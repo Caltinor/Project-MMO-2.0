@@ -825,7 +825,7 @@ public class XP
 						if( !noDropOre && wasPlaced )
 							award += getXp( block.getRegistryName() ) * ( drops.get( 0 ).getCount() );
 
-						String awardMessage = "mining " + block.getNameTextComponent().getFormattedText();
+						String awardMessage = "mining a block";
 
 						if( guaranteedDrop + extraDrop > 0 )
 						{
