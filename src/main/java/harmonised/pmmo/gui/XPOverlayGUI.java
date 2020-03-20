@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 //import harmonised.pmmo.proxy.ClientHandler;
+import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
@@ -66,8 +67,8 @@ public class XPOverlayGUI extends AbstractGui
 				if( themePos > 10000 )
 					themePos =  themePos % 10000;
 
-//				showGUI = ClientHandler.SHOW_GUI.isKeyDown();
-				showGUI = true;
+				showGUI = ClientHandler.SHOW_GUI.isKeyDown();
+//				showGUI = true;
 
 				if( showGUI )
 					cooldown = 1;

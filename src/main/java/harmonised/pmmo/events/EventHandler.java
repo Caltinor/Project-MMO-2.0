@@ -59,7 +59,6 @@ public class EventHandler
 	@SubscribeEvent
 	public static void PlayerLogin( PlayerEvent.PlayerLoggedInEvent event)
 	{
-		AttributeHandler.updateReach( event.getPlayer() );
 		XP.handlePlayerConnected( event );
 	}
 
@@ -98,6 +97,12 @@ public class EventHandler
 	public static void itemCrafted( PlayerEvent.ItemCraftedEvent event )
 	{
 		XP.handleCrafted( event );
+	}
+
+	@SubscribeEvent
+	public static void breakSpeed( PlayerEvent.BreakSpeed event )
+	{
+		XP.handleBreakSpeed( event );
 	}
 	
 //	@SubscribeEvent

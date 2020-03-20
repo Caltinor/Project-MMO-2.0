@@ -57,7 +57,7 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 
 public class XP
-{	
+{
 	private static Map<ResourceLocation, Float> xpValues = new HashMap<>();
 	private static Map<ResourceLocation, Float> oreDoubleValues = new HashMap<>();
 	private static Map<ResourceLocation, Float> plantDoubleValues = new HashMap<>();
@@ -78,7 +78,7 @@ public class XP
 	public static List<String> validSkills = new ArrayList<String>();
 	public static float globalMultiplier = 1;
 	public static float maxXp = xpAtLevel( 999 );
-	
+
 	public static void initValues()
 	{
 ////////////////////////////////////VALID_SKILLS///////////////////////////////////////////////////
@@ -174,13 +174,13 @@ public class XP
 		xpValues.put( Blocks.NETHER_QUARTZ_ORE.getRegistryName(), 1.5f );
 		xpValues.put( Blocks.DIAMOND_ORE.getRegistryName(), 35.0f );
 		xpValues.put( Blocks.EMERALD_ORE.getRegistryName(), 60.0f );
-		xpValues.put(Items.SALMON.getRegistryName(), 50.0f );
+		xpValues.put(Items.SALMON.getRegistryName(), 60.0f );
 		xpValues.put(Items.COD.getRegistryName(), 50.0f );
-		xpValues.put(Items.TROPICAL_FISH.getRegistryName(), 50.0f );
-		xpValues.put(Items.PUFFERFISH.getRegistryName(), 50.0f );
+		xpValues.put(Items.TROPICAL_FISH.getRegistryName(), 70.0f );
+		xpValues.put(Items.PUFFERFISH.getRegistryName(), 35.0f );
 
 		xpValues.put( Items.SADDLE.getRegistryName(), 250.0f );
-		xpValues.put( Items.NAME_TAG.getRegistryName(), 350.0f );	
+		xpValues.put( Items.NAME_TAG.getRegistryName(), 350.0f );
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
 		skillColors.put( "mining", 0x00ffff );
 		skillColors.put( "building", 0x00ffff );
@@ -196,7 +196,7 @@ public class XP
 		skillColors.put( "swimming", 0x3366ff );
 		skillColors.put( "fishing", 0x00ccff );
 		skillColors.put( "crafting", 0xff9900 );
-		
+
 		skillTextFormat.put( "mining", TextFormatting.AQUA );
 		skillTextFormat.put( "building", TextFormatting.AQUA );
 		skillTextFormat.put( "excavation", TextFormatting.GOLD );
@@ -214,53 +214,53 @@ public class XP
 ////////////////////////////////////ORE_DOUBLE_VALUES//////////////////////////////////////////////
 		oreDoubleValues.put( Blocks.COAL_ORE.getRegistryName(), 1.0f );
 		oreDoubleValues.put( Items.COAL.getRegistryName(), 1.0f );
-		
+
 		oreDoubleValues.put( Blocks.IRON_ORE.getRegistryName(), 0.75f );
 		oreDoubleValues.put( Items.IRON_INGOT.getRegistryName(), 0.75f );
-		
-		
+
+
 		oreDoubleValues.put( Blocks.REDSTONE_ORE.getRegistryName(), 2.0f );
 //		oreDoubleValues.put( Blocks.LIT_REDSTONE_ORE.getRegistryName(), 2.0f );
 		oreDoubleValues.put( Items.REDSTONE.getRegistryName(), 2.0f );
-		
+
 		oreDoubleValues.put( Blocks.GOLD_ORE.getRegistryName(), 0.50f );
 		oreDoubleValues.put( Items.GOLD_INGOT.getRegistryName(), 0.50f );
 		oreDoubleValues.put( Blocks.COAL_ORE.getRegistryName(), 0.5f );
-		
+
 		oreDoubleValues.put( Blocks.LAPIS_ORE.getRegistryName(), 1.50f );
 		oreDoubleValues.put( Items.INK_SAC.getRegistryName(), 1.50f );
-		
+
 		oreDoubleValues.put( Blocks.NETHER_QUARTZ_ORE.getRegistryName(), 0.55f );
 		oreDoubleValues.put( Items.QUARTZ.getRegistryName(), 0.55f );
-		
+
 		oreDoubleValues.put( Blocks.DIAMOND_ORE.getRegistryName(), 0.33f );
 		oreDoubleValues.put( Items.DIAMOND.getRegistryName(), 0.33f );
-		
+
 		oreDoubleValues.put( Blocks.EMERALD_ORE.getRegistryName(), 0.75f );
 		oreDoubleValues.put( Items.EMERALD.getRegistryName(), 0.75f );
 ////////////////////////////////////PLANT_DOUBLE_VALUES////////////////////////////////////////////
 		plantDoubleValues.put( Items.WHEAT.getRegistryName(), 0.75f );
 		plantDoubleValues.put( Items.WHEAT_SEEDS.getRegistryName(), 0.75f );
-		
+
 		plantDoubleValues.put( Items.CARROT.getRegistryName(), 1.50f );
-		
+
 		plantDoubleValues.put( Items.POISONOUS_POTATO.getRegistryName(), 1.50f );
 		plantDoubleValues.put( Items.POTATO.getRegistryName(), 1.50f );
-		
+
 		plantDoubleValues.put( Items.BEETROOT.getRegistryName(), 1.00f );
 		plantDoubleValues.put( Items.BEETROOT_SEEDS.getRegistryName(), 1.00f );
-		
+
 		plantDoubleValues.put( Items.SUGAR_CANE.getRegistryName(), 0.33f );
 		plantDoubleValues.put( Blocks.CACTUS.getRegistryName(), 0.45f );
 		plantDoubleValues.put( Items.NETHER_WART.getRegistryName(), 0.75f );
-		
+
 		plantDoubleValues.put( Blocks.PUMPKIN.getRegistryName(), 0.60f );
-		plantDoubleValues.put( Items.PUMPKIN_SEEDS.getRegistryName(), 0.60f );		
-		
+		plantDoubleValues.put( Items.PUMPKIN_SEEDS.getRegistryName(), 0.60f );
+
 		plantDoubleValues.put( Blocks.MELON.getRegistryName(), 0.75f );
 		plantDoubleValues.put( Items.MELON.getRegistryName(), 0.75f );
 		plantDoubleValues.put( Items.MELON_SEEDS.getRegistryName(), 0.75f );
-		
+
 		plantDoubleValues.put( Items.INK_SAC.getRegistryName(), 1.50f );			// COCO
 ////////////////////////////////////NO_DROP_VALUES/////////////////////////////////////////////////
 		noDropOres.put( Blocks.IRON_ORE.getRegistryName(), true );
@@ -288,7 +288,7 @@ public class XP
 
 		materialHarvestTool.put( Material.WOOD, "axe" );					//AXE
 		materialHarvestTool.put( Material.LEAVES, "axe" );
-		
+
 		materialHarvestTool.put( Material.CLAY, "shovel" );					//SHOVEL
 		materialHarvestTool.put( Material.EARTH, "shovel" );
 		materialHarvestTool.put( Material.GOURD, "shovel" );
@@ -296,7 +296,7 @@ public class XP
 		materialHarvestTool.put( Material.SNOW, "shovel" );
 		materialHarvestTool.put( Material.SEA_GRASS, "shovel" );
 		materialHarvestTool.put( Material.SNOW_BLOCK, "shovel" );
-		
+
 		materialHarvestTool.put( Material.PLANTS, "hoe" );					//HOE
 		materialHarvestTool.put( Material.ORGANIC, "hoe" );
 		materialHarvestTool.put( Material.CACTUS, "hoe" );
@@ -313,7 +313,7 @@ public class XP
 		toolItems.put( Items.DIAMOND_PICKAXE.getRegistryName(), new ItemStack( Items.DIAMOND ) );
 		toolItems.put( Items.DIAMOND_SHOVEL.getRegistryName(), new ItemStack( Items.DIAMOND ) );
 		toolItems.put( Items.DIAMOND_SWORD.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		
+
 		toolItems.put( Items.GOLDEN_HELMET.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
 		toolItems.put( Items.GOLDEN_CHESTPLATE.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
 		toolItems.put( Items.GOLDEN_LEGGINGS.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
@@ -323,7 +323,7 @@ public class XP
 		toolItems.put( Items.GOLDEN_PICKAXE.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
 		toolItems.put( Items.GOLDEN_SHOVEL.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
 		toolItems.put( Items.GOLDEN_SWORD.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		
+
 		toolItems.put( Items.IRON_HELMET.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
 		toolItems.put( Items.IRON_CHESTPLATE.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
 		toolItems.put( Items.IRON_LEGGINGS.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
@@ -333,7 +333,7 @@ public class XP
 		toolItems.put( Items.IRON_PICKAXE.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
 		toolItems.put( Items.IRON_SHOVEL.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
 		toolItems.put( Items.IRON_SWORD.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		
+
 		toolItems.put( Items.LEATHER_HELMET.getRegistryName(), new ItemStack( Items.LEATHER ) );
 		toolItems.put( Items.LEATHER_CHESTPLATE.getRegistryName(), new ItemStack( Items.LEATHER ) );
 		toolItems.put( Items.LEATHER_LEGGINGS.getRegistryName(), new ItemStack( Items.LEATHER ) );
@@ -344,13 +344,13 @@ public class XP
 		toolItems.put( Items.STONE_PICKAXE.getRegistryName(), new ItemStack( Blocks.COBBLESTONE ) );
 		toolItems.put( Items.STONE_SHOVEL.getRegistryName(), new ItemStack( Blocks.COBBLESTONE ) );
 		toolItems.put( Items.STONE_SWORD.getRegistryName(), new ItemStack( Blocks.COBBLESTONE ) );
-		
+
 		toolItems.put( Items.WOODEN_AXE.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
 		toolItems.put( Items.WOODEN_HOE.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
 		toolItems.put( Items.WOODEN_PICKAXE.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
 		toolItems.put( Items.WOODEN_SHOVEL.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
 		toolItems.put( Items.WOODEN_SWORD.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
-		
+
 		toolItems.put( Items.SHEARS.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
 		toolItems.put( Items.BOW.getRegistryName(), new ItemStack( Items.STRING ) );
 		toolItems.put( Items.FISHING_ROD.getRegistryName(), new ItemStack( Items.STRING ) );
@@ -365,7 +365,7 @@ public class XP
 		toolItemAmount.put( Items.DIAMOND_PICKAXE.getRegistryName(), 3 );
 		toolItemAmount.put( Items.DIAMOND_SHOVEL.getRegistryName(), 1 );
 		toolItemAmount.put( Items.DIAMOND_SWORD.getRegistryName(), 2 );
-		
+
 		toolItemAmount.put( Items.GOLDEN_HELMET.getRegistryName(), 5 );
 		toolItemAmount.put( Items.GOLDEN_CHESTPLATE.getRegistryName(), 8 );
 		toolItemAmount.put( Items.GOLDEN_LEGGINGS.getRegistryName(), 7 );
@@ -375,7 +375,7 @@ public class XP
 		toolItemAmount.put( Items.GOLDEN_PICKAXE.getRegistryName(), 3 );
 		toolItemAmount.put( Items.GOLDEN_SHOVEL.getRegistryName(), 1 );
 		toolItemAmount.put( Items.GOLDEN_SWORD.getRegistryName(), 2 );
-		
+
 		toolItemAmount.put( Items.IRON_HELMET.getRegistryName(), 5 );
 		toolItemAmount.put( Items.IRON_CHESTPLATE.getRegistryName(), 8 );
 		toolItemAmount.put( Items.IRON_LEGGINGS.getRegistryName(), 7 );
@@ -385,7 +385,7 @@ public class XP
 		toolItemAmount.put( Items.IRON_PICKAXE.getRegistryName(), 3 );
 		toolItemAmount.put( Items.IRON_SHOVEL.getRegistryName(), 1 );
 		toolItemAmount.put( Items.IRON_SWORD.getRegistryName(), 2 );
-		
+
 		toolItemAmount.put( Items.LEATHER_HELMET.getRegistryName(), 5 );
 		toolItemAmount.put( Items.LEATHER_CHESTPLATE.getRegistryName(), 8 );
 		toolItemAmount.put( Items.LEATHER_LEGGINGS.getRegistryName(), 7 );
@@ -396,13 +396,13 @@ public class XP
 		toolItemAmount.put( Items.STONE_PICKAXE.getRegistryName(), 3 );
 		toolItemAmount.put( Items.STONE_SHOVEL.getRegistryName(), 1 );
 		toolItemAmount.put( Items.STONE_SWORD.getRegistryName(), 2 );
-		
+
 		toolItemAmount.put( Items.WOODEN_AXE.getRegistryName(), 3 );
 		toolItemAmount.put( Items.WOODEN_HOE.getRegistryName(), 2 );
 		toolItemAmount.put( Items.WOODEN_PICKAXE.getRegistryName(), 3 );
 		toolItemAmount.put( Items.WOODEN_SHOVEL.getRegistryName(), 1 );
 		toolItemAmount.put( Items.WOODEN_SWORD.getRegistryName(), 2 );
-		
+
 		toolItemAmount.put( Items.SHEARS.getRegistryName(), 2 );
 		toolItemAmount.put( Items.BOW.getRegistryName(), 3 );
 		toolItemAmount.put( Items.FISHING_ROD.getRegistryName(), 2 );
@@ -436,26 +436,26 @@ public class XP
 		salvageXp.put( Items.STRING.getRegistryName(), 2.0f );
 		salvageXp.put( Items.LEATHER.getRegistryName(), 5.0f );
 	}
-	
+
 	private static Skill getSkill( String tool )
 	{
 		if( tool == null )
 			return Skill.INVALID_SKILL;
-		
+
 		switch( tool )
 		{
 			case "pickaxe":
 				return Skill.MINING;
-				
+
 			case "shovel":
 				return Skill.EXCAVATION;
-				
+
 			case "axe":
 				return Skill.WOODCUTTING;
-				
+
 			case "hoe":
 				return Skill.FARMING;
-				
+
 			default:
 				return Skill.INVALID_SKILL;
 		}
@@ -468,7 +468,7 @@ public class XP
 		else
 			return 0.0f;
 	}
-	
+
 	private static float getOreDoubleChance( ResourceLocation registryName )
 	{
 		if( oreDoubleValues.get( registryName ) != null )
@@ -476,7 +476,7 @@ public class XP
 		else
 			return 0.0f;
 	}
-	
+
 	private static float getPlantDoubleChance( ResourceLocation registryName )
 	{
 		if( plantDoubleValues.get( registryName ) != null )
@@ -484,7 +484,7 @@ public class XP
 		else
 			return 0.0f;
 	}
-	
+
 	private static boolean getNoDropOre( ResourceLocation registryName )
 	{
 		if( noDropOres.get( registryName ) != null )
@@ -492,7 +492,7 @@ public class XP
 		else
 			return false;
 	}
-	
+
 	public static Integer getSkillColor( String skill )
 	{
 		if( skillColors.get( skill ) != null )
@@ -500,7 +500,7 @@ public class XP
 		else
             return 0xffffff;
 	}
-	
+
 	private static String correctHarvestTool( Material material )
 	{
 		if( materialHarvestTool.get( material ) != null )
@@ -508,7 +508,7 @@ public class XP
 		else
 			return "none";
 	}
-	
+
 	private static ItemStack getToolItem( ResourceLocation name )
 	{
 		if( toolItems.get( name ) != null )
@@ -516,7 +516,7 @@ public class XP
 		else
 			return null;
 	}
-	
+
 	private static Integer getToolItemAmount( ResourceLocation name )
 	{
 		if( toolItemAmount.get( name ) != null )
@@ -524,7 +524,7 @@ public class XP
 		else
 			return 0;
 	}
-	
+
 	private static float getSalvageBaseValue( ResourceLocation registryName )
 	{
 		if( salvageBaseValue.get( registryName ) != null )
@@ -532,7 +532,7 @@ public class XP
 		else
 			return 0.0f;
 	}
-	
+
 	private static float getSalvageValuePerLevel( ResourceLocation registryName )
 	{
 		if( salvageValuePerLevel.get( registryName ) != null )
@@ -540,7 +540,7 @@ public class XP
 		else
 			return 0.0f;
 	}
-	
+
 	private static float getRepairXp( ResourceLocation registryName )
 	{
 		if( repairXp.get( registryName ) != null )
@@ -548,7 +548,7 @@ public class XP
 		else
 			return 0.0f;
 	}
-	
+
 	private static float getSalvageXp( ResourceLocation registryName )
 	{
 		if( salvageXp.get( registryName ) != null )
@@ -556,7 +556,7 @@ public class XP
 		else
 			return 0.0f;
 	}
-	
+
 //	private static boolean isPlant( ResourceLocation block )
 //	{
 //		if( plantItems.get( block ) != null )
@@ -564,7 +564,7 @@ public class XP
 //		else
 //			return false;
 //	}
-	
+
 	public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
 	{
 		if( event.getEntity() instanceof PlayerEntity ) {
@@ -606,13 +606,13 @@ public class XP
 			}
 		}
 	}
-	
+
 	public static void handleHarvested( HarvestDropsEvent event )
 	{
 		if( event.getHarvester() instanceof PlayerEntity && !event.getWorld().isRemote() )
 		{
 			PlayerEntity player = event.getHarvester();
-			
+
 			if( !player.isCreative() )
 			{
 				CompoundNBT skillsTag = getSkillsTag( player );
@@ -644,7 +644,7 @@ public class XP
 		}
 		PlacedBlocks.removeOre( event.getWorld().getWorld(), event.getPos() );
 	}
-	
+
 	public static void handleBroken( BreakEvent event )
 	{
 		if( event.getPlayer() instanceof PlayerEntity )
@@ -680,7 +680,7 @@ public class XP
 				}
 				List<ItemStack> drops = block.getDrops( block.getDefaultState(), builder );
 
-				System.out.println( drops );
+//				System.out.println( drops );
 
 				boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
 				Block sugarCane = Blocks.SUGAR_CANE;
@@ -695,7 +695,7 @@ public class XP
 					float extraChance = getPlantDoubleChance( baseBlock.getRegistryName() ) * currLevel;
 					int rewardable, guaranteedDrop, extraDrop, totalDrops;
 					rewardable = guaranteedDrop = extraDrop = totalDrops = 0;
-					
+
 					if( ( extraChance / 100 ) > 1 )
 					{
 						guaranteedDrop = (int)Math.floor( extraChance / 100 );
@@ -703,7 +703,7 @@ public class XP
 					}
 					if( !wasPlaced )
 						rewardable++;
-					
+
 					int height = 1;
 					BlockPos currBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
 					block =  world.getBlockState( currBlockPos ).getBlock();
@@ -713,7 +713,7 @@ public class XP
 						if( !wasPlaced )
 						{
 							rewardable++;
-								
+
 							if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
 								extraDrop++;
 						}
@@ -721,7 +721,7 @@ public class XP
 						currBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
 						block =  world.getBlockState( currBlockPos ).getBlock();
 					}
-					
+
 					int dropsLeft = guaranteedDrop + extraDrop;
 					if( guaranteedDrop + extraDrop > 0 )
 					{
@@ -874,7 +874,7 @@ public class XP
 	{
 		System.out.println( "SMELTED" );
 	}
-	
+
 	public static void handleDamage( LivingDamageEvent event )
 	{
 		float damage = event.getAmount();
@@ -887,7 +887,7 @@ public class XP
 			float agilityXp = 0;
 			float enduranceXp = 0;
 			boolean hideEndurance = false;
-			
+
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
 			int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
 			float endured = 0;
@@ -897,9 +897,9 @@ public class XP
 			endured = damage * ( endurePercent / 100 );
 			if( endured < 0 )
 				endured = 0;
-			
+
 			damage -= endured;
-			
+
 			enduranceXp = ( damage * 5 ) + ( endured * 10 );
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
 			if( event.getSource().getDamageType().equals( "fall" ) )
@@ -919,32 +919,32 @@ public class XP
 					}
 				}
 				damage -= saved;
-				
+
 				if( saved != 0 && player.getHealth() > damage )
 					player.sendStatusMessage( new StringTextComponent( "Saved " + (int) saved + " damage!" ), true );
-				
+
 				award = saved * 30;
-					
+
 				agilityXp = award;
 			}
-			
+
 			event.setAmount( damage );
-			
+
 			if( player.getHealth() > damage )
 			{
 				if( agilityXp > 0 )
 					hideEndurance = true;
-				
+
 				if( event.getSource().getTrueSource() != null )
 					awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getFormattedText(), enduranceXp, hideEndurance );
 				else
 					awardXp( player, Skill.ENDURANCE, event.getSource().getDamageType(), enduranceXp, hideEndurance );
-				
+
 				if( agilityXp > 0 )
 					awardXp( player, Skill.AGILITY, "surviving " + startDmg + " fall damage", agilityXp, false );
 			}
 		}
-		
+
 		if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
 		{
 			PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
@@ -955,20 +955,20 @@ public class XP
 				float targetHealth = target.getHealth();
 				float targetMaxHealth = target.getMaxHealth();
 				float lowHpBonus = 1.0f;
-				
+
 				if( damage > targetHealth )		//no overkill xp
 					damage = targetHealth;
-				
+
 				amount += damage * 3;
-				
+
 				if ( startDmg >= targetHealth )	//kill reduce xp
 					amount /= 2;
-					
+
 				if( startDmg >= targetMaxHealth )	//max hp kill reduce xp
 					amount /= 1.5;
-				
+
 //				player.setHealth( 1f );
-				
+
 				if( target instanceof AnimalEntity )		//reduce xp if passive mob
 					amount /= 2;
 				else if( playerHealth <= 10 )				//if aggresive mob and low hp
@@ -977,7 +977,7 @@ public class XP
 					if( playerHealth <= 2 )
 						lowHpBonus += 1;
 				}
-				
+
 				damage = event.getAmount();
 				if( event.getSource().damageType.equals( "arrow" ) )
 				{
@@ -986,7 +986,7 @@ public class XP
 						distance -= 16;
 					else
 						distance = 0;
-					
+
 					amount += (float) ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
 
 					amount *= lowHpBonus;
@@ -1000,7 +1000,7 @@ public class XP
 			}
 		}
 	}
-	
+
 	public static void handleJump( LivingJumpEvent event )
 	{
 		if( event.getEntityLiving() instanceof PlayerEntity )
@@ -1049,7 +1049,7 @@ public class XP
 //	public static void handleLivingDeath( LivingDeathEvent event )
 //	{
 //	}
-	
+
 	public static void handlePlayerRespawn( PlayerEvent.PlayerRespawnEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
@@ -1063,13 +1063,14 @@ public class XP
 	{
 		event.getPlayer().getPersistentData().put( "pmmo", event.getOriginal().getPersistentData().getCompound( "pmmo" ) );
 	}
-	
+
 	public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
 		CompoundNBT skillsTag = getSkillsTag( player );
 		Set<String> keySet = skillsTag.keySet();
-		
+
+		AttributeHandler.updateReach( player );
 		NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
 
 		for( String tag : keySet )
@@ -1086,11 +1087,11 @@ public class XP
 				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
 		}
 	}
-	
+
 	public static void handleRightClickItem( RightClickItem event )
 	{
 	}
-	
+
 	public static void handleRightClickBlock( RightClickBlock event )
 	{
 		if( !event.getWorld().isRemote )
@@ -1114,7 +1115,7 @@ public class XP
 						int currLevel;
 						float baseChance = 0;
 						float extraChance = 0;
-						
+
 						if( getPlantDoubleChance( item.getRegistryName() ) != 0 )
 						{
 							currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
@@ -1127,14 +1128,14 @@ public class XP
 							baseChance = getOreDoubleChance( item.getRegistryName() );
 							extraChance = baseChance * currLevel;
 						}
-						
+
 						if( extraChance != 0 )
 							player.sendStatusMessage( new StringTextComponent( itemStack.getDisplayName() + " " + DP.dp( extraChance ) + "% extra chance, " + DP.dp( baseChance ) + "% per level" ), false );
 					}
 					else
 						return;
 				}
-				
+
 				if( block.equals( goldBlock ) || block.equals( anvil ) )
 				{
 					if( item.isDamageable() )
@@ -1150,45 +1151,45 @@ public class XP
 							float chance = baseValue + ( valuePerLevel * currLevel );
 							if( chance > 80 )
 								chance = 80;
-							
+
 							float enchantChance = currLevel * 0.9f;
 							if( enchantChance > 90 )
 								enchantChance = 90;
-							
+
 							int itemPotential = getToolItemAmount( item.getRegistryName() );
-							
+
 							float startDmg = itemStack.getDamage();
 							float maxDmg = itemStack.getMaxDamage();
 							float award = 0;
 							float displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
 							float durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
 							int potentialReturnAmount = (int) Math.floor( itemPotential * durabilityPercent );
-							
+
 							if( event.getHand() == Hand.OFF_HAND )
 							{
 								if( !player.isCreative() )
 								{
 									int returnAmount = 0;
-									
+
 									for( int i = 0; i < potentialReturnAmount; i++ )
 									{
 										if( Math.ceil( Math.random() * 100 ) <= chance )
 											returnAmount++;
 									}
 									award += getSalvageXp( salvageItem.getRegistryName() ) * returnAmount;
-									
+
 //									itemStack.damageItem( item.getMaxDamage() * 10, player );
-									
+
 									String replyMsg = "Salvaged " + returnAmount + "/" + itemPotential + " " + new ItemStack( salvageItem ).getDisplayName();
 									replyMsg += ( returnAmount > 1 && !salvageItem.equals( Items.STRING ) && !salvageItem.equals( Items.LEATHER ) && !( salvageItem instanceof BlockItem ) ? "s" : "" ) + "!";
 									BlockPos spawnPos = event.getPos();
 //									if( returnAmount > 0 )
 //										event.getWorld().spawnEntity( new EntityItem( event.getWorld(), spawnPos.getX() + 0.5d, spawnPos.getY() + 1.0d, spawnPos.getZ() + 0.5d, new ItemStack( salvageItem, returnAmount ) ) );
-									
+
 									if( award > 0 )
 										awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + itemPotential + " " + new ItemStack( salvageItem ).getDisplayName() + " from salvaging " + itemDisplayName, award, false  );
 									player.sendStatusMessage( new StringTextComponent( replyMsg ), true );
-									
+
 									if( enchants.size() > 0 )
 									{
 										ItemStack salvagedBook = new ItemStack( Items.KNOWLEDGE_BOOK );
@@ -1233,38 +1234,38 @@ public class XP
 						}
 					}
 				}
-				
+
 				if( block.equals( diamondBlock ) && event.getHand() == Hand.MAIN_HAND )
-				{					
+				{
 					int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
 					int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
 					int combatLevel = levelAtXp( skillsTag.getFloat( "combat" ) );
 					int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
-					
+
 					double reach = AttributeHandler.getReach( player );
 					double agilityChance = agilityLevel * 0.64f;
 					double damageReduction = enduranceLevel * 0.25f;
 					double extraDamage = Math.floor( combatLevel / 20 );
-					
+
 					float speedPercent = agilityLevel / 2000f;
-					
+
 					if( agilityChance > 64 )
 						agilityChance = 64;
-					
+
 					if( damageReduction > 50 )
 						damageReduction = 50;
-					
+
 					if( speedPercent > 0.10f )
 						speedPercent = 0.10f;
 					speedPercent = speedPercent / 0.10f * 100f;
-					
+
 					player.sendStatusMessage( new StringTextComponent( "_________________________________" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( reach ) + " player reach" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( agilityChance ) + "% fall damage save chance" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( damageReduction ) + "% damage reduction" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( extraDamage ) + " extra damage" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( speedPercent ) + "% sprint speed boost" ), false );
-					
+
 					if( swimLevel >= 25 )
 						player.sendStatusMessage( new StringTextComponent( "Underwater night vision is unlocked!" ), false );
 					else
@@ -1273,35 +1274,35 @@ public class XP
 			}
 		}
 	}
-	
+
 	public static void handleAnvilRepair( AnvilRepairEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
 		if( !player.world.isRemote && event.getItemInput().getItem().isDamageable() )
 		{
 			CompoundNBT skillsTag = getSkillsTag( player );
-			
+
 			int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
 			float bonusRepair = 0.0025f * currLevel / ( 1f + 0.01f * currLevel );
 			int maxCost = (int) Math.floor( 50 - ( currLevel / 4f ) );
 			if( maxCost < 20 )
 				maxCost = 20;
-			
+
 			event.setBreakChance( event.getBreakChance() / ( 1f + 0.01f * currLevel ) );
-			
+
 //			ItemStack rItem = event.getIngredientInput();
 			ItemStack lItem = event.getItemInput();
 			ItemStack oItem = event.getItemResult();
-			
+
 			if( oItem.getRepairCost() > maxCost )
 				oItem.setRepairCost( maxCost );
-						
+
 			float repaired = oItem.getDamage() - lItem.getDamage();
 			if( repaired < 0 )
 				repaired = -repaired;
-			
+
 			oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
-			
+
 			float award = (float) ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
 			award *= getRepairXp( getToolItem( lItem.getItem().getRegistryName() ).getItem().getRegistryName() );
 
@@ -1312,7 +1313,7 @@ public class XP
 			}
 		}
 	}
-	
+
 	public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
 	{
 		if( !event.getPlayer().world.isRemote )
@@ -1320,7 +1321,46 @@ public class XP
 			awardXp( event.getPlayer(), Skill.CRAFTING, "crafting " + event.getCrafting().getDisplayName(), + 10.0f, false );
 		}
 	}
-	
+
+	public static void handleBreakSpeed( PlayerEvent.BreakSpeed event )
+	{
+		PlayerEntity player = event.getPlayer();
+		CompoundNBT skills = getSkillsTag( player );
+
+		int mining = levelAtXp( skills.getFloat( "mining" ) );
+		int woodcutting = levelAtXp( skills.getFloat( "woodcutting" ) );
+		int excavation = levelAtXp( skills.getFloat( "excavation" ) );
+
+		switch( correctHarvestTool( event.getState().getMaterial() ) )
+		{
+			case "pickaxe":
+				float height = event.getPos().getY();
+				if( height < 0 )
+					height = 0;
+
+				float heightMultiplier = 1 - ( height / 1000) ;
+
+				if( heightMultiplier < 0.5f )
+					heightMultiplier = 0.5f;
+
+				System.out.println( heightMultiplier );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + mining * 0.01f ) * ( heightMultiplier ) );
+				break;
+
+			case "axe":
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + woodcutting * 0.01f ) );
+				break;
+
+			case "shovel":
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + excavation * 0.01f ) );
+				break;
+
+			default:
+				event.setNewSpeed( event.getOriginalSpeed() );
+				break;
+		}
+	}
+
 	public static CompoundNBT getSkillsTag( PlayerEntity player )
 	{
 		CompoundNBT persistTag = player.getPersistentData();
@@ -1349,12 +1389,12 @@ public class XP
 
 		return skillsTag;
 	}
-	
+
 	public static void awardXp( PlayerEntity player, Skill skill, String sourceName, float amount, boolean skip )
 	{
 		if( amount <= 0.0f || player.world.isRemote )
 			return;
-		
+
 		if( skill == skill.INVALID_SKILL )
 		{
 			System.out.println( "INVALID SKILL" );
@@ -1368,7 +1408,7 @@ public class XP
 			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) )
 				return;
 		}
-		
+
 		if( skillName.equals( "combat" ) || skillName.equals( "archery" ) || skillName.equals( "endurance" ) )
 		{
 			switch( player.world.getDifficulty() )
@@ -1376,34 +1416,32 @@ public class XP
 			case PEACEFUL:
 				amount *= 1f/3f;
 				break;
-					
+
 			case EASY:
 				amount *= 2f/3f;
 				break;
-				
+
 			case NORMAL:
 				break;
-				
+
 			case HARD:
 				amount *= 4f/3f;
 				break;
-				
+
 				default:
 					break;
 			}
 		}
-		
-//		System.out.println( amount );
-		
+
 		amount *= globalMultiplier;
-		
+
 		String playerName = player.getDisplayName().getFormattedText();
 		int startLevel;
 		int currLevel;
 		float startXp = 0;
 
 		CompoundNBT skillsTag = getSkillsTag( player );
-		
+
 		if( !skillsTag.contains( skillName ) )
 		{
 			skillsTag.putFloat( skillName, amount );
@@ -1413,22 +1451,22 @@ public class XP
 		{
 			startLevel = levelAtXp( skillsTag.getFloat( skillName ) );
 			startXp = skillsTag.getFloat( skillName );
-			
+
 			if( startXp >= 2000000000 )
 				return;
-			
+
 			if( startXp + amount >= 2000000000 )
 			{
 				player.sendStatusMessage( new StringTextComponent( skillName + " cap of 2b xp reached, you fucking psycho!" ).setStyle( new Style().setColor( TextFormatting.LIGHT_PURPLE ) ), false);
 				System.out.println( player.getName() + " " + skillName + " 2b cap reached" );
 				amount = 2000000000 - startXp;
 			}
-				
+
 			skillsTag.putFloat( skillName, startXp + amount );
 		}
-		
+
 		currLevel = levelAtXp( skillsTag.getFloat( skillName ) );
-		
+
 		if( startLevel != currLevel )
 		{
 			switch( skill )
@@ -1436,35 +1474,35 @@ public class XP
 				case BUILDING:
 					AttributeHandler.updateReach( player );
 					break;
-			
+
 				case ENDURANCE:
 					AttributeHandler.updateHP( player );
 					break;
-					
+
 				case COMBAT:
 					AttributeHandler.updateDamage( player );
 					break;
-					
+
 				default:
 					break;
 			}
 			System.out.println( playerName + " " + currLevel + " " + skillName + " level up!" );
 		}
-		
+
 		if( player instanceof ServerPlayerEntity )
 			NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
-		
+
 //		persistTag.putString( "lastSkill", skillName );
 		if( !skip )
 			System.out.println( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getFloat( skillName ) );
-		
+
 		if( startXp + amount >= maxXp && startXp <= maxXp )
 		{
 			player.sendStatusMessage( new StringTextComponent( skillName + " max level reached, you psycho!" ).setStyle( new Style().setColor( TextFormatting.LIGHT_PURPLE ) ), false);
 			System.out.println( player.getName() + " " + skillName + " max level reached" );
 		}
 	}
-	
+
 //	public static void setXp( PlayerEntity player, String skillName, float newXp )
 //	{
 //		CompoundNBT persistTag = player.getPersistentData();
@@ -1492,46 +1530,46 @@ public class XP
 //
 //		NetworkHandler.sendToPlayer( new MessageXp( newXp, skill, 0, false ), (ServerPlayerEntity) player );
 //	}
-	
+
 	public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
 	{
 		PlayerEntity player = event.player;
-		
+
 		if( !player.world.isRemote )
 		{
 			String name = player.getName().getString();
-			
+
 			if( player.isSprinting() )
 				AttributeHandler.updateSpeed( player );
 			else
 				AttributeHandler.resetSpeed( player );
-			
+
 			if( !lastAward.containsKey( name ) )
 				 lastAward.put( name, System.currentTimeMillis() );
-			
+
 			if( !player.isCreative() && player.isAlive() )
 			{
 				long gap = System.currentTimeMillis() - lastAward.get( name );
 				if( gap > 1000 )
 				{
 					CompoundNBT skillsTag = getSkillsTag( player );
-					
+
 					int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
 					int flyLevel = levelAtXp( skillsTag.getFloat( "flying" ) );
 					int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
 					if( agilityLevel > 200 )
 						agilityLevel = 200;
-					
-					float swimAward = (float) ( 3 + swimLevel    / 10.00f ) * ( gap / 1000f );
-					float flyAward  = (float) ( 1 + flyLevel     / 30.77f ) * ( gap / 1000f );
-					float runAward  = (float) ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f );
-					
+
+					float swimAward = ( 3 + swimLevel    / 10.00f ) * ( gap / 1000f );
+					float flyAward  = ( 1 + flyLevel     / 30.77f ) * ( gap / 1000f );
+					float runAward  = ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f );
+
 					lastAward.replace( name, System.currentTimeMillis() );
 					Block waterBlock = Blocks.WATER;
 					BlockPos playerPos = player.getPosition();
 					boolean waterBelow = true;
-					
-					
+
+
 					for( int i = -1; i <= 1; i++ )
 					{
 						for( int j = -1; j <= 1; j++ )
@@ -1542,14 +1580,14 @@ public class XP
 					}
 
 					boolean waterAbove = player.getEntityWorld().getBlockState( playerPos.up()   ).getBlock().equals( waterBlock );
-					
+
 					if( swimLevel >= 25 && player.isInWater() && waterAbove )
 					{
 						player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 250, 0, true, false ) );
 					}
 					else if( player.isPotionActive( Effects.NIGHT_VISION ) && player.getActivePotionEffect( Effects.NIGHT_VISION ).isAmbient() )
 						player.removePotionEffect( Effects.NIGHT_VISION );
-					
+
 					if( player.isSprinting() )
 					{
 						if( player.isInWater() && ( waterAbove || waterBelow ) )
@@ -1557,7 +1595,7 @@ public class XP
 						else
 							awardXp( player, Skill.AGILITY, "running", runAward, true );
 					}
-					
+
 					if( player.isInWater() && ( waterAbove || waterBelow ) )
 						{
 						if( !player.isSprinting() )
@@ -1565,14 +1603,14 @@ public class XP
 					}
 					else if( player.isElytraFlying() )
 						awardXp( player, Skill.FLYING, "flying", flyAward, true );
-					
+
 					if( (player.getRidingEntity() instanceof BoatEntity ) && player.isInWater() )
 						awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true );
 				}
 			}
 		}
 	}
-	
+
 	public static void handleFished( ItemFishedEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
@@ -1582,11 +1620,11 @@ public class XP
 			award = 10.0f;
 		awardXp( player, Skill.FISHING, "catching " + items, award, false );
 	}
-	
+
 	public static int levelAtXp( float xp )
 	{
 		int theXp = 0;
-		
+
 		for( int level = 0; ; level++ )
 		{
 			if( xp < theXp || level >= 999 )
@@ -1596,7 +1634,7 @@ public class XP
 			theXp += 250 + level * 50.00f;
 		}
 	}
-	
+
 	public static float levelAtXpDecimal( float xp )
 	{
 		if( levelAtXp( xp ) == 999 )
@@ -1604,32 +1642,32 @@ public class XP
 		int startLevel = levelAtXp( xp );
 		int startXp = xpAtLevel( startLevel );
 		int goalXp = xpAtLevel( startLevel + 1 );
-		
+
 		if( startXp == goalXp )
 			return 999.99f;
 		else
 			return startLevel + ( (xp - startXp) / (goalXp - startXp) );
 	}
-	
+
 	public static int xpAtLevel( float givenLevel )
 	{
 		int theXp = 0;
 		if( givenLevel > 999 )
 			givenLevel = 999;
-		
+
 		for( int level = 1; level < givenLevel; level++ )
 		{
 			theXp += 250 + (level - 1) * 50.00f;
 		}
 		return theXp;
 	}
-	
+
 	public static float xpAtLevelDecimal( float givenLevel )
 	{
 		float startXp = xpAtLevel( (float) Math.floor( givenLevel ) );
 		float endXp   = xpAtLevel( (float) Math.floor( givenLevel + 1 ) );
 		float pos = givenLevel - (float) Math.floor( givenLevel );
-		
+
 		return startXp + ( ( endXp - startXp ) * pos );
 	}
 }
