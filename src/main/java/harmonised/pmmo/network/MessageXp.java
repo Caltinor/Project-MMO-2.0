@@ -2,19 +2,22 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.gui.XPOverlayGUI;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-import java.util.function.Supplier;
-
-public class MessageXp
+public class MessageXp extends MessageBase<MessageXp>
 {
 	private float xp;
-	private int skill;
+	private String skill;
 	private float gainedXp;
 	private boolean skip;
 	
-	public MessageXp( float xp, int skill, float gainedXp, boolean skip )
+	public MessageXp( float xp, String skill, float gainedXp, boolean skip )
 	{
 		this.xp = xp;
 		this.gainedXp = gainedXp;
@@ -27,34 +30,39 @@ public class MessageXp
 		
 	}
 
-	public static MessageXp decode( PacketBuffer buf )
+	@Override
+	public void fromBytes(ByteBuf buf)
 	{
-		MessageXp packet = new MessageXp();
-		packet.xp = buf.readFloat();
-		packet.gainedXp = buf.readFloat();
-		packet.skill = buf.readInt();
-		packet.skip = buf.readBoolean();
-
-		return packet;
+		xp = buf.readFloat();
+		gainedXp = buf.readFloat();
+		skill = ByteBufUtils.readUTF8String( buf );
+		skip = buf.readBoolean();
 	}
 
-	public static void encode( MessageXp packet, PacketBuffer buf )
+	@Override
+	public void toBytes(ByteBuf buf)
 	{
-		buf.writeFloat( packet.xp );
-		buf.writeFloat( packet.gainedXp );
-		buf.writeInt( packet.skill );
-		buf.writeBoolean( packet.skip );
+		buf.writeFloat( xp );
+		buf.writeFloat( gainedXp );
+		ByteBufUtils.writeUTF8String( buf,  skill );
+		buf.writeBoolean( skip );
 	}
 
-	public static void handlePacket( MessageXp packet, Supplier<NetworkEvent.Context> ctx )
+	@Override
+	public void handleClientSide(MessageXp message, EntityPlayer onlinePlayer)
 	{
-		ctx.get().enqueueWork(() ->
-		{
-			if( packet.skill == 42069 )
-				XPOverlayGUI.clearXP();
-			else
-				XPOverlayGUI.makeXpDrop( packet.xp, packet.skill, 10000, packet.gainedXp, packet.skip );
-		});
-		ctx.get().setPacketHandled(true);
+		if( message.skill.equals( "CLEAR" ) )
+			XPOverlayGUI.clearXP();
+		else
+			XPOverlayGUI.makeXpDrop( message.xp, message.skill, 10000, message.gainedXp, message.skip );
 	}
+
+	@Override
+	public void handleServerSide(MessageXp message, EntityPlayer player)
+	{
+//		player.sendStatusMessage( new TextComponentString( "SERVER" ), false );
+//		System.out.println( "SERVER RECEIVED PACKET" );
+//		NetworkHandler.sendToPlayer( new MessageXp( 500.0f, "mining" ), player);
+	}
+
 }

@@ -4,57 +4,54 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-//import harmonised.pmmo.proxy.ClientHandler;
-import harmonised.pmmo.proxy.ClientHandler;
-import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.proxy.ClientProxy;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class XPOverlayGUI extends AbstractGui
+public class XPOverlayGUI extends Gui
 {
 	private static int guiWidth = 102, guiHeight = 5;
 	private static int cooldown, tempAlpha, halfScreen = 0;
-	private static float xp, pos, goalXp, goalPos = 0;
+	private static float xp, pos = 1, goalXp = 83, goalPos = 1;
 	private static double lastTime, startLevel, timeDiff, tempDouble, tempDouble2, dropOffset, dropOffsetCap = 0;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0;
-	private static String name = "none", tempName = "none";
+	private static String name = "none";
+	private static Minecraft mc = Minecraft.getMinecraft();
+	private static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 	private static boolean showGUI = false;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
-	private static Minecraft minecraft = Minecraft.getInstance();
-	private static PlayerEntity player = minecraft.player;
-	public static Map<String, ASkill> skills = new HashMap<>();
+	private static Minecraft minecraft = Minecraft.getMinecraft();
+	private static EntityPlayer player = minecraft.player;
+	public static Map<String, Skill> skills = new HashMap<>();
 	private static ArrayList<String> skillsKeys = new ArrayList<String>();
-	private static ASkill skill;
-	private static FontRenderer fontRenderer = minecraft.fontRenderer;
-
+	private static Skill skill;
+	
 	@SubscribeEvent
-	public void renderOverlay(RenderGameOverlayEvent event)
+	public void renderOverlay( RenderGameOverlayEvent event )
 	{
 		if( !name.equals( "none" ) )
 		{
 			if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
 			{
-				RenderSystem.pushMatrix();
-				RenderSystem.enableBlend();
-				MainWindow sr = minecraft.getMainWindow();
+				GlStateManager.pushMatrix();
+				GlStateManager.enableBlend();
+				ScaledResolution sr = new ScaledResolution( mc );
 				halfScreen = ( sr.getScaledWidth() - guiWidth ) / 2;
-
-				skill = skills.get( name );
 				
 				timeDiff = (System.nanoTime() - lastTime);
 				lastTime = System.nanoTime();
@@ -66,10 +63,11 @@ public class XPOverlayGUI extends AbstractGui
 				
 				if( themePos > 10000 )
 					themePos =  themePos % 10000;
-
-				showGUI = ClientHandler.SHOW_GUI.isKeyDown();
-//				showGUI = true;
-
+				
+				skill = skills.get( name );
+				
+				showGUI = ClientProxy.SHOW_GUI.isKeyDown();
+				
 				if( showGUI )
 					cooldown = 1;
 			
@@ -112,9 +110,13 @@ public class XPOverlayGUI extends AbstractGui
 							xpDrop.gainedXp -= ( tempDouble2 * timeDiff / 10000000 );
 							skill.goalXp += ( tempDouble2 * timeDiff / 10000000 );
 						}
+						
+						if( xpDrop.gainedXp <= 0 )
+							xpDrops.remove( i );
+						
 						skill.goalPos = XP.levelAtXpDecimal( skill.goalXp );
-
-
+						
+						
 					}
 					
 					tempDouble = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
@@ -136,13 +138,9 @@ public class XPOverlayGUI extends AbstractGui
 						drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " in " + xpDrop.name, halfScreen + (guiWidth / 2), (int) xpDrop.Y + (int) dropOffset, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
 					}
 				}
-
-				if( xpDrops.size() > 0 && xpDrops.get( 0 ).gainedXp <= 0 )
-					xpDrops.remove( 0 );
-
-				RenderSystem.disableBlend();
-				RenderSystem.color3f( 255, 255, 255 );
-				RenderSystem.popMatrix();
+				GlStateManager.disableBlend();
+				GlStateManager.color( 255, 255, 255 );
+				GlStateManager.popMatrix();
 				
 				for( String tag : skillsKeys )		//Update Skills
 				{
@@ -177,21 +175,22 @@ public class XPOverlayGUI extends AbstractGui
 				
 				if( cooldown > 0 )				//Xp Bar
 				{
-					RenderSystem.pushMatrix();
-					RenderSystem.enableBlend();
-					Minecraft.getInstance().getTextureManager().bindTexture( bar );
-
+					GlStateManager.pushMatrix();
+					GlStateManager.enableBlend();
+					mc.renderEngine.bindTexture( bar );
+					
+					
 					skill = skills.get( name );
 					
-					blit( halfScreen, 10, 0, 0, guiWidth, guiHeight );
+					drawTexturedModalRect( halfScreen, 10, 0, 0, guiWidth, guiHeight );
 					if( theme == 1 )
 					{
-						blit( halfScreen, 10, 0, guiHeight * 1, (int) Math.floor( guiWidth * ( skill.pos - Math.floor( skill.pos ) ) ), guiHeight );
+						drawTexturedModalRect( halfScreen, 10, 0, guiHeight * 1, (int) Math.floor( guiWidth * ( skill.pos - Math.floor( skill.pos ) ) ), guiHeight );
 					}
 					else
 					{
-						blit( halfScreen, 10, 0, guiHeight*3, guiWidth - 1, guiHeight );
-						blit( halfScreen + 1, 10, 1 + (int)( Math.floor( themePos / 100 ) ), guiHeight*2, (int) Math.floor( ( guiWidth - 1 ) * ( skill.pos - Math.floor( skill.pos ) ) ), guiHeight );
+						drawTexturedModalRect( halfScreen, 10, 0, guiHeight*3, guiWidth - 1, guiHeight );
+						drawTexturedModalRect( halfScreen + 1, 10, 1 + (int)( Math.floor( themePos / 100 ) ), guiHeight*2, (int) Math.floor( ( guiWidth - 1 ) * ( skill.pos - Math.floor( skill.pos ) ) ), guiHeight );
 					}
 					drawCenteredString( fontRenderer, name + " " + DP.dp( skill.pos ), halfScreen + (guiWidth / 2), 0, XP.getSkillColor( name ) );
 					
@@ -225,9 +224,9 @@ public class XPOverlayGUI extends AbstractGui
 							listIndex += 9;
 						}
 					}
-					RenderSystem.disableBlend();
-					RenderSystem.color3f( 255, 255, 255 );
-					RenderSystem.popMatrix();
+					GlStateManager.disableBlend();
+					GlStateManager.color( 255, 255, 255 );
+					GlStateManager.popMatrix();
 				}
 			}
 		}
@@ -282,36 +281,34 @@ public class XPOverlayGUI extends AbstractGui
 				tempString = level + " " + name + " level up!";
 				break;
 		}
-		player.sendStatusMessage( new StringTextComponent( tempString ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), false);
+		player.sendStatusMessage( new TextComponentString( tempString ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), false);
 	}
 	
-	public static void makeXpDrop( float xp, int id, int cooldown, float gainedXp, boolean skip )
+	public static void makeXpDrop( float xp, String name, int cooldown, float gainedXp, boolean skip )
 	{
-		tempName = Skill.getString( id );
-
 		if( XPOverlayGUI.name.equals( "none" ) )
-			XPOverlayGUI.name = tempName;
-
-		if( skills.get( tempName ) == null )				//Handle client xp tracker
+			XPOverlayGUI.name = name;
+		
+		if( skills.get( name ) == null )				//Handle client xp tracker
 		{
-			skills.put( tempName, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
-			skillsKeys.add( tempName );
+			skills.put( name, new Skill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
+			skillsKeys.add( name );
 		}
 		
-		skill = skills.get( tempName );
+		skill = skills.get( name );
 		
 		if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
 		{
 			skill.pos = XP.levelAtXpDecimal( xp );
 			skill.goalPos = pos;
-			System.out.println( minecraft.player.getDisplayName() + " " + skill + " has been set to: " + xp );
+			System.out.println( Minecraft.getMinecraft().player.getName() + " " + skill + " has been set to: " + xp );
 			skill.xp = xp;
 			skill.goalXp = xp;
 			XPOverlayGUI.cooldown = cooldown;
 			return;
 		}
 		
-		if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( tempName ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 )
+		if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( name ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 )
 		{
 			xpDrops.get( xpDrops.size() - 1).gainedXp += gainedXp;
 			if( xpDrops.get( xpDrops.size() - 1).age > 475 )
@@ -320,9 +317,9 @@ public class XPOverlayGUI extends AbstractGui
 		else
 		{
 			if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).Y > 75 )
-				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, tempName, xp, gainedXp, skip ) );
+				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, name, xp, gainedXp, skip ) );
 			else
-				xpDrops.add( new XpDrop( 0, 100, tempName, xp, gainedXp, skip ) );
+				xpDrops.add( new XpDrop( 0, 100, name, xp, gainedXp, skip ) );
 		}
 		
 		if( !skip )

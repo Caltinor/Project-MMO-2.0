@@ -1,24 +1,32 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.util.Reference;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class NetworkHandler
 {
-	public static void registerChannel()
+	private static SimpleNetworkWrapper INSTANCE;
+	public static void init()
 	{
-//		HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(Reference.MOD_ID, "main_channel" ), () -> "1.0", s -> true, s -> true);
+		 INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel( Reference.MOD_ID );
+		 
+		 INSTANCE.registerMessage( MessageXp.class, MessageXp.class, 0, Side.SERVER );
+		 INSTANCE.registerMessage( MessageXp.class, MessageXp.class, 0, Side.CLIENT );
 	}
-
-	public static void registerPackets()
+	
+	public static void sendToServer( IMessage message )
 	{
-		ProjectMMOMod.HANDLER.registerMessage( 0, MessageXp.class, MessageXp::encode, MessageXp::decode, MessageXp::handlePacket );
+		INSTANCE.sendToServer( message );
 	}
-
-	public static void sendToPlayer( MessageXp packet, ServerPlayerEntity player )
+	
+	public static void sendToPlayer( IMessage message, EntityPlayerMP player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		INSTANCE.sendTo( message, player );
 	}
 }

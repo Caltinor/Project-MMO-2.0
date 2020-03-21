@@ -1,63 +1,79 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.BoolArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import javax.annotation.Nullable;
+
+import harmonised.pmmo.network.MessageXp;
+import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.skills.XP;
+
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
-public class CommandClear
+public class CommandClear extends CommandBase
 {
-	public static void register( CommandDispatcher<CommandSource> dispatch )
-	{
-		LiteralArgumentBuilder<CommandSource> argBuilder = Commands.literal("pmmo")
-				        .requires( src -> src.hasPermissionLevel(0) )
-				        .requires( src -> src.getEntity() instanceof ServerPlayerEntity )
-                        .then( Commands.argument("active", BoolArgumentType.bool() ) )
-                        .then( Commands.argument("potato", BoolArgumentType.bool() )
-                        .executes( CommandClear::execute ) );
 
-		dispatch.register(argBuilder);
+	@Override
+	public String getName()
+	{
+		return "clear";
+	}
+	
+	@Override
+	public int getRequiredPermissionLevel()
+	{
+		return 0;
+	}
+	
+	@Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+		List<String> completions = new ArrayList<String>();
+		completions.add( "iagreetothetermsandconditions" );
+		return completions;
+    }
+
+	@Override
+	public String getUsage(ICommandSender sender)
+	{
+		return null;
 	}
 
-    private static int execute( CommandContext<CommandSource> context ) throws CommandException
+	@Override
+	public void execute( MinecraftServer server, ICommandSender sender, String[] args ) throws CommandException
 	{
-
-	    System.out.println( context.getInput() );
-	    return 1;
-//		PlayerEntity player = commandSourceCommandContext.getArgument();
-//		CompoundNBT persistTag = XP.player.getPersistentData();
-//
-//		if( args.length > 0 && args[0].equals( "iagreetothetermsandconditions" ) )
-//		{
-//			NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0, true ), (ServerPlayerEntity) player );
-//			persistTag.setTag( "skills", new CompoundNBT() );
-//
-//			player.sendStatusMessage( new StringTextComponent( "Your stats have been reset!" ), false);
-//		}
-//		else
-//		{
-//			CompoundNBT skillsTag = XP.getSkillsTag( persistTag );
-//			Set<String> keySet = skillsTag.keySet();
-//
-//			NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
-//			for( String tag : keySet )
-//			{
-//				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), tag, 0, true ), (ServerPlayerEntity) player );
-//			}
-//
-//			player.sendStatusMessage( new StringTextComponent( "Your stats have been resynced. \"iagreetothetermsandconditions\" to clear your stats!" ), false);
-//		}
+		EntityPlayer player = CommandBase.getCommandSenderAsPlayer( sender );
+		NBTTagCompound persistTag = XP.getPersistTag( player );
+		
+		if( args.length > 0 && args[0].equals( "iagreetothetermsandconditions" ) )
+		{
+			NetworkHandler.sendToPlayer( new MessageXp( 0f, "CLEAR", 0, true ), (EntityPlayerMP) player );
+			persistTag.setTag( "skills", new NBTTagCompound() );
+			
+			player.sendStatusMessage( new TextComponentString( "Your stats have been reset!" ), false);
+		}
+		else
+		{
+			NBTTagCompound skillsTag = XP.getSkillsTag( persistTag );
+			Set<String> keySet = skillsTag.getKeySet();
+			
+			NetworkHandler.sendToPlayer( new MessageXp( 0f, "CLEAR", 0f, true ), (EntityPlayerMP) player );
+			for( String tag : keySet )
+			{
+				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), tag, 0, true ), (EntityPlayerMP) player );
+			}
+			
+			player.sendStatusMessage( new TextComponentString( "Your stats have been resynced. \"iagreetothetermsandconditions\" to clear your stats!" ), false);
+		}
 	}
-
-    //    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
-//    {
-//		List<String> completions = new ArrayList<String>();
-//		completions.add( "iagreetothetermsandconditions" );
-//		return completions;
-//    }
 }

@@ -3,8 +3,8 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.XP;
 
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.TickEvent;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -12,12 +12,17 @@ import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
-@Mod.EventBusSubscriber
 public class EventHandler
 {
 	@SubscribeEvent
@@ -25,9 +30,15 @@ public class EventHandler
     {
 		XP.handleBroken( event );
     }
-
+	
 	@SubscribeEvent
-	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
+	public static void blockHarvested( HarvestDropsEvent event )
+	{
+		XP.handleHarvested(event);
+	}
+	
+	@SubscribeEvent
+	public static void blockPlaced( PlaceEvent event )
 	{
 		XP.handlePlaced( event );
 	}
@@ -39,13 +50,13 @@ public class EventHandler
 	}
 	
 	@SubscribeEvent
-	public static void playerTick( TickEvent.PlayerTickEvent event )
+	public static void playerTick( PlayerTickEvent event )
 	{
 		XP.handlePlayerTick( event );
 	}
 	
 	@SubscribeEvent
-	public static void playerRespawn( PlayerEvent.PlayerRespawnEvent event )
+	public static void playerRespawn( PlayerRespawnEvent event )
 	{
 		XP.handlePlayerRespawn( event );
 	}
@@ -53,25 +64,15 @@ public class EventHandler
 	@SubscribeEvent
 	public static void livingJump( LivingJumpEvent event )
 	{
-		XP.handleJump( event );
+		XP.handleLivingJump( event );
 	}
 	
 	@SubscribeEvent
-	public static void PlayerLogin( PlayerEvent.PlayerLoggedInEvent event)
+	public static void onPlayerLogin( PlayerLoggedInEvent event)
 	{
+		AttributeHandler.updateReach( event.player );
+		
 		XP.handlePlayerConnected( event );
-	}
-
-	@SubscribeEvent
-	public static void itemSmelted( PlayerEvent.ItemSmeltedEvent event )
-	{
-		XP.handleSmelted( event );
-	}
-
-    @SubscribeEvent
-	public static void playerClone( PlayerEvent.Clone event )
-	{
-		XP.handleClone( event );
 	}
 	
 	@SubscribeEvent
@@ -92,13 +93,6 @@ public class EventHandler
 		XP.handleFished( event );
 	}
 
-	
-	@SubscribeEvent
-	public static void itemCrafted( PlayerEvent.ItemCraftedEvent event )
-	{
-		XP.handleCrafted( event );
-	}
-
 	@SubscribeEvent
 	public static void breakSpeed( PlayerEvent.BreakSpeed event )
 	{
@@ -106,7 +100,31 @@ public class EventHandler
 	}
 	
 //	@SubscribeEvent
-//	public void playerData( Playerevent.getPlayer()LoggedInEvent event )
+//	public static void onRightClickItem( RightClickItem event )
+//	{
+//		XP.handleRightClickItem( event );
+//	}
+	
+//	@SubscribeEvent
+//	public static void itemSmelted( ItemSmeltedEvent event )
+//	{
+//		XP.handleSmelt( event );
+//	}
+	
+//	@SubscribeEvent
+//	public static void livingDeath( LivingDeathEvent event )
+//	{
+//		
+//	}
+	
+	@SubscribeEvent
+	public static void itemCrafted( ItemCraftedEvent event )
+	{
+		XP.handleCrafted( event );
+	}
+	
+//	@SubscribeEvent
+//	public void playerData( PlayerEvent.PlayerLoggedInEvent event )
 //	{
 //	}
 }

@@ -2,6 +2,7 @@ package harmonised.pmmo.skills;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -12,7 +13,7 @@ public class PlacedBlocks
 
 	public static void removeOre( World world, BlockPos pos )
 	{
-		int dimension = world.getDimension().getType().getId();
+		int dimension = world.provider.getDimension();
 		if (!placedBlockMap.containsKey( dimension ))
 	        return;
 		
@@ -28,7 +29,7 @@ public class PlacedBlocks
 	
 	public static boolean isPlayerPlaced(World world, BlockPos pos)
 	{
-		int dimension = world.getDimension().getType().getId();
+		int dimension = world.provider.getDimension();
 	    if (!placedBlockMap.containsKey( dimension ))
 	        return false;
 
@@ -47,7 +48,7 @@ public class PlacedBlocks
 	
 	public static void orePlaced( World world, BlockPos pos )
 	{
-		int dimension = world.getDimension().getType().getId();
+		int dimension = world.provider.getDimension();
 		
 		if( !placedBlockMap.containsKey( dimension ) )
 			placedBlockMap.put( dimension, new HashSet<Long>() );
