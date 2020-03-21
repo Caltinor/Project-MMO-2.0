@@ -1,5 +1,6 @@
 package harmonised.pmmo.commands;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -8,18 +9,34 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class CommandClear
 {
 	public static void register( CommandDispatcher<CommandSource> dispatch )
 	{
+		String[] suggestCommand = new String[4];
+		suggestCommand[0] = "Set";
+		suggestCommand[1] = "Clear";
+		suggestCommand[2] = "LevelAtXp";
+		suggestCommand[3] = "XpAtLevel";
+
+//		LiteralArgumentBuilder<CommandSource> argBuilder = Commands.literal("pmmo")
+//				        .requires( src -> src.hasPermissionLevel(0) )
+//				        .requires( src -> src.getEntity() instanceof ServerPlayerEntity )
+//                        .then( Commands.argument("command", StringArgumentType.word() )
+//						.suggests( (ctx, builder) -> ISuggestionProvider.suggest( suggestCommand, builder ) )
+//                        .then( Commands.argument("value", BoolArgumentType.bool() ) )
+//                        .executes( CommandClear::execute ) );
+
 		LiteralArgumentBuilder<CommandSource> argBuilder = Commands.literal("pmmo")
-				        .requires( src -> src.hasPermissionLevel(0) )
-				        .requires( src -> src.getEntity() instanceof ServerPlayerEntity )
-                        .then( Commands.argument("active", BoolArgumentType.bool() ) )
-                        .then( Commands.argument("potato", BoolArgumentType.bool() )
-                        .executes( CommandClear::execute ) );
+				.requires( src -> src.hasPermissionLevel(0) )
+				.requires( src -> src.getEntity() instanceof ServerPlayerEntity )
+				.then( Commands.argument("command", StringArgumentType.word() )
+				.suggests( (ctx, builder) -> ISuggestionProvider.suggest( suggestCommand, builder ) )
+				.then( Commands.argument("value", BoolArgumentType.bool() ) )
+				.executes( CommandClear::execute ) );
 
 		dispatch.register(argBuilder);
 	}
