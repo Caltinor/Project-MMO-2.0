@@ -1343,7 +1343,7 @@ public class XP
 				if( heightMultiplier < 0.5f )
 					heightMultiplier = 0.5f;
 
-				System.out.println( heightMultiplier );
+//				System.out.println( heightMultiplier );
 				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + mining * 0.01f ) * ( heightMultiplier ) );
 				break;
 
