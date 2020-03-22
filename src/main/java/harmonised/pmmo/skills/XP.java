@@ -1503,33 +1503,32 @@ public class XP
 		}
 	}
 
-//	public static void setXp( PlayerEntity player, String skillName, float newXp )
-//	{
-//		CompoundNBT persistTag = player.getPersistentData();
-//		CompoundNBT skillsTag = getSkillsTag( persistTag );
-//		skillsTag.putFloat( skillName, newXp );
-//
-//		switch( skill )
-//		{
-//			case "building":
-//				AttributeHandler.updateReach( player );
-//				break;
-//
-//			case "endurance":
-//				AttributeHandler.updateHP( player );
-//				break;
-//
-//			case "combat":
-//				AttributeHandler.updateDamage( player );
-//				break;
-//
-//			default:
-//
-//				break;
-//		}
-//
-//		NetworkHandler.sendToPlayer( new MessageXp( newXp, skill, 0, false ), (ServerPlayerEntity) player );
-//	}
+	public static void setXp( PlayerEntity player, String skillName, float newXp )
+	{
+		CompoundNBT skillsTag = getSkillsTag( player );
+		skillsTag.putFloat( skillName, newXp );
+
+		switch( skillName )
+		{
+			case "building":
+				AttributeHandler.updateReach( player );
+				break;
+
+			case "endurance":
+				AttributeHandler.updateHP( player );
+				break;
+
+			case "combat":
+				AttributeHandler.updateDamage( player );
+				break;
+
+			default:
+
+				break;
+		}
+
+		NetworkHandler.sendToPlayer( new MessageXp( newXp, Skill.getInt( skillName ), 0, false ), (ServerPlayerEntity) player );
+	}
 
 	public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
 	{

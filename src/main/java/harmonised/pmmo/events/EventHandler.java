@@ -1,12 +1,9 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.XP;
 
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
@@ -104,9 +101,4 @@ public class EventHandler
 	{
 		XP.handleBreakSpeed( event );
 	}
-	
-//	@SubscribeEvent
-//	public void playerData( Playerevent.getPlayer()LoggedInEvent event )
-//	{
-//	}
 }

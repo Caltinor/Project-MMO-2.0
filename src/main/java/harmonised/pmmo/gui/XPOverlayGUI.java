@@ -339,10 +339,4 @@ public class XPOverlayGUI extends AbstractGui
 		goalPos = 1;
 		name = "none";
 	}
-	
-//	@SubscribeEvent
-//	public void onUpdate( ClientTickEvent event )
-//	{
-//		
-//	}
 }

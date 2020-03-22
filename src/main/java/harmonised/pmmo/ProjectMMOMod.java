@@ -1,6 +1,7 @@
 package harmonised.pmmo;
 
 import harmonised.pmmo.commands.CommandClear;
+import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
@@ -50,6 +51,6 @@ public class ProjectMMOMod
 
     private void serverStart(FMLServerStartingEvent event)
     {
-        CommandClear.register( event.getCommandDispatcher() );
+        PmmoCommand.register( event.getCommandDispatcher() );
     }
 }
