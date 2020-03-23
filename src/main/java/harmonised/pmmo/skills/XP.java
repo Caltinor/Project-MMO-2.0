@@ -1552,22 +1552,34 @@ public class XP
 	public static void handleBreakSpeed( PlayerEvent.BreakSpeed event )
 	{
 		EntityPlayer player = event.getEntityPlayer();
-		if( player.world.isRemote )
-			return;
 		NBTTagCompound skills = getSkillsTag( getPersistTag( player ) );
 
-		int mining = levelAtXp( skills.getFloat( "mining" ) );
-		int woodcutting = levelAtXp( skills.getFloat( "woodcutting" ) );
-		int excavation = levelAtXp( skills.getFloat( "excavation" ) );
+		int mining = 1;
+		int woodcutting = 1;
+		int excavation = 1;
 
-		System.out.println( "mining: " + mining );
+		if( player.world.isRemote )
+		{
+			if( XPOverlayGUI.skills.get( "mining" ) != null )
+				mining = levelAtXp( XPOverlayGUI.skills.get( "mining" ).xp );
+			if( XPOverlayGUI.skills.get( "woodcutting" ) != null )
+				woodcutting = levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).xp );
+			if( XPOverlayGUI.skills.get( "excavation" ) != null )
+				excavation = levelAtXp( XPOverlayGUI.skills.get( "excavation" ).xp );
+		}
+		else
+		{
+			mining = levelAtXp( skills.getFloat("mining") );
+			woodcutting = levelAtXp( skills.getFloat("woodcutting") );
+			excavation = levelAtXp( skills.getFloat("excavation") );
+		}
 
 		switch( correctHarvestTool( event.getState().getMaterial() ) )
 		{
 			case "pickaxe":
 				float height = event.getPos().getY();
 				if( height < 0 )
-					height = 0;
+					height = -height;
 
 				float heightMultiplier = 1 - ( height / 1000) ;
 
