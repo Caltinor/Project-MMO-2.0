@@ -73,7 +73,7 @@ public class XP
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
-	public static float globalMultiplier = 1;
+	public static double globalMultiplier = Config.config.globalMultipier.get() / 100;
 	public static float maxXp = xpAtLevel( 999 );
 
 	public static void initValues()
@@ -887,11 +887,16 @@ public class XP
 
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
 			int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
-			float endured = 0;
-			float endurePercent = enduranceLevel * 0.25f;
-			if( endurePercent > 50 )
-				endurePercent = 50;
-			endured = damage * ( endurePercent / 100 );
+			double endurancePerLevel = Config.config.endurancePerLevel.get();
+			double maxEndurance = Config.config.maxEndurance.get();
+			double endurePercent = (enduranceLevel * endurancePerLevel);
+			if( endurePercent > maxEndurance )
+				endurePercent = maxEndurance;
+			endurePercent /= 100;
+
+			System.out.println( endurePercent );
+
+			float endured = damage * (float) endurePercent;
 			if( endured < 0 )
 				endured = 0;
 
@@ -905,9 +910,13 @@ public class XP
 //				float savedExtra = 0;
 				int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
 				int saved = 0;
-				float chance = agilityLevel * 0.50f;
-				if( chance > 64 )
-					chance = 64;
+
+				double maxFallSaveChance = Config.config.maxFallSaveChance.get();
+				double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
+
+				double chance = agilityLevel * saveChancePerLevel;
+				if( chance > maxFallSaveChance )
+					chance = maxFallSaveChance;
 				for( int i = 0; i < damage; i++ )
 				{
 					if( Math.ceil( Math.random() * 100 ) <= chance )
@@ -1239,15 +1248,18 @@ public class XP
 					int combatLevel = levelAtXp( skillsTag.getFloat( "combat" ) );
 					int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
 
+					double maxFallSaveChance = Config.config.maxFallSaveChance.get();
+					double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
+
 					double reach = AttributeHandler.getReach( player );
-					double agilityChance = agilityLevel * 0.64f;
+					double agilityChance = agilityLevel * saveChancePerLevel;
 					double damageReduction = enduranceLevel * 0.25f;
 					double extraDamage = Math.floor( combatLevel / 20 );
 
 					float speedPercent = agilityLevel / 2000f;
 
-					if( agilityChance > 64 )
-						agilityChance = 64;
+					if( agilityChance > maxFallSaveChance )
+						agilityChance = maxFallSaveChance;
 
 					if( damageReduction > 50 )
 						damageReduction = 50;
@@ -1329,6 +1341,10 @@ public class XP
 		int woodcutting = 1;
 		int excavation = 1;
 
+		double miningPercent = Config.config.miningBonusSpeed.get() / 100;
+		double woodcuttingPercent = Config.config.woodcuttingBonusSpeed.get() / 100;
+		double excavationPercent = Config.config.excavationBonusSpeed.get() / 100;
+
 		if( player.world.isRemote() )
 		{
 			if( XPOverlayGUI.skills.get( "mining" ) != null )
@@ -1358,13 +1374,13 @@ public class XP
 				if ( heightMultiplier < Config.config.minBreakSpeed.get() )
 					heightMultiplier = Config.config.minBreakSpeed.get();
 
-				event.setNewSpeed( event.getOriginalSpeed() * (1 + mining * 0.01f) * ( (float) heightMultiplier) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + mining * (float) miningPercent ) * ( (float) heightMultiplier) );
 			break;
 			case "axe":
-				event.setNewSpeed( event.getOriginalSpeed() * (1 + woodcutting * 0.01f) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + woodcutting * (float) woodcuttingPercent ) );
 			break;
 			case "shovel":
-				event.setNewSpeed( event.getOriginalSpeed() * (1 + excavation * 0.01f) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + excavation * (float) excavationPercent ) );
 			break;
 			default:
 				event.setNewSpeed( event.getOriginalSpeed() );
