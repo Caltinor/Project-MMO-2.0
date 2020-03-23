@@ -32,7 +32,9 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0;
 	private static String name = "none", tempName = "none";
-	private static boolean showGUI = false;
+	private static boolean guiKey = false;
+	private static boolean guiPressed = false;
+	private static boolean guiOn = true;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -67,15 +69,26 @@ public class XPOverlayGUI extends AbstractGui
 				if( themePos > 10000 )
 					themePos =  themePos % 10000;
 
-				showGUI = ClientHandler.SHOW_GUI.isKeyDown();
-//				showGUI = true;
+				guiKey = ClientHandler.SHOW_GUI.isKeyDown();
+//				guiKey = true;
 
-				if( showGUI )
+				if( guiKey )
 					cooldown = 1;
+
+				if( guiKey )
+				{
+					if( !guiPressed )
+					{
+						guiOn = !guiOn;
+						guiPressed = true;
+					}
+				}
+				else
+					guiPressed = false;
 			
 				if( cooldown <= 0 )
 					dropOffsetCap = -9;
-				else if ( showGUI )
+				else if ( guiKey )
 					dropOffsetCap = 34;
 				else
 					dropOffsetCap = 16;
@@ -195,7 +208,7 @@ public class XPOverlayGUI extends AbstractGui
 					}
 					drawCenteredString( fontRenderer, name + " " + DP.dp( skill.pos ), halfScreen + (guiWidth / 2), 0, XP.getSkillColor( name ) );
 					
-					if( showGUI && skills.get( name ) != null )
+					if( guiKey && skills.get( name ) != null )
 					{
 						if( skills.get( name ).xp >= XP.maxXp )
 						{
@@ -211,9 +224,13 @@ public class XPOverlayGUI extends AbstractGui
 							drawCenteredString( fontRenderer, DP.dprefix( goalXp - skill.xp ) + " left", halfScreen + (guiWidth / 2), 26, XP.getSkillColor( name ) );
 						}
 					}
-					
-					if( cooldown > 0 )
-					{
+					RenderSystem.disableBlend();
+					RenderSystem.color3f( 255, 255, 255 );
+					RenderSystem.popMatrix();
+				}
+
+				if( guiOn )
+				{
 						listIndex = 0;
 						for( String tag : skillsKeys )
 						{
@@ -224,10 +241,6 @@ public class XPOverlayGUI extends AbstractGui
 							drawString( fontRenderer, " | " + DP.dprefix( skills.get( tag ).xp ), 102, 3 + listIndex, XP.getSkillColor( tag ) );
 							listIndex += 9;
 						}
-					}
-					RenderSystem.disableBlend();
-					RenderSystem.color3f( 255, 255, 255 );
-					RenderSystem.popMatrix();
 				}
 			}
 		}
