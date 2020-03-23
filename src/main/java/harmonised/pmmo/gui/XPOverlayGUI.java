@@ -32,7 +32,9 @@ public class XPOverlayGUI extends Gui
 	private static String name = "none";
 	private static Minecraft mc = Minecraft.getMinecraft();
 	private static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-	private static boolean showGUI = false;
+	private static boolean guiKey = false;
+	private static boolean guiPressed = false;
+	private static boolean guiOn = true;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getMinecraft();
@@ -66,14 +68,25 @@ public class XPOverlayGUI extends Gui
 				
 				skill = skills.get( name );
 				
-				showGUI = ClientProxy.SHOW_GUI.isKeyDown();
+				guiKey = ClientProxy.SHOW_GUI.isKeyDown();
 				
-				if( showGUI )
+				if( guiKey )
 					cooldown = 1;
+
+				if( guiKey )
+				{
+					if( !guiPressed )
+					{
+						guiOn = !guiOn;
+						guiPressed = true;
+					}
+				}
+				else
+					guiPressed = false;
 			
 				if( cooldown <= 0 )
 					dropOffsetCap = -9;
-				else if ( showGUI )
+				else if ( guiKey )
 					dropOffsetCap = 34;
 				else
 					dropOffsetCap = 16;
@@ -193,8 +206,8 @@ public class XPOverlayGUI extends Gui
 						drawTexturedModalRect( halfScreen + 1, 10, 1 + (int)( Math.floor( themePos / 100 ) ), guiHeight*2, (int) Math.floor( ( guiWidth - 1 ) * ( skill.pos - Math.floor( skill.pos ) ) ), guiHeight );
 					}
 					drawCenteredString( fontRenderer, name + " " + DP.dp( skill.pos ), halfScreen + (guiWidth / 2), 0, XP.getSkillColor( name ) );
-					
-					if( showGUI && skills.get( name ) != null )
+
+					if( guiKey && skills.get( name ) != null )
 					{
 						if( skills.get( name ).xp >= XP.maxXp )
 						{
@@ -204,29 +217,30 @@ public class XPOverlayGUI extends Gui
 						{
 							if( goalXp >= XP.maxXp )
 								goalXp =  XP.maxXp;
-							
+
 							goalXp = XP.xpAtLevel( XP.levelAtXp( skill.xp ) + 1 );
 							drawCenteredString( fontRenderer, DP.dprefix( skills.get( name ).xp ) + " / " + DP.dprefix( goalXp ), halfScreen + (guiWidth / 2), 17, XP.getSkillColor( name ) );
 							drawCenteredString( fontRenderer, DP.dprefix( goalXp - skill.xp ) + " left", halfScreen + (guiWidth / 2), 26, XP.getSkillColor( name ) );
 						}
 					}
-					
-					if( cooldown > 0 )
-					{
-						listIndex = 0;
-						for( String tag : skillsKeys )
-						{
-							tempDouble = XP.levelAtXpDecimal( skills.get( tag ).xp );
-							tempString = DP.dp( tempDouble );
-							drawString( fontRenderer, tempString, 3, 3 + listIndex, XP.getSkillColor( tag ) );
-							drawString( fontRenderer, " | " + tag, 32, 3 + listIndex, XP.getSkillColor( tag ) );
-							drawString( fontRenderer, " | " + DP.dprefix( skills.get( tag ).xp ), 102, 3 + listIndex, XP.getSkillColor( tag ) );
-							listIndex += 9;
-						}
-					}
+
 					GlStateManager.disableBlend();
 					GlStateManager.color( 255, 255, 255 );
 					GlStateManager.popMatrix();
+				}
+
+				if( guiOn )
+				{
+					listIndex = 0;
+					for( String tag : skillsKeys )
+					{
+						tempDouble = XP.levelAtXpDecimal( skills.get( tag ).xp );
+						tempString = DP.dp( tempDouble );
+						drawString( fontRenderer, tempString, 3, 3 + listIndex, XP.getSkillColor( tag ) );
+						drawString( fontRenderer, " | " + tag, 32, 3 + listIndex, XP.getSkillColor( tag ) );
+						drawString( fontRenderer, " | " + DP.dprefix( skills.get( tag ).xp ), 102, 3 + listIndex, XP.getSkillColor( tag ) );
+						listIndex += 9;
+					}
 				}
 			}
 		}

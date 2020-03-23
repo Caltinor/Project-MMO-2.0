@@ -4,12 +4,12 @@ import harmonised.pmmo.gui.XPOverlayGUI;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.glfw.GLFW;
+import org.lwjgl.input.Keyboard;
 
 //@net.minecraftforge.fml.common.Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.MOD)
 public class ClientHandler
 {
-    public static final KeyBinding SHOW_GUI = new KeyBinding( "key.showgui", GLFW.GLFW_KEY_TAB, "category.pmmo" );
+    public static final KeyBinding SHOW_GUI = new KeyBinding( "key.showgui", Keyboard.KEY_TAB, "category.pmmo" );
 
 //    public static void registerKeybinds()
 //    {
