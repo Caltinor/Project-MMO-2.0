@@ -296,9 +296,9 @@ public class XP
 		materialHarvestTool.put( Material.SNOW, "shovel" );
 		materialHarvestTool.put( Material.SEA_GRASS, "shovel" );
 		materialHarvestTool.put( Material.SNOW_BLOCK, "shovel" );
+		materialHarvestTool.put( Material.ORGANIC, "shovel" );
 
 		materialHarvestTool.put( Material.PLANTS, "hoe" );					//HOE
-		materialHarvestTool.put( Material.ORGANIC, "hoe" );
 		materialHarvestTool.put( Material.CACTUS, "hoe" );
 		materialHarvestTool.put( Material.CORAL, "hoe" );
 		materialHarvestTool.put( Material.OCEAN_PLANT, "hoe" );
@@ -1325,39 +1325,48 @@ public class XP
 	public static void handleBreakSpeed( PlayerEvent.BreakSpeed event )
 	{
 		PlayerEntity player = event.getPlayer();
+
 		CompoundNBT skills = getSkillsTag( player );
 
-		int mining = levelAtXp( skills.getFloat( "mining" ) );
-		int woodcutting = levelAtXp( skills.getFloat( "woodcutting" ) );
-		int excavation = levelAtXp( skills.getFloat( "excavation" ) );
+		int mining = 1;
+		int woodcutting = 1;
+		int excavation = 1;
 
-		switch( correctHarvestTool( event.getState().getMaterial() ) )
+		if( player.world.isRemote() )
 		{
-			case "pickaxe":
-				float height = event.getPos().getY();
-				if( height < 0 )
-					height = 0;
+			if( XPOverlayGUI.skills.get( "mining" ) != null )
+				mining = levelAtXp( XPOverlayGUI.skills.get( "mining" ).xp );
+			if( XPOverlayGUI.skills.get( "woodcutting" ) != null )
+				woodcutting = levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).xp );
+			if( XPOverlayGUI.skills.get( "excavation" ) != null )
+				excavation = levelAtXp( XPOverlayGUI.skills.get( "excavation" ).xp );
+		}
+		else
+		{
+			mining = levelAtXp( skills.getFloat("mining") );
+			woodcutting = levelAtXp( skills.getFloat("woodcutting") );
+			excavation = levelAtXp( skills.getFloat("excavation") );
+		}
 
-				float heightMultiplier = 1 - ( height / 1000) ;
+		switch ( correctHarvestTool(event.getState().getMaterial()) )
+		{ case "pickaxe":
+			float height = event.getPos().getY();
+			if (height < 0)
+				height = -height;
 
-				if( heightMultiplier < 0.5f )
-					heightMultiplier = 0.5f;
+			float heightMultiplier = 1 - (height / 1000);
 
-//				System.out.println( heightMultiplier );
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + mining * 0.01f ) * ( heightMultiplier ) );
-				break;
+			if (heightMultiplier < 0.5f)
+				heightMultiplier = 0.5f;
 
-			case "axe":
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + woodcutting * 0.01f ) );
-				break;
-
-			case "shovel":
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + excavation * 0.01f ) );
-				break;
-
-			default:
-				event.setNewSpeed( event.getOriginalSpeed() );
-				break;
+			event.setNewSpeed( event.getOriginalSpeed() * (1 + mining * 0.01f) * (heightMultiplier) );
+			break;
+			case "axe": event.setNewSpeed( event.getOriginalSpeed() * (1 + woodcutting * 0.01f) );
+			break;
+			case "shovel": event.setNewSpeed( event.getOriginalSpeed() * (1 + excavation * 0.01f) );
+			break;
+			default: event.setNewSpeed( event.getOriginalSpeed() );
+			break;
 		}
 	}
 
@@ -1505,6 +1514,7 @@ public class XP
 
 	public static void setXp( PlayerEntity player, String skillName, float newXp )
 	{
+		skillName = skillName.toLowerCase();
 		CompoundNBT skillsTag = getSkillsTag( player );
 		skillsTag.putFloat( skillName, newXp );
 

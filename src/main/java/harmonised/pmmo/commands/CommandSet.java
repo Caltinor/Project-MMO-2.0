@@ -51,15 +51,16 @@ public class CommandSet
                 return 1;
             }
 
-            if (setLevel) {
+            if ( setLevel )
+            {
                 if (newXp >= 999)
                     newXp = 999.99f;
-                XP.setXp(player, args[2], XP.xpAtLevelDecimal(newXp));
+                XP.setXp( player, args[2], XP.xpAtLevelDecimal(newXp) );
                 player.sendStatusMessage(new StringTextComponent(args[2] + " has been set to level: " + newXp), false);
             }
             else if (newXp >= 0 && newXp <= 2000000000)
             {
-                XP.setXp(player, args[2], newXp);
+                XP.setXp( player, args[2], newXp );
                 player.sendStatusMessage(new StringTextComponent(args[2] + " has been set to: " + args[3] + "xp"), false);
             }
             else
