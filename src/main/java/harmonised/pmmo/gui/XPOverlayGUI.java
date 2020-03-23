@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 //import harmonised.pmmo.proxy.ClientHandler;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -25,16 +26,16 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class XPOverlayGUI extends AbstractGui
 {
-	private static int guiWidth = 102, guiHeight = 5;
-	private static int cooldown, tempAlpha, halfScreen = 0;
-	private static float xp, pos, goalXp, goalPos = 0;
-	private static double lastTime, startLevel, timeDiff, tempDouble, tempDouble2, dropOffset, dropOffsetCap = 0;
+	private static int barWidth = 102, barHeight = 5, barPosX, barPosY;
+	private static int cooldown, tempAlpha, halfscreen;
+	private static float xp, pos, goalXp, goalPos;
+	private static double lastTime, startLevel, timeDiff, tempDouble, tempDouble2, dropOffset, dropOffsetCap;
+	private static double barOffsetX = 0;
+	private static double barOffsetY = 0;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0;
 	private static String name = "none", tempName = "none";
-	private static boolean guiKey = false;
-	private static boolean guiPressed = false;
-	private static boolean guiOn = true;
+	private static boolean init = false, guiKey = false, guiPressed = false, guiOn = true;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -51,21 +52,29 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
 			{
+				if( !init )
+				{
+					barOffsetX = Config.config.barOffsetX.get();
+					barOffsetY = Config.config.barOffsetY.get();
+					init = true;
+				}
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
 				MainWindow sr = minecraft.getMainWindow();
-				halfScreen = ( sr.getScaledWidth() - guiWidth ) / 2;
+//				barPosX = ( sr.getScaledWidth() - barWidth ) / 2;
+				barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
+				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
 
 				skill = skills.get( name );
-				
+
 				timeDiff = (System.nanoTime() - lastTime);
 				lastTime = System.nanoTime();
-				
+
 				pos = skill.pos;
 				if( cooldown > 0 )
 					cooldown -= timeDiff / 1000000;
 				themePos += 2.5 + 7.5 * ( pos % Math.floor( pos ) ) * timeDiff / 1000000;
-				
+
 				if( themePos > 10000 )
 					themePos =  themePos % 10000;
 
@@ -85,11 +94,16 @@ public class XPOverlayGUI extends AbstractGui
 				}
 				else
 					guiPressed = false;
-			
+
 				if( cooldown <= 0 )
 					dropOffsetCap = -9;
 				else if ( guiKey )
-					dropOffsetCap = 34;
+				{
+					if( skills.get( name ).xp >= XP.maxXp )
+						dropOffsetCap = 25;
+					else
+						dropOffsetCap = 34;
+				}
 				else
 					dropOffsetCap = 16;
 				
@@ -146,7 +160,7 @@ public class XPOverlayGUI extends AbstractGui
 					
 					if( tempAlpha > 3 )
 					{
-						drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " in " + xpDrop.name, halfScreen + (guiWidth / 2), (int) xpDrop.Y + (int) dropOffset, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
+						drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " in " + xpDrop.name, barPosX + (barWidth / 2), (int) xpDrop.Y + (int) dropOffset + barPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
 					}
 				}
 
@@ -196,32 +210,30 @@ public class XPOverlayGUI extends AbstractGui
 
 					skill = skills.get( name );
 					
-					blit( halfScreen, 10, 0, 0, guiWidth, guiHeight );
+					blit( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
 					if( theme == 1 )
 					{
-						blit( halfScreen, 10, 0, guiHeight * 1, (int) Math.floor( guiWidth * ( skill.pos - Math.floor( skill.pos ) ) ), guiHeight );
+						blit( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( skill.pos - Math.floor( skill.pos ) ) ), barHeight );
 					}
 					else
 					{
-						blit( halfScreen, 10, 0, guiHeight*3, guiWidth - 1, guiHeight );
-						blit( halfScreen + 1, 10, 1 + (int)( Math.floor( themePos / 100 ) ), guiHeight*2, (int) Math.floor( ( guiWidth - 1 ) * ( skill.pos - Math.floor( skill.pos ) ) ), guiHeight );
+						blit( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
+						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( themePos / 100 ) ), barHeight*2, (int) Math.floor( ( barWidth - 1 ) * ( skill.pos - Math.floor( skill.pos ) ) ), barHeight );
 					}
-					drawCenteredString( fontRenderer, name + " " + DP.dp( skill.pos ), halfScreen + (guiWidth / 2), 0, XP.getSkillColor( name ) );
+					drawCenteredString( fontRenderer, name + " " + DP.dp( skill.pos ), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
 					
 					if( guiKey && skills.get( name ) != null )
 					{
 						if( skills.get( name ).xp >= XP.maxXp )
-						{
-							drawCenteredString( fontRenderer, "MAX LEVEL", halfScreen + (guiWidth / 2), 17, XP.getSkillColor( name ) );
-						}
+							drawCenteredString( fontRenderer, "MAX LEVEL", barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( name ) );
 						else
 						{
 							if( goalXp >= XP.maxXp )
 								goalXp =  XP.maxXp;
 							
 							goalXp = XP.xpAtLevel( XP.levelAtXp( skill.xp ) + 1 );
-							drawCenteredString( fontRenderer, DP.dprefix( skills.get( name ).xp ) + " / " + DP.dprefix( goalXp ), halfScreen + (guiWidth / 2), 17, XP.getSkillColor( name ) );
-							drawCenteredString( fontRenderer, DP.dprefix( goalXp - skill.xp ) + " left", halfScreen + (guiWidth / 2), 26, XP.getSkillColor( name ) );
+							drawCenteredString( fontRenderer, DP.dprefix( skills.get( name ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( name ) );
+							drawCenteredString( fontRenderer, DP.dprefix( goalXp - skill.xp ) + " left", barPosX + (barWidth / 2), 26 + barPosY, XP.getSkillColor( name ) );
 						}
 					}
 					RenderSystem.disableBlend();

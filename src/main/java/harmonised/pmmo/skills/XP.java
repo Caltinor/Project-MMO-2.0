@@ -851,11 +851,11 @@ public class XP
 							break;
 
 						case EXCAVATION:
-							awardXp( player, Skill.EXCAVATION, "digging a block", getXp( block.getRegistryName() ) + hardness * 2, false );
+							awardXp( player, Skill.EXCAVATION, "digging a block", getXp( block.getRegistryName() ) + hardness, false );
 							break;
 
 						case FARMING:
-							awardXp( player, Skill.EXCAVATION, "harvesting", getXp( block.getRegistryName() ) + hardness * 2, false );
+							awardXp( player, Skill.EXCAVATION, "harvesting", getXp( block.getRegistryName() ) + hardness, false );
 							break;
 
 						default:
@@ -893,8 +893,6 @@ public class XP
 			if( endurePercent > maxEndurance )
 				endurePercent = maxEndurance;
 			endurePercent /= 100;
-
-			System.out.println( endurePercent );
 
 			float endured = damage * (float) endurePercent;
 			if( endured < 0 )
@@ -1429,6 +1427,8 @@ public class XP
 		}
 
 		String skillName = skill.name().toLowerCase();
+		double skillMultiplier = 1;
+		double difficultyMultiplier = 1;
 
 		for( char letter : player.getDisplayName().getFormattedText().toCharArray() )
 		{
@@ -1441,18 +1441,19 @@ public class XP
 			switch( player.world.getDifficulty() )
 			{
 			case PEACEFUL:
-				amount *= 1f/3f;
+				difficultyMultiplier = Config.config.peacefulMultiplier.get();
 				break;
 
 			case EASY:
-				amount *= 2f/3f;
+				difficultyMultiplier = Config.config.easyMultiplier.get();
 				break;
 
 			case NORMAL:
+				difficultyMultiplier = Config.config.normalMultiplier.get();
 				break;
 
 			case HARD:
-				amount *= 4f/3f;
+				difficultyMultiplier = Config.config.hardMultiplier.get();
 				break;
 
 				default:
@@ -1460,7 +1461,74 @@ public class XP
 			}
 		}
 
+		switch( skill )
+		{
+			case MINING:
+				skillMultiplier = Config.config.miningMultiplier.get();
+				break;
+
+			case BUILDING:
+				skillMultiplier = Config.config.buildingMultiplier.get();
+				break;
+
+			case EXCAVATION:
+				skillMultiplier = Config.config.excavationMultiplier.get();
+				break;
+
+			case WOODCUTTING:
+				skillMultiplier = Config.config.woodcuttingMultiplier.get();
+				break;
+
+			case FARMING:
+				skillMultiplier = Config.config.farmingMultiplier.get();
+				break;
+
+			case AGILITY:
+				skillMultiplier = Config.config.agilityMultiplier.get();
+				break;
+
+			case ENDURANCE:
+				skillMultiplier = Config.config.enduranceMultiplier.get();
+				break;
+
+			case COMBAT:
+				skillMultiplier = Config.config.combatMultiplier.get();
+				break;
+
+			case ARCHERY:
+				skillMultiplier = Config.config.archeryMultiplier.get();
+				break;
+
+			case REPAIRING:
+				skillMultiplier = Config.config.repairingMultiplier.get();
+				break;
+
+			case FLYING:
+				skillMultiplier = Config.config.flyingMultiplier.get();
+				break;
+
+			case SWIMMING:
+				skillMultiplier = Config.config.swimmingMultiplier.get();
+				break;
+
+			case FISHING:
+				skillMultiplier = Config.config.fishingMultiplier.get();
+				break;
+
+			case CRAFTING:
+				skillMultiplier = Config.config.craftingMultiplier.get();
+				break;
+
+			default:
+				break;
+		}
+
+
+		amount *= skillMultiplier;
 		amount *= globalMultiplier;
+
+		if( amount == 0 )
+			return;
 
 		String playerName = player.getDisplayName().getFormattedText();
 		int startLevel;
@@ -1498,6 +1566,7 @@ public class XP
 		{
 			switch( skill )
 			{
+
 				case BUILDING:
 					AttributeHandler.updateReach( player );
 					break;
