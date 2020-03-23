@@ -644,10 +644,6 @@ public class XP
 
 	public static void handleBroken( BreakEvent event )
 	{
-		System.out.println( "Broken" );
-		System.out.println( Config.config.minBreakSpeed.get() );
-		System.out.println( Config.config.bananas.get() );
-
 		if( event.getPlayer() instanceof PlayerEntity )
 		{
 			PlayerEntity player = event.getPlayer();
@@ -749,7 +745,7 @@ public class XP
 					totalDrops = rewardable + guaranteedDrop + extraDrop;
 					award += ( getXp( baseBlock.getRegistryName() ) * totalDrops ) + ( hardness * totalDrops );
 	//				System.out.println( "Height: " + height );
-					awardXp( player, Skill.FARMING, "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " " + baseBlock.getNameTextComponent().toString(), award, false );
+					awardXp( player, Skill.FARMING, "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra", award, false );
 				}
 				else if( material.equals( Material.PLANTS ) && drops.size() > 0 ) //IS PLANT
 				{
@@ -833,7 +829,7 @@ public class XP
 							award += getXp( block.getRegistryName() ) * ( guaranteedDrop + extraDrop );
 							ItemStack theDrop = new ItemStack( drops.get( 0 ).getItem(), guaranteedDrop + extraDrop );
 							drops.add( theDrop );
-							awardMessage = "mining " + block.getNameTextComponent().getFormattedText() + " and " + ( guaranteedDrop + extraDrop ) + " extra " + drops.get( 0 ).getDisplayName().getFormattedText() + " drop";
+							awardMessage = "mining  and " + ( guaranteedDrop + extraDrop ) + " extra drop";
 							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop + extraDrop ) + " Extra " + theDrop.getDisplayName().getFormattedText() + " Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
 						}
 						awardXp( player, Skill.MINING, awardMessage, award, false );
@@ -1350,23 +1346,28 @@ public class XP
 		}
 
 		switch ( correctHarvestTool(event.getState().getMaterial()) )
-		{ case "pickaxe":
-			float height = event.getPos().getY();
-			if (height < 0)
-				height = -height;
+		{
+			case "pickaxe":
+				float height = event.getPos().getY();
+				if (height < 0)
+					height = -height;
 
-			float heightMultiplier = 1 - (height / 1000);
+				double blocksToUnbreakableY = Config.config.blocksToUnbreakableY.get();
+				double heightMultiplier = 1 - ( height / blocksToUnbreakableY );
 
-			if (heightMultiplier < 0.5f)
-				heightMultiplier = 0.5f;
+				if ( heightMultiplier < Config.config.minBreakSpeed.get() )
+					heightMultiplier = Config.config.minBreakSpeed.get();
 
-			event.setNewSpeed( event.getOriginalSpeed() * (1 + mining * 0.01f) * (heightMultiplier) );
+				event.setNewSpeed( event.getOriginalSpeed() * (1 + mining * 0.01f) * ( (float) heightMultiplier) );
 			break;
-			case "axe": event.setNewSpeed( event.getOriginalSpeed() * (1 + woodcutting * 0.01f) );
+			case "axe":
+				event.setNewSpeed( event.getOriginalSpeed() * (1 + woodcutting * 0.01f) );
 			break;
-			case "shovel": event.setNewSpeed( event.getOriginalSpeed() * (1 + excavation * 0.01f) );
+			case "shovel":
+				event.setNewSpeed( event.getOriginalSpeed() * (1 + excavation * 0.01f) );
 			break;
-			default: event.setNewSpeed( event.getOriginalSpeed() );
+			default:
+				event.setNewSpeed( event.getOriginalSpeed() );
 			break;
 		}
 	}
