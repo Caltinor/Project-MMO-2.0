@@ -73,7 +73,7 @@ public class XP
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
-	public static double globalMultiplier = Config.config.globalMultipier.get() / 100;
+	public static double globalMultiplier = Config.config.globalMultiplier.get() / 100;
 	public static float maxXp = xpAtLevel( 999 );
 
 	public static void initValues()

@@ -67,6 +67,8 @@ public class Config
                     .translation("pmmo.excavationBonusSpeed")
                     .defineInRange("excavationBonusSpeed", 1D, 0, 10) );
 
+            builder.pop();
+
             builder.push("Agility");
 
             this.maxFallSaveChance = subscriber.subscribe(builder
