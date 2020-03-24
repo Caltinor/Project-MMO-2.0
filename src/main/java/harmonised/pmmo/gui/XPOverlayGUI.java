@@ -257,6 +257,8 @@ public class XPOverlayGUI extends AbstractGui
 						{
 							tempDouble = XP.levelAtXpDecimal( skills.get( tag ).xp );
 							tempString = DP.dp( tempDouble );
+							if( tempDouble >= XP.maxLevel )
+								tempString = "" + XP.maxLevel;
 							drawString( fontRenderer, tempString, 3, 3 + listIndex, XP.getSkillColor( tag ) );
 							drawString( fontRenderer, " | " + tag, 32, 3 + listIndex, XP.getSkillColor( tag ) );
 							drawString( fontRenderer, " | " + DP.dprefix( skills.get( tag ).xp ), 102, 3 + listIndex, XP.getSkillColor( tag ) );

@@ -12,9 +12,7 @@ import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.DP;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -31,6 +29,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -98,18 +97,14 @@ public class XP
 ////////////////////////////////////XP_VALUES//////////////////////////////////////////////////////
 //		xpValues.put( Blocks.GRASS.getRegistryName(), 2.5f );
 		xpValues.put( Blocks.AIR.getRegistryName(), 0.0f );
-		xpValues.put( Blocks.DEAD_BUSH.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.LILY_PAD.getRegistryName(), 15.0f );
-//		xpValues.put( Blocks.YELLOW_FLOWER.getRegistryName(), 15.0f );
-//		xpValues.put( Blocks.RED_FLOWER.getRegistryName(), 17.5f );
 //		xpValues.put( Blocks.DOUBLE_PLANT.getRegistryName(), 25.0f );
 //		xpValues.put( Blocks.TALLGRASS.getRegistryName(), 6.0f );
-		xpValues.put( Blocks.WHEAT.getRegistryName(), 25.0f );
+		xpValues.put( Blocks.WHEAT.getRegistryName(), 15.0f );
 		xpValues.put( Blocks.POTATOES.getRegistryName(), 7.5f );
 		xpValues.put( Blocks.CARROTS.getRegistryName(), 7.5f );
 		xpValues.put( Blocks.COCOA.getRegistryName(), 30.0f );
-		xpValues.put( Blocks.BEETROOTS.getRegistryName(), 35.0f );
-		xpValues.put( Blocks.NETHER_WART.getRegistryName(), 10.0f );
+		xpValues.put( Blocks.BEETROOTS.getRegistryName(), 20.0f );
+		xpValues.put( Blocks.NETHER_WART.getRegistryName(), 5.0f );
 		xpValues.put( Blocks.OAK_SAPLING.getRegistryName(), 10.0f );
 		xpValues.put( Blocks.ACACIA_SAPLING.getRegistryName(), 10.0f );
 		xpValues.put( Blocks.BAMBOO_SAPLING.getRegistryName(), 10.0f );
@@ -126,12 +121,30 @@ public class XP
 		xpValues.put( Blocks.SPRUCE_LEAVES.getRegistryName(), 1.5f );
 		xpValues.put( Blocks.PUMPKIN.getRegistryName(), 35.0f );
 		xpValues.put( Blocks.MELON.getRegistryName(), 7.0f );
-		xpValues.put( Blocks.BROWN_MUSHROOM_BLOCK.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.BROWN_MUSHROOM.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.RED_MUSHROOM_BLOCK.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.RED_MUSHROOM.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.SUGAR_CANE.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.CACTUS.getRegistryName(), 20.0f );
+		xpValues.put( Blocks.SUGAR_CANE.getRegistryName(), 8.0f );
+		xpValues.put( Blocks.CACTUS.getRegistryName(), 15.0f );
+		xpValues.put( Blocks.KELP_PLANT.getRegistryName(), 4.0f );
+		xpValues.put( Blocks.SEA_PICKLE.getRegistryName(), 2.0f );
+		xpValues.put( Blocks.DEAD_BUSH.getRegistryName(), 5.0f );
+		xpValues.put( Blocks.LILY_PAD.getRegistryName(), 15.0f );
+		xpValues.put( Blocks.DANDELION.getRegistryName(), 15.0f );
+		xpValues.put( Blocks.POPPY.getRegistryName(), 17.5f );
+		xpValues.put( Blocks.BLUE_ORCHID.getRegistryName(), 20.0f );
+		xpValues.put( Blocks.POPPY.getRegistryName(), 17.5f );
+		xpValues.put( Blocks.ALLIUM.getRegistryName(), 12.5f );
+		xpValues.put( Blocks.AZURE_BLUET.getRegistryName(), 14.5f );
+		xpValues.put( Blocks.ORANGE_TULIP.getRegistryName(), 16.5f );
+		xpValues.put( Blocks.PINK_TULIP.getRegistryName(), 16.0f );
+		xpValues.put( Blocks.RED_TULIP.getRegistryName(), 17.5f );
+		xpValues.put( Blocks.WHITE_TULIP.getRegistryName(), 18.5f );
+		xpValues.put( Blocks.OXEYE_DAISY.getRegistryName(), 14.5f );
+		xpValues.put( Blocks.CORNFLOWER.getRegistryName(), 15.5f );
+		xpValues.put( Blocks.LILY_OF_THE_VALLEY.getRegistryName(), 19.5f );
+		xpValues.put( Blocks.WITHER_ROSE.getRegistryName(), 35.0f );
+		xpValues.put( Blocks.BROWN_MUSHROOM.getRegistryName(), 10.0f );
+		xpValues.put( Blocks.BROWN_MUSHROOM_BLOCK.getRegistryName(), 3.0f );
+		xpValues.put( Blocks.RED_MUSHROOM.getRegistryName(), 12.0f );
+		xpValues.put( Blocks.RED_MUSHROOM_BLOCK.getRegistryName(), 4.0f );
 		xpValues.put( Blocks.CHORUS_PLANT.getRegistryName(), 2.5f );
 		xpValues.put( Blocks.CHORUS_FLOWER.getRegistryName(), 35.0f );
 		xpValues.put( Blocks.VINE.getRegistryName(), 3.5f );
@@ -260,7 +273,10 @@ public class XP
 		plantDoubleValues.put( Items.MELON.getRegistryName(), 0.75f );
 		plantDoubleValues.put( Items.MELON_SEEDS.getRegistryName(), 0.75f );
 
-		plantDoubleValues.put( Items.INK_SAC.getRegistryName(), 1.50f );			// COCO
+		plantDoubleValues.put( Items.COCOA_BEANS.getRegistryName(), 1.50f );
+		plantDoubleValues.put( Items.KELP.getRegistryName(), 0.25f );
+		plantDoubleValues.put( Items.SEA_PICKLE.getRegistryName(), 1.50f );
+
 ////////////////////////////////////NO_DROP_VALUES/////////////////////////////////////////////////
 		noDropOres.put( Blocks.IRON_ORE.getRegistryName(), true );
 		noDropOres.put( Blocks.GOLD_ORE.getRegistryName(), true );
@@ -298,6 +314,7 @@ public class XP
 		materialHarvestTool.put( Material.ORGANIC, "shovel" );
 
 		materialHarvestTool.put( Material.PLANTS, "hoe" );					//HOE
+		materialHarvestTool.put( Material.OCEAN_PLANT, "hoe" );
 		materialHarvestTool.put( Material.CACTUS, "hoe" );
 		materialHarvestTool.put( Material.CORAL, "hoe" );
 		materialHarvestTool.put( Material.OCEAN_PLANT, "hoe" );
@@ -606,44 +623,6 @@ public class XP
 		}
 	}
 
-	public static void handleHarvested( HarvestDropsEvent event )
-	{
-		if( event.getHarvester() instanceof PlayerEntity && !event.getWorld().isRemote() )
-		{
-			PlayerEntity player = event.getHarvester();
-
-			if( !player.isCreative() )
-			{
-				CompoundNBT skillsTag = getSkillsTag( player );
-				Block block = event.getState().getBlock();
-				if( block == Blocks.SUGAR_CANE || block == Blocks.CACTUS )
-					return;
-				ResourceLocation blockRegistry = block.getRegistryName();
-				Material material = block.getMaterial( block.getDefaultState() );
-				boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
-				float blockHardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos());
-				if( blockHardness > 50 )
-					blockHardness = 50;
-				float award = blockHardness;
-				List<ItemStack> drops = event.getDrops();
-
-//				else
-				{
-					if( !wasPlaced )
-						award += getXp( block.getRegistryName() ) * drops.size();
-					String harvestTool = block.getHarvestTool( block.getDefaultState() ).toString();
-					if( harvestTool == null || !XP.correctHarvestTool( material ).equals( "none" ) )
-						harvestTool = XP.correctHarvestTool( material );
-					Skill skill = XP.getSkill( harvestTool );
-
-					if( skill != Skill.INVALID_SKILL )										//if correct skill is matched
-						awardXp( player, skill, "removing a block", award, false );
-				}
-			}
-		}
-		PlacedBlocks.removeOre( event.getWorld().getWorld(), event.getPos() );
-	}
-
 	public static void handleBroken( BreakEvent event )
 	{
 		if( event.getPlayer() instanceof PlayerEntity )
@@ -656,6 +635,7 @@ public class XP
 				Material material = event.getState().getMaterial();
 				World world = event.getWorld().getWorld();
 				ItemStack toolUsed = player.getHeldItemMainhand();
+//				Skill skill = getSkill( correctHarvestTool( material ) );
 				float hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
 				if( hardness > 50 )
 					hardness = 50;
@@ -677,15 +657,16 @@ public class XP
 				{
 					builder.withLuck(fortune);
 				}
-				List<ItemStack> drops = block.getDrops( block.getDefaultState(), builder );
+				List<ItemStack> drops = block.getDrops( event.getState(), builder );
 
 //				System.out.println( drops );
 
 				boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
 				Block sugarCane = Blocks.SUGAR_CANE;
 				Block cactus = Blocks.CACTUS;
+				Block kelp = Blocks.KELP_PLANT;
 
-				if( block.equals( sugarCane ) || block.equals( cactus ) ) //Handle Sugar Cane / Cactus
+				if( block.equals( sugarCane ) || block.equals( cactus ) || block.equals( kelp ) ) //Handle Sugar Cane / Cactus
 				{
 					int currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
 					Block baseBlock = event.getState().getBlock();
@@ -728,8 +709,10 @@ public class XP
 						{
 							if( baseBlock == Blocks.CACTUS )
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Blocks.CACTUS, dropsLeft ) );
-							else
+							else if( baseBlock == Blocks.SUGAR_CANE )
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
+							else
+								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.KELP, dropsLeft ) );
 							dropsLeft -= 64;
 						}
 
@@ -738,10 +721,15 @@ public class XP
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Blocks.CACTUS, dropsLeft ) );
 							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Cactus Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
 						}
-						else
+						else if( baseBlock == Blocks.SUGAR_CANE )
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
 							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Sugar Cane Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+						}
+						else
+						{
+							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.KELP, dropsLeft ) );
+							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Kelp Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
 						}
 					}
 
@@ -750,50 +738,89 @@ public class XP
 	//				System.out.println( "Height: " + height );
 					awardXp( player, Skill.FARMING, "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra", award, false );
 				}
-				else if( material.equals( Material.PLANTS ) && drops.size() > 0 ) //IS PLANT
+				else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) ) && drops.size() > 0 ) //IS PLANT
 				{
-					ItemStack theDrop = new ItemStack( drops.get( 0 ).getItem(), 1 );
-					Item theDropItem = drops.get( 0 ).getItem();
+					ItemStack theDropItem = drops.get( 0 );
 
 					BlockState state = event.getState();
 					int age = -1;
 					int maxAge = -1;
-					int matches = 0;
+					award += getXp( block.getRegistryName() );
 
-					if( age == maxAge && age >= 0 )
+
+					if( state.has( BlockStateProperties.AGE_0_1 ) )
+					{
+						age = state.get( BlockStateProperties.AGE_0_1 );
+						maxAge = 1;
+					}
+					else if( state.has( BlockStateProperties.AGE_0_2 ) )
+					{
+						age = state.get( BlockStateProperties.AGE_0_2 );
+						maxAge = 2;
+					}
+					else if( state.has( BlockStateProperties.AGE_0_3 ) )
+					{
+						age = state.get( BlockStateProperties.AGE_0_3 );
+						maxAge = 3;
+					}
+					else if( state.has( BlockStateProperties.AGE_0_5 ) )
+					{
+						age = state.get( BlockStateProperties.AGE_0_5 );
+						maxAge = 5;
+					}
+					else if( state.has( BlockStateProperties.AGE_0_7 ) )
+					{
+						age = state.get( BlockStateProperties.AGE_0_7 );
+						maxAge = 7;
+					}
+					else if( state.has( BlockStateProperties.AGE_0_15) )
+					{
+						age = state.get( BlockStateProperties.AGE_0_15 );
+						maxAge = 15;
+					}
+					else if( state.has( BlockStateProperties.AGE_0_25 ) )
+					{
+						age = state.get( BlockStateProperties.AGE_0_25 );
+						maxAge = 25;
+					}
+					else if( state.has( BlockStateProperties.PICKLES_1_4 ) )
+					{
+						age = state.get( BlockStateProperties.PICKLES_1_4 );
+						maxAge = 4;
+						if( wasPlaced )
+							return;
+					}
+
+					if( age == maxAge && age >= 0 || block instanceof SeaPickleBlock )
 					{
 						int currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
-						float extraChance = getPlantDoubleChance( theDropItem.getRegistryName() ) * currLevel;
+						float extraChance = getPlantDoubleChance( theDropItem.getItem().getRegistryName() ) * currLevel;
 						int guaranteedDrop = 0;
 						int extraDrop = 0;
 
 						if( ( extraChance / 100 ) > 1 )
 						{
-							guaranteedDrop = (int)Math.floor( extraChance / 100 );
-							extraChance = (float)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
+							guaranteedDrop = (int) Math.floor( extraChance / 100 );
+							extraChance = (float) ( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
 						}
 
 						if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
 							extraDrop = 1;
 
-						for( int i = 0; i < guaranteedDrop + extraDrop; i++ )
-						{
-							drops.add( theDrop );
-						}
-
-						for( ItemStack drop : drops )
-						{
-							if( drop.getItem().equals ( theDropItem ) )
-								matches++;
-						}
+						drops.add( new ItemStack( theDropItem.getItem(), guaranteedDrop + extraDrop ) );
 
 						if ( guaranteedDrop + extraDrop > 0 )
-							player.sendStatusMessage( new StringTextComponent( Integer.toString( guaranteedDrop + extraDrop ) + " Extra " + theDrop.getDisplayName() + " Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+							player.sendStatusMessage( new StringTextComponent( Integer.toString( guaranteedDrop + extraDrop ) + " Extra " + theDropItem.getDisplayName().getFormattedText() + " Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
 
-						award += getXp( block.getRegistryName() ) * matches;
-						awardXp( player, Skill.FARMING, "harvesting " + ( matches - guaranteedDrop - extraDrop ) + " + " + ( guaranteedDrop + extraDrop ) + " " + theDrop.getDisplayName(), award, false );
-//						player.sendStatusMessage( new StringTextComponent( getXp( block.getRegistryName() ) + " xp, award: " + award ), false );
+//						System.out.println( theDropItem );
+//						System.out.println( guaranteedDrop );
+//						System.out.println( extraDrop );
+
+						award += getXp( block.getRegistryName() ) * ( theDropItem.getCount() + guaranteedDrop + extraDrop );
+						awardXp( player, Skill.FARMING, "harvesting " + ( theDropItem.getCount() ) + " + " + ( guaranteedDrop + extraDrop ) + " crops", award, false );
 					}
+
+					awardXp( player, Skill.FARMING, "breaking a plant", award, false );
 				}
 				else if( getOreDoubleChance( block.getRegistryName() ) != 0.0f )		//IS ORE
 				{
