@@ -27,8 +27,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class XPOverlayGUI extends AbstractGui
 {
 	private static int barWidth = 102, barHeight = 5, barPosX, barPosY;
-	private static int cooldown, tempAlpha, halfscreen;
-	private static float xp, pos, goalXp, goalPos;
+	private static int cooldown, tempAlpha, halfscreen, tempInt;
+	private static double xp, goalXp;
 	private static double lastTime, startLevel, timeDiff, tempDouble, tempDouble2, dropOffset, dropOffsetCap;
 	private static double barOffsetX = 0;
 	private static double barOffsetY = 0;
@@ -72,10 +72,9 @@ public class XPOverlayGUI extends AbstractGui
 				timeDiff = (System.nanoTime() - lastTime);
 				lastTime = System.nanoTime();
 
-				pos = skill.pos;
 				if( cooldown > 0 )
 					cooldown -= timeDiff / 1000000;
-				themePos += 2.5 + 7.5 * ( pos % Math.floor( pos ) ) * timeDiff / 1000000;
+				themePos += 2.5 + 7.5 * ( skill.pos % Math.floor( skill.pos ) ) * timeDiff / 1000000;
 
 				if( themePos > 10000 )
 					themePos =  themePos % 10000;
@@ -114,7 +113,7 @@ public class XPOverlayGUI extends AbstractGui
 				
 				if( dropOffset < dropOffsetCap )
 					dropOffset = dropOffsetCap;
-				
+
 				for( int i = 0; i < xpDrops.size(); i++ )				//update Xp Drops
 				{
 					XpDrop xpDrop = xpDrops.get( i );
@@ -162,9 +161,7 @@ public class XPOverlayGUI extends AbstractGui
 
 
 						if( tempAlpha > 3 )
-						{
 							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " in " + xpDrop.name, barPosX + (barWidth / 2), (int) xpDrop.Y + (int) dropOffset + barPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
-						}
 					}
 				}
 
@@ -193,17 +190,14 @@ public class XPOverlayGUI extends AbstractGui
 //						if( cooldown < 10000 )
 //							cooldown = 10000;
 					}
-					else if( pos >= goalPos )
-						pos = goalPos;
+					else if( skill.pos > skill.goalPos )
+						skill.pos = skill.goalPos;
 					
 					if( startLevel < Math.floor( skill.pos ) )
 						sendLvlUp( (int) Math.floor( skill.pos ), tag );
 					
 					if( skill.xp > skill.goalXp )
 						skill.xp = skill.goalXp;
-					
-					if( goalPos == 999.99f )
-						goalPos = 999.991f;
 				}
 				
 				if( cooldown > 0 )				//Xp Bar
@@ -221,10 +215,21 @@ public class XPOverlayGUI extends AbstractGui
 					}
 					else
 					{
+						tempInt = (int) Math.floor( ( barWidth ) * ( skill.pos - Math.floor( skill.pos ) ) );
+
+						if( tempInt > 100 )
+							tempInt = 100;
+
+						if( skill.pos >= XP.maxLevel )
+							tempInt = 100;
+
 						blit( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
-						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( themePos / 100 ) ), barHeight*2, (int) Math.floor( ( barWidth - 1 ) * ( skill.pos - Math.floor( skill.pos ) ) ), barHeight );
+						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( themePos / 100 ) ), barHeight*2, tempInt, barHeight );
 					}
-					drawCenteredString( fontRenderer, name + " " + DP.dp( skill.pos ), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
+					if( skill.pos >= XP.maxLevel )
+						drawCenteredString( fontRenderer, name + " " + XP.maxLevel, barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
+					else
+						drawCenteredString( fontRenderer, name + " " + DP.dp( Math.floor( skill.pos * 100 ) / 100 ), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
 					
 					if( guiKey && skills.get( name ) != null )
 					{
@@ -269,11 +274,11 @@ public class XPOverlayGUI extends AbstractGui
 		switch( name )
 		{
 			case "agility":
-				float saveChance = level * 0.64f;
+				double saveChance = level * 0.64f;
 				if( saveChance > 64 )
 					saveChance = 64;
 				
-				float speedPercent = level / 2000f;
+				double speedPercent = level / 2000f;
 				if( speedPercent > 0.10f )
 					speedPercent = 0.10f;
 				speedPercent = speedPercent / 0.10f * 100f;
@@ -286,7 +291,7 @@ public class XPOverlayGUI extends AbstractGui
 				break;
 		
 			case "endurance":
-				float endurancePercent = level * 0.25f;
+				double endurancePercent = level * 0.25f;
 				if( endurancePercent > 50 )
 					endurancePercent = 50;
 				tempString = level + " endurance level up! " + DP.dp( endurancePercent ) + "% endurance! +" + (int) Math.floor( level / 10 ) + " Max Heart" + ( Math.floor( level/10 ) == 1 ? "" : "s" ) + "!";
@@ -314,7 +319,7 @@ public class XPOverlayGUI extends AbstractGui
 		player.sendStatusMessage( new StringTextComponent( tempString ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), false);
 	}
 	
-	public static void makeXpDrop( float xp, int id, int cooldown, float gainedXp, boolean skip )
+	public static void makeXpDrop( double xp, int id, int cooldown, double gainedXp, boolean skip )
 	{
 		tempName = Skill.getString( id );
 
@@ -332,11 +337,12 @@ public class XPOverlayGUI extends AbstractGui
 		if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
 		{
 			skill.pos = XP.levelAtXpDecimal( xp );
-			skill.goalPos = pos;
-			System.out.println( minecraft.player.getDisplayName() + " " + skill + " has been set to: " + xp );
+			skill.goalPos = skill.pos;
 			skill.xp = xp;
 			skill.goalXp = xp;
 			XPOverlayGUI.cooldown = cooldown;
+
+			System.out.println( minecraft.player.getDisplayName() + " " + skill + " has been set to: " + xp );
 			return;
 		}
 		
@@ -364,8 +370,6 @@ public class XPOverlayGUI extends AbstractGui
 		skillsKeys = new ArrayList<String>();
 		xpDrops = new ArrayList<XpDrop>();
 		xp = 0;
-		pos = 1;
-		goalPos = 1;
 		name = "none";
 	}
 }

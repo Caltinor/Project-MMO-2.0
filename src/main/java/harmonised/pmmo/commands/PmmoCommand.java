@@ -49,14 +49,14 @@ public class PmmoCommand
 
         builder.then( Commands.argument("Set", StringArgumentType.word() )
                 .then( Commands.argument("skill", StringArgumentType.word() )
-                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
+//                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
                 .then( Commands.argument("new xp", StringArgumentType.word() )
                 .executes( CommandSet::execute ) ) ) );
 
         builder.then( Commands.argument("Clear", StringArgumentType.word() )
                 .executes( CommandClear::execute )
                 .then( Commands.argument("agreement", StringArgumentType.word() )
-                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestClear, theBuilder ) )
+//                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestClear, theBuilder ) )
                 .executes( CommandClear::execute ) ) );
 
         dispatch.register( builder );

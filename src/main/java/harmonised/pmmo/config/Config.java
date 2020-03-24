@@ -14,6 +14,11 @@ public class Config
 
     public static class ConfigImplementation
     {
+        //Levels
+        public ConfigHelper.ConfigValueListener<Integer> maxLevel;
+        public ConfigHelper.ConfigValueListener<Integer> baseXp;
+        public ConfigHelper.ConfigValueListener<Integer> xpIncreasePerLevel;
+
         //Multipliers
         public ConfigHelper.ConfigValueListener<Double> globalMultiplier;
         public ConfigHelper.ConfigValueListener<Double> peacefulMultiplier;
@@ -82,6 +87,25 @@ public class Config
 
         public ConfigImplementation(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber)
         {
+            builder.push( "Levels" );
+
+            this.maxLevel = subscriber.subscribe(builder
+                    .comment( "What is the global max level" )
+                    .translation( "pmmo.maxLevel" )
+                    .defineInRange( "maxLevel", 999, 1, 1000000) );
+
+            this.baseXp = subscriber.subscribe(builder
+                    .comment( "What is the baseXp for level 2 ( baseXp + level * xpPerLevel )" )
+                    .translation( "pmmo.baseXp" )
+                    .defineInRange( "baseXp", 250, 1, 1000000 ) );
+
+            this.xpIncreasePerLevel = subscriber.subscribe(builder
+                    .comment( "What is the xp increase per level ( baseXp + level * xpPerLevel )" )
+                    .translation( "pmmo.xpIncreasePerLevel" )
+                    .defineInRange( "xpIncreasePerLevel", 50, 1, 1000000 ) );
+
+            builder.pop();
+
             builder.push( "Multipliers" );
 
             this.globalMultiplier = subscriber.subscribe(builder

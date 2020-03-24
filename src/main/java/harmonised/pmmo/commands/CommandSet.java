@@ -53,8 +53,10 @@ public class CommandSet
 
             if ( setLevel )
             {
-                if (newXp >= 999)
-                    newXp = 999.99f;
+                if ( newXp >= XP.maxLevel )
+                    newXp = XP.maxLevel;
+                if( newXp < 1 )
+                    newXp = 1;
                 XP.setXp( player, args[2], XP.xpAtLevelDecimal(newXp) );
                 player.sendStatusMessage(new StringTextComponent(args[2] + " has been set to level: " + newXp), false);
             }

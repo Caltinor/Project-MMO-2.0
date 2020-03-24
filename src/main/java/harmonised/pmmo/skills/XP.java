@@ -73,8 +73,10 @@ public class XP
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
+	public static double baseXp, xpIncreasePerLevel;
 	public static double globalMultiplier = Config.config.globalMultiplier.get();
-	public static float maxXp = xpAtLevel( 999 );
+	public static int maxLevel = Config.config.maxLevel.get();
+	public static float maxXp = xpAtLevel( maxLevel );
 
 	public static void initValues()
 	{
@@ -414,7 +416,7 @@ public class XP
 		salvageBaseValue.put( Items.LEATHER.getRegistryName(), 60.0f );
 ////////////////////////////////////SALVAGE_VALUE_PER_LEVEL////////////////////////////////////////
 		salvageValuePerLevel.put( Blocks.COBBLESTONE.getRegistryName(), 2.0f );	// 20
-		salvageValuePerLevel.put( Blocks.OAK_PLANKS.getRegistryName(), 0.8f );		// 25
+		salvageValuePerLevel.put( Blocks.OAK_PLANKS.getRegistryName(), 0.8f );  // 25
 		salvageValuePerLevel.put( Items.STRING.getRegistryName(), 1.0f );		// 30
 		salvageValuePerLevel.put( Items.IRON_INGOT.getRegistryName(), 0.8f );	//100
 		salvageValuePerLevel.put( Items.GOLD_INGOT.getRegistryName(), 1.6f );	// 50
@@ -569,21 +571,21 @@ public class XP
 			if ( !player.isCreative() )
 			{
 				Block block = event.getPlacedBlock().getBlock();
-				CompoundNBT skillsTag = getSkillsTag(player);
 				float blockHardness = block.getBlockHardness(block.getDefaultState(), event.getWorld(), event.getPos());
 				if (blockHardness > 50)
 					blockHardness = 50;
-//				int buildLevel = levelAtXp( skillsTag.getFloat( "building" ) );
 				String playerName = player.getName().toString();
 				BlockPos blockPos = event.getPos();
 
-				if (!lastPosPlaced.containsKey(playerName) || !lastPosPlaced.get(playerName).equals(blockPos)) {
+				if (!lastPosPlaced.containsKey(playerName) || !lastPosPlaced.get(playerName).equals(blockPos))
+				{
 					if (block.equals(Blocks.FARMLAND))
 						awardXp(player, Skill.FARMING, "tilting dirt", blockHardness, false);
-					else {
-//						for( int i = 0; i < 1000; i++ )
+					else
+						{
+//							for( int i = 0; i < 1000; i++ )
 //						{
-						awardXp(player, Skill.BUILDING, "placing a block", blockHardness, false);
+							awardXp(player, Skill.BUILDING, "placing a block", blockHardness, false);
 //						}
 					}
 				}
@@ -730,6 +732,7 @@ public class XP
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
 							dropsLeft -= 64;
 						}
+
 						if( baseBlock == Blocks.CACTUS )
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Blocks.CACTUS, dropsLeft ) );
@@ -1720,50 +1723,72 @@ public class XP
 
 	public static int levelAtXp( float xp )
 	{
+		return levelAtXp( (double) xp );
+	}
+	public static int levelAtXp( double xp )
+	{
+		baseXp = Config.config.baseXp.get();
+		xpIncreasePerLevel = Config.config.xpIncreasePerLevel.get();
+
 		int theXp = 0;
 
 		for( int level = 0; ; level++ )
 		{
-			if( xp < theXp || level >= 999 )
+			if( xp < theXp || level >= maxLevel )
 			{
 				return level;
 			}
-			theXp += 250 + level * 50.00f;
+			theXp += baseXp + level * xpIncreasePerLevel;
 		}
 	}
 
 	public static float levelAtXpDecimal( float xp )
 	{
-		if( levelAtXp( xp ) == 999 )
-			xp = xpAtLevel( 999 );
+		return (float) levelAtXpDecimal( (double) xp );
+	}
+	public static double levelAtXpDecimal( double xp )
+	{
+		if( levelAtXp( xp ) == maxLevel )
+			xp = xpAtLevel( maxLevel );
 		int startLevel = levelAtXp( xp );
 		int startXp = xpAtLevel( startLevel );
 		int goalXp = xpAtLevel( startLevel + 1 );
 
 		if( startXp == goalXp )
-			return 999.99f;
+			return maxLevel;
 		else
 			return startLevel + ( (xp - startXp) / (goalXp - startXp) );
 	}
 
 	public static int xpAtLevel( float givenLevel )
 	{
+		return xpAtLevel( (double) givenLevel );
+	}
+	public static int xpAtLevel( double givenLevel )
+	{
+		baseXp = Config.config.baseXp.get();
+		xpIncreasePerLevel = Config.config.xpIncreasePerLevel.get();
+
 		int theXp = 0;
-		if( givenLevel > 999 )
-			givenLevel = 999;
+		if( givenLevel > maxLevel )
+			givenLevel = maxLevel;
 
 		for( int level = 1; level < givenLevel; level++ )
 		{
-			theXp += 250 + (level - 1) * 50.00f;
+			theXp += baseXp + (level - 1) * xpIncreasePerLevel;
 		}
 		return theXp;
 	}
 
 	public static float xpAtLevelDecimal( float givenLevel )
 	{
-		float startXp = xpAtLevel( (float) Math.floor( givenLevel ) );
-		float endXp   = xpAtLevel( (float) Math.floor( givenLevel + 1 ) );
-		float pos = givenLevel - (float) Math.floor( givenLevel );
+		return (float) xpAtLevelDecimal( (double) givenLevel );
+	}
+	public static double xpAtLevelDecimal( double givenLevel )
+	{
+		double startXp = xpAtLevel( Math.floor( givenLevel ) );
+		double endXp   = xpAtLevel( Math.floor( givenLevel + 1 ) );
+		double pos = givenLevel - Math.floor( givenLevel );
 
 		return startXp + ( ( endXp - startXp ) * pos );
 	}
