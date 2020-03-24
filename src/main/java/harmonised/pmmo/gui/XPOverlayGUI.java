@@ -35,7 +35,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0;
 	private static String name = "none", tempName = "none";
-	private static boolean init = false, guiKey = false, guiPressed = false, guiOn = true;
+	private static boolean init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -56,8 +56,10 @@ public class XPOverlayGUI extends AbstractGui
 				{
 					barOffsetX = Config.config.barOffsetX.get();
 					barOffsetY = Config.config.barOffsetY.get();
+					showXpDrops = Config.config.showXpDrops.get();
 					init = true;
 				}
+
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
 				MainWindow sr = minecraft.getMainWindow();
@@ -117,18 +119,18 @@ public class XPOverlayGUI extends AbstractGui
 				{
 					XpDrop xpDrop = xpDrops.get( i );
 					xpDrop.age += timeDiff / 5000000;
-					
-					if( ( xpDrop.Y - tempDouble * timeDiff / 10000000 < 0 ) && xpDrop.age >= 500 )
+
+					if( ( ( xpDrop.Y - tempDouble * timeDiff / 10000000 < 0 ) && xpDrop.age >= 500 ) || !showXpDrops )
 					{
 						skill = skills.get( xpDrop.name );
-						
+
 						if( !xpDrop.skip )
 							name = xpDrop.name;
-						
+
 						tempDouble2 = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
 						if( tempDouble2 < 0.1 )
 							tempDouble2 = 0.1;
-						
+
 						if( xpDrop.gainedXp - ( tempDouble2 * timeDiff / 10000000 ) < 0 )
 						{
 							skill.goalXp += xpDrop.gainedXp;
@@ -140,27 +142,29 @@ public class XPOverlayGUI extends AbstractGui
 							skill.goalXp += ( tempDouble2 * timeDiff / 10000000 );
 						}
 						skill.goalPos = XP.levelAtXpDecimal( skill.goalXp );
-
-
 					}
-					
-					tempDouble = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
-					
-					if( dropOffset == dropOffsetCap )
-						xpDrop.Y -= tempDouble * timeDiff / 10000000;
-					
-					if( xpDrop.Y < ( i * 9 ) )
-						xpDrop.Y = ( i * 9 );
-					
-					if( xpDrop.Y * 2 > 200 )
-						tempAlpha = 0;
-					else
-						tempAlpha = (int) Math.floor(200 - xpDrop.Y * 2 );
-					
-					
-					if( tempAlpha > 3 )
+
+					if( showXpDrops )
 					{
-						drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " in " + xpDrop.name, barPosX + (barWidth / 2), (int) xpDrop.Y + (int) dropOffset + barPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
+
+						tempDouble = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
+
+						if( dropOffset == dropOffsetCap )
+							xpDrop.Y -= tempDouble * timeDiff / 10000000;
+
+						if( xpDrop.Y < ( i * 9 ) )
+							xpDrop.Y = ( i * 9 );
+
+						if( xpDrop.Y * 2 > 200 )
+							tempAlpha = 0;
+						else
+							tempAlpha = (int) Math.floor(200 - xpDrop.Y * 2 );
+
+
+						if( tempAlpha > 3 )
+						{
+							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " in " + xpDrop.name, barPosX + (barWidth / 2), (int) xpDrop.Y + (int) dropOffset + barPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
+						}
 					}
 				}
 

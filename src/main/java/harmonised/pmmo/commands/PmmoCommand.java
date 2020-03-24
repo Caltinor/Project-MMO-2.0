@@ -15,9 +15,9 @@ public class PmmoCommand
 {
     public static void register( CommandDispatcher<CommandSource> dispatch )
     {
-        String[] suggestCommand = new String[1];
+        String[] suggestCommand = new String[2];
         suggestCommand[0] = "Set";
-//        suggestCommand[1] = "Clear";
+        suggestCommand[1] = "Clear";
 //        suggestCommand[2] = "LevelAtXp";
 //        suggestCommand[3] = "XpAtLevel";
 
@@ -53,11 +53,11 @@ public class PmmoCommand
                 .then( Commands.argument("new xp", StringArgumentType.word() )
                 .executes( CommandSet::execute ) ) ) );
 
-//        builder.then( Commands.argument("Clear", StringArgumentType.word() )
-//                .executes( CommandClear::execute )
-//                .then( Commands.argument("agreement", StringArgumentType.word() )
-//                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestClear, theBuilder ) )
-//                .executes( CommandClear::execute ) ) );
+        builder.then( Commands.argument("Clear", StringArgumentType.word() )
+                .executes( CommandClear::execute )
+                .then( Commands.argument("agreement", StringArgumentType.word() )
+                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestClear, theBuilder ) )
+                .executes( CommandClear::execute ) ) );
 
         dispatch.register( builder );
     }

@@ -38,6 +38,7 @@ public class Config
         //GUI
         public ConfigHelper.ConfigValueListener<Double> barOffsetX;
         public ConfigHelper.ConfigValueListener<Double> barOffsetY;
+        public ConfigHelper.ConfigValueListener<Boolean> showXpDrops;
 
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
@@ -192,12 +193,17 @@ public class Config
                     .translation( "pmmo.barOffsetY" )
                     .defineInRange( "barOffsetY", 0D, 0, 1) );
 
+            this.showXpDrops = subscriber.subscribe(builder
+                    .comment( "If Off, xp drops will no longer appear" )
+                    .translation( "pmmo.showXpDrops" )
+                    .define( "showXpDrops", true ) );
+
             builder.pop();
 
             builder.push( "Breaking Speed" );
 
             this.minBreakSpeed = subscriber.subscribe(builder
-                    .comment( "Minimum Breaking Speed" )
+                    .comment( "Minimum Breaking Speed (1 is Original speed, 0.5 is half)" )
                     .translation( "pmmo.minBreakSpeed" )
                     .defineInRange( "minBreakSpeed", 0.5, 0, 100) );
 

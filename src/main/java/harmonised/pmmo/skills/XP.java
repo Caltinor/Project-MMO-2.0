@@ -73,7 +73,7 @@ public class XP
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
-	public static double globalMultiplier = Config.config.globalMultiplier.get() / 100;
+	public static double globalMultiplier = Config.config.globalMultiplier.get();
 	public static float maxXp = xpAtLevel( 999 );
 
 	public static void initValues()
@@ -1430,9 +1430,10 @@ public class XP
 		double skillMultiplier = 1;
 		double difficultyMultiplier = 1;
 
+
 		for( char letter : player.getDisplayName().getFormattedText().toCharArray() )
 		{
-			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) )
+			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) && !( letter == '\u00a7' ) )
 				return;
 		}
 
@@ -1523,8 +1524,8 @@ public class XP
 				break;
 		}
 
-
 		amount *= skillMultiplier;
+		amount *= difficultyMultiplier;
 		amount *= globalMultiplier;
 
 		if( amount == 0 )
