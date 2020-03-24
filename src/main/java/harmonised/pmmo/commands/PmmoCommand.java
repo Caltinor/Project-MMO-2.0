@@ -16,10 +16,10 @@ public class PmmoCommand
     public static void register( CommandDispatcher<CommandSource> dispatch )
     {
         String[] suggestCommand = new String[2];
-        suggestCommand[0] = "Set";
-        suggestCommand[1] = "Clear";
-//        suggestCommand[2] = "LevelAtXp";
-//        suggestCommand[3] = "XpAtLevel";
+        suggestCommand[0] = "set";
+        suggestCommand[1] = "clear";
+//        suggestCommand[2] = "levelAtXp";
+//        suggestCommand[3] = "xpAtLevel";
 
         String[] suggestSkill = new String[14];
         suggestSkill[0] = "Mining";
@@ -47,17 +47,25 @@ public class PmmoCommand
                 .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestCommand, theBuilder ) )
                 .executes( CommandClear::execute ) );
 
-        builder.then( Commands.argument("Set", StringArgumentType.word() )
+        builder.then( Commands.argument("set", StringArgumentType.word() )
                 .then( Commands.argument("skill", StringArgumentType.word() )
 //                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
-                .then( Commands.argument("new xp", StringArgumentType.word() )
+                .then( Commands.argument("request", StringArgumentType.word() )
                 .executes( CommandSet::execute ) ) ) );
 
-        builder.then( Commands.argument("Clear", StringArgumentType.word() )
+        builder.then( Commands.argument("clear", StringArgumentType.word() )
                 .executes( CommandClear::execute )
-                .then( Commands.argument("agreement", StringArgumentType.word() )
+                .then( Commands.argument("request", StringArgumentType.word() )
 //                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestClear, theBuilder ) )
                 .executes( CommandClear::execute ) ) );
+
+        builder.then( Commands.argument("levelAtXp", StringArgumentType.word() )
+                .then( Commands.argument("request", StringArgumentType.word() )
+                .executes( CommandLevelAtXp::execute ) ) );
+
+        builder.then( Commands.argument("xpAtLevel", StringArgumentType.word() )
+                .then( Commands.argument("request", StringArgumentType.word() )
+                .executes( CommandXpAtLevel::execute ) ) );
 
         dispatch.register( builder );
     }

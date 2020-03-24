@@ -95,7 +95,7 @@ public class Config
                     .defineInRange( "maxLevel", 999, 1, 1000000) );
 
             this.baseXp = subscriber.subscribe(builder
-                    .comment( "What is the baseXp for level 2 ( baseXp + level * xpPerLevel )" )
+                    .comment( "What is the baseXp to reach level 2 ( baseXp + level * xpPerLevel )" )
                     .translation( "pmmo.baseXp" )
                     .defineInRange( "baseXp", 250, 1, 1000000 ) );
 
