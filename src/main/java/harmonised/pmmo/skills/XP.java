@@ -1328,7 +1328,7 @@ public class XP
 		
 		for( char letter : player.getName().toCharArray() )
 		{
-			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) )
+			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) && !( letter == '\u00a7' ) )
 				return;
 		}
 		
