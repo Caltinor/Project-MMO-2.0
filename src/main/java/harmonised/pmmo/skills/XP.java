@@ -1,10 +1,7 @@
 package harmonised.pmmo.skills;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.config.Config;
@@ -27,12 +24,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
@@ -98,7 +95,7 @@ public class XP
 //		xpValues.put( Blocks.GRASS.getRegistryName(), 2.5f );
 		xpValues.put( Blocks.AIR.getRegistryName(), 0.0f );
 //		xpValues.put( Blocks.DOUBLE_PLANT.getRegistryName(), 25.0f );
-//		xpValues.put( Blocks.TALLGRASS.getRegistryName(), 6.0f );
+		xpValues.put( Blocks.TALL_GRASS.getRegistryName(), 6.0f );
 		xpValues.put( Blocks.WHEAT.getRegistryName(), 15.0f );
 		xpValues.put( Blocks.POTATOES.getRegistryName(), 7.5f );
 		xpValues.put( Blocks.CARROTS.getRegistryName(), 7.5f );
@@ -317,7 +314,6 @@ public class XP
 		materialHarvestTool.put( Material.OCEAN_PLANT, "hoe" );
 		materialHarvestTool.put( Material.CACTUS, "hoe" );
 		materialHarvestTool.put( Material.CORAL, "hoe" );
-		materialHarvestTool.put( Material.OCEAN_PLANT, "hoe" );
 		materialHarvestTool.put( Material.TALL_PLANTS, "hoe" );
 ////////////////////////////////////TOOL_ITEM//////////////////////////////////////////////////////
 		toolItems.put( Items.DIAMOND_HELMET.getRegistryName(), new ItemStack( Items.DIAMOND ) );
@@ -583,14 +579,16 @@ public class XP
 
 	public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
 	{
-		if( event.getEntity() instanceof PlayerEntity ) {
+		if( event.getEntity() instanceof PlayerEntity )
+		{
 			PlayerEntity player = (PlayerEntity) event.getEntity();
 			if ( !player.isCreative() )
 			{
+				double blockHardnessLimit = Config.config.blockHardnessLimit.get();
 				Block block = event.getPlacedBlock().getBlock();
 				float blockHardness = block.getBlockHardness(block.getDefaultState(), event.getWorld(), event.getPos());
-				if (blockHardness > 50)
-					blockHardness = 50;
+				if ( blockHardness > blockHardnessLimit )
+					blockHardness = (float) blockHardnessLimit;
 				String playerName = player.getName().toString();
 				BlockPos blockPos = event.getPos();
 
@@ -630,6 +628,7 @@ public class XP
 			PlayerEntity player = event.getPlayer();
 			if( !player.isCreative() )
 			{
+				double blockHardnessLimit = Config.config.blockHardnessLimit.get();
 				CompoundNBT skillsTag = getSkillsTag( player );
 				Block block = event.getState().getBlock();
 				Material material = event.getState().getMaterial();
@@ -637,8 +636,8 @@ public class XP
 				ItemStack toolUsed = player.getHeldItemMainhand();
 //				Skill skill = getSkill( correctHarvestTool( material ) );
 				float hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
-				if( hardness > 50 )
-					hardness = 50;
+				if( hardness > blockHardnessLimit )
+					hardness = (float) blockHardnessLimit;
 
 				float award = hardness;
 
@@ -652,7 +651,6 @@ public class XP
 						.withParameter( LootParameters.POSITION, event.getPos() )
 						.withParameter( LootParameters.TOOL, toolUsed )
 						.withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
-
 				if (fortune > 0)
 				{
 					builder.withLuck(fortune);
@@ -738,15 +736,14 @@ public class XP
 	//				System.out.println( "Height: " + height );
 					awardXp( player, Skill.FARMING, "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra", award, false );
 				}
-				else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) ) && drops.size() > 0 ) //IS PLANT
+				else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) || material.equals( Material.TALL_PLANTS ) ) && drops.size() > 0 ) //IS PLANT
 				{
 					ItemStack theDropItem = drops.get( 0 );
 
 					BlockState state = event.getState();
 					int age = -1;
 					int maxAge = -1;
-					award += getXp( block.getRegistryName() );
-
+					award += getXp( block.getRegistryName() ) * theDropItem.getCount();
 
 					if( state.has( BlockStateProperties.AGE_0_1 ) )
 					{
@@ -820,7 +817,7 @@ public class XP
 						awardXp( player, Skill.FARMING, "harvesting " + ( theDropItem.getCount() ) + " + " + ( guaranteedDrop + extraDrop ) + " crops", award, false );
 					}
 
-					awardXp( player, Skill.FARMING, "breaking a plant", award, false );
+					awardXp( player, Skill.FARMING, "breaking a plant", award * drops.get(0).getCount(), false );
 				}
 				else if( getOreDoubleChance( block.getRegistryName() ) != 0.0f )		//IS ORE
 				{
@@ -858,7 +855,7 @@ public class XP
 						{
 							award += getXp( block.getRegistryName() ) * ( guaranteedDrop + extraDrop );
 							ItemStack theDrop = new ItemStack( drops.get( 0 ).getItem(), guaranteedDrop + extraDrop );
-							drops.add( theDrop );
+							block.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), theDrop );
 							awardMessage = "mining  and " + ( guaranteedDrop + extraDrop ) + " extra drop";
 							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop + extraDrop ) + " Extra " + theDrop.getDisplayName().getFormattedText() + " Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
 						}
@@ -873,19 +870,19 @@ public class XP
 					switch( getSkill( correctHarvestTool( material ) ) )
 					{
 						case MINING:
-							awardXp( player, Skill.MINING, "mining a block", getXp( block.getRegistryName() ) + hardness, false );
+							awardXp( player, Skill.MINING, "mining a block", award, false );
 							break;
 
 						case WOODCUTTING:
-							awardXp( player, Skill.WOODCUTTING, "cutting a block", getXp( block.getRegistryName() ) + hardness, false );
+							awardXp( player, Skill.WOODCUTTING, "cutting a block", award, false );
 							break;
 
 						case EXCAVATION:
-							awardXp( player, Skill.EXCAVATION, "digging a block", getXp( block.getRegistryName() ) + hardness, false );
+							awardXp( player, Skill.EXCAVATION, "digging a block", award, false );
 							break;
 
 						case FARMING:
-							awardXp( player, Skill.EXCAVATION, "harvesting", getXp( block.getRegistryName() ) + hardness, false );
+							awardXp( player, Skill.FARMING, "harvesting", award, false );
 							break;
 
 						default:
@@ -1134,7 +1131,7 @@ public class XP
 			CompoundNBT skillsTag = getSkillsTag( player );
 			ItemStack itemStack = event.getItemStack();
 			Item item = itemStack.getItem();
-			String itemDisplayName = itemStack.getDisplayName().toString();
+			String itemDisplayName = itemStack.getDisplayName().getFormattedText();
 			Block block = event.getWorld().getBlockState( event.getPos() ).getBlock();
 			Block anvil 		=	Blocks.ANVIL;
 			Block ironBlock		= 	Blocks.IRON_BLOCK;
@@ -1179,6 +1176,7 @@ public class XP
 							Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
 							ItemStack salvageItemStack = getToolItem( item.getRegistryName() );
 							Item salvageItem = salvageItemStack.getItem();
+							ServerWorld serverWorld = (ServerWorld) event.getWorld();
 							int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
 							float baseValue = getSalvageBaseValue( salvageItem.getRegistryName() );
 							float valuePerLevel = getSalvageValuePerLevel( salvageItem.getRegistryName() );
@@ -1212,16 +1210,15 @@ public class XP
 									}
 									award += getSalvageXp( salvageItem.getRegistryName() ) * returnAmount;
 
-//									itemStack.damageItem( item.getMaxDamage() * 10, player );
-
-									String replyMsg = "Salvaged " + returnAmount + "/" + itemPotential + " " + new ItemStack( salvageItem ).getDisplayName();
+									String replyMsg = "Salvaged " + returnAmount + "/" + itemPotential + " " + new ItemStack( salvageItem ).getDisplayName().getFormattedText();
 									replyMsg += ( returnAmount > 1 && !salvageItem.equals( Items.STRING ) && !salvageItem.equals( Items.LEATHER ) && !( salvageItem instanceof BlockItem ) ? "s" : "" ) + "!";
 									BlockPos spawnPos = event.getPos();
-//									if( returnAmount > 0 )
-//										event.getWorld().spawnEntity( new EntityItem( event.getWorld(), spawnPos.getX() + 0.5d, spawnPos.getY() + 1.0d, spawnPos.getZ() + 0.5d, new ItemStack( salvageItem, returnAmount ) ) );
+									if( returnAmount > 0 )
+										block.spawnAsEntity( event.getWorld(), event.getPos(), new ItemStack( salvageItem, returnAmount ) );
 
 									if( award > 0 )
-										awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + itemPotential + " " + new ItemStack( salvageItem ).getDisplayName() + " from salvaging " + itemDisplayName, award, false  );
+										awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + itemPotential + " from an item", award, false  );
+
 									player.sendStatusMessage( new StringTextComponent( replyMsg ), true );
 
 									if( enchants.size() > 0 )
@@ -1229,6 +1226,8 @@ public class XP
 										ItemStack salvagedBook = new ItemStack( Items.KNOWLEDGE_BOOK );
 										Set<Enchantment> enchantKeys = enchants.keySet();
 										int enchantLevel;
+										boolean fullEnchants = true;
+
 										for( Enchantment enchant : enchantKeys )
 										{
 											enchantLevel = 0;
@@ -1237,24 +1236,32 @@ public class XP
 												if( Math.floor( Math.random() * 100 ) < enchantChance )
 													enchantLevel = i;
 												else
+												{
+													fullEnchants = false;
 													i = enchants.get( enchant ) + 1;
+												}
 											}
 											if( enchantLevel > 0 )
 												salvagedBook.addEnchantment( enchant, enchantLevel );
 										}
 										if( salvagedBook.isEnchanted() )
 										{
-//											event.getWorld().spawnEntity( new EntityItem( event.getWorld(), spawnPos.getX() + 0.5d, spawnPos.getY() + 1.0d, spawnPos.getZ() + 0.5d, salvagedBook ) );
-											player.sendStatusMessage( new StringTextComponent( "You managed to save some enchants!" ), true );
+											block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
+											if( fullEnchants )
+												player.sendStatusMessage( new StringTextComponent( "You managed to save all enchants!" ), true );
+											else
+												player.sendStatusMessage( new StringTextComponent( "You managed to save some enchants!" ), true );
 										}
 									}
+									player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
+									player.sendBreakAnimation(Hand.OFF_HAND );
 								}
 								else
 									player.sendStatusMessage( new StringTextComponent( "Only available in Survival Mode!" ), true );
 							}
 							else
 							{
-//								itemStack.damageItem( 200, player );
+								itemStack.damageItem( 750, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
 								player.sendStatusMessage( new StringTextComponent( "Off-Hand to Disassemble!" ), true );
 								player.sendStatusMessage( new StringTextComponent( "_________________________________" ), false );
 								player.sendStatusMessage( new StringTextComponent( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" ), false );
@@ -1320,7 +1327,7 @@ public class XP
 			CompoundNBT skillsTag = getSkillsTag( player );
 
 			int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
-			float bonusRepair = 0.0025f * currLevel / ( 1f + 0.01f * currLevel );
+			float bonusRepair = 0.01f * currLevel;
 			int maxCost = (int) Math.floor( 50 - ( currLevel / 4f ) );
 			if( maxCost < 20 )
 				maxCost = 20;
@@ -1463,7 +1470,7 @@ public class XP
 
 		for( char letter : player.getDisplayName().getFormattedText().toCharArray() )
 		{
-			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) && !( letter == '\u00a7' ) )
+			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) && !( letter == '\u00a7' ) && !( letter == '_' ) )
 				return;
 		}
 

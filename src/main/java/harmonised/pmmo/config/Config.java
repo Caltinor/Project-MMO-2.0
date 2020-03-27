@@ -53,6 +53,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> excavationBonusSpeed;
 
         //Mining
+        public ConfigHelper.ConfigValueListener<Double> blockHardnessLimit;
 
         //Building
 
@@ -254,6 +255,11 @@ public class Config
             builder.pop();
 
             builder.push( "Mining" );
+
+            this.blockHardnessLimit = subscriber.subscribe(builder
+                    .comment( "Hardest considered block (1 hardness = 1 build/remove xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
+                    .translation( "pmmo.blockHardnessLimit" )
+                    .defineInRange( "blockHardnessLimit", 250D, 0, 1000000) );
 
             builder.pop();
 

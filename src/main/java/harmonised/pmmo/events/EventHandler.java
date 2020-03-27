@@ -2,6 +2,7 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.skills.XP;
 
+import net.minecraft.advancements.criterion.FishingRodHookedTrigger;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -100,5 +101,10 @@ public class EventHandler
 	public static void breakSpeed( PlayerEvent.BreakSpeed event )
 	{
 		XP.handleBreakSpeed( event );
+	}
+
+	public static void fishingHooked( FishingRodHookedTrigger event )
+	{
+
 	}
 }
