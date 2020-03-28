@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.IParticleData;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -1054,7 +1055,8 @@ public class XP
 						agilityLevel = 1;
 					else
 						agilityLevel = levelAtXp( XPOverlayGUI.skills.get("agility").xp );
-				} else
+				}
+				else
 					agilityLevel = levelAtXp(skillsTag.getFloat("agility"));
 
 				if (player.isCrouching())
@@ -1072,7 +1074,14 @@ public class XP
 						player.setMotion( player.getMotion().x, player.getMotion().y + jumpBoost, player.getMotion().z );
 				}
 				else if (!player.isInWater())
-					awardXp( player, Skill.AGILITY, "jumping", (float) (jumpBoost * 10 + 1), true );
+				{
+					float jumpAmp = 0;
+
+					if( player.isPotionActive( Effects.JUMP_BOOST ) )
+						jumpAmp = player.getActivePotionEffect( Effects.JUMP_BOOST ).getAmplifier() + 1;
+
+					awardXp( player, Skill.AGILITY, "jumping", (float) (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), true );
+				}
 			}
 		}
 	}
@@ -1695,12 +1704,16 @@ public class XP
 					int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
 					int flyLevel = levelAtXp( skillsTag.getFloat( "flying" ) );
 					int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
-					if( agilityLevel > 200 )
-						agilityLevel = 200;
+					float speedAmp = 0;
+//					if( agilityLevel > 200 )
+//						agilityLevel = 200;
+
+					if( player.isPotionActive( Effects.SPEED ) )
+						speedAmp = player.getActivePotionEffect( Effects.SPEED ).getAmplifier() + 1;
 
 					float swimAward = ( 3 + swimLevel    / 10.00f ) * ( gap / 1000f );
 					float flyAward  = ( 1 + flyLevel     / 30.77f ) * ( gap / 1000f );
-					float runAward  = ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f );
+					float runAward  = ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f ) * ( 1 + speedAmp / 4);
 
 					lastAward.replace( name, System.currentTimeMillis() );
 					Block waterBlock = Blocks.WATER;
