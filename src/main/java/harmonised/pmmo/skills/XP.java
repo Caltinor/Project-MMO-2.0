@@ -105,7 +105,6 @@ public class XP
 		xpValues.put( Blocks.NETHER_WART.getRegistryName(), 5.0f );
 		xpValues.put( Blocks.OAK_SAPLING.getRegistryName(), 10.0f );
 		xpValues.put( Blocks.ACACIA_SAPLING.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.BAMBOO_SAPLING.getRegistryName(), 10.0f );
 		xpValues.put( Blocks.BIRCH_SAPLING.getRegistryName(), 10.0f );
 		xpValues.put( Blocks.DARK_OAK_SAPLING.getRegistryName(), 10.0f );
 		xpValues.put( Blocks.JUNGLE_SAPLING.getRegistryName(), 10.0f );
@@ -122,6 +121,8 @@ public class XP
 		xpValues.put( Blocks.SUGAR_CANE.getRegistryName(), 8.0f );
 		xpValues.put( Blocks.CACTUS.getRegistryName(), 15.0f );
 		xpValues.put( Blocks.KELP_PLANT.getRegistryName(), 4.0f );
+		xpValues.put( Blocks.BAMBOO.getRegistryName(), 1.2f );
+		xpValues.put( Blocks.BAMBOO_SAPLING.getRegistryName(), 1.2f );
 		xpValues.put( Blocks.SEA_PICKLE.getRegistryName(), 2.0f );
 		xpValues.put( Blocks.DEAD_BUSH.getRegistryName(), 5.0f );
 		xpValues.put( Blocks.LILY_PAD.getRegistryName(), 15.0f );
@@ -274,6 +275,7 @@ public class XP
 		plantDoubleValues.put( Items.COCOA_BEANS.getRegistryName(), 1.50f );
 		plantDoubleValues.put( Items.KELP.getRegistryName(), 0.25f );
 		plantDoubleValues.put( Items.SEA_PICKLE.getRegistryName(), 1.50f );
+		plantDoubleValues.put( Items.BAMBOO.getRegistryName(), 0.35f );
 
 ////////////////////////////////////NO_DROP_VALUES/////////////////////////////////////////////////
 		noDropOres.put( Blocks.IRON_ORE.getRegistryName(), true );
@@ -304,7 +306,6 @@ public class XP
 
 		materialHarvestTool.put( Material.CLAY, "shovel" );					//SHOVEL
 		materialHarvestTool.put( Material.EARTH, "shovel" );
-		materialHarvestTool.put( Material.GOURD, "shovel" );
 		materialHarvestTool.put( Material.SAND, "shovel" );
 		materialHarvestTool.put( Material.SNOW, "shovel" );
 		materialHarvestTool.put( Material.SEA_GRASS, "shovel" );
@@ -316,6 +317,9 @@ public class XP
 		materialHarvestTool.put( Material.CACTUS, "hoe" );
 		materialHarvestTool.put( Material.CORAL, "hoe" );
 		materialHarvestTool.put( Material.TALL_PLANTS, "hoe" );
+		materialHarvestTool.put( Material.BAMBOO, "hoe" );
+		materialHarvestTool.put( Material.GOURD, "hoe" );
+		materialHarvestTool.put( Material.BAMBOO_SAPLING, "hoe" );
 ////////////////////////////////////TOOL_ITEM//////////////////////////////////////////////////////
 		toolItems.put( Items.DIAMOND_HELMET.getRegistryName(), new ItemStack( Items.DIAMOND ) );
 		toolItems.put( Items.DIAMOND_CHESTPLATE.getRegistryName(), new ItemStack( Items.DIAMOND ) );
@@ -578,6 +582,96 @@ public class XP
 //			return false;
 //	}
 
+	public static String checkMaterial( Material material )
+	{
+		if( material.equals( Material.AIR ) )
+			return "AIR";
+		else if( material.equals( Material.STRUCTURE_VOID ) )
+			return "STRUCTURE_VOID";
+		else if( material.equals( Material.PORTAL ) )
+			return "PORTAL";
+		else if( material.equals( Material.CARPET ) )
+			return "CARPET";
+		else if( material.equals( Material.PLANTS ) )
+			return "PLANTS";
+		else if( material.equals( Material.OCEAN_PLANT ) )
+			return "OCEAN_PLANT";
+		else if( material.equals( Material.TALL_PLANTS ) )
+			return "TALL_PLANTS";
+		else if( material.equals( Material.SEA_GRASS ) )
+			return "SEA_GRASS";
+		else if( material.equals( Material.WATER ) )
+			return "WATER";
+		else if( material.equals( Material.BUBBLE_COLUMN ) )
+			return "BUBBLE_COLUMN";
+		else if( material.equals( Material.LAVA ) )
+			return "LAVA";
+		else if( material.equals( Material.SNOW ) )
+			return "SNOW";
+		else if( material.equals( Material.FIRE ) )
+			return "FIRE";
+		else if( material.equals( Material.MISCELLANEOUS ) )
+			return "MISCELLANEOUS";
+		else if( material.equals( Material.WEB ) )
+			return "WEB";
+		else if( material.equals( Material.REDSTONE_LIGHT ) )
+			return "REDSTONE_LIGHT";
+		else if( material.equals( Material.CLAY ) )
+			return "CLAY";
+		else if( material.equals( Material.EARTH ) )
+			return "EARTH";
+		else if( material.equals( Material.ORGANIC ) )
+			return "ORGANIC";
+		else if( material.equals( Material.PACKED_ICE ) )
+			return "PACKED_ICE";
+		else if( material.equals( Material.SAND ) )
+			return "SAND";
+		else if( material.equals( Material.SPONGE ) )
+			return "SPONGE";
+		else if( material.equals( Material.SHULKER ) )
+			return "SHULKER";
+		else if( material.equals( Material.WOOD ) )
+			return "WOOD";
+		else if( material.equals( Material.BAMBOO_SAPLING ) )
+			return "BAMBOO_SAPLING";
+		else if( material.equals( Material.BAMBOO ) )
+			return "BAMBOO";
+		else if( material.equals( Material.WOOL ) )
+			return "WOOL";
+		else if( material.equals( Material.TNT ) )
+			return "TNT";
+		else if( material.equals( Material.LEAVES ) )
+			return "LEAVES";
+		else if( material.equals( Material.GLASS ) )
+			return "GLASS";
+		else if( material.equals( Material.ICE ) )
+			return "ICE";
+		else if( material.equals( Material.CACTUS ) )
+			return "CACTUS";
+		else if( material.equals( Material.ROCK ) )
+			return "ROCK";
+		else if( material.equals( Material.IRON ) )
+			return "IRON";
+		else if( material.equals( Material.SNOW_BLOCK ) )
+			return "SNOW_BLOCK";
+		else if( material.equals( Material.ANVIL ) )
+			return "ANVIL";
+		else if( material.equals( Material.BARRIER ) )
+			return "BARRIER";
+		else if( material.equals( Material.PISTON ) )
+			return "PISTON";
+		else if( material.equals( Material.CORAL ) )
+			return "CORAL";
+		else if( material.equals( Material.GOURD ) )
+			return "GOURD";
+		else if( material.equals( Material.DRAGON_EGG ) )
+			return "DRAGON_EGG";
+		else if( material.equals( Material.CAKE ) )
+			return "CAKE";
+		else
+			return "UNKNOWN";
+	}
+
 	public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
 	{
 		if( event.getEntity() instanceof PlayerEntity )
@@ -642,6 +736,8 @@ public class XP
 
 				float award = hardness;
 
+//				System.out.println( checkMaterial( material ) );
+
 				Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( player.getHeldItemMainhand() );
 				int fortune = 0;
 				if( enchants.get( Enchantments.FORTUNE ) != null )
@@ -664,8 +760,9 @@ public class XP
 				Block sugarCane = Blocks.SUGAR_CANE;
 				Block cactus = Blocks.CACTUS;
 				Block kelp = Blocks.KELP_PLANT;
+				Block bamboo = Blocks.BAMBOO;
 
-				if( block.equals( sugarCane ) || block.equals( cactus ) || block.equals( kelp ) ) //Handle Sugar Cane / Cactus
+				if( block.equals( sugarCane ) || block.equals( cactus ) || block.equals( kelp ) || block.equals( bamboo ) ) //Handle Sugar Cane / Cactus
 				{
 					int currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
 					Block baseBlock = event.getState().getBlock();
@@ -710,6 +807,8 @@ public class XP
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Blocks.CACTUS, dropsLeft ) );
 							else if( baseBlock == Blocks.SUGAR_CANE )
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
+							else if( baseBlock == Blocks.BAMBOO )
+								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.BAMBOO, dropsLeft ) );
 							else
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.KELP, dropsLeft ) );
 							dropsLeft -= 64;
@@ -724,6 +823,11 @@ public class XP
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
 							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Sugar Cane Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+						}
+						else if( baseBlock == Blocks.BAMBOO )
+						{
+							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.BAMBOO, dropsLeft ) );
+							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Bamboo Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
 						}
 						else
 						{
@@ -1160,7 +1264,7 @@ public class XP
 						{
 							currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
 							baseChance = getPlantDoubleChance( item.getRegistryName() );
-							extraChance = baseChance* currLevel;
+							extraChance = baseChance * currLevel;
 						}
 						else if( getOreDoubleChance( item.getRegistryName() ) != 0 )
 						{
@@ -1170,7 +1274,7 @@ public class XP
 						}
 
 						if( extraChance != 0 )
-							player.sendStatusMessage( new StringTextComponent( itemStack.getDisplayName() + " " + DP.dp( extraChance ) + "% extra chance, " + DP.dp( baseChance ) + "% per level" ), false );
+							player.sendStatusMessage( new StringTextComponent( itemStack.getDisplayName().getFormattedText() + " " + DP.dp( extraChance ) + "% extra chance, " + DP.dp( baseChance ) + "% per level" ), false );
 					}
 					else
 						return;
@@ -1189,13 +1293,17 @@ public class XP
 							int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
 							float baseValue = getSalvageBaseValue( salvageItem.getRegistryName() );
 							float valuePerLevel = getSalvageValuePerLevel( salvageItem.getRegistryName() );
-							float chance = baseValue + ( valuePerLevel * currLevel );
-							if( chance > 80 )
-								chance = 80;
+							double chance = baseValue + ( valuePerLevel * currLevel );
+							double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
+							double maxSalvageEnchantChance = Config.config.maxSalvageEnchantChance.get();
+							double enchantSaveChancePerLevel = Config.config.enchantSaveChancePerLevel.get();
 
-							float enchantChance = currLevel * 0.9f;
-							if( enchantChance > 90 )
-								enchantChance = 90;
+							if( chance > maxSalvageMaterialChance )
+								chance = maxSalvageMaterialChance;
+
+							double enchantChance = currLevel * enchantSaveChancePerLevel;
+							if( enchantChance > maxSalvageEnchantChance )
+								enchantChance = maxSalvageEnchantChance;
 
 							int itemPotential = getToolItemAmount( item.getRegistryName() );
 
@@ -1291,22 +1399,26 @@ public class XP
 					int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
 					int combatLevel = levelAtXp( skillsTag.getFloat( "combat" ) );
 					int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
+					int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();	//Swimming
 
-					double maxFallSaveChance = Config.config.maxFallSaveChance.get();
+					double maxFallSaveChance = Config.config.maxFallSaveChance.get();			//Agility
 					double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
+
+					double endurancePerLevel = Config.config.endurancePerLevel.get();			//Endurance
+					double maxEndurance = Config.config.maxEndurance.get();
+					double endurePercent = (enduranceLevel * endurancePerLevel);
+					if( endurePercent > maxEndurance )
+						endurePercent = maxEndurance;
 
 					double reach = AttributeHandler.getReach( player );
 					double agilityChance = agilityLevel * saveChancePerLevel;
-					double damageReduction = enduranceLevel * 0.25f;
+
 					double extraDamage = Math.floor( combatLevel / 20 );
 
 					float speedPercent = agilityLevel / 2000f;
 
 					if( agilityChance > maxFallSaveChance )
 						agilityChance = maxFallSaveChance;
-
-					if( damageReduction > 50 )
-						damageReduction = 50;
 
 					if( speedPercent > 0.10f )
 						speedPercent = 0.10f;
@@ -1315,14 +1427,14 @@ public class XP
 					player.sendStatusMessage( new StringTextComponent( "_________________________________" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( reach ) + " player reach" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( agilityChance ) + "% fall damage save chance" ), false );
-					player.sendStatusMessage( new StringTextComponent( DP.dp( damageReduction ) + "% damage reduction" ), false );
+					player.sendStatusMessage( new StringTextComponent( DP.dp( endurePercent ) + "% damage reduction" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( extraDamage ) + " extra damage" ), false );
 					player.sendStatusMessage( new StringTextComponent( DP.dp( speedPercent ) + "% sprint speed boost" ), false );
 
-					if( swimLevel >= 25 )
+					if( swimLevel >= nightvisionUnlockLevel )
 						player.sendStatusMessage( new StringTextComponent( "Underwater night vision is unlocked!" ), false );
 					else
-						player.sendStatusMessage( new StringTextComponent( "Underwater night vision is locked until level 25 Swimming" ), false );
+						player.sendStatusMessage( new StringTextComponent( "Underwater night vision is locked until level " + nightvisionUnlockLevel + " Swimming" ), false );
 				}
 			}
 		}
@@ -1388,10 +1500,12 @@ public class XP
 		int mining = 1;
 		int woodcutting = 1;
 		int excavation = 1;
+		int farming = 1;
 
 		double miningPercent = Config.config.miningBonusSpeed.get() / 100;
 		double woodcuttingPercent = Config.config.woodcuttingBonusSpeed.get() / 100;
 		double excavationPercent = Config.config.excavationBonusSpeed.get() / 100;
+		double farmingPercent = Config.config.farmingBonusSpeed.get() / 100;
 
 		if( player.world.isRemote() )
 		{
@@ -1401,12 +1515,15 @@ public class XP
 				woodcutting = levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).xp );
 			if( XPOverlayGUI.skills.get( "excavation" ) != null )
 				excavation = levelAtXp( XPOverlayGUI.skills.get( "excavation" ).xp );
+			if( XPOverlayGUI.skills.get( "farming" ) != null )
+				farming = levelAtXp( XPOverlayGUI.skills.get( "farming" ).xp );
 		}
 		else
 		{
 			mining = levelAtXp( skills.getFloat("mining") );
 			woodcutting = levelAtXp( skills.getFloat("woodcutting") );
 			excavation = levelAtXp( skills.getFloat("excavation") );
+			farming = levelAtXp( skills.getFloat("farming") );
 		}
 
 		switch ( correctHarvestTool(event.getState().getMaterial()) )
@@ -1423,16 +1540,23 @@ public class XP
 					heightMultiplier = Config.config.minBreakSpeed.get();
 
 				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + mining * (float) miningPercent ) * ( (float) heightMultiplier) );
-			break;
+				break;
+
 			case "axe":
 				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + woodcutting * (float) woodcuttingPercent ) );
-			break;
+				break;
+
 			case "shovel":
 				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + excavation * (float) excavationPercent ) );
-			break;
+				break;
+
+			case "hoe":
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + farming * (float) farmingPercent ) );
+				break;
+
 			default:
 				event.setNewSpeed( event.getOriginalSpeed() );
-			break;
+				break;
 		}
 	}
 
@@ -1643,10 +1767,10 @@ public class XP
 		if( !skip )
 			System.out.println( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getFloat( skillName ) );
 
-		if( startXp + amount >= maxXp && startXp <= maxXp )
+		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
 			player.sendStatusMessage( new StringTextComponent( skillName + " max level reached, you psycho!" ).setStyle( new Style().setColor( TextFormatting.LIGHT_PURPLE ) ), false);
-			System.out.println( player.getName() + " " + skillName + " max level reached" );
+			System.out.println( playerName + " " + skillName + " max level reached" );
 		}
 	}
 
@@ -1704,6 +1828,8 @@ public class XP
 					int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
 					int flyLevel = levelAtXp( skillsTag.getFloat( "flying" ) );
 					int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
+					int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();
+					float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
 					float speedAmp = 0;
 //					if( agilityLevel > 200 )
 //						agilityLevel = 200;
@@ -1711,7 +1837,7 @@ public class XP
 					if( player.isPotionActive( Effects.SPEED ) )
 						speedAmp = player.getActivePotionEffect( Effects.SPEED ).getAmplifier() + 1;
 
-					float swimAward = ( 3 + swimLevel    / 10.00f ) * ( gap / 1000f );
+					float swimAward = ( 3 + swimLevel    / 10.00f ) * ( gap / 1000f ) * ( 1 + swimAmp / 4 );
 					float flyAward  = ( 1 + flyLevel     / 30.77f ) * ( gap / 1000f );
 					float runAward  = ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f ) * ( 1 + speedAmp / 4);
 
@@ -1719,7 +1845,6 @@ public class XP
 					Block waterBlock = Blocks.WATER;
 					BlockPos playerPos = player.getPosition();
 					boolean waterBelow = true;
-
 
 					for( int i = -1; i <= 1; i++ )
 					{
@@ -1732,7 +1857,7 @@ public class XP
 
 					boolean waterAbove = player.getEntityWorld().getBlockState( playerPos.up()   ).getBlock().equals( waterBlock );
 
-					if( swimLevel >= 25 && player.isInWater() && waterAbove )
+					if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
 					{
 						player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 250, 0, true, false ) );
 					}
@@ -1742,7 +1867,11 @@ public class XP
 					if( player.isSprinting() )
 					{
 						if( player.isInWater() && ( waterAbove || waterBelow ) )
+						{
+
+
 							awardXp( player, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true );
+						}
 						else
 							awardXp( player, Skill.AGILITY, "running", runAward, true );
 					}

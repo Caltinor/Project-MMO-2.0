@@ -51,6 +51,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> miningBonusSpeed;
         public ConfigHelper.ConfigValueListener<Double> woodcuttingBonusSpeed;
         public ConfigHelper.ConfigValueListener<Double> excavationBonusSpeed;
+        public ConfigHelper.ConfigValueListener<Double> farmingBonusSpeed;
 
         //Mining
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimit;
@@ -76,7 +77,11 @@ public class Config
         //Archery
 
         //Repairing
-        public ConfigHelper.ConfigValueListener<Double> anvilCostReductionPerLevel;
+        public ConfigHelper.ConfigValueListener<Double> maxSalvageMaterialChance;
+        public ConfigHelper.ConfigValueListener<Double> maxSalvageEnchantChance;
+        public ConfigHelper.ConfigValueListener<Double> enchantSaveChancePerLevel;
+
+        public ConfigHelper.ConfigValueListener<Double> anvilCostReductionPerLevel;         //Salvage
         public ConfigHelper.ConfigValueListener<Double> extraChanceToNotBreakAnvilPerLevel;
         public ConfigHelper.ConfigValueListener<Double> anvilFinalItemBonusRepaired;
         public ConfigHelper.ConfigValueListener<Integer> anvilFinalItemMaxCostToAnvil;
@@ -84,6 +89,7 @@ public class Config
         //Flying
 
         //Swimming
+        public ConfigHelper.ConfigValueListener<Integer> nightvisionUnlockLevel;
 
         //Fishing
 
@@ -259,6 +265,11 @@ public class Config
                         .translation( "pmmo.excavationBonusSpeed" )
                         .defineInRange( "excavationBonusSpeed", 1D, 0, 10) );
 
+                this.farmingBonusSpeed = subscriber.subscribe(builder
+                        .comment( "How much your farming speed increases per level in (1 = 1% increase per level)" )
+                        .translation( "pmmo.farmingBonusSpeed" )
+                        .defineInRange( "farmingBonusSpeed", 1D, 0, 10) );
+
                 builder.pop();
             }
 
@@ -305,8 +316,8 @@ public class Config
                 builder.pop();
                 }
 
-                builder.push( "Endurance" );
-                {
+            builder.push( "Endurance" );
+            {
                 this.maxEndurance = subscriber.subscribe(builder
                         .comment( "How much endurance is max (100 = god mode)" )
                         .translation( "pmmo.maxEndurance" )
@@ -331,6 +342,21 @@ public class Config
             }
                 builder.push( "Repairing" );
             {
+                this.maxSalvageMaterialChance = subscriber.subscribe(builder
+                        .comment( "Max Percentage chance to return each Material" )
+                        .translation( "pmmo.maxSalvageMaterialChance" )
+                        .defineInRange( "maxSalvageMaterialChance", 80D, 0, 100) );
+
+                this.maxSalvageEnchantChance = subscriber.subscribe(builder
+                        .comment( "Max Percentage chance to return each Enchantment Level" )
+                        .translation( "pmmo.maxSalvageEnchantChance" )
+                        .defineInRange( "maxSalvageEnchantChance", 90D, 0, 100) );
+
+                this.enchantSaveChancePerLevel = subscriber.subscribe(builder
+                        .comment( "Each Enchantment Save Chance per Level" )
+                        .translation( "pmmo.enchantSaveChancePerLevel" )
+                        .defineInRange( "enchantSaveChancePerLevel", 0.9D, 0, 100) );
+
                 this.anvilCostReductionPerLevel = subscriber.subscribe(builder
                         .comment( "Vanilla starts at 50, hence: (50 - [this] * level)" )
                         .translation( "pmmo.anvilCostReductionPerLevel" )
@@ -361,6 +387,11 @@ public class Config
 
             builder.push( "Swimming" );
             {
+                this.nightvisionUnlockLevel = subscriber.subscribe(builder
+                        .comment( "Underwater Nightvision Unlock Level" )
+                        .translation( "pmmo.nightvisionUnlockLevel" )
+                        .defineInRange( "nightvisionUnlockLevel", 25, 0, 1000000) );
+
                 builder.pop();
             }
 
