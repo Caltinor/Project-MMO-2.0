@@ -1261,7 +1261,7 @@ public class XP
 							}
 							else
 							{
-								itemStack.damageItem( 750, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
+//								itemStack.damageItem( 750, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
 								player.sendStatusMessage( new StringTextComponent( "Off-Hand to Disassemble!" ), true );
 								player.sendStatusMessage( new StringTextComponent( "_________________________________" ), false );
 								player.sendStatusMessage( new StringTextComponent( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" ), false );
@@ -1325,14 +1325,18 @@ public class XP
 		if( !player.world.isRemote && event.getItemInput().getItem().isDamageable() )
 		{
 			CompoundNBT skillsTag = getSkillsTag( player );
+			double anvilCostReductionPerLevel = Config.config.anvilCostReductionPerLevel.get();
+			double extraChanceToNotBreakAnvilPerLevel = Config.config.extraChanceToNotBreakAnvilPerLevel.get() / 100;
+			double anvilFinalItemBonusRepaired = Config.config.anvilFinalItemBonusRepaired.get() / 100;
+			int anvilFinalItemMaxCostToAnvil = Config.config.anvilFinalItemMaxCostToAnvil.get();
 
 			int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
-			float bonusRepair = 0.01f * currLevel;
-			int maxCost = (int) Math.floor( 50 - ( currLevel / 4f ) );
-			if( maxCost < 20 )
-				maxCost = 20;
+			float bonusRepair = (float) anvilFinalItemBonusRepaired * currLevel;
+			int maxCost = (int) Math.floor( 50 - ( currLevel * anvilCostReductionPerLevel ) );
+			if( maxCost < anvilFinalItemMaxCostToAnvil )
+				maxCost = anvilFinalItemMaxCostToAnvil;
 
-			event.setBreakChance( event.getBreakChance() / ( 1f + 0.01f * currLevel ) );
+			event.setBreakChance( event.getBreakChance() / ( 1f + (float) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
 
 //			ItemStack rItem = event.getIngredientInput();
 			ItemStack lItem = event.getItemInput();
@@ -1353,7 +1357,7 @@ public class XP
 			if( award > 0 )
 			{
 				player.sendStatusMessage( new StringTextComponent( "repaired " + (int) repaired + " + " + (int) ( repaired * bonusRepair ) + " extra!" ), true );
-				awardXp( player, Skill.REPAIRING, "repairing " + oItem.getDisplayName() + " by: " + repaired, award, false );
+				awardXp( player, Skill.REPAIRING, "repairing an item by: " + repaired, award, false );
 			}
 		}
 	}
