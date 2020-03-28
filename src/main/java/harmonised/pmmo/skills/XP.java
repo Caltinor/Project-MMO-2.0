@@ -38,9 +38,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -69,7 +71,8 @@ public class XP
 	private static Map<String, Integer> skillColors = new HashMap<>();
 	private static Map<String, Long> lastAward = new HashMap<>();
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
-	private static Map<ArmorMaterial, Integer> levelReq = new HashMap<>();
+	private static Map<ArmorMaterial, Integer> wornLevelReq = new HashMap<>();
+	private static Map<ItemTier, Integer> toolLevelReq = new HashMap<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
 	public static double baseXp, xpIncreasePerLevel;
@@ -455,13 +458,18 @@ public class XP
 		salvageXp.put( Items.STRING.getRegistryName(), 2.0f );
 		salvageXp.put( Items.LEATHER.getRegistryName(), 5.0f );
 ////////////////////////////////////LEVEL_REQ//////////////////////////////////////////////////////
-		levelReq.put( ArmorMaterial.LEATHER, Config.config.levelReqLeather.get() );
-		levelReq.put( ArmorMaterial.CHAIN, Config.config.levelReqChain.get() );
-		levelReq.put( ArmorMaterial.IRON, Config.config.levelReqIron.get() );
-		levelReq.put( ArmorMaterial.GOLD, Config.config.levelReqGold.get() );
-		levelReq.put( ArmorMaterial.DIAMOND, Config.config.levelReqDiamond.get() );
-		levelReq.put( ArmorMaterial.TURTLE, Config.config.levelReqTurtle.get() );
+		wornLevelReq.put( ArmorMaterial.LEATHER, Config.config.levelReqLeatherArmor.get() );
+		wornLevelReq.put( ArmorMaterial.CHAIN, Config.config.levelReqChainArmor.get() );
+		wornLevelReq.put( ArmorMaterial.IRON, Config.config.levelReqIronArmor.get() );
+		wornLevelReq.put( ArmorMaterial.GOLD, Config.config.levelReqGoldArmor.get() );
+		wornLevelReq.put( ArmorMaterial.DIAMOND, Config.config.levelReqDiamondArmor.get() );
+		wornLevelReq.put( ArmorMaterial.TURTLE, Config.config.levelReqTurtleArmor.get() );
 
+		toolLevelReq.put( ItemTier.WOOD, Config.config.levelReqWoodTool.get() );
+		toolLevelReq.put( ItemTier.STONE, Config.config.levelReqStoneTool.get() );
+		toolLevelReq.put( ItemTier.IRON, Config.config.levelReqIronTool.get() );
+		toolLevelReq.put( ItemTier.GOLD, Config.config.levelReqGoldTool.get() );
+		toolLevelReq.put( ItemTier.DIAMOND, Config.config.levelReqDiamondTool.get() );
 	}
 
 	private static Skill getSkill( String tool )
@@ -592,10 +600,18 @@ public class XP
 //			return false;
 //	}
 
-	public static int getLevelReq( ArmorMaterial material )
+	public static int getToolLevelReq( ItemTier tier )
 	{
-		if( levelReq.get( material ) != null )
-			return levelReq.get( material );
+		if( toolLevelReq.get( tier ) != null )
+			return toolLevelReq.get( tier );
+		else
+			return 0;
+	}
+
+	public static int getWornLevelReq( ArmorMaterial material )
+	{
+		if( wornLevelReq.get( material ) != null )
+			return wornLevelReq.get( material );
 		else
 			return 0;
 	}
@@ -1576,6 +1592,8 @@ public class XP
 				event.setNewSpeed( event.getOriginalSpeed() );
 				break;
 		}
+
+		checkHandItemSpeed( event, player );
 	}
 
 	public static CompoundNBT getSkillsTag( PlayerEntity player )
@@ -1820,16 +1838,86 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageXp( newXp, Skill.getInt( skillName ), 0, false ), (ServerPlayerEntity) player );
 	}
 
-	public static void checkLevelReq( PlayerEntity player, int slot )
+	public static void checkHandItemDamage( LivingHurtEvent event, PlayerEntity player )
+	{
+
+	}
+
+	public static void checkHandItemSpeed( PlayerEvent.BreakSpeed event, PlayerEntity player )
+	{
+		ItemStack item = player.getHeldItemMainhand();
+		if( item.getItem() instanceof ToolItem )
+		{
+			int level = 1;
+			float newSpeed = event.getNewSpeed();
+			String skill = "";
+			CompoundNBT skills = getSkillsTag( player );
+			for( ToolType toolType : item.getToolTypes() )
+			{
+				if( !player.world.isRemote() )
+				{
+					switch( toolType.getName() )
+					{
+						case "pickaxe":
+							skill = "Mining";
+							level = XP.levelAtXp( skills.getFloat( "mining" ) );
+							break;
+
+						case "axe":
+							skill = "Woodcutting";
+							level = XP.levelAtXp( skills.getFloat( "woodcutting" ) );
+							break;
+
+						case "shovel":
+							skill = "Excavation";
+							level = XP.levelAtXp( skills.getFloat( "excavation" ) );
+							break;
+					}
+				}
+				else
+				{
+					switch( toolType.getName() )
+					{
+						case "pickaxe":
+							skill = "Mining";
+							level = XP.levelAtXp( XPOverlayGUI.skills.get( "mining" ).xp );
+							break;
+
+						case "axe":
+							skill = "Woodcutting";
+							level = XP.levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).xp );
+							break;
+
+						case "shovel":
+							skill = "Excavation";
+							level = XP.levelAtXp( XPOverlayGUI.skills.get( "excavation" ).xp );
+							break;
+					}
+				}
+			}
+			ItemTier tier = (ItemTier) ((ToolItem) item.getItem()).getTier();
+			int toolLevelReq =  getToolLevelReq( tier );
+			if( level < toolLevelReq )
+			{
+				float speedReduction = 1 / (float) (toolLevelReq - level + 1);
+				if( speedReduction < 0 )
+					speedReduction = 0;
+
+				event.setNewSpeed( newSpeed * speedReduction );
+				player.sendStatusMessage( new StringTextComponent( "Your Tool is too heavy! You need level " + toolLevelReq + " in " + skill + " to use this tool!" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+			}
+		}
+	}
+
+	public static void checkWornLevelReq( PlayerEntity player, int slot )
 	{
 		Item item = player.inventory.armorItemInSlot( slot ).getItem();
-
 		if( item instanceof ArmorItem )
 		{
-			int levelReq = getLevelReq( (ArmorMaterial) ((ArmorItem) item).getArmorMaterial() );
+			int wornLevelReq = getWornLevelReq( (ArmorMaterial) ((ArmorItem) item).getArmorMaterial() );
 			CompoundNBT skills = getSkillsTag( player );
 			int endurance = levelAtXp( skills.getFloat( "endurance" ) );
-			if( endurance < levelReq )
+			if( endurance < wornLevelReq )
 			{
 				String itemType = "";
 
@@ -1852,13 +1940,12 @@ public class XP
 						break;
 				}
 
-				int slowAmp = (int) Math.ceil( ( levelReq - endurance ) / 5 );
-				if( slowAmp > 10 )
-					slowAmp = 10;
+				int slowAmp = (int) Math.ceil( ( wornLevelReq - endurance ) / 5 );
+				if( slowAmp > 9 )
+					slowAmp = 9;
 
 				player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 50, slowAmp, false, true ) );
-
-				player.sendStatusMessage( new StringTextComponent( "Your " + itemType + ( slot == 0 || slot == 1 ? " are" : " is" ) + " too heavy! You need level " + levelReq + " Endurance to wear your " + itemType + "!" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+				player.sendStatusMessage( new StringTextComponent( "Your " + itemType + ( slot == 0 || slot == 1 ? " are" : " is" ) + " too heavy! You need level " + wornLevelReq + " Endurance to wear your " + itemType + "!" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 			}
 		}
 	}
@@ -1895,13 +1982,13 @@ public class XP
 					PlayerInventory inv = player.inventory;
 
 					if( !inv.armorItemInSlot( 3 ).isEmpty() )	//Helm
-						checkLevelReq( player, 3 );
+						checkWornLevelReq( player, 3 );
 					if( !inv.armorItemInSlot( 2 ).isEmpty() )	//Chest
-						checkLevelReq( player, 2 );
+						checkWornLevelReq( player, 2 );
 					if( !inv.armorItemInSlot( 1 ).isEmpty() )	//Legs
-						checkLevelReq( player, 1 );
+						checkWornLevelReq( player, 1 );
 					if( !inv.armorItemInSlot( 0 ).isEmpty() )	//Boots
-						checkLevelReq( player, 0 );
+						checkWornLevelReq( player, 0 );
 ////////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
 					if( player.isPotionActive( Effects.SPEED ) )
