@@ -18,11 +18,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.potion.Effect;
@@ -51,6 +50,8 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 
+import static net.minecraft.item.ArmorMaterial.GOLD;
+
 public class XP
 {
 	private static Map<ResourceLocation, Float> xpValues = new HashMap<>();
@@ -68,6 +69,7 @@ public class XP
 	private static Map<String, Integer> skillColors = new HashMap<>();
 	private static Map<String, Long> lastAward = new HashMap<>();
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
+	private static Map<ArmorMaterial, Integer> levelReq = new HashMap<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
 	public static double baseXp, xpIncreasePerLevel;
@@ -452,6 +454,14 @@ public class XP
 		salvageXp.put( Items.DIAMOND.getRegistryName(), 50.0f );
 		salvageXp.put( Items.STRING.getRegistryName(), 2.0f );
 		salvageXp.put( Items.LEATHER.getRegistryName(), 5.0f );
+////////////////////////////////////LEVEL_REQ//////////////////////////////////////////////////////
+		levelReq.put( ArmorMaterial.LEATHER, Config.config.levelReqLeather.get() );
+		levelReq.put( ArmorMaterial.CHAIN, Config.config.levelReqChain.get() );
+		levelReq.put( ArmorMaterial.IRON, Config.config.levelReqIron.get() );
+		levelReq.put( ArmorMaterial.GOLD, Config.config.levelReqGold.get() );
+		levelReq.put( ArmorMaterial.DIAMOND, Config.config.levelReqDiamond.get() );
+		levelReq.put( ArmorMaterial.TURTLE, Config.config.levelReqTurtle.get() );
+
 	}
 
 	private static Skill getSkill( String tool )
@@ -581,6 +591,14 @@ public class XP
 //		else
 //			return false;
 //	}
+
+	public static int getLevelReq( ArmorMaterial material )
+	{
+		if( levelReq.get( material ) != null )
+			return levelReq.get( material );
+		else
+			return 0;
+	}
 
 	public static String checkMaterial( Material material )
 	{
@@ -1378,7 +1396,7 @@ public class XP
 							}
 							else
 							{
-//								itemStack.damageItem( 750, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
+								itemStack.damageItem( 100, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
 								player.sendStatusMessage( new StringTextComponent( "Off-Hand to Disassemble!" ), true );
 								player.sendStatusMessage( new StringTextComponent( "_________________________________" ), false );
 								player.sendStatusMessage( new StringTextComponent( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" ), false );
@@ -1802,24 +1820,67 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageXp( newXp, Skill.getInt( skillName ), 0, false ), (ServerPlayerEntity) player );
 	}
 
+	public static void checkLevelReq( PlayerEntity player, int slot )
+	{
+		Item item = player.inventory.armorItemInSlot( slot ).getItem();
+
+		if( item instanceof ArmorItem )
+		{
+			int levelReq = getLevelReq( (ArmorMaterial) ((ArmorItem) item).getArmorMaterial() );
+			CompoundNBT skills = getSkillsTag( player );
+			int endurance = levelAtXp( skills.getFloat( "endurance" ) );
+			if( endurance < levelReq )
+			{
+				String itemType = "";
+
+				switch( slot )
+				{
+					case 3:
+						itemType = "Helmet";
+						break;
+
+					case 2:
+						itemType = "Chestplate";
+						break;
+
+					case 1:
+						itemType = "Leggings";
+						break;
+
+					case 0:
+						itemType = "Shoes";
+						break;
+				}
+
+				int slowAmp = (int) Math.ceil( ( levelReq - endurance ) / 5 );
+				if( slowAmp > 10 )
+					slowAmp = 10;
+
+				player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 50, slowAmp, false, true ) );
+
+				player.sendStatusMessage( new StringTextComponent( "Your " + itemType + ( slot == 0 || slot == 1 ? " are" : " is" ) + " too heavy! You need level " + levelReq + " Endurance to wear your " + itemType + "!" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+			}
+		}
+	}
+
 	public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
 	{
 		PlayerEntity player = event.player;
 
 		if( !player.world.isRemote )
 		{
-			String name = player.getName().getString();
-
-			if( player.isSprinting() )
-				AttributeHandler.updateSpeed( player );
-			else
-				AttributeHandler.resetSpeed( player );
-
-			if( !lastAward.containsKey( name ) )
-				 lastAward.put( name, System.currentTimeMillis() );
-
 			if( !player.isCreative() && player.isAlive() )
 			{
+				String name = player.getName().getString();
+
+				if( player.isSprinting() )
+					AttributeHandler.updateSpeed( player );
+				else
+					AttributeHandler.resetSpeed( player );
+
+				if( !lastAward.containsKey( name ) )
+					lastAward.put( name, System.currentTimeMillis() );
+
 				long gap = System.currentTimeMillis() - lastAward.get( name );
 				if( gap > 1000 )
 				{
@@ -1831,8 +1892,17 @@ public class XP
 					int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();
 					float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
 					float speedAmp = 0;
-//					if( agilityLevel > 200 )
-//						agilityLevel = 200;
+					PlayerInventory inv = player.inventory;
+
+					if( !inv.armorItemInSlot( 3 ).isEmpty() )	//Helm
+						checkLevelReq( player, 3 );
+					if( !inv.armorItemInSlot( 2 ).isEmpty() )	//Chest
+						checkLevelReq( player, 2 );
+					if( !inv.armorItemInSlot( 1 ).isEmpty() )	//Legs
+						checkLevelReq( player, 1 );
+					if( !inv.armorItemInSlot( 0 ).isEmpty() )	//Boots
+						checkLevelReq( player, 0 );
+////////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
 					if( player.isPotionActive( Effects.SPEED ) )
 						speedAmp = player.getActivePotionEffect( Effects.SPEED ).getAmplifier() + 1;

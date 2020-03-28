@@ -19,6 +19,15 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> baseXp;
         public ConfigHelper.ConfigValueListener<Integer> xpIncreasePerLevel;
 
+        //LevelReq
+        public ConfigHelper.ConfigValueListener<Integer> levelReqLeather;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqChain;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqIron;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqGold;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqDiamond;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqTurtle;
+
+
         //Multipliers
         public ConfigHelper.ConfigValueListener<Double> globalMultiplier;
         public ConfigHelper.ConfigValueListener<Double> peacefulMultiplier;
@@ -114,6 +123,43 @@ public class Config
                         .comment( "What is the xp increase per level ( baseXp + level * xpPerLevel )" )
                         .translation( "pmmo.xpIncreasePerLevel" )
                         .defineInRange( "xpIncreasePerLevel", 50, 1, 1000000 ) );
+
+                builder.pop();
+            }
+
+            builder.push( "Level Requirements" );
+            {
+                this.levelReqLeather = subscriber.subscribe(builder
+                        .comment( "Level Required to wear Leather Equipment" )
+                        .translation( "pmmo.levelReqLeather" )
+                        .defineInRange( "levelReqLeather", 5, 1, 1000000 ) );
+
+                this.levelReqChain = subscriber.subscribe(builder
+                        .comment( "Level Required to wear Chain Equipment" )
+                        .translation( "pmmo.levelReqChain" )
+                        .defineInRange( "levelReqChain", 10, 1, 1000000 ) );
+
+                this.levelReqIron = subscriber.subscribe(builder
+                        .comment( "Level Required to wear Iron Equipment" )
+                        .translation( "pmmo.levelReqIron" )
+                        .defineInRange( "levelReqIron", 20, 1, 1000000 ) );
+
+                this.levelReqGold = subscriber.subscribe(builder
+                        .comment( "Level Required to wear Gold Equipment" )
+                        .translation( "pmmo.levelReqGold" )
+                        .defineInRange( "levelReqGold", 30, 1, 1000000 ) );
+
+                this.levelReqDiamond = subscriber.subscribe(builder
+                        .comment( "Level Required to wear Diamond Equipment" )
+                        .translation( "pmmo.levelReqDiamond" )
+                        .defineInRange( "levelReqDiamond", 40, 1, 1000000 ) );
+
+                this.levelReqTurtle = subscriber.subscribe(builder
+                        .comment( "Level Required to wear Turtle Equipment" )
+                        .translation( "pmmo.levelReqTurtle" )
+                        .defineInRange( "levelReqTurtle", 10, 1, 1000000 ) );
+
+
 
                 builder.pop();
             }
