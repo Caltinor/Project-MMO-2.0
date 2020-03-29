@@ -33,6 +33,12 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> levelReqGoldTool;
         public ConfigHelper.ConfigValueListener<Integer> levelReqDiamondTool;
 
+        public ConfigHelper.ConfigValueListener<Integer> levelReqWoodWeapon;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqStoneWeapon;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqIronWeapon;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqGoldWeapon;
+        public ConfigHelper.ConfigValueListener<Integer> levelReqDiamondWeapon;
+
 
 
         //Multipliers
@@ -60,6 +66,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> barOffsetX;
         public ConfigHelper.ConfigValueListener<Double> barOffsetY;
         public ConfigHelper.ConfigValueListener<Boolean> showXpDrops;
+        public ConfigHelper.ConfigValueListener<Boolean> stackXpDrops;
 
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
@@ -199,6 +206,36 @@ public class Config
                 builder.pop();
             }
 
+            builder.push( "Weapon Level Requirements" );
+            {
+                this.levelReqWoodWeapon = subscriber.subscribe(builder
+                        .comment( "Level Required to use Wooden Weapons" )
+                        .translation( "pmmo.levelReqWoodWeapon" )
+                        .defineInRange( "levelReqWoodWeapon", 1, 1, 1000000 ) );
+
+                this.levelReqStoneWeapon = subscriber.subscribe(builder
+                        .comment( "Level Required to use Stone Weapons" )
+                        .translation( "pmmo.levelReqStoneWeapon" )
+                        .defineInRange( "levelReqStoneWeapon", 5, 1, 1000000 ) );
+
+                this.levelReqIronWeapon = subscriber.subscribe(builder
+                        .comment( "Level Required to use Iron Weapons" )
+                        .translation( "pmmo.levelReqIronWeapon" )
+                        .defineInRange( "levelReqIronWeapon", 20, 1, 1000000 ) );
+
+                this.levelReqGoldWeapon = subscriber.subscribe(builder
+                        .comment( "Level Required to use Golden Weapons" )
+                        .translation( "pmmo.levelReqGoldWeapon" )
+                        .defineInRange( "levelReqGoldWeapon", 30, 1, 1000000 ) );
+
+                this.levelReqDiamondWeapon = subscriber.subscribe(builder
+                        .comment( "Level Required to use Diamond Weapons" )
+                        .translation( "pmmo.levelReqDiamondWeapon" )
+                        .defineInRange( "levelReqDiamondWeapon", 40, 1, 1000000 ) );
+
+                builder.pop();
+            }
+
             builder.push( "Multipliers" );
             {
                 this.globalMultiplier = subscriber.subscribe(builder
@@ -315,6 +352,11 @@ public class Config
                         .comment( "If Off, xp drops will no longer appear" )
                         .translation( "pmmo.showXpDrops" )
                         .define( "showXpDrops", true ) );
+
+                this.stackXpDrops = subscriber.subscribe(builder
+                        .comment( "If Off, xp drops will no longer stack with each other" )
+                        .translation( "pmmo.stackXpDrops" )
+                        .define( "stackXpDrops", true ) );
 
                 builder.pop();
             }

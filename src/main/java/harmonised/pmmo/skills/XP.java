@@ -73,6 +73,7 @@ public class XP
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	private static Map<ArmorMaterial, Integer> wornLevelReq = new HashMap<>();
 	private static Map<ItemTier, Integer> toolLevelReq = new HashMap<>();
+	private static Map<ItemTier, Integer> weaponLevelReq = new HashMap<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
 	public static double baseXp, xpIncreasePerLevel;
@@ -179,7 +180,10 @@ public class XP
 		xpValues.put( Blocks.MYCELIUM.getRegistryName(), 15.0f );
 		xpValues.put( Blocks.SLIME_BLOCK.getRegistryName(), 50.0f );
 //		xpValues.put( Blocks.MONSTER_EGG.getRegistryName(), 200.0f );
-//		xpValues.put( Blocks.STONE.getRegistryName(), 1.0f );
+//		xpValues.put( Blocks.STONE.getRegistryName(), 0.1f );
+		xpValues.put( Blocks.ANDESITE.getRegistryName(), 0.5f );
+		xpValues.put( Blocks.GRANITE.getRegistryName(), 0.4f );
+		xpValues.put( Blocks.DIORITE.getRegistryName(), 0.3f );
 //		xpValues.put( Blocks.COBBLESTONE.getRegistryName(), 0.5f );
 		xpValues.put( Blocks.COAL_ORE.getRegistryName(), 2.0f );
 		xpValues.put( Blocks.IRON_ORE.getRegistryName(), 12.0f );
@@ -470,6 +474,12 @@ public class XP
 		toolLevelReq.put( ItemTier.IRON, Config.config.levelReqIronTool.get() );
 		toolLevelReq.put( ItemTier.GOLD, Config.config.levelReqGoldTool.get() );
 		toolLevelReq.put( ItemTier.DIAMOND, Config.config.levelReqDiamondTool.get() );
+
+		weaponLevelReq.put( ItemTier.WOOD, Config.config.levelReqWoodWeapon.get() );
+		weaponLevelReq.put( ItemTier.STONE, Config.config.levelReqStoneWeapon.get() );
+		weaponLevelReq.put( ItemTier.IRON, Config.config.levelReqIronWeapon.get() );
+		weaponLevelReq.put( ItemTier.GOLD, Config.config.levelReqGoldWeapon.get() );
+		weaponLevelReq.put( ItemTier.DIAMOND, Config.config.levelReqDiamondWeapon.get() );
 	}
 
 	private static Skill getSkill( String tool )
@@ -600,6 +610,14 @@ public class XP
 //			return false;
 //	}
 
+	public static int getWeaponLevelReq( ItemTier tier )
+	{
+		if( weaponLevelReq.get( tier ) != null )
+			return weaponLevelReq.get( tier );
+		else
+			return 0;
+	}
+
 	public static int getToolLevelReq( ItemTier tier )
 	{
 		if( toolLevelReq.get( tier ) != null )
@@ -706,6 +724,16 @@ public class XP
 			return "UNKNOWN";
 	}
 
+	public static void sendMessage( String msg, boolean bar, PlayerEntity player )
+	{
+		player.sendStatusMessage( new StringTextComponent( msg ), bar );
+	}
+
+	public static void sendMessage( String msg, boolean bar, PlayerEntity player, TextFormatting format )
+	{
+		player.sendStatusMessage( new StringTextComponent( msg ).setStyle( new Style().setColor( format ) ), bar );
+	}
+
 	public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
 	{
 		if( event.getEntity() instanceof PlayerEntity )
@@ -739,11 +767,6 @@ public class XP
 				else
 					lastPosPlaced.put(playerName, blockPos);
 
-//				int newBuildLevel = levelAtXp( skillsTag.getFloat( "building" ) );
-
-//				if( player.getAttributeMap().getAttributeInstance( player.REACH_DISTANCE ).getBaseValue() < ( 4.09D + ( buildLevel / 25D ) ) )
-//				player.getAttributeMap().getAttributeInstance( player.REACH_DISTANCE ).setBaseValue( 4.09D + ( buildLevel / 25D ) );
-//
 				if (getXp(block.getRegistryName()) != 0)
 					PlacedBlocks.orePlaced(event.getWorld().getWorld(), event.getPos());
 			}
@@ -851,22 +874,22 @@ public class XP
 						if( baseBlock == Blocks.CACTUS )
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Blocks.CACTUS, dropsLeft ) );
-							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Cactus Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+							sendMessage( ( guaranteedDrop * height ) + extraDrop + " Extra Cactus Dropped!", true, player, TextFormatting.GREEN );
 						}
 						else if( baseBlock == Blocks.SUGAR_CANE )
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
-							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Sugar Cane Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+							sendMessage( ( guaranteedDrop * height ) + extraDrop + " Extra Sugar Cane Dropped!", true, player, TextFormatting.GREEN );
 						}
 						else if( baseBlock == Blocks.BAMBOO )
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.BAMBOO, dropsLeft ) );
-							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Bamboo Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+							sendMessage( ( guaranteedDrop * height ) + extraDrop + " Extra Bamboo Dropped!", true, player, TextFormatting.GREEN );
 						}
 						else
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.KELP, dropsLeft ) );
-							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop * height ) + extraDrop + " Extra Kelp Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+							sendMessage( ( guaranteedDrop * height ) + extraDrop + " Extra Kelp Dropped!", true, player, TextFormatting.GREEN );
 						}
 					}
 
@@ -946,7 +969,7 @@ public class XP
 						drops.add( new ItemStack( theDropItem.getItem(), guaranteedDrop + extraDrop ) );
 
 						if ( guaranteedDrop + extraDrop > 0 )
-							player.sendStatusMessage( new StringTextComponent( Integer.toString( guaranteedDrop + extraDrop ) + " Extra " + theDropItem.getDisplayName().getFormattedText() + " Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+							sendMessage( Integer.toString( guaranteedDrop + extraDrop ) + " Extra " + theDropItem.getDisplayName().getFormattedText() + " Dropped!", true, player, TextFormatting.GREEN );
 
 //						System.out.println( theDropItem );
 //						System.out.println( guaranteedDrop );
@@ -996,7 +1019,7 @@ public class XP
 							ItemStack theDrop = new ItemStack( drops.get( 0 ).getItem(), guaranteedDrop + extraDrop );
 							block.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), theDrop );
 							awardMessage = "mining  and " + ( guaranteedDrop + extraDrop ) + " extra drop";
-							player.sendStatusMessage( new StringTextComponent( ( guaranteedDrop + extraDrop ) + " Extra " + theDrop.getDisplayName().getFormattedText() + " Dropped!" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+							sendMessage( ( guaranteedDrop + extraDrop ) + " Extra " + theDrop.getDisplayName().getFormattedText() + " Dropped!", true, player, TextFormatting.GREEN );
 						}
 						awardXp( player, Skill.MINING, awardMessage, award, false );
 
@@ -1091,7 +1114,7 @@ public class XP
 				damage -= saved;
 
 				if( saved != 0 && player.getHealth() > damage )
-					player.sendStatusMessage( new StringTextComponent( "Saved " + (int) saved + " damage!" ), true );
+					sendMessage( "Saved " + (int) saved + " damage!" , true, player );
 
 				award = saved * 30;
 
@@ -1115,11 +1138,15 @@ public class XP
 			}
 		}
 
+///////////////////////////////////////Attacking////////////////////////////////////////////////////////////
+
 		if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
 		{
 			PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
 			if( !player.isCreative() )
 			{
+				checkHandItemDamage( event, player );
+				damage = event.getAmount();
 				float amount = 0;
 				float playerHealth = player.getHealth();
 				float targetHealth = target.getHealth();
@@ -1148,7 +1175,6 @@ public class XP
 						lowHpBonus += 1;
 				}
 
-				damage = event.getAmount();
 				if( event.getSource().damageType.equals( "arrow" ) )
 				{
 					double distance = event.getEntity().getDistance( player );
@@ -1264,6 +1290,8 @@ public class XP
 			else
 				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
 		}
+
+		sendMessage( "Thank you for using Project MMO! Most features can be disabled in config.", false, player );
 	}
 
 	public static void handleRightClickItem( RightClickItem event )
@@ -1308,7 +1336,7 @@ public class XP
 						}
 
 						if( extraChance != 0 )
-							player.sendStatusMessage( new StringTextComponent( itemStack.getDisplayName().getFormattedText() + " " + DP.dp( extraChance ) + "% extra chance, " + DP.dp( baseChance ) + "% per level" ), false );
+							sendMessage( itemStack.getDisplayName().getFormattedText() + " " + DP.dp( extraChance ) + "% extra chance, " + DP.dp( baseChance ) + "% per level" , false, player );
 					}
 					else
 						return;
@@ -1370,7 +1398,7 @@ public class XP
 									if( award > 0 )
 										awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + itemPotential + " from an item", award, false  );
 
-									player.sendStatusMessage( new StringTextComponent( replyMsg ), true );
+									sendMessage( replyMsg , true, player );
 
 									if( enchants.size() > 0 )
 									{
@@ -1399,30 +1427,30 @@ public class XP
 										{
 											block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
 											if( fullEnchants )
-												player.sendStatusMessage( new StringTextComponent( "You managed to save all enchants!" ), true );
+												sendMessage( "You managed to save all enchants!" , true, player );
 											else
-												player.sendStatusMessage( new StringTextComponent( "You managed to save some enchants!" ), true );
+												sendMessage( "You managed to save some enchants!" , true, player );
 										}
 									}
 									player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
 									player.sendBreakAnimation(Hand.OFF_HAND );
 								}
 								else
-									player.sendStatusMessage( new StringTextComponent( "Only available in Survival Mode!" ), true );
+									sendMessage( "Only available in Survival Mode!" , true, player );
 							}
 							else
 							{
 								itemStack.damageItem( 100, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
-								player.sendStatusMessage( new StringTextComponent( "Off-Hand to Disassemble!" ), true );
-								player.sendStatusMessage( new StringTextComponent( "_________________________________" ), false );
-								player.sendStatusMessage( new StringTextComponent( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" ), false );
-								player.sendStatusMessage( new StringTextComponent( DP.dp( chance ) + "% per material, " + potentialReturnAmount + " max items returned" ), false );
-								player.sendStatusMessage( new StringTextComponent( DP.dp( enchantChance ) + "% enchant return, " + itemStack.getRepairCost() + " repair cost" ), false );
+								sendMessage( "Off-Hand to Disassemble!" , true, player );
+								sendMessage( "_________________________________", false, player );
+								sendMessage( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" , false, player );
+								sendMessage( DP.dp( chance ) + "% per material, " + potentialReturnAmount + " max items returned" , false, player );
+								sendMessage( DP.dp( enchantChance ) + "% enchant return, " + itemStack.getRepairCost() + " repair cost" , false, player );
 							}
 						}
 						else
 						{
-							player.sendStatusMessage( new StringTextComponent( "UNACCOUNTED FOR DAMAGEABLE ITEM! Please Report!" ), false );
+							sendMessage( "UNACCOUNTED FOR DAMAGEABLE ITEM! Please Report!" , false, player );
 						}
 					}
 				}
@@ -1458,17 +1486,17 @@ public class XP
 						speedPercent = 0.10f;
 					speedPercent = speedPercent / 0.10f * 100f;
 
-					player.sendStatusMessage( new StringTextComponent( "_________________________________" ), false );
-					player.sendStatusMessage( new StringTextComponent( DP.dp( reach ) + " player reach" ), false );
-					player.sendStatusMessage( new StringTextComponent( DP.dp( agilityChance ) + "% fall damage save chance" ), false );
-					player.sendStatusMessage( new StringTextComponent( DP.dp( endurePercent ) + "% damage reduction" ), false );
-					player.sendStatusMessage( new StringTextComponent( DP.dp( extraDamage ) + " extra damage" ), false );
-					player.sendStatusMessage( new StringTextComponent( DP.dp( speedPercent ) + "% sprint speed boost" ), false );
+					sendMessage( "_________________________________" , false, player );
+					sendMessage( DP.dp( reach ) + " player reach" , false, player );
+					sendMessage( DP.dp( agilityChance ) + "% fall damage save chance" , false, player );
+					sendMessage( DP.dp( endurePercent ) + "% damage reduction" , false, player );
+					sendMessage( DP.dp( extraDamage ) + " extra damage" , false, player );
+					sendMessage( DP.dp( speedPercent ) + "% sprint speed boost" , false, player );
 
 					if( swimLevel >= nightvisionUnlockLevel )
-						player.sendStatusMessage( new StringTextComponent( "Underwater night vision is unlocked!" ), false );
+						sendMessage( "Underwater night vision is unlocked!" , false, player );
 					else
-						player.sendStatusMessage( new StringTextComponent( "Underwater night vision is locked until level " + nightvisionUnlockLevel + " Swimming" ), false );
+						sendMessage( "Underwater night vision is locked until level " + nightvisionUnlockLevel + " Swimming" , false, player );
 				}
 			}
 		}
@@ -1511,7 +1539,7 @@ public class XP
 
 			if( award > 0 )
 			{
-				player.sendStatusMessage( new StringTextComponent( "repaired " + (int) repaired + " + " + (int) ( repaired * bonusRepair ) + " extra!" ), true );
+				sendMessage( "repaired " + (int) repaired + " + " + (int) ( repaired * bonusRepair ) + " extra!" , true, player );
 				awardXp( player, Skill.REPAIRING, "repairing an item by: " + repaired, award, false );
 			}
 		}
@@ -1763,7 +1791,7 @@ public class XP
 
 			if( startXp + amount >= 2000000000 )
 			{
-				player.sendStatusMessage( new StringTextComponent( skillName + " cap of 2b xp reached, you fucking psycho!" ).setStyle( new Style().setColor( TextFormatting.LIGHT_PURPLE ) ), false);
+				sendMessage( skillName + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
 				System.out.println( player.getName() + " " + skillName + " 2b cap reached" );
 				amount = 2000000000 - startXp;
 			}
@@ -1805,7 +1833,7 @@ public class XP
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
-			player.sendStatusMessage( new StringTextComponent( skillName + " max level reached, you psycho!" ).setStyle( new Style().setColor( TextFormatting.LIGHT_PURPLE ) ), false);
+			sendMessage( skillName + " max level reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
 			System.out.println( playerName + " " + skillName + " max level reached" );
 		}
 	}
@@ -1838,9 +1866,32 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageXp( newXp, Skill.getInt( skillName ), 0, false ), (ServerPlayerEntity) player );
 	}
 
-	public static void checkHandItemDamage( LivingHurtEvent event, PlayerEntity player )
+	public static void checkHandItemDamage( LivingDamageEvent event, PlayerEntity player )
 	{
+		if( !player.getHeldItemMainhand().isEmpty() )
+		{
+			Item item = player.getHeldItemMainhand().getItem();
+			ItemTier tier = null;
+			int levelReq;
 
+			if( item instanceof SwordItem )
+				tier = (ItemTier) ( (SwordItem) item ).getTier();
+			else if( item instanceof ToolItem )
+				tier = (ItemTier) ( (ToolItem) item ).getTier();
+
+			if( tier != null )
+			{
+				CompoundNBT skills = getSkillsTag( player );
+				int level = levelAtXp( skills.getFloat( "combat" ) );
+				levelReq = getWeaponLevelReq( tier );
+
+				if( level < levelReq )
+				{
+					event.setAmount( event.getAmount() * ( 1 / (float) ( levelReq - level ) ) );
+					sendMessage( "You aren't skilled enough to use this as a weapon! You need level " + levelReq + " combat.", true, player, TextFormatting.RED );
+				}
+			}
+		}
 	}
 
 	public static void checkHandItemSpeed( PlayerEvent.BreakSpeed event, PlayerEntity player )
@@ -1880,17 +1931,20 @@ public class XP
 					{
 						case "pickaxe":
 							skill = "Mining";
-							level = XP.levelAtXp( XPOverlayGUI.skills.get( "mining" ).xp );
+							if( XPOverlayGUI.skills.containsKey( "mining" ) )
+								level = XP.levelAtXp( XPOverlayGUI.skills.get( "mining" ).xp );
 							break;
 
 						case "axe":
 							skill = "Woodcutting";
-							level = XP.levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).xp );
+							if( XPOverlayGUI.skills.containsKey( "woodcutting") )
+								level = XP.levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).xp );
 							break;
 
 						case "shovel":
 							skill = "Excavation";
-							level = XP.levelAtXp( XPOverlayGUI.skills.get( "excavation" ).xp );
+							if( XPOverlayGUI.skills.containsKey( "excavation" ) )
+								level = XP.levelAtXp( XPOverlayGUI.skills.get( "excavation" ).xp );
 							break;
 					}
 				}
@@ -1904,7 +1958,7 @@ public class XP
 					speedReduction = 0;
 
 				event.setNewSpeed( newSpeed * speedReduction );
-				player.sendStatusMessage( new StringTextComponent( "Your Tool is too heavy! You need level " + toolLevelReq + " in " + skill + " to use this tool!" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+				sendMessage( "Your Tool is too heavy! You need level " + toolLevelReq + " in " + skill + " to use this tool!", true, player, TextFormatting.RED );
 			}
 		}
 	}
@@ -1945,7 +1999,7 @@ public class XP
 					slowAmp = 9;
 
 				player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 50, slowAmp, false, true ) );
-				player.sendStatusMessage( new StringTextComponent( "Your " + itemType + ( slot == 0 || slot == 1 ? " are" : " is" ) + " too heavy! You need level " + wornLevelReq + " Endurance to wear your " + itemType + "!" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+				sendMessage( "Your " + itemType + ( slot == 0 || slot == 1 ? " are" : " is" ) + " too heavy! You need level " + wornLevelReq + " Endurance to wear your " + itemType + "!", true, player, TextFormatting.RED );
 			}
 		}
 	}
@@ -1981,14 +2035,21 @@ public class XP
 					float speedAmp = 0;
 					PlayerInventory inv = player.inventory;
 
-					if( !inv.armorItemInSlot( 3 ).isEmpty() )	//Helm
-						checkWornLevelReq( player, 3 );
-					if( !inv.armorItemInSlot( 2 ).isEmpty() )	//Chest
-						checkWornLevelReq( player, 2 );
-					if( !inv.armorItemInSlot( 1 ).isEmpty() )	//Legs
-						checkWornLevelReq( player, 1 );
-					if( !inv.armorItemInSlot( 0 ).isEmpty() )	//Boots
-						checkWornLevelReq( player, 0 );
+					try
+					{
+						if( !inv.armorItemInSlot( 3 ).isEmpty() )	//Helm
+							checkWornLevelReq( player, 3 );
+						if( !inv.armorItemInSlot( 2 ).isEmpty() )	//Chest
+							checkWornLevelReq( player, 2 );
+						if( !inv.armorItemInSlot( 1 ).isEmpty() )	//Legs
+							checkWornLevelReq( player, 1 );
+						if( !inv.armorItemInSlot( 0 ).isEmpty() )	//Boots
+							checkWornLevelReq( player, 0 );
+					}
+					catch( Exception e )
+					{
+						//Can't cast into ArmorMaterial
+					}
 ////////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
 					if( player.isPotionActive( Effects.SPEED ) )

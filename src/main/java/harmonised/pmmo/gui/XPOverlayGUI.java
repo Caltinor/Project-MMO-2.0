@@ -35,7 +35,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0;
 	private static String name = "none", tempName = "none";
-	private static boolean init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true;
+	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -57,6 +57,7 @@ public class XPOverlayGUI extends AbstractGui
 					barOffsetX = Config.config.barOffsetX.get();
 					barOffsetY = Config.config.barOffsetY.get();
 					showXpDrops = Config.config.showXpDrops.get();
+					stackXpDrops = Config.config.stackXpDrops.get();
 					init = true;
 				}
 
@@ -348,7 +349,7 @@ public class XPOverlayGUI extends AbstractGui
 			return;
 		}
 		
-		if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( tempName ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 )
+		if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( tempName ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 && stackXpDrops )
 		{
 			xpDrops.get( xpDrops.size() - 1).gainedXp += gainedXp;
 			if( xpDrops.get( xpDrops.size() - 1).age > 475 )
