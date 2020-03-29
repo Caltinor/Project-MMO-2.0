@@ -80,6 +80,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimit;
 
         //Building
+        public ConfigHelper.ConfigValueListener<Integer> levelsPerBlockReach;
 
         //Excavation
 
@@ -90,12 +91,19 @@ public class Config
         //Agility
         public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
         public ConfigHelper.ConfigValueListener<Double> saveChancePerLevel;
+        public ConfigHelper.ConfigValueListener<Double> maxJumpBoost;
+        public ConfigHelper.ConfigValueListener<Double> maxSpeedBoost;
+        public ConfigHelper.ConfigValueListener<Double> speedBoostPerLevel;
+        public ConfigHelper.ConfigValueListener<Integer> levelsCrouchJumpBoost;
+        public ConfigHelper.ConfigValueListener<Integer> levelsSprintJumpBoost;
 
         //Endurance
         public ConfigHelper.ConfigValueListener<Double> endurancePerLevel;
         public ConfigHelper.ConfigValueListener<Double> maxEndurance;
+        public ConfigHelper.ConfigValueListener<Integer> levelsPerHeart;
 
         //Combat
+        public ConfigHelper.ConfigValueListener<Integer> levelsPerDamage;
 
         //Archery
 
@@ -103,12 +111,16 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> maxSalvageMaterialChance;
         public ConfigHelper.ConfigValueListener<Double> maxSalvageEnchantChance;
         public ConfigHelper.ConfigValueListener<Double> enchantSaveChancePerLevel;
+        public ConfigHelper.ConfigValueListener<Boolean> bypassEnchantLimit;
+        public ConfigHelper.ConfigValueListener<Integer> levelsPerOneEnchantBypass;
+        public ConfigHelper.ConfigValueListener<Integer> maxEnchantmentBypass;
+        public ConfigHelper.ConfigValueListener<Integer> maxEnchantLevel;
 
         public ConfigHelper.ConfigValueListener<Double> anvilCostReductionPerLevel;         //Salvage
         public ConfigHelper.ConfigValueListener<Double> extraChanceToNotBreakAnvilPerLevel;
         public ConfigHelper.ConfigValueListener<Double> anvilFinalItemBonusRepaired;
         public ConfigHelper.ConfigValueListener<Integer> anvilFinalItemMaxCostToAnvil;
-        
+
         //Flying
 
         //Swimming
@@ -408,6 +420,11 @@ public class Config
 
             builder.push( "Building" );
             {
+                this.levelsPerBlockReach = subscriber.subscribe(builder
+                        .comment( "Every how many levels you gain an extra block of reach" )
+                        .translation( "pmmo.levelsPerBlockReach" )
+                        .defineInRange( "levelsPerBlockReach", 25, 0, 1000) );
+
                 builder.pop();
             }
 
@@ -436,8 +453,33 @@ public class Config
                         .translation( "pmmo.saveChancePerLevel" )
                         .defineInRange( "saveChancePerLevel", 64D, 0, 100) );
 
+                this.maxJumpBoost = subscriber.subscribe(builder
+                        .comment( "How much jump boost can you gain max (above 0.33 makes you take fall damage)" )
+                        .translation( "pmmo.maxJumpBoost" )
+                        .defineInRange( "maxJumpBoost", 0.33D, 0, 100) );
+
+                this.levelsCrouchJumpBoost = subscriber.subscribe(builder
+                        .comment( "Every how many levels you gain an extra block of jumping height while Crouching" )
+                        .translation( "pmmo.levelsCrouchJumpBoost" )
+                        .defineInRange( "levelsCrouchJumpBoost", 33, 0, 1000) );
+
+                this.levelsSprintJumpBoost = subscriber.subscribe(builder
+                        .comment( "Every how many levels you gain an extra block of jumping height while Sprinting" )
+                        .translation( "pmmo.levelsSprintJumpBoost" )
+                        .defineInRange( "levelsSprintJumpBoost", 50, 0, 1000) );
+
+                this.maxSpeedBoost = subscriber.subscribe(builder
+                        .comment( "How much speed boost you can get from Agility (Incredibly sensitive, default 0.1)" )
+                        .translation( "pmmo.maxSpeedBoost" )
+                        .defineInRange( "maxSpeedBoost", 0.1D, 0, 10) );
+
+                this.speedBoostPerLevel = subscriber.subscribe(builder
+                        .comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )
+                        .translation( "pmmo.speedBoostPerLevel" )
+                        .defineInRange( "speedBoostPerLevel", 0.0005D, 0, 10) );
+
                 builder.pop();
-                }
+            }
 
             builder.push( "Endurance" );
             {
@@ -451,11 +493,21 @@ public class Config
                         .translation( "pmmo.endurancePerLevel" )
                         .defineInRange( "endurancePerLevel", 0.25D, 0, 100) );
 
+                this.levelsPerHeart = subscriber.subscribe(builder
+                        .comment( "Per how many levels you gain 1 Max Heart" )
+                        .translation( "pmmo.levelsPerHeart" )
+                        .defineInRange( "levelsPerHeart", 10, 0, 1000) );
+
                 builder.pop();
             }
 
             builder.push( "Combat" );
             {
+                this.levelsPerDamage = subscriber.subscribe(builder
+                        .comment( "Per how many levels you gain 1 Extra Damage" )
+                        .translation( "pmmo.levelsPerDamage" )
+                        .defineInRange( "levelsPerDamage", 20, 0, 1000) );
+
                 builder.pop();
             }
 
@@ -463,7 +515,7 @@ public class Config
             {
                 builder.pop();
             }
-                builder.push( "Repairing" );
+            builder.push( "Repairing" );
             {
                 this.maxSalvageMaterialChance = subscriber.subscribe(builder
                         .comment( "Max Percentage chance to return each Material" )
@@ -498,7 +550,30 @@ public class Config
                 this.anvilFinalItemMaxCostToAnvil = subscriber.subscribe(builder
                         .comment( "Vanilla caps at 50, at around 30 vanilla you can no longer anvil the item again. allows unlocking infinite Anvil uses." )
                         .translation( "pmmo.anvilFinalItemMaxCostToAnvil" )
-                        .defineInRange( "anvilFinalItemMaxCostToAnvil", 20, 0, 50) );
+                        .defineInRange( "anvilFinalItemMaxCostToAnvil", 10, 0, 50) );
+
+                this.bypassEnchantLimit = subscriber.subscribe(builder
+                        .comment( "Anvil combination limits enchantments to max level set in this config" )
+                        .translation( "pmmo.bypassEnchantLimit" )
+                        .define( "bypassEnchantLimit", true) );
+
+                this.levelsPerOneEnchantBypass = subscriber.subscribe(builder
+                        .comment( "How many levels per each Enchantment Level Bypass above max level enchantment can support in vanilla" )
+                        .translation( "pmmo.levelsPerOneEnchantBypass" )
+                        .defineInRange( "levelsPerOneEnchantBypass", 50, 0, 1000) );
+
+                this.maxEnchantmentBypass = subscriber.subscribe(builder
+                        .comment( "Max amount of levels enchants are able to go above max vanilla level" )
+                        .translation( "pmmo.maxEnchantmentBypass" )
+                        .defineInRange( "maxEnchantmentBypass", 2, 0, 1000) );
+
+                this.maxEnchantLevel = subscriber.subscribe(builder
+                        .comment( "Anvil combination limits enchantments to this level" )
+                        .translation( "pmmo.maxEnchantLevel" )
+                        .defineInRange( "maxEnchantLevel", 255, 1, 255) );
+
+
+
 
                 builder.pop();
             }

@@ -2,6 +2,7 @@ package harmonised.pmmo.skills;
 
 import java.util.UUID;
 
+import harmonised.pmmo.config.Config;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -13,7 +14,12 @@ public class AttributeHandler
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");
 	private static final UUID HPModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	private static final UUID DamageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
-	 
+	private static int levelsPerBlockReach = Config.config.levelsPerBlockReach.get();
+	private static int levelsPerHeart = Config.config.levelsPerHeart.get();
+	private static int levelsPerDamage = Config.config.levelsPerDamage.get();
+	private static double maxSpeedBoost = Config.config.maxSpeedBoost.get();
+	private static double speedBoostPerLevel = Config.config.speedBoostPerLevel.get();
+
 	public static double getReach( PlayerEntity player )
 	{
 		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
@@ -32,10 +38,7 @@ public class AttributeHandler
 		if( buildLevel == 1 )
 			return;
 
-		double reach = -0.91 + ( buildLevel / 25 );
-		
-//		if( reach > 0 && player.getHeldItemMainhand().getItem().isDamageable() )
-//			reach /= 2;
+		double reach = -0.91 + ( buildLevel / levelsPerBlockReach );
 		
 		if( reachAttribute.getModifier( reachModifierID ) == null || reachAttribute.getModifier( reachModifierID ).getAmount() != reach )
 		{
@@ -49,9 +52,9 @@ public class AttributeHandler
 	{
 		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		float agilityLevel = XP.levelAtXp( XP.getSkillsTag( player ).getFloat( "agility" ) );
-		double speedBoost = agilityLevel / 2000;
-		if( speedBoost > 0.1 )
-			speedBoost = 0.1;
+		double speedBoost = agilityLevel * speedBoostPerLevel;
+		if( speedBoost > maxSpeedBoost )
+			speedBoost = maxSpeedBoost;
 		if( speedAttribute.getModifier( speedModifierID ) == null || speedAttribute.getModifier( speedModifierID ).getAmount() != speedBoost )
 		{
 			AttributeModifier speedModifier = new AttributeModifier( speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, AttributeModifier.Operation.ADDITION );
@@ -70,7 +73,7 @@ public class AttributeHandler
 	{
 		IAttributeInstance HPAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		float enduranceLevel = XP.levelAtXp( XP.getSkillsTag( player ).getFloat( "endurance" ) );
-		int maxHP = (int) Math.floor( enduranceLevel / 10) * 2;
+		int maxHP = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
 		AttributeModifier HPModifier = new AttributeModifier( HPModifierID, "Max HP Bonus thanks to Endurance Level", maxHP, AttributeModifier.Operation.ADDITION );
 		HPAttribute.removeModifier( HPModifierID );
 		HPAttribute.applyModifier( HPModifier );
@@ -80,7 +83,7 @@ public class AttributeHandler
 	{
 		IAttributeInstance DamageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
 		float combatLevel = XP.levelAtXp( XP.getSkillsTag( player ).getFloat( "combat" ) );
-		int damageBoost = (int) Math.floor( combatLevel / 20 );
+		int damageBoost = (int) Math.floor( combatLevel / levelsPerDamage );
 		AttributeModifier damageModifier = new AttributeModifier( DamageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );
 		DamageAttribute.removeModifier( DamageModifierID );
 		DamageAttribute.applyModifier( damageModifier );

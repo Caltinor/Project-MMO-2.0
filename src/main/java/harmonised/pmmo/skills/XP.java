@@ -11,6 +11,7 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.DP;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -77,8 +78,10 @@ public class XP
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
 	public static double baseXp, xpIncreasePerLevel;
+
 	public static double globalMultiplier = Config.config.globalMultiplier.get();
 	public static int maxLevel = Config.config.maxLevel.get();
+
 	public static float maxXp = xpAtLevel( maxLevel );
 
 	public static void initValues()
@@ -800,6 +803,12 @@ public class XP
 				if( enchants.get( Enchantments.FORTUNE ) != null )
 					fortune = enchants.get( Enchantments.FORTUNE );
 
+				if( world instanceof ClientWorld )
+				{
+					System.out.println( "ClientWorld Detected, cannot get loot" );
+					return;
+				}
+
 				LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
 						.withRandom(world.rand)
 						.withParameter( LootParameters.POSITION, event.getPos() )
@@ -866,7 +875,7 @@ public class XP
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
 							else if( baseBlock == Blocks.BAMBOO )
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.BAMBOO, dropsLeft ) );
-							else
+							else if( baseBlock == Blocks.KELP )
 								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.KELP, dropsLeft ) );
 							dropsLeft -= 64;
 						}
@@ -1058,7 +1067,7 @@ public class XP
 
 	public static void handleSmelted( PlayerEvent.ItemSmeltedEvent event )
 	{
-		System.out.println( "SMELTED" );
+//		System.out.println( "SMELTED" );
 	}
 
 	public static void handleDamage( LivingDamageEvent event )
@@ -1212,6 +1221,9 @@ public class XP
 
 				double agilityLevel = 1;
 				double jumpBoost = 0;
+				double maxJumpBoost = Config.config.maxJumpBoost.get();
+				int levelsCrouchJumpBoost = Config.config.levelsCrouchJumpBoost.get();
+				int levelsSprintJumpBoost = Config.config.levelsSprintJumpBoost.get();
 
 				if (player.world.isRemote)
 				{
@@ -1224,13 +1236,13 @@ public class XP
 					agilityLevel = levelAtXp(skillsTag.getFloat("agility"));
 
 				if (player.isCrouching())
-					jumpBoost = -0.011 + agilityLevel * (0.14 / 33);
+					jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsCrouchJumpBoost );
 
 				if (player.isSprinting())
-					jumpBoost = -0.013 + agilityLevel * (0.14 / 50);
+					jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsSprintJumpBoost );
 
-				if (jumpBoost > 0.33)
-					jumpBoost = 0.33;
+				if ( jumpBoost > maxJumpBoost )
+					jumpBoost = maxJumpBoost;
 
 				if (player.world.isRemote)
 				{
@@ -1440,7 +1452,7 @@ public class XP
 							}
 							else
 							{
-								itemStack.damageItem( 100, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
+//								itemStack.damageItem( 100, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
 								sendMessage( "Off-Hand to Disassemble!" , true, player );
 								sendMessage( "_________________________________", false, player );
 								sendMessage( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" , false, player );
@@ -1465,6 +1477,10 @@ public class XP
 
 					double maxFallSaveChance = Config.config.maxFallSaveChance.get();			//Agility
 					double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
+					double speedBoostPerLevel = Config.config.speedBoostPerLevel.get();
+					double maxSpeedBoost = Config.config.maxSpeedBoost.get();
+
+					int levelsPerDamage = Config.config.levelsPerDamage.get();					//Combat
 
 					double endurancePerLevel = Config.config.endurancePerLevel.get();			//Endurance
 					double maxEndurance = Config.config.maxEndurance.get();
@@ -1475,23 +1491,22 @@ public class XP
 					double reach = AttributeHandler.getReach( player );
 					double agilityChance = agilityLevel * saveChancePerLevel;
 
-					double extraDamage = Math.floor( combatLevel / 20 );
+					double extraDamage = Math.floor( combatLevel / levelsPerDamage );
 
-					float speedPercent = agilityLevel / 2000f;
+					double speedBonus = agilityLevel * speedBoostPerLevel;
 
 					if( agilityChance > maxFallSaveChance )
 						agilityChance = maxFallSaveChance;
 
-					if( speedPercent > 0.10f )
-						speedPercent = 0.10f;
-					speedPercent = speedPercent / 0.10f * 100f;
+					if( speedBonus > maxSpeedBoost )
+						speedBonus = maxSpeedBoost;
 
 					sendMessage( "_________________________________" , false, player );
 					sendMessage( DP.dp( reach ) + " player reach" , false, player );
 					sendMessage( DP.dp( agilityChance ) + "% fall damage save chance" , false, player );
 					sendMessage( DP.dp( endurePercent ) + "% damage reduction" , false, player );
 					sendMessage( DP.dp( extraDamage ) + " extra damage" , false, player );
-					sendMessage( DP.dp( speedPercent ) + "% sprint speed boost" , false, player );
+					sendMessage( DP.dp( speedBonus ) + " sprint speed boost" , false, player );
 
 					if( swimLevel >= nightvisionUnlockLevel )
 						sendMessage( "Underwater night vision is unlocked!" , false, player );
@@ -1512,6 +1527,7 @@ public class XP
 			double extraChanceToNotBreakAnvilPerLevel = Config.config.extraChanceToNotBreakAnvilPerLevel.get() / 100;
 			double anvilFinalItemBonusRepaired = Config.config.anvilFinalItemBonusRepaired.get() / 100;
 			int anvilFinalItemMaxCostToAnvil = Config.config.anvilFinalItemMaxCostToAnvil.get();
+			boolean bypassEnchantLimit = Config.config.bypassEnchantLimit.get();
 
 			int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
 			float bonusRepair = (float) anvilFinalItemBonusRepaired * currLevel;
@@ -1521,7 +1537,7 @@ public class XP
 
 			event.setBreakChance( event.getBreakChance() / ( 1f + (float) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
 
-//			ItemStack rItem = event.getIngredientInput();
+			ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
 			ItemStack lItem = event.getItemInput();
 			ItemStack oItem = event.getItemResult();
 
@@ -1542,7 +1558,102 @@ public class XP
 				sendMessage( "repaired " + (int) repaired + " + " + (int) ( repaired * bonusRepair ) + " extra!" , true, player );
 				awardXp( player, Skill.REPAIRING, "repairing an item by: " + repaired, award, false );
 			}
+
+			if( bypassEnchantLimit )
+			{
+				Map<Enchantment, Integer> rEnchants = EnchantmentHelper.getEnchantments( rItem );
+				Map<Enchantment, Integer> lEnchants = EnchantmentHelper.getEnchantments( lItem );
+
+				Map<Enchantment, Integer> newEnchants = EnchantmentHelper.getEnchantments( lItem );
+
+				newEnchants = mergeEnchants( rEnchants, newEnchants, player, currLevel );
+				newEnchants = mergeEnchants( lEnchants, newEnchants, player, currLevel );
+
+				EnchantmentHelper.setEnchantments( newEnchants, oItem );
+			}
 		}
+	}
+
+	public static Map<Enchantment, Integer> mergeEnchants( Map<Enchantment, Integer> oldEnchants, Map<Enchantment, Integer> newEnchants, PlayerEntity player, int currLevel )
+	{
+		int levelsPerOneEnchantBypass = Config.config.levelsPerOneEnchantBypass.get();
+		int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
+		int maxEnchantLevel = Config.config.maxEnchantLevel.get();
+
+		oldEnchants.forEach( ( enchant, level ) ->
+		{
+			int maxPlayerBypass = (int) Math.floor( (double) currLevel / (double) levelsPerOneEnchantBypass );
+			if( maxPlayerBypass > maxEnchantmentBypass )
+				maxPlayerBypass = maxEnchantmentBypass;
+
+			if( enchant.getMaxLevel() > 1 )		//if max not 1, continue
+			{
+				if( newEnchants.containsKey( enchant ) )	//new enchants contains
+				{
+					System.out.println( level );
+					System.out.println( newEnchants.get( enchant ).intValue() );
+					if( level == newEnchants.get( enchant ).intValue() )	//same level, merge
+					{
+						if( level + 1 <= maxEnchantLevel )
+						{
+							if( level - enchant.getMaxLevel() < maxPlayerBypass )
+							{
+								newEnchants.replace( enchant, level + 1 );
+								sendMessage( "You have bypassed your " + enchant.getRegistryName() + " to level " + (level + 1) + "!", false, player, TextFormatting.GREEN );
+							}
+							else
+							{
+								newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
+								sendMessage( "You were not skilled enough to Bypass another level of " + enchant.getRegistryName() + ".", false, player, TextFormatting.RED );
+							}
+						}
+						else
+						{
+							newEnchants.replace( enchant, maxEnchantLevel );
+							sendMessage( "You hit the max Enchantment Level cap of " + maxEnchantLevel + " for " + enchant.getRegistryName() + ".", false, player, TextFormatting.RED );
+						}
+					}
+					else if( level > newEnchants.get( enchant ).intValue() )
+					{
+						if( maxEnchantLevel < level )
+						{
+							newEnchants.replace( enchant, maxEnchantLevel );
+							sendMessage( "You hit the max Enchantment Level cap of " + maxEnchantLevel + " for " + enchant.getRegistryName() + ".", false, player, TextFormatting.RED );
+						}
+						else if( enchant.getMaxLevel() + maxPlayerBypass < level )
+						{
+							newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
+							sendMessage( "Your inexperience has degraded " + enchant.getRegistryName() + " to " + enchant.getMaxLevel() + maxPlayerBypass + ".", false, player, TextFormatting.RED );
+						}
+						else
+						{
+							newEnchants.replace( enchant, level );
+						}
+					}
+				}
+				else
+				{
+					if( maxEnchantLevel < level )
+					{
+						newEnchants.put( enchant, maxEnchantLevel );
+						sendMessage( enchant.getRegistryName() + " global cap of " + maxEnchantLevel + " was reached.", false, player, TextFormatting.RED );
+					}
+					else if( enchant.getMaxLevel() + maxPlayerBypass < level )
+					{
+						newEnchants.put( enchant, enchant.getMaxLevel() + maxPlayerBypass );
+						sendMessage( "Your inexperience has degraded " + enchant.getRegistryName() + " to " + enchant.getMaxLevel() + maxPlayerBypass + ".", false, player, TextFormatting.RED );
+					}
+					else
+					{
+						newEnchants.put( enchant, level );
+					}
+				}
+			}
+			else if( !newEnchants.containsKey( enchant ) )
+				newEnchants.put( enchant, level );
+		});
+		System.out.println( newEnchants );
+		return newEnchants;
 	}
 
 	public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
@@ -1965,7 +2076,7 @@ public class XP
 
 	public static void checkWornLevelReq( PlayerEntity player, int slot )
 	{
-		Item item = player.inventory.armorItemInSlot( slot ).getItem();
+		Item item = player.inventory.getStackInSlot( slot ).getItem();
 		if( item instanceof ArmorItem )
 		{
 			int wornLevelReq = getWornLevelReq( (ArmorMaterial) ((ArmorItem) item).getArmorMaterial() );
@@ -1977,19 +2088,19 @@ public class XP
 
 				switch( slot )
 				{
-					case 3:
+					case 39:
 						itemType = "Helmet";
 						break;
 
-					case 2:
+					case 38:
 						itemType = "Chestplate";
 						break;
 
-					case 1:
+					case 37:
 						itemType = "Leggings";
 						break;
 
-					case 0:
+					case 36:
 						itemType = "Shoes";
 						break;
 				}
@@ -2037,14 +2148,14 @@ public class XP
 
 					try
 					{
-						if( !inv.armorItemInSlot( 3 ).isEmpty() )	//Helm
-							checkWornLevelReq( player, 3 );
-						if( !inv.armorItemInSlot( 2 ).isEmpty() )	//Chest
-							checkWornLevelReq( player, 2 );
-						if( !inv.armorItemInSlot( 1 ).isEmpty() )	//Legs
-							checkWornLevelReq( player, 1 );
-						if( !inv.armorItemInSlot( 0 ).isEmpty() )	//Boots
-							checkWornLevelReq( player, 0 );
+						if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
+							checkWornLevelReq( player, 39 );
+						if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
+							checkWornLevelReq( player, 38 );
+						if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
+							checkWornLevelReq( player, 37 );
+						if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
+							checkWornLevelReq( player, 36 );
 					}
 					catch( Exception e )
 					{
