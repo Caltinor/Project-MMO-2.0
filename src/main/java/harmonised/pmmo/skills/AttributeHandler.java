@@ -19,6 +19,7 @@ public class AttributeHandler
 	private static int levelsPerDamage = Config.config.levelsPerDamage.get();
 	private static double maxSpeedBoost = Config.config.maxSpeedBoost.get();
 	private static double speedBoostPerLevel = Config.config.speedBoostPerLevel.get();
+	private static int maxHeartCap = Config.config.maxHeartCap.get();
 
 	public static double getReach( PlayerEntity player )
 	{
@@ -74,6 +75,8 @@ public class AttributeHandler
 		IAttributeInstance HPAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		float enduranceLevel = XP.levelAtXp( XP.getSkillsTag( player ).getFloat( "endurance" ) );
 		int maxHP = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
+		if( maxHP > maxHeartCap * 2 )
+			maxHP = maxHeartCap;
 		AttributeModifier HPModifier = new AttributeModifier( HPModifierID, "Max HP Bonus thanks to Endurance Level", maxHP, AttributeModifier.Operation.ADDITION );
 		HPAttribute.removeModifier( HPModifierID );
 		HPAttribute.applyModifier( HPModifier );

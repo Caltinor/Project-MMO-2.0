@@ -101,6 +101,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> endurancePerLevel;
         public ConfigHelper.ConfigValueListener<Double> maxEndurance;
         public ConfigHelper.ConfigValueListener<Integer> levelsPerHeart;
+        public ConfigHelper.ConfigValueListener<Integer> maxHeartCap;
 
         //Combat
         public ConfigHelper.ConfigValueListener<Integer> levelsPerDamage;
@@ -115,6 +116,9 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> levelsPerOneEnchantBypass;
         public ConfigHelper.ConfigValueListener<Integer> maxEnchantmentBypass;
         public ConfigHelper.ConfigValueListener<Integer> maxEnchantLevel;
+        public ConfigHelper.ConfigValueListener<Double> upgradeChance;
+        public ConfigHelper.ConfigValueListener<Double> failedUpgradeKeepLevelChance;
+        public ConfigHelper.ConfigValueListener<Boolean> alwaysUseUpgradeChance;
 
         public ConfigHelper.ConfigValueListener<Double> anvilCostReductionPerLevel;         //Salvage
         public ConfigHelper.ConfigValueListener<Double> extraChanceToNotBreakAnvilPerLevel;
@@ -498,6 +502,11 @@ public class Config
                         .translation( "pmmo.levelsPerHeart" )
                         .defineInRange( "levelsPerHeart", 10, 0, 1000) );
 
+                this.maxHeartCap = subscriber.subscribe(builder
+                        .comment( "How many Bonus Max Hearts you can have" )
+                        .translation( "pmmo.maxHeartCap" )
+                        .defineInRange( "maxHeartCap", 20, 0, 1000) );
+
                 builder.pop();
             }
 
@@ -570,10 +579,22 @@ public class Config
                 this.maxEnchantLevel = subscriber.subscribe(builder
                         .comment( "Anvil combination limits enchantments to this level" )
                         .translation( "pmmo.maxEnchantLevel" )
-                        .defineInRange( "maxEnchantLevel", 255, 1, 255) );
+                        .defineInRange( "maxEnchantLevel", 255, 0, 255) );
 
+                this.upgradeChance = subscriber.subscribe(builder
+                        .comment( "What is the chance to Bypass a max enchant level (provided you got the skill to do so)" )
+                        .translation( "pmmo.upgradeChance" )
+                        .defineInRange( "upgradeChance", 50D, 0, 100) );
 
+                this.failedUpgradeKeepLevelChance = subscriber.subscribe(builder
+                        .comment( "What is the chance to Reduce a level after a Upgrade chance fails (100 = everytime you fail bypass, enchant level goes down by 1)" )
+                        .translation( "pmmo.failedUpgradeKeepLevelChance" )
+                        .defineInRange( "failedUpgradeKeepLevelChance", 50D, 0, 100) );
 
+                this.alwaysUseUpgradeChance = subscriber.subscribe(builder
+                        .comment( "false = Upgrade Chance if only rolled if you are trying to upgrade your item ABOVE vanilla max level. true = you ALWAYS have an upgrade chance level." )
+                        .translation( "pmmo.alwaysUseUpgradeChance" )
+                        .define( "alwaysUseUpgradeChance", false) );
 
                 builder.pop();
             }

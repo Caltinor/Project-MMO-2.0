@@ -1324,6 +1324,14 @@ public class XP
 			Block ironBlock		= 	Blocks.IRON_BLOCK;
 			Block goldBlock 	= 	Blocks.GOLD_BLOCK;
 			Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
+
+			int repairLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
+			int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
+			int levelsPerOneEnchantBypass = Config.config.levelsPerOneEnchantBypass.get();
+			int maxPlayerBypass = (int) Math.floor( (double) repairLevel / (double) levelsPerOneEnchantBypass );
+			if( maxPlayerBypass > maxEnchantmentBypass )
+				maxPlayerBypass = maxEnchantmentBypass;
+
 			if( player.isCrouching() )
 			{
 				if( block.equals( ironBlock ) || block.equals( anvil ) )
@@ -1364,10 +1372,9 @@ public class XP
 							ItemStack salvageItemStack = getToolItem( item.getRegistryName() );
 							Item salvageItem = salvageItemStack.getItem();
 							ServerWorld serverWorld = (ServerWorld) event.getWorld();
-							int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
 							float baseValue = getSalvageBaseValue( salvageItem.getRegistryName() );
 							float valuePerLevel = getSalvageValuePerLevel( salvageItem.getRegistryName() );
-							double chance = baseValue + ( valuePerLevel * currLevel );
+							double chance = baseValue + ( valuePerLevel * repairLevel );
 							double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
 							double maxSalvageEnchantChance = Config.config.maxSalvageEnchantChance.get();
 							double enchantSaveChancePerLevel = Config.config.enchantSaveChancePerLevel.get();
@@ -1375,7 +1382,7 @@ public class XP
 							if( chance > maxSalvageMaterialChance )
 								chance = maxSalvageMaterialChance;
 
-							double enchantChance = currLevel * enchantSaveChancePerLevel;
+							double enchantChance = repairLevel * enchantSaveChancePerLevel;
 							if( enchantChance > maxSalvageEnchantChance )
 								enchantChance = maxSalvageEnchantChance;
 
@@ -1458,6 +1465,7 @@ public class XP
 								sendMessage( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" , false, player );
 								sendMessage( DP.dp( chance ) + "% per material, " + potentialReturnAmount + " max items returned" , false, player );
 								sendMessage( DP.dp( enchantChance ) + "% enchant return, " + itemStack.getRepairCost() + " repair cost" , false, player );
+								sendMessage( maxPlayerBypass + " max Enchant Bypass" , false, player );
 							}
 						}
 						else
@@ -1507,6 +1515,7 @@ public class XP
 					sendMessage( DP.dp( endurePercent ) + "% damage reduction" , false, player );
 					sendMessage( DP.dp( extraDamage ) + " extra damage" , false, player );
 					sendMessage( DP.dp( speedBonus ) + " sprint speed boost" , false, player );
+					sendMessage( maxPlayerBypass + " max Enchant Bypass" , false, player );
 
 					if( swimLevel >= nightvisionUnlockLevel )
 						sendMessage( "Underwater night vision is unlocked!" , false, player );
@@ -1561,98 +1570,117 @@ public class XP
 
 			if( bypassEnchantLimit )
 			{
-				Map<Enchantment, Integer> rEnchants = EnchantmentHelper.getEnchantments( rItem );
-				Map<Enchantment, Integer> lEnchants = EnchantmentHelper.getEnchantments( lItem );
+				Map<Enchantment, Integer> lEnchants = EnchantmentHelper.getEnchantments( rItem );
+				Map<Enchantment, Integer> rEnchants = EnchantmentHelper.getEnchantments( lItem );
 
-				Map<Enchantment, Integer> newEnchants = EnchantmentHelper.getEnchantments( lItem );
-
-				newEnchants = mergeEnchants( rEnchants, newEnchants, player, currLevel );
-				newEnchants = mergeEnchants( lEnchants, newEnchants, player, currLevel );
+				Map<Enchantment, Integer> newEnchants = mergeEnchants( lEnchants, rEnchants, player, currLevel );
 
 				EnchantmentHelper.setEnchantments( newEnchants, oItem );
 			}
 		}
 	}
 
-	public static Map<Enchantment, Integer> mergeEnchants( Map<Enchantment, Integer> oldEnchants, Map<Enchantment, Integer> newEnchants, PlayerEntity player, int currLevel )
+	public static Map<Enchantment, Integer> mergeEnchants( Map<Enchantment, Integer> lEnchants, Map<Enchantment, Integer> rEnchants, PlayerEntity player, int currLevel )
 	{
+		Map<Enchantment, Integer> newEnchants = new HashMap<Enchantment, Integer>();
+		double bypassChance = Config.config.upgradeChance.get();
+		double failedBypassPenaltyChance = Config.config.failedUpgradeKeepLevelChance.get();
 		int levelsPerOneEnchantBypass = Config.config.levelsPerOneEnchantBypass.get();
 		int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
 		int maxEnchantLevel = Config.config.maxEnchantLevel.get();
+		boolean alwaysUseUpgradeChance = Config.config.alwaysUseUpgradeChance.get();
 
-		oldEnchants.forEach( ( enchant, level ) ->
+		lEnchants.forEach( ( enchant, level ) ->
 		{
+			if( newEnchants.containsKey( enchant ) )
+			{
+				if( newEnchants.get( enchant ) < level )
+					newEnchants.replace( enchant, level );
+			}
+			else
+				newEnchants.put( enchant, level );
+		});
+
+
+		rEnchants.forEach( ( enchant, level ) ->
+		{
+			if( newEnchants.containsKey( enchant ) )
+			{
+				if( newEnchants.get( enchant ) < level )
+					newEnchants.replace( enchant, level );
+			}
+			else
+				newEnchants.put( enchant, level );
+		});
+
+		Set<Enchantment> keys = new HashSet<>( newEnchants.keySet() );
+
+		keys.forEach( ( enchant ) ->
+		{
+			int level = newEnchants.get( enchant );
+
 			int maxPlayerBypass = (int) Math.floor( (double) currLevel / (double) levelsPerOneEnchantBypass );
 			if( maxPlayerBypass > maxEnchantmentBypass )
 				maxPlayerBypass = maxEnchantmentBypass;
 
-			if( enchant.getMaxLevel() > 1 )		//if max not 1, continue
+			if( maxEnchantLevel < level )
 			{
-				if( newEnchants.containsKey( enchant ) )	//new enchants contains
+				if( maxEnchantLevel > 0 )
+					newEnchants.replace( enchant, maxEnchantLevel );
+				else
+					newEnchants.remove( enchant );
+				sendMessage( "You hit the max Enchantment Level cap of " + maxEnchantLevel + " for " + enchant.getRegistryName() + ".", false, player, TextFormatting.RED );
+			}
+			else if( enchant.getMaxLevel() + maxPlayerBypass < level )
+			{
+				if( enchant.getMaxLevel() + maxPlayerBypass > 0 )
+					newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
+				else
+					newEnchants.remove( enchant );
+				sendMessage( "Your inexperience has degraded " + enchant.getRegistryName() + " to " + (enchant.getMaxLevel() + maxPlayerBypass) + ".", false, player, TextFormatting.RED );
+			}
+			else if( lEnchants.get( enchant ).intValue() == rEnchants.get( enchant ).intValue() ) //same values
+			{
+				if( level + 1 > maxEnchantLevel )
 				{
-					System.out.println( level );
-					System.out.println( newEnchants.get( enchant ).intValue() );
-					if( level == newEnchants.get( enchant ).intValue() )	//same level, merge
-					{
-						if( level + 1 <= maxEnchantLevel )
-						{
-							if( level - enchant.getMaxLevel() < maxPlayerBypass )
-							{
-								newEnchants.replace( enchant, level + 1 );
-								sendMessage( "You have bypassed your " + enchant.getRegistryName() + " to level " + (level + 1) + "!", false, player, TextFormatting.GREEN );
-							}
-							else
-							{
-								newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
-								sendMessage( "You were not skilled enough to Bypass another level of " + enchant.getRegistryName() + ".", false, player, TextFormatting.RED );
-							}
-						}
-						else
-						{
-							newEnchants.replace( enchant, maxEnchantLevel );
-							sendMessage( "You hit the max Enchantment Level cap of " + maxEnchantLevel + " for " + enchant.getRegistryName() + ".", false, player, TextFormatting.RED );
-						}
-					}
-					else if( level > newEnchants.get( enchant ).intValue() )
-					{
-						if( maxEnchantLevel < level )
-						{
-							newEnchants.replace( enchant, maxEnchantLevel );
-							sendMessage( "You hit the max Enchantment Level cap of " + maxEnchantLevel + " for " + enchant.getRegistryName() + ".", false, player, TextFormatting.RED );
-						}
-						else if( enchant.getMaxLevel() + maxPlayerBypass < level )
-						{
-							newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
-							sendMessage( "Your inexperience has degraded " + enchant.getRegistryName() + " to " + enchant.getMaxLevel() + maxPlayerBypass + ".", false, player, TextFormatting.RED );
-						}
-						else
-						{
-							newEnchants.replace( enchant, level );
-						}
-					}
+					sendMessage( enchant.getRegistryName() + " Upgrade failed due to hitting global max Enchant level.", false, player, TextFormatting.RED );
+				}
+				else if( level + 1 > enchant.getMaxLevel() + maxPlayerBypass )
+				{
+					sendMessage( enchant.getRegistryName() + " Upgrade failed due to lack of skill.", false, player, TextFormatting.RED );
 				}
 				else
 				{
-					if( maxEnchantLevel < level )
+					if( ( level >= enchant.getMaxLevel() ) || alwaysUseUpgradeChance )
 					{
-						newEnchants.put( enchant, maxEnchantLevel );
-						sendMessage( enchant.getRegistryName() + " global cap of " + maxEnchantLevel + " was reached.", false, player, TextFormatting.RED );
-					}
-					else if( enchant.getMaxLevel() + maxPlayerBypass < level )
-					{
-						newEnchants.put( enchant, enchant.getMaxLevel() + maxPlayerBypass );
-						sendMessage( "Your inexperience has degraded " + enchant.getRegistryName() + " to " + enchant.getMaxLevel() + maxPlayerBypass + ".", false, player, TextFormatting.RED );
+						if( Math.ceil( Math.random() * 100 ) <= bypassChance ) //success
+						{
+							newEnchants.replace( enchant, level + 1 );
+							sendMessage( "Successfully Upgraded " + enchant.getRegistryName() + " to level " + (level + 1) + "!", false, player, TextFormatting.GREEN );
+						}
+						else if( Math.ceil( Math.random() * 100 ) <= failedBypassPenaltyChance ) //fucked up twice
+						{
+							if( level > 1 )
+								newEnchants.replace( enchant, level - 1 );
+							else
+								newEnchants.remove( enchant );
+							sendMessage( "Failed " + enchant.getRegistryName() + " " + bypassChance + "% Upgrade Chance, as well as " + failedBypassPenaltyChance + "% Keep Level Chance. Level reduced by 1.", false, player, TextFormatting.RED );
+						}
+						else	//only fucked up once
+						{
+							newEnchants.replace( enchant, level );
+							sendMessage( "Failed " + enchant.getRegistryName() + " " + bypassChance + "% Upgrade Chance. Level remains the same.", false, player, TextFormatting.RED );
+						}
 					}
 					else
 					{
-						newEnchants.put( enchant, level );
+						newEnchants.replace( enchant, level + 1 );
+						sendMessage( "Successfully Upgraded " + enchant.getRegistryName() + " to level " + (level + 1) + "!", false, player, TextFormatting.GREEN );
 					}
 				}
 			}
-			else if( !newEnchants.containsKey( enchant ) )
-				newEnchants.put( enchant, level );
 		});
-		System.out.println( newEnchants );
+
 		return newEnchants;
 	}
 
