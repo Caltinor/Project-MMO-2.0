@@ -41,7 +41,7 @@ public class PmmoCommand
         suggestClear[0] = "iagreetothetermsandconditions";
 
         LiteralArgumentBuilder<CommandSource> builder = Commands.literal("pmmo")
-                .requires( src -> src.hasPermissionLevel(0 ) )
+                .requires( src -> src.hasPermissionLevel(4 ) )
                 .requires( src -> src.getEntity() instanceof ServerPlayerEntity )
                 .then( Commands.argument("command", StringArgumentType.word() )
                 .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestCommand, theBuilder ) )
@@ -49,7 +49,7 @@ public class PmmoCommand
 
         builder.then( Commands.argument("set", StringArgumentType.word() )
                 .then( Commands.argument("skill", StringArgumentType.word() )
-//                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
+                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
                 .then( Commands.argument("request", StringArgumentType.word() )
                 .executes( CommandSet::execute ) ) ) );
 
@@ -59,13 +59,13 @@ public class PmmoCommand
 //                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestClear, theBuilder ) )
                 .executes( CommandClear::execute ) ) );
 
-        builder.then( Commands.argument("levelAtXp", StringArgumentType.word() )
-                .then( Commands.argument("request", StringArgumentType.word() )
-                .executes( CommandLevelAtXp::execute ) ) );
-
-        builder.then( Commands.argument("xpAtLevel", StringArgumentType.word() )
-                .then( Commands.argument("request", StringArgumentType.word() )
-                .executes( CommandXpAtLevel::execute ) ) );
+//        builder.then( Commands.argument("levelAtXp", StringArgumentType.word() )
+//                .then( Commands.argument("request", StringArgumentType.word() )
+//                .executes( CommandLevelAtXp::execute ) ) );
+//
+//        builder.then( Commands.argument("xpAtLevel", StringArgumentType.word() )
+//                .then( Commands.argument("request", StringArgumentType.word() )
+//                .executes( CommandXpAtLevel::execute ) ) );
 
         dispatch.register( builder );
     }

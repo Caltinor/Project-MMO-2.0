@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.command.CommandException;
@@ -44,6 +45,9 @@ public class CommandClear
 				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
 			}
 
+			AttributeHandler.updateDamage( player );
+			AttributeHandler.updateHP( player );
+			AttributeHandler.updateReach( player );
 			player.sendStatusMessage( new StringTextComponent( "Your stats have been resynced. \"iagreetothetermsandconditions\" to clear your stats!" ), false);
 		}
 

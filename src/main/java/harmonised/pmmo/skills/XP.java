@@ -1446,9 +1446,9 @@ public class XP
 										{
 											block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
 											if( fullEnchants )
-												sendMessage( "You managed to save all enchants!" , true, player );
+												sendMessage( "You managed to save all enchants!" , true, player, TextFormatting.GREEN );
 											else
-												sendMessage( "You managed to save some enchants!" , true, player );
+												sendMessage( "You managed to save some enchants!" , true, player, TextFormatting.YELLOW );
 										}
 									}
 									player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
