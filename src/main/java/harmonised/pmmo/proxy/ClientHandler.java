@@ -9,7 +9,7 @@ import org.lwjgl.glfw.GLFW;
 //@net.minecraftforge.fml.common.Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.MOD)
 public class ClientHandler
 {
-    public static final KeyBinding SHOW_GUI = new KeyBinding( "key.showgui", GLFW.GLFW_KEY_TAB, "category.pmmo" );
+    public static final KeyBinding SHOW_GUI = new KeyBinding( "key.pmmo.showgui", GLFW.GLFW_KEY_TAB, "category.pmmo" );
 
 //    public static void registerKeybinds()
 //    {

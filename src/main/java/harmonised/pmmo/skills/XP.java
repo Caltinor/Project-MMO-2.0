@@ -803,22 +803,23 @@ public class XP
 				if( enchants.get( Enchantments.FORTUNE ) != null )
 					fortune = enchants.get( Enchantments.FORTUNE );
 
-				if( world instanceof ClientWorld )
-				{
-					System.out.println( "ClientWorld Detected, cannot get loot" );
-					return;
-				}
+				List<ItemStack> drops;
 
-				LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
-						.withRandom(world.rand)
-						.withParameter( LootParameters.POSITION, event.getPos() )
-						.withParameter( LootParameters.TOOL, toolUsed )
-						.withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
-				if (fortune > 0)
+				if( world instanceof ServerWorld )
 				{
-					builder.withLuck(fortune);
+					LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
+							.withRandom(world.rand)
+							.withParameter( LootParameters.POSITION, event.getPos() )
+							.withParameter( LootParameters.TOOL, toolUsed )
+							.withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
+					if (fortune > 0)
+					{
+						builder.withLuck(fortune);
+					}
+					drops = block.getDrops( event.getState(), builder );
 				}
-				List<ItemStack> drops = block.getDrops( event.getState(), builder );
+				else
+					drops = new ArrayList<>();
 
 //				System.out.println( drops );
 
