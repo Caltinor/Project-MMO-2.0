@@ -6,10 +6,12 @@ import com.sun.java.accessibility.util.java.awt.TextComponentTranslator;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageCrawling;
+import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.util.DP;
+import mezz.jei.network.Network;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -50,6 +52,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import org.apache.logging.log4j.core.jmx.Server;
+
+import javax.annotation.Nullable;
 
 public class XP
 {
@@ -739,6 +743,7 @@ public class XP
 		if( event.getEntity() instanceof PlayerEntity )
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntity();
+
 			if ( !player.isCreative() )
 			{
 				double blockHardnessLimit = Config.config.blockHardnessLimit.get();
@@ -781,6 +786,7 @@ public class XP
 			if( !player.isCreative() )
 			{
 				double blockHardnessLimit = Config.config.blockHardnessLimit.get();
+				boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
 				CompoundNBT skillsTag = getSkillsTag( player );
 				Block block = event.getState().getBlock();
 				Material material = event.getState().getMaterial();
@@ -820,7 +826,6 @@ public class XP
 
 //				System.out.println( drops );
 
-				boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
 				Block sugarCane = Blocks.SUGAR_CANE;
 				Block cactus = Blocks.CACTUS;
 				Block kelp = Blocks.KELP_PLANT;
@@ -833,14 +838,12 @@ public class XP
 					BlockPos baseBlockPos = event.getPos();
 
 					float extraChance = getPlantDoubleChance( baseBlock.getRegistryName() ) * currLevel;
-					int rewardable, guaranteedDrop, extraDrop, totalDrops;
-					rewardable = guaranteedDrop = extraDrop = totalDrops = 0;
+					int rewardable, guaranteedDrop, extraDrop, totalDrops, guaranteedDropEach;
+					rewardable = extraDrop = guaranteedDrop = totalDrops = 0;
 
-					if( ( extraChance / 100 ) > 1 )
-					{
-						guaranteedDrop = (int)Math.floor( extraChance / 100 );
-						extraChance = (float)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
-					}
+					guaranteedDropEach = (int)Math.floor( extraChance / 100 );
+					extraChance = (float)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
+
 					if( !wasPlaced )
 						rewardable++;
 
@@ -853,6 +856,7 @@ public class XP
 						if( !wasPlaced )
 						{
 							rewardable++;
+							guaranteedDrop += guaranteedDropEach;
 
 							if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
 								extraDrop++;
@@ -881,28 +885,26 @@ public class XP
 						if( baseBlock == Blocks.CACTUS )
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Blocks.CACTUS, dropsLeft ) );
-							sendMessage( ( guaranteedDrop * height ) + extraDrop + " Extra Cactus Dropped!", true, player, TextFormatting.GREEN );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), Items.CACTUS.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 						}
 						else if( baseBlock == Blocks.SUGAR_CANE )
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
-							sendMessage( ( guaranteedDrop * height ) + extraDrop + " Extra Sugar Cane Dropped!", true, player, TextFormatting.GREEN );
+                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), Items.SUGAR_CANE.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 						}
 						else if( baseBlock == Blocks.BAMBOO )
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.BAMBOO, dropsLeft ) );
-							sendMessage( ( guaranteedDrop * height ) + extraDrop + " Extra Bamboo Dropped!", true, player, TextFormatting.GREEN );
+                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), Items.BAMBOO.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 						}
 						else
 						{
 							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.KELP, dropsLeft ) );
-							sendMessage( ( guaranteedDrop * height ) + extraDrop + " Extra Kelp Dropped!", true, player, TextFormatting.GREEN );
+                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), Items.KELP.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 						}
 					}
-
 					totalDrops = rewardable + guaranteedDrop + extraDrop;
 					award += ( getXp( baseBlock.getRegistryName() ) * totalDrops ) + ( hardness * totalDrops );
-	//				System.out.println( "Height: " + height );
 					awardXp( player, Skill.FARMING, "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra", award, false );
 				}
 				else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) || material.equals( Material.TALL_PLANTS ) ) && drops.size() > 0 ) //IS PLANT
@@ -912,7 +914,8 @@ public class XP
 					BlockState state = event.getState();
 					int age = -1;
 					int maxAge = -1;
-					award += getXp( block.getRegistryName() ) * theDropItem.getCount();
+					if( !wasPlaced )
+						award += getXp( block.getRegistryName() ) * theDropItem.getCount();
 
 					if( state.has( BlockStateProperties.AGE_0_1 ) )
 					{
@@ -1026,7 +1029,7 @@ public class XP
 							ItemStack theDrop = new ItemStack( drops.get( 0 ).getItem(), guaranteedDrop + extraDrop );
 							block.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), theDrop );
 							awardMessage = "mining  and " + ( guaranteedDrop + extraDrop ) + " extra drop";
-							sendMessage( ( guaranteedDrop + extraDrop ) + " Extra " + theDrop.getDisplayName().getFormattedText() + " Dropped!", true, player, TextFormatting.GREEN );
+							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.extraDrop", ( guaranteedDrop + extraDrop ), theDrop.getDisplayName().getFormattedText() ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
 						}
 						awardXp( player, Skill.MINING, awardMessage, award, false );
 
@@ -1036,6 +1039,12 @@ public class XP
 				}
 				else
 				{
+					if( !wasPlaced )
+					{
+						award += getXp( block.getRegistryName() );
+						PlacedBlocks.removeOre( event.getWorld().getWorld(), event.getPos() );
+					}
+
 					switch( getSkill( correctHarvestTool( material ) ) )
 					{
 						case MINING:
@@ -1121,7 +1130,7 @@ public class XP
 				damage -= saved;
 
 				if( saved != 0 && player.getHealth() > damage )
-					sendMessage( "Saved " + (int) saved + " damage!" , true, player );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedFall", 5 ), true );
 
 				award = saved * 30;
 
@@ -1301,7 +1310,7 @@ public class XP
 				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
 		}
 
-		sendMessage( "Thank you for using Project MMO! Most features can be tweaked in config.", false, player );
+		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.welcome" ), false );
 	}
 
 	public static void handleRightClickItem( RightClickItem event )
@@ -1444,7 +1453,7 @@ public class XP
 										{
 											block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
 											if( fullEnchants )
-												sendMessage( "You managed to save all enchants!" , true, player, TextFormatting.GREEN );
+												sendMessage( "You managed to save all enchants!", true, player, TextFormatting.GREEN );
 											else
 												sendMessage( "You managed to save some enchants!" , true, player, TextFormatting.YELLOW );
 										}
@@ -1453,12 +1462,12 @@ public class XP
 									player.sendBreakAnimation(Hand.OFF_HAND );
 								}
 								else
-									sendMessage( "Only available in Survival Mode!" , true, player );
+									sendMessage( "Only available in Survival Mode!", true, player );
 							}
 							else
 							{
 //								itemStack.damageItem( 100, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
-								sendMessage( "Off-Hand to Disassemble!" , true, player );
+								sendMessage( "Off-Hand to Disassemble!", true, player );
 								sendMessage( "_________________________________", false, player );
 								sendMessage( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" , false, player );
 								sendMessage( DP.dp( chance ) + "% per material, " + potentialReturnAmount + " max items returned" , false, player );
@@ -2025,7 +2034,9 @@ public class XP
 				if( level < levelReq )
 				{
 					event.setAmount( event.getAmount() * ( 1 / (float) ( levelReq - level ) ) );
-					sendMessage( "You aren't skilled enough to use this as a weapon! You need level " + levelReq + " combat.", true, player, TextFormatting.RED );
+//					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.weaponLevelReq", levelReq ), true );
+//					System.out.println( "hello" );
+					sendMessage( "pmmo.text.weaponLevelReq", true, player, TextFormatting.RED );
 				}
 			}
 		}

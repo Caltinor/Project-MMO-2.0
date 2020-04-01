@@ -4,7 +4,6 @@ import harmonised.pmmo.network.MessageCrawling;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,6 +19,7 @@ public class ClientEventHandler
     @SubscribeEvent
     public static void keyPress( net.minecraftforge.client.event.InputEvent.KeyInputEvent event )
     {
-        NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ), Minecraft.getInstance().player );
+        if( Minecraft.getInstance().player != null )
+            NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
     }
 }

@@ -2,5 +2,12 @@
   "category.pmmo": "Project MMO",
   "key.pmmo.showgui": "Show GUI",
   "key.pmmo.crawl": "Crawl",
-  "pmmo.text.welcome": "Thank you for using Project MMO! Most features can be tweaked in config."
+  "pmmo.text.welcome": "Thank you for using Project MMO! Most features can be tweaked in config.",
+  "pmmo.text.savedFall": "Saved %1$s fall damage!",
+  "pmmo.text.extraDrop": "%1$s Extra %2$s Dropped!",
+  "pmmo.text.savedAllEnchants": "You managed to save all enchants!",
+  "pmmo.text.savedSomeEnchants": "You managed to save some enchants!",
+  "pmmo.text.survivalOnlyWarning": "Only available in Survival Mode!",
+  "pmmo.text.offhandToDiss": "Off-Hand to Disassemble!",
+  "pmmo.text.weaponLevelReq": "You aren't skilled enough to use this as a weapon! You need level %1$s combat."
 }
