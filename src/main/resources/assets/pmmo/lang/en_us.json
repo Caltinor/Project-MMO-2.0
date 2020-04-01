@@ -1,4 +1,6 @@
 {
   "category.pmmo": "Project MMO",
-  "key.pmmo.showgui": "Show GUI"
+  "key.pmmo.showgui": "Show GUI",
+  "key.pmmo.crawl": "Crawl",
+  "pmmo.text.welcome": "Thank you for using Project MMO! Most features can be tweaked in config."
 }

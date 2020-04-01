@@ -1,40 +1,39 @@
 package harmonised.pmmo.skills;
 
 import java.util.*;
-import java.util.function.Consumer;
 
-import harmonised.pmmo.ProjectMMOMod;
+import com.sun.java.accessibility.util.java.awt.TextComponentTranslator;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.gui.XPOverlayGUI;
+import harmonised.pmmo.network.MessageCrawling;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.util.DP;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.entity.PMMOPoseSetter;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
@@ -43,7 +42,6 @@ import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -51,9 +49,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBloc
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-
-import static net.minecraft.item.ArmorMaterial.GOLD;
+import org.apache.logging.log4j.core.jmx.Server;
 
 public class XP
 {
@@ -75,6 +71,7 @@ public class XP
 	private static Map<ArmorMaterial, Integer> wornLevelReq = new HashMap<>();
 	private static Map<ItemTier, Integer> toolLevelReq = new HashMap<>();
 	private static Map<ItemTier, Integer> weaponLevelReq = new HashMap<>();
+	public static Set<String> isCrawling = new HashSet<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
 	public static double baseXp, xpIncreasePerLevel;
@@ -1304,7 +1301,7 @@ public class XP
 				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
 		}
 
-		sendMessage( "Thank you for using Project MMO! Most features can be disabled in config.", false, player );
+		sendMessage( "Thank you for using Project MMO! Most features can be tweaked in config.", false, player );
 	}
 
 	public static void handleRightClickItem( RightClickItem event )
@@ -2014,9 +2011,9 @@ public class XP
 			ItemTier tier = null;
 			int levelReq;
 
-			if( item instanceof SwordItem )
+			if( item instanceof SwordItem && ( (SwordItem) item ).getTier() instanceof ItemTier )
 				tier = (ItemTier) ( (SwordItem) item ).getTier();
-			else if( item instanceof ToolItem )
+			else if( item instanceof ToolItem && ( (ToolItem) item ).getTier() instanceof ItemTier )
 				tier = (ItemTier) ( (ToolItem) item ).getTier();
 
 			if( tier != null )
@@ -2089,16 +2086,19 @@ public class XP
 					}
 				}
 			}
-			ItemTier tier = (ItemTier) ((ToolItem) item.getItem()).getTier();
-			int toolLevelReq =  getToolLevelReq( tier );
-			if( level < toolLevelReq )
+			if( ((ToolItem) item.getItem()).getTier() instanceof ItemTier )
 			{
-				float speedReduction = 1 / (float) (toolLevelReq - level + 1);
-				if( speedReduction < 0 )
-					speedReduction = 0;
+				ItemTier tier = (ItemTier) ((ToolItem) item.getItem()).getTier();
+				int toolLevelReq =  getToolLevelReq( tier );
+				if( level < toolLevelReq )
+				{
+					float speedReduction = 1 / (float) (toolLevelReq - level + 1);
+					if( speedReduction < 0 )
+						speedReduction = 0;
 
-				event.setNewSpeed( newSpeed * speedReduction );
-				sendMessage( "Your Tool is too heavy! You need level " + toolLevelReq + " in " + skill + " to use this tool!", true, player, TextFormatting.RED );
+					event.setNewSpeed( newSpeed * speedReduction );
+					sendMessage( "Your Tool is too heavy! You need level " + toolLevelReq + " in " + skill + " to use this tool!", true, player, TextFormatting.RED );
+				}
 			}
 		}
 	}
@@ -2148,8 +2148,11 @@ public class XP
 	{
 		PlayerEntity player = event.player;
 
-		if( !player.world.isRemote )
+		if( !player.world.isRemote() )
 		{
+			if( isCrawling.contains( player.getName().getString() ) )
+				PMMOPoseSetter.setPose( player, Pose.SWIMMING );
+
 			if( !player.isCreative() && player.isAlive() )
 			{
 				String name = player.getName().getString();
@@ -2247,6 +2250,7 @@ public class XP
 				}
 			}
 		}
+
 	}
 
 	public static void handleFished( ItemFishedEvent event )

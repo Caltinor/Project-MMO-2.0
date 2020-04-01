@@ -4,14 +4,17 @@ import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.ConfigHelper;
 import harmonised.pmmo.config.ConfigHelper.ConfigValueListener;
+import harmonised.pmmo.events.ClientEventHandler;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -38,6 +41,8 @@ public class ProjectMMOMod
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::modsLoading );
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::clientLoading );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
+
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientEventHandler.subscribeClientEvents( MinecraftForge.EVENT_BUS ) );
 
         Config.init();
     }
