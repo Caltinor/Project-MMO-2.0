@@ -9,5 +9,22 @@
   "pmmo.text.savedSomeEnchants": "You managed to save some enchants!",
   "pmmo.text.survivalOnlyWarning": "Only available in Survival Mode!",
   "pmmo.text.offhandToDiss": "Off-Hand to Disassemble!",
-  "pmmo.text.weaponLevelReq": "You aren't skilled enough to use this as a weapon! You need level %1$s combat."
+  "pmmo.text.weaponLevelReq": "You aren't skilled enough to use this as a weapon! You need level %1$s combat.",
+  "pmmo.text.levelUp": "%1$s %2$s level up!",
+  "pmmo.text.nightVisionUnlocked": "Underwater Night Vision has been Unlocked!",
+  "pmmo.text.invalidSkill": "INVALID SKILL",
+  "pmmo.text.mining": "Mining",
+  "pmmo.text.building": "Building",
+  "pmmo.text.excavation": "Excavation",
+  "pmmo.text.woodcutting": "Woodcutting",
+  "pmmo.text.farming": "Farming",
+  "pmmo.text.agility": "Agility",
+  "pmmo.text.endurance": "Endurance",
+  "pmmo.text.combat": "Combat",
+  "pmmo.text.archery": "Archery",
+  "pmmo.text.repairing": "Repairing",
+  "pmmo.text.flying": "Flying",
+  "pmmo.text.swimming": "Swimming",
+  "pmmo.text.fishing": "Fishing",
+  "pmmo.text.crafting": "Crafting"
 }

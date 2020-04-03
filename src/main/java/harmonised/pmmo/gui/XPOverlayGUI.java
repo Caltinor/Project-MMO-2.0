@@ -21,6 +21,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.logging.log4j.core.layout.HtmlLayout;
@@ -129,8 +130,14 @@ public class XPOverlayGUI extends AbstractGui
 							name = xpDrop.name;
 
 						tempDouble2 = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
-						if( tempDouble2 < 0.1 )
-							tempDouble2 = 0.1;
+						if( stackXpDrops )
+						{
+							if( tempDouble2 < 0.1 )
+								tempDouble2 = 0.1;
+						}
+						else
+							if( tempDouble2 < 1 )
+								tempDouble2 = 1;
 
 						if( xpDrop.gainedXp - ( tempDouble2 * timeDiff / 10000000 ) < 0 )
 						{
@@ -262,7 +269,7 @@ public class XPOverlayGUI extends AbstractGui
 							if( tempDouble >= XP.maxLevel )
 								tempString = "" + XP.maxLevel;
 							drawString( fontRenderer, tempString, 3, 3 + listIndex, XP.getSkillColor( tag ) );
-							drawString( fontRenderer, " | " + tag, 32, 3 + listIndex, XP.getSkillColor( tag ) );
+							drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo.text." + tag ).getString(), 32, 3 + listIndex, XP.getSkillColor( tag ) );
 							drawString( fontRenderer, " | " + DP.dprefix( skills.get( tag ).xp ), 102, 3 + listIndex, XP.getSkillColor( tag ) );
 							listIndex += 9;
 						}
@@ -277,50 +284,16 @@ public class XPOverlayGUI extends AbstractGui
 		
 		switch( name )
 		{
-			case "agility":
-				double saveChance = level * 0.64f;
-				if( saveChance > 64 )
-					saveChance = 64;
-				
-				double speedPercent = level / 2000f;
-				if( speedPercent > 0.10f )
-					speedPercent = 0.10f;
-				speedPercent = speedPercent / 0.10f * 100f;
-				
-				tempString = level + " agility level up! " + DP.dp( saveChance ) + "% save chance! + " + DP.dp( speedPercent ) + "% speed boost!";
-				break;
-		
-			case "building":
-				tempString = level + " building level up!";
-				break;
-		
-			case "endurance":
-				double endurancePercent = level * 0.25f;
-				if( endurancePercent > 50 )
-					endurancePercent = 50;
-				tempString = level + " endurance level up! " + DP.dp( endurancePercent ) + "% endurance! +" + (int) Math.floor( level / 10 ) + " Max Heart" + ( Math.floor( level/10 ) == 1 ? "" : "s" ) + "!";
-				break;
-				
-			case "combat":
-				tempString = level + " combat level up! " + (int) Math.floor( level / 20 ) + " Bonus Damage!";
-				break;
-				
-			case "repairing":
-				tempString = level + " repairing level up! " + (int) Math.floor( 50 - ( level / 4 ) ) + " max anvil cost!";
-				break;
-				
 			case "swimming":
 				if( level - 1 < 25 && level >= 25 )
 					tempString = level + " swimming level up! Underwater Night Vision Unlocked!";
 				else
 					tempString = level + " swimming level up!";
 				break;
-				
-			default:
-				tempString = level + " " + name + " level up!";
-				break;
 		}
-		player.sendStatusMessage( new StringTextComponent( tempString ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), false);
+		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelUp", level, new TranslationTextComponent( "pmmo.text." + name ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), false);
+		if( name.equals( "swimming" ) && level - 1 < 25 && level >= 25 )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), true );
 	}
 	
 	public static void makeXpDrop( double xp, int id, int cooldown, double gainedXp, boolean skip )
@@ -350,7 +323,7 @@ public class XPOverlayGUI extends AbstractGui
 			return;
 		}
 		
-		if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( tempName ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 && stackXpDrops )
+		if( stackXpDrops && xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( tempName ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 )
 		{
 			xpDrops.get( xpDrops.size() - 1).gainedXp += gainedXp;
 			if( xpDrops.get( xpDrops.size() - 1).age > 475 )
