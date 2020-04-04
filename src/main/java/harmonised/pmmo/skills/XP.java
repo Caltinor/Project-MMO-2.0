@@ -960,10 +960,7 @@ public class XP
 						drops.add( new ItemStack( theDropItem.getItem(), guaranteedDrop + extraDrop ) );
 
 						if ( guaranteedDrop + extraDrop > 0 )
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + guaranteedDrop + extraDrop, theDropItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
-//						System.out.println( theDropItem );
-//						System.out.println( guaranteedDrop );
-//						System.out.println( extraDrop );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( guaranteedDrop + extraDrop ), theDropItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 
 						award += getXp( block.getRegistryName() ) * ( theDropItem.getCount() + guaranteedDrop + extraDrop );
 						awardXp( player, Skill.FARMING, "harvesting " + ( theDropItem.getCount() ) + " + " + ( guaranteedDrop + extraDrop ) + " crops", award, false );
@@ -1008,7 +1005,7 @@ public class XP
 							award += getXp( block.getRegistryName() ) * ( guaranteedDrop + extraDrop );
 							ItemStack theDrop = new ItemStack( drops.get( 0 ).getItem(), guaranteedDrop + extraDrop );
 							block.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), theDrop );
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", block.getTranslationKey(), "" + guaranteedDrop + extraDrop, true, 1 ), (ServerPlayerEntity) player );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + (guaranteedDrop + extraDrop), theDrop.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 						}
 						awardXp( player, Skill.MINING, awardMessage, award, false );
 
@@ -1109,7 +1106,7 @@ public class XP
 				damage -= saved;
 
 				if( saved != 0 && player.getHealth() > damage )
-					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedFall", 5 ), true );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedFall", saved ), true );
 
 				award = saved * 30;
 
@@ -1271,6 +1268,8 @@ public class XP
 		PlayerEntity player = event.getPlayer();
 		CompoundNBT skillsTag = getSkillsTag( player );
 		Set<String> keySet = skillsTag.keySet();
+
+		System.out.println( player.world.isRemote() );
 
 		AttributeHandler.updateReach( player );
 		NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );

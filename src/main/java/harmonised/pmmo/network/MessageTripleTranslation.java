@@ -71,7 +71,6 @@ public class MessageTripleTranslation
     {
         ctx.get().enqueueWork(() ->
         {
-            System.out.println( packet.rdKey );
             switch( packet.color )
             {
                 case 0: //white

@@ -66,9 +66,6 @@ public class MessageDoubleTranslation
     {
         ctx.get().enqueueWork(() ->
         {
-            System.out.println( new TranslationTextComponent( "pmmo.text.savedFall", "5" ).getString() );
-            System.out.println( new TranslationTextComponent( "pmmo.text.extraChanceMessage", "5", "10" ).getString() );
-//            System.out.println( new TranslationTextComponent( packet.tKey, "5", "test" ).getString() );
             switch( packet.color )
             {
                 case 0: //white
