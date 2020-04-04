@@ -5,15 +5,13 @@ import java.util.*;
 import com.sun.java.accessibility.util.java.awt.TextComponentTranslator;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.gui.XPOverlayGUI;
-import harmonised.pmmo.network.MessageCrawling;
-import harmonised.pmmo.network.MessageDoubleTranslation;
-import harmonised.pmmo.network.MessageXp;
-import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.network.*;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.util.DP;
 import mezz.jei.network.Network;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -133,7 +131,7 @@ public class XP
 		xpValues.put( Blocks.KELP_PLANT.getRegistryName(), 4.0f );
 		xpValues.put( Blocks.BAMBOO.getRegistryName(), 1.2f );
 		xpValues.put( Blocks.BAMBOO_SAPLING.getRegistryName(), 1.2f );
-		xpValues.put( Blocks.SEA_PICKLE.getRegistryName(), 2.0f );
+		xpValues.put( Blocks.SEA_PICKLE.getRegistryName(), 4.0f );
 		xpValues.put( Blocks.DEAD_BUSH.getRegistryName(), 5.0f );
 		xpValues.put( Blocks.LILY_PAD.getRegistryName(), 15.0f );
 		xpValues.put( Blocks.DANDELION.getRegistryName(), 15.0f );
@@ -385,6 +383,7 @@ public class XP
 		toolItems.put( Items.BOW.getRegistryName(), new ItemStack( Items.STRING ) );
 		toolItems.put( Items.FISHING_ROD.getRegistryName(), new ItemStack( Items.STRING ) );
 		toolItems.put( Items.ELYTRA.getRegistryName(), new ItemStack( Items.LEATHER ) );
+		toolItems.put( Items.TURTLE_HELMET.getRegistryName(), new ItemStack( Items.SCUTE ) );
 ////////////////////////////////////TOOL_ITEM_AMOUNT///////////////////////////////////////////////
 		toolItemAmount.put( Items.DIAMOND_HELMET.getRegistryName(), 5 );
 		toolItemAmount.put( Items.DIAMOND_CHESTPLATE.getRegistryName(), 8 );
@@ -437,6 +436,7 @@ public class XP
 		toolItemAmount.put( Items.BOW.getRegistryName(), 3 );
 		toolItemAmount.put( Items.FISHING_ROD.getRegistryName(), 2 );
 		toolItemAmount.put( Items.ELYTRA.getRegistryName(), 7 );
+		toolItemAmount.put( Items.TURTLE_HELMET.getRegistryName(), 5 );
 ////////////////////////////////////SALVAGE_BASE_VALUE/////////////////////////////////////////////
 		salvageBaseValue.put( Blocks.COBBLESTONE.getRegistryName(), 50.0f );
 		salvageBaseValue.put( Blocks.OAK_PLANKS.getRegistryName(), 70.0f );
@@ -445,6 +445,7 @@ public class XP
 		salvageBaseValue.put( Items.GOLD_INGOT.getRegistryName(), 35.0f );
 		salvageBaseValue.put( Items.DIAMOND.getRegistryName(), 0.0f );
 		salvageBaseValue.put( Items.LEATHER.getRegistryName(), 60.0f );
+		salvageBaseValue.put( Items.SCUTE.getRegistryName(), 40.0f );
 ////////////////////////////////////SALVAGE_VALUE_PER_LEVEL////////////////////////////////////////
 		salvageValuePerLevel.put( Blocks.COBBLESTONE.getRegistryName(), 2.0f );	// 20
 		salvageValuePerLevel.put( Blocks.OAK_PLANKS.getRegistryName(), 0.8f );  // 25
@@ -453,18 +454,21 @@ public class XP
 		salvageValuePerLevel.put( Items.GOLD_INGOT.getRegistryName(), 1.6f );	// 50
 		salvageValuePerLevel.put( Items.DIAMOND.getRegistryName(), 0.666f );	//150
 		salvageValuePerLevel.put( Items.LEATHER.getRegistryName(), 1.0f );		// 30
+		salvageValuePerLevel.put( Items.SCUTE.getRegistryName(), 1.0f );		// ???
 ////////////////////////////////////REPAIR_XP//////////////////////////////////////////////////////
 		repairXp.put( Items.IRON_INGOT.getRegistryName(), 35.0f );
 		repairXp.put( Items.GOLD_INGOT.getRegistryName(), 666.0f );
 		repairXp.put( Items.DIAMOND.getRegistryName(), 75.0f );
 		repairXp.put( Items.STRING.getRegistryName(), 20.0f );
 		repairXp.put( Items.LEATHER.getRegistryName(), 40.0f );
+		repairXp.put( Items.SCUTE.getRegistryName(), 300.0f );
 ////////////////////////////////////SALVAGE_XP/////////////////////////////////////////////////////
 		salvageXp.put( Items.IRON_INGOT.getRegistryName(), 20.0f );
 		salvageXp.put( Items.GOLD_INGOT.getRegistryName(), 25.0f );
 		salvageXp.put( Items.DIAMOND.getRegistryName(), 50.0f );
 		salvageXp.put( Items.STRING.getRegistryName(), 2.0f );
 		salvageXp.put( Items.LEATHER.getRegistryName(), 5.0f );
+		salvageXp.put( Items.TURTLE_HELMET.getRegistryName(), 20.0f );
 ////////////////////////////////////LEVEL_REQ//////////////////////////////////////////////////////
 		wornLevelReq.put( ArmorMaterial.LEATHER, Config.config.levelReqLeatherArmor.get() );
 		wornLevelReq.put( ArmorMaterial.CHAIN, Config.config.levelReqChainArmor.get() );
@@ -872,36 +876,13 @@ public class XP
 						while( dropsLeft > 64 )
 						{
 							if( baseBlock == Blocks.CACTUS )
-								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Blocks.CACTUS, dropsLeft ) );
-							else if( baseBlock == Blocks.SUGAR_CANE )
-								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
-							else if( baseBlock == Blocks.BAMBOO )
-								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.BAMBOO, dropsLeft ) );
-							else if( baseBlock == Blocks.KELP )
-								baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.KELP, dropsLeft ) );
+							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( baseBlock.asItem(), dropsLeft ) );
 							dropsLeft -= 64;
 						}
 
-						if( baseBlock == Blocks.CACTUS )
-						{
-							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Blocks.CACTUS, dropsLeft ) );
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), Items.CACTUS.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
-						}
-						else if( baseBlock == Blocks.SUGAR_CANE )
-						{
-							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.SUGAR_CANE, dropsLeft ) );
-                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), Items.SUGAR_CANE.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
-						}
-						else if( baseBlock == Blocks.BAMBOO )
-						{
-							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.BAMBOO, dropsLeft ) );
-                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), Items.BAMBOO.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
-						}
-						else
-						{
-							baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( Items.KELP, dropsLeft ) );
-                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), Items.KELP.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
-						}
+
+						baseBlock.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), new ItemStack( baseBlock.asItem(), dropsLeft ) );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), baseBlock.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 					}
 					totalDrops = rewardable + guaranteedDrop + extraDrop;
 					award += ( getXp( baseBlock.getRegistryName() ) * totalDrops ) + ( hardness * totalDrops );
@@ -979,8 +960,7 @@ public class XP
 						drops.add( new ItemStack( theDropItem.getItem(), guaranteedDrop + extraDrop ) );
 
 						if ( guaranteedDrop + extraDrop > 0 )
-							sendMessage( Integer.toString( guaranteedDrop + extraDrop ) + " Extra " + theDropItem.getDisplayName().getFormattedText() + " Dropped!", true, player, TextFormatting.GREEN );
-
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + guaranteedDrop + extraDrop, theDropItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 //						System.out.println( theDropItem );
 //						System.out.println( guaranteedDrop );
 //						System.out.println( extraDrop );
@@ -988,8 +968,8 @@ public class XP
 						award += getXp( block.getRegistryName() ) * ( theDropItem.getCount() + guaranteedDrop + extraDrop );
 						awardXp( player, Skill.FARMING, "harvesting " + ( theDropItem.getCount() ) + " + " + ( guaranteedDrop + extraDrop ) + " crops", award, false );
 					}
-
-					awardXp( player, Skill.FARMING, "breaking a plant", award * drops.get(0).getCount(), false );
+					else if( !wasPlaced )
+						awardXp( player, Skill.FARMING, "breaking a plant", award * drops.get(0).getCount(), false );
 				}
 				else if( getOreDoubleChance( block.getRegistryName() ) != 0.0f )		//IS ORE
 				{
@@ -1028,8 +1008,7 @@ public class XP
 							award += getXp( block.getRegistryName() ) * ( guaranteedDrop + extraDrop );
 							ItemStack theDrop = new ItemStack( drops.get( 0 ).getItem(), guaranteedDrop + extraDrop );
 							block.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), theDrop );
-							awardMessage = "mining  and " + ( guaranteedDrop + extraDrop ) + " extra drop";
-							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.extraDrop", ( guaranteedDrop + extraDrop ), theDrop.getDisplayName().getFormattedText() ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", block.getTranslationKey(), "" + guaranteedDrop + extraDrop, true, 1 ), (ServerPlayerEntity) player );
 						}
 						awardXp( player, Skill.MINING, awardMessage, award, false );
 
@@ -1325,7 +1304,6 @@ public class XP
 			CompoundNBT skillsTag = getSkillsTag( player );
 			ItemStack itemStack = event.getItemStack();
 			Item item = itemStack.getItem();
-			String itemDisplayName = itemStack.getDisplayName().getFormattedText();
 			Block block = event.getWorld().getBlockState( event.getPos() ).getBlock();
 			Block anvil 		=	Blocks.ANVIL;
 			Block ironBlock		= 	Blocks.IRON_BLOCK;
@@ -1363,7 +1341,7 @@ public class XP
 						}
 
 						if( extraChance != 0 )
-							sendMessage( itemStack.getDisplayName().getFormattedText() + " " + DP.dp( extraChance ) + "% extra chance, " + DP.dp( baseChance ) + "% per level" , false, player );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraChanceMessage", "" + DP.dp( extraChance ), "" + DP.dp( baseChance ), false, 0 ), (ServerPlayerEntity) player );
 					}
 					else
 						return;
@@ -1378,7 +1356,6 @@ public class XP
 							Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
 							ItemStack salvageItemStack = getToolItem( item.getRegistryName() );
 							Item salvageItem = salvageItemStack.getItem();
-							ServerWorld serverWorld = (ServerWorld) event.getWorld();
 							float baseValue = getSalvageBaseValue( salvageItem.getRegistryName() );
 							float valuePerLevel = getSalvageValuePerLevel( salvageItem.getRegistryName() );
 							double chance = baseValue + ( valuePerLevel * repairLevel );
@@ -1415,16 +1392,18 @@ public class XP
 									}
 									award += getSalvageXp( salvageItem.getRegistryName() ) * returnAmount;
 
-									String replyMsg = "Salvaged " + returnAmount + "/" + itemPotential + " " + new ItemStack( salvageItem ).getDisplayName().getFormattedText();
-									replyMsg += ( returnAmount > 1 && !salvageItem.equals( Items.STRING ) && !salvageItem.equals( Items.LEATHER ) && !( salvageItem instanceof BlockItem ) ? "s" : "" ) + "!";
-									BlockPos spawnPos = event.getPos();
-									if( returnAmount > 0 )
+//									if( returnAmount > 0 )
 										block.spawnAsEntity( event.getWorld(), event.getPos(), new ItemStack( salvageItem, returnAmount ) );
 
 									if( award > 0 )
 										awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + itemPotential + " from an item", award, false  );
 
-									sendMessage( replyMsg , true, player );
+									if( returnAmount == itemPotential )
+										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + itemPotential, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+									else if( returnAmount > 0 )
+										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + itemPotential, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
+									else
+										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + itemPotential, salvageItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
 
 									if( enchants.size() > 0 )
 									{
@@ -1453,31 +1432,30 @@ public class XP
 										{
 											block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
 											if( fullEnchants )
-												sendMessage( "You managed to save all enchants!", true, player, TextFormatting.GREEN );
+												player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), true );
 											else
-												sendMessage( "You managed to save some enchants!" , true, player, TextFormatting.YELLOW );
-										}
+												player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );										}
 									}
 									player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
 									player.sendBreakAnimation(Hand.OFF_HAND );
 								}
 								else
-									sendMessage( "Only available in Survival Mode!", true, player );
+									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.survivalOnlyWarning" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 							}
 							else
 							{
 //								itemStack.damageItem( 100, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
-								sendMessage( "Off-Hand to Disassemble!", true, player );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.offhandToDiss" ), false );
 								sendMessage( "_________________________________", false, player );
-								sendMessage( itemDisplayName + " " + DP.dp( displayDurabilityPercent ) + "%" , false, player );
-								sendMessage( DP.dp( chance ) + "% per material, " + potentialReturnAmount + " max items returned" , false, player );
-								sendMessage( DP.dp( enchantChance ) + "% enchant return, " + itemStack.getRepairCost() + " repair cost" , false, player );
-								sendMessage( maxPlayerBypass + " max Enchant Bypass" , false, player );
+								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
+								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
 							}
 						}
 						else
 						{
-							sendMessage( "UNACCOUNTED FOR DAMAGEABLE ITEM! Please Report!" , false, player );
+							sendMessage( "UNACCOUNTED FOR DAMAGEABLE ITEM! Please Report!", false, player );
 						}
 					}
 				}
@@ -1517,17 +1495,17 @@ public class XP
 						speedBonus = maxSpeedBoost;
 
 					sendMessage( "_________________________________" , false, player );
-					sendMessage( DP.dp( reach ) + " player reach" , false, player );
-					sendMessage( DP.dp( agilityChance ) + "% fall damage save chance" , false, player );
-					sendMessage( DP.dp( endurePercent ) + "% damage reduction" , false, player );
-					sendMessage( DP.dp( extraDamage ) + " extra damage" , false, player );
-					sendMessage( DP.dp( speedBonus ) + " sprint speed boost" , false, player );
-					sendMessage( maxPlayerBypass + " max Enchant Bypass" , false, player );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.buildingInfo", DP.dp( reach ) ), false );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.fallInfo", DP.dp( agilityChance ) ), false );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enduranceInfo", DP.dp( endurePercent ) ), false );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.combatInfo", DP.dp( extraDamage ) ), false );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.sprintInfo", DP.dp( speedBonus ) ), false );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantmentBypassInfo", maxPlayerBypass ), false );
 
 					if( swimLevel >= nightvisionUnlockLevel )
-						sendMessage( "Underwater night vision is unlocked!" , false, player );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.underwaterNightVisionUnLocked", nightvisionUnlockLevel ), false );
 					else
-						sendMessage( "Underwater night vision is locked until level " + nightvisionUnlockLevel + " Swimming" , false, player );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.underwaterNightVisionLocked", nightvisionUnlockLevel ), false );
 				}
 			}
 		}
@@ -1571,7 +1549,7 @@ public class XP
 
 			if( award > 0 )
 			{
-				sendMessage( "repaired " + (int) repaired + " + " + (int) ( repaired * bonusRepair ) + " extra!" , true, player );
+				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
 				awardXp( player, Skill.REPAIRING, "repairing an item by: " + repaired, award, false );
 			}
 
@@ -1650,11 +1628,11 @@ public class XP
 			{
 				if( level + 1 > maxEnchantLevel )
 				{
-					sendMessage( enchant.getRegistryName() + " Upgrade failed due to hitting global max Enchant level.", false, player, TextFormatting.RED );
+					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
 				}
 				else if( level + 1 > enchant.getMaxLevel() + maxPlayerBypass )
 				{
-					sendMessage( enchant.getRegistryName() + " Upgrade failed due to lack of skill.", false, player, TextFormatting.RED );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantLackOfLevelWarning", enchant.getRegistryName() ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 				}
 				else
 				{
@@ -1663,7 +1641,7 @@ public class XP
 						if( Math.ceil( Math.random() * 100 ) <= bypassChance ) //success
 						{
 							newEnchants.replace( enchant, level + 1 );
-							sendMessage( "Successfully Upgraded " + enchant.getRegistryName() + " to level " + (level + 1) + "!", false, player, TextFormatting.GREEN );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (level + 1), false, 1 ), (ServerPlayerEntity) player );
 						}
 						else if( Math.ceil( Math.random() * 100 ) <= failedBypassPenaltyChance ) //fucked up twice
 						{
@@ -1671,18 +1649,18 @@ public class XP
 								newEnchants.replace( enchant, level - 1 );
 							else
 								newEnchants.remove( enchant );
-							sendMessage( "Failed " + enchant.getRegistryName() + " " + bypassChance + "% Upgrade Chance, as well as " + failedBypassPenaltyChance + "% Keep Level Chance. Level reduced by 1.", false, player, TextFormatting.RED );
+							NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.enchantUpgradeAndSaveFail", enchant.getRegistryName().toString(), "" + bypassChance, "" + failedBypassPenaltyChance, false, 2 ), (ServerPlayerEntity) player );
 						}
 						else	//only fucked up once
 						{
 							newEnchants.replace( enchant, level );
-							sendMessage( "Failed " + enchant.getRegistryName() + " " + bypassChance + "% Upgrade Chance. Level remains the same.", false, player, TextFormatting.RED );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeFail", enchant.getRegistryName().toString(), "" + bypassChance, false, 3 ), (ServerPlayerEntity) player );
 						}
 					}
 					else
 					{
 						newEnchants.replace( enchant, level + 1 );
-						sendMessage( "Successfully Upgraded " + enchant.getRegistryName() + " to level " + (level + 1) + "!", false, player, TextFormatting.GREEN );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (level + 1), false, 1 ), (ServerPlayerEntity) player );
 					}
 				}
 			}
@@ -2034,9 +2012,7 @@ public class XP
 				if( level < levelReq )
 				{
 					event.setAmount( event.getAmount() * ( 1 / (float) ( levelReq - level ) ) );
-//					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.weaponLevelReq", levelReq ), true );
-//					System.out.println( "hello" );
-					sendMessage( "pmmo.text.weaponLevelReq", true, player, TextFormatting.RED );
+					NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.notSkilledEnough", item.getTranslationKey(), "" + levelReq, "pmmo.text.combat", false, 2 ), (ServerPlayerEntity) player );
 				}
 			}
 		}
@@ -2108,7 +2084,9 @@ public class XP
 						speedReduction = 0;
 
 					event.setNewSpeed( newSpeed * speedReduction );
-					sendMessage( "Your Tool is too heavy! You need level " + toolLevelReq + " in " + skill + " to use this tool!", true, player, TextFormatting.RED );
+
+					if( player.world.isRemote() )
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.tooHeavy", new TranslationTextComponent( item.getTranslationKey() ), toolLevelReq, new TranslationTextComponent( "pmmo.text." + skill.toLowerCase() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 				}
 			}
 		}
@@ -2150,7 +2128,7 @@ public class XP
 					slowAmp = 9;
 
 				player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 50, slowAmp, false, true ) );
-				sendMessage( "Your " + itemType + ( slot == 0 || slot == 1 ? " are" : " is" ) + " too heavy! You need level " + wornLevelReq + " Endurance to wear your " + itemType + "!", true, player, TextFormatting.RED );
+				NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.tooHeavy", item.getTranslationKey(), "" + wornLevelReq, "pmmo.text.endurance", true, 2 ), (ServerPlayerEntity) player );
 			}
 		}
 	}

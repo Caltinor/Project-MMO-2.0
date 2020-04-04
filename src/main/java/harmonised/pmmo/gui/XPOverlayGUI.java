@@ -170,7 +170,7 @@ public class XPOverlayGUI extends AbstractGui
 
 
 						if( tempAlpha > 3 )
-							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " in " + xpDrop.name, barPosX + (barWidth / 2), (int) xpDrop.Y + (int) dropOffset + barPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
+							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo.text." + xpDrop.name ).getString(), barPosX + (barWidth / 2), (int) xpDrop.Y + (int) dropOffset + barPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
 					}
 				}
 
@@ -236,9 +236,9 @@ public class XPOverlayGUI extends AbstractGui
 						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( themePos / 100 ) ), barHeight*2, tempInt, barHeight );
 					}
 					if( skill.pos >= XP.maxLevel )
-						drawCenteredString( fontRenderer, name + " " + XP.maxLevel, barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
+						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + name ).getString(), XP.maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
 					else
-						drawCenteredString( fontRenderer, name + " " + DP.dp( Math.floor( skill.pos * 100 ) / 100 ), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
+						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + name ).getString(), DP.dp( Math.floor( skill.pos * 100 ) / 100 ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
 					
 					if( guiKey && skills.get( name ) != null )
 					{

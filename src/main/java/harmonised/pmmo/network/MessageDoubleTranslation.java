@@ -13,11 +13,11 @@ import java.util.function.Supplier;
 
 public class MessageDoubleTranslation
 {
-    String tKey;
-    String fKey;
-    String sKey;
-    boolean bar;
-    int color;
+    private String tKey;
+    private String fKey;
+    private String sKey;
+    private boolean bar;
+    private int color;
 
     public MessageDoubleTranslation( String tKey, String fKey, String sKey, boolean bar, int color )
     {
@@ -66,6 +66,9 @@ public class MessageDoubleTranslation
     {
         ctx.get().enqueueWork(() ->
         {
+            System.out.println( new TranslationTextComponent( "pmmo.text.savedFall", "5" ).getString() );
+            System.out.println( new TranslationTextComponent( "pmmo.text.extraChanceMessage", "5", "10" ).getString() );
+//            System.out.println( new TranslationTextComponent( packet.tKey, "5", "test" ).getString() );
             switch( packet.color )
             {
                 case 0: //white
