@@ -29,7 +29,6 @@
   "pmmo.text.survivalOnlyWarning": "Only available in Survival Mode!",
   "pmmo.text.offhandToDiss": "Off-Hand to Disassemble!",
   "pmmo.text.levelUp": "%1$s %2$s level up!",
-  "pmmo.text.nightVisionUnlocked": "Underwater Night Vision has been Unlocked!",
   "pmmo.text.durabilityInfo": "%1$s %2$s%%",
   "pmmo.text.materialSaveChanceInfo": "%1$s%% chance per material, %2$s max items returned",
   "pmmo.text.repairInfo": "%1$s%% Enchantment return chance, %2$s repair cost",

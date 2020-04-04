@@ -29,7 +29,6 @@
   "pmmo.text.survivalOnlyWarning": "§l서바이벌 모드 에서만 이용할수 있습니다!",
   "pmmo.text.offhandToDiss": "§l손에 들고 있으면 분해 할 수 없습니다!",
   "pmmo.text.levelUp": "§l%1$s %2$s 레벨 업!",
-  "pmmo.text.nightVisionUnlocked": "§l물 속 야간투시 능력이 해방 되었습니다!",
   "pmmo.text.durabilityInfo": "§l%1$s %2$s%%",
   "pmmo.text.materialSaveChanceInfo": "§l재료 당 확률 %1$s%%, %2$s 만큼 최대로 아이템을 돌려 받습니다",
   "pmmo.text.repairInfo": "§l%1$s%% 인챈트가 보존될 확률, 수리 비용 경감 %2$s",
