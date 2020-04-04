@@ -2,6 +2,8 @@
   "category.pmmo": "Project MMO",
   "key.pmmo.showgui": "Show GUI",
   "key.pmmo.crawl": "Crawl",
+  "pmmo.text.xpLeft": "%1$s left",
+  "pmmo.text.maxLevel": "MAX LEVEL",
   "pmmo.text.levelDisplay": "%1$s %2$s",
   "pmmo.text.invalidSkill": "INVALID SKILL",
   "pmmo.text.mining": "Mining",
@@ -48,5 +50,12 @@
   "pmmo.text.underwaterNightVisionLocked": "Underwater Nightvision is locked until level %1$s Swimming",
   "pmmo.text.underwaterNightVisionUnLocked": "Underwater Nightvision is unlocked since level %1$s Swimming",
   "pmmo.text.tooHeavy": "Your %1$s is too heavy to use! You need level %2$s in %3$s",
-  "pmmo.text.notSkilledEnough": "You are not skilled enough to use %1$s as a weapon! You need level %2$s in %3$s"
+  "pmmo.text.notSkilledEnough": "You are not skilled enough to use %1$s as a weapon! You need level %2$s in %3$s",
+  "pmmo.text.setLevel": "%1$s has been set to level %2$s",
+  "pmmo.text.setXp": "%1$s has been set to %2$s xp",
+  "pmmo.text.xpCap": "New XP must be no less than 0, and no more than 2 billion!",
+  "pmmo.text.invalidSkillWarning": "%1$s is not a valid skill!",
+  "pmmo.text.invalidNumberWarning": "%1$s is not a valid number!",
+  "pmmo.text.skillsCleared": "Your skills have been cleared!",
+  "pmmo.text.skillsResynced": "Your skills have been resynced!"
 }

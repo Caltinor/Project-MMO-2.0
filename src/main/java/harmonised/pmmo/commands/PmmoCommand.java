@@ -37,8 +37,8 @@ public class PmmoCommand
         suggestSkill[12] = "Fishing";
         suggestSkill[13] = "Crafting";
 
-        String[] suggestClear = new String[1];
-        suggestClear[0] = "iagreetothetermsandconditions";
+//        String[] suggestClear = new String[1];
+//        suggestClear[0] = "iagreetothetermsandconditions";
 
         LiteralArgumentBuilder<CommandSource> builder = Commands.literal("pmmo")
                 .requires( src -> src.hasPermissionLevel(4 ) )
@@ -57,6 +57,7 @@ public class PmmoCommand
                 .executes( CommandClear::execute )
                 .then( Commands.argument("request", StringArgumentType.word() )
 //                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestClear, theBuilder ) )
+                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
                 .executes( CommandClear::execute ) ) );
 
 //        builder.then( Commands.argument("levelAtXp", StringArgumentType.word() )

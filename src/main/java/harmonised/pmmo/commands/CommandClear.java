@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class CommandClear
 			NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0, true ), (ServerPlayerEntity) player );
 			persistTag.getCompound( "pmmo" ).put( "skills", new CompoundNBT() );
 
-			player.sendStatusMessage( new StringTextComponent( "Your stats have been reset!" ), false);
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.skillsCleared" ), false);
 		}
 		else
 		{
@@ -48,7 +49,7 @@ public class CommandClear
 			AttributeHandler.updateDamage( player );
 			AttributeHandler.updateHP( player );
 			AttributeHandler.updateReach( player );
-			player.sendStatusMessage( new StringTextComponent( "Your stats have been resynced. \"iagreetothetermsandconditions\" to clear your stats!" ), false);
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.skillsResynced" ), false);
 		}
 
 		return 1;

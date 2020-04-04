@@ -3,13 +3,17 @@ package harmonised.pmmo.commands;
 import java.util.Arrays;
 
 import com.mojang.brigadier.context.CommandContext;
+import harmonised.pmmo.network.MessageDoubleTranslation;
+import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class CommandSet
 {
@@ -36,7 +40,7 @@ public class CommandSet
             }
             catch (NumberFormatException e)
             {
-                player.sendStatusMessage(new StringTextComponent("\"" + args[3] + "\" is not a valid number!"), false);
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidNumberWarning", args[3] ), false);
                 return 1;
             }
 
@@ -47,18 +51,19 @@ public class CommandSet
                 if( newXp < 1 )
                     newXp = 1;
                 XP.setXp( player, args[2], XP.xpAtLevelDecimal(newXp) );
-                player.sendStatusMessage(new StringTextComponent(args[2] + " has been set to level: " + newXp), false);
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.setLevel", "pmmo.text." + args[2], "" + newXp, false, 0 ), (ServerPlayerEntity) player );
             }
             else if (newXp >= 0 && newXp <= 2000000000)
             {
                 XP.setXp( player, args[2], newXp );
-                player.sendStatusMessage(new StringTextComponent(args[2] + " has been set to: " + args[3] + "xp"), false);
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.setXp", "pmmo.text." + args[2], "" + newXp, false, 0 ), (ServerPlayerEntity) player );
             }
             else
-                player.sendStatusMessage(new StringTextComponent("New XP must be no less than 0, and no more than 2b!"), false);
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpCap" ), false);
         }
         else
-            player.sendStatusMessage(new StringTextComponent("\"" + args[2] + "\" is not a valid skill!"), false);
+
+             player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSkillWarning", args[2] ), false);
     return 1;
     }
 }
