@@ -2,16 +2,12 @@ package harmonised.pmmo.skills;
 
 import java.util.*;
 
-import com.sun.java.accessibility.util.java.awt.TextComponentTranslator;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
-import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.util.DP;
-import mezz.jei.network.Network;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -49,9 +45,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBloc
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import org.apache.logging.log4j.core.jmx.Server;
-
-import javax.annotation.Nullable;
 
 public class XP
 {

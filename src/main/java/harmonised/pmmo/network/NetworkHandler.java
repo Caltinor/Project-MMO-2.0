@@ -2,19 +2,11 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.ProjectMMOMod;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Items;
 import net.minecraftforge.fml.network.NetworkDirection;
 
 public class NetworkHandler
 {
-	public static void registerChannel()
-	{
-//		HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(Reference.MOD_ID, "main_channel" ), () -> "1.0", s -> true, s -> true);
-	}
-
 	public static void registerPackets()
 	{
 		int index = 0;

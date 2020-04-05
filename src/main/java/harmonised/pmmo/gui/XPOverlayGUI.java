@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-//import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
@@ -19,12 +18,10 @@ import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.logging.log4j.core.layout.HtmlLayout;
 
 public class XPOverlayGUI extends AbstractGui
 {
@@ -344,8 +341,17 @@ public class XPOverlayGUI extends AbstractGui
 
 		skillsKeys.forEach( key ->
 		{
-			if( levelGap < fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( key ).goalXp ) ) ) )
-				levelGap = fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( key ).goalXp ) ) );
+			if( skills.get( key ).pos >= XP.maxLevel )
+			{
+				if( levelGap < fontRenderer.getStringWidth( "" + XP.maxLevel ) )
+					levelGap = fontRenderer.getStringWidth( "" + XP.maxLevel );
+			}
+			else
+			{
+				if( levelGap < fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( key ).goalXp ) ) ) )
+					levelGap = fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( key ).goalXp ) ) );
+			}
+
 			if( skillGap < fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() ) )
 				skillGap = fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() );
 		});
@@ -354,8 +360,8 @@ public class XPOverlayGUI extends AbstractGui
 	public static void clearXP()
 	{
 		skills = new HashMap<>();
-		skillsKeys = new ArrayList<String>();
-		xpDrops = new ArrayList<XpDrop>();
+		skillsKeys = new ArrayList<>();
+		xpDrops = new ArrayList<>();
 		xp = 0;
 		name = "none";
 		levelGap = 0;

@@ -8,7 +8,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import javax.annotation.Resource;
 import java.util.function.Supplier;
 
 public class MessageTripleTranslation

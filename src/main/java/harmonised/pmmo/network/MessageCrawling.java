@@ -1,6 +1,5 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
