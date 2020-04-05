@@ -298,9 +298,6 @@ public class XPOverlayGUI extends AbstractGui
 	
 	public static void makeXpDrop( double xp, int id, int cooldown, double gainedXp, boolean skip )
 	{
-		if( levelGap < fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( xp + gainedXp ) ) ) )
-			levelGap = fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( xp + gainedXp ) ) );
-
 		tempName = Skill.getString( id );
 
 		if( XPOverlayGUI.name.equals( "none" ) )
@@ -310,12 +307,6 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			skills.put( tempName, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
 			skillsKeys.add( tempName );
-
-			skillsKeys.forEach( key ->
-			{
-				if( skillGap < fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() ) )
-					skillGap = fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() );
-			});
 		}
 		
 		skill = skills.get( tempName );
@@ -328,11 +319,10 @@ public class XPOverlayGUI extends AbstractGui
 			skill.goalXp = xp;
 			XPOverlayGUI.cooldown = cooldown;
 
+
 			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + tempName + " has been set to: " + xp );
-			return;
 		}
-		
-		if( stackXpDrops && xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( tempName ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 )
+		else if( stackXpDrops && xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( tempName ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 )
 		{
 			xpDrops.get( xpDrops.size() - 1).gainedXp += gainedXp;
 			if( xpDrops.get( xpDrops.size() - 1).age > 475 )
@@ -348,6 +338,17 @@ public class XPOverlayGUI extends AbstractGui
 		
 		if( !skip )
 			XPOverlayGUI.cooldown = cooldown;
+
+		levelGap = 0;
+		skillGap = 0;
+
+		skillsKeys.forEach( key ->
+		{
+			if( levelGap < fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( key ).goalXp ) ) ) )
+				levelGap = fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( key ).goalXp ) ) );
+			if( skillGap < fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() ) )
+				skillGap = fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() );
+		});
 	}
 	
 	public static void clearXP()

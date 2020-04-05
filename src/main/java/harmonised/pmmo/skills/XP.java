@@ -1614,7 +1614,7 @@ public class XP
 					newEnchants.replace( enchant, maxEnchantLevel );
 				else
 					newEnchants.remove( enchant );
-				sendMessage( "You hit the max Enchantment Level cap of " + maxEnchantLevel + " for " + enchant.getRegistryName() + ".", false, player, TextFormatting.RED );
+				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
 			}
 			else if( enchant.getMaxLevel() + maxPlayerBypass < level )
 			{
@@ -1622,7 +1622,7 @@ public class XP
 					newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
 				else
 					newEnchants.remove( enchant );
-				sendMessage( "Your inexperience has degraded " + enchant.getRegistryName() + " to " + (enchant.getMaxLevel() + maxPlayerBypass) + ".", false, player, TextFormatting.RED );
+				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantmentDegradedWarning", enchant.getRegistryName().toString(), "" + (enchant.getMaxLevel() + maxPlayerBypass), false, 2 ), (ServerPlayerEntity) player );
 			}
 			else if( lEnchants.get( enchant ) != null && rEnchants.get( enchant ) != null )
 			{
