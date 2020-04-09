@@ -56,5 +56,6 @@
 	"pmmo.text.invalidSkillWarning": "%1$s nėra teisingas įgudis!",
 	"pmmo.text.invalidNumberWarning": "%1$s nėra taisiklingas skaičius!",
 	"pmmo.text.skillsCleared": "Jūsų įgudžiai buvo sugražinti į pradžią!",
-	"pmmo.text.skillsResynced": "Jūsų įgudžiai buvo atnaujinti!"
+	"pmmo.text.skillsResynced": "Jūsų įgudžiai buvo atnaujinti!",
+	"pmmo.text.lapisDonatorWelcome": "Sveiki atvyke, PMMO Lapis Tier Patreone %1$s!"
 }

@@ -56,5 +56,6 @@
 	"pmmo.text.invalidSkillWarning": "%1$s n'est pas une compétence valide !",
 	"pmmo.text.invalidNumberWarning": "%1$s n'est pas un nombre valide !",
 	"pmmo.text.skillsCleared": "Vos compétences ont été effacés !",
-	"pmmo.text.skillsResynced": "Vos compétences ont été resynchronisés !"
+	"pmmo.text.skillsResynced": "Vos compétences ont été resynchronisés !",
+	"pmmo.text.lapisDonatorWelcome": "bienvenue %1$s, tier Lapis du Patreon PMMO !"
 }
