@@ -1,10 +1,6 @@
 package harmonised.pmmo.skills;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageXp;
@@ -66,10 +62,12 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.network.handshake.FMLHandshakeMessage;
 
 public class XP
 {	
@@ -92,6 +90,7 @@ public class XP
 	public static List<String> validSkills = new ArrayList<String>();
 	public static float globalMultiplier = 1;
 	public static float maxXp = xpAtLevel( 999 );
+	public static Set<String> lapisDonators = new HashSet<>();
 	
 	public static void initValues()
 	{
@@ -196,6 +195,8 @@ public class XP
 		skillTextFormat.put( "swimming", TextFormatting.AQUA );
 		skillTextFormat.put( "fishing", TextFormatting.AQUA );
 		skillTextFormat.put( "crafting", TextFormatting.GOLD );
+////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
+//		lapisDonators.add( "Harmonised" );
 ////////////////////////////////////ORE_DOUBLE_VALUES//////////////////////////////////////////////
 		oreDoubleValues.put( Blocks.COAL_ORE.getRegistryName(), 1.0f );
 		oreDoubleValues.put( Items.COAL.getRegistryName(), 1.0f );
@@ -621,7 +622,6 @@ public class XP
 							awardXp( player, "farming", "harvesting " + theDrop.getDisplayName(), award, false );
 						return;
 					}
-					
 					IBlockState state = event.getState();
 					int age = -1;
 					int maxAge = -1;
@@ -1036,7 +1036,15 @@ public class XP
 		NBTTagCompound persistTag = getPersistTag( player );
 		NBTTagCompound skillsTag = getSkillsTag( persistTag );
 		Set<String> keySet = skillsTag.getKeySet();
-		
+
+		if( lapisDonators.contains( player.getDisplayNameString() ) )
+		{
+			player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
+			{
+				thePlayer.sendStatusMessage( new TextComponentString( "Welcome, PMMO Lapis Tier Patreon " + player.getDisplayNameString() + "!" ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
+			});
+		}
+
 		NetworkHandler.sendToPlayer( new MessageXp( 0f, "CLEAR", 0f, true ), (EntityPlayerMP) player );
 
 		for( String tag : keySet )
@@ -1414,6 +1422,18 @@ public class XP
 				default:
 					break;
 			}
+
+			if( Loader.isModLoaded( "compatskills" ) )
+			{
+				if( !player.world.isRemote )
+                {
+                    if( skill.equals( "mining" ) || skill.equals( "building" ) || skill.equals( "farming" ) || skill.equals( "agility" ) )
+                        player.getServer().commandManager.executeCommand( player, "/reskillable incrementskill " + playerName + " reskillable." + skill + " 1" );
+                    else
+					    player.getServer().commandManager.executeCommand( player, "/reskillable incrementskill " + playerName + " compatskills." + skill + " 1" );
+			    }
+            }
+
 			System.out.println( player.getName() + " " + currLevel + " " + skill + " level up!" );
 		}
 		
