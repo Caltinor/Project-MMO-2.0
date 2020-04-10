@@ -17,19 +17,17 @@ import java.util.function.BiConsumer;
 
 public class Requirements
 {
-    public static Map wearRequirement;
-    public static Map toolRequirement;
-    public static Map weaponRequirement;
-    public static Map mobRequirement;
-    public static Map xpValue;
+    public static Map<String, Map<String, Double>> wearReq = new HashMap<>();
+    public static Map<String, Map<String, Double>> toolReq = new HashMap<>();
+    public static Map<String, Map<String, Double>> weaponReq = new HashMap<>();
+    public static Map<String, Map<String, Double>> mobReq = new HashMap<>();
+    public static Map<String, Map<String, Double>> xpValue = new HashMap<>();
 
     private static String dataPath = "pmmo/data.json";
     private static String templateDataPath = "pmmo/data_template.json";
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
-    private static Gson gson = new GsonBuilder()/*.registerTypeAdapter(...)*/.create();
     private static final Logger LOGGER = LogManager.getLogger();
-    public static Requirements defaultReq;
-    public static Requirements customReq;
+    private static Requirements defaultReq, customReq;
 
     public static void init()
     {
@@ -42,6 +40,43 @@ public class Requirements
 
         defaultReq = Requirements.readFromFile( templateData.getPath() );
         customReq = Requirements.readFromFile( data.getPath() );
+        updateFinal( defaultReq );
+        updateFinal( customReq );
+    }
+
+    private static void updateFinal( Requirements req )
+    {
+        req.wears.forEach( (key, value) ->
+        {
+            if( wearReq.containsKey( key ) )
+                wearReq.replace( key, value.requirements );
+            else
+                wearReq.put( key, value.requirements );
+        });
+
+        req.tools.forEach( (key, value) ->
+        {
+            if( toolReq.containsKey( key ) )
+                toolReq.replace( key, value.requirements );
+            else
+                toolReq.put( key, value.requirements );
+        });
+
+        req.weapons.forEach( (key, value) ->
+        {
+            if( weaponReq.containsKey( key ) )
+                weaponReq.replace( key, value.requirements );
+            else
+                weaponReq.put( key, value.requirements );
+        });
+
+        req.xpValues.forEach( (key, value) ->
+        {
+            if( xpValue.containsKey( key ) )
+                xpValue.replace( key, value.requirements );
+            else
+                xpValue.put( key, value.requirements );
+        });
     }
 
     private static void createData( File dataFile )
@@ -87,14 +122,14 @@ public class Requirements
 
     public static class RequirementItem
     {
-        private final Map<String, Integer> requirements = Maps.newHashMap();
+        private final Map<String, Double> requirements = Maps.newHashMap();
 
-        public HashMap<String, Integer> getMap()
+        public HashMap<String, Double> getMap()
         {
             return new HashMap<>( requirements );
         }
 
-        public int get(String registryName)
+        public double get(String registryName)
         {
             return requirements.get(registryName);
         }
@@ -105,7 +140,7 @@ public class Requirements
     private final Map<String, RequirementItem> weapons = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
 
-    public Map<String, Integer> getWear(String registryName)
+    public Map<String, Double> getWear(String registryName)
     {
         if( wears.containsKey( registryName ) )
             return wears.get( registryName ).getMap();
@@ -113,7 +148,7 @@ public class Requirements
             return null;
     }
 
-    public Map<String, Integer> getTool(String registryName)
+    public Map<String, Double> getTool(String registryName)
     {
         if( tools.containsKey( registryName ) )
             return tools.get( registryName ).getMap();
@@ -121,7 +156,7 @@ public class Requirements
             return new HashMap<>();
     }
 
-    public Map<String, Integer> getWeapon(String registryName)
+    public Map<String, Double> getWeapon(String registryName)
     {
         if( weapons.containsKey( registryName ) )
             return weapons.get( registryName ).getMap();
@@ -129,7 +164,7 @@ public class Requirements
             return new HashMap<>();
     }
 
-    public Map<String, Integer> getXp(String registryName)
+    public Map<String, Double> getXp(String registryName)
     {
         if( xpValues.containsKey( registryName ) )
             return xpValues.get( registryName ).getMap();
@@ -174,6 +209,7 @@ public class Requirements
                 {
                     String name = entries.getKey();
                     RequirementItem values = context.deserialize(entries.getValue(), RequirementItem.class);
+
                     putter.accept(name, values);
                 }
             }
@@ -192,7 +228,7 @@ public class Requirements
             for(Map.Entry<String, JsonElement> entries : obj.entrySet())
             {
                 String name = entries.getKey();
-                Integer values = entries.getValue().getAsInt();
+                Double values = entries.getValue().getAsDouble();
                 item.requirements.put(name, values);
             }
 

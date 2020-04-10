@@ -1333,27 +1333,50 @@ public class XP
 	{
 	}
 
-	public static boolean checkReqWear( PlayerEntity player, ResourceLocation res )
+	public static boolean checkReq( PlayerEntity player, ResourceLocation res, String type )
 	{
+		if( res.equals( Items.AIR.getRegistryName() ) )
+			return true;
+
 		CompoundNBT skills = getSkillsTag( player );
 		String registryName = res.toString();
-		Map<String, Integer> reqMap;
+		Map<String, Double> reqMap;
 		int level;
 		boolean failedReq = false;
 
-		if( Requirements.customReq.getWear( registryName ) != null )
-			reqMap = Requirements.customReq.getWear( registryName );
-		else if( Requirements.defaultReq.getWear( registryName ) != null )
-			reqMap = Requirements.defaultReq.getWear( registryName );
-		else
+		switch( type.toLowerCase() )
 		{
-			reqMap = new HashMap<>();
-			failedReq = true;
+			case "wear":
+				if( Requirements.wearReq.containsKey( registryName ) )
+					reqMap = Requirements.wearReq.get( registryName );
+				else
+					reqMap = new HashMap<>();
+				break;
+
+			case "tool":
+				if( Requirements.toolReq.containsKey( registryName ) )
+					reqMap = Requirements.toolReq.get( registryName );
+				else
+					reqMap = new HashMap<>();
+				break;
+
+			case "weapon":
+				if( Requirements.weaponReq.containsKey( registryName ) )
+					reqMap = Requirements.weaponReq.get( registryName );
+				else
+					reqMap = new HashMap<>();
+				break;
+
+			default:
+				reqMap = new HashMap<>();
+				failedReq = true;
+				break;
 		}
+
 
 		if( !failedReq )
 		{
-			for( Map.Entry<String, Integer> entry : reqMap.entrySet() )
+			for( Map.Entry<String, Double> entry : reqMap.entrySet() )
 			{
 				if( player.world.isRemote() )
 				{
@@ -1386,8 +1409,6 @@ public class XP
 			Block ironBlock		= 	Blocks.IRON_BLOCK;
 			Block goldBlock 	= 	Blocks.GOLD_BLOCK;
 			Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
-
-			System.out.println( checkReqWear( player, item.getRegistryName() ) );
 
 			int repairLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
 			int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
@@ -1427,6 +1448,45 @@ public class XP
 
 						if( extraChance != 0 )
 							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraChanceMessage", "" + DP.dp( extraChance ), "" + DP.dp( baseChance ), false, 0 ), (ServerPlayerEntity) player );
+
+						if( !checkReq( player, item.getRegistryName(), "wear" ) )
+						{
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", item.getTranslationKey(), "", false, 0 ), (ServerPlayerEntity) player );
+							Map<String, Double> reqs = Requirements.wearReq.get( item.getRegistryName().toString() );
+							reqs.forEach( (key, value) ->
+							{
+								if( levelAtXp( skillsTag.getFloat( key ) ) < value )
+									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 2 ), (ServerPlayerEntity) player );
+								else
+									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 1 ), (ServerPlayerEntity) player );
+							});
+						}
+
+						if( !checkReq( player, item.getRegistryName(), "tool" ) )
+						{
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsTool", item.getTranslationKey(), "", false, 0 ), (ServerPlayerEntity) player );
+							Map<String, Double> reqs = Requirements.toolReq.get( item.getRegistryName().toString() );
+							reqs.forEach( (key, value) ->
+							{
+								if( levelAtXp( skillsTag.getFloat( key ) ) < value )
+									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 2 ), (ServerPlayerEntity) player );
+								else
+									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 1 ), (ServerPlayerEntity) player );
+							});
+						}
+
+						if( !checkReq( player, item.getRegistryName(), "weapon" ) )
+						{
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", item.getTranslationKey(), "", false, 0 ), (ServerPlayerEntity) player );
+							Map<String, Double> reqs = Requirements.weaponReq.get( item.getRegistryName().toString() );
+							reqs.forEach( (key, value) ->
+							{
+								if( levelAtXp( skillsTag.getFloat( key ) ) < value )
+									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 2 ), (ServerPlayerEntity) player );
+								else
+									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 1 ), (ServerPlayerEntity) player );
+							});
+						}
 					}
 					else
 						return;
@@ -2176,6 +2236,7 @@ public class XP
 					}
 				}
 			}
+
 			if( ((ToolItem) item.getItem()).getTier() instanceof ItemTier )
 			{
 				ItemTier tier = (ItemTier) ((ToolItem) item.getItem()).getTier();
