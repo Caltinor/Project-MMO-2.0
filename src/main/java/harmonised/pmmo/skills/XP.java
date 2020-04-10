@@ -3,7 +3,9 @@ package harmonised.pmmo.skills;
 import java.util.*;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.util.DP;
@@ -782,6 +784,7 @@ public class XP
 		if( event.getPlayer() instanceof PlayerEntity )
 		{
 			PlayerEntity player = event.getPlayer();
+
 			if( !player.isCreative() )
 			{
 				double blockHardnessLimit = Config.config.blockHardnessLimit.get();
@@ -1330,6 +1333,46 @@ public class XP
 	{
 	}
 
+	public static boolean checkReqWear( PlayerEntity player, ResourceLocation res )
+	{
+		CompoundNBT skills = getSkillsTag( player );
+		String registryName = res.toString();
+		Map<String, Integer> reqMap;
+		int level;
+		boolean failedReq = false;
+
+		if( Requirements.customReq.getWear( registryName ) != null )
+			reqMap = Requirements.customReq.getWear( registryName );
+		else if( Requirements.defaultReq.getWear( registryName ) != null )
+			reqMap = Requirements.defaultReq.getWear( registryName );
+		else
+		{
+			reqMap = new HashMap<>();
+			failedReq = true;
+		}
+
+		if( !failedReq )
+		{
+			for( Map.Entry<String, Integer> entry : reqMap.entrySet() )
+			{
+				if( player.world.isRemote() )
+				{
+					if( XPOverlayGUI.skills.containsKey( entry.getKey() ) )
+						level = levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp );
+					else
+						level = 1;
+				}
+				else
+					level = levelAtXp( skills.getFloat( entry.getKey() ) );
+
+				if( level < entry.getValue() )
+					failedReq = true;
+			}
+		}
+
+		return !failedReq;
+	}
+
 	public static void handleRightClickBlock( RightClickBlock event )
 	{
 		if( !event.getWorld().isRemote )
@@ -1343,6 +1386,8 @@ public class XP
 			Block ironBlock		= 	Blocks.IRON_BLOCK;
 			Block goldBlock 	= 	Blocks.GOLD_BLOCK;
 			Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
+
+			System.out.println( checkReqWear( player, item.getRegistryName() ) );
 
 			int repairLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
 			int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();

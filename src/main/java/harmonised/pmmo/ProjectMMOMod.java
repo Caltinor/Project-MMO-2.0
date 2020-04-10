@@ -4,6 +4,7 @@ import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.ConfigHelper;
 import harmonised.pmmo.config.ConfigHelper.ConfigValueListener;
+import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.events.ClientEventHandler;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -45,6 +46,7 @@ public class ProjectMMOMod
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientEventHandler.subscribeClientEvents( MinecraftForge.EVENT_BUS ) );
 
         Config.init();
+        Requirements.init();
     }
 
     private void modsLoading( FMLCommonSetupEvent event )

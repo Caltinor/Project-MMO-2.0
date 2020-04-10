@@ -1,0 +1,228 @@
+{
+	"wear_requirement": {
+		"minecraft:netherite_helmet": {
+			"endurance": 60
+		},
+		"minecraft:netherite_chestplate": {
+			"endurance": 60
+		},
+		"minecraft:netherite_leggings": {
+			"endurance": 60
+		},
+		"minecraft:netherite_boots": {
+			"endurance": 60
+		},
+		"minecraft:diamond_helmet": {
+			"endurance": 40
+		},
+		"minecraft:diamond_chestplate": {
+			"endurance": 40
+		},
+		"minecraft:diamond_leggings": {
+			"endurance": 40
+		},
+		"minecraft:diamond_boots": {
+			"endurance": 40
+		},
+		"minecraft:chainmail_helmet": {
+			"endurance": 30
+		},
+		"minecraft:chainmail_chestplate": {
+			"endurance": 30
+		},
+		"minecraft:chainmail_leggings": {
+			"endurance": 30
+		},
+		"minecraft:chainmail_boots": {
+			"endurance": 30
+		},
+		"minecraft:iron_helmet": {
+			"endurance": 20
+		},
+		"minecraft:iron_chestplate": {
+			"endurance": 20
+		},
+		"minecraft:iron_leggings": {
+			"endurance": 20
+		},
+		"minecraft:iron_boots": {
+			"endurance": 20
+		},
+		"minecraft:golden_helmet": {
+			"endurance": 10
+		},
+		"minecraft:golden_chestplate": {
+			"endurance": 10
+		},
+		"minecraft:golden_leggings": {
+			"endurance": 10
+		},
+		"minecraft:golden_boots": {
+			"endurance": 10
+		},
+		"minecraft:leather_helmet": {
+			"endurance": 5
+		},
+		"minecraft:leather_chestplate": {
+			"endurance": 5
+		},
+		"minecraft:leather_leggings": {
+			"endurance": 5
+		},
+		"minecraft:leather_boots": {
+			"endurance": 5
+		},
+		"minecraft:turtle_helmet": {
+			"endurance": 15,
+			"swimming": 5
+		}
+	},
+	"tool_requirement": {
+		"minecraft:netherite_pickaxe": {
+			"mining": 60
+		},
+		"minecraft:netherite_shovel": {
+			"excavation": 60
+		},
+		"minecraft:netherite_axe": {
+			"woodcutting": 60
+		},
+		"minecraft:diamond_pickaxe": {
+			"mining": 40
+		},
+		"minecraft:diamond_shovel": {
+			"excavation": 40
+		},
+		"minecraft:diamond_axe": {
+			"woodcutting": 40
+		},
+		"minecraft:golden_pickaxe": {
+			"mining": 30
+		},
+		"minecraft:golden_shovel": {
+			"excavation": 30
+		},
+		"minecraft:golden_axe": {
+			"woodcutting": 30
+		},
+		"minecraft:iron_pickaxe": {
+			"mining": 20
+		},
+		"minecraft:iron_shovel": {
+			"excavation": 20
+		},
+		"minecraft:iron_axe": {
+			"woodcutting": 20
+		},
+		"minecraft:stone_pickaxe": {
+			"mining": 5
+		},
+		"minecraft:stone_shovel": {
+			"excavation": 5
+		},
+		"minecraft:stone_axe": {
+			"woodcutting": 5
+		},
+		"minecraft:wooden_pickaxe": {
+			"mining": 1
+		},
+		"minecraft:wooden_shovel": {
+			"excavation": 1
+		},
+		"minecraft:wooden_axe": {
+			"woodcutting": 1
+		}
+	},
+	"weapon_requirement": {
+		"minecraft:netherite_pickaxe": {
+			"combat": 60
+		},
+		"minecraft:netherite_shovel": {
+			"combat": 60
+		},
+		"minecraft:netherite_axe": {
+			"combat": 60
+		},
+		"minecraft:netherite_hoe": {
+			"combat": 60
+		},
+		"minecraft:netherite_sword": {
+			"combat": 60
+		},
+		"minecraft:diamond_pickaxe": {
+			"combat": 40
+		},
+		"minecraft:diamond_shovel": {
+			"combat": 40
+		},
+		"minecraft:diamond_axe": {
+			"combat": 40
+		},
+		"minecraft:diamond_hoe": {
+			"combat": 40
+		},
+		"minecraft:diamond_sword": {
+			"combat": 40
+		},
+		"minecraft:golden_pickaxe": {
+			"combat": 30
+		},
+		"minecraft:golden_shovel": {
+			"combat": 30
+		},
+		"minecraft:golden_axe": {
+			"combat": 30
+		},
+		"minecraft:golden_hoe": {
+			"combat": 30
+		},
+		"minecraft:golden_sword": {
+			"combat": 30
+		},
+		"minecraft:iron_pickaxe": {
+			"combat": 20
+		},
+		"minecraft:iron_shovel": {
+			"combat": 20
+		},
+		"minecraft:iron_axe": {
+			"combat": 20
+		},
+		"minecraft:iron_hoe": {
+			"combat": 20
+		},
+		"minecraft:iron_sword": {
+			"combat": 20
+		},
+		"minecraft:stone_pickaxe": {
+			"combat": 5
+		},
+		"minecraft:stone_shovel": {
+			"combat": 5
+		},
+		"minecraft:stone_axe": {
+			"combat": 5
+		},
+		"minecraft:stone_hoe": {
+			"combat": 5
+		},
+		"minecraft:stone_sword": {
+			"combat": 5
+		},
+		"minecraft:wooden_pickaxe": {
+			"combat": 1
+		},
+		"minecraft:wooden_shovel": {
+			"combat": 1
+		},
+		"minecraft:wooden_axe": {
+			"combat": 1
+		},
+		"minecraft:wooden_hoe": {
+			"combat": 1
+		},
+		"minecraft:wooden_sword": {
+			"combat": 1
+		}
+	}
+}
