@@ -8,6 +8,7 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.*;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,7 +26,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 import java.util.Map;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEventHandler
 {
     private static boolean wasCrawling = false;

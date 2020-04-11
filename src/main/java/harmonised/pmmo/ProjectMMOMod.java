@@ -43,7 +43,7 @@ public class ProjectMMOMod
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::clientLoading );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
 
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientEventHandler.subscribeClientEvents( MinecraftForge.EVENT_BUS ) );
+//        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ClientEventHandler.subscribeClientEvents( MinecraftForge.EVENT_BUS ) );
 
         Config.init();
         Requirements.init();
