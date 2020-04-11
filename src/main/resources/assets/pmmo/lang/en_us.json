@@ -50,9 +50,16 @@
   "pmmo.text.underwaterNightVisionUnLocked": "Underwater Nightvision is unlocked since level %1$s Swimming",
   "pmmo.text.tooHeavy": "Your %1$s item is too heavy to wear! You need level %2$s in %3$s",
   "pmmo.text.notSkilledEnough": "You are not skilled enough to use %1$s as a weapon! You need level %2$s in %3$s",
-  "pmmo.text.toWear": "To wear %1$s, you need:",
-  "pmmo.text.toUseAsTool": "To use %1$s as a tool, you need:",
-  "pmmo.text.toUseAsWeapon": "To use %1$s item as a weapon, you need:",
+  "pmmo.text.toWear": "To wear %1$s, you need higher stats!",
+  "pmmo.text.toUseAsTool": "To use %1$s as a tool, you need higher stats!",
+  "pmmo.text.toUseAsWeapon": "To use %1$s item as a weapon, you need higher stats!",
+  "pmmo.text.Armor": "Armor",
+  "pmmo.text.Tool": "Tool",
+  "pmmo.text.Weapon": "Weapon",
+  "pmmo.text.xpValue": "Xp Value",
+  "pmmo.text.oreExtraChance": "Extra Mined: %1$s%%",
+  "pmmo.text.logExtraChance": "Extra Chopped: %1$s%%",
+  "pmmo.text.plantExtraChance": "Extra Harvest: %1$s%%",
   "pmmo.text.setLevel": "%1$s has been set to level %2$s",
   "pmmo.text.setXp": "%1$s has been set to %2$s xp",
   "pmmo.text.xpCap": "New XP must be no less than 0, and no more than 2 billion!",
@@ -60,5 +67,7 @@
   "pmmo.text.invalidNumberWarning": "%1$s is not a valid number!",
   "pmmo.text.skillsCleared": "Your skills have been cleared!",
   "pmmo.text.skillsResynced": "Your skills have been resynced!",
-  "pmmo.text.lapisDonatorWelcome": "Welcome, PMMO Lapis Tier Patreon %1$s!"
+  "pmmo.text.lapisDonatorWelcome": "Welcome, PMMO Lapis Tier Patreon %1$s!",
+  "pmmo.text.dandelionDonatorWelcome": "Welcome, PMMO Dandelion Tier Patreon %1$s!",
+  "pmmo.text.ironDonatorWelcome": "Welcome, PMMO Iron Tier Patreon %1$s!"
 }

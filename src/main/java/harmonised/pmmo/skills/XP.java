@@ -50,12 +50,10 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.ModList;
 
+import javax.annotation.Resource;
+
 public class XP
 {
-	private static Map<ResourceLocation, Float> xpValues = new HashMap<>();
-	private static Map<ResourceLocation, Float> oreDoubleValues = new HashMap<>();
-	private static Map<ResourceLocation, Float> plantDoubleValues = new HashMap<>();
-	private static Map<ResourceLocation, Float> logDoubleValues = new HashMap<>();
 	private static Map<ResourceLocation, Float> salvageBaseValue = new HashMap<>();
 	private static Map<ResourceLocation, Float> salvageValuePerLevel = new HashMap<>();
 	private static Map<ResourceLocation, Float> repairXp = new HashMap<>();
@@ -75,6 +73,8 @@ public class XP
 	public static List<String> validSkills = new ArrayList<String>();
 	public static double baseXp, xpIncreasePerLevel;
 	public static Set<String> lapisDonators = new HashSet<>();
+	public static Set<String> dandelionDonators = new HashSet<>();
+	public static Set<String> ironDonators = new HashSet<>();
 
 	public static double globalMultiplier = Config.config.globalMultiplier.get();
 	public static int maxLevel = Config.config.maxLevel.get();
@@ -98,109 +98,6 @@ public class XP
 		validSkills.add( "swimming" );
 		validSkills.add( "fishing" );
 		validSkills.add( "crafting" );
-////////////////////////////////////XP_VALUES//////////////////////////////////////////////////////
-//		xpValues.put( Blocks.GRASS.getRegistryName(), 2.5f );
-		xpValues.put( Blocks.AIR.getRegistryName(), 0.0f );
-//		xpValues.put( Blocks.DOUBLE_PLANT.getRegistryName(), 25.0f );
-		xpValues.put( Blocks.TALL_GRASS.getRegistryName(), 6.0f );
-		xpValues.put( Blocks.WHEAT.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.POTATOES.getRegistryName(), 7.5f );
-		xpValues.put( Blocks.CARROTS.getRegistryName(), 7.5f );
-		xpValues.put( Blocks.COCOA.getRegistryName(), 30.0f );
-		xpValues.put( Blocks.BEETROOTS.getRegistryName(), 20.0f );
-		xpValues.put( Blocks.NETHER_WART.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.OAK_SAPLING.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.ACACIA_SAPLING.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.BIRCH_SAPLING.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.DARK_OAK_SAPLING.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.JUNGLE_SAPLING.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.SPRUCE_SAPLING.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.END_ROD.getRegistryName(), 25.0f );
-		xpValues.put( Blocks.ACACIA_LEAVES.getRegistryName(), 1.1f );
-		xpValues.put( Blocks.BIRCH_LEAVES.getRegistryName(), 0.7f );
-		xpValues.put( Blocks.DARK_OAK_LEAVES.getRegistryName(), 0.6f );
-		xpValues.put( Blocks.JUNGLE_LEAVES.getRegistryName(), 0.9f );
-		xpValues.put( Blocks.OAK_LEAVES.getRegistryName(), 0.5f );
-		xpValues.put( Blocks.SPRUCE_LEAVES.getRegistryName(), 1.5f );
-		xpValues.put( Blocks.PUMPKIN.getRegistryName(), 35.0f );
-		xpValues.put( Blocks.MELON.getRegistryName(), 7.0f );
-		xpValues.put( Blocks.SUGAR_CANE.getRegistryName(), 8.0f );
-		xpValues.put( Blocks.CACTUS.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.KELP_PLANT.getRegistryName(), 4.0f );
-		xpValues.put( Blocks.BAMBOO.getRegistryName(), 1.2f );
-		xpValues.put( Blocks.BAMBOO_SAPLING.getRegistryName(), 1.2f );
-		xpValues.put( Blocks.SEA_PICKLE.getRegistryName(), 4.0f );
-		xpValues.put( Blocks.DEAD_BUSH.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.LILY_PAD.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.DANDELION.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.POPPY.getRegistryName(), 17.5f );
-		xpValues.put( Blocks.BLUE_ORCHID.getRegistryName(), 20.0f );
-		xpValues.put( Blocks.POPPY.getRegistryName(), 17.5f );
-		xpValues.put( Blocks.ALLIUM.getRegistryName(), 12.5f );
-		xpValues.put( Blocks.AZURE_BLUET.getRegistryName(), 14.5f );
-		xpValues.put( Blocks.ORANGE_TULIP.getRegistryName(), 16.5f );
-		xpValues.put( Blocks.PINK_TULIP.getRegistryName(), 16.0f );
-		xpValues.put( Blocks.RED_TULIP.getRegistryName(), 17.5f );
-		xpValues.put( Blocks.WHITE_TULIP.getRegistryName(), 18.5f );
-		xpValues.put( Blocks.OXEYE_DAISY.getRegistryName(), 14.5f );
-		xpValues.put( Blocks.CORNFLOWER.getRegistryName(), 15.5f );
-		xpValues.put( Blocks.LILY_OF_THE_VALLEY.getRegistryName(), 19.5f );
-		xpValues.put( Blocks.WITHER_ROSE.getRegistryName(), 35.0f );
-		xpValues.put( Blocks.BROWN_MUSHROOM.getRegistryName(), 10.0f );
-		xpValues.put( Blocks.BROWN_MUSHROOM_BLOCK.getRegistryName(), 3.0f );
-		xpValues.put( Blocks.RED_MUSHROOM.getRegistryName(), 12.0f );
-		xpValues.put( Blocks.RED_MUSHROOM_BLOCK.getRegistryName(), 4.0f );
-		xpValues.put( Blocks.CHORUS_PLANT.getRegistryName(), 2.5f );
-		xpValues.put( Blocks.CHORUS_FLOWER.getRegistryName(), 35.0f );
-		xpValues.put( Blocks.VINE.getRegistryName(), 3.5f );
-		xpValues.put( Blocks.COBWEB.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.ACACIA_LOG.getRegistryName(), 22.0f );
-		xpValues.put( Blocks.BIRCH_LOG.getRegistryName(), 19.0f );
-		xpValues.put( Blocks.DARK_OAK_LOG.getRegistryName(), 11.0f );
-		xpValues.put( Blocks.JUNGLE_LOG.getRegistryName(), 12.0f );
-		xpValues.put( Blocks.OAK_LOG.getRegistryName(), 18.0f );
-		xpValues.put( Blocks.SPRUCE_LOG.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.STRIPPED_ACACIA_LOG.getRegistryName(), 22.0f );
-		xpValues.put( Blocks.STRIPPED_BIRCH_LOG.getRegistryName(), 19.0f );
-		xpValues.put( Blocks.STRIPPED_DARK_OAK_LOG.getRegistryName(), 11.0f );
-		xpValues.put( Blocks.STRIPPED_JUNGLE_LOG.getRegistryName(), 12.0f );
-		xpValues.put( Blocks.STRIPPED_OAK_LOG.getRegistryName(), 18.0f );
-		xpValues.put( Blocks.STRIPPED_SPRUCE_LOG.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.ACACIA_PLANKS.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.BIRCH_PLANKS.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.DARK_OAK_PLANKS.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.JUNGLE_PLANKS.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.OAK_PLANKS.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.SPRUCE_PLANKS.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.BOOKSHELF.getRegistryName(), 100.0f );
-		xpValues.put( Blocks.DIRT.getRegistryName(), 1.5f );
-		xpValues.put( Blocks.GRASS.getRegistryName(), 2.5f );
-		xpValues.put( Blocks.SAND.getRegistryName(), 1.0f );
-		xpValues.put( Blocks.GRAVEL.getRegistryName(), 2.0f );
-		xpValues.put( Blocks.MYCELIUM.getRegistryName(), 15.0f );
-		xpValues.put( Blocks.SLIME_BLOCK.getRegistryName(), 50.0f );
-//		xpValues.put( Blocks.MONSTER_EGG.getRegistryName(), 200.0f );
-//		xpValues.put( Blocks.STONE.getRegistryName(), 0.1f );
-		xpValues.put( Blocks.ANDESITE.getRegistryName(), 0.5f );
-		xpValues.put( Blocks.GRANITE.getRegistryName(), 0.4f );
-		xpValues.put( Blocks.DIORITE.getRegistryName(), 0.3f );
-//		xpValues.put( Blocks.COBBLESTONE.getRegistryName(), 0.5f );
-		xpValues.put( Blocks.COAL_ORE.getRegistryName(), 2.0f );
-		xpValues.put( Blocks.IRON_ORE.getRegistryName(), 12.0f );
-		xpValues.put( Blocks.REDSTONE_ORE.getRegistryName(), 1.5f );
-//		xpValues.put( Blocks.LIT_REDSTONE_ORE.getRegistryName(), 1.5f );
-		xpValues.put( Blocks.GOLD_ORE.getRegistryName(), 22.0f );
-		xpValues.put( Blocks.LAPIS_ORE.getRegistryName(), 5.0f );
-		xpValues.put( Blocks.NETHER_QUARTZ_ORE.getRegistryName(), 1.5f );
-		xpValues.put( Blocks.DIAMOND_ORE.getRegistryName(), 35.0f );
-		xpValues.put( Blocks.EMERALD_ORE.getRegistryName(), 60.0f );
-		xpValues.put(Items.SALMON.getRegistryName(), 60.0f );
-		xpValues.put(Items.COD.getRegistryName(), 50.0f );
-		xpValues.put(Items.TROPICAL_FISH.getRegistryName(), 70.0f );
-		xpValues.put(Items.PUFFERFISH.getRegistryName(), 35.0f );
-
-		xpValues.put( Items.SADDLE.getRegistryName(), 250.0f );
-		xpValues.put( Items.NAME_TAG.getRegistryName(), 350.0f );
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
 		skillColors.put( "mining", 0x00ffff );
 		skillColors.put( "building", 0x00ffff );
@@ -232,68 +129,9 @@ public class XP
 		skillTextFormat.put( "fishing", TextFormatting.AQUA );
 		skillTextFormat.put( "crafting", TextFormatting.GOLD );
 ////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
-		lapisDonators.add( "Harmonised" );
-////////////////////////////////////ORE_DOUBLE_VALUES//////////////////////////////////////////////
-		oreDoubleValues.put( Blocks.COAL_ORE.getRegistryName(), 1.0f );
-		oreDoubleValues.put( Items.COAL.getRegistryName(), 1.0f );
-
-		oreDoubleValues.put( Blocks.IRON_ORE.getRegistryName(), 0.75f );
-		oreDoubleValues.put( Items.IRON_INGOT.getRegistryName(), 0.75f );
-
-
-		oreDoubleValues.put( Blocks.REDSTONE_ORE.getRegistryName(), 2.0f );
-//		oreDoubleValues.put( Blocks.LIT_REDSTONE_ORE.getRegistryName(), 2.0f );
-		oreDoubleValues.put( Items.REDSTONE.getRegistryName(), 2.0f );
-
-		oreDoubleValues.put( Blocks.GOLD_ORE.getRegistryName(), 0.50f );
-		oreDoubleValues.put( Items.GOLD_INGOT.getRegistryName(), 0.50f );
-		oreDoubleValues.put( Blocks.COAL_ORE.getRegistryName(), 0.5f );
-
-		oreDoubleValues.put( Blocks.LAPIS_ORE.getRegistryName(), 1.50f );
-		oreDoubleValues.put( Items.INK_SAC.getRegistryName(), 1.50f );
-
-		oreDoubleValues.put( Blocks.NETHER_QUARTZ_ORE.getRegistryName(), 0.55f );
-		oreDoubleValues.put( Items.QUARTZ.getRegistryName(), 0.55f );
-
-		oreDoubleValues.put( Blocks.DIAMOND_ORE.getRegistryName(), 0.33f );
-		oreDoubleValues.put( Items.DIAMOND.getRegistryName(), 0.33f );
-
-		oreDoubleValues.put( Blocks.EMERALD_ORE.getRegistryName(), 0.75f );
-		oreDoubleValues.put( Items.EMERALD.getRegistryName(), 0.75f );
-////////////////////////////////////PLANT_DOUBLE_VALUES////////////////////////////////////////////
-		plantDoubleValues.put( Items.WHEAT.getRegistryName(), 0.75f );
-		plantDoubleValues.put( Items.WHEAT_SEEDS.getRegistryName(), 0.75f );
-
-		plantDoubleValues.put( Items.CARROT.getRegistryName(), 1.50f );
-
-		plantDoubleValues.put( Items.POISONOUS_POTATO.getRegistryName(), 1.50f );
-		plantDoubleValues.put( Items.POTATO.getRegistryName(), 1.50f );
-
-		plantDoubleValues.put( Items.BEETROOT.getRegistryName(), 1.00f );
-		plantDoubleValues.put( Items.BEETROOT_SEEDS.getRegistryName(), 1.00f );
-
-		plantDoubleValues.put( Items.SUGAR_CANE.getRegistryName(), 0.33f );
-		plantDoubleValues.put( Blocks.CACTUS.getRegistryName(), 0.45f );
-		plantDoubleValues.put( Items.NETHER_WART.getRegistryName(), 0.75f );
-
-		plantDoubleValues.put( Blocks.PUMPKIN.getRegistryName(), 0.60f );
-		plantDoubleValues.put( Items.PUMPKIN_SEEDS.getRegistryName(), 0.60f );
-
-		plantDoubleValues.put( Blocks.MELON.getRegistryName(), 0.75f );
-		plantDoubleValues.put( Items.MELON.getRegistryName(), 0.75f );
-		plantDoubleValues.put( Items.MELON_SEEDS.getRegistryName(), 0.75f );
-
-		plantDoubleValues.put( Items.COCOA_BEANS.getRegistryName(), 1.50f );
-		plantDoubleValues.put( Items.KELP.getRegistryName(), 0.25f );
-		plantDoubleValues.put( Items.SEA_PICKLE.getRegistryName(), 1.50f );
-		plantDoubleValues.put( Items.BAMBOO.getRegistryName(), 0.35f );
-////////////////////////////////////PLANT_DOUBLE_VALUES////////////////////////////////////////////
-		logDoubleValues.put( Items.ACACIA_LOG.getRegistryName(), 1.25f );
-		logDoubleValues.put( Items.BIRCH_LOG.getRegistryName(), 0.85f );
-		logDoubleValues.put( Items.DARK_OAK_LOG.getRegistryName(), 0.50f );
-		logDoubleValues.put( Items.JUNGLE_LOG.getRegistryName(), 0.55f );
-		logDoubleValues.put( Items.OAK_LOG.getRegistryName(), 1.00f );
-		logDoubleValues.put( Items.SPRUCE_LOG.getRegistryName(), 0.65f );
+//		lapisDonators.add( "Harmonised" );
+//		dandelionDonators.add( "Harmonised" );
+//		ironDonators.add( "Harmonised" );
 ////////////////////////////////////NO_DROP_VALUES/////////////////////////////////////////////////
 		noDropOres.put( Blocks.IRON_ORE.getRegistryName(), true );
 		noDropOres.put( Blocks.GOLD_ORE.getRegistryName(), true );
@@ -511,36 +349,36 @@ public class XP
 		}
 	}
 
-	private static float getXp( ResourceLocation registryName )
+	private static Map<String, Double> getXp( ResourceLocation registryName )
 	{
-		if( xpValues.get( registryName ) != null )
-			return xpValues.get( registryName );
+		if( Requirements.xpValue.containsKey( registryName.toString() ) )
+			return Requirements.xpValue.get( registryName.toString() );
 		else
-			return 0.0f;
+			return new HashMap<>();
 	}
 
-	private static float getOreDoubleChance( ResourceLocation registryName )
+	private static double getOreDoubleChance( ResourceLocation registryName )
 	{
-		if( oreDoubleValues.get( registryName ) != null )
-			return oreDoubleValues.get( registryName );
+		if( Requirements.oreInfo.containsKey( registryName.toString() ) && Requirements.oreInfo.get( registryName.toString() ).get( "extraChance" ) != null )
+			return Requirements.oreInfo.get( registryName.toString() ).get( "extraChance" );
 		else
-			return 0.0f;
+			return 0.0D;
 	}
 
-	private static float getPlantDoubleChance( ResourceLocation registryName )
+	private static double getPlantDoubleChance( ResourceLocation registryName )
 	{
-		if( plantDoubleValues.get( registryName ) != null )
-			return plantDoubleValues.get( registryName );
+		if( Requirements.plantInfo.containsKey( registryName.toString() ) && Requirements.plantInfo.get( registryName.toString() ).get( "extraChance" ) != null )
+			return Requirements.plantInfo.get( registryName.toString() ).get( "extraChance" );
 		else
-			return 0.0f;
+			return 0.0D;
 	}
 
-	private static float getLogDoubleChance( ResourceLocation registryName )
+	private static double getLogDoubleChance( ResourceLocation registryName )
 	{
-		if( logDoubleValues.get( registryName ) != null )
-			return logDoubleValues.get( registryName );
+		if( Requirements.logInfo.containsKey( registryName.toString() ) && Requirements.logInfo.get( registryName.toString() ).get( "extraChance" ) != null )
+			return Requirements.logInfo.get( registryName.toString() ).get( "extraChance" );
 		else
-			return 0.0f;
+			return 0.0D;
 	}
 
 	private static boolean getNoDropOre( ResourceLocation registryName )
@@ -773,7 +611,7 @@ public class XP
 				else
 					lastPosPlaced.put(playerName, blockPos);
 
-				if (getXp(block.getRegistryName()) != 0)
+				if ( getXp(block.getRegistryName()) != null )
 					PlacedBlocks.orePlaced(event.getWorld().getWorld(), event.getPos());
 			}
 		}
@@ -799,7 +637,7 @@ public class XP
 				if( hardness > blockHardnessLimit )
 					hardness = (float) blockHardnessLimit;
 
-				float award = hardness;
+				double award = hardness;
 
 //				System.out.println( checkMaterial( material ) );
 
@@ -942,7 +780,7 @@ public class XP
 					if( age == maxAge && age >= 0 || block instanceof SeaPickleBlock )
 					{
 						int currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
-						float extraChance = getPlantDoubleChance( theDropItem.getItem().getRegistryName() ) * currLevel;
+						double extraChance = getPlantDoubleChance( theDropItem.getItem().getRegistryName() ) * currLevel;
 						int guaranteedDrop = 0;
 						int extraDrop = 0;
 
@@ -978,7 +816,7 @@ public class XP
 					if( noDropOre && !wasPlaced || !noDropOre && !isSilk )			//EXTRA DROPS
 					{
 						int currLevel = levelAtXp( skillsTag.getFloat( "mining" ) );
-						float extraChance = getOreDoubleChance( block.getRegistryName() ) * currLevel;
+						double extraChance = getOreDoubleChance( block.getRegistryName() ) * currLevel;
 						//					float extraChance = 180.0f;
 
 						int guaranteedDrop = 0;
@@ -1015,7 +853,7 @@ public class XP
 					if( !wasPlaced )			//EXTRA DROPS
 					{
 						int currLevel = levelAtXp( skillsTag.getFloat( "woodcutting" ) );
-						float extraChance = getLogDoubleChance( block.getRegistryName() ) * currLevel;
+						double extraChance = getLogDoubleChance( block.getRegistryName() ) * currLevel;
 						//					float extraChance = 180.0f;
 
 						int guaranteedDrop = 0;
@@ -1094,8 +932,8 @@ public class XP
 		{
 			PlayerEntity player = (PlayerEntity) target;
 			CompoundNBT skillsTag = getSkillsTag( player );
-			float agilityXp = 0;
-			float enduranceXp = 0;
+			double agilityXp = 0;
+			double enduranceXp = 0;
 			boolean hideEndurance = false;
 
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
@@ -1117,7 +955,7 @@ public class XP
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
 			if( event.getSource().getDamageType().equals( "fall" ) )
 			{
-				float award = startDmg;
+				double award = startDmg;
 //				float savedExtra = 0;
 				int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
 				int saved = 0;
@@ -1308,6 +1146,10 @@ public class XP
 				thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.text.lapisDonatorWelcome", thePlayer.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
 			});
 		}
+		else if( dandelionDonators.contains( player.getDisplayName().getString() ) )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.dandelionDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), false );
+		else if( ironDonators.contains( player.getDisplayName().getString() ) )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.ironDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), false );
 
 		AttributeHandler.updateReach( player );
 		NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
@@ -1424,8 +1266,8 @@ public class XP
 					if( event.getHand() == Hand.MAIN_HAND )
 					{
 						int currLevel;
-						float baseChance = 0;
-						float extraChance = 0;
+						double baseChance = 0;
+						double extraChance = 0;
 
 						if( getPlantDoubleChance( item.getRegistryName() ) != 0 )
 						{
@@ -1519,7 +1361,7 @@ public class XP
 
 							float startDmg = itemStack.getDamage();
 							float maxDmg = itemStack.getMaxDamage();
-							float award = 0;
+							double award = 0;
 							float displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
 							float durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
 							int potentialReturnAmount = (int) Math.floor( itemPotential * durabilityPercent );
@@ -1689,7 +1531,7 @@ public class XP
 
 			oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
 
-			float award = (float) ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
+			double award = (float) ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
 			award *= getRepairXp( getToolItem( lItem.getItem().getRegistryName() ).getItem().getRegistryName() );
 
 			if( award > 0 )
@@ -1926,7 +1768,7 @@ public class XP
 		return skillsTag;
 	}
 
-	public static void awardXp( PlayerEntity player, Skill skill, String sourceName, float amount, boolean skip )
+	public static void awardXp( PlayerEntity player, Skill skill, String sourceName, double amount, boolean skip )
 	{
 		if( amount <= 0.0f || player.world.isRemote )
 			return;
@@ -2051,7 +1893,7 @@ public class XP
 
 		if( !skillsTag.contains( skillName ) )
 		{
-			skillsTag.putFloat( skillName, amount );
+			skillsTag.putFloat( skillName, (float) amount );
 			startLevel = 1;
 		}
 		else
@@ -2069,7 +1911,7 @@ public class XP
 				amount = 2000000000 - startXp;
 			}
 
-			skillsTag.putFloat( skillName, startXp + amount );
+			skillsTag.putFloat( skillName, (float) (startXp + amount) );
 		}
 
 		currLevel = levelAtXp( skillsTag.getFloat( skillName ) );
@@ -2153,147 +1995,83 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageXp( newXp, Skill.getInt( skillName ), 0, false ), (ServerPlayerEntity) player );
 	}
 
+	public static Double getGap( Double a, Double b )
+	{
+		if( a < b )
+			return b - a;
+		else
+			return a - b;
+	}
+
 	public static void checkHandItemDamage( LivingDamageEvent event, PlayerEntity player )
 	{
 		if( !player.getHeldItemMainhand().isEmpty() )
 		{
 			Item item = player.getHeldItemMainhand().getItem();
-			ItemTier tier = null;
-			int levelReq;
+			CompoundNBT skillsTag = getSkillsTag( player );
 
-			if( item instanceof SwordItem && ( (SwordItem) item ).getTier() instanceof ItemTier )
-				tier = (ItemTier) ( (SwordItem) item ).getTier();
-			else if( item instanceof ToolItem && ( (ToolItem) item ).getTier() instanceof ItemTier )
-				tier = (ItemTier) ( (ToolItem) item ).getTier();
-
-			if( tier != null )
+			if( !checkReq( player, item.getRegistryName(), "weapon" ) )
 			{
-				CompoundNBT skills = getSkillsTag( player );
-				int level = levelAtXp( skills.getFloat( "combat" ) );
-				levelReq = getWeaponLevelReq( tier );
+				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", item.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+				Map<String, Double> reqs = Requirements.weaponReq.get( item.getRegistryName().toString() );
 
-				if( level < levelReq )
-				{
-					event.setAmount( event.getAmount() * ( 1 / (float) ( levelReq - level ) ) );
-					NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.notSkilledEnough", item.getTranslationKey(), "" + levelReq, "pmmo.text.combat", false, 2 ), (ServerPlayerEntity) player );
-				}
+				int gap = (int) Math.floor( reqs.entrySet().stream()
+														   .map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
+														   .reduce( 0D, Math::max ) );
+
+				event.setAmount( event.getAmount() / (gap + 1) );
 			}
 		}
 	}
 
 	public static void checkHandItemSpeed( PlayerEvent.BreakSpeed event, PlayerEntity player )
 	{
-		ItemStack item = player.getHeldItemMainhand();
-		if( item.getItem() instanceof ToolItem )
+		Item item = player.getHeldItemMainhand().getItem();
+		CompoundNBT skillsTag = getSkillsTag( player );
+
+		if( !checkReq( player, item.getRegistryName(), "tool" ) )
 		{
-			int level = 1;
-			float newSpeed = event.getNewSpeed();
-			String skill = "";
-			CompoundNBT skills = getSkillsTag( player );
-			for( ToolType toolType : item.getToolTypes() )
+			Map<String, Double> reqs = Requirements.toolReq.get( item.getRegistryName().toString() );
+
+			int gap;
+
+			if( player.world.isRemote() )
 			{
-				if( !player.world.isRemote() )
-				{
-					switch( toolType.getName() )
-					{
-						case "pickaxe":
-							skill = "Mining";
-							level = XP.levelAtXp( skills.getFloat( "mining" ) );
-							break;
+				gap = (int) Math.floor( reqs.entrySet().stream()
+						.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp ) ) ) )
+						.reduce( 0D, Math::max ) );
 
-						case "axe":
-							skill = "Woodcutting";
-							level = XP.levelAtXp( skills.getFloat( "woodcutting" ) );
-							break;
-
-						case "shovel":
-							skill = "Excavation";
-							level = XP.levelAtXp( skills.getFloat( "excavation" ) );
-							break;
-					}
-				}
-				else
-				{
-					switch( toolType.getName() )
-					{
-						case "pickaxe":
-							skill = "Mining";
-							if( XPOverlayGUI.skills.containsKey( "mining" ) )
-								level = XP.levelAtXp( XPOverlayGUI.skills.get( "mining" ).xp );
-							break;
-
-						case "axe":
-							skill = "Woodcutting";
-							if( XPOverlayGUI.skills.containsKey( "woodcutting") )
-								level = XP.levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).xp );
-							break;
-
-						case "shovel":
-							skill = "Excavation";
-							if( XPOverlayGUI.skills.containsKey( "excavation" ) )
-								level = XP.levelAtXp( XPOverlayGUI.skills.get( "excavation" ).xp );
-							break;
-					}
-				}
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUseAsTool", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+			}
+			else
+			{
+				gap = (int) Math.floor( reqs.entrySet().stream()
+						.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
+						.reduce( 0D, Math::max ) );
 			}
 
-			if( ((ToolItem) item.getItem()).getTier() instanceof ItemTier )
-			{
-				ItemTier tier = (ItemTier) ((ToolItem) item.getItem()).getTier();
-				int toolLevelReq =  getToolLevelReq( tier );
-				if( level < toolLevelReq )
-				{
-					float speedReduction = 1 / (float) (toolLevelReq - level + 1);
-					if( speedReduction < 0 )
-						speedReduction = 0;
-
-					event.setNewSpeed( newSpeed * speedReduction );
-
-					if( player.world.isRemote() )
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.tooHeavy", new TranslationTextComponent( item.getTranslationKey() ), toolLevelReq, new TranslationTextComponent( "pmmo.text." + skill.toLowerCase() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
-				}
-			}
+			event.setNewSpeed( event.getNewSpeed() / (gap + 1) );
 		}
 	}
 
 	public static void checkWornLevelReq( PlayerEntity player, int slot )
 	{
+		CompoundNBT skillsTag = getSkillsTag( player );
 		Item item = player.inventory.getStackInSlot( slot ).getItem();
-		if( item instanceof ArmorItem )
+
+		if( !checkReq( player, item.getRegistryName(), "wear" ) )
 		{
-			int wornLevelReq = getWornLevelReq( (ArmorMaterial) ((ArmorItem) item).getArmorMaterial() );
-			CompoundNBT skills = getSkillsTag( player );
-			int endurance = levelAtXp( skills.getFloat( "endurance" ) );
-			if( endurance < wornLevelReq )
-			{
-				String itemType = "";
+			NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", item.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+			Map<String, Double> reqs = Requirements.wearReq.get( item.getRegistryName().toString() );
 
-				switch( slot )
-				{
-					case 39:
-						itemType = "Helmet";
-						break;
+			int slowAmp = (int) Math.floor( reqs.entrySet().stream()
+					.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
+					.reduce( 0D, Math::max ) / 5 );
 
-					case 38:
-						itemType = "Chestplate";
-						break;
+			if( slowAmp > 9 )
+				slowAmp = 9;
 
-					case 37:
-						itemType = "Leggings";
-						break;
-
-					case 36:
-						itemType = "Shoes";
-						break;
-				}
-
-				int slowAmp = (int) Math.ceil( ( wornLevelReq - endurance ) / 5 );
-				if( slowAmp > 9 )
-					slowAmp = 9;
-
-				player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 50, slowAmp, false, true ) );
-				NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.tooHeavy", item.getTranslationKey(), "" + wornLevelReq, "pmmo.text.endurance", true, 2 ), (ServerPlayerEntity) player );
-			}
+			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 50, slowAmp, false, true ) );
 		}
 	}
 
@@ -2410,7 +2188,7 @@ public class XP
 	{
 		PlayerEntity player = event.getPlayer();
 		NonNullList<ItemStack> items = event.getDrops();
-		float award = getXp( items.get( 0 ).getItem().getRegistryName() );
+		double award = getXp( items.get( 0 ).getItem().getRegistryName() );
 		if( award == 0 )
 			award = 10.0f;
 		awardXp( player, Skill.FISHING, "catching " + items, award, false );

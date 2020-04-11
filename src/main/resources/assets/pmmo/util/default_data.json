@@ -224,5 +224,415 @@
 		"minecraft:wooden_sword": {
 			"combat": 1
 		}
+	},
+	"xp_value": {
+		"minecraft:nether_quartz_ore": {
+			"mining": 1.5
+		},
+		"minecraft:coal_ore": {
+			"mining": 2
+		},
+		"minecraft:iron_ore": {
+			"mining": 12
+		},
+		"minecraft:gold_ore": {
+			"mining": 22
+		},
+		"minecraft:diamond_ore": {
+			"mining": 35
+		},
+		"minecraft:redstone_ore": {
+			"mining": 1.5
+		},
+		"minecraft:lapis_ore": {
+			"mining": 5
+		},
+		"minecraft:emerald_ore": {
+			"mining": 60
+		},
+		"minecraft:granite": {
+			"mining": 0.4
+		},
+		"minecraft:diorite": {
+			"mining": 0.3
+		},
+		"minecraft:andesite": {
+			"mining": 0.5
+		},
+		"minecraft:cobblestone": {
+			"mining": 0.5
+		},
+		"minecraft:infested_stone": {
+			"mining": 200
+		},
+		"minecraft:dirt": {
+			"excavation": 1.5
+		},
+		"minecraft:sand": {
+			"excavation": 1
+		},
+		"minecraft:gravel": {
+			"excavation": 2
+		},
+		"minecraft:mycelium": {
+			"excavation": 15,
+			"farming": 5
+		},
+		"minecraft:stripped_oak_log": {
+			"woodcutting": 18
+		},
+		"minecraft:stripped_birch_log": {
+			"woodcutting": 19
+		},
+		"minecraft:stripped_spruce_log": {
+			"woodcutting": 15
+		},
+		"minecraft:stripped_jungle_log": {
+			"woodcutting": 12
+		},
+		"minecraft:stripped_dark_oak_log": {
+			"woodcutting": 11
+		},
+		"minecraft:stripped_acacia_log": {
+			"woodcutting": 22
+		},
+		"minecraft:oak_sapling": {
+			"woodcutting": 10
+		},
+		"minecraft:birch_sapling": {
+			"woodcutting": 10
+		},
+		"minecraft:spruce_sapling": {
+			"woodcutting": 10
+		},
+		"minecraft:jungle_sapling": {
+			"woodcutting": 10
+		},
+		"minecraft:dark_oak_sapling": {
+			"woodcutting": 10
+		},
+		"minecraft:acacia_sapling": {
+			"woodcutting": 10
+		},
+		"minecraft:oak_log": {
+			"woodcutting": 18
+		},
+		"minecraft:birch_log": {
+			"woodcutting": 19
+		},
+		"minecraft:spruce_log": {
+			"woodcutting": 15
+		},
+		"minecraft:jungle_log": {
+			"woodcutting": 12
+		},
+		"minecraft:dark_oak_log": {
+			"woodcutting": 11
+		},
+		"minecraft:acacia_log": {
+			"woodcutting": 22
+		},
+		"minecraft:oak_planks": {
+			"woodcutting": 5
+		},
+		"minecraft:birch_planks": {
+			"woodcutting": 5
+		},
+		"minecraft:spruce_planks": {
+			"woodcutting": 5
+		},
+		"minecraft:jungle_planks": {
+			"woodcutting": 5
+		},
+		"minecraft:dark_oak_planks": {
+			"woodcutting": 5
+		},
+		"minecraft:acacia_planks": {
+			"woodcutting": 5
+		},
+		"minecraft:oak_leaves": {
+			"woodcutting": 0.5
+		},
+		"minecraft:birch_leaves": {
+			"woodcutting": 0.7
+		},
+		"minecraft:spruce_leaves": {
+			"woodcutting": 1.5
+		},
+		"minecraft:jungle_leaves": {
+			"woodcutting": 0.9
+		},
+		"minecraft:dark_oak_leaves": {
+			"woodcutting": 0.6
+		},
+		"minecraft:acacia_leaves": {
+			"woodcutting": 1.1
+		},
+		"minecraft:bookshelf": {
+			"woodcutting": 50
+		},
+		"minecraft:brown_mushroom_block": {
+			"farming": 3
+		},
+		"minecraft:brown_mushroom": {
+			"farming": 10
+		},
+		"minecraft:red_mushroom_block": {
+			"farming": 4
+		},
+		"minecraft:red_mushroom": {
+			"farming": 12
+		},
+		"minecraft:sugar_cane": {
+			"farming": 8
+		},
+		"minecraft:cactus": {
+			"farming": 15
+		},
+		"minecraft:bamboo": {
+			"farming": 1.2
+		},
+		"minecraft:bamboo_sapling": {
+			"farming": 1.2
+		},
+		"minecraft:kelp_plant": {
+			"farming": 4
+		},
+		"minecraft:sea_pickle": {
+			"farming": 4
+		},
+		"minecraft:wheat": {
+			"farming": 15
+		},
+		"minecraft:beetroots": {
+			"farming": 20
+		},
+		"minecraft:carrots": {
+			"farming": 7.5
+		},
+		"minecraft:potatoes": {
+			"farming": 7.5
+		},
+		"minecraft:chorus_flower": {
+			"farming": 35
+		},
+		"minecraft:cocoa": {
+			"farming": 30
+		},
+		"minecraft:chorus_plant": {
+			"farming": 2.5
+		},
+		"minecraft:nether_wart": {
+			"farming": 5
+		},
+		"minecraft:melon": {
+			"farming": 7,
+			"woodcutting": 1
+		},
+		"minecraft:pumpkin": {
+			"farming": 35,
+			"woodcutting": 5
+		},
+		"minecraft:lily_pad": {
+			"farming": 15
+		},
+		"minecraft:dandelion": {
+			"farming": 15
+		},
+		"minecraft:white_tulip": {
+			"farming": 18.5
+		},
+		"minecraft:pink_tulip": {
+			"farming": 16
+		},
+		"minecraft:red_tulip": {
+			"farming": 17.5
+		},
+		"minecraft:oxeye_daisy": {
+			"farming": 14.5
+		},
+		"minecraft:dead_bush": {
+			"farming": 5
+		},
+		"minecraft:cobweb": {
+			"farming": 5
+		},
+		"minecraft:orange_tulip": {
+			"farming": 16.5
+		},
+		"minecraft:wither_rose": {
+			"farming": 35
+		},
+		"minecraft:allium": {
+			"farming": 12.5
+		},
+		"minecraft:poppy": {
+			"farming": 17.5
+		},
+		"minecraft:vine": {
+			"farming": 3.5
+		},
+		"minecraft:grass": {
+			"farming": 2.5
+		},
+		"minecraft:tall_grass": {
+			"farming": 6
+		},
+		"minecraft:cornflower": {
+			"farming": 15.5
+		},
+		"minecraft:azure_bluet": {
+			"farming": 14.5
+		},
+		"minecraft:lily_of_the_valley": {
+			"farming": 19.5
+		},
+		"minecraft:blue_orchid": {
+			"farming": 20
+		},
+		"minecraft:pufferfish": {
+			"fishing": 35
+		},
+		"minecraft:name_tag": {
+			"fishing": 75
+		},
+		"minecraft:cod": {
+			"fishing": 50
+		},
+		"minecraft:salmon": {
+			"fishing": 60
+		},
+		"minecraft:tropical_fish": {
+			"fishing": 70
+		},
+		"minecraft:saddle": {
+			"fishing": 125
+		}
+	},
+	"ore": {
+		"minecraft:nether_quartz_ore": {
+			"extraChance": 0.55
+		},
+		"minecraft:quartz": {
+			"extraChance": 0.55
+		},
+		"minecraft:coal_ore": {
+			"extraChance": 1
+		},
+		"minecraft:coal": {
+			"extraChance": 1
+		},
+		"minecraft:iron_ore": {
+			"extraChance": 0.75
+		},
+		"minecraft:iron_ingot": {
+			"extraChance": 0.75
+		},
+		"minecraft:gold_ore": {
+			"extraChance": 0.5
+		},
+		"minecraft:gold_ingot": {
+			"extraChance": 0.5
+		},
+		"minecraft:diamond_ore": {
+			"extraChance": 0.33
+		},
+		"minecraft:diamond": {
+			"extraChance": 0.33
+		},
+		"minecraft:redstone_ore": {
+			"extraChance": 2
+		},
+		"minecraft:redstone": {
+			"extraChance": 2
+		},
+		"minecraft:lapis_ore": {
+			"extraChance": 1.5
+		},
+		"minecraft:lapis_lazuli": {
+			"extraChance": 1.5
+		},
+		"minecraft:emerald_ore": {
+			"extraChance": 0.75
+		},
+		"minecraft:emerald": {
+			"extraChance": 0.75
+		}
+	},
+	"log": {
+		"minecraft:oak_log": {
+			"extraChance": 1
+		},
+		"minecraft:birch_log": {
+			"extraChance": 0.85
+		},
+		"minecraft:spruce_log": {
+			"extraChance": 0.65
+		},
+		"minecraft:jungle_log": {
+			"extraChance": 0.55
+		},
+		"minecraft:dark_oak_log": {
+			"extraChance": 0.5
+		},
+		"minecraft:acacia_log": {
+			"extraChance": 1.25
+		}
+	},
+	"plant": {
+		"minecraft:cocoa_beans": {
+			"extraChance": 1.5
+		},
+		"minecraft:wheat_seeds": {
+			"extraChance": 0.75
+		},
+		"minecraft:wheat": {
+			"extraChance": 0.75
+		},
+		"minecraft:melon": {
+			"extraChance": 0.75
+		},
+		"minecraft:melon_seeds": {
+			"extraChance": 0.75
+		},
+		"minecraft:pumpkin": {
+			"extraChance": 0.6
+		},
+		"minecraft:pumpkin_seeds": {
+			"extraChance": 0.6
+		},
+		"minecraft:beetroot_seeds": {
+			"extraChance": 1
+		},
+		"minecraft:beetroot": {
+			"extraChance": 1
+		},
+		"minecraft:cactus": {
+			"extraChance": 0.45
+		},
+		"minecraft:sugar_cane": {
+			"extraChance": 0.33
+		},
+		"minecraft:kelp": {
+			"extraChance": 0.25
+		},
+		"minecraft:bamboo": {
+			"extraChance": 0.35
+		},
+		"minecraft:sea_pickle": {
+			"extraChance": 1.5
+		},
+		"minecraft:potato": {
+			"extraChance": 1.5
+		},
+		"minecraft:poisonous_potato": {
+			"extraChance": 1.5
+		},
+		"minecraft:nether_wart": {
+			"extraChance": 0.75
+		},
+		"minecraft:carrot": {
+			"extraChance": 1.5
+		}
 	}
 }

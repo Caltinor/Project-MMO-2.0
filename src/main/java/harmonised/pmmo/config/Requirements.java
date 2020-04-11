@@ -22,6 +22,9 @@ public class Requirements
     public static Map<String, Map<String, Double>> weaponReq = new HashMap<>();
     public static Map<String, Map<String, Double>> mobReq = new HashMap<>();
     public static Map<String, Map<String, Double>> xpValue = new HashMap<>();
+    public static Map<String, Map<String, Double>> oreInfo = new HashMap<>();
+    public static Map<String, Map<String, Double>> logInfo = new HashMap<>();
+    public static Map<String, Map<String, Double>> plantInfo = new HashMap<>();
 
     private static String dataPath = "pmmo/data.json";
     private static String templateDataPath = "pmmo/data_template.json";
@@ -70,12 +73,44 @@ public class Requirements
                 weaponReq.put( key, value.requirements );
         });
 
+        req.mobs.forEach( (key, value) ->
+        {
+            if( mobReq.containsKey( key ) )
+                mobReq.replace( key, value.requirements );
+            else
+                mobReq.put( key, value.requirements );
+        });
+
         req.xpValues.forEach( (key, value) ->
         {
             if( xpValue.containsKey( key ) )
                 xpValue.replace( key, value.requirements );
             else
                 xpValue.put( key, value.requirements );
+        });
+
+        req.ores.forEach( (key, value) ->
+        {
+            if( oreInfo.containsKey( key ) )
+                oreInfo.replace( key, value.requirements );
+            else
+                oreInfo.put( key, value.requirements );
+        });
+
+        req.logs.forEach( (key, value) ->
+        {
+            if( logInfo.containsKey( key ) )
+                logInfo.replace( key, value.requirements );
+            else
+                logInfo.put( key, value.requirements );
+        });
+
+        req.plants.forEach( (key, value) ->
+        {
+            if( plantInfo.containsKey( key ) )
+                plantInfo.replace( key, value.requirements );
+            else
+                plantInfo.put( key, value.requirements );
         });
     }
 
@@ -138,39 +173,43 @@ public class Requirements
     private final Map<String, RequirementItem> wears = Maps.newHashMap();
     private final Map<String, RequirementItem> tools = Maps.newHashMap();
     private final Map<String, RequirementItem> weapons = Maps.newHashMap();
+    private final Map<String, RequirementItem> mobs = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
+    private final Map<String, RequirementItem> ores = Maps.newHashMap();
+    private final Map<String, RequirementItem> logs = Maps.newHashMap();
+    private final Map<String, RequirementItem> plants = Maps.newHashMap();
 
-    public Map<String, Double> getWear(String registryName)
-    {
-        if( wears.containsKey( registryName ) )
-            return wears.get( registryName ).getMap();
-        else
-            return null;
-    }
-
-    public Map<String, Double> getTool(String registryName)
-    {
-        if( tools.containsKey( registryName ) )
-            return tools.get( registryName ).getMap();
-        else
-            return new HashMap<>();
-    }
-
-    public Map<String, Double> getWeapon(String registryName)
-    {
-        if( weapons.containsKey( registryName ) )
-            return weapons.get( registryName ).getMap();
-        else
-            return new HashMap<>();
-    }
-
-    public Map<String, Double> getXp(String registryName)
-    {
-        if( xpValues.containsKey( registryName ) )
-            return xpValues.get( registryName ).getMap();
-        else
-            return new HashMap<>();
-    }
+//    public Map<String, Double> getWear(String registryName)
+//    {
+//        if( wears.containsKey( registryName ) )
+//            return wears.get( registryName ).getMap();
+//        else
+//            return null;
+//    }
+//
+//    public Map<String, Double> getTool(String registryName)
+//    {
+//        if( tools.containsKey( registryName ) )
+//            return tools.get( registryName ).getMap();
+//        else
+//            return new HashMap<>();
+//    }
+//
+//    public Map<String, Double> getWeapon(String registryName)
+//    {
+//        if( weapons.containsKey( registryName ) )
+//            return weapons.get( registryName ).getMap();
+//        else
+//            return new HashMap<>();
+//    }
+//
+//    public Map<String, Double> getXp(String registryName)
+//    {
+//        if( xpValues.containsKey( registryName ) )
+//            return xpValues.get( registryName ).getMap();
+//        else
+//            return new HashMap<>();
+//    }
 
     // -----------------------------------------------------------------------------
     //
@@ -195,7 +234,12 @@ public class Requirements
             deserializeGroup(obj, "wear_requirement", req.wears::put, context);
             deserializeGroup(obj, "tool_requirement", req.tools::put, context);
             deserializeGroup(obj, "weapon_requirement", req.weapons::put, context);
+            deserializeGroup(obj, "mob_requirement", req.mobs::put, context);
             deserializeGroup(obj, "xp_value", req.xpValues::put, context);
+            deserializeGroup(obj, "ore", req.ores::put, context);
+            deserializeGroup(obj, "log", req.logs::put, context);
+            deserializeGroup(obj, "plant", req.plants::put, context);
+
 
             return req;
         }

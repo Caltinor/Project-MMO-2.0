@@ -9,12 +9,11 @@ import java.util.function.Supplier;
 
 public class MessageXp
 {
-	private float xp;
+	private double xp, gainedXp;
 	private int skill;
-	private float gainedXp;
 	private boolean skip;
 	
-	public MessageXp( float xp, int skill, float gainedXp, boolean skip )
+	public MessageXp( double xp, int skill, double gainedXp, boolean skip )
 	{
 		this.xp = xp;
 		this.gainedXp = gainedXp;
@@ -30,8 +29,8 @@ public class MessageXp
 	public static MessageXp decode( PacketBuffer buf )
 	{
 		MessageXp packet = new MessageXp();
-		packet.xp = buf.readFloat();
-		packet.gainedXp = buf.readFloat();
+		packet.xp = buf.readDouble();
+		packet.gainedXp = buf.readDouble();
 		packet.skill = buf.readInt();
 		packet.skip = buf.readBoolean();
 
@@ -40,8 +39,8 @@ public class MessageXp
 
 	public static void encode( MessageXp packet, PacketBuffer buf )
 	{
-		buf.writeFloat( packet.xp );
-		buf.writeFloat( packet.gainedXp );
+		buf.writeDouble( packet.xp );
+		buf.writeDouble( packet.gainedXp );
 		buf.writeInt( packet.skill );
 		buf.writeBoolean( packet.skip );
 	}
