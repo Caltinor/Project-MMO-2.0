@@ -68,6 +68,6 @@
 	"pmmo.text.skillsCleared": "Vos compétences ont été effacés !",
 	"pmmo.text.skillsResynced": "Vos compétences ont été resynchronisés !",
 	"pmmo.text.lapisDonatorWelcome": "bienvenue %1$s, tier Lapis du Patreon PMMO !",
-	"pmmo.text.dandelionDonatorWelcome": "Welcome, PMMO Dandelion Tier Patreon %1$s!",
-	"pmmo.text.ironDonatorWelcome": "Welcome, PMMO Iron Tier Patreon %1$s!"
+	"pmmo.text.dandelionDonatorWelcome": "bienvenue %1$s, tier Pissenlit du Patreon PMMO !",
+	"pmmo.text.ironDonatorWelcome": "bienvenue %1$s, tier Fer du Patreon PMMO !"
 }

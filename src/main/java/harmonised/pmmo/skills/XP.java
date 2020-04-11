@@ -149,6 +149,7 @@ public class XP
 
 		materialHarvestTool.put( Material.WOOD, "axe" );					//AXE
 		materialHarvestTool.put( Material.LEAVES, "axe" );
+		materialHarvestTool.put( Material.GOURD, "axe" );
 
 		materialHarvestTool.put( Material.CLAY, "shovel" );					//SHOVEL
 		materialHarvestTool.put( Material.EARTH, "shovel" );
@@ -164,7 +165,6 @@ public class XP
 		materialHarvestTool.put( Material.CORAL, "hoe" );
 		materialHarvestTool.put( Material.TALL_PLANTS, "hoe" );
 		materialHarvestTool.put( Material.BAMBOO, "hoe" );
-		materialHarvestTool.put( Material.GOURD, "hoe" );
 		materialHarvestTool.put( Material.BAMBOO_SAPLING, "hoe" );
 ////////////////////////////////////TOOL_ITEM//////////////////////////////////////////////////////
 		toolItems.put( Items.DIAMOND_HELMET.getRegistryName(), new ItemStack( Items.DIAMOND ) );
@@ -756,6 +756,7 @@ public class XP
 					BlockState state = event.getState();
 					int age = -1;
 					int maxAge = -1;
+
 					if( !wasPlaced )
 						award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), theDropItem.getCount() ) );
 
@@ -912,7 +913,7 @@ public class XP
 				{
 					if( !wasPlaced )
 					{
-						award = addMaps( award, getXp( block.getRegistryName() ) );
+						award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), drops.size() ) );
 						PlacedBlocks.removeOre( event.getWorld().getWorld(), event.getPos() );
 					}
 

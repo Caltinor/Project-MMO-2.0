@@ -439,6 +439,10 @@
 			"farming": 7,
 			"woodcutting": 1
 		},
+		"minecraft:melon_slice": {
+			"farming": 7,
+			"woodcutting": 1
+		},
 		"minecraft:pumpkin": {
 			"farming": 35,
 			"woodcutting": 5
@@ -607,6 +611,9 @@
 			"extraChance": 0.75
 		},
 		"minecraft:melon_seeds": {
+			"extraChance": 0.75
+		},
+		"minecraft:melon_slice": {
 			"extraChance": 0.75
 		},
 		"minecraft:pumpkin": {

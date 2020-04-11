@@ -3,6 +3,7 @@ package harmonised.pmmo.config;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
 import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.skills.Skill;
 import net.minecraft.util.JSONUtils;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.IOUtils;
@@ -46,47 +47,75 @@ public class Requirements
         updateFinal( defaultReq );
         updateFinal( customReq );
     }
+    
+    private static boolean checkInvalidSkills( Map<String, Double> theMap )
+    {
+        boolean accepted = true;
+
+        for( String key : theMap.keySet() )
+        {
+            if( Skill.getInt( key ) == 0 )
+                accepted = false;
+        }
+
+        return accepted;
+    }
 
     private static void updateFinal( Requirements req )
     {
         req.wears.forEach( (key, value) ->
         {
-            if( wearReq.containsKey( key ) )
-                wearReq.replace( key, value.requirements );
-            else
-                wearReq.put( key, value.requirements );
+            if( checkInvalidSkills( value.requirements ) )
+            {
+                if( wearReq.containsKey( key ) )
+                    wearReq.replace( key, value.requirements );
+                else
+                    wearReq.put( key, value.requirements );
+            }
         });
 
         req.tools.forEach( (key, value) ->
         {
-            if( toolReq.containsKey( key ) )
-                toolReq.replace( key, value.requirements );
-            else
-                toolReq.put( key, value.requirements );
+            if( checkInvalidSkills( value.requirements ) )
+            {
+                if( toolReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
+                    toolReq.replace( key, value.requirements );
+                else
+                    toolReq.put( key, value.requirements );
+            }
         });
 
         req.weapons.forEach( (key, value) ->
         {
-            if( weaponReq.containsKey( key ) )
-                weaponReq.replace( key, value.requirements );
-            else
-                weaponReq.put( key, value.requirements );
+            if( checkInvalidSkills( value.requirements ) )
+            {
+                if( weaponReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
+                    weaponReq.replace( key, value.requirements );
+                else
+                    weaponReq.put( key, value.requirements );
+            }
         });
 
         req.mobs.forEach( (key, value) ->
         {
-            if( mobReq.containsKey( key ) )
-                mobReq.replace( key, value.requirements );
-            else
-                mobReq.put( key, value.requirements );
+            if( checkInvalidSkills( value.requirements ) )
+            {
+                if( mobReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
+                    mobReq.replace( key, value.requirements );
+                else
+                    mobReq.put( key, value.requirements );
+            }
         });
 
         req.xpValues.forEach( (key, value) ->
         {
-            if( xpValue.containsKey( key ) )
-                xpValue.replace( key, value.requirements );
-            else
-                xpValue.put( key, value.requirements );
+            if( checkInvalidSkills( value.requirements ) )
+            {
+                if( xpValue.containsKey( key ) && checkInvalidSkills( value.requirements ) )
+                    xpValue.replace( key, value.requirements );
+                else
+                    xpValue.put( key, value.requirements );
+            }
         });
 
         req.ores.forEach( (key, value) ->
