@@ -56,6 +56,16 @@ public enum Skill
         return "none";
     }
 
+    public static Skill getSkill( String input )
+    {
+        for( Skill theEnum : Skill.values() )
+        {
+            if( theEnum.name().toLowerCase().equals( input.toLowerCase() ) )
+                return theEnum;
+        }
+        return Skill.INVALID_SKILL;
+    }
+
     public int getValue()
     {
         return this.value;

@@ -352,7 +352,7 @@ public class XP
 	private static Map<String, Double> getXp( ResourceLocation registryName )
 	{
 		if( Requirements.xpValue.containsKey( registryName.toString() ) )
-			return Requirements.xpValue.get( registryName.toString() );
+			return new HashMap<>( Requirements.xpValue.get( registryName.toString() ) );
 		else
 			return new HashMap<>();
 	}
@@ -577,6 +577,30 @@ public class XP
 		player.sendStatusMessage( new StringTextComponent( msg ).setStyle( new Style().setColor( format ) ), bar );
 	}
 
+	public static Map<String, Double> multiplyMap( Map<String, Double> mapOne, double multiplier )
+	{
+		for( String key : mapOne.keySet() )
+		{
+			mapOne.replace( key, mapOne.get( key ) * multiplier );
+		}
+
+		return mapOne;
+	}
+
+	public static Map<String, Double> addMaps( Map<String, Double> mapOne, Map<String, Double> mapTwo )
+	{
+		for( String key : mapTwo.keySet() )
+		{
+			if( mapOne.containsKey( key ) )
+				mapOne.replace( key, mapOne.get( key ) + mapTwo.get( key ) );
+			else
+				mapOne.put( key, mapTwo.get( key ) );
+
+		}
+
+		return mapOne;
+	}
+
 	public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
 	{
 		if( event.getEntity() instanceof PlayerEntity )
@@ -632,14 +656,14 @@ public class XP
 				Material material = event.getState().getMaterial();
 				World world = event.getWorld().getWorld();
 				ItemStack toolUsed = player.getHeldItemMainhand();
-//				Skill skill = getSkill( correctHarvestTool( material ) );
-				float hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
+				String skill = getSkill( correctHarvestTool( material ) ).name().toLowerCase();
+				double hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
 				if( hardness > blockHardnessLimit )
 					hardness = (float) blockHardnessLimit;
 
-				double award = hardness;
-
-//				System.out.println( checkMaterial( material ) );
+				String awardMsg = "";
+				Map<String, Double> award = new HashMap<>();
+				award.put( skill, hardness );
 
 				Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( player.getHeldItemMainhand() );
 				int fortune = 0;
@@ -677,7 +701,7 @@ public class XP
 					Block baseBlock = event.getState().getBlock();
 					BlockPos baseBlockPos = event.getPos();
 
-					float extraChance = getPlantDoubleChance( baseBlock.getRegistryName() ) * currLevel;
+					double extraChance = getPlantDoubleChance( baseBlock.getRegistryName() ) * currLevel;
 					int rewardable, guaranteedDrop, extraDrop, totalDrops, guaranteedDropEach;
 					rewardable = extraDrop = guaranteedDrop = totalDrops = 0;
 
@@ -721,8 +745,9 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( ( guaranteedDrop ) + extraDrop ), baseBlock.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 					}
 					totalDrops = rewardable + guaranteedDrop + extraDrop;
-					award += ( getXp( baseBlock.getRegistryName() ) * totalDrops ) + ( hardness * totalDrops );
-					awardXp( player, Skill.FARMING, "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra", award, false );
+					award = addMaps( award, multiplyMap( getXp( baseBlock.getRegistryName() ), totalDrops ) );
+
+					awardMsg = "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra";
 				}
 				else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) || material.equals( Material.TALL_PLANTS ) ) && drops.size() > 0 ) //IS PLANT
 				{
@@ -732,7 +757,7 @@ public class XP
 					int age = -1;
 					int maxAge = -1;
 					if( !wasPlaced )
-						award += getXp( block.getRegistryName() ) * theDropItem.getCount();
+						award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), theDropItem.getCount() ) );
 
 					if( state.has( BlockStateProperties.AGE_0_1 ) )
 					{
@@ -779,6 +804,8 @@ public class XP
 
 					if( age == maxAge && age >= 0 || block instanceof SeaPickleBlock )
 					{
+						award = addMaps( award, getXp( block.getRegistryName() ) );
+
 						int currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
 						double extraChance = getPlantDoubleChance( theDropItem.getItem().getRegistryName() ) * currLevel;
 						int guaranteedDrop = 0;
@@ -798,11 +825,11 @@ public class XP
 						if ( guaranteedDrop + extraDrop > 0 )
 							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + ( guaranteedDrop + extraDrop ), theDropItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 
-						award += getXp( block.getRegistryName() ) * ( theDropItem.getCount() + guaranteedDrop + extraDrop );
-						awardXp( player, Skill.FARMING, "harvesting " + ( theDropItem.getCount() ) + " + " + ( guaranteedDrop + extraDrop ) + " crops", award, false );
+						award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), guaranteedDrop + extraDrop ) );
+						awardMsg = "harvesting " + ( theDropItem.getCount() ) + " + " + ( guaranteedDrop + extraDrop ) + " crops";
 					}
 					else if( !wasPlaced )
-						awardXp( player, Skill.FARMING, "breaking a plant", award * drops.get(0).getCount(), false );
+						awardMsg = "breaking a plant";
 				}
 				else if( getOreDoubleChance( block.getRegistryName() ) != 0.0f )		//IS ORE
 				{
@@ -811,7 +838,7 @@ public class XP
 					boolean noDropOre = getNoDropOre( block.getRegistryName() );
 
 					if( !wasPlaced && !isSilk )
-						award += getXp( block.getRegistryName() ) * drops.get( 0 ).getCount();
+						award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), drops.get( 0 ).getCount() ) );
 
 					if( noDropOre && !wasPlaced || !noDropOre && !isSilk )			//EXTRA DROPS
 					{
@@ -832,21 +859,20 @@ public class XP
 							extraDrop = 1;
 
 						if( !noDropOre && wasPlaced )
-							award += getXp( block.getRegistryName() ) * ( drops.get( 0 ).getCount() );
+							award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), ( drops.get( 0 ).getCount() ) ) );
 
-						String awardMessage = "mining a block";
+						awardMsg = "mining a block";
 
 						if( guaranteedDrop + extraDrop > 0 )
 						{
-							award += getXp( block.getRegistryName() ) * ( guaranteedDrop + extraDrop );
+							award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), ( guaranteedDrop + extraDrop ) ) );
 							ItemStack theDrop = new ItemStack( drops.get( 0 ).getItem(), guaranteedDrop + extraDrop );
 							block.spawnAsEntity( event.getWorld().getWorld(), event.getPos(), theDrop );
 							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + (guaranteedDrop + extraDrop), theDrop.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 						}
-						awardXp( player, Skill.MINING, awardMessage, award, false );
 					}
 					else
-						awardXp( player, Skill.MINING, "mining a block", award, false );
+						awardMsg = "mining a block";
 				}
 				else if( getLogDoubleChance( block.getRegistryName() ) != 0.0f )
 				{
@@ -875,44 +901,47 @@ public class XP
 							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + (guaranteedDrop + extraDrop), theDrop.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 						}
 
-						if( !wasPlaced )
-							award += getXp( block.getRegistryName() ) * ( drops.get( 0 ).getCount() + guaranteedDrop + extraDrop );
+						award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), ( drops.get( 0 ).getCount() + guaranteedDrop + extraDrop ) ) );
 
-						awardXp( player, Skill.WOODCUTTING, "cutting a block", award, false );
+						awardMsg = "cutting a block";
 					}
 					else
-						awardXp( player, Skill.WOODCUTTING, "cutting a block", award, false );
+						awardMsg = "cutting a block";
 				}
 				else
 				{
 					if( !wasPlaced )
 					{
-						award += getXp( block.getRegistryName() );
+						award = addMaps( award, getXp( block.getRegistryName() ) );
 						PlacedBlocks.removeOre( event.getWorld().getWorld(), event.getPos() );
 					}
 
 					switch( getSkill( correctHarvestTool( material ) ) )
 					{
 						case MINING:
-							awardXp( player, Skill.MINING, "mining a block", award, false );
+							awardMsg = "mining a block";
 							break;
 
 						case WOODCUTTING:
-							awardXp( player, Skill.WOODCUTTING, "cutting a block", award, false );
+							awardMsg = "cutting a block";
 							break;
 
 						case EXCAVATION:
-							awardXp( player, Skill.EXCAVATION, "digging a block", award, false );
+							awardMsg = "digging a block";
 							break;
 
 						case FARMING:
-							awardXp( player, Skill.FARMING, "harvesting", award, false );
+							awardMsg = "harvesting";
 							break;
 
 						default:
 //							System.out.println( "INVALID SKILL ON BREAK" );
 							break;
 					}
+				}
+				for( String skillName : award.keySet() )
+				{
+					awardXp( player, Skill.getSkill( skillName ), awardMsg, award.get( skillName ), false );
 				}
 			}
 		}
@@ -2188,10 +2217,12 @@ public class XP
 	{
 		PlayerEntity player = event.getPlayer();
 		NonNullList<ItemStack> items = event.getDrops();
-		double award = getXp( items.get( 0 ).getItem().getRegistryName() );
-		if( award == 0 )
-			award = 10.0f;
-		awardXp( player, Skill.FISHING, "catching " + items, award, false );
+		Map<String, Double> award = getXp( items.get( 0 ).getItem().getRegistryName() );
+
+		for( String skillName : award.keySet() )
+		{
+			awardXp( player, Skill.getSkill( skillName ), "catching " + items, award.get( skillName ), false );
+		}
 	}
 
 	public static int levelAtXp( float xp )

@@ -50,6 +50,16 @@
 	"pmmo.text.underwaterNightVisionUnLocked": "Povandeninis naktinis matymas veikia nuo %1$s Plaukimo lygio",
 	"pmmo.text.tooHeavy": "Jūsų %1$s yra per sunku jums naudoti! Jums reikia %2$s lygio %3$s",
 	"pmmo.text.notSkilledEnough": "Jūsų įgudžiai nepakankamai geri naudoti %1$s kaip ginkla! Reikia %2$s lygio %3$s",
+	"pmmo.text.toWear": "To wear %1$s, you need higher stats!",
+	"pmmo.text.toUseAsTool": "To use %1$s as a tool, you need higher stats!",
+	"pmmo.text.toUseAsWeapon": "To use %1$s item as a weapon, you need higher stats!",
+	"pmmo.text.Armor": "Šarvai",
+	"pmmo.text.Tool": "Įrankis",
+	"pmmo.text.Weapon": "Ginklas",
+	"pmmo.text.xpValue": "Xp Vertė",
+	"pmmo.text.oreExtraChance": "Papildomai Iškasi: %1$s%%",
+	"pmmo.text.logExtraChance": "Papildomai Nukirsi: %1$s%%",
+	"pmmo.text.plantExtraChance": "Papildomai Nuimsi Derliaus: %1$s%%",
 	"pmmo.text.setLevel": "%1$s buvo nustatytas į %2$s lygį",
 	"pmmo.text.setXp": "%1$s buvo nustatytas į %2$s taškus",
 	"pmmo.text.xpCap": "Nauji taškai turi būti nemažiau negu 0, ir nedaugiau negu du bilijonai!",
@@ -57,5 +67,7 @@
 	"pmmo.text.invalidNumberWarning": "%1$s nėra taisiklingas skaičius!",
 	"pmmo.text.skillsCleared": "Jūsų įgudžiai buvo sugražinti į pradžią!",
 	"pmmo.text.skillsResynced": "Jūsų įgudžiai buvo atnaujinti!",
-	"pmmo.text.lapisDonatorWelcome": "Sveiki atvyke, PMMO Lapis Tier Patreone %1$s!"
+	"pmmo.text.lapisDonatorWelcome": "Sveiki atvyke, PMMO Lapis Tier Patreone %1$s!",
+	"pmmo.text.dandelionDonatorWelcome": "Sveiki atvyke, PMMO Dandelion Tier Patreone %1$s!",
+	"pmmo.text.ironDonatorWelcome": "Sveiki atvyke, PMMO Iron Tier Patreone %1$s!"
 }

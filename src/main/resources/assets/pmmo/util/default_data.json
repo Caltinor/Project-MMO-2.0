@@ -404,7 +404,13 @@
 		"minecraft:wheat": {
 			"farming": 15
 		},
+		"minecraft:wheat_seeds": {
+			"farming": 15
+		},
 		"minecraft:beetroots": {
+			"farming": 20
+		},
+		"minecraft:beetroots_seeds": {
 			"farming": 20
 		},
 		"minecraft:carrots": {
@@ -429,7 +435,15 @@
 			"farming": 7,
 			"woodcutting": 1
 		},
+		"minecraft:melon_seeds": {
+			"farming": 7,
+			"woodcutting": 1
+		},
 		"minecraft:pumpkin": {
+			"farming": 35,
+			"woodcutting": 5
+		},
+		"minecraft:pumpkin_seeds": {
 			"farming": 35,
 			"woodcutting": 5
 		},

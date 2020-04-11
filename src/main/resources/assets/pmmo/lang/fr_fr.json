@@ -50,6 +50,16 @@
 	"pmmo.text.underwaterNightVisionUnLocked": "La vision nocturne sous-marine est déverrouillée depuis le niveau %1$s de Nage",
 	"pmmo.text.tooHeavy": "Votre %1$s est trop lourde pour être utilisée ! vous avez besoin de %2$s niveaux en %3$s",
 	"pmmo.text.notSkilledEnough": "Vous n'êtes pas suffisamment compétent pour utiliser %1$s en tant qu'arme ! vous avez besoin de %2$s niveaux en %3$s",
+	"pmmo.text.toWear": "To wear %1$s, you need higher stats!",
+	"pmmo.text.toUseAsTool": "To use %1$s as a tool, you need higher stats!",
+	"pmmo.text.toUseAsWeapon": "To use %1$s item as a weapon, you need higher stats!",
+	"pmmo.text.Armor": "Armor",
+	"pmmo.text.Tool": "Tool",
+	"pmmo.text.Weapon": "Weapon",
+	"pmmo.text.xpValue": "Xp Value",
+	"pmmo.text.oreExtraChance": "Extra Mined: %1$s%%",
+	"pmmo.text.logExtraChance": "Extra Chopped: %1$s%%",
+	"pmmo.text.plantExtraChance": "Extra Harvest: %1$s%%",
 	"pmmo.text.setLevel": "%1$s a été défini au niveau %2$s",
 	"pmmo.text.setXp": "%1$s a été défini à %2$s xp",
 	"pmmo.text.xpCap": "Nouvelle XP ne peux pas être moins que 0, et pas plus que 2 milliard !",
@@ -57,5 +67,7 @@
 	"pmmo.text.invalidNumberWarning": "%1$s n'est pas un nombre valide !",
 	"pmmo.text.skillsCleared": "Vos compétences ont été effacés !",
 	"pmmo.text.skillsResynced": "Vos compétences ont été resynchronisés !",
-	"pmmo.text.lapisDonatorWelcome": "bienvenue %1$s, tier Lapis du Patreon PMMO !"
+	"pmmo.text.lapisDonatorWelcome": "bienvenue %1$s, tier Lapis du Patreon PMMO !",
+	"pmmo.text.dandelionDonatorWelcome": "Welcome, PMMO Dandelion Tier Patreon %1$s!",
+	"pmmo.text.ironDonatorWelcome": "Welcome, PMMO Iron Tier Patreon %1$s!"
 }
