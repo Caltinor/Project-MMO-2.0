@@ -49,6 +49,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.ModList;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import javax.annotation.Resource;
 
@@ -130,7 +131,7 @@ public class XP
 		skillTextFormat.put( "crafting", TextFormatting.GOLD );
 ////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
 //		lapisDonators.add( "Harmonised" );
-//		dandelionDonators.add( "Harmonised" );
+		dandelionDonators.add( "didis54" );
 //		ironDonators.add( "Harmonised" );
 ////////////////////////////////////NO_DROP_VALUES/////////////////////////////////////////////////
 		noDropOres.put( Blocks.IRON_ORE.getRegistryName(), true );
@@ -1166,39 +1167,51 @@ public class XP
 	public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
-		CompoundNBT skillsTag = getSkillsTag( player );
-		Set<String> keySet = skillsTag.keySet();
-
-		if( lapisDonators.contains( player.getDisplayName().getString() ) )
+		if( !player.world.isRemote() )
 		{
-			player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
+			CompoundNBT skillsTag = getSkillsTag( player );
+			Set<String> keySet = skillsTag.keySet();
+
+			if( lapisDonators.contains( player.getDisplayName().getString() ) )
 			{
-				thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.text.lapisDonatorWelcome", thePlayer.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
-			});
-		}
-		else if( dandelionDonators.contains( player.getDisplayName().getString() ) )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.dandelionDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), false );
-		else if( ironDonators.contains( player.getDisplayName().getString() ) )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.ironDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), false );
-
-		AttributeHandler.updateReach( player );
-		NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
-
-		for( String tag : keySet )
-		{
-			if( Skill.getInt( tag ) == 0 )
-			{
-				if( XP.validSkills.contains( tag.toLowerCase() ) )
-					skillsTag.put( tag.toLowerCase(), skillsTag.get(tag) );
-
-				System.out.println( "REMOVING INVALID SKILL " + tag );
-				skillsTag.remove( tag );
+				player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
+				{
+					thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.text.lapisDonatorWelcome", thePlayer.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
+				});
 			}
-			else
-				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
-		}
+			else if( dandelionDonators.contains( player.getDisplayName().getString() ) )
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.dandelionDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), false );
+			else if( ironDonators.contains( player.getDisplayName().getString() ) )
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.ironDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), false );
 
-		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.welcome" ), false );
+			AttributeHandler.updateReach( player );
+			NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.wearReq, "wearReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.toolReq, "toolReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.weaponReq, "weaponReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.mobReq, "mobReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
+
+			for( String tag : keySet )
+			{
+				if( Skill.getInt( tag ) == 0 )
+				{
+					if( XP.validSkills.contains( tag.toLowerCase() ) )
+						skillsTag.put( tag.toLowerCase(), skillsTag.get(tag) );
+
+					System.out.println( "REMOVING INVALID SKILL " + tag );
+					skillsTag.remove( tag );
+				}
+				else
+					NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
+			}
+
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.welcome" ), false );
+		}
 	}
 
 	public static void handleRightClickItem( RightClickItem event )
@@ -1986,9 +1999,8 @@ public class XP
 		if( player instanceof ServerPlayerEntity )
 			NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
 
-//		persistTag.putString( "lastSkill", skillName );
-		if( !skip )
-			System.out.println( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getFloat( skillName ) );
+//		if( !skip )
+//			System.out.println( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getFloat( skillName ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
@@ -2063,9 +2075,9 @@ public class XP
 		{
 			Map<String, Double> reqs = Requirements.toolReq.get( item.getRegistryName().toString() );
 
-			int gap;
+			int gap = 0;
 
-			if( player.world.isRemote() )
+			if( player.world.isRemote() && XPOverlayGUI.skills.size() > 0 )
 			{
 				gap = (int) Math.floor( reqs.entrySet().stream()
 						.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp ) ) ) )

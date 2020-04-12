@@ -1,10 +1,12 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -49,7 +51,69 @@ public class MessageReqUpdate
     {
         ctx.get().enqueueWork(() ->
         {
+            Map<String, Map<String, Double>> newPackage = new HashMap<>();
 
+            if( !packet.outputName.toLowerCase().equals( "wipe" ) )
+            {
+                for( String topKey : packet.reqPackage.keySet() )
+                {
+                    newPackage.put( topKey, new HashMap<>() );
+                    for( String botKey : packet.reqPackage.getCompound( topKey ).keySet() )
+                    {
+                        newPackage.get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getDouble( botKey ) );
+                    }
+                }
+            }
+
+            switch( packet.outputName.toLowerCase() )
+            {
+                case "wipe":
+                    Requirements.wearReq = new HashMap<>();
+                    Requirements.toolReq = new HashMap<>();
+                    Requirements.weaponReq = new HashMap<>();
+                    Requirements.mobReq = new HashMap<>();
+                    Requirements.xpValue = new HashMap<>();
+                    Requirements.oreInfo = new HashMap<>();
+                    Requirements.logInfo = new HashMap<>();
+                    Requirements.plantInfo = new HashMap<>();
+                    break;
+
+                case "wearreq":
+                    Requirements.wearReq = newPackage;
+                    break;
+
+                case "toolreq":
+                    Requirements.toolReq = newPackage;
+                    break;
+
+                case "weaponreq":
+                    Requirements.weaponReq = newPackage;
+                    break;
+
+                case "mobreq":
+                    Requirements.mobReq = newPackage;
+                    break;
+
+                case "xpvalue":
+                    Requirements.xpValue = newPackage;
+                    break;
+
+                case "oreinfo":
+                    Requirements.oreInfo = newPackage;
+                    break;
+
+                case "loginfo":
+                    Requirements.logInfo = newPackage;
+                    break;
+
+                case "plantinfo":
+                    Requirements.plantInfo = newPackage;
+                    break;
+
+                default:
+                    System.out.println( "WRONG SYNC NAME" );
+                    break;
+            }
         });
         ctx.get().setPacketHandled(true);
     }
