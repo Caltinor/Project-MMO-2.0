@@ -38,6 +38,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -114,6 +115,7 @@ public class XP
 		skillColors.put( "swimming", 0x3366ff );
 		skillColors.put( "fishing", 0x00ccff );
 		skillColors.put( "crafting", 0xff9900 );
+		skillColors.put( "magic", 0x0000ff );
 
 		skillTextFormat.put( "mining", TextFormatting.AQUA );
 		skillTextFormat.put( "building", TextFormatting.AQUA );
@@ -129,6 +131,7 @@ public class XP
 		skillTextFormat.put( "swimming", TextFormatting.AQUA );
 		skillTextFormat.put( "fishing", TextFormatting.AQUA );
 		skillTextFormat.put( "crafting", TextFormatting.GOLD );
+		skillTextFormat.put( "magic", TextFormatting.BLUE );
 ////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
 //		lapisDonators.add( "Harmonised" );
 		dandelionDonators.add( "didis54" );
@@ -580,7 +583,7 @@ public class XP
 
 	public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
 	{
-		if( event.getEntity() instanceof PlayerEntity )
+		if( event.getEntity() instanceof PlayerEntity && !(event.getEntity() instanceof FakePlayer) )
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntity();
 
@@ -620,7 +623,7 @@ public class XP
 
 	public static void handleBroken( BreakEvent event )
 	{
-		if( event.getPlayer() instanceof PlayerEntity )
+		if( event.getPlayer() instanceof PlayerEntity && !(event.getPlayer() instanceof FakePlayer) )
 		{
 			PlayerEntity player = event.getPlayer();
 
@@ -937,151 +940,154 @@ public class XP
 
 	public static void handleDamage( LivingDamageEvent event )
 	{
-		float damage = event.getAmount();
-		float startDmg = damage;
-		LivingEntity target = event.getEntityLiving();
-		if( target instanceof PlayerEntity )
+		if( !(event.getEntityLiving() instanceof FakePlayer || event.getEntity() instanceof FakePlayer) )
 		{
-			PlayerEntity player = (PlayerEntity) target;
-			CompoundNBT skillsTag = getSkillsTag( player );
-			double agilityXp = 0;
-			double enduranceXp = 0;
-			boolean hideEndurance = false;
+			float damage = event.getAmount();
+			float startDmg = damage;
+			LivingEntity target = event.getEntityLiving();
+			if( target instanceof PlayerEntity )
+			{
+				PlayerEntity player = (PlayerEntity) target;
+				CompoundNBT skillsTag = getSkillsTag( player );
+				double agilityXp = 0;
+				double enduranceXp = 0;
+				boolean hideEndurance = false;
 
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
-			int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
-			double endurancePerLevel = Config.config.endurancePerLevel.get();
-			double maxEndurance = Config.config.maxEndurance.get();
-			double endurePercent = (enduranceLevel * endurancePerLevel);
-			if( endurePercent > maxEndurance )
-				endurePercent = maxEndurance;
-			endurePercent /= 100;
+				int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
+				double endurancePerLevel = Config.config.endurancePerLevel.get();
+				double maxEndurance = Config.config.maxEndurance.get();
+				double endurePercent = (enduranceLevel * endurancePerLevel);
+				if( endurePercent > maxEndurance )
+					endurePercent = maxEndurance;
+				endurePercent /= 100;
 
-			float endured = damage * (float) endurePercent;
-			if( endured < 0 )
-				endured = 0;
+				float endured = damage * (float) endurePercent;
+				if( endured < 0 )
+					endured = 0;
 
-			damage -= endured;
+				damage -= endured;
 
-			enduranceXp = ( damage * 5 ) + ( endured * 10 );
+				enduranceXp = ( damage * 5 ) + ( endured * 10 );
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
-			if( event.getSource().getDamageType().equals( "fall" ) )
-			{
-				double award = startDmg;
-//				float savedExtra = 0;
-				int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
-				int saved = 0;
-
-				double maxFallSaveChance = Config.config.maxFallSaveChance.get();
-				double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
-
-				double chance = agilityLevel * saveChancePerLevel;
-				if( chance > maxFallSaveChance )
-					chance = maxFallSaveChance;
-				for( int i = 0; i < damage; i++ )
+				if( event.getSource().getDamageType().equals( "fall" ) )
 				{
-					if( Math.ceil( Math.random() * 100 ) <= chance )
+					double award = startDmg;
+//					float savedExtra = 0;
+					int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
+					int saved = 0;
+
+					double maxFallSaveChance = Config.config.maxFallSaveChance.get();
+					double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
+
+					double chance = agilityLevel * saveChancePerLevel;
+					if( chance > maxFallSaveChance )
+						chance = maxFallSaveChance;
+					for( int i = 0; i < damage; i++ )
 					{
-						saved++;
+						if( Math.ceil( Math.random() * 100 ) <= chance )
+						{
+							saved++;
+						}
 					}
+					damage -= saved;
+
+					if( saved != 0 && player.getHealth() > damage )
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedFall", saved ), true );
+
+					award = saved * 30;
+
+					agilityXp = award;
 				}
-				damage -= saved;
 
-				if( saved != 0 && player.getHealth() > damage )
-					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedFall", saved ), true );
+				event.setAmount( damage );
 
-				award = saved * 30;
+				if( player.getHealth() > damage )
+				{
+					if( agilityXp > 0 )
+						hideEndurance = true;
 
-				agilityXp = award;
+					if( event.getSource().getTrueSource() != null )
+						awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getFormattedText(), enduranceXp, hideEndurance );
+					else
+						awardXp( player, Skill.ENDURANCE, event.getSource().getDamageType(), enduranceXp, hideEndurance );
+
+					if( agilityXp > 0 )
+						awardXp( player, Skill.AGILITY, "surviving " + startDmg + " fall damage", agilityXp, false );
+				}
 			}
-
-			event.setAmount( damage );
-
-			if( player.getHealth() > damage )
-			{
-				if( agilityXp > 0 )
-					hideEndurance = true;
-
-				if( event.getSource().getTrueSource() != null )
-					awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getFormattedText(), enduranceXp, hideEndurance );
-				else
-					awardXp( player, Skill.ENDURANCE, event.getSource().getDamageType(), enduranceXp, hideEndurance );
-
-				if( agilityXp > 0 )
-					awardXp( player, Skill.AGILITY, "surviving " + startDmg + " fall damage", agilityXp, false );
-			}
-		}
 
 ///////////////////////////////////////Attacking////////////////////////////////////////////////////////////
 
-		if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
-		{
-			PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
-			if( !player.isCreative() )
+			if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
 			{
-				int gap = getItemReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
-				if( gap > 0 )
-					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-
-				event.setAmount( event.getAmount() / (gap + 1) );
-				damage = event.getAmount();
-
-				float amount = 0;
-				float playerHealth = player.getHealth();
-				float targetHealth = target.getHealth();
-				float targetMaxHealth = target.getMaxHealth();
-				float lowHpBonus = 1.0f;
-
-				if( damage > targetHealth )		//no overkill xp
-					damage = targetHealth;
-
-				amount += damage * 3;
-
-				if ( startDmg >= targetHealth )	//kill reduce xp
-					amount /= 2;
-
-				if( startDmg >= targetMaxHealth )	//max hp kill reduce xp
-					amount /= 1.5;
-
-//				player.setHealth( 1f );
-
-				if( target instanceof AnimalEntity )		//reduce xp if passive mob
-					amount /= 2;
-				else if( playerHealth <= 10 )				//if aggresive mob and low hp
+				PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
+				if( !player.isCreative() )
 				{
-					lowHpBonus += ( 11 - playerHealth ) / 5;
-					if( playerHealth <= 2 )
-						lowHpBonus += 1;
-				}
+					int gap = getItemReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
+					if( gap > 0 )
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
-				if( event.getSource().damageType.equals( "arrow" ) )
-				{
-					double distance = event.getEntity().getDistance( player );
-					if( distance > 16 )
-						distance -= 16;
+					event.setAmount( event.getAmount() / (gap + 1) );
+					damage = event.getAmount();
+
+					float amount = 0;
+					float playerHealth = player.getHealth();
+					float targetHealth = target.getHealth();
+					float targetMaxHealth = target.getMaxHealth();
+					float lowHpBonus = 1.0f;
+
+					if( damage > targetHealth )		//no overkill xp
+						damage = targetHealth;
+
+					amount += damage * 3;
+
+					if ( startDmg >= targetHealth )	//kill reduce xp
+						amount /= 2;
+
+					if( startDmg >= targetMaxHealth )	//max hp kill reduce xp
+						amount /= 1.5;
+
+//					player.setHealth( 1f );
+
+					if( target instanceof AnimalEntity )		//reduce xp if passive mob
+						amount /= 2;
+					else if( playerHealth <= 10 )				//if aggresive mob and low hp
+					{
+						lowHpBonus += ( 11 - playerHealth ) / 5;
+						if( playerHealth <= 2 )
+							lowHpBonus += 1;
+					}
+
+					if( event.getSource().damageType.equals( "arrow" ) )
+					{
+						double distance = event.getEntity().getDistance( player );
+						if( distance > 16 )
+							distance -= 16;
+						else
+							distance = 0;
+
+						amount += (float) ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
+
+						amount *= lowHpBonus;
+						awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
+					}
 					else
-						distance = 0;
+					{
+						amount *= lowHpBonus;
+						awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
+					}
 
-					amount += (float) ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
-
-					amount *= lowHpBonus;
-					awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
+					if( gap > 0 )
+						player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 				}
-				else
-				{
-					amount *= lowHpBonus;
-					awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
-				}
-
-				if( gap > 0 )
-					player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 			}
 		}
 	}
 
 	public static void handleJump( LivingJumpEvent event )
 	{
-		if( event.getEntityLiving() instanceof PlayerEntity )
+		if( event.getEntityLiving() instanceof PlayerEntity && !(event.getEntityLiving() instanceof FakePlayer) )
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 
@@ -1806,7 +1812,7 @@ public class XP
 
 	public static void awardXp( PlayerEntity player, Skill skill, String sourceName, double amount, boolean skip )
 	{
-		if( amount <= 0.0f || player.world.isRemote || player.getDisplayName().getString().toLowerCase().equals( "mekanism" ) )
+		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer || player.getDisplayName().getString().toLowerCase().equals( "mekanism" ) )
 			return;
 
 		if( skill == skill.INVALID_SKILL )
@@ -2086,10 +2092,12 @@ public class XP
 			int gap = getItemReqGap( player, item.getRegistryName(), "wear" );
 			if( gap > 0 )
 				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", item.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-			int slowAmp = gap / 5 ;
+			int slowAmp = gap / 3;
 
 			if( slowAmp > 9 )
 				slowAmp = 9;
+
+			System.out.println( slowAmp );
 
 			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 50, slowAmp, false, true ) );
 		}

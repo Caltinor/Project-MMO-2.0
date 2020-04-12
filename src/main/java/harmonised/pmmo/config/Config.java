@@ -19,28 +19,6 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> baseXp;
         public ConfigHelper.ConfigValueListener<Integer> xpIncreasePerLevel;
 
-        //LevelReq
-        public ConfigHelper.ConfigValueListener<Integer> levelReqLeatherArmor;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqChainArmor;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqIronArmor;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqGoldArmor;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqDiamondArmor;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqTurtleArmor;
-
-        public ConfigHelper.ConfigValueListener<Integer> levelReqWoodTool;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqStoneTool;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqIronTool;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqGoldTool;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqDiamondTool;
-
-        public ConfigHelper.ConfigValueListener<Integer> levelReqWoodWeapon;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqStoneWeapon;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqIronWeapon;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqGoldWeapon;
-        public ConfigHelper.ConfigValueListener<Integer> levelReqDiamondWeapon;
-
-
-
         //Multipliers
         public ConfigHelper.ConfigValueListener<Double> globalMultiplier;
         public ConfigHelper.ConfigValueListener<Double> peacefulMultiplier;
@@ -153,101 +131,6 @@ public class Config
                         .comment( "What is the xp increase per level ( baseXp + level * xpPerLevel )" )
                         .translation( "pmmo.xpIncreasePerLevel" )
                         .defineInRange( "xpIncreasePerLevel", 50, 1, 1000000 ) );
-
-                builder.pop();
-            }
-
-            builder.push( "Armor Level Requirements" );
-            {
-                this.levelReqLeatherArmor = subscriber.subscribe(builder
-                        .comment( "Level Required to wear Leather Equipment" )
-                        .translation( "pmmo.levelReqLeatherArmor" )
-                        .defineInRange( "levelReqLeatherArmor", 5, 1, 1000000 ) );
-
-                this.levelReqChainArmor = subscriber.subscribe(builder
-                        .comment( "Level Required to wear Chain Equipment" )
-                        .translation( "pmmo.levelReqChainArmor" )
-                        .defineInRange( "levelReqChainArmor", 10, 1, 1000000 ) );
-
-                this.levelReqIronArmor = subscriber.subscribe(builder
-                        .comment( "Level Required to wear Iron Equipment" )
-                        .translation( "pmmo.levelReqIronArmor" )
-                        .defineInRange( "levelReqIronArmor", 20, 1, 1000000 ) );
-
-                this.levelReqGoldArmor = subscriber.subscribe(builder
-                        .comment( "Level Required to wear Gold Equipment" )
-                        .translation( "pmmo.levelReqGoldArmor" )
-                        .defineInRange( "levelReqGoldArmor", 30, 1, 1000000 ) );
-
-                this.levelReqDiamondArmor = subscriber.subscribe(builder
-                        .comment( "Level Required to wear Diamond Equipment" )
-                        .translation( "pmmo.levelReqDiamondArmor" )
-                        .defineInRange( "levelReqDiamondArmor", 40, 1, 1000000 ) );
-
-                this.levelReqTurtleArmor = subscriber.subscribe(builder
-                        .comment( "Level Required to wear Turtle Equipment" )
-                        .translation( "pmmo.levelReqTurtleArmor" )
-                        .defineInRange( "levelReqTurtleArmor", 10, 1, 1000000 ) );
-
-                builder.pop();
-            }
-
-            builder.push( "Tool Level Requirements" );
-            {
-                this.levelReqWoodTool = subscriber.subscribe(builder
-                        .comment( "Level Required to use Wooden Tools" )
-                        .translation( "pmmo.levelReqWoodTool" )
-                        .defineInRange( "levelReqWoodTool", 1, 1, 1000000 ) );
-
-                this.levelReqStoneTool = subscriber.subscribe(builder
-                        .comment( "Level Required to use Stone Tools" )
-                        .translation( "pmmo.levelReqStoneTool" )
-                        .defineInRange( "levelReqStoneTool", 5, 1, 1000000 ) );
-
-                this.levelReqIronTool = subscriber.subscribe(builder
-                        .comment( "Level Required to use Iron Tools" )
-                        .translation( "pmmo.levelReqIronTool" )
-                        .defineInRange( "levelReqIronTool", 20, 1, 1000000 ) );
-
-                this.levelReqGoldTool = subscriber.subscribe(builder
-                        .comment( "Level Required to use Golden Tools" )
-                        .translation( "pmmo.levelReqGoldTool" )
-                        .defineInRange( "levelReqGoldTool", 30, 1, 1000000 ) );
-
-                this.levelReqDiamondTool = subscriber.subscribe(builder
-                        .comment( "Level Required to use Diamond Tools" )
-                        .translation( "pmmo.levelReqDiamondTool" )
-                        .defineInRange( "levelReqDiamondTool", 40, 1, 1000000 ) );
-
-                builder.pop();
-            }
-
-            builder.push( "Weapon Level Requirements" );
-            {
-                this.levelReqWoodWeapon = subscriber.subscribe(builder
-                        .comment( "Level Required to use Wooden Weapons" )
-                        .translation( "pmmo.levelReqWoodWeapon" )
-                        .defineInRange( "levelReqWoodWeapon", 1, 1, 1000000 ) );
-
-                this.levelReqStoneWeapon = subscriber.subscribe(builder
-                        .comment( "Level Required to use Stone Weapons" )
-                        .translation( "pmmo.levelReqStoneWeapon" )
-                        .defineInRange( "levelReqStoneWeapon", 5, 1, 1000000 ) );
-
-                this.levelReqIronWeapon = subscriber.subscribe(builder
-                        .comment( "Level Required to use Iron Weapons" )
-                        .translation( "pmmo.levelReqIronWeapon" )
-                        .defineInRange( "levelReqIronWeapon", 20, 1, 1000000 ) );
-
-                this.levelReqGoldWeapon = subscriber.subscribe(builder
-                        .comment( "Level Required to use Golden Weapons" )
-                        .translation( "pmmo.levelReqGoldWeapon" )
-                        .defineInRange( "levelReqGoldWeapon", 30, 1, 1000000 ) );
-
-                this.levelReqDiamondWeapon = subscriber.subscribe(builder
-                        .comment( "Level Required to use Diamond Weapons" )
-                        .translation( "pmmo.levelReqDiamondWeapon" )
-                        .defineInRange( "levelReqDiamondWeapon", 40, 1, 1000000 ) );
 
                 builder.pop();
             }

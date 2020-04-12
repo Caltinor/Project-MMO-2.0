@@ -12,6 +12,10 @@
 		"minecraft:netherite_boots": {
 			"endurance": 60
 		},
+		"minecraft:elytra": {
+			"agility": 40,
+			"endurance": 20
+		},
 		"minecraft:diamond_helmet": {
 			"endurance": 40
 		},
@@ -24,28 +28,28 @@
 		"minecraft:diamond_boots": {
 			"endurance": 40
 		},
-		"minecraft:chainmail_helmet": {
-			"endurance": 30
-		},
-		"minecraft:chainmail_chestplate": {
-			"endurance": 30
-		},
-		"minecraft:chainmail_leggings": {
-			"endurance": 30
-		},
-		"minecraft:chainmail_boots": {
-			"endurance": 30
-		},
 		"minecraft:iron_helmet": {
-			"endurance": 20
+			"endurance": 30
 		},
 		"minecraft:iron_chestplate": {
-			"endurance": 20
+			"endurance": 30
 		},
 		"minecraft:iron_leggings": {
-			"endurance": 20
+			"endurance": 30
 		},
 		"minecraft:iron_boots": {
+			"endurance": 30
+		},
+		"minecraft:chainmail_helmet": {
+			"endurance": 20
+		},
+		"minecraft:chainmail_chestplate": {
+			"endurance": 20
+		},
+		"minecraft:chainmail_leggings": {
+			"endurance": 20
+		},
+		"minecraft:chainmail_boots": {
 			"endurance": 20
 		},
 		"minecraft:golden_helmet": {
@@ -148,6 +152,13 @@
 		},
 		"minecraft:netherite_sword": {
 			"combat": 60
+		},
+		"minecraft:crossbow": {
+			"archery": 20
+		},
+		"minecraft:bow": {
+			"archery": 1,
+			"agility": 5
 		},
 		"minecraft:diamond_pickaxe": {
 			"combat": 40
@@ -253,30 +264,91 @@
 		"minecraft:granite": {
 			"mining": 0.4
 		},
+		"minecraft:polished_granite": {
+			"mining": 0.4
+		},
 		"minecraft:diorite": {
+			"mining": 0.3
+		},
+		"minecraft:polished_diorite": {
 			"mining": 0.3
 		},
 		"minecraft:andesite": {
 			"mining": 0.5
 		},
+		"minecraft:polished_andesite": {
+			"mining": 0.5
+		},
+		"minecraft:stone": {
+			"mining": 0.1
+		},
+		"minecraft:stone_bricks": {
+			"mining": 0.7
+		},
 		"minecraft:cobblestone": {
 			"mining": 0.5
+		},
+		"minecraft:mossy_cobblestone": {
+			"mining": 1.5
+		},
+		"minecraft:netherrack": {
+			"mining": 0.1
+		},
+		"minecraft:ice": {
+			"mining": 0.1
+		},
+		"minecraft:prismarine": {
+			"mining": 6.5
+		},
+		"minecraft:dark_prismarine": {
+			"mining": 6.66
+		},
+		"minecraft:prismarine_bricks": {
+			"mining": 5
+		},
+		"minecraft:purpur_block": {
+			"mining": 5
+		},
+		"minecraft:purpur_pillar": {
+			"mining": 6.5
 		},
 		"minecraft:infested_stone": {
 			"mining": 200
 		},
+		"minecraft:bedrock": {
+			"mining": 9001
+		},
 		"minecraft:dirt": {
 			"excavation": 1.5
 		},
+		"minecraft:coarse_dirt": {
+			"excavation": 1.7
+		},
+		"minecraft:podzol": {
+			"excavation": 5,
+			"farming": 1
+		},
+		"minecraft:grass_block": {
+			"excavation": 2
+		},
 		"minecraft:sand": {
 			"excavation": 1
+		},
+		"minecraft:red_sand": {
+			"excavation": 1.2
 		},
 		"minecraft:gravel": {
 			"excavation": 2
 		},
 		"minecraft:mycelium": {
 			"excavation": 15,
-			"farming": 5
+			"farming": 1
+		},
+		"minecraft:soul_sand": {
+			"excavation": 5
+		},
+		"minecraft:snow_block": {
+			"excavation": 3.5
 		},
 		"minecraft:stripped_oak_log": {
 			"woodcutting": 18
@@ -294,6 +366,24 @@
 			"woodcutting": 11
 		},
 		"minecraft:stripped_acacia_log": {
+			"woodcutting": 22
+		},
+		"minecraft:stripped_oak_wood": {
+			"woodcutting": 18
+		},
+		"minecraft:stripped_birch_wood": {
+			"woodcutting": 19
+		},
+		"minecraft:stripped_spruce_wood": {
+			"woodcutting": 15
+		},
+		"minecraft:stripped_jungle_wood": {
+			"woodcutting": 12
+		},
+		"minecraft:stripped_dark_oak_wood": {
+			"woodcutting": 11
+		},
+		"minecraft:stripped_acacia_wood": {
 			"woodcutting": 22
 		},
 		"minecraft:oak_sapling": {
@@ -330,6 +420,24 @@
 			"woodcutting": 11
 		},
 		"minecraft:acacia_log": {
+			"woodcutting": 22
+		},
+		"minecraft:oak_wood": {
+			"woodcutting": 18
+		},
+		"minecraft:birch_wood": {
+			"woodcutting": 19
+		},
+		"minecraft:spruce_wood": {
+			"woodcutting": 15
+		},
+		"minecraft:jungle_wood": {
+			"woodcutting": 12
+		},
+		"minecraft:dark_oak_wood": {
+			"woodcutting": 11
+		},
+		"minecraft:acacia_wood": {
 			"woodcutting": 22
 		},
 		"minecraft:oak_planks": {
@@ -469,6 +577,18 @@
 		"minecraft:oxeye_daisy": {
 			"farming": 14.5
 		},
+		"minecraft:sunflower": {
+			"farming": 17.5
+		},
+		"minecraft:lilac": {
+			"farming": 16.5
+		},
+		"minecraft:rose_bush": {
+			"farming": 19.5
+		},
+		"minecraft:peony": {
+			"farming": 22.5
+		},
 		"minecraft:dead_bush": {
 			"farming": 5
 		},
@@ -492,6 +612,9 @@
 		},
 		"minecraft:grass": {
 			"farming": 2.5
+		},
+		"minecraft:large_fern": {
+			"farming": 5.5
 		},
 		"minecraft:tall_grass": {
 			"farming": 6

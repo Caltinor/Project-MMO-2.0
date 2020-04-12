@@ -9,9 +9,11 @@ import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -190,6 +192,11 @@ public class ClientEventHandler
                     level = 1;
                 tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", DP.dp( plantInfo.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
             }
+        }
+
+        if( item instanceof BlockItem && ((BlockItem) item).getBlock().getBlockHardness( null, player.world, player.getPosition() ) != 0 )
+        {
+            tooltip.add( new TranslationTextComponent( "pmmo.text.hardness", DP.dp( ((BlockItem) item).getBlock().getBlockHardness( null, player.world, player.getPosition() ) ) ) );
         }
     }
 }
