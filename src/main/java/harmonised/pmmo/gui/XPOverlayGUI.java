@@ -343,8 +343,8 @@ public class XPOverlayGUI extends Gui
 	public static void clearXP()
 	{
 		skills = new HashMap<>();
-		skillsKeys = new ArrayList<String>();
-		xpDrops = new ArrayList<XpDrop>();
+		skillsKeys = new ArrayList<>();
+		xpDrops = new ArrayList<>();
 		xp = 0;
 		pos = 1;
 		goalPos = 1;

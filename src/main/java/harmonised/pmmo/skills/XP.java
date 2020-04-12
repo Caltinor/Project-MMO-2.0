@@ -91,7 +91,9 @@ public class XP
 	public static float globalMultiplier = 1;
 	public static float maxXp = xpAtLevel( 999 );
 	public static Set<String> lapisDonators = new HashSet<>();
-	
+	public static Set<String> dandelionDonators = new HashSet<>();
+	public static Set<String> ironDonators = new HashSet<>();
+
 	public static void initValues()
 	{
 ////////////////////////////////////VALID_SKILLS///////////////////////////////////////////////////
@@ -196,6 +198,7 @@ public class XP
 		skillTextFormat.put( "fishing", TextFormatting.AQUA );
 		skillTextFormat.put( "crafting", TextFormatting.GOLD );
 ////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
+		ironDonators.add( "didis54" );
 //		lapisDonators.add( "Harmonised" );
 ////////////////////////////////////ORE_DOUBLE_VALUES//////////////////////////////////////////////
 		oreDoubleValues.put( Blocks.COAL_ORE.getRegistryName(), 1.0f );
@@ -1044,6 +1047,10 @@ public class XP
 				thePlayer.sendStatusMessage( new TextComponentString( "Welcome, PMMO Lapis Tier Patreon " + player.getDisplayNameString() + "!" ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
 			});
 		}
+		else if( dandelionDonators.contains( player.getDisplayNameString() ) )
+			player.sendStatusMessage( new TextComponentString( "Welcome, PMMO Dandelion Tier Patreon " + player.getDisplayNameString() + "!" ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), false );
+		else if( ironDonators.contains( player.getDisplayNameString() ) )
+			player.sendStatusMessage( new TextComponentString( "Welcome, PMMO Iron Tier Patreon " + player.getDisplayNameString() + "!" ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), false );
 
 		NetworkHandler.sendToPlayer( new MessageXp( 0f, "CLEAR", 0f, true ), (EntityPlayerMP) player );
 
