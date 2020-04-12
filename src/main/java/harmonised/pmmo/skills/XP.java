@@ -454,30 +454,6 @@ public class XP
 			return 0.0f;
 	}
 
-	public static int getWeaponLevelReq( ItemTier tier )
-	{
-		if( weaponLevelReq.get( tier ) != null )
-			return weaponLevelReq.get( tier );
-		else
-			return 0;
-	}
-
-	public static int getToolLevelReq( ItemTier tier )
-	{
-		if( toolLevelReq.get( tier ) != null )
-			return toolLevelReq.get( tier );
-		else
-			return 0;
-	}
-
-	public static int getWornLevelReq( ArmorMaterial material )
-	{
-		if( wornLevelReq.get( material ) != null )
-			return wornLevelReq.get( material );
-		else
-			return 0;
-	}
-
 	public static String checkMaterial( Material material )
 	{
 		if( material.equals( Material.AIR ) )
@@ -941,9 +917,14 @@ public class XP
 							break;
 					}
 				}
+
+				int gap = getItemReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
+				if( gap > 0 )
+					player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
+
 				for( String skillName : award.keySet() )
 				{
-					awardXp( player, Skill.getSkill( skillName ), awardMsg, award.get( skillName ), false );
+					awardXp( player, Skill.getSkill( skillName ), awardMsg, award.get( skillName ) / (gap + 1), false );
 				}
 			}
 		}
@@ -1038,8 +1019,13 @@ public class XP
 			PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
 			if( !player.isCreative() )
 			{
-				checkHandItemDamage( event, player );
+				int gap = getItemReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
+				if( gap > 0 )
+					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+
+				event.setAmount( event.getAmount() / (gap + 1) );
 				damage = event.getAmount();
+
 				float amount = 0;
 				float playerHealth = player.getHealth();
 				float targetHealth = target.getHealth();
@@ -1079,13 +1065,16 @@ public class XP
 					amount += (float) ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
 
 					amount *= lowHpBonus;
-					awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount, false );
+					awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
 				}
 				else
 				{
 					amount *= lowHpBonus;
-					awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount, false );
+					awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
 				}
+
+				if( gap > 0 )
+					player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 			}
 		}
 	}
@@ -1633,7 +1622,6 @@ public class XP
 		keys.forEach( ( enchant ) ->
 		{
 			int level = newEnchants.get( enchant );
-			System.out.println( enchant + " " + level );
 
 			int maxPlayerBypass = (int) Math.floor( (double) currLevel / (double) levelsPerOneEnchantBypass );
 			if( maxPlayerBypass > maxEnchantmentBypass )
@@ -1779,7 +1767,12 @@ public class XP
 				break;
 		}
 
-		checkHandItemSpeed( event, player );
+		int gap = getItemReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
+
+		if( gap > 0 )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+
+		event.setNewSpeed( event.getNewSpeed() / (gap + 1) );
 	}
 
 	public static CompoundNBT getSkillsTag( PlayerEntity player )
@@ -1813,7 +1806,7 @@ public class XP
 
 	public static void awardXp( PlayerEntity player, Skill skill, String sourceName, double amount, boolean skip )
 	{
-		if( amount <= 0.0f || player.world.isRemote )
+		if( amount <= 0.0f || player.world.isRemote || player.getDisplayName().getString().toLowerCase().equals( "mekanism" ) )
 			return;
 
 		if( skill == skill.INVALID_SKILL )
@@ -2045,55 +2038,42 @@ public class XP
 			return a - b;
 	}
 
-	public static void checkHandItemDamage( LivingDamageEvent event, PlayerEntity player )
+	public static int getItemReqGap( PlayerEntity player, ResourceLocation res, String type )
 	{
 		if( !player.getHeldItemMainhand().isEmpty() )
 		{
-			Item item = player.getHeldItemMainhand().getItem();
 			CompoundNBT skillsTag = getSkillsTag( player );
 
-			if( !checkReq( player, item.getRegistryName(), "weapon" ) )
+			if( !checkReq( player, res, type ) )
 			{
-				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", item.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-				Map<String, Double> reqs = Requirements.weaponReq.get( item.getRegistryName().toString() );
+				Map<String, Double> reqs;
+				switch( type )
+				{
+					case "wear":
+						reqs = Requirements.wearReq.get( res.toString() );
+						break;
 
-				int gap = (int) Math.floor( reqs.entrySet().stream()
-														   .map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
-														   .reduce( 0D, Math::max ) );
+					case "tool":
+						reqs = Requirements.toolReq.get( res.toString() );
+						break;
 
-				event.setAmount( event.getAmount() / (gap + 1) );
-			}
-		}
-	}
+					case "weapon":
+						reqs = Requirements.weaponReq.get( res.toString() );
+						break;
 
-	public static void checkHandItemSpeed( PlayerEvent.BreakSpeed event, PlayerEntity player )
-	{
-		Item item = player.getHeldItemMainhand().getItem();
-		CompoundNBT skillsTag = getSkillsTag( player );
+					default:
+						System.out.println( "PLEASE REPORT THIS IF YOU SEE ME" );
+						return 0;
+				}
 
-		if( !checkReq( player, item.getRegistryName(), "tool" ) )
-		{
-			Map<String, Double> reqs = Requirements.toolReq.get( item.getRegistryName().toString() );
 
-			int gap = 0;
-
-			if( player.world.isRemote() && XPOverlayGUI.skills.size() > 0 )
-			{
-				gap = (int) Math.floor( reqs.entrySet().stream()
-						.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp ) ) ) )
-						.reduce( 0D, Math::max ) );
-
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUseAsTool", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
-			}
-			else
-			{
-				gap = (int) Math.floor( reqs.entrySet().stream()
+				return (int) Math.floor( reqs.entrySet().stream()
 						.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
 						.reduce( 0D, Math::max ) );
 			}
-
-			event.setNewSpeed( event.getNewSpeed() / (gap + 1) );
 		}
+
+		return 0;
 	}
 
 	public static void checkWornLevelReq( PlayerEntity player, int slot )
@@ -2103,12 +2083,10 @@ public class XP
 
 		if( !checkReq( player, item.getRegistryName(), "wear" ) )
 		{
-			NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", item.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-			Map<String, Double> reqs = Requirements.wearReq.get( item.getRegistryName().toString() );
-
-			int slowAmp = (int) Math.floor( reqs.entrySet().stream()
-					.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
-					.reduce( 0D, Math::max ) / 5 );
+			int gap = getItemReqGap( player, item.getRegistryName(), "wear" );
+			if( gap > 0 )
+				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", item.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+			int slowAmp = gap / 5 ;
 
 			if( slowAmp > 9 )
 				slowAmp = 9;
