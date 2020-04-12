@@ -80,6 +80,7 @@ public class XP
 
 	public static double globalMultiplier = Config.config.globalMultiplier.get();
 	public static int maxLevel = Config.config.maxLevel.get();
+	private static boolean crawlingAllowed = Config.config.crawlingAllowed.get();
 
 	public static float maxXp = xpAtLevel( maxLevel );
 
@@ -308,25 +309,6 @@ public class XP
 		salvageXp.put( Items.STRING.getRegistryName(), 2.0f );
 		salvageXp.put( Items.LEATHER.getRegistryName(), 5.0f );
 		salvageXp.put( Items.TURTLE_HELMET.getRegistryName(), 20.0f );
-////////////////////////////////////LEVEL_REQ//////////////////////////////////////////////////////
-		wornLevelReq.put( ArmorMaterial.LEATHER, Config.config.levelReqLeatherArmor.get() );
-		wornLevelReq.put( ArmorMaterial.CHAIN, Config.config.levelReqChainArmor.get() );
-		wornLevelReq.put( ArmorMaterial.IRON, Config.config.levelReqIronArmor.get() );
-		wornLevelReq.put( ArmorMaterial.GOLD, Config.config.levelReqGoldArmor.get() );
-		wornLevelReq.put( ArmorMaterial.DIAMOND, Config.config.levelReqDiamondArmor.get() );
-		wornLevelReq.put( ArmorMaterial.TURTLE, Config.config.levelReqTurtleArmor.get() );
-
-		toolLevelReq.put( ItemTier.WOOD, Config.config.levelReqWoodTool.get() );
-		toolLevelReq.put( ItemTier.STONE, Config.config.levelReqStoneTool.get() );
-		toolLevelReq.put( ItemTier.IRON, Config.config.levelReqIronTool.get() );
-		toolLevelReq.put( ItemTier.GOLD, Config.config.levelReqGoldTool.get() );
-		toolLevelReq.put( ItemTier.DIAMOND, Config.config.levelReqDiamondTool.get() );
-
-		weaponLevelReq.put( ItemTier.WOOD, Config.config.levelReqWoodWeapon.get() );
-		weaponLevelReq.put( ItemTier.STONE, Config.config.levelReqStoneWeapon.get() );
-		weaponLevelReq.put( ItemTier.IRON, Config.config.levelReqIronWeapon.get() );
-		weaponLevelReq.put( ItemTier.GOLD, Config.config.levelReqGoldWeapon.get() );
-		weaponLevelReq.put( ItemTier.DIAMOND, Config.config.levelReqDiamondWeapon.get() );
 	}
 
 	private static Skill getSkill( String tool )
@@ -2109,7 +2091,7 @@ public class XP
 
 		if( !player.world.isRemote() )
 		{
-			if( isCrawling.contains( player.getName().getString() ) )
+			if( isCrawling.contains( player.getName().getString() ) && crawlingAllowed )
 				PMMOPoseSetter.setPose( player, Pose.SWIMMING );
 
 			if( !player.isCreative() && player.isAlive() )

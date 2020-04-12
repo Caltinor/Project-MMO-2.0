@@ -20,6 +20,7 @@
   "pmmo.text.swimming": "Swimming",
   "pmmo.text.fishing": "Fishing",
   "pmmo.text.crafting": "Crafting",
+  "pmmo.text.magic": "Magic",
   "pmmo.text.welcome": "Thank you for using Project MMO! Most features can be tweaked in config.",
   "pmmo.text.savedFall": "Saved %1$s fall damage!",
   "pmmo.text.extraDrop": "%1$s Extra %2$s Dropped!",

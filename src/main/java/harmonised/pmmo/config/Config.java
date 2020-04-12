@@ -14,6 +14,9 @@ public class Config
 
     public static class ConfigImplementation
     {
+        //Miscellaneous
+        public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
+
         //Levels
         public ConfigHelper.ConfigValueListener<Integer> maxLevel;
         public ConfigHelper.ConfigValueListener<Integer> baseXp;
@@ -112,9 +115,21 @@ public class Config
 
         //Crafting
 
+        //Magic
+
 
         public ConfigImplementation(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber)
         {
+            builder.push( "Levels" );
+            {
+                this.crawlingAllowed = subscriber.subscribe(builder
+                        .comment( "Is crawling allowed? true = on, false = off" )
+                        .translation( "pmmo.crawlingAllowed" )
+                        .define( "crawlingAllowed", true) );
+
+                builder.pop();
+            }
+
             builder.push( "Levels" );
             {
                 this.maxLevel = subscriber.subscribe(builder
