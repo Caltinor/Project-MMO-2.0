@@ -633,8 +633,6 @@ public class XP
 			{
 				Block block = event.getState().getBlock();
 
-				boolean test = checkReq( player, block.getRegistryName(), "break" );
-
 				if( checkReq( player, block.getRegistryName(), "break" ) )
 				{
 					double blockHardnessLimit = Config.config.blockHardnessLimit.get();
@@ -939,7 +937,24 @@ public class XP
 				}
 				else
 				{
+					CompoundNBT skillsTag = getSkillsTag( player );
+					int level;
+
 					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+
+					for( Map.Entry<String, Double> entry : Requirements.breakReq.get( block.getRegistryName().toString() ).entrySet() )
+					{
+						if( skillsTag.contains( entry.getKey() ) )
+							level = levelAtXp( skillsTag.getFloat( entry.getKey() ) );
+						else
+							level = 1;
+
+						if( level < entry.getValue() )
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entry.getValue() ), false, 2 ), (ServerPlayerEntity) player );
+						else
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entry.getValue() ), false, 1 ), (ServerPlayerEntity) player );
+					}
 
 					event.setCanceled( true );
 				}
@@ -1337,70 +1352,7 @@ public class XP
 				{
 					if( event.getHand() == Hand.MAIN_HAND )
 					{
-						int currLevel;
-						double baseChance = 0;
-						double extraChance = 0;
-
-						if( getPlantDoubleChance( item.getRegistryName() ) != 0 )
-						{
-							currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
-							baseChance = getPlantDoubleChance( item.getRegistryName() );
-							extraChance = baseChance * currLevel;
-						}
-						else if( getOreDoubleChance( item.getRegistryName() ) != 0 )
-						{
-							currLevel = levelAtXp( skillsTag.getFloat( "mining" ) );
-							baseChance = getOreDoubleChance( item.getRegistryName() );
-							extraChance = baseChance * currLevel;
-						}
-						else if( getLogDoubleChance( item.getRegistryName() ) != 0 )
-						{
-							currLevel = levelAtXp( skillsTag.getFloat( "woodcutting" ) );
-							baseChance = getLogDoubleChance( item.getRegistryName() );
-							extraChance = baseChance * currLevel;
-						}
-
-						if( extraChance != 0 )
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraChanceMessage", "" + DP.dp( extraChance ), "" + DP.dp( baseChance ), false, 0 ), (ServerPlayerEntity) player );
-
-						if( !checkReq( player, item.getRegistryName(), "wear" ) )
-						{
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", item.getTranslationKey(), "", false, 0 ), (ServerPlayerEntity) player );
-							Map<String, Double> reqs = Requirements.wearReq.get( item.getRegistryName().toString() );
-							reqs.forEach( (key, value) ->
-							{
-								if( levelAtXp( skillsTag.getFloat( key ) ) < value )
-									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 2 ), (ServerPlayerEntity) player );
-								else
-									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 1 ), (ServerPlayerEntity) player );
-							});
-						}
-
-						if( !checkReq( player, item.getRegistryName(), "tool" ) )
-						{
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsTool", item.getTranslationKey(), "", false, 0 ), (ServerPlayerEntity) player );
-							Map<String, Double> reqs = Requirements.toolReq.get( item.getRegistryName().toString() );
-							reqs.forEach( (key, value) ->
-							{
-								if( levelAtXp( skillsTag.getFloat( key ) ) < value )
-									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 2 ), (ServerPlayerEntity) player );
-								else
-									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 1 ), (ServerPlayerEntity) player );
-							});
-						}
-
-						if( !checkReq( player, item.getRegistryName(), "weapon" ) )
-						{
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", item.getTranslationKey(), "", false, 0 ), (ServerPlayerEntity) player );
-							Map<String, Double> reqs = Requirements.weaponReq.get( item.getRegistryName().toString() );
-							reqs.forEach( (key, value) ->
-							{
-								if( levelAtXp( skillsTag.getFloat( key ) ) < value )
-									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 2 ), (ServerPlayerEntity) player );
-								else
-									NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", key + ":", "" + (int) Math.floor(value), false, 1 ), (ServerPlayerEntity) player );
-							});
-						}
+						//Outdated, Replaced by Tooltip
 					}
 					else
 						return;
