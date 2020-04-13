@@ -571,9 +571,6 @@ public class XP
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntity();
 
-			Map<String, Map<String, Double>> test = Requirements.wearReq;
-			System.out.println( test );
-
 			if ( !player.isCreative() )
 			{
 				Block block = event.getPlacedBlock().getBlock();

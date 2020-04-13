@@ -75,8 +75,8 @@ public class Requirements
 
                 for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
                 {
-                    if( Skill.getInt( entry.getKey() ) != 0 && entry.getValue() >= 1 )
-                        outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                    if( Skill.getInt( entry.getKey() ) != 0 && entry.getValue() != 0 && entry.getValue() > 0 )
+                        outReq.get( key ).put( entry.getKey(), Math.ceil( entry.getValue() ) );
                 }
             }
         });
@@ -91,7 +91,7 @@ public class Requirements
 
             for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
             {
-                if( entry.getKey().equals( "extraChance" ) && entry.getValue() > 0 )
+                if( entry.getKey().equals( "extraChance" ) && entry.getValue() != 0 && entry.getValue() > 0 )
                     outReq.get( key ).put( entry.getKey(), entry.getValue() );
             }
         });
