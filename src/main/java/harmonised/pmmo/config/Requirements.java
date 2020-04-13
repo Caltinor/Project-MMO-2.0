@@ -29,6 +29,7 @@ public class Requirements
     public static Map<String, Map<String, Double>> logInfo = new HashMap<>();
     public static Map<String, Map<String, Double>> plantInfo = new HashMap<>();
 
+    private static Map<String, Double> tempMap;
     private static String dataPath = "pmmo/data.json";
     private static String templateDataPath = "pmmo/data_template.json";
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
@@ -49,122 +50,66 @@ public class Requirements
         updateFinal( defaultReq );
         updateFinal( customReq );
     }
-    
-    private static boolean checkInvalidSkills( Map<String, Double> theMap )
+
+    private static boolean checkValidSkills( Map<String, Double> theMap )
     {
-        boolean accepted = true;
+        boolean anyValidSkills = false;
 
         for( String key : theMap.keySet() )
         {
-            if( Skill.getInt( key ) == 0 )
-                accepted = false;
+            if( Skill.getInt( key ) != 0 )
+                anyValidSkills = true;
         }
 
-        return accepted;
+        return anyValidSkills;
+    }
+
+    private static void updateReqSkills( Map<String, RequirementItem> req, Map<String, Map<String, Double>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            if( checkValidSkills( value.requirements ) )
+            {
+                if(  !outReq.containsKey( key ) )
+                    outReq.put( key, new HashMap<>() );
+
+                for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
+                {
+                    if( Skill.getInt( entry.getKey() ) != 0 && entry.getValue() >= 1 )
+                        outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                }
+            }
+        });
+    }
+
+    private static void updateReqExtra( Map<String, RequirementItem> req, Map<String, Map<String, Double>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            if( !outReq.containsKey( key ) )
+                outReq.put( key, new HashMap<>() );
+
+            for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
+            {
+                if( entry.getKey().equals( "extraChance" ) && entry.getValue() > 0 )
+                    outReq.get( key ).put( entry.getKey(), entry.getValue() );
+            }
+        });
     }
 
     private static void updateFinal( Requirements req )
     {
-        req.wears.forEach( (key, value) ->
-        {
-            if( checkInvalidSkills( value.requirements ) )
-            {
-                if( wearReq.containsKey( key ) )
-                    wearReq.replace( key, value.requirements );
-                else
-                    wearReq.put( key, value.requirements );
-            }
-        });
+        updateReqSkills( req.wears, wearReq );
+        updateReqSkills( req.tools, toolReq );
+        updateReqSkills( req.weapons, weaponReq );
+        updateReqSkills( req.mobs, mobReq );
+        updateReqSkills( req.xpValues, xpValue );
+        updateReqSkills( req.placing, placeReq );
+        updateReqSkills( req.breaking, breakReq );
 
-        req.tools.forEach( (key, value) ->
-        {
-            if( checkInvalidSkills( value.requirements ) )
-            {
-                if( toolReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
-                    toolReq.replace( key, value.requirements );
-                else
-                    toolReq.put( key, value.requirements );
-            }
-        });
-
-        req.weapons.forEach( (key, value) ->
-        {
-            if( checkInvalidSkills( value.requirements ) )
-            {
-                if( weaponReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
-                    weaponReq.replace( key, value.requirements );
-                else
-                    weaponReq.put( key, value.requirements );
-            }
-        });
-
-        req.mobs.forEach( (key, value) ->
-        {
-            if( checkInvalidSkills( value.requirements ) )
-            {
-                if( mobReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
-                    mobReq.replace( key, value.requirements );
-                else
-                    mobReq.put( key, value.requirements );
-            }
-        });
-
-        req.placing.forEach( (key, value) ->
-        {
-            if( checkInvalidSkills( value.requirements ) )
-            {
-                if( placeReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
-                    placeReq.replace( key, value.requirements );
-                else
-                    placeReq.put( key, value.requirements );
-            }
-        });
-
-        req.breaking.forEach( (key, value) ->
-        {
-            if( checkInvalidSkills( value.requirements ) )
-            {
-                if( breakReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
-                    breakReq.replace( key, value.requirements );
-                else
-                    breakReq.put( key, value.requirements );
-            }
-        });
-
-        req.xpValues.forEach( (key, value) ->
-        {
-            if( checkInvalidSkills( value.requirements ) )
-            {
-                if( xpValue.containsKey( key ) && checkInvalidSkills( value.requirements ) )
-                    xpValue.replace( key, value.requirements );
-                else
-                    xpValue.put( key, value.requirements );
-            }
-        });
-
-        req.ores.forEach( (key, value) ->
-        {
-            if( oreInfo.containsKey( key ) )
-                oreInfo.replace( key, value.requirements );
-            else
-                oreInfo.put( key, value.requirements );
-        });
-
-        req.logs.forEach( (key, value) ->
-        {
-            if( logInfo.containsKey( key ) )
-                logInfo.replace( key, value.requirements );
-            else
-                logInfo.put( key, value.requirements );
-        });
-
-        req.plants.forEach( (key, value) ->
-        {
-            if( plantInfo.containsKey( key ) )
-                plantInfo.replace( key, value.requirements );
-            else
-                plantInfo.put( key, value.requirements );
-        });
+        updateReqExtra( req.ores, oreInfo );
+        updateReqExtra( req.logs, logInfo );
+        updateReqExtra( req.plants, plantInfo );
     }
 
     private static void createData( File dataFile )

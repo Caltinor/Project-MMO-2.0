@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
@@ -16,11 +17,14 @@ import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class XPOverlayGUI extends AbstractGui
@@ -44,7 +48,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static FontRenderer fontRenderer = minecraft.fontRenderer;
 
 	@SubscribeEvent
-	public void renderOverlay(RenderGameOverlayEvent event)
+	public void renderOverlay( RenderGameOverlayEvent event )
 	{
 		if( !name.equals( "none" ) )
 		{
@@ -295,6 +299,35 @@ public class XPOverlayGUI extends AbstractGui
 			}
 		}
 	}
+
+//	@SubscribeEvent
+//	public void renderWorldDrops( RenderWorldLastEvent event )
+//	{
+//		MatrixStack matrixStack = event.getMatrixStack();
+//		String theText = "test";
+//
+//		double d0 = this.renderManager.squareDistanceTo(entityIn);
+//		if (!(d0 > 4096.0D)) {
+//			boolean flag = !entityIn.isDiscrete();
+//			float f = entityIn.getHeight() + 0.5F;
+//			int i = "deadmau5".equals(displayNameIn) ? -10 : 0;
+//			matrixStack.push();
+//			matrixStack.translate(0.0D, (double)f, 0.0D);
+//			matrixStack.rotate(this.renderManager.getCameraOrientation());
+//			matrixStack.scale(-0.025F, -0.025F, 0.025F);
+//			Matrix4f matrix4f = matrixStackIn.getLast().getPositionMatrix();
+//			float f1 = Minecraft.getInstance().gameSettings.getTextBackgroundOpacity(0.25F);
+//			int j = (int)(f1 * 255.0F) << 24;
+//			FontRenderer fontrenderer = this.getFontRendererFromRenderManager();
+//			float f2 = (float)(-fontrenderer.getStringWidth(theText) / 2);
+//			fontrenderer.renderString(theText, f2, (float)i, 553648127, false, matrix4f, bufferIn, flag, j, packedLightIn);
+//			if (flag) {
+//				fontrenderer.renderString(theText, f2, (float)i, -1, false, matrix4f, bufferIn, false, 0, packedLightIn);
+//			}
+//
+//			matrixStackIn.pop();
+//		}
+//	}
 	
 	public static void sendLvlUp( int level, String name )
 	{

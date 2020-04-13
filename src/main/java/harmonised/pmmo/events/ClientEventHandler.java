@@ -81,20 +81,17 @@ public class ClientEventHandler
 
                 for( String key : wearReq.keySet() )
                 {
-                    if( wearReq.get( key ) >= 1 )
-                    {
-                        if(XPOverlayGUI.skills.containsKey( key ))
-                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                        else
-                            level = 1;
+                    if(XPOverlayGUI.skills.containsKey( key ))
+                        level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                    else
+                        level = 1;
 
-                        value = (int) Math.floor( wearReq.get( key ) );
+                    value = (int) Math.floor( wearReq.get( key ) );
 
-                        if( level < value )
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                        else
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                    }
+                    if( level < value )
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    else
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 }
             }
 
@@ -108,20 +105,17 @@ public class ClientEventHandler
 
                 for( String key : toolReq.keySet() )
                 {
-                    if( toolReq.get( key ) >= 1 )
-                    {
-                        if(XPOverlayGUI.skills.containsKey( key ))
-                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                        else
-                            level = 1;
+                   if(XPOverlayGUI.skills.containsKey( key ))
+                       level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                   else
+                       level = 1;
 
-                        value = (int) Math.floor( toolReq.get( key ) );
+                   value = (int) Math.floor( toolReq.get( key ) );
 
-                        if( level < value )
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                        else
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                    }
+                   if( level < value )
+                       tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                   else
+                       tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 }
             }
 
@@ -135,20 +129,17 @@ public class ClientEventHandler
 
                 for( String key : weaponReq.keySet() )
                 {
-                    if( weaponReq.get( key ) >= 1 )
-                    {
-                        if(XPOverlayGUI.skills.containsKey( key ))
-                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                        else
-                            level = 1;
+                     if(XPOverlayGUI.skills.containsKey( key ))
+                         level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                     else
+                         level = 1;
 
-                        value = (int) Math.floor( weaponReq.get( key ) );
+                     value = (int) Math.floor( weaponReq.get( key ) );
 
-                        if( level < value )
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                        else
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                    }
+                     if( level < value )
+                         tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                     else
+                         tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 }
             }
 
@@ -158,17 +149,9 @@ public class ClientEventHandler
 
                 for( String key : xpValue.keySet() )
                 {
-                    if( xpValue.get( key ) > 0 )
-                    {
-                        if(XPOverlayGUI.skills.containsKey( key ))
-                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                        else
-                            level = 1;
+                    dValue = xpValue.get( key );
 
-                        dValue = xpValue.get( key );
-
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, DP.dp( dValue ) ) );
-                    }
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, DP.dp( dValue ) ) );
                 }
             }
 
@@ -187,20 +170,17 @@ public class ClientEventHandler
 
                 for( String key : placeReq.keySet() )
                 {
-                    if( placeReq.get( key ) >= 1 )
-                    {
-                        if(XPOverlayGUI.skills.containsKey( key ))
-                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                        else
-                            level = 1;
+                    if(XPOverlayGUI.skills.containsKey( key ))
+                        level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                    else
+                        level = 1;
 
-                        value = (int) Math.floor( placeReq.get( key ) );
+                    value = (int) Math.floor( placeReq.get( key ) );
 
-                        if( level < value )
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                        else
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                    }
+                    if( level < value )
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    else
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 }
             }
 
@@ -214,26 +194,23 @@ public class ClientEventHandler
 
                 for( String key : breakReq.keySet() )
                 {
-                    if( breakReq.get( key ) >= 1 )
-                    {
-                        if(XPOverlayGUI.skills.containsKey( key ))
-                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                        else
-                            level = 1;
+                    if(XPOverlayGUI.skills.containsKey( key ))
+                        level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                    else
+                        level = 1;
 
-                        value = (int) Math.floor( breakReq.get( key ) );
+                    value = (int) Math.floor( breakReq.get( key ) );
 
-                        if( level < value )
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                        else
-                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                    }
+                    if( level < value )
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    else
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 }
             }
 
             if( oreInfo != null && oreInfo.size() > 0 )      //ORE INFO
             {
-                if( oreInfo.get( "extraChance" ) != null && oreInfo.get( "extraChance" ) > 0 )
+                if( oreInfo.get( "extraChance" ) != null )
                 {
                     if(XPOverlayGUI.skills.containsKey( "mining" ) )
                         level = XP.levelAtXp( XPOverlayGUI.skills.get( "mining" ).goalXp );
@@ -246,7 +223,7 @@ public class ClientEventHandler
 
             if( logInfo != null && logInfo.size() > 0 )      //LOG INFO
             {
-                if( logInfo.get( "extraChance" ) != null && logInfo.get( "extraChance" ) > 0 )
+                if( logInfo.get( "extraChance" ) != null )
                 {
                     if(XPOverlayGUI.skills.containsKey( "woodcutting" ) )
                         level = XP.levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).goalXp );
@@ -259,7 +236,7 @@ public class ClientEventHandler
 
             if( plantInfo != null && plantInfo.size() > 0 )      //PLANT INFO
             {
-                if( plantInfo.get( "extraChance" ) != null && plantInfo.get( "extraChance" ) > 0 )
+                if( plantInfo.get( "extraChance" ) != null )
                 {
                     if(XPOverlayGUI.skills.containsKey( "farming" ) )
                         level = XP.levelAtXp( XPOverlayGUI.skills.get( "farming" ).goalXp );

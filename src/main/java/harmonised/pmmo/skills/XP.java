@@ -69,6 +69,7 @@ public class XP
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
 	private static Map<String, Integer> skillColors = new HashMap<>();
 	private static Map<String, Long> lastAward = new HashMap<>();
+	private static Map<String, Double> testMap = new HashMap<>();
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static Set<String> isCrawling = new HashSet<>();
@@ -569,6 +570,9 @@ public class XP
 		if( event.getEntity() instanceof PlayerEntity && !(event.getEntity() instanceof FakePlayer) )
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntity();
+
+			Map<String, Map<String, Double>> test = Requirements.wearReq;
+			System.out.println( test );
 
 			if ( !player.isCreative() )
 			{
