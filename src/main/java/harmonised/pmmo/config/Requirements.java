@@ -22,6 +22,8 @@ public class Requirements
     public static Map<String, Map<String, Double>> toolReq = new HashMap<>();
     public static Map<String, Map<String, Double>> weaponReq = new HashMap<>();
     public static Map<String, Map<String, Double>> mobReq = new HashMap<>();
+    public static Map<String, Map<String, Double>> placeReq = new HashMap<>();
+    public static Map<String, Map<String, Double>> breakReq = new HashMap<>();
     public static Map<String, Map<String, Double>> xpValue = new HashMap<>();
     public static Map<String, Map<String, Double>> oreInfo = new HashMap<>();
     public static Map<String, Map<String, Double>> logInfo = new HashMap<>();
@@ -104,6 +106,28 @@ public class Requirements
                     mobReq.replace( key, value.requirements );
                 else
                     mobReq.put( key, value.requirements );
+            }
+        });
+
+        req.placing.forEach( (key, value) ->
+        {
+            if( checkInvalidSkills( value.requirements ) )
+            {
+                if( placeReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
+                    placeReq.replace( key, value.requirements );
+                else
+                    placeReq.put( key, value.requirements );
+            }
+        });
+
+        req.breaking.forEach( (key, value) ->
+        {
+            if( checkInvalidSkills( value.requirements ) )
+            {
+                if( breakReq.containsKey( key ) && checkInvalidSkills( value.requirements ) )
+                    breakReq.replace( key, value.requirements );
+                else
+                    breakReq.put( key, value.requirements );
             }
         });
 
@@ -203,6 +227,8 @@ public class Requirements
     private final Map<String, RequirementItem> tools = Maps.newHashMap();
     private final Map<String, RequirementItem> weapons = Maps.newHashMap();
     private final Map<String, RequirementItem> mobs = Maps.newHashMap();
+    private final Map<String, RequirementItem> placing = Maps.newHashMap();
+    private final Map<String, RequirementItem> breaking = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
     private final Map<String, RequirementItem> ores = Maps.newHashMap();
     private final Map<String, RequirementItem> logs = Maps.newHashMap();
@@ -264,11 +290,12 @@ public class Requirements
             deserializeGroup(obj, "tool_requirement", req.tools::put, context);
             deserializeGroup(obj, "weapon_requirement", req.weapons::put, context);
             deserializeGroup(obj, "mob_requirement", req.mobs::put, context);
+            deserializeGroup(obj, "place_requirement", req.placing::put, context);
+            deserializeGroup(obj, "break_requirement", req.breaking::put, context);
             deserializeGroup(obj, "xp_value", req.xpValues::put, context);
             deserializeGroup(obj, "ore", req.ores::put, context);
             deserializeGroup(obj, "log", req.logs::put, context);
             deserializeGroup(obj, "plant", req.plants::put, context);
-
 
             return req;
         }

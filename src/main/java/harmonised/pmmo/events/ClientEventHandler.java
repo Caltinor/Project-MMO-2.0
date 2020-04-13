@@ -54,161 +54,220 @@ public class ClientEventHandler
     @SubscribeEvent
     public static void tooltipEvent( ItemTooltipEvent event )
     {
-        Item item = event.getItemStack().getItem();
-        PlayerEntity player = event.getPlayer();
-        List<ITextComponent> tooltip = event.getToolTip();
-        Map<String, Double> wearReq = Requirements.wearReq.get( item.getRegistryName().toString() );
-        Map<String, Double> toolReq = Requirements.toolReq.get( item.getRegistryName().toString() );
-        Map<String, Double> weaponReq = Requirements.weaponReq.get( item.getRegistryName().toString() );
-        Map<String, Double> xpValue = Requirements.xpValue.get( item.getRegistryName().toString() );
-        Map<String, Double> oreInfo = Requirements.oreInfo.get( item.getRegistryName().toString() );
-        Map<String, Double> logInfo = Requirements.logInfo.get( item.getRegistryName().toString() );
-        Map<String, Double> plantInfo = Requirements.plantInfo.get( item.getRegistryName().toString() );
-        int level, value;
-        double dValue;
-
-        if( wearReq != null && wearReq.size() > 0 )      //WEAR REQUIREMENT
+        if( event.getPlayer() != null )
         {
-            if( XP.checkReq( player, item.getRegistryName(), "wear" ) )
-                tooltip.add( new TranslationTextComponent( "pmmo.text.Armor" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-            else
-                tooltip.add( new TranslationTextComponent( "pmmo.text.Armor" ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+            Item item = event.getItemStack().getItem();
+            PlayerEntity player = event.getPlayer();
+            List<ITextComponent> tooltip = event.getToolTip();
+            Map<String, Double> wearReq = Requirements.wearReq.get( item.getRegistryName().toString() );
+            Map<String, Double> toolReq = Requirements.toolReq.get( item.getRegistryName().toString() );
+            Map<String, Double> weaponReq = Requirements.weaponReq.get( item.getRegistryName().toString() );
+            Map<String, Double> placeReq = Requirements.placeReq.get( item.getRegistryName().toString() );
+            Map<String, Double> breakReq = Requirements.breakReq.get( item.getRegistryName().toString() );
+            Map<String, Double> xpValue = Requirements.xpValue.get( item.getRegistryName().toString() );
+            Map<String, Double> oreInfo = Requirements.oreInfo.get( item.getRegistryName().toString() );
+            Map<String, Double> logInfo = Requirements.logInfo.get( item.getRegistryName().toString() );
+            Map<String, Double> plantInfo = Requirements.plantInfo.get( item.getRegistryName().toString() );
+            int level, value;
+            double dValue;
 
-
-            for( String key : wearReq.keySet() )
+            if( wearReq != null && wearReq.size() > 0 )      //WEAR REQUIREMENT
             {
-                if( wearReq.get( key ) > 0 )
-                {
-                    if(XPOverlayGUI.skills.containsKey( key ))
-                        level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                    else
-                        level = 1;
-
-                    value = (int) Math.floor( wearReq.get( key ) );
-
-                    if( level < value )
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                    else
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                }
-            }
-        }
-
-        if( toolReq != null && toolReq.size() > 0 )      //TOOL REQUIREMENT
-        {
-            if( XP.checkReq( player, item.getRegistryName(), "tool" ) )
-                tooltip.add( new TranslationTextComponent( "pmmo.text.Tool" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-            else
-                tooltip.add( new TranslationTextComponent( "pmmo.text.Tool" ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-
-
-            for( String key : toolReq.keySet() )
-            {
-                if( toolReq.get( key ) > 0 )
-                {
-                    if(XPOverlayGUI.skills.containsKey( key ))
-                        level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                    else
-                        level = 1;
-
-                    value = (int) Math.floor( toolReq.get( key ) );
-
-                    if( level < value )
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                    else
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                }
-            }
-        }
-
-        if( weaponReq != null && weaponReq.size() > 0 )      //WEAPON REQUIREMENT
-        {
-            if( XP.checkReq( player, item.getRegistryName(), "weapon" ) )
-                tooltip.add( new TranslationTextComponent( "pmmo.text.Weapon" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-            else
-                tooltip.add( new TranslationTextComponent( "pmmo.text.Weapon" ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-
-
-            for( String key : weaponReq.keySet() )
-            {
-                if( weaponReq.get( key ) > 0 )
-                {
-                    if(XPOverlayGUI.skills.containsKey( key ))
-                        level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                    else
-                        level = 1;
-
-                    value = (int) Math.floor( weaponReq.get( key ) );
-
-                    if( level < value )
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                    else
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                }
-            }
-        }
-
-        if( xpValue != null && xpValue.size() > 0 )      //XP VALUE
-        {
-            tooltip.add( new TranslationTextComponent( "pmmo.text.xpValue" ) );
-
-            for( String key : xpValue.keySet() )
-            {
-                if( xpValue.get( key ) > 0 )
-                {
-                    if(XPOverlayGUI.skills.containsKey( key ))
-                        level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
-                    else
-                        level = 1;
-
-                    dValue = xpValue.get( key );
-
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, DP.dp( dValue ) ) );
-                }
-            }
-        }
-
-        if( oreInfo != null && oreInfo.size() > 0 )      //ORE INFO
-        {
-            if( oreInfo.get( "extraChance" ) != null && oreInfo.get( "extraChance" ) > 0 )
-            {
-                if(XPOverlayGUI.skills.containsKey( "mining" ) )
-                    level = XP.levelAtXp( XPOverlayGUI.skills.get( "mining" ).goalXp );
+                if( XP.checkReq( player, item.getRegistryName(), "wear" ) )
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.Armor" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 else
-                    level = 1;
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.Armor" ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
-                tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraChance", DP.dp( oreInfo.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+
+                for( String key : wearReq.keySet() )
+                {
+                    if( wearReq.get( key ) >= 1 )
+                    {
+                        if(XPOverlayGUI.skills.containsKey( key ))
+                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                        else
+                            level = 1;
+
+                        value = (int) Math.floor( wearReq.get( key ) );
+
+                        if( level < value )
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                        else
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    }
+                }
             }
-        }
 
-        if( logInfo != null && logInfo.size() > 0 )      //LOG INFO
-        {
-            if( logInfo.get( "extraChance" ) != null && logInfo.get( "extraChance" ) > 0 )
+            if( toolReq != null && toolReq.size() > 0 )      //TOOL REQUIREMENT
             {
-                if(XPOverlayGUI.skills.containsKey( "woodcutting" ) )
-                    level = XP.levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).goalXp );
+                if( XP.checkReq( player, item.getRegistryName(), "tool" ) )
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.Tool" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 else
-                    level = 1;
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.Tool" ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
-                tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraChance", DP.dp( logInfo.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+
+                for( String key : toolReq.keySet() )
+                {
+                    if( toolReq.get( key ) >= 1 )
+                    {
+                        if(XPOverlayGUI.skills.containsKey( key ))
+                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                        else
+                            level = 1;
+
+                        value = (int) Math.floor( toolReq.get( key ) );
+
+                        if( level < value )
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                        else
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    }
+                }
             }
-        }
 
-        if( plantInfo != null && plantInfo.size() > 0 )      //PLANT INFO
-        {
-            if( plantInfo.get( "extraChance" ) != null && plantInfo.get( "extraChance" ) > 0 )
+            if( weaponReq != null && weaponReq.size() > 0 )      //WEAPON REQUIREMENT
             {
-                if(XPOverlayGUI.skills.containsKey( "farming" ) )
-                    level = XP.levelAtXp( XPOverlayGUI.skills.get( "farming" ).goalXp );
+                if( XP.checkReq( player, item.getRegistryName(), "weapon" ) )
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.Weapon" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 else
-                    level = 1;
-                tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", DP.dp( plantInfo.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-            }
-        }
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.Weapon" ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
-        if( item instanceof BlockItem && ((BlockItem) item).getBlock().getBlockHardness( null, player.world, player.getPosition() ) > 0 )
-        {
-            tooltip.add( new TranslationTextComponent( "pmmo.text.hardness", DP.dp( ((BlockItem) item).getBlock().getBlockHardness( null, player.world, player.getPosition() ) ) ) );
+
+                for( String key : weaponReq.keySet() )
+                {
+                    if( weaponReq.get( key ) >= 1 )
+                    {
+                        if(XPOverlayGUI.skills.containsKey( key ))
+                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                        else
+                            level = 1;
+
+                        value = (int) Math.floor( weaponReq.get( key ) );
+
+                        if( level < value )
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                        else
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    }
+                }
+            }
+
+            if( xpValue != null && xpValue.size() > 0 )      //XP VALUE
+            {
+                tooltip.add( new TranslationTextComponent( "pmmo.text.xpValue" ) );
+
+                for( String key : xpValue.keySet() )
+                {
+                    if( xpValue.get( key ) > 0 )
+                    {
+                        if(XPOverlayGUI.skills.containsKey( key ))
+                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                        else
+                            level = 1;
+
+                        dValue = xpValue.get( key );
+
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, DP.dp( dValue ) ) );
+                    }
+                }
+            }
+
+            if( item instanceof BlockItem && ((BlockItem) item).getBlock().getBlockHardness( null, player.world, player.getPosition() ) > 0 )
+            {
+                tooltip.add( new TranslationTextComponent( "pmmo.text.hardness", DP.dp( ((BlockItem) item).getBlock().getBlockHardness( null, player.world, player.getPosition() ) ) ) );
+            }
+
+            if( placeReq != null && placeReq.size() > 0 )      //PLACEMENT REQUIREMENT
+            {
+                if( XP.checkReq( player, item.getRegistryName(), "place" ) )
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.placeDown" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                else
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.placeDown" ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+
+
+                for( String key : placeReq.keySet() )
+                {
+                    if( placeReq.get( key ) >= 1 )
+                    {
+                        if(XPOverlayGUI.skills.containsKey( key ))
+                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                        else
+                            level = 1;
+
+                        value = (int) Math.floor( placeReq.get( key ) );
+
+                        if( level < value )
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                        else
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    }
+                }
+            }
+
+            if( breakReq != null && breakReq.size() > 0 )      //BREAKING REQUIREMENT
+            {
+                if( XP.checkReq( player, item.getRegistryName(), "break" ) )
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.break" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                else
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.break" ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+
+
+                for( String key : breakReq.keySet() )
+                {
+                    if( breakReq.get( key ) >= 1 )
+                    {
+                        if(XPOverlayGUI.skills.containsKey( key ))
+                            level = XP.levelAtXp( XPOverlayGUI.skills.get( key ).goalXp );
+                        else
+                            level = 1;
+
+                        value = (int) Math.floor( breakReq.get( key ) );
+
+                        if( level < value )
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                        else
+                            tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + key, value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    }
+                }
+            }
+
+            if( oreInfo != null && oreInfo.size() > 0 )      //ORE INFO
+            {
+                if( oreInfo.get( "extraChance" ) != null && oreInfo.get( "extraChance" ) > 0 )
+                {
+                    if(XPOverlayGUI.skills.containsKey( "mining" ) )
+                        level = XP.levelAtXp( XPOverlayGUI.skills.get( "mining" ).goalXp );
+                    else
+                        level = 1;
+
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraChance", DP.dp( oreInfo.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                }
+            }
+
+            if( logInfo != null && logInfo.size() > 0 )      //LOG INFO
+            {
+                if( logInfo.get( "extraChance" ) != null && logInfo.get( "extraChance" ) > 0 )
+                {
+                    if(XPOverlayGUI.skills.containsKey( "woodcutting" ) )
+                        level = XP.levelAtXp( XPOverlayGUI.skills.get( "woodcutting" ).goalXp );
+                    else
+                        level = 1;
+
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraChance", DP.dp( logInfo.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                }
+            }
+
+            if( plantInfo != null && plantInfo.size() > 0 )      //PLANT INFO
+            {
+                if( plantInfo.get( "extraChance" ) != null && plantInfo.get( "extraChance" ) > 0 )
+                {
+                    if(XPOverlayGUI.skills.containsKey( "farming" ) )
+                        level = XP.levelAtXp( XPOverlayGUI.skills.get( "farming" ).goalXp );
+                    else
+                        level = 1;
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", DP.dp( plantInfo.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                }
+            }
         }
     }
 }

@@ -52,16 +52,16 @@
 		"minecraft:chainmail_boots": {
 			"endurance": 20
 		},
-		"minecraft:golden_helmet": {
+		"minecraft:gold_helmet": {
 			"endurance": 10
 		},
-		"minecraft:golden_chestplate": {
+		"minecraft:gold_chestplate": {
 			"endurance": 10
 		},
-		"minecraft:golden_leggings": {
+		"minecraft:gold_leggings": {
 			"endurance": 10
 		},
-		"minecraft:golden_boots": {
+		"minecraft:gold_boots": {
 			"endurance": 10
 		},
 		"minecraft:leather_helmet": {
@@ -82,9 +82,6 @@
 		}
 	},
 	"tool_requirement": {
-		"minecraft:netherite_pickaxe": {
-			"mining": 60
-		},
 		"minecraft:netherite_shovel": {
 			"excavation": 60
 		},
@@ -135,19 +132,16 @@
 		},
 		"minecraft:wooden_axe": {
 			"woodcutting": 1
+		},
+		"minecraft:netherite_pickaxe": {
+			"mining": 60
 		}
 	},
 	"weapon_requirement": {
-		"minecraft:netherite_pickaxe": {
-			"combat": 60
-		},
 		"minecraft:netherite_shovel": {
 			"combat": 60
 		},
 		"minecraft:netherite_axe": {
-			"combat": 60
-		},
-		"minecraft:netherite_hoe": {
 			"combat": 60
 		},
 		"minecraft:netherite_sword": {
@@ -156,10 +150,6 @@
 		"minecraft:crossbow": {
 			"archery": 20
 		},
-		"minecraft:bow": {
-			"archery": 1,
-			"agility": 5
-		},
 		"minecraft:diamond_pickaxe": {
 			"combat": 40
 		},
@@ -167,9 +157,6 @@
 			"combat": 40
 		},
 		"minecraft:diamond_axe": {
-			"combat": 40
-		},
-		"minecraft:diamond_hoe": {
 			"combat": 40
 		},
 		"minecraft:diamond_sword": {
@@ -184,9 +171,6 @@
 		"minecraft:golden_axe": {
 			"combat": 30
 		},
-		"minecraft:golden_hoe": {
-			"combat": 30
-		},
 		"minecraft:golden_sword": {
 			"combat": 30
 		},
@@ -197,9 +181,6 @@
 			"combat": 20
 		},
 		"minecraft:iron_axe": {
-			"combat": 20
-		},
-		"minecraft:iron_hoe": {
 			"combat": 20
 		},
 		"minecraft:iron_sword": {
@@ -214,9 +195,6 @@
 		"minecraft:stone_axe": {
 			"combat": 5
 		},
-		"minecraft:stone_hoe": {
-			"combat": 5
-		},
 		"minecraft:stone_sword": {
 			"combat": 5
 		},
@@ -229,17 +207,27 @@
 		"minecraft:wooden_axe": {
 			"combat": 1
 		},
-		"minecraft:wooden_hoe": {
-			"combat": 1
-		},
 		"minecraft:wooden_sword": {
 			"combat": 1
+		},
+		"minecraft:netherite_pickaxe": {
+			"combat": 60
+		}
+	},
+	"place_requirement": {
+		"minecraft:command_block": {
+			"building": 999
+		},
+		"minecraft:bedrock": {
+			"building": 999
+		}
+	},
+	"break_requirement": {
+		"minecraft:command_block": {
+			"mining": 999
 		}
 	},
 	"xp_value": {
-		"minecraft:nether_quartz_ore": {
-			"mining": 1.5
-		},
 		"minecraft:coal_ore": {
 			"mining": 2
 		},
@@ -324,10 +312,6 @@
 		"minecraft:coarse_dirt": {
 			"excavation": 1.7
 		},
-		"minecraft:podzol": {
-			"excavation": 5,
-			"farming": 1
-		},
 		"minecraft:grass_block": {
 			"excavation": 2
 		},
@@ -339,10 +323,6 @@
 		},
 		"minecraft:gravel": {
 			"excavation": 2
-		},
-		"minecraft:mycelium": {
-			"excavation": 15,
-			"farming": 1
 		},
 		"minecraft:soul_sand": {
 			"excavation": 5
@@ -539,26 +519,6 @@
 		"minecraft:nether_wart": {
 			"farming": 5
 		},
-		"minecraft:melon": {
-			"farming": 7,
-			"woodcutting": 1
-		},
-		"minecraft:melon_seeds": {
-			"farming": 7,
-			"woodcutting": 1
-		},
-		"minecraft:melon_slice": {
-			"farming": 7,
-			"woodcutting": 1
-		},
-		"minecraft:pumpkin": {
-			"farming": 35,
-			"woodcutting": 5
-		},
-		"minecraft:pumpkin_seeds": {
-			"farming": 35,
-			"woodcutting": 5
-		},
 		"minecraft:lily_pad": {
 			"farming": 15
 		},
@@ -648,12 +608,12 @@
 		},
 		"minecraft:saddle": {
 			"fishing": 125
+		},
+		"minecraft:nether_quartz_ore": {
+			"mining": 1.5
 		}
 	},
 	"ore": {
-		"minecraft:nether_quartz_ore": {
-			"extraChance": 0.55
-		},
 		"minecraft:quartz": {
 			"extraChance": 0.55
 		},
@@ -698,12 +658,12 @@
 		},
 		"minecraft:emerald": {
 			"extraChance": 0.75
+		},
+		"minecraft:nether_quartz_ore": {
+			"extraChance": 0.55
 		}
 	},
 	"log": {
-		"minecraft:oak_log": {
-			"extraChance": 1
-		},
 		"minecraft:birch_log": {
 			"extraChance": 0.85
 		},
@@ -718,12 +678,12 @@
 		},
 		"minecraft:acacia_log": {
 			"extraChance": 1.25
+		},
+		"minecraft:oak_log": {
+			"extraChance": 1
 		}
 	},
 	"plant": {
-		"minecraft:cocoa_beans": {
-			"extraChance": 1.5
-		},
 		"minecraft:wheat_seeds": {
 			"extraChance": 0.75
 		},
@@ -776,6 +736,9 @@
 			"extraChance": 0.75
 		},
 		"minecraft:carrot": {
+			"extraChance": 1.5
+		},
+		"minecraft:cocoa_beans": {
 			"extraChance": 1.5
 		}
 	}

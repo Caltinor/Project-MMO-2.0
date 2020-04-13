@@ -25,16 +25,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class XPOverlayGUI extends AbstractGui
 {
-	private static int barWidth = 102, barHeight = 5, barPosX, barPosY;
-	private static int cooldown, tempAlpha, levelGap = 0, skillGap, halfscreen, tempInt;
+	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, xpDropPosX, xpDropPosY;
+	private static int cooldown, tempAlpha, levelGap = 0, skillGap, halfscreen, tempInt, xpDropDecayAge = 0;
 	private static double xp, goalXp;
-	private static double lastTime, startLevel, timeDiff, tempDouble, tempDouble2, dropOffset, dropOffsetCap;
-	private static double barOffsetX = 0;
-	private static double barOffsetY = 0;
+	private static double lastTime, startLevel, timeDiff, tempDouble, tempDouble2, xpDropOffset = 0, xpDropOffsetCap = 0;
+	private static double barOffsetX = 0, barOffsetY = 0, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0;
 	private static String tempString;
-	private static int theme = 2, themePos = 1, listIndex = 0;
+	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String name = "none", tempName = "none";
-	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true;
+	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true, xpDropsAttachedToBar = true, xpDropWasStacked;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -55,8 +54,21 @@ public class XPOverlayGUI extends AbstractGui
 				{
 					barOffsetX = Config.config.barOffsetX.get();
 					barOffsetY = Config.config.barOffsetY.get();
+					xpDropOffsetX = Config.config.xpDropOffsetX.get();
+					xpDropOffsetY = Config.config.xpDropOffsetY.get();
+					xpDropsAttachedToBar = Config.config.xpDropsAttachedToBar.get();
 					showXpDrops = Config.config.showXpDrops.get();
 					stackXpDrops = Config.config.stackXpDrops.get();
+					xpDropSpawnDistance = Config.config.xpDropSpawnDistance.get();
+					xpDropOpacityPerTime = Config.config.xpDropOpacityPerTime.get();
+					xpDropMaxOpacity = Config.config.xpDropMaxOpacity.get();
+					xpDropDecayAge = Config.config.xpDropDecayAge.get();
+
+					if( !xpDropsAttachedToBar )
+						xpDropYLimit = 999999999;
+					else
+						xpDropYLimit = 0;
+
 					init = true;
 				}
 
@@ -66,6 +78,8 @@ public class XPOverlayGUI extends AbstractGui
 //				barPosX = ( sr.getScaledWidth() - barWidth ) / 2;
 				barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
 				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
+				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
+				xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
 
 				skill = skills.get( name );
 
@@ -96,30 +110,33 @@ public class XPOverlayGUI extends AbstractGui
 				else
 					guiPressed = false;
 
-				if( cooldown <= 0 )
-					dropOffsetCap = -9;
-				else if ( guiKey )
+				if( xpDropsAttachedToBar )
 				{
-					if( skills.get( name ).xp >= XP.maxXp )
-						dropOffsetCap = 25;
+					if( cooldown <= 0 )
+						xpDropOffsetCap = -9;
+					else if ( guiKey )
+					{
+						if( skills.get( name ).xp >= XP.maxXp )
+							xpDropOffsetCap = 25;
+						else
+							xpDropOffsetCap = 34;
+					}
 					else
-						dropOffsetCap = 34;
-				}
-				else
-					dropOffsetCap = 16;
-				
-				if( dropOffset > dropOffsetCap )
-					dropOffset -= 1d * timeDiff / 10000000;
-				
-				if( dropOffset < dropOffsetCap )
-					dropOffset = dropOffsetCap;
+						xpDropOffsetCap = 16;
 
+					if( xpDropOffset > xpDropOffsetCap )
+						xpDropOffset -= 1d * timeDiff / 10000000;
+
+					if( xpDropOffset < xpDropOffsetCap )
+						xpDropOffset = xpDropOffsetCap;
+				}
+				
 				for( int i = 0; i < xpDrops.size(); i++ )				//update Xp Drops
 				{
 					XpDrop xpDrop = xpDrops.get( i );
 					xpDrop.age += timeDiff / 5000000;
 
-					if( ( ( xpDrop.Y - tempDouble * timeDiff / 10000000 < 0 ) && xpDrop.age >= 500 ) || !showXpDrops )
+					if( ( ( xpDrop.Y - tempDouble * timeDiff / 10000000 < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 					{
 						skill = skills.get( xpDrop.name );
 
@@ -154,20 +171,24 @@ public class XPOverlayGUI extends AbstractGui
 
 						tempDouble = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
 
-						if( dropOffset == dropOffsetCap )
+						if( xpDropOffset == xpDropOffsetCap )
 							xpDrop.Y -= tempDouble * timeDiff / 10000000;
 
-						if( xpDrop.Y < ( i * 9 ) )
-							xpDrop.Y = ( i * 9 );
+						if( xpDrop.Y < ( i * 9 ) - xpDropYLimit )
+							xpDrop.Y = ( i * 9 ) - xpDropYLimit;
 
-						if( xpDrop.Y * 2 > 200 )
+						tempInt = (int) Math.floor( xpDrop.Y * xpDropOpacityPerTime ); //Opacity Loss
+
+						if( tempInt < 0 )
+							tempInt = -tempInt;
+
+						if( tempInt > xpDropMaxOpacity )
 							tempAlpha = 0;
 						else
-							tempAlpha = (int) Math.floor(200 - xpDrop.Y * 2 );
-
+							tempAlpha = (int) Math.floor( xpDropMaxOpacity - tempInt );
 
 						if( tempAlpha > 3 )
-							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo.text." + xpDrop.name ).getString(), barPosX + (barWidth / 2), (int) xpDrop.Y + (int) dropOffset + barPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
+							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo.text." + xpDrop.name ).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
 					}
 				}
 
@@ -279,23 +300,24 @@ public class XPOverlayGUI extends AbstractGui
 	{
 		player = minecraft.player;
 		
-		switch( name )
-		{
-			case "swimming":
-				if( level - 1 < 25 && level >= 25 )
-					tempString = level + " swimming level up! Underwater Night Vision Unlocked!";
-				else
-					tempString = level + " swimming level up!";
-				break;
-		}
+//		switch( name )
+//		{
+//			case "swimming":
+//				if( level - 1 < 25 && level >= 25 )
+//					tempString = level + " swimming level up! Underwater Night Vision Unlocked!";
+//				else
+//					tempString = level + " swimming level up!";
+//				break;
+//		}
 		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelUp", level, new TranslationTextComponent( "pmmo.text." + name ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), false);
-		if( name.equals( "swimming" ) && level - 1 < 25 && level >= 25 )
+		if( name.equals( "swimming" ) && level - 1 < Config.config.nightvisionUnlockLevel.get() && level >= Config.config.nightvisionUnlockLevel.get() )
 			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), true );
 	}
 	
 	public static void makeXpDrop( double xp, int id, int cooldown, double gainedXp, boolean skip )
 	{
 		tempName = Skill.getString( id );
+		xpDropWasStacked = false;
 
 		if( XPOverlayGUI.name.equals( "none" ) )
 			XPOverlayGUI.name = tempName;
@@ -319,13 +341,24 @@ public class XPOverlayGUI extends AbstractGui
 
 			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + tempName + " has been set to: " + xp );
 		}
-		else if( stackXpDrops && xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).name.equals( tempName ) && xpDrops.get( xpDrops.size() - 1 ).age < 500 )
+		else if( stackXpDrops && xpDrops.size() > 0 )
 		{
-			xpDrops.get( xpDrops.size() - 1).gainedXp += gainedXp;
-			if( xpDrops.get( xpDrops.size() - 1).age > 475 )
-				xpDrops.get( xpDrops.size() - 1).age = 475;
+			for( XpDrop xpDrop : xpDrops )
+			{
+				System.out.println( xpDrop.name + " " + tempName + " " + xpDrop.age );
+				if( xpDrop.name.equals( tempName ) && xpDrop.age < xpDropDecayAge )
+				{
+					xpDrop.gainedXp += gainedXp;
+					xpDrop.startXp += gainedXp;
+					if( xpDrops.get( xpDrops.size() - 1).age > xpDropDecayAge - 25 )
+						xpDrops.get( xpDrops.size() - 1).age = xpDropDecayAge - 25;
+
+					xpDropWasStacked = true;
+				}
+			}
 		}
-		else
+
+		if( !xpDropWasStacked )
 		{
 			if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).Y > 75 )
 				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, tempName, xp, gainedXp, skip ) );

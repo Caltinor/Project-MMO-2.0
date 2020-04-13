@@ -46,8 +46,15 @@ public class Config
         //GUI
         public ConfigHelper.ConfigValueListener<Double> barOffsetX;
         public ConfigHelper.ConfigValueListener<Double> barOffsetY;
+        public ConfigHelper.ConfigValueListener<Double> xpDropOffsetX;
+        public ConfigHelper.ConfigValueListener<Double> xpDropOffsetY;
+        public ConfigHelper.ConfigValueListener<Double> xpDropSpawnDistance;
+        public ConfigHelper.ConfigValueListener<Double> xpDropOpacityPerTime;
+        public ConfigHelper.ConfigValueListener<Double> xpDropMaxOpacity;
+        public ConfigHelper.ConfigValueListener<Integer> xpDropDecayAge;
         public ConfigHelper.ConfigValueListener<Boolean> showXpDrops;
         public ConfigHelper.ConfigValueListener<Boolean> stackXpDrops;
+        public ConfigHelper.ConfigValueListener<Boolean> xpDropsAttachedToBar;
 
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
@@ -261,6 +268,41 @@ public class Config
                         .comment( "GUI bar position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
                         .translation( "pmmo.barOffsetY" )
                         .defineInRange( "barOffsetY", 0D, 0, 1) );
+
+                this.xpDropOffsetX = subscriber.subscribe(builder
+                        .comment( "GUI Xp drops position X (Width)" )
+                        .translation( "pmmo.xpDropOffsetX" )
+                        .defineInRange( "xpDropOffsetX", 0.5D, 0, 1) );
+
+                this.xpDropOffsetY = subscriber.subscribe(builder
+                        .comment( "GUI Xp drops position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
+                        .translation( "pmmo.xpDropOffsetY" )
+                        .defineInRange( "xpDropOffsetY", 0D, 0, 1) );
+
+                this.xpDropSpawnDistance = subscriber.subscribe(builder
+                        .comment( "How far away does the Xp Drop spawn" )
+                        .translation( "pmmo.xpDropSpawnDistance" )
+                        .defineInRange( "xpDropSpawnDistance", 100D, 0, 1000) );
+
+                this.xpDropOpacityPerTime = subscriber.subscribe(builder
+                        .comment( "How much out of MaxOpacity does the Xp Drop become visible per 1 distance" )
+                        .translation( "pmmo.xpDropOpacityPerTime" )
+                        .defineInRange( "xpDropOpacityPerTime", 5D, 0, 255) );
+
+                this.xpDropMaxOpacity = subscriber.subscribe(builder
+                        .comment( "How opaque (visible) can the xp drop get?" )
+                        .translation( "pmmo.xpDropMaxOpacity" )
+                        .defineInRange( "xpDropMaxOpacity", 200D, 0, 255) );
+
+                this.xpDropDecayAge = subscriber.subscribe(builder
+                        .comment( "At what age do xp drops start to decay?" )
+                        .translation( "pmmo.xpDropDecayAge" )
+                        .defineInRange( "xpDropDecayAge", 500, 0, 5000) );
+
+                this.xpDropsAttachedToBar = subscriber.subscribe(builder
+                        .comment( "Should xp drops sync up with the bar being open or closed? HIGHLY RECOMMEND TO KEEP FALSE IF YOU ARE MOVING XP DROP POSITIONS" )
+                        .translation( "pmmo.xpDropsAttachedToBar" )
+                        .define( "xpDropsAttachedToBar", true ) );
 
                 this.showXpDrops = subscriber.subscribe(builder
                         .comment( "If Off, xp drops will no longer appear" )
