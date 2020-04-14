@@ -60,12 +60,6 @@ public class EventHandler
 		XP.handlePlayerConnected( event );
 	}
 
-	@SubscribeEvent
-	public static void itemSmelted( PlayerEvent.ItemSmeltedEvent event )
-	{
-		XP.handleSmelted( event );
-	}
-
     @SubscribeEvent
 	public static void playerClone( PlayerEvent.Clone event )
 	{

@@ -1,8 +1,10 @@
 package harmonised.pmmo.network;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -12,6 +14,10 @@ import java.util.function.Supplier;
 
 public class MessageDoubleTranslation
 {
+    private static String regKey;
+    private static int lastAmount;
+    private static long lastTime = System.currentTimeMillis();
+
     private String tKey;
     private String fKey;
     private String sKey;
@@ -72,7 +78,23 @@ public class MessageDoubleTranslation
                     break;
 
                 case 1: //green
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), packet.bar );
+                    if( packet.tKey.equals( "pmmo.text.extraDrop" ) && packet.sKey.equals( regKey ) )
+                    {
+                        if( System.currentTimeMillis() - lastTime < 3000 )
+                        {
+                            lastAmount += Integer.parseInt( packet.fKey );
+                        }
+                        else
+                            lastAmount = 0;
+
+                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), packet.bar );
+                    }
+                    else
+                    {
+                        regKey = packet.sKey;
+                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), packet.bar );
+                    }
+                    lastTime = System.currentTimeMillis();
                     break;
 
                 case 2: //red

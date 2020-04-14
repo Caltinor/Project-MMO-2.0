@@ -96,7 +96,19 @@ public class ClientEventHandler
                 else
                     level = 1;
 
-                tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraChance", DP.dp( theMap.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                switch( skill )
+                {
+                    case "mining":
+                        break;
+
+                    case "woodcutting":
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraChance", DP.dp( theMap.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                        break;
+
+                    case "farming":
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", DP.dp( theMap.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                        break;
+                }
             }
         }
     }
@@ -104,22 +116,23 @@ public class ClientEventHandler
     @SubscribeEvent
     public static void tooltipEvent( ItemTooltipEvent event )
     {
-        if( event.getPlayer() != null )
+        PlayerEntity player = event.getPlayer();
+
+        if( player != null )
         {
             Item item = event.getItemStack().getItem();
             List<ITextComponent> tooltip = event.getToolTip();
             int level;
+            String regKey = item.getRegistryName().toString();
+            float hardness;
             double dValue;
 
-            Map<String, Double> wearReq = Requirements.wearReq.get( item.getRegistryName().toString() );
-            Map<String, Double> toolReq = Requirements.toolReq.get( item.getRegistryName().toString() );
-            Map<String, Double> weaponReq = Requirements.weaponReq.get( item.getRegistryName().toString() );
-            Map<String, Double> placeReq = Requirements.placeReq.get( item.getRegistryName().toString() );
-            Map<String, Double> breakReq = Requirements.breakReq.get( item.getRegistryName().toString() );
-            Map<String, Double> xpValue = Requirements.xpValue.get( item.getRegistryName().toString() );
-            Map<String, Double> oreInfo = Requirements.oreInfo.get( item.getRegistryName().toString() );
-            Map<String, Double> logInfo = Requirements.logInfo.get( item.getRegistryName().toString() );
-            Map<String, Double> plantInfo = Requirements.plantInfo.get( item.getRegistryName().toString() );
+            Map<String, Double> wearReq = Requirements.wearReq.get( regKey );
+            Map<String, Double> toolReq = Requirements.toolReq.get( regKey );
+            Map<String, Double> weaponReq = Requirements.weaponReq.get( regKey );
+            Map<String, Double> placeReq = Requirements.placeReq.get( regKey );
+            Map<String, Double> breakReq = Requirements.breakReq.get( regKey );
+            Map<String, Double> xpValue = Requirements.xpValue.get( regKey );
 
             if( xpValue != null && xpValue.size() > 0 )      //XP VALUE
             {
@@ -131,6 +144,13 @@ public class ClientEventHandler
 
                     tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), DP.dp( dValue ) ) );
                 }
+            }
+
+            if( item instanceof BlockItem )
+            {
+                hardness = ((BlockItem) item).getBlock().getBlockHardness( ((BlockItem) item).getBlock().getDefaultState(), null, null );
+                if( hardness > 0 )
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text.hardness", DP.dp( hardness ) ).getString() ) );
             }
 
             if( wearReq != null && wearReq.size() > 0 )
@@ -151,14 +171,21 @@ public class ClientEventHandler
             if( breakReq != null && breakReq.size() > 0 )
                 addTooltipTextSkill( "pmmo.text.break", "break", breakReq, event );
 
-            if( oreInfo != null && oreInfo.size() > 0 )      //ORE INFO
-                addTooltipTextInfo( oreInfo, "mining", event );
+            if( XP.getExtraChance( regKey, "ore", XP.getBreakReqGap( regKey, player, "mining" ) ) > 0 )  //ORE EXTRA CHANCE
+                tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraChance", DP.dp( XP.getExtraChance( regKey, "ore", XP.getBreakReqGap( regKey, player, "mining" ) ) ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+            else if( Requirements.oreInfo.containsKey( regKey ) && Requirements.oreInfo.get( regKey ).containsKey( "extraChance" ) )
+                tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraChance", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
-            if( logInfo != null && logInfo.size() > 0 )      //LOG INFO
-                addTooltipTextInfo( logInfo, "woodcutting", event );
+            if( XP.getExtraChance( regKey, "log", XP.getBreakReqGap( regKey, player, "woodcutting" ) ) > 0 )  //LOG EXTRA CHANCE
+                tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraChance", DP.dp( XP.getExtraChance( regKey, "log", XP.getBreakReqGap( regKey, player, "woodcutting" ) ) ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+            else if( Requirements.logInfo.containsKey( regKey ) && Requirements.logInfo.get( regKey ).containsKey( "extraChance" ) )
+                tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraChance", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
-            if( plantInfo != null && plantInfo.size() > 0 )  //PLANT INFO
-                addTooltipTextInfo( plantInfo, "farming", event );
+            if( XP.getExtraChance( regKey, "plant", XP.getBreakReqGap( regKey, player, "farming" ) ) > 0 )  //PLANT EXTRA CHANCE
+                tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", DP.dp( XP.getExtraChance( regKey, "plant", XP.getBreakReqGap( regKey, player, "farming" ) ) ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+            else if( Requirements.plantInfo.containsKey( regKey ) && Requirements.plantInfo.get( regKey ).containsKey( "extraChance" ) )
+                tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+
         }
     }
 }

@@ -378,7 +378,6 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			for( XpDrop xpDrop : xpDrops )
 			{
-				System.out.println( xpDrop.name + " " + tempName + " " + xpDrop.age );
 				if( xpDrop.name.equals( tempName ) && xpDrop.age < xpDropDecayAge )
 				{
 					xpDrop.gainedXp += gainedXp;

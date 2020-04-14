@@ -324,6 +324,9 @@
 		"minecraft:ice": {
 			"mining": 0.1
 		},
+		"minecraft:rail": {
+			"mining": 0.8
+		},
 		"minecraft:prismarine": {
 			"mining": 2.5
 		},
@@ -530,22 +533,28 @@
 		"minecraft:beetroot": {
 			"farming": 20
 		},
-		"minecraft:beetroot_seeds": {
+		"minecraft:beetroots": {
 			"farming": 20
 		},
 		"minecraft:carrot": {
 			"farming": 8.5
 		},
+		"minecraft:carrots": {
+			"farming": 8.5
+		},
 		"minecraft:potato": {
+			"farming": 7.5
+		},
+		"minecraft:potatoes": {
 			"farming": 7.5
 		},
 		"minecraft:melon": {
 			"farming": 7.5
 		},
-		"minecraft:melon_slice": {
+		"minecraft:melon_seeds": {
 			"farming": 7.5
 		},
-		"minecraft:melon_seeds": {
+		"minecraft:melon_slice": {
 			"farming": 7.5
 		},
 		"minecraft:pumpkin": {
@@ -667,55 +676,28 @@
 		"minecraft:nether_quartz_ore": {
 			"extraChance": 0.55
 		},
-		"minecraft:quartz": {
-			"extraChance": 0.55
-		},
 		"minecraft:coal_ore": {
-			"extraChance": 1
-		},
-		"minecraft:coal": {
 			"extraChance": 1
 		},
 		"minecraft:iron_ore": {
 			"extraChance": 0.75
 		},
-		"minecraft:iron_ingot": {
-			"extraChance": 0.75
-		},
 		"minecraft:gold_ore": {
-			"extraChance": 0.5
-		},
-		"minecraft:gold_ingot": {
 			"extraChance": 0.5
 		},
 		"minecraft:diamond_ore": {
 			"extraChance": 0.33
 		},
-		"minecraft:diamond": {
-			"extraChance": 0.33
-		},
 		"minecraft:redstone_ore": {
-			"extraChance": 2
-		},
-		"minecraft:redstone": {
 			"extraChance": 2
 		},
 		"minecraft:lapis_ore": {
 			"extraChance": 1.5
 		},
-		"minecraft:lapis_lazuli": {
-			"extraChance": 1.5
-		},
 		"minecraft:emerald_ore": {
 			"extraChance": 0.75
 		},
-		"minecraft:emerald": {
-			"extraChance": 0.75
-		},
 		"minecraft:glowstone": {
-			"extraChance": 2
-		},
-		"minecraft:glowstone_dust": {
 			"extraChance": 2
 		}
 	},
@@ -764,28 +746,13 @@
 		"minecraft:wheat": {
 			"extraChance": 0.75
 		},
-		"minecraft:wheat_seeds": {
-			"extraChance": 0.75
-		},
 		"minecraft:melon": {
-			"extraChance": 0.75
-		},
-		"minecraft:melon_seeds": {
-			"extraChance": 0.75
-		},
-		"minecraft:melon_slice": {
 			"extraChance": 0.75
 		},
 		"minecraft:pumpkin": {
 			"extraChance": 0.6
 		},
-		"minecraft:pumpkin_seeds": {
-			"extraChance": 0.6
-		},
 		"minecraft:beetroot": {
-			"extraChance": 1
-		},
-		"minecraft:beetroot_seeds": {
 			"extraChance": 1
 		},
 		"minecraft:cactus": {
@@ -803,10 +770,13 @@
 		"minecraft:sea_pickle": {
 			"extraChance": 1.5
 		},
+		"minecraft:potatoes": {
+			"extraChance": 1.5
+		},
 		"minecraft:potato": {
 			"extraChance": 1.5
 		},
-		"minecraft:poisonous_potato": {
+		"minecraft:carrots": {
 			"extraChance": 1.5
 		},
 		"minecraft:carrot": {
