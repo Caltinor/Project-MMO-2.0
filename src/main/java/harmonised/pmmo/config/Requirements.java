@@ -76,7 +76,7 @@ public class Requirements
                 for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
                 {
                     if( Skill.getInt( entry.getKey() ) != 0 && entry.getValue() != 0 && entry.getValue() > 0 )
-                        outReq.get( key ).put( entry.getKey(), Math.ceil( entry.getValue() ) );
+                        outReq.get( key ).put( entry.getKey(), entry.getValue() );
                 }
             }
         });

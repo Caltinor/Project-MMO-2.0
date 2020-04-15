@@ -40,6 +40,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
@@ -712,10 +713,15 @@ public class XP
 
 			if( !player.isCreative() )
 			{
-				Block block = event.getState().getBlock();
+				BlockState state = event.getState();
+				Block block = state.getBlock();
 				World world = event.getWorld().getWorld();
-                Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
-				boolean passedBreakReq = checkReq( player, blockAbove.getRegistryName(), "break" );
+
+				Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
+				boolean passedBreakReq = false;
+
+				if( Requirements.plantInfo.containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable );
+					passedBreakReq = checkReq( player, blockAbove.getRegistryName(), "break" );
 
 				if( !passedBreakReq )
 					block = blockAbove;
@@ -760,8 +766,6 @@ public class XP
 					}
 					else
 						drops = new ArrayList<>();
-
-//					System.out.println( drops );
 
 					Block sugarCane = Blocks.SUGAR_CANE;
 					Block cactus = Blocks.CACTUS;
@@ -816,7 +820,6 @@ public class XP
 					{
 						ItemStack theDropItem = drops.get( 0 );
 
-						BlockState state = event.getState();
 						int age = -1;
 						int maxAge = -1;
 
