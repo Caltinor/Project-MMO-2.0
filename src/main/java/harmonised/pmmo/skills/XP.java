@@ -656,32 +656,28 @@ public class XP
 
 	public static double getExtraChance(String regKey, String type, int gap)
 	{
-		String skill;
-		int extraChancePerLevel = 0;
+		double extraChancePerLevel = 0;
 		double extraChance;
 
 		switch( type )
 		{
 			case "ore":
-				skill = "mining";
 				if( Requirements.oreInfo.containsKey( regKey ) && Requirements.oreInfo.get( regKey ).containsKey( "extraChance" ) )
-					extraChancePerLevel = (int) Math.ceil( Requirements.oreInfo.get( regKey ).get( "extraChance" ) );
+					extraChancePerLevel = Requirements.oreInfo.get( regKey ).get( "extraChance" );
 				break;
 
 			case "log":
-				skill = "woodcutting";
 				if( Requirements.logInfo.containsKey( regKey ) && Requirements.logInfo.get( regKey ).containsKey( "extraChance" ) )
-					extraChancePerLevel = (int) Math.ceil( Requirements.logInfo.get( regKey ).get( "extraChance" ) );
+					extraChancePerLevel = Requirements.logInfo.get( regKey ).get( "extraChance" );
 				break;
 
 			case "plant":
-				skill = "farming";
 				if( Requirements.plantInfo.containsKey( regKey ) && Requirements.plantInfo.get( regKey ).containsKey( "extraChance" ) )
-					extraChancePerLevel = (int) Math.ceil( Requirements.plantInfo.get( regKey ).get( "extraChance" ) );
+					extraChancePerLevel = Requirements.plantInfo.get( regKey ).get( "extraChance" );
 				break;
 
 			default:
-				System.out.println("WRONG EXTRA CHANCE TYPE! PLEASE REPORT!");
+				System.out.println( "WRONG EXTRA CHANCE TYPE! PLEASE REPORT!" );
 				return 0;
 		}
 
@@ -2055,7 +2051,8 @@ public class XP
 			{
 				player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
 				{
-					NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.milestoneLevelUp", thePlayer.getDisplayName().getString(), "" + currLevel , "pmmo.text." + skillName, false, 3 ), thePlayer );
+					if( thePlayer.getUniqueID() != player.getUniqueID() )
+						NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.milestoneLevelUp", player.getDisplayName().getString(), "" + currLevel , "pmmo.text." + skillName, false, 3 ), thePlayer );
 				});
 			}
 		}
