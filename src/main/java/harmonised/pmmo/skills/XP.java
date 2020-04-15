@@ -713,13 +713,20 @@ public class XP
 			if( !player.isCreative() )
 			{
 				Block block = event.getState().getBlock();
+				World world = event.getWorld().getWorld();
+                Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
+				boolean passedBreakReq = checkReq( player, blockAbove.getRegistryName(), "break" );
 
-				if( checkReq( player, block.getRegistryName(), "break" ) )
+				if( !passedBreakReq )
+					block = blockAbove;
+				else
+					passedBreakReq = checkReq( player, block.getRegistryName(), "break" );
+
+				if( passedBreakReq )
 				{
 					double blockHardnessLimit = Config.config.blockHardnessLimit.get();
 					boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
 					Material material = event.getState().getMaterial();
-					World world = event.getWorld().getWorld();
 					ItemStack toolUsed = player.getHeldItemMainhand();
 					String skill = getSkill( correctHarvestTool( material ) ).name().toLowerCase();
 					String regKey = block.getRegistryName().toString();
