@@ -75,7 +75,7 @@ public class XP
 	private static Map<String, Double> testMap = new HashMap<>();
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	private static final Logger LOGGER = LogManager.getLogger();
-	public static Set<String> isCrawling = new HashSet<>();
+	public static Set<UUID> isCrawling = new HashSet<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
 	public static double baseXp, xpIncreasePerLevel;
@@ -753,6 +753,7 @@ public class XP
 								.withRandom(world.rand)
 								.withParameter( LootParameters.POSITION, event.getPos() )
 								.withParameter( LootParameters.TOOL, toolUsed )
+								.withParameter( LootParameters.THIS_ENTITY, player )
 								.withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
 						if (fortune > 0)
 						{
@@ -2170,106 +2171,103 @@ public class XP
 	{
 		PlayerEntity player = event.player;
 
-		if( !player.world.isRemote() )
-		{
-			if( isCrawling.contains( player.getName().getString() ) && crawlingAllowed )
-				PMMOPoseSetter.setPose( player, Pose.SWIMMING );
+		if( isCrawling.contains( player.getUniqueID() ) && crawlingAllowed )
+			PMMOPoseSetter.setPose( player, Pose.SWIMMING );
 
-			if( !player.isCreative() && player.isAlive() )
+		if( !player.isCreative() && player.isAlive() )
+		{
+			String name = player.getName().getString();
+
+			if( player.isSprinting() )
+				AttributeHandler.updateSpeed( player );
+			else
+				AttributeHandler.resetSpeed( player );
+
+			if( !lastAward.containsKey( name ) )
+				lastAward.put( name, System.currentTimeMillis() );
+
+			long gap = System.currentTimeMillis() - lastAward.get( name );
+			if( gap > 1000 )
 			{
-				String name = player.getName().getString();
+				CompoundNBT skillsTag = getSkillsTag( player );
+
+				int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
+				int flyLevel = levelAtXp( skillsTag.getFloat( "flying" ) );
+				int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
+				int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();
+				float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
+				float speedAmp = 0;
+				PlayerInventory inv = player.inventory;
+
+				try
+				{
+					if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
+						checkWornLevelReq( player, 39 );
+					if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
+						checkWornLevelReq( player, 38 );
+					if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
+						checkWornLevelReq( player, 37 );
+					if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
+						checkWornLevelReq( player, 36 );
+				}
+				catch( Exception e )
+				{
+					//Can't cast into ArmorMaterial
+				}
+////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
+
+				if( player.isPotionActive( Effects.SPEED ) )
+					speedAmp = player.getActivePotionEffect( Effects.SPEED ).getAmplifier() + 1;
+
+				float swimAward = ( 3 + swimLevel    / 10.00f ) * ( gap / 1000f ) * ( 1 + swimAmp / 4 );
+				float flyAward  = ( 1 + flyLevel     / 30.77f ) * ( gap / 1000f );
+				float runAward  = ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f ) * ( 1 + speedAmp / 4);
+
+				lastAward.replace( name, System.currentTimeMillis() );
+				Block waterBlock = Blocks.WATER;
+				BlockPos playerPos = player.getPosition();
+				boolean waterBelow = true;
+
+				for( int i = -1; i <= 1; i++ )
+				{
+					for( int j = -1; j <= 1; j++ )
+					{
+						if( !player.getEntityWorld().getBlockState( playerPos.down().east( i ).north( j ) ).getBlock().equals( waterBlock ) )
+							waterBelow = false;
+					}
+				}
+
+				boolean waterAbove = player.getEntityWorld().getBlockState( playerPos.up()   ).getBlock().equals( waterBlock );
+
+				if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
+				{
+					player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 250, 0, true, false ) );
+				}
+				else if( player.isPotionActive( Effects.NIGHT_VISION ) && player.getActivePotionEffect( Effects.NIGHT_VISION ).isAmbient() )
+					player.removePotionEffect( Effects.NIGHT_VISION );
 
 				if( player.isSprinting() )
-					AttributeHandler.updateSpeed( player );
-				else
-					AttributeHandler.resetSpeed( player );
-
-				if( !lastAward.containsKey( name ) )
-					lastAward.put( name, System.currentTimeMillis() );
-
-				long gap = System.currentTimeMillis() - lastAward.get( name );
-				if( gap > 1000 )
 				{
-					CompoundNBT skillsTag = getSkillsTag( player );
-
-					int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
-					int flyLevel = levelAtXp( skillsTag.getFloat( "flying" ) );
-					int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
-					int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();
-					float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
-					float speedAmp = 0;
-					PlayerInventory inv = player.inventory;
-
-					try
-					{
-						if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-							checkWornLevelReq( player, 39 );
-						if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-							checkWornLevelReq( player, 38 );
-						if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-							checkWornLevelReq( player, 37 );
-						if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-							checkWornLevelReq( player, 36 );
-					}
-					catch( Exception e )
-					{
-						//Can't cast into ArmorMaterial
-					}
-////////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
-
-					if( player.isPotionActive( Effects.SPEED ) )
-						speedAmp = player.getActivePotionEffect( Effects.SPEED ).getAmplifier() + 1;
-
-					float swimAward = ( 3 + swimLevel    / 10.00f ) * ( gap / 1000f ) * ( 1 + swimAmp / 4 );
-					float flyAward  = ( 1 + flyLevel     / 30.77f ) * ( gap / 1000f );
-					float runAward  = ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f ) * ( 1 + speedAmp / 4);
-
-					lastAward.replace( name, System.currentTimeMillis() );
-					Block waterBlock = Blocks.WATER;
-					BlockPos playerPos = player.getPosition();
-					boolean waterBelow = true;
-
-					for( int i = -1; i <= 1; i++ )
-					{
-						for( int j = -1; j <= 1; j++ )
-						{
-							if( !player.getEntityWorld().getBlockState( playerPos.down().east( i ).north( j ) ).getBlock().equals( waterBlock ) )
-								waterBelow = false;
-						}
-					}
-
-					boolean waterAbove = player.getEntityWorld().getBlockState( playerPos.up()   ).getBlock().equals( waterBlock );
-
-					if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
-					{
-						player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 250, 0, true, false ) );
-					}
-					else if( player.isPotionActive( Effects.NIGHT_VISION ) && player.getActivePotionEffect( Effects.NIGHT_VISION ).isAmbient() )
-						player.removePotionEffect( Effects.NIGHT_VISION );
-
-					if( player.isSprinting() )
-					{
-						if( player.isInWater() && ( waterAbove || waterBelow ) )
-						{
-
-
-							awardXp( player, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true );
-						}
-						else
-							awardXp( player, Skill.AGILITY, "running", runAward, true );
-					}
-
 					if( player.isInWater() && ( waterAbove || waterBelow ) )
-						{
-						if( !player.isSprinting() )
-							awardXp( player, Skill.SWIMMING, "swimming", swimAward, true );
-					}
-					else if( player.isElytraFlying() )
-						awardXp( player, Skill.FLYING, "flying", flyAward, true );
+					{
 
-					if( (player.getRidingEntity() instanceof BoatEntity ) && player.isInWater() )
-						awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true );
+
+						awardXp( player, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true );
+					}
+					else
+						awardXp( player, Skill.AGILITY, "running", runAward, true );
 				}
+
+				if( player.isInWater() && ( waterAbove || waterBelow ) )
+					{
+					if( !player.isSprinting() )
+						awardXp( player, Skill.SWIMMING, "swimming", swimAward, true );
+				}
+				else if( player.isElytraFlying() )
+					awardXp( player, Skill.FLYING, "flying", flyAward, true );
+
+				if( (player.getRidingEntity() instanceof BoatEntity ) && player.isInWater() )
+					awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true );
 			}
 		}
 	}

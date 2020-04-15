@@ -52,7 +52,9 @@ public class ClientEventHandler
             }
 
             if( ClientHandler.CRAWL_KEY.isKeyDown() )
-                PMMOPoseSetter.setPose( Minecraft.getInstance().player, Pose.SWIMMING );
+                XP.isCrawling.add( Minecraft.getInstance().player.getUniqueID() );
+            else
+                XP.isCrawling.remove( Minecraft.getInstance().player.getUniqueID() );
         }
     }
 

@@ -4,6 +4,7 @@ import harmonised.pmmo.skills.XP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessageCrawling
@@ -36,11 +37,11 @@ public class MessageCrawling
     {
         ctx.get().enqueueWork(() ->
         {
-            String name = ctx.get().getSender().getName().getFormattedText();
+            UUID playerUUID = ctx.get().getSender().getUniqueID();
             if( packet.crawling )
-                XP.isCrawling.add( name );
+                XP.isCrawling.add( playerUUID );
             else
-                XP.isCrawling.remove( name );
+                XP.isCrawling.remove( playerUUID );
         });
         ctx.get().setPacketHandled(true);
     }
