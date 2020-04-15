@@ -11,6 +11,8 @@ import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.PMMOPoseSetter;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -48,6 +50,9 @@ public class ClientEventHandler
                 wasCrawling = ClientHandler.CRAWL_KEY.isKeyDown();
                 NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
             }
+
+            if( ClientHandler.CRAWL_KEY.isKeyDown() )
+                PMMOPoseSetter.setPose( Minecraft.getInstance().player, Pose.SWIMMING );
         }
     }
 

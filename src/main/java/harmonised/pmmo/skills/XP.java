@@ -2272,12 +2272,6 @@ public class XP
 				}
 			}
 		}
-		else
-		{
-			if( ClientHandler.CRAWL_KEY.isKeyDown() )
-				PMMOPoseSetter.setPose( player, Pose.SWIMMING );
-		}
-
 	}
 
 	public static void handleFished( ItemFishedEvent event )
