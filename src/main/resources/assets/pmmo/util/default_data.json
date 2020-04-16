@@ -382,6 +382,10 @@
 	"use_requirement": {
 		"minecraft:firework_rocket": {
 			"flying": 5
+		},
+		"minecraft:stonecutter": {
+			"crafting": 10,
+			"building": 10
 		}
 	},
 	"place_requirement": {
@@ -671,10 +675,10 @@
 			"farming": 12
 		},
 		"minecraft:sugar_cane": {
-			"farming": 8
+			"farming": 10
 		},
 		"minecraft:cactus": {
-			"farming": 15
+			"farming": 12
 		},
 		"minecraft:bamboo": {
 			"farming": 1.2
@@ -689,28 +693,28 @@
 			"farming": 4
 		},
 		"minecraft:wheat": {
-			"farming": 15
+			"farming": 12
 		},
 		"minecraft:wheat_seeds": {
-			"farming": 15
+			"farming": 12
 		},
 		"minecraft:beetroot": {
-			"farming": 20
+			"farming": 15
 		},
 		"minecraft:beetroots": {
-			"farming": 20
+			"farming": 15
 		},
 		"minecraft:carrot": {
-			"farming": 8.5
+			"farming": 4.5
 		},
 		"minecraft:carrots": {
-			"farming": 8.5
+			"farming": 4.5
 		},
 		"minecraft:potato": {
-			"farming": 7.5
+			"farming": 3.5
 		},
 		"minecraft:potatoes": {
-			"farming": 7.5
+			"farming": 3.5
 		},
 		"minecraft:melon": {
 			"farming": 7.5
@@ -740,22 +744,22 @@
 			"farming": 5
 		},
 		"minecraft:lily_pad": {
-			"farming": 15
+			"farming": 5
 		},
 		"minecraft:dandelion": {
-			"farming": 15
+			"farming": 8
 		},
 		"minecraft:white_tulip": {
-			"farming": 18.5
+			"farming": 8.5
 		},
 		"minecraft:pink_tulip": {
-			"farming": 16
+			"farming": 6
 		},
 		"minecraft:red_tulip": {
-			"farming": 17.5
+			"farming": 7.5
 		},
 		"minecraft:oxeye_daisy": {
-			"farming": 14.5
+			"farming": 8.5
 		},
 		"minecraft:sunflower": {
 			"farming": 17.5
@@ -764,10 +768,10 @@
 			"farming": 16.5
 		},
 		"minecraft:rose_bush": {
-			"farming": 19.5
+			"farming": 13.5
 		},
 		"minecraft:peony": {
-			"farming": 22.5
+			"farming": 17.5
 		},
 		"minecraft:dead_bush": {
 			"farming": 5
@@ -806,13 +810,13 @@
 			"farming": 6
 		},
 		"minecraft:cornflower": {
-			"farming": 15.5
+			"farming": 5.5
 		},
 		"minecraft:azure_bluet": {
-			"farming": 14.5
+			"farming": 4.5
 		},
 		"minecraft:lily_of_the_valley": {
-			"farming": 19.5
+			"farming": 9.5
 		},
 		"minecraft:blue_orchid": {
 			"farming": 20

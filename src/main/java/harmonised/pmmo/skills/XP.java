@@ -1305,6 +1305,9 @@ public class XP
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.toolReq, "toolReq" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.weaponReq, "weaponReq" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.mobReq, "mobReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.useReq, "useReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
@@ -1432,7 +1435,7 @@ public class XP
 			int level;
             boolean metReq;
 
-			if( event instanceof RightClickItem )
+			if( event instanceof RightClickItem && !player.isCreative() )
             {
                 metReq = checkReq( player, item.getRegistryName(), "use" );
 
@@ -1448,7 +1451,7 @@ public class XP
                 Block block = player.world.getBlockState( event.getPos() ).getBlock();
                 metReq = checkReq( player, block.getRegistryName(), "use" );
 
-                if( !metReq )
+                if( !metReq && !player.isCreative() )
                 {
                     event.setCanceled( true );
                     if( player.world.isRemote() && event.getHand().equals( Hand.MAIN_HAND ) )
@@ -1838,7 +1841,7 @@ public class XP
 	{
 		if( !event.getPlayer().world.isRemote )
 		{
-			awardXp( event.getPlayer(), Skill.CRAFTING, "crafting " + event.getCrafting().getDisplayName(), + 10.0f, false );
+			awardXp( event.getPlayer(), Skill.CRAFTING, "crafting " + event.getCrafting().getDisplayName(), 1.0f, false );
 		}
 	}
 

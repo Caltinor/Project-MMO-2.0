@@ -72,6 +72,9 @@ public class MessageReqUpdate
                     Requirements.toolReq = new HashMap<>();
                     Requirements.weaponReq = new HashMap<>();
                     Requirements.mobReq = new HashMap<>();
+                    Requirements.useReq = new HashMap<>();
+                    Requirements.placeReq = new HashMap<>();
+                    Requirements.breakReq = new HashMap<>();
                     Requirements.xpValue = new HashMap<>();
                     Requirements.oreInfo = new HashMap<>();
                     Requirements.logInfo = new HashMap<>();
@@ -94,6 +97,18 @@ public class MessageReqUpdate
                     Requirements.mobReq = newPackage;
                     break;
 
+                case "usereq":
+                    Requirements.useReq = newPackage;
+                    break;
+
+                case "placereq":
+                    Requirements.placeReq = newPackage;
+                    break;
+
+                case "breakreq":
+                    Requirements.breakReq = newPackage;
+                    break;
+
                 case "xpvalue":
                     Requirements.xpValue = newPackage;
                     break;
@@ -108,6 +123,10 @@ public class MessageReqUpdate
 
                 case "plantinfo":
                     Requirements.plantInfo = newPackage;
+                    break;
+
+                case "salvageInfo":
+
                     break;
 
                 default:
