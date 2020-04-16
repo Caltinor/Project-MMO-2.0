@@ -9,6 +9,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
@@ -65,13 +66,7 @@ public class EventHandler
 	{
 		XP.handleClone( event );
 	}
-	
-	@SubscribeEvent
-	public static void onRightClickBlock( RightClickBlock event )
-	{
-		XP.handleRightClickBlock( event );
-	}
-	
+
 	@SubscribeEvent
 	public static void onAnvilRepair( AnvilRepairEvent event )
 	{
@@ -97,8 +92,9 @@ public class EventHandler
 		XP.handleBreakSpeed( event );
 	}
 
-	public static void fishingHooked( FishingRodHookedTrigger event )
+	@SubscribeEvent
+	public static void itemUsed( PlayerInteractEvent event )
 	{
-
+		XP.handleItemUse( event );
 	}
 }

@@ -379,6 +379,11 @@
 			"combat": 1
 		}
 	},
+	"use_requirement": {
+		"minecraft:firework_rocket": {
+			"flying": 5
+		}
+	},
 	"place_requirement": {
 		"minecraft:bedrock": {
 			"building": 999

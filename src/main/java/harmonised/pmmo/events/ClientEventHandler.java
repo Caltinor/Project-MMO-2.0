@@ -110,6 +110,7 @@ public class ClientEventHandler
             Map<String, Double> wearReq = Requirements.wearReq.get( regKey );
             Map<String, Double> toolReq = Requirements.toolReq.get( regKey );
             Map<String, Double> weaponReq = Requirements.weaponReq.get( regKey );
+            Map<String, Double> useReq = Requirements.useReq.get( regKey );
             Map<String, Double> placeReq = Requirements.placeReq.get( regKey );
             Map<String, Double> breakReq = Requirements.breakReq.get( regKey );
             Map<String, Double> xpValue = Requirements.xpValue.get( regKey );
@@ -143,6 +144,9 @@ public class ClientEventHandler
 
             if( weaponReq != null && weaponReq.size() > 0 )
                 addTooltipTextSkill( "pmmo.text.weapon", "weapon", weaponReq, event );
+
+            if( useReq != null && useReq.size() > 0 )
+                addTooltipTextSkill( "pmmo.text.use", "use", useReq, event );
 
 //            if( wearReq != null && wearReq.size() > 0 )
 //                addTooltipTextSkill( "pmmo.text.wear", "mob", mobReq, event );

@@ -22,6 +22,7 @@ public class Requirements
     public static Map<String, Map<String, Double>> toolReq = new HashMap<>();
     public static Map<String, Map<String, Double>> weaponReq = new HashMap<>();
     public static Map<String, Map<String, Double>> mobReq = new HashMap<>();
+    public static Map<String, Map<String, Double>> useReq = new HashMap<>();
     public static Map<String, Map<String, Double>> placeReq = new HashMap<>();
     public static Map<String, Map<String, Double>> breakReq = new HashMap<>();
     public static Map<String, Map<String, Double>> xpValue = new HashMap<>();
@@ -103,6 +104,7 @@ public class Requirements
         updateReqSkills( req.tools, toolReq );
         updateReqSkills( req.weapons, weaponReq );
         updateReqSkills( req.mobs, mobReq );
+        updateReqSkills( req.use, useReq );
         updateReqSkills( req.xpValues, xpValue );
         updateReqSkills( req.placing, placeReq );
         updateReqSkills( req.breaking, breakReq );
@@ -172,6 +174,7 @@ public class Requirements
     private final Map<String, RequirementItem> tools = Maps.newHashMap();
     private final Map<String, RequirementItem> weapons = Maps.newHashMap();
     private final Map<String, RequirementItem> mobs = Maps.newHashMap();
+    private final Map<String, RequirementItem> use = Maps.newHashMap();
     private final Map<String, RequirementItem> placing = Maps.newHashMap();
     private final Map<String, RequirementItem> breaking = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
@@ -235,6 +238,7 @@ public class Requirements
             deserializeGroup(obj, "tool_requirement", req.tools::put, context);
             deserializeGroup(obj, "weapon_requirement", req.weapons::put, context);
             deserializeGroup(obj, "mob_requirement", req.mobs::put, context);
+            deserializeGroup(obj, "use_requirement", req.use::put, context);
             deserializeGroup(obj, "place_requirement", req.placing::put, context);
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);
             deserializeGroup(obj, "xp_value", req.xpValues::put, context);
