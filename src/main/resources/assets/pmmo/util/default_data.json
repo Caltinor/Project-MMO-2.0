@@ -1,5 +1,9 @@
 {
 	"wear_requirement": {
+		"minecraft:elytra": {
+			"agility": 40,
+			"endurance": 20
+		},
 		"minecraft:netherite_helmet": {
 			"endurance": 60
 		},
@@ -11,10 +15,6 @@
 		},
 		"minecraft:netherite_boots": {
 			"endurance": 60
-		},
-		"minecraft:elytra": {
-			"agility": 40,
-			"endurance": 20
 		},
 		"minecraft:diamond_helmet": {
 			"endurance": 40
@@ -79,6 +79,66 @@
 		"minecraft:turtle_helmet": {
 			"endurance": 15,
 			"swimming": 5
+		},
+		"oresandmetals:rune_helmet": {
+			"endurance": 40
+		},
+		"oresandmetals:rune_chestplate": {
+			"endurance": 40
+		},
+		"oresandmetals:rune_leggings": {
+			"endurance": 40
+		},
+		"oresandmetals:rune_boots": {
+			"endurance": 40
+		},
+		"oresandmetals:adamant_helmet": {
+			"endurance": 30
+		},
+		"oresandmetals:adamant_chestplate": {
+			"endurance": 30
+		},
+		"oresandmetals:adamant_leggings": {
+			"endurance": 30
+		},
+		"oresandmetals:adamant_boots": {
+			"endurance": 30
+		},
+		"oresandmetals:mithril_helmet": {
+			"endurance": 20
+		},
+		"oresandmetals:mithril_chestplate": {
+			"endurance": 20
+		},
+		"oresandmetals:mithril_leggings": {
+			"endurance": 20
+		},
+		"oresandmetals:mithril_boots": {
+			"endurance": 20
+		},
+		"oresandmetals:steel_helmet": {
+			"endurance": 10
+		},
+		"oresandmetals:steel_chestplate": {
+			"endurance": 10
+		},
+		"oresandmetals:steel_leggings": {
+			"endurance": 10
+		},
+		"oresandmetals:steel_boots": {
+			"endurance": 10
+		},
+		"oresandmetals:bronze_helmet": {
+			"endurance": 1
+		},
+		"oresandmetals:bronze_chestplate": {
+			"endurance": 1
+		},
+		"oresandmetals:bronze_leggings": {
+			"endurance": 1
+		},
+		"oresandmetals:bronze_boots": {
+			"endurance": 1
 		}
 	},
 	"tool_requirement": {
@@ -134,6 +194,51 @@
 			"excavation": 1
 		},
 		"minecraft:wooden_axe": {
+			"woodcutting": 1
+		},
+		"oresandmetals:rune_pickaxe": {
+			"mining": 40
+		},
+		"oresandmetals:rune_shovel": {
+			"excavation": 40
+		},
+		"oresandmetals:rune_axe": {
+			"woodcutting": 40
+		},
+		"oresandmetals:adamant_pickaxe": {
+			"mining": 30
+		},
+		"oresandmetals:adamant_shovel": {
+			"excavation": 30
+		},
+		"oresandmetals:adamant_axe": {
+			"woodcutting": 30
+		},
+		"oresandmetals:mithril_pickaxe": {
+			"mining": 20
+		},
+		"oresandmetals:mithril_shovel": {
+			"excavation": 20
+		},
+		"oresandmetals:mithril_axe": {
+			"woodcutting": 20
+		},
+		"oresandmetals:steel_pickaxe": {
+			"mining": 10
+		},
+		"oresandmetals:steel_shovel": {
+			"excavation": 10
+		},
+		"oresandmetals:steel_axe": {
+			"woodcutting": 10
+		},
+		"oresandmetals:bronze_pickaxe": {
+			"mining": 1
+		},
+		"oresandmetals:bronze_shovel": {
+			"excavation": 1
+		},
+		"oresandmetals:bronze_axe": {
 			"woodcutting": 1
 		}
 	},
@@ -212,6 +317,66 @@
 		},
 		"minecraft:wooden_sword": {
 			"combat": 1
+		},
+		"oresandmetals:rune_pickaxe": {
+			"combat": 40
+		},
+		"oresandmetals:rune_shovel": {
+			"combat": 40
+		},
+		"oresandmetals:rune_axe": {
+			"combat": 40
+		},
+		"oresandmetals:rune_sword": {
+			"combat": 40
+		},
+		"oresandmetals:adamant_pickaxe": {
+			"combat": 30
+		},
+		"oresandmetals:adamant_shovel": {
+			"combat": 30
+		},
+		"oresandmetals:adamant_axe": {
+			"combat": 30
+		},
+		"oresandmetals:adamant_sword": {
+			"combat": 30
+		},
+		"oresandmetals:mithril_pickaxe": {
+			"combat": 20
+		},
+		"oresandmetals:mithril_shovel": {
+			"combat": 20
+		},
+		"oresandmetals:mithril_axe": {
+			"combat": 20
+		},
+		"oresandmetals:mithril_sword": {
+			"combat": 20
+		},
+		"oresandmetals:steel_pickaxe": {
+			"combat": 10
+		},
+		"oresandmetals:steel_shovel": {
+			"combat": 10
+		},
+		"oresandmetals:steel_axe": {
+			"combat": 10
+		},
+		"oresandmetals:steel_sword": {
+			"combat": 10
+		},
+		"oresandmetals:bronze_pickaxe": {
+			"combat": 1
+		},
+		"oresandmetals:bronze_shovel": {
+			"combat": 1
+		},
+		"oresandmetals:bronze_axe": {
+			"combat": 1
+		},
+		"oresandmetals:bronze_sword": {
+			"combat": 1
 		}
 	},
 	"place_requirement": {
@@ -234,6 +399,21 @@
 		},
 		"minecraft:barrier": {
 			"mining": 999
+		},
+		"oresandmetals:runite_ore": {
+			"mining": 40
+		},
+		"oresandmetals:adamantite_ore": {
+			"mining": 30
+		},
+		"oresandmetals:mithril_ore": {
+			"mining": 20
+		},
+		"oresandmetals:tin_ore": {
+			"mining": 1
+		},
+		"oresandmetals:copper_ore": {
+			"mining": 1
 		}
 	},
 	"xp_value": {
@@ -246,43 +426,22 @@
 		"minecraft:coal_ore": {
 			"mining": 2
 		},
-		"minecraft:coal": {
-			"mining": 2
-		},
 		"minecraft:iron_ore": {
-			"mining": 12
-		},
-		"minecraft:iron_ingot": {
 			"mining": 12
 		},
 		"minecraft:gold_ore": {
 			"mining": 22
 		},
-		"minecraft:gold_ingot": {
-			"mining": 22
-		},
 		"minecraft:diamond_ore": {
-			"mining": 35
-		},
-		"minecraft:diamond": {
 			"mining": 35
 		},
 		"minecraft:redstone_ore": {
 			"mining": 1.5
 		},
-		"minecraft:redstone": {
-			"mining": 1.5
-		},
 		"minecraft:lapis_ore": {
 			"mining": 5
 		},
-		"minecraft:lapis_lazuli": {
-			"mining": 5
-		},
 		"minecraft:emerald_ore": {
-			"mining": 60
-		},
-		"minecraft:emerald": {
 			"mining": 60
 		},
 		"minecraft:granite": {
@@ -670,6 +829,21 @@
 		},
 		"minecraft:saddle": {
 			"fishing": 125
+		},
+		"oresandmetals:runite_ore": {
+			"mining": 45
+		},
+		"oresandmetals:adamantite_ore": {
+			"mining": 30
+		},
+		"oresandmetals:mithril_ore": {
+			"mining": 20
+		},
+		"oresandmetals:tin_ore": {
+			"mining": 5
+		},
+		"oresandmetals:copper_ore": {
+			"mining": 5
 		}
 	},
 	"ore": {

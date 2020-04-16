@@ -10,6 +10,8 @@ import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.PMMOPoseSetter;
 import net.minecraft.entity.Pose;
@@ -22,6 +24,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -89,37 +92,6 @@ public class ClientEventHandler
         }
     }
 
-    private static void addTooltipTextInfo( Map<String, Double> theMap, String skill, ItemTooltipEvent event )
-    {
-        int level;
-        List<ITextComponent> tooltip = event.getToolTip();
-
-        if( theMap != null && theMap.size() > 0 )
-        {
-            if( theMap.get( "extraChance" ) != null )
-            {
-                if(XPOverlayGUI.skills.containsKey( skill ) )
-                    level = XP.levelAtXp( XPOverlayGUI.skills.get( skill ).goalXp );
-                else
-                    level = 1;
-
-                switch( skill )
-                {
-                    case "mining":
-                        break;
-
-                    case "woodcutting":
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraChance", DP.dp( theMap.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                        break;
-
-                    case "farming":
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", DP.dp( theMap.get( "extraChance" ) * level ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                        break;
-                }
-            }
-        }
-    }
-
     @SubscribeEvent
     public static void tooltipEvent( ItemTooltipEvent event )
     {
@@ -133,6 +105,7 @@ public class ClientEventHandler
             String regKey = item.getRegistryName().toString();
             float hardness;
             double dValue;
+            Material material = null;
 
             Map<String, Double> wearReq = Requirements.wearReq.get( regKey );
             Map<String, Double> toolReq = Requirements.toolReq.get( regKey );
@@ -155,6 +128,8 @@ public class ClientEventHandler
 
             if( item instanceof BlockItem )
             {
+                material = ( (BlockItem) item).getBlock().getDefaultState().getMaterial();
+
                 hardness = ((BlockItem) item).getBlock().getBlockHardness( ((BlockItem) item).getBlock().getDefaultState(), null, null );
                 if( hardness > 0 )
                     tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text.hardness", DP.dp( hardness ) ).getString() ) );
@@ -173,10 +148,22 @@ public class ClientEventHandler
 //                addTooltipTextSkill( "pmmo.text.wear", "mob", mobReq, event );
 
             if( placeReq != null && placeReq.size() > 0 )
-                addTooltipTextSkill( "pmmo.text.placeDown", "place", placeReq, event );
+            {
+                if( Requirements.plantInfo.containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable )
+                    addTooltipTextSkill( "pmmo.text.plant", "place", placeReq, event );
+                else
+                    addTooltipTextSkill( "pmmo.text.placeDown", "break", breakReq, event );
+            }
 
             if( breakReq != null && breakReq.size() > 0 )
-                addTooltipTextSkill( "pmmo.text.break", "break", breakReq, event );
+            {
+                if( XP.correctHarvestTool( material ).equals( "axe" ) )
+                    addTooltipTextSkill( "pmmo.text.chop", "break", breakReq, event );
+                else if( Requirements.plantInfo.containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable )
+                    addTooltipTextSkill( "pmmo.text.harvest", "break", breakReq, event );
+                else
+                    addTooltipTextSkill( "pmmo.text.break", "break", breakReq, event );
+            }
 
             if( XP.getExtraChance( regKey, "ore", XP.getBreakReqGap( regKey, player, "mining" ) ) > 0 )  //ORE EXTRA CHANCE
                 tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraChance", DP.dp( XP.getExtraChance( regKey, "ore", XP.getBreakReqGap( regKey, player, "mining" ) ) ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );

@@ -389,8 +389,11 @@ public class XP
             return 0xffffff;
 	}
 
-	private static String correctHarvestTool( Material material )
+	public static String correctHarvestTool(Material material)
 	{
+		if( material == null )
+			return "none";
+
 		if( materialHarvestTool.get( material ) != null )
 			return materialHarvestTool.get( material );
 		else
@@ -578,6 +581,7 @@ public class XP
 			if ( !player.isCreative() )
 			{
 				Block block = event.getPlacedBlock().getBlock();
+				Material material = event.getState().getMaterial();
 
 				if( checkReq( player, block.getRegistryName(), "place" ) )
 				{
@@ -619,7 +623,16 @@ public class XP
 					if( offItemStack.getItem() instanceof BlockItem )
 						NetworkHandler.sendToPlayer( new MessageGrow( 1, offItemStack.getCount() ), (ServerPlayerEntity) player );
 
-					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+					if( Requirements.plantInfo.containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable )
+					{
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlant", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+					}
+					else
+					{
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+					}
 
 					event.setCanceled( true );
 				}
@@ -712,6 +725,7 @@ public class XP
 				BlockState state = event.getState();
 				Block block = state.getBlock();
 				World world = event.getWorld().getWorld();
+				Material material = event.getState().getMaterial();
 
 				Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
 				boolean passedBreakReq = false;
@@ -728,7 +742,6 @@ public class XP
 				{
 					double blockHardnessLimit = Config.config.blockHardnessLimit.get();
 					boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
-					Material material = event.getState().getMaterial();
 					ItemStack toolUsed = player.getHeldItemMainhand();
 					String skill = getSkill( correctHarvestTool( material ) ).name().toLowerCase();
 					String regKey = block.getRegistryName().toString();
@@ -1008,8 +1021,21 @@ public class XP
 					CompoundNBT skillsTag = getSkillsTag( player );
 					int level;
 
-					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+					if( correctHarvestTool( material ).equals( "axe" ) )
+					{
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+					}
+					else if( Requirements.plantInfo.containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
+					{
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+					}
+					else
+					{
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+					}
 
 					for( Map.Entry<String, Double> entry : Requirements.breakReq.get( block.getRegistryName().toString() ).entrySet() )
 					{
@@ -2135,14 +2161,20 @@ public class XP
 						return 0;
 				}
 
-				if( player.world.isRemote() )
-					return (int) Math.floor( reqs.entrySet().stream()
-							.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp ) ) ) )
+				if( XPOverlayGUI.skills.size() > 0 )
+				{
+					if( player.world.isRemote() )
+						return (int) Math.floor( reqs.entrySet().stream()
+								.map( entry -> getGap( entry.getValue(),
+											   XPOverlayGUI.skills.containsKey( entry.getKey() ) ? Math.floor( levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp ) ) : 1 ) )
+								.reduce( 0D, Math::max ) );
+					else
+						return (int) Math.floor( reqs.entrySet().stream()
+							.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
 							.reduce( 0D, Math::max ) );
+				}
 				else
-					return (int) Math.floor( reqs.entrySet().stream()
-						.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
-						.reduce( 0D, Math::max ) );
+					return (int) Math.floor( reqs.values().stream().reduce( 0D, Math::max ) ) - 1;
 			}
 		}
 
