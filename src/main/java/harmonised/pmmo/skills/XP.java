@@ -346,34 +346,18 @@ public class XP
 
 	private static Map<String, Double> getXp( ResourceLocation registryName )
 	{
+		Map<String, Double> theMap = new HashMap<>();
+
 		if( Requirements.xpValue.containsKey( registryName.toString() ) )
-			return new HashMap<>( Requirements.xpValue.get( registryName.toString() ) );
-		else
-			return new HashMap<>();
-	}
+		{
+			for( Map.Entry<String, Object> entry : Requirements.xpValue.get( registryName.toString() ).entrySet() )
+			{
+				if( entry.getValue() instanceof Double )
+					theMap.put( entry.getKey(), (double) entry.getValue() );
+			}
+		}
 
-	private static double getOreDoubleChance( ResourceLocation registryName )
-	{
-		if( Requirements.oreInfo.containsKey( registryName.toString() ) && Requirements.oreInfo.get( registryName.toString() ).get( "extraChance" ) != null )
-			return Requirements.oreInfo.get( registryName.toString() ).get( "extraChance" );
-		else
-			return 0.0D;
-	}
-
-	private static double getPlantExtraChance( ResourceLocation registryName )
-	{
-		if( Requirements.plantInfo.containsKey( registryName.toString() ) && Requirements.plantInfo.get( registryName.toString() ).get( "extraChance" ) != null )
-			return Requirements.plantInfo.get( registryName.toString() ).get( "extraChance" );
-		else
-			return 0.0D;
-	}
-
-	private static double getLogDoubleChance( ResourceLocation registryName )
-	{
-		if( Requirements.logInfo.containsKey( registryName.toString() ) && Requirements.logInfo.get( registryName.toString() ).get( "extraChance" ) != null )
-			return Requirements.logInfo.get( registryName.toString() ).get( "extraChance" );
-		else
-			return 0.0D;
+		return theMap;
 	}
 
 	private static boolean getNoDropOre( ResourceLocation registryName )
@@ -655,7 +639,8 @@ public class XP
 		}
 
 		if( Requirements.breakReq.containsKey( regKey ) && Requirements.breakReq.get( regKey ).containsKey( skill ) )
-			reqLevel = (int) Math.ceil( Requirements.breakReq.get( regKey ).get( skill ) );
+			if( Requirements.breakReq.get( regKey ).get( skill ) instanceof Double )
+				reqLevel = (int) Math.ceil( (double) Requirements.breakReq.get( regKey ).get( skill ) );
 
 		if( player.world.isRemote() )
 		{
@@ -679,17 +664,20 @@ public class XP
 		{
 			case "ore":
 				if( Requirements.oreInfo.containsKey( regKey ) && Requirements.oreInfo.get( regKey ).containsKey( "extraChance" ) )
-					extraChancePerLevel = Requirements.oreInfo.get( regKey ).get( "extraChance" );
+					if( Requirements.oreInfo.get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) Requirements.oreInfo.get( regKey ).get( "extraChance" );
 				break;
 
 			case "log":
 				if( Requirements.logInfo.containsKey( regKey ) && Requirements.logInfo.get( regKey ).containsKey( "extraChance" ) )
-					extraChancePerLevel = Requirements.logInfo.get( regKey ).get( "extraChance" );
+					if( Requirements.logInfo.get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) Requirements.logInfo.get( regKey ).get( "extraChance" );
 				break;
 
 			case "plant":
 				if( Requirements.plantInfo.containsKey( regKey ) && Requirements.plantInfo.get( regKey ).containsKey( "extraChance" ) )
-					extraChancePerLevel = Requirements.plantInfo.get( regKey ).get( "extraChance" );
+					if( Requirements.plantInfo.get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) Requirements.plantInfo.get( regKey ).get( "extraChance" );
 				break;
 
 			default:
@@ -908,11 +896,16 @@ public class XP
 						else if( !wasPlaced )
 							awardMsg = "breaking a plant";
 					}
-					else if( getOreDoubleChance( block.getRegistryName() ) != 0.0f )		//IS ORE
+					else if( XP.getExtraChance( regKey, "ore", XP.getBreakReqGap( regKey, player, "mining" ) ) > 0 )		//IS ORE
 					{
 //						System.out.println( "IS ORE" );
 						boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
-						boolean noDropOre = getNoDropOre( block.getRegistryName() );
+//						boolean noDropOre = getNoDropOre( block.getRegistryName() );
+						boolean noDropOre = false;
+						if( drops.size() > 0 )
+							noDropOre = block.asItem().equals( drops.get(0).getItem() );
+
+						System.out.println( noDropOre );
 
 						if( !wasPlaced && !isSilk )
 							award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), drops.get( 0 ).getCount() ) );
@@ -946,7 +939,7 @@ public class XP
 						else
 							awardMsg = "mining a block";
 					}
-					else if( getLogDoubleChance( block.getRegistryName() ) != 0.0f )
+					else if( XP.getExtraChance( regKey, "log", XP.getBreakReqGap( regKey, player, "woodcutting" ) ) > 0 )
 					{
 						if( !wasPlaced )			//EXTRA DROPS
 						{
@@ -1040,17 +1033,21 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
 					}
 
-					for( Map.Entry<String, Double> entry : Requirements.breakReq.get( block.getRegistryName().toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.breakReq.get( block.getRegistryName().toString() ).entrySet() )
 					{
 						if( skillsTag.contains( entry.getKey() ) )
 							level = levelAtXp( skillsTag.getFloat( entry.getKey() ) );
 						else
 							level = 1;
 
-						if( level < entry.getValue() )
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entry.getValue() ), false, 2 ), (ServerPlayerEntity) player );
+						double entryValue = 1;
+						if( entry.getValue() instanceof Double )
+							entryValue = (double) entry.getValue();
+
+						if( level < entryValue )
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 2 ), (ServerPlayerEntity) player );
 						else
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entry.getValue() ), false, 1 ), (ServerPlayerEntity) player );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 1 ), (ServerPlayerEntity) player );
 					}
 
 					event.setCanceled( true );
@@ -1337,10 +1334,6 @@ public class XP
 		}
 	}
 
-	public static void handleRightClickItem( RightClickItem event )
-	{
-	}
-
 	public static boolean checkReq( PlayerEntity player, ResourceLocation res, String type )
 	{
 		if( res.equals( Items.AIR.getRegistryName() ) )
@@ -1348,7 +1341,7 @@ public class XP
 
 		CompoundNBT skills = getSkillsTag( player );
 		String registryName = res.toString();
-		Map<String, Double> reqMap;
+		Map<String, Double> reqMap = new HashMap<>();
 		int level;
 		boolean failedReq = false;
 
@@ -1356,55 +1349,70 @@ public class XP
 		{
 			case "wear":
 				if( Requirements.wearReq.containsKey( registryName ) )
-					reqMap = Requirements.wearReq.get( registryName );
-				else
-					reqMap = new HashMap<>();
+				{
+					for( Map.Entry<String, Object> entry : Requirements.wearReq.get( registryName ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqMap.put( entry.getKey(), (double) entry.getValue() );
+					}
+				}
 				break;
 
 			case "tool":
 				if( Requirements.toolReq.containsKey( registryName ) )
-					reqMap = Requirements.toolReq.get( registryName );
-				else
-					reqMap = new HashMap<>();
+					for( Map.Entry<String, Object> entry : Requirements.wearReq.get( registryName ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqMap.put( entry.getKey(), (double) entry.getValue() );
+					}
 				break;
 
 			case "weapon":
 				if( Requirements.weaponReq.containsKey( registryName ) )
-					reqMap = Requirements.weaponReq.get( registryName );
-				else
-					reqMap = new HashMap<>();
+					for( Map.Entry<String, Object> entry : Requirements.weaponReq.get( registryName ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqMap.put( entry.getKey(), (double) entry.getValue() );
+					}
 				break;
 
             case "mob":
                 if( Requirements.mobReq.containsKey( registryName ) )
-                    reqMap = Requirements.mobReq.get( registryName );
-                else
-                    reqMap = new HashMap<>();
+					for( Map.Entry<String, Object> entry : Requirements.mobReq.get( registryName ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqMap.put( entry.getKey(), (double) entry.getValue() );
+					}
                 break;
 
             case "use":
                 if( Requirements.useReq.containsKey( registryName ) )
-                    reqMap = Requirements.useReq.get( registryName );
-                else
-                    reqMap = new HashMap<>();
+					for( Map.Entry<String, Object> entry : Requirements.useReq.get( registryName ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqMap.put( entry.getKey(), (double) entry.getValue() );
+					}
                 break;
 
             case "place":
 				if( Requirements.placeReq.containsKey( registryName ) )
-					reqMap = Requirements.placeReq.get( registryName );
-				else
-					reqMap = new HashMap<>();
+					for( Map.Entry<String, Object> entry : Requirements.placeReq.get( registryName ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqMap.put( entry.getKey(), (double) entry.getValue() );
+					}
 				break;
 
 			case "break":
 				if( Requirements.breakReq.containsKey( registryName ) )
-					reqMap = Requirements.breakReq.get( registryName );
-				else
-					reqMap = new HashMap<>();
+					for( Map.Entry<String, Object> entry : Requirements.breakReq.get( registryName ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqMap.put( entry.getKey(), (double) entry.getValue() );
+					}
 				break;
 
 			default:
-				reqMap = new HashMap<>();
 				failedReq = true;
 				break;
 		}
@@ -1433,7 +1441,7 @@ public class XP
 
 	public static void handleItemUse( PlayerInteractEvent event )
 	{
-		if( event instanceof RightClickBlock || event instanceof  RightClickItem )
+		if( event instanceof RightClickBlock || event instanceof RightClickItem )
 		{
 			PlayerEntity player = event.getPlayer();
 			ItemStack itemStack = event.getItemStack();
@@ -1441,7 +1449,7 @@ public class XP
 			int level;
             boolean metReq;
 
-			if( event instanceof RightClickItem && !player.isCreative() )
+			if( ( event instanceof RightClickItem || event instanceof RightClickBlock ) && !player.isCreative() )
             {
                 metReq = checkReq( player, item.getRegistryName(), "use" );
 
@@ -1452,6 +1460,7 @@ public class XP
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
                 }
             }
+
 			if( event instanceof RightClickBlock )
 			{
                 Block block = player.world.getBlockState( event.getPos() ).getBlock();
@@ -1464,17 +1473,21 @@ public class XP
 					{
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
-						for( Map.Entry<String, Double> entry : Requirements.useReq.get( block.getRegistryName().toString() ).entrySet() )
+						for( Map.Entry<String, Object> entry : Requirements.useReq.get( block.getRegistryName().toString() ).entrySet() )
 						{
 							if( XPOverlayGUI.skills.get( entry.getKey() ) != null )
 								level = levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).xp );
 							else
 								level = 1;
 
-							if( level < entry.getValue() )
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
+							double entryValue = 1;
+							if( entry.getValue() instanceof Double )
+								entryValue = (double) entry.getValue();
+
+							if( level < entryValue )
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 							else
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), false );
 						}
 					}
                 }
@@ -2204,29 +2217,40 @@ public class XP
 
 			if( !checkReq( player, res, type ) )
 			{
-				Map<String, Double> reqs;
+				Map<String, Double> reqs = new HashMap<>();
 				switch( type )
 				{
 					case "wear":
-						reqs = Requirements.wearReq.get( res.toString() );
+						for( Map.Entry<String, Object> entry : Requirements.wearReq.get( res.toString() ).entrySet() )
+						{
+							if( entry.getValue() instanceof Double )
+								reqs.put( entry.getKey(), (double) entry.getValue() );
+						}
 						break;
 
 					case "tool":
-						reqs = Requirements.toolReq.get( res.toString() );
+						for( Map.Entry<String, Object> entry : Requirements.toolReq.get( res.toString() ).entrySet() )
+						{
+							if( entry.getValue() instanceof Double )
+								reqs.put( entry.getKey(), (double) entry.getValue() );
+						}
 						break;
 
 					case "weapon":
-						reqs = Requirements.weaponReq.get( res.toString() );
+						for( Map.Entry<String, Object> entry : Requirements.weaponReq.get( res.toString() ).entrySet() )
+						{
+							if( entry.getValue() instanceof Double )
+								reqs.put( entry.getKey(), (double) entry.getValue() );
+						}
 						break;
 
 					default:
 						System.out.println( "PLEASE REPORT THIS IF YOU SEE ME" );
 						return 0;
 				}
-
-				if( XPOverlayGUI.skills.size() > 0 )
+				if( player.world.isRemote() )
 				{
-					if( player.world.isRemote() )
+					if( XPOverlayGUI.skills.size() > 0 )
 						return (int) Math.floor( reqs.entrySet().stream()
 								.map( entry -> getGap( entry.getValue(),
 											   XPOverlayGUI.skills.containsKey( entry.getKey() ) ? Math.floor( levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp ) ) : 1 ) )

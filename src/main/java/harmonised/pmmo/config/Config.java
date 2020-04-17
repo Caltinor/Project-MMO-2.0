@@ -31,6 +31,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> oreEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> logEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> plantEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> salvageEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
         //Levels
@@ -219,6 +220,12 @@ public class Config
                         .comment( "Should plants be enabled? False means no extra chance" )
                         .translation( "pmmo.plantEnabled" )
                         .define( "plantEnabled", true) );
+
+                this.salvageEnabled = subscriber.subscribe(builder
+                        .comment( "Is Salvaging items using the Repairing skill enabled? False = off" )
+                        .translation( "pmmo.salvageEnabled" )
+                        .define( "salvageEnabled", true) );
+
 
                 this.loadDefaultConfig = subscriber.subscribe(builder
                         .comment( "Should config from data_template.json be loaded? False means only data.json is loaded" )

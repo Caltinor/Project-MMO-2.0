@@ -18,20 +18,20 @@ import java.util.function.BiConsumer;
 
 public class Requirements
 {
-    public static Map<String, Map<String, Double>> wearReq = new HashMap<>();
-    public static Map<String, Map<String, Double>> toolReq = new HashMap<>();
-    public static Map<String, Map<String, Double>> weaponReq = new HashMap<>();
-    public static Map<String, Map<String, Double>> mobReq = new HashMap<>();
-    public static Map<String, Map<String, Double>> useReq = new HashMap<>();
-    public static Map<String, Map<String, Double>> placeReq = new HashMap<>();
-    public static Map<String, Map<String, Double>> breakReq = new HashMap<>();
-    public static Map<String, Map<String, Double>> xpValue = new HashMap<>();
-    public static Map<String, Map<String, Double>> oreInfo = new HashMap<>();
-    public static Map<String, Map<String, Double>> logInfo = new HashMap<>();
-    public static Map<String, Map<String, Double>> plantInfo = new HashMap<>();
-    public static Map<String, Map<String, Double>> salvageInfo = new HashMap<>();
+    public static Map<String, Map<String, Object>> wearReq = new HashMap<>();
+    public static Map<String, Map<String, Object>> toolReq = new HashMap<>();
+    public static Map<String, Map<String, Object>> weaponReq = new HashMap<>();
+    public static Map<String, Map<String, Object>> mobReq = new HashMap<>();
+    public static Map<String, Map<String, Object>> useReq = new HashMap<>();
+    public static Map<String, Map<String, Object>> placeReq = new HashMap<>();
+    public static Map<String, Map<String, Object>> breakReq = new HashMap<>();
+    public static Map<String, Map<String, Object>> xpValue = new HashMap<>();
+    public static Map<String, Map<String, Object>> oreInfo = new HashMap<>();
+    public static Map<String, Map<String, Object>> logInfo = new HashMap<>();
+    public static Map<String, Map<String, Object>> plantInfo = new HashMap<>();
+    public static Map<String, Map<String, Object>> salvageInfo = new HashMap<>();
 
-    private static Map<String, Double> tempMap;
+    private static Map<String, Object> tempMap;
     private static String dataPath = "pmmo/data.json";
     private static String templateDataPath = "pmmo/data_template.json";
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
@@ -55,7 +55,7 @@ public class Requirements
         updateFinal( customReq );
     }
 
-    private static boolean checkValidSkills( Map<String, Double> theMap )
+    private static boolean checkValidSkills( Map<String, Object> theMap )
     {
         boolean anyValidSkills = false;
 
@@ -68,7 +68,7 @@ public class Requirements
         return anyValidSkills;
     }
 
-    private static void updateReqSkills( Map<String, RequirementItem> req, Map<String, Map<String, Double>> outReq )
+    private static void updateReqSkills( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
     {
         req.forEach( (key, value) ->
         {
@@ -77,41 +77,49 @@ public class Requirements
                 if(  !outReq.containsKey( key ) )
                     outReq.put( key, new HashMap<>() );
 
-                for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
+                for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
                 {
-                    if( Skill.getInt( entry.getKey() ) != 0 && entry.getValue() != 0 && entry.getValue() > 0 )
+                    if( entry.getValue() instanceof Double )
+                    {
+                        if( Skill.getInt( entry.getKey() ) != 0 && (double) entry.getValue() > 0 )
+                            outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                    }
+                }
+            }
+        });
+    }
+
+    private static void updateReqExtra( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            if( !outReq.containsKey( key ) )
+                outReq.put( key, new HashMap<>() );
+
+            for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
+            {
+                if( entry.getValue() instanceof Double )
+                {
+                    if( entry.getKey().equals( "extraChance" ) && (double) entry.getValue() > 0 )
                         outReq.get( key ).put( entry.getKey(), entry.getValue() );
                 }
             }
         });
     }
 
-    private static void updateReqExtra( Map<String, RequirementItem> req, Map<String, Map<String, Double>> outReq )
+    private static void updateReqSalvage( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
     {
         req.forEach( (key, value) ->
         {
             if( !outReq.containsKey( key ) )
                 outReq.put( key, new HashMap<>() );
 
-            for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
+            for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
             {
-                if( entry.getKey().equals( "extraChance" ) && entry.getValue() > 0 )
-                    outReq.get( key ).put( entry.getKey(), entry.getValue() );
-            }
-        });
-    }
+                if( ( entry.getKey().equals( "salvageMax" ) || entry.getKey().equals( "baseChance" ) || entry.getKey().equals( "chancePerLevel" ) || entry.getKey().equals( "xpPerItem" )  ) )
+                    if( entry.getValue() instanceof Double && (double) entry.getValue() >= 0 )
+                        outReq.get( key ).put( entry.getKey(), entry.getValue() );
 
-    private static void updateReqSalvage( Map<String, RequirementItem> req, Map<String, Map<String, Double>> outReq )
-    {
-        req.forEach( (key, value) ->
-        {
-            if( !outReq.containsKey( key ) )
-                outReq.put( key, new HashMap<>() );
-
-            for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
-            {
-                if( ( entry.getKey().equals( "salvageMax" ) || entry.getKey().equals( "baseChance" ) || entry.getKey().equals( "chancePerLevel" ) || entry.getKey().equals( "xpPerItem" )  ) && entry.getValue() >= 0 )
-                    outReq.get( key ).put( entry.getKey(), entry.getValue() );
             }
         });
     }
@@ -139,6 +147,9 @@ public class Requirements
         if( Config.config.logEnabled.get() )
             updateReqExtra( req.logs, logInfo );
         if( Config.config.plantEnabled.get() )
+            updateReqExtra( req.plants, plantInfo );
+
+        if( Config.config.salvageEnabled.get() )
             updateReqExtra( req.plants, plantInfo );
     }
 
@@ -185,16 +196,16 @@ public class Requirements
 
     public static class RequirementItem
     {
-        private final Map<String, Double> requirements = Maps.newHashMap();
+        private final Map<String, Object> requirements = Maps.newHashMap();
 
-        public HashMap<String, Double> getMap()
-        {
-            return new HashMap<>( requirements );
-        }
+//        public HashMap<String, Object> getMap()
+//        {
+//            return new HashMap<>( requirements );
+//        }
 
-        public double get(String registryName)
+        public double getDouble(String registryName)
         {
-            return requirements.get(registryName);
+            return (double) requirements.get(registryName);
         }
     }
 
@@ -210,7 +221,7 @@ public class Requirements
     private final Map<String, RequirementItem> logs = Maps.newHashMap();
     private final Map<String, RequirementItem> plants = Maps.newHashMap();
 
-//    public Map<String, Double> getWear(String registryName)
+//    public Map<String, Object> getWear(String registryName)
 //    {
 //        if( wears.containsKey( registryName ) )
 //            return wears.get( registryName ).getMap();
@@ -218,7 +229,7 @@ public class Requirements
 //            return null;
 //    }
 //
-//    public Map<String, Double> getTool(String registryName)
+//    public Map<String, Object> getTool(String registryName)
 //    {
 //        if( tools.containsKey( registryName ) )
 //            return tools.get( registryName ).getMap();
@@ -226,7 +237,7 @@ public class Requirements
 //            return new HashMap<>();
 //    }
 //
-//    public Map<String, Double> getWeapon(String registryName)
+//    public Map<String, Object> getWeapon(String registryName)
 //    {
 //        if( weapons.containsKey( registryName ) )
 //            return weapons.get( registryName ).getMap();
@@ -234,7 +245,7 @@ public class Requirements
 //            return new HashMap<>();
 //    }
 //
-//    public Map<String, Double> getXp(String registryName)
+//    public Map<String, Object> getXp(String registryName)
 //    {
 //        if( xpValues.containsKey( registryName ) )
 //            return xpValues.get( registryName ).getMap();
@@ -305,8 +316,13 @@ public class Requirements
             for(Map.Entry<String, JsonElement> entries : obj.entrySet())
             {
                 String name = entries.getKey();
-                Double values = entries.getValue().getAsDouble();
-                item.requirements.put(name, values);
+                Object values;
+                if( name.equals( "salvageItem" ) )
+                    values = entries.getValue().getAsString();
+                else
+                    values = entries.getValue().getAsDouble();
+
+                item.requirements.put( name, values );
             }
 
             return item;

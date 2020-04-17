@@ -15,7 +15,7 @@ public class MessageReqUpdate
     private CompoundNBT reqPackage = new CompoundNBT();
     private String outputName;
 
-    public MessageReqUpdate( Map<String, Map<String, Double>> theMap, String outputName )
+    public MessageReqUpdate( Map<String, Map<String, Object>> theMap, String outputName )
     {
         this.outputName = outputName;
         for( String keyTop : theMap.keySet() )
@@ -23,7 +23,11 @@ public class MessageReqUpdate
             reqPackage.put( keyTop, new CompoundNBT() );
             for( String keyBot : theMap.get( keyTop ).keySet() )
             {
-                reqPackage.getCompound( keyTop ).putDouble( keyBot, theMap.get( keyTop ).get( keyBot ) );
+                Object value = theMap.get( keyTop ).get( keyBot );
+                if( keyBot.equals( "salvageItem" ) )
+                    reqPackage.getCompound( keyTop ).putString( keyBot, (String) value );
+                else
+                    reqPackage.getCompound( keyTop ).putDouble( keyBot, (double) value );
             }
         }
     }
@@ -51,7 +55,7 @@ public class MessageReqUpdate
     {
         ctx.get().enqueueWork(() ->
         {
-            Map<String, Map<String, Double>> newPackage = new HashMap<>();
+            Map<String, Map<String, Object>> newPackage = new HashMap<>();
 
             if( !packet.outputName.toLowerCase().equals( "wipe" ) )
             {
@@ -60,7 +64,10 @@ public class MessageReqUpdate
                     newPackage.put( topKey, new HashMap<>() );
                     for( String botKey : packet.reqPackage.getCompound( topKey ).keySet() )
                     {
-                        newPackage.get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getDouble( botKey ) );
+                        if( botKey.equals( "salvageItem" ) )
+                            newPackage.get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getString( botKey ) );
+                        else
+                            newPackage.get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getDouble( botKey ) );
                     }
                 }
             }

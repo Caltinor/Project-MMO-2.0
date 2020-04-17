@@ -46,7 +46,6 @@ public class ProjectMMOMod
 //        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
 
         Config.init();
-        Requirements.init();
     }
 
     private void modsLoading( FMLCommonSetupEvent event )
@@ -56,6 +55,7 @@ public class ProjectMMOMod
         NetworkHandler.registerPackets();
         MinecraftForge.EVENT_BUS.register( harmonised.pmmo.events.EventHandler.class );
         MinecraftForge.EVENT_BUS.register( harmonised.pmmo.skills.AttributeHandler.class );
+        Requirements.init();
     }
 
     private void clientLoading( FMLClientSetupEvent event )

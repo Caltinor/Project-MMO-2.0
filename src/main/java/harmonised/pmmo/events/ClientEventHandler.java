@@ -61,7 +61,7 @@ public class ClientEventHandler
         }
     }
 
-    private static void addTooltipTextSkill( String tKey, String type, Map<String, Double> theMap, ItemTooltipEvent event )
+    private static void addTooltipTextSkill( String tKey, String type, Map<String, Object> theMap, ItemTooltipEvent event )
     {
         PlayerEntity player = event.getPlayer();
         List<ITextComponent> tooltip = event.getToolTip();
@@ -82,12 +82,15 @@ public class ClientEventHandler
                 else
                     level = 1;
 
-                value = (int) Math.floor( theMap.get( key ) );
+                if( theMap.get( key ) instanceof Double )
+                {
+                    value = (int) Math.floor( (double) theMap.get( key ) );
 
-                if( level < value )
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-                else
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    if( level < value )
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    else
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                }
             }
         }
     }
@@ -107,13 +110,13 @@ public class ClientEventHandler
             double dValue;
             Material material = null;
 
-            Map<String, Double> wearReq = Requirements.wearReq.get( regKey );
-            Map<String, Double> toolReq = Requirements.toolReq.get( regKey );
-            Map<String, Double> weaponReq = Requirements.weaponReq.get( regKey );
-            Map<String, Double> useReq = Requirements.useReq.get( regKey );
-            Map<String, Double> placeReq = Requirements.placeReq.get( regKey );
-            Map<String, Double> breakReq = Requirements.breakReq.get( regKey );
-            Map<String, Double> xpValue = Requirements.xpValue.get( regKey );
+            Map<String, Object> wearReq = Requirements.wearReq.get( regKey );
+            Map<String, Object> toolReq = Requirements.toolReq.get( regKey );
+            Map<String, Object> weaponReq = Requirements.weaponReq.get( regKey );
+            Map<String, Object> useReq = Requirements.useReq.get( regKey );
+            Map<String, Object> placeReq = Requirements.placeReq.get( regKey );
+            Map<String, Object> breakReq = Requirements.breakReq.get( regKey );
+            Map<String, Object> xpValue = Requirements.xpValue.get( regKey );
 
             if( xpValue != null && xpValue.size() > 0 )      //XP VALUE
             {
@@ -121,9 +124,11 @@ public class ClientEventHandler
 
                 for( String key : xpValue.keySet() )
                 {
-                    dValue = xpValue.get( key );
-
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), DP.dp( dValue ) ) );
+                    if( xpValue.get( key ) instanceof Double )
+                    {
+                        dValue = (double) xpValue.get( key );
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), DP.dp( dValue ) ) );
+                    }
                 }
             }
 
