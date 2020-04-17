@@ -898,14 +898,10 @@ public class XP
 					}
 					else if( XP.getExtraChance( regKey, "ore", XP.getBreakReqGap( regKey, player, "mining" ) ) > 0 )		//IS ORE
 					{
-//						System.out.println( "IS ORE" );
 						boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
-//						boolean noDropOre = getNoDropOre( block.getRegistryName() );
 						boolean noDropOre = false;
 						if( drops.size() > 0 )
 							noDropOre = block.asItem().equals( drops.get(0).getItem() );
-
-						System.out.println( noDropOre );
 
 						if( !wasPlaced && !isSilk )
 							award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), drops.get( 0 ).getCount() ) );
@@ -953,6 +949,8 @@ public class XP
 								guaranteedDrop = (int)Math.floor( extraChance );
 								extraChance = (float)( ( extraChance ) - Math.floor( extraChance ) ) * 100;
 							}
+
+							extraChance *= 100;
 
 							if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
 								extraDrop = 1;
@@ -1360,7 +1358,7 @@ public class XP
 
 			case "tool":
 				if( Requirements.toolReq.containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.wearReq.get( registryName ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.toolReq.get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -2360,7 +2358,7 @@ public class XP
 
 				if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
 				{
-					player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 250, 0, true, false ) );
+					player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 750, 0, true, false ) );
 				}
 				else if( player.isPotionActive( Effects.NIGHT_VISION ) && player.getActivePotionEffect( Effects.NIGHT_VISION ).isAmbient() )
 					player.removePotionEffect( Effects.NIGHT_VISION );

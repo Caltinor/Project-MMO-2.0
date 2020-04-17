@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public class MessageDoubleTranslation
 {
-    private static String regKey;
+    private static String regKey = "banana";
     private static int lastAmount;
     private static long lastTime = System.currentTimeMillis();
 
@@ -78,21 +78,23 @@ public class MessageDoubleTranslation
                     break;
 
                 case 1: //green
-                    if( packet.tKey.equals( "pmmo.text.extraDrop" ) && packet.sKey.equals( regKey ) )
+                    if( packet.tKey.equals( "pmmo.text.extraDrop" ) )
                     {
+                        if( !regKey.equals( packet.sKey ) )
+                        {
+                            regKey = packet.sKey;
+                            lastAmount = 0;
+                        }
+
                         if( System.currentTimeMillis() - lastTime < 3000 )
                         {
+//                            System.out.println( lastAmount + " + " + Integer.parseInt( packet.fKey ) + " = " + (lastAmount + Integer.parseInt( packet.fKey )) );
                             lastAmount += Integer.parseInt( packet.fKey );
                         }
                         else
                             lastAmount = 0;
 
                         Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), packet.bar );
-                    }
-                    else
-                    {
-                        regKey = packet.sKey;
-                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), packet.bar );
                     }
                     lastTime = System.currentTimeMillis();
                     break;

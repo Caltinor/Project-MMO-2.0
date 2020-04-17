@@ -50,12 +50,12 @@ public class CommandSet
                 if( newXp < 1 )
                     newXp = 1;
                 XP.setXp( player, args[2], XP.xpAtLevelDecimal(newXp) );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.setLevel", "pmmo.text." + args[2], "" + newXp, false, 0 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.setLevel", "pmmo.text." + args[2].toLowerCase(), "" + newXp, false, 0 ), (ServerPlayerEntity) player );
             }
             else if (newXp >= 0 && newXp <= 2000000000)
             {
                 XP.setXp( player, args[2], newXp );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.setXp", "pmmo.text." + args[2], "" + newXp, false, 0 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.setXp", "pmmo.text." + args[2].toLowerCase(), "" + newXp, false, 0 ), (ServerPlayerEntity) player );
             }
             else
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpCap" ), false);

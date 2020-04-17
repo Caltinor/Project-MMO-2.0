@@ -541,9 +541,9 @@ public class Config
                         .defineInRange( "levelsPerHeart", 10, 0, 1000) );
 
                 this.maxHeartCap = subscriber.subscribe(builder
-                        .comment( "How many Bonus Max Hearts you can have" )
+                        .comment( "How many Max Hearts you can have (20 means 10 vanilla + 10 boosted)" )
                         .translation( "pmmo.maxHeartCap" )
-                        .defineInRange( "maxHeartCap", 20, 0, 1000) );
+                        .defineInRange( "maxHeartCap", 50, 0, 1000) );
 
                 builder.pop();
             }
