@@ -63,7 +63,7 @@
   "pmmo.text.weapon": "Arme",
   "pmmo.text.xpValue": "Valeur d'Xp",
   "pmmo.text.placeDown": "Placer",
-  "pmmo.text.plant": "Planter"
+  "pmmo.text.plant": "Planter",
   "pmmo.text.break": "Casser",
   "pmmo.text.chop": "Bûcher",
   "pmmo.text.harvest": "Récolter",
@@ -81,6 +81,6 @@
   "pmmo.text.skillsResynced": "Vos compétences ont été resynchronisées !",
   "pmmo.text.lapisDonatorWelcome": "Bienvenue %1$s, tier Lapis du Patreon PMMO !",
   "pmmo.text.dandelionDonatorWelcome": "Bienvenue %1$s, tier Pissenlit du Patreon de PMMO !",
-  "pmmo.text.ironDonatorWelcome": "Bienvenue %1$s, tier Fer du Patreon de PMMO !"
+  "pmmo.text.ironDonatorWelcome": "Bienvenue %1$s, tier Fer du Patreon de PMMO !",
   "pmmo.text.milestoneLevelUp": "%1$s à atteint le niveau %2$s en %3$s!"
 }
