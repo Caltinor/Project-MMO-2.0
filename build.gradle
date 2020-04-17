@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '2.9.1'
+version = '2.11'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO-1.15'
 

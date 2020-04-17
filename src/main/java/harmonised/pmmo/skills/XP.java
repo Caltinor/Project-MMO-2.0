@@ -83,12 +83,14 @@ public class XP
 	public static Set<UUID> lapisDonators = new HashSet<>();
 	public static Set<UUID> dandelionDonators = new HashSet<>();
 	public static Set<UUID> ironDonators = new HashSet<>();
-
 	public static double globalMultiplier = Config.config.globalMultiplier.get();
 	public static int maxLevel = Config.config.maxLevel.get();
 	private static boolean crawlingAllowed = Config.config.crawlingAllowed.get();
+    private static boolean showWelcome = Config.config.showWelcome.get();
+    private static boolean showDonatorWelcome = Config.config.showDonatorWelcome.get();
+    private static boolean broadcastMilestone = Config.config.broadcastMilestone.get();
 
-	public static float maxXp = xpAtLevel( maxLevel );
+    public static float maxXp = xpAtLevel( maxLevel );
 
 	public static void initValues()
 	{
@@ -1286,18 +1288,6 @@ public class XP
 			CompoundNBT skillsTag = getSkillsTag( player );
 			Set<String> keySet = skillsTag.keySet();
 
-			if( lapisDonators.contains( player.getUniqueID() ) )
-			{
-				player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
-				{
-					thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.text.lapisDonatorWelcome", thePlayer.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
-				});
-			}
-			else if( dandelionDonators.contains( player.getUniqueID() ) )
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.dandelionDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), false );
-			else if( ironDonators.contains( player.getUniqueID() ) )
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.ironDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), false );
-
 			AttributeHandler.updateReach( player );
 			NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
@@ -1327,7 +1317,23 @@ public class XP
 					NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
 			}
 
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.welcome" ), false );
+            if( lapisDonators.contains( player.getUniqueID() ) )
+            {
+                player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
+                {
+                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.text.lapisDonatorWelcome", thePlayer.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
+                });
+            }
+            else if( showDonatorWelcome )
+            {
+                if( dandelionDonators.contains( player.getUniqueID() ) )
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.dandelionDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), false );
+                else if( ironDonators.contains( player.getUniqueID() ) )
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.ironDonatorWelcome", player.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), false );
+            }
+
+            if( showWelcome )
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.welcome" ), false );
 		}
 	}
 
@@ -2131,7 +2137,7 @@ public class XP
 			}
 
 			System.out.println( playerName + " " + currLevel + " " + skillName + " level up!" );
-			if( currLevel % 10 == 0 )
+			if( currLevel % 10 == 0 && broadcastMilestone )
 			{
 				player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
 				{

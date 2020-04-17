@@ -16,6 +16,22 @@ public class Config
     {
         //Miscellaneous
         public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
+        public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
+        public ConfigHelper.ConfigValueListener<Boolean> showDonatorWelcome;
+        public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
+
+        //Requirements
+        public ConfigHelper.ConfigValueListener<Boolean> wearReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> toolReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> weaponReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> useReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> xpValueEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> oreEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> logEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> plantEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
         //Levels
         public ConfigHelper.ConfigValueListener<Integer> maxLevel;
@@ -127,12 +143,87 @@ public class Config
 
         public ConfigImplementation(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber)
         {
-            builder.push( "Levels" );
+            builder.push( "Miscellaneous" );
             {
                 this.crawlingAllowed = subscriber.subscribe(builder
                         .comment( "Is crawling allowed? true = on, false = off" )
                         .translation( "pmmo.crawlingAllowed" )
                         .define( "crawlingAllowed", true) );
+
+                this.showWelcome = subscriber.subscribe(builder
+                        .comment( "Should your personal Welcome message come up?" )
+                        .translation( "pmmo.showWelcome" )
+                        .define( "showWelcome", true) );
+
+                this.showDonatorWelcome = subscriber.subscribe(builder
+                        .comment( "Should your personal Donator Welcome message come up?" )
+                        .translation( "pmmo.showDonatorWelcome" )
+                        .define( "showDonatorWelcome", true) );
+
+                this.broadcastMilestone = subscriber.subscribe(builder
+                        .comment( "Should every 10th level up be broadcast to everyone?" )
+                        .translation( "pmmo.broadcastMilestone" )
+                        .define( "broadcastMilestone", true) );
+
+                builder.pop();
+            }
+
+            builder.push( "Requirements" );
+            {
+                this.wearReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should wear requirements be enabled? False means no requirements" )
+                        .translation( "pmmo.wearReqEnabled" )
+                        .define( "wearReqEnabled", true) );
+
+                this.toolReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should tool requirements be enabled? False means no requirements" )
+                        .translation( "pmmo.toolReqEnabled" )
+                        .define( "toolReqEnabled", true) );
+
+                this.weaponReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should weapon requirements be enabled? False means no requirements" )
+                        .translation( "pmmo.weaponReqEnabled" )
+                        .define( "weaponReqEnabled", true) );
+
+                this.useReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should use requirements be enabled? False means no requirements" )
+                        .translation( "pmmo.useReqEnabled" )
+                        .define( "useReqEnabled", true) );
+
+                this.placeReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should place requirements be enabled? False means no requirements" )
+                        .translation( "pmmo.placeReqEnabled" )
+                        .define( "placeReqEnabled", true) );
+
+                this.breakReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should break requirements be enabled? False means no requirements" )
+                        .translation( "pmmo.breakReqEnabled" )
+                        .define( "breakReqEnabled", true) );
+
+                this.xpValueEnabled = subscriber.subscribe(builder
+                        .comment( "Should xp values be enabled? False means only Hardness xp is awarded for breaking" )
+                        .translation( "pmmo.xpValueEnabled" )
+                        .define( "xpValueEnabled", true) );
+
+                this.oreEnabled = subscriber.subscribe(builder
+                        .comment( "Should ores be enabled? False means no extra chance" )
+                        .translation( "pmmo.oreEnabled" )
+                        .define( "oreEnabled", true) );
+
+                this.logEnabled = subscriber.subscribe(builder
+                        .comment( "Should logs be enabled? False means no extra chance" )
+                        .translation( "pmmo.logEnabled" )
+                        .define( "logEnabled", true) );
+
+                this.plantEnabled = subscriber.subscribe(builder
+                        .comment( "Should plants be enabled? False means no extra chance" )
+                        .translation( "pmmo.plantEnabled" )
+                        .define( "plantEnabled", true) );
+
+                this.loadDefaultConfig = subscriber.subscribe(builder
+                        .comment( "Should config from data_template.json be loaded? False means only data.json is loaded" )
+                        .translation( "pmmo.loadDefaultConfig" )
+                        .define( "loadDefaultConfig", true) );
 
                 builder.pop();
             }

@@ -29,6 +29,7 @@ public class Requirements
     public static Map<String, Map<String, Double>> oreInfo = new HashMap<>();
     public static Map<String, Map<String, Double>> logInfo = new HashMap<>();
     public static Map<String, Map<String, Double>> plantInfo = new HashMap<>();
+    public static Map<String, Map<String, Double>> salvageInfo = new HashMap<>();
 
     private static Map<String, Double> tempMap;
     private static String dataPath = "pmmo/data.json";
@@ -48,7 +49,9 @@ public class Requirements
 
         defaultReq = Requirements.readFromFile( templateData.getPath() );
         customReq = Requirements.readFromFile( data.getPath() );
-        updateFinal( defaultReq );
+
+        if( Config.config.loadDefaultConfig.get() )
+            updateFinal( defaultReq );
         updateFinal( customReq );
     }
 
@@ -92,7 +95,22 @@ public class Requirements
 
             for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
             {
-                if( entry.getKey().equals( "extraChance" ) && entry.getValue() != 0 && entry.getValue() > 0 )
+                if( entry.getKey().equals( "extraChance" ) && entry.getValue() > 0 )
+                    outReq.get( key ).put( entry.getKey(), entry.getValue() );
+            }
+        });
+    }
+
+    private static void updateReqSalvage( Map<String, RequirementItem> req, Map<String, Map<String, Double>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            if( !outReq.containsKey( key ) )
+                outReq.put( key, new HashMap<>() );
+
+            for( Map.Entry<String, Double> entry : value.requirements.entrySet() )
+            {
+                if( ( entry.getKey().equals( "salvageMax" ) || entry.getKey().equals( "baseChance" ) || entry.getKey().equals( "chancePerLevel" ) || entry.getKey().equals( "xpPerItem" )  ) && entry.getValue() >= 0 )
                     outReq.get( key ).put( entry.getKey(), entry.getValue() );
             }
         });
@@ -100,18 +118,28 @@ public class Requirements
 
     private static void updateFinal( Requirements req )
     {
-        updateReqSkills( req.wears, wearReq );
-        updateReqSkills( req.tools, toolReq );
-        updateReqSkills( req.weapons, weaponReq );
-        updateReqSkills( req.mobs, mobReq );
-        updateReqSkills( req.use, useReq );
-        updateReqSkills( req.xpValues, xpValue );
-        updateReqSkills( req.placing, placeReq );
-        updateReqSkills( req.breaking, breakReq );
+        if( Config.config.wearReqEnabled.get() )
+            updateReqSkills( req.wears, wearReq );
+        if( Config.config.toolReqEnabled.get() )
+            updateReqSkills( req.tools, toolReq );
+        if( Config.config.weaponReqEnabled.get() )
+            updateReqSkills( req.weapons, weaponReq );
+//        updateReqSkills( req.mobs, mobReq );
+        if( Config.config.useReqEnabled.get() )
+            updateReqSkills( req.use, useReq );
+        if( Config.config.xpValueEnabled.get() )
+            updateReqSkills( req.xpValues, xpValue );
+        if( Config.config.placeReqEnabled.get() )
+            updateReqSkills( req.placing, placeReq );
+        if( Config.config.breakReqEnabled.get() )
+            updateReqSkills( req.breaking, breakReq );
 
-        updateReqExtra( req.ores, oreInfo );
-        updateReqExtra( req.logs, logInfo );
-        updateReqExtra( req.plants, plantInfo );
+        if( Config.config.oreEnabled.get() )
+            updateReqExtra( req.ores, oreInfo );
+        if( Config.config.logEnabled.get() )
+            updateReqExtra( req.logs, logInfo );
+        if( Config.config.plantEnabled.get() )
+            updateReqExtra( req.plants, plantInfo );
     }
 
     private static void createData( File dataFile )
