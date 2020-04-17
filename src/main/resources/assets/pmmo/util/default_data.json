@@ -968,5 +968,63 @@
 		"minecraft:nether_wart": {
 			"extraChance": 0.75
 		}
+	},
+	"salvage": {
+		"minecraft:diamond_helmet": {
+			"salvageItem": "minecraft:diamond",
+			"salvageMax": 5,
+			"baseChance": 0,
+			"chancePerLevel": 0.5,
+			"xpPerItem": 25
+		},
+		"minecraft:diamond_chestplate": {
+			"salvageItem": "minecraft:diamond",
+			"salvageMax": 8,
+			"baseChance": 0,
+			"chancePerLevel": 0.5,
+			"xpPerItem": 25
+		},
+		"minecraft:diamond_leggings": {
+			"salvageItem": "minecraft:diamond",
+			"salvageMax": 7,
+			"baseChance": 0,
+			"chancePerLevel": 0.5,
+			"xpPerItem": 25
+		},
+		"minecraft:diamond_boots": {
+			"salvageItem": "minecraft:diamond",
+			"salvageMax": 4,
+			"baseChance": 0,
+			"chancePerLevel": 0.5,
+			"xpPerItem": 25
+		},
+		"minecraft:golden_helmet": {
+			"salvageItem": "minecraft:gold_ingot",
+			"salvageMax": 5,
+			"baseChance": 20,
+			"chancePerLevel": 1,
+			"xpPerItem": 75
+		},
+		"minecraft:golden_chestplate": {
+			"salvageItem": "minecraft:gold_ingot",
+			"salvageMax": 8,
+			"baseChance": 20,
+			"chancePerLevel": 1,
+			"xpPerItem": 75
+		},
+		"minecraft:golden_leggings": {
+			"salvageItem": "minecraft:gold_ingot",
+			"salvageMax": 7,
+			"baseChance": 20,
+			"chancePerLevel": 1,
+			"xpPerItem": 75
+		},
+		"minecraft:golden_boots": {
+			"salvageItem": "minecraft:gold_ingot",
+			"salvageMax": 4,
+			"baseChance": 20,
+			"chancePerLevel": 1,
+			"xpPerItem": 75
+		}
 	}
 }

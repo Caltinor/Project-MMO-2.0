@@ -29,6 +29,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.Map;
@@ -188,6 +189,19 @@ public class ClientEventHandler
                 tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", DP.dp( XP.getExtraChance( regKey, "plant", XP.getBreakReqGap( regKey, player, "farming" ) ) ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
             else if( Requirements.plantInfo.containsKey( regKey ) && Requirements.plantInfo.get( regKey ).containsKey( "extraChance" ) )
                 tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+
+            if( Requirements.salvageInfo.containsKey( regKey ) && Requirements.salvageInfo.get( regKey ).containsKey( "salvageItem" ) )
+            {
+                Item salvageItem = ForgeRegistries.ITEMS.getValue( item.getRegistryName() );
+
+                if( salvageItem != null )
+                {
+                    for( Map.Entry<String, Object> entry : Requirements.salvageInfo.get( regKey ).entrySet() )
+                    {
+                        System.out.println( entry );
+                    }
+                }
+            }
 
         }
     }

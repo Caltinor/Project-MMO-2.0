@@ -116,10 +116,13 @@ public class Requirements
 
             for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
             {
-                if( ( entry.getKey().equals( "salvageMax" ) || entry.getKey().equals( "baseChance" ) || entry.getKey().equals( "chancePerLevel" ) || entry.getKey().equals( "xpPerItem" )  ) )
-                    if( entry.getValue() instanceof Double && (double) entry.getValue() >= 0 )
+                if( entry.getValue() instanceof Double )
+                {
+                    if( (double) entry.getValue() >= 0 )
                         outReq.get( key ).put( entry.getKey(), entry.getValue() );
-
+                }
+                else if( entry.getValue() instanceof String )
+                    outReq.get( key ).put( entry.getKey(), entry.getValue() );
             }
         });
     }
@@ -150,7 +153,7 @@ public class Requirements
             updateReqExtra( req.plants, plantInfo );
 
         if( Config.config.salvageEnabled.get() )
-            updateReqExtra( req.plants, plantInfo );
+            updateReqSalvage( req.salvage, salvageInfo );
     }
 
     private static void createData( File dataFile )
@@ -220,6 +223,7 @@ public class Requirements
     private final Map<String, RequirementItem> ores = Maps.newHashMap();
     private final Map<String, RequirementItem> logs = Maps.newHashMap();
     private final Map<String, RequirementItem> plants = Maps.newHashMap();
+    private final Map<String, RequirementItem> salvage = Maps.newHashMap();
 
 //    public Map<String, Object> getWear(String registryName)
 //    {
@@ -284,6 +288,7 @@ public class Requirements
             deserializeGroup(obj, "ore", req.ores::put, context);
             deserializeGroup(obj, "log", req.logs::put, context);
             deserializeGroup(obj, "plant", req.plants::put, context);
+            deserializeGroup(obj, "salvage", req.salvage::put, context);
 
             return req;
         }
