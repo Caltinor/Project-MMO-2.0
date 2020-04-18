@@ -611,15 +611,9 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageGrow( 1, offItemStack.getCount() ), (ServerPlayerEntity) player );
 
 					if( Requirements.plantInfo.containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable )
-					{
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlant", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
-					}
 					else
-					{
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
-					}
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
 					event.setCanceled( true );
 				}
@@ -627,38 +621,27 @@ public class XP
 		}
 	}
 
-	public static int getBreakReqGap(String regKey, PlayerEntity player, String skill)
-    {
-		CompoundNBT skillsTag = getSkillsTag( player );
-		int level, reqLevel = 1;
-
-		if( Skill.getInt( skill ) == 0 )
-		{
-			System.out.println( "INVALID SKILL AT getBreakReqGap" );
-			return 0;
-		}
-
-		if( Requirements.breakReq.containsKey( regKey ) && Requirements.breakReq.get( regKey ).containsKey( skill ) )
-			if( Requirements.breakReq.get( regKey ).get( skill ) instanceof Double )
-				reqLevel = (int) Math.ceil( (double) Requirements.breakReq.get( regKey ).get( skill ) );
+	public static int getLevel( String skill, PlayerEntity player )
+	{
+		int level = 1;
 
 		if( player.world.isRemote() )
 		{
 			if( XPOverlayGUI.skills.containsKey( skill ) )
 				level = levelAtXp( XPOverlayGUI.skills.get( skill ).goalXp );
-			else
-				level = 1;
 		}
 		else
-			level = levelAtXp( skillsTag.getFloat( skill ) );
+			level = levelAtXp( getSkillsTag( player ).getFloat( skill ) );
 
-        return (level - reqLevel);
-    }
+		return level;
+	}
 
-	public static double getExtraChance(String regKey, String type, int gap)
+	public static double getExtraChance( PlayerEntity player, ResourceLocation resLoc, String type )
 	{
+		String regKey = resLoc.toString();
 		double extraChancePerLevel = 0;
 		double extraChance;
+		int gap = XP.getSkillReqGap( player, resLoc, "break" );
 
 		switch( type )
 		{
@@ -778,7 +761,7 @@ public class XP
 						Block baseBlock = event.getState().getBlock();
 						BlockPos baseBlockPos = event.getPos();
 
-						double extraChance = XP.getExtraChance( regKey, "plant", XP.getBreakReqGap( regKey, player, "farming" ) ) / 100;
+						double extraChance = XP.getExtraChance( player, block.getRegistryName(), "plant" ) / 100;
 						int rewardable, guaranteedDrop, extraDrop, totalDrops, guaranteedDropEach;
 						rewardable = extraDrop = guaranteedDrop = totalDrops = 0;
 
@@ -874,7 +857,7 @@ public class XP
 						{
 							award = addMaps( award, getXp( block.getRegistryName() ) );
 
-							double extraChance = XP.getExtraChance( regKey, "plant", XP.getBreakReqGap( regKey, player, "farming" ) ) / 100;
+							double extraChance = XP.getExtraChance( player, block.getRegistryName(), "plant" ) / 100;
 							int guaranteedDrop = 0;
 							int extraDrop = 0;
 
@@ -896,7 +879,7 @@ public class XP
 						else if( !wasPlaced )
 							awardMsg = "breaking a plant";
 					}
-					else if( XP.getExtraChance( regKey, "ore", XP.getBreakReqGap( regKey, player, "mining" ) ) > 0 )		//IS ORE
+					else if( XP.getExtraChance( player, block.getRegistryName(), "ore" ) > 0 )		//IS ORE
 					{
 						boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
 						boolean noDropOre = false;
@@ -908,7 +891,7 @@ public class XP
 
 						if( noDropOre && !wasPlaced || !noDropOre && !isSilk )			//EXTRA DROPS
 						{
-							double extraChance = XP.getExtraChance( regKey, "ore", XP.getBreakReqGap( regKey, player, "mining" ) ) / 100;
+							double extraChance = XP.getExtraChance( player, block.getRegistryName(), "ore" ) / 100;
 
 							int guaranteedDrop = 0;
 							int extraDrop = 0;
@@ -935,11 +918,11 @@ public class XP
 						else
 							awardMsg = "mining a block";
 					}
-					else if( XP.getExtraChance( regKey, "log", XP.getBreakReqGap( regKey, player, "woodcutting" ) ) > 0 )
+					else if( XP.getExtraChance( player, block.getRegistryName(), "log" ) > 0 )
 					{
 						if( !wasPlaced )			//EXTRA DROPS
 						{
-							double extraChance = XP.getExtraChance( regKey, "log", XP.getBreakReqGap( regKey, player, "woodcutting" ) ) / 100;
+							double extraChance = XP.getExtraChance( player, block.getRegistryName(), "log" ) / 100;
 
 							int guaranteedDrop = 0;
 							int extraDrop = 0;
@@ -1000,7 +983,7 @@ public class XP
 						}
 					}
 
-					int gap = getItemReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
+					int gap = getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
 
 					if( gap > 0 )
 						player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
@@ -1012,7 +995,6 @@ public class XP
 				}
 				else
 				{
-					CompoundNBT skillsTag = getSkillsTag( player );
 					int level;
 
 					if( correctHarvestTool( material ).equals( "axe" ) )
@@ -1033,10 +1015,7 @@ public class XP
 
 					for( Map.Entry<String, Object> entry : Requirements.breakReq.get( block.getRegistryName().toString() ).entrySet() )
 					{
-						if( skillsTag.contains( entry.getKey() ) )
-							level = levelAtXp( skillsTag.getFloat( entry.getKey() ) );
-						else
-							level = 1;
+						level = getLevel( entry.getKey(), player );
 
 						double entryValue = 1;
 						if( entry.getValue() instanceof Double )
@@ -1140,7 +1119,7 @@ public class XP
 				PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
 				if( !player.isCreative() )
 				{
-					int gap = getItemReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
+					int gap = getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
 					if( gap > 0 )
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
@@ -1220,15 +1199,7 @@ public class XP
 				int levelsCrouchJumpBoost = Config.config.levelsCrouchJumpBoost.get();
 				int levelsSprintJumpBoost = Config.config.levelsSprintJumpBoost.get();
 
-				if (player.world.isRemote)
-				{
-					if (XPOverlayGUI.skills.get("agility") == null)
-						agilityLevel = 1;
-					else
-						agilityLevel = levelAtXp( XPOverlayGUI.skills.get("agility").xp );
-				}
-				else
-					agilityLevel = levelAtXp(skillsTag.getFloat("agility"));
+				agilityLevel = getLevel( "agility", player );
 
 				if (player.isCrouching())
 					jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsCrouchJumpBoost );
@@ -1337,7 +1308,6 @@ public class XP
 		if( res.equals( Items.AIR.getRegistryName() ) )
 			return true;
 
-		CompoundNBT skills = getSkillsTag( player );
 		String registryName = res.toString();
 		Map<String, Double> reqMap = new HashMap<>();
 		int level;
@@ -1419,15 +1389,7 @@ public class XP
 		{
 			for( Map.Entry<String, Double> entry : reqMap.entrySet() )
 			{
-				if( player.world.isRemote() )
-				{
-					if( XPOverlayGUI.skills.containsKey( entry.getKey() ) )
-						level = levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp );
-					else
-						level = 1;
-				}
-				else
-					level = levelAtXp( skills.getFloat( entry.getKey() ) );
+				level = getLevel( entry.getKey(), player );
 
 				if( level < entry.getValue() )
 					failedReq = true;
@@ -1447,11 +1409,11 @@ public class XP
 			int level;
             boolean metReq;
 
-			if( ( event instanceof RightClickItem || event instanceof RightClickBlock ) && !player.isCreative() )
+			if(  !player.isCreative() )
             {
                 metReq = checkReq( player, item.getRegistryName(), "use" );
 
-                if( !metReq )
+                if( !metReq && !(item instanceof BlockItem) )
                 {
                     event.setCanceled( true );
                     if( player.world.isRemote() )
@@ -1473,10 +1435,7 @@ public class XP
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 						for( Map.Entry<String, Object> entry : Requirements.useReq.get( block.getRegistryName().toString() ).entrySet() )
 						{
-							if( XPOverlayGUI.skills.get( entry.getKey() ) != null )
-								level = levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).xp );
-							else
-								level = 1;
+							level = getLevel( entry.getKey(), player );
 
 							double entryValue = 1;
 							if( entry.getValue() instanceof Double )
@@ -1633,10 +1592,10 @@ public class XP
 
 				    		if( block.equals( diamondBlock ) && event.getHand() == Hand.MAIN_HAND )
 				    		{
-				    			int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
-				    			int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
-				    			int combatLevel = levelAtXp( skillsTag.getFloat( "combat" ) );
-				    			int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
+				    			int agilityLevel = getLevel( "agility", player );
+				    			int enduranceLevel = getLevel( "endurance", player );
+				    			int combatLevel = getLevel( "combat", player );
+				    			int swimLevel = getLevel( "swimming", player );
 				    			int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();	//Swimming
 
 				    			double maxFallSaveChance = Config.config.maxFallSaveChance.get();			//Agility
@@ -1866,25 +1825,15 @@ public class XP
 	{
 		PlayerEntity player = event.getPlayer();
 
-		CompoundNBT skills = getSkillsTag( player );
 		String skill = getSkill( correctHarvestTool( event.getState().getMaterial() ) ).name().toLowerCase();
 		double speedBonus = 0;
 
-		int level = 1;
+		int toolGap = getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
 
-		if( player.world.isRemote() )
-		{
-			if( XPOverlayGUI.skills.get( skill ) != null )
-				level = levelAtXp( XPOverlayGUI.skills.get( skill ).xp );
-		}
-		else
-			level = levelAtXp( skills.getFloat( skill ) );
+		if( toolGap > 0 )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 
-
-		level = level - getBreakReqGap( event.getState().getBlock().getRegistryName().toString(), player, skill );
-
-		if( level < 0 )
-			level = 0;
+		int level = getLevel( skill, player );
 
 		switch ( correctHarvestTool( event.getState().getMaterial() ) )
 		{
@@ -1900,33 +1849,28 @@ public class XP
 					heightMultiplier = Config.config.minBreakSpeed.get();
 
 				speedBonus = Config.config.miningBonusSpeed.get() / 100;
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + level * (float) speedBonus ) * ( (float) heightMultiplier ) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (level - toolGap) * (float) speedBonus ) * ( (float) heightMultiplier ) );
 				break;
 
 			case "axe":
 				speedBonus = Config.config.woodcuttingBonusSpeed.get() / 100;
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + level * (float) speedBonus ) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (level - toolGap) * (float) speedBonus ) );
 				break;
 
 			case "shovel":
 				speedBonus = Config.config.excavationBonusSpeed.get() / 100;
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + level * (float) speedBonus ) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (level - toolGap) * (float) speedBonus ) );
 				break;
 
 			case "hoe":
 				speedBonus = Config.config.farmingBonusSpeed.get() / 100;
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + level * (float) speedBonus ) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (level - toolGap) * (float) speedBonus ) );
 				break;
 
 			default:
 				event.setNewSpeed( event.getOriginalSpeed() );
 				break;
 		}
-
-		int toolGap = getItemReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
-
-		if( toolGap > 0 )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 
 		event.setNewSpeed( event.getNewSpeed() / (toolGap + 1) );
 	}
@@ -2199,7 +2143,7 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageXp( newXp, Skill.getInt( skillName ), 0, false ), (ServerPlayerEntity) player );
 	}
 
-	public static Double getGap( Double a, Double b )
+	public static int getGap( int a, int b )
 	{
 		if( a < b )
 			return b - a;
@@ -2207,12 +2151,12 @@ public class XP
 			return a - b;
 	}
 
-	public static int getItemReqGap( PlayerEntity player, ResourceLocation res, String type )
+	public static int getSkillReqGap( PlayerEntity player, ResourceLocation res, String type )
 	{
+		int gap = 0;
+
 		if( !player.getHeldItemMainhand().isEmpty() )
 		{
-			CompoundNBT skillsTag = getSkillsTag( player );
-
 			if( !checkReq( player, res, type ) )
 			{
 				Map<String, Double> reqs = new HashMap<>();
@@ -2242,45 +2186,58 @@ public class XP
 						}
 						break;
 
+					case "use":
+						for( Map.Entry<String, Object> entry : Requirements.useReq.get( res.toString() ).entrySet() )
+						{
+							if( entry.getValue() instanceof Double )
+								reqs.put( entry.getKey(), (double) entry.getValue() );
+						}
+						break;
+
+					case "place":
+						for( Map.Entry<String, Object> entry : Requirements.placeReq.get( res.toString() ).entrySet() )
+						{
+							if( entry.getValue() instanceof Double )
+								reqs.put( entry.getKey(), (double) entry.getValue() );
+						}
+						break;
+
+					case "break":
+						for( Map.Entry<String, Object> entry : Requirements.breakReq.get( res.toString() ).entrySet() )
+						{
+							if( entry.getValue() instanceof Double )
+								reqs.put( entry.getKey(), (double) entry.getValue() );
+						}
+						break;
+
 					default:
 						System.out.println( "PLEASE REPORT THIS IF YOU SEE ME" );
 						return 0;
 				}
-				if( player.world.isRemote() )
-				{
-					if( XPOverlayGUI.skills.size() > 0 )
-						return (int) Math.floor( reqs.entrySet().stream()
-								.map( entry -> getGap( entry.getValue(),
-											   XPOverlayGUI.skills.containsKey( entry.getKey() ) ? Math.floor( levelAtXp( XPOverlayGUI.skills.get( entry.getKey() ).goalXp ) ) : 1 ) )
-								.reduce( 0D, Math::max ) );
-					else
-						return (int) Math.floor( reqs.entrySet().stream()
-							.map( entry -> getGap( entry.getValue(), Math.floor( levelAtXp( skillsTag.getFloat( entry.getKey() ) ) ) ) )
-							.reduce( 0D, Math::max ) );
-				}
-				else
-					return (int) Math.floor( reqs.values().stream().reduce( 0D, Math::max ) ) - 1;
+
+				gap = (int) Math.floor( reqs.entrySet().stream()
+						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( entry.getKey(), player ) ) )
+						.reduce( 0, Math::max ) );
 			}
 		}
 
-		return 0;
+		return gap;
 	}
 
 	public static void checkWornLevelReq( PlayerEntity player, int slot )
 	{
-		CompoundNBT skillsTag = getSkillsTag( player );
 		Item item = player.inventory.getStackInSlot( slot ).getItem();
 
 		if( !checkReq( player, item.getRegistryName(), "wear" ) )
 		{
-			int gap = getItemReqGap( player, item.getRegistryName(), "wear" );
+			int gap = getSkillReqGap( player, item.getRegistryName(), "wear" );
 			if( gap > 0 )
 				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", item.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
 			if( gap > 9 )
 				gap = 9;
 
-			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 50, gap, false, true ) );
+			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
 		}
 	}
 
@@ -2306,11 +2263,9 @@ public class XP
 			long gap = System.currentTimeMillis() - lastAward.get( name );
 			if( gap > 1000 )
 			{
-				CompoundNBT skillsTag = getSkillsTag( player );
-
-				int swimLevel = levelAtXp( skillsTag.getFloat( "swimming" ) );
-				int flyLevel = levelAtXp( skillsTag.getFloat( "flying" ) );
-				int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
+				int swimLevel = getLevel( "swimming", player );
+				int flyLevel = getLevel( "flying", player );
+				int agilityLevel = getLevel( "agility", player );
 				int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();
 				float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
 				float speedAmp = 0;
@@ -2357,10 +2312,8 @@ public class XP
 				boolean waterAbove = player.getEntityWorld().getBlockState( playerPos.up()   ).getBlock().equals( waterBlock );
 
 				if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
-				{
-					player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 750, 0, true, false ) );
-				}
-				else if( player.isPotionActive( Effects.NIGHT_VISION ) && player.getActivePotionEffect( Effects.NIGHT_VISION ).isAmbient() )
+					player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 300, 0, false, false ) );
+				else
 					player.removePotionEffect( Effects.NIGHT_VISION );
 
 				if( player.isSprinting() )

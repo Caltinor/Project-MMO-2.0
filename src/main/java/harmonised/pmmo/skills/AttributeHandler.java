@@ -34,7 +34,7 @@ public class AttributeHandler
 	public static void updateReach( PlayerEntity player )
 	{
 		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
-		float buildLevel = XP.levelAtXp( XP.getSkillsTag( player ).getFloat( "building" ) );
+		float buildLevel = XP.getLevel( "building", player );
 
 		if( buildLevel == 1 )
 			return;
@@ -52,7 +52,7 @@ public class AttributeHandler
 	public static void updateSpeed( PlayerEntity player )
 	{
 		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
-		float agilityLevel = XP.levelAtXp( XP.getSkillsTag( player ).getFloat( "agility" ) );
+		float agilityLevel = XP.getLevel( "agility", player );
 		double speedBoost = agilityLevel * speedBoostPerLevel;
 		if( speedBoost > maxSpeedBoost )
 			speedBoost = maxSpeedBoost;
@@ -73,7 +73,7 @@ public class AttributeHandler
 	public static void updateHP( PlayerEntity player )
 	{
 		IAttributeInstance HPAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
-		float enduranceLevel = XP.levelAtXp( XP.getSkillsTag( player ).getFloat( "endurance" ) );
+		float enduranceLevel = XP.getLevel( "endurance", player );
 		int maxHP = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
 		if( maxHP > maxHeartCap * 2 )
 			maxHP = maxHeartCap;
@@ -85,7 +85,7 @@ public class AttributeHandler
 	public static void updateDamage( PlayerEntity player )
 	{
 		IAttributeInstance DamageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
-		float combatLevel = XP.levelAtXp( XP.getSkillsTag( player ).getFloat( "combat" ) );
+		float combatLevel = XP.getLevel( "combat", player );
 		int damageBoost = (int) Math.floor( combatLevel / levelsPerDamage );
 		AttributeModifier damageModifier = new AttributeModifier( DamageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );
 		DamageAttribute.removeModifier( DamageModifierID );
