@@ -612,7 +612,7 @@ public class Config
                 this.maxEnchantmentBypass = subscriber.subscribe(builder
                         .comment( "Max amount of levels enchants are able to go above max vanilla level" )
                         .translation( "pmmo.maxEnchantmentBypass" )
-                        .defineInRange( "maxEnchantmentBypass", 2, 0, 1000) );
+                        .defineInRange( "maxEnchantmentBypass", 10, 0, 1000) );
 
                 this.maxEnchantLevel = subscriber.subscribe(builder
                         .comment( "Anvil combination limits enchantments to this level" )

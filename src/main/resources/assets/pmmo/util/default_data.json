@@ -1000,7 +1000,7 @@
 		},
 		"minecraft:diamond_horse_armor": {
 			"salvageItem": "minecraft:diamond",
-			"salvageMax": 5,
+			"salvageMax": 7,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
 			"xpPerItem": 75
@@ -1040,6 +1040,20 @@
 			"chancePerLevel": 0.5,
 			"xpPerItem": 75
 		},
+		"minecraft:jukebox": {
+			"salvageItem": "minecraft:diamond",
+			"salvageMax": 1,
+			"baseChance": 0,
+			"chancePerLevel": 0.5,
+			"xpPerItem": 75
+		},
+		"minecraft:enchanting_table": {
+			"salvageItem": "minecraft:diamond",
+			"salvageMax": 2,
+			"baseChance": 0,
+			"chancePerLevel": 0.5,
+			"xpPerItem": 75
+		},
 		"minecraft:golden_helmet": {
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 5,
@@ -1070,7 +1084,7 @@
 		},
 		"minecraft:golden_horse_armor": {
 			"salvageItem": "minecraft:gold_ingot",
-			"salvageMax": 5,
+			"salvageMax": 7,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
 			"xpPerItem": 35
@@ -1110,103 +1124,208 @@
 			"chancePerLevel": 0.75,
 			"xpPerItem": 35
 		},
+		"minecraft:clock": {
+			"salvageItem": "minecraft:gold_ingot",
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"xpPerItem": 35
+		},
+		"minecraft:golden_apple": {
+			"salvageItem": "minecraft:gold_ingot",
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"xpPerItem": 35
+		},
 		"minecraft:chainmail_helmet": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 5,
 			"baseChance": 35,
 			"chancePerLevel": 1.25,
-			"xpPerItem": 90
+			"xpPerItem": 60
 		},
 		"minecraft:chainmail_chestplate": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 8,
 			"baseChance": 35,
 			"chancePerLevel": 1.25,
-			"xpPerItem": 90
+			"xpPerItem": 60
 		},
 		"minecraft:chainmail_leggings": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 7,
 			"baseChance": 35,
 			"chancePerLevel": 1.25,
-			"xpPerItem": 90
+			"xpPerItem": 60
 		},
 		"minecraft:chainmail_boots": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 4,
 			"baseChance": 35,
 			"chancePerLevel": 1.25,
-			"xpPerItem": 90
+			"xpPerItem": 60
 		},
 		"minecraft:iron_helmet": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 5,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_chestplate": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 8,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_leggings": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 7,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_boots": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 4,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_horse_armor": {
 			"salvageItem": "minecraft:iron_ingot",
-			"salvageMax": 5,
+			"salvageMax": 7,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_sword": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 2,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_axe": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 3,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_pickaxe": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 3,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_hoe": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 2,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
 		},
 		"minecraft:iron_shovel": {
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 1,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 20
+			"xpPerItem": 15
+		},
+		"minecraft:anvil": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 31,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:chipped_anvil": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 20,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:damaged_anvil": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 10,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:iron_trapdoor": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 4,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:iron_door": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 6,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:hopper": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 5,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:compass": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 4,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:minecart": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 5,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:bucket": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 3,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:cauldron": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 7,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:flint_and_steel": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 1,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:shears": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 2,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
+		},
+		"minecraft:blast_furnace": {
+			"salvageItem": "minecraft:iron_ingot",
+			"salvageMax": 5,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 15
 		},
 		"minecraft:leather_helmet": {
 			"salvageItem": "minecraft:leather",
@@ -1235,6 +1354,34 @@
 			"baseChance": 50,
 			"chancePerLevel": 1.5,
 			"xpPerItem": 25
+		},
+		"minecraft:leather_horse_armor": {
+			"salvageItem": "minecraft:leather",
+			"salvageMax": 7,
+			"baseChance": 50,
+			"chancePerLevel": 1.5,
+			"xpPerItem": 25
+		},
+		"minecraft:book": {
+			"salvageItem": "minecraft:leather",
+			"salvageMax": 1,
+			"baseChance": 50,
+			"chancePerLevel": 1.5,
+			"xpPerItem": 25
+		},
+		"minecraft:writable_book": {
+			"salvageItem": "minecraft:book",
+			"salvageMax": 1,
+			"baseChance": 50,
+			"chancePerLevel": 1.5,
+			"xpPerItem": 20
+		},
+		"minecraft:saddle": {
+			"salvageItem": "minecraft:leather",
+			"salvageMax": 5,
+			"baseChance": 50,
+			"chancePerLevel": 1.5,
+			"xpPerItem": 50
 		},
 		"minecraft:wooden_sword": {
 			"salvageItem": "minecraft:oak_planks",
@@ -1275,8 +1422,78 @@
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 5,
 			"baseChance": 50,
-			"chancePerLevel": 1.5,
+			"chancePerLevel": 1,
 			"xpPerItem": 100
+		},
+		"minecraft:fishing_rod": {
+			"salvageItem": "minecraft:string",
+			"salvageMax": 2,
+			"baseChance": 60,
+			"chancePerLevel": 2,
+			"xpPerItem": 7
+		},
+		"minecraft:bow": {
+			"salvageItem": "minecraft:string",
+			"salvageMax": 3,
+			"baseChance": 70,
+			"chancePerLevel": 2,
+			"xpPerItem": 7
+		},
+		"minecraft:beacon": {
+			"salvageItem": "minecraft:nether_star",
+			"salvageMax": 3,
+			"baseChance": 0,
+			"chancePerLevel": 1,
+			"xpPerItem": 200
+		},
+		"minecraft:tnt": {
+			"salvageItem": "minecraft:gunpowder",
+			"salvageMax": 5,
+			"baseChance": 25,
+			"chancePerLevel": 2,
+			"xpPerItem": 10
+		},
+		"minecraft:brewing_stand": {
+			"salvageItem": "minecraft:blaze_rod",
+			"salvageMax": 1,
+			"baseChance": 35,
+			"chancePerLevel": 1,
+			"xpPerItem": 50
+		},
+		"minecraft:gravel": {
+			"salvageItem": "minecraft:flint",
+			"salvageMax": 1,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"xpPerItem": 1
+		},
+		"minecraft:ender_eye": {
+			"salvageItem": "minecraft:ender_pearl",
+			"salvageMax": 1,
+			"baseChance": 20,
+			"chancePerLevel": 1,
+			"xpPerItem": 20
+		},
+		"minecraft:magma_cream": {
+			"salvageItem": "minecraft:slime_ball",
+			"salvageMax": 1,
+			"baseChance": 30,
+			"chancePerLevel": 1,
+			"xpPerItem": 25
+		},
+		"minecraft:jack_o_lantern": {
+			"salvageItem": "minecraft:carved_pumpkin",
+			"salvageMax": 1,
+			"baseChance": 60,
+			"chancePerLevel": 1,
+			"xpPerItem": 3
+		},
+		"minecraft:furnace": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 8,
+			"baseChance": 40,
+			"chancePerLevel": 2,
+			"xpPerItem": 0.5
 		}
 	}
 }

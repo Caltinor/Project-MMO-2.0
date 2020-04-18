@@ -4,25 +4,18 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageCrawling;
-import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.PMMOPoseSetter;
-import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.IPlantable;
@@ -220,13 +213,15 @@ public class ClientEventHandler
 
                 int salvageMax = (int) Math.floor( (double) theMap.get( "salvageMax" ) );
                 double durabilityPercent = ( 1.00f - ( (double) itemStack.getDamage() / (double) itemStack.getMaxDamage() ) );
+
+                if( Double.isNaN( durabilityPercent ) )
+                    durabilityPercent = 1;
+
                 int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
                 Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
 
-
                 if( potentialReturnAmount > 0 )
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", new TranslationTextComponent( item.getTranslationKey() ), potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                tooltip.add( new TranslationTextComponent( "pmmo.text.salvageChance", chance ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ), DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
             }
         }
     }

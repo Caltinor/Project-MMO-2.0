@@ -1469,6 +1469,7 @@ public class XP
 				    	Block anvil 		=	Blocks.ANVIL;
 				    	Block ironBlock		= 	Blocks.IRON_BLOCK;
 				    	Block goldBlock 	= 	Blocks.GOLD_BLOCK;
+				    	Block smithBlock    =   Blocks.SMITHING_TABLE;
 				    	Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
 
 				    	int repairLevel = getLevel( "repairing", player );
@@ -1490,7 +1491,7 @@ public class XP
 				    				return;
 				    		}
 
-				    		if( block.equals( goldBlock ) )
+				    		if( block.equals( goldBlock ) || block.equals( smithBlock ) )
 				    		{
 				    			if( event.getHand().equals( Hand.OFF_HAND ) )
 								{
@@ -1521,11 +1522,15 @@ public class XP
 				    						if( enchantChance > maxSalvageEnchantChance )
 				    							enchantChance = maxSalvageEnchantChance;
 
-				    						float startDmg = itemStack.getDamage();
-				    						float maxDmg = itemStack.getMaxDamage();
+											double startDmg = itemStack.getDamage();
+											double maxDmg = itemStack.getMaxDamage();
 				    						double award = 0;
-				    						float displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
-				    						float durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
+											double displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
+				    						double durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
+
+											if( Double.isNaN( durabilityPercent ) )
+												durabilityPercent = 1;
+
 				    						int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
 
 				    						if( event.getHand() == Hand.OFF_HAND )
@@ -1539,7 +1544,7 @@ public class XP
 				    									if( Math.ceil( Math.random() * 100 ) <= chance )
 				    										returnAmount++;
 				    								}
-				    								award += getSalvageXp( salvageItem.getRegistryName() ) * returnAmount;
+				    								award += (double) theMap.get( "xpPerItem" ) * returnAmount;
 
 				    								if( returnAmount > 0 )
 				    									dropItems( returnAmount, salvageItem, event.getWorld(), event.getPos() );
@@ -1548,11 +1553,11 @@ public class XP
 				    									awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false  );
 
 				    								if( returnAmount == salvageMax )
-				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + salvageMax, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 				    								else if( returnAmount > 0 )
-				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + salvageMax, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
+				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
 				    								else
-				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + salvageMax, salvageItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
+				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
 
 				    								if( enchants.size() > 0 )
 				    								{
@@ -1585,7 +1590,9 @@ public class XP
 				    										else
 				    											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );										}
 				    								}
-				    								player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
+				    								event.setCanceled( true );
+				    								player.getHeldItemOffhand().shrink( 1 );
+//				    								player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
 				    								player.sendBreakAnimation(Hand.OFF_HAND );
 				    							}
 				    							else
@@ -1605,10 +1612,8 @@ public class XP
 											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSalvageItem", theMap.get( "salvageItem" ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 				    				}
 				    				else
-				    				{
-				    					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotSalvage", item.getTranslationKey() ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
-				    				}
-								}
+										player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+									}
 								}
 				    		}
 
