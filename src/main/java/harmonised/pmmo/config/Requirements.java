@@ -111,18 +111,49 @@ public class Requirements
     {
         req.forEach( (key, value) ->
         {
-            if( !outReq.containsKey( key ) )
-                outReq.put( key, new HashMap<>() );
+            boolean failed = false;
+            Map<String, Object> inMap = value.requirements;
 
-            for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
+            for( Map.Entry<String, Object> entry : inMap.entrySet() )
             {
-                if( entry.getValue() instanceof Double )
+                if( !( ( entry.getValue() instanceof Double && ( entry.getKey().equals( "salvageMax" ) || entry.getKey().equals( "baseChance" ) || entry.getKey().equals( "chancePerLevel" ) || entry.getKey().equals( "xpPerItem" ) ) ) || ( entry.getValue() instanceof String && entry.getKey().equals( "salvageItem" ) ) ) )
                 {
-                    if( (double) entry.getValue() >= 0 )
-                        outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                    failed = true;
+                    break;
                 }
-                else if( entry.getValue() instanceof String )
-                    outReq.get( key ).put( entry.getKey(), entry.getValue() );
+            }
+
+            if( !failed )
+            {
+                if( !outReq.containsKey( key ) )
+                    outReq.put( key, new HashMap<>() );
+                Map<String, Object> outMap = outReq.get( key );
+
+                outMap.put( "salvageItem", inMap.get( "salvageItem" ) );
+
+                if( (double) inMap.get( "salvageMax" ) < 1 )
+                    outMap.put( "salvageMax", 1 );
+                else
+                    outMap.put( "salvageMax", inMap.get( "salvageMax" ) );
+
+                if( (double) inMap.get( "xpPerItem" ) < 0 )
+                    outMap.put( "xpPerItem", 0 );
+                else
+                    outMap.put( "xpPerItem", inMap.get( "xpPerItem" ) );
+
+                if( (double) inMap.get( "baseChance" ) < 0 )
+                    outMap.put( "baseChance", 0 );
+                else if( (double) inMap.get( "baseChance" ) > 100 )
+                    outMap.put( "baseChance", 100 );
+                else
+                    outMap.put( "baseChance", inMap.get( "baseChance" ) );
+
+                if( (double) inMap.get( "chancePerLevel" ) < 0 )
+                    outMap.put( "chancePerLevel", 0 );
+                else if( (double) inMap.get( "chancePerLevel" ) > 100 )
+                    outMap.put( "chancePerLevel", 100 );
+                else
+                    outMap.put( "chancePerLevel", inMap.get( "chancePerLevel" ) );
             }
         });
     }

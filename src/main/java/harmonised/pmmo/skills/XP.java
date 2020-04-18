@@ -55,6 +55,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.jmx.Server;
@@ -1399,6 +1400,19 @@ public class XP
 		return !failedReq;
 	}
 
+	public static Item getItem( String resLoc )
+	{
+		if( resLoc != null )
+			return ForgeRegistries.ITEMS.getValue( new ResourceLocation( resLoc ) );
+		else
+			return Items.AIR;
+	}
+
+	public static Item getItem( ResourceLocation resLoc )
+	{
+		return ForgeRegistries.ITEMS.getValue( resLoc );
+	}
+
 	public static void handleItemUse( PlayerInteractEvent event )
 	{
 		if( event instanceof RightClickBlock || event instanceof RightClickItem )
@@ -1452,13 +1466,12 @@ public class XP
                 {
                     if( !event.getWorld().isRemote )
 				    {
-				    	CompoundNBT skillsTag = getSkillsTag( player );
 				    	Block anvil 		=	Blocks.ANVIL;
 				    	Block ironBlock		= 	Blocks.IRON_BLOCK;
 				    	Block goldBlock 	= 	Blocks.GOLD_BLOCK;
 				    	Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
 
-				    	int repairLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
+				    	int repairLevel = getLevel( "repairing", player );
 				    	int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
 				    	int levelsPerOneEnchantBypass = Config.config.levelsPerOneEnchantBypass.get();
 				    	int maxPlayerBypass = (int) Math.floor( (double) repairLevel / (double) levelsPerOneEnchantBypass );
@@ -1477,117 +1490,126 @@ public class XP
 				    				return;
 				    		}
 
-				    		if( block.equals( goldBlock ) || block.equals( anvil ) )
+				    		if( block.equals( goldBlock ) )
 				    		{
-				    			if( item.isDamageable() )
-				    			{
-				    				if( getToolItem( item.getRegistryName() ) != null )
+				    			if( event.getHand().equals( Hand.OFF_HAND ) )
+								{
+				    				itemStack = player.getHeldItemOffhand();
+				    				item = itemStack.getItem();
+
+				    				if( !item.equals( Items.AIR ) )
+									{
+				    				if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) )
 				    				{
-				    					Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
-				    					ItemStack salvageItemStack = getToolItem( item.getRegistryName() );
-				    					Item salvageItem = salvageItemStack.getItem();
-				    					float baseValue = getSalvageBaseValue( salvageItem.getRegistryName() );
-				    					float valuePerLevel = getSalvageValuePerLevel( salvageItem.getRegistryName() );
-				    					double chance = baseValue + ( valuePerLevel * repairLevel );
-				    					double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
-				    					double maxSalvageEnchantChance = Config.config.maxSalvageEnchantChance.get();
-				    					double enchantSaveChancePerLevel = Config.config.enchantSaveChancePerLevel.get();
+										Map<String, Object> theMap = Requirements.salvageInfo.get( item.getRegistryName().toString() );
+										Item salvageItem = getItem( (String) theMap.get( "salvageItem" ) );
+										if( !salvageItem.equals( Items.AIR ) )
+										{
+											Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
+				    						double baseChance = (double) theMap.get( "baseChance" );
+											double chancePerLevel = (double) theMap.get( "chancePerLevel" );
+											int salvageMax = (int) Math.floor( (double) theMap.get( "salvageMax" ) );
+											double chance = baseChance + ( chancePerLevel * repairLevel );
+				    						double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
+				    						double maxSalvageEnchantChance = Config.config.maxSalvageEnchantChance.get();
+				    						double enchantSaveChancePerLevel = Config.config.enchantSaveChancePerLevel.get();
 
-				    					if( chance > maxSalvageMaterialChance )
-				    						chance = maxSalvageMaterialChance;
+				    						if( chance > maxSalvageMaterialChance )
+				    							chance = maxSalvageMaterialChance;
 
-				    					double enchantChance = repairLevel * enchantSaveChancePerLevel;
-				    					if( enchantChance > maxSalvageEnchantChance )
-				    						enchantChance = maxSalvageEnchantChance;
+				    						double enchantChance = repairLevel * enchantSaveChancePerLevel;
+				    						if( enchantChance > maxSalvageEnchantChance )
+				    							enchantChance = maxSalvageEnchantChance;
 
-				    					int itemPotential = getToolItemAmount( item.getRegistryName() );
+				    						float startDmg = itemStack.getDamage();
+				    						float maxDmg = itemStack.getMaxDamage();
+				    						double award = 0;
+				    						float displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
+				    						float durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
+				    						int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
 
-				    					float startDmg = itemStack.getDamage();
-				    					float maxDmg = itemStack.getMaxDamage();
-				    					double award = 0;
-				    					float displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
-				    					float durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
-				    					int potentialReturnAmount = (int) Math.floor( itemPotential * durabilityPercent );
-
-				    					if( event.getHand() == Hand.OFF_HAND )
-				    					{
-				    						if( !player.isCreative() )
+				    						if( event.getHand() == Hand.OFF_HAND )
 				    						{
-				    							int returnAmount = 0;
-
-				    							for( int i = 0; i < potentialReturnAmount; i++ )
+				    							if( !player.isCreative() )
 				    							{
-				    								if( Math.ceil( Math.random() * 100 ) <= chance )
-				    									returnAmount++;
-				    							}
-				    							award += getSalvageXp( salvageItem.getRegistryName() ) * returnAmount;
+				    								int returnAmount = 0;
 
-//				    						if( returnAmount > 0 )
-				    							block.spawnAsEntity( event.getWorld(), event.getPos(), new ItemStack( salvageItem, returnAmount ) );
-
-				    							if( award > 0 )
-				    								awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + itemPotential + " from an item", award, false  );
-
-				    							if( returnAmount == itemPotential )
-				    								NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + itemPotential, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
-				    							else if( returnAmount > 0 )
-				    								NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + itemPotential, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
-				    							else
-				    								NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + itemPotential, salvageItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
-
-				    							if( enchants.size() > 0 )
-				    							{
-				    								ItemStack salvagedBook = new ItemStack( Items.KNOWLEDGE_BOOK );
-				    								Set<Enchantment> enchantKeys = enchants.keySet();
-				    								int enchantLevel;
-				    								boolean fullEnchants = true;
-
-				    								for( Enchantment enchant : enchantKeys )
+				    								for( int i = 0; i < potentialReturnAmount; i++ )
 				    								{
-				    									enchantLevel = 0;
-				    									for( int i = 1; i <= enchants.get( enchant ); i++ )
-				    									{
-				    										if( Math.floor( Math.random() * 100 ) < enchantChance )
-				    											enchantLevel = i;
-				    										else
-				    										{
-				    											fullEnchants = false;
-				    											i = enchants.get( enchant ) + 1;
-				    										}
-				    									}
-				    									if( enchantLevel > 0 )
-				    										salvagedBook.addEnchantment( enchant, enchantLevel );
+				    									if( Math.ceil( Math.random() * 100 ) <= chance )
+				    										returnAmount++;
 				    								}
-				    								if( salvagedBook.isEnchanted() )
+				    								award += getSalvageXp( salvageItem.getRegistryName() ) * returnAmount;
+
+				    								if( returnAmount > 0 )
+				    									dropItems( returnAmount, salvageItem, event.getWorld(), event.getPos() );
+
+				    								if( award > 0 )
+				    									awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false  );
+
+				    								if( returnAmount == salvageMax )
+				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + salvageMax, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+				    								else if( returnAmount > 0 )
+				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + salvageMax, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
+				    								else
+				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + salvageMax, salvageItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
+
+				    								if( enchants.size() > 0 )
 				    								{
-				    									block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
-				    									if( fullEnchants )
-				    										player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), true );
-				    									else
-				    										player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );										}
+				    									ItemStack salvagedBook = new ItemStack( Items.KNOWLEDGE_BOOK );
+				    									Set<Enchantment> enchantKeys = enchants.keySet();
+				    									int enchantLevel;
+				    									boolean fullEnchants = true;
+
+				    									for( Enchantment enchant : enchantKeys )
+				    									{
+				    										enchantLevel = 0;
+				    										for( int i = 1; i <= enchants.get( enchant ); i++ )
+				    										{
+				    											if( Math.floor( Math.random() * 100 ) < enchantChance )
+				    												enchantLevel = i;
+				    											else
+				    											{
+				    												fullEnchants = false;
+				    												i = enchants.get( enchant ) + 1;
+				    											}
+				    										}
+				    										if( enchantLevel > 0 )
+				    											salvagedBook.addEnchantment( enchant, enchantLevel );
+				    									}
+				    									if( salvagedBook.isEnchanted() )
+				    									{
+				    										block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
+				    										if( fullEnchants )
+				    											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), true );
+				    										else
+				    											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );										}
+				    								}
+				    								player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
+				    								player.sendBreakAnimation(Hand.OFF_HAND );
 				    							}
-				    							player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
-				    							player.sendBreakAnimation(Hand.OFF_HAND );
+				    							else
+				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.survivalOnlyWarning" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 				    						}
 				    						else
-				    							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.survivalOnlyWarning" ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+				    						{
+				    							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.offhandToDiss" ), false );
+				    							sendMessage( "_________________________________", false, player );
+				    							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
+				    							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
+				    							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
+				    							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
+				    						}
 				    					}
-				    					else
-				    					{
-//				    					itemStack.damageItem( 100, player, (a) -> a.sendBreakAnimation(Hand.OFF_HAND ) );
-				    						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.offhandToDiss" ), false );
-				    						sendMessage( "_________________________________", false, player );
-				    						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
-				    						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
-				    						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
-				    						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
-				    					}
+										else
+											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSalvageItem", theMap.get( "salvageItem" ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 				    				}
 				    				else
 				    				{
-				    					sendMessage( "UNACCOUNTED FOR DAMAGEABLE ITEM! Please Report!", false, player );
+				    					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotSalvage", item.getTranslationKey() ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 				    				}
-				    			}
+								}
+								}
 				    		}
 
 				    		if( block.equals( diamondBlock ) && event.getHand() == Hand.MAIN_HAND )

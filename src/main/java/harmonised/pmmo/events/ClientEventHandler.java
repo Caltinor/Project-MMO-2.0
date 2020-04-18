@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageCrawling;
@@ -103,7 +104,8 @@ public class ClientEventHandler
 
         if( player != null )
         {
-            Item item = event.getItemStack().getItem();
+            ItemStack itemStack = event.getItemStack();
+            Item item = itemStack.getItem();
             List<ITextComponent> tooltip = event.getToolTip();
             int level;
             String regKey = item.getRegistryName().toString();
@@ -203,6 +205,29 @@ public class ClientEventHandler
                 }
             }
 
+            if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) && !XP.getItem( (String) Requirements.salvageInfo.get( item.getRegistryName().toString() ).get( "salvageItem" ) ).equals( Items.AIR ) )
+            {
+                Map<String, Object> theMap = Requirements.salvageInfo.get( item.getRegistryName().toString() );
+
+                level = XP.getLevel( "repairing", player );
+                double baseChance = (double) theMap.get( "baseChance" );
+                double chancePerLevel = (double) theMap.get( "chancePerLevel" );
+                double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
+                double chance = baseChance + ( chancePerLevel * level );
+
+                if( chance > maxSalvageMaterialChance )
+                    chance = maxSalvageMaterialChance;
+
+                int salvageMax = (int) Math.floor( (double) theMap.get( "salvageMax" ) );
+                double durabilityPercent = ( 1.00f - ( (double) itemStack.getDamage() / (double) itemStack.getMaxDamage() ) );
+                int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
+                Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
+
+
+                if( potentialReturnAmount > 0 )
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", new TranslationTextComponent( item.getTranslationKey() ), potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.salvageChance", chance ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+            }
         }
     }
 }
