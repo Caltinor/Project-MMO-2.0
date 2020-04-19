@@ -31,7 +31,7 @@ import java.util.Map;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEventHandler
 {
-    private static boolean wasCrawling = false;
+    private static boolean wasCrawling = false, tooltipOn = true, tooltipKeyWasPressed = false;
 
     public static void subscribeClientEvents( IEventBus eventBus )
     {
@@ -48,6 +48,17 @@ public class ClientEventHandler
                 wasCrawling = ClientHandler.CRAWL_KEY.isKeyDown();
                 NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
             }
+
+            if( !(Minecraft.getInstance().player == null) && ClientHandler.TOGGLE_TOOLTIP.isKeyDown() && !tooltipKeyWasPressed )
+            {
+                tooltipOn = !tooltipOn;
+                if( tooltipOn )
+                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.tooltipOn" ), true );
+                else
+                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.tooltipOff" ), true );
+            }
+
+            tooltipKeyWasPressed = ClientHandler.TOGGLE_TOOLTIP.isKeyDown();
 
             if( ClientHandler.CRAWL_KEY.isKeyDown() )
                 XP.isCrawling.add( Minecraft.getInstance().player.getUniqueID() );
@@ -93,6 +104,9 @@ public class ClientEventHandler
     @SubscribeEvent
     public static void tooltipEvent( ItemTooltipEvent event )
     {
+        if( !tooltipOn )
+            return;
+
         PlayerEntity player = event.getPlayer();
 
         if( player != null )
@@ -185,26 +199,28 @@ public class ClientEventHandler
             else if( Requirements.plantInfo.containsKey( regKey ) && Requirements.plantInfo.get( regKey ).containsKey( "extraChance" ) )
                 tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
-            if( Requirements.salvageInfo.containsKey( regKey ) && Requirements.salvageInfo.get( regKey ).containsKey( "salvageItem" ) )
-            {
-                Item salvageItem = ForgeRegistries.ITEMS.getValue( item.getRegistryName() );
-
-                if( salvageItem != null )
-                {
-                    for( Map.Entry<String, Object> entry : Requirements.salvageInfo.get( regKey ).entrySet() )
-                    {
-//                        System.out.println( entry );
-                    }
-                }
-            }
-
             if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) && !XP.getItem( (String) Requirements.salvageInfo.get( item.getRegistryName().toString() ).get( "salvageItem" ) ).equals( Items.AIR ) )
             {
+                int highestUseReq = 0;
+
+                if( useReq != null )
+                {
+                    for( Map.Entry<String, Object> entry : useReq.entrySet() )
+                    {
+                        if( highestUseReq < (double) entry.getValue() )
+                        {
+                            highestUseReq = (int) Math.floor( (double) entry.getValue() );
+                        }
+                    }
+                }
+
                 Map<String, Object> theMap = Requirements.salvageInfo.get( item.getRegistryName().toString() );
 
                 level = XP.getLevel( "repairing", player );
                 double baseChance = (double) theMap.get( "baseChance" );
+                double xpPerItem = (double) theMap.get( "xpPerItem" );
                 double chancePerLevel = (double) theMap.get( "chancePerLevel" );
+                int levelReq = (int) Math.floor( (double) theMap.get( "levelReq" ) );
                 double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
                 double chance = baseChance + ( chancePerLevel * level );
 
@@ -221,7 +237,10 @@ public class ClientEventHandler
                 Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
 
                 if( potentialReturnAmount > 0 )
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ), DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ), DP.dp( xpPerItem ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.baseChance", DP.dp( baseChance )).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.perLevelChance", DP.dp( chancePerLevel ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.totalChance", DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
             }
         }
     }

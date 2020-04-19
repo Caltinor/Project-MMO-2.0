@@ -114,13 +114,36 @@ public class Requirements
             boolean failed = false;
             Map<String, Object> inMap = value.requirements;
 
-            for( Map.Entry<String, Object> entry : inMap.entrySet() )
+
+            if( !( inMap.containsKey( "salvageItem" ) && inMap.get( "salvageItem" ) instanceof String ) )
             {
-                if( !( ( entry.getValue() instanceof Double && ( entry.getKey().equals( "salvageMax" ) || entry.getKey().equals( "baseChance" ) || entry.getKey().equals( "chancePerLevel" ) || entry.getKey().equals( "xpPerItem" ) ) ) || ( entry.getValue() instanceof String && entry.getKey().equals( "salvageItem" ) ) ) )
-                {
-                    failed = true;
-                    break;
-                }
+                LOGGER.error( "Failed to load Salvage Item " + key + " \"salvageItem\" is invalid" );
+                failed = true;
+            }
+            if( !( inMap.containsKey( "salvageMax" ) && inMap.get( "salvageMax" ) instanceof Double ) )
+            {
+                LOGGER.error( "Failed to load Salvage Item " + key + " \"salvageMax\" is invalid" );
+                failed = true;
+            }
+            if( !( inMap.containsKey( "baseChance" ) && inMap.get( "baseChance" ) instanceof Double ) )
+            {
+                LOGGER.error( "Failed to load Salvage Item " + key + " \"baseChance\" is invalid" );
+                failed = true;
+            }
+            if( !( inMap.containsKey( "chancePerLevel" ) && inMap.get( "chancePerLevel" ) instanceof Double ) )
+            {
+                LOGGER.error( "Failed to load Salvage Item " + key + " \"chancePerLevel\" is invalid" );
+                failed = true;
+            }
+            if( !( inMap.containsKey( "xpPerItem" ) && inMap.get( "xpPerItem" ) instanceof Double ) )
+            {
+                LOGGER.error( "Failed to load Salvage Item " + key + " \"xpPerItem\" is invalid" );
+                failed = true;
+            }
+            if( !( inMap.containsKey( "levelReq" ) && inMap.get( "levelReq" ) instanceof Double ) )
+            {
+                LOGGER.error( "Failed to load Salvage Item " + key + " \"levelReq\" is invalid" );
+                failed = true;
             }
 
             if( !failed )
@@ -135,6 +158,11 @@ public class Requirements
                     outMap.put( "salvageMax", 1 );
                 else
                     outMap.put( "salvageMax", inMap.get( "salvageMax" ) );
+
+                if( (double) inMap.get( "levelReq" ) < 1 )
+                    outMap.put( "levelReq", 1 );
+                else
+                    outMap.put( "levelReq", inMap.get( "levelReq" ) );
 
                 if( (double) inMap.get( "xpPerItem" ) < 0 )
                     outMap.put( "xpPerItem", 0 );

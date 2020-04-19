@@ -1,6 +1,7 @@
 {
   "category.pmmo": "Project MMO",
-  "key.pmmo.showgui": "Show GUI",
+  "key.pmmo.showGui": "Show GUI",
+  "key.pmmo.toggleTooltip": "Toggle Tooltip",
   "key.pmmo.crawl": "Crawl",
   "pmmo.text.xpLeft": "%1$s left",
   "pmmo.text.maxLevel": "MAX LEVEL",
@@ -28,7 +29,10 @@
   "pmmo.text.salvageMessage": "Salvaged %1$s/%2$s %3$s!",
   "pmmo.text.cannotSalvage": "%1$s cannot be salvaged!",
   "pmmo.text.invalidSalvageItem": "%1$s is an invalid item! Please check your config",
-  "pmmo.text.salvagesInto": "Salvages into %1$s %2$s, %3$s%% each",
+  "pmmo.text.salvagesInto": "Salvages into %1$s %2$s, %3$sxp each",
+  "pmmo.text.baseChance": " %1$s%% Base Chance",
+  "pmmo.text.perLevelChance": " %1$s%% Per Level Chance",
+  "pmmo.text.totalChance": " %1$s%% Total Chance",
   "pmmo.text.extraChanceMessage": "%1$s%% Extra Drop Chance, %2$s%% per level",
   "pmmo.text.survivalOnlyWarning": "Only available in Survival Mode!",
   "pmmo.text.offhandToDiss": "Off-Hand to Disassemble!",
@@ -85,5 +89,7 @@
   "pmmo.text.lapisDonatorWelcome": "Welcome, PMMO Lapis Tier Patreon %1$s!",
   "pmmo.text.dandelionDonatorWelcome": "Welcome, PMMO Dandelion Tier Patreon %1$s!",
   "pmmo.text.ironDonatorWelcome": "Welcome, PMMO Iron Tier Patreon %1$s!",
-  "pmmo.text.milestoneLevelUp": "%1$s has reached level %2$s in %3$s!"
+  "pmmo.text.milestoneLevelUp": "%1$s has reached level %2$s in %3$s!",
+  "pmmo.text.tooltipOn": "PMMO Tooltip Info has been turned on",
+  "pmmo.text.tooltipOff": "PMMO Tooltip Info has been turned off"
 }
