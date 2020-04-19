@@ -61,6 +61,8 @@ public class AttributeHandler
 			AttributeModifier speedModifier = new AttributeModifier( speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, AttributeModifier.Operation.ADDITION );
 			speedAttribute.removeModifier( speedModifierID );
 			speedAttribute.applyModifier( speedModifier );
+
+//			System.out.println( speedModifier.getAmount() );
 		}
 	}
 	

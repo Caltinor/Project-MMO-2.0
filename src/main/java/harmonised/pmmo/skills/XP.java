@@ -1551,7 +1551,7 @@ public class XP
 
 				    								for( int i = 0; i < potentialReturnAmount; i++ )
 				    								{
-				    									if( Math.ceil( Math.random() * 100 ) <= chance )
+				    									if( Math.ceil( Math.random() * 10000 ) <= chance * 100 )
 				    										returnAmount++;
 				    								}
 				    								award += (double) theMap.get( "xpPerItem" ) * returnAmount;
@@ -1915,38 +1915,65 @@ public class XP
 		event.setNewSpeed( event.getNewSpeed() / (toolGap + 1) );
 	}
 
-	public static CompoundNBT getSkillsTag( PlayerEntity player )
+	public static CompoundNBT getPmmoTag( PlayerEntity player )
 	{
 		if( player != null )
 		{
 			CompoundNBT persistTag = player.getPersistentData();
 			CompoundNBT pmmoTag = null;
-			CompoundNBT skillsTag = null;
 
-			if( !persistTag.contains( "pmmo" ) )						//if Player doesn't have pmmo tag, make it
+			if( !persistTag.contains( "pmmo" ) )			//if Player doesn't have pmmo tag, make it
 			{
 				pmmoTag = new CompoundNBT();
 				persistTag.put( "pmmo", pmmoTag );
 			}
 			else
 			{
-				pmmoTag = persistTag.getCompound( "pmmo" );	//if Player has skills tag, use it
+				pmmoTag = persistTag.getCompound( "pmmo" );	//if Player has pmmo tag, use it
 			}
 
-			if( !pmmoTag.contains( "skills" ) )						//if Player doesn't have skills tag, make it
-			{
-				skillsTag = new CompoundNBT();
-				pmmoTag.put( "skills", skillsTag );
-			}
-			else
-			{
-				skillsTag = pmmoTag.getCompound( "skills" );	//if Player has skills tag, use it
-			}
-
-			return skillsTag;
+			return pmmoTag;
 		}
 		else
 			return new CompoundNBT();
+	}
+
+	public static CompoundNBT getPmmoTagElement( PlayerEntity player, String element )
+	{
+		if( player != null )
+		{
+			CompoundNBT pmmoTag = getPmmoTag( player );
+			CompoundNBT elementTag = null;
+
+			if( !pmmoTag.contains( element ) )					//if Player doesn't have element tag, make it
+			{
+				elementTag = new CompoundNBT();
+				pmmoTag.put( element, elementTag );
+			}
+			else
+			{
+				elementTag = pmmoTag.getCompound( element );	//if Player has element tag, use it
+			}
+
+			return elementTag;
+		}
+		else
+			return new CompoundNBT();
+	}
+
+	public static CompoundNBT getSkillsTag( PlayerEntity player )
+	{
+		return getPmmoTagElement( player, "skills" );
+	}
+
+	public static CompoundNBT getPreferencesTag( PlayerEntity player )
+	{
+		return getPmmoTagElement( player, "preferences" );
+	}
+
+	public static CompoundNBT getAbilitiesTag( PlayerEntity player )
+	{
+		return getPmmoTagElement( player, "abilities" );
 	}
 
 	public static void awardXp( PlayerEntity player, Skill skill, String sourceName, double amount, boolean skip )
@@ -2311,21 +2338,14 @@ public class XP
 				float speedAmp = 0;
 				PlayerInventory inv = player.inventory;
 
-				try
-				{
-					if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-						checkWornLevelReq( player, 39 );
-					if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-						checkWornLevelReq( player, 38 );
-					if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-						checkWornLevelReq( player, 37 );
-					if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-						checkWornLevelReq( player, 36 );
-				}
-				catch( Exception e )
-				{
-					//Can't cast into ArmorMaterial
-				}
+				if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
+					checkWornLevelReq( player, 39 );
+				if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
+					checkWornLevelReq( player, 38 );
+				if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
+					checkWornLevelReq( player, 37 );
+				if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
+					checkWornLevelReq( player, 36 );
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
 				if( player.isPotionActive( Effects.SPEED ) )
@@ -2378,6 +2398,17 @@ public class XP
 
 				if( (player.getRidingEntity() instanceof BoatEntity ) && player.isInWater() )
 					awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true );
+////////////////////////////////////////////ABILITIES//////////////////////////////////////////
+//				if( !player.world.isRemote() )
+//				{
+//					CompoundNBT abilityTag = getAbilitiesTag( player );
+//					if( !abilityTag.contains( "excavate" ) )
+//						abilityTag.putDouble( "excavate", 0 );
+//
+//					abilityTag.putDouble( "excavate", abilityTag.getDouble( "excavate" ) + 1 );
+//
+//					System.out.println( abilityTag.getDouble( "excavate" ) );
+//				}
 			}
 		}
 	}
