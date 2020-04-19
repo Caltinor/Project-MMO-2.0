@@ -201,28 +201,17 @@ public class ClientEventHandler
 
             if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) && !XP.getItem( (String) Requirements.salvageInfo.get( item.getRegistryName().toString() ).get( "salvageItem" ) ).equals( Items.AIR ) )
             {
-                int highestUseReq = 0;
-
-                if( useReq != null )
-                {
-                    for( Map.Entry<String, Object> entry : useReq.entrySet() )
-                    {
-                        if( highestUseReq < (double) entry.getValue() )
-                        {
-                            highestUseReq = (int) Math.floor( (double) entry.getValue() );
-                        }
-                    }
-                }
-
                 Map<String, Object> theMap = Requirements.salvageInfo.get( item.getRegistryName().toString() );
 
                 level = XP.getLevel( "repairing", player );
+                int reqLevel = (int) Math.floor( (double) theMap.get( "levelReq" ) );
+                int finalLevel = level - reqLevel;
+
                 double baseChance = (double) theMap.get( "baseChance" );
                 double xpPerItem = (double) theMap.get( "xpPerItem" );
                 double chancePerLevel = (double) theMap.get( "chancePerLevel" );
-                int levelReq = (int) Math.floor( (double) theMap.get( "levelReq" ) );
                 double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
-                double chance = baseChance + ( chancePerLevel * level );
+                double chance = baseChance + ( chancePerLevel * finalLevel );
 
                 if( chance > maxSalvageMaterialChance )
                     chance = maxSalvageMaterialChance;
@@ -236,11 +225,24 @@ public class ClientEventHandler
                 int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
                 Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
 
-                if( potentialReturnAmount > 0 )
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ), DP.dp( xpPerItem ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                tooltip.add( new TranslationTextComponent( "pmmo.text.baseChance", DP.dp( baseChance )).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                tooltip.add( new TranslationTextComponent( "pmmo.text.perLevelChance", DP.dp( chancePerLevel ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-                tooltip.add( new TranslationTextComponent( "pmmo.text.totalChance", DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                if( finalLevel < 0 )
+                {
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.cannotSalvageLackLevel", reqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                }
+                else
+                {
+                    if( potentialReturnAmount > 0 )
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    else
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+//                    tooltip.add( new TranslationTextComponent( "pmmo.text.baseChance", " " + DP.dp( baseChance )).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+//                    tooltip.add( new TranslationTextComponent( "pmmo.text.perLevelChance", " " + DP.dp( chancePerLevel ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+//                    tooltip.add( new TranslationTextComponent( "pmmo.text.totalChance", " " + DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    if( chance > 0 )
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    else
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                }
             }
         }
     }
