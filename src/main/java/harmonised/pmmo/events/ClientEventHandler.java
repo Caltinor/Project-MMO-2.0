@@ -227,7 +227,7 @@ public class ClientEventHandler
 
                 if( finalLevel < 0 )
                 {
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.cannotSalvageLackLevel", reqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.cannotSalvageLackLevel", reqLevel ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
                 }
                 else
                 {
