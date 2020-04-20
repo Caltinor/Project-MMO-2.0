@@ -30,7 +30,7 @@
 	"pmmo.text.cannotSalvageLackLevel": "Forgeage niveau %1$s requis pour démonter %2$s",
 	"pmmo.text.cannotSalvageLackLevelLonger": "Niveau %1$s de forgeage requis pour démonter %2$s",
 	"pmmo.text.cannotSalvage": "%1$s ne peux pas être démonter !",
-	"pmmo.text.invalidSalvageItem": "%1$s est un item invalide ! Merci de vérifier votre config",
+	"pmmo.text.invalidItem": "%1$s est un item invalide ! Merci de vérifier votre config",
 	"pmmo.text.salvagesInto": "Se démonte en %1$s %2$s, %3$sxp chacun",
 	"pmmo.text.baseChance": " %1$s%% de chance de base",
 	"pmmo.text.perLevelChance": " %1$s%% de chance par niveau",

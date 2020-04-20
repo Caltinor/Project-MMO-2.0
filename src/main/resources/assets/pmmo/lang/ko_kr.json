@@ -30,7 +30,7 @@
 	"pmmo.text.cannotSalvageLackLevel": "Level %1$s Repairing to salvage %2$s",
 	"pmmo.text.cannotSalvageLackLevelLonger": "You need level %1$s Repairing to salvage %2$s",
 	"pmmo.text.cannotSalvage": "%1$s cannot be salvaged!",
-	"pmmo.text.invalidSalvageItem": "%1$s is an invalid item! Please check your config",
+	"pmmo.text.invalidItem": "%1$s is an invalid item! Please check your config",
 	"pmmo.text.salvagesInto": "Salvages into %1$s %2$s, %3$sxp each",
 	"pmmo.text.baseChance": " %1$s%% Base Chance",
 	"pmmo.text.perLevelChance": " %1$s%% Per Level Chance",

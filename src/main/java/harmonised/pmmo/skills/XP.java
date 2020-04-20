@@ -27,11 +27,13 @@ import net.minecraft.entity.PMMOPoseSetter;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -1362,7 +1364,7 @@ public class XP
 				    								if( award > 0 )
 				    									awardXp( player, Skill.SMITHING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false  );
 
-				    								if( returnAmount == salvageMax )
+				    								if( returnAmount == potentialReturnAmount )
 				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 				    								else if( returnAmount > 0 )
 				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
@@ -1371,8 +1373,9 @@ public class XP
 
 				    								if( enchants.size() > 0 )
 				    								{
-				    									ItemStack salvagedBook = new ItemStack( Items.KNOWLEDGE_BOOK );
+				    									ItemStack salvagedBook = new ItemStack( Items.ENCHANTED_BOOK );
 				    									Set<Enchantment> enchantKeys = enchants.keySet();
+														Map<Enchantment, Integer> newEnchantMap = new HashMap<>();
 				    									int enchantLevel;
 				    									boolean fullEnchants = true;
 
@@ -1390,15 +1393,17 @@ public class XP
 				    											}
 				    										}
 				    										if( enchantLevel > 0 )
-				    											salvagedBook.addEnchantment( enchant, enchantLevel );
+																newEnchantMap.put( enchant, enchantLevel );
 				    									}
-				    									if( salvagedBook.isEnchanted() )
+				    									if( newEnchantMap.size() > 0 )
 				    									{
+				    										EnchantmentHelper.setEnchantments( newEnchantMap, salvagedBook );
 				    										block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
 				    										if( fullEnchants )
-				    											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), true );
+				    											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedAllEnchants" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), false );
 				    										else
-				    											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );										}
+				    											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( new Style().setColor( TextFormatting.YELLOW ) ), false );
+				    									}
 				    								}
 				    								player.getHeldItemOffhand().shrink( 1 );
 //				    								player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
@@ -1489,44 +1494,46 @@ public class XP
 		try
 		{
 			PlayerEntity player = event.getPlayer();
-			if( !player.world.isRemote && event.getItemInput().getItem().isDamageable() )
+			if( !player.world.isRemote )
 			{
-				CompoundNBT skillsTag = getSkillsTag( player );
-				double anvilCostReductionPerLevel = Config.config.anvilCostReductionPerLevel.get();
-				double extraChanceToNotBreakAnvilPerLevel = Config.config.extraChanceToNotBreakAnvilPerLevel.get() / 100;
-				double anvilFinalItemBonusRepaired = Config.config.anvilFinalItemBonusRepaired.get() / 100;
-				int anvilFinalItemMaxCostToAnvil = Config.config.anvilFinalItemMaxCostToAnvil.get();
 				boolean bypassEnchantLimit = Config.config.bypassEnchantLimit.get();
-
-				int currLevel = levelAtXp( skillsTag.getDouble( "smithing" ) );
-				double bonusRepair = anvilFinalItemBonusRepaired * currLevel;
-				int maxCost = (int) Math.floor( 50 - ( currLevel * anvilCostReductionPerLevel ) );
-				if( maxCost < anvilFinalItemMaxCostToAnvil )
-					maxCost = anvilFinalItemMaxCostToAnvil;
-
-				event.setBreakChance( event.getBreakChance() / ( 1f + (float) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
-
+				int currLevel = getLevel( "smithing", player );
 				ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
 				ItemStack lItem = event.getItemInput();
 				ItemStack oItem = event.getItemResult();
 
-				if( oItem.getRepairCost() > maxCost )
-					oItem.setRepairCost( maxCost );
-
-				float repaired = oItem.getDamage() - lItem.getDamage();
-				if( repaired < 0 )
-					repaired = -repaired;
-
-				oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
-
-				double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-				if( Requirements.salvageInfo.containsKey( oItem.getItem().getRegistryName().toString() ) )
-					award *= (double) Requirements.salvageInfo.get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
-
-				if( award > 0 )
+				if( event.getItemInput().getItem().isDamageable() )
 				{
-					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
-					awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false );
+					double anvilCostReductionPerLevel = Config.config.anvilCostReductionPerLevel.get();
+					double extraChanceToNotBreakAnvilPerLevel = Config.config.extraChanceToNotBreakAnvilPerLevel.get() / 100;
+					double anvilFinalItemBonusRepaired = Config.config.anvilFinalItemBonusRepaired.get() / 100;
+					int anvilFinalItemMaxCostToAnvil = Config.config.anvilFinalItemMaxCostToAnvil.get();
+
+					double bonusRepair = anvilFinalItemBonusRepaired * currLevel;
+					int maxCost = (int) Math.floor( 50 - ( currLevel * anvilCostReductionPerLevel ) );
+					if( maxCost < anvilFinalItemMaxCostToAnvil )
+						maxCost = anvilFinalItemMaxCostToAnvil;
+
+					event.setBreakChance( event.getBreakChance() / ( 1f + (float) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
+
+					if( oItem.getRepairCost() > maxCost )
+						oItem.setRepairCost( maxCost );
+
+					float repaired = oItem.getDamage() - lItem.getDamage();
+					if( repaired < 0 )
+						repaired = -repaired;
+
+					oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
+
+					double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
+					if( Requirements.salvageInfo.containsKey( oItem.getItem().getRegistryName().toString() ) )
+						award *= (double) Requirements.salvageInfo.get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
+
+					if( award > 0 )
+					{
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
+						awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false );
+					}
 				}
 
 				if( bypassEnchantLimit )
@@ -1620,7 +1627,7 @@ public class XP
 					}
 					else
 					{
-						if( ( level >= enchant.getMaxLevel() ) || alwaysUseUpgradeChance )
+						if( ( ( level >= enchant.getMaxLevel() ) || alwaysUseUpgradeChance ) && !player.isCreative() )
 						{
 							if( Math.ceil( Math.random() * 100 ) <= bypassChance ) //success
 							{
@@ -1782,7 +1789,7 @@ public class XP
 		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
 			return;
 
-		if( skill == skill.INVALID_SKILL )
+		if( skill.getValue() == skill.INVALID_SKILL.getValue() )
 		{
 			System.out.println( "INVALID SKILL" );
 			return;

@@ -75,17 +75,7 @@ public class MessageReqUpdate
             switch( packet.outputName.toLowerCase() )
             {
                 case "wipe":
-                    Requirements.wearReq = new HashMap<>();
-                    Requirements.toolReq = new HashMap<>();
-                    Requirements.weaponReq = new HashMap<>();
-                    Requirements.mobReq = new HashMap<>();
-                    Requirements.useReq = new HashMap<>();
-                    Requirements.placeReq = new HashMap<>();
-                    Requirements.breakReq = new HashMap<>();
-                    Requirements.xpValue = new HashMap<>();
-                    Requirements.oreInfo = new HashMap<>();
-                    Requirements.logInfo = new HashMap<>();
-                    Requirements.plantInfo = new HashMap<>();
+                    Requirements.resetRequirements();
                     break;
 
                 case "wearreq":

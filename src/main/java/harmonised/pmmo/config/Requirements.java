@@ -18,17 +18,40 @@ import java.util.function.BiConsumer;
 
 public class Requirements
 {
+    private static Map<String, Map<String, Object>> localWearReq = new HashMap<>();
     public static Map<String, Map<String, Object>> wearReq = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localToolReq = new HashMap<>();
     public static Map<String, Map<String, Object>> toolReq = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localWeaponReq = new HashMap<>();
     public static Map<String, Map<String, Object>> weaponReq = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localMobReq = new HashMap<>();
     public static Map<String, Map<String, Object>> mobReq = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localUseReq = new HashMap<>();
     public static Map<String, Map<String, Object>> useReq = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localPlaceReq = new HashMap<>();
     public static Map<String, Map<String, Object>> placeReq = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localBreakReq = new HashMap<>();
     public static Map<String, Map<String, Object>> breakReq = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localXpValue = new HashMap<>();
     public static Map<String, Map<String, Object>> xpValue = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localOreInfo = new HashMap<>();
     public static Map<String, Map<String, Object>> oreInfo = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> locallogInfo = new HashMap<>();
     public static Map<String, Map<String, Object>> logInfo = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localPlantInfo = new HashMap<>();
     public static Map<String, Map<String, Object>> plantInfo = new HashMap<>();
+
+    private static Map<String, Map<String, Object>> localSalvageInfo = new HashMap<>();
     public static Map<String, Map<String, Object>> salvageInfo = new HashMap<>();
 
     private static Map<String, Object> tempMap;
@@ -189,30 +212,56 @@ public class Requirements
     private static void updateFinal( Requirements req )
     {
         if( Config.config.wearReqEnabled.get() )
-            updateReqSkills( req.wears, wearReq );
+            updateReqSkills( req.wears, localWeaponReq );
+
         if( Config.config.toolReqEnabled.get() )
-            updateReqSkills( req.tools, toolReq );
+            updateReqSkills( req.tools, localToolReq );
+
         if( Config.config.weaponReqEnabled.get() )
-            updateReqSkills( req.weapons, weaponReq );
+            updateReqSkills( req.weapons, localWeaponReq );
+
 //        updateReqSkills( req.mobs, mobReq );
+
         if( Config.config.useReqEnabled.get() )
-            updateReqSkills( req.use, useReq );
+            updateReqSkills( req.use, localUseReq );
+
         if( Config.config.xpValueEnabled.get() )
-            updateReqSkills( req.xpValues, xpValue );
+            updateReqSkills( req.xpValues, localXpValue );
+
         if( Config.config.placeReqEnabled.get() )
-            updateReqSkills( req.placing, placeReq );
+            updateReqSkills( req.placing, localPlaceReq );
+
         if( Config.config.breakReqEnabled.get() )
-            updateReqSkills( req.breaking, breakReq );
+            updateReqSkills( req.breaking, localBreakReq );
 
         if( Config.config.oreEnabled.get() )
-            updateReqExtra( req.ores, oreInfo );
+            updateReqExtra( req.ores, localOreInfo );
+
         if( Config.config.logEnabled.get() )
-            updateReqExtra( req.logs, logInfo );
+            updateReqExtra( req.logs, locallogInfo );
+
         if( Config.config.plantEnabled.get() )
-            updateReqExtra( req.plants, plantInfo );
+            updateReqExtra( req.plants, localPlantInfo );
 
         if( Config.config.salvageEnabled.get() )
-            updateReqSalvage( req.salvage, salvageInfo );
+            updateReqSalvage( req.salvage, localSalvageInfo );
+
+        resetRequirements();
+    }
+
+    public static void resetRequirements()
+    {
+        wearReq = localWearReq;
+        toolReq = localToolReq;
+        weaponReq = localWeaponReq;
+        useReq = localUseReq;
+        xpValue = localXpValue;
+        placeReq = localPlaceReq;
+        breakReq = localBreakReq;
+        oreInfo = localOreInfo;
+        logInfo = locallogInfo;
+        plantInfo = localPlantInfo;
+        salvageInfo = localSalvageInfo;
     }
 
     private static void createData( File dataFile )

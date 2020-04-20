@@ -30,7 +30,7 @@
 	"pmmo.text.cannotSalvageLackLevel": "Level %1$s Repairing to salvage %2$s",
 	"pmmo.text.cannotSalvageLackLevelLonger": "You need level %1$s Repairing to salvage %2$s",
 	"pmmo.text.cannotSalvage": "neįmanoma perdirbti %1$s!",
-	"pmmo.text.invalidSalvageItem": "%1$s yra netaisiklingas! Prašome patikrinti savo Config",
+	"pmmo.text.invalidItem": "%1$s yra netaisiklingas! Prašome patikrinti savo Config",
 	"pmmo.text.salvagesInto": "Salvages into %1$s %2$s, %3$sxp each",
 	"pmmo.text.baseChance": " %1$s%% Pagrindo Šansas",
 	"pmmo.text.perLevelChance": " %1$s%% Šansas per lygį",
