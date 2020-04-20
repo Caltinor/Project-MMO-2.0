@@ -1,6 +1,7 @@
 package harmonised.pmmo.skills;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.ProjectMMOMod;
@@ -430,12 +431,19 @@ public class XP
 		return level;
 	}
 
+	private static int doubleObjectToInt( Object object )
+	{
+		return (int) Math.floor( (double) object );
+	}
+
 	public static double getExtraChance( PlayerEntity player, ResourceLocation resLoc, String type )
 	{
 		String regKey = resLoc.toString();
 		double extraChancePerLevel = 0;
 		double extraChance;
-		int gap = XP.getSkillReqGap( player, resLoc, "break" );
+		int highestReq = 1;
+		if( Requirements.breakReq.containsKey( resLoc.toString() ) )
+			highestReq = Requirements.breakReq.get( resLoc.toString() ).entrySet().stream().map( a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
 		int level = 1;
 
 		switch( type )
@@ -466,7 +474,7 @@ public class XP
 				return 0;
 		}
 
-		extraChance = (level - gap) * extraChancePerLevel;
+		extraChance = (level - highestReq) * extraChancePerLevel;
 		if( extraChance < 0 )
 			extraChance = 0;
 
