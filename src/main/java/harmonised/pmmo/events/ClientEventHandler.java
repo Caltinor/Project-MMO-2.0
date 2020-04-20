@@ -203,7 +203,7 @@ public class ClientEventHandler
             {
                 Map<String, Object> theMap = Requirements.salvageInfo.get( item.getRegistryName().toString() );
 
-                level = XP.getLevel( "repairing", player );
+                level = XP.getLevel( "smithing", player );
                 int reqLevel = (int) Math.floor( (double) theMap.get( "levelReq" ) );
                 int finalLevel = level - reqLevel;
 

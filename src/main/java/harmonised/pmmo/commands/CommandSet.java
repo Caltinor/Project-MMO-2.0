@@ -24,7 +24,7 @@ public class CommandSet
         System.out.println(Arrays.toString(args));
 
 
-        if (Skill.getInt( args[2] ) != 0)
+        if (true)
         {
             boolean setLevel = false;
             float newXp = -1;

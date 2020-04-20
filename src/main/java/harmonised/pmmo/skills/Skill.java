@@ -15,7 +15,7 @@ public enum Skill
     ENDURANCE( 7 ),
     COMBAT( 8 ),
     ARCHERY( 9 ),
-    REPAIRING( 10 ),
+    SMITHING( 10 ),
     FLYING( 11 ),
     SWIMMING( 12 ),
     FISHING( 13 ),

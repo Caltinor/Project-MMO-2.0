@@ -562,7 +562,7 @@ public class Config
             {
                 builder.pop();
             }
-            builder.push( "Repairing" );
+            builder.push( "Smithing" );
             {
                 this.maxSalvageMaterialChance = subscriber.subscribe(builder
                         .comment( "Max Percentage chance to return each Material" )

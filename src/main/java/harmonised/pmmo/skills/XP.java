@@ -64,22 +64,14 @@ import javax.annotation.Resource;
 
 public class XP
 {
-	private static Map<ResourceLocation, Float> salvageBaseValue = new HashMap<>();
-	private static Map<ResourceLocation, Float> salvageValuePerLevel = new HashMap<>();
-	private static Map<ResourceLocation, Float> repairXp = new HashMap<>();
-	private static Map<ResourceLocation, Float> salvageXp = new HashMap<>();
 	private static Map<ResourceLocation, Boolean> noDropOres = new HashMap<>();
-	private static Map<ResourceLocation, ItemStack> toolItems = new HashMap<>();
-	private static Map<ResourceLocation, Integer> toolItemAmount = new HashMap<>();
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
 	private static Map<String, Integer> skillColors = new HashMap<>();
 	private static Map<String, Long> lastAward = new HashMap<>();
-	private static Map<String, Double> testMap = new HashMap<>();
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static Set<UUID> isCrawling = new HashSet<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
-	public static List<String> validSkills = new ArrayList<String>();
 	public static double baseXp, xpIncreasePerLevel;
 	public static Set<UUID> lapisDonators = new HashSet<>();
 	public static Set<UUID> dandelionDonators = new HashSet<>();
@@ -95,21 +87,6 @@ public class XP
 
 	public static void initValues()
 	{
-////////////////////////////////////VALID_SKILLS///////////////////////////////////////////////////
-		validSkills.add( "mining" );
-		validSkills.add( "building" );
-		validSkills.add( "excavation" );
-		validSkills.add( "woodcutting" );
-		validSkills.add( "farming" );
-		validSkills.add( "agility" );
-		validSkills.add( "endurance" );
-		validSkills.add( "combat" );
-		validSkills.add( "archery" );
-		validSkills.add( "repairing" );
-		validSkills.add( "flying" );
-		validSkills.add( "swimming" );
-		validSkills.add( "fishing" );
-		validSkills.add( "crafting" );
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
 		skillColors.put( "mining", 0x00ffff );
 		skillColors.put( "building", 0x00ffff );
@@ -120,7 +97,7 @@ public class XP
 		skillColors.put( "endurance", 0xcc0000 );
 		skillColors.put( "combat", 0xff3300 );
 		skillColors.put( "archery", 0xffff00 );
-		skillColors.put( "repairing", 0xf0f0f0 );
+		skillColors.put( "smithing", 0xf0f0f0 );
 		skillColors.put( "flying", 0xccccff );
 		skillColors.put( "swimming", 0x3366ff );
 		skillColors.put( "fishing", 0x00ccff );
@@ -136,7 +113,7 @@ public class XP
 		skillTextFormat.put( "endurance", TextFormatting.DARK_RED );
 		skillTextFormat.put( "combat", TextFormatting.RED);
 		skillTextFormat.put( "archery", TextFormatting.YELLOW );
-		skillTextFormat.put( "repairing", TextFormatting.GRAY );
+		skillTextFormat.put( "smithing", TextFormatting.GRAY );
 		skillTextFormat.put( "flying", TextFormatting.GRAY );
 		skillTextFormat.put( "swimming", TextFormatting.AQUA );
 		skillTextFormat.put( "fishing", TextFormatting.AQUA );
@@ -181,144 +158,6 @@ public class XP
 		materialHarvestTool.put( Material.TALL_PLANTS, "hoe" );
 		materialHarvestTool.put( Material.BAMBOO, "hoe" );
 		materialHarvestTool.put( Material.BAMBOO_SAPLING, "hoe" );
-////////////////////////////////////TOOL_ITEM//////////////////////////////////////////////////////
-		toolItems.put( Items.DIAMOND_HELMET.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		toolItems.put( Items.DIAMOND_CHESTPLATE.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		toolItems.put( Items.DIAMOND_LEGGINGS.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		toolItems.put( Items.DIAMOND_BOOTS.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		toolItems.put( Items.DIAMOND_AXE.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		toolItems.put( Items.DIAMOND_HOE.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		toolItems.put( Items.DIAMOND_PICKAXE.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		toolItems.put( Items.DIAMOND_SHOVEL.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-		toolItems.put( Items.DIAMOND_SWORD.getRegistryName(), new ItemStack( Items.DIAMOND ) );
-
-		toolItems.put( Items.GOLDEN_HELMET.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		toolItems.put( Items.GOLDEN_CHESTPLATE.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		toolItems.put( Items.GOLDEN_LEGGINGS.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		toolItems.put( Items.GOLDEN_BOOTS.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		toolItems.put( Items.GOLDEN_AXE.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		toolItems.put( Items.GOLDEN_HOE.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		toolItems.put( Items.GOLDEN_PICKAXE.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		toolItems.put( Items.GOLDEN_SHOVEL.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-		toolItems.put( Items.GOLDEN_SWORD.getRegistryName(), new ItemStack( Items.GOLD_INGOT ) );
-
-		toolItems.put( Items.IRON_HELMET.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.IRON_CHESTPLATE.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.IRON_LEGGINGS.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.IRON_BOOTS.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.IRON_AXE.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.IRON_HOE.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.IRON_PICKAXE.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.IRON_SHOVEL.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.IRON_SWORD.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-
-		toolItems.put( Items.LEATHER_HELMET.getRegistryName(), new ItemStack( Items.LEATHER ) );
-		toolItems.put( Items.LEATHER_CHESTPLATE.getRegistryName(), new ItemStack( Items.LEATHER ) );
-		toolItems.put( Items.LEATHER_LEGGINGS.getRegistryName(), new ItemStack( Items.LEATHER ) );
-		toolItems.put( Items.LEATHER_BOOTS.getRegistryName(), new ItemStack( Items.LEATHER ) );
-
-		toolItems.put( Items.STONE_AXE.getRegistryName(), new ItemStack( Blocks.COBBLESTONE ) );
-		toolItems.put( Items.STONE_HOE.getRegistryName(), new ItemStack( Blocks.COBBLESTONE ) );
-		toolItems.put( Items.STONE_PICKAXE.getRegistryName(), new ItemStack( Blocks.COBBLESTONE ) );
-		toolItems.put( Items.STONE_SHOVEL.getRegistryName(), new ItemStack( Blocks.COBBLESTONE ) );
-		toolItems.put( Items.STONE_SWORD.getRegistryName(), new ItemStack( Blocks.COBBLESTONE ) );
-
-		toolItems.put( Items.WOODEN_AXE.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
-		toolItems.put( Items.WOODEN_HOE.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
-		toolItems.put( Items.WOODEN_PICKAXE.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
-		toolItems.put( Items.WOODEN_SHOVEL.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
-		toolItems.put( Items.WOODEN_SWORD.getRegistryName(), new ItemStack( Blocks.OAK_PLANKS ) );
-
-		toolItems.put( Items.SHEARS.getRegistryName(), new ItemStack( Items.IRON_INGOT ) );
-		toolItems.put( Items.BOW.getRegistryName(), new ItemStack( Items.STRING ) );
-		toolItems.put( Items.FISHING_ROD.getRegistryName(), new ItemStack( Items.STRING ) );
-		toolItems.put( Items.ELYTRA.getRegistryName(), new ItemStack( Items.LEATHER ) );
-		toolItems.put( Items.TURTLE_HELMET.getRegistryName(), new ItemStack( Items.SCUTE ) );
-////////////////////////////////////TOOL_ITEM_AMOUNT///////////////////////////////////////////////
-		toolItemAmount.put( Items.DIAMOND_HELMET.getRegistryName(), 5 );
-		toolItemAmount.put( Items.DIAMOND_CHESTPLATE.getRegistryName(), 8 );
-		toolItemAmount.put( Items.DIAMOND_LEGGINGS.getRegistryName(), 7 );
-		toolItemAmount.put( Items.DIAMOND_BOOTS.getRegistryName(), 4 );
-		toolItemAmount.put( Items.DIAMOND_AXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.DIAMOND_HOE.getRegistryName(), 2 );
-		toolItemAmount.put( Items.DIAMOND_PICKAXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.DIAMOND_SHOVEL.getRegistryName(), 1 );
-		toolItemAmount.put( Items.DIAMOND_SWORD.getRegistryName(), 2 );
-
-		toolItemAmount.put( Items.GOLDEN_HELMET.getRegistryName(), 5 );
-		toolItemAmount.put( Items.GOLDEN_CHESTPLATE.getRegistryName(), 8 );
-		toolItemAmount.put( Items.GOLDEN_LEGGINGS.getRegistryName(), 7 );
-		toolItemAmount.put( Items.GOLDEN_BOOTS.getRegistryName(), 4 );
-		toolItemAmount.put( Items.GOLDEN_AXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.GOLDEN_HOE.getRegistryName(), 2 );
-		toolItemAmount.put( Items.GOLDEN_PICKAXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.GOLDEN_SHOVEL.getRegistryName(), 1 );
-		toolItemAmount.put( Items.GOLDEN_SWORD.getRegistryName(), 2 );
-
-		toolItemAmount.put( Items.IRON_HELMET.getRegistryName(), 5 );
-		toolItemAmount.put( Items.IRON_CHESTPLATE.getRegistryName(), 8 );
-		toolItemAmount.put( Items.IRON_LEGGINGS.getRegistryName(), 7 );
-		toolItemAmount.put( Items.IRON_BOOTS.getRegistryName(), 4 );
-		toolItemAmount.put( Items.IRON_AXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.IRON_HOE.getRegistryName(), 2 );
-		toolItemAmount.put( Items.IRON_PICKAXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.IRON_SHOVEL.getRegistryName(), 1 );
-		toolItemAmount.put( Items.IRON_SWORD.getRegistryName(), 2 );
-
-		toolItemAmount.put( Items.LEATHER_HELMET.getRegistryName(), 5 );
-		toolItemAmount.put( Items.LEATHER_CHESTPLATE.getRegistryName(), 8 );
-		toolItemAmount.put( Items.LEATHER_LEGGINGS.getRegistryName(), 7 );
-		toolItemAmount.put( Items.LEATHER_BOOTS.getRegistryName(), 4 );
-
-		toolItemAmount.put( Items.STONE_AXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.STONE_HOE.getRegistryName(), 2 );
-		toolItemAmount.put( Items.STONE_PICKAXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.STONE_SHOVEL.getRegistryName(), 1 );
-		toolItemAmount.put( Items.STONE_SWORD.getRegistryName(), 2 );
-
-		toolItemAmount.put( Items.WOODEN_AXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.WOODEN_HOE.getRegistryName(), 2 );
-		toolItemAmount.put( Items.WOODEN_PICKAXE.getRegistryName(), 3 );
-		toolItemAmount.put( Items.WOODEN_SHOVEL.getRegistryName(), 1 );
-		toolItemAmount.put( Items.WOODEN_SWORD.getRegistryName(), 2 );
-
-		toolItemAmount.put( Items.SHEARS.getRegistryName(), 2 );
-		toolItemAmount.put( Items.BOW.getRegistryName(), 3 );
-		toolItemAmount.put( Items.FISHING_ROD.getRegistryName(), 2 );
-		toolItemAmount.put( Items.ELYTRA.getRegistryName(), 7 );
-		toolItemAmount.put( Items.TURTLE_HELMET.getRegistryName(), 5 );
-////////////////////////////////////SALVAGE_BASE_VALUE/////////////////////////////////////////////
-		salvageBaseValue.put( Blocks.COBBLESTONE.getRegistryName(), 50.0f );
-		salvageBaseValue.put( Blocks.OAK_PLANKS.getRegistryName(), 70.0f );
-		salvageBaseValue.put( Items.STRING.getRegistryName(), 65.0f );
-		salvageBaseValue.put( Items.IRON_INGOT.getRegistryName(), 20.0f );
-		salvageBaseValue.put( Items.GOLD_INGOT.getRegistryName(), 35.0f );
-		salvageBaseValue.put( Items.DIAMOND.getRegistryName(), 0.0f );
-		salvageBaseValue.put( Items.LEATHER.getRegistryName(), 60.0f );
-		salvageBaseValue.put( Items.SCUTE.getRegistryName(), 40.0f );
-////////////////////////////////////SALVAGE_VALUE_PER_LEVEL////////////////////////////////////////
-		salvageValuePerLevel.put( Blocks.COBBLESTONE.getRegistryName(), 2.0f );	// 20
-		salvageValuePerLevel.put( Blocks.OAK_PLANKS.getRegistryName(), 0.8f );  // 25
-		salvageValuePerLevel.put( Items.STRING.getRegistryName(), 1.0f );		// 30
-		salvageValuePerLevel.put( Items.IRON_INGOT.getRegistryName(), 0.8f );	//100
-		salvageValuePerLevel.put( Items.GOLD_INGOT.getRegistryName(), 1.6f );	// 50
-		salvageValuePerLevel.put( Items.DIAMOND.getRegistryName(), 0.666f );	//150
-		salvageValuePerLevel.put( Items.LEATHER.getRegistryName(), 1.0f );		// 30
-		salvageValuePerLevel.put( Items.SCUTE.getRegistryName(), 1.0f );		// ???
-////////////////////////////////////REPAIR_XP//////////////////////////////////////////////////////
-		repairXp.put( Items.IRON_INGOT.getRegistryName(), 35.0f );
-		repairXp.put( Items.GOLD_INGOT.getRegistryName(), 666.0f );
-		repairXp.put( Items.DIAMOND.getRegistryName(), 75.0f );
-		repairXp.put( Items.STRING.getRegistryName(), 20.0f );
-		repairXp.put( Items.LEATHER.getRegistryName(), 40.0f );
-		repairXp.put( Items.SCUTE.getRegistryName(), 300.0f );
-////////////////////////////////////SALVAGE_XP/////////////////////////////////////////////////////
-		salvageXp.put( Items.IRON_INGOT.getRegistryName(), 20.0f );
-		salvageXp.put( Items.GOLD_INGOT.getRegistryName(), 25.0f );
-		salvageXp.put( Items.DIAMOND.getRegistryName(), 50.0f );
-		salvageXp.put( Items.STRING.getRegistryName(), 2.0f );
-		salvageXp.put( Items.LEATHER.getRegistryName(), 5.0f );
-		salvageXp.put( Items.TURTLE_HELMET.getRegistryName(), 20.0f );
 	}
 
 	private static Skill getSkill( String tool )
@@ -386,54 +225,6 @@ public class XP
 			return materialHarvestTool.get( material );
 		else
 			return "none";
-	}
-
-	private static ItemStack getToolItem( ResourceLocation name )
-	{
-		if( toolItems.get( name ) != null )
-			return toolItems.get( name );
-		else
-			return null;
-	}
-
-	private static Integer getToolItemAmount( ResourceLocation name )
-	{
-		if( toolItemAmount.get( name ) != null )
-			return toolItemAmount.get( name );
-		else
-			return 0;
-	}
-
-	private static float getSalvageBaseValue( ResourceLocation registryName )
-	{
-		if( salvageBaseValue.get( registryName ) != null )
-			return salvageBaseValue.get( registryName );
-		else
-			return 0.0f;
-	}
-
-	private static float getSalvageValuePerLevel( ResourceLocation registryName )
-	{
-		if( salvageValuePerLevel.get( registryName ) != null )
-			return salvageValuePerLevel.get( registryName );
-		else
-			return 0.0f;
-	}
-
-	private static float getRepairXp( ResourceLocation registryName )
-	{
-		if( repairXp.get( registryName ) != null )
-			return repairXp.get( registryName );
-		else
-			return 0.0f;
-	}
-
-	private static float getSalvageXp( ResourceLocation registryName )
-	{
-		if( salvageXp.get( registryName ) != null )
-			return salvageXp.get( registryName );
-		else
-			return 0.0f;
 	}
 
 	public static String checkMaterial( Material material )
@@ -565,18 +356,18 @@ public class XP
 		if( event.getEntity() instanceof PlayerEntity && !(event.getEntity() instanceof FakePlayer) )
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntity();
+			CompoundNBT test = new CompoundNBT();
 
 			if ( !player.isCreative() )
 			{
 				Block block = event.getPlacedBlock().getBlock();
-				Material material = event.getState().getMaterial();
 
 				if( checkReq( player, block.getRegistryName(), "place" ) )
 				{
 					double blockHardnessLimit = Config.config.blockHardnessLimit.get();
-					float blockHardness = block.getBlockHardness(block.getDefaultState(), event.getWorld(), event.getPos());
+					double blockHardness = block.getBlockHardness(block.getDefaultState(), event.getWorld(), event.getPos());
 					if ( blockHardness > blockHardnessLimit )
-						blockHardness = (float) blockHardnessLimit;
+						blockHardness = blockHardnessLimit;
 					String playerName = player.getName().toString();
 					BlockPos blockPos = event.getPos();
 
@@ -632,7 +423,7 @@ public class XP
 				level = levelAtXp( XPOverlayGUI.skills.get( skill ).goalXp );
 		}
 		else
-			level = levelAtXp( getSkillsTag( player ).getFloat( skill ) );
+			level = levelAtXp( getSkillsTag( player ).getDouble( skill ) );
 
 		return level;
 	}
@@ -722,7 +513,7 @@ public class XP
 					String regKey = block.getRegistryName().toString();
 					double hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
 					if( hardness > blockHardnessLimit )
-						hardness = (float) blockHardnessLimit;
+						hardness = blockHardnessLimit;
 
 					String awardMsg = "";
 					Map<String, Double> award = new HashMap<>();
@@ -767,7 +558,7 @@ public class XP
 						rewardable = extraDrop = guaranteedDrop = totalDrops = 0;
 
 						guaranteedDropEach = (int) Math.floor( extraChance );
-						extraChance = (float)( ( extraChance ) - Math.floor( extraChance ) ) * 100;
+						extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
 
 						int height = 0;
 						BlockPos currBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
@@ -863,7 +654,7 @@ public class XP
 							int extraDrop = 0;
 
 							guaranteedDrop = (int) Math.floor( extraChance );
-							extraChance = (float) ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
+							extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
 
 							if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
 								extraDrop = 1;
@@ -898,7 +689,7 @@ public class XP
 							int extraDrop = 0;
 
 							guaranteedDrop = (int)Math.floor( extraChance );
-							extraChance = (float)( ( extraChance ) - Math.floor( extraChance ) ) * 100;
+							extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
 
 
 							if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
@@ -931,7 +722,7 @@ public class XP
 							if( ( extraChance ) > 1 )
 							{
 								guaranteedDrop = (int)Math.floor( extraChance );
-								extraChance = (float)( ( extraChance ) - Math.floor( extraChance ) ) * 100;
+								extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
 							}
 
 							extraChance *= 100;
@@ -1050,7 +841,7 @@ public class XP
 				boolean hideEndurance = false;
 
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
-				int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
+				int enduranceLevel = levelAtXp( skillsTag.getDouble( "endurance" ) );
 				double endurancePerLevel = Config.config.endurancePerLevel.get();
 				double maxEndurance = Config.config.maxEndurance.get();
 				double endurePercent = (enduranceLevel * endurancePerLevel);
@@ -1058,7 +849,7 @@ public class XP
 					endurePercent = maxEndurance;
 				endurePercent /= 100;
 
-				float endured = damage * (float) endurePercent;
+				double endured = damage * endurePercent;
 				if( endured < 0 )
 					endured = 0;
 
@@ -1070,7 +861,7 @@ public class XP
 				{
 					double award = startDmg;
 //					float savedExtra = 0;
-					int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
+					int agilityLevel = levelAtXp( skillsTag.getDouble( "agility" ) );
 					int saved = 0;
 
 					double maxFallSaveChance = Config.config.maxFallSaveChance.get();
@@ -1163,7 +954,7 @@ public class XP
 						else
 							distance = 0;
 
-						amount += (float) ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
+						amount += ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
 
 						amount *= lowHpBonus;
 						awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
@@ -1223,7 +1014,7 @@ public class XP
 					if( player.isPotionActive( Effects.JUMP_BOOST ) )
 						jumpAmp = player.getActivePotionEffect( Effects.JUMP_BOOST ).getAmplifier() + 1;
 
-					awardXp( player, Skill.AGILITY, "jumping", (float) (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), true );
+					awardXp( player, Skill.AGILITY, "jumping", (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), true );
 				}
 			}
 		}
@@ -1253,7 +1044,6 @@ public class XP
 		if( !player.world.isRemote() )
 		{
 			CompoundNBT skillsTag = getSkillsTag( player );
-			Set<String> keySet = skillsTag.keySet();
 
 			AttributeHandler.updateReach( player );
 			NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
@@ -1270,18 +1060,28 @@ public class XP
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
 
+			Set<String> keySet = new HashSet<>( skillsTag.keySet() );
+
 			for( String tag : keySet )
 			{
 				if( Skill.getInt( tag ) == 0 )
 				{
-					if( XP.validSkills.contains( tag.toLowerCase() ) )
+					if( Skill.getInt( tag.toLowerCase() ) != 0 )
 						skillsTag.put( tag.toLowerCase(), skillsTag.get(tag) );
+
+					if( tag.toLowerCase().equals( "repairing" ) )
+						skillsTag.put( "smithing", skillsTag.get(tag) );
 
 					System.out.println( "REMOVING INVALID SKILL " + tag );
 					skillsTag.remove( tag );
 				}
-				else
-					NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getFloat( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
+			}
+
+			keySet = new HashSet<>( skillsTag.keySet() );
+
+			for( String tag : keySet )
+			{
+				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getDouble( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
 			}
 
             if( lapisDonators.contains( player.getUniqueID() ) )
@@ -1473,7 +1273,7 @@ public class XP
 				    Block smithBlock    =   Blocks.SMITHING_TABLE;
 				    Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
 
-				    int repairLevel = getLevel( "repairing", player );
+				    int repairLevel = getLevel( "smithing", player );
 				    int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
 				    int levelsPerOneEnchantBypass = Config.config.levelsPerOneEnchantBypass.get();
 				    int maxPlayerBypass = (int) Math.floor( (double) repairLevel / (double) levelsPerOneEnchantBypass );
@@ -1560,7 +1360,7 @@ public class XP
 				    									dropItems( returnAmount, salvageItem, event.getWorld(), event.getPos() );
 
 				    								if( award > 0 )
-				    									awardXp( player, Skill.REPAIRING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false  );
+				    									awardXp( player, Skill.SMITHING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false  );
 
 				    								if( returnAmount == salvageMax )
 				    									NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
@@ -1698,8 +1498,8 @@ public class XP
 				int anvilFinalItemMaxCostToAnvil = Config.config.anvilFinalItemMaxCostToAnvil.get();
 				boolean bypassEnchantLimit = Config.config.bypassEnchantLimit.get();
 
-				int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
-				float bonusRepair = (float) anvilFinalItemBonusRepaired * currLevel;
+				int currLevel = levelAtXp( skillsTag.getDouble( "smithing" ) );
+				double bonusRepair = anvilFinalItemBonusRepaired * currLevel;
 				int maxCost = (int) Math.floor( 50 - ( currLevel * anvilCostReductionPerLevel ) );
 				if( maxCost < anvilFinalItemMaxCostToAnvil )
 					maxCost = anvilFinalItemMaxCostToAnvil;
@@ -1719,13 +1519,14 @@ public class XP
 
 				oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
 
-				double award = (float) ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-				award *= getRepairXp( getToolItem( lItem.getItem().getRegistryName() ).getItem().getRegistryName() );
+				double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
+				if( Requirements.salvageInfo.containsKey( oItem.getItem().getRegistryName().toString() ) )
+					award *= (double) Requirements.salvageInfo.get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
 
 				if( award > 0 )
 				{
 					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
-					awardXp( player, Skill.REPAIRING, "repairing an item by: " + repaired, award, false );
+					awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false );
 				}
 
 				if( bypassEnchantLimit )
@@ -2061,7 +1862,7 @@ public class XP
 				skillMultiplier = Config.config.archeryMultiplier.get();
 				break;
 
-			case REPAIRING:
+			case SMITHING:
 				skillMultiplier = Config.config.repairingMultiplier.get();
 				break;
 
@@ -2095,19 +1896,19 @@ public class XP
 		String playerName = player.getDisplayName().getFormattedText();
 		int startLevel;
 		int currLevel;
-		float startXp = 0;
+		double startXp = 0;
 
 		CompoundNBT skillsTag = getSkillsTag( player );
 
 		if( !skillsTag.contains( skillName ) )
 		{
-			skillsTag.putFloat( skillName, (float) amount );
+			skillsTag.putDouble( skillName, amount );
 			startLevel = 1;
 		}
 		else
 		{
-			startLevel = levelAtXp( skillsTag.getFloat( skillName ) );
-			startXp = skillsTag.getFloat( skillName );
+			startLevel = levelAtXp( skillsTag.getDouble( skillName ) );
+			startXp = skillsTag.getDouble( skillName );
 
 			if( startXp >= 2000000000 )
 				return;
@@ -2119,10 +1920,10 @@ public class XP
 				amount = 2000000000 - startXp;
 			}
 
-			skillsTag.putFloat( skillName, (float) (startXp + amount) );
+			skillsTag.putDouble( skillName, (startXp + amount) );
 		}
 
-		currLevel = levelAtXp( skillsTag.getFloat( skillName ) );
+		currLevel = levelAtXp( skillsTag.getDouble( skillName ) );
 
 		if( startLevel != currLevel )
 		{
@@ -2173,7 +1974,7 @@ public class XP
 			NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
 
 //		if( !skip )
-//			System.out.println( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getFloat( skillName ) );
+//			System.out.println( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getDouble( skillName ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
@@ -2186,7 +1987,7 @@ public class XP
 	{
 		skillName = skillName.toLowerCase();
 		CompoundNBT skillsTag = getSkillsTag( player );
-		skillsTag.putFloat( skillName, newXp );
+		skillsTag.putDouble( skillName, newXp );
 
 		switch( skillName )
 		{
@@ -2212,10 +2013,9 @@ public class XP
 
 	public static int getGap( int a, int b )
 	{
-		if( a < b )
-			return b - a;
-		else
-			return a - b;
+		int gap = a - b;
+
+		return gap;
 	}
 
 	public static int getSkillReqGap( PlayerEntity player, ResourceLocation res, String type )
@@ -2338,14 +2138,17 @@ public class XP
 				float speedAmp = 0;
 				PlayerInventory inv = player.inventory;
 
-				if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-					checkWornLevelReq( player, 39 );
-				if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-					checkWornLevelReq( player, 38 );
-				if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-					checkWornLevelReq( player, 37 );
-				if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-					checkWornLevelReq( player, 36 );
+				if( !player.world.isRemote() )
+				{
+					if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
+						checkWornLevelReq( player, 39 );
+					if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
+						checkWornLevelReq( player, 38 );
+					if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
+						checkWornLevelReq( player, 37 );
+					if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
+						checkWornLevelReq( player, 36 );
+				}
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
 				if( player.isPotionActive( Effects.SPEED ) )

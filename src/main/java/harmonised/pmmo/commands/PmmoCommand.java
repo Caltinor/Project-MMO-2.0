@@ -28,7 +28,7 @@ public class PmmoCommand
         suggestSkill[6] = "Endurance";
         suggestSkill[7] = "Combat";
         suggestSkill[8] = "Archery";
-        suggestSkill[9] = "Repairing";
+        suggestSkill[9] = "Smithing";
         suggestSkill[10] = "Flying";
         suggestSkill[11] = "Swimming";
         suggestSkill[12] = "Fishing";
