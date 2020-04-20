@@ -436,6 +436,7 @@ public class XP
 		double extraChancePerLevel = 0;
 		double extraChance;
 		int gap = XP.getSkillReqGap( player, resLoc, "break" );
+		int level = 1;
 
 		switch( type )
 		{
@@ -443,18 +444,21 @@ public class XP
 				if( Requirements.oreInfo.containsKey( regKey ) && Requirements.oreInfo.get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.oreInfo.get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.oreInfo.get( regKey ).get( "extraChance" );
+				level = getLevel( "mining", player );
 				break;
 
 			case "log":
 				if( Requirements.logInfo.containsKey( regKey ) && Requirements.logInfo.get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.logInfo.get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.logInfo.get( regKey ).get( "extraChance" );
+				level = getLevel( "woodcutting", player );
 				break;
 
 			case "plant":
 				if( Requirements.plantInfo.containsKey( regKey ) && Requirements.plantInfo.get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.plantInfo.get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.plantInfo.get( regKey ).get( "extraChance" );
+				level = getLevel( "farming", player );
 				break;
 
 			default:
@@ -462,7 +466,7 @@ public class XP
 				return 0;
 		}
 
-		extraChance = gap * extraChancePerLevel;
+		extraChance = (level - gap) * extraChancePerLevel;
 		if( extraChance < 0 )
 			extraChance = 0;
 
@@ -2029,70 +2033,67 @@ public class XP
 	{
 		int gap = 0;
 
-		if( !player.getHeldItemMainhand().isEmpty() )
+		if( !checkReq( player, res, type ) )
 		{
-			if( !checkReq( player, res, type ) )
+			Map<String, Double> reqs = new HashMap<>();
+			switch( type )
 			{
-				Map<String, Double> reqs = new HashMap<>();
-				switch( type )
-				{
-					case "wear":
-						for( Map.Entry<String, Object> entry : Requirements.wearReq.get( res.toString() ).entrySet() )
-						{
-							if( entry.getValue() instanceof Double )
-								reqs.put( entry.getKey(), (double) entry.getValue() );
-						}
-						break;
+				case "wear":
+					for( Map.Entry<String, Object> entry : Requirements.wearReq.get( res.toString() ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqs.put( entry.getKey(), (double) entry.getValue() );
+					}
+					break;
 
-					case "tool":
-						for( Map.Entry<String, Object> entry : Requirements.toolReq.get( res.toString() ).entrySet() )
-						{
-							if( entry.getValue() instanceof Double )
-								reqs.put( entry.getKey(), (double) entry.getValue() );
-						}
-						break;
+				case "tool":
+					for( Map.Entry<String, Object> entry : Requirements.toolReq.get( res.toString() ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqs.put( entry.getKey(), (double) entry.getValue() );
+					}
+					break;
 
-					case "weapon":
-						for( Map.Entry<String, Object> entry : Requirements.weaponReq.get( res.toString() ).entrySet() )
-						{
-							if( entry.getValue() instanceof Double )
-								reqs.put( entry.getKey(), (double) entry.getValue() );
-						}
-						break;
+				case "weapon":
+					for( Map.Entry<String, Object> entry : Requirements.weaponReq.get( res.toString() ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqs.put( entry.getKey(), (double) entry.getValue() );
+					}
+					break;
 
-					case "use":
-						for( Map.Entry<String, Object> entry : Requirements.useReq.get( res.toString() ).entrySet() )
-						{
-							if( entry.getValue() instanceof Double )
-								reqs.put( entry.getKey(), (double) entry.getValue() );
-						}
-						break;
+				case "use":
+					for( Map.Entry<String, Object> entry : Requirements.useReq.get( res.toString() ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqs.put( entry.getKey(), (double) entry.getValue() );
+					}
+					break;
 
-					case "place":
-						for( Map.Entry<String, Object> entry : Requirements.placeReq.get( res.toString() ).entrySet() )
-						{
-							if( entry.getValue() instanceof Double )
-								reqs.put( entry.getKey(), (double) entry.getValue() );
-						}
-						break;
+				case "place":
+					for( Map.Entry<String, Object> entry : Requirements.placeReq.get( res.toString() ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqs.put( entry.getKey(), (double) entry.getValue() );
+					}
+					break;
 
-					case "break":
-						for( Map.Entry<String, Object> entry : Requirements.breakReq.get( res.toString() ).entrySet() )
-						{
-							if( entry.getValue() instanceof Double )
-								reqs.put( entry.getKey(), (double) entry.getValue() );
-						}
-						break;
+				case "break":
+					for( Map.Entry<String, Object> entry : Requirements.breakReq.get( res.toString() ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqs.put( entry.getKey(), (double) entry.getValue() );
+					}
+					break;
 
-					default:
-						System.out.println( "PLEASE REPORT THIS IF YOU SEE ME" );
-						return 0;
-				}
-
-				gap = (int) Math.floor( reqs.entrySet().stream()
-						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( entry.getKey(), player ) ) )
-						.reduce( 0, Math::max ) );
+				default:
+					System.out.println( "PLEASE REPORT THIS IF YOU SEE ME" );
+					return 0;
 			}
+
+			gap = (int) Math.floor( reqs.entrySet().stream()
+					.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( entry.getKey(), player ) ) )
+					.reduce( 0, Math::max ) );
 		}
 
 		return gap;

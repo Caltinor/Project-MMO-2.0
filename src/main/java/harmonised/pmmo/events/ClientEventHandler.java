@@ -185,19 +185,19 @@ public class ClientEventHandler
             }
 
             if( XP.getExtraChance( player, item.getRegistryName(), "ore" ) > 0 )  //ORE EXTRA CHANCE
-                tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraChance", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "ore" ) ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "ore" ) / 100 ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
             else if( Requirements.oreInfo.containsKey( regKey ) && Requirements.oreInfo.get( regKey ).containsKey( "extraChance" ) )
-                tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraChance", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraDrop", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
             if( XP.getExtraChance( player, item.getRegistryName(), "log" ) > 0 )  //LOG EXTRA CHANCE
-                tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraChance", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "log" ) ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "log" ) / 100 ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
             else if( Requirements.logInfo.containsKey( regKey ) && Requirements.logInfo.get( regKey ).containsKey( "extraChance" ) )
-                tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraChance", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraDrop", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
             if( XP.getExtraChance( player, item.getRegistryName(), "plant" ) > 0 )  //PLANT EXTRA CHANCE
-                tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "plant" ) ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "plant" ) / 100 ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
             else if( Requirements.plantInfo.containsKey( regKey ) && Requirements.plantInfo.get( regKey ).containsKey( "extraChance" ) )
-                tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraChance", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraDrop", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
 
             if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) && !XP.getItem( (String) Requirements.salvageInfo.get( item.getRegistryName().toString() ).get( "salvageItem" ) ).equals( Items.AIR ) )
             {
