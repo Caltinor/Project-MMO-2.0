@@ -114,7 +114,6 @@ public class Config
         //Archery
 
         //Repairing
-        public ConfigHelper.ConfigValueListener<Double> maxSalvageMaterialChance;
         public ConfigHelper.ConfigValueListener<Double> maxSalvageEnchantChance;
         public ConfigHelper.ConfigValueListener<Double> enchantSaveChancePerLevel;
         public ConfigHelper.ConfigValueListener<Boolean> bypassEnchantLimit;
@@ -564,11 +563,6 @@ public class Config
             }
             builder.push( "Smithing" );
             {
-                this.maxSalvageMaterialChance = subscriber.subscribe(builder
-                        .comment( "Max Percentage chance to return each Material" )
-                        .translation( "pmmo.maxSalvageMaterialChance" )
-                        .defineInRange( "maxSalvageMaterialChance", 80D, 0, 100) );
-
                 this.maxSalvageEnchantChance = subscriber.subscribe(builder
                         .comment( "Max Percentage chance to return each Enchantment Level" )
                         .translation( "pmmo.maxSalvageEnchantChance" )

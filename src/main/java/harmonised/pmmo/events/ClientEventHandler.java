@@ -32,6 +32,10 @@ import java.util.Map;
 public class ClientEventHandler
 {
     private static boolean wasCrawling = false, tooltipOn = true, tooltipKeyWasPressed = false;
+    private static String lastKey = "";
+    private static int salvageArrayPos = 0, salvageArraySize;
+    private static long lastTime = System.currentTimeMillis();
+    private static Object[] salvageArray;
 
     public static void subscribeClientEvents( IEventBus eventBus )
     {
@@ -127,6 +131,8 @@ public class ClientEventHandler
             Map<String, Object> placeReq = Requirements.placeReq.get( regKey );
             Map<String, Object> breakReq = Requirements.breakReq.get( regKey );
             Map<String, Object> xpValue = Requirements.xpValue.get( regKey );
+            Map<String, Object> salvageInfo = Requirements.salvageInfo.get( regKey );
+            Map<String, Object> salvagesFrom = Requirements.salvagesFrom.get( regKey );
 
             if( xpValue != null && xpValue.size() > 0 )      //XP VALUE
             {
@@ -208,31 +214,29 @@ public class ClientEventHandler
                     tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraDrop", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
             }
 
-            if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) && !XP.getItem( (String) Requirements.salvageInfo.get( item.getRegistryName().toString() ).get( "salvageItem" ) ).equals( Items.AIR ) )
+            if( salvageInfo != null && !XP.getItem( (String) salvageInfo.get( "salvageItem" ) ).equals( Items.AIR ) )
             {
-                Map<String, Object> theMap = Requirements.salvageInfo.get( item.getRegistryName().toString() );
-
                 level = XP.getLevel( "smithing", player );
-                int reqLevel = (int) Math.floor( (double) theMap.get( "levelReq" ) );
+                int reqLevel = (int) Math.floor( (double) salvageInfo.get( "levelReq" ) );
                 int finalLevel = level - reqLevel;
 
-                double baseChance = (double) theMap.get( "baseChance" );
-                double xpPerItem = (double) theMap.get( "xpPerItem" );
-                double chancePerLevel = (double) theMap.get( "chancePerLevel" );
-                double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
+                double baseChance = (double) salvageInfo.get( "baseChance" );
+                double xpPerItem = (double) salvageInfo.get( "xpPerItem" );
+                double chancePerLevel = (double) salvageInfo.get( "chancePerLevel" );
+                double maxSalvageMaterialChance = (double) salvageInfo.get( "maxChance" );
                 double chance = baseChance + ( chancePerLevel * finalLevel );
 
                 if( chance > maxSalvageMaterialChance )
                     chance = maxSalvageMaterialChance;
 
-                int salvageMax = (int) Math.floor( (double) theMap.get( "salvageMax" ) );
+                int salvageMax = (int) Math.floor( (double) salvageInfo.get( "salvageMax" ) );
                 double durabilityPercent = ( 1.00f - ( (double) itemStack.getDamage() / (double) itemStack.getMaxDamage() ) );
 
                 if( Double.isNaN( durabilityPercent ) )
                     durabilityPercent = 1;
 
                 int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
-                Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
+                Item salvageItem = XP.getItem( (String) salvageInfo.get( "salvageItem" ) );
 
                 if( finalLevel < 0 )
                 {
@@ -244,14 +248,39 @@ public class ClientEventHandler
                         tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                     else
                         tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
-//                    tooltip.add( new TranslationTextComponent( "pmmo.text.baseChance", " " + DP.dp( baseChance )).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-//                    tooltip.add( new TranslationTextComponent( "pmmo.text.perLevelChance", " " + DP.dp( chancePerLevel ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
-//                    tooltip.add( new TranslationTextComponent( "pmmo.text.totalChance", " " + DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                     if( chance > 0 )
                         tooltip.add( new TranslationTextComponent( "pmmo.text.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                     else
                         tooltip.add( new TranslationTextComponent( "pmmo.text.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
                 }
+            }
+
+            if( salvagesFrom != null )
+            {
+                tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFrom" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                level = XP.getLevel( "smithing", player );
+
+                if( !lastKey.equals( regKey ) )
+                {
+                    salvageArraySize = salvagesFrom.size();
+                    salvageArray = salvagesFrom.keySet().toArray();
+                }
+
+                if( System.currentTimeMillis() - lastTime > 1000 )
+                {
+                    lastTime = System.currentTimeMillis();
+                    if( ++salvageArrayPos > salvageArraySize - 1 )
+                        salvageArrayPos = 0;
+                }
+
+                String key = (String) salvageArray[salvageArrayPos];
+                String displayName = new TranslationTextComponent( XP.getItem( (String) salvageArray[salvageArrayPos] ).getTranslationKey() ).getString();
+                int value = (int) Math.floor( (double) salvagesFrom.get( key ) );
+
+                if( (double) Requirements.salvageInfo.get( key ).get( "levelReq" ) <= level )
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                else
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
             }
         }
     }

@@ -1073,6 +1073,7 @@ public class XP
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
 
 			Set<String> keySet = new HashSet<>( skillsTag.keySet() );
 
@@ -1239,14 +1240,17 @@ public class XP
 
 			if(  !player.isCreative() )
             {
+            	if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) )
+            		event.setCanceled( true );
+
                 metUseReq = checkReq( player, item.getRegistryName(), "use" );
 
-                if( !metUseReq && !(item instanceof BlockItem) )
-                {
-                    event.setCanceled( true );
-                    if( player.world.isRemote() )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
-                }
+                if( !metUseReq )
+				{
+					event.setCanceled( true );
+					if( player.world.isRemote() )
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+				}
             }
 
 			if( event instanceof RightClickBlock )
@@ -1329,13 +1333,13 @@ public class XP
 										Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
 				    					double baseChance = (double) theMap.get( "baseChance" );
 										double chancePerLevel = (double) theMap.get( "chancePerLevel" );
+										double maxSalvageMaterialChance = (double) theMap.get( "maxChance" );
 										int reqLevel = (int) Math.floor( (double) theMap.get( "levelReq" ) );
 										int salvageMax = (int) Math.floor( (double) theMap.get( "salvageMax" ) );
 										repairLevel -= reqLevel;
 										if( repairLevel >= 0 )
 										{
 											double chance = baseChance + ( chancePerLevel * repairLevel );
-				    						double maxSalvageMaterialChance = Config.config.maxSalvageMaterialChance.get();
 				    						double maxSalvageEnchantChance = Config.config.maxSalvageEnchantChance.get();
 				    						double enchantSaveChancePerLevel = Config.config.enchantSaveChancePerLevel.get();
 
@@ -1575,6 +1579,7 @@ public class XP
 		int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
 		int maxEnchantLevel = Config.config.maxEnchantLevel.get();
 		boolean alwaysUseUpgradeChance = Config.config.alwaysUseUpgradeChance.get();
+		boolean creative = player.isCreative();
 
 		lEnchants.forEach( ( enchant, level ) ->
 		{
@@ -1609,7 +1614,7 @@ public class XP
 			if( maxPlayerBypass > maxEnchantmentBypass )
 				maxPlayerBypass = maxEnchantmentBypass;
 
-			if( maxEnchantLevel < level )
+			if( maxEnchantLevel < level && !creative )
 			{
 				if( maxEnchantLevel > 0 )
 					newEnchants.replace( enchant, maxEnchantLevel );
@@ -1617,7 +1622,7 @@ public class XP
 					newEnchants.remove( enchant );
 				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
 			}
-			else if( enchant.getMaxLevel() + maxPlayerBypass < level )
+			else if( enchant.getMaxLevel() + maxPlayerBypass < level && !creative )
 			{
 				if( enchant.getMaxLevel() + maxPlayerBypass > 0 )
 					newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
@@ -1629,17 +1634,17 @@ public class XP
 			{
 				if( lEnchants.get( enchant ).intValue() == rEnchants.get( enchant ).intValue() ) //same values
 				{
-					if( level + 1 > maxEnchantLevel )
+					if( level + 1 > maxEnchantLevel && !creative )
 					{
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
 					}
-					else if( level + 1 > enchant.getMaxLevel() + maxPlayerBypass )
+					else if( level + 1 > enchant.getMaxLevel() + maxPlayerBypass && !creative )
 					{
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantLackOfLevelWarning", enchant.getRegistryName() ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 					}
 					else
 					{
-						if( ( ( level >= enchant.getMaxLevel() ) || alwaysUseUpgradeChance ) && !player.isCreative() )
+						if( ( ( level >= enchant.getMaxLevel() ) || alwaysUseUpgradeChance ) && !creative )
 						{
 							if( Math.ceil( Math.random() * 100 ) <= bypassChance ) //success
 							{

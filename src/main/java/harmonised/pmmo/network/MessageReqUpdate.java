@@ -123,7 +123,11 @@ public class MessageReqUpdate
                     break;
 
                 case "salvageInfo":
+                    Requirements.salvageInfo = newPackage;
+                    break;
 
+                case "salvagesFrom":
+                    Requirements.salvagesFrom = newPackage;
                     break;
 
                 default:

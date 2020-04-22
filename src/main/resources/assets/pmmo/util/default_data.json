@@ -978,6 +978,7 @@
 			"salvageMax": 5,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -986,6 +987,7 @@
 			"salvageMax": 8,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -994,6 +996,7 @@
 			"salvageMax": 7,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1002,6 +1005,7 @@
 			"salvageMax": 4,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1010,6 +1014,7 @@
 			"salvageMax": 7,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1018,6 +1023,7 @@
 			"salvageMax": 2,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1026,6 +1032,7 @@
 			"salvageMax": 3,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1034,6 +1041,7 @@
 			"salvageMax": 3,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1042,6 +1050,7 @@
 			"salvageMax": 2,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1050,6 +1059,7 @@
 			"salvageMax": 1,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1058,6 +1068,7 @@
 			"salvageMax": 1,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1066,6 +1077,7 @@
 			"salvageMax": 2,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 85,
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
@@ -1074,6 +1086,7 @@
 			"salvageMax": 5,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1082,6 +1095,7 @@
 			"salvageMax": 8,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1090,6 +1104,7 @@
 			"salvageMax": 7,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1098,6 +1113,7 @@
 			"salvageMax": 4,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1106,6 +1122,7 @@
 			"salvageMax": 7,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1114,6 +1131,7 @@
 			"salvageMax": 2,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1122,6 +1140,7 @@
 			"salvageMax": 3,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1130,6 +1149,7 @@
 			"salvageMax": 3,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1138,6 +1158,7 @@
 			"salvageMax": 2,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1146,6 +1167,7 @@
 			"salvageMax": 1,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1154,6 +1176,7 @@
 			"salvageMax": 4,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1162,6 +1185,7 @@
 			"salvageMax": 8,
 			"baseChance": 15,
 			"chancePerLevel": 0.75,
+			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
@@ -1170,6 +1194,7 @@
 			"salvageMax": 5,
 			"baseChance": 35,
 			"chancePerLevel": 1.25,
+			"maxChance": 90,
 			"xpPerItem": 50,
 			"levelReq": 20
 		},
@@ -1178,6 +1203,7 @@
 			"salvageMax": 8,
 			"baseChance": 35,
 			"chancePerLevel": 1.25,
+			"maxChance": 90,
 			"xpPerItem": 50,
 			"levelReq": 20
 		},
@@ -1186,6 +1212,7 @@
 			"salvageMax": 7,
 			"baseChance": 35,
 			"chancePerLevel": 1.25,
+			"maxChance": 90,
 			"xpPerItem": 50,
 			"levelReq": 20
 		},
@@ -1194,6 +1221,7 @@
 			"salvageMax": 4,
 			"baseChance": 35,
 			"chancePerLevel": 1.25,
+			"maxChance": 90,
 			"xpPerItem": 50,
 			"levelReq": 20
 		},
@@ -1202,6 +1230,7 @@
 			"salvageMax": 5,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1210,6 +1239,7 @@
 			"salvageMax": 8,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1218,6 +1248,7 @@
 			"salvageMax": 7,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1226,6 +1257,7 @@
 			"salvageMax": 4,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1234,6 +1266,7 @@
 			"salvageMax": 7,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1242,6 +1275,7 @@
 			"salvageMax": 2,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1250,6 +1284,7 @@
 			"salvageMax": 3,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1258,6 +1293,7 @@
 			"salvageMax": 3,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1266,6 +1302,7 @@
 			"salvageMax": 2,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1274,6 +1311,7 @@
 			"salvageMax": 1,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1282,6 +1320,7 @@
 			"salvageMax": 31,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 75,
 			"xpPerItem": 10,
 			"levelReq": 30
 		},
@@ -1290,6 +1329,7 @@
 			"salvageMax": 20,
 			"baseChance": 10,
 			"chancePerLevel": 1,
+			"maxChance": 75,
 			"xpPerItem": 10,
 			"levelReq": 20
 		},
@@ -1298,6 +1338,7 @@
 			"salvageMax": 10,
 			"baseChance": 5,
 			"chancePerLevel": 1,
+			"maxChance": 75,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1306,6 +1347,7 @@
 			"salvageMax": 4,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1314,6 +1356,7 @@
 			"salvageMax": 6,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1322,6 +1365,7 @@
 			"salvageMax": 5,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1330,6 +1374,7 @@
 			"salvageMax": 4,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1338,6 +1383,7 @@
 			"salvageMax": 5,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1346,6 +1392,7 @@
 			"salvageMax": 3,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1354,6 +1401,7 @@
 			"salvageMax": 7,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1362,6 +1410,7 @@
 			"salvageMax": 1,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 90,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1370,6 +1419,7 @@
 			"salvageMax": 2,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1378,6 +1428,7 @@
 			"salvageMax": 5,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
@@ -1386,6 +1437,7 @@
 			"salvageMax": 5,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
@@ -1394,6 +1446,7 @@
 			"salvageMax": 8,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
@@ -1402,6 +1455,7 @@
 			"salvageMax": 7,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
@@ -1410,6 +1464,7 @@
 			"salvageMax": 4,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
@@ -1418,6 +1473,7 @@
 			"salvageMax": 7,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
@@ -1426,6 +1482,7 @@
 			"salvageMax": 1,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 1
 		},
@@ -1434,6 +1491,7 @@
 			"salvageMax": 1,
 			"baseChance": 25,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 12.5,
 			"levelReq": 1
 		},
@@ -1442,6 +1500,7 @@
 			"salvageMax": 5,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 25,
 			"levelReq": 1
 		},
@@ -1450,6 +1509,7 @@
 			"salvageMax": 2,
 			"baseChance": 35,
 			"chancePerLevel": 2,
+			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
@@ -1458,6 +1518,7 @@
 			"salvageMax": 3,
 			"baseChance": 35,
 			"chancePerLevel": 2,
+			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
@@ -1466,6 +1527,7 @@
 			"salvageMax": 3,
 			"baseChance": 35,
 			"chancePerLevel": 2,
+			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
@@ -1474,6 +1536,7 @@
 			"salvageMax": 2,
 			"baseChance": 35,
 			"chancePerLevel": 2,
+			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
@@ -1482,6 +1545,7 @@
 			"salvageMax": 1,
 			"baseChance": 35,
 			"chancePerLevel": 2,
+			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
@@ -1490,6 +1554,7 @@
 			"salvageMax": 5,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 100,
 			"levelReq": 1
 		},
@@ -1498,6 +1563,7 @@
 			"salvageMax": 2,
 			"baseChance": 45,
 			"chancePerLevel": 2,
+			"maxChance": 80,
 			"xpPerItem": 7,
 			"levelReq": 1
 		},
@@ -1506,6 +1572,7 @@
 			"salvageMax": 3,
 			"baseChance": 60,
 			"chancePerLevel": 2,
+			"maxChance": 80,
 			"xpPerItem": 7,
 			"levelReq": 1
 		},
@@ -1514,6 +1581,7 @@
 			"salvageMax": 1,
 			"baseChance": 0,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 200,
 			"levelReq": 50
 		},
@@ -1522,7 +1590,8 @@
 			"salvageMax": 5,
 			"baseChance": 25,
 			"chancePerLevel": 1,
-			"xpPerItem": 5,
+			"maxChance": 75,
+			"xpPerItem": 4,
 			"levelReq": 15
 		},
 		"minecraft:brewing_stand": {
@@ -1530,6 +1599,7 @@
 			"salvageMax": 1,
 			"baseChance": 15,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 25
 		},
@@ -1538,6 +1608,7 @@
 			"salvageMax": 1,
 			"baseChance": 20,
 			"chancePerLevel": 1,
+			"maxChance": 90,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1546,6 +1617,7 @@
 			"salvageMax": 1,
 			"baseChance": 10,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 15
 		},
@@ -1554,6 +1626,7 @@
 			"salvageMax": 1,
 			"baseChance": 30,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 15,
 			"levelReq": 20
 		},
@@ -1562,6 +1635,7 @@
 			"salvageMax": 1,
 			"baseChance": 30,
 			"chancePerLevel": 1.25,
+			"maxChance": 80,
 			"xpPerItem": 3,
 			"levelReq": 1
 		},
@@ -1570,6 +1644,7 @@
 			"salvageMax": 8,
 			"baseChance": 20,
 			"chancePerLevel": 1,
+			"maxChance": 80,
 			"xpPerItem": 1.25,
 			"levelReq": 5
 		},
@@ -1578,6 +1653,7 @@
 			"salvageMax": 5,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
+			"maxChance": 75,
 			"xpPerItem": 15,
 			"levelReq": 15
 		},
@@ -1586,6 +1662,7 @@
 			"salvageMax": 3,
 			"baseChance": 30,
 			"chancePerLevel": 1,
+			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1594,6 +1671,7 @@
 			"salvageMax": 3,
 			"baseChance": 20,
 			"chancePerLevel": 1,
+			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1602,6 +1680,7 @@
 			"salvageMax": 7,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
+			"maxChance": 80,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1610,6 +1689,7 @@
 			"salvageMax": 3,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
+			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1618,6 +1698,7 @@
 			"salvageMax": 2,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
+			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1626,6 +1707,7 @@
 			"salvageMax": 1,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
+			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1634,6 +1716,7 @@
 			"salvageMax": 3,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
+			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1642,6 +1725,7 @@
 			"salvageMax": 3,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
+			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1650,6 +1734,7 @@
 			"salvageMax": 1,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
+			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
@@ -1658,7 +1743,8 @@
 			"salvageMax": 4,
 			"baseChance": 10,
 			"chancePerLevel": 1,
-			"xpPerItem": 2,
+			"maxChance": 90,
+			"xpPerItem": 1.5,
 			"levelReq": 15
 		},
 		"minecraft:end_crystal": {
@@ -1666,6 +1752,7 @@
 			"salvageMax": 1,
 			"baseChance": 20,
 			"chancePerLevel": 0.5,
+			"maxChance": 80,
 			"xpPerItem": 25,
 			"levelReq": 40
 		},
@@ -1674,6 +1761,7 @@
 			"salvageMax": 1,
 			"baseChance": 12.5,
 			"chancePerLevel": 0,
+			"maxChance": 12.5,
 			"xpPerItem": 3,
 			"levelReq": 10
 		},
@@ -1682,8 +1770,18 @@
 			"salvageMax": 666,
 			"baseChance": 0.01,
 			"chancePerLevel": 0,
+			"maxChance": 0.01,
 			"xpPerItem": 200,
 			"levelReq": 999
+		},
+		"minecraft:emerald_ore": {
+			"salvageItem": "minecraft:zombie_villager_spawn_egg",
+			"salvageMax": 1,
+			"baseChance": 0.25,
+			"chancePerLevel": 0,
+			"maxChance": 0.25,
+			"xpPerItem": 50,
+			"levelReq": 1
 		}
 	}
 }

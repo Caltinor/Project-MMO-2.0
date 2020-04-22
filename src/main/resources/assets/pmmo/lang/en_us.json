@@ -32,6 +32,8 @@
   "pmmo.text.cannotSalvage": "%1$s cannot be salvaged!",
   "pmmo.text.invalidItem": "%1$s is an invalid item! Please check your config",
   "pmmo.text.salvagesInto": "Salvages into %1$s %2$s",
+  "pmmo.text.salvagesFrom": "Can be salvaged from other items",
+  "pmmo.text.salvagesFromItem": "%1$s from %2$s",
   "pmmo.text.baseChance": "%1$s%% Base Chance",
   "pmmo.text.perLevelChance": "%1$s%% Per Level Chance",
   "pmmo.text.totalChance": "%1$s%% Total Chance",
