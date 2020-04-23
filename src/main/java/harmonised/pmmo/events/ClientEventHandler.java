@@ -33,7 +33,7 @@ public class ClientEventHandler
 {
     private static boolean wasCrawling = false, tooltipOn = true, tooltipKeyWasPressed = false;
     private static String lastKey = "";
-    private static int salvageArrayPos = 0, salvageArraySize;
+    private static int salvageArrayPos = 0, salvageArrayLength;
     private static long lastTime = System.currentTimeMillis();
     private static Object[] salvageArray;
 
@@ -262,14 +262,14 @@ public class ClientEventHandler
 
                 if( !lastKey.equals( regKey ) )
                 {
-                    salvageArraySize = salvagesFrom.size();
                     salvageArray = salvagesFrom.keySet().toArray();
+                    salvageArrayLength = salvageArray.length;
                 }
 
                 if( System.currentTimeMillis() - lastTime > 1000 )
                 {
                     lastTime = System.currentTimeMillis();
-                    if( ++salvageArrayPos > salvageArraySize - 1 )
+                    if( ++salvageArrayPos > salvageArrayLength - 1 )
                         salvageArrayPos = 0;
                 }
 

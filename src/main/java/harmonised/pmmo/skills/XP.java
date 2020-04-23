@@ -359,7 +359,6 @@ public class XP
 		if( event.getEntity() instanceof PlayerEntity && !(event.getEntity() instanceof FakePlayer) )
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntity();
-			CompoundNBT test = new CompoundNBT();
 
 			if ( !player.isCreative() )
 			{
@@ -1236,34 +1235,32 @@ public class XP
 			ItemStack itemStack = event.getItemStack();
 			Item item = itemStack.getItem();
 			int level;
-            boolean metUseReq = true, metBlockReq = true;
+			boolean isRemote = player.world.isRemote();
 
-			if(  !player.isCreative() )
-            {
-            	if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) )
-            		event.setCanceled( true );
-
-                metUseReq = checkReq( player, item.getRegistryName(), "use" );
-
-                if( !metUseReq )
+            if( event instanceof RightClickItem )
+			{
+				if( !player.isCreative() )
 				{
-					event.setCanceled( true );
-					if( player.world.isRemote() )
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+					if( !checkReq( player, item.getRegistryName(), "use" ) )
+					{
+						event.setCanceled( true );
+
+						if( isRemote )
+							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+					}
 				}
-            }
+			}
 
 			if( event instanceof RightClickBlock )
 			{
                 Block block = player.world.getBlockState( event.getPos() ).getBlock();
-				metBlockReq = checkReq( player, block.getRegistryName(), "use" );
 
-                if( !metBlockReq )
+                if( !checkReq( player, block.getRegistryName(), "use" ) )
                 {
                 	if( !player.isCreative() )
 					{
                     	event.setCanceled( true );
-                    	if( player.world.isRemote() && event.getHand().equals( Hand.MAIN_HAND ) )
+                    	if( isRemote && event.getHand().equals( Hand.MAIN_HAND ) )
 						{
 							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
@@ -1285,6 +1282,8 @@ public class XP
                 }
                 else
                 {
+                	event.setCanceled( false );
+
 				    Block anvil 		=	Blocks.ANVIL;
 				    Block ironBlock		= 	Blocks.IRON_BLOCK;
 				    Block goldBlock 	= 	Blocks.GOLD_BLOCK;
@@ -1314,7 +1313,7 @@ public class XP
 				    	{
 							event.setCanceled( true );
 
-				    		if( player.world.isRemote() )
+				    		if( isRemote )
 				    			return;
 
 				    		if( event.getHand().equals( Hand.OFF_HAND ) )
@@ -1498,8 +1497,6 @@ public class XP
 				    			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.underwaterNightVisionLocked", nightvisionUnlockLevel ), false );
 				    	}
 				    }
-
-
                 }
 			}
 		}

@@ -72,6 +72,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> showXpDrops;
         public ConfigHelper.ConfigValueListener<Boolean> stackXpDrops;
         public ConfigHelper.ConfigValueListener<Boolean> xpDropsAttachedToBar;
+        public ConfigHelper.ConfigValueListener<Boolean> xpBarAlwaysOn;
+        public ConfigHelper.ConfigValueListener<Boolean> xpLeftDisplayAlwaysOn;
 
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
@@ -410,6 +412,16 @@ public class Config
                         .comment( "If Off, xp drops will no longer stack with each other" )
                         .translation( "pmmo.stackXpDrops" )
                         .define( "stackXpDrops", true ) );
+
+                this.xpBarAlwaysOn = subscriber.subscribe(builder
+                        .comment( "Should the Xp Bar always be on? false = only appears while holding Show GUI or when you gain xp" )
+                        .translation( "pmmo.xpBarAlwaysOn" )
+                        .define( "xpBarAlwaysOn", false ) );
+
+                this.xpLeftDisplayAlwaysOn = subscriber.subscribe(builder
+                        .comment( "Should the Xp left indicator always be on? false = only appears with Show GUI key" )
+                        .translation( "pmmo.xpLeftDisplayAlwaysOn" )
+                        .define( "xpLeftDisplayAlwaysOn", false ) );
 
                 builder.pop();
             }

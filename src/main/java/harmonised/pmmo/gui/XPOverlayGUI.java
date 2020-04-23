@@ -37,7 +37,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String name = "none", tempName = "none";
-	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true, xpDropsAttachedToBar = true, xpDropWasStacked;
+	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -67,6 +67,8 @@ public class XPOverlayGUI extends AbstractGui
 					xpDropOpacityPerTime = Config.config.xpDropOpacityPerTime.get();
 					xpDropMaxOpacity = Config.config.xpDropMaxOpacity.get();
 					xpDropDecayAge = Config.config.xpDropDecayAge.get();
+					xpBarAlwaysOn = Config.config.xpBarAlwaysOn.get();
+					xpLeftDisplayAlwaysOn = Config.config.xpLeftDisplayAlwaysOn.get();
 
 					if( !xpDropsAttachedToBar )
 						xpDropYLimit = 999999999;
@@ -79,11 +81,12 @@ public class XPOverlayGUI extends AbstractGui
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
 				MainWindow sr = minecraft.getMainWindow();
-//				barPosX = ( sr.getScaledWidth() - barWidth ) / 2;
 				barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
 				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
 				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
 				xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
+
+				xpLeftDisplayAlwaysOn = true;
 
 				skill = skills.get( name );
 
@@ -100,7 +103,7 @@ public class XPOverlayGUI extends AbstractGui
 				guiKey = ClientHandler.SHOW_GUI.isKeyDown();
 //				guiKey = true;
 
-				if( guiKey )
+				if( guiKey || xpBarAlwaysOn )
 					cooldown = 1;
 
 				if( guiKey )
@@ -262,7 +265,7 @@ public class XPOverlayGUI extends AbstractGui
 					else
 						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + name ).getString(), DP.dp( Math.floor( skill.pos * 100 ) / 100 ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
 					
-					if( guiKey && skills.get( name ) != null )
+					if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( name ) != null )
 					{
 						if( skills.get( name ).xp >= XP.maxXp )
 							drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.maxLevel" ).getString(), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( name ) );

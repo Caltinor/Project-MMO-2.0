@@ -257,7 +257,7 @@ public class Requirements
     private static void updateFinal( Requirements req )
     {
         if( Config.config.wearReqEnabled.get() )
-            updateReqSkills( req.wears, localWeaponReq );
+            updateReqSkills( req.wears, localWearReq );
 
         if( Config.config.toolReqEnabled.get() )
             updateReqSkills( req.tools, localToolReq );
