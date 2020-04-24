@@ -1882,15 +1882,6 @@
 			"xpPerItem": 3,
 			"levelReq": 10
 		},
-		"minecraft:ender_pearl": {
-			"salvageItem": "minecraft:enderman_spawn_egg",
-			"salvageMax": 1,
-			"baseChance": 12.5,
-			"chancePerLevel": 0.1,
-			"maxChance": 25,
-			"xpPerItem": 3.5,
-			"levelReq": 15
-		},
 		"minecraft:ghast_tear": {
 			"salvageItem": "minecraft:ghast_spawn_egg",
 			"salvageMax": 1,
