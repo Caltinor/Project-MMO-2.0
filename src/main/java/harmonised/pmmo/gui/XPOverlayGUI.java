@@ -77,7 +77,6 @@ public class XPOverlayGUI extends AbstractGui
 
 					init = true;
 				}
-
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
 				MainWindow sr = minecraft.getMainWindow();
@@ -85,8 +84,6 @@ public class XPOverlayGUI extends AbstractGui
 				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
 				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
 				xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
-
-				xpLeftDisplayAlwaysOn = true;
 
 				skill = skills.get( name );
 
@@ -121,7 +118,7 @@ public class XPOverlayGUI extends AbstractGui
 				{
 					if( cooldown <= 0 )
 						xpDropOffsetCap = -9;
-					else if ( guiKey )
+					else if ( guiKey || xpLeftDisplayAlwaysOn )
 					{
 						if( skills.get( name ).xp >= XP.maxXp )
 							xpDropOffsetCap = 25;
@@ -381,7 +378,7 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			for( XpDrop xpDrop : xpDrops )
 			{
-				if( xpDrop.name.equals( tempName ) && xpDrop.age < xpDropDecayAge )
+				if( xpDrop.name.equals( tempName ) && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0) )
 				{
 					xpDrop.gainedXp += gainedXp;
 					xpDrop.startXp += gainedXp;
@@ -398,7 +395,7 @@ public class XPOverlayGUI extends AbstractGui
 			if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).Y > 75 )
 				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, tempName, xp, gainedXp, skip ) );
 			else
-				xpDrops.add( new XpDrop( 0, 100, tempName, xp, gainedXp, skip ) );
+				xpDrops.add( new XpDrop( 0, xpDropSpawnDistance, tempName, xp, gainedXp, skip ) );
 		}
 		
 		if( !skip )

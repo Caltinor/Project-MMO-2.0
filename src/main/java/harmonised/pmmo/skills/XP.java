@@ -1366,11 +1366,11 @@ public class XP
 
 				    			if( !item.equals( Items.AIR ) )
 								{
-				    			if( Requirements.salvageInfo.containsKey( item.getRegistryName().toString() ) )
+				    			if( Requirements.salvageInfo.containsKey( regKey ) )
 				    			{
 				    				if( player.getPosition().withinDistance( event.getPos(), 2 ) )
 									{
-										Map<String, Object> theMap = Requirements.salvageInfo.get( item.getRegistryName().toString() );
+										Map<String, Object> theMap = Requirements.salvageInfo.get( regKey );
 										Item salvageItem = getItem( (String) theMap.get( "salvageItem" ) );
 										if( !salvageItem.equals( Items.AIR ) )
 										{

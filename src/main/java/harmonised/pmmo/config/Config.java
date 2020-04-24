@@ -381,7 +381,7 @@ public class Config
                 this.xpDropSpawnDistance = subscriber.subscribe(builder
                         .comment( "How far away does the Xp Drop spawn" )
                         .translation( "pmmo.xpDropSpawnDistance" )
-                        .defineInRange( "xpDropSpawnDistance", 100D, 0, 1000) );
+                        .defineInRange( "xpDropSpawnDistance", 50D, 0, 1000) );
 
                 this.xpDropOpacityPerTime = subscriber.subscribe(builder
                         .comment( "How much out of MaxOpacity does the Xp Drop become visible per 1 distance" )
@@ -396,7 +396,7 @@ public class Config
                 this.xpDropDecayAge = subscriber.subscribe(builder
                         .comment( "At what age do xp drops start to decay?" )
                         .translation( "pmmo.xpDropDecayAge" )
-                        .defineInRange( "xpDropDecayAge", 500, 0, 5000) );
+                        .defineInRange( "xpDropDecayAge", 350, 0, 5000) );
 
                 this.xpDropsAttachedToBar = subscriber.subscribe(builder
                         .comment( "Should xp drops sync up with the bar being open or closed? HIGHLY RECOMMEND TO KEEP FALSE IF YOU ARE MOVING XP DROP POSITIONS" )
