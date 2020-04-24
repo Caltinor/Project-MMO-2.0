@@ -976,7 +976,7 @@
 		"minecraft:diamond_helmet": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 5,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -985,7 +985,7 @@
 		"minecraft:diamond_chestplate": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 8,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -994,7 +994,7 @@
 		"minecraft:diamond_leggings": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 7,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1003,7 +1003,7 @@
 		"minecraft:diamond_boots": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 4,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1012,7 +1012,7 @@
 		"minecraft:diamond_horse_armor": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 7,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1021,7 +1021,7 @@
 		"minecraft:diamond_sword": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 2,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1030,7 +1030,7 @@
 		"minecraft:diamond_axe": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 3,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1039,7 +1039,7 @@
 		"minecraft:diamond_pickaxe": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 3,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1048,7 +1048,7 @@
 		"minecraft:diamond_hoe": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 2,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1057,7 +1057,7 @@
 		"minecraft:diamond_shovel": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 1,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1066,7 +1066,7 @@
 		"minecraft:jukebox": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 1,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 75,
@@ -1075,7 +1075,7 @@
 		"minecraft:enchanting_table": {
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 2,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 85,
 			"xpPerItem": 75,
@@ -1188,6 +1188,15 @@
 			"maxChance": 80,
 			"xpPerItem": 35,
 			"levelReq": 30
+		},
+		"minecraft:golden_carrot": {
+			"salvageItem": "minecraft:gold_nugget",
+			"salvageMax": 8,
+			"baseChance": 20,
+			"chancePerLevel": 0.85,
+			"maxChance": 80,
+			"xpPerItem": 4,
+			"levelReq": 15
 		},
 		"minecraft:light_weighted_pressure_plate": {
 			"salvageItem": "minecraft:gold_ingot",
@@ -1531,6 +1540,51 @@
 			"xpPerItem": 25,
 			"levelReq": 1
 		},
+		"minecraft:stone_sword": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 2,
+			"baseChance": 25,
+			"chancePerLevel": 1.5,
+			"maxChance": 75,
+			"xpPerItem": 5,
+			"levelReq": 1
+		},
+		"minecraft:stone_axe": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 3,
+			"baseChance": 25,
+			"chancePerLevel": 1.5,
+			"maxChance": 75,
+			"xpPerItem": 5,
+			"levelReq": 1
+		},
+		"minecraft:stone_pickaxe": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 3,
+			"baseChance": 25,
+			"chancePerLevel": 1.5,
+			"maxChance": 75,
+			"xpPerItem": 5,
+			"levelReq": 1
+		},
+		"minecraft:stone_hoe": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 2,
+			"baseChance": 25,
+			"chancePerLevel": 1.5,
+			"maxChance": 75,
+			"xpPerItem": 5,
+			"levelReq": 1
+		},
+		"minecraft:stone_shovel": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 1,
+			"baseChance": 25,
+			"chancePerLevel": 1.5,
+			"maxChance": 75,
+			"xpPerItem": 5,
+			"levelReq": 5
+		},
 		"minecraft:wooden_sword": {
 			"salvageItem": "minecraft:oak_planks",
 			"salvageMax": 2,
@@ -1606,7 +1660,7 @@
 		"minecraft:beacon": {
 			"salvageItem": "minecraft:nether_star",
 			"salvageMax": 1,
-			"baseChance": 0,
+			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
 			"xpPerItem": 200,
@@ -1674,6 +1728,42 @@
 			"maxChance": 80,
 			"xpPerItem": 1.25,
 			"levelReq": 5
+		},
+		"minecraft:cobblestone_wall": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 1,
+			"baseChance": 20,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 1.25,
+			"levelReq": 5
+		},
+		"minecraft:sandstone_wall": {
+			"salvageItem": "minecraft:sandstone",
+			"salvageMax": 1,
+			"baseChance": 25,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 1,
+			"levelReq": 5
+		},
+		"minecraft:end_stone_brick_wall": {
+			"salvageItem": "minecraft:end_stone_bricks",
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 10
+		},
+		"minecraft:mossy_cobblestone": {
+			"salvageItem": "minecraft:vine",
+			"salvageMax": 1,
+			"baseChance": 1,
+			"chancePerLevel": 1,
+			"maxChance": 15,
+			"xpPerItem": 5,
+			"levelReq": 15
 		},
 		"minecraft:turtle_helmet": {
 			"salvageItem": "minecraft:scute",
@@ -1775,7 +1865,7 @@
 			"levelReq": 15
 		},
 		"minecraft:end_crystal": {
-			"salvageItem": "minecraft:ghast_tier",
+			"salvageItem": "minecraft:ghast_tear",
 			"salvageMax": 1,
 			"baseChance": 20,
 			"chancePerLevel": 0.5,
@@ -1791,6 +1881,33 @@
 			"maxChance": 12.5,
 			"xpPerItem": 3,
 			"levelReq": 10
+		},
+		"minecraft:ender_pearl": {
+			"salvageItem": "minecraft:enderman_spawn_egg",
+			"salvageMax": 1,
+			"baseChance": 12.5,
+			"chancePerLevel": 0.1,
+			"maxChance": 25,
+			"xpPerItem": 3.5,
+			"levelReq": 15
+		},
+		"minecraft:ghast_tear": {
+			"salvageItem": "minecraft:ghast_spawn_egg",
+			"salvageMax": 1,
+			"baseChance": 12.5,
+			"chancePerLevel": 0.1,
+			"maxChance": 25,
+			"xpPerItem": 10,
+			"levelReq": 25
+		},
+		"minecraft:wither_rose": {
+			"salvageItem": "minecraft:wither_skeleton_spawn_egg",
+			"salvageMax": 3,
+			"baseChance": 12.5,
+			"chancePerLevel": 0.1,
+			"maxChance": 25,
+			"xpPerItem": 10,
+			"levelReq": 60
 		},
 		"minecraft:bedrock": {
 			"salvageItem": "minecraft:nether_star",
@@ -2002,11 +2119,65 @@
 		"minecraft:soul_sand": {
 			"salvageItem": "minecraft:nether_wart",
 			"salvageMax": 1,
-			"baseChance": 0,
-			"chancePerLevel": 0.25,
-			"maxChance": 5,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.05,
+			"maxChance": 0.5,
 			"xpPerItem": 0.5,
 			"levelReq": 25
+		},
+		"minecraft:conduit": {
+			"salvageItem": "minecraft:heart_of_the_sea",
+			"salvageMax": 1,
+			"baseChance": 10,
+			"chancePerLevel": 1,
+			"maxChance": 100,
+			"xpPerItem": 50,
+			"levelReq": 25
+		},
+		"minecraft:bone_block": {
+			"salvageItem": "minecraft:bone",
+			"salvageMax": 3,
+			"baseChance": 20,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2,
+			"levelReq": 8
+		},
+		"minecraft:diorite": {
+			"salvageItem": "minecraft:quartz",
+			"salvageMax": 1,
+			"baseChance": 1,
+			"chancePerLevel": 1,
+			"maxChance": 100,
+			"xpPerItem": 1,
+			"levelReq": 12
+		},
+		"minecraft:melon": {
+			"salvageItem": "minecraft:melon_slice",
+			"salvageMax": 9,
+			"baseChance": 30,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 0.35,
+			"levelReq": 3
+		},
+		"minecraft:emerald": {
+			"salvageItem": "minecraft:experience_bottle",
+			"salvageMax": 16,
+			"baseChance": 1,
+			"chancePerLevel": 1,
+			"maxChance": 100,
+			"xpPerItem": 1,
+			"levelReq": 15
+		},
+		"minecraft:glass_bottle": {
+			"salvageItem": "minecraft:glass",
+			"salvageMax": 9,
+			"baseChance": 20,
+			"chancePerLevel": 1.5,
+			"maxChance": 90,
+			"xpPerItem": 0.35,
+			"levelReq": 3
 		}
 	}
 }

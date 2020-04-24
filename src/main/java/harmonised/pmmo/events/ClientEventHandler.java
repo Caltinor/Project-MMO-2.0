@@ -24,7 +24,10 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +39,7 @@ public class ClientEventHandler
     private static int salvageArrayPos = 0, salvageArrayLength;
     private static long lastTime = System.currentTimeMillis();
     private static Object[] salvageArray;
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static void subscribeClientEvents( IEventBus eventBus )
     {
@@ -269,9 +273,10 @@ public class ClientEventHandler
                 if( System.currentTimeMillis() - lastTime > 1000 )
                 {
                     lastTime = System.currentTimeMillis();
-                    if( ++salvageArrayPos > salvageArrayLength - 1 )
-                        salvageArrayPos = 0;
+                    salvageArrayPos++;
                 }
+                if( salvageArrayPos > salvageArrayLength - 1 )
+                    salvageArrayPos = 0;
 
                 String key = (String) salvageArray[salvageArrayPos];
                 String displayName = new TranslationTextComponent( XP.getItem( (String) salvageArray[salvageArrayPos] ).getTranslationKey() ).getString();

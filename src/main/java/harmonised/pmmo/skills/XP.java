@@ -1234,6 +1234,9 @@ public class XP
 			PlayerEntity player = event.getPlayer();
 			ItemStack itemStack = event.getItemStack();
 			Item item = itemStack.getItem();
+			Block goldBlock 	= 	Blocks.GOLD_BLOCK;
+			Block smithBlock    =   Blocks.SMITHING_TABLE;
+			String regKey = item.getRegistryName().toString();
 			int level;
 			boolean isRemote = player.world.isRemote();
 
@@ -1241,6 +1244,43 @@ public class XP
 			{
 				if( !player.isCreative() )
 				{
+					if( Requirements.salvageInfo.containsKey( regKey ) )
+					{
+						World world = event.getWorld();
+						Block currBlock;
+						BlockPos playerPos = event.getPos();
+						Block matchedBlock = null;
+
+						for( int x = -2; x <= 2; x++ )
+						{
+							for( int y = -2; y <= 2; y++ )
+							{
+								for( int z = -2; z <= 2; z++ )
+								{
+									currBlock = world.getBlockState( new BlockPos( playerPos.getX() + x, playerPos.getY() + y, playerPos.getZ() + z ) ).getBlock();
+									if( currBlock.equals( smithBlock ) )
+									{
+										matchedBlock = smithBlock;
+										break;
+									}
+									if( currBlock.equals( goldBlock ) )
+									{
+										matchedBlock = goldBlock;
+										break;
+									}
+								}
+							}
+						}
+
+						if( matchedBlock != null )
+						{
+							event.setCanceled( true );
+
+							if( isRemote )
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotUseProximity", new TranslationTextComponent( matchedBlock.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+						}
+					}
+
 					if( !checkReq( player, item.getRegistryName(), "use" ) )
 					{
 						event.setCanceled( true );
@@ -1286,8 +1326,6 @@ public class XP
 
 				    Block anvil 		=	Blocks.ANVIL;
 				    Block ironBlock		= 	Blocks.IRON_BLOCK;
-				    Block goldBlock 	= 	Blocks.GOLD_BLOCK;
-				    Block smithBlock    =   Blocks.SMITHING_TABLE;
 				    Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
 
 				    int repairLevel = getLevel( "smithing", player );
@@ -1311,7 +1349,8 @@ public class XP
 
 				    	if( block.equals( goldBlock ) || block.equals( smithBlock ) )
 				    	{
-							event.setCanceled( true );
+							if( Requirements.salvageInfo.containsKey( regKey ) )
+								event.setCanceled( true );
 
 				    		if( isRemote )
 				    			return;

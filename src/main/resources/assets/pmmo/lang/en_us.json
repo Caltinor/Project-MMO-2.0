@@ -70,6 +70,7 @@
   "pmmo.text.toChop": "You need higher stats to chop %1$s!",
   "pmmo.text.toHarvest": "You need higher stats to harvest %1$s!",
   "pmmo.text.toUse": "You need higher stats to use %1$s!",
+  "pmmo.text.cannotUseProximity": "You cannot use salvageable items so close to %1$s!",
   "pmmo.text.armor": "Armor",
   "pmmo.text.tool": "Tool",
   "pmmo.text.weapon": "Weapon",
