@@ -92,7 +92,7 @@ public class XPOverlayGUI extends AbstractGui
 
 				if( cooldown > 0 )
 					cooldown -= timeDiff / 1000000;
-				themePos += 2.5 + 7.5 * ( skill.pos % Math.floor( skill.pos ) ) * timeDiff / 1000000;
+				themePos += ( 2.5 + 7.5 * ( skill.pos % Math.floor( skill.pos ) ) ) * (timeDiff / 1000000);
 
 				if( themePos > 10000 )
 					themePos =  themePos % 10000;

@@ -1,24 +1,24 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.command.arguments.ItemArgument;
 import net.minecraft.entity.player.ServerPlayerEntity;
+
+import java.util.Arrays;
 
 public class PmmoCommand
 {
-    public static void register( CommandDispatcher<CommandSource> dispatch )
+    public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
-        String[] suggestCommand = new String[2];
-        suggestCommand[0] = "set";
-        suggestCommand[1] = "clear";
-//        suggestCommand[2] = "levelAtXp";
-//        suggestCommand[3] = "xpAtLevel";
-
-        String[] suggestSkill = new String[14];
+        String[] suggestSkill = new String[15];
         suggestSkill[0] = "Mining";
         suggestSkill[1] = "Building";
         suggestSkill[2] = "Excavation";
@@ -33,38 +33,51 @@ public class PmmoCommand
         suggestSkill[11] = "Swimming";
         suggestSkill[12] = "Fishing";
         suggestSkill[13] = "Crafting";
+        suggestSkill[14] = "Magic";
 
-//        String[] suggestClear = new String[1];
-//        suggestClear[0] = "iagreetothetermsandconditions";
+        String[] suggestClear = new String[1];
+        suggestClear[0] = "iagreetothetermsandconditions";
 
-        LiteralArgumentBuilder<CommandSource> builder = Commands.literal("pmmo")
-                .requires( src -> src.hasPermissionLevel(4 ) )
-                .requires( src -> src.getEntity() instanceof ServerPlayerEntity )
-                .then( Commands.argument("command", StringArgumentType.word() )
-                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestCommand, theBuilder ) )
-                .executes( CommandClear::execute ) );
+        String[] levelOrXp = new String[2];
+        levelOrXp[0] = "level";
+        levelOrXp[1] = "xp";
 
-        builder.then( Commands.argument("set", StringArgumentType.word() )
-                .then( Commands.argument("skill", StringArgumentType.word() )
-                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
-                .then( Commands.argument("request", StringArgumentType.word() )
-                .executes( CommandSet::execute ) ) ) );
+        dispatcher.register( Commands.literal( "pmmo" ).requires( player -> { return player.hasPermissionLevel( 2 ); })
+                  .then( Commands.literal( "level" )
+                  .then( Commands.argument( "target", EntityArgument.players() )
+                  .then( Commands.literal( "set" )
+                  .then( Commands.argument( "Skill", StringArgumentType.word() )
+                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
+                  .then( Commands.argument( "Level|Xp", StringArgumentType.word() )
+                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( levelOrXp, theBuilder ) )
+                  .then( Commands.argument( "New Value", DoubleArgumentType.doubleArg() )
+                  .executes( context ->
+                  {
+                      String[] args = context.getInput().split( " " );
 
-        builder.then( Commands.argument("clear", StringArgumentType.word() )
-                .executes( CommandClear::execute )
-                .then( Commands.argument("request", StringArgumentType.word() )
-//                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestClear, theBuilder ) )
-                .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
-                .executes( CommandClear::execute ) ) );
+                      System.out.println( Arrays.toString( args ) );
+                      return 1;
+                  })
+                  ))))
+                  .then( Commands.literal( "add" )
+                  .then( Commands.argument( "Skill", StringArgumentType.word() )
+                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
+                  .then( Commands.argument( "Level|Xp", StringArgumentType.word() )
+                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( levelOrXp, theBuilder ) )
+                  .then( Commands.argument( "Value To Add", DoubleArgumentType.doubleArg() )
+                  .executes( context ->
+                  {
+                      String[] args = context.getInput().split( " " );
 
-//        builder.then( Commands.argument("levelAtXp", StringArgumentType.word() )
-//                .then( Commands.argument("request", StringArgumentType.word() )
-//                .executes( CommandLevelAtXp::execute ) ) );
-//
-//        builder.then( Commands.argument("xpAtLevel", StringArgumentType.word() )
-//                .then( Commands.argument("request", StringArgumentType.word() )
-//                .executes( CommandXpAtLevel::execute ) ) );
-
-        dispatch.register( builder );
+                      System.out.println( Arrays.toString( args ) );
+                      return 1;
+                  })))))
+                  .then( Commands.literal( "clear" )
+                  .executes( context ->
+                  {
+                      System.out.println( "Clear command" );
+                      return 1;
+                  }
+                  )))));
     }
 }
