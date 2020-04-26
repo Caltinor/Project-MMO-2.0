@@ -3,6 +3,7 @@ package harmonised.pmmo.gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
@@ -371,6 +372,11 @@ public class XPOverlayGUI extends AbstractGui
 			skill.goalXp = xp;
 			XPOverlayGUI.cooldown = cooldown;
 
+			for( XpDrop theDrop : xpDrops )
+			{
+				if( theDrop.name.equals( tempName ) )
+					xpDrops.remove( theDrop );
+			}
 
 			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + tempName + " has been set to: " + xp );
 		}

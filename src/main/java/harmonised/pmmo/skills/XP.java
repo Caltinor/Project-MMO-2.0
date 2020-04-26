@@ -86,7 +86,7 @@ public class XP
     private static boolean showDonatorWelcome = Config.config.showDonatorWelcome.get();
     private static boolean broadcastMilestone = Config.config.broadcastMilestone.get();
 
-    public static float maxXp = xpAtLevel( maxLevel );
+    public static double maxXp = xpAtLevel( maxLevel );
 
 	public static void initValues()
 	{
@@ -1051,16 +1051,45 @@ public class XP
 		event.getPlayer().getPersistentData().put( "pmmo", event.getOriginal().getPersistentData().getCompound( "pmmo" ) );
 	}
 
+	public static void syncPlayer( PlayerEntity player )
+    {
+        CompoundNBT skillsTag = getSkillsTag( player );
+        Set<String> keySet = new HashSet<>( skillsTag.keySet() );
+
+        NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
+        AttributeHandler.updateDamage( player );
+        AttributeHandler.updateHP( player );
+        AttributeHandler.updateReach( player );
+
+        for( String tag : keySet )
+        {
+            if( Skill.getInt( tag ) == 0 )
+            {
+                if( Skill.getInt( tag.toLowerCase() ) != 0 )
+                    skillsTag.put( tag.toLowerCase(), skillsTag.get(tag) );
+
+                if( tag.toLowerCase().equals( "repairing" ) )
+                    skillsTag.put( "smithing", skillsTag.get(tag) );
+
+                System.out.println( "REMOVING INVALID SKILL " + tag );
+                skillsTag.remove( tag );
+            }
+        }
+
+        keySet = new HashSet<>( skillsTag.keySet() );
+
+        for( String tag : keySet )
+        {
+            NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getDouble( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
+        }
+    }
+
 	public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
 		if( !player.world.isRemote() )
 		{
-			CompoundNBT skillsTag = getSkillsTag( player );
-
-			AttributeHandler.updateReach( player );
-			NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
+		    NetworkHandler.sendToPlayer( new MessageReqUpdate( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.wearReq, "wearReq" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.toolReq, "toolReq" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.weaponReq, "weaponReq" ), (ServerPlayerEntity) player );
@@ -1074,29 +1103,7 @@ public class XP
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
 			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
 
-			Set<String> keySet = new HashSet<>( skillsTag.keySet() );
-
-			for( String tag : keySet )
-			{
-				if( Skill.getInt( tag ) == 0 )
-				{
-					if( Skill.getInt( tag.toLowerCase() ) != 0 )
-						skillsTag.put( tag.toLowerCase(), skillsTag.get(tag) );
-
-					if( tag.toLowerCase().equals( "repairing" ) )
-						skillsTag.put( "smithing", skillsTag.get(tag) );
-
-					System.out.println( "REMOVING INVALID SKILL " + tag );
-					skillsTag.remove( tag );
-				}
-			}
-
-			keySet = new HashSet<>( skillsTag.keySet() );
-
-			for( String tag : keySet )
-			{
-				NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getDouble( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
-			}
+			syncPlayer( player );
 
             if( lapisDonators.contains( player.getUniqueID() ) )
             {
