@@ -66,7 +66,7 @@ public class PmmoCommand
         levelOrXp[1] = "xp";
 
         dispatcher.register( Commands.literal( "pmmo" ).requires( player -> { return player.hasPermissionLevel( 4 ); })
-                  .then( Commands.literal( "level" )
+                  .then( Commands.literal( "admin" )
                   .then( Commands.argument( "target", EntityArgument.players() )
                   .then( Commands.literal( "set" )
                   .then( Commands.argument( "Skill", StringArgumentType.word() )
@@ -85,12 +85,27 @@ public class PmmoCommand
                   .executes( PmmoCommand::commandAdd )
                   ))))
                   .then( Commands.literal( "clear" )
-                  .executes( PmmoCommand::commandClear ) )
+                  .executes( PmmoCommand::commandClear ) )))
                   .then( Commands.literal( "sync" )
                   .executes( context -> commandSync( context, EntityArgument.getPlayers( context, "target" ) ) )
-                  )))
+                  )
                   .then(Commands.literal( "sync" )
-                  .executes( context -> commandSync( context, null ))));
+                  .executes( context -> commandSync( context, null )))
+                  .then( Commands.literal( "tools" )
+                  .then( Commands.literal( "levelatxp" )
+                  .then( Commands.argument( "xp", DoubleArgumentType.doubleArg() )
+                  .executes( PmmoCommand::commandLevelAtXp )
+                  ))
+                  .then( Commands.literal( "xpatlevel" )
+                  .then(  Commands.argument( "level", DoubleArgumentType.doubleArg() )
+                  .executes( PmmoCommand::commandXpAtLevel )
+                  ))
+                  .then( Commands.literal( "xpto" )
+                  .then(  Commands.argument( "level", DoubleArgumentType.doubleArg() )
+                  .executes( PmmoCommand::commandXpFromTo )
+                  .then(  Commands.argument( "goal level", DoubleArgumentType.doubleArg() )
+                  .executes( PmmoCommand::commandXpFromTo )
+                  )))));
     }
 
     private static int commandClear( CommandContext<CommandSource> context ) throws CommandException
@@ -313,78 +328,74 @@ public class PmmoCommand
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
+        double xp = Double.parseDouble( args[3] );
 
-        float xp;
-        if( args.length > 0 )
-        {
-            try
-            {
-                xp = Float.parseFloat( args[0].replace(',', '.'));
-            }
-            catch( NumberFormatException e )
-            {
-                player.sendStatusMessage( new StringTextComponent( "\"" + args[0] + "\" is not a valid number!" ), false);
-                return 1;
-            }
-            player.sendStatusMessage( new StringTextComponent( DP.dp( xp ) + "xp is level " + DP.dp( XP.levelAtXpDecimal( xp ) ) ), false );
-        }
+        if( xp < 0 )
+            xp = 0;
+
+        if( xp >= XP.maxXp )
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelAtXp", DP.dp( xp ), XP.maxLevel ), false );
         else
-            player.sendStatusMessage( new StringTextComponent( "You must specify a start level, optionally also a goal level!" ), false);
-
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelAtXp", DP.dp( xp ), XP.levelAtXpDecimal( xp ) ), false );
         return 1;
     }
 
     public static int commandXpAtLevel(CommandContext<CommandSource> context) throws CommandException
     {
-        System.out.println( "happened" );
+        PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
+        String[] args = context.getInput().split(" ");
+        double level = Double.parseDouble( args[3] );
+
+        if( level < 1 )
+            level = 1;
+
+        if( level > XP.maxLevel )
+            level = XP.maxLevel;
+
+        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp( XP.xpAtLevelDecimal( level ) ) ), false );
+
+        return 1;
+    }
+
+    public static int commandXpFromTo(CommandContext<CommandSource> context) throws CommandException
+    {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 
-        float startLevel;
-        float goalLevel;
-        if( args.length > 0 )
+        double level = Double.parseDouble( args[3] );
+        if( level < 1 )
+            level = 1;
+        if( level > XP.maxLevel )
+            level = XP.maxLevel;
+        double xp = XP.xpAtLevelDecimal( level );
+        if( xp < 0 )
+            xp = 0;
+
+        if( args.length > 4 )
         {
-            try
+            double goalLevel = Double.parseDouble( args[4] );
+            if( goalLevel < 1 )
+                goalLevel = 1;
+            if( goalLevel > XP.maxLevel )
+                goalLevel = XP.maxLevel;
+
+            if( goalLevel < level )
             {
-                startLevel = Float.parseFloat( args[0].replace(',', '.'));
+                double temp = goalLevel;
+                goalLevel = level;
+                level = temp;
+
+                xp = XP.xpAtLevelDecimal( level );
             }
-            catch( NumberFormatException e )
-            {
-                player.sendStatusMessage( new StringTextComponent( "\"" + args[0] + "\" is not a valid number!" ), false);
-                return 1;
-            }
-            if( args.length > 1 )
-            {
-                try
-                {
 
-                    goalLevel = Float.parseFloat( args[1].replace(',', '.'));
-                }
-                catch( NumberFormatException e )
-                {
-                    player.sendStatusMessage( new StringTextComponent( "\"" + args[1] + "\" is not a valid number!" ), false);
-                    return 1;
-                }
+            double goalXp = XP.xpAtLevelDecimal( goalLevel );
+            if( goalXp < 0 )
+                goalXp = 0;
 
-                if( startLevel > goalLevel )
-                {
-                    float temp = startLevel;
-                    startLevel = goalLevel;
-                    goalLevel = temp;
-                }
-
-                if( goalLevel >= 999 ) goalLevel = 999.99f;
-                if( goalLevel < 1 ) goalLevel = 1;
-                if( startLevel >= 999 ) startLevel = 999.99f;
-                if( startLevel < 1 ) startLevel = 1;
-
-                player.sendStatusMessage( new StringTextComponent( "level " + startLevel + " -> " + goalLevel + " is " + DP.dp( XP.xpAtLevelDecimal( goalLevel ) - XP.xpAtLevelDecimal( startLevel ) ) + "xp" ), false);
-            }
-            else
-                player.sendStatusMessage( new StringTextComponent( "level " + startLevel + " is " + DP.dp( XP.xpAtLevelDecimal( startLevel ) ) + "xp" ), false);
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpFromTo", DP.dp(goalXp - xp), ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), ( goalLevel % 1 == 0 ? (int) Math.floor( goalLevel ) : DP.dp(goalLevel) ) ), false );
         }
         else
-            player.sendStatusMessage( new StringTextComponent( "You must specify a start level, optionally also a goal level!" ), false);
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp(xp) ), false );
 
         return 1;
     }
