@@ -73,7 +73,7 @@ public class PmmoCommand
         suggestPref[0] = "maxReachBoost";
         suggestPref[1] = "speedBoostMax";
         suggestPref[2] = "maxSprintJumpBoost";
-        suggestPref[3] = "maxSneakJumpBoost";
+        suggestPref[3] = "maxCrouchJumpBoost";
         suggestPref[4] = "maxExtraHeartBoost";
         suggestPref[5] = "maxExtraDamageBoost";
 
@@ -442,7 +442,7 @@ public class PmmoCommand
                 prefsTag.putDouble( "maxReachBoost", value );
                 break;
 
-            case "speedBoostMax":
+            case "speedboostmax":
                 prefsTag.putDouble( "speedBoostMax", value );
                 break;
 
@@ -450,8 +450,8 @@ public class PmmoCommand
                 prefsTag.putDouble( "maxSprintJumpBoost", value );
                 break;
 
-            case "maxsneakjumpboost":
-                prefsTag.putDouble( "maxSneakJumpBoost", value );
+            case "maxcrouchjumpboost":
+                prefsTag.putDouble( "maxCrouchJumpBoost", value );
                 break;
 
             case "maxextraheartboost":

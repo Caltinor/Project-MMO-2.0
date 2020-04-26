@@ -530,7 +530,7 @@ public class Config
                         .defineInRange( "levelsSprintJumpBoost", 50, 0, 1000) );
 
                 this.speedBoostMax = subscriber.subscribe(builder
-                        .comment( "How much speed boost you can get from Agility (100 = max speed is twice of vanilla)" )
+                        .comment( "How much speed boost you can get from Agility (100 = 100% vanilla + 100% = twice as fast max)" )
                         .translation( "pmmo.speedBoostMax" )
                         .defineInRange( "speedBoostMax", 100D, 0, 1000) );
 

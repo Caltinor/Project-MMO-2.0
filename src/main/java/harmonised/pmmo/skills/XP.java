@@ -986,24 +986,35 @@ public class XP
 
 			if( !player.isCreative() )
 			{
-				CompoundNBT skillsTag = getSkillsTag(player);
+				CompoundNBT prefsTag = getPreferencesTag(player);
 
 				double agilityLevel = 1;
 				double jumpBoost = 0;
 				double maxJumpBoost = Config.config.maxJumpBoost.get();
+				double maxJumpBoostPref = maxJumpBoost;
 				int levelsCrouchJumpBoost = Config.config.levelsCrouchJumpBoost.get();
 				int levelsSprintJumpBoost = Config.config.levelsSprintJumpBoost.get();
 
 				agilityLevel = getLevel( "agility", player );
 
 				if (player.isCrouching())
+				{
+					if( prefsTag.contains( "maxCrouchJumpBoost" ) )
+						maxJumpBoostPref = 0.14 * (prefsTag.getDouble( "maxCrouchJumpBoost" ) / 100);
 					jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsCrouchJumpBoost );
+				}
 
 				if (player.isSprinting())
+				{
+					if( prefsTag.contains( "maxSprintJumpBoost" ) )
+						maxJumpBoostPref = 0.14 * (prefsTag.getDouble( "maxSprintJumpBoost" ) / 100);
 					jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsSprintJumpBoost );
+				}
 
 				if ( jumpBoost > maxJumpBoost )
 					jumpBoost = maxJumpBoost;
+				if( jumpBoost > maxJumpBoostPref )
+					jumpBoost = maxJumpBoostPref;
 
 				if (player.world.isRemote)
 				{

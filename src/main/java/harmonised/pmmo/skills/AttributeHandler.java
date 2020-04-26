@@ -69,18 +69,23 @@ public class AttributeHandler
 		double speedBoostMaxPref = prefsTag.getDouble( "speedBoostMax" );
 		double speedBoost = agilityLevel * speedBoostPerLevel;
 		double baseValue = speedAttribute.getBaseValue();
-		if( speedBoost >= ( (speedBoostMax / 100) * baseValue ) )
-			speedBoost = ( (speedBoostMax / 100) * baseValue );
-		if( speedBoost >= ( (speedBoostMaxPref / 100) * baseValue ) && prefsTag.contains( "speedBoostMax" ) )
-			speedBoost = ( (speedBoostMaxPref / 100) * baseValue );
+		double maxSpeed = baseValue * (speedBoostMax / 100);
+		if( maxSpeed > baseValue * (speedBoostMaxPref / 100) && prefsTag.contains( "speedBoostMax" ) )
+			maxSpeed = baseValue * (speedBoostMaxPref / 100);
 
-		if( speedAttribute.getModifier( speedModifierID ) == null || speedAttribute.getModifier( speedModifierID ).getAmount() != speedBoost )
+		if( speedBoost > maxSpeed )
+			speedBoost = maxSpeed;
+
+		if( speedBoost > 0 )
 		{
-			AttributeModifier speedModifier = new AttributeModifier( speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, AttributeModifier.Operation.ADDITION );
-			speedAttribute.removeModifier( speedModifierID );
-			speedAttribute.applyModifier( speedModifier );
+			if( speedAttribute.getModifier( speedModifierID ) == null || speedAttribute.getModifier( speedModifierID ).getAmount() != speedBoost )
+			{
+				AttributeModifier speedModifier = new AttributeModifier( speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, AttributeModifier.Operation.ADDITION );
+				speedAttribute.removeModifier( speedModifierID );
+				speedAttribute.applyModifier( speedModifier );
 
-//			System.out.println( speedModifier.getAmount() );
+//				System.out.println( speedModifier.getAmount() );
+			}
 		}
 	}
 	
