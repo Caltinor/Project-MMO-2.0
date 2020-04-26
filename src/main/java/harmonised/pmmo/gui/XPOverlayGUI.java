@@ -372,10 +372,13 @@ public class XPOverlayGUI extends AbstractGui
 			skill.goalXp = xp;
 			XPOverlayGUI.cooldown = cooldown;
 
-			for( XpDrop theDrop : xpDrops )
+			for( int i = 0; i < xpDrops.size(); i++ )
 			{
-				if( theDrop.name.equals( tempName ) )
-					xpDrops.remove( theDrop );
+				if( xpDrops.get( i ).name.equals( tempName ) )
+				{
+					xpDrops.remove( i );
+					i = 0;
+				}
 			}
 
 			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + tempName + " has been set to: " + xp );

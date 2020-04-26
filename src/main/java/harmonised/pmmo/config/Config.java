@@ -88,6 +88,7 @@ public class Config
 
         //Building
         public ConfigHelper.ConfigValueListener<Integer> levelsPerBlockReach;
+        public ConfigHelper.ConfigValueListener<Double> maxReach;
 
         //Excavation
 
@@ -99,7 +100,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
         public ConfigHelper.ConfigValueListener<Double> saveChancePerLevel;
         public ConfigHelper.ConfigValueListener<Double> maxJumpBoost;
-        public ConfigHelper.ConfigValueListener<Double> maxSpeedBoost;
+        public ConfigHelper.ConfigValueListener<Double> speedBoostMax;
         public ConfigHelper.ConfigValueListener<Double> speedBoostPerLevel;
         public ConfigHelper.ConfigValueListener<Integer> levelsCrouchJumpBoost;
         public ConfigHelper.ConfigValueListener<Integer> levelsSprintJumpBoost;
@@ -112,6 +113,7 @@ public class Config
 
         //Combat
         public ConfigHelper.ConfigValueListener<Integer> levelsPerDamage;
+        public ConfigHelper.ConfigValueListener<Integer> maxDamage;
 
         //Archery
 
@@ -478,6 +480,12 @@ public class Config
                         .translation( "pmmo.levelsPerBlockReach" )
                         .defineInRange( "levelsPerBlockReach", 25, 0, 1000) );
 
+                this.maxReach = subscriber.subscribe(builder
+                        .comment( "What is the maximum reach a player can have" )
+                        .translation( "pmmo.maxReach" )
+                        .defineInRange( "maxReach", 20D, 0, 1000) );
+
+
                 builder.pop();
             }
 
@@ -521,10 +529,10 @@ public class Config
                         .translation( "pmmo.levelsSprintJumpBoost" )
                         .defineInRange( "levelsSprintJumpBoost", 50, 0, 1000) );
 
-                this.maxSpeedBoost = subscriber.subscribe(builder
-                        .comment( "How much speed boost you can get from Agility (Incredibly sensitive, default 0.1)" )
-                        .translation( "pmmo.maxSpeedBoost" )
-                        .defineInRange( "maxSpeedBoost", 0.1D, 0, 10) );
+                this.speedBoostMax = subscriber.subscribe(builder
+                        .comment( "How much speed boost you can get from Agility (100 = max speed is twice of vanilla)" )
+                        .translation( "pmmo.speedBoostMax" )
+                        .defineInRange( "speedBoostMax", 100D, 0, 1000) );
 
                 this.speedBoostPerLevel = subscriber.subscribe(builder
                         .comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )
@@ -552,9 +560,9 @@ public class Config
                         .defineInRange( "levelsPerHeart", 10, 0, 1000) );
 
                 this.maxHeartCap = subscriber.subscribe(builder
-                        .comment( "How many Max Hearts you can have (20 means 10 vanilla + 10 boosted)" )
+                        .comment( "How many Max Hearts you can have (20 means 10 vanilla + 20 boosted)" )
                         .translation( "pmmo.maxHeartCap" )
-                        .defineInRange( "maxHeartCap", 50, 0, 1000) );
+                        .defineInRange( "maxHeartCap", 20, 0, 1000) );
 
                 builder.pop();
             }
@@ -565,6 +573,11 @@ public class Config
                         .comment( "Per how many levels you gain 1 Extra Damage" )
                         .translation( "pmmo.levelsPerDamage" )
                         .defineInRange( "levelsPerDamage", 20, 0, 1000) );
+
+                this.maxDamage = subscriber.subscribe(builder
+                        .comment( "How much extra damage can you get from the Combat skill max?" )
+                        .translation( "pmmo.maxDamage" )
+                        .defineInRange( "maxDamage", 10, 0, 1000) );
 
                 builder.pop();
             }

@@ -1,19 +1,15 @@
 package harmonised.pmmo.skills;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
-import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.util.DP;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -25,16 +21,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.PMMOPoseSetter;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -44,7 +37,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -62,8 +54,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.jmx.Server;
-
-import javax.annotation.Resource;
 
 public class XP
 {
@@ -1041,9 +1031,7 @@ public class XP
 	{
 		PlayerEntity player = event.getPlayer();
 
-		AttributeHandler.updateReach( player );
-		AttributeHandler.updateHP( player );
-		AttributeHandler.updateDamage( player );
+		AttributeHandler.updateAll( player );
 	}
 
 	public static void handleClone( PlayerEvent.Clone event )
@@ -1054,12 +1042,12 @@ public class XP
 	public static void syncPlayer( PlayerEntity player )
     {
         CompoundNBT skillsTag = getSkillsTag( player );
+        CompoundNBT prefsTag = getPreferencesTag( player );
         Set<String> keySet = new HashSet<>( skillsTag.keySet() );
 
         NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
-        AttributeHandler.updateDamage( player );
-        AttributeHandler.updateHP( player );
-        AttributeHandler.updateReach( player );
+        NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
+        AttributeHandler.updateAll( player );
 
         for( String tag : keySet )
         {
@@ -1089,19 +1077,19 @@ public class XP
 		PlayerEntity player = event.getPlayer();
 		if( !player.world.isRemote() )
 		{
-		    NetworkHandler.sendToPlayer( new MessageReqUpdate( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.wearReq, "wearReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.toolReq, "toolReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.weaponReq, "weaponReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.mobReq, "mobReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.useReq, "useReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageReqUpdate( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
+		    NetworkHandler.sendToPlayer( new MessageUpdateReq( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.wearReq, "wearReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.toolReq, "toolReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.weaponReq, "weaponReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.mobReq, "mobReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.useReq, "useReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
 
 			syncPlayer( player );
 
@@ -1518,7 +1506,7 @@ public class XP
 				    		double maxFallSaveChance = Config.config.maxFallSaveChance.get();			//Agility
 				    		double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
 				    		double speedBoostPerLevel = Config.config.speedBoostPerLevel.get();
-				    		double maxSpeedBoost = Config.config.maxSpeedBoost.get();
+				    		double speedBoostMax = Config.config.speedBoostMax.get();
 
 				    		int levelsPerDamage = Config.config.levelsPerDamage.get();					//Combat
 
@@ -1538,8 +1526,8 @@ public class XP
 				    		if( agilityChance > maxFallSaveChance )
 				    			agilityChance = maxFallSaveChance;
 
-				    		if( speedBonus > maxSpeedBoost )
-				    			speedBonus = maxSpeedBoost;
+				    		if( speedBonus > speedBoostMax )
+				    			speedBonus = speedBoostMax;
 
 				    		sendMessage( "_________________________________" , false, player );
 				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.buildingInfo", DP.dp( reach ) ), false );

@@ -1,7 +1,6 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.Requirements;
-import harmonised.pmmo.skills.XP;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -10,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class MessageReqUpdate
+public class MessageUpdateReq
 {
     private CompoundNBT reqPackage = new CompoundNBT();
     private String outputName;
 
-    public MessageReqUpdate( Map<String, Map<String, Object>> theMap, String outputName )
+    public MessageUpdateReq(Map<String, Map<String, Object>> theMap, String outputName )
     {
         this.outputName = outputName;
         for( String keyTop : theMap.keySet() )
@@ -32,26 +31,26 @@ public class MessageReqUpdate
         }
     }
 
-    MessageReqUpdate()
+    MessageUpdateReq()
     {
     }
 
-    public static MessageReqUpdate decode( PacketBuffer buf )
+    public static MessageUpdateReq decode(PacketBuffer buf )
     {
-        MessageReqUpdate packet = new MessageReqUpdate();
+        MessageUpdateReq packet = new MessageUpdateReq();
         packet.reqPackage = buf.readCompoundTag();
         packet.outputName = buf.readString();
 
         return packet;
     }
 
-    public static void encode( MessageReqUpdate packet, PacketBuffer buf )
+    public static void encode(MessageUpdateReq packet, PacketBuffer buf )
     {
         buf.writeCompoundTag( packet.reqPackage );
         buf.writeString( packet.outputName );
     }
 
-    public static void handlePacket( MessageReqUpdate packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageUpdateReq packet, Supplier<NetworkEvent.Context> ctx )
     {
         ctx.get().enqueueWork(() ->
         {
