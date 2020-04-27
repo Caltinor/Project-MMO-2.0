@@ -18,7 +18,7 @@ public class AttributeHandler
 	private static int levelsPerBlockReach = Config.config.levelsPerBlockReach.get();
 	private static int levelsPerHeart = Config.config.levelsPerHeart.get();
 	private static int levelsPerDamage = Config.config.levelsPerDamage.get();
-	private static double speedBoostMax = Config.config.speedBoostMax.get();
+	private static double maxSpeedBoost = Config.config.maxSpeedBoost.get();
 	private static double speedBoostPerLevel = Config.config.speedBoostPerLevel.get();
 	private static int maxHeartCap = Config.config.maxHeartCap.get();
 	private static double maxReach = Config.config.maxReach.get();
@@ -66,12 +66,12 @@ public class AttributeHandler
 		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double agilityLevel = XP.getLevel( "agility", player );
-		double speedBoostMaxPref = prefsTag.getDouble( "speedBoostMax" );
+		double maxSpeedBoostPref = prefsTag.getDouble( "maxSpeedBoost" );
 		double speedBoost = agilityLevel * speedBoostPerLevel;
 		double baseValue = speedAttribute.getBaseValue();
-		double maxSpeed = baseValue * (speedBoostMax / 100);
-		if( maxSpeed > baseValue * (speedBoostMaxPref / 100) && prefsTag.contains( "speedBoostMax" ) )
-			maxSpeed = baseValue * (speedBoostMaxPref / 100);
+		double maxSpeed = baseValue * (maxSpeedBoost / 100);
+		if( maxSpeed > baseValue * (maxSpeedBoostPref / 100) && prefsTag.contains( "maxSpeedBoost" ) )
+			maxSpeed = baseValue * (maxSpeedBoostPref / 100);
 
 		if( speedBoost > maxSpeed )
 			speedBoost = maxSpeed;

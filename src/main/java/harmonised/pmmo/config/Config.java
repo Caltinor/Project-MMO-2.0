@@ -100,7 +100,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
         public ConfigHelper.ConfigValueListener<Double> saveChancePerLevel;
         public ConfigHelper.ConfigValueListener<Double> maxJumpBoost;
-        public ConfigHelper.ConfigValueListener<Double> speedBoostMax;
+        public ConfigHelper.ConfigValueListener<Double> maxSpeedBoost;
         public ConfigHelper.ConfigValueListener<Double> speedBoostPerLevel;
         public ConfigHelper.ConfigValueListener<Integer> levelsCrouchJumpBoost;
         public ConfigHelper.ConfigValueListener<Integer> levelsSprintJumpBoost;
@@ -529,10 +529,10 @@ public class Config
                         .translation( "pmmo.levelsSprintJumpBoost" )
                         .defineInRange( "levelsSprintJumpBoost", 50, 0, 1000) );
 
-                this.speedBoostMax = subscriber.subscribe(builder
+                this.maxSpeedBoost = subscriber.subscribe(builder
                         .comment( "How much speed boost you can get from Agility (100 = 100% vanilla + 100% = twice as fast max)" )
-                        .translation( "pmmo.speedBoostMax" )
-                        .defineInRange( "speedBoostMax", 100D, 0, 1000) );
+                        .translation( "pmmo.maxSpeedBoost" )
+                        .defineInRange( "maxSpeedBoost", 100D, 0, 1000) );
 
                 this.speedBoostPerLevel = subscriber.subscribe(builder
                         .comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )

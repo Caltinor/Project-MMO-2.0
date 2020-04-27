@@ -885,7 +885,7 @@ public class XP
 					if( saved != 0 && player.getHealth() > damage )
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedFall", saved ), true );
 
-					award = saved * 30;
+					award = saved * 25;
 
 					agilityXp = award;
 				}
@@ -1290,15 +1290,15 @@ public class XP
 //								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotUseProximity", new TranslationTextComponent( matchedBlock.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 						}
 					}
-
-					if( !checkReq( player, item.getRegistryName(), "use" ) )
-					{
-						event.setCanceled( true );
-
-						if( isRemote )
-							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
-					}
 				}
+			}
+
+			if( !checkReq( player, item.getRegistryName(), "use" ) && !(item instanceof BlockItem) )
+			{
+				event.setCanceled( true );
+
+				if( isRemote )
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 			}
 
 			if( event instanceof RightClickBlock )
@@ -1517,7 +1517,7 @@ public class XP
 				    		double maxFallSaveChance = Config.config.maxFallSaveChance.get();			//Agility
 				    		double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
 				    		double speedBoostPerLevel = Config.config.speedBoostPerLevel.get();
-				    		double speedBoostMax = Config.config.speedBoostMax.get();
+				    		double maxSpeedBoost = Config.config.maxSpeedBoost.get();
 
 				    		int levelsPerDamage = Config.config.levelsPerDamage.get();					//Combat
 
@@ -1537,8 +1537,8 @@ public class XP
 				    		if( agilityChance > maxFallSaveChance )
 				    			agilityChance = maxFallSaveChance;
 
-				    		if( speedBonus > speedBoostMax )
-				    			speedBonus = speedBoostMax;
+				    		if( speedBonus > maxSpeedBoost )
+				    			speedBonus = maxSpeedBoost;
 
 				    		sendMessage( "_________________________________" , false, player );
 				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.buildingInfo", DP.dp( reach ) ), false );
