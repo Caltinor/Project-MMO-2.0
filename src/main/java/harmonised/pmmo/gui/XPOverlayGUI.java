@@ -21,6 +21,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -57,25 +58,7 @@ public class XPOverlayGUI extends AbstractGui
 			{
 				if( !init )
 				{
-					barOffsetX = Config.config.barOffsetX.get();
-					barOffsetY = Config.config.barOffsetY.get();
-					xpDropOffsetX = Config.config.xpDropOffsetX.get();
-					xpDropOffsetY = Config.config.xpDropOffsetY.get();
-					xpDropsAttachedToBar = Config.config.xpDropsAttachedToBar.get();
-					showXpDrops = Config.config.showXpDrops.get();
-					stackXpDrops = Config.config.stackXpDrops.get();
-					xpDropSpawnDistance = Config.config.xpDropSpawnDistance.get();
-					xpDropOpacityPerTime = Config.config.xpDropOpacityPerTime.get();
-					xpDropMaxOpacity = Config.config.xpDropMaxOpacity.get();
-					xpDropDecayAge = Config.config.xpDropDecayAge.get();
-					xpBarAlwaysOn = Config.config.xpBarAlwaysOn.get();
-					xpLeftDisplayAlwaysOn = Config.config.xpLeftDisplayAlwaysOn.get();
-
-					if( !xpDropsAttachedToBar )
-						xpDropYLimit = 999999999;
-					else
-						xpDropYLimit = 0;
-
+					doInit();
 					init = true;
 				}
 				RenderSystem.pushMatrix();
@@ -301,6 +284,135 @@ public class XPOverlayGUI extends AbstractGui
 		}
 	}
 
+	public static void doInit()
+	{
+		player = Minecraft.getInstance().player;
+
+		if( player != null )
+		{
+			CompoundNBT prefsTag = XP.getPreferencesTag( player );
+
+			if( prefsTag.contains( "barOffsetX" ) )
+				barOffsetX = prefsTag.getDouble( "barOffsetX" );
+			else
+				barOffsetX = Config.config.barOffsetX.get();
+
+			if( prefsTag.contains( "barOffsetY" ) )
+				barOffsetY = prefsTag.getDouble( "barOffsetY" );
+			else
+				barOffsetY = Config.config.barOffsetY.get();
+
+			if( prefsTag.contains( "xpDropOffsetX" ) )
+				xpDropOffsetX = prefsTag.getDouble( "xpDropOffsetX" );
+			else
+				xpDropOffsetX = Config.config.xpDropOffsetX.get();
+
+			if( prefsTag.contains( "xpDropOffsetY" ) )
+				xpDropOffsetY = prefsTag.getDouble( "xpDropOffsetY" );
+			else
+				xpDropOffsetY = Config.config.xpDropOffsetY.get();
+
+			if( prefsTag.contains( "xpDropSpawnDistance" ) )
+				xpDropSpawnDistance = prefsTag.getDouble( "xpDropSpawnDistance" );
+			else
+				xpDropSpawnDistance = Config.config.xpDropSpawnDistance.get();
+
+			if( prefsTag.contains( "xpDropOpacityPerTime" ) )
+				xpDropOpacityPerTime = prefsTag.getDouble( "xpDropOpacityPerTime" );
+			else
+				xpDropOpacityPerTime = Config.config.xpDropOpacityPerTime.get();
+
+			if( prefsTag.contains( "xpDropMaxOpacity" ) )
+				xpDropMaxOpacity = prefsTag.getDouble( "xpDropMaxOpacity" );
+			else
+				xpDropMaxOpacity = Config.config.xpDropMaxOpacity.get();
+
+			if( prefsTag.contains( "xpDropDecayAge" ) )
+				xpDropDecayAge = (int) Math.floor( prefsTag.getDouble( "xpDropDecayAge" ) );
+			else
+				xpDropDecayAge = (int) Math.floor( Config.config.xpDropDecayAge.get() );
+
+			if( prefsTag.contains( "xpDropsAttachedToBar" ) )
+			{
+				if( prefsTag.getDouble( "xpDropsAttachedToBar" ) == 0 )
+					xpDropsAttachedToBar = false;
+				else
+					xpDropsAttachedToBar = true;
+			}
+			else
+				xpDropsAttachedToBar = Config.config.xpDropsAttachedToBar.get();
+
+			if( prefsTag.contains( "xpBarAlwaysOn" ) )
+			{
+				if( prefsTag.getDouble( "xpBarAlwaysOn" ) == 0 )
+					xpBarAlwaysOn = false;
+				else
+					xpBarAlwaysOn = true;
+			}
+			else
+				xpBarAlwaysOn = Config.config.xpBarAlwaysOn.get();
+
+			if( prefsTag.contains( "xpLeftDisplayAlwaysOn" ) )
+			{
+				if( prefsTag.getDouble( "xpLeftDisplayAlwaysOn" ) == 0 )
+					xpLeftDisplayAlwaysOn = false;
+				else
+					xpLeftDisplayAlwaysOn = true;
+			}
+			else
+				xpLeftDisplayAlwaysOn = Config.config.xpLeftDisplayAlwaysOn.get();
+
+			if( prefsTag.contains( "showXpDrops" ) )
+			{
+				if( prefsTag.getDouble( "showXpDrops" ) == 0 )
+					showXpDrops = false;
+				else
+					showXpDrops = true;
+			}
+			else
+				showXpDrops = Config.config.showXpDrops.get();
+
+			if( prefsTag.contains( "stackXpDrops" ) )
+			{
+				if( prefsTag.getDouble( "stackXpDrops" ) == 0 )
+					stackXpDrops = false;
+				else
+					stackXpDrops = true;
+			}
+			else
+				stackXpDrops = Config.config.stackXpDrops.get();
+
+			if( !xpDropsAttachedToBar )
+				xpDropYLimit = 999999999;
+			else
+				xpDropYLimit = 0;
+
+			if( barOffsetX < 0 || barOffsetX > 1 )
+				barOffsetX = Config.config.barOffsetX.get();
+
+			if( barOffsetY < 0 || barOffsetY > 1 )
+				barOffsetY = Config.config.barOffsetY.get();
+
+			if( xpDropOffsetX < 0 || xpDropOffsetX > 1 )
+				xpDropOffsetX = Config.config.xpDropOffsetX.get();
+
+			if( xpDropOffsetY < 0 || xpDropOffsetY > 1 )
+				xpDropOffsetY = Config.config.xpDropOffsetY.get();
+
+			if( xpDropSpawnDistance < 0 || xpDropSpawnDistance > 1000 )
+				xpDropSpawnDistance = Config.config.xpDropSpawnDistance.get();
+
+			if( xpDropOpacityPerTime < 0 || xpDropOpacityPerTime > 255 )
+				xpDropOpacityPerTime = Config.config.xpDropOpacityPerTime.get();
+
+			if( xpDropMaxOpacity < 0 || xpDropMaxOpacity > 255 )
+				xpDropMaxOpacity = Config.config.xpDropMaxOpacity.get();
+
+			if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
+				xpDropDecayAge = (int) Math.floor( Config.config.xpDropDecayAge.get() );
+		}
+	}
+
 //	@SubscribeEvent
 //	public void renderWorldDrops( RenderWorldLastEvent event )
 //	{
@@ -332,8 +444,8 @@ public class XPOverlayGUI extends AbstractGui
 	
 	public static void sendLvlUp( int level, String name )
 	{
-		player = minecraft.player;
-		
+		player = Minecraft.getInstance().player;
+
 //		switch( name )
 //		{
 //			case "swimming":

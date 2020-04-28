@@ -44,6 +44,8 @@ public class ClientHandler
                     prefsTag.putDouble( tag, newPackage.getDouble( tag ) );
                 }
                 AttributeHandler.updateAll( player );
+
+                XPOverlayGUI.doInit();
                 break;
 
             default:

@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import harmonised.pmmo.config.ConfigHelper;
 import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageUpdateNBT;
@@ -43,10 +44,15 @@ import java.util.Set;
 public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static String[] suggestSkill = new String[15];
+    private static String[] suggestClear = new String[1];
+    private static String[] levelOrXp = new String[2];
+    private static String[] suggestPref = new String[6];
+    private static String[] suggestGui = new String[13];
 
     public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
-        String[] suggestSkill = new String[15];
+
         suggestSkill[0] = "Mining";
         suggestSkill[1] = "Building";
         suggestSkill[2] = "Excavation";
@@ -63,20 +69,31 @@ public class PmmoCommand
         suggestSkill[13] = "Crafting";
         suggestSkill[14] = "Magic";
 
-        String[] suggestClear = new String[1];
         suggestClear[0] = "iagreetothetermsandconditions";
 
-        String[] levelOrXp = new String[2];
         levelOrXp[0] = "level";
         levelOrXp[1] = "xp";
 
-        String[] suggestPref = new String[6];
         suggestPref[0] = "maxReachBoost";
         suggestPref[1] = "maxSpeedBoost";
         suggestPref[2] = "maxSprintJumpBoost";
         suggestPref[3] = "maxCrouchJumpBoost";
         suggestPref[4] = "maxExtraHeartBoost";
         suggestPref[5] = "maxExtraDamageBoost";
+
+        suggestGui[0] = "barOffsetX";
+        suggestGui[1] = "barOffsetY";
+        suggestGui[2] = "xpDropOffsetX";
+        suggestGui[3] = "xpDropOffsetY";
+        suggestGui[4] = "xpDropSpawnDistance";
+        suggestGui[5] = "xpDropOpacityPerTime";
+        suggestGui[6] = "xpDropMaxOpacity";
+        suggestGui[7] = "xpDropDecayAge";
+        suggestGui[8] = "showXpDrops";
+        suggestGui[9] = "stackXpDrops";
+        suggestGui[10] = "xpDropsAttachedToBar";
+        suggestGui[11] = "xpBarAlwaysOn";
+        suggestGui[12] = "xpLeftDisplayAlwaysOn";
 
         dispatcher.register( Commands.literal( "pmmo" )
                   .then( Commands.literal( "admin" )
@@ -127,6 +144,13 @@ public class PmmoCommand
                   .then( Commands.literal( "prefs" )
                   .then( Commands.argument( "option", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestPref, theBuilder ) )
+                  .executes( PmmoCommand::commandPref )
+                  .then( Commands.argument( "new value", DoubleArgumentType.doubleArg() )
+                  .executes( PmmoCommand::commandPref )
+                  )))
+                  .then( Commands.literal( "gui" )
+                  .then( Commands.argument( "option", StringArgumentType.word() )
+                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestGui, theBuilder ) )
                   .executes( PmmoCommand::commandPref )
                   .then( Commands.argument( "new value", DoubleArgumentType.doubleArg() )
                   .executes( PmmoCommand::commandPref )
@@ -442,41 +466,38 @@ public class PmmoCommand
         if( value < 0 )
             value = 0;
 
-        switch( args[2].toLowerCase() )
+        boolean matched = false;
+        String match = "ERROR";
+
+        for( String element : suggestPref )
         {
-            case "maxreachboost":
-                prefsTag.putDouble( "maxReachBoost", value );
-                break;
-
-            case "maxspeedboost":
-                prefsTag.putDouble( "maxSpeedBoost", value );
-                break;
-
-            case "maxsprintjumpboost":
-                prefsTag.putDouble( "maxSprintJumpBoost", value );
-                break;
-
-            case "maxcrouchjumpboost":
-                prefsTag.putDouble( "maxCrouchJumpBoost", value );
-                break;
-
-            case "maxextraheartboost":
-                prefsTag.putDouble( "maxExtraHeartBoost", value );
-                break;
-
-            case "maxextradamageboost":
-                prefsTag.putDouble( "maxExtraDamageBoost", value );
-                break;
-
-            default:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", args[2] ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
-                return 1;
+            if( args[2].toLowerCase().equals( element.toLowerCase() ) )
+            {
+                match = element;
+                matched = true;
+            }
         }
 
-        NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
-        AttributeHandler.updateAll( player );
+        for( String element : suggestGui )
+        {
+            if( args[2].toLowerCase().equals( element.toLowerCase() ) )
+            {
+                match = element;
+                matched = true;
+            }
+        }
 
-        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasBeenSet", args[2], args[3] ), false );
+        if( matched )
+        {
+            prefsTag.putDouble( match, value );
+
+            NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
+            AttributeHandler.updateAll( player );
+
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasBeenSet", match, args[3] ), false );
+        }
+        else
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", args[2] ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 
         return 1;
     }
