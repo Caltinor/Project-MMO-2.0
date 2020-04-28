@@ -197,6 +197,22 @@ public class XP
 		return theMap;
 	}
 
+    private static Map<String, Double> getXpCrafting( ResourceLocation registryName )
+    {
+        Map<String, Double> theMap = new HashMap<>();
+
+        if( Requirements.xpValueCrafting.containsKey( registryName.toString() ) )
+        {
+            for( Map.Entry<String, Object> entry : Requirements.xpValueCrafting.get( registryName.toString() ).entrySet() )
+            {
+                if( entry.getValue() instanceof Double )
+                    theMap.put( entry.getKey(), (double) entry.getValue() );
+            }
+        }
+
+        return theMap;
+    }
+
 	private static boolean getNoDropOre( ResourceLocation registryName )
 	{
 		if( noDropOres.get( registryName ) != null )
@@ -1064,8 +1080,9 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.useReq, "useReq" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
+        NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
+        NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValueCrafting, "xpValueCrafting" ), (ServerPlayerEntity) player );
+        NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
@@ -1743,10 +1760,22 @@ public class XP
 
 	public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
 	{
-		if( !event.getPlayer().world.isRemote )
-		{
-			awardXp( event.getPlayer(), Skill.CRAFTING, "crafting " + event.getCrafting().getDisplayName(), 1.0f, false );
-		}
+	    PlayerEntity player = event.getPlayer();
+	    if( !player.world.isRemote() )
+        {
+	        Map<String, Double> award = new HashMap<>();
+	        award.put( "crafting", 1D );
+	        Item item = event.getCrafting().getItem();
+	        ResourceLocation resLoc = item.getRegistryName();
+
+	        if( Requirements.xpValueCrafting.containsKey( resLoc.toString() ) )
+	            addMaps( award, getXpCrafting( resLoc ) );
+
+            for( String skillName : award.keySet() )
+            {
+                awardXp( player, Skill.getSkill( skillName ), "crafting", award.get( skillName ), false );
+            }
+        }
 	}
 
 	public static void handleBreakSpeed( PlayerEvent.BreakSpeed event )
@@ -2224,13 +2253,16 @@ public class XP
 
 				if( !player.world.isRemote() )
 				{
-					Curios.getCurios(player).forEach(value ->
+					if( Curios.isLoaded() )
 					{
-						for (int i = 0; i < value.getSlots(); i++)
+						Curios.getCurios(player).forEach(value ->
 						{
-							checkWornLevelReq( player, value.getStackInSlot(i).getItem() );
-						}
-					});
+							for (int i = 0; i < value.getSlots(); i++)
+							{
+								checkWornLevelReq( player, value.getStackInSlot(i).getItem() );
+							}
+						});
+					}
 
 					if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
 						checkWornLevelReq( player, player.inventory.getStackInSlot( 39 ).getItem() );

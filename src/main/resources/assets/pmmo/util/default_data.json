@@ -858,6 +858,167 @@
 			"mining": 5
 		}
 	},
+	"crafting_xp": {
+		"minecraft:netherite_helmet": {
+			"crafting": 1000
+		},
+		"minecraft:netherite_chestplate": {
+			"crafting": 1600
+		},
+		"minecraft:netherite_leggings": {
+			"crafting": 1400
+		},
+		"minecraft:netherite_boots": {
+			"crafting": 800
+		},
+		"minecraft:netherite_pickaxe": {
+			"crafting": 600
+		},
+		"minecraft:netherite_shovel": {
+			"crafting": 200
+		},
+		"minecraft:netherite_hoe": {
+			"crafting": 400
+		},
+		"minecraft:netherite_axe": {
+			"crafting": 600
+		},
+		"minecraft:netherite_sword": {
+			"crafting": 400
+		},
+		"minecraft:diamond_helmet": {
+			"crafting": 300
+		},
+		"minecraft:diamond_chestplate": {
+			"crafting": 480
+		},
+		"minecraft:diamond_leggings": {
+			"crafting": 420
+		},
+		"minecraft:diamond_boots": {
+			"crafting": 240
+		},
+		"minecraft:diamond_pickaxe": {
+			"crafting": 180
+		},
+		"minecraft:diamond_shovel": {
+			"crafting": 60
+		},
+		"minecraft:diamond_hoe": {
+			"crafting": 120
+		},
+		"minecraft:diamond_axe": {
+			"crafting": 180
+		},
+		"minecraft:diamond_sword": {
+			"crafting": 120
+		},
+		"minecraft:iron_helmet": {
+			"crafting": 50
+		},
+		"minecraft:iron_chestplate": {
+			"crafting": 80
+		},
+		"minecraft:iron_leggings": {
+			"crafting": 70
+		},
+		"minecraft:iron_boots": {
+			"crafting": 40
+		},
+		"minecraft:iron_pickaxe": {
+			"crafting": 30
+		},
+		"minecraft:iron_shovel": {
+			"crafting": 10
+		},
+		"minecraft:iron_hoe": {
+			"crafting": 20
+		},
+		"minecraft:iron_axe": {
+			"crafting": 30
+		},
+		"minecraft:iron_sword": {
+			"crafting": 20
+		},
+		"minecraft:golden_helmet": {
+			"crafting": 150
+		},
+		"minecraft:golden_chestplate": {
+			"crafting": 240
+		},
+		"minecraft:golden_leggings": {
+			"crafting": 210
+		},
+		"minecraft:golden_boots": {
+			"crafting": 120
+		},
+		"minecraft:golden_pickaxe": {
+			"crafting": 90
+		},
+		"minecraft:golden_shovel": {
+			"crafting": 30
+		},
+		"minecraft:golden_hoe": {
+			"crafting": 60
+		},
+		"minecraft:golden_axe": {
+			"crafting": 90
+		},
+		"minecraft:golden_sword": {
+			"crafting": 60
+		},
+		"minecraft:leather_helmet": {
+			"crafting": 75
+		},
+		"minecraft:leather_chestplate": {
+			"crafting": 120
+		},
+		"minecraft:leather_leggings": {
+			"crafting": 105
+		},
+		"minecraft:leather_boots": {
+			"crafting": 60
+		},
+		"minecraft:turtle_helmet": {
+			"crafting": 100
+		},
+		"minecraft:crossbow": {
+			"crafting": 20
+		},
+		"minecraft:stone_pickaxe": {
+			"crafting": 15
+		},
+		"minecraft:stone_shovel": {
+			"crafting": 5
+		},
+		"minecraft:stone_hoe": {
+			"crafting": 10
+		},
+		"minecraft:stone_axe": {
+			"crafting": 15
+		},
+		"minecraft:stone_sword": {
+			"crafting": 10
+		},
+		"minecraft:wooden_pickaxe": {
+			"crafting": 9
+		},
+		"minecraft:wooden_shovel": {
+			"crafting": 3
+		},
+		"minecraft:wooden_hoe": {
+			"crafting": 6
+		},
+		"minecraft:wooden_axe": {
+			"crafting": 9
+		},
+		"minecraft:wooden_sword": {
+			"crafting": 6
+		},
+		"minecraft:beacon": {
+			"crafting": 1000
+		}
+	},
 	"ore": {
 		"minecraft:nether_quartz_ore": {
 			"extraChance": 0.55

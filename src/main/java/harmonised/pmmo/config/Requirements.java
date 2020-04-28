@@ -45,6 +45,9 @@ public class Requirements
     private static Map<String, Map<String, Object>> localXpValue;
     public static Map<String, Map<String, Object>> xpValue;
 
+    private static Map<String, Map<String, Object>> localXpValueCrafting;
+    public static Map<String, Map<String, Object>> xpValueCrafting;
+
     private static Map<String, Map<String, Object>> localOreInfo;
     public static Map<String, Map<String, Object>> oreInfo;
 
@@ -111,6 +114,9 @@ public class Requirements
 
         localXpValue = new HashMap<>();
         xpValue = new HashMap<>();
+
+        localXpValueCrafting = new HashMap<>();
+        xpValueCrafting = new HashMap<>();
 
         localOreInfo = new HashMap<>();
         oreInfo = new HashMap<>();
@@ -329,6 +335,9 @@ public class Requirements
         if( Config.config.xpValueEnabled.get() )
             updateReqSkills( req.xpValues, localXpValue );
 
+        if( Config.config.xpValueCraftingEnabled.get() )
+            updateReqSkills( req.xpValuesCrafting, localXpValueCrafting );
+
         if( Config.config.placeReqEnabled.get() )
             updateReqSkills( req.placing, localPlaceReq );
 
@@ -357,6 +366,7 @@ public class Requirements
         weaponReq = localWeaponReq;
         useReq = localUseReq;
         xpValue = localXpValue;
+        xpValueCrafting = localXpValueCrafting;
         placeReq = localPlaceReq;
         breakReq = localBreakReq;
         oreInfo = localOreInfo;
@@ -430,6 +440,7 @@ public class Requirements
     private final Map<String, RequirementItem> placing = Maps.newHashMap();
     private final Map<String, RequirementItem> breaking = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
+    private final Map<String, RequirementItem> xpValuesCrafting = Maps.newHashMap();
     private final Map<String, RequirementItem> ores = Maps.newHashMap();
     private final Map<String, RequirementItem> logs = Maps.newHashMap();
     private final Map<String, RequirementItem> plants = Maps.newHashMap();
@@ -495,6 +506,7 @@ public class Requirements
             deserializeGroup(obj, "place_requirement", req.placing::put, context);
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);
             deserializeGroup(obj, "xp_value", req.xpValues::put, context);
+            deserializeGroup(obj, "crafting_xp", req.xpValuesCrafting::put, context);
             deserializeGroup(obj, "ore", req.ores::put, context);
             deserializeGroup(obj, "log", req.logs::put, context);
             deserializeGroup(obj, "plant", req.plants::put, context);

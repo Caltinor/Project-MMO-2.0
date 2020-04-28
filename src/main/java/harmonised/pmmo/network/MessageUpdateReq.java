@@ -109,6 +109,10 @@ public class MessageUpdateReq
                     Requirements.xpValue = newPackage;
                     break;
 
+                case "xpvaluecrafting":
+                    Requirements.xpValueCrafting = newPackage;
+                    break;
+
                 case "oreinfo":
                     Requirements.oreInfo = newPackage;
                     break;

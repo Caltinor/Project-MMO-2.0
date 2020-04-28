@@ -28,6 +28,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> xpValueEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> xpValueCraftingEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> oreEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> logEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> plantEnabled;
@@ -205,9 +206,14 @@ public class Config
                         .define( "breakReqEnabled", true) );
 
                 this.xpValueEnabled = subscriber.subscribe(builder
-                        .comment( "Should xp values be enabled? False means only Hardness xp is awarded for breaking" )
+                        .comment( "Should xp values for breaking things first time be enabled? False means only Hardness xp is awarded for breaking" )
                         .translation( "pmmo.xpValueEnabled" )
                         .define( "xpValueEnabled", true) );
+
+                this.xpValueCraftingEnabled = subscriber.subscribe(builder
+                        .comment( "Should xp values for crafting be enabled? False means only static of 1xp is awarded upon crafting" )
+                        .translation( "pmmo.xpValueCraftingEnabled" )
+                        .define( "xpValueCraftingEnabled", true) );
 
                 this.oreEnabled = subscriber.subscribe(builder
                         .comment( "Should ores be enabled? False means no extra chance" )

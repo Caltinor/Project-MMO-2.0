@@ -11,6 +11,11 @@ public class Curios
 {
     private static final boolean isCuriosLoaded = ModList.get().isLoaded("curios");
 
+    public static boolean isLoaded()
+    {
+        return isCuriosLoaded;
+    }
+
     public static Stream<IItemHandler> getCurios(PlayerEntity player)
     {
         return isCuriosLoaded ? ActualCurios.getCurios(player) : Stream.empty();

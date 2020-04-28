@@ -135,6 +135,7 @@ public class ClientEventHandler
             Map<String, Object> placeReq = Requirements.placeReq.get( regKey );
             Map<String, Object> breakReq = Requirements.breakReq.get( regKey );
             Map<String, Object> xpValue = Requirements.xpValue.get( regKey );
+            Map<String, Object> xpValueCrafting = Requirements.xpValueCrafting.get( regKey );
             Map<String, Object> salvageInfo = Requirements.salvageInfo.get( regKey );
             Map<String, Object> salvagesFrom = Requirements.salvagesFrom.get( regKey );
 
@@ -147,6 +148,20 @@ public class ClientEventHandler
                     if( xpValue.get( key ) instanceof Double )
                     {
                         dValue = (double) xpValue.get( key );
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), DP.dp( dValue ) ) );
+                    }
+                }
+            }
+
+            if( xpValueCrafting != null && xpValueCrafting.size() > 0 )      //XP VALUE
+            {
+                tooltip.add( new TranslationTextComponent( "pmmo.text.xpValueCrafting" ) );
+
+                for( String key : xpValueCrafting.keySet() )
+                {
+                    if( xpValueCrafting.get( key ) instanceof Double )
+                    {
+                        dValue = (double) xpValueCrafting.get( key );
                         tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), DP.dp( dValue ) ) );
                     }
                 }
