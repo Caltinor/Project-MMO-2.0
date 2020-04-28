@@ -203,7 +203,7 @@ public class PmmoCommand
                         if( newValue > XP.maxLevel )
                             newValue = XP.maxLevel;
 
-                        double newLevelXp = XP.xpAtLevel( newValue );
+                        double newLevelXp = XP.xpAtLevelDecimal( newValue );
 
                         NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skillInt, 0, true ), player );
                         skillsTag.putDouble( skillName, newLevelXp );
@@ -275,7 +275,7 @@ public class PmmoCommand
 
                     if( args[5].toLowerCase().equals( "level" ) )
                     {
-                        newLevelXp = XP.xpAtLevel( XP.levelAtXp( playerXp ) + newValue );
+                        newLevelXp = XP.xpAtLevelDecimal( XP.levelAtXpDecimal( playerXp ) + newValue );
 
                         if( newLevelXp > XP.maxXp )
                             newLevelXp = XP.maxXp;

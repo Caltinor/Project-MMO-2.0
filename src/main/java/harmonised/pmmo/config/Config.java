@@ -63,6 +63,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> fishingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> craftingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> biomePenaltyMultiplier;
+        public ConfigHelper.ConfigValueListener<Double> deathXpPenaltyMultiplier;
 
         //GUI
         public ConfigHelper.ConfigValueListener<Double> barOffsetX;
@@ -378,6 +379,11 @@ public class Config
                         .comment( "How much xp you get in biomes you do not meet the requirements for (1 = Full xp, 0.5 = Half xp)" )
                         .translation( "pmmo.biomePenaltyMultiplier" )
                         .defineInRange( "biomePenaltyMultiplier", 1D, 0, 1) );
+
+                this.deathXpPenaltyMultiplier = subscriber.subscribe(builder
+                        .comment( "How much of the xp above whole level you loose (1 = 100% = from 5.5 to 5.0, 0.5 = 50% = from 5.5 to 5.25" )
+                        .translation( "pmmo.deathXpPenaltyMultiplier" )
+                        .defineInRange( "deathXpPenaltyMultiplier", 1D, 0, 1) );
 
                 builder.pop();
             }

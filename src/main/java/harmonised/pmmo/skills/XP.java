@@ -45,6 +45,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
@@ -79,6 +80,7 @@ public class XP
 	private static Set<UUID> ironDonators = new HashSet<>();
 	private static double globalMultiplier = Config.config.globalMultiplier.get();
 	private static double biomePenaltyMultiplier = Config.config.biomePenaltyMultiplier.get();
+	private static double deathXpPenaltyMultiplier = Config.config.deathXpPenaltyMultiplier.get();
 	public static int maxLevel = Config.config.maxLevel.get();
 	private static boolean crawlingAllowed = Config.config.crawlingAllowed.get();
     private static boolean showWelcome = Config.config.showWelcome.get();
@@ -545,7 +547,7 @@ public class XP
 					boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
 					ItemStack toolUsed = player.getHeldItemMainhand();
 					String skill = getSkill( correctHarvestTool( material ) ).name().toLowerCase();
-					String regKey = block.getRegistryName().toString();
+//					String regKey = block.getRegistryName().toString();
 					double hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
 					if( hardness > blockHardnessLimit )
 						hardness = blockHardnessLimit;
@@ -1066,9 +1068,28 @@ public class XP
 		}
 	}
 
-//	public static void handleLivingDeath( LivingDeathEvent event )
-//	{
-//	}
+	public static void handleLivingDeath( LivingDeathEvent event )
+	{
+		if( event.getEntity() instanceof PlayerEntity && !(event.getEntity() instanceof FakePlayer) )
+		{
+			PlayerEntity player = (PlayerEntity) event.getEntity();
+			if( !player.world.isRemote() )
+			{
+				CompoundNBT skillsTag = getSkillsTag( player );
+
+				for( String key : skillsTag.keySet() )
+				{
+					double startXp = skillsTag.getDouble( key );
+					double floorXp = xpAtLevelDecimal( Math.floor( levelAtXpDecimal( startXp ) ) );
+					double diffXp = startXp - floorXp;
+					double finalXp = floorXp + diffXp * (1 - deathXpPenaltyMultiplier);
+
+					skillsTag.putDouble( key, finalXp );
+					NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getDouble( key ), Skill.getInt( key ), 0, true ), (ServerPlayerEntity) player );
+				}
+			}
+		}
+	}
 
 	public static void handlePlayerRespawn( PlayerEvent.PlayerRespawnEvent event )
 	{
@@ -2485,8 +2506,8 @@ public class XP
 		if( levelAtXp( xp ) == maxLevel )
 			xp = xpAtLevel( maxLevel );
 		int startLevel = levelAtXp( xp );
-		int startXp = xpAtLevel( startLevel );
-		int goalXp = xpAtLevel( startLevel + 1 );
+		double startXp = xpAtLevel( startLevel );
+		double goalXp = xpAtLevel( startLevel + 1 );
 
 		if( startXp == goalXp )
 			return maxLevel;
@@ -2494,16 +2515,16 @@ public class XP
 			return startLevel + ( (xp - startXp) / (goalXp - startXp) );
 	}
 
-	public static int xpAtLevel( float givenLevel )
+	public static double xpAtLevel( float givenLevel )
 	{
 		return xpAtLevel( (double) givenLevel );
 	}
-	public static int xpAtLevel( double givenLevel )
+	public static double xpAtLevel( double givenLevel )
 	{
 		baseXp = Config.config.baseXp.get();
 		xpIncreasePerLevel = Config.config.xpIncreasePerLevel.get();
 
-		int theXp = 0;
+		double theXp = 0;
 		if( givenLevel > maxLevel )
 			givenLevel = maxLevel;
 

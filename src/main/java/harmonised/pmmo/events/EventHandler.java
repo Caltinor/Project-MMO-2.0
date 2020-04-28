@@ -5,6 +5,7 @@ import harmonised.pmmo.skills.XP;
 import net.minecraft.advancements.criterion.FishingRodHookedTrigger;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
@@ -36,7 +37,13 @@ public class EventHandler
 	{
 		XP.handleDamage( event );
 	}
-	
+
+	@SubscribeEvent
+	public static void livingDeath( LivingDeathEvent event )
+	{
+		XP.handleLivingDeath( event );
+	}
+
 	@SubscribeEvent
 	public static void playerTick( TickEvent.PlayerTickEvent event )
 	{
