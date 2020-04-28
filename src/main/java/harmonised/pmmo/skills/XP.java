@@ -1,10 +1,12 @@
 package harmonised.pmmo.skills;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
+import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.util.DP;
@@ -50,10 +52,12 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.jmx.Server;
+import top.theillusivec4.curios.api.CuriosAPI;
 
 public class XP
 {
@@ -2171,10 +2175,8 @@ public class XP
 		return gap;
 	}
 
-	public static void checkWornLevelReq( PlayerEntity player, int slot )
+	public static void checkWornLevelReq( PlayerEntity player, Item item )
 	{
-		Item item = player.inventory.getStackInSlot( slot ).getItem();
-
 		if( !checkReq( player, item.getRegistryName(), "wear" ) )
 		{
 			int gap = getSkillReqGap( player, item.getRegistryName(), "wear" );
@@ -2218,16 +2220,26 @@ public class XP
 				float speedAmp = 0;
 				PlayerInventory inv = player.inventory;
 
+
+
 				if( !player.world.isRemote() )
 				{
+					Curios.getCurios(player).forEach(value ->
+					{
+						for (int i = 0; i < value.getSlots(); i++)
+						{
+							checkWornLevelReq( player, value.getStackInSlot(i).getItem() );
+						}
+					});
+
 					if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-						checkWornLevelReq( player, 39 );
+						checkWornLevelReq( player, player.inventory.getStackInSlot( 39 ).getItem() );
 					if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-						checkWornLevelReq( player, 38 );
+						checkWornLevelReq( player, player.inventory.getStackInSlot( 38 ).getItem() );
 					if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-						checkWornLevelReq( player, 37 );
+						checkWornLevelReq( player, player.inventory.getStackInSlot( 37 ).getItem() );
 					if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-						checkWornLevelReq( player, 36 );
+						checkWornLevelReq( player, player.inventory.getStackInSlot( 36 ).getItem() );
 				}
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 

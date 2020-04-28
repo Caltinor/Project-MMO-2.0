@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '2.18'
+version = '2.19'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO-1.15'
 
@@ -65,21 +65,28 @@ repositories {
     jcenter()
 
     maven {
-        name = "jitpack"
-        url "https://jitpack.io"
+        url "http://dvs1.progwml6.com/files/maven/"
     }
 
-    maven { url = "https://maven.theillusivec4.top/" }
+    maven {
+        url = "https://maven.theillusivec4.top/"
+    }
 
+    mavenLocal()
 }
 
 dependencies
 {
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.30'
     implementation 'com.google.code.gson:gson:2.8.6'
-    compile fg.deobf( "curse.maven:jei:2866141" )
-//  compile fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0-beta2") //Needed for Mine and Slash
-//	compile fg.deobf("curse.maven:MaS:2903342") //to add another mod simiply change the MaS (Mine and Slash shorted) to whatever you want and the 2889426 is from the link of the mod like so https://www.curseforge.com/minecraft/mc-mods/mine-and-slash-reloaded/files/2903342
+
+    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3")
+
+    fg.deobf("curse.maven:curio-of-undying:2880784")
+
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2:api")
 }
 
 jar {
