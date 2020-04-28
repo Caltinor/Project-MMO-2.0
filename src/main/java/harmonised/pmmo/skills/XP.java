@@ -1050,11 +1050,30 @@ public class XP
 		event.getPlayer().getPersistentData().put( "pmmo", event.getOriginal().getPersistentData().getCompound( "pmmo" ) );
 	}
 
+	public static void syncPlayerConfig( PlayerEntity player )
+	{
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.wearReq, "wearReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.toolReq, "toolReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.weaponReq, "weaponReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.mobReq, "mobReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.useReq, "useReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
+	}
+
 	public static void syncPlayer( PlayerEntity player )
     {
         CompoundNBT skillsTag = getSkillsTag( player );
         CompoundNBT prefsTag = getPreferencesTag( player );
         Set<String> keySet = new HashSet<>( skillsTag.keySet() );
+
+		syncPlayerConfig( player );
 
         NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
         NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
@@ -1088,20 +1107,6 @@ public class XP
 		PlayerEntity player = event.getPlayer();
 		if( !player.world.isRemote() )
 		{
-		    NetworkHandler.sendToPlayer( new MessageUpdateReq( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.wearReq, "wearReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.toolReq, "toolReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.weaponReq, "weaponReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.mobReq, "mobReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.useReq, "useReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
-			NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
-
 			syncPlayer( player );
 
             if( lapisDonators.contains( player.getUniqueID() ) )

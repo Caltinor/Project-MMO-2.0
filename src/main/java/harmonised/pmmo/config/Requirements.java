@@ -21,44 +21,44 @@ import java.util.function.BiConsumer;
 
 public class Requirements
 {
-    private static Map<String, Map<String, Object>> localWearReq = new HashMap<>();
-    public static Map<String, Map<String, Object>> wearReq = new HashMap<>();
+    private static Map<String, Map<String, Object>> localWearReq;
+    public static Map<String, Map<String, Object>> wearReq;
 
-    private static Map<String, Map<String, Object>> localToolReq = new HashMap<>();
-    public static Map<String, Map<String, Object>> toolReq = new HashMap<>();
+    private static Map<String, Map<String, Object>> localToolReq;
+    public static Map<String, Map<String, Object>> toolReq;
 
-    private static Map<String, Map<String, Object>> localWeaponReq = new HashMap<>();
-    public static Map<String, Map<String, Object>> weaponReq = new HashMap<>();
+    private static Map<String, Map<String, Object>> localWeaponReq;
+    public static Map<String, Map<String, Object>> weaponReq;
 
-    private static Map<String, Map<String, Object>> localMobReq = new HashMap<>();
-    public static Map<String, Map<String, Object>> mobReq = new HashMap<>();
+    private static Map<String, Map<String, Object>> localMobReq;
+    public static Map<String, Map<String, Object>> mobReq;
 
-    private static Map<String, Map<String, Object>> localUseReq = new HashMap<>();
-    public static Map<String, Map<String, Object>> useReq = new HashMap<>();
+    private static Map<String, Map<String, Object>> localUseReq;
+    public static Map<String, Map<String, Object>> useReq;
 
-    private static Map<String, Map<String, Object>> localPlaceReq = new HashMap<>();
-    public static Map<String, Map<String, Object>> placeReq = new HashMap<>();
+    private static Map<String, Map<String, Object>> localPlaceReq;
+    public static Map<String, Map<String, Object>> placeReq;
 
-    private static Map<String, Map<String, Object>> localBreakReq = new HashMap<>();
-    public static Map<String, Map<String, Object>> breakReq = new HashMap<>();
+    private static Map<String, Map<String, Object>> localBreakReq;
+    public static Map<String, Map<String, Object>> breakReq;
 
-    private static Map<String, Map<String, Object>> localXpValue = new HashMap<>();
-    public static Map<String, Map<String, Object>> xpValue = new HashMap<>();
+    private static Map<String, Map<String, Object>> localXpValue;
+    public static Map<String, Map<String, Object>> xpValue;
 
-    private static Map<String, Map<String, Object>> localOreInfo = new HashMap<>();
-    public static Map<String, Map<String, Object>> oreInfo = new HashMap<>();
+    private static Map<String, Map<String, Object>> localOreInfo;
+    public static Map<String, Map<String, Object>> oreInfo;
 
-    private static Map<String, Map<String, Object>> locallogInfo = new HashMap<>();
-    public static Map<String, Map<String, Object>> logInfo = new HashMap<>();
+    private static Map<String, Map<String, Object>> locallogInfo;
+    public static Map<String, Map<String, Object>> logInfo;
 
-    private static Map<String, Map<String, Object>> localPlantInfo = new HashMap<>();
-    public static Map<String, Map<String, Object>> plantInfo = new HashMap<>();
+    private static Map<String, Map<String, Object>> localPlantInfo;
+    public static Map<String, Map<String, Object>> plantInfo;
 
-    private static Map<String, Map<String, Object>> localSalvageInfo = new HashMap<>();
-    public static Map<String, Map<String, Object>> salvageInfo = new HashMap<>();
+    private static Map<String, Map<String, Object>> localSalvageInfo;
+    public static Map<String, Map<String, Object>> salvageInfo;
 
-    public static Map<String, Map<String, Object>> localSalvagesFrom = new HashMap<>();
-    public static Map<String, Map<String, Object>> salvagesFrom = new HashMap<>();
+    public static Map<String, Map<String, Object>> localSalvagesFrom;
+    public static Map<String, Map<String, Object>> salvagesFrom;
 
     private static Map<String, Object> tempMap;
     private static String dataPath = "pmmo/data.json";
@@ -72,6 +72,8 @@ public class Requirements
         File templateData = FMLPaths.CONFIGDIR.get().resolve( templateDataPath ).toFile();
         File data = FMLPaths.CONFIGDIR.get().resolve( dataPath ).toFile();
 
+        initMaps();
+
         createData( templateData ); //always rewrite template data with hardcoded one
         if ( !data.exists() )   //If no data file, create one
             createData( data );
@@ -84,6 +86,48 @@ public class Requirements
         updateFinal( customReq );
     }
 
+    private static void initMaps()
+    {
+        localWearReq = new HashMap<>();
+        wearReq = new HashMap<>();
+
+        localToolReq = new HashMap<>();
+        toolReq = new HashMap<>();
+
+        localWeaponReq = new HashMap<>();
+        weaponReq = new HashMap<>();
+
+        localMobReq = new HashMap<>();
+        mobReq = new HashMap<>();
+
+        localUseReq = new HashMap<>();
+        useReq = new HashMap<>();
+
+        localPlaceReq = new HashMap<>();
+        placeReq = new HashMap<>();
+
+        localBreakReq = new HashMap<>();
+        breakReq = new HashMap<>();
+
+        localXpValue = new HashMap<>();
+        xpValue = new HashMap<>();
+
+        localOreInfo = new HashMap<>();
+        oreInfo = new HashMap<>();
+
+        locallogInfo = new HashMap<>();
+        logInfo = new HashMap<>();
+
+        localPlantInfo = new HashMap<>();
+        plantInfo = new HashMap<>();
+
+        localSalvageInfo = new HashMap<>();
+        salvageInfo = new HashMap<>();
+
+        localSalvagesFrom = new HashMap<>();
+        salvagesFrom = new HashMap<>();
+    }
+
     private static boolean checkValidSkills( Map<String, Object> theMap )
     {
         boolean anyValidSkills = false;
@@ -92,6 +136,8 @@ public class Requirements
         {
             if( Skill.getInt( key ) != 0 )
                 anyValidSkills = true;
+            else
+                LOGGER.info( "Invalid skill " + key );
         }
 
         return anyValidSkills;
@@ -112,9 +158,15 @@ public class Requirements
                     {
                         if( Skill.getInt( entry.getKey() ) != 0 && (double) entry.getValue() > 0 )
                             outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                        else
+                            LOGGER.error( key + " is either not a valid skill, or not above 0!" );
                     }
+                        else
+                        LOGGER.error( key + " is not a Double!" );
                 }
             }
+            else
+                LOGGER.error( "No valid skills, cannot add " + key );
         });
     }
 
@@ -131,7 +183,11 @@ public class Requirements
                 {
                     if( entry.getKey().equals( "extraChance" ) && (double) entry.getValue() > 0 )
                         outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                    else
+                        LOGGER.error( key + " is either not \"extraChance\", or not above 0!" );
                 }
+                else
+                    LOGGER.error( key + " is not a Double!" );
             }
         });
     }
@@ -144,8 +200,6 @@ public class Requirements
             {
                 boolean failed = false;
                 Map<String, Object> inMap = value.requirements;
-
-
 
                 if( !( inMap.containsKey( "salvageItem" ) && inMap.get( "salvageItem" ) instanceof String ) )
                 {
@@ -251,6 +305,8 @@ public class Requirements
                     localSalvagesFrom.get( salvageItem ).put( key, salvageMax );
                 }
             }
+            else
+                LOGGER.info( "Could not load inexistant item " + key );
         });
     }
 

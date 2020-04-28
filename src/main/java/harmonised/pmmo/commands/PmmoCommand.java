@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.MessageXp;
@@ -77,8 +78,9 @@ public class PmmoCommand
         suggestPref[4] = "maxExtraHeartBoost";
         suggestPref[5] = "maxExtraDamageBoost";
 
-        dispatcher.register( Commands.literal( "pmmo" ).requires( player -> { return player.hasPermissionLevel( 4 ); })
+        dispatcher.register( Commands.literal( "pmmo" )
                   .then( Commands.literal( "admin" )
+                  .requires( player -> { return player.hasPermissionLevel( 2 ); })
                   .then( Commands.argument( "target", EntityArgument.players() )
                   .then( Commands.literal( "set" )
                   .then( Commands.argument( "Skill", StringArgumentType.word() )
@@ -98,10 +100,14 @@ public class PmmoCommand
                   ))))
                   .then( Commands.literal( "clear" )
                   .executes( PmmoCommand::commandClear ) )))
-                  .then( Commands.literal( "sync" )
+                  .then( Commands.literal( "reload" )
+                  .requires( player -> { return player.hasPermissionLevel( 2 ); } )
+                  .executes( PmmoCommand::commandReloadConfig )
+                  )
+                  .then( Commands.literal( "resync" )
                   .executes( context -> commandSync( context, EntityArgument.getPlayers( context, "target" ) ) )
                   )
-                  .then(Commands.literal( "sync" )
+                  .then(Commands.literal( "resync" )
                   .executes( context -> commandSync( context, null )))
                   .then( Commands.literal( "tools" )
                   .then( Commands.literal( "levelatxp" )
@@ -497,6 +503,19 @@ public class PmmoCommand
         }
         else
             sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSkill", skillName ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
+
+        return 1;
+    }
+
+    private static int commandReloadConfig(CommandContext<CommandSource> context) throws CommandException
+    {
+        Requirements.init();    //load up locally
+
+        context.getSource().getServer().getPlayerList().getPlayers().forEach( player ->
+        {
+            XP.syncPlayerConfig( player );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.jsonConfigReload" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), false );
+        });
 
         return 1;
     }

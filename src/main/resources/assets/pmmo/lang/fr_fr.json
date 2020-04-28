@@ -106,5 +106,6 @@
 	"pmmo.text.ironDonatorWelcome": "Bienvenue %1$s, tier Fer du Patreon de PMMO !",
 	"pmmo.text.milestoneLevelUp": "%1$s à atteint le niveau %2$s en %3$s!",
 	"pmmo.text.tooltipOn": "Les info-bulles PMMO ont été activées",
-	"pmmo.text.tooltipOff": "Les info-bulles PMMO ont été désactivées"
+	"pmmo.text.tooltipOff": "Les info-bulles PMMO ont été désactivées",
+	"pmmo.text.jsonConfigReload": "PMMO Json Config has been reloaded!"
 }

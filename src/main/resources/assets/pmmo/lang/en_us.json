@@ -87,12 +87,12 @@
   "pmmo.text.plantExtraDrop": "Extra Harvest: %1$s",
   "pmmo.text.hardness": "Hardness %1$s",
   "pmmo.text.setLevel": "%1$s has been set to level %2$s",
-  "pmmo.text.setXp": "%1$s has been set to %2$s xp",
+  "pmmo.text.setXp": "%1$s has been set to %2$sxp",
   "pmmo.text.hasBeenSet": "%1$s has been set to %2$s",
   "pmmo.text.addLevel": "%1$s has been changed by %2$s levels",
   "pmmo.text.addXp": "%1$s has been changed by %2$sxp",
   "pmmo.text.levelAtXp": "%1$sxp is level %2$s",
-  "pmmo.text.xpAtLevel": "level %1$s is %2$s xp",
+  "pmmo.text.xpAtLevel": "level %1$s is %2$sxp",
   "pmmo.text.xpFromTo": "%1$sxp from level %2$s to level %3$s",
   "pmmo.text.xpCap": "New XP must be no less than 0, and no more than 2 billion!",
   "pmmo.text.invalidSkill": "%1$s is not a valid skill!",
@@ -106,5 +106,6 @@
   "pmmo.text.ironDonatorWelcome": "Welcome, PMMO Iron Tier Patreon %1$s!",
   "pmmo.text.milestoneLevelUp": "%1$s has reached level %2$s in %3$s!",
   "pmmo.text.tooltipOn": "PMMO Tooltip Info has been turned on",
-  "pmmo.text.tooltipOff": "PMMO Tooltip Info has been turned off"
+  "pmmo.text.tooltipOff": "PMMO Tooltip Info has been turned off",
+  "pmmo.text.jsonConfigReload": "PMMO Json Config has been reloaded!"
 }

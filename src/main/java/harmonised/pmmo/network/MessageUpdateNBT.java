@@ -1,6 +1,7 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.Requirements;
+import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.client.Minecraft;
@@ -17,8 +18,8 @@ import java.util.function.Supplier;
 
 public class MessageUpdateNBT
 {
-    private CompoundNBT reqPackage = new CompoundNBT();
-    private String outputName;
+    public CompoundNBT reqPackage = new CompoundNBT();
+    public String outputName;
 
     public MessageUpdateNBT( CompoundNBT theNBT, String outputName )
     {
@@ -49,25 +50,7 @@ public class MessageUpdateNBT
     {
         ctx.get().enqueueWork(() ->
         {
-            PlayerEntity player = Minecraft.getInstance().player;
-            CompoundNBT newPackage = packet.reqPackage;
-            Set<String> keySet = new HashSet<>( newPackage.keySet() );
-
-            switch( packet.outputName.toLowerCase() )
-            {
-                case "prefs":
-                    CompoundNBT prefsTag = XP.getPreferencesTag( player );
-                    for( String tag : keySet )
-                    {
-                        prefsTag.putDouble( tag, newPackage.getDouble( tag ) );
-                    }
-                    AttributeHandler.updateAll( player );
-                    break;
-
-                default:
-                    System.out.println( "WRONG NBT UPDATE NAME" );
-                    break;
-            }
+            ClientHandler.updatePrefsTag( packet );
         });
         ctx.get().setPacketHandled(true);
     }
