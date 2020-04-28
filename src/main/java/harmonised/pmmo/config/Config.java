@@ -375,9 +375,9 @@ public class Config
                         .defineInRange( "craftingMultiplier", 1D, 0, 1000) );
 
                 this.biomePenaltyMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp you get in biomes you do not meet the requirements for (100 = Full xp, 50 = Half xp)" )
+                        .comment( "How much xp you get in biomes you do not meet the requirements for (1 = Full xp, 0.5 = Half xp)" )
                         .translation( "pmmo.biomePenaltyMultiplier" )
-                        .defineInRange( "biomePenaltyMultiplier", 100D, 0, 100) );
+                        .defineInRange( "biomePenaltyMultiplier", 1D, 0, 1) );
 
                 builder.pop();
             }
