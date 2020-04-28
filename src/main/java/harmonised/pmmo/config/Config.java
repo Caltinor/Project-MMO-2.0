@@ -27,6 +27,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> useReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> biomeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> xpValueEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> xpValueCraftingEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> oreEnabled;
@@ -204,6 +205,11 @@ public class Config
                         .comment( "Should break requirements be enabled? False means no requirements" )
                         .translation( "pmmo.breakReqEnabled" )
                         .define( "breakReqEnabled", true) );
+
+                this.biomeReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should biome requirements be enabled? False means no requirements" )
+                        .translation( "pmmo.biomeReqEnabled" )
+                        .define( "biomeReqEnabled", true) );
 
                 this.xpValueEnabled = subscriber.subscribe(builder
                         .comment( "Should xp values for breaking things first time be enabled? False means only Hardness xp is awarded for breaking" )

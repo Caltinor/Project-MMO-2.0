@@ -1019,6 +1019,23 @@
 			"crafting": 1000
 		}
 	},
+	"biome_requirement": {
+		"minecraft:deep_ocean": {
+			"swimming": 35
+		},
+		"minecraft:deep_frozen_ocean": {
+			"swimming": 35,
+			"endurance": 25
+		}
+	},
+	"biome_effect": {
+		"minecraft:deep_ocean": {
+			"minecraft:slowness": 2
+		},
+		"minecraft:deep_frozen_ocean": {
+			"minecraft:slowness": 3
+		}
+	},
 	"ore": {
 		"minecraft:nether_quartz_ore": {
 			"extraChance": 0.55

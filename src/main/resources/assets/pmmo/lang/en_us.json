@@ -63,6 +63,7 @@
   "pmmo.text.sprintInfo": "%1$s Sprint Speed Bonus",
   "pmmo.text.underwaterNightVisionLocked": "Underwater Nightvision is locked until level %1$s Swimming",
   "pmmo.text.underwaterNightVisionUnLocked": "Underwater Nightvision is unlocked since level %1$s Swimming",
+  "pmmo.text.toSurvive": "You need higher stats to survive in %1$s!",
   "pmmo.text.toWear": "You need higher stats to wear %1$s!",
   "pmmo.text.toUseAsTool": "You need higher stats to use %1$s as a tool!",
   "pmmo.text.toUseAsWeapon": "You need higher stats to use %1$s as a weapon!",

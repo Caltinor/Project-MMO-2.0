@@ -105,6 +105,14 @@ public class MessageUpdateReq
                     Requirements.breakReq = newPackage;
                     break;
 
+                case "biomereq":
+                    Requirements.biomeReq = newPackage;
+                    break;
+
+                case "biomeeffect":
+                    Requirements.biomeEffect = newPackage;
+                    break;
+
                 case "xpvalue":
                     Requirements.xpValue = newPackage;
                     break;

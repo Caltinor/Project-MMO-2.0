@@ -6,8 +6,12 @@ import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +46,12 @@ public class Requirements
     private static Map<String, Map<String, Object>> localBreakReq;
     public static Map<String, Map<String, Object>> breakReq;
 
+    private static Map<String, Map<String, Object>> localBiomeReq;
+    public static Map<String, Map<String, Object>> biomeReq;
+
+    private static Map<String, Map<String, Object>> localBiomeEffect;
+    public static Map<String, Map<String, Object>> biomeEffect;
+
     private static Map<String, Map<String, Object>> localXpValue;
     public static Map<String, Map<String, Object>> xpValue;
 
@@ -69,6 +79,7 @@ public class Requirements
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
     private static final Logger LOGGER = LogManager.getLogger();
     private static Requirements defaultReq, customReq;
+    private static Effect invalidEffect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
 
     public static void init()
     {
@@ -112,6 +123,12 @@ public class Requirements
         localBreakReq = new HashMap<>();
         breakReq = new HashMap<>();
 
+        localBiomeReq = new HashMap<>();
+        biomeReq = new HashMap<>();
+
+        localBiomeEffect = new HashMap<>();
+        biomeEffect = new HashMap<>();
+
         localXpValue = new HashMap<>();
         xpValue = new HashMap<>();
 
@@ -149,6 +166,22 @@ public class Requirements
         return anyValidSkills;
     }
 
+    private static boolean checkValidEffects( Map<String, Object> theMap )
+    {
+        boolean anyValidEffects = false;
+
+        for( String key : theMap.keySet() )
+        {
+            Effect effect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( key ) );
+            if( !effect.equals( invalidEffect ) )
+                anyValidEffects = true;
+            else
+                LOGGER.info( "Invalid effect " + key );
+        }
+
+        return anyValidEffects;
+    }
+
     private static void updateReqSkills( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
     {
         req.forEach( (key, value) ->
@@ -165,10 +198,39 @@ public class Requirements
                         if( Skill.getInt( entry.getKey() ) != 0 && (double) entry.getValue() > 0 )
                             outReq.get( key ).put( entry.getKey(), entry.getValue() );
                         else
-                            LOGGER.error( key + " is either not a valid skill, or not above 0!" );
+                            LOGGER.error( entry.getKey() + " is either not a valid skill, or not above 0!" );
                     }
                         else
-                        LOGGER.error( key + " is not a Double!" );
+                        LOGGER.error( entry.getValue() + " is not a Double!" );
+                }
+            }
+            else
+                LOGGER.error( "No valid skills, cannot add " + key );
+        });
+    }
+
+    private static void updateReqEffects( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            if( checkValidEffects( value.requirements ) )
+            {
+                if(  !outReq.containsKey( key ) )
+                    outReq.put( key, new HashMap<>() );
+
+                for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
+                {
+                    if( entry.getValue() instanceof Double )
+                    {
+                        Potion potion = ForgeRegistries.POTION_TYPES.getValue( new ResourceLocation( entry.getKey() ) );
+
+                        if( !potion.equals( invalidEffect ) && (double) entry.getValue() >= 0 && (double) entry.getValue() < 255 )
+                            outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                        else
+                            LOGGER.error( entry.getKey() + " is either not a effect skill, or below 0, or above 255!" );
+                    }
+                    else
+                        LOGGER.error( entry.getValue() + " is not a Double!" );
                 }
             }
             else
@@ -344,6 +406,12 @@ public class Requirements
         if( Config.config.breakReqEnabled.get() )
             updateReqSkills( req.breaking, localBreakReq );
 
+        if( Config.config.biomeReqEnabled.get() )
+        {
+            updateReqSkills( req.biome, localBiomeReq );
+            updateReqEffects( req.biomeeff, localBiomeEffect );
+        }
+
         if( Config.config.oreEnabled.get() )
             updateReqExtra( req.ores, localOreInfo );
 
@@ -369,6 +437,8 @@ public class Requirements
         xpValueCrafting = localXpValueCrafting;
         placeReq = localPlaceReq;
         breakReq = localBreakReq;
+        biomeReq = localBiomeReq;
+        biomeEffect = localBiomeEffect;
         oreInfo = localOreInfo;
         logInfo = locallogInfo;
         plantInfo = localPlantInfo;
@@ -439,6 +509,8 @@ public class Requirements
     private final Map<String, RequirementItem> use = Maps.newHashMap();
     private final Map<String, RequirementItem> placing = Maps.newHashMap();
     private final Map<String, RequirementItem> breaking = Maps.newHashMap();
+    private final Map<String, RequirementItem> biome = Maps.newHashMap();
+    private final Map<String, RequirementItem> biomeeff = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValuesCrafting = Maps.newHashMap();
     private final Map<String, RequirementItem> ores = Maps.newHashMap();
@@ -505,6 +577,8 @@ public class Requirements
             deserializeGroup(obj, "use_requirement", req.use::put, context);
             deserializeGroup(obj, "place_requirement", req.placing::put, context);
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);
+            deserializeGroup(obj, "biome_requirement", req.biome::put, context);
+            deserializeGroup(obj, "biome_effect", req.biomeeff::put, context);
             deserializeGroup(obj, "xp_value", req.xpValues::put, context);
             deserializeGroup(obj, "crafting_xp", req.xpValuesCrafting::put, context);
             deserializeGroup(obj, "ore", req.ores::put, context);

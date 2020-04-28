@@ -25,8 +25,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.PMMOPoseSetter;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.potion.Potion;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -35,6 +37,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
@@ -64,8 +67,9 @@ public class XP
 	private static Map<ResourceLocation, Boolean> noDropOres = new HashMap<>();
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
 	private static Map<String, Integer> skillColors = new HashMap<>();
-	private static Map<String, Long> lastAward = new HashMap<>();
-	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
+	private static Map<UUID, Long> lastAward = new HashMap<>();
+	private static Map<UUID, BlockPos> lastPosPlaced = new HashMap<>();
+	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static Set<UUID> isCrawling = new HashSet<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
@@ -374,6 +378,12 @@ public class XP
 			{
 				Block block = event.getPlacedBlock().getBlock();
 
+				if( block.equals( Blocks.WATER ) )
+				{
+					awardXp( player, Skill.MAGIC, "Walking on water -gasp-", 0.075, true );
+					return;
+				}
+
 				if( checkReq( player, block.getRegistryName(), "place" ) )
 				{
 					double blockHardnessLimit = Config.config.blockHardnessLimit.get();
@@ -382,8 +392,9 @@ public class XP
 						blockHardness = blockHardnessLimit;
 					String playerName = player.getName().toString();
 					BlockPos blockPos = event.getPos();
+					UUID playerUUID = player.getUniqueID();
 
-					if (!lastPosPlaced.containsKey(playerName) || !lastPosPlaced.get(playerName).equals(blockPos))
+					if (!lastPosPlaced.containsKey(playerUUID) || !lastPosPlaced.get(playerUUID).equals(blockPos))
 					{
 						if (block.equals(Blocks.FARMLAND))
 							awardXp(player, Skill.FARMING, "tilting dirt", blockHardness, false);
@@ -397,9 +408,9 @@ public class XP
 					}
 
 					if (lastPosPlaced.containsKey(playerName))
-						lastPosPlaced.replace(playerName, event.getPos());
+						lastPosPlaced.replace(playerUUID, event.getPos());
 					else
-						lastPosPlaced.put(playerName, blockPos);
+						lastPosPlaced.put(playerUUID, blockPos);
 
 					if ( getXp(block.getRegistryName()) != null )
 						PlacedBlocks.orePlaced(event.getWorld().getWorld(), event.getPos());
@@ -1080,7 +1091,9 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.useReq, "useReq" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
-        NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeReq, "biomeReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeEffect, "biomeEffect" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
         NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValueCrafting, "xpValueCrafting" ), (ServerPlayerEntity) player );
         NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
@@ -1221,6 +1234,15 @@ public class XP
 			case "break":
 				if( Requirements.breakReq.containsKey( registryName ) )
 					for( Map.Entry<String, Object> entry : Requirements.breakReq.get( registryName ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqMap.put( entry.getKey(), (double) entry.getValue() );
+					}
+				break;
+
+			case "biome":
+				if( Requirements.biomeReq.containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : Requirements.biomeReq.get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -2191,6 +2213,14 @@ public class XP
 					}
 					break;
 
+				case "biome":
+					for( Map.Entry<String, Object> entry : Requirements.biomeReq.get( res.toString() ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqs.put( entry.getKey(), (double) entry.getValue() );
+					}
+					break;
+
 				default:
 					System.out.println( "PLEASE REPORT THIS IF YOU SEE ME" );
 					return 0;
@@ -2219,6 +2249,62 @@ public class XP
 		}
 	}
 
+	public static void checkBiomeLevelReq( PlayerEntity player )
+	{
+		Biome biome = player.world.getBiome( player.getPosition() );
+		ResourceLocation resLoc = biome.getRegistryName();
+		String biomeKey = resLoc.toString();
+		UUID playerUUID = player.getUniqueID();
+		Map<String, Object> biomeReq = Requirements.biomeReq.get( biomeKey );
+		Map<String, Object> biomeEffect = Requirements.biomeEffect.get( biomeKey );
+
+		if( !lastBiome.containsKey( playerUUID ) )
+			lastBiome.put( playerUUID, "none" );
+
+		if( biomeReq != null && biomeEffect != null )
+		{
+			if( !checkReq( player, resLoc, "biome" ) )
+			{
+//				int gap = getSkillReqGap( player, resLoc, "biome" );
+//
+//				if( gap > 0 )
+//					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", "", biomeKey, true, 2 ), (ServerPlayerEntity) player );
+//
+//				if( gap > 9 )
+//					gap = 9;
+
+				for( Map.Entry<String, Object> entry : biomeEffect.entrySet() )
+				{
+					Effect effect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( entry.getKey() ) );
+
+					if( effect != null )
+						player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( (double) entry.getValue() ), false, true ) );
+				}
+
+				if( player.world.isRemote() )
+				{
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
+
+					if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
+					{
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
+						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
+						{
+							int level = getLevel( entry.getKey(), player );
+
+							if( level < (double) entry.getValue() )
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
+							else
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), false );
+						}
+					}
+				}
+			}
+		}
+
+		lastBiome.put( playerUUID, biomeKey );
+	}
+
 	public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
 	{
 		PlayerEntity player = event.player;
@@ -2229,16 +2315,17 @@ public class XP
 		if( !player.isCreative() && player.isAlive() )
 		{
 			String name = player.getName().getString();
+			UUID playerUUID = player.getUniqueID();
 
 			if( player.isSprinting() )
 				AttributeHandler.updateSpeed( player );
 			else
 				AttributeHandler.resetSpeed( player );
 
-			if( !lastAward.containsKey( name ) )
-				lastAward.put( name, System.currentTimeMillis() );
+			if( !lastAward.containsKey( playerUUID ) )
+				lastAward.put( playerUUID, System.currentTimeMillis() );
 
-			long gap = System.currentTimeMillis() - lastAward.get( name );
+			long gap = System.currentTimeMillis() - lastAward.get( playerUUID );
 			if( gap > 1000 )
 			{
 				int swimLevel = getLevel( "swimming", player );
@@ -2249,7 +2336,7 @@ public class XP
 				float speedAmp = 0;
 				PlayerInventory inv = player.inventory;
 
-
+				checkBiomeLevelReq( player );
 
 				if( !player.world.isRemote() )
 				{
@@ -2282,7 +2369,7 @@ public class XP
 				float flyAward  = ( 1 + flyLevel     / 30.77f ) * ( gap / 1000f );
 				float runAward  = ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f ) * ( 1 + speedAmp / 4);
 
-				lastAward.replace( name, System.currentTimeMillis() );
+				lastAward.replace( playerUUID, System.currentTimeMillis() );
 				Block waterBlock = Blocks.WATER;
 				BlockPos playerPos = player.getPosition();
 				boolean waterBelow = true;
