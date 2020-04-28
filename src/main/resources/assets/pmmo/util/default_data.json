@@ -1034,6 +1034,9 @@
 		"minecraft:jungle": {
 			"agility": 1.25
 		},
+		"minecraft:jungle_hills": {
+			"agility": 1.25
+		},
 		"minecraft:ocean": {
 			"swimming": 1.25
 		},
@@ -1052,6 +1055,10 @@
 	},
 	"biome_requirement": {
 		"minecraft:jungle": {
+			"agility": 20,
+			"endurance": 10
+		},
+		"minecraft:jungle_hills": {
 			"agility": 20,
 			"endurance": 10
 		},
@@ -1076,6 +1083,10 @@
 	},
 	"biome_effect": {
 		"minecraft:jungle": {
+			"minecraft:slowness": 0,
+			"minecraft:weakness": 0
+		},
+		"minecraft:jungle_hills": {
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},

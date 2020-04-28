@@ -62,6 +62,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> swimmingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> fishingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> craftingMultiplier;
+        public ConfigHelper.ConfigValueListener<Double> biomePenaltyMultiplier;
 
         //GUI
         public ConfigHelper.ConfigValueListener<Double> barOffsetX;
@@ -372,6 +373,11 @@ public class Config
                         .comment( "How much xp everyone gains in Crafting (1 = normal, 2 = twice as much)" )
                         .translation( "pmmo.craftingMultiplier" )
                         .defineInRange( "craftingMultiplier", 1D, 0, 1000) );
+
+                this.biomePenaltyMultiplier = subscriber.subscribe(builder
+                        .comment( "How much xp you get in biomes you do not meet the requirements for (100 = Full xp, 50 = Half xp)" )
+                        .translation( "pmmo.biomePenaltyMultiplier" )
+                        .defineInRange( "biomePenaltyMultiplier", 100D, 0, 100) );
 
                 builder.pop();
             }

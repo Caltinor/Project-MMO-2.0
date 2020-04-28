@@ -73,11 +73,12 @@ public class XP
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static Set<UUID> isCrawling = new HashSet<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
-	public static double baseXp, xpIncreasePerLevel;
-	public static Set<UUID> lapisDonators = new HashSet<>();
-	public static Set<UUID> dandelionDonators = new HashSet<>();
-	public static Set<UUID> ironDonators = new HashSet<>();
-	public static double globalMultiplier = Config.config.globalMultiplier.get();
+	private static double baseXp, xpIncreasePerLevel;
+	private static Set<UUID> lapisDonators = new HashSet<>();
+	private static Set<UUID> dandelionDonators = new HashSet<>();
+	private static Set<UUID> ironDonators = new HashSet<>();
+	private static double globalMultiplier = Config.config.globalMultiplier.get();
+	private static double biomePenaltyMultiplier = Config.config.biomePenaltyMultiplier.get();
 	public static int maxLevel = Config.config.maxLevel.get();
 	private static boolean crawlingAllowed = Config.config.crawlingAllowed.get();
     private static boolean showWelcome = Config.config.showWelcome.get();
@@ -2038,6 +2039,8 @@ public class XP
 		{
 			if( checkReq( player, resLoc, "biome" ) )
 				amount *= (double) biomeMap.get( skillName );
+			else
+				amount *= biomePenaltyMultiplier;
 		}
 
 		amount *= globalMultiplier;
