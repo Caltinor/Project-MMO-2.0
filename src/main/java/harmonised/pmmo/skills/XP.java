@@ -1092,6 +1092,7 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeReq, "biomeReq" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeMultiplier, "biomeMultiplier" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeEffect, "biomeEffect" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
         NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValueCrafting, "xpValueCrafting" ), (ServerPlayerEntity) player );
@@ -2026,6 +2027,19 @@ public class XP
 
 		amount *= skillMultiplier;
 		amount *= difficultyMultiplier;
+
+
+		Biome biome = player.world.getBiome( player.getPosition() );
+		ResourceLocation resLoc = biome.getRegistryName();
+		String biomeKey = resLoc.toString();
+		Map<String, Object> biomeMap = Requirements.biomeMultiplier.get( biomeKey );
+
+		if( biomeMap != null && biomeMap.containsKey( skillName ) )
+		{
+			if( checkReq( player, resLoc, "biome" ) )
+				amount *= (double) biomeMap.get( skillName );
+		}
+
 		amount *= globalMultiplier;
 
 		if( amount == 0 )
@@ -2283,10 +2297,9 @@ public class XP
 
 				if( player.world.isRemote() )
 				{
-					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
-
 					if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
 					{
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 						{

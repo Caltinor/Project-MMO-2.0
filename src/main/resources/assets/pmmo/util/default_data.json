@@ -1019,6 +1019,37 @@
 			"crafting": 1000
 		}
 	},
+	"biome_multiplier": {
+		"minecraft:void": {
+			"flying": 2,
+			"combat": 1.2,
+			"archery": 1.5,
+			"endurance": 1.2
+		},
+		"minecraft:hell": {
+			"combat": 1.25,
+			"archery": 1.25,
+			"endurance": 1.25
+		},
+		"minecraft:jungle": {
+			"agility": 1.25
+		},
+		"minecraft:ocean": {
+			"swimming": 1.25
+		},
+		"minecraft:deep_ocean": {
+			"swimming": 1.5
+		},
+		"minecraft:cold_ocean": {
+			"swimming": 1.5
+		},
+		"minecraft:frozen_ocean": {
+			"swimming": 1.75
+		},
+		"minecraft:deep_frozen_ocean": {
+			"swimming": 2
+		}
+	},
 	"biome_requirement": {
 		"minecraft:jungle": {
 			"agility": 20,

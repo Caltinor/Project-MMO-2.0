@@ -49,6 +49,9 @@ public class Requirements
     private static Map<String, Map<String, Object>> localBiomeReq;
     public static Map<String, Map<String, Object>> biomeReq;
 
+    private static Map<String, Map<String, Object>> localBiomeMultiplier;
+    public static Map<String, Map<String, Object>> biomeMultiplier;
+
     private static Map<String, Map<String, Object>> localBiomeEffect;
     public static Map<String, Map<String, Object>> biomeEffect;
 
@@ -125,6 +128,9 @@ public class Requirements
 
         localBiomeReq = new HashMap<>();
         biomeReq = new HashMap<>();
+
+        localBiomeMultiplier = new HashMap<>();
+        biomeMultiplier = new HashMap<>();
 
         localBiomeEffect = new HashMap<>();
         biomeEffect = new HashMap<>();
@@ -412,6 +418,9 @@ public class Requirements
             updateReqEffects( req.biomeeff, localBiomeEffect );
         }
 
+        if( Config.config.biomeMultiplierEnabled.get() )
+            updateReqSkills( req.biomemultiplier, localBiomeMultiplier );
+
         if( Config.config.oreEnabled.get() )
             updateReqExtra( req.ores, localOreInfo );
 
@@ -438,6 +447,7 @@ public class Requirements
         placeReq = localPlaceReq;
         breakReq = localBreakReq;
         biomeReq = localBiomeReq;
+        biomeMultiplier = localBiomeMultiplier;
         biomeEffect = localBiomeEffect;
         oreInfo = localOreInfo;
         logInfo = locallogInfo;
@@ -511,6 +521,7 @@ public class Requirements
     private final Map<String, RequirementItem> breaking = Maps.newHashMap();
     private final Map<String, RequirementItem> biome = Maps.newHashMap();
     private final Map<String, RequirementItem> biomeeff = Maps.newHashMap();
+    private final Map<String, RequirementItem> biomemultiplier = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValuesCrafting = Maps.newHashMap();
     private final Map<String, RequirementItem> ores = Maps.newHashMap();
@@ -578,6 +589,7 @@ public class Requirements
             deserializeGroup(obj, "place_requirement", req.placing::put, context);
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);
             deserializeGroup(obj, "biome_requirement", req.biome::put, context);
+            deserializeGroup(obj, "biome_multiplier", req.biomemultiplier::put, context);
             deserializeGroup(obj, "biome_effect", req.biomeeff::put, context);
             deserializeGroup(obj, "xp_value", req.xpValues::put, context);
             deserializeGroup(obj, "crafting_xp", req.xpValuesCrafting::put, context);

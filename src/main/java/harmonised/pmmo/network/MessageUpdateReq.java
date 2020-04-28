@@ -109,6 +109,10 @@ public class MessageUpdateReq
                     Requirements.biomeReq = newPackage;
                     break;
 
+                case "biomemultiplier":
+                    Requirements.biomeMultiplier = newPackage;
+                    break;
+
                 case "biomeeffect":
                     Requirements.biomeEffect = newPackage;
                     break;
