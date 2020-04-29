@@ -282,7 +282,7 @@ public class ClientEventHandler
                 String displayName = new TranslationTextComponent( XP.getItem( (String) salvageArray[salvageArrayPos] ).getTranslationKey() ).getString();
                 int value = (int) Math.floor( (double) salvagesFrom.get( key ) );
 
-                if( (double) Requirements.salvageInfo.get( key ).get( "levelReq" ) <= level )
+                if( salvageInfo != null && (double) salvageInfo.get( "levelReq" ) <= level )
                     tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
                 else
                     tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
