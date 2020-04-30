@@ -61,14 +61,17 @@ minecraft {
     }
 }
 
-repositories {
+repositories
+{
     jcenter()
 
-    maven {
+    maven
+    {
         url "http://dvs1.progwml6.com/files/maven/"
     }
 
-    maven {
+    maven
+    {
         url = "https://maven.theillusivec4.top/"
     }
 

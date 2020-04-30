@@ -2,6 +2,7 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
+import harmonised.pmmo.gui.ScreenSkills;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageCrawling;
 import harmonised.pmmo.network.NetworkHandler;
@@ -53,6 +54,8 @@ public class ClientEventHandler
         {
             if( wasCrawling != ClientHandler.CRAWL_KEY.isKeyDown() )
             {
+                Minecraft.getInstance().displayGuiScreen( new ScreenSkills( new TranslationTextComponent( "pmmo.text.potato" ) ) );
+
                 wasCrawling = ClientHandler.CRAWL_KEY.isKeyDown();
                 NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
             }

@@ -7,11 +7,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.curios.Curios;
+import harmonised.pmmo.gui.ScreenSkills;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.util.DP;
+import javafx.stage.Screen;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -450,6 +453,21 @@ public class XP
 		}
 		else
 			level = levelAtXp( getSkillsTag( player ).getDouble( skill ) );
+
+		return level;
+	}
+
+	public static double getLevelDecimal( String skill, PlayerEntity player )
+	{
+		double level = 1;
+
+		if( player.world.isRemote() )
+		{
+			if( XPOverlayGUI.skills.containsKey( skill ) )
+				level = levelAtXpDecimal( XPOverlayGUI.skills.get( skill ).goalXp );
+		}
+		else
+			level = levelAtXpDecimal( getSkillsTag( player ).getDouble( skill ) );
 
 		return level;
 	}
@@ -2497,11 +2515,11 @@ public class XP
 		}
 	}
 
-	public static float levelAtXpDecimal( float xp )
+	private static float levelAtXpDecimal( float xp )
 	{
 		return (float) levelAtXpDecimal( (double) xp );
 	}
-	public static double levelAtXpDecimal( double xp )
+	private static double levelAtXpDecimal( double xp )
 	{
 		if( levelAtXp( xp ) == maxLevel )
 			xp = xpAtLevel( maxLevel );

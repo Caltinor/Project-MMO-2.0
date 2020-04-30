@@ -20,7 +20,9 @@ public enum Skill
     SWIMMING( 12 ),
     FISHING( 13 ),
     CRAFTING( 14 ),
-    MAGIC( 15 );
+    MAGIC( 15 ),
+    SLAYER( 16 ),
+    FLETCHING( 17 );
 
     private static Map< String, Integer > map = new HashMap<>();
 
