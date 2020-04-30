@@ -2045,10 +2045,10 @@
 		},
 		"minecraft:ladder": {
 			"salvageItem": "minecraft:stick",
-			"salvageMax": 7,
+			"salvageMax": 2,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
-			"maxChance": 80,
+			"maxChance": 100,
 			"xpPerItem": 1,
 			"levelReq": 1
 		},

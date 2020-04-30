@@ -54,7 +54,7 @@ public class ClientEventHandler
         {
             if( wasCrawling != ClientHandler.CRAWL_KEY.isKeyDown() )
             {
-                Minecraft.getInstance().displayGuiScreen( new ScreenSkills( new TranslationTextComponent( "pmmo.text.potato" ) ) );
+//                Minecraft.getInstance().displayGuiScreen( new ScreenSkills( new TranslationTextComponent( "pmmo.text.potato" ) ) );
 
                 wasCrawling = ClientHandler.CRAWL_KEY.isKeyDown();
                 NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
@@ -299,6 +299,8 @@ public class ClientEventHandler
                 String key = (String) salvageArray[salvageArrayPos];
                 String displayName = new TranslationTextComponent( XP.getItem( (String) salvageArray[salvageArrayPos] ).getTranslationKey() ).getString();
                 int value = (int) Math.floor( (double) salvagesFrom.get( key ) );
+
+                salvageInfo = Requirements.salvageInfo.get( key );
 
                 if( salvageInfo != null && (double) salvageInfo.get( "levelReq" ) <= level )
                     tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );

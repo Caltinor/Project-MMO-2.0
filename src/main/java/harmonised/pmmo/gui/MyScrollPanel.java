@@ -13,7 +13,7 @@ public class MyScrollPanel extends ScrollPanel
 
     @Override
     protected int getContentHeight() {
-        return 0;
+        return 500;
     }
 
     @Override

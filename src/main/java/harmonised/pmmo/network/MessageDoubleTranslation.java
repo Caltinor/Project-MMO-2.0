@@ -86,6 +86,9 @@ public class MessageDoubleTranslation
                             lastAmount = 0;
                         }
 
+                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), packet.bar );
+                        lastTime = System.currentTimeMillis();
+
                         if( System.currentTimeMillis() - lastTime < 3000 )
                         {
 //                            System.out.println( lastAmount + " + " + Integer.parseInt( packet.fKey ) + " = " + (lastAmount + Integer.parseInt( packet.fKey )) );
@@ -93,9 +96,6 @@ public class MessageDoubleTranslation
                         }
                         else
                             lastAmount = 0;
-
-                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), packet.bar );
-                        lastTime = System.currentTimeMillis();
                     }
                     else
                         Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), packet.bar );

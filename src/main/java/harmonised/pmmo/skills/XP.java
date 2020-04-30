@@ -1139,6 +1139,7 @@ public class XP
         NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.salvageInfo, "salvageInfo" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
 	}
 
@@ -2515,11 +2516,11 @@ public class XP
 		}
 	}
 
-	private static float levelAtXpDecimal( float xp )
+	public static float levelAtXpDecimal( float xp )
 	{
 		return (float) levelAtXpDecimal( (double) xp );
 	}
-	private static double levelAtXpDecimal( double xp )
+	public static double levelAtXpDecimal( double xp )
 	{
 		if( levelAtXp( xp ) == maxLevel )
 			xp = xpAtLevel( maxLevel );

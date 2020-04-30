@@ -1,10 +1,13 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.gui.ScrollPanel;
 
@@ -13,6 +16,14 @@ import java.util.List;
 public class ScreenSkills extends Screen
 {
     protected final List<IGuiEventListener> children = Lists.newArrayList();
+    private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/screenbox.png" );
+
+    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    private int boxWidth = 250;
+    private int boxHeight = 250;
+    private int boxPosX;
+    private int boxPosY;
+    private MyScrollPanel myList;
 
     public ScreenSkills(ITextComponent titleIn)
     {
@@ -23,11 +34,15 @@ public class ScreenSkills extends Screen
     protected void init()
     {
         super.init();
+
+        children.add( myList = new MyScrollPanel(minecraft, boxPosX - 24, boxPosY - 40, 20, 12));
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks)
     {
+        renderBackground( 1 );
+
         super.render(mouseX, mouseY, partialTicks);
     }
 
@@ -40,9 +55,13 @@ public class ScreenSkills extends Screen
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
         else
-        {
             this.renderDirtBackground(p_renderBackground_1_);
-        }
+
+        boxPosX = (int) ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
+        boxPosY = (int) ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        Minecraft.getInstance().getTextureManager().bindTexture( bar );
+
+        this.blit( boxPosX, boxPosY, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override
