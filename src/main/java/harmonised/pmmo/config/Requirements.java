@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -55,6 +56,9 @@ public class Requirements
     private static Map<String, Map<String, Object>> localBiomeEffect;
     public static Map<String, Map<String, Object>> biomeEffect;
 
+    private static Map<String, Map<String, Object>> localBiomeMobMultiplier;
+    public static Map<String, Map<String, Object>> biomeMobMultiplier;
+
     private static Map<String, Map<String, Object>> localXpValue;
     public static Map<String, Map<String, Object>> xpValue;
 
@@ -76,7 +80,8 @@ public class Requirements
     public static Map<String, Map<String, Object>> localSalvagesFrom;
     public static Map<String, Map<String, Object>> salvagesFrom;
 
-    private static Map<String, Object> tempMap;
+//    private static Map<String, Object> tempMap;
+    private static ArrayList<String> validAttributes = new ArrayList<>();
     private static String dataPath = "pmmo/data.json";
     private static String templateDataPath = "pmmo/data_template.json";
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
@@ -86,6 +91,10 @@ public class Requirements
 
     public static void init()
     {
+        validAttributes.add( "speedBonus" );
+        validAttributes.add( "hpBonus" );
+        validAttributes.add( "damageBonus" );
+
         File templateData = FMLPaths.CONFIGDIR.get().resolve( templateDataPath ).toFile();
         File data = FMLPaths.CONFIGDIR.get().resolve( dataPath ).toFile();
 
@@ -134,6 +143,9 @@ public class Requirements
 
         localBiomeEffect = new HashMap<>();
         biomeEffect = new HashMap<>();
+
+        localBiomeMobMultiplier = new HashMap<>();
+        biomeMobMultiplier = new HashMap<>();
 
         localXpValue = new HashMap<>();
         xpValue = new HashMap<>();
@@ -384,6 +396,44 @@ public class Requirements
         });
     }
 
+    private static void updateReqAttributes( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            if( checkValidAttributes( value.requirements ) )
+            {
+                if( !outReq.containsKey( key ) )
+                    outReq.put( key, new HashMap<>() );
+
+                for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
+                {
+                    if( validAttributes.contains( entry.getKey() ) )
+                        outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                    else
+                        LOGGER.error( "Invalid attribute " + entry.getKey() );
+                }
+            }
+            else
+                LOGGER.error( "No valid attributes, cannot add " + key );
+
+        });
+    }
+
+    private static boolean checkValidAttributes( Map<String, Object> theMap )
+    {
+        boolean anyValidAttributes = false;
+
+        for( String key : theMap.keySet() )
+        {
+            if( validAttributes.contains( key ) )
+                anyValidAttributes = true;
+            else
+                LOGGER.info( "Invalid attribute " + key );
+        }
+
+        return anyValidAttributes;
+    }
+
     private static void updateFinal( Requirements req )
     {
         if( Config.config.wearReqEnabled.get() )
@@ -421,6 +471,9 @@ public class Requirements
         if( Config.config.biomeMultiplierEnabled.get() )
             updateReqSkills( req.biomemultiplier, localBiomeMultiplier );
 
+        if( Config.config.biomeMobMultiplierEnabled.get() )
+            updateReqAttributes( req.biomemobmultiplier, localBiomeMobMultiplier );
+
         if( Config.config.oreEnabled.get() )
             updateReqExtra( req.ores, localOreInfo );
 
@@ -449,6 +502,7 @@ public class Requirements
         biomeReq = localBiomeReq;
         biomeMultiplier = localBiomeMultiplier;
         biomeEffect = localBiomeEffect;
+        biomeMobMultiplier = localBiomeMobMultiplier;
         oreInfo = localOreInfo;
         logInfo = locallogInfo;
         plantInfo = localPlantInfo;
@@ -522,6 +576,7 @@ public class Requirements
     private final Map<String, RequirementItem> biome = Maps.newHashMap();
     private final Map<String, RequirementItem> biomeeff = Maps.newHashMap();
     private final Map<String, RequirementItem> biomemultiplier = Maps.newHashMap();
+    private final Map<String, RequirementItem> biomemobmultiplier = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
     private final Map<String, RequirementItem> xpValuesCrafting = Maps.newHashMap();
     private final Map<String, RequirementItem> ores = Maps.newHashMap();
@@ -590,6 +645,7 @@ public class Requirements
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);
             deserializeGroup(obj, "biome_requirement", req.biome::put, context);
             deserializeGroup(obj, "biome_multiplier", req.biomemultiplier::put, context);
+            deserializeGroup(obj, "biome_mob_multiplier", req.biomemobmultiplier::put, context);
             deserializeGroup(obj, "biome_effect", req.biomeeff::put, context);
             deserializeGroup(obj, "xp_value", req.xpValues::put, context);
             deserializeGroup(obj, "crafting_xp", req.xpValuesCrafting::put, context);

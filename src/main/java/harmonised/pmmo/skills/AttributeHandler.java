@@ -1,8 +1,10 @@
 package harmonised.pmmo.skills;
 
+import java.util.Map;
 import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.util.DP;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -144,10 +146,10 @@ public class AttributeHandler
 		IAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		if( hpAttribute != null )
 		{
-			if( mob instanceof AnimalEntity )
-				bonus = 1;
-			else
+			if( !(mob instanceof AnimalEntity) )
 				bonus *= mobHPBoostPerPowerLevel;
+
+			bonus *= getBiomeMobMultiplier( mob, "hpBonus" );
 
 			if( bonus > maxMobHPBoost )
 				bonus = (float) maxMobHPBoost;
@@ -173,6 +175,8 @@ public class AttributeHandler
 //			System.out.println( "damage boost " + bonus / damageAttribute.getBaseValue() + " " + bonus + " " + damageAttribute.getBaseValue() );
 			bonus *= mobDamageBoostPerPowerLevel;
 
+			bonus *= getBiomeMobMultiplier( mob, "damageBonus" );
+
 			if( bonus > maxMobDamageBoost )
 				bonus = (float) maxMobDamageBoost;
 
@@ -193,6 +197,8 @@ public class AttributeHandler
 			{
 				bonus *= mobSpeedBoostPerPowerLevel;
 
+				bonus *= getBiomeMobMultiplier( mob, "speedBonus" );
+
 				if( bonus > maxMobSpeedBoost )
 					bonus = (float) maxMobSpeedBoost;
 
@@ -201,5 +207,20 @@ public class AttributeHandler
 				speedAttribute.applyModifier(speedModifier);
 			}
 		}
+	}
+
+	private static double getBiomeMobMultiplier( MobEntity mob, String type )
+	{
+		String biomeKey = mob.world.getBiome( mob.getPosition() ).getRegistryName().toString();
+		Map<String, Object> theMap = Requirements.biomeMobMultiplier.get( biomeKey );
+		double multiplier = 1;
+
+		if( theMap != null && theMap.containsKey( type ) )
+			multiplier = (double) theMap.get( type );
+
+//		if( multiplier != 1 )
+//			System.out.println( type + " " + multiplier );
+
+		return multiplier;
 	}
 }

@@ -27,6 +27,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> mobHPBoostPerPowerLevel;
         public ConfigHelper.ConfigValueListener<Double> maxMobDamageBoost;
         public ConfigHelper.ConfigValueListener<Double> mobDamageBoostPerPowerLevel;
+        public ConfigHelper.ConfigValueListener<Boolean> biomeMobMultiplierEnabled;
 
         //Requirements
         public ConfigHelper.ConfigValueListener<Boolean> wearReqEnabled;
@@ -217,6 +218,10 @@ public class Config
                         .translation( "pmmo.mobSpeedBoostPerPowerLevel" )
                         .defineInRange( "mobSpeedBoostPerPowerLevel", 1D, 0, 10) );
 
+                this.biomeMobMultiplierEnabled = subscriber.subscribe(builder
+                        .comment( "Should mob xp multipliers inside of biomes be enabled? False means no multipliers" )
+                        .translation( "pmmo.biomeMobMultiplierEnabled" )
+                        .define( "biomeMobMultiplierEnabled", true) );
 
 
                 builder.pop();

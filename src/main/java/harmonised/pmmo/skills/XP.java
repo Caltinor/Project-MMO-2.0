@@ -133,7 +133,7 @@ public class XP
 		skillTextFormat.put( "fletching", TextFormatting.DARK_GREEN );
 		skillTextFormat.put( "power", TextFormatting.AQUA );
 ////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
-//		lapisDonators.add( "Harmonised" );
+//		lapisDonators.add(  );
 //		dandelionDonators.add(  );
 		ironDonators.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );
 ////////////////////////////////////NO_DROP_VALUES/////////////////////////////////////////////////
@@ -969,9 +969,9 @@ public class XP
 
 			if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
 			{
-				IAttributeInstance test = target.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
-				if( !(target instanceof AnimalEntity) )
-					System.out.println( test.getValue() + " " + test.getBaseValue() );
+//				IAttributeInstance test = target.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+//				if( !(target instanceof AnimalEntity) )
+//					System.out.println( test.getValue() + " " + test.getBaseValue() );
 
 				PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
 				if( !player.isCreative() )
@@ -1209,6 +1209,7 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeReq, "biomeReq" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeMultiplier, "biomeMultiplier" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeEffect, "biomeEffect" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeMobMultiplier, "biomeMobMultiplier" ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
         NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValueCrafting, "xpValueCrafting" ), (ServerPlayerEntity) player );
         NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
