@@ -229,15 +229,13 @@ public class PmmoCommand
 
                         double newLevelXp = XP.xpAtLevelDecimal( newValue );
 
-                        NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skillInt, 0, true ), player );
-                        skillsTag.putDouble( skillName, newLevelXp );
+                        XP.setXp( player, skillName, newLevelXp );
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.setLevel", skillName, (newValue % 1 == 0 ? (int) Math.floor(newValue) : DP.dp(newValue) ) ), false );
                     }
                     else if( args[5].toLowerCase().equals( "xp" ) )
                     {
-                        NetworkHandler.sendToPlayer( new MessageXp( newValue, skillInt, 0, true ), player );
-                        skillsTag.putDouble( skillName, newValue );
+                        XP.setXp( player, skillName, newValue );
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.setXp", skillName, DP.dp(newValue) ), false );
                     }

@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '2.24.2'
+version = '2.25'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO-1.15'
 
@@ -83,10 +83,10 @@ dependencies
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.30'
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
+//    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3")
 
-    fg.deobf("curse.maven:curio-of-undying:2880784")
+    runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")
 
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2")
     compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2:api")

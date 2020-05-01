@@ -20,6 +20,14 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> showDonatorWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
 
+        //Mob Scaling
+        public ConfigHelper.ConfigValueListener<Double> maxMobSpeedBoost;
+        public ConfigHelper.ConfigValueListener<Double> mobSpeedBoostPerPowerLevel;
+        public ConfigHelper.ConfigValueListener<Double> maxMobHPBoost;
+        public ConfigHelper.ConfigValueListener<Double> mobHPBoostPerPowerLevel;
+        public ConfigHelper.ConfigValueListener<Double> maxMobDamageBoost;
+        public ConfigHelper.ConfigValueListener<Double> mobDamageBoostPerPowerLevel;
+
         //Requirements
         public ConfigHelper.ConfigValueListener<Boolean> wearReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> toolReqEnabled;
@@ -173,6 +181,43 @@ public class Config
                         .comment( "Should every 10th level up be broadcast to everyone?" )
                         .translation( "pmmo.broadcastMilestone" )
                         .define( "broadcastMilestone", true) );
+
+                builder.pop();
+            }
+
+            builder.push( "Mob Scaling" );
+            {
+                this.maxMobDamageBoost = subscriber.subscribe(builder
+                        .comment( "What is the maximum amount an aggressive mob's damage will be boosted?" )
+                        .translation( "pmmo.maxMobDamageBoost" )
+                        .defineInRange( "maxMobDamageBoost", 10D, 0, 10000) );
+
+                this.mobDamageBoostPerPowerLevel = subscriber.subscribe(builder
+                        .comment( "How much an aggresive mob's damage will increase per one Power Level?" )
+                        .translation( "pmmo.mobDamageBoostPerPowerLevel" )
+                        .defineInRange( "mobDamageBoostPerPowerLevel", 1D, 0, 10) );
+
+                this.maxMobHPBoost = subscriber.subscribe(builder
+                        .comment( "What is the maximum amount an aggressive mob's HP will be boosted?" )
+                        .translation( "pmmo.maxMobHPBoost" )
+                        .defineInRange( "maxMobHPBoost", 128D, 0, 1024) );
+
+                this.mobHPBoostPerPowerLevel = subscriber.subscribe(builder
+                        .comment( "How much an aggresive mob's HP will increase per one Power Level?" )
+                        .translation( "pmmo.mobHPBoostPerPowerLevel" )
+                        .defineInRange( "mobHPBoostPerPowerLevel", 5D, 0, 100) );
+
+                this.maxMobSpeedBoost = subscriber.subscribe(builder
+                        .comment( "What is the maximum amount an aggressive mob's speed will be boosted?" )
+                        .translation( "pmmo.maxMobSpeedBoost" )
+                        .defineInRange( "maxMobSpeedBoost", 10D, 0, 100) );
+
+                this.mobSpeedBoostPerPowerLevel = subscriber.subscribe(builder
+                        .comment( "How much an aggresive mob's speed will increase per one Power Level?" )
+                        .translation( "pmmo.mobSpeedBoostPerPowerLevel" )
+                        .defineInRange( "mobSpeedBoostPerPowerLevel", 1D, 0, 10) );
+
+
 
                 builder.pop();
             }

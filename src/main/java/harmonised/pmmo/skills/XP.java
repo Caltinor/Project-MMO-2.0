@@ -18,14 +18,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.PMMOPoseSetter;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
@@ -50,6 +52,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -910,7 +913,7 @@ public class XP
 
 				damage -= endured;
 
-				enduranceXp = ( damage * 5 ) + ( endured * 10 );
+				enduranceXp = ( damage * 5 ) + ( endured * 7.5 );
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
 				if( event.getSource().getDamageType().equals( "fall" ) )
 				{
@@ -963,6 +966,10 @@ public class XP
 
 			if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
 			{
+				IAttributeInstance test = target.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+				if( !(target instanceof AnimalEntity) )
+					System.out.println( test.getValue() + " " + test.getBaseValue() );
+
 				PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
 				if( !player.isCreative() )
 				{
@@ -1108,6 +1115,76 @@ public class XP
 			}
 		}
 	}
+
+	public static void handleLivingSpawn( LivingSpawnEvent.CheckSpawn event )
+	{
+		if( event.getEntity() instanceof MobEntity )
+		{
+			MobEntity mob = (MobEntity) event.getEntity();
+			Collection<ServerPlayerEntity> allPlayers = mob.getServer().getPlayerList().getPlayers();
+
+			Float closestDistance = null;
+			float tempDistance;
+
+			for( ServerPlayerEntity player : allPlayers )
+			{
+				tempDistance = mob.getDistance( player );
+				if( closestDistance == null || tempDistance < closestDistance )
+					closestDistance = tempDistance;
+			}
+
+			if( closestDistance != null )
+			{
+				float searchRange = closestDistance + 30;
+				float powerLevel = 0;
+				float playerPowerAverage = 1;
+				float playerPowerBonus = 1;
+
+				Collection<ServerPlayerEntity> players = new ArrayList<>();
+
+				for( ServerPlayerEntity player : allPlayers )
+				{
+					if( mob.getDistance( player ) < searchRange )
+						players.add( player );
+				}
+
+				for( ServerPlayerEntity player : players )
+				{
+					powerLevel += getPowerLevel( player );
+				}
+				powerLevel /= players.size();
+				playerPowerAverage = (float) Math.pow(0.5, players.size() - 1 );
+
+				if( playerPowerAverage < 1 )
+					powerLevel *= 1 + playerPowerAverage;
+
+				playerPowerBonus = powerLevel / 50;
+
+//				System.out.println( playerPowerBonus );
+
+				AttributeHandler.updateHP( mob, playerPowerBonus );
+				AttributeHandler.updateDamage( mob, playerPowerBonus );
+				AttributeHandler.updateSpeed( mob, playerPowerBonus );
+			}
+		}
+	}
+
+	private static float getPowerLevel( PlayerEntity player )
+    {
+		int powerLevel = getLevel( "endurance", player );
+
+		int combatLevel = getLevel( "combat", player );
+		int archeryLevel = getLevel( "archery", player );
+		int magicLevel = getLevel( "magic", player );
+
+		int maxOffensive = combatLevel;
+		if( maxOffensive < archeryLevel )
+			maxOffensive = archeryLevel;
+		if( maxOffensive < magicLevel )
+			maxOffensive = magicLevel;
+
+		return powerLevel + (maxOffensive * 1.5f);
+    }
 
 	public static void handlePlayerRespawn( PlayerEvent.PlayerRespawnEvent event )
 	{
@@ -2178,42 +2255,24 @@ public class XP
 		}
 	}
 
-	public static void setXp( PlayerEntity player, String skillName, float newXp )
+	public static void setXp( PlayerEntity player, String skillName, double newXp )
 	{
 		skillName = skillName.toLowerCase();
 		CompoundNBT skillsTag = getSkillsTag( player );
 		skillsTag.putDouble( skillName, newXp );
-
-		switch( skillName )
-		{
-			case "building":
-				AttributeHandler.updateReach( player );
-				break;
-
-			case "endurance":
-				AttributeHandler.updateHP( player );
-				break;
-
-			case "combat":
-				AttributeHandler.updateDamage( player );
-				break;
-
-			default:
-
-				break;
-		}
+		AttributeHandler.updateAll( player );
 
 		NetworkHandler.sendToPlayer( new MessageXp( newXp, Skill.getInt( skillName ), 0, false ), (ServerPlayerEntity) player );
 	}
 
-	public static int getGap( int a, int b )
+	private static int getGap( int a, int b )
 	{
 		int gap = a - b;
 
 		return gap;
 	}
 
-	public static int getSkillReqGap( PlayerEntity player, ResourceLocation res, String type )
+	private static int getSkillReqGap( PlayerEntity player, ResourceLocation res, String type )
 	{
 		int gap = 0;
 
@@ -2291,7 +2350,7 @@ public class XP
 		return gap;
 	}
 
-	public static void checkWornLevelReq( PlayerEntity player, Item item )
+	private static void checkWornLevelReq( PlayerEntity player, Item item )
 	{
 		if( !checkReq( player, item.getRegistryName(), "wear" ) )
 		{
@@ -2302,11 +2361,13 @@ public class XP
 			if( gap > 9 )
 				gap = 9;
 
+			player.addPotionEffect( new EffectInstance( Effects.MINING_FATIGUE, 75, gap, false, true ) );
+			player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
 		}
 	}
 
-	public static void checkBiomeLevelReq( PlayerEntity player )
+	private static void checkBiomeLevelReq( PlayerEntity player )
 	{
 		Biome biome = player.world.getBiome( player.getPosition() );
 		ResourceLocation resLoc = biome.getRegistryName();
@@ -2443,8 +2504,6 @@ public class XP
 
 				if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
 					player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 300, 0, false, false ) );
-				else
-					player.removePotionEffect( Effects.NIGHT_VISION );
 
 				if( player.isSprinting() )
 				{

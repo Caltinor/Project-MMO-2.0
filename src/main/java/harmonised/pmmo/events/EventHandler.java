@@ -7,6 +7,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -103,5 +104,11 @@ public class EventHandler
 	public static void itemUsed( PlayerInteractEvent event )
 	{
 		XP.handleItemUse( event );
+	}
+
+	@SubscribeEvent
+	public static void livingSpawn( LivingSpawnEvent.CheckSpawn event )
+	{
+		XP.handleLivingSpawn( event );
 	}
 }

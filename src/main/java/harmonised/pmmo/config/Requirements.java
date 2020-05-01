@@ -163,7 +163,7 @@ public class Requirements
 
         for( String key : theMap.keySet() )
         {
-            if( Skill.getInt( key ) != 0 )
+            if( Skill.getInt( key ) != 0 && (double) theMap.get( key ) >= 1 )
                 anyValidSkills = true;
             else
                 LOGGER.info( "Invalid skill " + key );
@@ -201,10 +201,15 @@ public class Requirements
                 {
                     if( entry.getValue() instanceof Double )
                     {
-                        if( Skill.getInt( entry.getKey() ) != 0 && (double) entry.getValue() > 0 )
-                            outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                        if( Skill.getInt( entry.getKey() ) != 0 )
+                        {
+                            if( (double) entry.getValue() >= 1 )
+                                outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                            else
+                                outReq.get( key ).put( entry.getKey(), 1);
+                        }
                         else
-                            LOGGER.error( entry.getKey() + " is either not a valid skill, or not above 0!" );
+                            LOGGER.error( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
                     }
                         else
                         LOGGER.error( entry.getValue() + " is not a Double!" );

@@ -3,9 +3,12 @@ package harmonised.pmmo.skills;
 import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.util.DP;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -13,8 +16,8 @@ public class AttributeHandler
 {
 	private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");
-	private static final UUID HPModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
-	private static final UUID DamageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
+	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
+	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
 	private static int levelsPerBlockReach = Config.config.levelsPerBlockReach.get();
 	private static int levelsPerHeart = Config.config.levelsPerHeart.get();
 	private static int levelsPerDamage = Config.config.levelsPerDamage.get();
@@ -23,6 +26,13 @@ public class AttributeHandler
 	private static int maxHeartCap = Config.config.maxHeartCap.get();
 	private static double maxReach = Config.config.maxReach.get();
 	private static double maxDamage = Config.config.maxDamage.get();
+	private static double maxMobSpeedBoost = Config.config.maxMobSpeedBoost.get();
+	private static double mobSpeedBoostPerPowerLevel = Config.config.mobSpeedBoostPerPowerLevel.get();
+	private static double maxMobHPBoost = Config.config.maxMobHPBoost.get();
+	private static double mobHPBoostPerPowerLevel = Config.config.mobHPBoostPerPowerLevel.get();
+	private static double maxMobDamageBoost = Config.config.maxMobDamageBoost.get();
+	private static double mobDamageBoostPerPowerLevel = Config.config.mobDamageBoostPerPowerLevel.get();
+
 
 	public static void updateAll( PlayerEntity player )
 	{
@@ -97,7 +107,7 @@ public class AttributeHandler
 	
 	public static void updateHP( PlayerEntity player )
 	{
-		IAttributeInstance HPAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		IAttributeInstance hpAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double enduranceLevel = XP.getLevel( "endurance", player );
 		int maxHP = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
@@ -107,14 +117,14 @@ public class AttributeHandler
 		if( maxHP > maxHPPref && prefsTag.contains( "maxExtraHeart" ) )
 			maxHP = maxHPPref;
 
-		AttributeModifier HPModifier = new AttributeModifier( HPModifierID, "Max HP Bonus thanks to Endurance Level", maxHP, AttributeModifier.Operation.ADDITION );
-		HPAttribute.removeModifier( HPModifierID );
-		HPAttribute.applyModifier( HPModifier );
+		AttributeModifier hpModifier = new AttributeModifier( hpModifierID, "Max HP Bonus thanks to Endurance Level", maxHP, AttributeModifier.Operation.ADDITION );
+		hpAttribute.removeModifier( hpModifierID );
+		hpAttribute.applyModifier( hpModifier );
 	}
 	
 	public static void updateDamage( PlayerEntity player )
 	{
-		IAttributeInstance DamageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		IAttributeInstance damageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double maxDamagePref = prefsTag.getDouble( "maxExtraDamageBoost" );
 		double combatLevel = XP.getLevel( "combat", player );
@@ -124,8 +134,72 @@ public class AttributeHandler
 		if( damageBoost > maxDamagePref && prefsTag.contains( "maxExtraDamageBoost" ) )
 			damageBoost = maxDamagePref;
 
-		AttributeModifier damageModifier = new AttributeModifier( DamageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );
-		DamageAttribute.removeModifier( DamageModifierID );
-		DamageAttribute.applyModifier( damageModifier );
+		AttributeModifier damageModifier = new AttributeModifier( damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );
+		damageAttribute.removeModifier( damageModifierID );
+		damageAttribute.applyModifier( damageModifier );
+	}
+
+	public static void updateHP( MobEntity mob, float bonus )
+	{
+		IAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		if( hpAttribute != null )
+		{
+			if( mob instanceof AnimalEntity )
+				bonus = 1;
+			else
+				bonus *= mobHPBoostPerPowerLevel;
+
+			if( bonus > maxMobHPBoost )
+				bonus = (float) maxMobHPBoost;
+//			System.out.println( "hp boost " + DP.dp( bonus / hpAttribute.getBaseValue() ) + " " + bonus + " " + hpAttribute.getBaseValue() + " " + mob.getDisplayName().getString() );
+
+			AttributeModifier hpModifier = new AttributeModifier(hpModifierID, "Max HP Bonus thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
+			boolean wasHealed = hpAttribute.hasModifier( hpModifier );
+
+			hpAttribute.removeModifier(hpModifierID);
+			hpAttribute.applyModifier(hpModifier);
+
+			if( !wasHealed )
+				mob.setHealth( mob.getHealth() + bonus );
+//			System.out.println( mob.getHealth() );
+		}
+	}
+
+	public static void updateDamage( MobEntity mob, float bonus )
+	{
+		IAttributeInstance damageAttribute = mob.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		if( damageAttribute != null )
+		{
+//			System.out.println( "damage boost " + bonus / damageAttribute.getBaseValue() + " " + bonus + " " + damageAttribute.getBaseValue() );
+			bonus *= mobDamageBoostPerPowerLevel;
+
+			if( bonus > maxMobDamageBoost )
+				bonus = (float) maxMobDamageBoost;
+
+			AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
+			damageAttribute.removeModifier(damageModifierID);
+			damageAttribute.applyModifier(damageModifier);
+		}
+//		else
+//			System.out.println( mob.getDisplayName().getString() );
+	}
+
+	public static void updateSpeed( MobEntity mob, float bonus )
+	{
+		IAttributeInstance speedAttribute = mob.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		if( speedAttribute != null )
+		{
+			if( !(mob instanceof  AnimalEntity) )
+			{
+				bonus *= mobSpeedBoostPerPowerLevel;
+
+				if( bonus > maxMobSpeedBoost )
+					bonus = (float) maxMobSpeedBoost;
+
+				AttributeModifier speedModifier = new AttributeModifier(speedModifierID, "Movement Speed Boost thanks to Nearby Player Power Level", bonus / 100, AttributeModifier.Operation.ADDITION);
+				speedAttribute.removeModifier(speedModifierID);
+				speedAttribute.applyModifier(speedModifier);
+			}
+		}
 	}
 }
