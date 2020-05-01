@@ -129,6 +129,9 @@ public class XP
 		skillTextFormat.put( "fishing", TextFormatting.AQUA );
 		skillTextFormat.put( "crafting", TextFormatting.GOLD );
 		skillTextFormat.put( "magic", TextFormatting.BLUE );
+		skillTextFormat.put( "slayer", TextFormatting.DARK_GRAY );
+		skillTextFormat.put( "fletching", TextFormatting.DARK_GREEN );
+		skillTextFormat.put( "power", TextFormatting.AQUA );
 ////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
 //		lapisDonators.add( "Harmonised" );
 //		dandelionDonators.add(  );
@@ -1138,7 +1141,6 @@ public class XP
 				float searchRange = closestDistance + 30;
 				float powerLevel = 0;
 				float playerPowerAverage = 1;
-				float playerPowerBonus = 1;
 
 				Collection<ServerPlayerEntity> players = new ArrayList<>();
 
@@ -1158,18 +1160,14 @@ public class XP
 				if( playerPowerAverage < 1 )
 					powerLevel *= 1 + playerPowerAverage;
 
-				playerPowerBonus = powerLevel / 50;
-
-//				System.out.println( playerPowerBonus );
-
-				AttributeHandler.updateHP( mob, playerPowerBonus );
-				AttributeHandler.updateDamage( mob, playerPowerBonus );
-				AttributeHandler.updateSpeed( mob, playerPowerBonus );
+				AttributeHandler.updateHP( mob, powerLevel );
+				AttributeHandler.updateDamage( mob, powerLevel );
+				AttributeHandler.updateSpeed( mob, powerLevel );
 			}
 		}
 	}
 
-	private static float getPowerLevel( PlayerEntity player )
+	public static float getPowerLevel( PlayerEntity player )
     {
 		int powerLevel = getLevel( "endurance", player );
 
@@ -1183,7 +1181,7 @@ public class XP
 		if( maxOffensive < magicLevel )
 			maxOffensive = magicLevel;
 
-		return powerLevel + (maxOffensive * 1.5f);
+		return ( powerLevel + (maxOffensive * 1.5f) ) / 50;
     }
 
 	public static void handlePlayerRespawn( PlayerEvent.PlayerRespawnEvent event )
@@ -2155,7 +2153,10 @@ public class XP
 		if( biomeMap != null && biomeMap.containsKey( skillName ) )
 		{
 			if( checkReq( player, resLoc, "biome" ) )
-				amount *= (double) biomeMap.get( skillName );
+			{
+				if( (double) biomeMap.get( skillName ) > 1 )
+					amount *= (double) biomeMap.get( skillName );
+			}
 			else
 				amount *= biomePenaltyMultiplier;
 		}

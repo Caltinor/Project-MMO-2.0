@@ -44,7 +44,7 @@ import java.util.Set;
 public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static String[] suggestSkill = new String[15];
+    private static String[] suggestSkill = new String[18];
     private static String[] suggestClear = new String[1];
     private static String[] levelOrXp = new String[2];
     private static String[] suggestPref = new String[6];
@@ -53,21 +53,24 @@ public class PmmoCommand
     public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
 
-        suggestSkill[0] = "Mining";
-        suggestSkill[1] = "Building";
-        suggestSkill[2] = "Excavation";
-        suggestSkill[3] = "Woodcutting";
-        suggestSkill[4] = "Farming";
-        suggestSkill[5] = "Agility";
-        suggestSkill[6] = "Endurance";
-        suggestSkill[7] = "Combat";
-        suggestSkill[8] = "Archery";
-        suggestSkill[9] = "Smithing";
-        suggestSkill[10] = "Flying";
-        suggestSkill[11] = "Swimming";
-        suggestSkill[12] = "Fishing";
-        suggestSkill[13] = "Crafting";
-        suggestSkill[14] = "Magic";
+        suggestSkill[0] =  "Power";
+        suggestSkill[1] =  "Mining";
+        suggestSkill[2] =  "Building";
+        suggestSkill[3] =  "Excavation";
+        suggestSkill[4] =  "Woodcutting";
+        suggestSkill[5] =  "Farming";
+        suggestSkill[6] =  "Agility";
+        suggestSkill[7] =  "Endurance";
+        suggestSkill[8] =  "Combat";
+        suggestSkill[9] =  "Archery";
+        suggestSkill[10] = "Smithing";
+        suggestSkill[11] = "Flying";
+        suggestSkill[12] = "Swimming";
+        suggestSkill[13] = "Fishing";
+        suggestSkill[14] = "Crafting";
+        suggestSkill[15] = "Magic";
+        suggestSkill[16] = "Slayer";
+        suggestSkill[17] = "Fletching";
 
         suggestClear[0] = "iagreetothetermsandconditions";
 
@@ -193,6 +196,7 @@ public class PmmoCommand
     {
         String[] args = context.getInput().split( " " );
         String skillName = args[4].toLowerCase();
+
         int skillInt = Skill.getInt( skillName );
         PlayerEntity sender = null;
 
@@ -203,6 +207,12 @@ public class PmmoCommand
         catch( CommandSyntaxException e )
         {
             //not player, it's fine
+        }
+
+        if( skillName.equals( "power" ) )
+        {
+            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", skillName ), false );
+            return 1;
         }
 
         if( skillInt != 0 )
@@ -506,12 +516,17 @@ public class PmmoCommand
         String[] args = context.getInput().split(" ");
         String skillName = args[3].toLowerCase();
 
-        if( Skill.getInt( skillName ) != 0 )
+        if( Skill.getInt( skillName ) != 0 || skillName.toLowerCase().equals( "power" ) )
         {
             try
             {
+                double level = 1;
+
                 ServerPlayerEntity target = EntityArgument.getPlayer( context, "player name" );
-                double level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
+                if( skillName.toLowerCase().equals( "power" ) )
+                    level = XP.getPowerLevel( target );
+                else
+                    level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
 
                 sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.text.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.text." + skillName ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ) ), false );
             }
