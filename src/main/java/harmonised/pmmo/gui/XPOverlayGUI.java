@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -32,14 +33,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class XPOverlayGUI extends AbstractGui
 {
 	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, xpDropPosX, xpDropPosY;
-	private static int cooldown, tempAlpha, levelGap = 0, skillGap, halfscreen, tempInt, xpDropDecayAge = 0;
+	private static int cooldown, tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
 	private static double xp, goalXp;
 	private static double lastTime, startLevel, timeDiff, tempDouble, tempDouble2, xpDropOffset = 0, xpDropOffsetCap = 0;
-	private static double barOffsetX = 0, barOffsetY = 0, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0;
+	private static double barOffsetX = 0, barOffsetY = 0, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String name = "none", tempName = "none";
-	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn;
+	private static boolean metBiomeReq = true, stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -56,6 +57,7 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
 			{
+				player = Minecraft.getInstance().player;
 				if( !init )
 				{
 					doInit();
@@ -277,6 +279,40 @@ public class XPOverlayGUI extends AbstractGui
 							drawString( fontRenderer, tempString, 3, 3 + listIndex, XP.getSkillColor( tag ) );
 							drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo.text." + tag ).getString(), levelGap + 4, 3 + listIndex, XP.getSkillColor( tag ) );
 							drawString( fontRenderer, " | " + DP.dprefix( skills.get( tag ).xp ), levelGap + skillGap + 13, 3 + listIndex, XP.getSkillColor( tag ) );
+
+							ResourceLocation resLoc = player.world.getBiome( player.getPosition() ).getRegistryName();
+							String biomeKey = resLoc.toString();
+							metBiomeReq = XP.checkReq( player, resLoc, "biome" );
+
+							if( !metBiomeReq )
+							{
+								if( biomePenaltyMultiplier < 1 )
+								{
+									tempDouble = (biomePenaltyMultiplier - 1) * 100;
+									tempDouble = Math.floor( tempDouble * 100 ) / 100;
+									tempString = ( tempDouble % 1 == 0 ? (int) Math.floor( tempDouble ) : DP.dp( tempDouble ) ) + "%";
+									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( tag ) );
+								}
+							}
+							else if( Requirements.biomeMultiplier.containsKey( biomeKey ) )
+							{
+								if( Requirements.biomeMultiplier.get( biomeKey ).containsKey( tag ) )
+								{
+									tempDouble = ( (double) Requirements.biomeMultiplier.get( biomeKey ).get( tag ) - 1 ) * 100;
+									tempDouble = Math.floor( tempDouble * 100 ) / 100;
+
+									if( tempDouble > 0 )
+										tempString = "+" + ( tempDouble % 1 == 0 ? (int) Math.floor( tempDouble ) : DP.dp( tempDouble ) ) + "%";
+									else if ( tempDouble < 0 )
+										tempString = ( tempDouble % 1 == 0 ? (int) Math.floor( tempDouble ) : DP.dp( tempDouble ) ) + "%";
+									else
+										tempString = "";
+
+									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( tag ) );
+								}
+							}
+							
+
 							listIndex += 9;
 						}
 				}
@@ -410,6 +446,8 @@ public class XPOverlayGUI extends AbstractGui
 
 			if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
 				xpDropDecayAge = (int) Math.floor( Config.config.xpDropDecayAge.get() );
+
+			biomePenaltyMultiplier = Config.config.biomePenaltyMultiplier.get();
 		}
 	}
 
@@ -524,6 +562,7 @@ public class XPOverlayGUI extends AbstractGui
 
 		levelGap = 0;
 		skillGap = 0;
+		xpGap = 0;
 
 		skillsKeys.forEach( key ->
 		{
@@ -540,6 +579,9 @@ public class XPOverlayGUI extends AbstractGui
 
 			if( skillGap < fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() ) )
 				skillGap = fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() );
+
+			if( xpGap < fontRenderer.getStringWidth( DP.dp( skills.get( key ).goalXp ) ) )
+				xpGap = fontRenderer.getStringWidth( DP.dprefix( skills.get( key ).goalXp ) );
 		});
 	}
 	
@@ -552,5 +594,6 @@ public class XPOverlayGUI extends AbstractGui
 		name = "none";
 		levelGap = 0;
 		skillGap = 0;
+		xpGap = 0;
 	}
 }

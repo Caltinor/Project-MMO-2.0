@@ -1063,6 +1063,13 @@
 		}
 	},
 	"biome_multiplier": {
+		"minecraft:river": {
+			"fishing": 1.05
+		},
+		"minecraft:desert": {
+			"excavation": 1.1,
+			"farming": 0.85
+		},
 		"minecraft:the_end": {
 			"flying": 2,
 			"combat": 1.2,
@@ -1072,31 +1079,56 @@
 		"minecraft:nether": {
 			"combat": 1.25,
 			"archery": 1.25,
-			"endurance": 1.25
+			"endurance": 1.25,
+			"flying": 2.5,
+			"farming": 0.75
 		},
 		"minecraft:jungle": {
-			"agility": 1.25
+			"agility": 1.25,
+			"swimming": 1.25,
+			"fishing": 1.25,
+			"combat": 1.1,
+			"archery": 1.35,
+			"woodcutting": 0.75,
+			"farming": 0.75
 		},
 		"minecraft:jungle_hills": {
-			"agility": 1.25
+			"agility": 1.25,
+			"swimming": 1.25,
+			"fishing": 1.25,
+			"combat": 1.1,
+			"archery": 1.35,
+			"woodcutting": 0.75,
+			"farming": 0.75
 		},
 		"minecraft:jungle_edge": {
-			"agility": 1.25
+			"agility": 1.25,
+			"swimming": 1.25,
+			"fishing": 1.25,
+			"combat": 1.1,
+			"archery": 1.35,
+			"woodcutting": 0.75,
+			"farming": 0.75
 		},
 		"minecraft:ocean": {
-			"swimming": 1.25
+			"swimming": 1.25,
+			"fishing": 1.1
 		},
 		"minecraft:deep_ocean": {
-			"swimming": 1.5
+			"swimming": 1.5,
+			"fishing": 1.2
 		},
 		"minecraft:cold_ocean": {
-			"swimming": 1.5
+			"swimming": 1.5,
+			"fishing": 1.3
 		},
 		"minecraft:frozen_ocean": {
-			"swimming": 1.75
+			"swimming": 1.75,
+			"fishing": 1.4
 		},
 		"minecraft:deep_frozen_ocean": {
-			"swimming": 2
+			"swimming": 2,
+			"fishing": 1.5
 		}
 	},
 	"biome_requirement": {

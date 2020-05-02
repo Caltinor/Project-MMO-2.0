@@ -2,14 +2,10 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import harmonised.pmmo.config.ConfigHelper;
 import harmonised.pmmo.config.Requirements;
-import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
@@ -17,18 +13,14 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.command.arguments.ItemArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -36,23 +28,22 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import javax.management.Attribute;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Set;
+import java.util.Map;
 
 public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
     private static String[] suggestSkill = new String[18];
-    private static String[] suggestClear = new String[1];
+//    private static String[] suggestClear = new String[1];
     private static String[] levelOrXp = new String[2];
     private static String[] suggestPref = new String[6];
     private static String[] suggestGui = new String[13];
+//    private static String[] suggestBiome = new String[ ForgeRegistries.BIOMES.getValues().size() ];
 
     public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
-
         suggestSkill[0] =  "Power";
         suggestSkill[1] =  "Mining";
         suggestSkill[2] =  "Building";
@@ -72,7 +63,7 @@ public class PmmoCommand
         suggestSkill[16] = "Slayer";
         suggestSkill[17] = "Fletching";
 
-        suggestClear[0] = "iagreetothetermsandconditions";
+//        suggestClear[0] = "iagreetothetermsandconditions";
 
         levelOrXp[0] = "level";
         levelOrXp[1] = "xp";
@@ -97,6 +88,13 @@ public class PmmoCommand
         suggestGui[10] = "xpDropsAttachedToBar";
         suggestGui[11] = "xpBarAlwaysOn";
         suggestGui[12] = "xpLeftDisplayAlwaysOn";
+
+//        int i = 0;
+//
+//        for( Biome biome : ForgeRegistries.BIOMES.getValues() )
+//        {
+//            suggestBiome[i++] = biome.getRegistryName().toString();
+//        }
 
         dispatcher.register( Commands.literal( "pmmo" )
                   .then( Commands.literal( "admin" )
@@ -163,7 +161,10 @@ public class PmmoCommand
                   .then( Commands.argument( "skill name", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
                   .executes( PmmoCommand::commandCheckStat )
-                  ))));
+                  )))
+                  .then( Commands.literal( "checkbiome" )
+                  .executes( PmmoCommand::commandCheckBiome )
+                  ));
     }
 
     private static int commandClear( CommandContext<CommandSource> context ) throws CommandException
@@ -315,7 +316,11 @@ public class PmmoCommand
                         if( newLevelXp < 0 )
                             newLevelXp = 0;
 
-                        NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skillInt, 0, true ), player );
+                        if( newLevelXp > playerXp )
+                            NetworkHandler.sendToPlayer( new MessageXp( playerXp, skillInt, newLevelXp - playerXp, true ), player );
+                        else
+                            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skillInt, 0, true ), player );
+
                         skillsTag.putDouble( skillName, newLevelXp );
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.addLevel", skillName, (newValue % 1 == 0 ? (int) Math.floor(newValue) : DP.dp(newValue) ) ), false );
@@ -330,7 +335,10 @@ public class PmmoCommand
                         if( newLevelXp < 0 )
                             newLevelXp = 0;
 
-                        NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skillInt, 0, true ), player );
+                        if( newLevelXp > playerXp )
+                            NetworkHandler.sendToPlayer( new MessageXp( playerXp, skillInt, newValue, true ), player );
+                        else
+                            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skillInt, 0, true ), player );
                         skillsTag.putDouble( skillName, newLevelXp );
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.addXp", skillName, DP.dp(newValue) ), false );
@@ -470,9 +478,14 @@ public class PmmoCommand
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
         CompoundNBT prefsTag = XP.getPreferencesTag( player );
-        double value = Double.parseDouble( args[3] );
-        if( value < 0 )
-            value = 0;
+        Double value = null;
+        if( args.length > 3 )
+        {
+            value = Double.parseDouble( args[3] );
+            if( value < 0 )
+                value = 0D;
+        }
+
 
         boolean matched = false;
         String match = "ERROR";
@@ -497,12 +510,19 @@ public class PmmoCommand
 
         if( matched )
         {
-            prefsTag.putDouble( match, value );
+            if( value != null )
+            {
+                prefsTag.putDouble( match, value );
 
-            NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
-            AttributeHandler.updateAll( player );
+                NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
+                AttributeHandler.updateAll( player );
 
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasBeenSet", match, args[3] ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasBeenSet", match, args[3] ), false );
+            }
+            else if( prefsTag.contains( match ) )
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasTheValue", "" + match, "" + prefsTag.getDouble( match ) ), false );
+            else
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasUnsetValue", "" + match ), false );
         }
         else
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", args[2] ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
@@ -537,6 +557,34 @@ public class PmmoCommand
         }
         else
             sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSkill", skillName ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
+
+        return 1;
+    }
+
+    private static int commandCheckBiome(CommandContext<CommandSource> context) throws CommandException
+    {
+        PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
+        String biomeKey = sender.world.getBiome( sender.getPosition() ).getRegistryName().toString();
+        String transKey = sender.world.getBiome( sender.getPosition() ).getTranslationKey();
+        Map<String, Object> theMap = Requirements.biomeMobMultiplier.get( biomeKey );
+
+        String damageBonus = "100";
+        String hpBonus = "100";
+        String speedBonus = "100";
+
+        if( theMap != null )
+        {
+            if( theMap.containsKey( "damageBonus" ) )
+                damageBonus = DP.dp( (double) theMap.get( "damageBonus" ) * 100 );
+            if( theMap.containsKey( "hpBonus" ) )
+                hpBonus = DP.dp( (double) theMap.get( "hpBonus" ) * 100 );
+            if( theMap.containsKey( "damageBonus" ) )
+                speedBonus = DP.dp( (double) theMap.get( "damageBonus" ) * 100 );
+        }
+
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.mobDamageBoost", new TranslationTextComponent( damageBonus ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), new TranslationTextComponent( transKey ).setStyle( new Style().setColor( TextFormatting.GRAY ) ) ), false );
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.mobHpBoost", new TranslationTextComponent( hpBonus ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), new TranslationTextComponent( transKey ).setStyle( new Style().setColor( TextFormatting.GRAY ) ) ), false );
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.mobSpeedBoost", new TranslationTextComponent( speedBonus ).setStyle( new Style().setColor( TextFormatting.GRAY ) ), new TranslationTextComponent( transKey ).setStyle( new Style().setColor( TextFormatting.GRAY ) ) ), false );
 
         return 1;
     }

@@ -2151,16 +2151,10 @@ public class XP
 		String biomeKey = resLoc.toString();
 		Map<String, Object> biomeMap = Requirements.biomeMultiplier.get( biomeKey );
 
-		if( biomeMap != null && biomeMap.containsKey( skillName ) )
-		{
-			if( checkReq( player, resLoc, "biome" ) )
-			{
-				if( (double) biomeMap.get( skillName ) > 1 )
-					amount *= (double) biomeMap.get( skillName );
-			}
-			else
-				amount *= biomePenaltyMultiplier;
-		}
+		if( !checkReq( player, resLoc, "biome" ) )
+			amount *= biomePenaltyMultiplier;
+		else if( biomeMap != null && biomeMap.containsKey( skillName ) )
+			amount *= (double) biomeMap.get( skillName );
 
 		amount *= globalMultiplier;
 
@@ -2358,7 +2352,7 @@ public class XP
 		{
 			int gap = getSkillReqGap( player, item.getRegistryName(), "wear" );
 			if( gap > 0 )
-				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", item.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+			    player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toWear", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 
 			if( gap > 9 )
 				gap = 9;
@@ -2385,14 +2379,6 @@ public class XP
 		{
 			if( !checkReq( player, resLoc, "biome" ) )
 			{
-//				int gap = getSkillReqGap( player, resLoc, "biome" );
-//
-//				if( gap > 0 )
-//					NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toWear", "", biomeKey, true, 2 ), (ServerPlayerEntity) player );
-//
-//				if( gap > 9 )
-//					gap = 9;
-
 				for( Map.Entry<String, Object> entry : biomeEffect.entrySet() )
 				{
 					Effect effect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( entry.getKey() ) );

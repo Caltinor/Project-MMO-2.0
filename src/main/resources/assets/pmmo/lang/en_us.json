@@ -94,6 +94,8 @@
   "pmmo.text.setLevel": "%1$s has been set to level %2$s",
   "pmmo.text.setXp": "%1$s has been set to %2$sxp",
   "pmmo.text.hasBeenSet": "%1$s has been set to %2$s",
+  "pmmo.text.hasTheValue": "%1$s has the value %2$s",
+  "pmmo.text.hasUnsetValue": "%1$s does not yet have a value",
   "pmmo.text.addLevel": "%1$s has been changed by %2$s levels",
   "pmmo.text.addXp": "%1$s has been changed by %2$sxp",
   "pmmo.text.levelAtXp": "%1$sxp is level %2$s",
@@ -112,5 +114,8 @@
   "pmmo.text.milestoneLevelUp": "%1$s has reached level %2$s in %3$s!",
   "pmmo.text.tooltipOn": "PMMO Tooltip Info has been turned on",
   "pmmo.text.tooltipOff": "PMMO Tooltip Info has been turned off",
-  "pmmo.text.jsonConfigReload": "PMMO Json Config has been reloaded!"
+  "pmmo.text.jsonConfigReload": "PMMO Json Config has been reloaded!",
+  "pmmo.text.mobDamageBoost": "Mobs Damage scaling is %1$s%% of normal rates in %2$s biome",
+  "pmmo.text.mobHpBoost": "Mobs HP scaling is %1$s%% of normal rates in %2$s biome",
+  "pmmo.text.mobSpeedBoost": "Mobs Speed scaling is %1$s%% of normal rates in %2$s biome"
 }
