@@ -16,7 +16,7 @@ import java.util.List;
 public class ScreenSkills extends Screen
 {
     protected final List<IGuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/screenbox.png" );
+    private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/screenboxy.png" );
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 250;
@@ -56,6 +56,9 @@ public class ScreenSkills extends Screen
         }
         else
             this.renderDirtBackground(p_renderBackground_1_);
+
+        boxHeight = 250;
+        boxWidth = 250;
 
         boxPosX = (int) ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         boxPosY = (int) ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );

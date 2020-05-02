@@ -1,28 +1,20 @@
 package harmonised.pmmo.skills;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.curios.Curios;
-import harmonised.pmmo.gui.ScreenSkills;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.util.DP;
-import javafx.stage.Screen;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +25,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.potion.Potion;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -62,12 +53,9 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.jmx.Server;
-import top.theillusivec4.curios.api.CuriosAPI;
 
 public class XP
 {
@@ -1646,13 +1634,13 @@ public class XP
 				    							}
 				    							else
 				    							{
-				    							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.offhandToDiss" ), false );
-				    							sendMessage( "_________________________________", false, player );
-				    							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
-				    							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
-				    							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
-				    							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
-				    						}
+				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.offhandToDiss" ), false );
+				    								sendMessage( "_________________________________", false, player );
+				    								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
+				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
+				    								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
+				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
+				    							}
 				    						}
 											else
 												player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotSalvageLackLevelLonger", reqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );

@@ -548,7 +548,7 @@ public class PmmoCommand
                 else
                     level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
 
-                sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.text.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.text." + skillName ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ) ), false );
+                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.text." + skillName ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ) ), false );
             }
             catch( CommandSyntaxException e )
             {

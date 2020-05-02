@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '2.27'
+version = '2.27.1'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO-1.15'
 
@@ -67,6 +67,20 @@ repositories
 
     maven
     {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+
+    maven
+    {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+
+    maven
+    {
         url "http://dvs1.progwml6.com/files/maven/"
     }
 
@@ -83,7 +97,7 @@ dependencies
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.30'
     implementation 'com.google.code.gson:gson:2.8.6'
 
-//    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
+    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3")
 
     runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")
@@ -100,7 +114,7 @@ jar {
             "Specification-Version": "1", 
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"pmmosareus",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

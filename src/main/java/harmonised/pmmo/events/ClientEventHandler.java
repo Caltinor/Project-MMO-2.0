@@ -35,7 +35,7 @@ import java.util.Map;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEventHandler
 {
-    private static boolean wasCrawling = false, tooltipOn = true, tooltipKeyWasPressed = false;
+    private static boolean wasCrawling = false, wasOpenMenu = false, tooltipOn = true, tooltipKeyWasPressed = false;
     private static String lastKey = "";
     private static int salvageArrayPos = 0, salvageArrayLength;
     private static long lastTime = System.currentTimeMillis();
@@ -54,10 +54,16 @@ public class ClientEventHandler
         {
             if( wasCrawling != ClientHandler.CRAWL_KEY.isKeyDown() )
             {
-//                Minecraft.getInstance().displayGuiScreen( new ScreenSkills( new TranslationTextComponent( "pmmo.text.potato" ) ) );
-
                 wasCrawling = ClientHandler.CRAWL_KEY.isKeyDown();
                 NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
+            }
+
+            if( wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() )
+            {
+                Minecraft.getInstance().displayGuiScreen( new ScreenSkills( new TranslationTextComponent( "pmmo.text.potato" ) ) );
+
+                wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
+//                NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
             }
 
             if( !(Minecraft.getInstance().player == null) && ClientHandler.TOGGLE_TOOLTIP.isKeyDown() && !tooltipKeyWasPressed )
