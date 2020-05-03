@@ -26,59 +26,8 @@ import java.util.function.BiConsumer;
 
 public class Requirements
 {
-    private static Map<String, Map<String, Object>> localWearReq;
-    public static Map<String, Map<String, Object>> wearReq;
-
-    private static Map<String, Map<String, Object>> localToolReq;
-    public static Map<String, Map<String, Object>> toolReq;
-
-    private static Map<String, Map<String, Object>> localWeaponReq;
-    public static Map<String, Map<String, Object>> weaponReq;
-
-    private static Map<String, Map<String, Object>> localMobReq;
-    public static Map<String, Map<String, Object>> mobReq;
-
-    private static Map<String, Map<String, Object>> localUseReq;
-    public static Map<String, Map<String, Object>> useReq;
-
-    private static Map<String, Map<String, Object>> localPlaceReq;
-    public static Map<String, Map<String, Object>> placeReq;
-
-    private static Map<String, Map<String, Object>> localBreakReq;
-    public static Map<String, Map<String, Object>> breakReq;
-
-    private static Map<String, Map<String, Object>> localBiomeReq;
-    public static Map<String, Map<String, Object>> biomeReq;
-
-    private static Map<String, Map<String, Object>> localBiomeMultiplier;
-    public static Map<String, Map<String, Object>> biomeMultiplier;
-
-    private static Map<String, Map<String, Object>> localBiomeEffect;
-    public static Map<String, Map<String, Object>> biomeEffect;
-
-    private static Map<String, Map<String, Object>> localBiomeMobMultiplier;
-    public static Map<String, Map<String, Object>> biomeMobMultiplier;
-
-    private static Map<String, Map<String, Object>> localXpValue;
-    public static Map<String, Map<String, Object>> xpValue;
-
-    private static Map<String, Map<String, Object>> localXpValueCrafting;
-    public static Map<String, Map<String, Object>> xpValueCrafting;
-
-    private static Map<String, Map<String, Object>> localOreInfo;
-    public static Map<String, Map<String, Object>> oreInfo;
-
-    private static Map<String, Map<String, Object>> locallogInfo;
-    public static Map<String, Map<String, Object>> logInfo;
-
-    private static Map<String, Map<String, Object>> localPlantInfo;
-    public static Map<String, Map<String, Object>> plantInfo;
-
-    private static Map<String, Map<String, Object>> localSalvageInfo;
-    public static Map<String, Map<String, Object>> salvageInfo;
-
-    public static Map<String, Map<String, Object>> localSalvagesFrom;
-    public static Map<String, Map<String, Object>> salvagesFrom;
+    public static Map<String, Map<String, Map<String, Object>>> localData = new HashMap<>();
+    public static Map<String, Map<String, Map<String, Object>>> data = new HashMap<>();
 
 //    private static Map<String, Object> tempMap;
     private static ArrayList<String> validAttributes = new ArrayList<>();
@@ -114,59 +63,30 @@ public class Requirements
 
     private static void initMaps()
     {
-        localWearReq = new HashMap<>();
-        wearReq = new HashMap<>();
+        initMap( localData );
+        initMap( data );
+    }
 
-        localToolReq = new HashMap<>();
-        toolReq = new HashMap<>();
-
-        localWeaponReq = new HashMap<>();
-        weaponReq = new HashMap<>();
-
-        localMobReq = new HashMap<>();
-        mobReq = new HashMap<>();
-
-        localUseReq = new HashMap<>();
-        useReq = new HashMap<>();
-
-        localPlaceReq = new HashMap<>();
-        placeReq = new HashMap<>();
-
-        localBreakReq = new HashMap<>();
-        breakReq = new HashMap<>();
-
-        localBiomeReq = new HashMap<>();
-        biomeReq = new HashMap<>();
-
-        localBiomeMultiplier = new HashMap<>();
-        biomeMultiplier = new HashMap<>();
-
-        localBiomeEffect = new HashMap<>();
-        biomeEffect = new HashMap<>();
-
-        localBiomeMobMultiplier = new HashMap<>();
-        biomeMobMultiplier = new HashMap<>();
-
-        localXpValue = new HashMap<>();
-        xpValue = new HashMap<>();
-
-        localXpValueCrafting = new HashMap<>();
-        xpValueCrafting = new HashMap<>();
-
-        localOreInfo = new HashMap<>();
-        oreInfo = new HashMap<>();
-
-        locallogInfo = new HashMap<>();
-        logInfo = new HashMap<>();
-
-        localPlantInfo = new HashMap<>();
-        plantInfo = new HashMap<>();
-
-        localSalvageInfo = new HashMap<>();
-        salvageInfo = new HashMap<>();
-
-        localSalvagesFrom = new HashMap<>();
-        salvagesFrom = new HashMap<>();
+    private static void initMap( Map<String, Map<String, Map<String, Object>>> map )
+    {
+        map.put( "wearReq", new HashMap<>() );
+        map.put( "toolReq", new HashMap<>() );
+        map.put( "weaponReq", new HashMap<>() );
+        map.put( "mobReq", new HashMap<>() );
+        map.put( "useReq", new HashMap<>() );
+        map.put( "placeReq", new HashMap<>() );
+        map.put( "breakReq", new HashMap<>() );
+        map.put( "biomeReq", new HashMap<>() );
+        map.put( "biomeMultiplier", new HashMap<>() );
+        map.put( "biomeEffect", new HashMap<>() );
+        map.put( "biomeMobMultiplier", new HashMap<>() );
+        map.put( "xpValue", new HashMap<>() );
+        map.put( "xpValueCrafting", new HashMap<>() );
+        map.put( "oreInfo", new HashMap<>() );
+        map.put( "logInfo", new HashMap<>() );
+        map.put( "plantInfo", new HashMap<>() );
+        map.put( "salvageInfo", new HashMap<>() );
+        map.put( "salvagesFrom", new HashMap<>() );
     }
 
     private static boolean checkValidSkills( Map<String, Object> theMap )
@@ -385,6 +305,8 @@ public class Requirements
                     else
                         outMap.put( "maxChance", maxChance );
 
+                    Map<String, Map<String, Object>> localSalvagesFrom = localData.get( "salvagesFrom" );
+
                     if( !localSalvagesFrom.containsKey( salvageItem ) )
                         localSalvagesFrom.put( salvageItem, new HashMap<>() );
 
@@ -437,78 +359,62 @@ public class Requirements
     private static void updateFinal( Requirements req )
     {
         if( Config.config.wearReqEnabled.get() )
-            updateReqSkills( req.wears, localWearReq );
+            updateReqSkills( req.wears, localData.get( "wearReq" ) );
 
         if( Config.config.toolReqEnabled.get() )
-            updateReqSkills( req.tools, localToolReq );
+            updateReqSkills( req.tools, localData.get( "toolReq" ) );
 
         if( Config.config.weaponReqEnabled.get() )
-            updateReqSkills( req.weapons, localWeaponReq );
+            updateReqSkills( req.weapons, localData.get( "weaponReq" ) );
 
 //        updateReqSkills( req.mobs, mobReq );
 
         if( Config.config.useReqEnabled.get() )
-            updateReqSkills( req.use, localUseReq );
+            updateReqSkills( req.use, localData.get( "useReq" ) );
 
         if( Config.config.xpValueEnabled.get() )
-            updateReqSkills( req.xpValues, localXpValue );
+            updateReqSkills( req.xpValues, localData.get( "xpValue" ) );
 
         if( Config.config.xpValueCraftingEnabled.get() )
-            updateReqSkills( req.xpValuesCrafting, localXpValueCrafting );
+            updateReqSkills( req.xpValuesCrafting, localData.get( "xpValueCrafting" ) );
 
         if( Config.config.placeReqEnabled.get() )
-            updateReqSkills( req.placing, localPlaceReq );
+            updateReqSkills( req.placing, localData.get( "placeReq" ) );
 
         if( Config.config.breakReqEnabled.get() )
-            updateReqSkills( req.breaking, localBreakReq );
+            updateReqSkills( req.breaking, localData.get( "breakReq" ) );
 
         if( Config.config.biomeReqEnabled.get() )
         {
-            updateReqSkills( req.biome, localBiomeReq );
-            updateReqEffects( req.biomeeff, localBiomeEffect );
+            updateReqSkills( req.biome, localData.get( "biomeReq" ) );
+            updateReqEffects( req.biomeeff, localData.get( "biomeEffect" ) );
         }
 
         if( Config.config.biomeMultiplierEnabled.get() )
-            updateReqSkills( req.biomemultiplier, localBiomeMultiplier );
+            updateReqSkills( req.biomemultiplier, localData.get( "biomeMultiplier" ) );
 
         if( Config.config.biomeMobMultiplierEnabled.get() )
-            updateReqAttributes( req.biomemobmultiplier, localBiomeMobMultiplier );
+            updateReqAttributes( req.biomemobmultiplier, localData.get( "biomeMobMultiplier" ) );
 
         if( Config.config.oreEnabled.get() )
-            updateReqExtra( req.ores, localOreInfo );
+            updateReqExtra( req.ores, localData.get( "oreInfo" ) );
 
         if( Config.config.logEnabled.get() )
-            updateReqExtra( req.logs, locallogInfo );
+            updateReqExtra( req.logs, localData.get( "logInfo" ) );
 
         if( Config.config.plantEnabled.get() )
-            updateReqExtra( req.plants, localPlantInfo );
+            updateReqExtra( req.plants, localData.get( "plantInfo" ) );
 
         if( Config.config.salvageEnabled.get() )
-            updateReqSalvage( req.salvage, localSalvageInfo );
+            updateReqSalvage( req.salvage, localData.get( "salvageInfo" ) );
 
-        resetRequirements();
+        data = localData;
     }
 
-    public static void resetRequirements()
-    {
-        wearReq = localWearReq;
-        toolReq = localToolReq;
-        weaponReq = localWeaponReq;
-        useReq = localUseReq;
-        xpValue = localXpValue;
-        xpValueCrafting = localXpValueCrafting;
-        placeReq = localPlaceReq;
-        breakReq = localBreakReq;
-        biomeReq = localBiomeReq;
-        biomeMultiplier = localBiomeMultiplier;
-        biomeEffect = localBiomeEffect;
-        biomeMobMultiplier = localBiomeMobMultiplier;
-        oreInfo = localOreInfo;
-        logInfo = locallogInfo;
-        plantInfo = localPlantInfo;
-        salvageInfo = localSalvageInfo;
-        salvagesFrom = localSalvagesFrom;
-    }
+//    public static void resetRequirements()
+//    {
+//        data = new HashMap<>( localData );
+//    }
 
     private static void createData( File dataFile )
     {

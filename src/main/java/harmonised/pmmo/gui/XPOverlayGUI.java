@@ -49,6 +49,8 @@ public class XPOverlayGUI extends AbstractGui
 	private static ArrayList<String> skillsKeys = new ArrayList<String>();
 	private static ASkill skill;
 	private static FontRenderer fontRenderer = minecraft.fontRenderer;
+	private static int maxLevel = (int) Math.floor( XP.getConfig( "maxLevel" ) );
+	private static double maxXp = XP.getConfig( "maxXp" );
 
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
@@ -106,7 +108,7 @@ public class XPOverlayGUI extends AbstractGui
 						xpDropOffsetCap = -9;
 					else if ( guiKey || xpLeftDisplayAlwaysOn )
 					{
-						if( skills.get( name ).xp >= XP.maxXp )
+						if( skills.get( name ).xp >= maxXp )
 							xpDropOffsetCap = 25;
 						else
 							xpDropOffsetCap = 34;
@@ -237,25 +239,25 @@ public class XPOverlayGUI extends AbstractGui
 						if( tempInt > 100 )
 							tempInt = 100;
 
-						if( skill.pos >= XP.maxLevel )
+						if( skill.pos >= maxLevel )
 							tempInt = 100;
 
 						blit( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
 						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( themePos / 100 ) ), barHeight*2, tempInt, barHeight );
 					}
-					if( skill.pos >= XP.maxLevel )
-						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + name ).getString(), XP.maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
+					if( skill.pos >= maxLevel )
+						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + name ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
 					else
 						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + name ).getString(), DP.dp( Math.floor( skill.pos * 100 ) / 100 ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
 					
 					if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( name ) != null )
 					{
-						if( skills.get( name ).xp >= XP.maxXp )
+						if( skills.get( name ).xp >= maxXp )
 							drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.maxLevel" ).getString(), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( name ) );
 						else
 						{
-							if( goalXp >= XP.maxXp )
-								goalXp =  XP.maxXp;
+							if( goalXp >= maxXp )
+								goalXp =  maxXp;
 							
 							goalXp = XP.xpAtLevel( XP.levelAtXp( skill.xp ) + 1 );
 							drawCenteredString( fontRenderer, DP.dprefix( skills.get( name ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( name ) );
@@ -274,8 +276,8 @@ public class XPOverlayGUI extends AbstractGui
 						{
 							tempDouble = XP.levelAtXpDecimal( skills.get( tag ).xp );
 							tempString = DP.dp( tempDouble );
-							if( tempDouble >= XP.maxLevel )
-								tempString = "" + XP.maxLevel;
+							if( tempDouble >= maxLevel )
+								tempString = "" + maxLevel;
 							drawString( fontRenderer, tempString, 3, 3 + listIndex, XP.getSkillColor( tag ) );
 							drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo.text." + tag ).getString(), levelGap + 4, 3 + listIndex, XP.getSkillColor( tag ) );
 							drawString( fontRenderer, " | " + DP.dprefix( skills.get( tag ).xp ), levelGap + skillGap + 13, 3 + listIndex, XP.getSkillColor( tag ) );
@@ -294,11 +296,11 @@ public class XPOverlayGUI extends AbstractGui
 									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( tag ) );
 								}
 							}
-							else if( Requirements.biomeMultiplier.containsKey( biomeKey ) )
+							else if( Requirements.data.get( "biomeMultiplier" ).containsKey( biomeKey ) )
 							{
-								if( Requirements.biomeMultiplier.get( biomeKey ).containsKey( tag ) )
+								if( Requirements.data.get( "biomeMultiplier" ).get( biomeKey ).containsKey( tag ) )
 								{
-									tempDouble = ( (double) Requirements.biomeMultiplier.get( biomeKey ).get( tag ) - 1 ) * 100;
+									tempDouble = ( (double) Requirements.data.get( "biomeMultiplier" ).get( biomeKey ).get( tag ) - 1 ) * 100;
 									tempDouble = Math.floor( tempDouble * 100 ) / 100;
 
 									if( tempDouble > 0 )
@@ -566,10 +568,10 @@ public class XPOverlayGUI extends AbstractGui
 
 		skillsKeys.forEach( key ->
 		{
-			if( skills.get( key ).pos >= XP.maxLevel )
+			if( skills.get( key ).pos >= maxLevel )
 			{
-				if( levelGap < fontRenderer.getStringWidth( "" + XP.maxLevel ) )
-					levelGap = fontRenderer.getStringWidth( "" + XP.maxLevel );
+				if( levelGap < fontRenderer.getStringWidth( "" + maxLevel ) )
+					levelGap = fontRenderer.getStringWidth( "" + maxLevel );
 			}
 			else
 			{

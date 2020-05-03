@@ -14,19 +14,24 @@ public class MessageUpdateReq
     private CompoundNBT reqPackage = new CompoundNBT();
     private String outputName;
 
-    public MessageUpdateReq(Map<String, Map<String, Object>> theMap, String outputName )
+    public MessageUpdateReq( Map<String, Map<String, Map<String, Object>>> theMap, String outputName )
     {
         this.outputName = outputName;
-        for( String keyTop : theMap.keySet() )
+
+        for( String reqKey : theMap.keySet() )
         {
-            reqPackage.put( keyTop, new CompoundNBT() );
-            for( String keyBot : theMap.get( keyTop ).keySet() )
+            reqPackage.put( reqKey, new CompoundNBT() );
+            for( String topKey : theMap.get( reqKey ).keySet() )
             {
-                Object value = theMap.get( keyTop ).get( keyBot );
-                if( keyBot.equals( "salvageItem" ) )
-                    reqPackage.getCompound( keyTop ).putString( keyBot, (String) value );
-                else
-                    reqPackage.getCompound( keyTop ).putDouble( keyBot, (double) value );
+                reqPackage.getCompound( reqKey ).put( topKey, new CompoundNBT() );
+                for( String botKey : theMap.get( reqKey ).get( topKey ).keySet() )
+                {
+                    Object value = theMap.get( reqKey ).get( topKey ).get( botKey );
+                    if( botKey.equals( "salvageItem" ) )
+                        reqPackage.getCompound( reqKey ).getCompound( topKey ).putString( botKey, (String) value );
+                    else
+                        reqPackage.getCompound( reqKey ).getCompound( topKey ).putDouble( botKey, (double) value );
+                }
             }
         }
     }
@@ -54,95 +59,34 @@ public class MessageUpdateReq
     {
         ctx.get().enqueueWork(() ->
         {
-            Map<String, Map<String, Object>> newPackage = new HashMap<>();
+            Map<String, Map<String, Map<String, Object>>> newPackage = new HashMap<>();
 
             if( !packet.outputName.toLowerCase().equals( "wipe" ) )
             {
-                for( String topKey : packet.reqPackage.keySet() )
+                for( String reqKey : packet.reqPackage.keySet() )
                 {
-                    newPackage.put( topKey, new HashMap<>() );
-                    for( String botKey : packet.reqPackage.getCompound( topKey ).keySet() )
+                    for( String topKey : packet.reqPackage.getCompound( reqKey ).keySet() )
                     {
-                        if( botKey.equals( "salvageItem" ) )
-                            newPackage.get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getString( botKey ) );
-                        else
-                            newPackage.get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getDouble( botKey ) );
+                        newPackage.put( topKey, new HashMap<>() );
+                        for( String botKey : packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).keySet() )
+                        {
+                            if( botKey.equals( "salvageItem" ) )
+                                newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getString( botKey ) );
+                            else
+                                newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getDouble( botKey ) );
+                        }
                     }
                 }
             }
 
             switch( packet.outputName.toLowerCase() )
             {
-                case "wipe":
-                    Requirements.resetRequirements();
-                    break;
+//                case "wipe":
+//                    Requirements.resetRequirements();
+//                    break;
 
-                case "wearreq":
-                    Requirements.wearReq = newPackage;
-                    break;
-
-                case "toolreq":
-                    Requirements.toolReq = newPackage;
-                    break;
-
-                case "weaponreq":
-                    Requirements.weaponReq = newPackage;
-                    break;
-
-                case "mobreq":
-                    Requirements.mobReq = newPackage;
-                    break;
-
-                case "usereq":
-                    Requirements.useReq = newPackage;
-                    break;
-
-                case "placereq":
-                    Requirements.placeReq = newPackage;
-                    break;
-
-                case "breakreq":
-                    Requirements.breakReq = newPackage;
-                    break;
-
-                case "biomereq":
-                    Requirements.biomeReq = newPackage;
-                    break;
-
-                case "biomemultiplier":
-                    Requirements.biomeMultiplier = newPackage;
-                    break;
-
-                case "biomeeffect":
-                    Requirements.biomeEffect = newPackage;
-                    break;
-
-                case "xpvalue":
-                    Requirements.xpValue = newPackage;
-                    break;
-
-                case "xpvaluecrafting":
-                    Requirements.xpValueCrafting = newPackage;
-                    break;
-
-                case "oreinfo":
-                    Requirements.oreInfo = newPackage;
-                    break;
-
-                case "loginfo":
-                    Requirements.logInfo = newPackage;
-                    break;
-
-                case "plantinfo":
-                    Requirements.plantInfo = newPackage;
-                    break;
-
-                case "salvageInfo":
-                    Requirements.salvageInfo = newPackage;
-                    break;
-
-                case "salvagesfrom":
-                    Requirements.salvagesFrom = newPackage;
+                case "json":
+                    Requirements.data = newPackage;
                     break;
 
                 default:

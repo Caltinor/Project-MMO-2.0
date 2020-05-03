@@ -9,6 +9,7 @@ import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -59,7 +60,6 @@ import org.apache.logging.log4j.Logger;
 
 public class XP
 {
-	private static Map<ResourceLocation, Boolean> noDropOres = new HashMap<>();
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
 	private static Map<String, Integer> skillColors = new HashMap<>();
 	private static Map<UUID, Long> lastAward = new HashMap<>();
@@ -68,23 +68,39 @@ public class XP
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static Set<UUID> isCrawling = new HashSet<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
-	private static double baseXp, xpIncreasePerLevel;
 	private static Set<UUID> lapisDonators = new HashSet<>();
 	private static Set<UUID> dandelionDonators = new HashSet<>();
 	private static Set<UUID> ironDonators = new HashSet<>();
 	private static double globalMultiplier = Config.config.globalMultiplier.get();
-	private static double biomePenaltyMultiplier = Config.config.biomePenaltyMultiplier.get();
 	private static double deathXpPenaltyMultiplier = Config.config.deathXpPenaltyMultiplier.get();
-	public static int maxLevel = Config.config.maxLevel.get();
-	private static boolean crawlingAllowed = Config.config.crawlingAllowed.get();
-    private static boolean showWelcome = Config.config.showWelcome.get();
+	private static boolean showWelcome = Config.config.showWelcome.get();
     private static boolean showDonatorWelcome = Config.config.showDonatorWelcome.get();
     private static boolean broadcastMilestone = Config.config.broadcastMilestone.get();
 
-    public static double maxXp = xpAtLevel( maxLevel );
+	public static Map<String, Double> localConfig = new HashMap<>();
+    public static Map<String, Double> config = new HashMap<>();
 
 	public static void initValues()
 	{
+////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
+
+		localConfig.put( "baseXp", (double) Config.config.baseXp.get() );
+		localConfig.put( "xpIncreasePerLevel", (double) Config.config.xpIncreasePerLevel.get() );
+		localConfig.put( "maxLevel", (double) Config.config.maxLevel.get() );
+		localConfig.put( "maxXp", xpAtLevel( Config.config.maxLevel.get() ) );
+		localConfig.put( "biomePenaltyMultiplier", Config.config.biomePenaltyMultiplier.get() );
+		localConfig.put( "nightvisionUnlockLevel", (double) Config.config.nightvisionUnlockLevel.get() );
+		localConfig.put( "speedBoostPerLevel", Config.config.speedBoostPerLevel.get() );
+		localConfig.put( "maxSpeedBoost", Config.config.maxSpeedBoost.get() );
+		localConfig.put( "maxJumpBoost", Config.config.maxJumpBoost.get() );
+		localConfig.put( "levelsCrouchJumpBoost", (double) Config.config.levelsCrouchJumpBoost.get() );
+		localConfig.put( "levelsSprintJumpBoost", (double) Config.config.levelsSprintJumpBoost.get() );
+
+		if( Config.config.crawlingAllowed.get() )
+			localConfig.put( "crawlingAllowed", 1D );
+		else
+			localConfig.put( "crawlingAllowed", 0D );
+
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
 		skillColors.put( "mining", 0x00ffff );
 		skillColors.put( "building", 0x00ffff );
@@ -124,9 +140,6 @@ public class XP
 //		lapisDonators.add(  );
 //		dandelionDonators.add(  );
 		ironDonators.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );
-////////////////////////////////////NO_DROP_VALUES/////////////////////////////////////////////////
-		noDropOres.put( Blocks.IRON_ORE.getRegistryName(), true );
-		noDropOres.put( Blocks.GOLD_ORE.getRegistryName(), true );
 ////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
 		materialHarvestTool.put( Material.ANVIL, "pickaxe" );				//PICKAXE
 		materialHarvestTool.put( Material.GLASS, "pickaxe" );
@@ -189,9 +202,9 @@ public class XP
 	{
 		Map<String, Double> theMap = new HashMap<>();
 
-		if( Requirements.xpValue.containsKey( registryName.toString() ) )
+		if( Requirements.data.get( "xpValue" ).containsKey( registryName.toString() ) )
 		{
-			for( Map.Entry<String, Object> entry : Requirements.xpValue.get( registryName.toString() ).entrySet() )
+			for( Map.Entry<String, Object> entry : Requirements.data.get( "xpValue" ).get( registryName.toString() ).entrySet() )
 			{
 				if( entry.getValue() instanceof Double )
 					theMap.put( entry.getKey(), (double) entry.getValue() );
@@ -205,9 +218,9 @@ public class XP
     {
         Map<String, Double> theMap = new HashMap<>();
 
-        if( Requirements.xpValueCrafting.containsKey( registryName.toString() ) )
+        if( Requirements.data.get( "xpValueCrafting" ).containsKey( registryName.toString() ) )
         {
-            for( Map.Entry<String, Object> entry : Requirements.xpValueCrafting.get( registryName.toString() ).entrySet() )
+            for( Map.Entry<String, Object> entry : Requirements.data.get( "xpValueCrafting" ).get( registryName.toString() ).entrySet() )
             {
                 if( entry.getValue() instanceof Double )
                     theMap.put( entry.getKey(), (double) entry.getValue() );
@@ -216,14 +229,6 @@ public class XP
 
         return theMap;
     }
-
-	private static boolean getNoDropOre( ResourceLocation registryName )
-	{
-		if( noDropOres.get( registryName ) != null )
-			return true;
-		else
-			return false;
-	}
 
 	public static Integer getSkillColor( String skill )
 	{
@@ -334,6 +339,19 @@ public class XP
 			return "UNKNOWN";
 	}
 
+	public static double getConfig( String key )
+	{
+		if( config.containsKey( key ) )
+			return config.get( key );
+		else if( localConfig.containsKey( key ) )
+			return localConfig.get( key );
+		else
+		{
+			LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT" );
+			return -1;
+		}
+	}
+
 	public static void sendMessage( String msg, boolean bar, PlayerEntity player )
 	{
 		player.sendStatusMessage( new StringTextComponent( msg ), bar );
@@ -425,7 +443,7 @@ public class XP
 					if( offItemStack.getItem() instanceof BlockItem )
 						NetworkHandler.sendToPlayer( new MessageGrow( 1, offItemStack.getCount() ), (ServerPlayerEntity) player );
 
-					if( Requirements.plantInfo.containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable )
+					if( Requirements.data.get( "plantInfo" ).containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable )
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 					else
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
@@ -477,30 +495,30 @@ public class XP
 		double extraChancePerLevel = 0;
 		double extraChance;
 		int highestReq = 1;
-		if( Requirements.breakReq.containsKey( resLoc.toString() ) )
-			highestReq = Requirements.breakReq.get( resLoc.toString() ).entrySet().stream().map( a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
+		if( Requirements.data.get( "breakReq" ).containsKey( resLoc.toString() ) )
+			highestReq = Requirements.data.get( "breakReq" ).get( resLoc.toString() ).entrySet().stream().map( a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
 		int level = 1;
 
 		switch( type )
 		{
 			case "ore":
-				if( Requirements.oreInfo.containsKey( regKey ) && Requirements.oreInfo.get( regKey ).containsKey( "extraChance" ) )
-					if( Requirements.oreInfo.get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) Requirements.oreInfo.get( regKey ).get( "extraChance" );
+				if( Requirements.data.get( "oreInfo" ).containsKey( regKey ) && Requirements.data.get( "oreInfo" ).get( regKey ).containsKey( "extraChance" ) )
+					if( Requirements.data.get( "oreInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) Requirements.data.get( "oreInfo" ).get( regKey ).get( "extraChance" );
 				level = getLevel( "mining", player );
 				break;
 
 			case "log":
-				if( Requirements.logInfo.containsKey( regKey ) && Requirements.logInfo.get( regKey ).containsKey( "extraChance" ) )
-					if( Requirements.logInfo.get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) Requirements.logInfo.get( regKey ).get( "extraChance" );
+				if( Requirements.data.get( "logInfo" ).containsKey( regKey ) && Requirements.data.get( "logInfo" ).get( regKey ).containsKey( "extraChance" ) )
+					if( Requirements.data.get( "logInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) Requirements.data.get( "logInfo" ).get( regKey ).get( "extraChance" );
 				level = getLevel( "woodcutting", player );
 				break;
 
 			case "plant":
-				if( Requirements.plantInfo.containsKey( regKey ) && Requirements.plantInfo.get( regKey ).containsKey( "extraChance" ) )
-					if( Requirements.plantInfo.get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) Requirements.plantInfo.get( regKey ).get( "extraChance" );
+				if( Requirements.data.get( "plantInfo" ).containsKey( regKey ) && Requirements.data.get( "plantInfo" ).get( regKey ).containsKey( "extraChance" ) )
+					if( Requirements.data.get( "plantInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) Requirements.data.get( "plantInfo" ).get( regKey ).get( "extraChance" );
 				level = getLevel( "farming", player );
 				break;
 
@@ -545,7 +563,7 @@ public class XP
 				Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
 				boolean passedBreakReq = false;
 
-				if( Requirements.plantInfo.containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable );
+				if( Requirements.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable );
 					passedBreakReq = checkReq( player, blockAbove.getRegistryName(), "break" );
 
 				if( !passedBreakReq )
@@ -843,7 +861,7 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
 					}
-					else if( Requirements.plantInfo.containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
+					else if( Requirements.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
 					{
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
@@ -854,7 +872,7 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
 					}
 
-					for( Map.Entry<String, Object> entry : Requirements.breakReq.get( block.getRegistryName().toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
 					{
 						level = getLevel( entry.getKey(), player );
 
@@ -1040,10 +1058,10 @@ public class XP
 
 				double agilityLevel = 1;
 				double jumpBoost = 0;
-				double maxJumpBoost = Config.config.maxJumpBoost.get();
+				double maxJumpBoost = getConfig( "maxJumpBoost" );
 				double maxJumpBoostPref = maxJumpBoost;
-				int levelsCrouchJumpBoost = Config.config.levelsCrouchJumpBoost.get();
-				int levelsSprintJumpBoost = Config.config.levelsSprintJumpBoost.get();
+				int levelsCrouchJumpBoost = (int) Math.floor( getConfig( "levelsCrouchJumpBoost" ) );
+				int levelsSprintJumpBoost = (int) Math.floor( getConfig( "levelsSprintJumpBoost" ) );
 
 				agilityLevel = getLevel( "agility", player );
 
@@ -1186,25 +1204,9 @@ public class XP
 
 	public static void syncPlayerConfig( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( new HashMap<>(), "wipe" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.wearReq, "wearReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.toolReq, "toolReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.weaponReq, "weaponReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.mobReq, "mobReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.useReq, "useReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.placeReq, "placeReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.breakReq, "breakReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeReq, "biomeReq" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeMultiplier, "biomeMultiplier" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeEffect, "biomeEffect" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.biomeMobMultiplier, "biomeMobMultiplier" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValue, "xpValue" ), (ServerPlayerEntity) player );
-        NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.xpValueCrafting, "xpValueCrafting" ), (ServerPlayerEntity) player );
-        NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.oreInfo, "oreInfo" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.logInfo, "logInfo" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.plantInfo, "plantInfo" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.salvageInfo, "salvageInfo" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.salvagesFrom, "salvagesFrom" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.localData, "json" ), (ServerPlayerEntity) player );
+
+		NetworkHandler.sendToPlayer( new MessageUpdateNBT( NBTHelper.mapToNBT( localConfig ), "config" ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayer( PlayerEntity player )
@@ -1282,9 +1284,9 @@ public class XP
 		switch( type.toLowerCase() )
 		{
 			case "wear":
-				if( Requirements.wearReq.containsKey( registryName ) )
+				if( Requirements.data.get( "wearReq" ).containsKey( registryName ) )
 				{
-					for( Map.Entry<String, Object> entry : Requirements.wearReq.get( registryName ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "wearReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1293,8 +1295,8 @@ public class XP
 				break;
 
 			case "tool":
-				if( Requirements.toolReq.containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.toolReq.get( registryName ).entrySet() )
+				if( Requirements.data.get( "toolReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "toolReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1302,8 +1304,8 @@ public class XP
 				break;
 
 			case "weapon":
-				if( Requirements.weaponReq.containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.weaponReq.get( registryName ).entrySet() )
+				if( Requirements.data.get( "weaponReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "weaponReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1311,8 +1313,8 @@ public class XP
 				break;
 
             case "mob":
-                if( Requirements.mobReq.containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.mobReq.get( registryName ).entrySet() )
+                if( Requirements.data.get( "mobReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "mobReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1320,8 +1322,8 @@ public class XP
                 break;
 
             case "use":
-                if( Requirements.useReq.containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.useReq.get( registryName ).entrySet() )
+                if( Requirements.data.get( "useReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1329,8 +1331,8 @@ public class XP
                 break;
 
             case "place":
-				if( Requirements.placeReq.containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.placeReq.get( registryName ).entrySet() )
+				if( Requirements.data.get( "placeReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "placeReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1338,8 +1340,8 @@ public class XP
 				break;
 
 			case "break":
-				if( Requirements.breakReq.containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.breakReq.get( registryName ).entrySet() )
+				if( Requirements.data.get( "breakReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1347,8 +1349,8 @@ public class XP
 				break;
 
 			case "biome":
-				if( Requirements.biomeReq.containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.biomeReq.get( registryName ).entrySet() )
+				if( Requirements.data.get( "biomeReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "biomeReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1430,7 +1432,7 @@ public class XP
 			{
 				if( !player.isCreative() )
 				{
-					if( Requirements.salvageInfo.containsKey( regKey ) )
+					if( Requirements.data.get( "salvageInfo" ).containsKey( regKey ) )
 					{
 						matched = scanBlock( smithBlock, 1, player );
 						if( !matched )
@@ -1468,7 +1470,7 @@ public class XP
 						{
 							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
-							for( Map.Entry<String, Object> entry : Requirements.useReq.get( block.getRegistryName().toString() ).entrySet() )
+							for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
 							{
 								level = getLevel( entry.getKey(), player );
 
@@ -1513,7 +1515,7 @@ public class XP
 
 				    	if( ( block.equals( goldBlock ) || block.equals( smithBlock ) ) )
 				    	{
-							if( Requirements.salvageInfo.containsKey( regKey ) )
+							if( Requirements.data.get( "salvageInfo" ).containsKey( regKey ) )
 								event.setCanceled( true );
 
 				    		if( isRemote )
@@ -1526,11 +1528,11 @@ public class XP
 
 				    			if( !item.equals( Items.AIR ) )
 								{
-				    			if( Requirements.salvageInfo.containsKey( regKey ) )
+				    			if( Requirements.data.get( "salvageInfo" ).containsKey( regKey ) )
 				    			{
 				    				if( player.getPosition().withinDistance( event.getPos(), 2 ) )
 									{
-										Map<String, Object> theMap = Requirements.salvageInfo.get( regKey );
+										Map<String, Object> theMap = Requirements.data.get( "salvageInfo" ).get( regKey );
 										Item salvageItem = getItem( (String) theMap.get( "salvageItem" ) );
 										if( !salvageItem.equals( Items.AIR ) )
 										{
@@ -1666,12 +1668,12 @@ public class XP
 				    		int enduranceLevel = getLevel( "endurance", player );
 				    		int combatLevel = getLevel( "combat", player );
 				    		int swimLevel = getLevel( "swimming", player );
-				    		int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();	//Swimming
+				    		int nightvisionUnlockLevel = (int) Math.floor( getConfig( "nightvisionUnlockLevel" ) );	//Swimming
 
 				    		double maxFallSaveChance = Config.config.maxFallSaveChance.get();			//Agility
 				    		double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
-				    		double speedBoostPerLevel = Config.config.speedBoostPerLevel.get();
-				    		double maxSpeedBoost = Config.config.maxSpeedBoost.get();
+				    		double speedBoostPerLevel = getConfig( "speedBoostPerLevel" );
+				    		double maxSpeedBoost = getConfig( "maxSpeedBoost" );
 
 				    		int levelsPerDamage = Config.config.levelsPerDamage.get();					//Combat
 
@@ -1750,8 +1752,8 @@ public class XP
 					oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
 
 					double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-					if( Requirements.salvageInfo.containsKey( oItem.getItem().getRegistryName().toString() ) )
-						award *= (double) Requirements.salvageInfo.get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
+					if( Requirements.data.get( "salvageInfo" ).containsKey( oItem.getItem().getRegistryName().toString() ) )
+						award *= (double) Requirements.data.get( "salvageInfo" ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
 
 					if( award > 0 )
 					{
@@ -1896,7 +1898,7 @@ public class XP
 	        Item item = event.getCrafting().getItem();
 	        ResourceLocation resLoc = item.getRegistryName();
 
-	        if( Requirements.xpValueCrafting.containsKey( resLoc.toString() ) )
+	        if( Requirements.data.get( "xpValueCrafting" ).containsKey( resLoc.toString() ) )
 	            addMaps( award, getXpCrafting( resLoc ) );
 
             for( String skillName : award.keySet() )
@@ -2023,6 +2025,9 @@ public class XP
 
 	public static void awardXp( PlayerEntity player, Skill skill, String sourceName, double amount, boolean skip )
 	{
+		double biomePenaltyMultiplier = getConfig( "biomePenaltyMultiplier" );
+		double maxXp = getConfig( "maxXp" );
+
 		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
 			return;
 
@@ -2137,7 +2142,7 @@ public class XP
 		Biome biome = player.world.getBiome( player.getPosition() );
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
-		Map<String, Object> biomeMap = Requirements.biomeMultiplier.get( biomeKey );
+		Map<String, Object> biomeMap = Requirements.data.get( "biomeMultiplier" ).get( biomeKey );
 
 		if( !checkReq( player, resLoc, "biome" ) )
 			amount *= biomePenaltyMultiplier;
@@ -2266,7 +2271,7 @@ public class XP
 			switch( type )
 			{
 				case "wear":
-					for( Map.Entry<String, Object> entry : Requirements.wearReq.get( res.toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "wearReq" ).get( res.toString() ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqs.put( entry.getKey(), (double) entry.getValue() );
@@ -2274,7 +2279,7 @@ public class XP
 					break;
 
 				case "tool":
-					for( Map.Entry<String, Object> entry : Requirements.toolReq.get( res.toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "toolReq" ).get( res.toString() ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqs.put( entry.getKey(), (double) entry.getValue() );
@@ -2282,7 +2287,7 @@ public class XP
 					break;
 
 				case "weapon":
-					for( Map.Entry<String, Object> entry : Requirements.weaponReq.get( res.toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "weaponReq" ).get( res.toString() ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqs.put( entry.getKey(), (double) entry.getValue() );
@@ -2290,7 +2295,7 @@ public class XP
 					break;
 
 				case "use":
-					for( Map.Entry<String, Object> entry : Requirements.useReq.get( res.toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( res.toString() ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqs.put( entry.getKey(), (double) entry.getValue() );
@@ -2298,7 +2303,7 @@ public class XP
 					break;
 
 				case "place":
-					for( Map.Entry<String, Object> entry : Requirements.placeReq.get( res.toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "placeReq" ).get( res.toString() ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqs.put( entry.getKey(), (double) entry.getValue() );
@@ -2306,7 +2311,7 @@ public class XP
 					break;
 
 				case "break":
-					for( Map.Entry<String, Object> entry : Requirements.breakReq.get( res.toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( res.toString() ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqs.put( entry.getKey(), (double) entry.getValue() );
@@ -2314,7 +2319,7 @@ public class XP
 					break;
 
 				case "biome":
-					for( Map.Entry<String, Object> entry : Requirements.biomeReq.get( res.toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "biomeReq" ).get( res.toString() ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqs.put( entry.getKey(), (double) entry.getValue() );
@@ -2357,8 +2362,8 @@ public class XP
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
-		Map<String, Object> biomeReq = Requirements.biomeReq.get( biomeKey );
-		Map<String, Object> biomeEffect = Requirements.biomeEffect.get( biomeKey );
+		Map<String, Object> biomeReq = Requirements.data.get( "biomeReq" ).get( biomeKey );
+		Map<String, Object> biomeEffect = Requirements.data.get( "biomeEffect" ).get( biomeKey );
 
 		if( !lastBiome.containsKey( playerUUID ) )
 			lastBiome.put( playerUUID, "none" );
@@ -2401,6 +2406,11 @@ public class XP
 	public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
 	{
 		PlayerEntity player = event.player;
+		boolean crawlingAllowed;
+		if( getConfig( "crawlingAllowed" ) == 0 )
+			crawlingAllowed = false;
+		else
+			crawlingAllowed = true;
 
 		if( isCrawling.contains( player.getUniqueID() ) && crawlingAllowed )
 			PMMOPoseSetter.setPose( player, Pose.SWIMMING );
@@ -2536,8 +2546,9 @@ public class XP
 	}
 	public static int levelAtXp( double xp )
 	{
-		baseXp = Config.config.baseXp.get();
-		xpIncreasePerLevel = Config.config.xpIncreasePerLevel.get();
+		double baseXp = getConfig( "baseXp" );
+		double xpIncreasePerLevel = getConfig( "xpIncreasePerLevel" );
+		int maxLevel = (int) Math.floor( getConfig( "maxLevel" ) );
 
 		int theXp = 0;
 
@@ -2557,6 +2568,8 @@ public class XP
 	}
 	public static double levelAtXpDecimal( double xp )
 	{
+		int maxLevel = (int) Math.floor( getConfig( "maxLevel" ) );
+
 		if( levelAtXp( xp ) == maxLevel )
 			xp = xpAtLevel( maxLevel );
 		int startLevel = levelAtXp( xp );
@@ -2575,8 +2588,9 @@ public class XP
 	}
 	public static double xpAtLevel( double givenLevel )
 	{
-		baseXp = Config.config.baseXp.get();
-		xpIncreasePerLevel = Config.config.xpIncreasePerLevel.get();
+		double baseXp = getConfig( "baseXp" );
+		double xpIncreasePerLevel = getConfig( "xpIncreasePerLevel" );
+		int maxLevel = (int) Math.floor( getConfig( "maxLevel" ) );
 
 		double theXp = 0;
 		if( givenLevel > maxLevel )

@@ -4,6 +4,7 @@ import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -50,7 +51,20 @@ public class MessageUpdateNBT
     {
         ctx.get().enqueueWork(() ->
         {
-            ClientHandler.updatePrefsTag( packet );
+            switch( packet.outputName )
+            {
+                case "prefs":
+                    ClientHandler.updatePrefsTag( packet );
+                    break;
+
+                case "config":
+                    XP.config = NBTHelper.nbtToMap( packet.reqPackage );
+                    break;
+
+                default:
+                    System.out.println( "WRONG SYNC NAME" );
+                    break;
+            }
         });
         ctx.get().setPacketHandled(true);
     }

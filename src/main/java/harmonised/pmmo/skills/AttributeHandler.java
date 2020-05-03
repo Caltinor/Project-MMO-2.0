@@ -212,7 +212,7 @@ public class AttributeHandler
 	private static double getBiomeMobMultiplier( MobEntity mob, String type )
 	{
 		String biomeKey = mob.world.getBiome( mob.getPosition() ).getRegistryName().toString();
-		Map<String, Object> theMap = Requirements.biomeMobMultiplier.get( biomeKey );
+		Map<String, Object> theMap = Requirements.data.get( "biomeMobMultiplier" ).get( biomeKey );
 		double multiplier = 1;
 
 		if( theMap != null && theMap.containsKey( type ) )

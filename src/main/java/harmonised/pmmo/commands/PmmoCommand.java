@@ -36,24 +36,24 @@ public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
     private static String[] suggestSkill = new String[18];
-//    private static String[] suggestClear = new String[1];
     private static String[] levelOrXp = new String[2];
     private static String[] suggestPref = new String[6];
     private static String[] suggestGui = new String[13];
-//    private static String[] suggestBiome = new String[ ForgeRegistries.BIOMES.getValues().size() ];
+    private static int maxLevel = (int) Math.floor( XP.getConfig( "maxLevel" ) );
+    private static double maxXp = XP.getConfig( "maxXp" );
 
     public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
-        suggestSkill[0] =  "Power";
-        suggestSkill[1] =  "Mining";
-        suggestSkill[2] =  "Building";
-        suggestSkill[3] =  "Excavation";
-        suggestSkill[4] =  "Woodcutting";
-        suggestSkill[5] =  "Farming";
-        suggestSkill[6] =  "Agility";
-        suggestSkill[7] =  "Endurance";
-        suggestSkill[8] =  "Combat";
-        suggestSkill[9] =  "Archery";
+        suggestSkill[0]  = "Power";
+        suggestSkill[1]  = "Mining";
+        suggestSkill[2]  = "Building";
+        suggestSkill[3]  = "Excavation";
+        suggestSkill[4]  = "Woodcutting";
+        suggestSkill[5]  = "Farming";
+        suggestSkill[6]  = "Agility";
+        suggestSkill[7]  = "Endurance";
+        suggestSkill[8]  = "Combat";
+        suggestSkill[9]  = "Archery";
         suggestSkill[10] = "Smithing";
         suggestSkill[11] = "Flying";
         suggestSkill[12] = "Swimming";
@@ -227,16 +227,16 @@ public class PmmoCommand
                     CompoundNBT skillsTag = XP.getSkillsTag( player );
                     double newValue = Double.parseDouble( args[6] );
 
-                    if( newValue > XP.maxXp )
-                        newValue = XP.maxXp;
+                    if( newValue > maxXp )
+                        newValue = maxXp;
 
                     if( newValue < 0 )
                         newValue = 0;
 
                     if( args[5].toLowerCase().equals( "level" ) )
                     {
-                        if( newValue > XP.maxLevel )
-                            newValue = XP.maxLevel;
+                        if( newValue > maxLevel )
+                            newValue = maxLevel;
 
                         double newLevelXp = XP.xpAtLevelDecimal( newValue );
 
@@ -310,8 +310,8 @@ public class PmmoCommand
                     {
                         newLevelXp = XP.xpAtLevelDecimal( XP.levelAtXpDecimal( playerXp ) + newValue );
 
-                        if( newLevelXp > XP.maxXp )
-                            newLevelXp = XP.maxXp;
+                        if( newLevelXp > maxXp )
+                            newLevelXp = maxXp;
 
                         if( newLevelXp < 0 )
                             newLevelXp = 0;
@@ -329,8 +329,8 @@ public class PmmoCommand
                     {
                         newLevelXp = newValue + playerXp;
 
-                        if( newLevelXp > XP.maxXp )
-                            newLevelXp = XP.maxXp;
+                        if( newLevelXp > maxXp )
+                            newLevelXp = maxXp;
 
                         if( newLevelXp < 0 )
                             newLevelXp = 0;
@@ -406,8 +406,8 @@ public class PmmoCommand
         if( xp < 0 )
             xp = 0;
 
-        if( xp >= XP.maxXp )
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelAtXp", DP.dp( xp ), XP.maxLevel ), false );
+        if( xp >= maxXp )
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelAtXp", DP.dp( xp ), maxLevel ), false );
         else
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelAtXp", DP.dp( xp ), XP.levelAtXpDecimal( xp ) ), false );
         return 1;
@@ -422,8 +422,8 @@ public class PmmoCommand
         if( level < 1 )
             level = 1;
 
-        if( level > XP.maxLevel )
-            level = XP.maxLevel;
+        if( level > maxLevel )
+            level = maxLevel;
 
         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp( XP.xpAtLevelDecimal( level ) ) ), false );
 
@@ -438,8 +438,8 @@ public class PmmoCommand
         double level = Double.parseDouble( args[3] );
         if( level < 1 )
             level = 1;
-        if( level > XP.maxLevel )
-            level = XP.maxLevel;
+        if( level > maxLevel )
+            level = maxLevel;
         double xp = XP.xpAtLevelDecimal( level );
         if( xp < 0 )
             xp = 0;
@@ -449,8 +449,8 @@ public class PmmoCommand
             double goalLevel = Double.parseDouble( args[4] );
             if( goalLevel < 1 )
                 goalLevel = 1;
-            if( goalLevel > XP.maxLevel )
-                goalLevel = XP.maxLevel;
+            if( goalLevel > maxLevel )
+                goalLevel = maxLevel;
 
             if( goalLevel < level )
             {
@@ -566,7 +566,7 @@ public class PmmoCommand
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String biomeKey = sender.world.getBiome( sender.getPosition() ).getRegistryName().toString();
         String transKey = sender.world.getBiome( sender.getPosition() ).getTranslationKey();
-        Map<String, Object> theMap = Requirements.biomeMobMultiplier.get( biomeKey );
+        Map<String, Object> theMap = Requirements.data.get( "biomeMobMultiplier" ).get( biomeKey );
 
         String damageBonus = "100";
         String hpBonus = "100";
