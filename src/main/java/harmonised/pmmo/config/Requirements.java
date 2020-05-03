@@ -87,6 +87,8 @@ public class Requirements
         map.put( "plantInfo", new HashMap<>() );
         map.put( "salvageInfo", new HashMap<>() );
         map.put( "salvagesFrom", new HashMap<>() );
+        map.put( "fishPool", new HashMap<>() );
+        map.put( "fishEnchantPool", new HashMap<>() );
     }
 
     private static boolean checkValidSkills( Map<String, Object> theMap )
@@ -408,6 +410,12 @@ public class Requirements
         if( Config.config.salvageEnabled.get() )
             updateReqSalvage( req.salvage, localData.get( "salvageInfo" ) );
 
+        if( Config.config.fishPoolEnabled.get() )
+            updateReqFishPool( req.fishpool, localData.get( "fishPool" ) );
+
+        if( Config.config.fishEnchantPoolEnabled.get() )
+            updateReqFishEnchantPool( req.fishenchantpool, localData.get( "fishEnchantPool" ) );
+
         data = localData;
     }
 
@@ -489,6 +497,9 @@ public class Requirements
     private final Map<String, RequirementItem> logs = Maps.newHashMap();
     private final Map<String, RequirementItem> plants = Maps.newHashMap();
     private final Map<String, RequirementItem> salvage = Maps.newHashMap();
+    private final Map<String, RequirementItem> fishpool = Maps.newHashMap();
+    private final Map<String, RequirementItem> fishenchantpool = Maps.newHashMap();
+
 
 //    public Map<String, Object> getWear(String registryName)
 //    {
@@ -559,6 +570,8 @@ public class Requirements
             deserializeGroup(obj, "log", req.logs::put, context);
             deserializeGroup(obj, "plant", req.plants::put, context);
             deserializeGroup(obj, "salvage", req.salvage::put, context);
+            deserializeGroup(obj, "fish_pool", req.fishpool::put, context);
+            deserializeGroup(obj, "fish_enchant_pool", req.fishenchantpool::put, context);
 
             return req;
         }

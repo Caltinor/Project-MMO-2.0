@@ -44,6 +44,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> logEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> plantEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> salvageEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> fishPoolEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> fishEnchantPoolEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
         //Levels
@@ -299,6 +301,15 @@ public class Config
                         .translation( "pmmo.salvageEnabled" )
                         .define( "salvageEnabled", true) );
 
+                this.fishPoolEnabled = subscriber.subscribe(builder
+                        .comment( "Is catching items from Fish Pool while Fishing enabled? False = off" )
+                        .translation( "pmmo.fishPoolEnabled" )
+                        .define( "fishPoolEnabled", true) );
+
+                this.fishEnchantPoolEnabled = subscriber.subscribe(builder
+                        .comment( "Should fished items have a chance at being Enchanted? enabled? False = off" )
+                        .translation( "pmmo.fishEnchantPoolEnabled" )
+                        .define( "fishEnchantPoolEnabled", true) );
 
                 this.loadDefaultConfig = subscriber.subscribe(builder
                         .comment( "Should config from data_template.json be loaded? False means only data.json is loaded" )

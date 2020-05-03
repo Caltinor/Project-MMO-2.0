@@ -913,6 +913,39 @@
 		"minecraft:diamond_sword": {
 			"crafting": 120
 		},
+		"minecraft:golden_helmet": {
+			"crafting": 150
+		},
+		"minecraft:golden_chestplate": {
+			"crafting": 240
+		},
+		"minecraft:golden_leggings": {
+			"crafting": 210
+		},
+		"minecraft:golden_boots": {
+			"crafting": 120
+		},
+		"minecraft:golden_pickaxe": {
+			"crafting": 90
+		},
+		"minecraft:golden_shovel": {
+			"crafting": 30
+		},
+		"minecraft:golden_hoe": {
+			"crafting": 60
+		},
+		"minecraft:golden_axe": {
+			"crafting": 90
+		},
+		"minecraft:golden_sword": {
+			"crafting": 60
+		},
+		"minecraft:clock": {
+			"crafting": 125
+		},
+		"minecraft:light_weighted_pressure_plate": {
+			"crafting": 60
+		},
 		"minecraft:iron_helmet": {
 			"crafting": 50
 		},
@@ -940,32 +973,41 @@
 		"minecraft:iron_sword": {
 			"crafting": 20
 		},
-		"minecraft:golden_helmet": {
-			"crafting": 150
+		"minecraft:anvil": {
+			"crafting": 310
 		},
-		"minecraft:golden_chestplate": {
-			"crafting": 240
+		"minecraft:iron_trapdoor": {
+			"crafting": 40
 		},
-		"minecraft:golden_leggings": {
-			"crafting": 210
+		"minecraft:iron_door": {
+			"crafting": 20
 		},
-		"minecraft:golden_boots": {
-			"crafting": 120
+		"minecraft:hopper": {
+			"crafting": 58
 		},
-		"minecraft:golden_pickaxe": {
-			"crafting": 90
+		"minecraft:compass": {
+			"crafting": 45
 		},
-		"minecraft:golden_shovel": {
+		"minecraft:minecart": {
+			"crafting": 50
+		},
+		"minecraft:bucket": {
 			"crafting": 30
 		},
-		"minecraft:golden_hoe": {
-			"crafting": 60
+		"minecraft:cauldron": {
+			"crafting": 70
 		},
-		"minecraft:golden_axe": {
-			"crafting": 90
+		"minecraft:flint_and_steel": {
+			"crafting": 12
 		},
-		"minecraft:golden_sword": {
-			"crafting": 60
+		"minecraft:shears": {
+			"crafting": 20
+		},
+		"minecraft:blast_furnace": {
+			"crafting": 61
+		},
+		"minecraft:heavy_weighted_pressure_plate": {
+			"crafting": 20
 		},
 		"minecraft:leather_helmet": {
 			"crafting": 75
@@ -2506,6 +2548,568 @@
 			"maxChance": 90,
 			"xpPerItem": 0.35,
 			"levelReq": 3
+		}
+	},
+	"fish_pool": {
+		"minecraft:leather_helmet": {
+			"startWeight": 100,
+			"startLevel": 5,
+			"endWeight": 10,
+			"endLevel": 100,
+			"xp": 25,
+			"enchantLevelReq": 1
+		},
+		"minecraft:leather_chestplate": {
+			"startWeight": 100,
+			"startLevel": 5,
+			"endWeight": 10,
+			"endLevel": 100,
+			"xp": 25,
+			"enchantLevelReq": 1
+		},
+		"minecraft:leather_leggings": {
+			"startWeight": 100,
+			"startLevel": 5,
+			"endWeight": 10,
+			"endLevel": 100,
+			"xp": 25,
+			"enchantLevelReq": 1
+		},
+		"minecraft:leather_boots": {
+			"startWeight": 100,
+			"startLevel": 5,
+			"endWeight": 10,
+			"endLevel": 100,
+			"xp": 25,
+			"enchantLevelReq": 1
+		},
+		"minecraft:wooden_shovel": {
+			"startWeight": 100,
+			"startLevel": 1,
+			"endWeight": 5,
+			"endLevel": 100,
+			"xp": 5,
+			"enchantLevelReq": 1
+		},
+		"minecraft:wooden_pickaxe": {
+			"startWeight": 100,
+			"startLevel": 1,
+			"endWeight": 5,
+			"endLevel": 100,
+			"xp": 5,
+			"enchantLevelReq": 1
+		},
+		"minecraft:wooden_axe": {
+			"startWeight": 100,
+			"startLevel": 1,
+			"endWeight": 5,
+			"endLevel": 100,
+			"xp": 5,
+			"enchantLevelReq": 1
+		},
+		"minecraft:wooden_sword": {
+			"startWeight": 100,
+			"startLevel": 1,
+			"endWeight": 5,
+			"endLevel": 100,
+			"xp": 5,
+			"enchantLevelReq": 1
+		},
+		"minecraft:wooden_hoe": {
+			"startWeight": 100,
+			"startLevel": 1,
+			"endWeight": 10,
+			"endLevel": 100,
+			"xp": 5,
+			"enchantLevelReq": 1
+		},
+		"minecraft:bow": {
+			"startWeight": 100,
+			"startLevel": 1,
+			"endWeight": 25,
+			"endLevel": 100,
+			"xp": 15,
+			"enchantLevelReq": 10
+		},
+		"minecraft:fishing_rod": {
+			"startWeight": 40,
+			"startLevel": 1,
+			"endWeight": 100,
+			"endLevel": 100,
+			"xp": 20,
+			"enchantLevelReq": 10
+		},
+		"minecraft:chainmail_helmet": {
+			"startWeight": 50,
+			"startLevel": 15,
+			"endWeight": 15,
+			"endLevel": 100,
+			"xp": 25,
+			"enchantLevelReq": 10
+		},
+		"minecraft:chainmail_chestplate": {
+			"startWeight": 50,
+			"startLevel": 15,
+			"endWeight": 15,
+			"endLevel": 100,
+			"xp": 25,
+			"enchantLevelReq": 10
+		},
+		"minecraft:chainmail_leggings": {
+			"startWeight": 50,
+			"startLevel": 15,
+			"endWeight": 15,
+			"endLevel": 100,
+			"xp": 25,
+			"enchantLevelReq": 10
+		},
+		"minecraft:chainmail_boots": {
+			"startWeight": 50,
+			"startLevel": 15,
+			"endWeight": 15,
+			"endLevel": 100,
+			"xp": 25,
+			"enchantLevelReq": 10
+		},
+		"minecraft:iron_helmet": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:iron_chestplate": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:iron_leggings": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:iron_boots": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:iron_shovel": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:iron_pickaxe": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:iron_axe": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:iron_sword": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:iron_hoe": {
+			"startWeight": 75,
+			"startLevel": 20,
+			"endWeight": 20,
+			"endLevel": 120,
+			"xp": 35,
+			"enchantLevelReq": 20
+		},
+		"minecraft:golden_helmet": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:golden_chestplate": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:golden_leggings": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:golden_boots": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:golden_shovel": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:golden_pickaxe": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:golden_axe": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:golden_sword": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:golden_hoe": {
+			"startWeight": 5,
+			"startLevel": 35,
+			"endWeight": 35,
+			"endLevel": 200,
+			"xp": 45,
+			"enchantLevelReq": 45
+		},
+		"minecraft:diamond_helmet": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:diamond_chestplate": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:diamond_leggings": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:diamond_boots": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:diamond_shovel": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:diamond_pickaxe": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:diamond_axe": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:diamond_sword": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:diamond_hoe": {
+			"startWeight": 0,
+			"startLevel": 50,
+			"endWeight": 25,
+			"endLevel": 300,
+			"xp": 100,
+			"enchantLevelReq": 60
+		},
+		"minecraft:netherite_helmet": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:netherite_chestplate": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:netherite_leggings": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:netherite_boots": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:netherite_shovel": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:netherite_pickaxe": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:netherite_axe": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:netherite_sword": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:netherite_hoe": {
+			"startWeight": 0,
+			"startLevel": 100,
+			"endWeight": 3,
+			"endLevel": 400,
+			"xp": 350,
+			"enchantLevelReq": 120
+		},
+		"minecraft:kelp": {
+			"startWeight": 500,
+			"startLevel": 1,
+			"endWeight": 25,
+			"endLevel": 100,
+			"xp": 0.25,
+			"minCount": 5,
+			"maxCount": 64
+		},
+		"minecraft:string": {
+			"startWeight": 200,
+			"startLevel": 1,
+			"endWeight": 15,
+			"endLevel": 150,
+			"xp": 0.35,
+			"minCount": 5,
+			"maxCount": 32
+		},
+		"minecraft:heart_of_the_sea": {
+			"startWeight": 1,
+			"startLevel": 1,
+			"endWeight": 1,
+			"endLevel": 1,
+			"xp": 250,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:nether_star": {
+			"startWeight": 0,
+			"startLevel": 200,
+			"endWeight": 1,
+			"endLevel": 300,
+			"xp": 666,
+			"minCount": 1,
+			"maxCount": 1
+		}
+	},
+	"fish_enchant_pool": {
+		"minecraft:bane_of_arthropods": {
+			"levelReq": 15,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 10
+		},
+		"minecraft:depth_strider": {
+			"levelReq": 20,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:efficiency": {
+			"levelReq": 25,
+			"levelPerLevel": 30,
+			"chancePerLevel": 1,
+			"maxLevel": 10
+		},
+		"minecraft:feather_falling": {
+			"levelReq": 5,
+			"levelPerLevel": 25,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:fortune": {
+			"levelReq": 35,
+			"levelPerLevel": 25,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:frost_walker": {
+			"levelReq": 25,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:looting": {
+			"levelReq": 35,
+			"levelPerLevel": 25,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:luck_of_the_sea": {
+			"levelReq": 15,
+			"levelPerLevel": 15,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:lure": {
+			"levelReq": 20,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:mending": {
+			"levelReq": 50
+		},
+		"minecraft:silk_touch": {
+			"levelReq": 40
+		},
+		"minecraft:projectile_protection": {
+			"levelReq": 15,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 8
+		},
+		"minecraft:blast_protection": {
+			"levelReq": 25,
+			"levelPerLevel": 25,
+			"chancePerLevel": 1,
+			"maxLevel": 8
+		},
+		"minecraft:protection": {
+			"levelReq": 20,
+			"levelPerLevel": 25,
+			"chancePerLevel": 1,
+			"maxLevel": 8
+		},
+		"minecraft:sharpness": {
+			"levelReq": 20,
+			"levelPerLevel": 25,
+			"chancePerLevel": 1,
+			"maxLevel": 8
+		},
+		"minecraft:sweeping": {
+			"levelReq": 15,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:smite": {
+			"levelReq": 15,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:thorns": {
+			"levelReq": 15,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 8
+		},
+		"minecraft:unbreaking": {
+			"levelReq": 15,
+			"levelPerLevel": 20,
+			"chancePerLevel": 1,
+			"maxLevel": 5
+		},
+		"minecraft:quick_charge": {
+			"levelReq": 20,
+			"levelPerLevel": 25,
+			"chancePerLevel": 1,
+			"maxLevel": 5
 		}
 	}
 }

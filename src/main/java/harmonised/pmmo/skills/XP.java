@@ -1895,11 +1895,13 @@ public class XP
         {
 	        Map<String, Double> award = new HashMap<>();
 	        award.put( "crafting", 1D );
-	        Item item = event.getCrafting().getItem();
-	        ResourceLocation resLoc = item.getRegistryName();
+	        ItemStack itemStack = event.getCrafting();
+	        ResourceLocation resLoc = itemStack.getItem().getRegistryName();
 
 	        if( Requirements.data.get( "xpValueCrafting" ).containsKey( resLoc.toString() ) )
 	            addMaps( award, getXpCrafting( resLoc ) );
+
+	        multiplyMap( award, itemStack.getCount() );
 
             for( String skillName : award.keySet() )
             {
@@ -2531,13 +2533,50 @@ public class XP
 	public static void handleFished( ItemFishedEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
+		int level = getLevel( "fishing", player );
 		NonNullList<ItemStack> items = event.getDrops();
 		Map<String, Double> award = getXp( items.get( 0 ).getItem().getRegistryName() );
-
-		for( String skillName : award.keySet() )
+		Map<String, Map<String, Object>> fishPool = Requirements.data.get( "fishPool" );
+		if( fishPool != null )
 		{
-			awardXp( player, Skill.getSkill( skillName ), "catching " + items, award.get( skillName ), false );
+			Map<String, Object> match = new HashMap<>();
+
+			double totalWeight = 0;
+			double weight;
+			double result = Math.floor( Math.random() * (totalWeight + 1) );
+			double currentWeight = 0;
+
+
+			for( Map.Entry<String, Map<String, Object>> entry : fishPool.entrySet() )
+			{
+				totalWeight += getWeight( level, entry.getValue() );
+			}
+
+			for( Map.Entry<String, Map<String, Object>> entry : fishPool.entrySet() )
+			{
+				weight = getWeight( level, entry.getValue() );
+
+				if( currentWeight < result && currentWeight + weight >= result )
+				{
+					match = new HashMap<>( entry.getValue() );
+					break;
+				}
+
+				totalWeight += weight;
+			}
+
+			System.out.println( match );
+
+			for( String skillName : award.keySet() )
+			{
+				awardXp( player, Skill.getSkill( skillName ), "catching " + items, award.get( skillName ), false );
+			}
 		}
+	}
+	
+	private static double getWeight( int level, Map<String, Object> fishItem )
+	{
+		return DP.map( level, (double) fishItem.get( "startLevel" ), (double) fishItem.get( "endLevel" ), (double) fishItem.get( "startWeight" ), (double) fishItem.get( "endWeight" ) );
 	}
 
 	public static int levelAtXp( float xp )

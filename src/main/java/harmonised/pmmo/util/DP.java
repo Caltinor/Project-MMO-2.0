@@ -43,4 +43,14 @@ public class DP
 	{
 		return String.format( Locale.ENGLISH , "%.2f", input );
 	}
+
+	public static double map( double input, double inLow, double inHigh, double outLow, double outHigh )
+	{
+		if( input < inLow )
+			input = inLow;
+		if( input > inHigh )
+			input = inHigh;
+
+		return ( (input - inLow) / (inHigh - inLow) ) * (outHigh - outLow) + outLow;
+	}
 }
