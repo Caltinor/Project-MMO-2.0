@@ -5,6 +5,8 @@ import com.google.gson.*;
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
@@ -29,14 +31,15 @@ public class Requirements
     public static Map<String, Map<String, Map<String, Object>>> localData = new HashMap<>();
     public static Map<String, Map<String, Map<String, Object>>> data = new HashMap<>();
 
-//    private static Map<String, Object> tempMap;
     private static ArrayList<String> validAttributes = new ArrayList<>();
+    private static ArrayList<String> validFishEnchantInfo = new ArrayList<>();
     private static String dataPath = "pmmo/data.json";
     private static String templateDataPath = "pmmo/data_template.json";
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
     private static final Logger LOGGER = LogManager.getLogger();
     private static Requirements defaultReq, customReq;
     private static Effect invalidEffect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
+    private static Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
 
     public static void init()
     {
@@ -174,7 +177,7 @@ public class Requirements
                 }
             }
             else
-                LOGGER.error( "No valid skills, cannot add " + key );
+                LOGGER.error( "No valid effects, cannot add " + key );
         });
     }
 
@@ -320,6 +323,204 @@ public class Requirements
         });
     }
 
+    private static void updateReqFishPool( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            Item item = XP.getItem( key );
+            if( !item.equals( Items.AIR ) )
+            {
+                Map<String, Object> inMap = value.requirements;
+
+                if( !( inMap.containsKey( "startWeight" ) && inMap.get( "startWeight" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"startWeight\" is invalid, loading default value 1" );
+                    inMap.put( "startWeight", 1D );
+                }
+
+                if( !( inMap.containsKey( "startLevel" ) && inMap.get( "startLevel" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"startLevel\" is invalid, loading default value level 1" );
+                    inMap.put( "startLevel", 1D );
+                }
+
+                if( !( inMap.containsKey( "endWeight" ) && inMap.get( "endWeight" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"endWeight\" is invalid, loading default value 1" );
+                    inMap.put( "endWeight", 1D );
+                }
+
+                if( !( inMap.containsKey( "endLevel" ) && inMap.get( "endLevel" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"endLevel\" is invalid, loading default value level 1" );
+                    inMap.put( "endLevel", 1D );
+                }
+
+                if( !( inMap.containsKey( "minCount" ) && inMap.get( "minCount" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"minCount\" is invalid, loading default value 1 item" );
+                    inMap.put( "minCount", 1D );
+                }
+                else if( (double) inMap.get( "minCount" ) > item.getMaxStackSize() )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"minCount\" is above Max Stack Size, loading default value 1 item" );
+                    inMap.put( "minCount", (double) item.getMaxStackSize() );
+                }
+
+                if( !( inMap.containsKey( "maxCount" ) && inMap.get( "maxCount" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"maxCount\" is invalid, loading default value 1" );
+                    inMap.put( "maxCount", 1D );
+                }
+                else if( (double) inMap.get( "maxCount" ) > item.getMaxStackSize() )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"maxCount\" is above Max Stack Size, loading default value 1 item" );
+                    inMap.put( "maxCount", (double) item.getMaxStackSize() );
+                }
+
+                if( !( inMap.containsKey( "enchantLevelReq" ) && inMap.get( "enchantLevelReq" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"enchantLevelReq\" is invalid, loading default value level 1" );
+                    inMap.put( "enchantLevelReq", 1D );
+                }
+
+                if( !( inMap.containsKey( "xp" ) && inMap.get( "xp" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"xp\" is invalid, loading default value 1xp" );
+                    inMap.put( "xp", 1D );
+                }
+
+                if( !outReq.containsKey( key ) )
+                    outReq.put( key, new HashMap<>() );
+                Map<String, Object> outMap = outReq.get( key );
+                double startWeight = (double) inMap.get( "startWeight" );
+                double startLevel = (double) inMap.get( "startLevel" );
+                double endWeight = (double) inMap.get( "endWeight" );
+                double endLevel = (double) inMap.get( "endLevel" );
+                double minCount = (double) inMap.get( "minCount" );
+                double maxCount = (double) inMap.get( "maxCount" );
+                double enchantLevelReq = (double) inMap.get( "enchantLevelReq" );
+                double xp = (double) inMap.get( "xp" );
+
+                if( endWeight < 1 )
+                    outMap.put( "endWeight", 1D );
+                else
+                    outMap.put( "endWeight", endWeight );
+
+                if( startWeight < endWeight )
+                    startWeight = endWeight;
+
+                if( startWeight < 1 )
+                    outMap.put( "startWeight", 1D );
+                else
+                    outMap.put( "startWeight", startWeight );
+
+                if( endLevel < 1 )
+                    outMap.put( "endLevel", 1D );
+                else
+                    outMap.put( "endLevel", endLevel );
+
+                if( startLevel < endLevel )
+                    startLevel = endLevel;
+
+                if( startLevel < 1 )
+                    outMap.put( "startLevel", 1D );
+                else
+                    outMap.put( "startLevel", startLevel );
+
+                if( maxCount < 1 )
+                    outMap.put( "maxCount", 1D );
+                else
+                    outMap.put( "maxCount", maxCount );
+
+                if( minCount < maxCount )
+                    minCount = maxCount;
+
+                if( minCount < 1 )
+                    outMap.put( "minCount", 1D );
+                else
+                    outMap.put( "minCount", minCount );
+
+                if( enchantLevelReq < 1 )
+                    outMap.put( "enchantLevelReq", 1D );
+                else
+                    outMap.put( "enchantLevelReq", enchantLevelReq );
+
+                if( xp < 0 )
+                    outMap.put( "xp", 0D );
+            }
+            else
+                LOGGER.info( "Could not load inexistant item " + key );
+        });
+    }
+
+    private static void updateReqFishEnchantPool( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( new ResourceLocation( key ) );
+            if( !enchant.equals( invalidEnchant ) )
+            {
+                Map<String, Object> inMap = value.requirements;
+
+                if( !( inMap.containsKey( "levelReq" ) && inMap.get( "levelReq" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + key + " \"levelReq\" is invalid, loading default value 1" );
+                    inMap.put( "levelReq", 1D );
+                }
+
+                if( !( inMap.containsKey( "levelPerLevel" ) && inMap.get( "levelPerLevel" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + key + " \"levelPerLevel\" is invalid, loading default value 1" );
+                    inMap.put( "levelPerLevel", 10D );
+                }
+
+                if( !( inMap.containsKey( "chancePerLevel" ) && inMap.get( "chancePerLevel" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + key + " \"chancePerLevel\" is invalid, loading default value 0" );
+                    inMap.put( "chancePerLevel", 0D );
+                }
+
+                if( !( inMap.containsKey( "maxLevel" ) && inMap.get( "maxLevel" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + key + " \"maxLevel\" is invalid, loading default value " + enchant.getMaxLevel() );
+                    inMap.put( "maxLevel", (double) enchant.getMaxLevel() );
+                }
+
+
+                if( !outReq.containsKey( key ) )
+                    outReq.put( key, new HashMap<>() );
+                Map<String, Object> outMap = outReq.get( key );
+                double levelReq = (double) inMap.get( "levelReq" );
+                double levelPerLevel = (double) inMap.get( "levelPerLevel" );
+                double chancePerLevel = (double) inMap.get( "chancePerLevel" );
+                double maxLevel = (double) inMap.get( "maxLevel" );
+
+                if( levelReq < 1 )
+                    outMap.put( "levelReq", 1D );
+                else
+                    outMap.put( "levelReq", levelReq );
+
+                if( levelPerLevel < 1 )
+                    outMap.put( "levelPerLevel", 1D );
+                else
+                    outMap.put( "levelPerLevel", levelPerLevel );
+
+                if( chancePerLevel < 0 )
+                    outMap.put( "chancePerLevel", 0D );
+                else
+                    outMap.put( "chancePerLevel", chancePerLevel );
+
+                if( maxLevel < 1 )
+                    outMap.put( "maxLevel", enchant.getMaxLevel() );
+                else
+                    outMap.put( "maxLevel", maxLevel );
+            }
+            else
+                LOGGER.info( "Could not load inexistant enchant " + key );
+        });
+    }
+
     private static void updateReqAttributes( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
     {
         req.forEach( (key, value) ->
@@ -418,11 +619,6 @@ public class Requirements
 
         data = localData;
     }
-
-//    public static void resetRequirements()
-//    {
-//        data = new HashMap<>( localData );
-//    }
 
     private static void createData( File dataFile )
     {
