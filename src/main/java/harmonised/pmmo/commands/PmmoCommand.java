@@ -19,18 +19,28 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PmmoCommand
@@ -40,6 +50,7 @@ public class PmmoCommand
     private static String[] levelOrXp = new String[2];
     private static String[] suggestPref = new String[6];
     private static String[] suggestGui = new String[13];
+    private static String[] suggestSearchRegistry = new String[5];
     private static int maxLevel = (int) Math.floor( XP.getConfig( "maxLevel" ) );
     private static double maxXp = XP.getConfig( "maxXp" );
 
@@ -89,6 +100,13 @@ public class PmmoCommand
         suggestGui[10] = "xpDropsAttachedToBar";
         suggestGui[11] = "xpBarAlwaysOn";
         suggestGui[12] = "xpLeftDisplayAlwaysOn";
+
+        suggestSearchRegistry[0] = "item";
+        suggestSearchRegistry[1] = "biome";
+        suggestSearchRegistry[2] = "enchant";
+        suggestSearchRegistry[3] = "potionEffect";
+        suggestSearchRegistry[4] = "entity";
+
 
 //        int i = 0;
 //
@@ -165,7 +183,90 @@ public class PmmoCommand
                   )))
                   .then( Commands.literal( "checkbiome" )
                   .executes( PmmoCommand::commandCheckBiome )
-                  ));
+                  )
+                  .then( Commands.literal( "debug" )
+                  .then( Commands.literal( "searchRegistry" )
+                  .then(Commands.argument( "type", StringArgumentType.word() )
+                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSearchRegistry, theBuilder ) )
+                  .then(Commands.argument( "search query", StringArgumentType.word() )
+                  .executes( PmmoCommand::commandSearchReg )
+                  )))));
+    }
+
+    private static int commandSearchReg( CommandContext<CommandSource> context ) throws CommandException
+    {
+        String query = StringArgumentType.getString( context, "search query" );
+        String type = StringArgumentType.getString( context, "type" );
+        StringBuilder listOut = new StringBuilder("PMMO DEBUG SEARCH RESULTS:\n");
+        StringBuilder listOutExtra = new StringBuilder("PMMO DEBUG SEARCH RESULTS:\n");
+
+        switch( type )
+        {
+            case "item":
+                for( Item item : ForgeRegistries.ITEMS )
+                {
+                    String regName = item.getRegistryName().toString();
+                    if( regName.contains( query ) )
+                    {
+                        listOut.append(regName).append("\n");
+                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                    }
+                }
+                break;
+
+            case "biome":
+                for( Biome item : ForgeRegistries.BIOMES )
+                {
+                    String regName = item.getRegistryName().toString();
+                    if( regName.contains( query ) )
+                    {
+                        listOut.append(regName).append("\n");
+                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                    }
+                }
+                break;
+
+            case "enchant":
+                for( Enchantment item : ForgeRegistries.ENCHANTMENTS )
+                {
+                    String regName = item.getRegistryName().toString();
+                    if( regName.contains( query ) )
+                    {
+                        listOut.append(regName).append("\n");
+                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                    }
+                }
+                break;
+
+            case "potionEffect":
+                for( Effect item : ForgeRegistries.POTIONS )
+                {
+                    String regName = item.getRegistryName().toString();
+                    if( regName.contains( query ) )
+                    {
+                        listOut.append(regName).append("\n");
+                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                    }
+                }
+                break;
+
+            case "entity":
+                for( EntityType item : ForgeRegistries.ENTITIES )
+                {
+                    String regName = item.getRegistryName().toString();
+                    if( regName.contains( query ) )
+                    {
+                        listOut.append(regName).append("\n");
+                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                    }
+                }
+                break;
+        }
+
+        System.out.println( listOut.toString() );
+        System.out.println( listOutExtra.toString() );
+
+        return 1;
     }
 
     private static int commandClear( CommandContext<CommandSource> context ) throws CommandException
