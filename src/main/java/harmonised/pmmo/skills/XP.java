@@ -992,11 +992,15 @@ public class XP
 
 				if( !player.isCreative() )
 				{
-					int gap = getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
-					if( gap > 0 )
+					int weaponGap = getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
+					if( weaponGap > 0 )
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
-					event.setAmount( event.getAmount() / (gap + 1) );
+					int slayerGap = getSkillReqGap( player, new ResourceLocation( target.getEntityString() ), "slayer" );
+					if( slayerGap > 0 )
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toDamage", target.getEntityString(), "", true, 2 ), (ServerPlayerEntity) player );
+
+					event.setAmount( event.getAmount() / (weaponGap + 1) );
 					damage = event.getAmount();
 
 					float amount = 0;
@@ -1038,16 +1042,18 @@ public class XP
 						amount += ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
 
 						amount *= lowHpBonus;
-						awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
+						amount /= (weaponGap + 1);
+						awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount, false );
 					}
 					else
 					{
 						amount *= lowHpBonus;
-						awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount / (gap + 1), false );
+						amount /= (weaponGap + 1);
+						awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount, false );
 					}
 
-					if( gap > 0 )
-						player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
+					if( weaponGap > 0 )
+						player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 				}
 			}
 		}
@@ -1389,7 +1395,16 @@ public class XP
 	public static Item getItem( String resLoc )
 	{
 		if( resLoc != null )
-			return ForgeRegistries.ITEMS.getValue( new ResourceLocation( resLoc ) );
+		{
+			Item item = ForgeRegistries.ITEMS.getValue( new ResourceLocation( resLoc ) );
+			Item item2 = ForgeRegistries.BLOCKS.getValue( new ResourceLocation( resLoc ) ).asItem();
+			if( !item.equals( Items.AIR ) )
+				return item;
+			else if( !item2.equals( Items.AIR ) )
+				return item2;
+			else
+				return Items.AIR;
+		}
 		else
 			return Items.AIR;
 	}
@@ -1621,7 +1636,7 @@ public class XP
 				    												else
 				    												{
 				    													fullEnchants = false;
-				    													i = enchants.get( enchant ) + 1;
+//				    													i = enchants.get( enchant ) + 1;
 				    												}
 				    											}
 				    											if( enchantLevel > 0 )
@@ -2332,6 +2347,14 @@ public class XP
 
 				case "biome":
 					for( Map.Entry<String, Object> entry : Requirements.data.get( "biomeReq" ).get( res.toString() ).entrySet() )
+					{
+						if( entry.getValue() instanceof Double )
+							reqs.put( entry.getKey(), (double) entry.getValue() );
+					}
+					break;
+
+				case "slayer":
+					for( Map.Entry<String, Object> entry : Requirements.data.get( "killReq" ).get( res.toString() ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqs.put( entry.getKey(), (double) entry.getValue() );

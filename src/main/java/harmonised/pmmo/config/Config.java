@@ -33,6 +33,9 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> wearReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> toolReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> weaponReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> killReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> killXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> mobRareDropEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> useReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
@@ -248,6 +251,22 @@ public class Config
                         .comment( "Should weapon requirements be enabled? False means no requirements" )
                         .translation( "pmmo.weaponReqEnabled" )
                         .define( "weaponReqEnabled", true) );
+
+                this.killReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should mob kill req be enabled? False means no requirements" )
+                        .translation( "pmmo.killReqEnabled" )
+                        .define( "killReqEnabled", true) );
+
+                this.killXpEnabled = subscriber.subscribe(builder
+                        .comment( "Should mob kill xp be enabled? False means no requirements" )
+                        .translation( "pmmo.killXpEnabled" )
+                        .define( "killXpEnabled", true) );
+
+                this.mobRareDropEnabled = subscriber.subscribe(builder
+                        .comment( "Should mob rare drops be enabled? False means no requirements" )
+                        .translation( "pmmo.mobRareDropEnabled" )
+                        .define( "mobRareDropEnabled", true) );
+
 
                 this.useReqEnabled = subscriber.subscribe(builder
                         .comment( "Should use requirements be enabled? False means no requirements" )
@@ -578,7 +597,6 @@ public class Config
                         .comment( "What is the maximum reach a player can have" )
                         .translation( "pmmo.maxReach" )
                         .defineInRange( "maxReach", 20D, 0, 1000) );
-
 
                 builder.pop();
             }

@@ -6,6 +6,7 @@ import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
@@ -40,6 +41,7 @@ public class Requirements
     private static Requirements defaultReq, customReq;
     private static Effect invalidEffect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
     private static Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
+//    private static Entity invalidEntity = ForgeRegistries.ENTITIES.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
 
     public static void init()
     {
@@ -92,6 +94,9 @@ public class Requirements
         map.put( "salvagesFrom", new HashMap<>() );
         map.put( "fishPool", new HashMap<>() );
         map.put( "fishEnchantPool", new HashMap<>() );
+        map.put( "killReq", new HashMap<>() );
+        map.put( "killXp", new HashMap<>() );
+        map.put( "mobRareDrop", new HashMap<>() );
     }
 
     private static boolean checkValidSkills( Map<String, Object> theMap )
@@ -185,21 +190,26 @@ public class Requirements
     {
         req.forEach( (key, value) ->
         {
-            if( !outReq.containsKey( key ) )
-                outReq.put( key, new HashMap<>() );
-
-            for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
+            if( !XP.getItem( key ).equals( Items.AIR ) )
             {
-                if( entry.getValue() instanceof Double )
+                if( !outReq.containsKey( key ) )
+                    outReq.put( key, new HashMap<>() );
+
+                for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
                 {
-                    if( entry.getKey().equals( "extraChance" ) && (double) entry.getValue() > 0 )
-                        outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                    if( entry.getValue() instanceof Double )
+                    {
+                        if( entry.getKey().equals( "extraChance" ) && (double) entry.getValue() > 0 )
+                            outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                        else
+                            LOGGER.error( key + " is either not \"extraChance\", or not above 0!" );
+                    }
                     else
-                        LOGGER.error( key + " is either not \"extraChance\", or not above 0!" );
+                        LOGGER.error( key + " is not a Double!" );
                 }
-                else
-                    LOGGER.error( key + " is not a Double!" );
             }
+            else
+                LOGGER.info( "Could not load inexistant item " + key );
         });
     }
 
@@ -320,6 +330,21 @@ public class Requirements
             }
             else
                 LOGGER.info( "Could not load inexistant item " + key );
+        });
+    }
+
+    private static void updateEntityItem( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            outReq.put( key, new HashMap<>() );
+            for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
+            {
+                if( !XP.getItem( entry.getKey() ).equals( Items.AIR ) )
+                    outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                else
+                    LOGGER.info( "Could not load inexistant item " + key );
+            }
         });
     }
 
@@ -634,6 +659,15 @@ public class Requirements
         if( Config.config.fishEnchantPoolEnabled.get() )
             updateReqFishEnchantPool( req.fishenchantpool, localData.get( "fishEnchantPool" ) );
 
+        if( Config.config.killReqEnabled.get() )
+            updateReqSkills( req.killReq, localData.get( "killReq" ) );
+
+        if( Config.config.killXpEnabled.get() )
+            updateReqSkills( req.killXp, localData.get( "killXp" ) );
+
+        if( Config.config.mobRareDropEnabled.get() )
+            updateEntityItem( req.mobRareDrop, localData.get( "mobRareDrop" ) );
+
         data = localData;
     }
 
@@ -696,7 +730,9 @@ public class Requirements
     private final Map<String, RequirementItem> wears = Maps.newHashMap();
     private final Map<String, RequirementItem> tools = Maps.newHashMap();
     private final Map<String, RequirementItem> weapons = Maps.newHashMap();
-    private final Map<String, RequirementItem> mobs = Maps.newHashMap();
+    private final Map<String, RequirementItem> killReq = Maps.newHashMap();
+    private final Map<String, RequirementItem> killXp = Maps.newHashMap();
+    private final Map<String, RequirementItem> mobRareDrop = Maps.newHashMap();
     private final Map<String, RequirementItem> use = Maps.newHashMap();
     private final Map<String, RequirementItem> placing = Maps.newHashMap();
     private final Map<String, RequirementItem> breaking = Maps.newHashMap();
@@ -769,7 +805,9 @@ public class Requirements
             deserializeGroup(obj, "wear_requirement", req.wears::put, context);
             deserializeGroup(obj, "tool_requirement", req.tools::put, context);
             deserializeGroup(obj, "weapon_requirement", req.weapons::put, context);
-            deserializeGroup(obj, "mob_requirement", req.mobs::put, context);
+            deserializeGroup(obj, "kill_requirement", req.killReq::put, context);
+            deserializeGroup(obj, "kill_xp", req.killXp::put, context);
+            deserializeGroup(obj, "mob_rare_drop", req.mobRareDrop::put, context);
             deserializeGroup(obj, "use_requirement", req.use::put, context);
             deserializeGroup(obj, "place_requirement", req.placing::put, context);
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);

@@ -65,15 +65,16 @@ public class MessageUpdateReq
             {
                 for( String reqKey : packet.reqPackage.keySet() )
                 {
+                    newPackage.put( reqKey, new HashMap<>() );
                     for( String topKey : packet.reqPackage.getCompound( reqKey ).keySet() )
                     {
-                        newPackage.put( topKey, new HashMap<>() );
+                        newPackage.get( reqKey ).put( topKey, new HashMap<>() );
                         for( String botKey : packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).keySet() )
                         {
                             if( botKey.equals( "salvageItem" ) )
-                                newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getString( botKey ) );
+                                newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).getString( botKey ) );
                             else
-                                newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( topKey ).getDouble( botKey ) );
+                                newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).getDouble( botKey ) );
                         }
                     }
                 }
