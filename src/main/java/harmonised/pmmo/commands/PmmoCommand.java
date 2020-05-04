@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.MessageXp;
@@ -549,6 +550,21 @@ public class PmmoCommand
                     level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
 
                 sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.text." + skillName ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ) ), false );
+
+                //EXTRA INFO
+                switch( skillName )
+                {
+                    case "fishing":
+                        double fishPoolBaseChance = Config.config.fishPoolBaseChance.get();
+                        double fishPoolChancePerLevel = Config.config.fishPoolChancePerLevel.get();
+                        double fishPoolMaxChance = Config.config.fishPoolMaxChance.get();
+                        double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
+                        if( fishPoolChance > fishPoolMaxChance )
+                            fishPoolChance = fishPoolMaxChance;
+
+                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ), false );
+                        break;
+                }
             }
             catch( CommandSyntaxException e )
             {

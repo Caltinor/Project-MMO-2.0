@@ -30,6 +30,8 @@
   "pmmo.text.welcome": "Thank you for using Project MMO! Most features can be tweaked in config.",
   "pmmo.text.savedFall": "Saved %1$s fall damage!",
   "pmmo.text.extraDrop": "%1$s Extra %2$s Dropped!",
+  "pmmo.text.extraFished": "Reeled in %1$s extra %2$s!",
+  "pmmo.text.fishPoolChance": "%1$s%% chance to access the Fish Pool",
   "pmmo.text.extraRepaired": "Repaired %1$s + %2$s extra!",
   "pmmo.text.salvageMessage": "Salvaged %1$s/%2$s %3$s!",
   "pmmo.text.cannotSalvageLackLevel": "Level %1$s Smithing to salvage",

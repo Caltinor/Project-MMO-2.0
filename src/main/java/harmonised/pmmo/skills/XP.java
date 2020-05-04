@@ -456,32 +456,32 @@ public class XP
 
 	public static int getLevel( String skill, PlayerEntity player )
 	{
-		int level = 1;
+		int startLevel = 1;
 
 		if( player.world.isRemote() )
 		{
 			if( XPOverlayGUI.skills.containsKey( skill ) )
-				level = levelAtXp( XPOverlayGUI.skills.get( skill ).goalXp );
+				startLevel = levelAtXp( XPOverlayGUI.skills.get( skill ).goalXp );
 		}
 		else
-			level = levelAtXp( getSkillsTag( player ).getDouble( skill ) );
+			startLevel = levelAtXp( getSkillsTag( player ).getDouble( skill ) );
 
-		return level;
+		return startLevel;
 	}
 
 	public static double getLevelDecimal( String skill, PlayerEntity player )
 	{
-		double level = 1;
+		double startLevel = 1;
 
 		if( player.world.isRemote() )
 		{
 			if( XPOverlayGUI.skills.containsKey( skill ) )
-				level = levelAtXpDecimal( XPOverlayGUI.skills.get( skill ).goalXp );
+				startLevel = levelAtXpDecimal( XPOverlayGUI.skills.get( skill ).goalXp );
 		}
 		else
-			level = levelAtXpDecimal( getSkillsTag( player ).getDouble( skill ) );
+			startLevel = levelAtXpDecimal( getSkillsTag( player ).getDouble( skill ) );
 
-		return level;
+		return startLevel;
 	}
 
 	private static int doubleObjectToInt( Object object )
@@ -497,7 +497,7 @@ public class XP
 		int highestReq = 1;
 		if( Requirements.data.get( "breakReq" ).containsKey( resLoc.toString() ) )
 			highestReq = Requirements.data.get( "breakReq" ).get( resLoc.toString() ).entrySet().stream().map( a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
-		int level = 1;
+		int startLevel = 1;
 
 		switch( type )
 		{
@@ -505,21 +505,21 @@ public class XP
 				if( Requirements.data.get( "oreInfo" ).containsKey( regKey ) && Requirements.data.get( "oreInfo" ).get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.data.get( "oreInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.data.get( "oreInfo" ).get( regKey ).get( "extraChance" );
-				level = getLevel( "mining", player );
+				startLevel = getLevel( "mining", player );
 				break;
 
 			case "log":
 				if( Requirements.data.get( "logInfo" ).containsKey( regKey ) && Requirements.data.get( "logInfo" ).get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.data.get( "logInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.data.get( "logInfo" ).get( regKey ).get( "extraChance" );
-				level = getLevel( "woodcutting", player );
+				startLevel = getLevel( "woodcutting", player );
 				break;
 
 			case "plant":
 				if( Requirements.data.get( "plantInfo" ).containsKey( regKey ) && Requirements.data.get( "plantInfo" ).get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.data.get( "plantInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.data.get( "plantInfo" ).get( regKey ).get( "extraChance" );
-				level = getLevel( "farming", player );
+				startLevel = getLevel( "farming", player );
 				break;
 
 			default:
@@ -527,7 +527,7 @@ public class XP
 				return 0;
 		}
 
-		extraChance = (level - highestReq) * extraChancePerLevel;
+		extraChance = (startLevel - highestReq) * extraChancePerLevel;
 		if( extraChance < 0 )
 			extraChance = 0;
 
@@ -859,7 +859,7 @@ public class XP
 				}
 				else
 				{
-					int level;
+					int startLevel;
 
 					if( correctHarvestTool( material ).equals( "axe" ) )
 					{
@@ -879,13 +879,13 @@ public class XP
 
 					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
 					{
-						level = getLevel( entry.getKey(), player );
+						startLevel = getLevel( entry.getKey(), player );
 
 						double entryValue = 1;
 						if( entry.getValue() instanceof Double )
 							entryValue = (double) entry.getValue();
 
-						if( level < entryValue )
+						if( startLevel < entryValue )
 							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 2 ), (ServerPlayerEntity) player );
 						else
 							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 1 ), (ServerPlayerEntity) player );
@@ -1288,7 +1288,7 @@ public class XP
 
 		String registryName = res.toString();
 		Map<String, Double> reqMap = new HashMap<>();
-		int level;
+		int startLevel;
 		boolean failedReq = false;
 
 		switch( type.toLowerCase() )
@@ -1376,9 +1376,9 @@ public class XP
 		{
 			for( Map.Entry<String, Double> entry : reqMap.entrySet() )
 			{
-				level = getLevel( entry.getKey(), player );
+				startLevel = getLevel( entry.getKey(), player );
 
-				if( level < entry.getValue() )
+				if( startLevel < entry.getValue() )
 					failedReq = true;
 			}
 		}
@@ -1434,7 +1434,7 @@ public class XP
 			Block goldBlock 	= 	Blocks.GOLD_BLOCK;
 			Block smithBlock    =   Blocks.SMITHING_TABLE;
 			String regKey = item.getRegistryName().toString();
-			int level;
+			int startLevel;
 			boolean isRemote = player.world.isRemote();
 			boolean matched;
 
@@ -1482,13 +1482,13 @@ public class XP
 							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 							for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
 							{
-								level = getLevel( entry.getKey(), player );
+								startLevel = getLevel( entry.getKey(), player );
 
 								double entryValue = 1;
 								if( entry.getValue() instanceof Double )
 									entryValue = (double) entry.getValue();
 
-								if( level < entryValue )
+								if( startLevel < entryValue )
 									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 								else
 									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), false );
@@ -1801,40 +1801,40 @@ public class XP
 		boolean alwaysUseUpgradeChance = Config.config.alwaysUseUpgradeChance.get();
 		boolean creative = player.isCreative();
 
-		lEnchants.forEach( ( enchant, level ) ->
+		lEnchants.forEach( ( enchant, startLevel ) ->
 		{
 			if( newEnchants.containsKey( enchant ) )
 			{
-				if( newEnchants.get( enchant ) < level )
-					newEnchants.replace( enchant, level );
+				if( newEnchants.get( enchant ) < startLevel )
+					newEnchants.replace( enchant, startLevel );
 			}
 			else
-				newEnchants.put( enchant, level );
+				newEnchants.put( enchant, startLevel );
 		});
 
 
-		rEnchants.forEach( ( enchant, level ) ->
+		rEnchants.forEach( ( enchant, startLevel ) ->
 		{
 			if( newEnchants.containsKey( enchant ) )
 			{
-				if( newEnchants.get( enchant ) < level )
-					newEnchants.replace( enchant, level );
+				if( newEnchants.get( enchant ) < startLevel )
+					newEnchants.replace( enchant, startLevel );
 			}
 			else
-				newEnchants.put( enchant, level );
+				newEnchants.put( enchant, startLevel );
 		});
 
 		Set<Enchantment> keys = new HashSet<>( newEnchants.keySet() );
 
 		keys.forEach( ( enchant ) ->
 		{
-			int level = newEnchants.get( enchant );
+			int startLevel = newEnchants.get( enchant );
 
 			int maxPlayerBypass = (int) Math.floor( (double) currLevel / (double) levelsPerOneEnchantBypass );
 			if( maxPlayerBypass > maxEnchantmentBypass )
 				maxPlayerBypass = maxEnchantmentBypass;
 
-			if( maxEnchantLevel < level && !creative )
+			if( maxEnchantLevel < startLevel && !creative )
 			{
 				if( maxEnchantLevel > 0 )
 					newEnchants.replace( enchant, maxEnchantLevel );
@@ -1842,7 +1842,7 @@ public class XP
 					newEnchants.remove( enchant );
 				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
 			}
-			else if( enchant.getMaxLevel() + maxPlayerBypass < level && !creative )
+			else if( enchant.getMaxLevel() + maxPlayerBypass < startLevel && !creative )
 			{
 				if( enchant.getMaxLevel() + maxPlayerBypass > 0 )
 					newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
@@ -1854,41 +1854,41 @@ public class XP
 			{
 				if( lEnchants.get( enchant ).intValue() == rEnchants.get( enchant ).intValue() ) //same values
 				{
-					if( level + 1 > maxEnchantLevel && !creative )
+					if( startLevel + 1 > maxEnchantLevel && !creative )
 					{
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
 					}
-					else if( level + 1 > enchant.getMaxLevel() + maxPlayerBypass && !creative )
+					else if( startLevel + 1 > enchant.getMaxLevel() + maxPlayerBypass && !creative )
 					{
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantLackOfLevelWarning", enchant.getRegistryName() ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 					}
 					else
 					{
-						if( ( ( level >= enchant.getMaxLevel() ) || alwaysUseUpgradeChance ) && !creative )
+						if( ( ( startLevel >= enchant.getMaxLevel() ) || alwaysUseUpgradeChance ) && !creative )
 						{
 							if( Math.ceil( Math.random() * 100 ) <= bypassChance ) //success
 							{
-								newEnchants.replace( enchant, level + 1 );
-								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (level + 1), false, 1 ), (ServerPlayerEntity) player );
+								newEnchants.replace( enchant, startLevel + 1 );
+								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
 							}
 							else if( Math.ceil( Math.random() * 100 ) <= failedBypassPenaltyChance ) //fucked up twice
 							{
-								if( level > 1 )
-									newEnchants.replace( enchant, level - 1 );
+								if( startLevel > 1 )
+									newEnchants.replace( enchant, startLevel - 1 );
 								else
 									newEnchants.remove( enchant );
 								NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.enchantUpgradeAndSaveFail", enchant.getRegistryName().toString(), "" + bypassChance, "" + failedBypassPenaltyChance, false, 2 ), (ServerPlayerEntity) player );
 							}
 							else	//only fucked up once
 							{
-								newEnchants.replace( enchant, level );
+								newEnchants.replace( enchant, startLevel );
 								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeFail", enchant.getRegistryName().toString(), "" + bypassChance, false, 3 ), (ServerPlayerEntity) player );
 							}
 						}
 						else
 						{
-							newEnchants.replace( enchant, level + 1 );
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (level + 1), false, 1 ), (ServerPlayerEntity) player );
+							newEnchants.replace( enchant, startLevel + 1 );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
 						}
 					}
 				}
@@ -1932,7 +1932,7 @@ public class XP
 		if( toolGap > 0 )
 			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), true );
 
-		int level = getLevel( skill, player );
+		int startLevel = getLevel( skill, player );
 
 		switch ( correctHarvestTool( event.getState().getMaterial() ) )
 		{
@@ -1948,22 +1948,22 @@ public class XP
 					heightMultiplier = Config.config.minBreakSpeed.get();
 
 				speedBonus = Config.config.miningBonusSpeed.get() / 100;
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (level - toolGap) * (float) speedBonus ) * ( (float) heightMultiplier ) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) * ( (float) heightMultiplier ) );
 				break;
 
 			case "axe":
 				speedBonus = Config.config.woodcuttingBonusSpeed.get() / 100;
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (level - toolGap) * (float) speedBonus ) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
 				break;
 
 			case "shovel":
 				speedBonus = Config.config.excavationBonusSpeed.get() / 100;
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (level - toolGap) * (float) speedBonus ) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
 				break;
 
 			case "hoe":
 				speedBonus = Config.config.farmingBonusSpeed.get() / 100;
-				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (level - toolGap) * (float) speedBonus ) );
+				event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
 				break;
 
 			default:
@@ -2232,7 +2232,7 @@ public class XP
 				}
 			}
 
-			System.out.println( playerName + " " + currLevel + " " + skillName + " level up!" );
+			System.out.println( playerName + " " + currLevel + " " + skillName + " startLevel up!" );
 			if( currLevel % 10 == 0 && broadcastMilestone )
 			{
 				player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
@@ -2251,8 +2251,8 @@ public class XP
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
-			sendMessage( skillName + " max level reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-			System.out.println( playerName + " " + skillName + " max level reached" );
+			sendMessage( skillName + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
+			System.out.println( playerName + " " + skillName + " max startLevel reached" );
 		}
 	}
 
@@ -2400,9 +2400,9 @@ public class XP
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 						{
-							int level = getLevel( entry.getKey(), player );
+							int startLevel = getLevel( entry.getKey(), player );
 
-							if( level < (double) entry.getValue() )
+							if( startLevel < (double) entry.getValue() )
 								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ), false );
 							else
 								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), false );
@@ -2543,9 +2543,16 @@ public class XP
 	public static void handleFished( ItemFishedEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
-		int level = getLevel( "fishing", player );
+		int startLevel = getLevel( "fishing", player );
+		int level;
 		NonNullList<ItemStack> items = event.getDrops();
 		double award = 10D;
+		for( ItemStack itemStack : items )
+		{
+			Map<String, Double> itemXp = getXp( itemStack.getItem().getRegistryName() );
+			if( itemXp.containsKey( "fishing" ) )
+				award = itemXp.get( "fishing" );
+		}
 		Map<String, Map<String, Object>> fishPool = Requirements.data.get( "fishPool" );
 
 		if( fishPool != null )
@@ -2553,7 +2560,7 @@ public class XP
 			double fishPoolBaseChance = Config.config.fishPoolBaseChance.get();
 			double fishPoolChancePerLevel = Config.config.fishPoolChancePerLevel.get();
 			double fishPoolMaxChance = Config.config.fishPoolMaxChance.get();
-			double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
+			double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * startLevel;
 			if( fishPoolChance > fishPoolMaxChance )
 				fishPoolChance = fishPoolMaxChance;
 
@@ -2570,14 +2577,14 @@ public class XP
 
 				for( Map.Entry<String, Map<String, Object>> entry : fishPool.entrySet() )
 				{
-					totalWeight += getWeight( level, entry.getValue() );
+					totalWeight += getWeight( startLevel, entry.getValue() );
 				}
 
 				result = Math.floor( Math.random() * (totalWeight + 1) );
 
 				for( Map.Entry<String, Map<String, Object>> entry : fishPool.entrySet() )
 				{
-					weight = getWeight( level, entry.getValue() );
+					weight = getWeight( startLevel, entry.getValue() );
 
 					if( currentWeight < result && currentWeight + weight >= result )
 					{
@@ -2619,16 +2626,14 @@ public class XP
 							int enchantLevelReq = (int) Math.floor( (double) enchantInfo.get( "levelReq" ) );
 							int itemLevelReq = (int) Math.floor( (double) match.get( "enchantLevelReq" ) );
 							int totalLevelReq = enchantLevelReq + itemLevelReq;
-							if( level >= totalLevelReq )
+							if( startLevel >= totalLevelReq )
 							{
-								level -= totalLevelReq;
+								level = startLevel - totalLevelReq;
 								double chancePerLevel = (double) enchantInfo.get( "chancePerLevel" );
 								double maxChance = (double) enchantInfo.get( "maxChance" );
 								double enchantChance = (chancePerLevel * level );
 								if( enchantChance > maxChance )
 									enchantChance = maxChance;
-
-								System.out.println( enchant.getName() + " " + enchantChance + " " + maxChance );
 
 								double levelPerLevel = (double) enchantInfo.get( "levelPerLevel" );
 								double maxEnchantLevel = (double) enchantInfo.get( "maxLevel" );
@@ -2654,8 +2659,6 @@ public class XP
 //										break;
 								}
 
-								System.out.println( enchantLevel );
-
 								if( enchantLevel > 0 )
 									outEnchants.put( enchant, enchantLevel );
 							}
@@ -2667,17 +2670,18 @@ public class XP
 				}
 
 				dropItemStack( itemStack, player.world, player.getPosition() );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ), true );
 
-				award += (double) match.get( "xp" );
-
-				awardXp( player, Skill.FISHING, "catching " + items, award, false );
+				award += (double) match.get( "xp" ) * count;
 			}
+
+			awardXp( player, Skill.FISHING, "catching " + items, award, false );
 		}
 	}
 	
-	private static double getWeight( int level, Map<String, Object> fishItem )
+	private static double getWeight( int startLevel, Map<String, Object> fishItem )
 	{
-		return DP.map( level, (double) fishItem.get( "startLevel" ), (double) fishItem.get( "endLevel" ), (double) fishItem.get( "startWeight" ), (double) fishItem.get( "endWeight" ) );
+		return DP.map( startLevel, (double) fishItem.get( "startLevel" ), (double) fishItem.get( "endLevel" ), (double) fishItem.get( "startWeight" ), (double) fishItem.get( "endWeight" ) );
 	}
 
 	public static int levelAtXp( float xp )
@@ -2692,13 +2696,13 @@ public class XP
 
 		int theXp = 0;
 
-		for( int level = 0; ; level++ )
+		for( int startLevel = 0; ; startLevel++ )
 		{
-			if( xp < theXp || level >= maxLevel )
+			if( xp < theXp || startLevel >= maxLevel )
 			{
-				return level;
+				return startLevel;
 			}
-			theXp += baseXp + level * xpIncreasePerLevel;
+			theXp += baseXp + startLevel * xpIncreasePerLevel;
 		}
 	}
 
@@ -2736,9 +2740,9 @@ public class XP
 		if( givenLevel > maxLevel )
 			givenLevel = maxLevel;
 
-		for( int level = 1; level < givenLevel; level++ )
+		for( int startLevel = 1; startLevel < givenLevel; startLevel++ )
 		{
-			theXp += baseXp + (level - 1) * xpIncreasePerLevel;
+			theXp += baseXp + (startLevel - 1) * xpIncreasePerLevel;
 		}
 		return theXp;
 	}
