@@ -94,9 +94,9 @@ public class ClientEventHandler
         if( theMap.size() > 0 )
         {
             if( XP.checkReq( player, item.getRegistryName(), type ) )
-                tooltip.add( new TranslationTextComponent( tKey ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( "green" ) ) );
             else
-                tooltip.add( new TranslationTextComponent( tKey ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( "red" ) ) );
 
             for( String key : theMap.keySet() )
             {
@@ -110,9 +110,9 @@ public class ClientEventHandler
                     value = (int) Math.floor( (double) theMap.get( key ) );
 
                     if( level < value )
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), value ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), value ).setStyle( XP.textStyle.get( "red" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), value ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + key ).getString(), value ).setStyle( XP.textStyle.get( "green" ) ) );
                 }
             }
         }
@@ -221,25 +221,25 @@ public class ClientEventHandler
             if( Requirements.data.get( "oreInfo" ).containsKey( regKey ) && Requirements.data.get( "oreInfo" ).get( regKey ).containsKey( "extraChance" ) )
             {
                 if( XP.getExtraChance( player, item.getRegistryName(), "ore" ) > 0 )  //ORE EXTRA CHANCE
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "ore" ) / 100 ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "ore" ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
                 else
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraDrop", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.oreExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
             }
 
             if( Requirements.data.get( "logInfo" ).containsKey( regKey ) && Requirements.data.get( "logInfo" ).get( regKey ).containsKey( "extraChance" ) )
             {
                 if( XP.getExtraChance( player, item.getRegistryName(), "log" ) > 0 )  //ORE EXTRA CHANCE
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "log" ) / 100 ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "log" ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
                 else
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraDrop", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.logExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
             }
 
             if( Requirements.data.get( "plantInfo" ).containsKey( regKey ) && Requirements.data.get( "plantInfo" ).get( regKey ).containsKey( "extraChance" ) )
             {
                 if( XP.getExtraChance( player, item.getRegistryName(), "plant" ) > 0 )  //ORE EXTRA CHANCE
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "plant" ) / 100 ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "plant" ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
                 else
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraDrop", 0 ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.plantExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
             }
 
             if( salvageInfo != null && !XP.getItem( (String) salvageInfo.get( "salvageItem" ) ).equals( Items.AIR ) )
@@ -268,24 +268,24 @@ public class ClientEventHandler
 
                 if( finalLevel < 0 )
                 {
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.cannotSalvageLackLevel", reqLevel ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.cannotSalvageLackLevel", reqLevel ).setStyle( XP.textStyle.get( "red" ) ) );
                 }
                 else
                 {
                     if( potentialReturnAmount > 0 )
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ) );
                     if( chance > 0 )
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( "green" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.text.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.text.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( "red" ) ) );
                 }
             }
 
             if( salvagesFrom != null )
             {
-                tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFrom" ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFrom" ).setStyle( XP.textStyle.get( "green" ) ) );
                 level = XP.getLevel( "smithing", player );
 
                 if( !lastKey.equals( regKey ) )
@@ -309,9 +309,9 @@ public class ClientEventHandler
                 salvageInfo = Requirements.data.get( "salvageInfo" ).get( key );
 
                 if( salvageInfo != null && (double) salvageInfo.get( "levelReq" ) <= level )
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( new Style().setColor( TextFormatting.GREEN ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( XP.textStyle.get( "green" ) ) );
                 else
-                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( new Style().setColor( TextFormatting.RED ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFromItem", " " + value, displayName ).setStyle( XP.textStyle.get( "red" ) ) );
             }
         }
     }
