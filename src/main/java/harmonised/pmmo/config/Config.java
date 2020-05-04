@@ -155,6 +155,9 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> nightvisionUnlockLevel;
 
         //Fishing
+        public ConfigHelper.ConfigValueListener<Double> fishPoolBaseChance;
+        public ConfigHelper.ConfigValueListener<Double> fishPoolChancePerLevel;
+        public ConfigHelper.ConfigValueListener<Double> fishPoolMaxChance;
 
         //Crafting
 
@@ -764,6 +767,22 @@ public class Config
 
             builder.push( "Fishing" );
             {
+                this.fishPoolBaseChance = subscriber.subscribe(builder
+                        .comment( "What is the chance on each successful fishing attempt to access the fish_pool" )
+                        .translation( "pmmo.fishPoolBaseChance" )
+                        .defineInRange( "fishPoolBaseChance", 0D, 0, 100) );
+
+                this.fishPoolChancePerLevel = subscriber.subscribe(builder
+                        .comment( "What is the increase per level to access the fish_pool" )
+                        .translation( "pmmo.fishPoolChancePerLevel" )
+                        .defineInRange( "fishPoolChancePerLevel", 0.25D, 0, 100) );
+
+                this.fishPoolMaxChance = subscriber.subscribe(builder
+                        .comment( "What is the max chance to access the fish_pool" )
+                        .translation( "pmmo.fishPoolMaxChance" )
+                        .defineInRange( "fishPoolMaxChance", 80D, 0, 100) );
+
+
                 builder.pop();
             }
 

@@ -358,7 +358,7 @@ public class Requirements
 
                 if( !( inMap.containsKey( "minCount" ) && inMap.get( "minCount" ) instanceof Double ) )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"minCount\" is invalid, loading default value 1 item" );
+//                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"minCount\" is invalid, loading default value 1 item" );
                     inMap.put( "minCount", 1D );
                 }
                 else if( (double) inMap.get( "minCount" ) > item.getMaxStackSize() )
@@ -369,7 +369,7 @@ public class Requirements
 
                 if( !( inMap.containsKey( "maxCount" ) && inMap.get( "maxCount" ) instanceof Double ) )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"maxCount\" is invalid, loading default value 1" );
+//                    LOGGER.info( "Error loading Fish Pool Item " + key + " \"maxCount\" is invalid, loading default value 1" );
                     inMap.put( "maxCount", 1D );
                 }
                 else if( (double) inMap.get( "maxCount" ) > item.getMaxStackSize() )
@@ -392,6 +392,7 @@ public class Requirements
 
                 if( !outReq.containsKey( key ) )
                     outReq.put( key, new HashMap<>() );
+
                 Map<String, Object> outMap = outReq.get( key );
                 double startWeight = (double) inMap.get( "startWeight" );
                 double startLevel = (double) inMap.get( "startLevel" );
@@ -407,7 +408,7 @@ public class Requirements
                 else
                     outMap.put( "endWeight", endWeight );
 
-                if( startWeight < endWeight )
+                if( startWeight > endWeight )
                     startWeight = endWeight;
 
                 if( startWeight < 1 )
@@ -420,7 +421,7 @@ public class Requirements
                 else
                     outMap.put( "endLevel", endLevel );
 
-                if( startLevel < endLevel )
+                if( startLevel > endLevel )
                     startLevel = endLevel;
 
                 if( startLevel < 1 )
@@ -433,7 +434,7 @@ public class Requirements
                 else
                     outMap.put( "maxCount", maxCount );
 
-                if( minCount < maxCount )
+                if( minCount > maxCount )
                     minCount = maxCount;
 
                 if( minCount < 1 )
@@ -448,6 +449,8 @@ public class Requirements
 
                 if( xp < 0 )
                     outMap.put( "xp", 0D );
+                else
+                    outMap.put( "xp", xp );
             }
             else
                 LOGGER.info( "Could not load inexistant item " + key );
@@ -471,14 +474,20 @@ public class Requirements
 
                 if( !( inMap.containsKey( "levelPerLevel" ) && inMap.get( "levelPerLevel" ) instanceof Double ) )
                 {
-                    LOGGER.info( "Error loading Fish Enchant Pool Item " + key + " \"levelPerLevel\" is invalid, loading default value 1" );
-                    inMap.put( "levelPerLevel", 10D );
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + key + " \"levelPerLevel\" is invalid, loading default value 0" );
+                    inMap.put( "levelPerLevel", 0D );
                 }
 
                 if( !( inMap.containsKey( "chancePerLevel" ) && inMap.get( "chancePerLevel" ) instanceof Double ) )
                 {
                     LOGGER.info( "Error loading Fish Enchant Pool Item " + key + " \"chancePerLevel\" is invalid, loading default value 0" );
                     inMap.put( "chancePerLevel", 0D );
+                }
+
+                if( !( inMap.containsKey( "maxChance" ) && inMap.get( "maxChance" ) instanceof Double ) )
+                {
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + key + " \"maxChance\" is invalid, loading default value 80%" );
+                    inMap.put( "maxChance", 80D );
                 }
 
                 if( !( inMap.containsKey( "maxLevel" ) && inMap.get( "maxLevel" ) instanceof Double ) )
@@ -494,6 +503,7 @@ public class Requirements
                 double levelReq = (double) inMap.get( "levelReq" );
                 double levelPerLevel = (double) inMap.get( "levelPerLevel" );
                 double chancePerLevel = (double) inMap.get( "chancePerLevel" );
+                double maxChance = (double) inMap.get( "maxChance" );
                 double maxLevel = (double) inMap.get( "maxLevel" );
 
                 if( levelReq < 1 )
@@ -501,8 +511,8 @@ public class Requirements
                 else
                     outMap.put( "levelReq", levelReq );
 
-                if( levelPerLevel < 1 )
-                    outMap.put( "levelPerLevel", 1D );
+                if( levelPerLevel < 0 )
+                    outMap.put( "levelPerLevel", 0D );
                 else
                     outMap.put( "levelPerLevel", levelPerLevel );
 
@@ -510,6 +520,13 @@ public class Requirements
                     outMap.put( "chancePerLevel", 0D );
                 else
                     outMap.put( "chancePerLevel", chancePerLevel );
+
+                if( maxChance < 0 )
+                    outMap.put( "maxChance", 0D );
+                else if( maxChance > 100 )
+                    outMap.put( "maxChance", 100D );
+                else
+                    outMap.put( "maxChance", maxChance );
 
                 if( maxLevel < 1 )
                     outMap.put( "maxLevel", enchant.getMaxLevel() );

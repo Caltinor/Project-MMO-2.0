@@ -51,6 +51,8 @@ public class DP
 		if( input > inHigh )
 			input = inHigh;
 
+		if( inLow == inHigh || outLow == outHigh )
+			return outHigh;
 		return ( (input - inLow) / (inHigh - inLow) ) * (outHigh - outLow) + outLow;
 	}
 }
