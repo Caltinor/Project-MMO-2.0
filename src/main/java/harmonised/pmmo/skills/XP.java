@@ -143,7 +143,7 @@ public class XP
 		textStyle.put( "yellow", new Style().setColor( TextFormatting.YELLOW ) );
 		textStyle.put( "grey", new Style().setColor( TextFormatting.GRAY ) );
 ////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
-//		lapisDonators.add(  );
+		lapisDonators.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );
 //		dandelionDonators.add(  );
 		ironDonators.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );
 ////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
