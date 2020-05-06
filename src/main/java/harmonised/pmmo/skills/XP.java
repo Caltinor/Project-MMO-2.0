@@ -63,7 +63,7 @@ import org.apache.logging.log4j.Logger;
 public class XP
 {
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
-	private static Map<String, Integer> skillColors = new HashMap<>();
+	private static Map<Skill, Integer> skillColors = new HashMap<>();
 	private static Map<UUID, Long> lastAward = new HashMap<>();
 	private static Map<UUID, BlockPos> lastPosPlaced = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
@@ -105,21 +105,21 @@ public class XP
 			localConfig.put( "crawlingAllowed", 0D );
 
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
-		skillColors.put( "mining", 0x00ffff );
-		skillColors.put( "building", 0x00ffff );
-		skillColors.put( "excavation", 0xe69900 );
-		skillColors.put( "woodcutting", 0xffa31a );
-		skillColors.put( "farming", 0x00e600 );
-		skillColors.put( "agility", 0x66cc66 );
-		skillColors.put( "endurance", 0xcc0000 );
-		skillColors.put( "combat", 0xff3300 );
-		skillColors.put( "archery", 0xffff00 );
-		skillColors.put( "smithing", 0xf0f0f0 );
-		skillColors.put( "flying", 0xccccff );
-		skillColors.put( "swimming", 0x3366ff );
-		skillColors.put( "fishing", 0x00ccff );
-		skillColors.put( "crafting", 0xff9900 );
-		skillColors.put( "magic", 0x0000ff );
+		skillColors.put( Skill.MINING, 0x00ffff );
+		skillColors.put( Skill.BUILDING, 0x00ffff );
+		skillColors.put( Skill.EXCAVATION, 0xe69900 );
+		skillColors.put( Skill.WOODCUTTING, 0xffa31a );
+		skillColors.put( Skill.FARMING, 0x00e600 );
+		skillColors.put( Skill.AGILITY, 0x66cc66 );
+		skillColors.put( Skill.ENDURANCE, 0xcc0000 );
+		skillColors.put( Skill.COMBAT, 0xff3300 );
+		skillColors.put( Skill.ARCHERY, 0xffff00 );
+		skillColors.put( Skill.SMITHING, 0xf0f0f0 );
+		skillColors.put( Skill.FLYING, 0xccccff );
+		skillColors.put( Skill.SWIMMING, 0x3366ff );
+		skillColors.put( Skill.FISHING, 0x00ccff );
+		skillColors.put( Skill.CRAFTING, 0xff9900 );
+		skillColors.put( Skill.MAGIC, 0x0000ff );
 
 		skillTextFormat.put( "mining", TextFormatting.AQUA );
 		skillTextFormat.put( "building", TextFormatting.AQUA );
@@ -238,7 +238,7 @@ public class XP
         return theMap;
     }
 
-	public static Integer getSkillColor( String skill )
+	public static Integer getSkillColor( Skill skill )
 	{
 		if( skillColors.get( skill ) != null )
 			return skillColors.get( skill );
@@ -462,7 +462,7 @@ public class XP
 		}
 	}
 
-	public static int getLevel( String skill, PlayerEntity player )
+	public static int getLevel( Skill skill, PlayerEntity player )
 	{
 		int startLevel = 1;
 
@@ -472,7 +472,7 @@ public class XP
 				startLevel = levelAtXp( XPOverlayGUI.skills.get( skill ).goalXp );
 		}
 		else
-			startLevel = levelAtXp( getSkillsTag( player ).getDouble( skill ) );
+			startLevel = levelAtXp( getSkillsTag( player ).getDouble( skill.name().toLowerCase() ) );
 
 		return startLevel;
 	}
@@ -513,21 +513,21 @@ public class XP
 				if( Requirements.data.get( "oreInfo" ).containsKey( regKey ) && Requirements.data.get( "oreInfo" ).get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.data.get( "oreInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.data.get( "oreInfo" ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( "mining", player );
+				startLevel = getLevel( Skill.MINING, player );
 				break;
 
 			case "log":
 				if( Requirements.data.get( "logInfo" ).containsKey( regKey ) && Requirements.data.get( "logInfo" ).get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.data.get( "logInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.data.get( "logInfo" ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( "woodcutting", player );
+				startLevel = getLevel( Skill.WOODCUTTING, player );
 				break;
 
 			case "plant":
 				if( Requirements.data.get( "plantInfo" ).containsKey( regKey ) && Requirements.data.get( "plantInfo" ).get( regKey ).containsKey( "extraChance" ) )
 					if( Requirements.data.get( "plantInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) Requirements.data.get( "plantInfo" ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( "farming", player );
+				startLevel = getLevel( Skill.FARMING, player );
 				break;
 
 			default:
@@ -887,7 +887,7 @@ public class XP
 
 					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
 					{
-						startLevel = getLevel( entry.getKey(), player );
+						startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 						double entryValue = 1;
 						if( entry.getValue() instanceof Double )
@@ -1011,7 +1011,7 @@ public class XP
 
 						for( Map.Entry<String, Object> entry : Requirements.data.get( "killReq" ).get( target.getEntityString() ).entrySet() )
 						{
-							int level = getLevel( entry.getKey(), player );
+							int level = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 							if( level < (double) entry.getValue() )
 								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
@@ -1033,21 +1033,22 @@ public class XP
 					{
 						double normalMaxHp = target.getAttribute( SharedMonsterAttributes.MAX_HEALTH ).getBaseValue();
 						damage = targetHealth;
+						double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
 						if( Requirements.data.get( "killXp" ).containsKey( target.getEntityString() ) )
 						{
 							Map<String, Object> killXp = Requirements.data.get( "killXp" ).get( target.getEntityString() );
 							for( Map.Entry<String, Object> entry : killXp.entrySet() )
 							{
-								awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * ( ( target.getMaxHealth() - normalMaxHp ) / 10 ), false );
+								awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * scaleMultiplier, false );
 							}
  						}
 						else if( target instanceof AnimalEntity )
-							awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 1D * ( ( target.getMaxHealth() - normalMaxHp ) / 10 ), false );
+							awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 1D * scaleMultiplier, false );
 						else if( target instanceof MobEntity )
-                            awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 3D * ( ( target.getMaxHealth() - normalMaxHp ) / 10 ), false );
+                            awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 3D * scaleMultiplier, false );
 
-						System.out.println( ( target.getMaxHealth() - normalMaxHp ) / 10 );
+//						System.out.println( ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
 						if( Requirements.data.get( "mobRareDrop" ).containsKey( target.getEntityString() ) )
 						{
@@ -1132,7 +1133,7 @@ public class XP
 				int levelsCrouchJumpBoost = (int) Math.floor( getConfig( "levelsCrouchJumpBoost" ) );
 				int levelsSprintJumpBoost = (int) Math.floor( getConfig( "levelsSprintJumpBoost" ) );
 
-				agilityLevel = getLevel( "agility", player );
+				agilityLevel = getLevel( Skill.AGILITY, player );
 
 				if (player.isCrouching())
 				{
@@ -1248,11 +1249,11 @@ public class XP
 
 	public static float getPowerLevel( PlayerEntity player )
     {
-		int powerLevel = getLevel( "endurance", player );
+		int powerLevel = getLevel( Skill.ENDURANCE, player );
 
-		int combatLevel = getLevel( "combat", player );
-		int archeryLevel = getLevel( "archery", player );
-		int magicLevel = getLevel( "magic", player );
+		int combatLevel = getLevel( Skill.COMBAT, player );
+		int archeryLevel = getLevel( Skill.ARCHERY, player );
+		int magicLevel = getLevel( Skill.MAGIC, player );
 
 		int maxOffensive = combatLevel;
 		if( maxOffensive < archeryLevel )
@@ -1439,7 +1440,7 @@ public class XP
 		{
 			for( Map.Entry<String, Double> entry : reqMap.entrySet() )
 			{
-				startLevel = getLevel( entry.getKey(), player );
+				startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 				if( startLevel < entry.getValue() )
 					failedReq = true;
@@ -1554,7 +1555,7 @@ public class XP
 							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 							for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
 							{
-								startLevel = getLevel( entry.getKey(), player );
+								startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 								double entryValue = 1;
 								if( entry.getValue() instanceof Double )
@@ -1576,10 +1577,10 @@ public class XP
 				    Block ironBlock		= 	Blocks.IRON_BLOCK;
 				    Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
 
-				    int repairLevel = getLevel( "smithing", player );
+				    int smithingLevel = getLevel( Skill.SMITHING, player );
 				    int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
 				    int levelsPerOneEnchantBypass = Config.config.levelsPerOneEnchantBypass.get();
-				    int maxPlayerBypass = (int) Math.floor( (double) repairLevel / (double) levelsPerOneEnchantBypass );
+				    int maxPlayerBypass = (int) Math.floor( (double) smithingLevel / (double) levelsPerOneEnchantBypass );
 				    if( maxPlayerBypass > maxEnchantmentBypass )
 				    	maxPlayerBypass = maxEnchantmentBypass;
 
@@ -1624,17 +1625,17 @@ public class XP
 											double maxSalvageMaterialChance = (double) theMap.get( "maxChance" );
 											int reqLevel = (int) Math.floor( (double) theMap.get( "levelReq" ) );
 											int salvageMax = (int) Math.floor( (double) theMap.get( "salvageMax" ) );
-											repairLevel -= reqLevel;
-											if( repairLevel >= 0 )
+											smithingLevel -= reqLevel;
+											if( smithingLevel >= 0 )
 											{
-												double chance = baseChance + ( chancePerLevel * repairLevel );
+												double chance = baseChance + ( chancePerLevel * smithingLevel );
 				    							double maxSalvageEnchantChance = Config.config.maxSalvageEnchantChance.get();
 				    							double enchantSaveChancePerLevel = Config.config.enchantSaveChancePerLevel.get();
 
 				    							if( chance > maxSalvageMaterialChance )
 				    								chance = maxSalvageMaterialChance;
 
-				    							double enchantChance = repairLevel * enchantSaveChancePerLevel;
+				    							double enchantChance = smithingLevel * enchantSaveChancePerLevel;
 				    							if( enchantChance > maxSalvageEnchantChance )
 				    								enchantChance = maxSalvageEnchantChance;
 
@@ -1746,10 +1747,10 @@ public class XP
 
 				    	if( block.equals( diamondBlock ) && event.getHand() == Hand.MAIN_HAND )
 				    	{
-				    		int agilityLevel = getLevel( "agility", player );
-				    		int enduranceLevel = getLevel( "endurance", player );
-				    		int combatLevel = getLevel( "combat", player );
-				    		int swimLevel = getLevel( "swimming", player );
+				    		int agilityLevel = getLevel( Skill.AGILITY, player );
+				    		int enduranceLevel = getLevel( Skill.ENDURANCE, player );
+				    		int combatLevel = getLevel( Skill.COMBAT, player );
+				    		int swimLevel = getLevel( Skill.SMITHING, player );
 				    		int nightvisionUnlockLevel = (int) Math.floor( getConfig( "nightvisionUnlockLevel" ) );	//Swimming
 
 				    		double maxFallSaveChance = Config.config.maxFallSaveChance.get();			//Agility
@@ -1805,7 +1806,7 @@ public class XP
 			if( !player.world.isRemote )
 			{
 				boolean bypassEnchantLimit = Config.config.bypassEnchantLimit.get();
-				int currLevel = getLevel( "smithing", player );
+				int currLevel = getLevel( Skill.SMITHING, player );
 				ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
 				ItemStack lItem = event.getItemInput();
 				ItemStack oItem = event.getItemResult();
@@ -2004,7 +2005,7 @@ public class XP
 		if( toolGap > 0 )
 			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 
-		int startLevel = getLevel( skill, player );
+		int startLevel = getLevel( Skill.getSkill( skill ), player );
 
 		switch ( correctHarvestTool( event.getState().getMaterial() ) )
 		{
@@ -2312,7 +2313,7 @@ public class XP
 				}
 			}
 
-			System.out.println( playerName + " " + currLevel + " " + skillName + " startLevel up!" );
+			System.out.println( playerName + " " + currLevel + " " + skillName + " level up!" );
 			if( currLevel % 10 == 0 && broadcastMilestone )
 			{
 				player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
@@ -2417,7 +2418,7 @@ public class XP
 				}
 
 				gap = (int) Math.floor( reqs.entrySet().stream()
-						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( entry.getKey(), player ) ) )
+						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( Skill.getSkill( entry.getKey() ), player ) ) )
 						.reduce( 0, Math::max ) );
 			}
 		}
@@ -2474,7 +2475,7 @@ public class XP
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 						{
-							int startLevel = getLevel( entry.getKey(), player );
+							int startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 							if( startLevel < (double) entry.getValue() )
 								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
@@ -2517,9 +2518,9 @@ public class XP
 			long gap = System.currentTimeMillis() - lastAward.get( playerUUID );
 			if( gap > 1000 )
 			{
-				int swimLevel = getLevel( "swimming", player );
-				int flyLevel = getLevel( "flying", player );
-				int agilityLevel = getLevel( "agility", player );
+				int swimLevel = getLevel( Skill.SWIMMING, player );
+				int flyLevel = getLevel( Skill.FLYING, player );
+				int agilityLevel = getLevel( Skill.AGILITY, player );
 				int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();
 				float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
 				float speedAmp = 0;
@@ -2617,7 +2618,7 @@ public class XP
 	public static void handleFished( ItemFishedEvent event )
 	{
 		PlayerEntity player = event.getPlayer();
-		int startLevel = getLevel( "fishing", player );
+		int startLevel = getLevel( Skill.FISHING, player );
 		int level;
 		NonNullList<ItemStack> items = event.getDrops();
 		double award = 10D;

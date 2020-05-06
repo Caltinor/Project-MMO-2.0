@@ -7,6 +7,7 @@ import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageCrawling;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
@@ -244,7 +245,7 @@ public class ClientEventHandler
 
             if( salvageInfo != null && !XP.getItem( (String) salvageInfo.get( "salvageItem" ) ).equals( Items.AIR ) )
             {
-                level = XP.getLevel( "smithing", player );
+                level = XP.getLevel(Skill.SMITHING, player );
                 int reqLevel = (int) Math.floor( (double) salvageInfo.get( "levelReq" ) );
                 int finalLevel = level - reqLevel;
 
@@ -286,7 +287,7 @@ public class ClientEventHandler
             if( salvagesFrom != null )
             {
                 tooltip.add( new TranslationTextComponent( "pmmo.text.salvagesFrom" ).setStyle( XP.textStyle.get( "green" ) ) );
-                level = XP.getLevel( "smithing", player );
+                level = XP.getLevel( Skill.SMITHING, player );
 
                 if( !lastKey.equals( regKey ) )
                 {

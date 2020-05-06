@@ -25,6 +25,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -39,23 +40,26 @@ public class XPOverlayGUI extends AbstractGui
 	private static double barOffsetX = 0, barOffsetY = 0, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
-	private static String name = "none", tempName = "none";
+	private static String skillName = "none";
 	private static boolean metBiomeReq = true, stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
 	private static PlayerEntity player = minecraft.player;
-	public static Map<String, ASkill> skills = new HashMap<>();
-	private static ArrayList<String> skillsKeys = new ArrayList<String>();
-	private static ASkill skill;
+	public static Map<Skill, ASkill> skills = new HashMap<>();
+//	private static ArrayList<String> skillsKeys = new ArrayList<String>();
+	private static ASkill aSkill;
+	private static Skill skill = Skill.INVALID_SKILL, tempSkill = Skill.INVALID_SKILL;
 	private static FontRenderer fontRenderer = minecraft.fontRenderer;
 	private static int maxLevel = (int) Math.floor( XP.getConfig( "maxLevel" ) );
 	private static double maxXp = XP.getConfig( "maxXp" );
+	private static XpDrop xpDrop;
+	private static int color;
 
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
 	{
-		if( !name.equals( "none" ) )
+		if( !skill.equals( Skill.INVALID_SKILL ) )
 		{
 			if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
 			{
@@ -73,14 +77,14 @@ public class XPOverlayGUI extends AbstractGui
 				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
 				xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
 
-				skill = skills.get( name );
+				aSkill = skills.get( skill );
 
 				timeDiff = (System.nanoTime() - lastTime);
 				lastTime = System.nanoTime();
 
 				if( cooldown > 0 )
 					cooldown -= timeDiff / 1000000;
-				themePos += ( 2.5 + 7.5 * ( skill.pos % Math.floor( skill.pos ) ) ) * (timeDiff / 1000000);
+				themePos += ( 2.5 + 7.5 * ( aSkill.pos % Math.floor( aSkill.pos ) ) ) * (timeDiff / 1000000);
 
 				if( themePos > 10000 )
 					themePos =  themePos % 10000;
@@ -108,7 +112,7 @@ public class XPOverlayGUI extends AbstractGui
 						xpDropOffsetCap = -9;
 					else if ( guiKey || xpLeftDisplayAlwaysOn )
 					{
-						if( skills.get( name ).xp >= maxXp )
+						if( skills.get( skill ).xp >= maxXp )
 							xpDropOffsetCap = 25;
 						else
 							xpDropOffsetCap = 34;
@@ -125,15 +129,15 @@ public class XPOverlayGUI extends AbstractGui
 				
 				for( int i = 0; i < xpDrops.size(); i++ )				//update Xp Drops
 				{
-					XpDrop xpDrop = xpDrops.get( i );
+					xpDrop = xpDrops.get( i );
 					xpDrop.age += timeDiff / 5000000;
 
 					if( ( ( xpDrop.Y - tempDouble * timeDiff / 10000000 < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 					{
-						skill = skills.get( xpDrop.name );
+						aSkill = skills.get( xpDrop.skill );
 
 						if( !xpDrop.skip )
-							name = xpDrop.name;
+							skill = xpDrop.skill;
 
 						tempDouble2 = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
 						if( stackXpDrops )
@@ -147,15 +151,15 @@ public class XPOverlayGUI extends AbstractGui
 
 						if( xpDrop.gainedXp - ( tempDouble2 * timeDiff / 10000000 ) < 0 )
 						{
-							skill.goalXp += xpDrop.gainedXp;
+							aSkill.goalXp += xpDrop.gainedXp;
 							xpDrop.gainedXp = 0;
 						}
 						else
 						{
 							xpDrop.gainedXp -= ( tempDouble2 * timeDiff / 10000000 );
-							skill.goalXp += ( tempDouble2 * timeDiff / 10000000 );
+							aSkill.goalXp += ( tempDouble2 * timeDiff / 10000000 );
 						}
-						skill.goalPos = XP.levelAtXpDecimal( skill.goalXp );
+						aSkill.goalPos = XP.levelAtXpDecimal( aSkill.goalXp );
 					}
 
 					if( showXpDrops )
@@ -180,7 +184,7 @@ public class XPOverlayGUI extends AbstractGui
 							tempAlpha = (int) Math.floor( xpDropMaxOpacity - tempInt );
 
 						if( tempAlpha > 3 )
-							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo.text." + xpDrop.name ).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.name ) );
+							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo.text." + xpDrop.skill.name().toLowerCase() ).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.skill ) );
 					}
 				}
 
@@ -191,32 +195,32 @@ public class XPOverlayGUI extends AbstractGui
 				RenderSystem.color3f( 255, 255, 255 );
 				RenderSystem.popMatrix();
 				
-				for( String tag : skillsKeys )		//Update Skills
+				for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )		//Update Skills
 				{
-					skill = skills.get( tag );
+					aSkill = entry.getValue();
 					
-					startLevel = Math.floor( skill.pos );
+					startLevel = Math.floor( aSkill.pos );
 					
-					tempDouble = ( skill.goalPos - skill.pos ) * 50;
+					tempDouble = ( aSkill.goalPos - aSkill.pos ) * 50;
 					if( tempDouble < 0.2 )
 						tempDouble = 0.2;
 					
-					if( skill.pos < skill.goalPos )
+					if( aSkill.pos < aSkill.goalPos )
 					{
-						skill.pos += 0.00005d * tempDouble;
-						skill.xp   = XP.xpAtLevelDecimal( skill.pos );
+						aSkill.pos += 0.00005d * tempDouble;
+						aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
 						
 //						if( cooldown < 10000 )
 //							cooldown = 10000;
 					}
-					else if( skill.pos > skill.goalPos )
-						skill.pos = skill.goalPos;
+					else if( aSkill.pos > aSkill.goalPos )
+						aSkill.pos = aSkill.goalPos;
 					
-					if( startLevel < Math.floor( skill.pos ) )
-						sendLvlUp( (int) Math.floor( skill.pos ), tag );
+					if( startLevel < Math.floor( aSkill.pos ) )
+						sendLvlUp( (int) Math.floor( aSkill.pos ), skill );
 					
-					if( skill.xp > skill.goalXp )
-						skill.xp = skill.goalXp;
+					if( aSkill.xp > aSkill.goalXp )
+						aSkill.xp = aSkill.goalXp;
 				}
 				
 				if( cooldown > 0 )				//Xp Bar
@@ -225,43 +229,43 @@ public class XPOverlayGUI extends AbstractGui
 					RenderSystem.enableBlend();
 					Minecraft.getInstance().getTextureManager().bindTexture( bar );
 
-					skill = skills.get( name );
+					aSkill = skills.get( skill );
 					
 					blit( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
 					if( theme == 1 )
 					{
-						blit( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( skill.pos - Math.floor( skill.pos ) ) ), barHeight );
+						blit( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
 					}
 					else
 					{
-						tempInt = (int) Math.floor( ( barWidth ) * ( skill.pos - Math.floor( skill.pos ) ) );
+						tempInt = (int) Math.floor( ( barWidth ) * ( aSkill.pos - Math.floor( aSkill.pos ) ) );
 
 						if( tempInt > 100 )
 							tempInt = 100;
 
-						if( skill.pos >= maxLevel )
+						if( aSkill.pos >= maxLevel )
 							tempInt = 100;
 
 						blit( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
 						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( themePos / 100 ) ), barHeight*2, tempInt, barHeight );
 					}
-					if( skill.pos >= maxLevel )
-						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + name ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
+					if( aSkill.pos >= maxLevel )
+						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + skill.name().toLowerCase() ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
 					else
-						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + name ).getString(), DP.dp( Math.floor( skill.pos * 100 ) / 100 ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( name ) );
+						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + skill.name().toLowerCase() ).getString(), DP.dp( Math.floor( aSkill.pos * 100 ) / 100 ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
 					
-					if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( name ) != null )
+					if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( skill ) != null )
 					{
-						if( skills.get( name ).xp >= maxXp )
-							drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.maxLevel" ).getString(), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( name ) );
+						if( skills.get( skill ).xp >= maxXp )
+							drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.text.maxLevel" ).getString(), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
 						else
 						{
 							if( goalXp >= maxXp )
 								goalXp =  maxXp;
 							
-							goalXp = XP.xpAtLevel( XP.levelAtXp( skill.xp ) + 1 );
-							drawCenteredString( fontRenderer, DP.dprefix( skills.get( name ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( name ) );
-							drawCenteredString( fontRenderer,  new TranslationTextComponent( "pmmo.text.xpLeft", DP.dprefix( goalXp - skill.xp ) ).getString(), barPosX + (barWidth / 2), 26 + barPosY, XP.getSkillColor( name ) );
+							goalXp = XP.xpAtLevel( XP.levelAtXp( aSkill.xp ) + 1 );
+							drawCenteredString( fontRenderer, DP.dprefix( skills.get( skill ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
+							drawCenteredString( fontRenderer,  new TranslationTextComponent( "pmmo.text.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getString(), barPosX + (barWidth / 2), 26 + barPosY, XP.getSkillColor( skill ) );
 						}
 					}
 					RenderSystem.disableBlend();
@@ -272,15 +276,17 @@ public class XPOverlayGUI extends AbstractGui
 				if( guiOn )
 				{
 						listIndex = 0;
-						for( String tag : skillsKeys )
+						for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
 						{
-							tempDouble = XP.levelAtXpDecimal( skills.get( tag ).xp );
+							skillName = entry.getKey().name().toLowerCase();
+							tempDouble = XP.levelAtXpDecimal( entry.getValue().xp );
 							tempString = DP.dp( tempDouble );
+							color = XP.getSkillColor( entry.getKey() );
 							if( tempDouble >= maxLevel )
 								tempString = "" + maxLevel;
-							drawString( fontRenderer, tempString, 3, 3 + listIndex, XP.getSkillColor( tag ) );
-							drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo.text." + tag ).getString(), levelGap + 4, 3 + listIndex, XP.getSkillColor( tag ) );
-							drawString( fontRenderer, " | " + DP.dprefix( skills.get( tag ).xp ), levelGap + skillGap + 13, 3 + listIndex, XP.getSkillColor( tag ) );
+							drawString( fontRenderer, tempString, 3, 3 + listIndex, color );
+							drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo.text." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
+							drawString( fontRenderer, " | " + DP.dprefix( entry.getValue().xp ), levelGap + skillGap + 13, 3 + listIndex, color );
 
 							ResourceLocation resLoc = player.world.getBiome( player.getPosition() ).getRegistryName();
 							String biomeKey = resLoc.toString();
@@ -293,14 +299,14 @@ public class XPOverlayGUI extends AbstractGui
 									tempDouble = (biomePenaltyMultiplier - 1) * 100;
 									tempDouble = Math.floor( tempDouble * 100 ) / 100;
 									tempString = ( tempDouble % 1 == 0 ? (int) Math.floor( tempDouble ) : DP.dp( tempDouble ) ) + "%";
-									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( tag ) );
+									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( skill ) );
 								}
 							}
 							else if( Requirements.data.get( "biomeMultiplier" ).containsKey( biomeKey ) )
 							{
-								if( Requirements.data.get( "biomeMultiplier" ).get( biomeKey ).containsKey( tag ) )
+								if( Requirements.data.get( "biomeMultiplier" ).get( biomeKey ).containsKey( skillName ) )
 								{
-									tempDouble = ( (double) Requirements.data.get( "biomeMultiplier" ).get( biomeKey ).get( tag ) - 1 ) * 100;
+									tempDouble = ( (double) Requirements.data.get( "biomeMultiplier" ).get( biomeKey ).get( skillName ) - 1 ) * 100;
 									tempDouble = Math.floor( tempDouble * 100 ) / 100;
 
 									if( tempDouble > 0 )
@@ -310,7 +316,7 @@ public class XPOverlayGUI extends AbstractGui
 									else
 										tempString = "";
 
-									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( tag ) );
+									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( skill ) );
 								}
 							}
 							
@@ -482,7 +488,7 @@ public class XPOverlayGUI extends AbstractGui
 //		}
 //	}
 	
-	public static void sendLvlUp( int level, String name )
+	public static void sendLvlUp( int level, Skill skill )
 	{
 		player = Minecraft.getInstance().player;
 
@@ -495,51 +501,48 @@ public class XPOverlayGUI extends AbstractGui
 //					tempString = level + " swimming level up!";
 //				break;
 //		}
-		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelUp", level, new TranslationTextComponent( "pmmo.text." + name ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), false);
-		if( name.equals( "swimming" ) && level - 1 < Config.config.nightvisionUnlockLevel.get() && level >= Config.config.nightvisionUnlockLevel.get() )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( name ) ) ), true );
+		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelUp", level, new TranslationTextComponent( "pmmo.text." + skill.name().toLowerCase() ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill.name().toLowerCase() ) ) ), false);
+		if( skill == Skill.SWIMMING && level - 1 < Config.config.nightvisionUnlockLevel.get() && level >= Config.config.nightvisionUnlockLevel.get() )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill.name().toLowerCase() ) ) ), true );
 	}
 	
-	public static void makeXpDrop( double xp, int id, int cooldown, double gainedXp, boolean skip )
+	public static void makeXpDrop( double xp, Skill skill, int cooldown, double gainedXp, boolean skip )
 	{
-		tempName = Skill.getString( id );
+		tempSkill = skill;
 		xpDropWasStacked = false;
 
-		if( XPOverlayGUI.name.equals( "none" ) )
-			XPOverlayGUI.name = tempName;
+		if( XPOverlayGUI.skill.equals( Skill.INVALID_SKILL ) )
+			XPOverlayGUI.skill = tempSkill;
 
-		if( skills.get( tempName ) == null )				//Handle client xp tracker
-		{
-			skills.put( tempName, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
-			skillsKeys.add( tempName );
-		}
+		if( skills.get( tempSkill ) == null )				//Handle client xp tracker
+			skills.put( tempSkill, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
 		
-		skill = skills.get( tempName );
+		aSkill = skills.get( tempSkill );
 		
 		if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
 		{
-			skill.pos = XP.levelAtXpDecimal( xp );
-			skill.goalPos = skill.pos;
-			skill.xp = xp;
-			skill.goalXp = xp;
+			aSkill.pos = XP.levelAtXpDecimal( xp );
+			aSkill.goalPos = aSkill.pos;
+			aSkill.xp = xp;
+			aSkill.goalXp = xp;
 			XPOverlayGUI.cooldown = cooldown;
 
 			for( int i = 0; i < xpDrops.size(); i++ )
 			{
-				if( xpDrops.get( i ).name.equals( tempName ) )
+				if( xpDrops.get( i ).skill == tempSkill )
 				{
 					xpDrops.remove( i );
 					i = 0;
 				}
 			}
 
-			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + tempName + " has been set to: " + xp );
+			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + skill.name() + " has been set to: " + xp );
 		}
 		else if( stackXpDrops && xpDrops.size() > 0 )
 		{
 			for( XpDrop xpDrop : xpDrops )
 			{
-				if( xpDrop.name.equals( tempName ) && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0) )
+				if( xpDrop.skill == tempSkill && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0) )
 				{
 					xpDrop.gainedXp += gainedXp;
 					xpDrop.startXp += gainedXp;
@@ -551,12 +554,12 @@ public class XPOverlayGUI extends AbstractGui
 			}
 		}
 
-		if( !xpDropWasStacked )
+		if( !xpDropWasStacked && gainedXp != 0 )
 		{
 			if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).Y > 75 )
-				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, tempName, xp, gainedXp, skip ) );
+				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, tempSkill, xp, gainedXp, skip ) );
 			else
-				xpDrops.add( new XpDrop( 0, xpDropSpawnDistance, tempName, xp, gainedXp, skip ) );
+				xpDrops.add( new XpDrop( 0, xpDropSpawnDistance, tempSkill, xp, gainedXp, skip ) );
 		}
 		
 		if( !skip )
@@ -566,34 +569,34 @@ public class XPOverlayGUI extends AbstractGui
 		skillGap = 0;
 		xpGap = 0;
 
-		skillsKeys.forEach( key ->
+		skills.forEach( (thisSkill, thisASkill) ->
 		{
-			if( skills.get( key ).pos >= maxLevel )
+			if( skills.get( thisSkill ).pos >= maxLevel )
 			{
 				if( levelGap < fontRenderer.getStringWidth( "" + maxLevel ) )
 					levelGap = fontRenderer.getStringWidth( "" + maxLevel );
 			}
 			else
 			{
-				if( levelGap < fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( key ).goalXp ) ) ) )
-					levelGap = fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( key ).goalXp ) ) );
+				if( levelGap < fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( thisSkill ).goalXp ) ) ) )
+					levelGap = fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( thisSkill ).goalXp ) ) );
 			}
 
-			if( skillGap < fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() ) )
-				skillGap = fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + key ).getString() );
+			if( skillGap < fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + thisSkill.name().toLowerCase() ).getString() ) )
+				skillGap = fontRenderer.getStringWidth( new TranslationTextComponent( "pmmo.text." + thisSkill.name().toLowerCase() ).getString() );
 
-			if( xpGap < fontRenderer.getStringWidth( DP.dp( skills.get( key ).goalXp ) ) )
-				xpGap = fontRenderer.getStringWidth( DP.dprefix( skills.get( key ).goalXp ) );
+			if( xpGap < fontRenderer.getStringWidth( DP.dp( skills.get( thisSkill ).goalXp ) ) )
+				xpGap = fontRenderer.getStringWidth( DP.dprefix( skills.get( thisSkill ).goalXp ) );
 		});
 	}
 	
 	public static void clearXP()
 	{
 		skills = new HashMap<>();
-		skillsKeys = new ArrayList<>();
+//		skillsKeys = new ArrayList<>();
 		xpDrops = new ArrayList<>();
 		xp = 0;
-		name = "none";
+		skill = Skill.INVALID_SKILL;
 		levelGap = 0;
 		skillGap = 0;
 		xpGap = 0;

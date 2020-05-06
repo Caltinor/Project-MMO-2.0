@@ -69,6 +69,17 @@ public enum Skill
         return Skill.INVALID_SKILL;
     }
 
+    public static Skill getSkill( int input )
+    {
+
+        for( Skill theEnum : Skill.values() )
+        {
+            if( theEnum.value == input )
+                return theEnum;
+        }
+        return Skill.INVALID_SKILL;
+    }
+
     public int getValue()
     {
         return this.value;

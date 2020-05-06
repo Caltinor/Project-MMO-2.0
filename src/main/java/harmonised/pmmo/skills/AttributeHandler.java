@@ -57,7 +57,7 @@ public class AttributeHandler
 	{
 		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
-		double buildLevel = XP.getLevel( "building", player );
+		double buildLevel = XP.getLevel( Skill.BUILDING, player );
 		double reach = -0.91 + ( buildLevel / levelsPerBlockReach );
 		double maxReachPref = prefsTag.getDouble( "maxReach" );
 		if( reach > maxReach )
@@ -77,7 +77,7 @@ public class AttributeHandler
 	{
 		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
-		double agilityLevel = XP.getLevel( "agility", player );
+		double agilityLevel = XP.getLevel( Skill.AGILITY, player );
 		double maxSpeedBoostPref = prefsTag.getDouble( "maxSpeedBoost" );
 		double speedBoost = agilityLevel * speedBoostPerLevel;
 		double baseValue = speedAttribute.getBaseValue();
@@ -111,7 +111,7 @@ public class AttributeHandler
 	{
 		IAttributeInstance hpAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
-		double enduranceLevel = XP.getLevel( "endurance", player );
+		double enduranceLevel = XP.getLevel( Skill.ENDURANCE, player );
 		int maxHP = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
 		int maxHPPref = (int) Math.floor(prefsTag.getDouble( "maxExtraHeart" ) * 2);
 		if( maxHP > maxHeartCap * 2 )
@@ -129,7 +129,7 @@ public class AttributeHandler
 		IAttributeInstance damageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double maxDamagePref = prefsTag.getDouble( "maxExtraDamageBoost" );
-		double combatLevel = XP.getLevel( "combat", player );
+		double combatLevel = XP.getLevel( Skill.COMBAT, player );
 		double damageBoost = combatLevel / levelsPerDamage;
 		if( damageBoost > maxDamage )
 			damageBoost = maxDamage;

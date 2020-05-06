@@ -2,6 +2,7 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.gui.XPOverlayGUI;
 
+import harmonised.pmmo.skills.Skill;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -53,7 +54,7 @@ public class MessageXp
 			if( packet.skill == 42069 )
 				XPOverlayGUI.clearXP();
 			else
-				XPOverlayGUI.makeXpDrop( packet.xp, packet.skill, 10000, packet.gainedXp, packet.skip );
+				XPOverlayGUI.makeXpDrop( packet.xp, Skill.getSkill( packet.skill ), 10000, packet.gainedXp, packet.skip );
 		});
 		ctx.get().setPacketHandled(true);
 	}
