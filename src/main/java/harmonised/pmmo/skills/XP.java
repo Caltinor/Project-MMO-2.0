@@ -26,6 +26,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -38,6 +39,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
@@ -990,7 +992,6 @@ public class XP
 //				if( !(target instanceof AnimalEntity) )
 //					System.out.println( test.getValue() + " " + test.getBaseValue() );
 
-
 				PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
 
 				if( player.getHeldItemMainhand().getItem().equals( Items.DEBUG_STICK ) )
@@ -1038,13 +1039,15 @@ public class XP
 							Map<String, Object> killXp = Requirements.data.get( "killXp" ).get( target.getEntityString() );
 							for( Map.Entry<String, Object> entry : killXp.entrySet() )
 							{
-								awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * ( target.getMaxHealth() / normalMaxHp ), false );
+								awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * ( ( target.getMaxHealth() - normalMaxHp ) / 10 ), false );
 							}
  						}
 						else if( target instanceof AnimalEntity )
-							awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 1D * ( target.getMaxHealth() / normalMaxHp ), false );
+							awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 1D * ( ( target.getMaxHealth() - normalMaxHp ) / 10 ), false );
 						else if( target instanceof MobEntity )
-                            awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 3D * ( target.getMaxHealth() / normalMaxHp ), false );
+                            awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 3D * ( ( target.getMaxHealth() - normalMaxHp ) / 10 ), false );
+
+						System.out.println( ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
 						if( Requirements.data.get( "mobRareDrop" ).containsKey( target.getEntityString() ) )
 						{
@@ -1191,50 +1194,54 @@ public class XP
 		}
 	}
 
-	public static void handleLivingSpawn( LivingSpawnEvent.CheckSpawn event )
+	public static void handleLivingSpawn( LivingSpawnEvent.EnteringChunk event )
 	{
-		if( event.getEntity() instanceof MobEntity )
+		if( event.getEntity() instanceof MobEntity && !(event.getEntity() instanceof AnimalEntity) )
 		{
 			MobEntity mob = (MobEntity) event.getEntity();
-			Collection<ServerPlayerEntity> allPlayers = mob.getServer().getPlayerList().getPlayers();
-
-			Float closestDistance = null;
-			float tempDistance;
-
-			for( ServerPlayerEntity player : allPlayers )
+			MinecraftServer server = mob.getServer();
+			if( server != null )
 			{
-				tempDistance = mob.getDistance( player );
-				if( closestDistance == null || tempDistance < closestDistance )
-					closestDistance = tempDistance;
-			}
+				Collection<ServerPlayerEntity> allPlayers = server.getPlayerList().getPlayers();
 
-			if( closestDistance != null )
-			{
-				float searchRange = closestDistance + 30;
-				float powerLevel = 0;
-				float playerPowerAverage = 1;
-
-				Collection<ServerPlayerEntity> players = new ArrayList<>();
+				Float closestDistance = null;
+				float tempDistance;
 
 				for( ServerPlayerEntity player : allPlayers )
 				{
-					if( mob.getDistance( player ) < searchRange )
-						players.add( player );
+					tempDistance = mob.getDistance( player );
+					if( closestDistance == null || tempDistance < closestDistance )
+						closestDistance = tempDistance;
 				}
 
-				for( ServerPlayerEntity player : players )
+				if( closestDistance != null )
 				{
-					powerLevel += getPowerLevel( player );
+					float searchRange = closestDistance + 30;
+					float powerLevel = 0;
+					float playerPowerAverage = 1;
+
+					Collection<ServerPlayerEntity> players = new ArrayList<>();
+
+					for( ServerPlayerEntity player : allPlayers )
+					{
+						if( mob.getDistance( player ) < searchRange )
+							players.add( player );
+					}
+
+					for( ServerPlayerEntity player : players )
+					{
+						powerLevel += getPowerLevel( player );
+					}
+					powerLevel /= players.size();
+					playerPowerAverage = (float) Math.pow(0.5, players.size() - 1 );
+
+					if( playerPowerAverage < 1 )
+						powerLevel *= 1 + playerPowerAverage;
+
+					AttributeHandler.updateHP( mob, powerLevel );
+					AttributeHandler.updateDamage( mob, powerLevel );
+					AttributeHandler.updateSpeed( mob, powerLevel );
 				}
-				powerLevel /= players.size();
-				playerPowerAverage = (float) Math.pow(0.5, players.size() - 1 );
-
-				if( playerPowerAverage < 1 )
-					powerLevel *= 1 + playerPowerAverage;
-
-				AttributeHandler.updateHP( mob, powerLevel );
-				AttributeHandler.updateDamage( mob, powerLevel );
-				AttributeHandler.updateSpeed( mob, powerLevel );
 			}
 		}
 	}

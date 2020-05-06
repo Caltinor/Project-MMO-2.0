@@ -19,8 +19,8 @@ public class ScreenSkills extends Screen
     private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/screenboxy.png" );
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
-    private int boxWidth = 250;
-    private int boxHeight = 250;
+    private int boxWidth = 256;
+    private int boxHeight = 256;
     private int boxPosX;
     private int boxPosY;
     private MyScrollPanel myList;

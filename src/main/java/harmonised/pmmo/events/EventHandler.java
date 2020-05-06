@@ -107,7 +107,7 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void livingSpawn( LivingSpawnEvent.CheckSpawn event )
+	public static void livingSpawn( LivingSpawnEvent.EnteringChunk event )
 	{
 		XP.handleLivingSpawn( event );
 	}
