@@ -60,6 +60,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
+
 public class XP
 {
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
@@ -2116,7 +2118,7 @@ public class XP
 		}
 	}
 
-	public static void awardXp( PlayerEntity player, Skill skill, String sourceName, double amount, boolean skip )
+	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip )
 	{
 		double biomePenaltyMultiplier = getConfig( "biomePenaltyMultiplier" );
 		double maxXp = getConfig( "maxXp" );
@@ -2124,9 +2126,9 @@ public class XP
 		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
 			return;
 
-		if( skill.getValue() == skill.INVALID_SKILL.getValue() )
+		if( skill == skill.INVALID_SKILL )
 		{
-			System.out.println( "INVALID SKILL" );
+			LOGGER.error( "Invalid skill at awardXp" );
 			return;
 		}
 
@@ -2337,14 +2339,19 @@ public class XP
 		}
 	}
 
-	public static void setXp( PlayerEntity player, String skillName, double newXp )
+	public static void setXp( Skill skill, PlayerEntity player, double newXp )
 	{
-		skillName = skillName.toLowerCase();
-		CompoundNBT skillsTag = getSkillsTag( player );
-		skillsTag.putDouble( skillName, newXp );
-		AttributeHandler.updateAll( player );
+		if( skill != Skill.INVALID_SKILL )
+		{
+			String skillName = skill.name().toLowerCase();
+			CompoundNBT skillsTag = getSkillsTag( player );
+			skillsTag.putDouble( skillName, newXp );
+			AttributeHandler.updateAll( player );
 
-		NetworkHandler.sendToPlayer( new MessageXp( newXp, Skill.getInt( skillName ), 0, false ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageXp( newXp, skill.getValue(), 0, false ), (ServerPlayerEntity) player );
+		}
+		else
+			LOGGER.error( "Invalid skill at method setXp" );
 	}
 
 	private static int getGap( int a, int b )

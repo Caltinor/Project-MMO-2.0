@@ -217,7 +217,7 @@ public class XPOverlayGUI extends AbstractGui
 						aSkill.pos = aSkill.goalPos;
 					
 					if( startLevel < Math.floor( aSkill.pos ) )
-						sendLvlUp( (int) Math.floor( aSkill.pos ), skill );
+						sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );
 					
 					if( aSkill.xp > aSkill.goalXp )
 						aSkill.xp = aSkill.goalXp;

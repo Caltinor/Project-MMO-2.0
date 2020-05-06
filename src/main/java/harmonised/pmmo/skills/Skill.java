@@ -1,5 +1,7 @@
 package harmonised.pmmo.skills;
 
+import net.minecraft.entity.player.PlayerEntity;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,4 +87,8 @@ public enum Skill
         return this.value;
     }
 
+    public int getLevel( PlayerEntity player )
+    {
+        return XP.getLevel( this, player );
+    }
 }

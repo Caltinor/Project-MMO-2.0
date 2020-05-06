@@ -298,7 +298,8 @@ public class PmmoCommand
     private static int commandSet(CommandContext<CommandSource> context) throws CommandException
     {
         String[] args = context.getInput().split( " " );
-        String skillName = args[4].toLowerCase();
+        String skillName = StringArgumentType.getString( context, "Skill" );
+        Skill skill = Skill.getSkill( skillName );
 
         int skillInt = Skill.getInt( skillName );
         PlayerEntity sender = null;
@@ -326,7 +327,6 @@ public class PmmoCommand
 
                 for( ServerPlayerEntity player : players )
                 {
-                    CompoundNBT skillsTag = XP.getSkillsTag( player );
                     double newValue = Double.parseDouble( args[6] );
 
                     if( newValue > maxXp )
@@ -342,13 +342,13 @@ public class PmmoCommand
 
                         double newLevelXp = XP.xpAtLevelDecimal( newValue );
 
-                        XP.setXp( player, skillName, newLevelXp );
+                        XP.setXp( skill, player, newLevelXp );
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.setLevel", skillName, (newValue % 1 == 0 ? (int) Math.floor(newValue) : DP.dp(newValue) ) ), false );
                     }
                     else if( args[5].toLowerCase().equals( "xp" ) )
                     {
-                        XP.setXp( player, skillName, newValue );
+                        XP.setXp( skill, player, newValue );
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.setXp", skillName, DP.dp(newValue) ), false );
                     }
@@ -382,8 +382,8 @@ public class PmmoCommand
     private static int commandAdd(CommandContext<CommandSource> context) throws CommandException
     {
         String[] args = context.getInput().split( " " );
-        String skillName = args[4].toLowerCase();
-        int skillInt = Skill.getInt( skillName );
+        String skillName = StringArgumentType.getString( context, "Skill" );
+        Skill skill = Skill.getSkill( skillName );
         PlayerEntity sender = null;
 
         try
@@ -395,7 +395,7 @@ public class PmmoCommand
             //not player, it's fine
         }
 
-        if( skillInt != 0 )
+        if( skill != Skill.INVALID_SKILL )
         {
             try
             {
@@ -419,9 +419,9 @@ public class PmmoCommand
                             newLevelXp = 0;
 
                         if( newLevelXp > playerXp )
-                            NetworkHandler.sendToPlayer( new MessageXp( playerXp, skillInt, newLevelXp - playerXp, true ), player );
+                            NetworkHandler.sendToPlayer( new MessageXp( playerXp, skill.getValue(), newLevelXp - playerXp, true ), player );
                         else
-                            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skillInt, 0, true ), player );
+                            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skill.getValue(), 0, true ), player );
 
                         skillsTag.putDouble( skillName, newLevelXp );
 
@@ -438,9 +438,9 @@ public class PmmoCommand
                             newLevelXp = 0;
 
                         if( newLevelXp > playerXp )
-                            NetworkHandler.sendToPlayer( new MessageXp( playerXp, skillInt, newValue, true ), player );
+                            NetworkHandler.sendToPlayer( new MessageXp( playerXp, skill.getValue(), newValue, true ), player );
                         else
-                            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skillInt, 0, true ), player );
+                            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skill.getValue(), 0, true ), player );
                         skillsTag.putDouble( skillName, newLevelXp );
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.addXp", skillName, DP.dp(newValue) ), false );
