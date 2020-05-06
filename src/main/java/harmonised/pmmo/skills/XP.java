@@ -144,7 +144,7 @@ public class XP
 		textStyle.put( "grey", new Style().setColor( TextFormatting.GRAY ) );
 ////////////////////////////////////LAPIS_DONATORS//////////////////////////////////////////////
 		lapisDonators.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );
-//		dandelionDonators.add(  );
+		dandelionDonators.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );
 		ironDonators.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );
 ////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
 		materialHarvestTool.put( Material.ANVIL, "pickaxe" );				//PICKAXE
@@ -2352,74 +2352,48 @@ public class XP
 
 		if( !checkReq( player, res, type ) )
 		{
+			Map<String, Object> theMap = null;
 			Map<String, Double> reqs = new HashMap<>();
 			switch( type )
 			{
 				case "wear":
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "wearReq" ).get( res.toString() ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqs.put( entry.getKey(), (double) entry.getValue() );
-					}
+					if( Requirements.data.get( "wearReq" ).containsKey( res.toString() ) )
+						theMap = Requirements.data.get( "wearReq" ).get( res.toString() );
 					break;
 
 				case "tool":
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "toolReq" ).get( res.toString() ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqs.put( entry.getKey(), (double) entry.getValue() );
-					}
+					if( Requirements.data.get( "toolReq" ).containsKey( res.toString() ) )
+						theMap = Requirements.data.get( "toolReq" ).get( res.toString() );
 					break;
 
 				case "weapon":
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "weaponReq" ).get( res.toString() ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqs.put( entry.getKey(), (double) entry.getValue() );
-					}
+					if( Requirements.data.get( "weaponReq" ).containsKey( res.toString() ) )
+						theMap = Requirements.data.get( "weaponReq" ).get( res.toString() );
 					break;
 
 				case "use":
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( res.toString() ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqs.put( entry.getKey(), (double) entry.getValue() );
-					}
+					if( Requirements.data.get( "useReq" ).containsKey( res.toString() ) )
+						theMap = Requirements.data.get( "useReq" ).get( res.toString() );
 					break;
 
 				case "place":
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "placeReq" ).get( res.toString() ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqs.put( entry.getKey(), (double) entry.getValue() );
-					}
+					if( Requirements.data.get( "placeReq" ).containsKey( res.toString() ) )
+						theMap = Requirements.data.get( "placeReq" ).get( res.toString() );
 					break;
 
 				case "break":
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( res.toString() ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqs.put( entry.getKey(), (double) entry.getValue() );
-					}
+					if( Requirements.data.get( "breakReq" ).containsKey( res.toString() ) )
+						theMap = Requirements.data.get( "breakReq" ).get( res.toString() );
 					break;
 
 				case "biome":
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "biomeReq" ).get( res.toString() ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqs.put( entry.getKey(), (double) entry.getValue() );
-					}
+					if( Requirements.data.get( "biomeReq" ).containsKey( res.toString() ) )
+						theMap = Requirements.data.get( "biomeReq" ).get( res.toString() );
 					break;
 
 				case "slayer":
-					if( Requirements.data.get( "killReq" ).get( res.toString() ) != null )
-					{
-						for( Map.Entry<String, Object> entry : Requirements.data.get( "killReq" ).get( res.toString() ).entrySet() )
-						{
-							if( entry.getValue() instanceof Double )
-								reqs.put( entry.getKey(), (double) entry.getValue() );
-						}
-					}
+					if( Requirements.data.get( "killReq" ).containsKey( res.toString() ) )
+						theMap = Requirements.data.get( "killReq" ).get( res.toString() );
 					break;
 
 				default:
@@ -2427,9 +2401,18 @@ public class XP
 					return 0;
 			}
 
-			gap = (int) Math.floor( reqs.entrySet().stream()
-					.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( entry.getKey(), player ) ) )
-					.reduce( 0, Math::max ) );
+			if( theMap != null )
+			{
+				for( Map.Entry<String, Object> entry : theMap.entrySet() )
+				{
+					if( entry.getValue() instanceof Double )
+						reqs.put( entry.getKey(), (double) entry.getValue() );
+				}
+
+				gap = (int) Math.floor( reqs.entrySet().stream()
+						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( entry.getKey(), player ) ) )
+						.reduce( 0, Math::max ) );
+			}
 		}
 
 		return gap;
