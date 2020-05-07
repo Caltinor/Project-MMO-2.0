@@ -51,8 +51,6 @@ public class PmmoCommand
     private static String[] suggestPref = new String[6];
     private static String[] suggestGui = new String[13];
     private static String[] suggestSearchRegistry = new String[5];
-    private static int maxLevel = (int) Math.floor( XP.getConfig( "maxLevel" ) );
-    private static double maxXp = XP.getConfig( "maxXp" );
 
     public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
@@ -298,10 +296,9 @@ public class PmmoCommand
     private static int commandSet(CommandContext<CommandSource> context) throws CommandException
     {
         String[] args = context.getInput().split( " " );
-        String skillName = StringArgumentType.getString( context, "Skill" );
+        String skillName = StringArgumentType.getString( context, "Skill" ).toLowerCase();
+        String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
         Skill skill = Skill.getSkill( skillName );
-
-        int skillInt = Skill.getInt( skillName );
         PlayerEntity sender = null;
 
         try
@@ -319,7 +316,7 @@ public class PmmoCommand
             return 1;
         }
 
-        if( skillInt != 0 )
+        if( skill != Skill.INVALID_SKILL )
         {
             try
             {
@@ -327,31 +324,12 @@ public class PmmoCommand
 
                 for( ServerPlayerEntity player : players )
                 {
-                    double newValue = Double.parseDouble( args[6] );
+                    double newValue = DoubleArgumentType.getDouble( context, "New Value" );
 
-                    if( newValue > maxXp )
-                        newValue = maxXp;
-
-                    if( newValue < 0 )
-                        newValue = 0;
-
-                    if( args[5].toLowerCase().equals( "level" ) )
-                    {
-                        if( newValue > maxLevel )
-                            newValue = maxLevel;
-
-                        double newLevelXp = XP.xpAtLevelDecimal( newValue );
-
-                        XP.setXp( skill, player, newLevelXp );
-
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.setLevel", skillName, (newValue % 1 == 0 ? (int) Math.floor(newValue) : DP.dp(newValue) ) ), false );
-                    }
-                    else if( args[5].toLowerCase().equals( "xp" ) )
-                    {
-                        XP.setXp( skill, player, newValue );
-
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.setXp", skillName, DP.dp(newValue) ), false );
-                    }
+                    if( type.equals( "level" ) )
+                        skill.setLevel( player, newValue );
+                    else if( type.equals( "xp" ) )
+                        skill.setXp( player, newValue );
                     else
                     {
                         LOGGER.error( "Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
@@ -382,7 +360,8 @@ public class PmmoCommand
     private static int commandAdd(CommandContext<CommandSource> context) throws CommandException
     {
         String[] args = context.getInput().split( " " );
-        String skillName = StringArgumentType.getString( context, "Skill" );
+        String skillName = StringArgumentType.getString( context, "Skill" ).toLowerCase();
+        String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
         Skill skill = Skill.getSkill( skillName );
         PlayerEntity sender = null;
 
@@ -403,48 +382,12 @@ public class PmmoCommand
 
                 for( ServerPlayerEntity player : players )
                 {
-                    CompoundNBT skillsTag = XP.getSkillsTag( player );
-                    double newValue = Double.parseDouble( args[6] );
-                    double playerXp = skillsTag.getDouble( skillName );
-                    double newLevelXp;
+                    double newValue = DoubleArgumentType.getDouble( context, "Value To Add" );
 
-                    if( args[5].toLowerCase().equals( "level" ) )
-                    {
-                        newLevelXp = XP.xpAtLevelDecimal( XP.levelAtXpDecimal( playerXp ) + newValue );
-
-                        if( newLevelXp > maxXp )
-                            newLevelXp = maxXp;
-
-                        if( newLevelXp < 0 )
-                            newLevelXp = 0;
-
-                        if( newLevelXp > playerXp )
-                            NetworkHandler.sendToPlayer( new MessageXp( playerXp, skill.getValue(), newLevelXp - playerXp, true ), player );
-                        else
-                            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skill.getValue(), 0, true ), player );
-
-                        skillsTag.putDouble( skillName, newLevelXp );
-
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.addLevel", skillName, (newValue % 1 == 0 ? (int) Math.floor(newValue) : DP.dp(newValue) ) ), false );
-                    }
-                    else if( args[5].toLowerCase().equals( "xp" ) )
-                    {
-                        newLevelXp = newValue + playerXp;
-
-                        if( newLevelXp > maxXp )
-                            newLevelXp = maxXp;
-
-                        if( newLevelXp < 0 )
-                            newLevelXp = 0;
-
-                        if( newLevelXp > playerXp )
-                            NetworkHandler.sendToPlayer( new MessageXp( playerXp, skill.getValue(), newValue, true ), player );
-                        else
-                            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, skill.getValue(), 0, true ), player );
-                        skillsTag.putDouble( skillName, newLevelXp );
-
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.addXp", skillName, DP.dp(newValue) ), false );
-                    }
+                    if( type.equals( "level" ) )
+                        skill.addLevel( player, newValue );
+                    else if( type.equals( "xp" ) )
+                        skill.addXp( player, newValue );
                     else
                     {
                         LOGGER.error( "Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
@@ -452,8 +395,6 @@ public class PmmoCommand
                         if( sender != null )
                             sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
-
-                    AttributeHandler.updateAll( player );
                 }
             }
             catch( CommandSyntaxException e )
@@ -504,6 +445,8 @@ public class PmmoCommand
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
         double xp = Double.parseDouble( args[3] );
+        double maxXp = XP.getConfig( "maxXp" );
+        double maxLevel = XP.getConfig( "maxLevel" );
 
         if( xp < 0 )
             xp = 0;
@@ -517,6 +460,7 @@ public class PmmoCommand
 
     private static int commandXpAtLevel(CommandContext<CommandSource> context) throws CommandException
     {
+        double maxLevel = XP.getConfig( "maxLevel" );
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
         double level = Double.parseDouble( args[3] );
@@ -534,6 +478,7 @@ public class PmmoCommand
 
     private static int commandXpFromTo(CommandContext<CommandSource> context) throws CommandException
     {
+        double maxLevel = XP.getConfig( "maxLevel" );
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 

@@ -466,17 +466,22 @@ public class XP
 
 	public static int getLevel( Skill skill, PlayerEntity player )
 	{
-		int startLevel = 1;
+		return levelAtXp( getXp( skill, player ) );
+	}
+
+	public static double getXp( Skill skill, PlayerEntity player )
+	{
+		double startXp = 0;
 
 		if( player.world.isRemote() )
 		{
 			if( XPOverlayGUI.skills.containsKey( skill ) )
-				startLevel = levelAtXp( XPOverlayGUI.skills.get( skill ).goalXp );
+				startXp = XPOverlayGUI.skills.get( skill ).goalXp;
 		}
 		else
-			startLevel = levelAtXp( getSkillsTag( player ).getDouble( skill.name().toLowerCase() ) );
+			startXp = getSkillsTag( player ).getDouble( skill.name().toLowerCase() );
 
-		return startLevel;
+		return startXp;
 	}
 
 	public static double getLevelDecimal( String skill, PlayerEntity player )
@@ -2337,21 +2342,6 @@ public class XP
 			sendMessage( skillName + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
 			System.out.println( playerName + " " + skillName + " max startLevel reached" );
 		}
-	}
-
-	public static void setXp( Skill skill, PlayerEntity player, double newXp )
-	{
-		if( skill != Skill.INVALID_SKILL )
-		{
-			String skillName = skill.name().toLowerCase();
-			CompoundNBT skillsTag = getSkillsTag( player );
-			skillsTag.putDouble( skillName, newXp );
-			AttributeHandler.updateAll( player );
-
-			NetworkHandler.sendToPlayer( new MessageXp( newXp, skill.getValue(), 0, false ), (ServerPlayerEntity) player );
-		}
-		else
-			LOGGER.error( "Invalid skill at method setXp" );
 	}
 
 	private static int getGap( int a, int b )
