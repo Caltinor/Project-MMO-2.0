@@ -49,6 +49,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> salvageEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> fishPoolEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> fishEnchantPoolEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> levelUpCommandEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
         //Levels
@@ -332,6 +333,11 @@ public class Config
                         .comment( "Should fished items have a chance at being Enchanted? enabled? False = off" )
                         .translation( "pmmo.fishEnchantPoolEnabled" )
                         .define( "fishEnchantPoolEnabled", true) );
+
+                this.levelUpCommandEnabled = subscriber.subscribe(builder
+                        .comment( "Commands being fired on specific level ups enabled? False = off" )
+                        .translation( "pmmo.levelUpCommandEnabled" )
+                        .define( "levelUpCommandEnabled", true) );
 
                 this.loadDefaultConfig = subscriber.subscribe(builder
                         .comment( "Should config from data_template.json be loaded? False means only data.json is loaded" )

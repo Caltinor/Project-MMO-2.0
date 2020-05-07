@@ -2329,6 +2329,32 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.milestoneLevelUp", player.getDisplayName().getString(), "" + currLevel , "pmmo.text." + skillName, false, 3 ), thePlayer );
 				});
 			}
+
+			System.out.println( Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) );
+
+			if( Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) != null )
+			{
+				Map<String, Object> commandMap = Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() );
+
+				for( Map.Entry<String, Object> entry : commandMap.entrySet() )
+				{
+					int commandLevel = (int) Math.floor( (double) entry.getValue() );
+					if( startLevel < commandLevel && currLevel >= commandLevel )
+					{
+						String command = entry.getKey().replace( ">player<", playerName ).replace( ">level<", "" + commandLevel );
+
+						try
+						{
+							player.getServer().getCommandManager().getDispatcher().execute( command, player.getServer().getCommandSource() );
+							LOGGER.info( "Executing command \"" + command + "\"\nTrigger: " + playerName + " level up from " + startLevel + " to " + currLevel + " in " + skill.name() + ", trigger level " + commandLevel );
+						}
+						catch( CommandSyntaxException e )
+						{
+							LOGGER.error( "Invalid level up command \"" + command + "\"", e );
+						}
+					}
+				}
+			}
 		}
 
 		if( player instanceof ServerPlayerEntity )

@@ -3265,5 +3265,10 @@
 			"maxChance": 85,
 			"maxLevel": 7
 		}
+	},
+	"level_up_command": {
+		"fishing": {
+			"give >player< minecraft:cookie >level<": 100
+		}
 	}
 }

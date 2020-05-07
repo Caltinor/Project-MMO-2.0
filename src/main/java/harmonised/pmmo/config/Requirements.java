@@ -97,6 +97,7 @@ public class Requirements
         map.put( "killReq", new HashMap<>() );
         map.put( "killXp", new HashMap<>() );
         map.put( "mobRareDrop", new HashMap<>() );
+        map.put( "levelUpCommand", new HashMap<>() );
     }
 
     private static boolean checkValidSkills( Map<String, Object> theMap )
@@ -348,7 +349,7 @@ public class Requirements
         });
     }
 
-    private static void updateReqFishPool( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    private static void updateReqfishPool( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
     {
         req.forEach( (key, value) ->
         {
@@ -586,6 +587,33 @@ public class Requirements
         });
     }
 
+    private static void updateCommand( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            if( Skill.getInt( key ) != 0 )
+            {
+                for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
+                {
+                    if( entry.getValue() instanceof Double )
+                    {
+                        if( !outReq.containsKey( key ) )
+                            outReq.put( key, new HashMap<>() );
+
+                        if( (double) entry.getValue() >= 1 )
+                            outReq.get( key ).put( entry.getKey(), entry.getValue() );
+                        else
+                            outReq.get( key ).put( entry.getKey(), 1D );
+                    }
+                    else
+                        LOGGER.error( "Invalid level " + entry.getValue() );
+                }
+            }
+            else
+                LOGGER.error( "Invalid skill \" " + key + " \" in Level Up Command" );
+        });
+    }
+
     private static boolean checkValidAttributes( Map<String, Object> theMap )
     {
         boolean anyValidAttributes = false;
@@ -632,14 +660,14 @@ public class Requirements
         if( Config.config.biomeReqEnabled.get() )
         {
             updateReqSkills( req.biome, localData.get( "biomeReq" ) );
-            updateReqEffects( req.biomeeff, localData.get( "biomeEffect" ) );
+            updateReqEffects( req.biomeEff, localData.get( "biomeEffect" ) );
         }
 
         if( Config.config.biomeMultiplierEnabled.get() )
-            updateReqSkills( req.biomemultiplier, localData.get( "biomeMultiplier" ) );
+            updateReqSkills( req.biomeMultiplier, localData.get( "biomeMultiplier" ) );
 
         if( Config.config.biomeMobMultiplierEnabled.get() )
-            updateReqAttributes( req.biomemobmultiplier, localData.get( "biomeMobMultiplier" ) );
+            updateReqAttributes( req.biomeMobMultiplier, localData.get( "biomeMobMultiplier" ) );
 
         if( Config.config.oreEnabled.get() )
             updateReqExtra( req.ores, localData.get( "oreInfo" ) );
@@ -654,10 +682,10 @@ public class Requirements
             updateReqSalvage( req.salvage, localData.get( "salvageInfo" ) );
 
         if( Config.config.fishPoolEnabled.get() )
-            updateReqFishPool( req.fishpool, localData.get( "fishPool" ) );
+            updateReqfishPool( req.fishPool, localData.get( "fishPool" ) );
 
         if( Config.config.fishEnchantPoolEnabled.get() )
-            updateReqFishEnchantPool( req.fishenchantpool, localData.get( "fishEnchantPool" ) );
+            updateReqFishEnchantPool( req.fishEnchantPool, localData.get( "fishEnchantPool" ) );
 
         if( Config.config.killReqEnabled.get() )
             updateReqSkills( req.killReq, localData.get( "killReq" ) );
@@ -668,6 +696,9 @@ public class Requirements
         if( Config.config.mobRareDropEnabled.get() )
             updateEntityItem( req.mobRareDrop, localData.get( "mobRareDrop" ) );
 
+        if( Config.config.mobRareDropEnabled.get() )
+            updateCommand( req.levelUpCommand, localData.get( "levelUpCommand" ) );
+            
         data = localData;
     }
 
@@ -714,7 +745,7 @@ public class Requirements
 
     public static class RequirementItem
     {
-        private final Map<String, Object> requirements = Maps.newHashMap();
+        private final Map<String, Object> requirements = new HashMap<>();
 
 //        public HashMap<String, Object> getMap()
 //        {
@@ -727,61 +758,29 @@ public class Requirements
         }
     }
 
-    private final Map<String, RequirementItem> wears = Maps.newHashMap();
-    private final Map<String, RequirementItem> tools = Maps.newHashMap();
-    private final Map<String, RequirementItem> weapons = Maps.newHashMap();
-    private final Map<String, RequirementItem> killReq = Maps.newHashMap();
-    private final Map<String, RequirementItem> killXp = Maps.newHashMap();
-    private final Map<String, RequirementItem> mobRareDrop = Maps.newHashMap();
-    private final Map<String, RequirementItem> use = Maps.newHashMap();
-    private final Map<String, RequirementItem> placing = Maps.newHashMap();
-    private final Map<String, RequirementItem> breaking = Maps.newHashMap();
-    private final Map<String, RequirementItem> biome = Maps.newHashMap();
-    private final Map<String, RequirementItem> biomeeff = Maps.newHashMap();
-    private final Map<String, RequirementItem> biomemultiplier = Maps.newHashMap();
-    private final Map<String, RequirementItem> biomemobmultiplier = Maps.newHashMap();
-    private final Map<String, RequirementItem> xpValues = Maps.newHashMap();
-    private final Map<String, RequirementItem> xpValuesCrafting = Maps.newHashMap();
-    private final Map<String, RequirementItem> ores = Maps.newHashMap();
-    private final Map<String, RequirementItem> logs = Maps.newHashMap();
-    private final Map<String, RequirementItem> plants = Maps.newHashMap();
-    private final Map<String, RequirementItem> salvage = Maps.newHashMap();
-    private final Map<String, RequirementItem> fishpool = Maps.newHashMap();
-    private final Map<String, RequirementItem> fishenchantpool = Maps.newHashMap();
-
-
-//    public Map<String, Object> getWear(String registryName)
-//    {
-//        if( wears.containsKey( registryName ) )
-//            return wears.get( registryName ).getMap();
-//        else
-//            return null;
-//    }
-//
-//    public Map<String, Object> getTool(String registryName)
-//    {
-//        if( tools.containsKey( registryName ) )
-//            return tools.get( registryName ).getMap();
-//        else
-//            return new HashMap<>();
-//    }
-//
-//    public Map<String, Object> getWeapon(String registryName)
-//    {
-//        if( weapons.containsKey( registryName ) )
-//            return weapons.get( registryName ).getMap();
-//        else
-//            return new HashMap<>();
-//    }
-//
-//    public Map<String, Object> getXp(String registryName)
-//    {
-//        if( xpValues.containsKey( registryName ) )
-//            return xpValues.get( registryName ).getMap();
-//        else
-//            return new HashMap<>();
-//    }
-
+    private final Map<String, RequirementItem> wears = new HashMap<>();
+    private final Map<String, RequirementItem> tools = new HashMap<>();
+    private final Map<String, RequirementItem> weapons = new HashMap<>();
+    private final Map<String, RequirementItem> killReq = new HashMap<>();
+    private final Map<String, RequirementItem> killXp = new HashMap<>();
+    private final Map<String, RequirementItem> mobRareDrop = new HashMap<>();
+    private final Map<String, RequirementItem> use = new HashMap<>();
+    private final Map<String, RequirementItem> placing = new HashMap<>();
+    private final Map<String, RequirementItem> breaking = new HashMap<>();
+    private final Map<String, RequirementItem> biome = new HashMap<>();
+    private final Map<String, RequirementItem> biomeEff = new HashMap<>();
+    private final Map<String, RequirementItem> biomeMultiplier = new HashMap<>();
+    private final Map<String, RequirementItem> biomeMobMultiplier = new HashMap<>();
+    private final Map<String, RequirementItem> xpValues = new HashMap<>();
+    private final Map<String, RequirementItem> xpValuesCrafting = new HashMap<>();
+    private final Map<String, RequirementItem> ores = new HashMap<>();
+    private final Map<String, RequirementItem> logs = new HashMap<>();
+    private final Map<String, RequirementItem> plants = new HashMap<>();
+    private final Map<String, RequirementItem> salvage = new HashMap<>();
+    private final Map<String, RequirementItem> fishPool = new HashMap<>();
+    private final Map<String, RequirementItem> fishEnchantPool = new HashMap<>();
+    private final Map<String, RequirementItem> levelUpCommand = new HashMap<>();
+    
     // -----------------------------------------------------------------------------
     //
     // GSON STUFFS BELOW
@@ -812,17 +811,18 @@ public class Requirements
             deserializeGroup(obj, "place_requirement", req.placing::put, context);
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);
             deserializeGroup(obj, "biome_requirement", req.biome::put, context);
-            deserializeGroup(obj, "biome_multiplier", req.biomemultiplier::put, context);
-            deserializeGroup(obj, "biome_mob_multiplier", req.biomemobmultiplier::put, context);
-            deserializeGroup(obj, "biome_effect", req.biomeeff::put, context);
+            deserializeGroup(obj, "biome_multiplier", req.biomeMultiplier::put, context);
+            deserializeGroup(obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context);
+            deserializeGroup(obj, "biome_effect", req.biomeEff::put, context);
             deserializeGroup(obj, "xp_value", req.xpValues::put, context);
             deserializeGroup(obj, "crafting_xp", req.xpValuesCrafting::put, context);
             deserializeGroup(obj, "ore", req.ores::put, context);
             deserializeGroup(obj, "log", req.logs::put, context);
             deserializeGroup(obj, "plant", req.plants::put, context);
             deserializeGroup(obj, "salvage", req.salvage::put, context);
-            deserializeGroup(obj, "fish_pool", req.fishpool::put, context);
-            deserializeGroup(obj, "fish_enchant_pool", req.fishenchantpool::put, context);
+            deserializeGroup(obj, "fish_pool", req.fishPool::put, context);
+            deserializeGroup(obj, "fish_enchant_pool", req.fishEnchantPool::put, context);
+            deserializeGroup(obj, "level_up_command", req.levelUpCommand::put, context);
 
             return req;
         }

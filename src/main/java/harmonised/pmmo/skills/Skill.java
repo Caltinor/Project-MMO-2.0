@@ -157,7 +157,7 @@ public enum Skill
             newLevelXp = 0;
 
         if( newLevelXp > playerXp )
-            NetworkHandler.sendToPlayer( new MessageXp( playerXp, this.getValue(), addAmount, true ), player );
+            XP.awardXp( player, this, "commandAdd", addAmount, false );
         else
             NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, this.getValue(), 0, true ), player );
         skillsTag.putDouble( skillName, newLevelXp );

@@ -3,13 +3,16 @@ https://www.curseforge.com/minecraft/mc-mods/project-mmo
 I am a new mod dev, so please let me know if the following is not correct:
 I believe I have API support for my mod! You should be able to access my mod's Levels by the methods
 
+Skill.SKILLNAME.getLevel( player ) returns level int
+Skill.SKILLNAME.getXp( player ) returns xp double
+Skill.SKILLNAME.setLevel( player ) sets level double
+Skill.SKILLNAME.setXp( player ) sets xp double
+Skill.SKILLNAME.addLevel( player ) rewards level double
+Skill.SKILLNAME.addXp( player ) rewards xp double
 
-XP.getLevel (takes in Skill + player, returns Floored level as int, works on client/server)
-Skill.SKILLNAME.getLevel( player ), same function as XP.getLevel
 XP.getLevelDecimal (takes in skillName + player, returns level as double, works on client/server)
 XP.xpAtLevel (takes in a level as int, returns double xp value)
 XP.xpAtLevelDecimal (takes in a level as double, returns double xp value)
-XP.awardXp (the skill Integer can be found in the Skill class, or retrieved by Skill.getInt( skillName )
 XP.getSkillsTag (takes in player, returns PMMO Skills CompoundNBT of all the player's xp values, as doubles)
 
 To use the API, include these two lines in your gradle.build
