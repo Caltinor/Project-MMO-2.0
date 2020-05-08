@@ -98,6 +98,7 @@ public class Requirements
         map.put( "killXp", new HashMap<>() );
         map.put( "mobRareDrop", new HashMap<>() );
         map.put( "levelUpCommand", new HashMap<>() );
+        map.put( "heldItemXpMultiplier", new HashMap<>() );
     }
 
     private static boolean checkValidSkills( Map<String, Object> theMap )
@@ -698,7 +699,10 @@ public class Requirements
 
         if( Config.config.mobRareDropEnabled.get() )
             updateCommand( req.levelUpCommand, localData.get( "levelUpCommand" ) );
-            
+
+        if( Config.config.heldItemXpMultiplierEnabled.get() )
+            updateReqSkills( req.heldItemXpMultiplier, localData.get( "heldItemXpMultiplier" ) );
+
         data = localData;
     }
 
@@ -780,7 +784,8 @@ public class Requirements
     private final Map<String, RequirementItem> fishPool = new HashMap<>();
     private final Map<String, RequirementItem> fishEnchantPool = new HashMap<>();
     private final Map<String, RequirementItem> levelUpCommand = new HashMap<>();
-    
+    private final Map<String, RequirementItem> heldItemXpMultiplier = new HashMap<>();
+
     // -----------------------------------------------------------------------------
     //
     // GSON STUFFS BELOW
@@ -823,6 +828,7 @@ public class Requirements
             deserializeGroup(obj, "fish_pool", req.fishPool::put, context);
             deserializeGroup(obj, "fish_enchant_pool", req.fishEnchantPool::put, context);
             deserializeGroup(obj, "level_up_command", req.levelUpCommand::put, context);
+            deserializeGroup(obj, "held_item_xp_multiplier", req.heldItemXpMultiplier::put, context);
 
             return req;
         }

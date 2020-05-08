@@ -242,6 +242,17 @@
 			"woodcutting": 1
 		}
 	},
+	"held_item_xp_multiplier": {
+		"minecraft:golden_pickaxe": {
+			"mining": 1.5
+		},
+		"minecraft:golden_shovel": {
+			"excavation": 1.5
+		},
+		"minecraft:golden_axe": {
+			"woodcutting": 1.5
+		}
+	},
 	"weapon_requirement": {
 		"minecraft:crossbow": {
 			"archery": 20

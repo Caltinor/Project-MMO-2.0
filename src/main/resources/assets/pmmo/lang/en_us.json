@@ -122,5 +122,6 @@
   "pmmo.text.jsonConfigReload": "PMMO Json Config has been reloaded!",
   "pmmo.text.mobDamageBoost": "Mobs Damage scaling is %1$s%% of normal rates in %2$s biome",
   "pmmo.text.mobHpBoost": "Mobs HP scaling is %1$s%% of normal rates in %2$s biome",
-  "pmmo.text.mobSpeedBoost": "Mobs Speed scaling is %1$s%% of normal rates in %2$s biome"
+  "pmmo.text.mobSpeedBoost": "Mobs Speed scaling is %1$s%% of normal rates in %2$s biome",
+  "pmmo.text.button": "TEST BUTTON"
 }

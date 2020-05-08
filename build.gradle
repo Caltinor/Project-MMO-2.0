@@ -23,7 +23,7 @@ archivesBaseName = 'Project MMO-1.15'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200131-1.15.1'
+    mappings channel: 'snapshot', version: '20200504-1.15.1'
     runs {
         client {
             workingDirectory project.file('run')

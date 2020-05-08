@@ -2141,13 +2141,6 @@ public class XP
 		double skillMultiplier = 1;
 		double difficultyMultiplier = 1;
 
-
-//		for( char letter : player.getDisplayName().getFormattedText().toCharArray() )
-//		{
-//			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) && !( letter == '\u00a7' ) && !( letter == '_' ) )
-//				return;
-//		}
-
 		if( skillName.equals( "combat" ) || skillName.equals( "archery" ) || skillName.equals( "endurance" ) )
 		{
 			switch( player.world.getDifficulty() )
@@ -2233,6 +2226,16 @@ public class XP
 
 			default:
 				break;
+		}
+
+		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
+		Map<String, Object> heldMap = Requirements.data.get( "heldItemXpMultiplier" ).get( regKey );
+		Map<String, Map<String, Object>> test = Requirements.data.get( "heldItemXpMultiplier" );
+
+		if( heldMap != null )
+		{
+			if( heldMap.containsKey( skillName ) )
+				amount *= (double) heldMap.get( skillName );
 		}
 
 		amount *= skillMultiplier;
@@ -2330,7 +2333,7 @@ public class XP
 				});
 			}
 
-			System.out.println( Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) );
+//			System.out.println( Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) );
 
 			if( Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) != null )
 			{
