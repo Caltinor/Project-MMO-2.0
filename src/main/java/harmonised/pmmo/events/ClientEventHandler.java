@@ -1,8 +1,7 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.Requirements;
-import harmonised.pmmo.gui.ScreenSkills;
+import harmonised.pmmo.gui.MainScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageCrawling;
 import harmonised.pmmo.network.NetworkHandler;
@@ -25,11 +24,9 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +58,7 @@ public class ClientEventHandler
 
             if( wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() )
             {
-                Minecraft.getInstance().displayGuiScreen( new ScreenSkills( new TranslationTextComponent( "pmmo.potato" ) ) );
+                Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
 
                 wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
 //                NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
