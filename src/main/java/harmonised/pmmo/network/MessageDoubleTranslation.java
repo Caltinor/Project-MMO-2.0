@@ -79,7 +79,7 @@ public class MessageDoubleTranslation
                     break;
 
                 case 1: //green
-                    if( packet.tKey.equals( "pmmo.text.extraDrop" ) )
+                    if( packet.tKey.equals( "pmmo.extraDrop" ) )
                     {
                         if( !regKey.equals( packet.sKey ) )
                         {

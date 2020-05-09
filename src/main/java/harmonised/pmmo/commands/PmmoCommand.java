@@ -282,7 +282,7 @@ public class PmmoCommand
                 NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0, true ), player );
                 player.getPersistentData().getCompound( "pmmo" ).put( "skills", new CompoundNBT() );
 
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.skillsCleared" ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsCleared" ), false );
             }
         }
         catch( CommandSyntaxException e )
@@ -312,7 +312,7 @@ public class PmmoCommand
 
         if( skillName.equals( "power" ) )
         {
-            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", skillName ), false );
+            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", skillName ), false );
             return 1;
         }
 
@@ -335,7 +335,7 @@ public class PmmoCommand
                         LOGGER.error( "Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
                         if( sender != null )
-                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
+                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
 
                     AttributeHandler.updateAll( player );
@@ -351,7 +351,7 @@ public class PmmoCommand
             LOGGER.error( "Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
 
             if( sender != null )
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
+                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
         }
 
         return 1;
@@ -393,7 +393,7 @@ public class PmmoCommand
                         LOGGER.error( "Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
                         if( sender != null )
-                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
+                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
                 }
             }
@@ -407,7 +407,7 @@ public class PmmoCommand
             LOGGER.error( "Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
 
             if( sender != null )
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
+                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
         }
 
         return 1;
@@ -420,7 +420,7 @@ public class PmmoCommand
             for( ServerPlayerEntity player : players )
             {
                 XP.syncPlayer( player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.skillsResynced" ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsResynced" ), false );
             }
         }
         else
@@ -429,7 +429,7 @@ public class PmmoCommand
             {
                 PlayerEntity player = context.getSource().asPlayer();
                 XP.syncPlayer( player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.skillsResynced" ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsResynced" ), false );
             }
             catch( CommandSyntaxException e )
             {
@@ -452,9 +452,9 @@ public class PmmoCommand
             xp = 0;
 
         if( xp >= maxXp )
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelAtXp", DP.dp( xp ), maxLevel ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelAtXp", DP.dp( xp ), maxLevel ), false );
         else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelAtXp", DP.dp( xp ), XP.levelAtXpDecimal( xp ) ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelAtXp", DP.dp( xp ), XP.levelAtXpDecimal( xp ) ), false );
         return 1;
     }
 
@@ -471,7 +471,7 @@ public class PmmoCommand
         if( level > maxLevel )
             level = maxLevel;
 
-        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp( XP.xpAtLevelDecimal( level ) ) ), false );
+        player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp( XP.xpAtLevelDecimal( level ) ) ), false );
 
         return 1;
     }
@@ -512,10 +512,10 @@ public class PmmoCommand
             if( goalXp < 0 )
                 goalXp = 0;
 
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpFromTo", DP.dp(goalXp - xp), ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), ( goalLevel % 1 == 0 ? (int) Math.floor( goalLevel ) : DP.dp(goalLevel) ) ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpFromTo", DP.dp(goalXp - xp), ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), ( goalLevel % 1 == 0 ? (int) Math.floor( goalLevel ) : DP.dp(goalLevel) ) ), false );
         }
         else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp(xp) ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp(xp) ), false );
 
         return 1;
     }
@@ -564,15 +564,15 @@ public class PmmoCommand
                 NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
                 AttributeHandler.updateAll( player );
 
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasBeenSet", match, args[3] ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasBeenSet", match, args[3] ), false );
             }
             else if( prefsTag.contains( match ) )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasTheValue", "" + match, "" + prefsTag.getDouble( match ) ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasTheValue", "" + match, "" + prefsTag.getDouble( match ) ), false );
             else
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.hasUnsetValue", "" + match ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasUnsetValue", "" + match ), false );
         }
         else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidChoice", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
 
         return 1;
     }
@@ -595,7 +595,7 @@ public class PmmoCommand
                 else
                     level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
 
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.text." + skillName ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ) ), false );
+                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ) ), false );
 
                 //EXTRA INFO
                 switch( skillName )
@@ -608,17 +608,17 @@ public class PmmoCommand
                         if( fishPoolChance > fishPoolMaxChance )
                             fishPoolChance = fishPoolMaxChance;
 
-                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ), false );
+                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ), false );
                         break;
                 }
             }
             catch( CommandSyntaxException e )
             {
-                sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.text.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+                sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
             }
         }
         else
-            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
+            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
 
         return 1;
     }
@@ -644,9 +644,9 @@ public class PmmoCommand
                 speedBonus = DP.dp( (double) theMap.get( "damageBonus" ) * 100 );
         }
 
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.mobDamageBoost", new TranslationTextComponent( damageBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.mobHpBoost", new TranslationTextComponent( hpBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.text.mobSpeedBoost", new TranslationTextComponent( speedBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobDamageBoost", new TranslationTextComponent( damageBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobHpBoost", new TranslationTextComponent( hpBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobSpeedBoost", new TranslationTextComponent( speedBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
 
         return 1;
     }
@@ -658,7 +658,7 @@ public class PmmoCommand
         context.getSource().getServer().getPlayerList().getPlayers().forEach( player ->
         {
             XP.syncPlayerConfig( player );
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.jsonConfigReload" ).setStyle( XP.textStyle.get( "green" ) ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.jsonConfigReload" ).setStyle( XP.textStyle.get( "green" ) ), false );
         });
 
         return 1;

@@ -40,10 +40,16 @@ public class ScreenSkills extends Screen
     @Override
     protected void init()
     {
-        button = new Button( (sr.getScaledWidth() / 2), (sr.getScaledHeight() / 2), 64, 16, I18n.format("pmmo.text.button"), (something) ->
+        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
+        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+
+        button = new TileButton( x + 16, y + 16, 32, 32, I18n.format("pmmo.skills"), (something) ->
         {
             System.out.println( "click" );
         });
+
+
+
         addButton( button );
     }
 

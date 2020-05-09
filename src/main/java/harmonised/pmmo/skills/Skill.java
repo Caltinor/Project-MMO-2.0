@@ -162,7 +162,7 @@ public enum Skill
             NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, this.getValue(), 0, true ), player );
         skillsTag.putDouble( skillName, newLevelXp );
 
-        player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.addXp", skillName, DP.dp(addAmount) ), false );
+        player.sendStatusMessage( new TranslationTextComponent( "pmmo.addXp", skillName, DP.dp(addAmount) ), false );
 
         AttributeHandler.updateAll( player );
     }

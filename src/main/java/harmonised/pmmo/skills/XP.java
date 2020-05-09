@@ -456,9 +456,9 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageGrow( 1, offItemStack.getCount() ), (ServerPlayerEntity) player );
 
 					if( Requirements.data.get( "plantInfo" ).containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable )
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 					else
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
 					event.setCanceled( true );
 				}
@@ -690,7 +690,7 @@ public class XP
 						if( dropsLeft > 0 )
 						{
 							dropItems( dropsLeft, block.asItem(), world, event.getPos() );
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + dropsLeft, drops.get( 0 ).getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + dropsLeft, drops.get( 0 ).getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 						}
 
 						totalDrops = rewardable + dropsLeft;
@@ -768,7 +768,7 @@ public class XP
 							if( guaranteedDrop + extraDrop > 0 )
 							{
 								dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 							}
 
 							award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), guaranteedDrop + extraDrop ) );
@@ -810,7 +810,7 @@ public class XP
 							if( guaranteedDrop + extraDrop > 0 )
 							{
 								dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 							}
 						}
 						else
@@ -839,7 +839,7 @@ public class XP
 							if( guaranteedDrop + extraDrop > 0 )
 							{
 								dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 							}
 
 							award = addMaps( award, multiplyMap( getXp( block.getRegistryName() ), ( drops.get( 0 ).getCount() + guaranteedDrop + extraDrop ) ) );
@@ -897,18 +897,18 @@ public class XP
 
 					if( correctHarvestTool( material ).equals( "axe" ) )
 					{
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
 					}
 					else if( Requirements.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
 					{
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
 					}
 					else
 					{
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
 					}
 
 					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
@@ -920,9 +920,9 @@ public class XP
 							entryValue = (double) entry.getValue();
 
 						if( startLevel < entryValue )
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 2 ), (ServerPlayerEntity) player );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 2 ), (ServerPlayerEntity) player );
 						else
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.levelDisplay", "pmmo.text." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 1 ), (ServerPlayerEntity) player );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 1 ), (ServerPlayerEntity) player );
 					}
 
 					event.setCanceled( true );
@@ -986,7 +986,7 @@ public class XP
 					damage -= saved;
 
 					if( saved != 0 && player.getHealth() > damage )
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedFall", saved ), true );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedFall", saved ), true );
 
 					award = saved * 25;
 
@@ -1027,22 +1027,22 @@ public class XP
 				{
 					int weaponGap = getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
 					if( weaponGap > 0 )
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
 					int slayerGap = getSkillReqGap( player, new ResourceLocation( target.getEntityString() ), "slayer" );
 					if( slayerGap > 0 )
 					{
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 
 						for( Map.Entry<String, Object> entry : Requirements.data.get( "killReq" ).get( target.getEntityString() ).entrySet() )
 						{
 							int level = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 							if( level < (double) entry.getValue() )
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
 							else
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
 						}
 					}
 
@@ -1087,8 +1087,8 @@ public class XP
 									ItemStack itemStack = new ItemStack( getItem( entry.getKey() ) );
 									dropItemStack( itemStack, player.world, target.getPosition() );
 
-									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), false );
-									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), true );
+									player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), false );
+									player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), true );
 								}
 							}
 						}
@@ -1355,19 +1355,19 @@ public class XP
             {
                 player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
                 {
-                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.text.lapisDonatorWelcome", thePlayer.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
+                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisDonatorWelcome", thePlayer.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
                 });
             }
             else if( showDonatorWelcome )
             {
                 if( dandelionDonators.contains( player.getUniqueID() ) )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.dandelionDonatorWelcome", player.getDisplayName().getString() ).setStyle( textStyle.get( "yellow" ) ), false );
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.dandelionDonatorWelcome", player.getDisplayName().getString() ).setStyle( textStyle.get( "yellow" ) ), false );
                 else if( ironDonators.contains( player.getUniqueID() ) )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.ironDonatorWelcome", player.getDisplayName().getString() ).setStyle( textStyle.get( "grey" ) ), false );
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.ironDonatorWelcome", player.getDisplayName().getString() ).setStyle( textStyle.get( "grey" ) ), false );
             }
 
             if( showWelcome )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.welcome" ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.welcome" ), false );
 		}
 	}
 
@@ -1552,7 +1552,7 @@ public class XP
 							event.setCanceled( true );
 
 //							if( isRemote )
-//								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotUseProximity", new TranslationTextComponent( matchedBlock.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+//								player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotUseProximity", new TranslationTextComponent( matchedBlock.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 						}
 					}
 				}
@@ -1563,7 +1563,7 @@ public class XP
 				event.setCanceled( true );
 
 				if( isRemote )
-					player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 			}
 
 			if( event instanceof RightClickBlock )
@@ -1577,8 +1577,8 @@ public class XP
                     	event.setCanceled( true );
                     	if( isRemote && event.getHand().equals( Hand.MAIN_HAND ) )
 						{
-							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-							player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+							player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+							player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 							for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
 							{
 								startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
@@ -1588,9 +1588,9 @@ public class XP
 									entryValue = (double) entry.getValue();
 
 								if( startLevel < entryValue )
-									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( textStyle.get( "red" ) ), false );
+									player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( textStyle.get( "red" ) ), false );
 								else
-									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", new TranslationTextComponent( "pmmo.text." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( textStyle.get( "green" ) ), false );
+									player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( textStyle.get( "green" ) ), false );
 							}
 						}
                     }
@@ -1696,11 +1696,11 @@ public class XP
 				    										awardXp( player, Skill.SMITHING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false  );
 
 				    									if( returnAmount == potentialReturnAmount )
-				    										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+				    										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
 				    									else if( returnAmount > 0 )
-				    										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
+				    										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
 				    									else
-				    										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
+				    										NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
 
 				    									if( enchants.size() > 0 )
 				    									{
@@ -1731,9 +1731,9 @@ public class XP
 				    											EnchantmentHelper.setEnchantments( newEnchantMap, salvagedBook );
 				    											block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
 				    											if( fullEnchants )
-				    												player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedAllEnchants" ).setStyle( textStyle.get( "green" ) ), false );
+				    												player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedAllEnchants" ).setStyle( textStyle.get( "green" ) ), false );
 				    											else
-				    												player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.savedSomeEnchants" ).setStyle( textStyle.get( "yellow" ) ), false );
+				    												player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedSomeEnchants" ).setStyle( textStyle.get( "yellow" ) ), false );
 				    										}
 				    									}
 				    									player.getHeldItemOffhand().shrink( 1 );
@@ -1741,32 +1741,32 @@ public class XP
 				    									player.sendBreakAnimation(Hand.OFF_HAND );
 				    								}
 				    								else
-				    									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.survivalOnlyWarning" ).setStyle( textStyle.get( "red" ) ), true );
+				    									player.sendStatusMessage( new TranslationTextComponent( "pmmo.survivalOnlyWarning" ).setStyle( textStyle.get( "red" ) ), true );
 				    							}
 				    							else
 				    							{
-				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.offhandToDiss" ), false );
+				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.offhandToDiss" ), false );
 				    								sendMessage( "_________________________________", false, player );
-				    								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
-				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
-				    								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
-				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
+				    								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
+				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
+				    								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
+				    								player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
 				    							}
 				    						}
 											else
-												player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotSalvageLackLevelLonger", reqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+												player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvageLackLevelLonger", reqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 				    					}
 										else
-											player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.invalidSalvageItem", theMap.get( "salvageItem" ) ).setStyle( textStyle.get( "red" ) ), true );
+											player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSalvageItem", theMap.get( "salvageItem" ) ).setStyle( textStyle.get( "red" ) ), true );
 				    				}
 				    				else
 									{
 										System.out.println( player.getPosition().distanceSq( event.getPos() ) );
-										player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.tooFarAwayToSalvage" ).setStyle( textStyle.get( "red" ) ), true );
+										player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooFarAwayToSalvage" ).setStyle( textStyle.get( "red" ) ), true );
 									}
 								}
 				    			else
-									player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+									player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 								}
 							}
 				    	}
@@ -1806,17 +1806,17 @@ public class XP
 				    			speedBonus = maxSpeedBoost;
 
 				    		sendMessage( "_________________________________" , false, player );
-				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.buildingInfo", DP.dp( reach ) ), false );
-				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.fallInfo", DP.dp( agilityChance ) ), false );
-				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enduranceInfo", DP.dp( endurePercent ) ), false );
-				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.combatInfo", DP.dp( extraDamage ) ), false );
-				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.sprintInfo", DP.dp( speedBonus ) ), false );
-				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantmentBypassInfo", maxPlayerBypass ), false );
+				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.buildingInfo", DP.dp( reach ) ), false );
+				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.fallInfo", DP.dp( agilityChance ) ), false );
+				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.enduranceInfo", DP.dp( endurePercent ) ), false );
+				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.combatInfo", DP.dp( extraDamage ) ), false );
+				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.sprintInfo", DP.dp( speedBonus ) ), false );
+				    		player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantmentBypassInfo", maxPlayerBypass ), false );
 
 				    		if( swimLevel >= nightvisionUnlockLevel )
-				    			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.underwaterNightVisionUnLocked", nightvisionUnlockLevel ), false );
+				    			player.sendStatusMessage( new TranslationTextComponent( "pmmo.underwaterNightVisionUnLocked", nightvisionUnlockLevel ), false );
 				    		else
-				    			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.underwaterNightVisionLocked", nightvisionUnlockLevel ), false );
+				    			player.sendStatusMessage( new TranslationTextComponent( "pmmo.underwaterNightVisionLocked", nightvisionUnlockLevel ), false );
 				    	}
 				    }
                 }
@@ -1866,7 +1866,7 @@ public class XP
 
 					if( award > 0 )
 					{
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
 						awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false );
 					}
 				}
@@ -1939,7 +1939,7 @@ public class XP
 					newEnchants.replace( enchant, maxEnchantLevel );
 				else
 					newEnchants.remove( enchant );
-				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
+				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
 			}
 			else if( enchant.getMaxLevel() + maxPlayerBypass < startLevel && !creative )
 			{
@@ -1947,7 +1947,7 @@ public class XP
 					newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
 				else
 					newEnchants.remove( enchant );
-				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantmentDegradedWarning", enchant.getRegistryName().toString(), "" + (enchant.getMaxLevel() + maxPlayerBypass), false, 2 ), (ServerPlayerEntity) player );
+				NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantmentDegradedWarning", enchant.getRegistryName().toString(), "" + (enchant.getMaxLevel() + maxPlayerBypass), false, 2 ), (ServerPlayerEntity) player );
 			}
 			else if( lEnchants.get( enchant ) != null && rEnchants.get( enchant ) != null )
 			{
@@ -1955,11 +1955,11 @@ public class XP
 				{
 					if( startLevel + 1 > maxEnchantLevel && !creative )
 					{
-						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
+						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
 					}
 					else if( startLevel + 1 > enchant.getMaxLevel() + maxPlayerBypass && !creative )
 					{
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.enchantLackOfLevelWarning", enchant.getRegistryName() ).setStyle( textStyle.get( "red" ) ), false );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantLackOfLevelWarning", enchant.getRegistryName() ).setStyle( textStyle.get( "red" ) ), false );
 					}
 					else
 					{
@@ -1968,7 +1968,7 @@ public class XP
 							if( Math.ceil( Math.random() * 100 ) <= bypassChance ) //success
 							{
 								newEnchants.replace( enchant, startLevel + 1 );
-								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
+								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
 							}
 							else if( Math.ceil( Math.random() * 100 ) <= failedBypassPenaltyChance ) //fucked up twice
 							{
@@ -1976,18 +1976,18 @@ public class XP
 									newEnchants.replace( enchant, startLevel - 1 );
 								else
 									newEnchants.remove( enchant );
-								NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.enchantUpgradeAndSaveFail", enchant.getRegistryName().toString(), "" + bypassChance, "" + failedBypassPenaltyChance, false, 2 ), (ServerPlayerEntity) player );
+								NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.enchantUpgradeAndSaveFail", enchant.getRegistryName().toString(), "" + bypassChance, "" + failedBypassPenaltyChance, false, 2 ), (ServerPlayerEntity) player );
 							}
 							else	//only fucked up once
 							{
 								newEnchants.replace( enchant, startLevel );
-								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeFail", enchant.getRegistryName().toString(), "" + bypassChance, false, 3 ), (ServerPlayerEntity) player );
+								NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeFail", enchant.getRegistryName().toString(), "" + bypassChance, false, 3 ), (ServerPlayerEntity) player );
 							}
 						}
 						else
 						{
 							newEnchants.replace( enchant, startLevel + 1 );
-							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.text.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
+							NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
 						}
 					}
 				}
@@ -2029,7 +2029,7 @@ public class XP
 		int toolGap = getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
 
 		if( toolGap > 0 )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 
 		int startLevel = getLevel( Skill.getSkill( skill ), player );
 
@@ -2348,7 +2348,7 @@ public class XP
 				player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
 				{
 					if( thePlayer.getUniqueID() != player.getUniqueID() )
-						NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.text.milestoneLevelUp", player.getDisplayName().getString(), "" + currLevel , "pmmo.text." + skillName, false, 3 ), thePlayer );
+						NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.milestoneLevelUp", player.getDisplayName().getString(), "" + currLevel , "pmmo." + skillName, false, 3 ), thePlayer );
 				});
 			}
 
@@ -2477,7 +2477,7 @@ public class XP
 		{
 			int gap = getSkillReqGap( player, item.getRegistryName(), "wear" );
 			if( gap > 0 )
-			    player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toWear", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+			    player.sendStatusMessage( new TranslationTextComponent( "pmmo.toWear", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 
 			if( gap > 9 )
 				gap = 9;
@@ -2516,16 +2516,16 @@ public class XP
 				{
 					if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
 					{
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 						{
 							int startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 							if( startLevel < (double) entry.getValue() )
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
 							else
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.levelDisplay", " " + new TranslationTextComponent( "pmmo.text." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
 						}
 					}
 				}
@@ -2791,7 +2791,7 @@ public class XP
 				}
 
 				dropItemStack( itemStack, player.world, player.getPosition() );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.text.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), true );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), true );
 
 				award += (double) match.get( "xp" ) * count;
 			}
