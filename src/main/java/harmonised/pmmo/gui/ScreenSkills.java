@@ -7,14 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.client.gui.ScrollPanel;
 
 import java.util.List;
 
@@ -26,8 +21,8 @@ public class ScreenSkills extends Screen
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 256;
     private int boxHeight = 256;
-    private int boxPosX;
-    private int boxPosY;
+    private int x;
+    private int y;
     private MyScrollPanel myList;
     private Button button;
 
@@ -45,17 +40,11 @@ public class ScreenSkills extends Screen
     @Override
     protected void init()
     {
-//        super.init();
-
-//        children.add( myList = new MyScrollPanel(minecraft, boxPosX - 24, boxPosY - 40, 20, 12));
-
-        button = new Button( (sr.getScaledWidth() / 2), (sr.getScaledHeight() / 2), 0, 0, I18n.format("pmmo.text.button"), (something) ->
+        button = new Button( (sr.getScaledWidth() / 2), (sr.getScaledHeight() / 2), 64, 16, I18n.format("pmmo.text.button"), (something) ->
         {
             System.out.println( "click" );
         });
-        buttons.add( button );
-        children.add( button );
-//        addButton( button );
+        addButton( button );
     }
 
     @Override
@@ -63,9 +52,10 @@ public class ScreenSkills extends Screen
     {
         renderBackground( 1 );
 
-        super.render(mouseX, mouseY, partialTicks);
+        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
+        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        this.renderTooltip( new ItemStack(Items.DIAMOND_AXE ), mouseX, mouseY );
+        super.render(mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -81,12 +71,9 @@ public class ScreenSkills extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-
-        boxPosX = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
-        boxPosY = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
         Minecraft.getInstance().getTextureManager().bindTexture( bar );
 
-        this.blit( boxPosX, boxPosY, 0, 0,  boxWidth, boxHeight );
+        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

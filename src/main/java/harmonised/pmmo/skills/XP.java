@@ -41,6 +41,7 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -81,6 +82,7 @@ public class XP
 	private static boolean showWelcome = Config.config.showWelcome.get();
     private static boolean showDonatorWelcome = Config.config.showDonatorWelcome.get();
     private static boolean broadcastMilestone = Config.config.broadcastMilestone.get();
+	private static int debugInt = 0;
 
 	public static Map<String, Double> localConfig = new HashMap<>();
     public static Map<String, Double> config = new HashMap<>();
@@ -579,6 +581,23 @@ public class XP
 				Block block = state.getBlock();
 				World world = event.getWorld().getWorld();
 				Material material = event.getState().getMaterial();
+
+				// DEBUG
+
+				if( debugInt-- > 0 )
+				{
+					World debugWorld = event.getWorld().getWorld();
+					BlockPos debugPos = event.getPos().south();
+					BlockState debugBlockState = debugWorld.getBlockState( debugPos );
+					BreakEvent debugEvent = new BreakEvent( debugWorld, debugPos, debugBlockState, player );
+					MinecraftForge.EVENT_BUS.post( debugEvent );
+					if( !debugEvent.isCanceled() )
+						debugWorld.removeBlock( debugPos, false );
+
+					System.out.println( debugPos );
+				}
+
+				// DEBUG
 
 				Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
 				boolean passedBreakReq = false;
@@ -2551,6 +2570,7 @@ public class XP
 				float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
 				float speedAmp = 0;
 				PlayerInventory inv = player.inventory;
+				System.out.println( ++debugInt );
 
 				checkBiomeLevelReq( player );
 
