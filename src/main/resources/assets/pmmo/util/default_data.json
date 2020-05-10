@@ -443,37 +443,37 @@
 			"mining": 1
 		}
 	},
-	"held_item_xp_multiplier": {
+	"held_item_xp_boost": {
 		"minecraft:golden_pickaxe": {
-			"mining": 1.5
+			"mining": 50
 		},
 		"minecraft:golden_shovel": {
-			"excavation": 1.5
+			"excavation": 50
 		},
 		"minecraft:golden_axe": {
-			"woodcutting": 1.5,
-			"combat": 1.5
+			"woodcutting": 50,
+			"combat": 50
 		},
 		"minecraft:golden_sword": {
-			"combat": 1.5
+			"combat": 50
 		},
 		"minecraft:golden_hoe": {
-			"farming": 1.2
+			"farming": 20
 		},
 		"minecraft:netherite_hoe": {
-			"farming": 1.15
+			"farming": 15
 		},
 		"minecraft:diamond_hoe": {
-			"farming": 1.1
+			"farming": 10
 		},
 		"minecraft:iron_hoe": {
-			"farming": 1.05
+			"farming": 5
 		},
 		"minecraft:stone_hoe": {
-			"farming": 1.025
+			"farming": 2.5
 		},
 		"minecraft:wooden_hoe": {
-			"farming": 1.01
+			"farming": 1
 		}
 	},
 	"worn_item_xp_boost": {

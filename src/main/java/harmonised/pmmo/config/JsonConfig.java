@@ -95,7 +95,7 @@ public class JsonConfig
         map.put( "killXp", new HashMap<>() );
         map.put( "mobRareDrop", new HashMap<>() );
         map.put( "levelUpCommand", new HashMap<>() );
-        map.put( "heldItemXpMultiplier", new HashMap<>() );
+        map.put( "heldItemXpBoost", new HashMap<>() );
         map.put( "wornItemXpBoost", new HashMap<>() );
     }
 
@@ -126,7 +126,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> fishPool = new HashMap<>();
     private final Map<String, RequirementItem> fishEnchantPool = new HashMap<>();
     private final Map<String, RequirementItem> levelUpCommand = new HashMap<>();
-    private final Map<String, RequirementItem> heldItemXpMultiplier = new HashMap<>();
+    private final Map<String, RequirementItem> heldItemXpBoost = new HashMap<>();
     private final Map<String, RequirementItem> wornItemXpBoost = new HashMap<>();
 
     // -----------------------------------------------------------------------------
@@ -210,8 +210,8 @@ public class JsonConfig
         if( Config.config.mobRareDropEnabled.get() )
             updateCommand( req.levelUpCommand, localData.get( "levelUpCommand" ) );
 
-        if( Config.config.heldItemXpMultiplierEnabled.get() )
-            updateReqSkills( req.heldItemXpMultiplier, localData.get( "heldItemXpMultiplier" ) );
+        if( Config.config.heldItemXpBoostEnabled.get() )
+            updateReqSkills( req.heldItemXpBoost, localData.get( "heldItemXpBoost" ) );
 
         if( Config.config.wornItemXpBoostEnabled.get() )
             updateReqSkills( req.wornItemXpBoost, localData.get( "wornItemXpBoost" ) );
@@ -250,7 +250,7 @@ public class JsonConfig
             deserializeGroup(obj, "fish_pool", req.fishPool::put, context);
             deserializeGroup(obj, "fish_enchant_pool", req.fishEnchantPool::put, context);
             deserializeGroup(obj, "level_up_command", req.levelUpCommand::put, context);
-            deserializeGroup(obj, "held_item_xp_multiplier", req.heldItemXpMultiplier::put, context);
+            deserializeGroup(obj, "held_item_xp_boost", req.heldItemXpBoost::put, context);
             deserializeGroup(obj, "worn_item_xp_boost", req.wornItemXpBoost::put, context);
 
             return req;

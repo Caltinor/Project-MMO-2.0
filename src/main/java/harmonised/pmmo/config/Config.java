@@ -50,7 +50,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> fishPoolEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> fishEnchantPoolEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> levelUpCommandEnabled;
-        public ConfigHelper.ConfigValueListener<Boolean> heldItemXpMultiplierEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> heldItemXpBoostEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> wornItemXpBoostEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
@@ -345,10 +345,10 @@ public class Config
                         .translation( "pmmo.levelUpCommandEnabled" )
                         .define( "levelUpCommandEnabled", true) );
 
-                this.heldItemXpMultiplierEnabled = subscriber.subscribe(builder
+                this.heldItemXpBoostEnabled = subscriber.subscribe(builder
                         .comment( "Main held items xp multiplier enabled? False = off" )
-                        .translation( "pmmo.heldItemXpMultiplierEnabled" )
-                        .define( "heldItemXpMultiplierEnabled", true) );
+                        .translation( "pmmo.heldItemXpBoostEnabled" )
+                        .define( "heldItemXpBoostEnabled", true) );
 
                 this.wornItemXpBoostEnabled = subscriber.subscribe(builder
                         .comment( "worn items xp boost enabled? False = off" )

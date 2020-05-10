@@ -60,7 +60,7 @@ public class ScrollScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
-        scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 48, boxHeight - 48, y + 24, x + 24, JsonConfig.data.get( "wearReq" ) );
+        scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 48, boxHeight - 48, y + 24, x + 24, type, player );
 
         children.add( scrollPanel );
 
@@ -77,7 +77,6 @@ public class ScrollScreen extends Screen
 
         scrollPanel.render( mouseX, mouseY, partialTicks );
 //        drawCenteredString(Minecraft.getInstance().fontRenderer, player.getDisplayName().getString() + " " + type,x + boxWidth / 2, y + boxHeight / 2, 50000 );
-
         super.render(mouseX, mouseY, partialTicks);
     }
 

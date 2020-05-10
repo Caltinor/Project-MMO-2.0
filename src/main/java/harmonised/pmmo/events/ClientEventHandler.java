@@ -113,6 +113,29 @@ public class ClientEventHandler
         }
     }
 
+    private static void addTooltipTextSkillPercentage( String tKey, Map<String, Object> theMap, ItemTooltipEvent event )
+    {
+        List<ITextComponent> tooltip = event.getToolTip();
+        int value;
+
+        if( theMap.size() > 0 )
+        {
+            tooltip.add( new TranslationTextComponent( tKey ) );
+
+            for( String key : theMap.keySet() )
+            {
+                if( theMap.get( key ) instanceof Double )
+                {
+                    value = (int) Math.floor( (double) theMap.get( key ) );
+                    if( value < 0 )
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " " + value, new TranslationTextComponent( "pmmo." + key ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
+                    else
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " +" + value, new TranslationTextComponent( "pmmo." + key ).getString() ).setStyle( XP.textStyle.get( "green" ) ) );
+                }
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void tooltipEvent( ItemTooltipEvent event )
     {
@@ -142,6 +165,8 @@ public class ClientEventHandler
             Map<String, Object> xpValueCrafting = JsonConfig.data.get( "xpValueCrafting" ).get( regKey );
             Map<String, Object> salvageInfo = JsonConfig.data.get( "salvageInfo" ).get( regKey );
             Map<String, Object> salvagesFrom = JsonConfig.data.get( "salvagesFrom" ).get( regKey );
+            Map<String, Object> heldItemXpBoost = JsonConfig.data.get( "heldItemXpBoost" ).get( regKey );
+            Map<String, Object> wornItemXpBoost = JsonConfig.data.get( "wornItemXpBoost" ).get( regKey );
 
             if( xpValue != null && xpValue.size() > 0 )      //XP VALUE
             {
@@ -152,6 +177,20 @@ public class ClientEventHandler
                     if( xpValue.get( key ) instanceof Double )
                     {
                         dValue = (double) xpValue.get( key );
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ) );
+                    }
+                }
+            }
+
+            if( heldItemXpBoost != null && heldItemXpBoost.size() > 0 )      //XP VALUE
+            {
+                tooltip.add( new TranslationTextComponent( "pmmo.xpValue" ) );
+
+                for( String key : heldItemXpBoost.keySet() )
+                {
+                    if( heldItemXpBoost.get( key ) instanceof Double )
+                    {
+                        dValue = (double) heldItemXpBoost.get( key );
                         tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ) );
                     }
                 }
@@ -182,12 +221,16 @@ public class ClientEventHandler
 
             if( wearReq != null && wearReq.size() > 0 )
                 addTooltipTextSkill( "pmmo.armor", "wear", wearReq, event );
+            if( wornItemXpBoost != null && wornItemXpBoost.size() > 0 )
+                addTooltipTextSkillPercentage( "pmmo.itemXpBoostWorn", wornItemXpBoost, event );
 
             if( toolReq != null && toolReq.size() > 0 )
                 addTooltipTextSkill( "pmmo.tool", "tool", toolReq, event );
-
             if( weaponReq != null && weaponReq.size() > 0 )
                 addTooltipTextSkill( "pmmo.weapon", "weapon", weaponReq, event );
+            if( heldItemXpBoost != null && heldItemXpBoost.size() > 0 )
+                addTooltipTextSkillPercentage( "pmmo.itemXpBoostHeld", heldItemXpBoost, event );
+
 
             if( useReq != null && useReq.size() > 0 )
                 addTooltipTextSkill( "pmmo.use", "use", useReq, event );

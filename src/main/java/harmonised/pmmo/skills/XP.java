@@ -2190,7 +2190,7 @@ public class XP
 		String skillName = skill.name().toLowerCase();
 		double skillMultiplier = 1;
 		double difficultyMultiplier = 1;
-		double wornMultiplier = 1;
+		double itemMultiplier = 1;
 
 		if( skillName.equals( "combat" ) || skillName.equals( "archery" ) || skillName.equals( "endurance" ) )
 		{
@@ -2280,14 +2280,13 @@ public class XP
 		}
 
 		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
-		Map<String, Object> heldMap = JsonConfig.data.get( "heldItemXpMultiplier" ).get( regKey );
+		Map<String, Object> heldMap = JsonConfig.data.get( "heldItemXpBoost" ).get( regKey );
 		PlayerInventory inv = player.inventory;
-		Map<String, Map<String, Object>> test = JsonConfig.data.get( "wornItemXpBoost" );
 
 		if( heldMap != null )
 		{
 			if( heldMap.containsKey( skillName ) )
-				amount *= (double) heldMap.get( skillName );
+				itemMultiplier += (double) heldMap.get( skillName ) / 100;
 		}
 
 ///////////////////////////////WORN XP BOOST///////////////////////////////////
@@ -2300,27 +2299,27 @@ public class XP
 			{
 				for (int i = 0; i < value.getSlots(); i++)
 				{
-					wornMultiplier += getWornXpBoost( player, value.getStackInSlot(i).getItem(), skillName );
+					itemMultiplier += getWornXpBoost( player, value.getStackInSlot(i).getItem(), skillName );
 				}
 			};
 		}
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
+			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
 		if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 38 ).getItem(), skillName );
+			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 38 ).getItem(), skillName );
 		if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 37 ).getItem(), skillName );
+			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 37 ).getItem(), skillName );
 		if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 36 ).getItem(), skillName );
+			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 36 ).getItem(), skillName );
 		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand
-			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 40 ).getItem(), skillName );
+			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 40 ).getItem(), skillName );
 
 ///////////////////////////////////////////////////////////////////////////////
 
 		amount *= skillMultiplier;
 		amount *= difficultyMultiplier;
-		amount *= wornMultiplier;
+		amount *= itemMultiplier;
 
 		Biome biome = player.world.getBiome( player.getPosition() );
 		ResourceLocation resLoc = biome.getRegistryName();
