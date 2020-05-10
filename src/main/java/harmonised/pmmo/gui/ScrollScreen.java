@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
@@ -15,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.client.gui.ScrollPanel;
 
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class ScrollScreen extends Screen
     private int y;
     private MyScrollPanel myList;
     private Button exitButton;
+    private ScrollPanel scrollPanel;
     private PlayerEntity player;
     private String type;
 
@@ -52,10 +55,14 @@ public class ScrollScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton( x + boxWidth - 32, y, 0, 2, I18n.format("" ), (something) ->
+        exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 2, I18n.format("" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
         });
+
+        scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 48, boxHeight - 48, y + 24, x + 24, JsonConfig.data.get( "wearReq" ) );
+
+        children.add( scrollPanel );
 
         addButton( exitButton );
     }
@@ -68,7 +75,8 @@ public class ScrollScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        drawCenteredString(Minecraft.getInstance().fontRenderer, player.getDisplayName().getString() + " " + type,x + boxWidth / 2, y + boxHeight / 2, 50000 );
+        scrollPanel.render( mouseX, mouseY, partialTicks );
+//        drawCenteredString(Minecraft.getInstance().fontRenderer, player.getDisplayName().getString() + " " + type,x + boxWidth / 2, y + boxHeight / 2, 50000 );
 
         super.render(mouseX, mouseY, partialTicks);
     }
@@ -94,24 +102,28 @@ public class ScrollScreen extends Screen
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
     {
+        scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
         return super.mouseScrolled(mouseX, mouseY, scroll);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
+        scrollPanel.mouseClicked( mouseX, mouseY, button );
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button)
     {
+        scrollPanel.mouseReleased( mouseX, mouseY, button );
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
     {
+        scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
