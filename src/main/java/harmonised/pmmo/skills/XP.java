@@ -86,6 +86,8 @@ public class XP
     private static boolean showDonatorWelcome = Config.config.showDonatorWelcome.get();
     private static boolean broadcastMilestone = Config.config.broadcastMilestone.get();
 	private static int debugInt = 0;
+	private static double passiveMobSlayerXp = Config.config.passiveMobSlayerXp.get();
+	private static double aggresiveMobSlayerXp = Config.config.passiveMobSlayerXp.get();
 
 	public static Map<String, Double> localConfig = new HashMap<>();
     public static Map<String, Double> config = new HashMap<>();
@@ -603,7 +605,7 @@ public class XP
 				// DEBUG
 
 				Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
-				boolean passedBreakReq = false;
+				boolean passedBreakReq;
 
 				if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable );
 					passedBreakReq = checkReq( player, blockAbove.getRegistryName(), "break" );
@@ -1032,9 +1034,13 @@ public class XP
 					if( weaponGap > 0 )
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
-					int slayerGap = getSkillReqGap( player, new ResourceLocation( target.getEntityString() ), "slayer" );
-					if( slayerGap > 0 )
+					int slayerGap = 0;
+
+					if( target.getEntityString() != null )
 					{
+						slayerGap = getSkillReqGap( player, new ResourceLocation( target.getEntityString() ), "slayer" );
+						if( slayerGap > 0 )
+						{
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 
@@ -1047,6 +1053,7 @@ public class XP
 							else
 								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
 						}
+					}
 					}
 
 					event.setAmount( event.getAmount() / (weaponGap + 1) / (slayerGap + 1) );
@@ -1073,9 +1080,9 @@ public class XP
 							}
  						}
 						else if( target instanceof AnimalEntity )
-							awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 1D * scaleMultiplier, false );
+							awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobSlayerXp * scaleMultiplier, false );
 						else if( target instanceof MobEntity )
-                            awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), 3D * scaleMultiplier, false );
+                            awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleMultiplier, false );
 
 //						System.out.println( ( target.getMaxHealth() - normalMaxHp ) / 10 );
 

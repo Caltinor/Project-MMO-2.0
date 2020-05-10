@@ -169,6 +169,10 @@ public class Config
 
         //Magic
 
+        //Slayer
+        public ConfigHelper.ConfigValueListener<Double> passiveMobSlayerXp;
+        public ConfigHelper.ConfigValueListener<Double> aggresiveMobSlayerXp;
+
 
         public ConfigImplementation(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber)
         {
@@ -824,6 +828,22 @@ public class Config
 
             builder.push( "Crafting" );
             {
+                builder.pop();
+            }
+
+            builder.push( "Slayer" );
+            {
+                this.passiveMobSlayerXp = subscriber.subscribe(builder
+                        .comment( "How much slayer xp is awarded upon killing a passive mob by default" )
+                        .translation( "pmmo.passiveMobSlayerXp" )
+                        .defineInRange( "passiveMobSlayerXp", 1D, 0, 10000) );
+
+                this.aggresiveMobSlayerXp = subscriber.subscribe(builder
+                        .comment( "How much slayer xp is awarded upon killing an aggresive mob by default" )
+                        .translation( "pmmo.aggresiveMobSlayerXp" )
+                        .defineInRange( "aggresiveMobSlayerXp", 3D, 0, 10000) );
+
+
                 builder.pop();
             }
         }
