@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.Requirements;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
@@ -20,27 +20,22 @@ import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public class PmmoCommand
@@ -628,7 +623,7 @@ public class PmmoCommand
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String biomeKey = sender.world.getBiome( sender.getPosition() ).getRegistryName().toString();
         String transKey = sender.world.getBiome( sender.getPosition() ).getTranslationKey();
-        Map<String, Object> theMap = Requirements.data.get( "biomeMobMultiplier" ).get( biomeKey );
+        Map<String, Object> theMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( biomeKey );
 
         String damageBonus = "100";
         String hpBonus = "100";
@@ -653,7 +648,7 @@ public class PmmoCommand
 
     private static int commandReloadConfig(CommandContext<CommandSource> context) throws CommandException
     {
-        Requirements.init();    //load up locally
+        JsonConfig.init();    //load up locally
 
         context.getSource().getServer().getPlayerList().getPlayers().forEach( player ->
         {

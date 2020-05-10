@@ -2,10 +2,7 @@ package harmonised.pmmo;
 
 import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.ConfigHelper;
-import harmonised.pmmo.config.ConfigHelper.ConfigValueListener;
-import harmonised.pmmo.config.Requirements;
-import harmonised.pmmo.events.ClientEventHandler;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
@@ -51,7 +48,7 @@ public class ProjectMMOMod
         NetworkHandler.registerPackets();
         MinecraftForge.EVENT_BUS.register( harmonised.pmmo.events.EventHandler.class );
         MinecraftForge.EVENT_BUS.register( harmonised.pmmo.skills.AttributeHandler.class );
-        Requirements.init();
+        JsonConfig.init();
     }
 
     private void clientLoading( FMLClientSetupEvent event )

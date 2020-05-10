@@ -1,12 +1,10 @@
 package harmonised.pmmo.config;
 
-import com.google.common.collect.Maps;
 import com.google.gson.*;
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
@@ -24,10 +22,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 
-public class Requirements
+public class JsonConfig
 {
     public static Map<String, Map<String, Map<String, Object>>> localData = new HashMap<>();
     public static Map<String, Map<String, Map<String, Object>>> data = new HashMap<>();
@@ -38,7 +35,7 @@ public class Requirements
     private static String templateDataPath = "pmmo/data_template.json";
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
     private static final Logger LOGGER = LogManager.getLogger();
-    private static Requirements defaultReq, customReq;
+    private static JsonConfig defaultReq, customReq;
     private static Effect invalidEffect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
     private static Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
 //    private static Entity invalidEntity = ForgeRegistries.ENTITIES.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
@@ -58,8 +55,8 @@ public class Requirements
         if ( !data.exists() )   //If no data file, create one
             createData( data );
 
-        defaultReq = Requirements.readFromFile( templateData.getPath() );
-        customReq = Requirements.readFromFile( data.getPath() );
+        defaultReq = JsonConfig.readFromFile( templateData.getPath() );
+        customReq = JsonConfig.readFromFile( data.getPath() );
 
         if( Config.config.loadDefaultConfig.get() )
             updateFinal( defaultReq );
@@ -99,6 +96,246 @@ public class Requirements
         map.put( "mobRareDrop", new HashMap<>() );
         map.put( "levelUpCommand", new HashMap<>() );
         map.put( "heldItemXpMultiplier", new HashMap<>() );
+        map.put( "wornItemXpBoost", new HashMap<>() );
+    }
+
+    public static class RequirementItem
+    {
+        private final Map<String, Object> requirements = new HashMap<>();
+    }
+
+    private final Map<String, RequirementItem> wears = new HashMap<>();
+    private final Map<String, RequirementItem> tools = new HashMap<>();
+    private final Map<String, RequirementItem> weapons = new HashMap<>();
+    private final Map<String, RequirementItem> killReq = new HashMap<>();
+    private final Map<String, RequirementItem> killXp = new HashMap<>();
+    private final Map<String, RequirementItem> mobRareDrop = new HashMap<>();
+    private final Map<String, RequirementItem> use = new HashMap<>();
+    private final Map<String, RequirementItem> placing = new HashMap<>();
+    private final Map<String, RequirementItem> breaking = new HashMap<>();
+    private final Map<String, RequirementItem> biome = new HashMap<>();
+    private final Map<String, RequirementItem> biomeEff = new HashMap<>();
+    private final Map<String, RequirementItem> biomeMultiplier = new HashMap<>();
+    private final Map<String, RequirementItem> biomeMobMultiplier = new HashMap<>();
+    private final Map<String, RequirementItem> xpValues = new HashMap<>();
+    private final Map<String, RequirementItem> xpValuesCrafting = new HashMap<>();
+    private final Map<String, RequirementItem> ores = new HashMap<>();
+    private final Map<String, RequirementItem> logs = new HashMap<>();
+    private final Map<String, RequirementItem> plants = new HashMap<>();
+    private final Map<String, RequirementItem> salvage = new HashMap<>();
+    private final Map<String, RequirementItem> fishPool = new HashMap<>();
+    private final Map<String, RequirementItem> fishEnchantPool = new HashMap<>();
+    private final Map<String, RequirementItem> levelUpCommand = new HashMap<>();
+    private final Map<String, RequirementItem> heldItemXpMultiplier = new HashMap<>();
+    private final Map<String, RequirementItem> wornItemXpBoost = new HashMap<>();
+
+    // -----------------------------------------------------------------------------
+    //
+    // GSON STUFFS BELOW
+    //
+    //
+
+    private static final Gson DESERIALIZER = new GsonBuilder()
+            .registerTypeAdapter(JsonConfig.class, new Deserializer())
+            .registerTypeAdapter(RequirementItem.class, new EntryDeserializer())
+            .create();
+
+    private static void updateFinal( JsonConfig req )
+    {
+        if( Config.config.wearReqEnabled.get() )
+            updateReqSkills( req.wears, localData.get( "wearReq" ) );
+
+        if( Config.config.toolReqEnabled.get() )
+            updateReqSkills( req.tools, localData.get( "toolReq" ) );
+
+        if( Config.config.weaponReqEnabled.get() )
+            updateReqSkills( req.weapons, localData.get( "weaponReq" ) );
+
+//        updateReqSkills( req.mobs, mobReq );
+
+        if( Config.config.useReqEnabled.get() )
+            updateReqSkills( req.use, localData.get( "useReq" ) );
+
+        if( Config.config.xpValueEnabled.get() )
+            updateReqSkills( req.xpValues, localData.get( "xpValue" ) );
+
+        if( Config.config.xpValueCraftingEnabled.get() )
+            updateReqSkills( req.xpValuesCrafting, localData.get( "xpValueCrafting" ) );
+
+        if( Config.config.placeReqEnabled.get() )
+            updateReqSkills( req.placing, localData.get( "placeReq" ) );
+
+        if( Config.config.breakReqEnabled.get() )
+            updateReqSkills( req.breaking, localData.get( "breakReq" ) );
+
+        if( Config.config.biomeReqEnabled.get() )
+        {
+            updateReqSkills( req.biome, localData.get( "biomeReq" ) );
+            updateReqEffects( req.biomeEff, localData.get( "biomeEffect" ) );
+        }
+
+        if( Config.config.biomeMultiplierEnabled.get() )
+            updateReqSkills( req.biomeMultiplier, localData.get( "biomeMultiplier" ) );
+
+        if( Config.config.biomeMobMultiplierEnabled.get() )
+            updateReqAttributes( req.biomeMobMultiplier, localData.get( "biomeMobMultiplier" ) );
+
+        if( Config.config.oreEnabled.get() )
+            updateReqExtra( req.ores, localData.get( "oreInfo" ) );
+
+        if( Config.config.logEnabled.get() )
+            updateReqExtra( req.logs, localData.get( "logInfo" ) );
+
+        if( Config.config.plantEnabled.get() )
+            updateReqExtra( req.plants, localData.get( "plantInfo" ) );
+
+        if( Config.config.salvageEnabled.get() )
+            updateReqSalvage( req.salvage, localData.get( "salvageInfo" ) );
+
+        if( Config.config.fishPoolEnabled.get() )
+            updateReqfishPool( req.fishPool, localData.get( "fishPool" ) );
+
+        if( Config.config.fishEnchantPoolEnabled.get() )
+            updateReqFishEnchantPool( req.fishEnchantPool, localData.get( "fishEnchantPool" ) );
+
+        if( Config.config.killReqEnabled.get() )
+            updateReqSkills( req.killReq, localData.get( "killReq" ) );
+
+        if( Config.config.killXpEnabled.get() )
+            updateReqSkills( req.killXp, localData.get( "killXp" ) );
+
+        if( Config.config.mobRareDropEnabled.get() )
+            updateEntityItem( req.mobRareDrop, localData.get( "mobRareDrop" ) );
+
+        if( Config.config.mobRareDropEnabled.get() )
+            updateCommand( req.levelUpCommand, localData.get( "levelUpCommand" ) );
+
+        if( Config.config.heldItemXpMultiplierEnabled.get() )
+            updateReqSkills( req.heldItemXpMultiplier, localData.get( "heldItemXpMultiplier" ) );
+
+        if( Config.config.wornItemXpBoostEnabled.get() )
+            updateReqSkills( req.wornItemXpBoost, localData.get( "wornItemXpBoost" ) );
+
+        data = localData;
+    }
+
+    private static class Deserializer implements JsonDeserializer<JsonConfig>
+    {
+
+        @Override
+        public JsonConfig deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+        {
+            JsonConfig req = new JsonConfig();
+
+            JsonObject obj = json.getAsJsonObject();
+            deserializeGroup(obj, "wear_requirement", req.wears::put, context);
+            deserializeGroup(obj, "tool_requirement", req.tools::put, context);
+            deserializeGroup(obj, "weapon_requirement", req.weapons::put, context);
+            deserializeGroup(obj, "kill_requirement", req.killReq::put, context);
+            deserializeGroup(obj, "kill_xp", req.killXp::put, context);
+            deserializeGroup(obj, "mob_rare_drop", req.mobRareDrop::put, context);
+            deserializeGroup(obj, "use_requirement", req.use::put, context);
+            deserializeGroup(obj, "place_requirement", req.placing::put, context);
+            deserializeGroup(obj, "break_requirement", req.breaking::put, context);
+            deserializeGroup(obj, "biome_requirement", req.biome::put, context);
+            deserializeGroup(obj, "biome_multiplier", req.biomeMultiplier::put, context);
+            deserializeGroup(obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context);
+            deserializeGroup(obj, "biome_effect", req.biomeEff::put, context);
+            deserializeGroup(obj, "xp_value", req.xpValues::put, context);
+            deserializeGroup(obj, "crafting_xp", req.xpValuesCrafting::put, context);
+            deserializeGroup(obj, "ore", req.ores::put, context);
+            deserializeGroup(obj, "log", req.logs::put, context);
+            deserializeGroup(obj, "plant", req.plants::put, context);
+            deserializeGroup(obj, "salvage", req.salvage::put, context);
+            deserializeGroup(obj, "fish_pool", req.fishPool::put, context);
+            deserializeGroup(obj, "fish_enchant_pool", req.fishEnchantPool::put, context);
+            deserializeGroup(obj, "level_up_command", req.levelUpCommand::put, context);
+            deserializeGroup(obj, "held_item_xp_multiplier", req.heldItemXpMultiplier::put, context);
+            deserializeGroup(obj, "worn_item_xp_boost", req.wornItemXpBoost::put, context);
+
+            return req;
+        }
+
+        private void deserializeGroup(JsonObject obj, String requirementGroupName, BiConsumer<String, RequirementItem> putter, JsonDeserializationContext context)
+        {
+            if (obj.has(requirementGroupName))
+            {
+                JsonObject wears = JSONUtils.getJsonObject(obj, requirementGroupName);
+                for(Map.Entry<String, JsonElement> entries : wears.entrySet())
+                {
+                    String name = entries.getKey();
+                    RequirementItem values = context.deserialize(entries.getValue(), RequirementItem.class);
+
+                    putter.accept(name, values);
+                }
+            }
+        }
+    }
+
+    private static class EntryDeserializer implements JsonDeserializer<RequirementItem>
+    {
+
+        @Override
+        public RequirementItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+        {
+            RequirementItem item = new RequirementItem();
+
+            JsonObject obj = json.getAsJsonObject();
+            for(Map.Entry<String, JsonElement> entries : obj.entrySet())
+            {
+                String name = entries.getKey();
+                Object values;
+                if( name.equals( "salvageItem" ) )
+                    values = entries.getValue().getAsString();
+                else
+                    values = entries.getValue().getAsDouble();
+
+                item.requirements.put( name, values );
+            }
+
+            return item;
+        }
+    }
+
+    private static void createData( File dataFile )
+    {
+        try     //create template data file
+        {
+            dataFile.getParentFile().mkdir();
+            dataFile.createNewFile();
+        }
+        catch( IOException e )
+        {
+            LOGGER.error( "Could not create template json config!", dataFile.getPath(), e );
+        }
+
+        try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( defaultDataPath );
+             FileOutputStream outputStream = new FileOutputStream( dataFile ); )
+        {
+            IOUtils.copy( inputStream, outputStream );
+        }
+        catch( IOException e )
+        {
+            LOGGER.error( "Error copying over default json config to " + dataFile.getPath(), dataFile.getPath(), e );
+        }
+    }
+
+    public static JsonConfig readFromFile(String path )
+    {
+        try (
+                InputStream input = new FileInputStream( path );
+                Reader reader = new BufferedReader(new InputStreamReader(input));
+        )
+        {
+            return DESERIALIZER.fromJson(reader, JsonConfig.class);
+        }
+        catch (IOException e)
+        {
+            LOGGER.error("Could not parse json from {}", path, e);
+
+            // If couldn't read, just return an empty object. This may not be what you want.
+            return new JsonConfig();
+        }
     }
 
     private static boolean checkValidSkills( Map<String, Object> theMap )
@@ -150,7 +387,7 @@ public class Requirements
                         else
                             LOGGER.error( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
                     }
-                        else
+                    else
                         LOGGER.error( entry.getValue() + " is not a Double!" );
                 }
             }
@@ -628,249 +865,5 @@ public class Requirements
         }
 
         return anyValidAttributes;
-    }
-
-    private static void updateFinal( Requirements req )
-    {
-        if( Config.config.wearReqEnabled.get() )
-            updateReqSkills( req.wears, localData.get( "wearReq" ) );
-
-        if( Config.config.toolReqEnabled.get() )
-            updateReqSkills( req.tools, localData.get( "toolReq" ) );
-
-        if( Config.config.weaponReqEnabled.get() )
-            updateReqSkills( req.weapons, localData.get( "weaponReq" ) );
-
-//        updateReqSkills( req.mobs, mobReq );
-
-        if( Config.config.useReqEnabled.get() )
-            updateReqSkills( req.use, localData.get( "useReq" ) );
-
-        if( Config.config.xpValueEnabled.get() )
-            updateReqSkills( req.xpValues, localData.get( "xpValue" ) );
-
-        if( Config.config.xpValueCraftingEnabled.get() )
-            updateReqSkills( req.xpValuesCrafting, localData.get( "xpValueCrafting" ) );
-
-        if( Config.config.placeReqEnabled.get() )
-            updateReqSkills( req.placing, localData.get( "placeReq" ) );
-
-        if( Config.config.breakReqEnabled.get() )
-            updateReqSkills( req.breaking, localData.get( "breakReq" ) );
-
-        if( Config.config.biomeReqEnabled.get() )
-        {
-            updateReqSkills( req.biome, localData.get( "biomeReq" ) );
-            updateReqEffects( req.biomeEff, localData.get( "biomeEffect" ) );
-        }
-
-        if( Config.config.biomeMultiplierEnabled.get() )
-            updateReqSkills( req.biomeMultiplier, localData.get( "biomeMultiplier" ) );
-
-        if( Config.config.biomeMobMultiplierEnabled.get() )
-            updateReqAttributes( req.biomeMobMultiplier, localData.get( "biomeMobMultiplier" ) );
-
-        if( Config.config.oreEnabled.get() )
-            updateReqExtra( req.ores, localData.get( "oreInfo" ) );
-
-        if( Config.config.logEnabled.get() )
-            updateReqExtra( req.logs, localData.get( "logInfo" ) );
-
-        if( Config.config.plantEnabled.get() )
-            updateReqExtra( req.plants, localData.get( "plantInfo" ) );
-
-        if( Config.config.salvageEnabled.get() )
-            updateReqSalvage( req.salvage, localData.get( "salvageInfo" ) );
-
-        if( Config.config.fishPoolEnabled.get() )
-            updateReqfishPool( req.fishPool, localData.get( "fishPool" ) );
-
-        if( Config.config.fishEnchantPoolEnabled.get() )
-            updateReqFishEnchantPool( req.fishEnchantPool, localData.get( "fishEnchantPool" ) );
-
-        if( Config.config.killReqEnabled.get() )
-            updateReqSkills( req.killReq, localData.get( "killReq" ) );
-
-        if( Config.config.killXpEnabled.get() )
-            updateReqSkills( req.killXp, localData.get( "killXp" ) );
-
-        if( Config.config.mobRareDropEnabled.get() )
-            updateEntityItem( req.mobRareDrop, localData.get( "mobRareDrop" ) );
-
-        if( Config.config.mobRareDropEnabled.get() )
-            updateCommand( req.levelUpCommand, localData.get( "levelUpCommand" ) );
-
-        if( Config.config.heldItemXpMultiplierEnabled.get() )
-            updateReqSkills( req.heldItemXpMultiplier, localData.get( "heldItemXpMultiplier" ) );
-
-        data = localData;
-    }
-
-    private static void createData( File dataFile )
-    {
-        try     //create template data file
-        {
-            dataFile.getParentFile().mkdir();
-            dataFile.createNewFile();
-        }
-        catch( IOException e )
-        {
-            LOGGER.error( "Could not create template json config!", dataFile.getPath(), e );
-        }
-
-        try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( defaultDataPath );
-             FileOutputStream outputStream = new FileOutputStream( dataFile ); )
-        {
-            IOUtils.copy( inputStream, outputStream );
-        }
-        catch( IOException e )
-        {
-            LOGGER.error( "Error copying over default json config to " + dataFile.getPath(), dataFile.getPath(), e );
-        }
-    }
-
-    public static Requirements readFromFile( String path )
-    {
-        try (
-                InputStream input = new FileInputStream( path );
-                Reader reader = new BufferedReader(new InputStreamReader(input));
-        )
-        {
-            return DESERIALIZER.fromJson(reader, Requirements.class);
-        }
-        catch (IOException e)
-        {
-            LOGGER.error("Could not parse json from {}", path, e);
-
-            // If couldn't read, just return an empty object. This may not be what you want.
-            return new Requirements();
-        }
-    }
-
-    public static class RequirementItem
-    {
-        private final Map<String, Object> requirements = new HashMap<>();
-
-//        public HashMap<String, Object> getMap()
-//        {
-//            return new HashMap<>( requirements );
-//        }
-
-        public double getDouble(String registryName)
-        {
-            return (double) requirements.get(registryName);
-        }
-    }
-
-    private final Map<String, RequirementItem> wears = new HashMap<>();
-    private final Map<String, RequirementItem> tools = new HashMap<>();
-    private final Map<String, RequirementItem> weapons = new HashMap<>();
-    private final Map<String, RequirementItem> killReq = new HashMap<>();
-    private final Map<String, RequirementItem> killXp = new HashMap<>();
-    private final Map<String, RequirementItem> mobRareDrop = new HashMap<>();
-    private final Map<String, RequirementItem> use = new HashMap<>();
-    private final Map<String, RequirementItem> placing = new HashMap<>();
-    private final Map<String, RequirementItem> breaking = new HashMap<>();
-    private final Map<String, RequirementItem> biome = new HashMap<>();
-    private final Map<String, RequirementItem> biomeEff = new HashMap<>();
-    private final Map<String, RequirementItem> biomeMultiplier = new HashMap<>();
-    private final Map<String, RequirementItem> biomeMobMultiplier = new HashMap<>();
-    private final Map<String, RequirementItem> xpValues = new HashMap<>();
-    private final Map<String, RequirementItem> xpValuesCrafting = new HashMap<>();
-    private final Map<String, RequirementItem> ores = new HashMap<>();
-    private final Map<String, RequirementItem> logs = new HashMap<>();
-    private final Map<String, RequirementItem> plants = new HashMap<>();
-    private final Map<String, RequirementItem> salvage = new HashMap<>();
-    private final Map<String, RequirementItem> fishPool = new HashMap<>();
-    private final Map<String, RequirementItem> fishEnchantPool = new HashMap<>();
-    private final Map<String, RequirementItem> levelUpCommand = new HashMap<>();
-    private final Map<String, RequirementItem> heldItemXpMultiplier = new HashMap<>();
-
-    // -----------------------------------------------------------------------------
-    //
-    // GSON STUFFS BELOW
-    //
-    //
-
-    private static final Gson DESERIALIZER = new GsonBuilder()
-            .registerTypeAdapter(Requirements.class, new Deserializer())
-            .registerTypeAdapter(RequirementItem.class, new EntryDeserializer())
-            .create();
-
-    private static class Deserializer implements JsonDeserializer<Requirements>
-    {
-
-        @Override
-        public Requirements deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
-        {
-            Requirements req = new Requirements();
-
-            JsonObject obj = json.getAsJsonObject();
-            deserializeGroup(obj, "wear_requirement", req.wears::put, context);
-            deserializeGroup(obj, "tool_requirement", req.tools::put, context);
-            deserializeGroup(obj, "weapon_requirement", req.weapons::put, context);
-            deserializeGroup(obj, "kill_requirement", req.killReq::put, context);
-            deserializeGroup(obj, "kill_xp", req.killXp::put, context);
-            deserializeGroup(obj, "mob_rare_drop", req.mobRareDrop::put, context);
-            deserializeGroup(obj, "use_requirement", req.use::put, context);
-            deserializeGroup(obj, "place_requirement", req.placing::put, context);
-            deserializeGroup(obj, "break_requirement", req.breaking::put, context);
-            deserializeGroup(obj, "biome_requirement", req.biome::put, context);
-            deserializeGroup(obj, "biome_multiplier", req.biomeMultiplier::put, context);
-            deserializeGroup(obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context);
-            deserializeGroup(obj, "biome_effect", req.biomeEff::put, context);
-            deserializeGroup(obj, "xp_value", req.xpValues::put, context);
-            deserializeGroup(obj, "crafting_xp", req.xpValuesCrafting::put, context);
-            deserializeGroup(obj, "ore", req.ores::put, context);
-            deserializeGroup(obj, "log", req.logs::put, context);
-            deserializeGroup(obj, "plant", req.plants::put, context);
-            deserializeGroup(obj, "salvage", req.salvage::put, context);
-            deserializeGroup(obj, "fish_pool", req.fishPool::put, context);
-            deserializeGroup(obj, "fish_enchant_pool", req.fishEnchantPool::put, context);
-            deserializeGroup(obj, "level_up_command", req.levelUpCommand::put, context);
-            deserializeGroup(obj, "held_item_xp_multiplier", req.heldItemXpMultiplier::put, context);
-
-            return req;
-        }
-
-        private void deserializeGroup(JsonObject obj, String requirementGroupName, BiConsumer<String, RequirementItem> putter, JsonDeserializationContext context)
-        {
-            if (obj.has(requirementGroupName))
-            {
-                JsonObject wears = JSONUtils.getJsonObject(obj, requirementGroupName);
-                for(Map.Entry<String, JsonElement> entries : wears.entrySet())
-                {
-                    String name = entries.getKey();
-                    RequirementItem values = context.deserialize(entries.getValue(), RequirementItem.class);
-
-                    putter.accept(name, values);
-                }
-            }
-        }
-    }
-
-    private static class EntryDeserializer implements JsonDeserializer<RequirementItem>
-    {
-
-        @Override
-        public RequirementItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
-        {
-            RequirementItem item = new RequirementItem();
-
-            JsonObject obj = json.getAsJsonObject();
-            for(Map.Entry<String, JsonElement> entries : obj.entrySet())
-            {
-                String name = entries.getKey();
-                Object values;
-                if( name.equals( "salvageItem" ) )
-                    values = entries.getValue().getAsString();
-                else
-                    values = entries.getValue().getAsDouble();
-
-                item.requirements.put( name, values );
-            }
-
-            return item;
-        }
     }
 }

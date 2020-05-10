@@ -36,6 +36,7 @@ public enum Skill
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static Map< String, Integer > map = new HashMap<>();
+//    Skill[] VALUES = values();
 
     private int value;
 

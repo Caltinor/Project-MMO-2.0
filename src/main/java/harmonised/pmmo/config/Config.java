@@ -51,6 +51,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> fishEnchantPoolEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> levelUpCommandEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> heldItemXpMultiplierEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> wornItemXpBoostEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
         //Levels
@@ -344,6 +345,11 @@ public class Config
                         .comment( "Main held items xp multiplier enabled? False = off" )
                         .translation( "pmmo.heldItemXpMultiplierEnabled" )
                         .define( "heldItemXpMultiplierEnabled", true) );
+
+                this.wornItemXpBoostEnabled = subscriber.subscribe(builder
+                        .comment( "worn items xp boost enabled? False = off" )
+                        .translation( "pmmo.wornItemXpBoostEnabled" )
+                        .define( "wornItemXpBoostEnabled", true) );
 
                 this.loadDefaultConfig = subscriber.subscribe(builder
                         .comment( "Should config from data_template.json be loaded? False means only data.json is loaded" )

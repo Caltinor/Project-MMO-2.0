@@ -4,8 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.Requirements;
-import harmonised.pmmo.util.DP;
+import harmonised.pmmo.config.JsonConfig;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -209,7 +208,7 @@ public class AttributeHandler
 	private static double getBiomeMobMultiplier( MobEntity mob, String type )
 	{
 		String biomeKey = mob.world.getBiome( mob.getPosition() ).getRegistryName().toString();
-		Map<String, Object> theMap = Requirements.data.get( "biomeMobMultiplier" ).get( biomeKey );
+		Map<String, Object> theMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( biomeKey );
 		double multiplier = 1;
 
 		if( theMap != null && theMap.containsKey( type ) )

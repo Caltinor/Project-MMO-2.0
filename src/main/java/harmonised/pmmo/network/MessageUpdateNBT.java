@@ -1,20 +1,12 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.config.Requirements;
 import harmonised.pmmo.proxy.ClientHandler;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.NBTHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class MessageUpdateNBT

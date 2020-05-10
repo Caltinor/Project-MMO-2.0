@@ -1,6 +1,6 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.config.Requirements;
+import harmonised.pmmo.config.JsonConfig;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -87,7 +87,7 @@ public class MessageUpdateReq
 //                    break;
 
                 case "json":
-                    Requirements.data = newPackage;
+                    JsonConfig.data = newPackage;
                     break;
 
                 default:

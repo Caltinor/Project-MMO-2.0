@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.Requirements;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
@@ -39,9 +39,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.MinecraftForge;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -57,11 +58,13 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
 public class XP
 {
@@ -214,9 +217,9 @@ public class XP
 	{
 		Map<String, Double> theMap = new HashMap<>();
 
-		if( Requirements.data.get( "xpValue" ).containsKey( registryName.toString() ) )
+		if( JsonConfig.data.get( "xpValue" ).containsKey( registryName.toString() ) )
 		{
-			for( Map.Entry<String, Object> entry : Requirements.data.get( "xpValue" ).get( registryName.toString() ).entrySet() )
+			for( Map.Entry<String, Object> entry : JsonConfig.data.get( "xpValue" ).get( registryName.toString() ).entrySet() )
 			{
 				if( entry.getValue() instanceof Double )
 					theMap.put( entry.getKey(), (double) entry.getValue() );
@@ -230,9 +233,9 @@ public class XP
     {
         Map<String, Double> theMap = new HashMap<>();
 
-        if( Requirements.data.get( "xpValueCrafting" ).containsKey( registryName.toString() ) )
+        if( JsonConfig.data.get( "xpValueCrafting" ).containsKey( registryName.toString() ) )
         {
-            for( Map.Entry<String, Object> entry : Requirements.data.get( "xpValueCrafting" ).get( registryName.toString() ).entrySet() )
+            for( Map.Entry<String, Object> entry : JsonConfig.data.get( "xpValueCrafting" ).get( registryName.toString() ).entrySet() )
             {
                 if( entry.getValue() instanceof Double )
                     theMap.put( entry.getKey(), (double) entry.getValue() );
@@ -455,7 +458,7 @@ public class XP
 					if( offItemStack.getItem() instanceof BlockItem )
 						NetworkHandler.sendToPlayer( new MessageGrow( 1, offItemStack.getCount() ), (ServerPlayerEntity) player );
 
-					if( Requirements.data.get( "plantInfo" ).containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable )
+					if( JsonConfig.data.get( "plantInfo" ).containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable )
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 					else
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
@@ -512,30 +515,30 @@ public class XP
 		double extraChancePerLevel = 0;
 		double extraChance;
 		int highestReq = 1;
-		if( Requirements.data.get( "breakReq" ).containsKey( resLoc.toString() ) )
-			highestReq = Requirements.data.get( "breakReq" ).get( resLoc.toString() ).entrySet().stream().map( a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
+		if( JsonConfig.data.get( "breakReq" ).containsKey( resLoc.toString() ) )
+			highestReq = JsonConfig.data.get( "breakReq" ).get( resLoc.toString() ).entrySet().stream().map(a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
 		int startLevel = 1;
 
 		switch( type )
 		{
 			case "ore":
-				if( Requirements.data.get( "oreInfo" ).containsKey( regKey ) && Requirements.data.get( "oreInfo" ).get( regKey ).containsKey( "extraChance" ) )
-					if( Requirements.data.get( "oreInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) Requirements.data.get( "oreInfo" ).get( regKey ).get( "extraChance" );
+				if( JsonConfig.data.get( "oreInfo" ).containsKey( regKey ) && JsonConfig.data.get( "oreInfo" ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( "oreInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( "oreInfo" ).get( regKey ).get( "extraChance" );
 				startLevel = getLevel( Skill.MINING, player );
 				break;
 
 			case "log":
-				if( Requirements.data.get( "logInfo" ).containsKey( regKey ) && Requirements.data.get( "logInfo" ).get( regKey ).containsKey( "extraChance" ) )
-					if( Requirements.data.get( "logInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) Requirements.data.get( "logInfo" ).get( regKey ).get( "extraChance" );
+				if( JsonConfig.data.get( "logInfo" ).containsKey( regKey ) && JsonConfig.data.get( "logInfo" ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( "logInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( "logInfo" ).get( regKey ).get( "extraChance" );
 				startLevel = getLevel( Skill.WOODCUTTING, player );
 				break;
 
 			case "plant":
-				if( Requirements.data.get( "plantInfo" ).containsKey( regKey ) && Requirements.data.get( "plantInfo" ).get( regKey ).containsKey( "extraChance" ) )
-					if( Requirements.data.get( "plantInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) Requirements.data.get( "plantInfo" ).get( regKey ).get( "extraChance" );
+				if( JsonConfig.data.get( "plantInfo" ).containsKey( regKey ) && JsonConfig.data.get( "plantInfo" ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( "plantInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( "plantInfo" ).get( regKey ).get( "extraChance" );
 				startLevel = getLevel( Skill.FARMING, player );
 				break;
 
@@ -584,25 +587,25 @@ public class XP
 
 				// DEBUG
 
-				if( debugInt-- > 0 )
-				{
-					World debugWorld = event.getWorld().getWorld();
-					BlockPos debugPos = event.getPos().south();
-					BlockState debugBlockState = debugWorld.getBlockState( debugPos );
-					BreakEvent debugEvent = new BreakEvent( debugWorld, debugPos, debugBlockState, player );
-					MinecraftForge.EVENT_BUS.post( debugEvent );
-					if( !debugEvent.isCanceled() )
-						debugWorld.removeBlock( debugPos, false );
-
-					System.out.println( debugPos );
-				}
+//				if( debugInt-- > 0 )
+//				{
+//					World debugWorld = event.getWorld().getWorld();
+//					BlockPos debugPos = event.getPos().south();
+//					BlockState debugBlockState = debugWorld.getBlockState( debugPos );
+//					BreakEvent debugEvent = new BreakEvent( debugWorld, debugPos, debugBlockState, player );
+//					MinecraftForge.EVENT_BUS.post( debugEvent );
+//					if( !debugEvent.isCanceled() )
+//						debugWorld.removeBlock( debugPos, false );
+//
+//					System.out.println( debugPos );
+//				}
 
 				// DEBUG
 
 				Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
 				boolean passedBreakReq = false;
 
-				if( Requirements.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable );
+				if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable );
 					passedBreakReq = checkReq( player, blockAbove.getRegistryName(), "break" );
 
 				if( !passedBreakReq )
@@ -900,7 +903,7 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
 					}
-					else if( Requirements.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
+					else if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
 					{
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
@@ -911,7 +914,7 @@ public class XP
 						NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
 					}
 
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
 					{
 						startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
@@ -1035,7 +1038,7 @@ public class XP
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 
-						for( Map.Entry<String, Object> entry : Requirements.data.get( "killReq" ).get( target.getEntityString() ).entrySet() )
+						for( Map.Entry<String, Object> entry : JsonConfig.data.get( "killReq" ).get( target.getEntityString() ).entrySet() )
 						{
 							int level = getLevel( Skill.getSkill( entry.getKey() ), player );
 
@@ -1061,9 +1064,9 @@ public class XP
 						damage = targetHealth;
 						double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
-						if( Requirements.data.get( "killXp" ).containsKey( target.getEntityString() ) )
+						if( JsonConfig.data.get( "killXp" ).containsKey( target.getEntityString() ) )
 						{
-							Map<String, Object> killXp = Requirements.data.get( "killXp" ).get( target.getEntityString() );
+							Map<String, Object> killXp = JsonConfig.data.get( "killXp" ).get( target.getEntityString() );
 							for( Map.Entry<String, Object> entry : killXp.entrySet() )
 							{
 								awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * scaleMultiplier, false );
@@ -1076,9 +1079,9 @@ public class XP
 
 //						System.out.println( ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
-						if( Requirements.data.get( "mobRareDrop" ).containsKey( target.getEntityString() ) )
+						if( JsonConfig.data.get( "mobRareDrop" ).containsKey( target.getEntityString() ) )
 						{
-							Map<String, Object> dropTable = Requirements.data.get( "mobRareDrop" ).get( target.getEntityString() );
+							Map<String, Object> dropTable = JsonConfig.data.get( "mobRareDrop" ).get( target.getEntityString() );
 
 							for( Map.Entry<String, Object> entry : dropTable.entrySet() )
 							{
@@ -1304,7 +1307,7 @@ public class XP
 
 	public static void syncPlayerConfig( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( Requirements.localData, "json" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateReq( JsonConfig.localData, "json" ), (ServerPlayerEntity) player );
 
 		NetworkHandler.sendToPlayer( new MessageUpdateNBT( NBTHelper.mapToNBT( localConfig ), "config" ), (ServerPlayerEntity) player );
 	}
@@ -1384,9 +1387,9 @@ public class XP
 		switch( type.toLowerCase() )
 		{
 			case "wear":
-				if( Requirements.data.get( "wearReq" ).containsKey( registryName ) )
+				if( JsonConfig.data.get( "wearReq" ).containsKey( registryName ) )
 				{
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "wearReq" ).get( registryName ).entrySet() )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "wearReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1395,8 +1398,8 @@ public class XP
 				break;
 
 			case "tool":
-				if( Requirements.data.get( "toolReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "toolReq" ).get( registryName ).entrySet() )
+				if( JsonConfig.data.get( "toolReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "toolReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1404,8 +1407,8 @@ public class XP
 				break;
 
 			case "weapon":
-				if( Requirements.data.get( "weaponReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "weaponReq" ).get( registryName ).entrySet() )
+				if( JsonConfig.data.get( "weaponReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "weaponReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1413,8 +1416,8 @@ public class XP
 				break;
 
             case "mob":
-                if( Requirements.data.get( "mobReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "mobReq" ).get( registryName ).entrySet() )
+                if( JsonConfig.data.get( "mobReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "mobReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1422,8 +1425,8 @@ public class XP
                 break;
 
             case "use":
-                if( Requirements.data.get( "useReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( registryName ).entrySet() )
+                if( JsonConfig.data.get( "useReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "useReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1431,8 +1434,8 @@ public class XP
                 break;
 
             case "place":
-				if( Requirements.data.get( "placeReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "placeReq" ).get( registryName ).entrySet() )
+				if( JsonConfig.data.get( "placeReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "placeReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1440,8 +1443,8 @@ public class XP
 				break;
 
 			case "break":
-				if( Requirements.data.get( "breakReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "breakReq" ).get( registryName ).entrySet() )
+				if( JsonConfig.data.get( "breakReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "breakReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1449,8 +1452,8 @@ public class XP
 				break;
 
 			case "biome":
-				if( Requirements.data.get( "biomeReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : Requirements.data.get( "biomeReq" ).get( registryName ).entrySet() )
+				if( JsonConfig.data.get( "biomeReq" ).containsKey( registryName ) )
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "biomeReq" ).get( registryName ).entrySet() )
 					{
 						if( entry.getValue() instanceof Double )
 							reqMap.put( entry.getKey(), (double) entry.getValue() );
@@ -1541,7 +1544,7 @@ public class XP
 			{
 				if( !player.isCreative() )
 				{
-					if( Requirements.data.get( "salvageInfo" ).containsKey( regKey ) )
+					if( JsonConfig.data.get( "salvageInfo" ).containsKey( regKey ) )
 					{
 						matched = scanBlock( smithBlock, 1, player );
 						if( !matched )
@@ -1579,7 +1582,7 @@ public class XP
 						{
 							player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 							player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
-							for( Map.Entry<String, Object> entry : Requirements.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
+							for( Map.Entry<String, Object> entry : JsonConfig.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
 							{
 								startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
@@ -1624,7 +1627,7 @@ public class XP
 
 				    	if( ( block.equals( goldBlock ) || block.equals( smithBlock ) ) )
 				    	{
-							if( Requirements.data.get( "salvageInfo" ).containsKey( regKey ) )
+							if( JsonConfig.data.get( "salvageInfo" ).containsKey( regKey ) )
 								event.setCanceled( true );
 
 				    		if( isRemote )
@@ -1637,11 +1640,11 @@ public class XP
 
 				    			if( !item.equals( Items.AIR ) )
 								{
-				    			if( Requirements.data.get( "salvageInfo" ).containsKey( regKey ) )
+				    			if( JsonConfig.data.get( "salvageInfo" ).containsKey( regKey ) )
 				    			{
 				    				if( player.getPosition().withinDistance( event.getPos(), 2 ) )
 									{
-										Map<String, Object> theMap = Requirements.data.get( "salvageInfo" ).get( regKey );
+										Map<String, Object> theMap = JsonConfig.data.get( "salvageInfo" ).get( regKey );
 										Item salvageItem = getItem( (String) theMap.get( "salvageItem" ) );
 										if( !salvageItem.equals( Items.AIR ) )
 										{
@@ -1861,8 +1864,8 @@ public class XP
 					oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
 
 					double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-					if( Requirements.data.get( "salvageInfo" ).containsKey( oItem.getItem().getRegistryName().toString() ) )
-						award *= (double) Requirements.data.get( "salvageInfo" ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
+					if( JsonConfig.data.get( "salvageInfo" ).containsKey( oItem.getItem().getRegistryName().toString() ) )
+						award *= (double) JsonConfig.data.get( "salvageInfo" ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
 
 					if( award > 0 )
 					{
@@ -2007,7 +2010,7 @@ public class XP
 	        ItemStack itemStack = event.getCrafting();
 	        ResourceLocation resLoc = itemStack.getItem().getRegistryName();
 
-	        if( Requirements.data.get( "xpValueCrafting" ).containsKey( resLoc.toString() ) )
+	        if( JsonConfig.data.get( "xpValueCrafting" ).containsKey( resLoc.toString() ) )
 	            addMaps( award, getXpCrafting( resLoc ) );
 
 	        multiplyMap( award, itemStack.getCount() );
@@ -2142,6 +2145,27 @@ public class XP
 		}
 	}
 
+	public static double getWornXpBoost( PlayerEntity player, Item item, String skillName )
+	{
+		double boost = 0;
+
+		if( !item.equals( Items.AIR ) )
+		{
+			String regName = item.getRegistryName().toString();
+			Map<String, Object> itemXpMap = JsonConfig.data.get( "wornItemXpBoost" ).get( regName );
+
+			if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
+			{
+				if( checkReq( player, item.getRegistryName(), "wear" ) )
+				{
+					boost = (double) itemXpMap.get( skillName );
+				}
+			}
+		}
+
+		return boost / 100;
+	}
+
 	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip )
 	{
 		double biomePenaltyMultiplier = getConfig( "biomePenaltyMultiplier" );
@@ -2159,6 +2183,7 @@ public class XP
 		String skillName = skill.name().toLowerCase();
 		double skillMultiplier = 1;
 		double difficultyMultiplier = 1;
+		double wornMultiplier = 1;
 
 		if( skillName.equals( "combat" ) || skillName.equals( "archery" ) || skillName.equals( "endurance" ) )
 		{
@@ -2248,8 +2273,9 @@ public class XP
 		}
 
 		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
-		Map<String, Object> heldMap = Requirements.data.get( "heldItemXpMultiplier" ).get( regKey );
-		Map<String, Map<String, Object>> test = Requirements.data.get( "heldItemXpMultiplier" );
+		Map<String, Object> heldMap = JsonConfig.data.get( "heldItemXpMultiplier" ).get( regKey );
+		PlayerInventory inv = player.inventory;
+		Map<String, Map<String, Object>> test = JsonConfig.data.get( "wornItemXpBoost" );
 
 		if( heldMap != null )
 		{
@@ -2257,14 +2283,42 @@ public class XP
 				amount *= (double) heldMap.get( skillName );
 		}
 
+///////////////////////////////WORN XP BOOST///////////////////////////////////
+
+		if( Curios.isLoaded() )
+		{
+			Collection<IItemHandler> curiosItems = Curios.getCurios(player).collect(Collectors.toSet());
+
+			for( IItemHandler value : curiosItems )
+			{
+				for (int i = 0; i < value.getSlots(); i++)
+				{
+					wornMultiplier += getWornXpBoost( player, value.getStackInSlot(i).getItem(), skillName );
+				}
+			};
+		}
+
+		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
+			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
+		if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
+			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 38 ).getItem(), skillName );
+		if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
+			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 37 ).getItem(), skillName );
+		if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
+			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 36 ).getItem(), skillName );
+		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand
+			wornMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 40 ).getItem(), skillName );
+
+///////////////////////////////////////////////////////////////////////////////
+
 		amount *= skillMultiplier;
 		amount *= difficultyMultiplier;
-
+		amount *= wornMultiplier;
 
 		Biome biome = player.world.getBiome( player.getPosition() );
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
-		Map<String, Object> biomeMap = Requirements.data.get( "biomeMultiplier" ).get( biomeKey );
+		Map<String, Object> biomeMap = JsonConfig.data.get( "biomeMultiplier" ).get( biomeKey );
 
 		if( !checkReq( player, resLoc, "biome" ) )
 			amount *= biomePenaltyMultiplier;
@@ -2354,9 +2408,9 @@ public class XP
 
 //			System.out.println( Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) );
 
-			if( Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) != null )
+			if( JsonConfig.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) != null )
 			{
-				Map<String, Object> commandMap = Requirements.data.get( "levelUpCommand" ).get( skillName.toLowerCase() );
+				Map<String, Object> commandMap = JsonConfig.data.get( "levelUpCommand" ).get( skillName.toLowerCase() );
 
 				for( Map.Entry<String, Object> entry : commandMap.entrySet() )
 				{
@@ -2410,43 +2464,43 @@ public class XP
 			switch( type )
 			{
 				case "wear":
-					if( Requirements.data.get( "wearReq" ).containsKey( res.toString() ) )
-						theMap = Requirements.data.get( "wearReq" ).get( res.toString() );
+					if( JsonConfig.data.get( "wearReq" ).containsKey( res.toString() ) )
+						theMap = JsonConfig.data.get( "wearReq" ).get( res.toString() );
 					break;
 
 				case "tool":
-					if( Requirements.data.get( "toolReq" ).containsKey( res.toString() ) )
-						theMap = Requirements.data.get( "toolReq" ).get( res.toString() );
+					if( JsonConfig.data.get( "toolReq" ).containsKey( res.toString() ) )
+						theMap = JsonConfig.data.get( "toolReq" ).get( res.toString() );
 					break;
 
 				case "weapon":
-					if( Requirements.data.get( "weaponReq" ).containsKey( res.toString() ) )
-						theMap = Requirements.data.get( "weaponReq" ).get( res.toString() );
+					if( JsonConfig.data.get( "weaponReq" ).containsKey( res.toString() ) )
+						theMap = JsonConfig.data.get( "weaponReq" ).get( res.toString() );
 					break;
 
 				case "use":
-					if( Requirements.data.get( "useReq" ).containsKey( res.toString() ) )
-						theMap = Requirements.data.get( "useReq" ).get( res.toString() );
+					if( JsonConfig.data.get( "useReq" ).containsKey( res.toString() ) )
+						theMap = JsonConfig.data.get( "useReq" ).get( res.toString() );
 					break;
 
 				case "place":
-					if( Requirements.data.get( "placeReq" ).containsKey( res.toString() ) )
-						theMap = Requirements.data.get( "placeReq" ).get( res.toString() );
+					if( JsonConfig.data.get( "placeReq" ).containsKey( res.toString() ) )
+						theMap = JsonConfig.data.get( "placeReq" ).get( res.toString() );
 					break;
 
 				case "break":
-					if( Requirements.data.get( "breakReq" ).containsKey( res.toString() ) )
-						theMap = Requirements.data.get( "breakReq" ).get( res.toString() );
+					if( JsonConfig.data.get( "breakReq" ).containsKey( res.toString() ) )
+						theMap = JsonConfig.data.get( "breakReq" ).get( res.toString() );
 					break;
 
 				case "biome":
-					if( Requirements.data.get( "biomeReq" ).containsKey( res.toString() ) )
-						theMap = Requirements.data.get( "biomeReq" ).get( res.toString() );
+					if( JsonConfig.data.get( "biomeReq" ).containsKey( res.toString() ) )
+						theMap = JsonConfig.data.get( "biomeReq" ).get( res.toString() );
 					break;
 
 				case "slayer":
-					if( Requirements.data.get( "killReq" ).containsKey( res.toString() ) )
-						theMap = Requirements.data.get( "killReq" ).get( res.toString() );
+					if( JsonConfig.data.get( "killReq" ).containsKey( res.toString() ) )
+						theMap = JsonConfig.data.get( "killReq" ).get( res.toString() );
 					break;
 
 				default:
@@ -2471,7 +2525,7 @@ public class XP
 		return gap;
 	}
 
-	private static void checkWornLevelReq( PlayerEntity player, Item item )
+	private static void applyWornPenalty( PlayerEntity player, Item item )
 	{
 		if( !checkReq( player, item.getRegistryName(), "wear" ) )
 		{
@@ -2494,8 +2548,8 @@ public class XP
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
-		Map<String, Object> biomeReq = Requirements.data.get( "biomeReq" ).get( biomeKey );
-		Map<String, Object> biomeEffect = Requirements.data.get( "biomeEffect" ).get( biomeKey );
+		Map<String, Object> biomeReq = JsonConfig.data.get( "biomeReq" ).get( biomeKey );
+		Map<String, Object> biomeEffect = JsonConfig.data.get( "biomeEffect" ).get( biomeKey );
 
 		if( !lastBiome.containsKey( playerUUID ) )
 			lastBiome.put( playerUUID, "none" );
@@ -2570,7 +2624,7 @@ public class XP
 				float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
 				float speedAmp = 0;
 				PlayerInventory inv = player.inventory;
-				System.out.println( ++debugInt );
+//				System.out.println( ++debugInt );
 
 				checkBiomeLevelReq( player );
 
@@ -2582,19 +2636,19 @@ public class XP
 						{
 							for (int i = 0; i < value.getSlots(); i++)
 							{
-								checkWornLevelReq( player, value.getStackInSlot(i).getItem() );
+								applyWornPenalty( player, value.getStackInSlot(i).getItem() );
 							}
 						});
 					}
 
 					if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-						checkWornLevelReq( player, player.inventory.getStackInSlot( 39 ).getItem() );
+						applyWornPenalty( player, player.inventory.getStackInSlot( 39 ).getItem() );
 					if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-						checkWornLevelReq( player, player.inventory.getStackInSlot( 38 ).getItem() );
+						applyWornPenalty( player, player.inventory.getStackInSlot( 38 ).getItem() );
 					if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-						checkWornLevelReq( player, player.inventory.getStackInSlot( 37 ).getItem() );
+						applyWornPenalty( player, player.inventory.getStackInSlot( 37 ).getItem() );
 					if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-						checkWornLevelReq( player, player.inventory.getStackInSlot( 36 ).getItem() );
+						applyWornPenalty( player, player.inventory.getStackInSlot( 36 ).getItem() );
 				}
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
@@ -2674,7 +2728,7 @@ public class XP
 			if( itemXp.containsKey( "fishing" ) )
 				award = itemXp.get( "fishing" );
 		}
-		Map<String, Map<String, Object>> fishPool = Requirements.data.get( "fishPool" );
+		Map<String, Map<String, Object>> fishPool = JsonConfig.data.get( "fishPool" );
 
 		if( fishPool != null )
 		{
@@ -2734,7 +2788,7 @@ public class XP
 
 				if( itemStack.isEnchantable() )
 				{
-					Map<String, Map<String, Object>> enchantMap = Requirements.data.get( "fishEnchantPool" );
+					Map<String, Map<String, Object>> enchantMap = JsonConfig.data.get( "fishEnchantPool" );
 					Map<Enchantment, Integer> outEnchants = new HashMap<>();
 
 					for( Map.Entry<String, Map<String, Object>> entry : enchantMap.entrySet() )

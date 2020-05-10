@@ -151,6 +151,9 @@
 		"minecraft:netherite_axe": {
 			"woodcutting": 60
 		},
+		"minecraft:netherite_hoe": {
+			"farming": 40
+		},
 		"minecraft:diamond_pickaxe": {
 			"mining": 40
 		},
@@ -159,6 +162,9 @@
 		},
 		"minecraft:diamond_axe": {
 			"woodcutting": 40
+		},
+		"minecraft:diamond_hoe": {
+			"farming": 30
 		},
 		"minecraft:golden_pickaxe": {
 			"mining": 30
@@ -169,6 +175,9 @@
 		"minecraft:golden_axe": {
 			"woodcutting": 30
 		},
+		"minecraft:golden_hoe": {
+			"farming": 50
+		},
 		"minecraft:iron_pickaxe": {
 			"mining": 20
 		},
@@ -177,6 +186,9 @@
 		},
 		"minecraft:iron_axe": {
 			"woodcutting": 20
+		},
+		"minecraft:iron_hoe": {
+			"farming": 20
 		},
 		"minecraft:stone_pickaxe": {
 			"mining": 5
@@ -187,6 +199,9 @@
 		"minecraft:stone_axe": {
 			"woodcutting": 5
 		},
+		"minecraft:stone_hoe": {
+			"farming": 5
+		},
 		"minecraft:wooden_pickaxe": {
 			"mining": 1
 		},
@@ -195,6 +210,9 @@
 		},
 		"minecraft:wooden_axe": {
 			"woodcutting": 1
+		},
+		"minecraft:wooden_hoe": {
+			"farming": 1
 		},
 		"oresandmetals:rune_pickaxe": {
 			"mining": 40
@@ -240,17 +258,6 @@
 		},
 		"oresandmetals:bronze_axe": {
 			"woodcutting": 1
-		}
-	},
-	"held_item_xp_multiplier": {
-		"minecraft:golden_pickaxe": {
-			"mining": 1.5
-		},
-		"minecraft:golden_shovel": {
-			"excavation": 1.5
-		},
-		"minecraft:golden_axe": {
-			"woodcutting": 1.5
 		}
 	},
 	"weapon_requirement": {
@@ -434,6 +441,85 @@
 		},
 		"oresandmetals:copper_ore": {
 			"mining": 1
+		}
+	},
+	"held_item_xp_multiplier": {
+		"minecraft:golden_pickaxe": {
+			"mining": 1.5
+		},
+		"minecraft:golden_shovel": {
+			"excavation": 1.5
+		},
+		"minecraft:golden_axe": {
+			"woodcutting": 1.5,
+			"combat": 1.5
+		},
+		"minecraft:golden_sword": {
+			"combat": 1.5
+		},
+		"minecraft:golden_hoe": {
+			"farming": 1.2
+		},
+		"minecraft:netherite_hoe": {
+			"farming": 1.15
+		},
+		"minecraft:diamond_hoe": {
+			"farming": 1.1
+		},
+		"minecraft:iron_hoe": {
+			"farming": 1.05
+		},
+		"minecraft:stone_hoe": {
+			"farming": 1.025
+		},
+		"minecraft:wooden_hoe": {
+			"farming": 1.01
+		}
+	},
+	"worn_item_xp_boost": {
+		"minecraft:golden_helmet": {
+			"mining": 5,
+			"endurance": 5
+		},
+		"minecraft:golden_chestplate": {
+			"mining": 5,
+			"endurance": 5
+		},
+		"minecraft:golden_leggings": {
+			"mining": 5,
+			"endurance": 5
+		},
+		"minecraft:golden_boots": {
+			"mining": 5,
+			"endurance": 5
+		},
+		"minecraft:leather_helmet": {
+			"agility": 2.5,
+			"farming": 2.5,
+			"woodcutting": 2.5
+		},
+		"minecraft:leather_chestplate": {
+			"agility": 2.5,
+			"farming": 2.5,
+			"woodcutting": 2.5
+		},
+		"minecraft:leather_leggings": {
+			"agility": 2.5,
+			"farming": 2.5,
+			"woodcutting": 2.5
+		},
+		"minecraft:leather_boots": {
+			"agility": 2.5,
+			"farming": 2.5,
+			"woodcutting": 2.5
+		},
+		"minecraft:turtle_helmet": {
+			"swimming": 10,
+			"fishing": 7.5
+		},
+		"minecraft:shield": {
+			"endurance": 12.5,
+			"combat": 5
 		}
 	},
 	"xp_value": {

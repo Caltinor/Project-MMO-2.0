@@ -3,11 +3,9 @@ package harmonised.pmmo.gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.Requirements;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -19,16 +17,12 @@ import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class XPOverlayGUI extends AbstractGui
@@ -302,11 +296,11 @@ public class XPOverlayGUI extends AbstractGui
 									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( skill ) );
 								}
 							}
-							else if( Requirements.data.get( "biomeMultiplier" ).containsKey( biomeKey ) )
+							else if( JsonConfig.data.get( "biomeMultiplier" ).containsKey( biomeKey ) )
 							{
-								if( Requirements.data.get( "biomeMultiplier" ).get( biomeKey ).containsKey( skillName ) )
+								if( JsonConfig.data.get( "biomeMultiplier" ).get( biomeKey ).containsKey( skillName ) )
 								{
-									tempDouble = ( (double) Requirements.data.get( "biomeMultiplier" ).get( biomeKey ).get( skillName ) - 1 ) * 100;
+									tempDouble = ( (double) JsonConfig.data.get( "biomeMultiplier" ).get( biomeKey ).get( skillName ) - 1 ) * 100;
 									tempDouble = Math.floor( tempDouble * 100 ) / 100;
 
 									if( tempDouble > 0 )
