@@ -20,6 +20,7 @@ public class MyScrollPanel extends ScrollPanel
     private int boxHeight = 256;
     private int x;
     private Map<String, Map<String, Object>> theMap;
+    private Button button;
 
     public MyScrollPanel( Minecraft client, int width, int height, int top, int left, String type, PlayerEntity player )
     {

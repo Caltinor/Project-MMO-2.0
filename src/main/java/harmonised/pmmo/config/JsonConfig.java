@@ -97,6 +97,7 @@ public class JsonConfig
         map.put( "levelUpCommand", new HashMap<>() );
         map.put( "heldItemXpBoost", new HashMap<>() );
         map.put( "wornItemXpBoost", new HashMap<>() );
+        map.put( "playerSpecific", new HashMap<>() );
     }
 
     public static class RequirementItem
@@ -128,6 +129,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> levelUpCommand = new HashMap<>();
     private final Map<String, RequirementItem> heldItemXpBoost = new HashMap<>();
     private final Map<String, RequirementItem> wornItemXpBoost = new HashMap<>();
+    private final Map<String, RequirementItem> playerSpecific = new HashMap<>();
 
     // -----------------------------------------------------------------------------
     //
@@ -216,6 +218,8 @@ public class JsonConfig
         if( Config.config.wornItemXpBoostEnabled.get() )
             updateReqSkills( req.wornItemXpBoost, localData.get( "wornItemXpBoost" ) );
 
+        updatePlayerSpecific( req.playerSpecific, localData.get( "playerSpecific" ) );
+
         data = localData;
     }
 
@@ -252,6 +256,7 @@ public class JsonConfig
             deserializeGroup(obj, "level_up_command", req.levelUpCommand::put, context);
             deserializeGroup(obj, "held_item_xp_boost", req.heldItemXpBoost::put, context);
             deserializeGroup(obj, "worn_item_xp_boost", req.wornItemXpBoost::put, context);
+            deserializeGroup(obj, "player_specific", req.playerSpecific::put, context);
 
             return req;
         }
@@ -831,13 +836,13 @@ public class JsonConfig
         {
             if( Skill.getInt( key ) != 0 )
             {
+                if( !outReq.containsKey( key ) )
+                    outReq.put( key, new HashMap<>() );
+
                 for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
                 {
                     if( entry.getValue() instanceof Double )
                     {
-                        if( !outReq.containsKey( key ) )
-                            outReq.put( key, new HashMap<>() );
-
                         if( (double) entry.getValue() >= 1 )
                             outReq.get( key ).put( entry.getKey(), entry.getValue() );
                         else
@@ -848,7 +853,21 @@ public class JsonConfig
                 }
             }
             else
-                LOGGER.error( "Invalid skill \" " + key + " \" in Level Up Command" );
+                LOGGER.error( "Invalid skill \"" + key + "\" in Level Up Command" );
+        });
+    }
+
+    private static void updatePlayerSpecific( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            if( !outReq.containsKey( key ) )
+                outReq.put( key, new HashMap<>() );
+
+            for( Map.Entry<String, Object> entry : value.requirements.entrySet() )
+            {
+                outReq.get( key ).put( entry.getKey(), entry.getValue() );
+            }
         });
     }
 

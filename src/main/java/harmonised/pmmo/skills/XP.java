@@ -87,7 +87,7 @@ public class XP
     private static boolean broadcastMilestone = Config.config.broadcastMilestone.get();
 	private static int debugInt = 0;
 	private static double passiveMobSlayerXp = Config.config.passiveMobSlayerXp.get();
-	private static double aggresiveMobSlayerXp = Config.config.passiveMobSlayerXp.get();
+	private static double aggresiveMobSlayerXp = Config.config.aggresiveMobSlayerXp.get();
 
 	public static Map<String, Double> localConfig = new HashMap<>();
     public static Map<String, Double> config = new HashMap<>();
@@ -1385,6 +1385,12 @@ public class XP
 	{
 		if( res.equals( Items.AIR.getRegistryName() ) )
 			return true;
+
+		if( JsonConfig.data.get( "playerSpecific" ).containsKey( player.getUniqueID().toString() ) )
+		{
+			if( JsonConfig.data.get( "playerSpecific" ).get( player.getUniqueID().toString() ).containsKey( "ignoreReq" ) )
+				return true;
+		}
 
 		String registryName = res.toString();
 		Map<String, Double> reqMap = new HashMap<>();
