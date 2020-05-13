@@ -1170,13 +1170,13 @@
 			"farming": 5
 		},
 		"minecraft:sheep": {
-			"farming": 8
+			"farming": 15
 		},
 		"minecraft:cow": {
-			"farming": 10
+			"farming": 20
 		},
 		"minecraft:pig": {
-			"farming": 8
+			"farming": 10
 		}
 	},
 	"player_specific": {
@@ -1312,7 +1312,7 @@
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		},
-		"bamboo_minecraft:jungle": {
+		"minecraft:bamboo_jungle": {
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		},
@@ -1364,7 +1364,7 @@
 			"woodcutting": -75,
 			"farming": -75
 		},
-		"bamboo_minecraft:jungle": {
+		"minecraft:bamboo_jungle": {
 			"agility": 25,
 			"swimming": 25,
 			"fishing": 25,
@@ -1373,7 +1373,7 @@
 			"woodcutting": -25,
 			"farming": -25
 		},
-		"bamboo_minecraft:jungle_hills": {
+		"minecraft:bamboo_jungle_hills": {
 			"agility": 25,
 			"swimming": 25,
 			"fishing": 25,
@@ -1421,7 +1421,7 @@
 			"agility": 20,
 			"endurance": 10
 		},
-		"bamboo_minecraft:jungle": {
+		"minecraft:bamboo_jungle": {
 			"agility": 20,
 			"endurance": 10
 		},
@@ -1461,7 +1461,7 @@
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},
-		"bamboo_minecraft:jungle": {
+		"minecraft:bamboo_jungle": {
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},

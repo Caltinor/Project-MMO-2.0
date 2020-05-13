@@ -1207,7 +1207,7 @@ public class XP
 			{
 				CompoundNBT skillsTag = getSkillsTag( player );
 
-				for( String key : skillsTag.keySet() )
+				for( String key : new HashSet<String>( skillsTag.keySet() ) )
 				{
 					double startXp = skillsTag.getDouble( key );
 					double floorXp = xpAtLevelDecimal( Math.floor( levelAtXpDecimal( startXp ) ) );
@@ -1218,8 +1218,9 @@ public class XP
 						skillsTag.putDouble( key, finalXp );
 					else
 						skillsTag.remove( key );
-					NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getDouble( key ), Skill.getInt( key ), 0, true ), (ServerPlayerEntity) player );
 				}
+
+				syncPlayer( player );
 			}
 		}
 		else if( source instanceof PlayerEntity && !( source instanceof FakePlayer ) )
@@ -1301,11 +1302,12 @@ public class XP
 					{
 						powerLevel += getPowerLevel( player );
 					}
-					powerLevel /= players.size();
-					playerPowerAverage = (float) Math.pow(0.5, players.size() - 1 );
 
-					if( playerPowerAverage < 1 )
-						powerLevel *= 1 + playerPowerAverage;
+//					powerLevel /= players.size();
+//					playerPowerAverage = (float) Math.pow(0.5, players.size() - 1 );
+//
+//					if( playerPowerAverage < 1 )
+//						powerLevel *= 1 + playerPowerAverage;
 
 					AttributeHandler.updateHP( mob, powerLevel );
 					AttributeHandler.updateDamage( mob, powerLevel );
