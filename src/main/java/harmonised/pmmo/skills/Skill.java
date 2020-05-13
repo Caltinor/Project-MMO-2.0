@@ -32,8 +32,9 @@ public enum Skill
     CRAFTING( 14 ),
     MAGIC( 15 ),
     SLAYER( 16 ),
-    FLETCHING( 17 ),
-    TAMING( 18 );
+    HUNTER( 17 ),
+    FLETCHING( 18 ),
+    TAMING( 19 );
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static Map< String, Integer > map = new HashMap<>();

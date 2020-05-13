@@ -79,7 +79,7 @@ public class JsonConfig
         map.put( "placeReq", new HashMap<>() );
         map.put( "breakReq", new HashMap<>() );
         map.put( "biomeReq", new HashMap<>() );
-        map.put( "biomeMultiplier", new HashMap<>() );
+        map.put( "biomeXpBonus", new HashMap<>() );
         map.put( "biomeEffect", new HashMap<>() );
         map.put( "biomeMobMultiplier", new HashMap<>() );
         map.put( "xpValue", new HashMap<>() );
@@ -118,7 +118,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> breaking = new HashMap<>();
     private final Map<String, RequirementItem> biome = new HashMap<>();
     private final Map<String, RequirementItem> biomeEff = new HashMap<>();
-    private final Map<String, RequirementItem> biomeMultiplier = new HashMap<>();
+    private final Map<String, RequirementItem> biomeXpBonus = new HashMap<>();
     private final Map<String, RequirementItem> biomeMobMultiplier = new HashMap<>();
     private final Map<String, RequirementItem> xpValue = new HashMap<>();
     private final Map<String, RequirementItem> xpValueCrafting = new HashMap<>();
@@ -180,8 +180,8 @@ public class JsonConfig
             updateReqEffects( req.biomeEff, localData.get( "biomeEffect" ) );
         }
 
-        if( Config.config.biomeMultiplierEnabled.get() )
-            updateReqSkills( req.biomeMultiplier, localData.get( "biomeMultiplier" ) );
+        if( Config.config.biomeXpBonusEnabled.get() )
+            updateReqSkills( req.biomeXpBonus, localData.get( "biomeXpBonus" ) );
 
         if( Config.config.biomeMobMultiplierEnabled.get() )
             updateReqAttributes( req.biomeMobMultiplier, localData.get( "biomeMobMultiplier" ) );
@@ -252,7 +252,7 @@ public class JsonConfig
             deserializeGroup(obj, "place_requirement", req.placing::put, context);
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);
             deserializeGroup(obj, "biome_requirement", req.biome::put, context);
-            deserializeGroup(obj, "biome_multiplier", req.biomeMultiplier::put, context);
+            deserializeGroup(obj, "biome_xp_bonus", req.biomeXpBonus::put, context);
             deserializeGroup(obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context);
             deserializeGroup(obj, "biome_effect", req.biomeEff::put, context);
             deserializeGroup(obj, "xp_value", req.xpValue::put, context);

@@ -30,7 +30,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, xpDropPosX, xpDropPosY;
 	private static int cooldown, tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
 	private static double xp, goalXp;
-	private static double lastTime, startLevel, timeDiff, tempDouble, tempDouble2, xpDropOffset = 0, xpDropOffsetCap = 0;
+	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0;
 	private static double barOffsetX = 0, barOffsetY = 0, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
@@ -49,6 +49,8 @@ public class XPOverlayGUI extends AbstractGui
 	private static double maxXp = XP.getConfig( "maxXp" );
 	private static XpDrop xpDrop;
 	private static int color;
+	private static long lastBonusUpdate = System.currentTimeMillis();
+	private static double itemBoost, biomeBoost;
 
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
@@ -125,44 +127,43 @@ public class XPOverlayGUI extends AbstractGui
 				{
 					xpDrop = xpDrops.get( i );
 					xpDrop.age += timeDiff / 5000000;
-
-					if( ( ( xpDrop.Y - tempDouble * timeDiff / 10000000 < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
+					decayRate = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
+					decayAmount = decayRate * timeDiff / 10000000;
+					
+					if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 					{
 						aSkill = skills.get( xpDrop.skill );
 
 						if( !xpDrop.skip )
 							skill = xpDrop.skill;
 
-						tempDouble2 = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
+						decayRate = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
 						if( stackXpDrops )
 						{
-							if( tempDouble2 < 0.1 )
-								tempDouble2 = 0.1;
+							if( decayRate < 0.1 )
+								decayRate = 0.1;
 						}
 						else
-							if( tempDouble2 < 1 )
-								tempDouble2 = 1;
+							if( decayRate < 1 )
+								decayRate = 1;
 
-						if( xpDrop.gainedXp - ( tempDouble2 * timeDiff / 10000000 ) < 0 )
+						if( xpDrop.gainedXp - ( decayAmount ) < 0 )
 						{
 							aSkill.goalXp += xpDrop.gainedXp;
 							xpDrop.gainedXp = 0;
 						}
 						else
 						{
-							xpDrop.gainedXp -= ( tempDouble2 * timeDiff / 10000000 );
-							aSkill.goalXp += ( tempDouble2 * timeDiff / 10000000 );
+							xpDrop.gainedXp -= ( decayAmount );
+							aSkill.goalXp += ( decayAmount );
 						}
 						aSkill.goalPos = XP.levelAtXpDecimal( aSkill.goalXp );
 					}
 
 					if( showXpDrops )
 					{
-
-						tempDouble = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
-
 						if( xpDropOffset == xpDropOffsetCap )
-							xpDrop.Y -= tempDouble * timeDiff / 10000000;
+							xpDrop.Y -= decayAmount;
 
 						if( xpDrop.Y < ( i * 9 ) - xpDropYLimit )
 							xpDrop.Y = ( i * 9 ) - xpDropYLimit;
@@ -195,13 +196,13 @@ public class XPOverlayGUI extends AbstractGui
 					
 					startLevel = Math.floor( aSkill.pos );
 					
-					tempDouble = ( aSkill.goalPos - aSkill.pos ) * 50;
-					if( tempDouble < 0.2 )
-						tempDouble = 0.2;
+					growAmount = ( aSkill.goalPos - aSkill.pos ) * 50;
+					if( growAmount < 0.2 )
+						growAmount = 0.2;
 					
 					if( aSkill.pos < aSkill.goalPos )
 					{
-						aSkill.pos += 0.00005d * tempDouble;
+						aSkill.pos += 0.00005d * growAmount;
 						aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
 						
 //						if( cooldown < 10000 )
@@ -269,54 +270,55 @@ public class XPOverlayGUI extends AbstractGui
 
 				if( guiOn )
 				{
-						listIndex = 0;
+					listIndex = 0;
+
+					if( System.currentTimeMillis() - lastBonusUpdate > 250 )
+					{
 						for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
 						{
-							skillName = entry.getKey().name().toLowerCase();
-							tempDouble = XP.levelAtXpDecimal( entry.getValue().xp );
-							tempString = DP.dp( tempDouble );
-							color = XP.getSkillColor( entry.getKey() );
-							if( tempDouble >= maxLevel )
-								tempString = "" + maxLevel;
-							drawString( fontRenderer, tempString, 3, 3 + listIndex, color );
-							drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
-							drawString( fontRenderer, " | " + DP.dprefix( entry.getValue().xp ), levelGap + skillGap + 13, 3 + listIndex, color );
+							skill = entry.getKey();
 
-							ResourceLocation resLoc = player.world.getBiome( player.getPosition() ).getRegistryName();
-							String biomeKey = resLoc.toString();
-							metBiomeReq = XP.checkReq( player, resLoc, "biome" );
+							itemBoost = XP.getItemBoost( player, skill );
+							biomeBoost = XP.getBiomeBoost( player, skill );
 
-							if( !metBiomeReq )
-							{
-								if( biomePenaltyMultiplier < 1 )
-								{
-									tempDouble = (biomePenaltyMultiplier - 1) * 100;
-									tempDouble = Math.floor( tempDouble * 100 ) / 100;
-									tempString = ( tempDouble % 1 == 0 ? (int) Math.floor( tempDouble ) : DP.dp( tempDouble ) ) + "%";
-									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, color );
-								}
-							}
-							else if( JsonConfig.data.get( "biomeMultiplier" ).containsKey( biomeKey ) )
-							{
-								if( JsonConfig.data.get( "biomeMultiplier" ).get( biomeKey ).containsKey( skillName ) )
-								{
-									tempDouble = ( (double) JsonConfig.data.get( "biomeMultiplier" ).get( biomeKey ).get( skillName ) - 1 ) * 100;
-									tempDouble = Math.floor( tempDouble * 100 ) / 100;
-
-									if( tempDouble > 0 )
-										tempString = "+" + ( tempDouble % 1 == 0 ? (int) Math.floor( tempDouble ) : DP.dp( tempDouble ) ) + "%";
-									else if ( tempDouble < 0 )
-										tempString = ( tempDouble % 1 == 0 ? (int) Math.floor( tempDouble ) : DP.dp( tempDouble ) ) + "%";
-									else
-										tempString = "";
-
-									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( skill ) );
-								}
-							}
-							
-
-							listIndex += 9;
+							if( itemBoost + biomeBoost >= -100 )
+								skills.get( skill ).bonus = itemBoost + biomeBoost;
+							else
+								skills.get( skill ).bonus = -100;
 						}
+						lastBonusUpdate = System.currentTimeMillis();
+					}
+
+					for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
+					{
+						aSkill = entry.getValue();
+						skill = entry.getKey();
+						skillName = entry.getKey().name().toLowerCase();
+						level = XP.levelAtXpDecimal( entry.getValue().xp );
+						tempString = DP.dp( level );
+						color = XP.getSkillColor( entry.getKey() );
+						if( level >= maxLevel )
+							tempString = "" + maxLevel;
+						drawString( fontRenderer, tempString, 3, 3 + listIndex, color );
+						drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
+						drawString( fontRenderer, " | " + DP.dprefix( entry.getValue().xp ), levelGap + skillGap + 13, 3 + listIndex, color );
+
+						if( aSkill.bonus != 0 )
+						{
+							bonus = Math.floor( aSkill.bonus * 100 ) / 100;
+
+							if( bonus > 0 )
+								tempString = "+" + ( bonus % 1 == 0 ? (int) Math.floor( bonus ) : DP.dp( bonus ) ) + "%";
+							else if ( bonus < 0 )
+								tempString = ( bonus % 1 == 0 ? (int) Math.floor( bonus ) : DP.dp( bonus ) ) + "%";
+							else
+								tempString = "";
+
+							drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 27, 3 + listIndex, color );
+						}
+
+						listIndex += 9;
+					}
 				}
 			}
 		}

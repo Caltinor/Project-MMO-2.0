@@ -40,7 +40,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeReqEnabled;
-        public ConfigHelper.ConfigValueListener<Boolean> biomeMultiplierEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> biomeXpBonusEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> xpValueEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> xpValueCraftingEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> oreEnabled;
@@ -174,7 +174,7 @@ public class Config
         //Magic
 
         //Slayer
-        public ConfigHelper.ConfigValueListener<Double> passiveMobSlayerXp;
+        public ConfigHelper.ConfigValueListener<Double> passiveMobHunterXp;
         public ConfigHelper.ConfigValueListener<Double> aggresiveMobSlayerXp;
 
 
@@ -299,10 +299,10 @@ public class Config
                         .translation( "pmmo.biomeReqEnabled" )
                         .define( "biomeReqEnabled", true) );
 
-                this.biomeMultiplierEnabled = subscriber.subscribe(builder
+                this.biomeXpBonusEnabled = subscriber.subscribe(builder
                         .comment( "Should xp multipliers be enabled? False means no multipliers" )
-                        .translation( "pmmo.biomeMultiplierEnabled" )
-                        .define( "biomeMultiplierEnabled", true) );
+                        .translation( "pmmo.biomeXpBonusEnabled" )
+                        .define( "biomeXpBonusEnabled", true) );
 
                 this.xpValueEnabled = subscriber.subscribe(builder
                         .comment( "Should xp values for breaking things first time be enabled? False means only Hardness xp is awarded for breaking" )
@@ -847,21 +847,26 @@ public class Config
 
             builder.push( "Slayer" );
             {
-                this.passiveMobSlayerXp = subscriber.subscribe(builder
-                        .comment( "How much slayer xp is awarded upon killing a passive mob by default" )
-                        .translation( "pmmo.passiveMobSlayerXp" )
-                        .defineInRange( "passiveMobSlayerXp", 1D, 0, 10000) );
-
                 this.aggresiveMobSlayerXp = subscriber.subscribe(builder
                         .comment( "How much slayer xp is awarded upon killing an aggresive mob by default" )
                         .translation( "pmmo.aggresiveMobSlayerXp" )
-                        .defineInRange( "aggresiveMobSlayerXp", 3D, 0, 10000) );
+                        .defineInRange( "aggresiveMobSlayerXp", 0D, 0, 10000) );
 
 
                 builder.pop();
             }
 
-            builder.push( "taming" );
+            builder.push( "Hunter" );
+            {
+                this.passiveMobHunterXp = subscriber.subscribe(builder
+                        .comment( "How much hunter xp is awarded upon killing a passive mob by default" )
+                        .translation( "pmmo.passiveMobHunterXp" )
+                        .defineInRange( "passiveMobHunterXp", 0D, 0, 10000) );
+
+                builder.pop();
+            }
+
+            builder.push( "Taming" );
             {
                 this.tamingXpEnabled = subscriber.subscribe(builder
                         .comment( "Do players get xp for taming animals? (no default values, need to fill them in json config)" )

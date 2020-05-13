@@ -84,7 +84,7 @@ public class XP
     private static boolean showDonatorWelcome = Config.config.showDonatorWelcome.get();
     private static boolean broadcastMilestone = Config.config.broadcastMilestone.get();
 	private static int debugInt = 0;
-	private static double passiveMobSlayerXp = Config.config.passiveMobSlayerXp.get();
+	private static double passiveMobHunterXp = Config.config.passiveMobHunterXp.get();
 	private static double aggresiveMobSlayerXp = Config.config.aggresiveMobSlayerXp.get();
 
 	public static Map<String, Double> localConfig = new HashMap<>();
@@ -127,6 +127,8 @@ public class XP
 		skillColors.put( Skill.FISHING, 0x00ccff );
 		skillColors.put( Skill.CRAFTING, 0xff9900 );
 		skillColors.put( Skill.MAGIC, 0x0000ff );
+		skillColors.put( Skill.SLAYER, 0xffffff );
+		skillColors.put( Skill.HUNTER, 0xcf7815 );
 		skillColors.put( Skill.FLETCHING, 0xff9700 );
 		skillColors.put( Skill.TAMING, 0xffffff );
 
@@ -146,6 +148,7 @@ public class XP
 		skillTextFormat.put( "crafting", TextFormatting.GOLD );
 		skillTextFormat.put( "magic", TextFormatting.BLUE );
 		skillTextFormat.put( "slayer", TextFormatting.DARK_GRAY );
+		skillTextFormat.put( "hunter", TextFormatting.GOLD );
 		skillTextFormat.put( "fletching", TextFormatting.DARK_GREEN );
 		skillTextFormat.put( "taming", TextFormatting.WHITE );
 		skillTextFormat.put( "power", TextFormatting.AQUA );
@@ -1086,43 +1089,7 @@ public class XP
 					float lowHpBonus = 1.0f;
 
 					if( damage > targetHealth )		//no overkill xp
-					{
-						double normalMaxHp = target.getAttribute( SharedMonsterAttributes.MAX_HEALTH ).getBaseValue();
 						damage = targetHealth;
-						double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
-
-						if( JsonConfig.data.get( "killXp" ).containsKey( target.getEntityString() ) )
-						{
-							Map<String, Object> killXp = JsonConfig.data.get( "killXp" ).get( target.getEntityString() );
-							for( Map.Entry<String, Object> entry : killXp.entrySet() )
-							{
-								awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * scaleMultiplier, false );
-							}
- 						}
-						else if( target instanceof AnimalEntity )
-							awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobSlayerXp * scaleMultiplier, false );
-						else if( target instanceof MobEntity )
-                            awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleMultiplier, false );
-
-//						System.out.println( ( target.getMaxHealth() - normalMaxHp ) / 10 );
-
-						if( JsonConfig.data.get( "mobRareDrop" ).containsKey( target.getEntityString() ) )
-						{
-							Map<String, Object> dropTable = JsonConfig.data.get( "mobRareDrop" ).get( target.getEntityString() );
-
-							for( Map.Entry<String, Object> entry : dropTable.entrySet() )
-							{
-								if( Math.floor( Math.random() * (double) entry.getValue() ) == 0 )
-								{
-									ItemStack itemStack = new ItemStack( getItem( entry.getKey() ) );
-									dropItemStack( itemStack, player.world, target.getPosition() );
-
-									player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), false );
-									player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), true );
-								}
-							}
-						}
-					}
 
 					amount += damage * 3;
 
@@ -1230,7 +1197,10 @@ public class XP
 
 	public static void handleLivingDeath( LivingDeathEvent event )
 	{
-		if( event.getEntity() instanceof PlayerEntity && !(event.getEntity() instanceof FakePlayer) )
+		LivingEntity target = event.getEntityLiving();
+		Entity source = event.getSource().getTrueSource();
+
+		if( target instanceof PlayerEntity && !( target instanceof FakePlayer ) )
 		{
 			PlayerEntity player = (PlayerEntity) event.getEntity();
 			if( !player.world.isRemote() )
@@ -1244,8 +1214,50 @@ public class XP
 					double diffXp = startXp - floorXp;
 					double finalXp = floorXp + diffXp * (1 - deathXpPenaltyMultiplier);
 
-					skillsTag.putDouble( key, finalXp );
+					if( finalXp > 0 )
+						skillsTag.putDouble( key, finalXp );
+					else
+						skillsTag.remove( key );
 					NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getDouble( key ), Skill.getInt( key ), 0, true ), (ServerPlayerEntity) player );
+				}
+			}
+		}
+		else if( source instanceof PlayerEntity && !( source instanceof FakePlayer ) )
+		{
+			PlayerEntity player = (PlayerEntity) source;
+
+			double normalMaxHp = target.getAttribute( SharedMonsterAttributes.MAX_HEALTH ).getBaseValue();
+			double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
+
+			if( JsonConfig.data.get( "killXp" ).containsKey( target.getEntityString() ) )
+			{
+				Map<String, Object> killXp = JsonConfig.data.get( "killXp" ).get( target.getEntityString() );
+				for( Map.Entry<String, Object> entry : killXp.entrySet() )
+				{
+					awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * scaleMultiplier, false );
+				}
+			}
+			else if( target instanceof AnimalEntity )
+				awardXp( player, Skill.HUNTER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleMultiplier, false );
+			else if( target instanceof MobEntity )
+				awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleMultiplier, false );
+
+//					System.out.println( ( target.getMaxHealth() - normalMaxHp ) / 10 );
+
+			if( JsonConfig.data.get( "mobRareDrop" ).containsKey( target.getEntityString() ) )
+			{
+				Map<String, Object> dropTable = JsonConfig.data.get( "mobRareDrop" ).get( target.getEntityString() );
+
+				for( Map.Entry<String, Object> entry : dropTable.entrySet() )
+				{
+					if( Math.floor( Math.random() * (double) entry.getValue() ) == 0 )
+					{
+						ItemStack itemStack = new ItemStack( getItem( entry.getKey() ) );
+						dropItemStack( itemStack, player.world, target.getPosition() );
+
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), false );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), true );
+					}
 				}
 			}
 		}
@@ -2188,60 +2200,12 @@ public class XP
 			}
 		}
 
-		return boost / 100;
+		return boost;
 	}
 
-	public static void awardXp( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip )
+	public static double getSkillMultiplier( PlayerEntity player, Skill skill )
 	{
-		for( Map.Entry<String, Object> entry : map.entrySet() )
-		{
-			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip );
-		}
-	}
-
-	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip )
-	{
-		double biomePenaltyMultiplier = getConfig( "biomePenaltyMultiplier" );
-		double maxXp = getConfig( "maxXp" );
-
-		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
-			return;
-
-		if( skill == skill.INVALID_SKILL )
-		{
-			LOGGER.error( "Invalid skill at awardXp" );
-			return;
-		}
-
-		String skillName = skill.name().toLowerCase();
 		double skillMultiplier = 1;
-		double difficultyMultiplier = 1;
-		double itemMultiplier = 1;
-
-		if( skillName.equals( "combat" ) || skillName.equals( "archery" ) || skillName.equals( "endurance" ) )
-		{
-			switch( player.world.getDifficulty() )
-			{
-			case PEACEFUL:
-				difficultyMultiplier = Config.config.peacefulMultiplier.get();
-				break;
-
-			case EASY:
-				difficultyMultiplier = Config.config.easyMultiplier.get();
-				break;
-
-			case NORMAL:
-				difficultyMultiplier = Config.config.normalMultiplier.get();
-				break;
-
-			case HARD:
-				difficultyMultiplier = Config.config.hardMultiplier.get();
-				break;
-
-				default:
-					break;
-			}
-		}
 
 		switch( skill )
 		{
@@ -2305,6 +2269,46 @@ public class XP
 				break;
 		}
 
+		return skillMultiplier;
+	}
+
+	public static double getDifficultyMultiplier( PlayerEntity player, Skill skill )
+	{
+		double difficultyMultiplier = 1;
+
+		if( skill == Skill.COMBAT || skill == Skill.ARCHERY || skill == Skill.ENDURANCE )
+		{
+			switch( player.world.getDifficulty() )
+			{
+				case PEACEFUL:
+					difficultyMultiplier = Config.config.peacefulMultiplier.get();
+					break;
+
+				case EASY:
+					difficultyMultiplier = Config.config.easyMultiplier.get();
+					break;
+
+				case NORMAL:
+					difficultyMultiplier = Config.config.normalMultiplier.get();
+					break;
+
+				case HARD:
+					difficultyMultiplier = Config.config.hardMultiplier.get();
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		return difficultyMultiplier;
+	}
+
+	public static double getItemBoost( PlayerEntity player, Skill skill )
+	{
+		double itemBoost = 0;
+
+		String skillName = skill.toString().toLowerCase();
 		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
 		Map<String, Object> heldMap = JsonConfig.data.get( "heldItemXpBoost" ).get( regKey );
 		PlayerInventory inv = player.inventory;
@@ -2312,10 +2316,8 @@ public class XP
 		if( heldMap != null )
 		{
 			if( heldMap.containsKey( skillName ) )
-				itemMultiplier += (double) heldMap.get( skillName ) / 100;
+				itemBoost += (double) heldMap.get( skillName ) / 100;
 		}
-
-///////////////////////////////WORN XP BOOST///////////////////////////////////
 
 		if( Curios.isLoaded() )
 		{
@@ -2325,39 +2327,95 @@ public class XP
 			{
 				for (int i = 0; i < value.getSlots(); i++)
 				{
-					itemMultiplier += getWornXpBoost( player, value.getStackInSlot(i).getItem(), skillName );
+					itemBoost += getWornXpBoost( player, value.getStackInSlot(i).getItem(), skillName );
 				}
 			};
 		}
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
 		if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 38 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 38 ).getItem(), skillName );
 		if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 37 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 37 ).getItem(), skillName );
 		if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 36 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 36 ).getItem(), skillName );
 		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand
-			itemMultiplier += getWornXpBoost( player, player.inventory.getStackInSlot( 40 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 40 ).getItem(), skillName );
 
-///////////////////////////////////////////////////////////////////////////////
+		return itemBoost;
+	}
 
-		amount *= skillMultiplier;
-		amount *= difficultyMultiplier;
-		amount *= itemMultiplier;
+	public static double getBiomeBoost( PlayerEntity player, Skill skill )
+	{
+		double biomeBoost = 0;
+		double theBiomeBoost = 0;
+		double biomePenaltyMultiplier = getConfig( "biomePenaltyMultiplier" );
+		String skillName = skill.toString().toLowerCase();
 
 		Biome biome = player.world.getBiome( player.getPosition() );
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
-		Map<String, Object> biomeMap = JsonConfig.data.get( "biomeMultiplier" ).get( biomeKey );
+		Map<String, Object> biomeMap = JsonConfig.data.get( "biomeXpBonus" ).get( biomeKey );
 
-		if( !checkReq( player, resLoc, "biome" ) )
-			amount *= biomePenaltyMultiplier;
-		else if( biomeMap != null && biomeMap.containsKey( skillName ) )
-			amount *= (double) biomeMap.get( skillName );
+		if( biomeMap != null && biomeMap.containsKey( skillName ) )
+		{
+			theBiomeBoost = (double) biomeMap.get( skillName );
 
-		amount *= globalMultiplier;
+			if( !checkReq( player, resLoc, "biome" ) )
+			{
+				if( theBiomeBoost > -biomePenaltyMultiplier * 100 )
+					biomeBoost = -biomePenaltyMultiplier * 100;
+				else
+					biomeBoost = theBiomeBoost;
+			}
+			else
+				biomeBoost = theBiomeBoost;
+		}
+
+		return biomeBoost;
+	}
+
+
+
+	public static void awardXp( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip )
+	{
+		for( Map.Entry<String, Object> entry : map.entrySet() )
+		{
+			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip );
+		}
+	}
+
+	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip )
+	{
+		double maxXp = getConfig( "maxXp" );
+
+		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
+			return;
+
+		if( skill == skill.INVALID_SKILL )
+		{
+			LOGGER.error( "Invalid skill at awardXp" );
+			return;
+		}
+
+		String skillName = skill.name().toLowerCase();
+		double skillMultiplier = getSkillMultiplier( player, skill );
+		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
+
+		double itemBoost = getItemBoost( player, skill );
+		double biomeBoost = getBiomeBoost( player, skill );
+		double additiveMultiplier = 1 + (itemBoost + biomeBoost) / 100;
+
+		amount *= skillMultiplier;
+		amount *= difficultyMultiplier;
+
+		if( additiveMultiplier >= 0 )
+			amount *= additiveMultiplier;
+		else
+			return; //amount will be 0
+
+ 		amount *= globalMultiplier;
 
 		if( amount == 0 )
 			return;
@@ -2882,6 +2940,7 @@ public class XP
 
 				dropItemStack( itemStack, player.world, player.getPosition() );
 				player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), true );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( textStyle.get( "green" ) ), false );
 
 				award += (double) match.get( "xp" ) * count;
 			}

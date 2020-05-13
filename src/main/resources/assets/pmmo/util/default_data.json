@@ -271,7 +271,7 @@
 			"combat": 60
 		},
 		"minecraft:netherite_axe": {
-			"combat": 60
+			"combat": 65
 		},
 		"minecraft:netherite_sword": {
 			"combat": 60
@@ -283,7 +283,7 @@
 			"combat": 40
 		},
 		"minecraft:diamond_axe": {
-			"combat": 40
+			"combat": 45
 		},
 		"minecraft:diamond_sword": {
 			"combat": 40
@@ -295,7 +295,7 @@
 			"combat": 30
 		},
 		"minecraft:golden_axe": {
-			"combat": 30
+			"combat": 35
 		},
 		"minecraft:golden_sword": {
 			"combat": 30
@@ -307,10 +307,10 @@
 			"combat": 20
 		},
 		"minecraft:iron_axe": {
-			"combat": 20
+			"combat": 30
 		},
 		"minecraft:iron_sword": {
-			"combat": 20
+			"combat": 25
 		},
 		"minecraft:stone_pickaxe": {
 			"combat": 5
@@ -319,7 +319,7 @@
 			"combat": 5
 		},
 		"minecraft:stone_axe": {
-			"combat": 5
+			"combat": 10
 		},
 		"minecraft:stone_sword": {
 			"combat": 5
@@ -496,22 +496,26 @@
 		"minecraft:leather_helmet": {
 			"agility": 2.5,
 			"farming": 2.5,
-			"woodcutting": 2.5
+			"woodcutting": 2.5,
+			"fishing": 2.5
 		},
 		"minecraft:leather_chestplate": {
 			"agility": 2.5,
 			"farming": 2.5,
-			"woodcutting": 2.5
+			"woodcutting": 2.5,
+			"fishing": 2.5
 		},
 		"minecraft:leather_leggings": {
 			"agility": 2.5,
 			"farming": 2.5,
-			"woodcutting": 2.5
+			"woodcutting": 2.5,
+			"fishing": 2.5
 		},
 		"minecraft:leather_boots": {
 			"agility": 2.5,
 			"farming": 2.5,
-			"woodcutting": 2.5
+			"woodcutting": 2.5,
+			"fishing": 2.5
 		},
 		"minecraft:turtle_helmet": {
 			"swimming": 10,
@@ -934,10 +938,13 @@
 			"fishing": 25
 		},
 		"minecraft:tropical_fish": {
-			"fishing": 100
+			"fishing": 200
 		},
 		"minecraft:saddle": {
 			"fishing": 75
+		},
+		"minecraft:tripwire_hook": {
+			"fishing": 35
 		},
 		"oresandmetals:runite_ore": {
 			"mining": 45
@@ -1305,78 +1312,104 @@
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		},
+		"bamboo_minecraft:jungle": {
+			"speedBonus": 1.5,
+			"hpBonus": 1.25
+		},
+		"minecraft:bamboo_jungle_hills": {
+			"speedBonus": 1.5,
+			"hpBonus": 1.25
+		},
 		"minecraft:jungle_edge": {
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		}
 	},
-	"biome_multiplier": {
+	"biome_xp_bonus": {
 		"minecraft:river": {
-			"fishing": 1.05
+			"fishing": 5
 		},
 		"minecraft:desert": {
-			"excavation": 1.1,
-			"farming": 0.85
+			"excavation": 10,
+			"farming": -15
 		},
 		"minecraft:the_end": {
-			"flying": 2,
-			"combat": 1.2,
-			"archery": 1.5,
-			"endurance": 1.2
+			"flying": 100,
+			"combat": 20,
+			"archery": 50,
+			"endurance": 20
 		},
 		"minecraft:nether": {
-			"combat": 1.25,
-			"archery": 1.25,
-			"endurance": 1.25,
-			"flying": 2.5,
-			"farming": 0.75
+			"combat": 25,
+			"archery": 25,
+			"endurance": 25,
+			"flying": 250,
+			"farming": -25
 		},
 		"minecraft:jungle": {
-			"agility": 1.25,
-			"swimming": 1.25,
-			"fishing": 1.25,
-			"combat": 1.1,
-			"archery": 1.35,
-			"woodcutting": 0.75,
-			"farming": 0.75
+			"agility": 25,
+			"swimming": 25,
+			"fishing": 25,
+			"combat": 10,
+			"archery": 35,
+			"woodcutting": -25,
+			"farming": -25
 		},
 		"minecraft:jungle_hills": {
-			"agility": 1.25,
-			"swimming": 1.25,
-			"fishing": 1.25,
-			"combat": 1.1,
-			"archery": 1.35,
-			"woodcutting": 0.75,
-			"farming": 0.75
+			"agility": 25,
+			"swimming": 25,
+			"fishing": 25,
+			"combat": 10,
+			"archery": 35,
+			"woodcutting": -75,
+			"farming": -75
+		},
+		"bamboo_minecraft:jungle": {
+			"agility": 25,
+			"swimming": 25,
+			"fishing": 25,
+			"combat": 10,
+			"archery": 35,
+			"woodcutting": -25,
+			"farming": -25
+		},
+		"bamboo_minecraft:jungle_hills": {
+			"agility": 25,
+			"swimming": 25,
+			"fishing": 25,
+			"combat": 10,
+			"archery": 35,
+			"woodcutting": -75,
+			"farming": -75
 		},
 		"minecraft:jungle_edge": {
-			"agility": 1.25,
-			"swimming": 1.25,
-			"fishing": 1.25,
-			"combat": 1.1,
-			"archery": 1.35,
-			"woodcutting": 0.75,
-			"farming": 0.75
+			"agility": 25,
+			"swimming": 25,
+			"fishing": 25,
+			"combat": 10,
+			"archery": 35,
+			"woodcutting": -75,
+			"farming": -75
 		},
 		"minecraft:ocean": {
-			"swimming": 1.25,
-			"fishing": 1.1
+			"swimming": 25,
+			"fishing": 10
 		},
 		"minecraft:deep_ocean": {
-			"swimming": 1.5,
-			"fishing": 1.2
+			"swimming": 50,
+			"fishing": 20
 		},
 		"minecraft:cold_ocean": {
-			"swimming": 1.5,
-			"fishing": 1.3
+			"swimming": 50,
+			"fishing": 30
 		},
 		"minecraft:frozen_ocean": {
-			"swimming": 1.75,
-			"fishing": 1.4
+			"swimming": 75,
+			"fishing": 40
 		},
 		"minecraft:deep_frozen_ocean": {
-			"swimming": 2,
-			"fishing": 1.5
+			"swimming": 100,
+			"fishing": 50
 		}
 	},
 	"biome_requirement": {
@@ -1385,6 +1418,14 @@
 			"endurance": 10
 		},
 		"minecraft:jungle_hills": {
+			"agility": 20,
+			"endurance": 10
+		},
+		"bamboo_minecraft:jungle": {
+			"agility": 20,
+			"endurance": 10
+		},
+		"minecraft:bamboo_jungle_hills": {
 			"agility": 20,
 			"endurance": 10
 		},
@@ -1417,6 +1458,14 @@
 			"minecraft:weakness": 0
 		},
 		"minecraft:jungle_hills": {
+			"minecraft:slowness": 0,
+			"minecraft:weakness": 0
+		},
+		"bamboo_minecraft:jungle": {
+			"minecraft:slowness": 0,
+			"minecraft:weakness": 0
+		},
+		"minecraft:bamboo_jungle_hills": {
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},
@@ -3173,6 +3222,15 @@
 			"xp": 0.25,
 			"minCount": 5,
 			"maxCount": 64
+		},
+		"minecraft:lily_pad": {
+			"startWeight": 500,
+			"startLevel": 1,
+			"endWeight": 25,
+			"endLevel": 125,
+			"xp": 0.25,
+			"minCount": 5,
+			"maxCount": 24
 		},
 		"minecraft:string": {
 			"startWeight": 200,

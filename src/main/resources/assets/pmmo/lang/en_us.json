@@ -29,6 +29,7 @@
   "pmmo.slayer": "Slayer",
   "pmmo.fletching": "Fletching",
   "pmmo.taming": "Taming",
+  "pmmo.hunter": "Hunter",
   "pmmo.welcome": "Thank you for using Project MMO! Most features can be tweaked in config.",
   "pmmo.savedFall": "Saved %1$s fall damage!",
   "pmmo.extraDrop": "%1$s Extra %2$s Dropped!",
