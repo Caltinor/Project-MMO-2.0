@@ -685,40 +685,40 @@
 			"woodcutting": 26
 		},
 		"minecraft:oak_log": {
-			"woodcutting": 18
+			"woodcutting": 8
 		},
 		"minecraft:birch_log": {
-			"woodcutting": 19
+			"woodcutting": 12
 		},
 		"minecraft:spruce_log": {
-			"woodcutting": 15
+			"woodcutting": 9
 		},
 		"minecraft:jungle_log": {
-			"woodcutting": 12
+			"woodcutting": 9
 		},
 		"minecraft:dark_oak_log": {
-			"woodcutting": 11
+			"woodcutting": 10
 		},
 		"minecraft:acacia_log": {
-			"woodcutting": 22
+			"woodcutting": 14
 		},
 		"minecraft:oak_wood": {
-			"woodcutting": 18
+			"woodcutting": 8
 		},
 		"minecraft:birch_wood": {
-			"woodcutting": 19
-		},
-		"minecraft:spruce_wood": {
-			"woodcutting": 15
-		},
-		"minecraft:jungle_wood": {
 			"woodcutting": 12
 		},
+		"minecraft:spruce_wood": {
+			"woodcutting": 9
+		},
+		"minecraft:jungle_wood": {
+			"woodcutting": 9
+		},
 		"minecraft:dark_oak_wood": {
-			"woodcutting": 11
+			"woodcutting": 10
 		},
 		"minecraft:acacia_wood": {
-			"woodcutting": 22
+			"woodcutting": 14
 		},
 		"minecraft:oak_planks": {
 			"woodcutting": 5
@@ -886,7 +886,7 @@
 			"farming": 12.5
 		},
 		"minecraft:poppy": {
-			"farming": 17.5
+			"farming": 11.5
 		},
 		"minecraft:vine": {
 			"farming": 3.5
@@ -922,16 +922,16 @@
 			"farming": 12.5
 		},
 		"minecraft:pufferfish": {
-			"fishing": 40
-		},
-		"minecraft:name_tag": {
-			"fishing": 100
-		},
-		"minecraft:cod": {
 			"fishing": 35
 		},
+		"minecraft:name_tag": {
+			"fishing": 60
+		},
+		"minecraft:cod": {
+			"fishing": 20
+		},
 		"minecraft:salmon": {
-			"fishing": 45
+			"fishing": 25
 		},
 		"minecraft:tropical_fish": {
 			"fishing": 100
@@ -1158,6 +1158,30 @@
 			"crafting": 1000
 		}
 	},
+	"breeding_xp": {
+		"minecraft:chicken": {
+			"farming": 5
+		},
+		"minecraft:sheep": {
+			"farming": 8
+		},
+		"minecraft:cow": {
+			"farming": 10
+		},
+		"minecraft:pig": {
+			"farming": 8
+		}
+	},
+	"player_specific": {
+		"UUID-GOES-HERE": {
+			"ignoreReq": 1
+		}
+	},
+	"taming_xp": {
+		"minecraft:exampleanimal": {
+			"taming": 10
+		}
+	},
 	"kill_requirement": {
 		"minecraft:silverfish": {
 			"slayer": 10
@@ -1369,7 +1393,7 @@
 			"endurance": 10
 		},
 		"minecraft:ocean": {
-			"swimming": 10
+			"swimming": 5
 		},
 		"minecraft:deep_ocean": {
 			"swimming": 15
@@ -2147,7 +2171,7 @@
 			"levelReq": 5
 		},
 		"minecraft:wooden_sword": {
-			"salvageItem": "minecraft:oak_planks",
+			"salvageItem": "minecraft:stick",
 			"salvageMax": 2,
 			"baseChance": 35,
 			"chancePerLevel": 2,
@@ -2156,7 +2180,7 @@
 			"levelReq": 1
 		},
 		"minecraft:wooden_axe": {
-			"salvageItem": "minecraft:oak_planks",
+			"salvageItem": "minecraft:stick",
 			"salvageMax": 3,
 			"baseChance": 35,
 			"chancePerLevel": 2,
@@ -2165,7 +2189,7 @@
 			"levelReq": 1
 		},
 		"minecraft:wooden_pickaxe": {
-			"salvageItem": "minecraft:oak_planks",
+			"salvageItem": "minecraft:stick",
 			"salvageMax": 3,
 			"baseChance": 35,
 			"chancePerLevel": 2,
@@ -2174,7 +2198,7 @@
 			"levelReq": 1
 		},
 		"minecraft:wooden_hoe": {
-			"salvageItem": "minecraft:oak_planks",
+			"salvageItem": "minecraft:stick",
 			"salvageMax": 2,
 			"baseChance": 35,
 			"chancePerLevel": 2,
@@ -2183,7 +2207,7 @@
 			"levelReq": 1
 		},
 		"minecraft:wooden_shovel": {
-			"salvageItem": "minecraft:oak_planks",
+			"salvageItem": "minecraft:stick",
 			"salvageMax": 1,
 			"baseChance": 35,
 			"chancePerLevel": 2,
@@ -2724,7 +2748,7 @@
 		},
 		"minecraft:glass_bottle": {
 			"salvageItem": "minecraft:glass",
-			"salvageMax": 9,
+			"salvageMax": 1,
 			"baseChance": 20,
 			"chancePerLevel": 1.5,
 			"maxChance": 90,

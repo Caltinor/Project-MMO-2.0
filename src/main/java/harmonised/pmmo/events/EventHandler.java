@@ -4,10 +4,8 @@ import harmonised.pmmo.skills.XP;
 
 import net.minecraft.advancements.criterion.FishingRodHookedTrigger;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -110,5 +108,17 @@ public class EventHandler
 	public static void livingSpawn( LivingSpawnEvent.EnteringChunk event )
 	{
 		XP.handleLivingSpawn( event );
+	}
+
+	@SubscribeEvent
+	public static void babySpawn( BabyEntitySpawnEvent event )
+	{
+		XP.handleBreedEvent( event );
+	}
+
+	@SubscribeEvent
+	public static void animalTaming( AnimalTameEvent event )
+	{
+		XP.handleAnimalTaming( event );
 	}
 }

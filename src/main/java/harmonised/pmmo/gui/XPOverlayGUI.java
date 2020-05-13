@@ -293,7 +293,7 @@ public class XPOverlayGUI extends AbstractGui
 									tempDouble = (biomePenaltyMultiplier - 1) * 100;
 									tempDouble = Math.floor( tempDouble * 100 ) / 100;
 									tempString = ( tempDouble % 1 == 0 ? (int) Math.floor( tempDouble ) : DP.dp( tempDouble ) ) + "%";
-									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, XP.getSkillColor( skill ) );
+									drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 25, 3 + listIndex, color );
 								}
 							}
 							else if( JsonConfig.data.get( "biomeMultiplier" ).containsKey( biomeKey ) )

@@ -32,7 +32,7 @@ public class JsonConfig
     private static ArrayList<String> validAttributes = new ArrayList<>();
     private static ArrayList<String> validFishEnchantInfo = new ArrayList<>();
     private static String dataPath = "pmmo/data.json";
-    private static String templateDataPath = "pmmo/data_template.json";
+    private static String templateDataPath = "pmmo/default_data.json";
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
     private static final Logger LOGGER = LogManager.getLogger();
     private static JsonConfig defaultReq, customReq;
@@ -84,6 +84,8 @@ public class JsonConfig
         map.put( "biomeMobMultiplier", new HashMap<>() );
         map.put( "xpValue", new HashMap<>() );
         map.put( "xpValueCrafting", new HashMap<>() );
+        map.put( "xpValueBreeding", new HashMap<>() );
+        map.put( "xpValueTaming", new HashMap<>() );
         map.put( "oreInfo", new HashMap<>() );
         map.put( "logInfo", new HashMap<>() );
         map.put( "plantInfo", new HashMap<>() );
@@ -118,8 +120,10 @@ public class JsonConfig
     private final Map<String, RequirementItem> biomeEff = new HashMap<>();
     private final Map<String, RequirementItem> biomeMultiplier = new HashMap<>();
     private final Map<String, RequirementItem> biomeMobMultiplier = new HashMap<>();
-    private final Map<String, RequirementItem> xpValues = new HashMap<>();
-    private final Map<String, RequirementItem> xpValuesCrafting = new HashMap<>();
+    private final Map<String, RequirementItem> xpValue = new HashMap<>();
+    private final Map<String, RequirementItem> xpValueCrafting = new HashMap<>();
+    private final Map<String, RequirementItem> xpValueBreeding = new HashMap<>();
+    private final Map<String, RequirementItem> xpValueTaming = new HashMap<>();
     private final Map<String, RequirementItem> ores = new HashMap<>();
     private final Map<String, RequirementItem> logs = new HashMap<>();
     private final Map<String, RequirementItem> plants = new HashMap<>();
@@ -159,10 +163,10 @@ public class JsonConfig
             updateReqSkills( req.use, localData.get( "useReq" ) );
 
         if( Config.config.xpValueEnabled.get() )
-            updateReqSkills( req.xpValues, localData.get( "xpValue" ) );
+            updateReqSkills( req.xpValue, localData.get( "xpValue" ) );
 
         if( Config.config.xpValueCraftingEnabled.get() )
-            updateReqSkills( req.xpValuesCrafting, localData.get( "xpValueCrafting" ) );
+            updateReqSkills( req.xpValueCrafting, localData.get( "xpValueCrafting" ) );
 
         if( Config.config.placeReqEnabled.get() )
             updateReqSkills( req.placing, localData.get( "placeReq" ) );
@@ -220,6 +224,12 @@ public class JsonConfig
 
         updatePlayerSpecific( req.playerSpecific, localData.get( "playerSpecific" ) );
 
+        if( Config.config.breedingXpEnabled.get() )
+            updateReqSkills( req.xpValueBreeding, localData.get( "xpValueBreeding" ) );
+
+        if( Config.config.tamingXpEnabled.get() )
+            updateReqSkills( req.xpValueTaming, localData.get( "xpValueTaming" ) );
+
         data = localData;
     }
 
@@ -245,8 +255,10 @@ public class JsonConfig
             deserializeGroup(obj, "biome_multiplier", req.biomeMultiplier::put, context);
             deserializeGroup(obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context);
             deserializeGroup(obj, "biome_effect", req.biomeEff::put, context);
-            deserializeGroup(obj, "xp_value", req.xpValues::put, context);
-            deserializeGroup(obj, "crafting_xp", req.xpValuesCrafting::put, context);
+            deserializeGroup(obj, "xp_value", req.xpValue::put, context);
+            deserializeGroup(obj, "crafting_xp", req.xpValueCrafting::put, context);
+            deserializeGroup(obj, "breeding_xp", req.xpValueBreeding::put, context);
+            deserializeGroup(obj, "taming_xp", req.xpValueTaming::put, context);
             deserializeGroup(obj, "ore", req.ores::put, context);
             deserializeGroup(obj, "log", req.logs::put, context);
             deserializeGroup(obj, "plant", req.plants::put, context);

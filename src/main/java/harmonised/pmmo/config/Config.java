@@ -52,6 +52,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> levelUpCommandEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> heldItemXpBoostEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> wornItemXpBoostEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> breedingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> tamingXpEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
         //Levels
@@ -117,6 +119,8 @@ public class Config
         //Woodcutting
 
         //Farming
+
+        public ConfigHelper.ConfigValueListener<Double> breedingXp;
 
         //Agility
         public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
@@ -356,7 +360,7 @@ public class Config
                         .define( "wornItemXpBoostEnabled", true) );
 
                 this.loadDefaultConfig = subscriber.subscribe(builder
-                        .comment( "Should config from data_template.json be loaded? False means only data.json is loaded" )
+                        .comment( "Should config from default_data.json be loaded? False means only data.json is loaded" )
                         .translation( "pmmo.loadDefaultConfig" )
                         .define( "loadDefaultConfig", true) );
 
@@ -633,6 +637,16 @@ public class Config
             }
                 builder.push( "Farming" );
             {
+                this.breedingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for breeding animals?" )
+                        .translation( "pmmo.breedingXpEnabled" )
+                        .define( "breedingXpEnabled", true) );
+
+                this.breedingXp = subscriber.subscribe(builder
+                        .comment( "How much xp should be awarded in Farming for breeding two animals? (Json Overrides this)" )
+                        .translation( "pmmo.breedingXp" )
+                        .defineInRange( "breedingXp", 10.0D, 0, 1000000) );
+
                 builder.pop();
             }
 
@@ -846,8 +860,16 @@ public class Config
 
                 builder.pop();
             }
+
+            builder.push( "taming" );
+            {
+                this.tamingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for taming animals? (no default values, need to fill them in json config)" )
+                        .translation( "pmmo.tamingXpEnabled" )
+                        .define( "tamingXpEnabled", true) );
+
+                builder.pop();
+            }
         }
     }
-
-
 }

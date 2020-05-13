@@ -45,10 +45,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -129,6 +127,8 @@ public class XP
 		skillColors.put( Skill.FISHING, 0x00ccff );
 		skillColors.put( Skill.CRAFTING, 0xff9900 );
 		skillColors.put( Skill.MAGIC, 0x0000ff );
+		skillColors.put( Skill.FLETCHING, 0xff9700 );
+		skillColors.put( Skill.TAMING, 0xffffff );
 
 		skillTextFormat.put( "mining", TextFormatting.AQUA );
 		skillTextFormat.put( "building", TextFormatting.AQUA );
@@ -147,7 +147,27 @@ public class XP
 		skillTextFormat.put( "magic", TextFormatting.BLUE );
 		skillTextFormat.put( "slayer", TextFormatting.DARK_GRAY );
 		skillTextFormat.put( "fletching", TextFormatting.DARK_GREEN );
+		skillTextFormat.put( "taming", TextFormatting.WHITE );
 		skillTextFormat.put( "power", TextFormatting.AQUA );
+
+//		skillTextFormat.put(Skill.MINING, TextFormatting.AQUA );
+//		skillTextFormat.put( Skill.BUILDING, TextFormatting.AQUA );
+//		skillTextFormat.put( Skill.EXCAVATION, TextFormatting.GOLD );
+//		skillTextFormat.put( Skill.WOODCUTTING, TextFormatting.GOLD );
+//		skillTextFormat.put( Skill.FARMING, TextFormatting.GREEN );
+//		skillTextFormat.put( Skill.AGILITY, TextFormatting.GREEN );
+//		skillTextFormat.put( Skill.ENDURANCE, TextFormatting.DARK_RED );
+//		skillTextFormat.put( Skill.COMBAT, TextFormatting.RED);
+//		skillTextFormat.put( Skill.ARCHERY, TextFormatting.YELLOW );
+//		skillTextFormat.put( Skill.SMITHING, TextFormatting.GRAY );
+//		skillTextFormat.put( Skill.FLYING, TextFormatting.GRAY );
+//		skillTextFormat.put( Skill.SWIMMING, TextFormatting.AQUA );
+//		skillTextFormat.put( Skill.FISHING, TextFormatting.AQUA );
+//		skillTextFormat.put( Skill.CRAFTING, TextFormatting.GOLD );
+//		skillTextFormat.put( Skill.MAGIC, TextFormatting.BLUE );
+//		skillTextFormat.put( Skill.SLAYER, TextFormatting.DARK_GRAY );
+//		skillTextFormat.put( Skill.FLETCHING, TextFormatting.DARK_GREEN );
+//		skillTextFormat.put( Skill.TAMING, TextFormatting.WHITE );
 ////////////////////////////////////Style//////////////////////////////////////////////
 		textStyle.put( "red", new Style().setColor( TextFormatting.RED ) );
 		textStyle.put( "green", new Style().setColor( TextFormatting.GREEN ) );
@@ -2150,14 +2170,6 @@ public class XP
 		return getPmmoTagElement( player, "abilities" );
 	}
 
-	public static void awardXp( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip )
-	{
-		for( Map.Entry<String, Object> entry : map.entrySet() )
-		{
-			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip );
-		}
-	}
-
 	public static double getWornXpBoost( PlayerEntity player, Item item, String skillName )
 	{
 		double boost = 0;
@@ -2177,6 +2189,14 @@ public class XP
 		}
 
 		return boost / 100;
+	}
+
+	public static void awardXp( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip )
+	{
+		for( Map.Entry<String, Object> entry : map.entrySet() )
+		{
+			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip );
+		}
 	}
 
 	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip )
@@ -2673,14 +2693,18 @@ public class XP
 
 				lastAward.replace( playerUUID, System.currentTimeMillis() );
 				Block waterBlock = Blocks.WATER;
+				Block tallSeagrassBlock = Blocks.TALL_SEAGRASS;
+				Block kelpBlock = Blocks.KELP_PLANT;
 				BlockPos playerPos = player.getPosition();
+				Block currBlock;
 				boolean waterBelow = true;
 
 				for( int i = -1; i <= 1; i++ )
 				{
 					for( int j = -1; j <= 1; j++ )
 					{
-						if( !player.getEntityWorld().getBlockState( playerPos.down().east( i ).north( j ) ).getBlock().equals( waterBlock ) )
+						currBlock = player.getEntityWorld().getBlockState( playerPos.down().east( i ).north( j ) ).getBlock();
+						if( !( currBlock.equals( waterBlock ) || currBlock.equals( tallSeagrassBlock ) || currBlock.equals( kelpBlock ) ) )
 							waterBelow = false;
 					}
 				}
@@ -2869,6 +2893,30 @@ public class XP
 	private static double getWeight( int startLevel, Map<String, Object> fishItem )
 	{
 		return DP.map( startLevel, (double) fishItem.get( "startLevel" ), (double) fishItem.get( "endLevel" ), (double) fishItem.get( "startWeight" ), (double) fishItem.get( "endWeight" ) );
+	}
+
+	public static void handleBreedEvent( BabyEntitySpawnEvent event )
+	{
+		String regKey = event.getChild().getEntityString();
+
+		if( JsonConfig.data.get( "xpValueBreeding" ).containsKey( regKey ) )
+		{
+			awardXp( event.getCausedByPlayer(), JsonConfig.data.get( "xpValueBreeding" ).get( regKey ), "breeding", true );
+		}
+		else
+			awardXp( event.getCausedByPlayer(), Skill.FARMING, "breeding", 10.0D, true );
+	}
+
+	public static void handleAnimalTaming( AnimalTameEvent event )
+	{
+		String regKey = event.getAnimal().getEntityString();
+
+		if( JsonConfig.data.get( "xpValueTaming" ).containsKey( regKey ) )
+		{
+			awardXp( event.getTamer(), JsonConfig.data.get( "xpValueTaming" ).get( regKey ), "taming", true );
+		}
+//		else
+//			awardXp( event.getTamer(), Skill.TAMING, "taming", 10.0D, true );
 	}
 
 	public static int levelAtXp( float xp )

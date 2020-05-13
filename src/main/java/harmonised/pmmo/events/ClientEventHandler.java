@@ -116,7 +116,7 @@ public class ClientEventHandler
     private static void addTooltipTextSkillPercentage( String tKey, Map<String, Object> theMap, ItemTooltipEvent event )
     {
         List<ITextComponent> tooltip = event.getToolTip();
-        int value;
+        double value;
 
         if( theMap.size() > 0 )
         {
@@ -126,11 +126,11 @@ public class ClientEventHandler
             {
                 if( theMap.get( key ) instanceof Double )
                 {
-                    value = (int) Math.floor( (double) theMap.get( key ) );
+                    value = (double) theMap.get( key );
                     if( value < 0 )
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " " + value, new TranslationTextComponent( "pmmo." + key ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " " + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " +" + value, new TranslationTextComponent( "pmmo." + key ).getString() ).setStyle( XP.textStyle.get( "green" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " +" + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).setStyle( XP.textStyle.get( "green" ) ) );
                 }
             }
         }
