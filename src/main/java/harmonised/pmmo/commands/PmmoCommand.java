@@ -41,11 +41,11 @@ import java.util.Map;
 public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static String[] suggestSkill = new String[18];
-    private static String[] levelOrXp = new String[2];
-    private static String[] suggestPref = new String[6];
-    private static String[] suggestGui = new String[13];
-    private static String[] suggestSearchRegistry = new String[5];
+    public static String[] suggestSkill = new String[18];
+    public static String[] levelOrXp = new String[2];
+    public static String[] suggestPref = new String[6];
+    public static String[] suggestGui = new String[13];
+    public static String[] suggestSearchRegistry = new String[5];
 
     public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
@@ -118,7 +118,7 @@ public class PmmoCommand
                   .then( Commands.argument( "Level|Xp", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( levelOrXp, theBuilder ) )
                   .then( Commands.argument( "New Value", DoubleArgumentType.doubleArg() )
-                  .executes( PmmoCommand::commandSet )
+                  .executes( SetCommand::execute )
                   ))))
                   .then( Commands.literal( "add" )
                   .then( Commands.argument( "Skill", StringArgumentType.word() )
@@ -126,545 +126,68 @@ public class PmmoCommand
                   .then( Commands.argument( "Level|Xp", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( levelOrXp, theBuilder ) )
                   .then( Commands.argument( "Value To Add", DoubleArgumentType.doubleArg() )
-                  .executes( PmmoCommand::commandAdd )
+                  .executes( AddCommand::execute )
                   ))))
                   .then( Commands.literal( "clear" )
-                  .executes( PmmoCommand::commandClear ) )))
+                  .executes( ClearCommand::execute ) )))
                   .then( Commands.literal( "reload" )
                   .requires( player -> { return player.hasPermissionLevel( 2 ); } )
-                  .executes( PmmoCommand::commandReloadConfig )
+                  .executes( ReloadConfigCommand::execute )
                   )
                   .then( Commands.literal( "resync" )
-                  .executes( context -> commandSync( context, EntityArgument.getPlayers( context, "target" ) ) )
+                  .executes( context -> SyncCommand.execute( context, EntityArgument.getPlayers( context, "target" ) ) )
                   )
                   .then(Commands.literal( "resync" )
-                  .executes( context -> commandSync( context, null )))
+                  .executes( context -> SyncCommand.execute( context, null )))
                   .then( Commands.literal( "tools" )
                   .then( Commands.literal( "levelatxp" )
                   .then( Commands.argument( "xp", DoubleArgumentType.doubleArg() )
-                  .executes( PmmoCommand::commandLevelAtXp )
+                  .executes( LevelAtXpCommand::execute )
                   ))
                   .then( Commands.literal( "xpatlevel" )
                   .then(  Commands.argument( "level", DoubleArgumentType.doubleArg() )
-                  .executes( PmmoCommand::commandXpAtLevel )
+                  .executes( XpAtLevelCommand::execute )
                   ))
                   .then( Commands.literal( "xpto" )
                   .then(  Commands.argument( "level", DoubleArgumentType.doubleArg() )
-                  .executes( PmmoCommand::commandXpFromTo )
+                  .executes( XpFromToCommand::execute )
                   .then(  Commands.argument( "goal level", DoubleArgumentType.doubleArg() )
-                  .executes( PmmoCommand::commandXpFromTo )
+                  .executes( XpFromToCommand::execute )
                   ))))
                   .then( Commands.literal( "prefs" )
                   .then( Commands.argument( "option", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestPref, theBuilder ) )
-                  .executes( PmmoCommand::commandPref )
+                  .executes( PrefCommand::execute )
                   .then( Commands.argument( "new value", DoubleArgumentType.doubleArg() )
-                  .executes( PmmoCommand::commandPref )
+                  .executes( PrefCommand::execute )
                   )))
                   .then( Commands.literal( "gui" )
                   .then( Commands.argument( "option", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestGui, theBuilder ) )
-                  .executes( PmmoCommand::commandPref )
+                  .executes( PrefCommand::execute )
                   .then( Commands.argument( "new value", DoubleArgumentType.doubleArg() )
-                  .executes( PmmoCommand::commandPref )
+                  .executes( PrefCommand::execute )
                   )))
                   .then( Commands.literal( "checkstat" )
                   .then( Commands.argument( "player name", EntityArgument.player() )
                   .then( Commands.argument( "skill name", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
-                  .executes( PmmoCommand::commandCheckStat )
+                  .executes( CheckStatCommand::execute )
                   )))
                   .then( Commands.literal( "checkbiome" )
-                  .executes( PmmoCommand::commandCheckBiome )
+                  .executes( CheckBiomeCommand::execute )
                   )
                   .then( Commands.literal( "debug" )
                   .then( Commands.literal( "searchRegistry" )
                   .then(Commands.argument( "type", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSearchRegistry, theBuilder ) )
                   .then(Commands.argument( "search query", StringArgumentType.word() )
-                  .executes( PmmoCommand::commandSearchReg )
-                  )))));
-    }
-
-    private static int commandSearchReg( CommandContext<CommandSource> context ) throws CommandException
-    {
-        String query = StringArgumentType.getString( context, "search query" );
-        String type = StringArgumentType.getString( context, "type" );
-        StringBuilder listOut = new StringBuilder("PMMO DEBUG SEARCH RESULTS:\n");
-        StringBuilder listOutExtra = new StringBuilder("PMMO DEBUG SEARCH RESULTS:\n");
-
-        switch( type )
-        {
-            case "item":
-                for( Item item : ForgeRegistries.ITEMS )
-                {
-                    String regName = item.getRegistryName().toString();
-                    if( regName.contains( query ) )
-                    {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
-                    }
-                }
-                break;
-
-            case "biome":
-                for( Biome item : ForgeRegistries.BIOMES )
-                {
-                    String regName = item.getRegistryName().toString();
-                    if( regName.contains( query ) )
-                    {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
-                    }
-                }
-                break;
-
-            case "enchant":
-                for( Enchantment item : ForgeRegistries.ENCHANTMENTS )
-                {
-                    String regName = item.getRegistryName().toString();
-                    if( regName.contains( query ) )
-                    {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
-                    }
-                }
-                break;
-
-            case "potionEffect":
-                for( Effect item : ForgeRegistries.POTIONS )
-                {
-                    String regName = item.getRegistryName().toString();
-                    if( regName.contains( query ) )
-                    {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
-                    }
-                }
-                break;
-
-            case "entity":
-                for( EntityType item : ForgeRegistries.ENTITIES )
-                {
-                    String regName = item.getRegistryName().toString();
-                    if( regName.contains( query ) )
-                    {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
-                    }
-                }
-                break;
-        }
-
-        System.out.println( listOut.toString() );
-        System.out.println( listOutExtra.toString() );
-
-        return 1;
-    }
-
-    private static int commandClear( CommandContext<CommandSource> context ) throws CommandException
-    {
-        String[] args = context.getInput().split( " " );
-
-        try
-        {
-            Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
-
-            for( ServerPlayerEntity player : players )
-            {
-                String playerName = player.getDisplayName().getString();
-                AttributeHandler.updateAll( player );
-
-                NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0, true ), player );
-                player.getPersistentData().getCompound( "pmmo" ).put( "skills", new CompoundNBT() );
-
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsCleared" ), false );
-
-                LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );
-            }
-        }
-        catch( CommandSyntaxException e )
-        {
-            LOGGER.error( "Clear Command Failed to get Players [" + Arrays.toString(args) + "]", e );
-        }
-
-        return 1;
-    }
-
-    private static int commandSet(CommandContext<CommandSource> context) throws CommandException
-    {
-        String[] args = context.getInput().split( " " );
-        String skillName = StringArgumentType.getString( context, "Skill" ).toLowerCase();
-        String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
-        Skill skill = Skill.getSkill( skillName );
-        PlayerEntity sender = null;
-
-        try
-        {
-            sender = context.getSource().asPlayer();
-        }
-        catch( CommandSyntaxException e )
-        {
-            //not player, it's fine
-        }
-
-        if( skillName.equals( "power" ) )
-        {
-            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", skillName ), false );
-            return 1;
-        }
-
-        if( skill != Skill.INVALID_SKILL )
-        {
-            try
-            {
-                Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
-
-                for( ServerPlayerEntity player : players )
-                {
-                    String playerName = player.getDisplayName().getString();
-                    double newValue = DoubleArgumentType.getDouble( context, "New Value" );
-
-                    if( type.equals( "level" ) )
-                        skill.setLevel( player, newValue );
-                    else if( type.equals( "xp" ) )
-                        skill.setXp( player, newValue );
-                    else
-                    {
-                        LOGGER.error( "PMMO Command Set: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
-
-                        if( sender != null )
-                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
-                    }
-
-                    AttributeHandler.updateAll( player );
-
-                    LOGGER.info( "PMMO Command Set: " + playerName + " " + args[4] + " has been set to " + args[5] + " " + args[6] );
-                }
-            }
-            catch( CommandSyntaxException e )
-            {
-                LOGGER.error( "PMMO Command Set: Failed to get Players [" + Arrays.toString(args) + "]", e );
-            }
-        }
-        else
-        {
-            LOGGER.error( "PMMO Command Set: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
-
-            if( sender != null )
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
-        }
-
-        return 1;
-    }
-
-    private static int commandAdd(CommandContext<CommandSource> context) throws CommandException
-    {
-        String[] args = context.getInput().split( " " );
-        String skillName = StringArgumentType.getString( context, "Skill" ).toLowerCase();
-        String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
-        Skill skill = Skill.getSkill( skillName );
-        PlayerEntity sender = null;
-
-        try
-        {
-            sender = context.getSource().asPlayer();
-        }
-        catch( CommandSyntaxException e )
-        {
-            //not player, it's fine
-        }
-
-        if( skill != Skill.INVALID_SKILL )
-        {
-            try
-            {
-                Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
-
-                for( ServerPlayerEntity player : players )
-                {
-                    String playerName = player.getDisplayName().getString();
-                    double newValue = DoubleArgumentType.getDouble( context, "Value To Add" );
-
-                    if( type.equals( "level" ) )
-                        skill.addLevel( player, newValue );
-                    else if( type.equals( "xp" ) )
-                        skill.addXp( player, newValue );
-                    else
-                    {
-                        LOGGER.error( "PMMO Command Add: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
-
-                        if( sender != null )
-                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
-                    }
-
-                    LOGGER.info( "PMMO Command Add: " + playerName + " " + args[4] + " has had " + args[6] + " " + args[5] + " added" );
-                }
-            }
-            catch( CommandSyntaxException e )
-            {
-                LOGGER.error( "PMMO Command Add: Add Command Failed to get Players [" + Arrays.toString(args) + "]", e );
-            }
-        }
-        else
-        {
-            LOGGER.error( "PMMO Command Add: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
-
-            if( sender != null )
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
-        }
-
-        return 1;
-    }
-
-    private static int commandSync( CommandContext<CommandSource> context, @Nullable  Collection<ServerPlayerEntity> players ) throws CommandException
-    {
-        if( players != null )
-        {
-            for( ServerPlayerEntity player : players )
-            {
-                XP.syncPlayer( player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsResynced" ), false );
-            }
-        }
-        else
-        {
-            try
-            {
-                PlayerEntity player = context.getSource().asPlayer();
-                XP.syncPlayer( player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsResynced" ), false );
-            }
-            catch( CommandSyntaxException e )
-            {
-                LOGGER.error( "Sync command fired not from player " + context.getInput(), e );
-            }
-        }
-
-        return 1;
-    }
-
-    private static int commandLevelAtXp(CommandContext<CommandSource> context) throws CommandException
-    {
-        PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
-        String[] args = context.getInput().split(" ");
-        double xp = Double.parseDouble( args[3] );
-        double maxXp = Config.getConfig( "maxXp" );
-        double maxLevel = Config.getConfig( "maxLevel" );
-
-        if( xp < 0 )
-            xp = 0;
-
-        if( xp >= maxXp )
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelAtXp", DP.dp( xp ), maxLevel ), false );
-        else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelAtXp", DP.dp( xp ), XP.levelAtXpDecimal( xp ) ), false );
-        return 1;
-    }
-
-    private static int commandXpAtLevel(CommandContext<CommandSource> context) throws CommandException
-    {
-        double maxLevel = Config.getConfig( "maxLevel" );
-        PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
-        String[] args = context.getInput().split(" ");
-        double level = Double.parseDouble( args[3] );
-
-        if( level < 1 )
-            level = 1;
-
-        if( level > maxLevel )
-            level = maxLevel;
-
-        player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp( XP.xpAtLevelDecimal( level ) ) ), false );
-
-        return 1;
-    }
-
-    private static int commandXpFromTo(CommandContext<CommandSource> context) throws CommandException
-    {
-        double maxLevel = Config.getConfig( "maxLevel" );
-        PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
-        String[] args = context.getInput().split(" ");
-
-        double level = Double.parseDouble( args[3] );
-        if( level < 1 )
-            level = 1;
-        if( level > maxLevel )
-            level = maxLevel;
-        double xp = XP.xpAtLevelDecimal( level );
-        if( xp < 0 )
-            xp = 0;
-
-        if( args.length > 4 )
-        {
-            double goalLevel = Double.parseDouble( args[4] );
-            if( goalLevel < 1 )
-                goalLevel = 1;
-            if( goalLevel > maxLevel )
-                goalLevel = maxLevel;
-
-            if( goalLevel < level )
-            {
-                double temp = goalLevel;
-                goalLevel = level;
-                level = temp;
-
-                xp = XP.xpAtLevelDecimal( level );
-            }
-
-            double goalXp = XP.xpAtLevelDecimal( goalLevel );
-            if( goalXp < 0 )
-                goalXp = 0;
-
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpFromTo", DP.dp(goalXp - xp), ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), ( goalLevel % 1 == 0 ? (int) Math.floor( goalLevel ) : DP.dp(goalLevel) ) ), false );
-        }
-        else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp(xp) ), false );
-
-        return 1;
-    }
-
-    private static int commandPref(CommandContext<CommandSource> context) throws CommandException
-    {
-        PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
-        String[] args = context.getInput().split(" ");
-        CompoundNBT prefsTag = XP.getPreferencesTag( player );
-        Double value = null;
-        if( args.length > 3 )
-        {
-            value = Double.parseDouble( args[3] );
-            if( value < 0 )
-                value = 0D;
-        }
-
-
-        boolean matched = false;
-        String match = "ERROR";
-
-        for( String element : suggestPref )
-        {
-            if( args[2].toLowerCase().equals( element.toLowerCase() ) )
-            {
-                match = element;
-                matched = true;
-            }
-        }
-
-        for( String element : suggestGui )
-        {
-            if( args[2].toLowerCase().equals( element.toLowerCase() ) )
-            {
-                match = element;
-                matched = true;
-            }
-        }
-
-        if( matched )
-        {
-            if( value != null )
-            {
-                prefsTag.putDouble( match, value );
-
-                NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
-                AttributeHandler.updateAll( player );
-
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasBeenSet", match, args[3] ), false );
-            }
-            else if( prefsTag.contains( match ) )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasTheValue", "" + match, "" + prefsTag.getDouble( match ) ), false );
-            else
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasUnsetValue", "" + match ), false );
-        }
-        else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
-
-        return 1;
-    }
-
-    private static int commandCheckStat(CommandContext<CommandSource> context) throws CommandException
-    {
-        PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
-        String[] args = context.getInput().split(" ");
-        String skillName = args[3].toLowerCase();
-
-        if( Skill.getInt( skillName ) != 0 || skillName.toLowerCase().equals( "power" ) )
-        {
-            try
-            {
-                double level = 1;
-
-                ServerPlayerEntity target = EntityArgument.getPlayer( context, "player name" );
-                if( skillName.toLowerCase().equals( "power" ) )
-                    level = XP.getPowerLevel( target );
-                else
-                    level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
-
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ) ), false );
-
-                //EXTRA INFO
-                switch( skillName )
-                {
-                    case "fishing":
-                        double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
-                        double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
-                        double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
-                        double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
-                        if( fishPoolChance > fishPoolMaxChance )
-                            fishPoolChance = fishPoolMaxChance;
-
-                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ), false );
-                        break;
-                }
-            }
-            catch( CommandSyntaxException e )
-            {
-                sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
-            }
-        }
-        else
-            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
-
-        return 1;
-    }
-
-    private static int commandCheckBiome(CommandContext<CommandSource> context) throws CommandException
-    {
-        PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
-        String biomeKey = sender.world.getBiome( sender.getPosition() ).getRegistryName().toString();
-        String transKey = sender.world.getBiome( sender.getPosition() ).getTranslationKey();
-        Map<String, Object> theMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( biomeKey );
-
-        String damageBonus = "100";
-        String hpBonus = "100";
-        String speedBonus = "100";
-
-        if( theMap != null )
-        {
-            if( theMap.containsKey( "damageBonus" ) )
-                damageBonus = DP.dp( (double) theMap.get( "damageBonus" ) * 100 );
-            if( theMap.containsKey( "hpBonus" ) )
-                hpBonus = DP.dp( (double) theMap.get( "hpBonus" ) * 100 );
-            if( theMap.containsKey( "damageBonus" ) )
-                speedBonus = DP.dp( (double) theMap.get( "damageBonus" ) * 100 );
-        }
-
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobDamageBoost", new TranslationTextComponent( damageBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobHpBoost", new TranslationTextComponent( hpBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobSpeedBoost", new TranslationTextComponent( speedBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
-
-        return 1;
-    }
-
-    private static int commandReloadConfig(CommandContext<CommandSource> context) throws CommandException
-    {
-        JsonConfig.init();    //load up locally
-
-        context.getSource().getServer().getPlayerList().getPlayers().forEach( player ->
-        {
-            XP.syncPlayerConfig( player );
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.jsonConfigReload" ).setStyle( XP.textStyle.get( "green" ) ), false );
-        });
-
-        return 1;
+                  .executes( SearchRegCommand::execute )
+                  )))
+                  .then( Commands.literal( "nearbyPowerLevel" )
+                  .executes( NearbyPowerLevelCommand::execute )
+                  .then( Commands.argument( "target", EntityArgument.player() )
+                  .executes( NearbyPowerLevelCommand::execute )
+                  ))));
     }
 }

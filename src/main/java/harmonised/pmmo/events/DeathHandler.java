@@ -57,37 +57,51 @@ public class DeathHandler
         else if( source instanceof PlayerEntity && !( source instanceof FakePlayer ) )
         {
             PlayerEntity player = (PlayerEntity) source;
+            Collection<PlayerEntity> nearbyPlayers = XP.getNearbyPlayers( target );
+            double scaleValue = 0;
 
-            double normalMaxHp = target.getAttribute( SharedMonsterAttributes.MAX_HEALTH ).getBaseValue();
-            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
+            for( PlayerEntity thePlayer : nearbyPlayers )
+            {
+                if( XP.getPowerLevel( player ) > 1 )
+                    scaleValue += 1;
+                else
+                    scaleValue += XP.getPowerLevel( thePlayer );
+            }
+
+            scaleValue /= 5;
+
+            if( scaleValue < 1 )
+                scaleValue = 1;
+
+            if( scaleValue > 10 )
+                scaleValue = 10;
+
+//            double normalMaxHp = target.getAttribute( SharedMonsterAttributes.MAX_HEALTH ).getBaseValue();
+//            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
             if( JsonConfig.data.get( "killXp" ).containsKey( target.getEntityString() ) )
             {
                 Map<String, Object> killXp = JsonConfig.data.get( "killXp" ).get( target.getEntityString() );
                 for( Map.Entry<String, Object> entry : killXp.entrySet() )
                 {
-                    XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * scaleMultiplier, false );
+                    XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * scaleValue, false );
                 }
             }
             else if( target instanceof AnimalEntity)
-                XP.awardXp( player, Skill.HUNTER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleMultiplier, false );
+                XP.awardXp( player, Skill.HUNTER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleValue, false );
             else if( target instanceof MobEntity)
-                XP.awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleMultiplier, false );
-
-//					System.out.println( ( target.getMaxHealth() - normalMaxHp ) / 10 );
+                XP.awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false );
 
             if( JsonConfig.data.get( "mobRareDrop" ).containsKey( target.getEntityString() ) )
             {
                 Map<String, Object> dropTable = JsonConfig.data.get( "mobRareDrop" ).get( target.getEntityString() );
-                Collection<PlayerEntity> allPlayers = XP.getNearbyPlayers( target );
+
                 double chance;
 
                 for( Map.Entry<String, Object> entry : dropTable.entrySet() )
                 {
-                    chance = ( (double) entry.getValue() / allPlayers.size() );
-
-                    System.out.println( entry.getValue() );
-                    System.out.println( (double) entry.getValue() / allPlayers.size() );
+                    chance = (double) entry.getValue();
+                    chance /= scaleValue;
 
                     if( Math.floor( Math.random() * chance ) == 0 )
                     {
