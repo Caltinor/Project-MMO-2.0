@@ -25,13 +25,12 @@ import java.util.UUID;
 public class PlayerTickHandler
 {
     private static Map<UUID, Long> lastAward = new HashMap<>();
-    private static Map<UUID, String> lastBiome = new HashMap<>();
 
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
         PlayerEntity player = event.player;
         boolean crawlingAllowed;
-        if( XP.getConfig( "crawlingAllowed" ) == 0 )
+        if( Config.getConfig( "crawlingAllowed" ) == 0 )
             crawlingAllowed = false;
         else
             crawlingAllowed = true;
@@ -58,7 +57,7 @@ public class PlayerTickHandler
                 int swimLevel = XP.getLevel( Skill.SWIMMING, player );
                 int flyLevel = XP.getLevel( Skill.FLYING, player );
                 int agilityLevel = XP.getLevel( Skill.AGILITY, player );
-                int nightvisionUnlockLevel = Config.config.nightvisionUnlockLevel.get();
+                int nightvisionUnlockLevel = Config.forgeConfig.nightvisionUnlockLevel.get();
                 float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
                 float speedAmp = 0;
                 PlayerInventory inv = player.inventory;

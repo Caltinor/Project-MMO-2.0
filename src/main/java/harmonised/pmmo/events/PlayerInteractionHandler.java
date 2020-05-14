@@ -110,8 +110,8 @@ public class PlayerInteractionHandler
                     Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
 
                     int smithingLevel = XP.getLevel( Skill.SMITHING, player );
-                    int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
-                    int levelsPerOneEnchantBypass = Config.config.levelsPerOneEnchantBypass.get();
+                    int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
+                    int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
                     int maxPlayerBypass = (int) Math.floor( (double) smithingLevel / (double) levelsPerOneEnchantBypass );
                     if( maxPlayerBypass > maxEnchantmentBypass )
                         maxPlayerBypass = maxEnchantmentBypass;
@@ -161,8 +161,8 @@ public class PlayerInteractionHandler
                                                 if( smithingLevel >= 0 )
                                                 {
                                                     double chance = baseChance + ( chancePerLevel * smithingLevel );
-                                                    double maxSalvageEnchantChance = Config.config.maxSalvageEnchantChance.get();
-                                                    double enchantSaveChancePerLevel = Config.config.enchantSaveChancePerLevel.get();
+                                                    double maxSalvageEnchantChance = Config.forgeConfig.maxSalvageEnchantChance.get();
+                                                    double enchantSaveChancePerLevel = Config.forgeConfig.enchantSaveChancePerLevel.get();
 
                                                     if( chance > maxSalvageMaterialChance )
                                                         chance = maxSalvageMaterialChance;
@@ -283,17 +283,17 @@ public class PlayerInteractionHandler
                             int enduranceLevel = XP.getLevel( Skill.ENDURANCE, player );
                             int combatLevel = XP.getLevel( Skill.COMBAT, player );
                             int swimLevel = XP.getLevel( Skill.SMITHING, player );
-                            int nightvisionUnlockLevel = (int) Math.floor( XP.getConfig( "nightvisionUnlockLevel" ) );	//Swimming
+                            int nightvisionUnlockLevel = (int) Math.floor( Config.getConfig( "nightvisionUnlockLevel" ) );	//Swimming
 
-                            double maxFallSaveChance = Config.config.maxFallSaveChance.get();			//Agility
-                            double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
-                            double speedBoostPerLevel = XP.getConfig( "speedBoostPerLevel" );
-                            double maxSpeedBoost = XP.getConfig( "maxSpeedBoost" );
+                            double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();			//Agility
+                            double saveChancePerLevel = Config.forgeConfig.saveChancePerLevel.get() / 100;
+                            double speedBoostPerLevel = Config.getConfig( "speedBoostPerLevel" );
+                            double maxSpeedBoost = Config.getConfig( "maxSpeedBoost" );
 
-                            int levelsPerDamage = Config.config.levelsPerDamage.get();					//Combat
+                            int levelsPerDamage = Config.forgeConfig.levelsPerDamage.get();					//Combat
 
-                            double endurancePerLevel = Config.config.endurancePerLevel.get();			//Endurance
-                            double maxEndurance = Config.config.maxEndurance.get();
+                            double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();			//Endurance
+                            double maxEndurance = Config.forgeConfig.maxEndurance.get();
                             double endurePercent = (enduranceLevel * endurancePerLevel);
                             if( endurePercent > maxEndurance )
                                 endurePercent = maxEndurance;

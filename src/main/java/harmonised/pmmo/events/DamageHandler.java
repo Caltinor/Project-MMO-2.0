@@ -40,8 +40,8 @@ public class DamageHandler
 
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
                 int enduranceLevel = XP.levelAtXp( skillsTag.getDouble( "endurance" ) );
-                double endurancePerLevel = Config.config.endurancePerLevel.get();
-                double maxEndurance = Config.config.maxEndurance.get();
+                double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
+                double maxEndurance = Config.forgeConfig.maxEndurance.get();
                 double endurePercent = (enduranceLevel * endurancePerLevel);
                 if( endurePercent > maxEndurance )
                     endurePercent = maxEndurance;
@@ -62,8 +62,8 @@ public class DamageHandler
                     int agilityLevel = XP.levelAtXp( skillsTag.getDouble( "agility" ) );
                     int saved = 0;
 
-                    double maxFallSaveChance = Config.config.maxFallSaveChance.get();
-                    double saveChancePerLevel = Config.config.saveChancePerLevel.get() / 100;
+                    double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
+                    double saveChancePerLevel = Config.forgeConfig.saveChancePerLevel.get() / 100;
 
                     double chance = agilityLevel * saveChancePerLevel;
                     if( chance > maxFallSaveChance )

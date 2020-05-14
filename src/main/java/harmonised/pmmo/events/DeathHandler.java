@@ -22,9 +22,9 @@ import java.util.Map;
 
 public class DeathHandler
 {
-    private static double deathXpPenaltyMultiplier = Config.config.deathXpPenaltyMultiplier.get();
-    private static double passiveMobHunterXp = Config.config.passiveMobHunterXp.get();
-    private static double aggresiveMobSlayerXp = Config.config.aggresiveMobSlayerXp.get();
+    private static double deathXpPenaltyMultiplier = Config.forgeConfig.deathXpPenaltyMultiplier.get();
+    private static double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
+    private static double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
 
     public static void handleDeath( LivingDeathEvent event )
     {

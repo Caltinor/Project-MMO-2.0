@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,10 +26,10 @@ public class JumpHandler
 
                 double agilityLevel = 1;
                 double jumpBoost = 0;
-                double maxJumpBoost = XP.getConfig( "maxJumpBoost" );
+                double maxJumpBoost = Config.getConfig( "maxJumpBoost" );
                 double maxJumpBoostPref = maxJumpBoost;
-                int levelsCrouchJumpBoost = (int) Math.floor( XP.getConfig( "levelsCrouchJumpBoost" ) );
-                int levelsSprintJumpBoost = (int) Math.floor( XP.getConfig( "levelsSprintJumpBoost" ) );
+                int levelsCrouchJumpBoost = (int) Math.floor( Config.getConfig( "levelsCrouchJumpBoost" ) );
+                int levelsSprintJumpBoost = (int) Math.floor( Config.getConfig( "levelsSprintJumpBoost" ) );
 
                 agilityLevel = XP.getLevel( Skill.AGILITY, player );
 

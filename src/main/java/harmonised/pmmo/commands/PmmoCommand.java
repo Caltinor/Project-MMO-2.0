@@ -449,8 +449,8 @@ public class PmmoCommand
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
         double xp = Double.parseDouble( args[3] );
-        double maxXp = XP.getConfig( "maxXp" );
-        double maxLevel = XP.getConfig( "maxLevel" );
+        double maxXp = Config.getConfig( "maxXp" );
+        double maxLevel = Config.getConfig( "maxLevel" );
 
         if( xp < 0 )
             xp = 0;
@@ -464,7 +464,7 @@ public class PmmoCommand
 
     private static int commandXpAtLevel(CommandContext<CommandSource> context) throws CommandException
     {
-        double maxLevel = XP.getConfig( "maxLevel" );
+        double maxLevel = Config.getConfig( "maxLevel" );
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
         double level = Double.parseDouble( args[3] );
@@ -482,7 +482,7 @@ public class PmmoCommand
 
     private static int commandXpFromTo(CommandContext<CommandSource> context) throws CommandException
     {
-        double maxLevel = XP.getConfig( "maxLevel" );
+        double maxLevel = Config.getConfig( "maxLevel" );
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 
@@ -605,9 +605,9 @@ public class PmmoCommand
                 switch( skillName )
                 {
                     case "fishing":
-                        double fishPoolBaseChance = Config.config.fishPoolBaseChance.get();
-                        double fishPoolChancePerLevel = Config.config.fishPoolChancePerLevel.get();
-                        double fishPoolMaxChance = Config.config.fishPoolMaxChance.get();
+                        double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
+                        double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
+                        double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
                         double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
                         if( fishPoolChance > fishPoolMaxChance )
                             fishPoolChance = fishPoolMaxChance;

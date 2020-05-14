@@ -14,8 +14,8 @@ import java.util.UUID;
 
 public class PlayerConnectedHandler
 {
-    private static boolean showWelcome = Config.config.showWelcome.get();
-    private static boolean showDonatorWelcome = Config.config.showDonatorWelcome.get();
+    private static boolean showWelcome = Config.forgeConfig.showWelcome.get();
+    private static boolean showDonatorWelcome = Config.forgeConfig.showDonatorWelcome.get();
     public static Set<UUID> lapisDonators = new HashSet<>();
     public static Set<UUID> dandelionDonators = new HashSet<>();
     public static Set<UUID> ironDonators = new HashSet<>();

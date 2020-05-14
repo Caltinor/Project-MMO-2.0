@@ -45,8 +45,8 @@ public class XPOverlayGUI extends AbstractGui
 	private static ASkill aSkill;
 	private static Skill skill = Skill.INVALID_SKILL, tempSkill = Skill.INVALID_SKILL;
 	private static FontRenderer fontRenderer = minecraft.fontRenderer;
-	private static int maxLevel = (int) Math.floor( XP.getConfig( "maxLevel" ) );
-	private static double maxXp = XP.getConfig( "maxXp" );
+	private static int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+	private static double maxXp = Config.getConfig( "maxXp" );
 	private static XpDrop xpDrop;
 	private static int color;
 	private static long lastBonusUpdate = System.currentTimeMillis();
@@ -335,42 +335,42 @@ public class XPOverlayGUI extends AbstractGui
 			if( prefsTag.contains( "barOffsetX" ) )
 				barOffsetX = prefsTag.getDouble( "barOffsetX" );
 			else
-				barOffsetX = Config.config.barOffsetX.get();
+				barOffsetX = Config.forgeConfig.barOffsetX.get();
 
 			if( prefsTag.contains( "barOffsetY" ) )
 				barOffsetY = prefsTag.getDouble( "barOffsetY" );
 			else
-				barOffsetY = Config.config.barOffsetY.get();
+				barOffsetY = Config.forgeConfig.barOffsetY.get();
 
 			if( prefsTag.contains( "xpDropOffsetX" ) )
 				xpDropOffsetX = prefsTag.getDouble( "xpDropOffsetX" );
 			else
-				xpDropOffsetX = Config.config.xpDropOffsetX.get();
+				xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
 
 			if( prefsTag.contains( "xpDropOffsetY" ) )
 				xpDropOffsetY = prefsTag.getDouble( "xpDropOffsetY" );
 			else
-				xpDropOffsetY = Config.config.xpDropOffsetY.get();
+				xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
 
 			if( prefsTag.contains( "xpDropSpawnDistance" ) )
 				xpDropSpawnDistance = prefsTag.getDouble( "xpDropSpawnDistance" );
 			else
-				xpDropSpawnDistance = Config.config.xpDropSpawnDistance.get();
+				xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
 
 			if( prefsTag.contains( "xpDropOpacityPerTime" ) )
 				xpDropOpacityPerTime = prefsTag.getDouble( "xpDropOpacityPerTime" );
 			else
-				xpDropOpacityPerTime = Config.config.xpDropOpacityPerTime.get();
+				xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
 
 			if( prefsTag.contains( "xpDropMaxOpacity" ) )
 				xpDropMaxOpacity = prefsTag.getDouble( "xpDropMaxOpacity" );
 			else
-				xpDropMaxOpacity = Config.config.xpDropMaxOpacity.get();
+				xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
 
 			if( prefsTag.contains( "xpDropDecayAge" ) )
 				xpDropDecayAge = (int) Math.floor( prefsTag.getDouble( "xpDropDecayAge" ) );
 			else
-				xpDropDecayAge = (int) Math.floor( Config.config.xpDropDecayAge.get() );
+				xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
 
 			if( prefsTag.contains( "xpDropsAttachedToBar" ) )
 			{
@@ -380,7 +380,7 @@ public class XPOverlayGUI extends AbstractGui
 					xpDropsAttachedToBar = true;
 			}
 			else
-				xpDropsAttachedToBar = Config.config.xpDropsAttachedToBar.get();
+				xpDropsAttachedToBar = Config.forgeConfig.xpDropsAttachedToBar.get();
 
 			if( prefsTag.contains( "xpBarAlwaysOn" ) )
 			{
@@ -390,7 +390,7 @@ public class XPOverlayGUI extends AbstractGui
 					xpBarAlwaysOn = true;
 			}
 			else
-				xpBarAlwaysOn = Config.config.xpBarAlwaysOn.get();
+				xpBarAlwaysOn = Config.forgeConfig.xpBarAlwaysOn.get();
 
 			if( prefsTag.contains( "xpLeftDisplayAlwaysOn" ) )
 			{
@@ -400,7 +400,7 @@ public class XPOverlayGUI extends AbstractGui
 					xpLeftDisplayAlwaysOn = true;
 			}
 			else
-				xpLeftDisplayAlwaysOn = Config.config.xpLeftDisplayAlwaysOn.get();
+				xpLeftDisplayAlwaysOn = Config.forgeConfig.xpLeftDisplayAlwaysOn.get();
 
 			if( prefsTag.contains( "showXpDrops" ) )
 			{
@@ -410,7 +410,7 @@ public class XPOverlayGUI extends AbstractGui
 					showXpDrops = true;
 			}
 			else
-				showXpDrops = Config.config.showXpDrops.get();
+				showXpDrops = Config.forgeConfig.showXpDrops.get();
 
 			if( prefsTag.contains( "stackXpDrops" ) )
 			{
@@ -420,7 +420,7 @@ public class XPOverlayGUI extends AbstractGui
 					stackXpDrops = true;
 			}
 			else
-				stackXpDrops = Config.config.stackXpDrops.get();
+				stackXpDrops = Config.forgeConfig.stackXpDrops.get();
 
 			if( !xpDropsAttachedToBar )
 				xpDropYLimit = 999999999;
@@ -428,30 +428,30 @@ public class XPOverlayGUI extends AbstractGui
 				xpDropYLimit = 0;
 
 			if( barOffsetX < 0 || barOffsetX > 1 )
-				barOffsetX = Config.config.barOffsetX.get();
+				barOffsetX = Config.forgeConfig.barOffsetX.get();
 
 			if( barOffsetY < 0 || barOffsetY > 1 )
-				barOffsetY = Config.config.barOffsetY.get();
+				barOffsetY = Config.forgeConfig.barOffsetY.get();
 
 			if( xpDropOffsetX < 0 || xpDropOffsetX > 1 )
-				xpDropOffsetX = Config.config.xpDropOffsetX.get();
+				xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
 
 			if( xpDropOffsetY < 0 || xpDropOffsetY > 1 )
-				xpDropOffsetY = Config.config.xpDropOffsetY.get();
+				xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
 
 			if( xpDropSpawnDistance < 0 || xpDropSpawnDistance > 1000 )
-				xpDropSpawnDistance = Config.config.xpDropSpawnDistance.get();
+				xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
 
 			if( xpDropOpacityPerTime < 0 || xpDropOpacityPerTime > 255 )
-				xpDropOpacityPerTime = Config.config.xpDropOpacityPerTime.get();
+				xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
 
 			if( xpDropMaxOpacity < 0 || xpDropMaxOpacity > 255 )
-				xpDropMaxOpacity = Config.config.xpDropMaxOpacity.get();
+				xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
 
 			if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
-				xpDropDecayAge = (int) Math.floor( Config.config.xpDropDecayAge.get() );
+				xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
 
-			biomePenaltyMultiplier = Config.config.biomePenaltyMultiplier.get();
+			biomePenaltyMultiplier = Config.forgeConfig.biomePenaltyMultiplier.get();
 		}
 	}
 
@@ -498,7 +498,7 @@ public class XPOverlayGUI extends AbstractGui
 //				break;
 //		}
 		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill.name().toLowerCase() ) ) ), false);
-		if( skill == Skill.SWIMMING && level - 1 < Config.config.nightvisionUnlockLevel.get() && level >= Config.config.nightvisionUnlockLevel.get() )
+		if( skill == Skill.SWIMMING && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
 			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill.name().toLowerCase() ) ) ), true );
 	}
 	

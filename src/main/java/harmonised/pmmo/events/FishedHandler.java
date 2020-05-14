@@ -37,9 +37,9 @@ public class FishedHandler
 
         if( fishPool != null )
         {
-            double fishPoolBaseChance = Config.config.fishPoolBaseChance.get();
-            double fishPoolChancePerLevel = Config.config.fishPoolChancePerLevel.get();
-            double fishPoolMaxChance = Config.config.fishPoolMaxChance.get();
+            double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
+            double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
+            double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
             double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * startLevel;
             if( fishPoolChance > fishPoolMaxChance )
                 fishPoolChance = fishPoolMaxChance;

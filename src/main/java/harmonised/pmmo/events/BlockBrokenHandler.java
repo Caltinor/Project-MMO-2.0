@@ -79,7 +79,7 @@ public class BlockBrokenHandler
 
                 if( passedBreakReq )
                 {
-                    double blockHardnessLimit = Config.config.blockHardnessLimit.get();
+                    double blockHardnessLimit = Config.forgeConfig.blockHardnessLimit.get();
                     boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
                     ItemStack toolUsed = player.getHeldItemMainhand();
                     String skill = XP.getSkill( material ).name().toLowerCase();

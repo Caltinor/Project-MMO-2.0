@@ -1,5 +1,6 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.NBTHelper;
@@ -50,7 +51,7 @@ public class MessageUpdateNBT
                     break;
 
                 case "config":
-                    XP.config = NBTHelper.nbtToMap( packet.reqPackage );
+                    Config.config = NBTHelper.nbtToMap( packet.reqPackage );
                     break;
 
                 default:

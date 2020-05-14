@@ -45,7 +45,7 @@ public class PlacedBlockHandler
 
                 if( XP.checkReq( player, block.getRegistryName(), "place" ) )
                 {
-                    double blockHardnessLimit = Config.config.blockHardnessLimit.get();
+                    double blockHardnessLimit = Config.forgeConfig.blockHardnessLimit.get();
                     double blockHardness = block.getBlockHardness(block.getDefaultState(), event.getWorld(), event.getPos());
                     if ( blockHardness > blockHardnessLimit )
                         blockHardness = blockHardnessLimit;

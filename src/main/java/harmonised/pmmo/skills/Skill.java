@@ -1,5 +1,6 @@
 package harmonised.pmmo.skills;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.DP;
@@ -119,7 +120,7 @@ public enum Skill
         if( this != Skill.INVALID_SKILL )
         {
             CompoundNBT skillsTag = XP.getSkillsTag( player );
-            double maxXp = XP.getConfig( "maxXp" );
+            double maxXp = Config.getConfig( "maxXp" );
 
             if( setAmount > maxXp )
                 setAmount = maxXp;
@@ -147,7 +148,7 @@ public enum Skill
     {
         CompoundNBT skillsTag = XP.getSkillsTag( player );
         double playerXp = this.getXp( player );
-        double maxXp = XP.getConfig( "maxXp" );
+        double maxXp = Config.getConfig( "maxXp" );
         double newLevelXp;
         String skillName = this.name().toLowerCase();
 

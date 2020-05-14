@@ -33,7 +33,7 @@ public class AnvilRepairHandler
             PlayerEntity player = event.getPlayer();
             if( !player.world.isRemote )
             {
-                boolean bypassEnchantLimit = Config.config.bypassEnchantLimit.get();
+                boolean bypassEnchantLimit = Config.forgeConfig.bypassEnchantLimit.get();
                 int currLevel = XP.getLevel( Skill.SMITHING, player );
                 ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
                 ItemStack lItem = event.getItemInput();
@@ -41,10 +41,10 @@ public class AnvilRepairHandler
 
                 if( event.getItemInput().getItem().isDamageable() )
                 {
-                    double anvilCostReductionPerLevel = Config.config.anvilCostReductionPerLevel.get();
-                    double extraChanceToNotBreakAnvilPerLevel = Config.config.extraChanceToNotBreakAnvilPerLevel.get() / 100;
-                    double anvilFinalItemBonusRepaired = Config.config.anvilFinalItemBonusRepaired.get() / 100;
-                    int anvilFinalItemMaxCostToAnvil = Config.config.anvilFinalItemMaxCostToAnvil.get();
+                    double anvilCostReductionPerLevel = Config.forgeConfig.anvilCostReductionPerLevel.get();
+                    double extraChanceToNotBreakAnvilPerLevel = Config.forgeConfig.extraChanceToNotBreakAnvilPerLevel.get() / 100;
+                    double anvilFinalItemBonusRepaired = Config.forgeConfig.anvilFinalItemBonusRepaired.get() / 100;
+                    int anvilFinalItemMaxCostToAnvil = Config.forgeConfig.anvilFinalItemMaxCostToAnvil.get();
 
                     double bonusRepair = anvilFinalItemBonusRepaired * currLevel;
                     int maxCost = (int) Math.floor( 50 - ( currLevel * anvilCostReductionPerLevel ) );
@@ -94,12 +94,12 @@ public class AnvilRepairHandler
     public static Map<Enchantment, Integer> mergeEnchants( Map<Enchantment, Integer> lEnchants, Map<Enchantment, Integer> rEnchants, PlayerEntity player, int currLevel )
     {
         Map<Enchantment, Integer> newEnchants = new HashMap<>();
-        double bypassChance = Config.config.upgradeChance.get();
-        double failedBypassPenaltyChance = Config.config.failedUpgradeKeepLevelChance.get();
-        int levelsPerOneEnchantBypass = Config.config.levelsPerOneEnchantBypass.get();
-        int maxEnchantmentBypass = Config.config.maxEnchantmentBypass.get();
-        int maxEnchantLevel = Config.config.maxEnchantLevel.get();
-        boolean alwaysUseUpgradeChance = Config.config.alwaysUseUpgradeChance.get();
+        double bypassChance = Config.forgeConfig.upgradeChance.get();
+        double failedBypassPenaltyChance = Config.forgeConfig.failedUpgradeKeepLevelChance.get();
+        int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
+        int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
+        int maxEnchantLevel = Config.forgeConfig.maxEnchantLevel.get();
+        boolean alwaysUseUpgradeChance = Config.forgeConfig.alwaysUseUpgradeChance.get();
         boolean creative = !XP.isPlayerSurvival( player );
 
         lEnchants.forEach( ( enchant, startLevel ) ->

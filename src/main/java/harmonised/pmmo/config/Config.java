@@ -1,15 +1,42 @@
 package harmonised.pmmo.config;
 
+import harmonised.pmmo.skills.XP;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Config
 {
-    public static ConfigImplementation config;
+    private static final Logger LOGGER = LogManager.getLogger();
+    public static Map<String, Double> localConfig = new HashMap<>();
+    public static Map<String, Double> config = new HashMap<>();
+
+    public static ConfigImplementation forgeConfig;
 
     public static void init()
     {
-        config = ConfigHelper.register( ModConfig.Type.COMMON, ConfigImplementation::new );
+        forgeConfig = ConfigHelper.register( ModConfig.Type.COMMON, ConfigImplementation::new );
+
+        localConfig.put( "baseXp", (double) forgeConfig.baseXp.get() );
+        localConfig.put( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
+        localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
+        localConfig.put( "maxXp", XP.xpAtLevel( forgeConfig.maxLevel.get() ) );
+        localConfig.put( "biomePenaltyMultiplier", forgeConfig.biomePenaltyMultiplier.get() );
+        localConfig.put( "nightvisionUnlockLevel", (double) forgeConfig.nightvisionUnlockLevel.get() );
+        localConfig.put( "speedBoostPerLevel", forgeConfig.speedBoostPerLevel.get() );
+        localConfig.put( "maxSpeedBoost", forgeConfig.maxSpeedBoost.get() );
+        localConfig.put( "maxJumpBoost", forgeConfig.maxJumpBoost.get() );
+        localConfig.put( "levelsCrouchJumpBoost", (double) forgeConfig.levelsCrouchJumpBoost.get() );
+        localConfig.put( "levelsSprintJumpBoost", (double) forgeConfig.levelsSprintJumpBoost.get() );
+
+        if( Config.forgeConfig.crawlingAllowed.get() )
+            localConfig.put( "crawlingAllowed", 1D );
+        else
+            localConfig.put( "crawlingAllowed", 0D );
     }
 
     public static class ConfigImplementation
@@ -875,6 +902,19 @@ public class Config
 
                 builder.pop();
             }
+        }
+    }
+
+    public static double getConfig( String key )
+    {
+        if( Config.config.containsKey( key ) )
+            return Config.config.get( key );
+        else if( Config.localConfig.containsKey( key ) )
+            return Config.localConfig.get( key );
+        else
+        {
+            LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT" );
+            return -1;
         }
     }
 }

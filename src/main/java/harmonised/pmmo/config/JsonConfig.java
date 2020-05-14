@@ -58,7 +58,7 @@ public class JsonConfig
         defaultReq = JsonConfig.readFromFile( templateData.getPath() );
         customReq = JsonConfig.readFromFile( data.getPath() );
 
-        if( Config.config.loadDefaultConfig.get() )
+        if( Config.forgeConfig.loadDefaultConfig.get() )
             updateFinal( defaultReq );
         updateFinal( customReq );
     }
@@ -148,86 +148,86 @@ public class JsonConfig
 
     private static void updateFinal( JsonConfig req )
     {
-        if( Config.config.wearReqEnabled.get() )
+        if( Config.forgeConfig.wearReqEnabled.get() )
             updateReqSkills( req.wears, localData.get( "wearReq" ) );
 
-        if( Config.config.toolReqEnabled.get() )
+        if( Config.forgeConfig.toolReqEnabled.get() )
             updateReqSkills( req.tools, localData.get( "toolReq" ) );
 
-        if( Config.config.weaponReqEnabled.get() )
+        if( Config.forgeConfig.weaponReqEnabled.get() )
             updateReqSkills( req.weapons, localData.get( "weaponReq" ) );
 
 //        updateReqSkills( req.mobs, mobReq );
 
-        if( Config.config.useReqEnabled.get() )
+        if( Config.forgeConfig.useReqEnabled.get() )
             updateReqSkills( req.use, localData.get( "useReq" ) );
 
-        if( Config.config.xpValueEnabled.get() )
+        if( Config.forgeConfig.xpValueEnabled.get() )
             updateReqSkills( req.xpValue, localData.get( "xpValue" ) );
 
-        if( Config.config.xpValueCraftingEnabled.get() )
+        if( Config.forgeConfig.xpValueCraftingEnabled.get() )
             updateReqSkills( req.xpValueCrafting, localData.get( "xpValueCrafting" ) );
 
-        if( Config.config.placeReqEnabled.get() )
+        if( Config.forgeConfig.placeReqEnabled.get() )
             updateReqSkills( req.placing, localData.get( "placeReq" ) );
 
-        if( Config.config.breakReqEnabled.get() )
+        if( Config.forgeConfig.breakReqEnabled.get() )
             updateReqSkills( req.breaking, localData.get( "breakReq" ) );
 
-        if( Config.config.biomeReqEnabled.get() )
+        if( Config.forgeConfig.biomeReqEnabled.get() )
         {
             updateReqSkills( req.biome, localData.get( "biomeReq" ) );
             updateReqEffects( req.biomeEff, localData.get( "biomeEffect" ) );
         }
 
-        if( Config.config.biomeXpBonusEnabled.get() )
+        if( Config.forgeConfig.biomeXpBonusEnabled.get() )
             updateReqSkills( req.biomeXpBonus, localData.get( "biomeXpBonus" ) );
 
-        if( Config.config.biomeMobMultiplierEnabled.get() )
+        if( Config.forgeConfig.biomeMobMultiplierEnabled.get() )
             updateReqAttributes( req.biomeMobMultiplier, localData.get( "biomeMobMultiplier" ) );
 
-        if( Config.config.oreEnabled.get() )
+        if( Config.forgeConfig.oreEnabled.get() )
             updateReqExtra( req.ores, localData.get( "oreInfo" ) );
 
-        if( Config.config.logEnabled.get() )
+        if( Config.forgeConfig.logEnabled.get() )
             updateReqExtra( req.logs, localData.get( "logInfo" ) );
 
-        if( Config.config.plantEnabled.get() )
+        if( Config.forgeConfig.plantEnabled.get() )
             updateReqExtra( req.plants, localData.get( "plantInfo" ) );
 
-        if( Config.config.salvageEnabled.get() )
+        if( Config.forgeConfig.salvageEnabled.get() )
             updateReqSalvage( req.salvage, localData.get( "salvageInfo" ) );
 
-        if( Config.config.fishPoolEnabled.get() )
+        if( Config.forgeConfig.fishPoolEnabled.get() )
             updateReqfishPool( req.fishPool, localData.get( "fishPool" ) );
 
-        if( Config.config.fishEnchantPoolEnabled.get() )
+        if( Config.forgeConfig.fishEnchantPoolEnabled.get() )
             updateReqFishEnchantPool( req.fishEnchantPool, localData.get( "fishEnchantPool" ) );
 
-        if( Config.config.killReqEnabled.get() )
+        if( Config.forgeConfig.killReqEnabled.get() )
             updateReqSkills( req.killReq, localData.get( "killReq" ) );
 
-        if( Config.config.killXpEnabled.get() )
+        if( Config.forgeConfig.killXpEnabled.get() )
             updateReqSkills( req.killXp, localData.get( "killXp" ) );
 
-        if( Config.config.mobRareDropEnabled.get() )
+        if( Config.forgeConfig.mobRareDropEnabled.get() )
             updateEntityItem( req.mobRareDrop, localData.get( "mobRareDrop" ) );
 
-        if( Config.config.mobRareDropEnabled.get() )
+        if( Config.forgeConfig.mobRareDropEnabled.get() )
             updateCommand( req.levelUpCommand, localData.get( "levelUpCommand" ) );
 
-        if( Config.config.heldItemXpBoostEnabled.get() )
+        if( Config.forgeConfig.heldItemXpBoostEnabled.get() )
             updateReqSkills( req.heldItemXpBoost, localData.get( "heldItemXpBoost" ) );
 
-        if( Config.config.wornItemXpBoostEnabled.get() )
+        if( Config.forgeConfig.wornItemXpBoostEnabled.get() )
             updateReqSkills( req.wornItemXpBoost, localData.get( "wornItemXpBoost" ) );
 
         updatePlayerSpecific( req.playerSpecific, localData.get( "playerSpecific" ) );
 
-        if( Config.config.breedingXpEnabled.get() )
+        if( Config.forgeConfig.breedingXpEnabled.get() )
             updateReqSkills( req.xpValueBreeding, localData.get( "xpValueBreeding" ) );
 
-        if( Config.config.tamingXpEnabled.get() )
+        if( Config.forgeConfig.tamingXpEnabled.get() )
             updateReqSkills( req.xpValueTaming, localData.get( "xpValueTaming" ) );
 
         data = localData;

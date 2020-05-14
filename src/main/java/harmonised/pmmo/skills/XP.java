@@ -13,12 +13,7 @@ import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -27,8 +22,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
@@ -37,25 +30,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraftforge.common.IPlantable;
 
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.player.AnvilRepairEvent;
-import net.minecraftforge.event.entity.player.ItemFishedEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -63,7 +40,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 
 public class XP
 {
@@ -73,34 +49,12 @@ public class XP
 	public static Set<UUID> isCrawling = new HashSet<>();
 	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
-	private static double globalMultiplier = Config.config.globalMultiplier.get();
-	private static boolean broadcastMilestone = Config.config.broadcastMilestone.get();
+	private static Map<UUID, String> lastBiome = new HashMap<>();
+	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
+	private static boolean broadcastMilestone = Config.forgeConfig.broadcastMilestone.get();
 	private static int debugInt = 0;
-
-	public static Map<String, Double> localConfig = new HashMap<>();
-    public static Map<String, Double> config = new HashMap<>();
-
 	public static void initValues()
 	{
-////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
-
-		localConfig.put( "baseXp", (double) Config.config.baseXp.get() );
-		localConfig.put( "xpIncreasePerLevel", (double) Config.config.xpIncreasePerLevel.get() );
-		localConfig.put( "maxLevel", (double) Config.config.maxLevel.get() );
-		localConfig.put( "maxXp", xpAtLevel( Config.config.maxLevel.get() ) );
-		localConfig.put( "biomePenaltyMultiplier", Config.config.biomePenaltyMultiplier.get() );
-		localConfig.put( "nightvisionUnlockLevel", (double) Config.config.nightvisionUnlockLevel.get() );
-		localConfig.put( "speedBoostPerLevel", Config.config.speedBoostPerLevel.get() );
-		localConfig.put( "maxSpeedBoost", Config.config.maxSpeedBoost.get() );
-		localConfig.put( "maxJumpBoost", Config.config.maxJumpBoost.get() );
-		localConfig.put( "levelsCrouchJumpBoost", (double) Config.config.levelsCrouchJumpBoost.get() );
-		localConfig.put( "levelsSprintJumpBoost", (double) Config.config.levelsSprintJumpBoost.get() );
-
-		if( Config.config.crawlingAllowed.get() )
-			localConfig.put( "crawlingAllowed", 1D );
-		else
-			localConfig.put( "crawlingAllowed", 0D );
-
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
 		skillColors.put( Skill.MINING, 0x00ffff );
 		skillColors.put( Skill.BUILDING, 0x00ffff );
@@ -374,19 +328,6 @@ public class XP
 			return "UNKNOWN";
 	}
 
-	public static double getConfig( String key )
-	{
-		if( config.containsKey( key ) )
-			return config.get( key );
-		else if( localConfig.containsKey( key ) )
-			return localConfig.get( key );
-		else
-		{
-			LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT" );
-			return -1;
-		}
-	}
-
 	public static void sendMessage( String msg, boolean bar, PlayerEntity player )
 	{
 		player.sendStatusMessage( new StringTextComponent( msg ), bar );
@@ -583,7 +524,7 @@ public class XP
 	{
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( JsonConfig.localData, "json" ), (ServerPlayerEntity) player );
 
-		NetworkHandler.sendToPlayer( new MessageUpdateNBT( NBTHelper.mapToNBT( localConfig ), "config" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateNBT( NBTHelper.mapToNBT( Config.localConfig ), "config" ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayer( PlayerEntity player )
@@ -868,59 +809,59 @@ public class XP
 		switch( skill )
 		{
 			case MINING:
-				skillMultiplier = Config.config.miningMultiplier.get();
+				skillMultiplier = Config.forgeConfig.miningMultiplier.get();
 				break;
 
 			case BUILDING:
-				skillMultiplier = Config.config.buildingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.buildingMultiplier.get();
 				break;
 
 			case EXCAVATION:
-				skillMultiplier = Config.config.excavationMultiplier.get();
+				skillMultiplier = Config.forgeConfig.excavationMultiplier.get();
 				break;
 
 			case WOODCUTTING:
-				skillMultiplier = Config.config.woodcuttingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.woodcuttingMultiplier.get();
 				break;
 
 			case FARMING:
-				skillMultiplier = Config.config.farmingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.farmingMultiplier.get();
 				break;
 
 			case AGILITY:
-				skillMultiplier = Config.config.agilityMultiplier.get();
+				skillMultiplier = Config.forgeConfig.agilityMultiplier.get();
 				break;
 
 			case ENDURANCE:
-				skillMultiplier = Config.config.enduranceMultiplier.get();
+				skillMultiplier = Config.forgeConfig.enduranceMultiplier.get();
 				break;
 
 			case COMBAT:
-				skillMultiplier = Config.config.combatMultiplier.get();
+				skillMultiplier = Config.forgeConfig.combatMultiplier.get();
 				break;
 
 			case ARCHERY:
-				skillMultiplier = Config.config.archeryMultiplier.get();
+				skillMultiplier = Config.forgeConfig.archeryMultiplier.get();
 				break;
 
 			case SMITHING:
-				skillMultiplier = Config.config.repairingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.repairingMultiplier.get();
 				break;
 
 			case FLYING:
-				skillMultiplier = Config.config.flyingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.flyingMultiplier.get();
 				break;
 
 			case SWIMMING:
-				skillMultiplier = Config.config.swimmingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.swimmingMultiplier.get();
 				break;
 
 			case FISHING:
-				skillMultiplier = Config.config.fishingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.fishingMultiplier.get();
 				break;
 
 			case CRAFTING:
-				skillMultiplier = Config.config.craftingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.craftingMultiplier.get();
 				break;
 
 			default:
@@ -939,19 +880,19 @@ public class XP
 			switch( player.world.getDifficulty() )
 			{
 				case PEACEFUL:
-					difficultyMultiplier = Config.config.peacefulMultiplier.get();
+					difficultyMultiplier = Config.forgeConfig.peacefulMultiplier.get();
 					break;
 
 				case EASY:
-					difficultyMultiplier = Config.config.easyMultiplier.get();
+					difficultyMultiplier = Config.forgeConfig.easyMultiplier.get();
 					break;
 
 				case NORMAL:
-					difficultyMultiplier = Config.config.normalMultiplier.get();
+					difficultyMultiplier = Config.forgeConfig.normalMultiplier.get();
 					break;
 
 				case HARD:
-					difficultyMultiplier = Config.config.hardMultiplier.get();
+					difficultyMultiplier = Config.forgeConfig.hardMultiplier.get();
 					break;
 
 				default:
@@ -1008,7 +949,7 @@ public class XP
 	{
 		double biomeBoost = 0;
 		double theBiomeBoost = 0;
-		double biomePenaltyMultiplier = getConfig( "biomePenaltyMultiplier" );
+		double biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
 		String skillName = skill.toString().toLowerCase();
 
 		Biome biome = player.world.getBiome( player.getPosition() );
@@ -1046,7 +987,7 @@ public class XP
 
 	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip )
 	{
-		double maxXp = getConfig( "maxXp" );
+		double maxXp = Config.getConfig( "maxXp" );
 
 		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
 			return;
@@ -1332,9 +1273,9 @@ public class XP
 	}
 	public static int levelAtXp( double xp )
 	{
-		double baseXp = getConfig( "baseXp" );
-		double xpIncreasePerLevel = getConfig( "xpIncreasePerLevel" );
-		int maxLevel = (int) Math.floor( getConfig( "maxLevel" ) );
+		double baseXp = Config.getConfig( "baseXp" );
+		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
+		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
 
 		int theXp = 0;
 
@@ -1354,7 +1295,7 @@ public class XP
 	}
 	public static double levelAtXpDecimal( double xp )
 	{
-		int maxLevel = (int) Math.floor( getConfig( "maxLevel" ) );
+		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
 
 		if( levelAtXp( xp ) == maxLevel )
 			xp = xpAtLevel( maxLevel );
@@ -1374,9 +1315,9 @@ public class XP
 	}
 	public static double xpAtLevel( double givenLevel )
 	{
-		double baseXp = getConfig( "baseXp" );
-		double xpIncreasePerLevel = getConfig( "xpIncreasePerLevel" );
-		int maxLevel = (int) Math.floor( getConfig( "maxLevel" ) );
+		double baseXp = Config.getConfig( "baseXp" );
+		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
+		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
 
 		double theXp = 0;
 		if( givenLevel > maxLevel )

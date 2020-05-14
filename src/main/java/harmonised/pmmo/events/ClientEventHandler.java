@@ -58,7 +58,8 @@ public class ClientEventHandler
 
             if( wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() )
             {
-                Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
+                if( Minecraft.getInstance().player.getDisplayName().getString().equals( "Dev" ) )
+                    Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
 
                 wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
 //                NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );

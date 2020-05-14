@@ -30,28 +30,28 @@ public class BreakSpeedHandler
                 if (height < 0)
                     height = -height;
 
-                double blocksToUnbreakableY = Config.config.blocksToUnbreakableY.get();
+                double blocksToUnbreakableY = Config.forgeConfig.blocksToUnbreakableY.get();
                 double heightMultiplier = 1 - ( height / blocksToUnbreakableY );
 
-                if ( heightMultiplier < Config.config.minBreakSpeed.get() )
-                    heightMultiplier = Config.config.minBreakSpeed.get();
+                if ( heightMultiplier < Config.forgeConfig.minBreakSpeed.get() )
+                    heightMultiplier = Config.forgeConfig.minBreakSpeed.get();
 
-                speedBonus = Config.config.miningBonusSpeed.get() / 100;
+                speedBonus = Config.forgeConfig.miningBonusSpeed.get() / 100;
                 event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) * ( (float) heightMultiplier ) );
                 break;
 
             case "axe":
-                speedBonus = Config.config.woodcuttingBonusSpeed.get() / 100;
+                speedBonus = Config.forgeConfig.woodcuttingBonusSpeed.get() / 100;
                 event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 
             case "shovel":
-                speedBonus = Config.config.excavationBonusSpeed.get() / 100;
+                speedBonus = Config.forgeConfig.excavationBonusSpeed.get() / 100;
                 event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 
             case "hoe":
-                speedBonus = Config.config.farmingBonusSpeed.get() / 100;
+                speedBonus = Config.forgeConfig.farmingBonusSpeed.get() / 100;
                 event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 
