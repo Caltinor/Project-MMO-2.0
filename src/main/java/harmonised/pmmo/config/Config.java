@@ -210,7 +210,7 @@ public class Config
                 this.maxMobDamageBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum amount an aggressive mob's damage will be boosted?" )
                         .translation( "pmmo.maxMobDamageBoost" )
-                        .defineInRange( "maxMobDamageBoost", 50D, 0, 10000) );
+                        .defineInRange( "maxMobDamageBoost", 100D, 0, 1000) );
 
                 this.mobDamageBoostPerPowerLevel = subscriber.subscribe(builder
                         .comment( "How much an aggresive mob's damage will increase per one Power Level?" )
@@ -220,7 +220,7 @@ public class Config
                 this.maxMobHPBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum amount an aggressive mob's HP will be boosted?" )
                         .translation( "pmmo.maxMobHPBoost" )
-                        .defineInRange( "maxMobHPBoost", 128D, 0, 1024) );
+                        .defineInRange( "maxMobHPBoost", 1000D, 0, 1024) );
 
                 this.mobHPBoostPerPowerLevel = subscriber.subscribe(builder
                         .comment( "How much an aggresive mob's HP will increase per one Power Level?" )

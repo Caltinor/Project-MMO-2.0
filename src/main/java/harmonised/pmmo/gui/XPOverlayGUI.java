@@ -532,7 +532,7 @@ public class XPOverlayGUI extends AbstractGui
 				}
 			}
 
-			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + skill.name() + " has been set to: " + xp );
+//			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + skill.name() + " has been set to: " + xp );
 		}
 		else if( stackXpDrops && xpDrops.size() > 0 )
 		{

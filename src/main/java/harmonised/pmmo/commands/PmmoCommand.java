@@ -272,12 +272,15 @@ public class PmmoCommand
 
             for( ServerPlayerEntity player : players )
             {
+                String playerName = player.getDisplayName().getString();
                 AttributeHandler.updateAll( player );
 
                 NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0, true ), player );
                 player.getPersistentData().getCompound( "pmmo" ).put( "skills", new CompoundNBT() );
 
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsCleared" ), false );
+
+                LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );
             }
         }
         catch( CommandSyntaxException e )
@@ -319,6 +322,7 @@ public class PmmoCommand
 
                 for( ServerPlayerEntity player : players )
                 {
+                    String playerName = player.getDisplayName().getString();
                     double newValue = DoubleArgumentType.getDouble( context, "New Value" );
 
                     if( type.equals( "level" ) )
@@ -327,23 +331,25 @@ public class PmmoCommand
                         skill.setXp( player, newValue );
                     else
                     {
-                        LOGGER.error( "Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
+                        LOGGER.error( "PMMO Command Set: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
                         if( sender != null )
                             sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
 
                     AttributeHandler.updateAll( player );
+
+                    LOGGER.info( "PMMO Command Set: " + playerName + " " + args[4] + " has been set to " + args[5] + " " + args[6] );
                 }
             }
             catch( CommandSyntaxException e )
             {
-                LOGGER.error( "Set Command Failed to get Players [" + Arrays.toString(args) + "]", e );
+                LOGGER.error( "PMMO Command Set: Failed to get Players [" + Arrays.toString(args) + "]", e );
             }
         }
         else
         {
-            LOGGER.error( "Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
+            LOGGER.error( "PMMO Command Set: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
 
             if( sender != null )
                 sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
@@ -377,6 +383,7 @@ public class PmmoCommand
 
                 for( ServerPlayerEntity player : players )
                 {
+                    String playerName = player.getDisplayName().getString();
                     double newValue = DoubleArgumentType.getDouble( context, "Value To Add" );
 
                     if( type.equals( "level" ) )
@@ -385,21 +392,23 @@ public class PmmoCommand
                         skill.addXp( player, newValue );
                     else
                     {
-                        LOGGER.error( "Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
+                        LOGGER.error( "PMMO Command Add: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
                         if( sender != null )
                             sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
+
+                    LOGGER.info( "PMMO Command Add: " + playerName + " " + args[4] + " has had " + args[6] + " " + args[5] + " added" );
                 }
             }
             catch( CommandSyntaxException e )
             {
-                LOGGER.error( "Add Command Failed to get Players [" + Arrays.toString(args) + "]", e );
+                LOGGER.error( "PMMO Command Add: Add Command Failed to get Players [" + Arrays.toString(args) + "]", e );
             }
         }
         else
         {
-            LOGGER.error( "Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
+            LOGGER.error( "PMMO Command Add: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
 
             if( sender != null )
                 sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );

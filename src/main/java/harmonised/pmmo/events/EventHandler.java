@@ -2,6 +2,7 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.skills.XP;
 
+import jdk.nashorn.internal.ir.Block;
 import net.minecraft.advancements.criterion.FishingRodHookedTrigger;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -22,103 +23,103 @@ public class EventHandler
 	@SubscribeEvent
     public static void blockBroken( BreakEvent event )
     {
-		XP.handleBroken( event );
+		BlockBrokenHandler.handleBroken( event );
     }
 
 	@SubscribeEvent
 	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
 	{
-		XP.handlePlaced( event );
+		PlacedBlockHandler.handlePlaced( event );
 	}
 	
 	@SubscribeEvent
 	public static void livingHurt( LivingDamageEvent event )
 	{
-		XP.handleDamage( event );
+		DamageHandler.handleDamage( event );
 	}
 
 	@SubscribeEvent
 	public static void livingDeath( LivingDeathEvent event )
 	{
-		XP.handleLivingDeath( event );
+		DeathHandler.handleDeath( event );
 	}
 
 	@SubscribeEvent
 	public static void playerTick( TickEvent.PlayerTickEvent event )
 	{
-		XP.handlePlayerTick( event );
+		PlayerTickHandler.handlePlayerTick( event );
 	}
 	
 	@SubscribeEvent
 	public static void playerRespawn( PlayerEvent.PlayerRespawnEvent event )
 	{
-		XP.handlePlayerRespawn( event );
+		PlayerRespawnHandler.handlePlayerRespawn( event );
 	}
 	
 	@SubscribeEvent
 	public static void livingJump( LivingJumpEvent event )
 	{
-		XP.handleJump( event );
+		JumpHandler.handleJump( event );
 	}
 	
 	@SubscribeEvent
 	public static void PlayerLogin( PlayerEvent.PlayerLoggedInEvent event)
 	{
-		XP.handlePlayerConnected( event );
+		PlayerConnectedHandler.handlePlayerConnected( event );
 	}
 
     @SubscribeEvent
 	public static void playerClone( PlayerEvent.Clone event )
 	{
-		XP.handleClone( event );
+		PlayerCloneHandler.handleClone( event );
 	}
 
 	@SubscribeEvent
 	public static void onAnvilRepair( AnvilRepairEvent event )
 	{
-		XP.handleAnvilRepair( event );
+		AnvilRepairHandler.handleAnvilRepair( event );
 	}
 	
 	@SubscribeEvent
 	public static void onItemFished( ItemFishedEvent event )
 	{
-		XP.handleFished( event );
+		FishedHandler.handleFished( event );
 	}
 
 	
 	@SubscribeEvent
 	public static void itemCrafted( PlayerEvent.ItemCraftedEvent event )
 	{
-		XP.handleCrafted( event );
+		CraftedHandler.handleCrafted( event );
 	}
 
 	@SubscribeEvent
 	public static void breakSpeed( PlayerEvent.BreakSpeed event )
 	{
-		XP.handleBreakSpeed( event );
+		BreakSpeedHandler.handleBreakSpeed( event );
 	}
 
 	@SubscribeEvent
 	public static void itemUsed( PlayerInteractEvent event )
 	{
-		XP.handleItemUse( event );
+		PlayerInteractionHandler.handleItemUse( event );
 	}
 
 	@SubscribeEvent
 	public static void livingSpawn( LivingSpawnEvent.EnteringChunk event )
 	{
-		XP.handleLivingSpawn( event );
+		SpawnHandler.handleSpawn( event );
 	}
 
 	@SubscribeEvent
 	public static void babySpawn( BabyEntitySpawnEvent event )
 	{
-		XP.handleBreedEvent( event );
+		BreedHandler.handleBreedEvent( event );
 	}
 
 	@SubscribeEvent
 	public static void animalTaming( AnimalTameEvent event )
 	{
-		XP.handleAnimalTaming( event );
+		TamingHandler.handleAnimalTaming( event );
 	}
 }
