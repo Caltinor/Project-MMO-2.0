@@ -77,6 +77,9 @@ public class DamageHandler
                     }
                     damage -= saved;
 
+                    if( damage <= 0 )
+                        event.setCanceled( true );
+
                     if( saved != 0 && player.getHealth() > damage )
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedFall", saved ), true );
 

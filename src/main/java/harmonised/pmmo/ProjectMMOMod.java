@@ -59,5 +59,6 @@ public class ProjectMMOMod
     private void serverStart(FMLServerStartingEvent event)
     {
         PmmoCommand.register( event.getCommandDispatcher() );
+        Config.initServer();
     }
 }

@@ -3,6 +3,7 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -55,7 +56,7 @@ public class MessageUpdateNBT
                     break;
 
                 default:
-                    System.out.println( "WRONG SYNC NAME" );
+                    LogHandler.LOGGER.error( "WRONG SYNC NAME" );
                     break;
             }
         });

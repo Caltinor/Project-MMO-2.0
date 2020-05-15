@@ -267,7 +267,6 @@ public class PlayerInteractionHandler
                                         }
                                         else
                                         {
-                                            System.out.println( player.getPosition().distanceSq( event.getPos() ) );
                                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooFarAwayToSalvage" ).setStyle( XP.textStyle.get( "red" ) ), true );
                                         }
                                     }

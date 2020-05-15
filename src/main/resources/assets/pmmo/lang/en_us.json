@@ -5,6 +5,7 @@
   "key.pmmo.crawl": "Crawl",
   "key.pmmo.openMenu": "Open Menu",
   "pmmo.xpLeft": "%1$s left",
+  "pmmo.lostXp": "You lost a total of %1$sxp!",
   "pmmo.maxLevel": "MAX LEVEL",
   "pmmo.levelDisplay": "%1$s %2$s",
   "pmmo.levelDisplayPercentage": "%1$s%% in %2$s",

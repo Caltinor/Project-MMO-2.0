@@ -7,6 +7,7 @@ import harmonised.pmmo.network.MessageTripleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -86,8 +87,7 @@ public class AnvilRepairHandler
         }
         catch( Exception e )
         {
-            LOGGER.error( "ANVIL FAILED, PLEASE REPORT", e );
-            System.out.println( "ANVIL FAILED, PLEASE REPORT" );
+            LogHandler.LOGGER.error( "ANVIL FAILED, PLEASE REPORT", e );
         }
     }
 

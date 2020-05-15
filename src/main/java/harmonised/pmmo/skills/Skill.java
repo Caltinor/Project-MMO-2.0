@@ -4,6 +4,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -134,7 +135,7 @@ public enum Skill
             NetworkHandler.sendToPlayer( new MessageXp( setAmount, this.getValue(), 0, false ), (ServerPlayerEntity) player );
         }
         else
-            LOGGER.error( "Invalid skill at method setXp" );
+            LogHandler.LOGGER.error( "Invalid skill at method setXp" );
     }
 
     public void addLevel( ServerPlayerEntity player, double addAmount )

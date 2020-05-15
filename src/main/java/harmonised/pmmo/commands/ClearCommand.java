@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.arguments.EntityArgument;
@@ -39,12 +40,12 @@ public class ClearCommand
 
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsCleared" ), false );
 
-                LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );
+                LogHandler.LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );
             }
         }
         catch( CommandSyntaxException e )
         {
-            LOGGER.error( "Clear Command Failed to get Players [" + Arrays.toString(args) + "]", e );
+            LogHandler.LOGGER.error( "Clear Command Failed to get Players [" + Arrays.toString(args) + "]", e );
         }
 
         return 1;

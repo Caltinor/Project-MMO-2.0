@@ -4,6 +4,7 @@ import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
@@ -51,7 +52,7 @@ public class ClientHandler
                 break;
 
             default:
-                System.out.println( "WRONG NBT UPDATE NAME" );
+                LogHandler.LOGGER.error( "ERROR MessageUpdateNBT WRONG TYPE" );
                 break;
         }
     }

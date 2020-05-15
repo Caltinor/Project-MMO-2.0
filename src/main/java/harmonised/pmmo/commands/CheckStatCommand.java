@@ -12,6 +12,7 @@ import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class CheckStatCommand
@@ -30,11 +31,14 @@ public class CheckStatCommand
 
                 ServerPlayerEntity target = EntityArgument.getPlayer( context, "player name" );
                 if( skillName.toLowerCase().equals( "power" ) )
+                {
                     level = XP.getPowerLevel( target );
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( new Style().setColor( TextFormatting.AQUA ) ) ), false );
+                }
                 else
+                {
                     level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
-
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ) ), false );
+                }
 
                 //EXTRA INFO
                 switch( skillName )

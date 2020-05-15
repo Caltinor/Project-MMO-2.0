@@ -1,6 +1,7 @@
 package harmonised.pmmo.config;
 
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
@@ -11,7 +12,6 @@ import java.util.Map;
 
 public class Config
 {
-    private static final Logger LOGGER = LogManager.getLogger();
     public static Map<String, Double> localConfig = new HashMap<>();
     public static Map<String, Double> config = new HashMap<>();
 
@@ -20,7 +20,10 @@ public class Config
     public static void init()
     {
         forgeConfig = ConfigHelper.register( ModConfig.Type.COMMON, ConfigImplementation::new );
+    }
 
+    public static void initServer()
+    {
         localConfig.put( "baseXp", (double) forgeConfig.baseXp.get() );
         localConfig.put( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
         localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
@@ -37,6 +40,8 @@ public class Config
             localConfig.put( "crawlingAllowed", 1D );
         else
             localConfig.put( "crawlingAllowed", 0D );
+
+//        config = localConfig;
     }
 
     public static class ConfigImplementation
@@ -215,7 +220,7 @@ public class Config
                         .define( "crawlingAllowed", true) );
 
                 this.showWelcome = subscriber.subscribe(builder
-                        .comment( "Should your personal Welcome message come up?" )
+                        .comment( "Should the Welcome message come up?" )
                         .translation( "pmmo.showWelcome" )
                         .define( "showWelcome", true) );
 
@@ -913,7 +918,7 @@ public class Config
             return Config.localConfig.get( key );
         else
         {
-            LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT" );
+            LogHandler.LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT" );
             return -1;
         }
     }

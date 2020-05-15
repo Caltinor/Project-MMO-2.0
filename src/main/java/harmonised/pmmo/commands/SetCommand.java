@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.arguments.EntityArgument;
@@ -63,7 +64,7 @@ public class SetCommand
                         skill.setXp( player, newValue );
                     else
                     {
-                        LOGGER.error( "PMMO Command Set: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
+                        LogHandler.LOGGER.error( "PMMO Command Set: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
                         if( sender != null )
                             sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
@@ -71,17 +72,17 @@ public class SetCommand
 
                     AttributeHandler.updateAll( player );
 
-                    LOGGER.info( "PMMO Command Set: " + playerName + " " + args[4] + " has been set to " + args[5] + " " + args[6] );
+                    LogHandler.LOGGER.info( "PMMO Command Set: " + playerName + " " + args[4] + " has been set to " + args[5] + " " + args[6] );
                 }
             }
             catch( CommandSyntaxException e )
             {
-                LOGGER.error( "PMMO Command Set: Failed to get Players [" + Arrays.toString(args) + "]", e );
+                LogHandler.LOGGER.error( "PMMO Command Set: Failed to get Players [" + Arrays.toString(args) + "]", e );
             }
         }
         else
         {
-            LOGGER.error( "PMMO Command Set: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
+            LogHandler.LOGGER.error( "PMMO Command Set: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
 
             if( sender != null )
                 sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );

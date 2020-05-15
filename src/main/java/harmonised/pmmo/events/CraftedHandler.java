@@ -18,6 +18,7 @@ public class CraftedHandler
         PlayerEntity player = event.getPlayer();
         if( !player.world.isRemote() )
         {
+            double durabilityMultiplier = 1;
             Map<String, Double> award = new HashMap<>();
             award.put( "crafting", 1D );
             ItemStack itemStack = event.getCrafting();
@@ -26,11 +27,15 @@ public class CraftedHandler
             if( JsonConfig.data.get( "xpValueCrafting" ).containsKey( resLoc.toString() ) )
                 XP.addMaps( award, XP.getXpCrafting( resLoc ) );
 
-            XP.multiplyMap( award, itemStack.getCount() );
+            if( itemStack.isDamageable() )
+                durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamage() ) / (double) itemStack.getMaxDamage();
 
-            for( String skillName : award.keySet() )
+            XP.multiplyMap( award, itemStack.getCount() );
+            XP.multiplyMap( award, durabilityMultiplier );
+
+            for( Map.Entry<String, Double> entry : award.entrySet() )
             {
-                XP.awardXp( player, Skill.getSkill( skillName ), "crafting", award.get( skillName ), false );
+                XP.awardXp( player, Skill.getSkill( entry.getKey() ), "crafting", entry.getValue(), false );
             }
         }
     }

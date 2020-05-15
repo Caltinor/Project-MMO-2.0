@@ -2,6 +2,7 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.enchantment.Enchantment;
@@ -83,8 +84,8 @@ public class SearchRegCommand
                 break;
         }
 
-        System.out.println( listOut.toString() );
-        System.out.println( listOutExtra.toString() );
+        LogHandler.LOGGER.info( listOut.toString() );
+        LogHandler.LOGGER.info( listOutExtra.toString() );
 
         return 1;
     }

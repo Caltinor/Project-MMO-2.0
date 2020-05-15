@@ -10,6 +10,7 @@ import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -47,7 +48,7 @@ public class XP
 	private static Map<Skill, Integer> skillColors = new HashMap<>();
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static Set<UUID> isCrawling = new HashSet<>();
-	public static Map<String, TextFormatting> skillTextFormat = new HashMap<>();
+	public static Map<Skill, TextFormatting> skillTextFormat = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
@@ -76,26 +77,25 @@ public class XP
 		skillColors.put( Skill.FLETCHING, 0xff9700 );
 		skillColors.put( Skill.TAMING, 0xffffff );
 
-		skillTextFormat.put( "mining", TextFormatting.AQUA );
-		skillTextFormat.put( "building", TextFormatting.AQUA );
-		skillTextFormat.put( "excavation", TextFormatting.GOLD );
-		skillTextFormat.put( "woodcutting", TextFormatting.GOLD );
-		skillTextFormat.put( "farming", TextFormatting.GREEN );
-		skillTextFormat.put( "agility", TextFormatting.GREEN );
-		skillTextFormat.put( "endurance", TextFormatting.DARK_RED );
-		skillTextFormat.put( "combat", TextFormatting.RED);
-		skillTextFormat.put( "archery", TextFormatting.YELLOW );
-		skillTextFormat.put( "smithing", TextFormatting.GRAY );
-		skillTextFormat.put( "flying", TextFormatting.GRAY );
-		skillTextFormat.put( "swimming", TextFormatting.AQUA );
-		skillTextFormat.put( "fishing", TextFormatting.AQUA );
-		skillTextFormat.put( "crafting", TextFormatting.GOLD );
-		skillTextFormat.put( "magic", TextFormatting.BLUE );
-		skillTextFormat.put( "slayer", TextFormatting.DARK_GRAY );
-		skillTextFormat.put( "hunter", TextFormatting.GOLD );
-		skillTextFormat.put( "fletching", TextFormatting.DARK_GREEN );
-		skillTextFormat.put( "taming", TextFormatting.WHITE );
-		skillTextFormat.put( "power", TextFormatting.AQUA );
+		skillTextFormat.put( Skill.MINING, TextFormatting.AQUA );
+		skillTextFormat.put( Skill.BUILDING, TextFormatting.AQUA );
+		skillTextFormat.put( Skill.EXCAVATION, TextFormatting.GOLD );
+		skillTextFormat.put( Skill.WOODCUTTING, TextFormatting.GOLD );
+		skillTextFormat.put( Skill.FARMING, TextFormatting.GREEN );
+		skillTextFormat.put( Skill.AGILITY, TextFormatting.GREEN );
+		skillTextFormat.put( Skill.ENDURANCE, TextFormatting.DARK_RED );
+		skillTextFormat.put( Skill.COMBAT, TextFormatting.RED);
+		skillTextFormat.put( Skill.ARCHERY, TextFormatting.YELLOW );
+		skillTextFormat.put( Skill.SMITHING, TextFormatting.GRAY );
+		skillTextFormat.put( Skill.FLYING, TextFormatting.GRAY );
+		skillTextFormat.put( Skill.SWIMMING, TextFormatting.AQUA );
+		skillTextFormat.put( Skill.FISHING, TextFormatting.AQUA );
+		skillTextFormat.put( Skill.CRAFTING, TextFormatting.GOLD );
+		skillTextFormat.put( Skill.MAGIC, TextFormatting.BLUE );
+		skillTextFormat.put( Skill.SLAYER, TextFormatting.DARK_GRAY );
+		skillTextFormat.put( Skill.HUNTER, TextFormatting.GOLD );
+		skillTextFormat.put( Skill.FLETCHING, TextFormatting.DARK_GREEN );
+		skillTextFormat.put( Skill.TAMING, TextFormatting.WHITE );
 
 //		skillTextFormat.put(Skill.MINING, TextFormatting.AQUA );
 //		skillTextFormat.put( Skill.BUILDING, TextFormatting.AQUA );
@@ -436,7 +436,7 @@ public class XP
 				break;
 
 			default:
-				System.out.println( "WRONG EXTRA CHANCE TYPE! PLEASE REPORT!" );
+				LogHandler.LOGGER.error( "WRONG getExtraChance CHANCE TYPE! PLEASE REPORT!" );
 				return 0;
 		}
 
@@ -523,7 +523,6 @@ public class XP
 	public static void syncPlayerConfig( PlayerEntity player )
 	{
 		NetworkHandler.sendToPlayer( new MessageUpdateReq( JsonConfig.localData, "json" ), (ServerPlayerEntity) player );
-
 		NetworkHandler.sendToPlayer( new MessageUpdateNBT( NBTHelper.mapToNBT( Config.localConfig ), "config" ), (ServerPlayerEntity) player );
 	}
 
@@ -536,8 +535,8 @@ public class XP
 		syncPlayerConfig( player );
 
         NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
-        NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
-        AttributeHandler.updateAll( player );
+		NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
+		AttributeHandler.updateAll( player );
 
         for( String tag : keySet )
         {
@@ -549,7 +548,7 @@ public class XP
                 if( tag.toLowerCase().equals( "repairing" ) )
                     skillsTag.put( "smithing", skillsTag.get(tag) );
 
-                System.out.println( "REMOVING INVALID SKILL " + tag );
+                LogHandler.LOGGER.info( "REMOVING INVALID SKILL " + tag + " FROM PLAYER " + player.getDisplayName().getString() );
                 skillsTag.remove( tag );
             }
         }
@@ -915,7 +914,7 @@ public class XP
 		if( heldMap != null )
 		{
 			if( heldMap.containsKey( skillName ) )
-				itemBoost += (double) heldMap.get( skillName ) / 100;
+				itemBoost += (double) heldMap.get( skillName );
 		}
 
 		if( Curios.isLoaded() )
@@ -994,7 +993,7 @@ public class XP
 
 		if( skill == skill.INVALID_SKILL )
 		{
-			LOGGER.error( "Invalid skill at awardXp" );
+			LogHandler.LOGGER.error( "Invalid skill at awardXp" );
 			return;
 		}
 
@@ -1008,18 +1007,14 @@ public class XP
 
 		amount *= skillMultiplier;
 		amount *= difficultyMultiplier;
-
-		if( additiveMultiplier >= 0 )
-			amount *= additiveMultiplier;
-		else
-			return; //amount will be 0
+		amount *= additiveMultiplier;
 
  		amount *= globalMultiplier;
 
 		if( amount == 0 )
 			return;
 
-		String playerName = player.getDisplayName().getFormattedText();
+		String playerName = player.getDisplayName().getString();
 		int startLevel;
 		int currLevel;
 		double startXp = 0;
@@ -1042,7 +1037,7 @@ public class XP
 			if( startXp + amount >= 2000000000 )
 			{
 				sendMessage( skillName + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-				System.out.println( player.getName() + " " + skillName + " 2b cap reached" );
+				LogHandler.LOGGER.info( player.getDisplayName().getString() + " " + skillName + " 2b cap reached" );
 				amount = 2000000000 - startXp;
 			}
 
@@ -1053,7 +1048,7 @@ public class XP
 
 		if( startLevel != currLevel )
 		{
-			syncPlayer( player );
+			AttributeHandler.updateAll( player );
 
 			if( ModList.get().isLoaded( "compatskills" ) )
 			{
@@ -1066,11 +1061,11 @@ public class XP
 				}
 				catch( CommandSyntaxException e )
 				{
-					LOGGER.error( "PMMO Level Up - compatskills command went wrong! args: " + commandArgs, e );
+					LogHandler.LOGGER.error( "PMMO Level Up - compatskills command went wrong! args: " + commandArgs, e );
 				}
 			}
 
-			System.out.println( playerName + " " + currLevel + " " + skillName + " level up!" );
+			LogHandler.LOGGER.info( playerName + " " + currLevel + " " + skillName + " level up!" );
 
 			if( currLevel % 10 == 0 && broadcastMilestone )
 			{
@@ -1095,11 +1090,11 @@ public class XP
 						try
 						{
 							player.getServer().getCommandManager().getDispatcher().execute( command, player.getServer().getCommandSource() );
-							LOGGER.info( "Executing command \"" + command + "\"\nTrigger: " + playerName + " level up from " + startLevel + " to " + currLevel + " in " + skill.name() + ", trigger level " + commandLevel );
+							LogHandler.LOGGER.info( "Executing command \"" + command + "\"\nTrigger: " + playerName + " level up from " + startLevel + " to " + currLevel + " in " + skill.name() + ", trigger level " + commandLevel );
 						}
 						catch( CommandSyntaxException e )
 						{
-							LOGGER.error( "Invalid level up command \"" + command + "\"", e );
+							LogHandler.LOGGER.error( "Invalid level up command \"" + command + "\"", e );
 						}
 					}
 				}
@@ -1110,12 +1105,12 @@ public class XP
 			NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
 
 		if( !skip )
-			LOGGER.debug( ( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getDouble( skillName ) ) );
+			LogHandler.LOGGER.debug( ( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getDouble( skillName ) ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
 			sendMessage( skillName + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-			System.out.println( playerName + " " + skillName + " max startLevel reached" );
+			LogHandler.LOGGER.info( playerName + " " + skillName + " max startLevel reached" );
 		}
 	}
 
@@ -1177,7 +1172,7 @@ public class XP
 					break;
 
 				default:
-					System.out.println( "PLEASE REPORT THIS IF YOU SEE ME" );
+					LogHandler.LOGGER.error( "ERROR getSkillReqGap wrong type" );
 					return 0;
 			}
 

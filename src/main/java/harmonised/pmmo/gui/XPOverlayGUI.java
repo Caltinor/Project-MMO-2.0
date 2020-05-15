@@ -45,8 +45,8 @@ public class XPOverlayGUI extends AbstractGui
 	private static ASkill aSkill;
 	private static Skill skill = Skill.INVALID_SKILL, tempSkill = Skill.INVALID_SKILL;
 	private static FontRenderer fontRenderer = minecraft.fontRenderer;
-	private static int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
-	private static double maxXp = Config.getConfig( "maxXp" );
+	private static int maxLevel;
+	private static double maxXp;
 	private static XpDrop xpDrop;
 	private static int color;
 	private static long lastBonusUpdate = System.currentTimeMillis();
@@ -133,9 +133,7 @@ public class XPOverlayGUI extends AbstractGui
 					if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 					{
 						aSkill = skills.get( xpDrop.skill );
-
-						if( !xpDrop.skip )
-							skill = xpDrop.skill;
+						skill = xpDrop.skill;
 
 						decayRate = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
 						if( stackXpDrops )
@@ -210,7 +208,9 @@ public class XPOverlayGUI extends AbstractGui
 					}
 					else if( aSkill.pos > aSkill.goalPos )
 						aSkill.pos = aSkill.goalPos;
-					
+
+//					System.out.println( startLevel + " " + Math.floor( aSkill.pos ) );
+
 					if( startLevel < Math.floor( aSkill.pos ) )
 						sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );
 					
@@ -276,15 +276,15 @@ public class XPOverlayGUI extends AbstractGui
 					{
 						for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
 						{
-							skill = entry.getKey();
+							tempSkill = entry.getKey();
 
-							itemBoost = XP.getItemBoost( player, skill );
-							biomeBoost = XP.getBiomeBoost( player, skill );
+							itemBoost = XP.getItemBoost( player, tempSkill );
+							biomeBoost = XP.getBiomeBoost( player, tempSkill );
 
 							if( itemBoost + biomeBoost >= -100 )
-								skills.get( skill ).bonus = itemBoost + biomeBoost;
+								skills.get( tempSkill ).bonus = itemBoost + biomeBoost;
 							else
-								skills.get( skill ).bonus = -100;
+								skills.get( tempSkill ).bonus = -100;
 						}
 						lastBonusUpdate = System.currentTimeMillis();
 					}
@@ -292,7 +292,7 @@ public class XPOverlayGUI extends AbstractGui
 					for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
 					{
 						aSkill = entry.getValue();
-						skill = entry.getKey();
+						tempSkill = entry.getKey();
 						skillName = entry.getKey().name().toLowerCase();
 						level = XP.levelAtXpDecimal( entry.getValue().xp );
 						tempString = DP.dp( level );
@@ -371,6 +371,16 @@ public class XPOverlayGUI extends AbstractGui
 				xpDropDecayAge = (int) Math.floor( prefsTag.getDouble( "xpDropDecayAge" ) );
 			else
 				xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
+
+			if( prefsTag.contains( "maxLevel" ) )
+				maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+			else
+				maxLevel = (int) Math.floor( Config.forgeConfig.maxLevel.get() );
+
+			if( prefsTag.contains( "maxXp" ) )
+				maxXp = (int) Math.floor( Config.getConfig( "maxXp" ) );
+			else
+				maxXp = XP.xpAtLevel( maxLevel );
 
 			if( prefsTag.contains( "xpDropsAttachedToBar" ) )
 			{
@@ -499,21 +509,20 @@ public class XPOverlayGUI extends AbstractGui
 //		}
 		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill.name().toLowerCase() ) ) ), false);
 		if( skill == Skill.SWIMMING && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill.name().toLowerCase() ) ) ), true );
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill ) ) ), true );
 	}
 	
-	public static void makeXpDrop( double xp, Skill skill, int cooldown, double gainedXp, boolean skip )
+	public static void makeXpDrop( double xp, Skill skillIn, int cooldown, double gainedXp, boolean skip )
 	{
-		tempSkill = skill;
 		xpDropWasStacked = false;
 
 		if( XPOverlayGUI.skill.equals( Skill.INVALID_SKILL ) )
-			XPOverlayGUI.skill = tempSkill;
+			XPOverlayGUI.skill = skillIn;
 
-		if( skills.get( tempSkill ) == null )				//Handle client xp tracker
-			skills.put( tempSkill, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
+		if( skills.get( skillIn ) == null )				//Handle client xp tracker
+			skills.put( skillIn, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
 		
-		aSkill = skills.get( tempSkill );
+		aSkill = skills.get( skillIn );
 		
 		if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
 		{
@@ -525,7 +534,7 @@ public class XPOverlayGUI extends AbstractGui
 
 			for( int i = 0; i < xpDrops.size(); i++ )
 			{
-				if( xpDrops.get( i ).skill == tempSkill )
+				if( xpDrops.get( i ).skill == skillIn )
 				{
 					xpDrops.remove( i );
 					i = 0;
@@ -538,7 +547,7 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			for( XpDrop xpDrop : xpDrops )
 			{
-				if( xpDrop.skill == tempSkill && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0) )
+				if( xpDrop.skill == skillIn && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0) )
 				{
 					xpDrop.gainedXp += gainedXp;
 					xpDrop.startXp += gainedXp;
@@ -553,9 +562,9 @@ public class XPOverlayGUI extends AbstractGui
 		if( !xpDropWasStacked && gainedXp != 0 )
 		{
 			if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).Y > 75 )
-				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, tempSkill, xp, gainedXp, skip ) );
+				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, skillIn, xp, gainedXp, skip ) );
 			else
-				xpDrops.add( new XpDrop( 0, xpDropSpawnDistance, tempSkill, xp, gainedXp, skip ) );
+				xpDrops.add( new XpDrop( 0, xpDropSpawnDistance, skillIn, xp, gainedXp, skip ) );
 		}
 		
 		if( !skip )

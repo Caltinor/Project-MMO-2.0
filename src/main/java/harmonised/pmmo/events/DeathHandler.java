@@ -4,6 +4,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.DP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -37,13 +38,16 @@ public class DeathHandler
             if( !player.world.isRemote() )
             {
                 CompoundNBT skillsTag = XP.getSkillsTag( player );
+                double totalLost = 0;
 
                 for( String key : new HashSet<String>( skillsTag.keySet() ) )
                 {
                     double startXp = skillsTag.getDouble( key );
                     double floorXp = XP.xpAtLevelDecimal( Math.floor( XP.levelAtXpDecimal( startXp ) ) );
                     double diffXp = startXp - floorXp;
-                    double finalXp = floorXp + diffXp * (1 - deathXpPenaltyMultiplier);
+                    double lostXp = diffXp * deathXpPenaltyMultiplier;
+                    double finalXp = startXp - lostXp;
+                    totalLost += lostXp;
 
                     if( finalXp > 0 )
                         skillsTag.putDouble( key, finalXp );
@@ -51,6 +55,9 @@ public class DeathHandler
                         skillsTag.remove( key );
                 }
 
+                if( totalLost > 0 )
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                
                 XP.syncPlayer( player );
             }
         }

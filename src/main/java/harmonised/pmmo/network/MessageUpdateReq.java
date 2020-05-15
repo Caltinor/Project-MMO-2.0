@@ -1,6 +1,7 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -91,7 +92,7 @@ public class MessageUpdateReq
                     break;
 
                 default:
-                    System.out.println( "WRONG SYNC NAME" );
+                    LogHandler.LOGGER.error( "ERROR MessageUpdateReq WRONG TYPE" );
                     break;
             }
         });
