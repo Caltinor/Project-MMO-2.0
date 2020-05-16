@@ -2,6 +2,8 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.curios.Curios;
+import harmonised.pmmo.gui.ScreenshotHandler;
+import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -16,9 +18,13 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -40,7 +46,6 @@ public class PlayerTickHandler
 
         if( XP.isPlayerSurvival( player ) && player.isAlive() )
         {
-            String name = player.getName().getString();
             UUID playerUUID = player.getUniqueID();
 
             if( player.isSprinting() )
@@ -152,6 +157,19 @@ public class PlayerTickHandler
 //
 //					System.out.println( abilityTag.getDouble( "excavate" ) );
 //				}
+            }
+        }
+
+        if( player.world.isRemote() )
+        {
+            if( XPOverlayGUI.screenshots.size() > 0 )
+            {
+                for( String key : new HashSet<>( XPOverlayGUI.screenshots ) )
+                {
+                    ScreenshotHandler.takeScreenshot( key, "levelup" );
+                    XPOverlayGUI.screenshots.remove( key );
+                    XPOverlayGUI.guiOn = XPOverlayGUI.guiWasOn;
+                }
             }
         }
     }

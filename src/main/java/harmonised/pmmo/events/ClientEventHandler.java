@@ -2,6 +2,7 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.gui.MainScreen;
+import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageCrawling;
 import harmonised.pmmo.network.NetworkHandler;
@@ -10,6 +11,7 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
+import javafx.stage.Screen;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;

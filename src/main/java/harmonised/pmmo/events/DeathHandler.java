@@ -38,21 +38,36 @@ public class DeathHandler
             if( !player.world.isRemote() )
             {
                 CompoundNBT skillsTag = XP.getSkillsTag( player );
+                CompoundNBT prefsTag = XP.getPreferencesTag( player );
                 double totalLost = 0;
+                boolean wipeAllSkills = Config.forgeConfig.wipeAllSkillsUponDeathPermanently.get();
+                if( prefsTag.contains( "wipeAllSkillsUponDeathPermanently" ) && prefsTag.getDouble( "wipeAllSkillsUponDeathPermanently" ) != 0 )
+                    wipeAllSkills = true;
 
-                for( String key : new HashSet<String>( skillsTag.keySet() ) )
+                if( wipeAllSkills )
                 {
-                    double startXp = skillsTag.getDouble( key );
-                    double floorXp = XP.xpAtLevelDecimal( Math.floor( XP.levelAtXpDecimal( startXp ) ) );
-                    double diffXp = startXp - floorXp;
-                    double lostXp = diffXp * deathXpPenaltyMultiplier;
-                    double finalXp = startXp - lostXp;
-                    totalLost += lostXp;
-
-                    if( finalXp > 0 )
-                        skillsTag.putDouble( key, finalXp );
-                    else
+                    for( String key : new HashSet<String>( skillsTag.keySet() ) )
+                    {
+                        totalLost += skillsTag.getDouble( key );
                         skillsTag.remove( key );
+                    }
+                }
+                else
+                {
+                    for( String key : new HashSet<String>( skillsTag.keySet() ) )
+                    {
+                        double startXp = skillsTag.getDouble( key );
+                        double floorXp = XP.xpAtLevelDecimal( Math.floor( XP.levelAtXpDecimal( startXp ) ) );
+                        double diffXp = startXp - floorXp;
+                        double lostXp = diffXp * deathXpPenaltyMultiplier;
+                        double finalXp = startXp - lostXp;
+                        totalLost += lostXp;
+
+                        if( finalXp > 0 )
+                            skillsTag.putDouble( key, finalXp );
+                        else
+                            skillsTag.remove( key );
+                    }
                 }
 
                 if( totalLost > 0 )

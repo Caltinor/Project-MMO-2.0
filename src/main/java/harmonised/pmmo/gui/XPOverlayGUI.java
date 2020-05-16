@@ -1,11 +1,8 @@
 package harmonised.pmmo.gui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -24,6 +21,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class XPOverlayGUI extends AbstractGui
 {
@@ -35,7 +33,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String skillName = "none";
-	private static boolean metBiomeReq = true, stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, guiOn = true, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn;
+	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -51,6 +49,8 @@ public class XPOverlayGUI extends AbstractGui
 	private static int color;
 	private static long lastBonusUpdate = System.currentTimeMillis();
 	private static double itemBoost, biomeBoost;
+	public static Set<String> screenshots = new HashSet<>();
+	public static boolean guiWasOn = true, guiOn = true;
 
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
@@ -213,7 +213,7 @@ public class XPOverlayGUI extends AbstractGui
 
 					if( startLevel < Math.floor( aSkill.pos ) )
 						sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );
-					
+
 					if( aSkill.xp > aSkill.goalXp )
 						aSkill.xp = aSkill.goalXp;
 				}
@@ -432,6 +432,26 @@ public class XPOverlayGUI extends AbstractGui
 			else
 				stackXpDrops = Config.forgeConfig.stackXpDrops.get();
 
+			if( prefsTag.contains( "lvlUpScreenshot" ) )
+			{
+				if( prefsTag.getDouble( "lvlUpScreenshot" ) == 0 )
+					lvlUpScreenshot = false;
+				else
+					lvlUpScreenshot = true;
+			}
+			else
+				lvlUpScreenshot = Config.forgeConfig.lvlUpScreenshot.get();
+
+			if( prefsTag.contains( "lvlUpScreenshotShowSkills" ) )
+			{
+				if( prefsTag.getDouble( "lvlUpScreenshotShowSkills" ) == 0 )
+					lvlUpScreenshotShowSkills = false;
+				else
+					lvlUpScreenshotShowSkills = true;
+			}
+			else
+				lvlUpScreenshotShowSkills = Config.forgeConfig.lvlUpScreenshotShowSkills.get();
+
 			if( !xpDropsAttachedToBar )
 				xpDropYLimit = 999999999;
 			else
@@ -497,19 +517,17 @@ public class XPOverlayGUI extends AbstractGui
 	public static void sendLvlUp( int level, Skill skill )
 	{
 		player = Minecraft.getInstance().player;
-
-//		switch( name )
-//		{
-//			case "swimming":
-//				if( level - 1 < 25 && level >= 25 )
-//					tempString = level + " swimming level up! Underwater Night Vision Unlocked!";
-//				else
-//					tempString = level + " swimming level up!";
-//				break;
-//		}
-		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill.name().toLowerCase() ) ) ), false);
+		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill ) ) ), false);
 		if( skill == Skill.SWIMMING && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
 			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill ) ) ), true );
+
+		guiWasOn = guiOn;
+
+		if( lvlUpScreenshotShowSkills )
+			guiOn = true;
+
+		if( lvlUpScreenshot )
+			screenshots.add( player.getDisplayName().getString() + " " + skill.name().toLowerCase() + " " + level );
 	}
 	
 	public static void makeXpDrop( double xp, Skill skillIn, int cooldown, double gainedXp, boolean skip )

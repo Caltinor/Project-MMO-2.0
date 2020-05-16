@@ -7,10 +7,7 @@ import net.minecraft.advancements.criterion.FishingRodHookedTrigger;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.player.AnvilRepairEvent;
-import net.minecraftforge.event.entity.player.ItemFishedEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
@@ -122,4 +119,10 @@ public class EventHandler
 	{
 		TamingHandler.handleAnimalTaming( event );
 	}
+
+//	@SubscribeEvent
+//	public static void itemThrown( EntityItemPickupEvent event )
+//	{
+//		PickupHandler.handlePickup( event );
+//	}
 }

@@ -92,6 +92,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> maxLevel;
         public ConfigHelper.ConfigValueListener<Integer> baseXp;
         public ConfigHelper.ConfigValueListener<Integer> xpIncreasePerLevel;
+        public ConfigHelper.ConfigValueListener<Boolean> wipeAllSkillsUponDeathPermanently;
 
         //Multipliers
         public ConfigHelper.ConfigValueListener<Double> globalMultiplier;
@@ -130,6 +131,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> xpDropsAttachedToBar;
         public ConfigHelper.ConfigValueListener<Boolean> xpBarAlwaysOn;
         public ConfigHelper.ConfigValueListener<Boolean> xpLeftDisplayAlwaysOn;
+        public ConfigHelper.ConfigValueListener<Boolean> lvlUpScreenshot;
+        public ConfigHelper.ConfigValueListener<Boolean> lvlUpScreenshotShowSkills;
 
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
@@ -416,6 +419,11 @@ public class Config
                         .translation( "pmmo.xpIncreasePerLevel" )
                         .defineInRange( "xpIncreasePerLevel", 50, 1, 1000000 ) );
 
+                this.wipeAllSkillsUponDeathPermanently = subscriber.subscribe(builder
+                        .comment( "Should a player have all their skills wiped to level 1 upon death?" )
+                        .translation( "pmmo.wipeAllSkillsUponDeathPermanently" )
+                        .define( "wipeAllSkillsUponDeathPermanently", false ) );
+
                 builder.pop();
             }
 
@@ -595,6 +603,16 @@ public class Config
                         .comment( "Should the Xp left indicator always be on? false = only appears with Show GUI key" )
                         .translation( "pmmo.xpLeftDisplayAlwaysOn" )
                         .define( "xpLeftDisplayAlwaysOn", false ) );
+
+                this.lvlUpScreenshot = subscriber.subscribe(builder
+                        .comment( "Should a screenshot be taken everytime you level up?" )
+                        .translation( "pmmo.lvlUpScreenshot" )
+                        .define( "lvlUpScreenshot", false ) );
+
+                this.lvlUpScreenshotShowSkills = subscriber.subscribe(builder
+                        .comment( "When a screenshot is taken upon levelling up, should the skills list turn on automatically to be included in the screenshot?" )
+                        .translation( "pmmo.lvlUpScreenshotShowSkills" )
+                        .define( "lvlUpScreenshotShowSkills", false ) );
 
                 builder.pop();
             }
