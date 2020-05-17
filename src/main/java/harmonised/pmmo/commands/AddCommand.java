@@ -29,7 +29,7 @@ public class AddCommand
         String[] args = context.getInput().split( " " );
         String skillName = StringArgumentType.getString( context, "Skill" ).toLowerCase();
         String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
-        boolean ignoreBonuses = BoolArgumentType.getBool( context, "Ignore Multiplier" );
+        boolean ignoreBonuses = BoolArgumentType.getBool( context, "Ignore Bonuses" );
         Skill skill = Skill.getSkill( skillName );
         PlayerEntity sender = null;
 

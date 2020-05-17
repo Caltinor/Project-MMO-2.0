@@ -21,9 +21,10 @@ public class CheckStatCommand
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
-        String skillName = args[3].toLowerCase();
+        Skill skill = Skill.getSkill( args[3] );
+        String skillName = skill.name().toLowerCase();
 
-        if( Skill.getInt( skillName ) != 0 || skillName.toLowerCase().equals( "power" ) )
+        if( skill.getValue() != 0 || skillName.toLowerCase().equals( "power" ) )
         {
             try
             {
@@ -38,6 +39,7 @@ public class CheckStatCommand
                 else
                 {
                     level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( XP.skillStyle.get( skill ) ) ), false );
                 }
 
                 //EXTRA INFO
@@ -51,7 +53,7 @@ public class CheckStatCommand
                         if( fishPoolChance > fishPoolMaxChance )
                             fishPoolChance = fishPoolMaxChance;
 
-                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( new Style().setColor( XP.skillTextFormat.get( skillName ) ) ), false );
+                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( XP.skillStyle.get( skill ) ), false );
                         break;
                 }
             }

@@ -517,9 +517,9 @@ public class XPOverlayGUI extends AbstractGui
 	public static void sendLvlUp( int level, Skill skill )
 	{
 		player = Minecraft.getInstance().player;
-		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill ) ) ), false);
+		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( XP.skillStyle.get( skill ) ), false);
 		if( skill == Skill.SWIMMING && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightVisionUnlocked" ).setStyle( new Style().setColor( XP.skillTextFormat.get( skill ) ) ), true );
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightVisionUnlocked" ).setStyle( XP.skillStyle.get( skill ) ), true );
 
 		guiWasOn = guiOn;
 
