@@ -262,7 +262,7 @@
 	},
 	"weapon_requirement": {
 		"minecraft:crossbow": {
-			"archery": 20
+			"archery": 10
 		},
 		"minecraft:netherite_pickaxe": {
 			"combat": 60
@@ -415,6 +415,33 @@
 		},
 		"minecraft:barrier": {
 			"building": 999
+		},
+		"minecraft:scaffolding": {
+			"building": 10
+		},
+		"minecraft:oak_sapling": {
+			"farming": 5,
+			"woodcutting": 10
+		},
+		"minecraft:birch_sapling": {
+			"farming": 10,
+			"woodcutting": 15
+		},
+		"minecraft:spruce_sapling": {
+			"farming": 15,
+			"woodcutting": 30
+		},
+		"minecraft:jungle_sapling": {
+			"farming": 20,
+			"woodcutting": 35
+		},
+		"minecraft:dark_oak_sapling": {
+			"farming": 10,
+			"woodcutting": 25
+		},
+		"minecraft:acacia_sapling": {
+			"farming": 5,
+			"woodcutting": 15
 		}
 	},
 	"break_requirement": {
@@ -493,6 +520,30 @@
 			"mining": 5,
 			"endurance": 5
 		},
+		"minecraft:chainmail_helmet": {
+			"combat": 5
+		},
+		"minecraft:chainmail_chestplate": {
+			"combat": 5
+		},
+		"minecraft:chainmail_leggings": {
+			"combat": 5
+		},
+		"minecraft:chainmail_boots": {
+			"combat": 5
+		},
+		"minecraft:iron_helmet": {
+			"smithing": 2.5
+		},
+		"minecraft:iron_chestplate": {
+			"smithing": 2.5
+		},
+		"minecraft:iron_leggings": {
+			"smithing": 2.5
+		},
+		"minecraft:iron_boots": {
+			"smithing": 2.5
+		},
 		"minecraft:leather_helmet": {
 			"agility": 2.5,
 			"farming": 2.5,
@@ -518,12 +569,31 @@
 			"fishing": 2.5
 		},
 		"minecraft:turtle_helmet": {
-			"swimming": 10,
+			"swimming": 15,
 			"fishing": 7.5
 		},
 		"minecraft:shield": {
 			"endurance": 12.5,
 			"combat": 5
+		},
+		"minecraft:dragon_head": {
+			"flying": 50,
+			"slayer": 25
+		},
+		"minecraft:carved_pumpkin": {
+			"slayer": 5
+		},
+		"minecraft:heart_of_the_sea": {
+			"swimming": 25,
+			"fishing": 10
+		},
+		"minecraft:nether_star": {
+			"slayer": 25,
+			"combat": 10,
+			"endurance": 10,
+			"archery": 10,
+			"magic": 10,
+			"flying": 20
 		}
 	},
 	"xp_value": {
@@ -946,6 +1016,9 @@
 		"minecraft:tripwire_hook": {
 			"fishing": 35
 		},
+		"minecraft:leather": {
+			"fishing": 25
+		},
 		"oresandmetals:runite_ore": {
 			"mining": 45
 		},
@@ -964,85 +1037,112 @@
 	},
 	"crafting_xp": {
 		"minecraft:netherite_helmet": {
-			"crafting": 1000
+			"crafting": 1000,
+			"smithing": 200
 		},
 		"minecraft:netherite_chestplate": {
-			"crafting": 1600
+			"crafting": 1600,
+			"smithing": 320
 		},
 		"minecraft:netherite_leggings": {
-			"crafting": 1400
+			"crafting": 1400,
+			"smithing": 280
 		},
 		"minecraft:netherite_boots": {
-			"crafting": 800
+			"crafting": 800,
+			"smithing": 160
 		},
 		"minecraft:netherite_pickaxe": {
-			"crafting": 600
+			"crafting": 600,
+			"smithing": 120
 		},
 		"minecraft:netherite_shovel": {
-			"crafting": 200
+			"crafting": 200,
+			"smithing": 40
 		},
 		"minecraft:netherite_hoe": {
-			"crafting": 400
+			"crafting": 400,
+			"smithing": 80
 		},
 		"minecraft:netherite_axe": {
-			"crafting": 600
+			"crafting": 600,
+			"smithing": 120
 		},
 		"minecraft:netherite_sword": {
-			"crafting": 400
+			"crafting": 400,
+			"smithing": 80
 		},
 		"minecraft:diamond_helmet": {
-			"crafting": 300
+			"crafting": 300,
+			"smithing": 60
 		},
 		"minecraft:diamond_chestplate": {
-			"crafting": 480
+			"crafting": 480,
+			"smithing": 96
 		},
 		"minecraft:diamond_leggings": {
-			"crafting": 420
+			"crafting": 420,
+			"smithing": 84
 		},
 		"minecraft:diamond_boots": {
-			"crafting": 240
+			"crafting": 240,
+			"smithing": 48
 		},
 		"minecraft:diamond_pickaxe": {
-			"crafting": 180
+			"crafting": 180,
+			"smithing": 36
 		},
 		"minecraft:diamond_shovel": {
-			"crafting": 60
+			"crafting": 60,
+			"smithing": 12
 		},
 		"minecraft:diamond_hoe": {
-			"crafting": 120
+			"crafting": 120,
+			"smithing": 24
 		},
 		"minecraft:diamond_axe": {
-			"crafting": 180
+			"crafting": 180,
+			"smithing": 36
 		},
 		"minecraft:diamond_sword": {
-			"crafting": 120
+			"crafting": 120,
+			"smithing": 24
 		},
 		"minecraft:golden_helmet": {
-			"crafting": 150
+			"crafting": 150,
+			"smithing": 30
 		},
 		"minecraft:golden_chestplate": {
-			"crafting": 240
+			"crafting": 240,
+			"smithing": 48
 		},
 		"minecraft:golden_leggings": {
-			"crafting": 210
+			"crafting": 210,
+			"smithing": 42
 		},
 		"minecraft:golden_boots": {
-			"crafting": 120
+			"crafting": 120,
+			"smithing": 24
 		},
 		"minecraft:golden_pickaxe": {
-			"crafting": 90
+			"crafting": 90,
+			"smithing": 18
 		},
 		"minecraft:golden_shovel": {
-			"crafting": 30
+			"crafting": 30,
+			"smithing": 6
 		},
 		"minecraft:golden_hoe": {
-			"crafting": 60
+			"crafting": 60,
+			"smithing": 12
 		},
 		"minecraft:golden_axe": {
-			"crafting": 90
+			"crafting": 90,
+			"smithing": 18
 		},
 		"minecraft:golden_sword": {
-			"crafting": 60
+			"crafting": 60,
+			"smithing": 12
 		},
 		"minecraft:clock": {
 			"crafting": 125
@@ -1051,34 +1151,44 @@
 			"crafting": 60
 		},
 		"minecraft:iron_helmet": {
-			"crafting": 50
+			"crafting": 50,
+			"smithing": 10
 		},
 		"minecraft:iron_chestplate": {
-			"crafting": 80
+			"crafting": 80,
+			"smithing": 16
 		},
 		"minecraft:iron_leggings": {
-			"crafting": 70
+			"crafting": 70,
+			"smithing": 14
 		},
 		"minecraft:iron_boots": {
-			"crafting": 40
+			"crafting": 40,
+			"smithing": 8
 		},
 		"minecraft:iron_pickaxe": {
-			"crafting": 30
+			"crafting": 30,
+			"smithing": 6
 		},
 		"minecraft:iron_shovel": {
-			"crafting": 10
+			"crafting": 10,
+			"smithing": 2
 		},
 		"minecraft:iron_hoe": {
-			"crafting": 20
+			"crafting": 20,
+			"smithing": 4
 		},
 		"minecraft:iron_axe": {
-			"crafting": 30
+			"crafting": 30,
+			"smithing": 6
 		},
 		"minecraft:iron_sword": {
-			"crafting": 20
+			"crafting": 20,
+			"smithing": 4
 		},
 		"minecraft:anvil": {
-			"crafting": 310
+			"crafting": 310,
+			"smithing": 62
 		},
 		"minecraft:iron_trapdoor": {
 			"crafting": 40
@@ -1114,37 +1224,48 @@
 			"crafting": 20
 		},
 		"minecraft:leather_helmet": {
-			"crafting": 75
+			"crafting": 75,
+			"smithing": 15
 		},
 		"minecraft:leather_chestplate": {
-			"crafting": 120
+			"crafting": 120,
+			"smithing": 24
 		},
 		"minecraft:leather_leggings": {
-			"crafting": 105
+			"crafting": 105,
+			"smithing": 21
 		},
 		"minecraft:leather_boots": {
-			"crafting": 60
+			"crafting": 60,
+			"smithing": 12
 		},
 		"minecraft:turtle_helmet": {
-			"crafting": 100
+			"crafting": 100,
+			"smithing": 20
 		},
 		"minecraft:crossbow": {
-			"crafting": 20
+			"crafting": 20,
+			"smithing": 10
 		},
 		"minecraft:stone_pickaxe": {
-			"crafting": 15
+			"crafting": 15,
+			"smithing": 3
 		},
 		"minecraft:stone_shovel": {
-			"crafting": 5
+			"crafting": 5,
+			"smithing": 1
 		},
 		"minecraft:stone_hoe": {
-			"crafting": 10
+			"crafting": 10,
+			"smithing": 2
 		},
 		"minecraft:stone_axe": {
-			"crafting": 15
+			"crafting": 15,
+			"smithing": 3
 		},
 		"minecraft:stone_sword": {
-			"crafting": 10
+			"crafting": 10,
+			"smithing": 2
 		},
 		"minecraft:wooden_pickaxe": {
 			"crafting": 9
@@ -1167,16 +1288,16 @@
 	},
 	"breeding_xp": {
 		"minecraft:chicken": {
-			"farming": 5
+			"farming": 10
 		},
 		"minecraft:sheep": {
-			"farming": 15
+			"farming": 30
 		},
 		"minecraft:cow": {
-			"farming": 20
+			"farming": 35
 		},
 		"minecraft:pig": {
-			"farming": 10
+			"farming": 25
 		}
 	},
 	"player_specific": {
@@ -1247,7 +1368,7 @@
 			"slayer": 45
 		},
 		"minecraft:magma_cube": {
-			"slayer": 15
+			"slayer": 7.5
 		},
 		"minecraft:zombie_pigman": {
 			"slayer": 25
@@ -1564,10 +1685,10 @@
 			"extraChance": 1.5
 		},
 		"minecraft:wheat": {
-			"extraChance": 0.75
+			"extraChance": 0.5
 		},
 		"minecraft:melon": {
-			"extraChance": 0.75
+			"extraChance": 1
 		},
 		"minecraft:pumpkin": {
 			"extraChance": 0.6

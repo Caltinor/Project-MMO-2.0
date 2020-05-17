@@ -69,10 +69,10 @@ public class BlockBrokenHandler
                 // DEBUG
 
                 Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
-                boolean passedBreakReq;
+                boolean passedBreakReq = true;
 
-                if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable);
-                passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), "break" );
+                if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
+                    passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), "break" );
 
                 if( !passedBreakReq )
                     block = blockAbove;
