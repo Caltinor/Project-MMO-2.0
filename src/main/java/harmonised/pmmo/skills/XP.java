@@ -991,7 +991,7 @@ public class XP
 		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
 			return;
 
-		if( skill == skill.INVALID_SKILL )
+		if( skill.getValue() == 0 )
 		{
 			LogHandler.LOGGER.error( "Invalid skill at awardXp" );
 			return;

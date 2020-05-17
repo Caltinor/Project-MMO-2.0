@@ -231,7 +231,7 @@ public class JsonConfig
         if( Config.forgeConfig.tamingXpEnabled.get() )
             updateReqSkills( req.xpValueTaming, localData.get( "xpValueTaming" ) );
 
-//        data = localData;
+        data = localData;
     }
 
     private static class Deserializer implements JsonDeserializer<JsonConfig>

@@ -18,6 +18,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
+import java.util.Map;
+
 @Mod( Reference.MOD_ID )
 public class ProjectMMOMod
 {
@@ -58,7 +60,7 @@ public class ProjectMMOMod
 
     private void serverStart(FMLServerStartingEvent event)
     {
-        PmmoCommand.register( event.getCommandDispatcher() );
         Config.initServer();
+        PmmoCommand.register( event.getCommandDispatcher() );
     }
 }
