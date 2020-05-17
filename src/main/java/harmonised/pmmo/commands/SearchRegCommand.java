@@ -14,12 +14,20 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class SearchRegCommand
 {
+    public static void append( String input, StringBuilder listOut, StringBuilder listOutExtra, StringBuilder listOutForBuilder )
+    {
+        listOut.append(input).append("\n");
+        listOutExtra.append("\"").append(input).append("\": { \"info\": value },\n");
+        listOutForBuilder.append("addData( \"dataType\", \"").append(input).append("\", { \"info\": value } );\n");
+    }
+
     public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         String query = StringArgumentType.getString( context, "search query" );
         String type = StringArgumentType.getString( context, "type" );
         StringBuilder listOut = new StringBuilder("PMMO DEBUG SEARCH RESULTS:\n");
         StringBuilder listOutExtra = new StringBuilder("PMMO DEBUG SEARCH RESULTS:\n");
+        StringBuilder listOutForBuilder = new StringBuilder();
 
         switch( type )
         {
@@ -29,8 +37,7 @@ public class SearchRegCommand
                     String regName = item.getRegistryName().toString();
                     if( regName.contains( query ) )
                     {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                        append( regName, listOut, listOutExtra, listOutForBuilder );
                     }
                 }
                 break;
@@ -41,8 +48,7 @@ public class SearchRegCommand
                     String regName = item.getRegistryName().toString();
                     if( regName.contains( query ) )
                     {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                        append( regName, listOut, listOutExtra, listOutForBuilder );
                     }
                 }
                 break;
@@ -53,8 +59,7 @@ public class SearchRegCommand
                     String regName = item.getRegistryName().toString();
                     if( regName.contains( query ) )
                     {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                        append( regName, listOut, listOutExtra, listOutForBuilder );
                     }
                 }
                 break;
@@ -65,8 +70,7 @@ public class SearchRegCommand
                     String regName = item.getRegistryName().toString();
                     if( regName.contains( query ) )
                     {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                        append( regName, listOut, listOutExtra, listOutForBuilder );
                     }
                 }
                 break;
@@ -77,8 +81,7 @@ public class SearchRegCommand
                     String regName = item.getRegistryName().toString();
                     if( regName.contains( query ) )
                     {
-                        listOut.append(regName).append("\n");
-                        listOutExtra.append("\"").append(regName).append("\": { \"info\": value },\n");
+                        append( regName, listOut, listOutExtra, listOutForBuilder );
                     }
                 }
                 break;
@@ -86,6 +89,7 @@ public class SearchRegCommand
 
         LogHandler.LOGGER.info( listOut.toString() );
         LogHandler.LOGGER.info( listOutExtra.toString() );
+        LogHandler.LOGGER.info( listOutForBuilder.toString() );
 
         return 1;
     }

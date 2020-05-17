@@ -153,6 +153,9 @@ public enum Skill
         double newLevelXp;
         String skillName = this.name().toLowerCase();
 
+        if( !ignoreBonuses )
+            addAmount *= XP.getMultiplier( player, this );
+
         newLevelXp = addAmount + playerXp;
 
         if( newLevelXp > maxXp )
@@ -162,10 +165,11 @@ public enum Skill
             newLevelXp = 0;
 
         if( newLevelXp > playerXp )
-            XP.awardXp( player, this, "commandAdd", addAmount, false, ignoreBonuses );
+            XP.awardXp( player, this, "commandAdd", addAmount, false, true );
         else
             NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, this.getValue(), 0, true ), player );
         skillsTag.putDouble( skillName, newLevelXp );
+
 
         player.sendStatusMessage( new TranslationTextComponent( "pmmo.addXp", skillName, DP.dp(addAmount) ), false );
 

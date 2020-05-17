@@ -152,8 +152,8 @@ public class XPOverlayGUI extends AbstractGui
 						}
 						else
 						{
-							xpDrop.gainedXp -= ( decayAmount );
-							aSkill.goalXp += ( decayAmount );
+							xpDrop.gainedXp -= decayRate;
+							aSkill.goalXp += decayRate;
 						}
 						aSkill.goalPos = XP.levelAtXpDecimal( aSkill.goalXp );
 					}

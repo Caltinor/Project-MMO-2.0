@@ -984,6 +984,23 @@ public class XP
 		}
 	}
 
+	public static double getMultiplier( PlayerEntity player, Skill skill )
+	{
+		double multiplier = 1;
+
+		double skillMultiplier = getSkillMultiplier( player, skill );
+		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
+		double itemBoost = getItemBoost( player, skill );
+		double biomeBoost = getBiomeBoost( player, skill );
+		double additiveMultiplier = 1 + (itemBoost + biomeBoost) / 100;
+
+		multiplier *= skillMultiplier;
+		multiplier *= difficultyMultiplier;
+		multiplier *= additiveMultiplier;
+
+		return multiplier;
+	}
+
 	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses )
 	{
 		double maxXp = Config.getConfig( "maxXp" );
@@ -998,21 +1015,11 @@ public class XP
 		}
 
 		String skillName = skill.name().toLowerCase();
-		double skillMultiplier = getSkillMultiplier( player, skill );
-		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
 
-		double itemBoost = getItemBoost( player, skill );
-		double biomeBoost = getBiomeBoost( player, skill );
-		double additiveMultiplier = 1 + (itemBoost + biomeBoost) / 100;
+
 
 		if( !ignoreBonuses )
-		{
-			amount *= skillMultiplier;
-			amount *= difficultyMultiplier;
-			amount *= additiveMultiplier;
-
- 			amount *= globalMultiplier;
-		}
+			amount *= getMultiplier( player, skill );
 
 		if( amount == 0 )
 			return;

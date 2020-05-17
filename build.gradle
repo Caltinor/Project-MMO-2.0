@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '2.37.6'
+version = '2.37.7'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO-1.15'
 
@@ -102,6 +102,7 @@ dependencies
 
     runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")
     runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
+    runtimeOnly fg.deobf("curse.maven:bc-5:2957866")
 
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2")
     compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2:api")
