@@ -170,6 +170,12 @@ public class BlockBrokenHandler
                     else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) || material.equals( Material.TALL_PLANTS ) ) && drops.size() > 0 ) //IS PLANT
                     {
                         ItemStack theDropItem = drops.get( 0 );
+                        int theDropCount = 0;
+
+                        for( ItemStack drop : drops )
+                        {
+                            theDropCount += drop.getCount();
+                        }
 
                         int age = -1;
                         int maxAge = -1;
@@ -222,7 +228,8 @@ public class BlockBrokenHandler
 
                         if( age == maxAge && age >= 0 || block instanceof SeaPickleBlock)
                         {
-                            award = XP.addMaps( award, XP.getXp( block.getRegistryName() ) );
+                            award = new HashMap<>();
+                            award.put( skill, hardness );
 
                             double extraChance = XP.getExtraChance( player, block.getRegistryName(), "plant" ) / 100;
                             int guaranteedDrop = 0;
@@ -240,8 +247,10 @@ public class BlockBrokenHandler
                                 NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                             }
 
-                            award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName() ), guaranteedDrop + extraDrop ) );
-                            awardMsg = "harvesting " + ( theDropItem.getCount() ) + " + " + ( guaranteedDrop + extraDrop ) + " crops";
+                            int totalDrops = theDropCount + guaranteedDrop + extraDrop;
+
+                            award = XP.multiplyMap( XP.addMaps( award, XP.getXp( block.getRegistryName() ) ), totalDrops );
+                            awardMsg = "harvesting " + ( theDropCount) + " + " + ( guaranteedDrop + extraDrop ) + " crops";
                         }
                         else if( !wasPlaced )
                             awardMsg = "breaking a plant";
