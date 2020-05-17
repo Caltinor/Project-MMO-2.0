@@ -357,7 +357,7 @@ public class BlockBrokenHandler
 
                     for( String skillName : award.keySet() )
                     {
-                        XP.awardXp( player, Skill.getSkill( skillName ), awardMsg, award.get( skillName ) / (gap + 1), false );
+                        XP.awardXp( player, Skill.getSkill( skillName ), awardMsg, award.get( skillName ) / (gap + 1), false, false );
                     }
                 }
                 else

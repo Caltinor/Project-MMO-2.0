@@ -1,6 +1,8 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -129,6 +131,7 @@ public class PmmoCommand
                   .then( Commands.argument( "Level|Xp", StringArgumentType.word() )
                   .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( levelOrXp, theBuilder ) )
                   .then( Commands.argument( "Value To Add", DoubleArgumentType.doubleArg() )
+                  .then( Commands.argument( "Ignore Multiplier", BoolArgumentType.bool() ) )
                   .executes( AddCommand::execute )
                   ))))
                   .then( Commands.literal( "clear" )

@@ -156,7 +156,7 @@ public class FishedHandler
                 award += (double) match.get( "xp" ) * count;
             }
 
-            XP.awardXp( player, Skill.FISHING, "catching " + items, award, false );
+            XP.awardXp( player, Skill.FISHING, "catching " + items, award, false, false );
         }
     }
 }

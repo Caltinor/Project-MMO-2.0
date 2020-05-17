@@ -199,7 +199,7 @@ public class PlayerInteractionHandler
                                                                 XP.dropItems( returnAmount, salvageItem, event.getWorld(), event.getPos() );
 
                                                             if( award > 0 )
-                                                                XP.awardXp( player, Skill.SMITHING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false  );
+                                                                XP.awardXp( player, Skill.SMITHING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false, false  );
 
                                                             if( returnAmount == potentialReturnAmount )
                                                                 NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );

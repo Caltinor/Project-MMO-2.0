@@ -12,7 +12,7 @@ public class TamingHandler
 
         if( JsonConfig.data.get( "xpValueTaming" ).containsKey( regKey ) )
         {
-            XP.awardXp( event.getTamer(), JsonConfig.data.get( "xpValueTaming" ).get( regKey ), "taming", true );
+            XP.awardXp( event.getTamer(), JsonConfig.data.get( "xpValueTaming" ).get( regKey ), "taming", true, false );
         }
 //		else
 //			XP.awardXp( event.getTamer(), Skill.TAMING, "taming", 10.0D, true );

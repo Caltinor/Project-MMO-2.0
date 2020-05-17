@@ -64,7 +64,7 @@ public class JumpHandler
                     if( player.isPotionActive( Effects.JUMP_BOOST ) )
                         jumpAmp = player.getActivePotionEffect( Effects.JUMP_BOOST ).getAmplifier() + 1;
 
-                    XP.awardXp( player, Skill.AGILITY, "jumping", (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), true );
+                    XP.awardXp( player, Skill.AGILITY, "jumping", (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), true, false );
                 }
             }
         }

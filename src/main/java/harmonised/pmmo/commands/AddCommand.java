@@ -1,5 +1,6 @@
 package harmonised.pmmo.commands;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -28,6 +29,7 @@ public class AddCommand
         String[] args = context.getInput().split( " " );
         String skillName = StringArgumentType.getString( context, "Skill" ).toLowerCase();
         String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
+        boolean ignoreBonuses = BoolArgumentType.getBool( context, "Ignore Multiplier" );
         Skill skill = Skill.getSkill( skillName );
         PlayerEntity sender = null;
 
@@ -52,9 +54,9 @@ public class AddCommand
                     double newValue = DoubleArgumentType.getDouble( context, "Value To Add" );
 
                     if( type.equals( "level" ) )
-                        skill.addLevel( player, newValue );
+                        skill.addLevel( player, newValue, ignoreBonuses );
                     else if( type.equals( "xp" ) )
-                        skill.addXp( player, newValue );
+                        skill.addXp( player, newValue, ignoreBonuses );
                     else
                     {
                         LogHandler.LOGGER.error( "PMMO Command Add: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );

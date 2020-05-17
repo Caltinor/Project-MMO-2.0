@@ -39,7 +39,7 @@ public class PlacedBlockHandler
 
                 if( block.equals( Blocks.WATER ) )
                 {
-                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", 0.075, true );
+                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", 0.075, true, false );
                     return;
                 }
 
@@ -56,12 +56,12 @@ public class PlacedBlockHandler
                     if (!lastPosPlaced.containsKey(playerUUID) || !lastPosPlaced.get(playerUUID).equals(blockPos))
                     {
                         if (block.equals(Blocks.FARMLAND))
-                            XP.awardXp(player, Skill.FARMING, "tilting dirt", blockHardness, false);
+                            XP.awardXp( player, Skill.FARMING, "tilting dirt", blockHardness, false, false );
                         else
                         {
 //								for( int i = 0; i < 1000; i++ )
 //							{
-                            XP.awardXp(player, Skill.BUILDING, "placing a block", blockHardness, false);
+                            XP.awardXp( player, Skill.BUILDING, "placing a block", blockHardness, false, false );
 //							}
                         }
                     }

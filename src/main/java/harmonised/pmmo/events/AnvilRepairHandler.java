@@ -70,7 +70,7 @@ public class AnvilRepairHandler
                     if( award > 0 )
                     {
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
-                        XP.awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false );
+                        XP.awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false, false );
                     }
                 }
 

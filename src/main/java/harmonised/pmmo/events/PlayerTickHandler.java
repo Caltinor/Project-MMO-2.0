@@ -130,22 +130,22 @@ public class PlayerTickHandler
                     {
 
 
-                        XP.awardXp( player, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true );
+                        XP.awardXp( player, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true, false );
                     }
                     else
-                        XP.awardXp( player, Skill.AGILITY, "running", runAward, true );
+                        XP.awardXp( player, Skill.AGILITY, "running", runAward, true, false );
                 }
 
                 if( player.isInWater() && ( waterAbove || waterBelow ) )
                 {
                     if( !player.isSprinting() )
-                        XP.awardXp( player, Skill.SWIMMING, "swimming", swimAward, true );
+                        XP.awardXp( player, Skill.SWIMMING, "swimming", swimAward, true, false );
                 }
                 else if( player.isElytraFlying() )
-                    XP.awardXp( player, Skill.FLYING, "flying", flyAward, true );
+                    XP.awardXp( player, Skill.FLYING, "flying", flyAward, true, false );
 
                 if( (player.getRidingEntity() instanceof BoatEntity) && player.isInWater() )
-                    XP.awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true );
+                    XP.awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true, false );
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
 //				if( !player.world.isRemote() )
 //				{

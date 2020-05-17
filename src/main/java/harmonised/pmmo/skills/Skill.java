@@ -138,14 +138,14 @@ public enum Skill
             LogHandler.LOGGER.error( "Invalid skill at method setXp" );
     }
 
-    public void addLevel( ServerPlayerEntity player, double addAmount )
+    public void addLevel( ServerPlayerEntity player, double addAmount, boolean ignoreBonuses )
     {
         double missingXp = XP.xpAtLevelDecimal( this.getLevel( player ) + addAmount ) - this.getXp( player );
 
-        this.addXp( player, missingXp );
+        this.addXp( player, missingXp, ignoreBonuses );
     }
 
-    public void addXp( ServerPlayerEntity player, double addAmount )
+    public void addXp( ServerPlayerEntity player, double addAmount, boolean ignoreBonuses )
     {
         CompoundNBT skillsTag = XP.getSkillsTag( player );
         double playerXp = this.getXp( player );
@@ -162,7 +162,7 @@ public enum Skill
             newLevelXp = 0;
 
         if( newLevelXp > playerXp )
-            XP.awardXp( player, this, "commandAdd", addAmount, false );
+            XP.awardXp( player, this, "commandAdd", addAmount, false, ignoreBonuses );
         else
             NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, this.getValue(), 0, true ), player );
         skillsTag.putDouble( skillName, newLevelXp );

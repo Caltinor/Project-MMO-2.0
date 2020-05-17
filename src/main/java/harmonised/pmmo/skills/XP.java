@@ -976,15 +976,15 @@ public class XP
 
 
 
-	public static void awardXp( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip )
+	public static void awardXp( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip, boolean ignoreBonuses )
 	{
 		for( Map.Entry<String, Object> entry : map.entrySet() )
 		{
-			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip );
+			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip, ignoreBonuses );
 		}
 	}
 
-	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip )
+	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses )
 	{
 		double maxXp = Config.getConfig( "maxXp" );
 
@@ -1005,11 +1005,14 @@ public class XP
 		double biomeBoost = getBiomeBoost( player, skill );
 		double additiveMultiplier = 1 + (itemBoost + biomeBoost) / 100;
 
-		amount *= skillMultiplier;
-		amount *= difficultyMultiplier;
-		amount *= additiveMultiplier;
+		if( !ignoreBonuses )
+		{
+			amount *= skillMultiplier;
+			amount *= difficultyMultiplier;
+			amount *= additiveMultiplier;
 
- 		amount *= globalMultiplier;
+ 			amount *= globalMultiplier;
+		}
 
 		if( amount == 0 )
 			return;
