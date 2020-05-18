@@ -1,18 +1,14 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.skills.XP;
-
-import jdk.nashorn.internal.ir.Block;
-import net.minecraft.advancements.criterion.FishingRodHookedTrigger;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.*;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 @Mod.EventBusSubscriber
 public class EventHandler
@@ -118,6 +114,18 @@ public class EventHandler
 	public static void animalTaming( AnimalTameEvent event )
 	{
 		TamingHandler.handleAnimalTaming( event );
+	}
+
+	@SubscribeEvent
+	public static void worldTick( TickEvent.WorldTickEvent event )
+	{
+		WorldTickHandler.handleWorldTick( event );
+	}
+
+	@SubscribeEvent
+	public static void serverStopping( FMLServerStoppingEvent event )
+	{
+		ServerStoppingHandler.handleServerStop( event );
 	}
 
 //	@SubscribeEvent

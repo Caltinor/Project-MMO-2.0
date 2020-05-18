@@ -37,6 +37,9 @@ public class AttributeHandler
 
 	public static void updateAll( PlayerEntity player )
 	{
+		CompoundNBT prefsTag = XP.getPreferencesTag( player );
+		prefsTag.putInt( "veinMax", XP.getMaxVein( player ) );
+
 		updateReach( player );
 		updateHP( player );
 		updateDamage( player );

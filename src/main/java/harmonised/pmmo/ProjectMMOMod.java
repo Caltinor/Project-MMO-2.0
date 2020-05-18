@@ -3,6 +3,7 @@ package harmonised.pmmo;
 import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
@@ -62,5 +63,6 @@ public class ProjectMMOMod
     {
         Config.initServer();
         PmmoCommand.register( event.getCommandDispatcher() );
+        WorldTickHandler.refreshVein();
     }
 }

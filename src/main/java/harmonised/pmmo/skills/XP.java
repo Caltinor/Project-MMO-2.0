@@ -34,6 +34,7 @@ import net.minecraft.world.biome.Biome;
 
 import java.util.stream.Collectors;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -48,6 +49,7 @@ public class XP
 	private static Map<Skill, Integer> skillColors = new HashMap<>();
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static Set<UUID> isCrawling = new HashSet<>();
+	public static Set<UUID> isVeining = new HashSet<>();
 	public static Map<Skill, Style> skillStyle = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
@@ -999,6 +1001,18 @@ public class XP
 		multiplier *= additiveMultiplier;
 
 		return multiplier;
+	}
+
+	public static int getMaxVein( PlayerEntity player )
+	{
+		int maxVein;
+		int miningLevel = Skill.MINING.getLevel( player ) - 1;
+		int woodcuttingLevel = Skill.WOODCUTTING.getLevel( player ) - 1;
+		int excavationLevel = Skill.EXCAVATION.getLevel( player ) - 1;
+
+		maxVein = (int) Math.floor( (double) (miningLevel + woodcuttingLevel + excavationLevel) / 3 );
+
+		return maxVein;
 	}
 
 	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses )

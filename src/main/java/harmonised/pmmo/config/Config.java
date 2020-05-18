@@ -41,6 +41,11 @@ public class Config
         else
             localConfig.put( "crawlingAllowed", 0D );
 
+        if( Config.forgeConfig.veiningAllowed.get() )
+            localConfig.put( "veiningAllowed", 1D );
+        else
+            localConfig.put( "veiningAllowed", 0D );
+
 //        config = localConfig;
     }
 
@@ -48,6 +53,7 @@ public class Config
     {
         //Miscellaneous
         public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
+        public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showDonatorWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
@@ -221,6 +227,11 @@ public class Config
                         .comment( "Is crawling allowed? true = on, false = off" )
                         .translation( "pmmo.crawlingAllowed" )
                         .define( "crawlingAllowed", true) );
+
+                this.veiningAllowed = subscriber.subscribe(builder
+                        .comment( "Is vein mining allowed? true = on, false = off" )
+                        .translation( "pmmo.veiningAllowed" )
+                        .define( "veiningAllowed", true) );
 
                 this.showWelcome = subscriber.subscribe(builder
                         .comment( "Should the Welcome message come up?" )

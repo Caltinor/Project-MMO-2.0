@@ -11,7 +11,7 @@ public class NetworkHandler
 	{
 		int index = 0;
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageXp.class, MessageXp::encode, MessageXp::decode, MessageXp::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageCrawling.class, MessageCrawling::encode, MessageCrawling::decode, MessageCrawling::handlePacket );
+		ProjectMMOMod.HANDLER.registerMessage( index++, MessageKeypress.class, MessageKeypress::encode, MessageKeypress::decode, MessageKeypress::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageDoubleTranslation.class, MessageDoubleTranslation::encode, MessageDoubleTranslation::decode, MessageDoubleTranslation::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageTripleTranslation.class, MessageTripleTranslation::encode, MessageTripleTranslation::decode, MessageTripleTranslation::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageUpdateReq.class, MessageUpdateReq::encode, MessageUpdateReq::decode, MessageUpdateReq::handlePacket );
@@ -49,7 +49,7 @@ public class NetworkHandler
 		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
-	public static void sendToServer( MessageCrawling packet )
+	public static void sendToServer( MessageKeypress packet )
 	{
 		ProjectMMOMod.HANDLER.sendToServer( packet );
 	}

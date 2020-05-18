@@ -15,6 +15,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
@@ -66,7 +67,26 @@ public class PlayerTickHandler
                 float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
                 float speedAmp = 0;
                 PlayerInventory inv = player.inventory;
-//				System.out.println( ++debugInt );
+
+                if( !player.world.isRemote() )
+                {
+                    CompoundNBT prefsTag = XP.getPreferencesTag( player );
+
+                    if( !prefsTag.contains( "veinMax" ) )
+                        prefsTag.putInt( "veinMax", ( XP.getMaxVein( player ) ) );
+
+                    int veinMax = prefsTag.getInt( "veinMax" );
+
+                    if( !prefsTag.contains( "veinLeft" ) )
+                        prefsTag.putInt( "veinLeft", veinMax );
+
+                    int veinLeft = prefsTag.getInt( "veinLeft" );
+
+                    if( veinLeft < veinMax )
+                        prefsTag.putInt( "veinLeft", ++veinLeft );
+                    else if( veinLeft > veinMax )
+                        prefsTag.putInt( "veinLeft", veinMax );
+                }
 
                 XP.checkBiomeLevelReq( player );
 
