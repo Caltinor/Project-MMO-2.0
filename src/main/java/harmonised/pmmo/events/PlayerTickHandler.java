@@ -7,6 +7,7 @@ import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -69,24 +70,7 @@ public class PlayerTickHandler
                 PlayerInventory inv = player.inventory;
 
                 if( !player.world.isRemote() )
-                {
-                    CompoundNBT prefsTag = XP.getPreferencesTag( player );
-
-                    if( !prefsTag.contains( "veinMax" ) )
-                        prefsTag.putInt( "veinMax", ( XP.getMaxVein( player ) ) );
-
-                    int veinMax = prefsTag.getInt( "veinMax" );
-
-                    if( !prefsTag.contains( "veinLeft" ) )
-                        prefsTag.putInt( "veinLeft", veinMax );
-
-                    int veinLeft = prefsTag.getInt( "veinLeft" );
-
-                    if( veinLeft < veinMax )
-                        prefsTag.putInt( "veinLeft", ++veinLeft );
-                    else if( veinLeft > veinMax )
-                        prefsTag.putInt( "veinLeft", veinMax );
-                }
+                    updateVein( player );
 
                 XP.checkBiomeLevelReq( player );
 
@@ -192,5 +176,38 @@ public class PlayerTickHandler
                 }
             }
         }
+    }
+    
+    public static void updateVein( PlayerEntity player )
+    {
+        updateSpecificVein( player, Skill.MINING );
+        updateSpecificVein( player, Skill.WOODCUTTING );
+        updateSpecificVein( player, Skill.EXCAVATION );
+        updateSpecificVein( player, Skill.FARMING );
+
+        System.out.println( XP.getAbilitiesTag( player ) );
+    }
+    
+    private static void updateSpecificVein( PlayerEntity player, Skill skill )
+    {
+        CompoundNBT abilityTag = XP.getAbilitiesTag( player );
+
+        String maxText = skill.name().toLowerCase() + "VeinMax";
+        String leftText = skill.name().toLowerCase() + "VeinLeft";
+
+        if( !abilityTag.contains( maxText ) )
+            abilityTag.putInt( maxText, ( XP.getMaxVein( player, skill ) ) );
+
+        int veinMax = abilityTag.getInt( maxText );
+
+        if( !abilityTag.contains( leftText ) )
+            abilityTag.putInt( leftText, veinMax );
+
+        int veinLeft = abilityTag.getInt( leftText );
+
+        if( veinLeft < veinMax )
+            abilityTag.putInt( leftText, ++veinLeft );
+        else if( veinLeft > veinMax )
+            abilityTag.putInt( leftText, veinMax );
     }
 }

@@ -33,6 +33,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import java.util.stream.Collectors;
+
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.ModList;
@@ -163,6 +165,18 @@ public class XP
 	public static Skill getSkill( Material material )
 	{
 		return getSkillFromTool( XP.correctHarvestTool( material ) );
+	}
+
+	public static Skill getSkill( BlockState state )
+	{
+		if( state.isToolEffective( ToolType.PICKAXE ) )
+			return Skill.MINING;
+		else if( state.isToolEffective( ToolType.AXE ) )
+			return Skill.WOODCUTTING;
+		else if( state.isToolEffective( ToolType.SHOVEL ) )
+			return Skill.EXCAVATION;
+		else
+			return Skill.INVALID_SKILL;
 	}
 
 	public static Skill getSkillFromTool( String tool )
@@ -1003,14 +1017,29 @@ public class XP
 		return multiplier;
 	}
 
-	public static int getMaxVein( PlayerEntity player )
+	public static int getMaxVein( PlayerEntity player, Skill skill )
 	{
-		int maxVein;
-		int miningLevel = Skill.MINING.getLevel( player ) - 1;
-		int woodcuttingLevel = Skill.WOODCUTTING.getLevel( player ) - 1;
-		int excavationLevel = Skill.EXCAVATION.getLevel( player ) - 1;
+		int maxVein = 0;
+		int level = skill.getLevel( player ) - 1;
 
-		maxVein = (int) Math.floor( (double) (miningLevel + woodcuttingLevel + excavationLevel) / 3 );
+		switch( skill )
+		{
+			case MINING:
+				maxVein = level / 5;
+				break;
+
+			case WOODCUTTING:
+				maxVein = level / 2;
+				break;
+
+			case EXCAVATION:
+				maxVein = level;
+				break;
+
+			case FARMING:
+				maxVein = level;
+				break;
+		}
 
 		return maxVein;
 	}

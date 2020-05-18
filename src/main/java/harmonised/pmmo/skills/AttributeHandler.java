@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.events.PlayerTickHandler;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -37,8 +38,7 @@ public class AttributeHandler
 
 	public static void updateAll( PlayerEntity player )
 	{
-		CompoundNBT prefsTag = XP.getPreferencesTag( player );
-		prefsTag.putInt( "veinMax", XP.getMaxVein( player ) );
+		PlayerTickHandler.updateVein( player );
 
 		updateReach( player );
 		updateHP( player );

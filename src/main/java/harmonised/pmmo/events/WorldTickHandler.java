@@ -2,9 +2,11 @@ package harmonised.pmmo.events;
 
 import com.mojang.authlib.GameProfile;
 import harmonised.pmmo.skills.PMMOFakePlayer;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
@@ -123,6 +125,9 @@ public class WorldTickHandler
 
     private static boolean addMatch( World world, BlockPos tempPos, Block originBlock, PlayerEntity player, ArrayList<BlockPos> setIn )
     {
+        if( setIn.contains( tempPos ) )
+            return false;
+
         BlockState tempState = world.getBlockState( tempPos );
         if( tempState.getBlock().equals( originBlock ) )
         {
@@ -135,11 +140,21 @@ public class WorldTickHandler
                 {
                     if( XP.isPlayerSurvival( player ) )
                     {
-                        CompoundNBT prefsTag = XP.getPreferencesTag( player );
-                        if( prefsTag.getInt( "veinLeft" ) <= 0 )
-                            return false;
+                        Material material = originBlock.getDefaultState().getMaterial();
+                        CompoundNBT abilityTag = XP.getAbilitiesTag( player );
+                        Skill skill = XP.getSkill( material );
 
-                        prefsTag.putInt( "veinLeft", prefsTag.getInt( "veinLeft" ) - 1 );
+                        if( skill == Skill.MINING || skill == Skill.WOODCUTTING || skill == Skill.EXCAVATION || skill == Skill.FARMING )
+                        {
+                            String veinLeft = skill.name().toLowerCase() + "VeinLeft";
+
+                            if( abilityTag.getInt( veinLeft ) <= 0 )
+                                return false;
+
+                            abilityTag.putInt( veinLeft, abilityTag.getInt( veinLeft ) - 1 );
+                        }
+                        else
+                            return false;
                     }
 
                     if( setIn.size() >= 1000 )
@@ -172,27 +187,20 @@ public class WorldTickHandler
         {
             for( int j = 0; j < size; j++ )
             {
-                tempPos = originPos.east(offset).north(i).up(j);
+                tempPos = originPos.east(offset).north(-i).up(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
                 tempPos = originPos.east(offset).north(i).up(-j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-            }
-        }
-        for( int i = 0; i <= size; i++ )
-        {
-            for( int j = 0; j < size; j++ )
-            {
-                tempPos = originPos.east(offset).north(-i).up(j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
                 tempPos = originPos.east(offset).north(-i).up(-j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
+                tempPos = originPos.east(offset).north(i).up(j);
+                if( addMatch( world, tempPos, originBlock, player, setIn ) )
+                    matched = true;
             }
         }
-
         return matched;
     }
 
@@ -214,22 +222,16 @@ public class WorldTickHandler
         {
             for( int j = 0; j <= size; j++ )
             {
-                tempPos = originPos.up(offset).north(i).east(j);
+                tempPos = originPos.up(offset).north(-i).east(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
                 tempPos = originPos.up(offset).north(i).east(-j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-            }
-        }
-        for( int i = 0; i <= size; i++ )
-        {
-            for( int j = 0; j <= size; j++ )
-            {
-                tempPos = originPos.up(offset).north(-i).east(j);
+                tempPos = originPos.up(offset).north(-i).east(-j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-                tempPos = originPos.up(offset).north(-i).east(-j);
+                tempPos = originPos.up(offset).north(i).east(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
             }
@@ -255,28 +257,16 @@ public class WorldTickHandler
         {
             for( int j = 0; j < size; j++ )
             {
-                tempPos = originPos.up(i).north(offset).east(j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-            }
-            for( int j = 0; j < size; j++ )
-            {
-                tempPos = originPos.up(i).north(offset).east(-j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-            }
-        }
-        for( int i = 0; i <= size; i++ )
-        {
-            for( int j = 0; j < size; j++ )
-            {
                 tempPos = originPos.up(-i).north(offset).east(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-            }
-            for( int j = 0; j < size; j++ )
-            {
+                tempPos = originPos.up(i).north(offset).east(-j);
+                if( addMatch( world, tempPos, originBlock, player, setIn ) )
+                    matched = true;
                 tempPos = originPos.up(-i).north(offset).east(-j);
+                if( addMatch( world, tempPos, originBlock, player, setIn ) )
+                    matched = true;
+                tempPos = originPos.up(i).north(offset).east(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
             }
@@ -328,6 +318,14 @@ public class WorldTickHandler
             if( !x1 && !x2 && !y1 && !y2 && !z1 && !z2 )
                 break;
         }
+
+//        ArrayList<BlockPos> filteredMatches = new ArrayList<>();
+//
+//        for( BlockPos pos : matches )
+//        {
+//            if( !filteredMatches.contains( pos ) )
+//                filteredMatches.add( pos );
+//        }
 
         return matches;
     }
