@@ -184,8 +184,6 @@ public class PlayerTickHandler
         updateSpecificVein( player, Skill.WOODCUTTING );
         updateSpecificVein( player, Skill.EXCAVATION );
         updateSpecificVein( player, Skill.FARMING );
-
-        System.out.println( XP.getAbilitiesTag( player ) );
     }
     
     private static void updateSpecificVein( PlayerEntity player, Skill skill )

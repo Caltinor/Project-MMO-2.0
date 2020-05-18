@@ -37,7 +37,7 @@ public class WorldTickHandler
             {
                 if( scheduledVein.containsKey( player ) )
                 {
-                    if( veinSet.get( player ).size() > 0 )
+                    if( veinSet.get( player ).size() > 0 && XP.isVeining.contains( player.getUniqueID() ) )
                     {
                         BlockEvent.BreakEvent breakEvent = scheduledVein.get(player);
                         BlockPos veinPos = veinSet.get( player ).get( 0 );
@@ -48,7 +48,8 @@ public class WorldTickHandler
 
                         BlockEvent.BreakEvent veinEvent = new BlockEvent.BreakEvent(world, veinPos, veinState, new PMMOFakePlayer((ServerWorld) world, new GameProfile(BlockBrokenHandler.fakePlayerUUID, "PMMOFakePlayer"), player));
                         MinecraftForge.EVENT_BUS.post(veinEvent);
-                        if (!veinEvent.isCanceled())
+
+                        if ( !veinEvent.isCanceled() )
                             world.destroyBlock(veinPos, true);
                     }
                     else
@@ -157,7 +158,7 @@ public class WorldTickHandler
                             return false;
                     }
 
-                    if( setIn.size() >= 1000 )
+                    if( setIn.size() >= 640 )
                         return false;
 
                     setIn.add( tempPos );
@@ -278,7 +279,7 @@ public class WorldTickHandler
     {
         ArrayList<BlockPos> matches = new ArrayList<>();
         matches.add( event.getPos() );
-        int maxSize = 25;
+        int maxSize = 35;
         boolean x1, x2, y1, y2, z1, z2;
         x1 = x2 = y1 = y2 = z1 = z2 = true;
 
@@ -318,14 +319,6 @@ public class WorldTickHandler
             if( !x1 && !x2 && !y1 && !y2 && !z1 && !z2 )
                 break;
         }
-
-//        ArrayList<BlockPos> filteredMatches = new ArrayList<>();
-//
-//        for( BlockPos pos : matches )
-//        {
-//            if( !filteredMatches.contains( pos ) )
-//                filteredMatches.add( pos );
-//        }
 
         return matches;
     }

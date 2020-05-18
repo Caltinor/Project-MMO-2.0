@@ -74,7 +74,7 @@ public class BlockBrokenHandler
         else
             passedBreakReq = XP.checkReq( player, block.getRegistryName(), "break" );
 
-        if( passedBreakReq || !XP.isPlayerSurvival( player ) )
+        if( passedBreakReq )
             processBroken( event );
         else
         {
@@ -135,6 +135,9 @@ public class BlockBrokenHandler
 
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && fakePlayer == null )
             WorldTickHandler.scheduleVein( player, event );
+
+        if( !XP.isPlayerSurvival( player ) )
+            return;
 
         Material material = event.getState().getMaterial();
         double blockHardnessLimit = Config.forgeConfig.blockHardnessLimit.get();
@@ -420,9 +423,12 @@ public class BlockBrokenHandler
         if( gap > 0 )
             player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 
-        for( String skillName : award.keySet() )
+        if( XP.isPlayerSurvival( player ) )
         {
-            XP.awardXp( player, Skill.getSkill( skillName ), awardMsg, award.get( skillName ) / (gap + 1), false, false );
+            for( String skillName : award.keySet() )
+            {
+                XP.awardXp( player, Skill.getSkill( skillName ), awardMsg, award.get( skillName ) / (gap + 1), false, false );
+            }
         }
     }
 }
