@@ -59,61 +59,58 @@ public class BlockBrokenHandler
         else
             player = event.getPlayer();
 
-        if( XP.isPlayerSurvival( player ) )
+        Block block = event.getState().getBlock();
+        World world = event.getWorld().getWorld();
+        Material material = event.getState().getMaterial();
+
+        Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
+        boolean passedBreakReq = true;
+
+        if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
+            passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), "break" );
+
+        if( !passedBreakReq )
+            block = blockAbove;
+        else
+            passedBreakReq = XP.checkReq( player, block.getRegistryName(), "break" );
+
+        if( passedBreakReq || !XP.isPlayerSurvival( player ) )
+            processBroken( event );
+        else
         {
-            Block block = event.getState().getBlock();
-            World world = event.getWorld().getWorld();
-            Material material = event.getState().getMaterial();
+            int startLevel;
 
-            Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
-            boolean passedBreakReq = true;
-
-            if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
-                passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), "break" );
-
-            if( !passedBreakReq )
-                block = blockAbove;
-            else
-                passedBreakReq = XP.checkReq( player, block.getRegistryName(), "break" );
-
-            if( passedBreakReq )
-                processBroken( event );
+            if( XP.correctHarvestTool( material ).equals( "axe" ) )
+            {
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+            }
+            else if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
+            {
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+            }
             else
             {
-                int startLevel;
-
-                if( XP.correctHarvestTool( material ).equals( "axe" ) )
-                {
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
-                }
-                else if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
-                {
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
-                }
-                else
-                {
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
-                }
-
-                for( Map.Entry<String, Object> entry : JsonConfig.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
-                {
-                    startLevel = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
-
-                    double entryValue = 1;
-                    if( entry.getValue() instanceof Double )
-                        entryValue = (double) entry.getValue();
-
-                    if( startLevel < entryValue )
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 2 ), (ServerPlayerEntity) player );
-                    else
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 1 ), (ServerPlayerEntity) player );
-                }
-
-                event.setCanceled( true );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
             }
+
+            for( Map.Entry<String, Object> entry : JsonConfig.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
+            {
+                startLevel = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
+
+                double entryValue = 1;
+                if( entry.getValue() instanceof Double )
+                    entryValue = (double) entry.getValue();
+
+                if( startLevel < entryValue )
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 2 ), (ServerPlayerEntity) player );
+                else
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 1 ), (ServerPlayerEntity) player );
+            }
+
+            event.setCanceled( true );
         }
     }
 

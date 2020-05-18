@@ -20,13 +20,11 @@ public class WorldTickHandler
 {
     private static Map<PlayerEntity, BlockEvent.BreakEvent> scheduledVein;
     private static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
-    private static Map<PlayerEntity, Integer> veinMatches;
 
     public static void refreshVein()
     {
         scheduledVein = new HashMap<>();
         veinSet = new HashMap<>();
-        veinMatches = new HashMap<>();
     }
 
     public static void handleWorldTick( TickEvent.WorldTickEvent event )
@@ -40,7 +38,7 @@ public class WorldTickHandler
                     if( veinSet.get( player ).size() > 0 )
                     {
                         BlockEvent.BreakEvent breakEvent = scheduledVein.get(player);
-                        BlockPos veinPos = veinSet.get( player ).get(0);
+                        BlockPos veinPos = veinSet.get( player ).get( 0 );
                         veinSet.get( player ).remove( 0 );
 
                         World world = breakEvent.getWorld().getWorld();
@@ -114,9 +112,6 @@ public class WorldTickHandler
 
     public static void scheduleVein(PlayerEntity player, BlockEvent.BreakEvent event )
     {
-        veinMatches.remove( player );
-        veinMatches.put( player, 0 );
-
         ArrayList<BlockPos> blockPosArrayList = scanNearbyMatchesVein( event );
 
         if( blockPosArrayList.size() > 0 )
@@ -131,18 +126,26 @@ public class WorldTickHandler
         BlockState tempState = world.getBlockState( tempPos );
         if( tempState.getBlock().equals( originBlock ) )
         {
-            for( BlockPos checkPos : setIn )
+            BlockPos checkPos;
+
+            for( int i = setIn.size() - 1; i >= 0; i-- )
             {
+                checkPos = setIn.get( i );
                 if( posIsAdjacent( tempPos, checkPos ) )
                 {
-                    CompoundNBT prefsTag = XP.getPreferencesTag( player );
+                    if( XP.isPlayerSurvival( player ) )
+                    {
+                        CompoundNBT prefsTag = XP.getPreferencesTag( player );
+                        if( prefsTag.getInt( "veinLeft" ) <= 0 )
+                            return false;
 
-                    if( prefsTag.getInt( "veinLeft" ) <= 0 )
+                        prefsTag.putInt( "veinLeft", prefsTag.getInt( "veinLeft" ) - 1 );
+                    }
+
+                    if( setIn.size() >= 1000 )
                         return false;
 
                     setIn.add( tempPos );
-                    veinMatches.replace( player, veinMatches.get( player ) + 1 );
-                    prefsTag.putInt( "veinLeft", prefsTag.getInt( "veinLeft" ) - 1 );
                     return true;
                 }
             }
@@ -171,19 +174,10 @@ public class WorldTickHandler
             {
                 tempPos = originPos.east(offset).north(i).up(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                {
-                    veinMatches.replace( player, veinMatches.get( player ) );
                     matched = true;
-                }
-            }
-            for( int j = 0; j < size; j++ )
-            {
                 tempPos = originPos.east(offset).north(i).up(-j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                {
-                    veinMatches.replace( player, veinMatches.get( player ) );
                     matched = true;
-                }
             }
         }
         for( int i = 0; i <= size; i++ )
@@ -192,23 +186,14 @@ public class WorldTickHandler
             {
                 tempPos = originPos.east(offset).north(-i).up(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                {
-                    veinMatches.replace( player, veinMatches.get( player ) );
                     matched = true;
-                }
-            }
-            for( int j = 0; j < size; j++ )
-            {
                 tempPos = originPos.east(offset).north(-i).up(-j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                {
-                    veinMatches.replace( player, veinMatches.get( player ) );
                     matched = true;
-                }
             }
         }
 
-        return false;
+        return matched;
     }
 
     private static boolean doY( BlockEvent.BreakEvent event, int offset, ArrayList<BlockPos> setIn )
@@ -232,9 +217,6 @@ public class WorldTickHandler
                 tempPos = originPos.up(offset).north(i).east(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-            }
-            for( int j = 0; j <= size; j++ )
-            {
                 tempPos = originPos.up(offset).north(i).east(-j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
@@ -247,9 +229,6 @@ public class WorldTickHandler
                 tempPos = originPos.up(offset).north(-i).east(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-            }
-            for( int j = 0; j <= size; j++ )
-            {
                 tempPos = originPos.up(offset).north(-i).east(-j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
@@ -309,7 +288,7 @@ public class WorldTickHandler
     {
         ArrayList<BlockPos> matches = new ArrayList<>();
         matches.add( event.getPos() );
-        int maxSize = 3;
+        int maxSize = 25;
         boolean x1, x2, y1, y2, z1, z2;
         x1 = x2 = y1 = y2 = z1 = z2 = true;
 

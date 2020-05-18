@@ -102,7 +102,6 @@ dependencies
 
     runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")
     runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
-    runtimeOnly fg.deobf("curse.maven:bc-5:2957866")
 
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2")
     compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2:api")
