@@ -46,17 +46,21 @@ public class Config
         else
             localConfig.put( "veiningAllowed", 0D );
 
-//        config = localConfig;
+        config = localConfig;
     }
 
     public static class ConfigImplementation
     {
         //Miscellaneous
         public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
-        public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showDonatorWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
+
+        //Vein Mining
+        public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
+        public ConfigHelper.ConfigValueListener<Double> veinMaxDistance;
+        public ConfigHelper.ConfigValueListener<Double> veinMaxBlocks;
 
         //Mob Scaling
         public ConfigHelper.ConfigValueListener<Double> maxMobSpeedBoost;
@@ -228,11 +232,6 @@ public class Config
                         .translation( "pmmo.crawlingAllowed" )
                         .define( "crawlingAllowed", true) );
 
-                this.veiningAllowed = subscriber.subscribe(builder
-                        .comment( "Is vein mining allowed? true = on, false = off" )
-                        .translation( "pmmo.veiningAllowed" )
-                        .define( "veiningAllowed", true) );
-
                 this.showWelcome = subscriber.subscribe(builder
                         .comment( "Should the Welcome message come up?" )
                         .translation( "pmmo.showWelcome" )
@@ -247,6 +246,26 @@ public class Config
                         .comment( "Should every 10th level up be broadcast to everyone?" )
                         .translation( "pmmo.broadcastMilestone" )
                         .define( "broadcastMilestone", true) );
+
+                builder.pop();
+            }
+
+            builder.push( "Vein Mining" );
+            {
+                this.veiningAllowed = subscriber.subscribe(builder
+                        .comment( "Is vein mining allowed? true = on, false = off" )
+                        .translation( "pmmo.veiningAllowed" )
+                        .define( "veiningAllowed", true) );
+
+                this.veinMaxDistance = subscriber.subscribe(builder
+                        .comment( "What is the maximum distance a player's vein can reach? WARNING, THIS NUMBER IS EXPONENTIAL AND CAN FREEZE SERVERS IF THE AMOUNT IS HIGH, IN CONTRAST TO veinMaxBlocks! Optimal settings: 100 for veinMaxDistance and veinMaxBlocks" )
+                        .translation( "pmmo.veinMaxDistance" )
+                        .defineInRange( "veinMaxDistance", 100D, 1, 200) );
+
+                this.veinMaxBlocks = subscriber.subscribe(builder
+                        .comment( "What is the maximum distance a player's vein can reach? WARNING, THIS NUMBER IS EXPONENTIAL WHEN USED WITH veinMaxDistance! If you want to allow veining more than 100 blocks, I highly suggest keeping veinMaxDistance at 25 or below!" )
+                        .translation( "pmmo.veinMaxBlocks" )
+                        .defineInRange( "veinMaxBlocks", 100D, 1, 2500) );
 
                 builder.pop();
             }

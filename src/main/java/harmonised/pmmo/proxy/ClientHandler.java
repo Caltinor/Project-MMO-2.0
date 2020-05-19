@@ -30,6 +30,7 @@ public class ClientHandler
         ClientRegistry.registerKeyBinding( SHOW_GUI );
         ClientRegistry.registerKeyBinding( TOGGLE_TOOLTIP );
         ClientRegistry.registerKeyBinding( CRAWL_KEY );
+        ClientRegistry.registerKeyBinding( VEIN_KEY );
         ClientRegistry.registerKeyBinding( OPEN_MENU );
     }
 

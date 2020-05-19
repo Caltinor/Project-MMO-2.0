@@ -33,7 +33,9 @@ public class WorldTickHandler
     {
         for( PlayerEntity player : event.world.getServer().getPlayerList().getPlayers() )
         {
-            for( int i = 0; i < 1; i++ )
+
+
+            for( int i = 0; i < 10; i++ )
             {
                 if( scheduledVein.containsKey( player ) )
                 {
@@ -50,7 +52,7 @@ public class WorldTickHandler
                         MinecraftForge.EVENT_BUS.post(veinEvent);
 
                         if ( !veinEvent.isCanceled() )
-                            world.destroyBlock(veinPos, true);
+                            world.destroyBlock(veinPos, XP.isPlayerSurvival( player ) );
                     }
                     else
                     {
@@ -158,7 +160,7 @@ public class WorldTickHandler
                             return false;
                     }
 
-                    if( setIn.size() >= 640 )
+                    if( setIn.size() >= 250 )
                         return false;
 
                     setIn.add( tempPos );
@@ -186,7 +188,7 @@ public class WorldTickHandler
 
         for( int i = 0; i <= size; i++ )
         {
-            for( int j = 0; j < size; j++ )
+            for( int j = 0; j <= size; j++ )
             {
                 tempPos = originPos.east(offset).north(-i).up(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
@@ -256,7 +258,7 @@ public class WorldTickHandler
 
         for( int i = 0; i <= size; i++ )
         {
-            for( int j = 0; j < size; j++ )
+            for( int j = 0; j <= size; j++ )
             {
                 tempPos = originPos.up(-i).north(offset).east(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
@@ -279,11 +281,11 @@ public class WorldTickHandler
     {
         ArrayList<BlockPos> matches = new ArrayList<>();
         matches.add( event.getPos() );
-        int maxSize = 35;
+        int maxDistance = 100;
         boolean x1, x2, y1, y2, z1, z2;
         x1 = x2 = y1 = y2 = z1 = z2 = true;
 
-        for( int offset = 1; offset <= maxSize; offset++ )
+        for( int offset = 1; offset <= maxDistance; offset++ )
         {
             //y+
 
