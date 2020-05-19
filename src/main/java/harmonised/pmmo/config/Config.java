@@ -271,9 +271,9 @@ public class Config
                         .defineInRange( "veinMaxDistance", 80D, 1, 200) );
 
                 this.veinMaxBlocks = subscriber.subscribe(builder
-                        .comment( "What is the maximum distance a player's vein can reach? WARNING, THIS NUMBER IS EXPONENTIAL WHEN USED WITH veinMaxDistance! If you want to allow veining more than 100 blocks, I highly suggest keeping veinMaxDistance at 25 or below!" )
+                        .comment( "How many blocks max can be veined? Warning! If you want to allow veining more than 100 blocks, I highly suggest keeping veinMaxDistance at 25 or below!" )
                         .translation( "pmmo.veinMaxBlocks" )
-                        .defineInRange( "veinMaxBlocks", 100D, 1, 2500) );
+                        .defineInRange( "veinMaxBlocks", 1000D, 1, 2500) );
 
                 this.veinSpeed = subscriber.subscribe(builder
                         .comment( "How many blocks get broken every tick?" )
