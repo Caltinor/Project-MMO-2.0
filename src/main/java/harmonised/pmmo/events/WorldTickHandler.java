@@ -190,7 +190,7 @@ public class WorldTickHandler
                         if( cost < minVeinCost )
                             cost = minVeinCost;
 
-                        if( abilityTag.getDouble( "veinLeft" ) - cost <= 0 )
+                        if( abilityTag.getDouble( "veinLeft" ) - cost < 0 )
                             return false;
 
                         abilityTag.putDouble( "veinLeft", abilityTag.getDouble( "veinLeft" ) - cost );

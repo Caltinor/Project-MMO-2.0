@@ -136,6 +136,8 @@ public class Config
         //GUI
         public ConfigHelper.ConfigValueListener<Double> barOffsetX;
         public ConfigHelper.ConfigValueListener<Double> barOffsetY;
+        public ConfigHelper.ConfigValueListener<Double> veinBarOffsetX;
+        public ConfigHelper.ConfigValueListener<Double> veinBarOffsetY;
         public ConfigHelper.ConfigValueListener<Double> xpDropOffsetX;
         public ConfigHelper.ConfigValueListener<Double> xpDropOffsetY;
         public ConfigHelper.ConfigValueListener<Double> xpDropSpawnDistance;
@@ -278,10 +280,10 @@ public class Config
                         .translation( "pmmo.veinSpeed" )
                         .defineInRange( "veinSpeed", 1D, 1, 10000) );
 
-                this.veinSpeed = subscriber.subscribe(builder
+                this.minVeinCost = subscriber.subscribe(builder
                         .comment( "How much is the lowest cost for each block veined? (1 = 1% of max)" )
-                        .translation( "pmmo.veinSpeed" )
-                        .defineInRange( "veinSpeed", 0.5D, 0.01, 100) );
+                        .translation( "pmmo.minVeinCost" )
+                        .defineInRange( "minVeinCost", 0.5D, 0.01, 100) );
 
                 this.levelsPerBlockMining = subscriber.subscribe(builder
                         .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
@@ -614,6 +616,17 @@ public class Config
                         .comment( "GUI bar position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
                         .translation( "pmmo.barOffsetY" )
                         .defineInRange( "barOffsetY", 0D, 0, 1) );
+
+                this.veinBarOffsetX = subscriber.subscribe(builder
+                        .comment( "GUI bar position X (Width)" )
+                        .translation( "pmmo.veinBarOffsetX" )
+                        .defineInRange( "veinBarOffsetX", 0.5D, 0, 1) );
+
+                this.veinBarOffsetY = subscriber.subscribe(builder
+                        .comment( "GUI bar position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
+                        .translation( "pmmo.veinBarOffsetY" )
+                        .defineInRange( "veinBarOffsetY", 0.65D, 0, 1) );
+
 
                 this.xpDropOffsetX = subscriber.subscribe(builder
                         .comment( "GUI Xp drops position X (Width)" )

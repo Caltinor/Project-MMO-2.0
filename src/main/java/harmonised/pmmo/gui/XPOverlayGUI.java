@@ -25,11 +25,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class XPOverlayGUI extends AbstractGui
 {
-	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, xpDropPosX, xpDropPosY;
+	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, veinBarPosX, veinBarPosY, xpDropPosX, xpDropPosY;
 	private static int cooldown, tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
 	private static double xp, goalXp;
 	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0;
-	private static double barOffsetX = 0, barOffsetY = 0, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0;
+	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String skillName = "none";
@@ -273,8 +273,8 @@ public class XPOverlayGUI extends AbstractGui
 				// VEIN STUFF
 
 				veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / 100D;
-				addAmount = timeDiff / 250000000000D / (veinPos / veinPosGoal);
-				lossAmount = timeDiff / 10000000000D;
+				addAmount = timeDiff / 275000000000D / (veinPos / veinPosGoal);
+				lossAmount = timeDiff / 2500000000D;
 
 				if( veinPos < veinPosGoal )
 				{
@@ -300,11 +300,12 @@ public class XPOverlayGUI extends AbstractGui
 					RenderSystem.enableBlend();
 					Minecraft.getInstance().getTextureManager().bindTexture( bar );
 
-					barPosY = (int) ( (sr.getScaledHeight() - barHeight) * 0.75 );
+					veinBarPosX = (int) (sr.getScaledWidth() * veinBarOffsetX - barWidth / 2 );
+					veinBarPosY = (int) (sr.getScaledHeight() * veinBarOffsetY - barHeight / 2 );
 
-					blit( barPosX, barPosY, 0, 0, barWidth, barHeight );
-					blit( barPosX, barPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
-					drawCenteredString( fontRenderer, DP.dprefix( veinPos * 100 ) + "%", barPosX + (barWidth / 2), barPosY - 8, 0x00ff00 );
+					blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
+					blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
+					drawCenteredString( fontRenderer, DP.dprefix( veinPos * 100 ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
 					RenderSystem.disableBlend();
 					RenderSystem.popMatrix();
@@ -383,6 +384,16 @@ public class XPOverlayGUI extends AbstractGui
 				barOffsetY = prefsTag.getDouble( "barOffsetY" );
 			else
 				barOffsetY = Config.forgeConfig.barOffsetY.get();
+
+			if( prefsTag.contains( "veinBarOffsetX" ) )
+				veinBarOffsetX = prefsTag.getDouble( "veinBarOffsetX" );
+			else
+				veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
+
+			if( prefsTag.contains( "veinBarOffsetY" ) )
+				veinBarOffsetY = prefsTag.getDouble( "veinBarOffsetY" );
+			else
+				veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
 
 			if( prefsTag.contains( "xpDropOffsetX" ) )
 				xpDropOffsetX = prefsTag.getDouble( "xpDropOffsetX" );

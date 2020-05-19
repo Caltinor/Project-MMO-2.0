@@ -46,7 +46,7 @@ public class PmmoCommand
     public static String[] suggestSkill = new String[18];
     public static String[] levelOrXp = new String[2];
     public static String[] suggestPref = new String[7];
-    public static String[] suggestGui = new String[15];
+    public static String[] suggestGui = new String[17];
     public static String[] suggestSearchRegistry = new String[5];
 
     public static void register( CommandDispatcher<CommandSource> dispatcher )
@@ -85,19 +85,21 @@ public class PmmoCommand
 
         suggestGui[0] = "barOffsetX";
         suggestGui[1] = "barOffsetY";
-        suggestGui[2] = "xpDropOffsetX";
-        suggestGui[3] = "xpDropOffsetY";
-        suggestGui[4] = "xpDropSpawnDistance";
-        suggestGui[5] = "xpDropOpacityPerTime";
-        suggestGui[6] = "xpDropMaxOpacity";
-        suggestGui[7] = "xpDropDecayAge";
-        suggestGui[8] = "showXpDrops";
-        suggestGui[9] = "stackXpDrops";
-        suggestGui[10] = "xpDropsAttachedToBar";
-        suggestGui[11] = "xpBarAlwaysOn";
-        suggestGui[12] = "xpLeftDisplayAlwaysOn";
-        suggestGui[13] = "lvlUpScreenshot";
-        suggestGui[14] = "lvlUpScreenshotShowSkills";
+        suggestGui[2] = "veinBarOffsetX";
+        suggestGui[3] = "veinBarOffsetY";
+        suggestGui[4] = "xpDropOffsetX";
+        suggestGui[5] = "xpDropOffsetY";
+        suggestGui[6] = "xpDropSpawnDistance";
+        suggestGui[7] = "xpDropOpacityPerTime";
+        suggestGui[8] = "xpDropMaxOpacity";
+        suggestGui[9] = "xpDropDecayAge";
+        suggestGui[10] = "showXpDrops";
+        suggestGui[11] = "stackXpDrops";
+        suggestGui[12] = "xpDropsAttachedToBar";
+        suggestGui[13] = "xpBarAlwaysOn";
+        suggestGui[14] = "xpLeftDisplayAlwaysOn";
+        suggestGui[15] = "lvlUpScreenshot";
+        suggestGui[16] = "lvlUpScreenshotShowSkills";
 
         suggestSearchRegistry[0] = "item";
         suggestSearchRegistry[1] = "biome";
