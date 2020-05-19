@@ -8,8 +8,10 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.PMMOFakePlayer;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -52,28 +54,43 @@ public class WorldTickHandler
         {
             for( int i = 0; i < veinSpeed; i++ )
             {
-                if( activeVein.containsKey( player ) )
+                if( activeVein.containsKey( player ) && veinSet.get( player ).size() > 0 )
                 {
-                    if( veinSet.get( player ).size() > 0 && !( !XP.isVeining.contains( player.getUniqueID() ) && player.isCreative() ) )
-                    {
-                        BlockEvent.BreakEvent breakEvent = activeVein.get(player);
-                        BlockPos veinPos = veinSet.get( player ).get( 0 );
-                        veinSet.get( player ).remove( 0 );
+                    BlockEvent.BreakEvent breakEvent = activeVein.get(player);
+                    World world = breakEvent.getWorld().getWorld();
+                    BlockPos veinPos = veinSet.get( player ).get( 0 );
+                    BlockState veinState = world.getBlockState(veinPos);
 
-                        World world = breakEvent.getWorld().getWorld();
-                        BlockState veinState = world.getBlockState(veinPos);
+                    CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
+
+                    double cost = getCost( veinState, veinPos, player );
+
+                    if( ( abilitiesTag.getDouble( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
+                    {
+                        veinSet.get( player ).remove( 0 );
 
                         BlockEvent.BreakEvent veinEvent = new BlockEvent.BreakEvent(world, veinPos, veinState, new PMMOFakePlayer((ServerWorld) world, new GameProfile(BlockBrokenHandler.fakePlayerUUID, "PMMOFakePlayer"), player));
                         MinecraftForge.EVENT_BUS.post(veinEvent);
 
                         if ( !veinEvent.isCanceled() )
                             world.destroyBlock(veinPos, XP.isPlayerSurvival( player ) );
+
+                        if( XP.isPlayerSurvival( player ) )
+                        {
+                            abilitiesTag.putDouble( "veinLeft", abilitiesTag.getDouble( "veinLeft" ) - cost );
+                            NetworkHandler.sendToPlayer( new MessageUpdateNBT( XP.getAbilitiesTag( player ), "abilities" ), (ServerPlayerEntity) player );
+                        }
                     }
                     else
                     {
                         activeVein.remove( player );
                         veinSet.remove( player );
                     }
+                }
+                else
+                {
+                    activeVein.remove( player );
+                    veinSet.remove( player );
                 }
             }
         }
@@ -158,7 +175,6 @@ public class WorldTickHandler
 
         if( blockPosArrayList.size() > 0 )
         {
-            NetworkHandler.sendToPlayer( new MessageUpdateNBT( XP.getAbilitiesTag( player ), "abilities" ), (ServerPlayerEntity) player );
             activeVein.put( player, event );
             veinSet.put( player, blockPosArrayList );
         }
@@ -179,47 +195,18 @@ public class WorldTickHandler
                 checkPos = setIn.get( i );
                 if( posIsAdjacent( tempPos, checkPos ) )
                 {
-                    if( XP.isPlayerSurvival( player ) )
-                    {
-                        Material material = originBlock.getDefaultState().getMaterial();
-                        CompoundNBT abilityTag = XP.getAbilitiesTag( player );
-                        Skill skill = XP.getSkill( material );
-//                        double cost = originBlock.getDefaultState().getBlockHardness( world, tempPos );
-                        double cost;
-
-                        switch( skill )
-                        {
-                            case MINING:
-                                cost = 100D / ( Skill.MINING.getLevel( player ) / levelsPerBlockMining );
-                                break;
-
-                            case WOODCUTTING:
-                                cost = 100D / ( Skill.WOODCUTTING.getLevel( player ) / levelsPerBlockWoodcutting );
-                                break;
-
-                            case EXCAVATION:
-                                cost = 100D / ( Skill.EXCAVATION.getLevel( player ) / levelsPerBlockExcavation );
-                                break;
-
-                            case FARMING:
-                                cost = 100D / ( Skill.FARMING.getLevel( player ) / levelsPerBlockFarming );
-                                break;
-
-                            default:
-                                return false;
-                        }
-
-                        if( cost < minVeinCost )
-                            cost = minVeinCost;
-
-                        if( abilityTag.getDouble( "veinLeft" ) - cost < 0 )
-                            return false;
-
-                        abilityTag.putDouble( "veinLeft", abilityTag.getDouble( "veinLeft" ) - cost );
-                    }
-
                     if( setIn.size() >= veinMaxBlocks )
                         return false;
+
+                    if( XP.isPlayerSurvival( player ) )
+                    {
+                        CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
+
+                        double cost = getCost( originBlock.getDefaultState(), tempPos, player );
+
+                        if( abilitiesTag.getDouble( "veinLeft" ) - ( cost * setIn.size() ) < 0 )
+                            return false;
+                    }
 
                     setIn.add( tempPos );
                     return true;
@@ -228,6 +215,45 @@ public class WorldTickHandler
         }
 
         return false;
+    }
+
+    private static double getCost( BlockState state, BlockPos pos, PlayerEntity player )
+    {
+        Material material = state.getMaterial();
+        double hardness = state.getBlockHardness( player.world, pos );
+        Skill skill = XP.getSkill( material );
+        double cost;
+
+        switch( skill )
+        {
+            case MINING:
+                cost = 100D / ( Skill.MINING.getLevel( player ) / levelsPerBlockMining );
+                break;
+
+            case WOODCUTTING:
+                cost = 100D / ( Skill.WOODCUTTING.getLevel( player ) / levelsPerBlockWoodcutting );
+                break;
+
+            case EXCAVATION:
+                cost = 100D / ( Skill.EXCAVATION.getLevel( player ) / levelsPerBlockExcavation );
+                break;
+
+            case FARMING:
+                cost = 100D / ( Skill.FARMING.getLevel( player ) / levelsPerBlockFarming );
+                break;
+
+            default:
+                if( !state.getBlock().equals( Blocks.AIR ) )
+                    LogHandler.LOGGER.error( "WRONG SKILL AT VEIN COST: " + state.getBlock().getRegistryName() );
+                return 0D;
+        }
+        if( hardness > 5 )
+            cost *= ( (hardness - 5D) / 5D);
+
+        if( cost < minVeinCost )
+            cost = minVeinCost;
+
+        return cost;
     }
 
     private static boolean doX( BlockEvent.BreakEvent event, int offset, boolean limitY, ArrayList<BlockPos> setIn )
@@ -391,6 +417,8 @@ public class WorldTickHandler
                 break;
         }
 
+//        matches.remove( event.getPos() );
+
         return matches;
     }
 
@@ -398,20 +426,20 @@ public class WorldTickHandler
     {
         if( !activeVein.containsKey( player ) )
         {
-            CompoundNBT abilityTag = XP.getAbilitiesTag( player );
+            CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
 
-            if( !abilityTag.contains( "veinLeft" ) )
-                abilityTag.putDouble( "veinLeft", 100D );
+            if( !abilitiesTag.contains( "veinLeft" ) )
+                abilitiesTag.putDouble( "veinLeft", 100D );
 
-            double veinLeft = abilityTag.getDouble( "veinLeft" );
+            double veinLeft = abilitiesTag.getDouble( "veinLeft" );
 
             if( veinLeft < 100 )
-                abilityTag.putDouble( "veinLeft", ++veinLeft );
+                abilitiesTag.putDouble( "veinLeft", ++veinLeft );
 
             if( veinLeft > 100 )
-                abilityTag.putDouble( "veinLeft", 100D );
+                abilitiesTag.putDouble( "veinLeft", 100D );
 
-            NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilityTag, "abilities" ), (ServerPlayerEntity) player );
+            NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilitiesTag, "abilities" ), (ServerPlayerEntity) player );
         }
     }
 }

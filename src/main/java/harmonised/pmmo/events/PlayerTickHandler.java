@@ -153,13 +153,13 @@ public class PlayerTickHandler
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
 //				if( !player.world.isRemote() )
 //				{
-//					CompoundNBT abilityTag = getAbilitiesTag( player );
-//					if( !abilityTag.contains( "excavate" ) )
-//						abilityTag.putDouble( "excavate", 0 );
+//					CompoundNBT abilitiesTag = getAbilitiesTag( player );
+//					if( !abilitiesTag.contains( "excavate" ) )
+//						abilitiesTag.putDouble( "excavate", 0 );
 //
-//					abilityTag.putDouble( "excavate", abilityTag.getDouble( "excavate" ) + 1 );
+//					abilitiesTag.putDouble( "excavate", abilitiesTag.getDouble( "excavate" ) + 1 );
 //
-//					System.out.println( abilityTag.getDouble( "excavate" ) );
+//					System.out.println( abilitiesTag.getDouble( "excavate" ) );
 //				}
             }
         }

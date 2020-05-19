@@ -54,10 +54,10 @@ public class ClientHandler
                 break;
 
             case "abilities":
-                CompoundNBT abilityTag = XP.getAbilitiesTag( player );
+                CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
                 for( String tag : keySet )
                 {
-                    abilityTag.putDouble( tag, newPackage.getDouble( tag ) );
+                    abilitiesTag.putDouble( tag, newPackage.getDouble( tag ) );
                 }
                 break;
 

@@ -546,14 +546,14 @@ public class XP
     {
         CompoundNBT skillsTag = getSkillsTag( player );
         CompoundNBT prefsTag = getPreferencesTag( player );
-		CompoundNBT abilityTag = getAbilitiesTag( player );
+		CompoundNBT abilitiesTag = getAbilitiesTag( player );
         Set<String> keySet = new HashSet<>( skillsTag.keySet() );
 
 		syncPlayerConfig( player );
 
         NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilityTag, "abilities" ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilitiesTag, "abilities" ), (ServerPlayerEntity) player );
 		AttributeHandler.updateAll( player );
 
         for( String tag : keySet )
