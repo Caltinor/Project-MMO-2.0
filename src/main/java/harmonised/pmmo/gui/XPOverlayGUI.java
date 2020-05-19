@@ -123,14 +123,14 @@ public class XPOverlayGUI extends AbstractGui
 					if( xpDropOffset < xpDropOffsetCap )
 						xpDropOffset = xpDropOffsetCap;
 				}
-				
+
 				for( int i = 0; i < xpDrops.size(); i++ )				//update Xp Drops
 				{
 					xpDrop = xpDrops.get( i );
 					xpDrop.age += timeDiff / 5000000;
 					decayRate = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
 					decayAmount = decayRate * timeDiff / 10000000;
-					
+
 					if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 					{
 						aSkill = skills.get( xpDrop.skill );
@@ -188,22 +188,22 @@ public class XPOverlayGUI extends AbstractGui
 				RenderSystem.disableBlend();
 				RenderSystem.color3f( 255, 255, 255 );
 				RenderSystem.popMatrix();
-				
+
 				for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )		//Update Skills
 				{
 					aSkill = entry.getValue();
-					
+
 					startLevel = Math.floor( aSkill.pos );
-					
+
 					growAmount = ( aSkill.goalPos - aSkill.pos ) * 50;
 					if( growAmount < 0.2 )
 						growAmount = 0.2;
-					
+
 					if( aSkill.pos < aSkill.goalPos )
 					{
 						aSkill.pos += 0.00005d * growAmount;
 						aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
-						
+
 //						if( cooldown < 10000 )
 //							cooldown = 10000;
 					}
@@ -218,7 +218,7 @@ public class XPOverlayGUI extends AbstractGui
 					if( aSkill.xp > aSkill.goalXp )
 						aSkill.xp = aSkill.goalXp;
 				}
-				
+
 				if( cooldown > 0 )				//Xp Bar
 				{
 					RenderSystem.pushMatrix();
@@ -227,7 +227,7 @@ public class XPOverlayGUI extends AbstractGui
 					RenderSystem.color3f( 255, 255, 255 );
 
 					aSkill = skills.get( skill );
-					
+
 					blit( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
 					if( theme == 1 )
 					{
@@ -250,7 +250,7 @@ public class XPOverlayGUI extends AbstractGui
 						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
 					else
 						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dp( Math.floor( aSkill.pos * 100 ) / 100 ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
-					
+
 					if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( skill ) != null )
 					{
 						if( skills.get( skill ).xp >= maxXp )
@@ -259,7 +259,7 @@ public class XPOverlayGUI extends AbstractGui
 						{
 							if( goalXp >= maxXp )
 								goalXp =  maxXp;
-							
+
 							goalXp = XP.xpAtLevel( XP.levelAtXp( aSkill.xp ) + 1 );
 							drawCenteredString( fontRenderer, DP.dprefix( skills.get( skill ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
 							drawCenteredString( fontRenderer,  new TranslationTextComponent( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getString(), barPosX + (barWidth / 2), 26 + barPosY, XP.getSkillColor( skill ) );
@@ -270,45 +270,48 @@ public class XPOverlayGUI extends AbstractGui
 					RenderSystem.popMatrix();
 				}
 
-				// VEIN STUFF
 
-				veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / 100D;
-				addAmount = timeDiff / 275000000000D / (veinPos / veinPosGoal);
-				lossAmount = timeDiff / 2500000000D;
 
-				if( veinPos < veinPosGoal )
-				{
-					if( veinPos + addAmount <= veinPosGoal )
-						veinPos += addAmount;
-					else
+				{   // VEIN STUFF
+					veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / 100D;
+					addAmount = timeDiff / 275000000000D;
+					if( !Double.isInfinite( addAmount / (veinPos / veinPosGoal ) ) )
+						addAmount /= (veinPos / veinPosGoal );
+					lossAmount = timeDiff / 2500000000D;
+
+					if( veinPos < veinPosGoal )
+					{
+							veinPos += addAmount;
+							if( veinPos > veinPosGoal )
+								veinPos = veinPosGoal;
+					}
+					else if( veinPos > veinPosGoal )
+					{
+						if( veinPos - lossAmount > veinPosGoal )
+							veinPos -= lossAmount;
+						else
+							veinPos = veinPosGoal;
+					}
+
+					if( veinPos < 0 || veinPos > 1 )
 						veinPos = veinPosGoal;
-				}
-				else if( veinPos > veinPosGoal )
-				{
-					if( veinPos - lossAmount > veinPosGoal )
-						veinPos -= lossAmount;
-					else
-						veinPos = veinPosGoal;
-				}
 
-				if( veinPos < 0 || veinPos > 1 )
-					veinPos = veinPosGoal;
+					if( veinKey )
+					{
+						RenderSystem.pushMatrix();
+						RenderSystem.enableBlend();
+						Minecraft.getInstance().getTextureManager().bindTexture( bar );
 
-				if( veinKey )
-				{
-					RenderSystem.pushMatrix();
-					RenderSystem.enableBlend();
-					Minecraft.getInstance().getTextureManager().bindTexture( bar );
+						veinBarPosX = (int) (sr.getScaledWidth() * veinBarOffsetX - barWidth / 2 );
+						veinBarPosY = (int) (sr.getScaledHeight() * veinBarOffsetY - barHeight / 2 );
 
-					veinBarPosX = (int) (sr.getScaledWidth() * veinBarOffsetX - barWidth / 2 );
-					veinBarPosY = (int) (sr.getScaledHeight() * veinBarOffsetY - barHeight / 2 );
+						blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
+						blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
+						drawCenteredString( fontRenderer, DP.dprefix( veinPos * 100 ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
-					blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
-					blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
-					drawCenteredString( fontRenderer, DP.dprefix( veinPos * 100 ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
-
-					RenderSystem.disableBlend();
-					RenderSystem.popMatrix();
+						RenderSystem.disableBlend();
+						RenderSystem.popMatrix();
+					}
 				}
 
 				if( guiOn )

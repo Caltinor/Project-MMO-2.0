@@ -268,7 +268,7 @@ public class Config
                 this.veinMaxDistance = subscriber.subscribe(builder
                         .comment( "What is the maximum distance a player's vein can reach? WARNING, THIS NUMBER IS EXPONENTIAL AND CAN FREEZE SERVERS IF THE AMOUNT IS HIGH, IN CONTRAST TO veinMaxBlocks! Optimal settings: 100 for veinMaxDistance and veinMaxBlocks" )
                         .translation( "pmmo.veinMaxDistance" )
-                        .defineInRange( "veinMaxDistance", 100D, 1, 200) );
+                        .defineInRange( "veinMaxDistance", 80D, 1, 200) );
 
                 this.veinMaxBlocks = subscriber.subscribe(builder
                         .comment( "What is the maximum distance a player's vein can reach? WARNING, THIS NUMBER IS EXPONENTIAL WHEN USED WITH veinMaxDistance! If you want to allow veining more than 100 blocks, I highly suggest keeping veinMaxDistance at 25 or below!" )
@@ -283,7 +283,7 @@ public class Config
                 this.minVeinCost = subscriber.subscribe(builder
                         .comment( "How much is the lowest cost for each block veined? (1 = 1% of max)" )
                         .translation( "pmmo.minVeinCost" )
-                        .defineInRange( "minVeinCost", 0.5D, 0.01, 100) );
+                        .defineInRange( "minVeinCost", 0.1D, 0.01, 100) );
 
                 this.levelsPerBlockMining = subscriber.subscribe(builder
                         .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )

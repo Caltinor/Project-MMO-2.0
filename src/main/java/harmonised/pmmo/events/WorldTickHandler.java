@@ -2,6 +2,7 @@ package harmonised.pmmo.events;
 
 import com.mojang.authlib.GameProfile;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.PMMOFakePlayer;
@@ -26,7 +27,8 @@ public class WorldTickHandler
 {
     private static Map<PlayerEntity, BlockEvent.BreakEvent> activeVein;
     private static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
-    private static double minVeinCost, levelsPerBlockMining, levelsPerBlockWoodcutting, levelsPerBlockExcavation, levelsPerBlockFarming;
+    private static double minVeinCost, levelsPerBlockMining, levelsPerBlockWoodcutting, levelsPerBlockExcavation, levelsPerBlockFarming, veinMaxBlocks;
+    private static int veinMaxDistance;
 
     public static void refreshVein()
     {
@@ -38,6 +40,8 @@ public class WorldTickHandler
         levelsPerBlockWoodcutting = Config.forgeConfig.levelsPerBlockWoodcutting.get();
         levelsPerBlockExcavation = Config.forgeConfig.levelsPerBlockExcavation.get();
         levelsPerBlockFarming = Config.forgeConfig.levelsPerBlockFarming.get();
+        veinMaxDistance = (int) Math.floor( Config.forgeConfig.veinMaxDistance.get() );
+        veinMaxBlocks = Config.forgeConfig.veinMaxBlocks.get();
     }
 
     public static void handleWorldTick( TickEvent.WorldTickEvent event )
@@ -50,7 +54,7 @@ public class WorldTickHandler
             {
                 if( activeVein.containsKey( player ) )
                 {
-                    if( veinSet.get( player ).size() > 0 /* && XP.isVeining.contains( player.getUniqueID() ) */ )
+                    if( veinSet.get( player ).size() > 0 && !( !XP.isVeining.contains( player.getUniqueID() ) && player.isCreative() ) )
                     {
                         BlockEvent.BreakEvent breakEvent = activeVein.get(player);
                         BlockPos veinPos = veinSet.get( player ).get( 0 );
@@ -130,9 +134,27 @@ public class WorldTickHandler
     {
         Skill skill = XP.getSkill( event.getState().getMaterial() );
         boolean limitY = skill == Skill.FARMING && event.getState().getBlockHardness( event.getWorld(), event.getPos() ) == 0;
+        String dimensionKey = player.dimension.getRegistryName().toString();
+        String blockKey = event.getState().getBlock().getRegistryName().toString();
+        ArrayList<BlockPos> blockPosArrayList;
+        Map<String, Object> globalBlacklist = null;
+        Map<String, Object> dimensionBlacklist = null;
 
+        if( JsonConfig.data.get( "veinBlacklist" ).containsKey( "all_dimensions" ) )
+            globalBlacklist = JsonConfig.data.get( "veinBlacklist" ).get( "all_dimensions" );
 
-        ArrayList<BlockPos> blockPosArrayList = scanNearbyMatchesVein( event, limitY );
+        if( JsonConfig.data.get( "veinBlacklist" ).containsKey( dimensionKey ) )
+            dimensionBlacklist = JsonConfig.data.get( "veinBlacklist" ).get( dimensionKey );
+
+        if( !player.isCreative() )
+        {
+            if( globalBlacklist != null && globalBlacklist.containsKey( blockKey ) )
+                return;
+            if( dimensionBlacklist != null && dimensionBlacklist.containsKey( blockKey ) )
+                return;
+        }
+
+        blockPosArrayList = scanNearbyMatchesVein( event, limitY );
 
         if( blockPosArrayList.size() > 0 )
         {
@@ -196,7 +218,7 @@ public class WorldTickHandler
                         abilityTag.putDouble( "veinLeft", abilityTag.getDouble( "veinLeft" ) - cost );
                     }
 
-                    if( setIn.size() >= 250 )
+                    if( setIn.size() >= veinMaxBlocks )
                         return false;
 
                     setIn.add( tempPos );
@@ -328,7 +350,7 @@ public class WorldTickHandler
     {
         ArrayList<BlockPos> matches = new ArrayList<>();
         matches.add( event.getPos() );
-        int maxDistance = 100;
+        int maxDistance = veinMaxDistance;
         boolean x1, x2, y1, y2, z1, z2;
         x1 = x2 = y1 = y2 = z1 = z2 = true;
 

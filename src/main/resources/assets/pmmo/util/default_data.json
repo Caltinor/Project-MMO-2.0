@@ -993,7 +993,7 @@
 			"farming": 20
 		},
 		"minecraft:sweet_berry_bush": {
-			"farming": 12.5
+			"farming": 1.25
 		},
 		"minecraft:pufferfish": {
 			"fishing": 35
@@ -3569,6 +3569,24 @@
 	"level_up_command": {
 		"fishing": {
 			"give >player< minecraft:cookie >level<": 100
+		}
+	},
+	"vein_blacklist": {
+		"all_dimensions": {
+			"minecraft:obsidian": 0,
+			"minecraft:chest": 0,
+			"minecraft:trapped_chest": 0,
+			"minecraft:shulker_box": 0,
+			"minecraft:barrel": 0
+		},
+		"minecraft:overworld": {
+			"minecraft:stone": 0
+		},
+		"minecraft:the_nether": {
+			"minecraft:netherrack": 0
+		},
+		"minecraft:the_end": {
+			"minecraft:end_stone": 0
 		}
 	}
 }

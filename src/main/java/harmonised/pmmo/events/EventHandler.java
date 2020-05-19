@@ -22,7 +22,7 @@ public class EventHandler
 	@SubscribeEvent
 	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
 	{
-		PlacedBlockHandler.handlePlaced( event );
+		BlockPlacedHandler.handlePlaced( event );
 	}
 	
 	@SubscribeEvent

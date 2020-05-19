@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class PlacedBlockHandler
+public class BlockPlacedHandler
 {
     private static Map<UUID, BlockPos> lastPosPlaced = new HashMap<>();
 
@@ -33,7 +33,7 @@ public class PlacedBlockHandler
         {
             PlayerEntity player = (PlayerEntity) event.getEntity();
 
-            XP.getAbilitiesTag( player ).putDouble( "veinLeft", 100D );
+//            XP.getAbilitiesTag( player ).putDouble( "veinLeft", 100D );
 
             if ( XP.isPlayerSurvival( player ) )
             {

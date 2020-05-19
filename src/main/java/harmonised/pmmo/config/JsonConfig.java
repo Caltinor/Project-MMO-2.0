@@ -101,6 +101,7 @@ public class JsonConfig
         map.put( "heldItemXpBoost", new HashMap<>() );
         map.put( "wornItemXpBoost", new HashMap<>() );
         map.put( "playerSpecific", new HashMap<>() );
+        map.put( "veinBlacklist", new HashMap<>() );
     }
 
     public static class RequirementItem
@@ -135,6 +136,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> heldItemXpBoost = new HashMap<>();
     private final Map<String, RequirementItem> wornItemXpBoost = new HashMap<>();
     private final Map<String, RequirementItem> playerSpecific = new HashMap<>();
+    private final Map<String, RequirementItem> veinBlacklist = new HashMap<>();
 
     // -----------------------------------------------------------------------------
     //
@@ -231,6 +233,8 @@ public class JsonConfig
         if( Config.forgeConfig.tamingXpEnabled.get() )
             updateReqSkills( req.xpValueTaming, localData.get( "xpValueTaming" ) );
 
+        updateReqVein( req.veinBlacklist, localData.get( "veinBlacklist" ) );
+
         data = localData;
     }
 
@@ -270,6 +274,7 @@ public class JsonConfig
             deserializeGroup(obj, "held_item_xp_boost", req.heldItemXpBoost::put, context);
             deserializeGroup(obj, "worn_item_xp_boost", req.wornItemXpBoost::put, context);
             deserializeGroup(obj, "player_specific", req.playerSpecific::put, context);
+            deserializeGroup(obj, "vein_blacklist", req.veinBlacklist::put, context);
 
             return req;
         }
@@ -587,6 +592,25 @@ public class JsonConfig
             }
             else
                 LogHandler.LOGGER.info( "Could not load inexistant item " + key );
+        });
+    }
+
+    private static void updateReqVein( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    {
+        req.forEach( (key, value) ->
+        {
+            Map<String, Object> inMap = value.requirements;
+
+            if( !outReq.containsKey( key ) )
+                outReq.put( key, new HashMap<>() );
+
+            for( Map.Entry<String, Object> entry : inMap.entrySet() )
+            {
+                if( XP.getItem( entry.getKey() ).equals( Items.AIR ) )
+                    LogHandler.LOGGER.info( "Could not load inexistant item " + entry.getKey() + " into Vein Blacklist" );
+                else
+                    outReq.get( key ).put( entry.getKey(), entry.getValue() );
+            }
         });
     }
 
