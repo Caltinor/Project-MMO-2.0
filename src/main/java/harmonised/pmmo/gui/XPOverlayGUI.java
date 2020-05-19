@@ -33,7 +33,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String skillName = "none";
-	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills;
+	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, veinKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills;
 	private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft minecraft = Minecraft.getInstance();
@@ -49,6 +49,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static int color;
 	private static long lastBonusUpdate = System.currentTimeMillis();
 	private static double itemBoost, biomeBoost;
+	private static double tempDouble, veinPos = -1, veinPosGoal, addAmount = 0, lossAmount = 0;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean guiWasOn = true, guiOn = true;
 
@@ -86,7 +87,7 @@ public class XPOverlayGUI extends AbstractGui
 					themePos =  themePos % 10000;
 
 				guiKey = ClientHandler.SHOW_GUI.isKeyDown();
-//				guiKey = true;
+				veinKey = ClientHandler.VEIN_KEY.isKeyDown();
 
 				if( guiKey || xpBarAlwaysOn )
 					cooldown = 1;
@@ -223,6 +224,7 @@ public class XPOverlayGUI extends AbstractGui
 					RenderSystem.pushMatrix();
 					RenderSystem.enableBlend();
 					Minecraft.getInstance().getTextureManager().bindTexture( bar );
+					RenderSystem.color3f( 255, 255, 255 );
 
 					aSkill = skills.get( skill );
 					
@@ -242,7 +244,7 @@ public class XPOverlayGUI extends AbstractGui
 							tempInt = 100;
 
 						blit( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
-						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( themePos / 100 ) ), barHeight*2, tempInt, barHeight );
+						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
 					}
 					if( aSkill.pos >= maxLevel )
 						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
@@ -263,8 +265,48 @@ public class XPOverlayGUI extends AbstractGui
 							drawCenteredString( fontRenderer,  new TranslationTextComponent( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getString(), barPosX + (barWidth / 2), 26 + barPosY, XP.getSkillColor( skill ) );
 						}
 					}
+
 					RenderSystem.disableBlend();
-					RenderSystem.color3f( 255, 255, 255 );
+					RenderSystem.popMatrix();
+				}
+
+				// VEIN STUFF
+
+				veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / 100D;
+				addAmount = timeDiff / 250000000000D / (veinPos / veinPosGoal);
+				lossAmount = timeDiff / 10000000000D;
+
+				if( veinPos < veinPosGoal )
+				{
+					if( veinPos + addAmount <= veinPosGoal )
+						veinPos += addAmount;
+					else
+						veinPos = veinPosGoal;
+				}
+				else if( veinPos > veinPosGoal )
+				{
+					if( veinPos - lossAmount > veinPosGoal )
+						veinPos -= lossAmount;
+					else
+						veinPos = veinPosGoal;
+				}
+
+				if( veinPos < 0 || veinPos > 1 )
+					veinPos = veinPosGoal;
+
+				if( veinKey )
+				{
+					RenderSystem.pushMatrix();
+					RenderSystem.enableBlend();
+					Minecraft.getInstance().getTextureManager().bindTexture( bar );
+
+					barPosY = (int) ( (sr.getScaledHeight() - barHeight) * 0.75 );
+
+					blit( barPosX, barPosY, 0, 0, barWidth, barHeight );
+					blit( barPosX, barPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
+					drawCenteredString( fontRenderer, DP.dprefix( veinPos * 100 ) + "%", barPosX + (barWidth / 2), barPosY - 8, 0x00ff00 );
+
+					RenderSystem.disableBlend();
 					RenderSystem.popMatrix();
 				}
 

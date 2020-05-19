@@ -6,6 +6,7 @@ import java.util.UUID;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.PlayerTickHandler;
+import harmonised.pmmo.events.WorldTickHandler;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -38,7 +39,8 @@ public class AttributeHandler
 
 	public static void updateAll( PlayerEntity player )
 	{
-		PlayerTickHandler.updateVein( player );
+		if( !player.world.isRemote() )
+			WorldTickHandler.updateVein( player );
 
 		updateReach( player );
 		updateHP( player );

@@ -34,7 +34,7 @@ public class ClientHandler
         ClientRegistry.registerKeyBinding( OPEN_MENU );
     }
 
-    public static void updatePrefsTag( MessageUpdateNBT packet )
+    public static void updateNBTTag( MessageUpdateNBT packet )
     {
         PlayerEntity player = Minecraft.getInstance().player;
         CompoundNBT newPackage = packet.reqPackage;
@@ -51,6 +51,14 @@ public class ClientHandler
                 AttributeHandler.updateAll( player );
 
                 XPOverlayGUI.doInit();
+                break;
+
+            case "abilities":
+                CompoundNBT abilityTag = XP.getAbilitiesTag( player );
+                for( String tag : keySet )
+                {
+                    abilityTag.putDouble( tag, newPackage.getDouble( tag ) );
+                }
                 break;
 
             default:

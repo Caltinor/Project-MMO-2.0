@@ -70,7 +70,7 @@ public class PlayerTickHandler
                 PlayerInventory inv = player.inventory;
 
                 if( !player.world.isRemote() )
-                    updateVein( player );
+                    WorldTickHandler.updateVein( player );
 
                 XP.checkBiomeLevelReq( player );
 
@@ -176,36 +176,5 @@ public class PlayerTickHandler
                 }
             }
         }
-    }
-    
-    public static void updateVein( PlayerEntity player )
-    {
-        updateSpecificVein( player, Skill.MINING );
-        updateSpecificVein( player, Skill.WOODCUTTING );
-        updateSpecificVein( player, Skill.EXCAVATION );
-        updateSpecificVein( player, Skill.FARMING );
-    }
-    
-    private static void updateSpecificVein( PlayerEntity player, Skill skill )
-    {
-        CompoundNBT abilityTag = XP.getAbilitiesTag( player );
-
-        String maxText = skill.name().toLowerCase() + "VeinMax";
-        String leftText = skill.name().toLowerCase() + "VeinLeft";
-
-        if( !abilityTag.contains( maxText ) )
-            abilityTag.putInt( maxText, ( XP.getMaxVein( player, skill ) ) );
-
-        int veinMax = abilityTag.getInt( maxText );
-
-        if( !abilityTag.contains( leftText ) )
-            abilityTag.putInt( leftText, veinMax );
-
-        int veinLeft = abilityTag.getInt( leftText );
-
-        if( veinLeft < veinMax )
-            abilityTag.putInt( leftText, ++veinLeft );
-        else if( veinLeft > veinMax )
-            abilityTag.putInt( leftText, veinMax );
     }
 }

@@ -61,6 +61,12 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Double> veinMaxDistance;
         public ConfigHelper.ConfigValueListener<Double> veinMaxBlocks;
+        public ConfigHelper.ConfigValueListener<Double> veinSpeed;
+        public ConfigHelper.ConfigValueListener<Double> minVeinCost;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerBlockMining;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerBlockWoodcutting;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerBlockExcavation;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerBlockFarming;
 
         //Mob Scaling
         public ConfigHelper.ConfigValueListener<Double> maxMobSpeedBoost;
@@ -266,6 +272,36 @@ public class Config
                         .comment( "What is the maximum distance a player's vein can reach? WARNING, THIS NUMBER IS EXPONENTIAL WHEN USED WITH veinMaxDistance! If you want to allow veining more than 100 blocks, I highly suggest keeping veinMaxDistance at 25 or below!" )
                         .translation( "pmmo.veinMaxBlocks" )
                         .defineInRange( "veinMaxBlocks", 100D, 1, 2500) );
+
+                this.veinSpeed = subscriber.subscribe(builder
+                        .comment( "How many blocks get broken every tick?" )
+                        .translation( "pmmo.veinSpeed" )
+                        .defineInRange( "veinSpeed", 1D, 1, 10000) );
+
+                this.veinSpeed = subscriber.subscribe(builder
+                        .comment( "How much is the lowest cost for each block veined? (1 = 1% of max)" )
+                        .translation( "pmmo.veinSpeed" )
+                        .defineInRange( "veinSpeed", 0.5D, 0.01, 100) );
+
+                this.levelsPerBlockMining = subscriber.subscribe(builder
+                        .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
+                        .translation( "pmmo.levelsPerBlockMining" )
+                        .defineInRange( "levelsPerBlockMining", 5D, 0.1, 10000) );
+
+                this.levelsPerBlockWoodcutting = subscriber.subscribe(builder
+                        .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
+                        .translation( "pmmo.levelsPerBlockWoodcutting" )
+                        .defineInRange( "levelsPerBlockWoodcutting", 3D, 0.1, 10000) );
+
+                this.levelsPerBlockExcavation = subscriber.subscribe(builder
+                        .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
+                        .translation( "pmmo.levelsPerBlockExcavation" )
+                        .defineInRange( "levelsPerBlockExcavation", 1D, 0.1, 10000) );
+
+                this.levelsPerBlockFarming = subscriber.subscribe(builder
+                        .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
+                        .translation( "pmmo.levelsPerBlockFarming" )
+                        .defineInRange( "levelsPerBlockFarming", 1D, 0.1, 10000) );
 
                 builder.pop();
             }

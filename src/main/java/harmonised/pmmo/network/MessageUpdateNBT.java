@@ -48,7 +48,8 @@ public class MessageUpdateNBT
             switch( packet.outputName )
             {
                 case "prefs":
-                    ClientHandler.updatePrefsTag( packet );
+                case "abilities":
+                    ClientHandler.updateNBTTag( packet );
                     break;
 
                 case "config":

@@ -1,6 +1,9 @@
 package harmonised.pmmo.events;
 
 import com.mojang.authlib.GameProfile;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.network.MessageUpdateNBT;
+import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.PMMOFakePlayer;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -8,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,28 +24,35 @@ import java.util.*;
 
 public class WorldTickHandler
 {
-    private static Map<PlayerEntity, BlockEvent.BreakEvent> scheduledVein;
+    private static Map<PlayerEntity, BlockEvent.BreakEvent> activeVein;
     private static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
+    private static double minVeinCost, levelsPerBlockMining, levelsPerBlockWoodcutting, levelsPerBlockExcavation, levelsPerBlockFarming;
 
     public static void refreshVein()
     {
-        scheduledVein = new HashMap<>();
+        activeVein = new HashMap<>();
         veinSet = new HashMap<>();
+
+        minVeinCost = Config.forgeConfig.minVeinCost.get();
+        levelsPerBlockMining = Config.forgeConfig.levelsPerBlockMining.get();
+        levelsPerBlockWoodcutting = Config.forgeConfig.levelsPerBlockWoodcutting.get();
+        levelsPerBlockExcavation = Config.forgeConfig.levelsPerBlockExcavation.get();
+        levelsPerBlockFarming = Config.forgeConfig.levelsPerBlockFarming.get();
     }
 
     public static void handleWorldTick( TickEvent.WorldTickEvent event )
     {
+        int veinSpeed = (int) Math.floor( Config.forgeConfig.veinSpeed.get() );
+
         for( PlayerEntity player : event.world.getServer().getPlayerList().getPlayers() )
         {
-
-
-            for( int i = 0; i < 10; i++ )
+            for( int i = 0; i < veinSpeed; i++ )
             {
-                if( scheduledVein.containsKey( player ) )
+                if( activeVein.containsKey( player ) )
                 {
-                    if( veinSet.get( player ).size() > 0 && XP.isVeining.contains( player.getUniqueID() ) )
+                    if( veinSet.get( player ).size() > 0 /* && XP.isVeining.contains( player.getUniqueID() ) */ )
                     {
-                        BlockEvent.BreakEvent breakEvent = scheduledVein.get(player);
+                        BlockEvent.BreakEvent breakEvent = activeVein.get(player);
                         BlockPos veinPos = veinSet.get( player ).get( 0 );
                         veinSet.get( player ).remove( 0 );
 
@@ -56,7 +67,7 @@ public class WorldTickHandler
                     }
                     else
                     {
-                        scheduledVein.remove( player );
+                        activeVein.remove( player );
                         veinSet.remove( player );
                     }
                 }
@@ -117,11 +128,16 @@ public class WorldTickHandler
 
     public static void scheduleVein(PlayerEntity player, BlockEvent.BreakEvent event )
     {
-        ArrayList<BlockPos> blockPosArrayList = scanNearbyMatchesVein( event );
+        Skill skill = XP.getSkill( event.getState().getMaterial() );
+        boolean limitY = skill == Skill.FARMING && event.getState().getBlockHardness( event.getWorld(), event.getPos() ) == 0;
+
+
+        ArrayList<BlockPos> blockPosArrayList = scanNearbyMatchesVein( event, limitY );
 
         if( blockPosArrayList.size() > 0 )
         {
-            scheduledVein.put( player, event );
+            NetworkHandler.sendToPlayer( new MessageUpdateNBT( XP.getAbilitiesTag( player ), "abilities" ), (ServerPlayerEntity) player );
+            activeVein.put( player, event );
             veinSet.put( player, blockPosArrayList );
         }
     }
@@ -146,18 +162,38 @@ public class WorldTickHandler
                         Material material = originBlock.getDefaultState().getMaterial();
                         CompoundNBT abilityTag = XP.getAbilitiesTag( player );
                         Skill skill = XP.getSkill( material );
+//                        double cost = originBlock.getDefaultState().getBlockHardness( world, tempPos );
+                        double cost;
 
-                        if( skill == Skill.MINING || skill == Skill.WOODCUTTING || skill == Skill.EXCAVATION || skill == Skill.FARMING )
+                        switch( skill )
                         {
-                            String veinLeft = skill.name().toLowerCase() + "VeinLeft";
+                            case MINING:
+                                cost = 100D / ( Skill.MINING.getLevel( player ) / levelsPerBlockMining );
+                                break;
 
-                            if( abilityTag.getInt( veinLeft ) <= 0 )
+                            case WOODCUTTING:
+                                cost = 100D / ( Skill.WOODCUTTING.getLevel( player ) / levelsPerBlockWoodcutting );
+                                break;
+
+                            case EXCAVATION:
+                                cost = 100D / ( Skill.EXCAVATION.getLevel( player ) / levelsPerBlockExcavation );
+                                break;
+
+                            case FARMING:
+                                cost = 100D / ( Skill.FARMING.getLevel( player ) / levelsPerBlockFarming );
+                                break;
+
+                            default:
                                 return false;
-
-                            abilityTag.putInt( veinLeft, abilityTag.getInt( veinLeft ) - 1 );
                         }
-                        else
+
+                        if( cost < minVeinCost )
+                            cost = minVeinCost;
+
+                        if( abilityTag.getDouble( "veinLeft" ) - cost <= 0 )
                             return false;
+
+                        abilityTag.putDouble( "veinLeft", abilityTag.getDouble( "veinLeft" ) - cost );
                     }
 
                     if( setIn.size() >= 250 )
@@ -172,7 +208,7 @@ public class WorldTickHandler
         return false;
     }
 
-    private static boolean doX( BlockEvent.BreakEvent event, int offset, ArrayList<BlockPos> setIn )
+    private static boolean doX( BlockEvent.BreakEvent event, int offset, boolean limitY, ArrayList<BlockPos> setIn )
     {
         boolean matched = false;
 
@@ -186,9 +222,14 @@ public class WorldTickHandler
         if( size < 0 )
             size = -size;
 
+        int yLimit = size;
+
+        if( limitY )
+            yLimit = 0;
+
         for( int i = 0; i <= size; i++ )
         {
-            for( int j = 0; j <= size; j++ )
+            for( int j = 0; j <= yLimit; j++ )
             {
                 tempPos = originPos.east(offset).north(-i).up(j);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
@@ -242,7 +283,7 @@ public class WorldTickHandler
         return matched;
     }
 
-    private static boolean doZ( BlockEvent.BreakEvent event, int offset, ArrayList<BlockPos> setIn )
+    private static boolean doZ( BlockEvent.BreakEvent event, int offset, boolean limitY, ArrayList<BlockPos> setIn )
     {
         boolean matched = false;
 
@@ -256,20 +297,26 @@ public class WorldTickHandler
         if( size < 0 )
             size = -size;
 
+        int yLimit = size;
+
+        Skill skill = XP.getSkill( event.getState().getMaterial() );
+        if( skill == Skill.FARMING )
+            yLimit = 0;
+
         for( int i = 0; i <= size; i++ )
         {
-            for( int j = 0; j <= size; j++ )
+            for( int j = 0; j <= yLimit; j++ )
             {
-                tempPos = originPos.up(-i).north(offset).east(j);
+                tempPos = originPos.up(-j).north(offset).east(i);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-                tempPos = originPos.up(i).north(offset).east(-j);
+                tempPos = originPos.up(j).north(offset).east(-i);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-                tempPos = originPos.up(-i).north(offset).east(-j);
+                tempPos = originPos.up(-j).north(offset).east(-i);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
-                tempPos = originPos.up(i).north(offset).east(j);
+                tempPos = originPos.up(j).north(offset).east(i);
                 if( addMatch( world, tempPos, originBlock, player, setIn ) )
                     matched = true;
             }
@@ -277,7 +324,7 @@ public class WorldTickHandler
         return matched;
     }
 
-    private static ArrayList<BlockPos> scanNearbyMatchesVein( BlockEvent.BreakEvent event )
+    private static ArrayList<BlockPos> scanNearbyMatchesVein( BlockEvent.BreakEvent event, boolean limitY )
     {
         ArrayList<BlockPos> matches = new ArrayList<>();
         matches.add( event.getPos() );
@@ -289,32 +336,32 @@ public class WorldTickHandler
         {
             //y+
 
-            if( !doY( event, offset, matches ) )
+            if( !limitY && !doY( event, offset, matches ) )
                 y1 = false;
             //
 
             //x+
-            if( !doX( event, offset, matches ) )
+            if( !doX( event, offset, limitY, matches ) )
                 x1 = false;
             //
 
             //z+
-            if( !doZ( event, offset, matches ) )
+            if( !doZ( event, offset, limitY, matches ) )
                 z1 = false;
             //
 
             //x-
-            if( !doX( event, -offset, matches ) )
+            if( !doX( event, -offset, limitY, matches ) )
                 x2 = false;
             //
 
             //z-
-            if( !doZ( event, -offset, matches ) )
+            if( !doZ( event, -offset, limitY, matches ) )
                 z2 = false;
             //
 
             //y-
-            if( !doY( event, -offset, matches ) )
+            if( !limitY && !doY( event, -offset, matches ) )
                 y2 = false;
             //
 
@@ -323,5 +370,26 @@ public class WorldTickHandler
         }
 
         return matches;
+    }
+
+    public static void updateVein( PlayerEntity player )
+    {
+        if( !activeVein.containsKey( player ) )
+        {
+            CompoundNBT abilityTag = XP.getAbilitiesTag( player );
+
+            if( !abilityTag.contains( "veinLeft" ) )
+                abilityTag.putDouble( "veinLeft", 100D );
+
+            double veinLeft = abilityTag.getDouble( "veinLeft" );
+
+            if( veinLeft < 100 )
+                abilityTag.putDouble( "veinLeft", ++veinLeft );
+
+            if( veinLeft > 100 )
+                abilityTag.putDouble( "veinLeft", 100D );
+
+            NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilityTag, "abilities" ), (ServerPlayerEntity) player );
+        }
     }
 }
