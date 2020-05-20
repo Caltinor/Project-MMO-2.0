@@ -31,6 +31,7 @@ public class WorldTickHandler
     private static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
     private static double minVeinCost, levelsPerBlockMining, levelsPerBlockWoodcutting, levelsPerBlockExcavation, levelsPerBlockFarming, veinMaxBlocks;
     private static int veinMaxDistance;
+    public static long lastVeinUpdateTime = System.nanoTime();
 
     public static void refreshVein()
     {
@@ -247,6 +248,9 @@ public class WorldTickHandler
                     LogHandler.LOGGER.error( "WRONG SKILL AT VEIN COST: " + state.getBlock().getRegistryName() );
                 return 0D;
         }
+
+        System.out.println( cost + " " + hardness );
+
         if( hardness > 5 )
             cost *= ( (hardness - 5D) / 5D);
 
@@ -422,7 +426,7 @@ public class WorldTickHandler
         return matches;
     }
 
-    public static void updateVein( PlayerEntity player )
+    public static void updateVein( PlayerEntity player, double gap )
     {
         if( !activeVein.containsKey( player ) )
         {
@@ -434,7 +438,7 @@ public class WorldTickHandler
             double veinLeft = abilitiesTag.getDouble( "veinLeft" );
 
             if( veinLeft < 100 )
-                abilitiesTag.putDouble( "veinLeft", ++veinLeft );
+                abilitiesTag.putDouble( "veinLeft", veinLeft + gap );
 
             if( veinLeft > 100 )
                 abilitiesTag.putDouble( "veinLeft", 100D );

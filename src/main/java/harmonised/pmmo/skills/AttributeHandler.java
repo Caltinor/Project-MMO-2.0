@@ -40,7 +40,7 @@ public class AttributeHandler
 	public static void updateAll( PlayerEntity player )
 	{
 		if( !player.world.isRemote() )
-			WorldTickHandler.updateVein( player );
+			WorldTickHandler.updateVein( player, 0 );
 
 		updateReach( player );
 		updateHP( player );

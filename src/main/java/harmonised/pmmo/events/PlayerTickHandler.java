@@ -56,10 +56,10 @@ public class PlayerTickHandler
                 AttributeHandler.resetSpeed( player );
 
             if( !lastAward.containsKey( playerUUID ) )
-                lastAward.put( playerUUID, System.currentTimeMillis() );
+                lastAward.put( playerUUID, System.nanoTime() );
 
-            long gap = System.currentTimeMillis() - lastAward.get( playerUUID );
-            if( gap > 1000 )
+            double gap = ( (System.nanoTime() - lastAward.get( playerUUID) ) / 1000000000D );
+            if( gap > 1 )
             {
                 int swimLevel = XP.getLevel( Skill.SWIMMING, player );
                 int flyLevel = XP.getLevel( Skill.FLYING, player );
@@ -70,7 +70,7 @@ public class PlayerTickHandler
                 PlayerInventory inv = player.inventory;
 
                 if( !player.world.isRemote() )
-                    WorldTickHandler.updateVein( player );
+                    WorldTickHandler.updateVein( player, gap );
 
                 XP.checkBiomeLevelReq( player );
 
@@ -101,11 +101,11 @@ public class PlayerTickHandler
                 if( player.isPotionActive( Effects.SPEED ) )
                     speedAmp = player.getActivePotionEffect( Effects.SPEED ).getAmplifier() + 1;
 
-                float swimAward = ( 3 + swimLevel    / 10.00f ) * ( gap / 1000f ) * ( 1 + swimAmp / 4 );
-                float flyAward  = ( 1 + flyLevel     / 30.77f ) * ( gap / 1000f );
-                float runAward  = ( 1 + agilityLevel / 30.77f ) * ( gap / 1000f ) * ( 1 + speedAmp / 4);
+                double swimAward = ( 3D + swimLevel    / 10.00D ) * gap * ( 1D + swimAmp / 4D );
+                double flyAward  = ( 1D + flyLevel     / 30.77D ) * gap ;
+                double runAward  = ( 1D + agilityLevel / 30.77D ) * gap * ( 1D + speedAmp / 4D );
 
-                lastAward.replace( playerUUID, System.currentTimeMillis() );
+                lastAward.replace( playerUUID, System.nanoTime() );
                 Block waterBlock = Blocks.WATER;
                 Block tallSeagrassBlock = Blocks.TALL_SEAGRASS;
                 Block kelpBlock = Blocks.KELP_PLANT;

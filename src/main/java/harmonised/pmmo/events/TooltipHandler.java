@@ -24,7 +24,7 @@ public class TooltipHandler
     public static boolean tooltipOn = true;
     private static String lastKey = "";
     private static int salvageArrayPos = 0, salvageArrayLength;
-    private static long lastTime = System.currentTimeMillis();
+    private static long lastTime = System.nanoTime();
     private static Object[] salvageArray;
 
     public static void handleTooltip( ItemTooltipEvent event )
@@ -211,9 +211,9 @@ public class TooltipHandler
                         salvageArrayLength = salvageArray.length;
                     }
 
-                    if( System.currentTimeMillis() - lastTime > 1000 )
+                    if( System.nanoTime() - lastTime > 750000000 )
                     {
-                        lastTime = System.currentTimeMillis();
+                        lastTime = System.nanoTime();
                         salvageArrayPos++;
                     }
                     if( salvageArrayPos > salvageArrayLength - 1 )

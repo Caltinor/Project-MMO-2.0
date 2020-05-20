@@ -17,7 +17,7 @@ public class MessageDoubleTranslation
 {
     private static String regKey = "banana";
     private static int lastAmount;
-    private static long lastTime = System.currentTimeMillis();
+    private static long lastTime = System.nanoTime();
 
     private String tKey;
     private String fKey;
@@ -87,7 +87,7 @@ public class MessageDoubleTranslation
                             lastAmount = 0;
                         }
 
-                        if( System.currentTimeMillis() - lastTime < 3000 )
+                        if( System.nanoTime() - lastTime < 3000000000L )
                         {
 //                            System.out.println( lastAmount + " + " + Integer.parseInt( packet.fKey ) + " = " + (lastAmount + Integer.parseInt( packet.fKey )) );
                             lastAmount += Integer.parseInt( packet.fKey );
@@ -95,7 +95,7 @@ public class MessageDoubleTranslation
                         else
                             lastAmount = 0;
 
-                        lastTime = System.currentTimeMillis();
+                        lastTime = System.nanoTime();
 
                         Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
                     }

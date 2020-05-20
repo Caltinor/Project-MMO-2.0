@@ -288,17 +288,17 @@ public class Config
                 this.levelsPerBlockMining = subscriber.subscribe(builder
                         .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
                         .translation( "pmmo.levelsPerBlockMining" )
-                        .defineInRange( "levelsPerBlockMining", 5D, 0.1, 10000) );
+                        .defineInRange( "levelsPerBlockMining", 3D, 0.01, 10000) );
 
                 this.levelsPerBlockWoodcutting = subscriber.subscribe(builder
                         .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
                         .translation( "pmmo.levelsPerBlockWoodcutting" )
-                        .defineInRange( "levelsPerBlockWoodcutting", 3D, 0.1, 10000) );
+                        .defineInRange( "levelsPerBlockWoodcutting", 1D, 0.01, 10000) );
 
                 this.levelsPerBlockExcavation = subscriber.subscribe(builder
                         .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
                         .translation( "pmmo.levelsPerBlockExcavation" )
-                        .defineInRange( "levelsPerBlockExcavation", 1D, 0.1, 10000) );
+                        .defineInRange( "levelsPerBlockExcavation", 1D, 0.01, 10000) );
 
                 this.levelsPerBlockFarming = subscriber.subscribe(builder
                         .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )

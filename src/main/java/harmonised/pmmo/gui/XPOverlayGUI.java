@@ -26,8 +26,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class XPOverlayGUI extends AbstractGui
 {
 	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, veinBarPosX, veinBarPosY, xpDropPosX, xpDropPosY;
-	private static int cooldown, tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
-	private static double xp, goalXp;
+	private static int tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
+	private static double xp, goalXp, cooldown;
 	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0;
 	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0;
 	private static String tempString;
@@ -47,9 +47,9 @@ public class XPOverlayGUI extends AbstractGui
 	private static double maxXp;
 	private static XpDrop xpDrop;
 	private static int color;
-	private static long lastBonusUpdate = System.currentTimeMillis();
+	private static long lastBonusUpdate = System.nanoTime();
 	private static double itemBoost, biomeBoost;
-	private static double tempDouble, veinPos = -1, veinPosGoal, addAmount = 0, lossAmount = 0;
+	private static double tempDouble, veinPos = -1, lastVeinPos = -1, veinPosGoal, addAmount = 0, lossAmount = 0;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean guiWasOn = true, guiOn = true;
 
@@ -80,7 +80,7 @@ public class XPOverlayGUI extends AbstractGui
 				lastTime = System.nanoTime();
 
 				if( cooldown > 0 )
-					cooldown -= timeDiff / 1000000;
+					cooldown -= timeDiff / 1000000D;
 				themePos += ( 2.5 + 7.5 * ( aSkill.pos % Math.floor( aSkill.pos ) ) ) * (timeDiff / 1000000);
 
 				if( themePos > 10000 )
@@ -274,9 +274,9 @@ public class XPOverlayGUI extends AbstractGui
 
 				{   // VEIN STUFF
 					veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / 100D;
-					addAmount = timeDiff / 333000000000D;
-					if( !Double.isInfinite( addAmount / (veinPos / veinPosGoal ) ) )
-						addAmount /= (veinPos / veinPosGoal );
+					addAmount = timeDiff / 1000000000000D;
+					if( !Double.isInfinite( addAmount / (veinPos / veinPosGoal / 4 ) ) )
+						addAmount /= (veinPos / veinPosGoal / 4 );
 					lossAmount = timeDiff / 2500000000D;
 
 					if( veinPos < veinPosGoal )
@@ -287,14 +287,20 @@ public class XPOverlayGUI extends AbstractGui
 					}
 					else if( veinPos > veinPosGoal )
 					{
-						if( veinPos - lossAmount > veinPosGoal )
-							veinPos -= lossAmount;
-						else
+						veinPos -= lossAmount;
+						if( veinPos < veinPosGoal )
 							veinPos = veinPosGoal;
 					}
 
 					if( veinPos < 0 || veinPos > 1 )
 						veinPos = veinPosGoal;
+
+					if( veinPos == 1D && lastVeinPos != 1D )
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.veinCharge", 100 ).setStyle( XP.textStyle.get( "green" ) ), true );
+
+					lastVeinPos = veinPos;
+
+//					System.out.println( veinPosGoal );
 
 					if( veinKey )
 					{
@@ -318,7 +324,7 @@ public class XPOverlayGUI extends AbstractGui
 				{
 					listIndex = 0;
 
-					if( System.currentTimeMillis() - lastBonusUpdate > 250 )
+					if( System.nanoTime() - lastBonusUpdate > 250000000 )
 					{
 						for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
 						{
@@ -332,7 +338,7 @@ public class XPOverlayGUI extends AbstractGui
 							else
 								skills.get( tempSkill ).bonus = -100;
 						}
-						lastBonusUpdate = System.currentTimeMillis();
+						lastBonusUpdate = System.nanoTime();
 					}
 
 					for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )

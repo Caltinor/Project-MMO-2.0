@@ -130,5 +130,6 @@
   "pmmo.mobDamageBoost": "Mobs Damage scaling is %1$s%% of normal rates in %2$s biome",
   "pmmo.mobHpBoost": "Mobs HP scaling is %1$s%% of normal rates in %2$s biome",
   "pmmo.mobSpeedBoost": "Mobs Speed scaling is %1$s%% of normal rates in %2$s biome",
-  "pmmo.skills": "Skills"
+  "pmmo.skills": "Skills",
+  "pmmo.veinCharge": "Your vein ability is at %1$s%% charge!"
 }
