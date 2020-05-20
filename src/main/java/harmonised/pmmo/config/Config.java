@@ -266,14 +266,14 @@ public class Config
                         .define( "veiningAllowed", true) );
 
                 this.veinMaxDistance = subscriber.subscribe(builder
-                        .comment( "What is the maximum distance a player's vein can reach? WARNING, THIS NUMBER IS EXPONENTIAL AND CAN FREEZE SERVERS IF THE AMOUNT IS HIGH, IN CONTRAST TO veinMaxBlocks! Optimal settings: 100 for veinMaxDistance and veinMaxBlocks" )
+                        .comment( "What is the maximum distance a player's vein can reach?" )
                         .translation( "pmmo.veinMaxDistance" )
-                        .defineInRange( "veinMaxDistance", 80D, 1, 200) );
+                        .defineInRange( "veinMaxDistance", 1000D, 1, 1000) );
 
                 this.veinMaxBlocks = subscriber.subscribe(builder
-                        .comment( "How many blocks max can be veined? Warning! If you want to allow veining more than 100 blocks, I highly suggest keeping veinMaxDistance at 25 or below!" )
+                        .comment( "How many blocks max can be veined?" )
                         .translation( "pmmo.veinMaxBlocks" )
-                        .defineInRange( "veinMaxBlocks", 1000D, 1, 2500) );
+                        .defineInRange( "veinMaxBlocks", 10000D, 1, 1000000) );
 
                 this.veinSpeed = subscriber.subscribe(builder
                         .comment( "How many blocks get broken every tick?" )

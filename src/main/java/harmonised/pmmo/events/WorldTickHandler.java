@@ -171,14 +171,79 @@ public class WorldTickHandler
             if( dimensionBlacklist != null && dimensionBlacklist.containsKey( blockKey ) )
                 return;
         }
+        long test;
 
-        blockPosArrayList = scanNearbyMatchesVein( event, limitY );
+//        test = System.currentTimeMillis();
+
+        blockPosArrayList = getVeinShape( event, limitY );
+
+//        System.out.println( System.currentTimeMillis() - test );
+//        System.out.println( testBlockPosSet.size() );
+
+//        blockPosArrayList.forEach( pos -> event.getWorld().destroyBlock( pos, false ) );
 
         if( blockPosArrayList.size() > 0 )
         {
             activeVein.put( player, event );
             veinSet.put( player, blockPosArrayList );
         }
+    }
+
+    private static ArrayList<BlockPos> getVeinShape( BlockEvent.BreakEvent event, boolean limitY )
+    {
+        Set<BlockPos> vein = new HashSet<>();
+        ArrayList<BlockPos> outVein = new ArrayList<>();
+        ArrayList<BlockPos> curLayer = new ArrayList<>();
+        ArrayList<BlockPos> nextLayer = new ArrayList<>();
+        BlockPos originPos = event.getPos();
+        curLayer.add( originPos );
+        BlockPos curPos2;
+        World world = event.getWorld().getWorld();
+        Block block = event.getState().getBlock();
+        int yLimit = 1;
+        if( limitY )
+            yLimit = 0;
+
+        while( vein.size() < veinMaxBlocks )
+        {
+            for( BlockPos curPos : curLayer )
+            {
+                if( curPos.withinDistance( originPos, veinMaxDistance ) )
+                {
+                    for( int i = 0; i <= yLimit; i++ )
+                    {
+                        for( int j = 0; j <= 1; j++ )
+                        {
+                            for( int k = 0; k <= 1; k++ )
+                            {
+                                curPos2 = curPos.up(-i).north(-j).east(-k);
+                                if( !vein.contains( curPos2 ) && world.getBlockState( curPos2 ).getBlock().equals( block ) )
+                                {
+                                    vein.add( curPos2 );
+                                    outVein.add( curPos2 );
+                                    nextLayer.add( curPos2 );
+                                }
+                                curPos2 = curPos.up(i).north(j).east(k);
+                                if( !vein.contains( curPos2 ) && world.getBlockState( curPos2 ).getBlock().equals( block ) )
+                                {
+                                    vein.add( curPos2 );
+                                    outVein.add( curPos2 );
+                                    nextLayer.add( curPos2 );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if( nextLayer.size() == 0 )
+                return outVein;
+
+            curLayer = nextLayer;
+            nextLayer = new ArrayList<>();
+        }
+
+        return outVein;
     }
 
     private static boolean addMatch( World world, BlockPos tempPos, Block originBlock, PlayerEntity player, ArrayList<BlockPos> setIn )
@@ -249,7 +314,7 @@ public class WorldTickHandler
                 return 0D;
         }
 
-        System.out.println( cost + " " + hardness );
+//        System.out.println( cost + " " + hardness );
 
         if( hardness > 5 )
             cost *= ( (hardness - 5D) / 5D);

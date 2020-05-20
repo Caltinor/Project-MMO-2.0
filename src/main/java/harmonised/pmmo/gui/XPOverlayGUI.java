@@ -275,8 +275,11 @@ public class XPOverlayGUI extends AbstractGui
 				{   // VEIN STUFF
 					veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / 100D;
 					addAmount = timeDiff / 1000000000000D;
-					if( !Double.isInfinite( addAmount / (veinPos / veinPosGoal / 4 ) ) )
-						addAmount /= (veinPos / veinPosGoal / 4 );
+//					if( !Double.isInfinite( addAmount / (veinPos / veinPosGoal / 4 ) ) )
+//						addAmount /= (veinPos / veinPosGoal / 4 );
+					addAmount *= veinPosGoal / 100;
+					if( addAmount < 0.00003 )
+						addAmount = 0.00003;
 					lossAmount = timeDiff / 2500000000D;
 
 					if( veinPos < veinPosGoal )
