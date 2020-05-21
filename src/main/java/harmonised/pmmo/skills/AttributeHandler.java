@@ -21,7 +21,7 @@ public class AttributeHandler
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");
 	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
-	private static int levelsPerBlockReach = Config.forgeConfig.levelsPerBlockReach.get();
+	private static int hardnessPerLevelReach = Config.forgeConfig.hardnessPerLevelReach.get();
 	private static int levelsPerHeart = Config.forgeConfig.levelsPerHeart.get();
 	private static int levelsPerDamage = Config.forgeConfig.levelsPerDamage.get();
 	private static double maxSpeedBoost = Config.forgeConfig.maxSpeedBoost.get();
@@ -62,7 +62,7 @@ public class AttributeHandler
 		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double buildLevel = XP.getLevel( Skill.BUILDING, player );
-		double reach = -0.91 + ( buildLevel / levelsPerBlockReach );
+		double reach = -0.91 + ( buildLevel / hardnessPerLevelReach );
 		double maxReachPref = prefsTag.getDouble( "maxReach" );
 		if( reach > maxReach )
 			reach = maxReach;

@@ -63,10 +63,10 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> veinMaxBlocks;
         public ConfigHelper.ConfigValueListener<Double> veinSpeed;
         public ConfigHelper.ConfigValueListener<Double> minVeinCost;
-        public ConfigHelper.ConfigValueListener<Double> levelsPerBlockMining;
-        public ConfigHelper.ConfigValueListener<Double> levelsPerBlockWoodcutting;
-        public ConfigHelper.ConfigValueListener<Double> levelsPerBlockExcavation;
-        public ConfigHelper.ConfigValueListener<Double> levelsPerBlockFarming;
+        public ConfigHelper.ConfigValueListener<Double> hardnessPerLevelMining;
+        public ConfigHelper.ConfigValueListener<Double> hardnessPerLevelWoodcutting;
+        public ConfigHelper.ConfigValueListener<Double> hardnessPerLevelExcavation;
+        public ConfigHelper.ConfigValueListener<Double> hardnessPerLevelFarming;
 
         //Mob Scaling
         public ConfigHelper.ConfigValueListener<Double> maxMobSpeedBoost;
@@ -164,7 +164,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimit;
 
         //Building
-        public ConfigHelper.ConfigValueListener<Integer> levelsPerBlockReach;
+        public ConfigHelper.ConfigValueListener<Integer> hardnessPerLevelReach;
         public ConfigHelper.ConfigValueListener<Double> maxReach;
 
         //Excavation
@@ -285,25 +285,25 @@ public class Config
                         .translation( "pmmo.minVeinCost" )
                         .defineInRange( "minVeinCost", 0.1D, 0.01, 100) );
 
-                this.levelsPerBlockMining = subscriber.subscribe(builder
-                        .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
-                        .translation( "pmmo.levelsPerBlockMining" )
-                        .defineInRange( "levelsPerBlockMining", 3D, 0.01, 10000) );
+                this.hardnessPerLevelMining = subscriber.subscribe(builder
+                        .comment( "How much hardness can you vein per level, from 100% vein energy (if this is set to 5, and you are level 10, you can vein 1 obsidian block, as obsidian is 50 hardness, which you can see by hovering over the block)" )
+                        .translation( "pmmo.hardnessPerLevelMining" )
+                        .defineInRange( "hardnessPerLevelMining", 3D, 0.01, 10000) );
 
-                this.levelsPerBlockWoodcutting = subscriber.subscribe(builder
-                        .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
-                        .translation( "pmmo.levelsPerBlockWoodcutting" )
-                        .defineInRange( "levelsPerBlockWoodcutting", 1D, 0.01, 10000) );
+                this.hardnessPerLevelWoodcutting = subscriber.subscribe(builder
+                        .comment( "How much hardness can you vein per level, from 100% vein energy (if this is set to 5, and you are level 10, you can vein 1 obsidian block, as obsidian is 50 hardness, which you can see by hovering over the block)" )
+                        .translation( "pmmo.hardnessPerLevelWoodcutting" )
+                        .defineInRange( "hardnessPerLevelWoodcutting", 1D, 0.01, 10000) );
 
-                this.levelsPerBlockExcavation = subscriber.subscribe(builder
-                        .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
-                        .translation( "pmmo.levelsPerBlockExcavation" )
-                        .defineInRange( "levelsPerBlockExcavation", 1D, 0.01, 10000) );
+                this.hardnessPerLevelExcavation = subscriber.subscribe(builder
+                        .comment( "How much hardness can you vein per level, from 100% vein energy (if this is set to 5, and you are level 10, you can vein 1 obsidian block, as obsidian is 50 hardness, which you can see by hovering over the block)" )
+                        .translation( "pmmo.hardnessPerLevelExcavation" )
+                        .defineInRange( "hardnessPerLevelExcavation", 1D, 0.01, 10000) );
 
-                this.levelsPerBlockFarming = subscriber.subscribe(builder
-                        .comment( "How many levels does it take per 1 block mined from full vein bar? (if this is set to 10, that means that every 10 levels, you can vein 1 more block, so at level 5, with a fulll bar, you'd vein 5 blocks)" )
-                        .translation( "pmmo.levelsPerBlockFarming" )
-                        .defineInRange( "levelsPerBlockFarming", 1D, 0.1, 10000) );
+                this.hardnessPerLevelFarming = subscriber.subscribe(builder
+                        .comment( "How much hardness can you vein per level, from 100% vein energy (if this is set to 5, and you are level 10, you can vein 1 obsidian block, as obsidian is 50 hardness, which you can see by hovering over the block)" )
+                        .translation( "pmmo.hardnessPerLevelFarming" )
+                        .defineInRange( "hardnessPerLevelFarming", 1D, 0.1, 10000) );
 
                 builder.pop();
             }
@@ -743,10 +743,10 @@ public class Config
 
             builder.push( "Building" );
             {
-                this.levelsPerBlockReach = subscriber.subscribe(builder
+                this.hardnessPerLevelReach = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of reach" )
-                        .translation( "pmmo.levelsPerBlockReach" )
-                        .defineInRange( "levelsPerBlockReach", 25, 0, 1000) );
+                        .translation( "pmmo.hardnessPerLevelReach" )
+                        .defineInRange( "hardnessPerLevelReach", 25, 0, 1000) );
 
                 this.maxReach = subscriber.subscribe(builder
                         .comment( "What is the maximum reach a player can have" )
