@@ -305,7 +305,7 @@ public class XPOverlayGUI extends AbstractGui
 
 //					System.out.println( veinPosGoal );
 
-					if( veinKey )
+					if( veinKey && XP.isPlayerSurvival( player ) )
 					{
 						RenderSystem.pushMatrix();
 						RenderSystem.enableBlend();

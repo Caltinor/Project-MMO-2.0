@@ -210,19 +210,12 @@ public class WorldTickHandler
             {
                 if( curPos.withinDistance( originPos, veinMaxDistance ) )
                 {
-                    for( int i = 0; i <= yLimit; i++ )
+                    for( int i = -yLimit; i <= yLimit; i++ )
                     {
-                        for( int j = 0; j <= 1; j++ )
+                        for( int j = -1; j <= 1; j++ )
                         {
-                            for( int k = 0; k <= 1; k++ )
+                            for( int k = -1; k <= 1; k++ )
                             {
-                                curPos2 = curPos.up(-i).north(-j).east(-k);
-                                if( !vein.contains( curPos2 ) && world.getBlockState( curPos2 ).getBlock().equals( block ) )
-                                {
-                                    vein.add( curPos2 );
-                                    outVein.add( curPos2 );
-                                    nextLayer.add( curPos2 );
-                                }
                                 curPos2 = curPos.up(i).north(j).east(k);
                                 if( !vein.contains( curPos2 ) && world.getBlockState( curPos2 ).getBlock().equals( block ) )
                                 {
