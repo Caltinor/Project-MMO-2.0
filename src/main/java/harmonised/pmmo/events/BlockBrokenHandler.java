@@ -4,10 +4,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.skills.PMMOFakePlayer;
-import harmonised.pmmo.skills.PlacedBlocks;
-import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.skills.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -36,7 +33,7 @@ public class BlockBrokenHandler
 {
     public static final UUID fakePlayerUUID = UUID.fromString( "b34010cd-f217-43a9-8e22-373404c25378" );
     private static boolean veiningAllowed;
-    private static boolean matched = true;
+//    private static boolean matched = true;
 
     public static void handleBroken( BlockEvent.BreakEvent event )
     {
@@ -48,16 +45,7 @@ public class BlockBrokenHandler
 
     private static void processReq( BlockEvent.BreakEvent event )
     {
-        PMMOFakePlayer fakePlayer = null;
-        PlayerEntity player;
-
-        if( event.getPlayer() instanceof PMMOFakePlayer )
-        {
-            fakePlayer = (PMMOFakePlayer) event.getPlayer();
-            player = fakePlayer.player;
-        }
-        else
-            player = event.getPlayer();
+        PlayerEntity player = event.getPlayer();
 
         Block block = event.getState().getBlock();
         World world = event.getWorld().getWorld();
@@ -120,21 +108,12 @@ public class BlockBrokenHandler
         Block block = state.getBlock();
         World world = event.getWorld().getWorld();
 
-        PMMOFakePlayer fakePlayer = null;
-        PlayerEntity player;
-
-        if( event.getPlayer() instanceof PMMOFakePlayer )
-        {
-            fakePlayer = (PMMOFakePlayer) event.getPlayer();
-            player = fakePlayer.player;
-        }
-        else
-            player = event.getPlayer();
+        PlayerEntity player = event.getPlayer();
 
         veiningAllowed = Config.config.containsKey("veiningAllowed") && Config.config.get("veiningAllowed") != 0;
 
-        if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && fakePlayer == null )
-            WorldTickHandler.scheduleVein( player, event );
+        if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
+            WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
 
         if( !XP.isPlayerSurvival( player ) )
             return;

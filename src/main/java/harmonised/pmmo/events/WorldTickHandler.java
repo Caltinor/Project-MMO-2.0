@@ -7,15 +7,22 @@ import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.PMMOFakePlayer;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -23,15 +30,16 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class WorldTickHandler
 {
-    private static Map<PlayerEntity, BlockEvent.BreakEvent> activeVein;
-    private static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
+    public static Map<PlayerEntity, VeinInfo> activeVein;
+    public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
     private static double minVeinCost, levelsPerBlockMining, levelsPerBlockWoodcutting, levelsPerBlockExcavation, levelsPerBlockFarming, veinMaxBlocks;
     private static int veinMaxDistance;
-    public static long lastVeinUpdateTime = System.nanoTime();
+//    public static long lastVeinUpdateTime = System.nanoTime();
 
     public static void refreshVein()
     {
@@ -57,29 +65,37 @@ public class WorldTickHandler
             {
                 if( activeVein.containsKey( player ) && veinSet.get( player ).size() > 0 )
                 {
-                    BlockEvent.BreakEvent breakEvent = activeVein.get(player);
-                    World world = breakEvent.getWorld().getWorld();
+                    VeinInfo veinInfo = activeVein.get(player);
+                    World world = veinInfo.world;
+                    ItemStack startItem = veinInfo.item;
                     BlockPos veinPos = veinSet.get( player ).get( 0 );
                     BlockState veinState = world.getBlockState(veinPos);
-
                     CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
-
                     double cost = getCost( veinState, veinPos, player );
 
                     if( ( abilitiesTag.getDouble( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
                     {
                         veinSet.get( player ).remove( 0 );
 
-                        BlockEvent.BreakEvent veinEvent = new BlockEvent.BreakEvent(world, veinPos, veinState, new PMMOFakePlayer((ServerWorld) world, new GameProfile(BlockBrokenHandler.fakePlayerUUID, "PMMOFakePlayer"), player));
+                        BlockEvent.BreakEvent veinEvent = new BlockEvent.BreakEvent( world, veinPos, veinState, player );
                         MinecraftForge.EVENT_BUS.post(veinEvent);
 
                         if ( !veinEvent.isCanceled() )
-                            world.destroyBlock(veinPos, XP.isPlayerSurvival( player ) );
-
-                        if( XP.isPlayerSurvival( player ) )
                         {
-                            abilitiesTag.putDouble( "veinLeft", abilitiesTag.getDouble( "veinLeft" ) - cost );
-                            NetworkHandler.sendToPlayer( new MessageUpdateNBT( XP.getAbilitiesTag( player ), "abilities" ), (ServerPlayerEntity) player );
+                            if( XP.isPlayerSurvival( player ) )
+                            {
+                                abilitiesTag.putDouble( "veinLeft", abilitiesTag.getDouble( "veinLeft" ) - cost );
+                                NetworkHandler.sendToPlayer( new MessageUpdateNBT( XP.getAbilitiesTag( player ), "abilities" ), (ServerPlayerEntity) player );
+                                if( startItem.getDamage() < startItem.getMaxDamage() && player.getHeldItemMainhand().equals( startItem ) )
+                                    destroyBlock( world, veinPos, player, startItem );
+                                else
+                                {
+                                    activeVein.remove( player );
+                                    veinSet.remove( player );
+                                }
+                            }
+                            else
+                                world.destroyBlock(veinPos, false );
                         }
                     }
                     else
@@ -97,38 +113,17 @@ public class WorldTickHandler
         }
     }
 
-    public static boolean scanBlock( World world, Block block, BlockPos blockPos, int radius )
+    public static void destroyBlock( World world, BlockPos pos, PlayerEntity player, ItemStack toolUsed )
     {
-        for( int i = -radius; i < radius; i++ )
-        {
-            for( int j = -radius; j < radius; j++ )
-            {
-                for( int k = -radius; k < radius; k++ )
-                {
-                    if( world.getBlockState( blockPos.up(i).north(j).east(k) ).getBlock().equals( block ) )
-                        return true;
-                }
-            }
-        }
+        BlockState blockstate = world.getBlockState(pos);
+        IFluidState ifluidstate = world.getFluidState(pos);
+        world.playEvent(2001, pos, Block.getStateId(blockstate));
 
-        return false;
-    }
+        TileEntity tileentity = blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
+        Block.spawnDrops(blockstate, world, pos, tileentity, player, toolUsed );
 
-    public static boolean hasAdjacentBlock( World world, Block block, BlockPos pos )
-    {
-        for( int i = -1; i <= 1; i++ )
-        {
-            for( int j = -1; j <= 1; j++ )
-            {
-                for( int k = -1; k <= 1; k++ )
-                {
-                    if( world.getBlockState( pos.up(i).north(j).east(k) ).getBlock().equals( block ) )
-                        return true;
-                }
-            }
-        }
-
-        return false;
+        if( !toolUsed.getItem().equals( Items.AIR ) && world.setBlockState(pos, ifluidstate.getBlockState(), 3) )
+            toolUsed.damageItem( 1, player, (a) -> a.sendBreakAnimation( Hand.MAIN_HAND ) );
     }
 
     public static boolean posIsAdjacent( BlockPos pos1, BlockPos pos2 )
@@ -148,12 +143,12 @@ public class WorldTickHandler
         return false;
     }
 
-    public static void scheduleVein(PlayerEntity player, BlockEvent.BreakEvent event )
+    public static void scheduleVein(PlayerEntity player, VeinInfo veinInfo )
     {
-        Skill skill = XP.getSkill( event.getState().getMaterial() );
-        boolean limitY = skill == Skill.FARMING && event.getState().getBlockHardness( event.getWorld(), event.getPos() ) == 0;
+        Skill skill = XP.getSkill( veinInfo.state.getMaterial() );
+        boolean limitY = skill == Skill.FARMING && veinInfo.state.getBlockHardness( veinInfo.world, veinInfo.pos ) == 0;
         String dimensionKey = player.dimension.getRegistryName().toString();
-        String blockKey = event.getState().getBlock().getRegistryName().toString();
+        String blockKey = veinInfo.state.getBlock().getRegistryName().toString();
         ArrayList<BlockPos> blockPosArrayList;
         Map<String, Object> globalBlacklist = null;
         Map<String, Object> dimensionBlacklist = null;
@@ -175,7 +170,7 @@ public class WorldTickHandler
 
 //        test = System.currentTimeMillis();
 
-        blockPosArrayList = getVeinShape( event, limitY );
+        blockPosArrayList = getVeinShape( veinInfo, limitY );
 
 //        System.out.println( System.currentTimeMillis() - test );
 //        System.out.println( testBlockPosSet.size() );
@@ -184,22 +179,21 @@ public class WorldTickHandler
 
         if( blockPosArrayList.size() > 0 )
         {
-            activeVein.put( player, event );
+            activeVein.put( player, veinInfo );
             veinSet.put( player, blockPosArrayList );
         }
     }
 
-    private static ArrayList<BlockPos> getVeinShape( BlockEvent.BreakEvent event, boolean limitY )
+    private static ArrayList<BlockPos> getVeinShape( VeinInfo veinInfo, boolean limitY )
     {
         Set<BlockPos> vein = new HashSet<>();
         ArrayList<BlockPos> outVein = new ArrayList<>();
         ArrayList<BlockPos> curLayer = new ArrayList<>();
         ArrayList<BlockPos> nextLayer = new ArrayList<>();
-        BlockPos originPos = event.getPos();
+        BlockPos originPos = veinInfo.pos;
         curLayer.add( originPos );
         BlockPos curPos2;
-        World world = event.getWorld().getWorld();
-        Block block = event.getState().getBlock();
+        Block block = veinInfo.state.getBlock();
         int yLimit = 1;
         if( limitY )
             yLimit = 0;
@@ -217,7 +211,7 @@ public class WorldTickHandler
                             for( int k = -1; k <= 1; k++ )
                             {
                                 curPos2 = curPos.up(i).north(j).east(k);
-                                if( !vein.contains( curPos2 ) && world.getBlockState( curPos2 ).getBlock().equals( block ) )
+                                if( !vein.contains( curPos2 ) && veinInfo.world.getBlockState( curPos2 ).getBlock().equals( block ) )
                                 {
                                     vein.add( curPos2 );
                                     outVein.add( curPos2 );
@@ -316,172 +310,6 @@ public class WorldTickHandler
             cost = minVeinCost;
 
         return cost;
-    }
-
-    private static boolean doX( BlockEvent.BreakEvent event, int offset, boolean limitY, ArrayList<BlockPos> setIn )
-    {
-        boolean matched = false;
-
-        World world = event.getWorld().getWorld();
-        BlockPos originPos = event.getPos();
-        Block originBlock = event.getState().getBlock();
-        BlockPos tempPos;
-        PlayerEntity player = event.getPlayer();
-
-        int size = offset;
-        if( size < 0 )
-            size = -size;
-
-        int yLimit = size;
-
-        if( limitY )
-            yLimit = 0;
-
-        for( int i = 0; i <= size; i++ )
-        {
-            for( int j = 0; j <= yLimit; j++ )
-            {
-                tempPos = originPos.east(offset).north(-i).up(j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.east(offset).north(i).up(-j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.east(offset).north(-i).up(-j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.east(offset).north(i).up(j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-            }
-        }
-        return matched;
-    }
-
-    private static boolean doY( BlockEvent.BreakEvent event, int offset, ArrayList<BlockPos> setIn )
-    {
-        boolean matched = false;
-
-        World world = event.getWorld().getWorld();
-        BlockPos originPos = event.getPos();
-        Block originBlock = event.getState().getBlock();
-        BlockPos tempPos;
-        PlayerEntity player = event.getPlayer();
-
-        int size = offset;
-        if( size < 0 )
-            size = -size;
-
-        for( int i = 0; i <= size; i++ )
-        {
-            for( int j = 0; j <= size; j++ )
-            {
-                tempPos = originPos.up(offset).north(-i).east(j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.up(offset).north(i).east(-j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.up(offset).north(-i).east(-j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.up(offset).north(i).east(j);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-            }
-        }
-        return matched;
-    }
-
-    private static boolean doZ( BlockEvent.BreakEvent event, int offset, boolean limitY, ArrayList<BlockPos> setIn )
-    {
-        boolean matched = false;
-
-        World world = event.getWorld().getWorld();
-        BlockPos originPos = event.getPos();
-        Block originBlock = event.getState().getBlock();
-        BlockPos tempPos;
-        PlayerEntity player = event.getPlayer();
-
-        int size = offset;
-        if( size < 0 )
-            size = -size;
-
-        int yLimit = size;
-
-        Skill skill = XP.getSkill( event.getState().getMaterial() );
-        if( skill == Skill.FARMING )
-            yLimit = 0;
-
-        for( int i = 0; i <= size; i++ )
-        {
-            for( int j = 0; j <= yLimit; j++ )
-            {
-                tempPos = originPos.up(-j).north(offset).east(i);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.up(j).north(offset).east(-i);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.up(-j).north(offset).east(-i);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-                tempPos = originPos.up(j).north(offset).east(i);
-                if( addMatch( world, tempPos, originBlock, player, setIn ) )
-                    matched = true;
-            }
-        }
-        return matched;
-    }
-
-    private static ArrayList<BlockPos> scanNearbyMatchesVein( BlockEvent.BreakEvent event, boolean limitY )
-    {
-        ArrayList<BlockPos> matches = new ArrayList<>();
-        matches.add( event.getPos() );
-        int maxDistance = veinMaxDistance;
-        boolean x1, x2, y1, y2, z1, z2;
-        x1 = x2 = y1 = y2 = z1 = z2 = true;
-
-        for( int offset = 1; offset <= maxDistance; offset++ )
-        {
-            //y+
-
-            if( !limitY && !doY( event, offset, matches ) )
-                y1 = false;
-            //
-
-            //x+
-            if( !doX( event, offset, limitY, matches ) )
-                x1 = false;
-            //
-
-            //z+
-            if( !doZ( event, offset, limitY, matches ) )
-                z1 = false;
-            //
-
-            //x-
-            if( !doX( event, -offset, limitY, matches ) )
-                x2 = false;
-            //
-
-            //z-
-            if( !doZ( event, -offset, limitY, matches ) )
-                z2 = false;
-            //
-
-            //y-
-            if( !limitY && !doY( event, -offset, matches ) )
-                y2 = false;
-            //
-
-            if( !x1 && !x2 && !y1 && !y2 && !z1 && !z2 )
-                break;
-        }
-
-//        matches.remove( event.getPos() );
-
-        return matches;
     }
 
     public static void updateVein( PlayerEntity player, double gap )
