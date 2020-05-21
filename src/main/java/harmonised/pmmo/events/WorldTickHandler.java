@@ -38,7 +38,7 @@ public class WorldTickHandler
 {
     public static Map<PlayerEntity, VeinInfo> activeVein;
     public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
-    private static double minVeinCost, hardnessPerLevelMining, hardnessPerLevelWoodcutting, hardnessPerLevelExcavation, hardnessPerLevelFarming, veinMaxBlocks;
+    private static double minVeinCost, minVeinHardness, hardnessPerLevelMining, hardnessPerLevelWoodcutting, hardnessPerLevelExcavation, hardnessPerLevelFarming, veinMaxBlocks;
     private static int veinMaxDistance;
 //    public static long lastVeinUpdateTime = System.nanoTime();
 
@@ -48,6 +48,7 @@ public class WorldTickHandler
         veinSet = new HashMap<>();
 
         minVeinCost = Config.forgeConfig.minVeinCost.get();
+        minVeinHardness = Config.forgeConfig.minVeinHardness.get();
         hardnessPerLevelMining = Config.forgeConfig.hardnessPerLevelMining.get();
         hardnessPerLevelWoodcutting = Config.forgeConfig.hardnessPerLevelWoodcutting.get();
         hardnessPerLevelExcavation = Config.forgeConfig.hardnessPerLevelExcavation.get();
@@ -237,9 +238,11 @@ public class WorldTickHandler
     private static double getCost( BlockState state, BlockPos pos, PlayerEntity player )
     {
         Material material = state.getMaterial();
-        double hardness = state.getBlockHardness( player.world, pos );
         Skill skill = XP.getSkill( material );
         double cost;
+        double hardness = state.getBlockHardness( player.world, pos );
+        if( hardness < minVeinHardness )
+            hardness = minVeinHardness;
 
         switch( skill )
         {

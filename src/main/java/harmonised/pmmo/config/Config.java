@@ -63,6 +63,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> veinMaxBlocks;
         public ConfigHelper.ConfigValueListener<Double> veinSpeed;
         public ConfigHelper.ConfigValueListener<Double> minVeinCost;
+        public ConfigHelper.ConfigValueListener<Double> minVeinHardness;
         public ConfigHelper.ConfigValueListener<Double> hardnessPerLevelMining;
         public ConfigHelper.ConfigValueListener<Double> hardnessPerLevelWoodcutting;
         public ConfigHelper.ConfigValueListener<Double> hardnessPerLevelExcavation;
@@ -284,6 +285,11 @@ public class Config
                         .comment( "How much is the lowest cost for each block veined? (1 = 1% of max)" )
                         .translation( "pmmo.minVeinCost" )
                         .defineInRange( "minVeinCost", 0.1D, 0.01, 100) );
+
+                this.minVeinHardness = subscriber.subscribe(builder
+                        .comment( "How much is the lowest cost for each block veined? (1 = 1% of max)" )
+                        .translation( "pmmo.minVeinHardness" )
+                        .defineInRange( "minVeinHardness", 0.5D, 0, 10000) );
 
                 this.hardnessPerLevelMining = subscriber.subscribe(builder
                         .comment( "How much hardness can you vein per level, from 100% vein energy (if this is set to 5, and you are level 10, you can vein 1 obsidian block, as obsidian is 50 hardness, which you can see by hovering over the block)" )
