@@ -3573,11 +3573,13 @@
 	},
 	"vein_blacklist": {
 		"all_dimensions": {
-			"minecraft:obsidian": 0,
+			"minecraft:furnace": 0,
 			"minecraft:chest": 0,
 			"minecraft:trapped_chest": 0,
 			"minecraft:shulker_box": 0,
-			"minecraft:barrel": 0
+			"minecraft:barrel": 0,
+			"minecraft:dropper": 0,
+			"minecraft:dispenser": 0
 		},
 		"minecraft:overworld": {
 			"minecraft:stone": 0

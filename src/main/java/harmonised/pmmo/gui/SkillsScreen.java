@@ -55,7 +55,7 @@ public class SkillsScreen extends Screen
 
         wearButton = new TileButton( x + 24, y + 24, 1, 3, I18n.format("Wear" ), (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.potato" ), "wear", Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.armor" ), "wear", Minecraft.getInstance().player ) );
         });
 
         addButton( wearButton );
@@ -102,8 +102,6 @@ public class SkillsScreen extends Screen
             this.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
-        else
-            this.renderDirtBackground(p_renderBackground_1_);
 
         boxHeight = 256;
         boxWidth = 256;

@@ -16,6 +16,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -24,20 +25,22 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
 public class BlockBrokenHandler
 {
     public static final UUID fakePlayerUUID = UUID.fromString( "b34010cd-f217-43a9-8e22-373404c25378" );
-    private static boolean veiningAllowed;
-//    private static boolean matched = true;
+    //    private static boolean matched = true;
 
     public static void handleBroken( BlockEvent.BreakEvent event )
     {
         PlayerEntity player = event.getPlayer();
+
 
         if( !( player instanceof FakePlayer ) || player instanceof PMMOFakePlayer )
             processReq( event );
@@ -47,12 +50,14 @@ public class BlockBrokenHandler
     {
         PlayerEntity player = event.getPlayer();
 
-        Block block = event.getState().getBlock();
+        BlockState blockState = event.getState();
+        Block block = blockState.getBlock();
         World world = event.getWorld().getWorld();
         Material material = event.getState().getMaterial();
 
         Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
         boolean passedBreakReq = true;
+
 
         if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
             passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), "break" );
@@ -107,15 +112,14 @@ public class BlockBrokenHandler
         BlockState state = event.getState();
         Block block = state.getBlock();
         World world = event.getWorld().getWorld();
-
         PlayerEntity player = event.getPlayer();
 
-        veiningAllowed = Config.config.containsKey("veiningAllowed") && Config.config.get("veiningAllowed") != 0;
+        boolean veiningAllowed = Config.config.containsKey("veiningAllowed") && Config.config.get("veiningAllowed") != 0;
 
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
 
-        if( !XP.isPlayerSurvival( player ) )
+        if( player.isCreative() )
             return;
 
         Material material = event.getState().getMaterial();
@@ -127,6 +131,17 @@ public class BlockBrokenHandler
         double hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
         if( hardness > blockHardnessLimit )
             hardness = blockHardnessLimit;
+
+        boolean isEffective = false;
+
+        for( ToolType toolType : player.getHeldItemMainhand().getToolTypes() )
+        {
+            if( state.isToolEffective( toolType ) )
+            {
+                isEffective = true;
+                break;
+            }
+        }
 
         String awardMsg = "";
         Map<String, Double> award = new HashMap<>();
@@ -293,7 +308,7 @@ public class BlockBrokenHandler
             else if( !wasPlaced )
                 awardMsg = "breaking a plant";
         }
-        else if( XP.getExtraChance( player, block.getRegistryName(), "ore" ) > 0 )		//IS ORE
+        else if( XP.getExtraChance( player, block.getRegistryName(), "ore" ) > 0 && isEffective )		//IS ORE
         {
             boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
             boolean noDropOre = false;
@@ -332,7 +347,7 @@ public class BlockBrokenHandler
             else
                 awardMsg = "mining a block";
         }
-        else if( XP.getExtraChance( player, block.getRegistryName(), "log" ) > 0 )
+        else if( XP.getExtraChance( player, block.getRegistryName(), "log" ) > 0 && isEffective )
         {
             if( !wasPlaced )			//EXTRA DROPS
             {

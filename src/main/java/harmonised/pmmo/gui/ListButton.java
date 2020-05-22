@@ -28,16 +28,18 @@ import java.util.List;
 public class ListButton extends Button
 {
     private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/items.png" );
-    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
+//    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
     public int element;
     public int offset;
-    public Item item;
+    public ItemStack itemStack;
+    public String text;
 
     public ListButton(int posX, int posY, int element, String regKey, String text, IPressable onPress)
     {
         super(posX, posY, 32, 32, text, onPress);
-        this.item = XP.getItem( regKey );
+        this.itemStack = new ItemStack( XP.getItem( regKey ) );
         this.element = element * 32;
+        this.text = text;
 
         if( element > 23 )
             offset = 192;
@@ -50,7 +52,7 @@ public class ListButton extends Button
     }
 
     @Override
-    public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_)
+    public void renderButton(int x, int y, float partialTicks)
     {
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontrenderer = minecraft.fontRenderer;
@@ -60,14 +62,16 @@ public class ListButton extends Button
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+
+
         if( this.isHovered() )
         {
             this.blit(this.x, this.y, this.offset + 32, this.element, this.width, this.height);
-
         }
         else
             this.blit(this.x, this.y, this.offset, this.element, this.width, this.height);
-        this.renderBg(minecraft, p_renderButton_1_, p_renderButton_2_);
+        this.renderBg(minecraft, x, y);
         int j = getFGColor();
         this.drawCenteredString(fontrenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
     }

@@ -38,7 +38,7 @@ public class WorldTickHandler
 {
     public static Map<PlayerEntity, VeinInfo> activeVein;
     public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
-    private static double minVeinCost, minVeinHardness, hardnessPerLevelMining, hardnessPerLevelWoodcutting, hardnessPerLevelExcavation, hardnessPerLevelFarming, veinMaxBlocks;
+    private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, veinMaxBlocks, maxVeinCharge;
     private static int veinMaxDistance;
 //    public static long lastVeinUpdateTime = System.nanoTime();
 
@@ -49,12 +49,13 @@ public class WorldTickHandler
 
         minVeinCost = Config.forgeConfig.minVeinCost.get();
         minVeinHardness = Config.forgeConfig.minVeinHardness.get();
-        hardnessPerLevelMining = Config.forgeConfig.hardnessPerLevelMining.get();
-        hardnessPerLevelWoodcutting = Config.forgeConfig.hardnessPerLevelWoodcutting.get();
-        hardnessPerLevelExcavation = Config.forgeConfig.hardnessPerLevelExcavation.get();
-        hardnessPerLevelFarming = Config.forgeConfig.hardnessPerLevelFarming.get();
+        levelsPerHardnessMining = Config.forgeConfig.levelsPerHardnessMining.get();
+        levelsPerHardnessWoodcutting = Config.forgeConfig.levelsPerHardnessWoodcutting.get();
+        levelsPerHardnessExcavation = Config.forgeConfig.levelsPerHardnessExcavation.get();
+        levelsPerHardnessFarming = Config.forgeConfig.levelsPerHardnessFarming.get();
         veinMaxDistance = (int) Math.floor( Config.forgeConfig.veinMaxDistance.get() );
         veinMaxBlocks = Config.forgeConfig.veinMaxBlocks.get();
+        maxVeinCharge = Config.forgeConfig.maxVeinCharge.get();
     }
 
     public static void handleWorldTick( TickEvent.WorldTickEvent event )
@@ -63,12 +64,12 @@ public class WorldTickHandler
         VeinInfo veinInfo;
         World world;
         ItemStack startItemStack;
-        Item startItem, curItem;
+        Item startItem;
         BlockPos veinPos;
         BlockState veinState;
         CompoundNBT abilitiesTag;
         double cost;
-        boolean correctBlock, correctItem;
+        boolean correctBlock, correctItem, correctHeldItem;
         
         
         for( PlayerEntity player : event.world.getServer().getPlayerList().getPlayers() )
@@ -87,6 +88,7 @@ public class WorldTickHandler
                     cost = getCost( veinState, veinPos, player );
                     correctBlock = world.getBlockState( veinPos ).getBlock().equals( veinInfo.state.getBlock() );
                     correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
+                    correctHeldItem = player.getHeldItemMainhand().getItem().equals( startItem );
 
                     if( ( abilitiesTag.getDouble( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
                     {
@@ -97,15 +99,16 @@ public class WorldTickHandler
 
                         if ( !veinEvent.isCanceled() )
                         {
-                            abilitiesTag.putDouble( "veinLeft", abilitiesTag.getDouble( "veinLeft" ) - cost );
-                            NetworkHandler.sendToPlayer( new MessageUpdateNBT( XP.getAbilitiesTag( player ), "abilities" ), (ServerPlayerEntity) player );
-
                             if( correctBlock )
                             {
                                 if( player.isCreative() )
                                     world.destroyBlock(veinPos, false );
-                                else if( correctItem )
+                                else if( correctItem && correctHeldItem )
+                                {
+                                    System.out.println( "happened" );
+                                    abilitiesTag.putDouble( "veinLeft", abilitiesTag.getDouble( "veinLeft" ) - cost );
                                     destroyBlock( world, veinPos, player, startItemStack );
+                                }
                                 else
                                 {
                                     activeVein.remove( player );
@@ -168,7 +171,7 @@ public class WorldTickHandler
             if( dimensionBlacklist != null && dimensionBlacklist.containsKey( blockKey ) )
                 return;
         }
-        long test;
+//        long test;
 
 //        test = System.currentTimeMillis();
 
@@ -247,19 +250,19 @@ public class WorldTickHandler
         switch( skill )
         {
             case MINING:
-                cost = 100D / ( Skill.MINING.getLevel( player ) * hardnessPerLevelMining ) / hardness;
+                cost = hardness / ( (double) Skill.MINING.getLevel( player ) / levelsPerHardnessMining );
                 break;
 
             case WOODCUTTING:
-                cost = 100D / ( Skill.WOODCUTTING.getLevel( player ) * hardnessPerLevelWoodcutting ) / hardness;
+                cost = hardness / ( Skill.WOODCUTTING.getLevel( player ) / levelsPerHardnessWoodcutting );
                 break;
 
             case EXCAVATION:
-                cost = 100D / ( Skill.EXCAVATION.getLevel( player ) * hardnessPerLevelExcavation ) / hardness;
+                cost = hardness / ( Skill.EXCAVATION.getLevel( player ) / levelsPerHardnessExcavation );
                 break;
 
             case FARMING:
-                cost = 100D / ( Skill.FARMING.getLevel( player ) * hardnessPerLevelFarming ) / hardness;
+                cost = hardness / ( Skill.FARMING.getLevel( player ) / levelsPerHardnessFarming );
                 break;
 
             default:
@@ -276,22 +279,25 @@ public class WorldTickHandler
 
     public static void updateVein( PlayerEntity player, double gap )
     {
+//        System.out.println( XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) );
+
+        CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
+
+        if( !abilitiesTag.contains( "veinLeft" ) )
+            abilitiesTag.putDouble( "veinLeft", maxVeinCharge );
+
+        double veinLeft = abilitiesTag.getDouble( "veinLeft" );
+        if( veinLeft < 0 )
+            veinLeft = 0D;
+
         if( !activeVein.containsKey( player ) )
-        {
-            CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
+            veinLeft += gap;
 
-            if( !abilitiesTag.contains( "veinLeft" ) )
-                abilitiesTag.putDouble( "veinLeft", 100D );
+        if( veinLeft > maxVeinCharge )
+            veinLeft = maxVeinCharge;
 
-            double veinLeft = abilitiesTag.getDouble( "veinLeft" );
+        abilitiesTag.putDouble( "veinLeft", veinLeft );
 
-            if( veinLeft < 100 )
-                abilitiesTag.putDouble( "veinLeft", veinLeft + gap );
-
-            if( veinLeft > 100 )
-                abilitiesTag.putDouble( "veinLeft", 100D );
-
-            NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilitiesTag, "abilities" ), (ServerPlayerEntity) player );
-        }
+        NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilitiesTag, "abilities" ), (ServerPlayerEntity) player );
     }
 }

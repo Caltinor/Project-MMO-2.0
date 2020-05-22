@@ -33,7 +33,7 @@ import java.util.UUID;
 public class PlayerTickHandler
 {
     private static Map<UUID, Long> lastAward = new HashMap<>();
-
+    private static Map<UUID, Long> lastVeinAward = new HashMap<>();
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
         PlayerEntity player = event.player;
@@ -57,8 +57,12 @@ public class PlayerTickHandler
 
             if( !lastAward.containsKey( playerUUID ) )
                 lastAward.put( playerUUID, System.nanoTime() );
+            if( !lastVeinAward.containsKey( playerUUID ) )
+                lastVeinAward.put( playerUUID, System.nanoTime() );
 
             double gap = ( (System.nanoTime() - lastAward.get( playerUUID) ) / 1000000000D );
+            double veinGap = ( (System.nanoTime() - lastVeinAward.get( playerUUID) ) / 1000000000D );
+
             if( gap > 1 )
             {
                 int swimLevel = XP.getLevel( Skill.SWIMMING, player );
@@ -68,9 +72,6 @@ public class PlayerTickHandler
                 float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
                 float speedAmp = 0;
                 PlayerInventory inv = player.inventory;
-
-                if( !player.world.isRemote() )
-                    WorldTickHandler.updateVein( player, gap );
 
                 XP.checkBiomeLevelReq( player );
 
@@ -161,6 +162,12 @@ public class PlayerTickHandler
 //
 //					System.out.println( abilitiesTag.getDouble( "excavate" ) );
 //				}
+            }
+
+            if( veinGap > 0.25 && !player.world.isRemote() )
+            {
+                WorldTickHandler.updateVein( player, veinGap );
+                lastVeinAward.put( playerUUID, System.nanoTime() );
             }
         }
 

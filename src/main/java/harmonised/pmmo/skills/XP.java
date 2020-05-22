@@ -581,7 +581,7 @@ public class XP
 
 	public static boolean checkReq( PlayerEntity player, ResourceLocation res, String type )
 	{
-		if( res.equals( Items.AIR.getRegistryName() ) )
+		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
 			return true;
 
 		if( JsonConfig.data.get( "playerSpecific" ).containsKey( player.getUniqueID().toString() ) )
@@ -688,6 +688,27 @@ public class XP
 		}
 
 		return !failedReq;
+	}
+
+	public static int getHighestReq( String regKey, String type )
+	{
+		int highestReq = 1;
+
+		switch( type )
+		{
+			case "wear":
+				if( JsonConfig.data.get( "wearReq" ).containsKey( regKey ) )
+				{
+					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "wearReq" ).get( regKey ).entrySet() )
+					{
+						if( highestReq < (double) entry.getValue() )
+							highestReq = (int) (double) entry.getValue();
+					}
+				}
+				break;
+		}
+
+		return highestReq;
 	}
 
 	public static Item getItem( String resLoc )

@@ -29,7 +29,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static int tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
 	private static double xp, goalXp, cooldown;
 	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0;
-	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0;
+	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0, maxVeinCharge = 64D;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String skillName = "none";
@@ -49,7 +49,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static int color;
 	private static long lastBonusUpdate = System.nanoTime();
 	private static double itemBoost, biomeBoost;
-	private static double tempDouble, veinPos = -1, lastVeinPos = -1, veinPosGoal, addAmount = 0, lossAmount = 0;
+	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean guiWasOn = true, guiOn = true;
 
@@ -273,14 +273,11 @@ public class XPOverlayGUI extends AbstractGui
 
 
 				{   // VEIN STUFF
-					veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / 100D;
-					addAmount = timeDiff / 1000000000000D;
-//					if( !Double.isInfinite( addAmount / (veinPos / veinPosGoal / 4 ) ) )
-//						addAmount /= (veinPos / veinPosGoal / 4 );
-					addAmount *= veinPosGoal / 100;
+					veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / maxVeinCharge;
+					addAmount = (veinPosGoal - veinPos) * (timeDiff / 200000000D);
 					if( addAmount < 0.00003 )
 						addAmount = 0.00003;
-					lossAmount = timeDiff / 2500000000D;
+					lossAmount = -(veinPosGoal - veinPos) * (timeDiff / 200000000D);
 
 					if( veinPos < veinPosGoal )
 					{
@@ -316,7 +313,8 @@ public class XPOverlayGUI extends AbstractGui
 
 						blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
 						blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
-						drawCenteredString( fontRenderer, DP.dprefix( veinPos * 100 ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
+//						System.out.println( veinPos * maxVeinCharge );
+						drawCenteredString( fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
 						RenderSystem.disableBlend();
 						RenderSystem.popMatrix();
@@ -546,7 +544,8 @@ public class XPOverlayGUI extends AbstractGui
 			if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
 				xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
 
-			biomePenaltyMultiplier = Config.forgeConfig.biomePenaltyMultiplier.get();
+			biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
+			maxVeinCharge = Config.getConfig( "maxVeinCharge" );
 		}
 	}
 

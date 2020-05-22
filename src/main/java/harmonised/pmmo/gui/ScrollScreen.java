@@ -3,7 +3,9 @@ package harmonised.pmmo.gui;
 import com.google.common.collect.Lists;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.Reference;
+import it.unimi.dsi.fastutil.ints.IntComparators;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -13,12 +15,13 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.gui.ScrollPanel;
 
-import java.util.List;
+import java.util.*;
 
 public class ScrollScreen extends Screen
 {
@@ -28,13 +31,12 @@ public class ScrollScreen extends Screen
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 256;
     private int boxHeight = 256;
-    private int x;
-    private int y;
-    private MyScrollPanel myList;
+    private int x, y, scrollX, scrollY, buttonX, buttonY;
     private Button exitButton;
-    private ScrollPanel scrollPanel;
+    private MyScrollPanel scrollPanel;
     private PlayerEntity player;
     private String type;
+    private ArrayList<ListButton> listButtons = new ArrayList<>();
 
     public ScrollScreen( ITextComponent titleIn, String type, PlayerEntity player )
     {
@@ -52,15 +54,35 @@ public class ScrollScreen extends Screen
     @Override
     protected void init()
     {
-        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        x = (sr.getScaledWidth() / 2) - (boxWidth / 2);
+        y = (sr.getScaledHeight() / 2) - (boxHeight / 2);
+        scrollX = x + 16;
+        scrollY = y + 10;
 
         exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 2, I18n.format("" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
-        scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 48, boxHeight - 48, y + 24, x + 24, type, player );
+        Map<String, Map<String, Object>> reqs = JsonConfig.data.get( "wearReq" );
+        int i = 0;
+
+        for( Map.Entry<String, Map<String, Object>> entry : reqs.entrySet() )
+        {
+            if( XP.getItem( entry.getKey() ) != Items.AIR )
+            {
+                listButtons.add( new ListButton( scrollX + 4, scrollY + 4 + i * 36, 1, entry.getKey(), "", a ->
+                {
+                    System.out.println( "clicc" );
+                }));
+
+                i++;
+            }
+        }
+
+        listButtons.sort(Comparator.comparingInt(b -> XP.getHighestReq(b.itemStack.getItem().getRegistryName().toString(), "wear")));
+
+        scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 42, boxHeight - 21, scrollY, scrollX, type, player, listButtons );
 
         children.add( scrollPanel );
 
@@ -72,10 +94,35 @@ public class ScrollScreen extends Screen
     {
         renderBackground( 1 );
 
+        drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        scrollX = x + 16;
+        scrollY = y + 10;
+        buttonX = scrollX + 4;
 
         scrollPanel.render( mouseX, mouseY, partialTicks );
+
+        int startI = (int) Math.floor( scrollPanel.getScroll() / 36D );
+        if( startI < 0 )
+            startI = 0;
+
+        ListButton button;
+
+        for( int i = startI; i < startI + 7; i++ )
+        {
+            if( listButtons.size() - 1 >= i )
+            {
+                button = listButtons.get( i );
+                buttonX = mouseX - button.x;
+                buttonY = mouseY - button.y;
+
+                if( buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
+                    renderTooltip( button.itemStack, mouseX, mouseY );
+            }
+        }
+
 //        drawCenteredString(Minecraft.getInstance().fontRenderer, player.getDisplayName().getString() + " " + type,x + boxWidth / 2, y + boxHeight / 2, 50000 );
         super.render(mouseX, mouseY, partialTicks);
     }
@@ -88,8 +135,6 @@ public class ScrollScreen extends Screen
             this.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
-        else
-            this.renderDirtBackground(p_renderBackground_1_);
 
         boxHeight = 256;
         boxWidth = 256;
