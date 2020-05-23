@@ -27,7 +27,7 @@ public class SkillsScreen extends Screen
     private int y;
     private MyScrollPanel myList;
     private Button exitButton;
-    private Button wearButton;
+    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton;
 
     public SkillsScreen(ITextComponent titleIn)
     {
@@ -59,6 +59,55 @@ public class SkillsScreen extends Screen
         });
 
         addButton( wearButton );
+
+        wearButton = new TileButton( x + 24 + 36, y + 24, 1, 3, I18n.format("Wear" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.armor" ), "wear", Minecraft.getInstance().player ) );
+        });
+
+        addButton( wearButton );
+
+        toolButton = new TileButton( x + 24 + 36 * 2, y + 24, 1, 3, I18n.format("Tool" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.tool" ), "tool", Minecraft.getInstance().player ) );
+        });
+
+        addButton( toolButton );
+
+        weaponButton = new TileButton( x + 24 + 36 * 3, y + 24, 1, 3, I18n.format("Weapon" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.weapon" ), "weapon", Minecraft.getInstance().player ) );
+        });
+
+        addButton( weaponButton );
+
+        useButton = new TileButton( x + 24 + 36 * 4, y + 24, 1, 3, I18n.format("Use" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.use" ), "use", Minecraft.getInstance().player ) );
+        });
+
+        addButton( useButton );
+
+        placeButton = new TileButton( x + 24 + 36 * 5, y + 24, 1, 3, I18n.format("Place" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.place" ), "place", Minecraft.getInstance().player ) );
+        });
+
+        addButton( placeButton );
+
+        breakButton = new TileButton( x + 24, y + 24 + 36, 1, 3, I18n.format("Break" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.break" ), "break", Minecraft.getInstance().player ) );
+        });
+
+        addButton( breakButton );
+
+        biomeButton = new TileButton( x + 24 + 36, y + 24 + 36, 1, 3, I18n.format("Biome" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.biome" ), "biome", Minecraft.getInstance().player ) );
+        });
+
+        addButton( biomeButton );
 
         int column = 1;
         int skillID;

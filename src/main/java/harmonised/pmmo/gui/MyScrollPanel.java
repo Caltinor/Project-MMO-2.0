@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.skills.XP;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
@@ -12,6 +13,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.gui.ScrollPanel;
 import org.lwjgl.opengl.GL11;
@@ -62,7 +64,14 @@ public class MyScrollPanel extends ScrollPanel
     @Override
     protected int getContentHeight()
     {
-        return buttons.size() * 36;
+        int height = 0;
+
+        for( ListButton a : buttons )
+        {
+            height += a.getHeight() + 4;
+        }
+
+        return height;
     }
 
     @Override
@@ -75,18 +84,29 @@ public class MyScrollPanel extends ScrollPanel
         ListButton button;
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-        for( int i = startI; i <= startI + 7; i++ )
+        int accumulativeHeight = 0;
+
+        for( int i = 0; i < buttons.size(); i++ )
         {
-            if( buttons.size() - 1 >= i )
+            button = buttons.get( i );
+            if( i >= startI || i <= startI + 7 )
             {
-                button = buttons.get( i );
                 button.x = this.right - button.getWidth() - 8;
-                button.y = relativeY + (i * (button.getHeight() + 4) );
-                this.fillGradient(this.left + 2, relativeY - 2 + (i * ( button.getHeight() + 4 )), this.right, relativeY + button.getHeight() + 2 + (i * (button.getHeight() + 4) ), -1072689136, -804253680);
+                button.y = relativeY + accumulativeHeight;
+                if(XP.checkReq( player, button.regKey, type ) )
+                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
+                else
+                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
                 button.render( mouseX, mouseY, 0 );
                 itemRenderer.renderItemIntoGUI( button.itemStack, button.x + 8, button.y + 8 );
-//                drawCenteredString( Minecraft.getInstance().fontRenderer, button.x + " " + button.y, button.x + 16, button.y + 16, 0xffffff );
+
+                drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 4, button.y + 2, 0xffffff );
+                for( ITextComponent line : button.text )
+                {
+                    drawString( Minecraft.getInstance().fontRenderer, line.getFormattedText(), this.left + 4, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
+                }
             }
+            accumulativeHeight += button.getHeight() + 4;
         }
     }
 

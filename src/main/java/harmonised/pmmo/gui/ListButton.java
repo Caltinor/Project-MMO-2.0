@@ -17,11 +17,14 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,15 +35,20 @@ public class ListButton extends Button
     public int element;
     public int offset;
     public ItemStack itemStack;
-    public String text, regKey;
+    public String regKey, title;
+    public List<ITextComponent> text = new ArrayList<>();
 
-    public ListButton(int posX, int posY, int element, String regKey, String text, IPressable onPress)
+    public ListButton(int posX, int posY, int element, String regKey, String type, IPressable onPress)
     {
-        super(posX, posY, 32, 32, text, onPress);
+        super(posX, posY, 32, 32, "", onPress);
         this.regKey = regKey;
         this.itemStack = new ItemStack( XP.getItem( regKey ) );
         this.element = element * 32;
-        this.text = text;
+
+        if( type.equals( "biome" ) )
+            this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( new ResourceLocation( regKey ) ).getTranslationKey() ).getString();
+        else
+            this.title = new TranslationTextComponent( itemStack.getTranslationKey() ).getString();
 
         if( element > 23 )
             offset = 192;
@@ -55,7 +63,17 @@ public class ListButton extends Button
     @Override
     public int getHeight()
     {
-        return 32;
+        int height = 11;
+
+        for( ITextComponent a : text )
+        {
+            height += 9;
+        }
+
+        if( height > 32 )
+            return height;
+        else
+            return 32;
     }
 
     @Override

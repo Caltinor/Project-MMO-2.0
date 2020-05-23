@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -18,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.gui.ScrollPanel;
 
@@ -36,7 +38,7 @@ public class ScrollScreen extends Screen
     private MyScrollPanel scrollPanel;
     private PlayerEntity player;
     private String type;
-    private ArrayList<ListButton> tempList = new ArrayList<>();
+    private ArrayList<ListButton> tempList;
     private ArrayList<ListButton> listButtons = new ArrayList<>();
 
     public ScrollScreen( ITextComponent titleIn, String type, PlayerEntity player )
@@ -66,7 +68,6 @@ public class ScrollScreen extends Screen
         keyWords.add( "hoe" );
         keyWords.add( "sword" );
 
-
         x = (sr.getScaledWidth() / 2) - (boxWidth / 2);
         y = (sr.getScaledHeight() / 2) - (boxHeight / 2);
         scrollX = x + 16;
@@ -77,19 +78,26 @@ public class ScrollScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
-        Map<String, Map<String, Object>> reqs = JsonConfig.data.get( "toolReq" );
-        int i = 0;
+        Map<String, Map<String, Object>> reqs = XP.getFullReqMap( type );
+
+        tempList = new ArrayList<>();
+        listButtons = new ArrayList<>();
 
         for( Map.Entry<String, Map<String, Object>> entry : reqs.entrySet() )
         {
             if( XP.getItem( entry.getKey() ) != Items.AIR )
             {
-                tempList.add( new ListButton( scrollX + 4, scrollY + 4 + i * 36, 1, entry.getKey(), "", a ->
+                tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, entry.getKey(), type, a ->
                 {
                     System.out.println( "clicc" );
                 }));
-
-                i++;
+            }
+            else if( type.equals( "biome" ) )
+            {
+                tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 0, entry.getKey(), type, a ->
+                {
+                    System.out.println( "clicc" );
+                }));
             }
         }
 
@@ -111,18 +119,38 @@ public class ScrollScreen extends Screen
                 listButtons.add( a );
         }
 
-//        for( int j = unsortedButtons.size() - 1; j >= 0; j-- )
-//        {
-//            listButtons.add( unsortedButtons.get( j ) );
-//        }
+        int accummulativeHeight = 4;
 
-        listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.itemStack.getItem().getRegistryName().toString(), "tool") ) );
+        for( ListButton a : listButtons )
+        {
+            for( Map.Entry<String, Object> inEntry : reqs.get( a.regKey ).entrySet() )
+            {
+                if( Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (int) (double) inEntry.getValue() )
+                    a.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "red" ) ) );
+                else
+                    a.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "green" ) ) );
+            }
+
+            a.text.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+        }
+
+        listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.itemStack.getItem().getRegistryName().toString(), type) ) );
 
         scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 42, boxHeight - 21, scrollY, scrollX, type, player, listButtons );
 
         children.add( scrollPanel );
 
         addButton( exitButton );
+    }
+
+    private static int getTextLevel( ITextComponent comp )
+    {
+        String number = comp.getUnformattedComponentText().replaceAll("\\D+","");
+
+        if( !Double.isNaN( Double.parseDouble( number ) ) )
+            return (int) Double.parseDouble( number );
+        else
+            return 0;
     }
 
     @Override
@@ -154,11 +182,12 @@ public class ScrollScreen extends Screen
                 buttonX = mouseX - button.x;
                 buttonY = mouseY - button.y;
 
-                if( buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
+                if( button.element != 0 && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
                     renderTooltip( button.itemStack, mouseX, mouseY );
             }
         }
 
+//        renderTooltip( mouseX + " " + mouseY, mouseX, mouseY );
 //        drawCenteredString(Minecraft.getInstance().fontRenderer, player.getDisplayName().getString() + " " + type,x + boxWidth / 2, y + boxHeight / 2, 50000 );
         super.render(mouseX, mouseY, partialTicks);
     }

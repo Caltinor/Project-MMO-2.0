@@ -579,6 +579,67 @@ public class XP
         }
     }
 
+	public static boolean checkReq( PlayerEntity player, String res, String type )
+	{
+		return checkReq( player, new ResourceLocation( res ), type );
+	}
+
+	public static Map<String, Map<String, Object>> getFullReqMap( String type )
+	{
+		switch( type.toLowerCase() )
+		{
+			case "wear":
+				return JsonConfig.data.get( "wearReq" );
+
+			case "tool":
+				return JsonConfig.data.get( "toolReq" );
+
+			case "weapon":
+				return JsonConfig.data.get( "weaponReq" );
+
+			case "mob":
+				return JsonConfig.data.get( "mobReq" );
+
+			case "use":
+				return JsonConfig.data.get( "useReq" );
+
+			case "place":
+				return JsonConfig.data.get( "placeReq" );
+
+			case "break":
+				return JsonConfig.data.get( "breakReq" );
+
+			case "biome":
+				return JsonConfig.data.get( "biomeReq" );
+
+			case "slayer":
+				return JsonConfig.data.get( "killReq" );
+
+			default:
+				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP" );
+				return null;
+		}
+	}
+
+	public static Map<String, Double> getReqMap( String registryName, String type )
+	{
+		Map<String, Map<String, Object>> fullMap = getFullReqMap( type );
+		Map<String, Double> map = null;
+
+		if( fullMap != null && fullMap.containsKey( registryName ) )
+		{
+			map = new HashMap<>();
+
+			for( Map.Entry<String, Object> entry : fullMap.get( registryName ).entrySet() )
+			{
+				if( entry.getValue() instanceof Double )
+					map.put( entry.getKey(), (double) entry.getValue() );
+			}
+		}
+
+		return map;
+	}
+
 	public static boolean checkReq( PlayerEntity player, ResourceLocation res, String type )
 	{
 		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
@@ -591,90 +652,12 @@ public class XP
 		}
 
 		String registryName = res.toString();
-		Map<String, Double> reqMap = new HashMap<>();
+		Map<String, Double> reqMap = getReqMap( registryName, type );
 		int startLevel;
 		boolean failedReq = false;
 
-		switch( type.toLowerCase() )
-		{
-			case "wear":
-				if( JsonConfig.data.get( "wearReq" ).containsKey( registryName ) )
-				{
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "wearReq" ).get( registryName ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqMap.put( entry.getKey(), (double) entry.getValue() );
-					}
-				}
-				break;
-
-			case "tool":
-				if( JsonConfig.data.get( "toolReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "toolReq" ).get( registryName ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqMap.put( entry.getKey(), (double) entry.getValue() );
-					}
-				break;
-
-			case "weapon":
-				if( JsonConfig.data.get( "weaponReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "weaponReq" ).get( registryName ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqMap.put( entry.getKey(), (double) entry.getValue() );
-					}
-				break;
-
-            case "mob":
-                if( JsonConfig.data.get( "mobReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "mobReq" ).get( registryName ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqMap.put( entry.getKey(), (double) entry.getValue() );
-					}
-                break;
-
-            case "use":
-                if( JsonConfig.data.get( "useReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "useReq" ).get( registryName ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqMap.put( entry.getKey(), (double) entry.getValue() );
-					}
-                break;
-
-            case "place":
-				if( JsonConfig.data.get( "placeReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "placeReq" ).get( registryName ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqMap.put( entry.getKey(), (double) entry.getValue() );
-					}
-				break;
-
-			case "break":
-				if( JsonConfig.data.get( "breakReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "breakReq" ).get( registryName ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqMap.put( entry.getKey(), (double) entry.getValue() );
-					}
-				break;
-
-			case "biome":
-				if( JsonConfig.data.get( "biomeReq" ).containsKey( registryName ) )
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "biomeReq" ).get( registryName ).entrySet() )
-					{
-						if( entry.getValue() instanceof Double )
-							reqMap.put( entry.getKey(), (double) entry.getValue() );
-					}
-				break;
-
-			default:
-				failedReq = true;
-				break;
-		}
+		if( reqMap == null )
+			failedReq = true;
 
 		if( !failedReq )
 		{
@@ -694,46 +677,13 @@ public class XP
 	{
 		int highestReq = 1;
 
-		Map<String, Object> map = null;
-
-		switch( type )
-		{
-			case "wear":
-				if( JsonConfig.data.get( "wearReq" ).containsKey( regKey ) )
-					map = JsonConfig.data.get( "wearReq" ).get( regKey );
-				break;
-
-			case "weapon":
-				if( JsonConfig.data.get( "weaponReq" ).containsKey( regKey ) )
-					map = JsonConfig.data.get( "weaponReq" ).get( regKey );
-				break;
-
-			case "tool":
-				if( JsonConfig.data.get( "toolReq" ).containsKey( regKey ) )
-					map = JsonConfig.data.get( "toolReq" ).get( regKey );
-				break;
-
-			case "use":
-				if( JsonConfig.data.get( "useReq" ).containsKey( regKey ) )
-					map = JsonConfig.data.get( "useReq" ).get( regKey );
-				break;
-
-			case "break":
-				if( JsonConfig.data.get( "breakReq" ).containsKey( regKey ) )
-					map = JsonConfig.data.get( "breakReq" ).get( regKey );
-				break;
-
-			case "place":
-				if( JsonConfig.data.get( "placeReq" ).containsKey( regKey ) )
-					map = JsonConfig.data.get( "placeReq" ).get( regKey );
-				break;
-		}
+		Map<String, Double> map = XP.getReqMap( regKey, type );
 
 		if( map != null )
 		{
-			for( Map.Entry<String, Object> entry : map.entrySet() )
+			for( Map.Entry<String, Double> entry : map.entrySet() )
 			{
-				if( highestReq < (double) entry.getValue() )
+				if( highestReq < entry.getValue() )
 					highestReq = (int) (double) entry.getValue();
 			}
 		}
@@ -1233,63 +1183,10 @@ public class XP
 
 		if( !checkReq( player, res, type ) )
 		{
-			Map<String, Object> theMap = null;
-			Map<String, Double> reqs = new HashMap<>();
-			switch( type )
+			Map<String, Double> reqs = getReqMap( res.toString(), type );
+
+			if( reqs != null )
 			{
-				case "wear":
-					if( JsonConfig.data.get( "wearReq" ).containsKey( res.toString() ) )
-						theMap = JsonConfig.data.get( "wearReq" ).get( res.toString() );
-					break;
-
-				case "tool":
-					if( JsonConfig.data.get( "toolReq" ).containsKey( res.toString() ) )
-						theMap = JsonConfig.data.get( "toolReq" ).get( res.toString() );
-					break;
-
-				case "weapon":
-					if( JsonConfig.data.get( "weaponReq" ).containsKey( res.toString() ) )
-						theMap = JsonConfig.data.get( "weaponReq" ).get( res.toString() );
-					break;
-
-				case "use":
-					if( JsonConfig.data.get( "useReq" ).containsKey( res.toString() ) )
-						theMap = JsonConfig.data.get( "useReq" ).get( res.toString() );
-					break;
-
-				case "place":
-					if( JsonConfig.data.get( "placeReq" ).containsKey( res.toString() ) )
-						theMap = JsonConfig.data.get( "placeReq" ).get( res.toString() );
-					break;
-
-				case "break":
-					if( JsonConfig.data.get( "breakReq" ).containsKey( res.toString() ) )
-						theMap = JsonConfig.data.get( "breakReq" ).get( res.toString() );
-					break;
-
-				case "biome":
-					if( JsonConfig.data.get( "biomeReq" ).containsKey( res.toString() ) )
-						theMap = JsonConfig.data.get( "biomeReq" ).get( res.toString() );
-					break;
-
-				case "slayer":
-					if( JsonConfig.data.get( "killReq" ).containsKey( res.toString() ) )
-						theMap = JsonConfig.data.get( "killReq" ).get( res.toString() );
-					break;
-
-				default:
-					LogHandler.LOGGER.error( "ERROR getSkillReqGap wrong type" );
-					return 0;
-			}
-
-			if( theMap != null )
-			{
-				for( Map.Entry<String, Object> entry : theMap.entrySet() )
-				{
-					if( entry.getValue() instanceof Double )
-						reqs.put( entry.getKey(), (double) entry.getValue() );
-				}
-
 				gap = (int) Math.floor( reqs.entrySet().stream()
 						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( Skill.getSkill( entry.getKey() ), player ) ) )
 						.reduce( 0, Math::max ) );
