@@ -87,14 +87,14 @@ public class ScrollScreen extends Screen
         {
             if( XP.getItem( entry.getKey() ) != Items.AIR )
             {
-                tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, entry.getKey(), type, a ->
+                tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, 0, entry.getKey(), type, a ->
                 {
                     System.out.println( "clicc" );
                 }));
             }
             else if( type.equals( "biome" ) )
             {
-                tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 0, entry.getKey(), type, a ->
+                tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, 8, entry.getKey(), type, a ->
                 {
                     System.out.println( "clicc" );
                 }));
@@ -182,7 +182,7 @@ public class ScrollScreen extends Screen
                 buttonX = mouseX - button.x;
                 buttonY = mouseY - button.y;
 
-                if( button.element != 0 && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
+                if( button.elementTwo == 0 && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
                     renderTooltip( button.itemStack, mouseX, mouseY );
             }
         }

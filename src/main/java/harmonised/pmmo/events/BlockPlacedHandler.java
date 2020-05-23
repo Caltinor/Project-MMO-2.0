@@ -33,8 +33,6 @@ public class BlockPlacedHandler
         {
             PlayerEntity player = (PlayerEntity) event.getEntity();
 
-//            XP.getAbilitiesTag( player ).putDouble( "veinLeft", 100D );
-
             if ( XP.isPlayerSurvival( player ) )
             {
                 Block block = event.getPlacedBlock().getBlock();

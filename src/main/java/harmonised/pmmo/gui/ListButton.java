@@ -32,32 +32,42 @@ public class ListButton extends Button
 {
     private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/items.png" );
 //    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
-    public int element;
-    public int offset;
+    public int elementOne, elementTwo;
+    public int offsetOne, offsetTwo;
     public ItemStack itemStack;
     public String regKey, title;
     public List<ITextComponent> text = new ArrayList<>();
 
-    public ListButton(int posX, int posY, int element, String regKey, String type, IPressable onPress)
+    public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, String type, IPressable onPress)
     {
         super(posX, posY, 32, 32, "", onPress);
         this.regKey = regKey;
         this.itemStack = new ItemStack( XP.getItem( regKey ) );
-        this.element = element * 32;
+        this.elementOne = elementOne * 32;
+        this.elementTwo = elementTwo * 32;
 
         if( type.equals( "biome" ) )
             this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( new ResourceLocation( regKey ) ).getTranslationKey() ).getString();
         else
             this.title = new TranslationTextComponent( itemStack.getTranslationKey() ).getString();
 
-        if( element > 23 )
-            offset = 192;
-        else if( element > 15 )
-            offset = 128;
-        else if( element > 7 )
-            offset = 64;
+        if( elementOne > 23 )
+            offsetOne = 192;
+        else if( elementOne > 15 )
+            offsetOne = 128;
+        else if( elementOne > 7 )
+            offsetOne = 64;
         else
-            offset = 0;
+            offsetOne = 0;
+
+        if( elementTwo > 23 )
+            offsetTwo = 192;
+        else if( elementTwo > 15 )
+            offsetTwo = 128;
+        else if( elementTwo > 7 )
+            offsetTwo = 64;
+        else
+            offsetTwo = 0;
     }
 
     @Override
@@ -88,14 +98,19 @@ public class ListButton extends Button
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-
-
         if( this.isHovered() )
         {
-            this.blit(this.x, this.y, this.offset + 32, this.element, this.width, this.height);
+            this.blit(this.x, this.y, this.offsetOne + 32, this.elementOne, this.width, this.height);
+            this.blit(this.x, this.y, this.offsetTwo + 32, this.elementTwo, this.width, this.height);
         }
         else
-            this.blit(this.x, this.y, this.offset, this.element, this.width, this.height);
+        {
+            this.blit(this.x, this.y, this.offsetOne, this.elementOne, this.width, this.height);
+            this.blit(this.x, this.y, this.offsetTwo, this.elementTwo, this.width, this.height);
+        }
+
+
+
         this.renderBg(minecraft, x, y);
         int j = getFGColor();
         this.drawCenteredString(fontrenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);

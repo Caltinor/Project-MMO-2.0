@@ -656,10 +656,10 @@ public class XP
 		int startLevel;
 		boolean failedReq = false;
 
-		if( reqMap == null )
-			failedReq = true;
+//		if( reqMap == null )
+//			failedReq = true;
 
-		if( !failedReq )
+		if( reqMap != null )
 		{
 			for( Map.Entry<String, Double> entry : reqMap.entrySet() )
 			{

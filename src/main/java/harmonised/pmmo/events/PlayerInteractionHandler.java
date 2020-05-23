@@ -31,6 +31,8 @@ public class PlayerInteractionHandler
 {
     public static void handleItemUse( PlayerInteractEvent event )
     {
+        try
+        {
         if( event instanceof PlayerInteractEvent.RightClickBlock || event instanceof PlayerInteractEvent.RightClickItem)
         {
             PlayerEntity player = event.getPlayer();
@@ -64,12 +66,15 @@ public class PlayerInteractionHandler
                 }
             }
 
-            if( !XP.checkReq( player, item.getRegistryName(), "use" ) && !(item instanceof BlockItem) )
+            if( !XP.checkReq( player, item.getRegistryName(), "use" ) )
             {
-                event.setCanceled( true );
+                if( !(item instanceof BlockItem) || !XP.checkReq( player, item.getRegistryName(), "place" ) )
+                {
+                    event.setCanceled( true );
 
-                if( isRemote )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                    if( isRemote )
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                }
             }
 
             if( event instanceof PlayerInteractEvent.RightClickBlock)
@@ -85,19 +90,23 @@ public class PlayerInteractionHandler
                         {
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
-                            for( Map.Entry<String, Object> entry : JsonConfig.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
-                            {
-                                startLevel = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
 
-                                double entryValue = 1;
-                                if( entry.getValue() instanceof Double )
-                                    entryValue = (double) entry.getValue();
+//                            if( JsonConfig.data.get( "useReq" ).containsKey( block.getRegistryName().toString() ) )
+//                            {
+                                for( Map.Entry<String, Object> entry : JsonConfig.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
+                                {
+                                    startLevel = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
 
-                                if( startLevel < entryValue )
-                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( XP.textStyle.get( "red" ) ), false );
-                                else
-                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                            }
+                                    double entryValue = 1;
+                                    if( entry.getValue() instanceof Double )
+                                        entryValue = (double) entry.getValue();
+
+                                    if( startLevel < entryValue )
+                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                                    else
+                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                                }
+//                            }
                         }
                     }
                 }
@@ -326,6 +335,11 @@ public class PlayerInteractionHandler
                     }
                 }
             }
+        }
+        }
+        catch( Exception e )
+        {
+            System.out.println( e );
         }
     }
 }
