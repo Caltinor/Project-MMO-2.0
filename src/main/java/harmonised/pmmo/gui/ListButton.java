@@ -32,11 +32,12 @@ public class ListButton extends Button
     public int element;
     public int offset;
     public ItemStack itemStack;
-    public String text;
+    public String text, regKey;
 
     public ListButton(int posX, int posY, int element, String regKey, String text, IPressable onPress)
     {
         super(posX, posY, 32, 32, text, onPress);
+        this.regKey = regKey;
         this.itemStack = new ItemStack( XP.getItem( regKey ) );
         this.element = element * 32;
         this.text = text;
@@ -49,6 +50,12 @@ public class ListButton extends Button
             offset = 64;
         else
             offset = 0;
+    }
+
+    @Override
+    public int getHeight()
+    {
+        return 32;
     }
 
     @Override

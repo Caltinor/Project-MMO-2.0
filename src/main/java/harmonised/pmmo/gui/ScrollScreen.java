@@ -36,6 +36,7 @@ public class ScrollScreen extends Screen
     private MyScrollPanel scrollPanel;
     private PlayerEntity player;
     private String type;
+    private ArrayList<ListButton> tempList = new ArrayList<>();
     private ArrayList<ListButton> listButtons = new ArrayList<>();
 
     public ScrollScreen( ITextComponent titleIn, String type, PlayerEntity player )
@@ -54,6 +55,18 @@ public class ScrollScreen extends Screen
     @Override
     protected void init()
     {
+        ArrayList<String> keyWords = new ArrayList<>();
+        keyWords.add( "helmet" );
+        keyWords.add( "chestplate" );
+        keyWords.add( "leggings" );
+        keyWords.add( "boots" );
+        keyWords.add( "pickaxe" );
+        keyWords.add( "axe" );
+        keyWords.add( "shovel" );
+        keyWords.add( "hoe" );
+        keyWords.add( "sword" );
+
+
         x = (sr.getScaledWidth() / 2) - (boxWidth / 2);
         y = (sr.getScaledHeight() / 2) - (boxHeight / 2);
         scrollX = x + 16;
@@ -64,14 +77,14 @@ public class ScrollScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
-        Map<String, Map<String, Object>> reqs = JsonConfig.data.get( "wearReq" );
+        Map<String, Map<String, Object>> reqs = JsonConfig.data.get( "toolReq" );
         int i = 0;
 
         for( Map.Entry<String, Map<String, Object>> entry : reqs.entrySet() )
         {
             if( XP.getItem( entry.getKey() ) != Items.AIR )
             {
-                listButtons.add( new ListButton( scrollX + 4, scrollY + 4 + i * 36, 1, entry.getKey(), "", a ->
+                tempList.add( new ListButton( scrollX + 4, scrollY + 4 + i * 36, 1, entry.getKey(), "", a ->
                 {
                     System.out.println( "clicc" );
                 }));
@@ -80,7 +93,30 @@ public class ScrollScreen extends Screen
             }
         }
 
-        listButtons.sort(Comparator.comparingInt(b -> XP.getHighestReq(b.itemStack.getItem().getRegistryName().toString(), "wear")));
+        for( String keyWord : keyWords )
+        {
+            for( ListButton a : tempList )
+            {
+                if( a.regKey.contains( keyWord ) )
+                {
+                    if( !listButtons.contains(a) )
+                        listButtons.add( a );
+                }
+            }
+        }
+
+        for( ListButton a : tempList )
+        {
+            if( !listButtons.contains( a ) )
+                listButtons.add( a );
+        }
+
+//        for( int j = unsortedButtons.size() - 1; j >= 0; j-- )
+//        {
+//            listButtons.add( unsortedButtons.get( j ) );
+//        }
+
+        listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.itemStack.getItem().getRegistryName().toString(), "tool") ) );
 
         scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 42, boxHeight - 21, scrollY, scrollX, type, player, listButtons );
 

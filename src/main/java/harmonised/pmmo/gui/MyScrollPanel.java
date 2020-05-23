@@ -80,9 +80,10 @@ public class MyScrollPanel extends ScrollPanel
             if( buttons.size() - 1 >= i )
             {
                 button = buttons.get( i );
-                button.x = this.left + 4;
-                button.y = relativeY + i * 36;
-                button.render( 0, 0, 0 );
+                button.x = this.right - button.getWidth() - 8;
+                button.y = relativeY + (i * (button.getHeight() + 4) );
+                this.fillGradient(this.left + 2, relativeY - 2 + (i * ( button.getHeight() + 4 )), this.right, relativeY + button.getHeight() + 2 + (i * (button.getHeight() + 4) ), -1072689136, -804253680);
+                button.render( mouseX, mouseY, 0 );
                 itemRenderer.renderItemIntoGUI( button.itemStack, button.x + 8, button.y + 8 );
 //                drawCenteredString( Minecraft.getInstance().fontRenderer, button.x + " " + button.y, button.x + 16, button.y + 16, 0xffffff );
             }
@@ -108,7 +109,7 @@ public class MyScrollPanel extends ScrollPanel
     @Override
     public void render(int mouseX, int mouseY, float partialTicks)
     {
-        this.drawBackground();
+//        this.drawBackground();
 
 //        if (Minecraft.getInstance().world != null)
 //        {

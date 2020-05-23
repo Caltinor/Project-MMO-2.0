@@ -694,18 +694,48 @@ public class XP
 	{
 		int highestReq = 1;
 
+		Map<String, Object> map = null;
+
 		switch( type )
 		{
 			case "wear":
 				if( JsonConfig.data.get( "wearReq" ).containsKey( regKey ) )
-				{
-					for( Map.Entry<String, Object> entry : JsonConfig.data.get( "wearReq" ).get( regKey ).entrySet() )
-					{
-						if( highestReq < (double) entry.getValue() )
-							highestReq = (int) (double) entry.getValue();
-					}
-				}
+					map = JsonConfig.data.get( "wearReq" ).get( regKey );
 				break;
+
+			case "weapon":
+				if( JsonConfig.data.get( "weaponReq" ).containsKey( regKey ) )
+					map = JsonConfig.data.get( "weaponReq" ).get( regKey );
+				break;
+
+			case "tool":
+				if( JsonConfig.data.get( "toolReq" ).containsKey( regKey ) )
+					map = JsonConfig.data.get( "toolReq" ).get( regKey );
+				break;
+
+			case "use":
+				if( JsonConfig.data.get( "useReq" ).containsKey( regKey ) )
+					map = JsonConfig.data.get( "useReq" ).get( regKey );
+				break;
+
+			case "break":
+				if( JsonConfig.data.get( "breakReq" ).containsKey( regKey ) )
+					map = JsonConfig.data.get( "breakReq" ).get( regKey );
+				break;
+
+			case "place":
+				if( JsonConfig.data.get( "placeReq" ).containsKey( regKey ) )
+					map = JsonConfig.data.get( "placeReq" ).get( regKey );
+				break;
+		}
+
+		if( map != null )
+		{
+			for( Map.Entry<String, Object> entry : map.entrySet() )
+			{
+				if( highestReq < (double) entry.getValue() )
+					highestReq = (int) (double) entry.getValue();
+			}
 		}
 
 		return highestReq;
