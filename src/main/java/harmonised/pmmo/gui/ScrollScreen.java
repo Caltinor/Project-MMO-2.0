@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 import it.unimi.dsi.fastutil.ints.IntComparators;
 import net.minecraft.client.MainWindow;
@@ -20,8 +21,10 @@ import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.gui.ScrollPanel;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
@@ -78,61 +81,166 @@ public class ScrollScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
-        Map<String, Map<String, Object>> reqs = XP.getFullReqMap( type );
+        Map<String, Map<String, Object>> reqMap = XP.getFullReqMap( type );
 
         tempList = new ArrayList<>();
         listButtons = new ArrayList<>();
 
-        for( Map.Entry<String, Map<String, Object>> entry : reqs.entrySet() )
+        if( type.equals( "biome" ) )
         {
-            if( XP.getItem( entry.getKey() ) != Items.AIR )
+            Map<String, Map<String, Object>> bonusMap = JsonConfig.data.get( "biomeXpBonus" );
+            Map<String, Map<String, Object>> scaleMap = JsonConfig.data.get( "biomeMobMultiplier" );
+            List<String> biomesToAdd = new ArrayList<>();
+
+            if( reqMap != null )
             {
-                tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, 0, entry.getKey(), type, a ->
+                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
-                    System.out.println( "clicc" );
-                }));
+                    biomesToAdd.add( entry.getKey() );
+                }
             }
-            else if( type.equals( "biome" ) )
+
+            if( bonusMap != null )
             {
-                tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, 8, entry.getKey(), type, a ->
+                for( Map.Entry<String, Map<String, Object>> entry : bonusMap.entrySet() )
                 {
-                    System.out.println( "clicc" );
-                }));
+                    biomesToAdd.add( entry.getKey() );
+                }
+            }
+
+            if( scaleMap != null )
+            {
+                for( Map.Entry<String, Map<String, Object>> entry : scaleMap.entrySet() )
+                {
+                    biomesToAdd.add( entry.getKey() );
+                }
+            }
+
+            biomesToAdd.sort( Comparator.comparingInt( b -> getBiomeReqInt( b, "biome" ) ) );
+
+            for( String regKey : biomesToAdd )
+            {
+                if ( ForgeRegistries.BIOMES.getValue( new ResourceLocation( regKey ) ) != null )
+                {
+                    tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, 8, regKey, type, button ->
+                    {
+                        System.out.println( "clicc" );
+                    }));
+                }
+            }
+        }
+        else
+        {
+            for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+            {
+                if( XP.getItem( entry.getKey() ) != Items.AIR )
+                {
+                    tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, 0, entry.getKey(), type, button ->
+                    {
+                        System.out.println( "clicc" );
+                    }));
+                }
             }
         }
 
         for( String keyWord : keyWords )
         {
-            for( ListButton a : tempList )
+            for( ListButton button : tempList )
             {
-                if( a.regKey.contains( keyWord ) )
+                if( button.regKey.contains( keyWord ) )
                 {
-                    if( !listButtons.contains(a) )
-                        listButtons.add( a );
+                    if( !listButtons.contains(button) )
+                        listButtons.add( button );
                 }
             }
         }
 
-        for( ListButton a : tempList )
+        for( ListButton button : tempList )
         {
-            if( !listButtons.contains( a ) )
-                listButtons.add( a );
+            if( !listButtons.contains( button ) )
+                listButtons.add( button );
         }
 
-        int accummulativeHeight = 4;
-
-        for( ListButton a : listButtons )
+        for( ListButton button : listButtons )
         {
-            for( Map.Entry<String, Object> inEntry : reqs.get( a.regKey ).entrySet() )
+            List<String> skillText = new ArrayList<>();
+            List<String> scaleText = new ArrayList<>();
+
+            if( reqMap.containsKey( button.regKey ) )
             {
-                if( Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (int) (double) inEntry.getValue() )
-                    a.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "red" ) ) );
-                else
-                    a.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "green" ) ) );
+                for( Map.Entry<String, Object> inEntry : reqMap.get( button.regKey ).entrySet() )
+                {
+                    if( Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (int) (double) inEntry.getValue() )
+                        button.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                    else
+                        button.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+
+                    button.text.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+                }
             }
 
-            a.text.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+            if( type.equals( "biome" ) )
+            {
+                Map<String, Object> biomeBonusMap = JsonConfig.data.get( "biomeXpBonus" ).get( button.regKey );
+                Map<String, Object> biomeMobMultiplierMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( button.regKey );
+
+                if( biomeBonusMap != null )
+                {
+                    for( Map.Entry<String, Object> entry : biomeBonusMap.entrySet() )
+                    {
+                        if( (double) entry.getValue() > 0 )
+                            skillText.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", entry.getKey(), "+" + entry.getValue() + "%" ).setStyle( XP.skillStyle.get( Skill.getSkill( entry.getKey() ) ) ).getFormattedText() );
+                        if( (double) entry.getValue() < 0 )
+                            skillText.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", entry.getKey(), entry.getValue() + "%" ).setStyle( XP.skillStyle.get( Skill.getSkill( entry.getKey() ) ) ).getFormattedText() );
+                    }
+                }
+
+                if( biomeMobMultiplierMap != null )
+                {
+                    for( Map.Entry<String, Object> entry : biomeMobMultiplierMap.entrySet() )
+                    {
+                        Style styleColor = new Style();
+
+                        if( (double) entry.getValue() > 1 )
+                            styleColor = XP.textStyle.get( "red" );
+                        else if( (double) entry.getValue() < 1 )
+                            styleColor = XP.textStyle.get( "green" );
+
+                        switch( entry.getKey() )
+                        {
+                            case "damageBonus":
+                                scaleText.add( " " + new TranslationTextComponent( "pmmo.enemyScaleDamage", DP.dp( (double) entry.getValue() * 100 ) ).setStyle( styleColor ).getFormattedText() );
+                                break;
+
+                            case "hpBonus":
+                                scaleText.add( " " + new TranslationTextComponent( "pmmo.enemyScaleHp", DP.dp( (double) entry.getValue() * 100 ) ).setStyle( styleColor ).getFormattedText() );
+                                break;
+
+                            case "speedBonus":
+                                scaleText.add( " " + new TranslationTextComponent( "pmmo.enemyScaleSpeed", DP.dp( (double) entry.getValue() * 100 ) ).setStyle( styleColor ).getFormattedText() );
+                                break;
+                        }
+                    }
+                }
+            }
+
+
+            if( skillText.size() > 0 )
+            {
+                skillText.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+                button.tooltipText.add( new TranslationTextComponent( "pmmo.xpModifiers" ).getFormattedText() );
+                button.tooltipText.addAll( skillText );
+            }
+
+            if( scaleText.size() > 0 )
+            {
+                scaleText.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+                button.tooltipText.add( new TranslationTextComponent( "pmmo.enemyScaling" ).getFormattedText() );
+                button.tooltipText.addAll( scaleText );
+            }
         }
+
+
 
         listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.itemStack.getItem().getRegistryName().toString(), type) ) );
 
@@ -143,14 +251,24 @@ public class ScrollScreen extends Screen
         addButton( exitButton );
     }
 
-    private static int getTextLevel( ITextComponent comp )
+    private static int getTextLevel( String comp )
     {
-        String number = comp.getUnformattedComponentText().replaceAll("\\D+","");
+        String number = comp.replaceAll("\\D+","");
 
-        if( !Double.isNaN( Double.parseDouble( number ) ) )
+        if( number.length() > 0 && !Double.isNaN( Double.parseDouble( number ) ) )
             return (int) Double.parseDouble( number );
         else
             return 0;
+    }
+
+    private static int getBiomeReqInt( String regKey, String type )
+    {
+        Map<String, Double> map = XP.getReqMap( regKey, type );
+
+        if( map == null )
+            return 0;
+        else
+            return map.size();
     }
 
     @Override
@@ -182,8 +300,13 @@ public class ScrollScreen extends Screen
                 buttonX = mouseX - button.x;
                 buttonY = mouseY - button.y;
 
-                if( button.elementTwo == 0 && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
-                    renderTooltip( button.itemStack, mouseX, mouseY );
+                if( buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
+                {
+                    if( button.elementTwo == 0 )
+                        renderTooltip( button.itemStack, mouseX, mouseY );
+                    else if( type.equals( "biome" ) )
+                        renderTooltip( button.tooltipText, mouseX, mouseY );
+                }
             }
         }
 

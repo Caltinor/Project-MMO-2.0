@@ -38,6 +38,7 @@
   "pmmo.extraFished": "Reeled in %1$s extra %2$s!",
   "pmmo.fishPoolChance": "%1$s%% chance to access the Fish Pool",
   "pmmo.extraRepaired": "Repaired %1$s + %2$s extra!",
+  "pmmo.xpModifiers": "Xp Modifiers",
   "pmmo.salvageMessage": "Salvaged %1$s/%2$s %3$s!",
   "pmmo.cannotSalvageLackLevel": "Level %1$s Smithing to salvage",
   "pmmo.cannotSalvageLackLevelLonger": "You need level %1$s Smithing to salvage %2$s",
@@ -130,6 +131,10 @@
   "pmmo.mobDamageBoost": "Mobs Damage scaling is %1$s%% of normal rates in %2$s biome",
   "pmmo.mobHpBoost": "Mobs HP scaling is %1$s%% of normal rates in %2$s biome",
   "pmmo.mobSpeedBoost": "Mobs Speed scaling is %1$s%% of normal rates in %2$s biome",
+  "pmmo.enemyScaling": "Enemy Scaling",
+  "pmmo.enemyScaleDamage": "Enemies Damage Scale: %1$s%%",
+  "pmmo.enemyScaleHp": "Enemies Hp Scale: %1$s%%",
+  "pmmo.enemyScaleSpeed": "Enemies Speed Scale: %1$s%%",
   "pmmo.skills": "Skills",
   "pmmo.veinCharge": "Your vein ability is at %1$s%% charge!"
 }

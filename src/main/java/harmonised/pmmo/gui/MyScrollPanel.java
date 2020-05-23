@@ -101,9 +101,9 @@ public class MyScrollPanel extends ScrollPanel
                 itemRenderer.renderItemIntoGUI( button.itemStack, button.x + 8, button.y + 8 );
 
                 drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 4, button.y + 2, 0xffffff );
-                for( ITextComponent line : button.text )
+                for( String line : button.text )
                 {
-                    drawString( Minecraft.getInstance().fontRenderer, line.getFormattedText(), this.left + 4, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
+                    drawString( Minecraft.getInstance().fontRenderer, line, this.left + 4, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
                 }
             }
             accumulativeHeight += button.getHeight() + 4;

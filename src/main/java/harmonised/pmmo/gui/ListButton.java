@@ -36,7 +36,8 @@ public class ListButton extends Button
     public int offsetOne, offsetTwo;
     public ItemStack itemStack;
     public String regKey, title;
-    public List<ITextComponent> text = new ArrayList<>();
+    public List<String> text = new ArrayList<>();
+    public List<String> tooltipText = new ArrayList<>();
 
     public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, String type, IPressable onPress)
     {
@@ -75,7 +76,7 @@ public class ListButton extends Button
     {
         int height = 11;
 
-        for( ITextComponent a : text )
+        for( String a : text )
         {
             height += 9;
         }
