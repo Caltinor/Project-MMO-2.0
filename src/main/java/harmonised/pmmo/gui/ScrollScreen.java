@@ -15,9 +15,12 @@ import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -76,7 +79,7 @@ public class ScrollScreen extends Screen
         scrollX = x + 16;
         scrollY = y + 10;
 
-        exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 2, I18n.format("" ), (something) ->
+        exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 7, I18n.format("" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
         });
@@ -96,7 +99,8 @@ public class ScrollScreen extends Screen
             {
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
-                    biomesToAdd.add( entry.getKey() );
+                    if( !biomesToAdd.contains( entry.getKey() ) )
+                        biomesToAdd.add( entry.getKey() );
                 }
             }
 
@@ -104,7 +108,8 @@ public class ScrollScreen extends Screen
             {
                 for( Map.Entry<String, Map<String, Object>> entry : bonusMap.entrySet() )
                 {
-                    biomesToAdd.add( entry.getKey() );
+                    if( !biomesToAdd.contains( entry.getKey() ) )
+                        biomesToAdd.add( entry.getKey() );
                 }
             }
 
@@ -112,7 +117,8 @@ public class ScrollScreen extends Screen
             {
                 for( Map.Entry<String, Map<String, Object>> entry : scaleMap.entrySet() )
                 {
-                    biomesToAdd.add( entry.getKey() );
+                    if( !biomesToAdd.contains( entry.getKey() ) )
+                        biomesToAdd.add( entry.getKey() );
                 }
             }
 
@@ -122,7 +128,7 @@ public class ScrollScreen extends Screen
             {
                 if ( ForgeRegistries.BIOMES.getValue( new ResourceLocation( regKey ) ) != null )
                 {
-                    tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, 8, regKey, type, button ->
+                    tempList.add( new ListButton( 0, 0, 1, 9, regKey, type, button ->
                     {
                         System.out.println( "clicc" );
                     }));
@@ -135,7 +141,7 @@ public class ScrollScreen extends Screen
             {
                 if( XP.getItem( entry.getKey() ) != Items.AIR )
                 {
-                    tempList.add( new ListButton( scrollX + boxWidth - 86, 0, 1, 0, entry.getKey(), type, button ->
+                    tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, button ->
                     {
                         System.out.println( "clicc" );
                     }));
@@ -165,24 +171,15 @@ public class ScrollScreen extends Screen
         {
             List<String> skillText = new ArrayList<>();
             List<String> scaleText = new ArrayList<>();
-
-            if( reqMap.containsKey( button.regKey ) )
-            {
-                for( Map.Entry<String, Object> inEntry : reqMap.get( button.regKey ).entrySet() )
-                {
-                    if( Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (int) (double) inEntry.getValue() )
-                        button.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
-                    else
-                        button.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
-
-                    button.text.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
-                }
-            }
+            List<String> effectText = new ArrayList<>();
 
             if( type.equals( "biome" ) )
             {
+                addLevelsToButton( button, reqMap, player );
+
                 Map<String, Object> biomeBonusMap = JsonConfig.data.get( "biomeXpBonus" ).get( button.regKey );
                 Map<String, Object> biomeMobMultiplierMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( button.regKey );
+                Map<String, Object> biomeEffectsMap = JsonConfig.data.get( "biomeEffect" ).get( button.regKey );
 
                 if( biomeBonusMap != null )
                 {
@@ -222,8 +219,22 @@ public class ScrollScreen extends Screen
                         }
                     }
                 }
-            }
 
+                if( biomeEffectsMap != null )
+                {
+                    for( Map.Entry<String, Object> entry : biomeEffectsMap.entrySet() )
+                    {
+                        if( ForgeRegistries.POTIONS.containsKey( new ResourceLocation( entry.getKey() ) ) )
+                        {
+                            Effect effect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( entry.getKey() ) );
+                            if( effect != null )
+                                effectText.add( " " + new TranslationTextComponent( effect.getDisplayName().getFormattedText() + " " + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                        }
+                    }
+                }
+            }
+            else
+                addLevelsToButton( button, reqMap, player );
 
             if( skillText.size() > 0 )
             {
@@ -238,9 +249,14 @@ public class ScrollScreen extends Screen
                 button.tooltipText.add( new TranslationTextComponent( "pmmo.enemyScaling" ).getFormattedText() );
                 button.tooltipText.addAll( scaleText );
             }
+
+            if( effectText.size() > 0 )
+            {
+                effectText.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+                button.tooltipText.add( new TranslationTextComponent( "pmmo.biomeEffects" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                button.tooltipText.addAll( effectText );
+            }
         }
-
-
 
         listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.itemStack.getItem().getRegistryName().toString(), type) ) );
 
@@ -249,6 +265,22 @@ public class ScrollScreen extends Screen
         children.add( scrollPanel );
 
         addButton( exitButton );
+    }
+
+    private static void addLevelsToButton( ListButton button, Map<String, Map<String, Object>> map, PlayerEntity player )
+    {
+        if( map.containsKey( button.regKey ) )
+        {
+            for( Map.Entry<String, Object> inEntry : map.get( button.regKey ).entrySet() )
+            {
+                if( Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (int) (double) inEntry.getValue() )
+                    button.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                else
+                    button.text.add( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+
+                button.text.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+            }
+        }
     }
 
     private static int getTextLevel( String comp )
@@ -300,7 +332,9 @@ public class ScrollScreen extends Screen
                 buttonX = mouseX - button.x;
                 buttonY = mouseY - button.y;
 
-                if( buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
+//                renderTooltip( mouseX + " " + mouseY, mouseX, mouseY );
+
+                if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
                 {
                     if( button.elementTwo == 0 )
                         renderTooltip( button.itemStack, mouseX, mouseY );

@@ -38,6 +38,7 @@ public class ListButton extends Button
     public String regKey, title;
     public List<String> text = new ArrayList<>();
     public List<String> tooltipText = new ArrayList<>();
+    ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
     public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, String type, IPressable onPress)
     {
@@ -110,7 +111,8 @@ public class ListButton extends Button
             this.blit(this.x, this.y, this.offsetTwo, this.elementTwo, this.width, this.height);
         }
 
-
+        if( !itemStack.getItem().equals( Items.AIR ) )
+            itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
 
         this.renderBg(minecraft, x, y);
         int j = getFGColor();

@@ -135,6 +135,7 @@
   "pmmo.enemyScaleDamage": "Enemies Damage Scale: %1$s%%",
   "pmmo.enemyScaleHp": "Enemies Hp Scale: %1$s%%",
   "pmmo.enemyScaleSpeed": "Enemies Speed Scale: %1$s%%",
+  "pmmo.biomeEffects": "Biome Effects",
   "pmmo.skills": "Skills",
   "pmmo.veinCharge": "Your vein ability is at %1$s%% charge!"
 }

@@ -46,7 +46,7 @@ public class SkillsScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 2, I18n.format("" ), (something) ->
+        exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 7, I18n.format("" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
         });
@@ -88,21 +88,21 @@ public class SkillsScreen extends Screen
 
         addButton( useButton );
 
-        placeButton = new TileButton( x + 24 + 36 * 5, y + 24, 1, 3, I18n.format("Place" ), (something) ->
+        placeButton = new TileButton( x + 24 + 36 * 5, y + 24, 1, 8, I18n.format("Place" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.place" ), "place", Minecraft.getInstance().player ) );
         });
 
         addButton( placeButton );
 
-        breakButton = new TileButton( x + 24, y + 24 + 36, 1, 3, I18n.format("Break" ), (something) ->
+        breakButton = new TileButton( x + 24, y + 24 + 36, 1, 0, I18n.format("Break" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.break" ), "break", Minecraft.getInstance().player ) );
         });
 
         addButton( breakButton );
 
-        biomeButton = new TileButton( x + 24 + 36, y + 24 + 36, 1, 3, I18n.format("Biome" ), (something) ->
+        biomeButton = new TileButton( x + 24 + 36, y + 24 + 36, 1, 9, I18n.format("Biome" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.biome" ), "biome", Minecraft.getInstance().player ) );
         });

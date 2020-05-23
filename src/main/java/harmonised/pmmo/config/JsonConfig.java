@@ -75,7 +75,6 @@ public class JsonConfig
         map.put( "wearReq", new HashMap<>() );
         map.put( "toolReq", new HashMap<>() );
         map.put( "weaponReq", new HashMap<>() );
-        map.put( "mobReq", new HashMap<>() );
         map.put( "useReq", new HashMap<>() );
         map.put( "placeReq", new HashMap<>() );
         map.put( "breakReq", new HashMap<>() );
@@ -159,8 +158,6 @@ public class JsonConfig
 
         if( Config.forgeConfig.weaponReqEnabled.get() )
             updateReqSkills( req.weapons, localData.get( "weaponReq" ) );
-
-//        updateReqSkills( req.mobs, mobReq );
 
         if( Config.forgeConfig.useReqEnabled.get() )
             updateReqSkills( req.use, localData.get( "useReq" ) );

@@ -82,7 +82,6 @@ public class MyScrollPanel extends ScrollPanel
             startI = 0;
 
         ListButton button;
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
         int accumulativeHeight = 0;
 
@@ -98,7 +97,6 @@ public class MyScrollPanel extends ScrollPanel
                 else
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
                 button.render( mouseX, mouseY, 0 );
-                itemRenderer.renderItemIntoGUI( button.itemStack, button.x + 8, button.y + 8 );
 
                 drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 4, button.y + 2, 0xffffff );
                 for( String line : button.text )
@@ -119,6 +117,16 @@ public class MyScrollPanel extends ScrollPanel
     public int getScroll()
     {
         return (int) this.scrollDistance;
+    }
+
+    public int getTop()
+    {
+        return this.top;
+    }
+
+    public int getBottom()
+    {
+        return this.bottom;
     }
 
     public int getRelativeY()
