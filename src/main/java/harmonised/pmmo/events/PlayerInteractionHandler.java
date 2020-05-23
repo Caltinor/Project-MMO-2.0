@@ -66,15 +66,22 @@ public class PlayerInteractionHandler
                 }
             }
 
-            if( !XP.checkReq( player, item.getRegistryName(), "use" ) )
+            if( item instanceof BlockItem )
             {
-                if( !(item instanceof BlockItem) || !XP.checkReq( player, item.getRegistryName(), "place" ) )
+                if( !XP.checkReq( player, item.getRegistryName(), "place" ) )
                 {
                     event.setCanceled( true );
 
                     if( isRemote )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.toPlaceDown", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                 }
+            }
+            else if( !XP.checkReq( player, item.getRegistryName(), "use" ) )
+            {
+               event.setCanceled( true );
+
+               if( isRemote )
+                   player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
             }
 
             if( event instanceof PlayerInteractEvent.RightClickBlock)
