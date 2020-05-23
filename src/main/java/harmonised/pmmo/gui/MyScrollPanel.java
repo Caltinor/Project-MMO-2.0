@@ -92,10 +92,14 @@ public class MyScrollPanel extends ScrollPanel
             {
                 button.x = this.right - button.getWidth() - 8;
                 button.y = relativeY + accumulativeHeight;
-                if(XP.checkReq( player, button.regKey, type ) )
+
+                if( XP.checkReq( player, button.regKey, type ) )
+                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
+                else if( XP.checkReq( player, button.regKey, "break" ) && ( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) ) )
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
                 else
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
+
                 button.render( mouseX, mouseY, 0 );
 
                 drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 4, button.y + 2, 0xffffff );

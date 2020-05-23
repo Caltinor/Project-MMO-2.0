@@ -35,15 +35,16 @@ public class ListButton extends Button
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
     public ItemStack itemStack;
-    public String regKey, title;
+    public String regKey, title, buttonText;
     public List<String> text = new ArrayList<>();
     public List<String> tooltipText = new ArrayList<>();
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-    public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, String type, IPressable onPress)
+    public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, String type, String buttonText, IPressable onPress)
     {
         super(posX, posY, 32, 32, "", onPress);
         this.regKey = regKey;
+        this.buttonText = buttonText;
         this.itemStack = new ItemStack( XP.getItem( regKey ) );
         this.elementOne = elementOne * 32;
         this.elementTwo = elementTwo * 32;
@@ -116,6 +117,6 @@ public class ListButton extends Button
 
         this.renderBg(minecraft, x, y);
         int j = getFGColor();
-        this.drawCenteredString(fontrenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
+        this.drawCenteredString(fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
     }
 }

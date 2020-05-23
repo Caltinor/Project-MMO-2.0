@@ -102,6 +102,7 @@
   "pmmo.oreExtraDrop": "Extra Mined: %1$s",
   "pmmo.logExtraDrop": "Extra Chopped: %1$s",
   "pmmo.plantExtraDrop": "Extra Harvest: %1$s",
+  "pmmo.extraDropPerLevel": "%1$s Extra dropped per level",
   "pmmo.rareDrop": "You got a Rare Drop %1$s!",
   "pmmo.hardness": "Hardness %1$s",
   "pmmo.setLevel": "%1$s has been set to level %2$s",

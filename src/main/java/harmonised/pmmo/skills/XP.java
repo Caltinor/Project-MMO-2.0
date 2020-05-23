@@ -418,6 +418,11 @@ public class XP
 		return (int) Math.floor( (double) object );
 	}
 
+	public static double getExtraChance( PlayerEntity player, String resLoc, String type )
+	{
+		return getExtraChance( player, new ResourceLocation( resLoc ), type );
+	}
+
 	public static double getExtraChance( PlayerEntity player, ResourceLocation resLoc, String type )
 	{
 		String regKey = resLoc.toString();
@@ -614,6 +619,15 @@ public class XP
 
 			case "slayer":
 				return JsonConfig.data.get( "killReq" );
+
+			case "ore":
+				return JsonConfig.data.get( "oreInfo" );
+
+			case "log":
+				return JsonConfig.data.get( "logInfo" );
+
+			case "plant":
+				return JsonConfig.data.get( "plantInfo" );
 
 			default:
 				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP" );
