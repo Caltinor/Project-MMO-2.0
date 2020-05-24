@@ -685,7 +685,7 @@ public class XP
 
 		String registryName = res.toString();
 		Map<String, Double> reqMap = getReqMap( registryName, type );
-		int startLevel;
+		double startLevel;
 		boolean failedReq = false;
 
 //		if( reqMap == null )
@@ -695,7 +695,7 @@ public class XP
 		{
 			for( Map.Entry<String, Double> entry : reqMap.entrySet() )
 			{
-				startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
+				startLevel = getLevelDecimal( Skill.getSkill( entry.getKey() ), player );
 
 				if( startLevel < entry.getValue() )
 					failedReq = true;
