@@ -207,9 +207,9 @@ public class XP
 	{
 		Map<String, Double> theMap = new HashMap<>();
 
-		if( JsonConfig.data.get( "xpValue" ).containsKey( registryName.toString() ) )
+		if( JsonConfig.data.get( "xpValueBreaking" ).containsKey( registryName.toString() ) )
 		{
-			for( Map.Entry<String, Object> entry : JsonConfig.data.get( "xpValue" ).get( registryName.toString() ).entrySet() )
+			for( Map.Entry<String, Object> entry : JsonConfig.data.get( "xpValueBreaking" ).get( registryName.toString() ).entrySet() )
 			{
 				if( entry.getValue() instanceof Double )
 					theMap.put( entry.getKey(), (double) entry.getValue() );
@@ -628,6 +628,24 @@ public class XP
 
 			case "plant":
 				return JsonConfig.data.get( "plantInfo" );
+
+			case "held":
+				return JsonConfig.data.get( "heldItemXpBoost" );
+
+			case "worn":
+				return JsonConfig.data.get( "wornItemXpBoost" );
+
+			case "breedxp":
+				return JsonConfig.data.get( "xpValueBreeding" );
+
+			case "tamexp":
+				return JsonConfig.data.get( "xpValueTaming" );
+
+			case "craftxp":
+				return JsonConfig.data.get( "xpValueCrafting" );
+
+			case "breakxp":
+				return JsonConfig.data.get( "xpValueBreaking" );
 
 			default:
 				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP" );

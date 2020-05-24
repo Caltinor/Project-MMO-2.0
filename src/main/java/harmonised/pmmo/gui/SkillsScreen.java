@@ -27,7 +27,7 @@ public class SkillsScreen extends Screen
     private int y;
     private MyScrollPanel myList;
     private Button exitButton;
-    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton;
+    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton, heldXpButton, wornXpButton, breedXpButton, tameXpButton, craftXpButton, breakXpButton;
 
     public SkillsScreen(ITextComponent titleIn)
     {
@@ -122,6 +122,48 @@ public class SkillsScreen extends Screen
         });
 
         addButton( plantButton );
+
+        heldXpButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36, 1, 0, I18n.format("Held" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.held" ), "held", Minecraft.getInstance().player ) );
+        });
+
+        addButton( heldXpButton );
+
+        wornXpButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36, 1, 0, I18n.format("Worn" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.worn" ), "worn", Minecraft.getInstance().player ) );
+        });
+
+        addButton( wornXpButton );
+
+        breedXpButton = new TileButton( x + 24, y + 24 + 36 * 2, 1, 0, I18n.format("BreedXp" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.breedXp" ), "breedXp", Minecraft.getInstance().player ) );
+        });
+
+        addButton( breedXpButton );
+
+        tameXpButton = new TileButton( x + 24 + 36, y + 24 + 36 * 2, 1, 0, I18n.format("TameXp" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.tameXp" ), "tameXp", Minecraft.getInstance().player ) );
+        });
+
+        addButton( tameXpButton );
+
+        craftXpButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 2, 1, 0, I18n.format("CraftXp" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.craftXp" ), "craftXp", Minecraft.getInstance().player ) );
+        });
+
+        addButton( craftXpButton );
+
+        breakXpButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 2, 1, 0, I18n.format("BreakXp" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.breakXp" ), "breakXp", Minecraft.getInstance().player ) );
+        });
+
+        addButton( breakXpButton );
 
         int column = 1;
         int skillID;

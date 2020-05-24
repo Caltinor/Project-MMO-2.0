@@ -82,7 +82,7 @@ public class JsonConfig
         map.put( "biomeXpBonus", new HashMap<>() );
         map.put( "biomeEffect", new HashMap<>() );
         map.put( "biomeMobMultiplier", new HashMap<>() );
-        map.put( "xpValue", new HashMap<>() );
+        map.put( "xpValueBreaking", new HashMap<>() );
         map.put( "xpValueCrafting", new HashMap<>() );
         map.put( "xpValueBreeding", new HashMap<>() );
         map.put( "xpValueTaming", new HashMap<>() );
@@ -121,7 +121,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> biomeEff = new HashMap<>();
     private final Map<String, RequirementItem> biomeXpBonus = new HashMap<>();
     private final Map<String, RequirementItem> biomeMobMultiplier = new HashMap<>();
-    private final Map<String, RequirementItem> xpValue = new HashMap<>();
+    private final Map<String, RequirementItem> xpValueBreaking = new HashMap<>();
     private final Map<String, RequirementItem> xpValueCrafting = new HashMap<>();
     private final Map<String, RequirementItem> xpValueBreeding = new HashMap<>();
     private final Map<String, RequirementItem> xpValueTaming = new HashMap<>();
@@ -163,7 +163,7 @@ public class JsonConfig
             updateReqSkills( req.use, localData.get( "useReq" ) );
 
         if( Config.forgeConfig.xpValueEnabled.get() )
-            updateReqSkills( req.xpValue, localData.get( "xpValue" ) );
+            updateReqSkills( req.xpValueBreaking, localData.get( "xpValueBreaking" ) );
 
         if( Config.forgeConfig.xpValueCraftingEnabled.get() )
             updateReqSkills( req.xpValueCrafting, localData.get( "xpValueCrafting" ) );
@@ -257,7 +257,7 @@ public class JsonConfig
             deserializeGroup(obj, "biome_xp_bonus", req.biomeXpBonus::put, context);
             deserializeGroup(obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context);
             deserializeGroup(obj, "biome_effect", req.biomeEff::put, context);
-            deserializeGroup(obj, "xp_value", req.xpValue::put, context);
+            deserializeGroup(obj, "xp_value", req.xpValueBreaking::put, context);
             deserializeGroup(obj, "crafting_xp", req.xpValueCrafting::put, context);
             deserializeGroup(obj, "breeding_xp", req.xpValueBreeding::put, context);
             deserializeGroup(obj, "taming_xp", req.xpValueTaming::put, context);

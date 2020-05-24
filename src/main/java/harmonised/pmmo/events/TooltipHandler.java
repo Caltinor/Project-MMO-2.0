@@ -52,22 +52,22 @@ public class TooltipHandler
                 Map<String, Object> useReq = JsonConfig.data.get( "useReq" ).get( regKey );
                 Map<String, Object> placeReq = JsonConfig.data.get( "placeReq" ).get( regKey );
                 Map<String, Object> breakReq = JsonConfig.data.get( "breakReq" ).get( regKey );
-                Map<String, Object> xpValue = JsonConfig.data.get( "xpValue" ).get( regKey );
+                Map<String, Object> xpValueBreaking = JsonConfig.data.get( "xpValueBreaking" ).get( regKey );
                 Map<String, Object> xpValueCrafting = JsonConfig.data.get( "xpValueCrafting" ).get( regKey );
                 Map<String, Object> salvageInfo = JsonConfig.data.get( "salvageInfo" ).get( regKey );
                 Map<String, Object> salvagesFrom = JsonConfig.data.get( "salvagesFrom" ).get( regKey );
                 Map<String, Object> heldItemXpBoost = JsonConfig.data.get( "heldItemXpBoost" ).get( regKey );
                 Map<String, Object> wornItemXpBoost = JsonConfig.data.get( "wornItemXpBoost" ).get( regKey );
 
-                if( xpValue != null && xpValue.size() > 0 )      //XP VALUE
+                if( xpValueBreaking != null && xpValueBreaking.size() > 0 )      //XP VALUE
                 {
-                    tooltip.add( new TranslationTextComponent( "pmmo.xpValue" ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.xpValueBreaking" ) );
 
-                    for( String key : xpValue.keySet() )
+                    for( String key : xpValueBreaking.keySet() )
                     {
-                        if( xpValue.get( key ) instanceof Double )
+                        if( xpValueBreaking.get( key ) instanceof Double )
                         {
-                            dValue = (double) xpValue.get( key );
+                            dValue = (double) xpValueBreaking.get( key );
                             tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ) );
                         }
                     }

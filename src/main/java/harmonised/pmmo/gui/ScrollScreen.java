@@ -178,7 +178,7 @@ public class ScrollScreen extends Screen
                 button.tooltipText.add( button.title );
 
                 if( reqMap.containsKey( button.regKey ) )
-                    addLevelsToButton( button, reqMap.get( button.regKey ), player );
+                    addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
 
                 Map<String, Object> biomeBonusMap = JsonConfig.data.get( "biomeXpBonus" ).get( button.regKey );
                 Map<String, Object> biomeMobMultiplierMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( button.regKey );
@@ -266,14 +266,15 @@ public class ScrollScreen extends Screen
                         button.text.add( new TranslationTextComponent( "pmmo.break" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                     else
                         button.text.add( new TranslationTextComponent( "pmmo.break" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
-                    addLevelsToButton( button, breakMap, player );
+                    addLevelsToButton( button, breakMap, player, false );
                 }
             }
+            else if( type.equals( "held" ) || type.equals( "worn" ) )
+                addLevelsBonusToButton( button, reqMap.get( button.regKey ), player );
+            else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "craftXp" ) )
+                addLevelsToButton( button, reqMap.get( button.regKey ), player, true );
             else
-            {
-                addLevelsToButton( button, reqMap.get( button.regKey ), player );
-//                listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.itemStack.getItem().getRegistryName().toString(), type) ) );
-            }
+                addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
 
             if( skillText.size() > 0 )
             {
@@ -304,16 +305,44 @@ public class ScrollScreen extends Screen
         addButton( exitButton );
     }
 
-    private static void addLevelsToButton( ListButton button, Map<String, Object> map, PlayerEntity player )
+    private static void addLevelsToButton( ListButton button, Map<String, Object> map, PlayerEntity player, boolean ignoreReq )
     {
         List<String> levelsToAdd = new ArrayList<>();
 
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
-            if( Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (int) (double) inEntry.getValue() )
-                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+            String valueText;
+
+            double value = (double) inEntry.getValue();
+
+            if( value % 1 == 0 )
+                valueText = Integer.toString( (int) Math.floor( value ) );
             else
-                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), (int) (double) inEntry.getValue() ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                valueText = DP.dp( value );
+
+            if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevel( player ) < value )
+                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), valueText ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+            else
+                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), valueText ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+        }
+
+        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+
+        button.text.addAll( levelsToAdd );
+    }
+
+    private static void addLevelsBonusToButton( ListButton button, Map<String, Object> map, PlayerEntity player )
+    {
+        List<String> levelsToAdd = new ArrayList<>();
+
+        for( Map.Entry<String, Object> inEntry : map.entrySet() )
+        {
+            double value = (double) inEntry.getValue();
+
+            if( value > 0 )
+                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+            else if( value < 0 )
+                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
         }
 
         levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
