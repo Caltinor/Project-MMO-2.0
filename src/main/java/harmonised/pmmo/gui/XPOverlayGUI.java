@@ -433,6 +433,11 @@ public class XPOverlayGUI extends AbstractGui
 			else
 				xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
 
+			if( prefsTag.contains( "minXpGrow" ) )
+				minXpGrow = prefsTag.getDouble( "minXpGrow" );
+			else
+				minXpGrow = Config.forgeConfig.minXpGrow.get();
+
 			if( prefsTag.contains( "xpDropDecayAge" ) )
 				xpDropDecayAge = (int) Math.floor( prefsTag.getDouble( "xpDropDecayAge" ) );
 			else
@@ -512,9 +517,11 @@ public class XPOverlayGUI extends AbstractGui
 			if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
 				xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
 
+			if( minXpGrow < 0.01 || minXpGrow > 100 )
+				minXpGrow = Config.getConfig( "minXpGrow" );
+
 			biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
 			maxVeinCharge = Config.getConfig( "maxVeinCharge" );
-			minXpGrow = Config.getConfig( "minXpGrow" );
 		}
 	}
 
