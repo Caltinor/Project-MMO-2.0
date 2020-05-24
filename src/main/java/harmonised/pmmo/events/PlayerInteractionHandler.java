@@ -109,9 +109,9 @@ public class PlayerInteractionHandler
                                         entryValue = (double) entry.getValue();
 
                                     if( startLevel < entryValue )
-                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + ( entryValue % 1 == 0 ? (int) entryValue : DP.dpSoft( entryValue ) ) ).setStyle( XP.textStyle.get( "red" ) ), false );
                                     else
-                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entryValue ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + ( entryValue % 1 == 0 ? (int) entryValue : DP.dpSoft( entryValue ) ) ).setStyle( XP.textStyle.get( "green" ) ), false );
                                 }
 //                            }
                         }

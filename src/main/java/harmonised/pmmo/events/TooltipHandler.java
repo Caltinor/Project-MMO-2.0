@@ -239,7 +239,7 @@ public class TooltipHandler
         PlayerEntity player = event.getPlayer();
         List<ITextComponent> tooltip = event.getToolTip();
         Item item = event.getItemStack().getItem();
-        int level, value;
+        double level, value;
 
         if( theMap.size() > 0 )
         {
@@ -250,16 +250,16 @@ public class TooltipHandler
 
             for( String key : theMap.keySet() )
             {
-                level = XP.getLevel( Skill.getSkill( key ), player );
+                level = XP.getLevelDecimal( Skill.getSkill( key ), player );
 
                 if( theMap.get( key ) instanceof Double )
                 {
-                    value = (int) Math.floor( (double) theMap.get( key ) );
+                    value = (double) theMap.get( key );
 
                     if( level < value )
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), value ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), ( value % 1 == 0 ? (int) value : DP.dpSoft( value ) ) ).setStyle( XP.textStyle.get( "red" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), value ).setStyle( XP.textStyle.get( "green" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), ( value % 1 == 0 ? (int) value : DP.dpSoft( value ) ) ).setStyle( XP.textStyle.get( "green" ) ) );
                 }
             }
         }

@@ -122,7 +122,7 @@ public class ScrollScreen extends Screen
                 }
             }
 
-            biomesToAdd.sort( Comparator.comparingInt( b -> getBiomeReqInt( b, "biome" ) ) );
+            biomesToAdd.sort( Comparator.comparingInt( b -> getReqCount( b, "biome" ) ) );
 
             for( String regKey : biomesToAdd )
             {
@@ -235,8 +235,6 @@ public class ScrollScreen extends Screen
                         }
                     }
                 }
-
-//                listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.itemStack.getItem().getRegistryName().toString(), type) ) );
             }
             else if( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) )
             {
@@ -270,9 +268,9 @@ public class ScrollScreen extends Screen
                 }
             }
             else if( type.equals( "held" ) || type.equals( "worn" ) )
-                addLevelsBonusToButton( button, reqMap.get( button.regKey ), player );
-            else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "craftXp" ) )
-                addLevelsToButton( button, reqMap.get( button.regKey ), player, true );
+                addPercentageToButton( button, reqMap.get( button.regKey ), player );
+            else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "craftXp" ) || type.equals( "breakXp" ) )
+                addXpToButton( button, reqMap.get( button.regKey ) );
             else
                 addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
 
@@ -297,6 +295,12 @@ public class ScrollScreen extends Screen
                 button.text.addAll( effectText );
             }
         }
+
+        //SORT
+        if( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) )
+            listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, "break" ) ) );
+        else
+            listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, type ) ) );
 
         scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 42, boxHeight - 21, scrollY, scrollX, type, player, listButtons );
 
@@ -331,7 +335,30 @@ public class ScrollScreen extends Screen
         button.text.addAll( levelsToAdd );
     }
 
-    private static void addLevelsBonusToButton( ListButton button, Map<String, Object> map, PlayerEntity player )
+    private static void addXpToButton( ListButton button, Map<String, Object> map )
+    {
+        List<String> levelsToAdd = new ArrayList<>();
+
+        for( Map.Entry<String, Object> inEntry : map.entrySet() )
+        {
+            String valueText;
+
+            double value = (double) inEntry.getValue();
+
+            if( value % 1 == 0 )
+                valueText = Integer.toString( (int) Math.floor( value ) );
+            else
+                valueText = DP.dp( value );
+
+            levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.xpDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), valueText ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+        }
+
+        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+
+        button.text.addAll( levelsToAdd );
+    }
+
+    private static void addPercentageToButton( ListButton button, Map<String, Object> map, PlayerEntity player )
     {
         List<String> levelsToAdd = new ArrayList<>();
 
@@ -360,7 +387,7 @@ public class ScrollScreen extends Screen
             return 0;
     }
 
-    private static int getBiomeReqInt( String regKey, String type )
+    private static int getReqCount( String regKey, String type )
     {
         Map<String, Double> map = XP.getReqMap( regKey, type );
 

@@ -44,6 +44,14 @@ public class DP
 		return String.format( Locale.ENGLISH , "%.2f", input );
 	}
 
+	public static String dpSoft( Double input )
+	{
+		if( (input * 10) % 1 == 0 )
+			return String.format( Locale.ENGLISH , "%.1f", input );
+		else
+			return String.format( Locale.ENGLISH , "%.2f", input );
+	}
+
 	public static double map( double input, double inLow, double inHigh, double outLow, double outHigh )
 	{
 		if( input < inLow )

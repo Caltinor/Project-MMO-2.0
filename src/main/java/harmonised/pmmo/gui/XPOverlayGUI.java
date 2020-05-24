@@ -27,6 +27,7 @@ public class XPOverlayGUI extends AbstractGui
 {
 	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, veinBarPosX, veinBarPosY, xpDropPosX, xpDropPosY;
 	private static int tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
+	private static ArrayList<Skill> skillsKeys;
 	private static double xp, goalXp, cooldown;
 	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0;
 	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0, maxVeinCharge = 64D;
@@ -342,19 +343,21 @@ public class XPOverlayGUI extends AbstractGui
 						lastBonusUpdate = System.nanoTime();
 					}
 
-					for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
+					skillsKeys = new ArrayList<>( skills.keySet() );
+					skillsKeys.sort( Comparator.comparingDouble( a -> ((Skill) a).getXp( player ) ).reversed() );
+
+					for( Skill keySkill : skillsKeys )
 					{
-						aSkill = entry.getValue();
-						tempSkill = entry.getKey();
-						skillName = entry.getKey().name().toLowerCase();
-						level = XP.levelAtXpDecimal( entry.getValue().xp );
+						aSkill = skills.get( keySkill );
+						skillName = keySkill.name().toLowerCase();
+						level = XP.levelAtXpDecimal( aSkill.xp );
 						tempString = DP.dp( level );
-						color = XP.getSkillColor( entry.getKey() );
+						color = XP.getSkillColor( keySkill );
 						if( level >= maxLevel )
 							tempString = "" + maxLevel;
-						drawString( fontRenderer, tempString, 3, 3 + listIndex, color );
+						drawRightAlignedString( fontRenderer, tempString, levelGap + 4, 3 + listIndex, color );
 						drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
-						drawString( fontRenderer, " | " + DP.dprefix( entry.getValue().xp ), levelGap + skillGap + 13, 3 + listIndex, color );
+						drawString( fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
 
 						if( aSkill.bonus != 0 )
 						{

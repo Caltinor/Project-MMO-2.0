@@ -9,6 +9,7 @@
   "pmmo.lostXp": "You lost a total of %1$sxp!",
   "pmmo.maxLevel": "MAX LEVEL",
   "pmmo.levelDisplay": "%1$s %2$s",
+  "pmmo.xpDisplay": "%1$s %2$sxp",
   "pmmo.levelDisplayPercentage": "%1$s%% in %2$s",
   "pmmo.playerLevelDisplay": "%1$s has level %2$s in %3$s",
   "pmmo.invalid_skill": "INVALID SKILL",

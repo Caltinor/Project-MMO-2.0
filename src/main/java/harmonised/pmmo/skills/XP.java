@@ -398,7 +398,7 @@ public class XP
 		return startXp;
 	}
 
-	public static double getLevelDecimal( String skill, PlayerEntity player )
+	public static double getLevelDecimal( Skill skill, PlayerEntity player )
 	{
 		double startLevel = 1;
 
@@ -408,7 +408,7 @@ public class XP
 				startLevel = levelAtXpDecimal( XPOverlayGUI.skills.get( skill ).goalXp );
 		}
 		else
-			startLevel = levelAtXpDecimal( getSkillsTag( player ).getDouble( skill ) );
+			startLevel = levelAtXpDecimal( getSkillsTag( player ).getDouble( skill.name().toLowerCase() ) );
 
 		return startLevel;
 	}
