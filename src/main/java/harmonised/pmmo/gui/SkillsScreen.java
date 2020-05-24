@@ -28,7 +28,7 @@ public class SkillsScreen extends Screen
     private int y;
     private MyScrollPanel myList;
     private Button exitButton;
-    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton, heldXpButton, wornXpButton, breedXpButton, tameXpButton, craftXpButton, breakXpButton, dimensionButton, fishPoolButton;
+    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton, heldXpButton, wornXpButton, breedXpButton, tameXpButton, craftXpButton, breakXpButton, dimensionButton, fishPoolButton, mobButton;
 
     public SkillsScreen(ITextComponent titleIn)
     {
@@ -179,6 +179,13 @@ public class SkillsScreen extends Screen
         });
 
         addButton( fishPoolButton );
+
+        mobButton = new TileButton( x + 24, y + 24 + 36 * 3, 1, 9, I18n.format("Mobs" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.mobInfo" ), "mobInfo", Minecraft.getInstance().player ) );
+        });
+
+        addButton( mobButton );
 
         int column = 1;
         int skillID;

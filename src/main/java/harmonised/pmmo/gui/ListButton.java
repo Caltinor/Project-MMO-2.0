@@ -61,7 +61,7 @@ public class ListButton extends Button
 
         if( type.equals( "biome" ) )
             this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
-        else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) )
+        else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "mobInfo" ) )
             this.title = new TranslationTextComponent( ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
         else if( type.equals( "dimension" ) )
         {

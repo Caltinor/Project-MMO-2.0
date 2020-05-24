@@ -85,109 +85,109 @@ public class ScrollScreen extends Screen
         });
 
         Map<String, Map<String, Object>> reqMap = XP.getFullReqMap( type );
-        
+
         tempList = new ArrayList<>();
         listButtons = new ArrayList<>();
 
-        if( type.equals( "biome" ) )
+        switch( type )
         {
-            Map<String, Map<String, Object>> bonusMap = JsonConfig.data.get( "biomeXpBonus" );
-            Map<String, Map<String, Object>> scaleMap = JsonConfig.data.get( "biomeMobMultiplier" );
-            List<String> biomesToAdd = new ArrayList<>();
+            case "biome":
+                Map<String, Map<String, Object>> bonusMap = JsonConfig.data.get( "biomeXpBonus" );
+                Map<String, Map<String, Object>> scaleMap = JsonConfig.data.get( "biomeMobMultiplier" );
+                List<String> biomesToAdd = new ArrayList<>();
 
-            if( reqMap != null )
-            {
-                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                if( reqMap != null )
                 {
-                    if( !biomesToAdd.contains( entry.getKey() ) )
-                        biomesToAdd.add( entry.getKey() );
-                }
-            }
-
-            if( bonusMap != null )
-            {
-                for( Map.Entry<String, Map<String, Object>> entry : bonusMap.entrySet() )
-                {
-                    if( !biomesToAdd.contains( entry.getKey() ) )
-                        biomesToAdd.add( entry.getKey() );
-                }
-            }
-
-            if( scaleMap != null )
-            {
-                for( Map.Entry<String, Map<String, Object>> entry : scaleMap.entrySet() )
-                {
-                    if( !biomesToAdd.contains( entry.getKey() ) )
-                        biomesToAdd.add( entry.getKey() );
-                }
-            }
-
-            biomesToAdd.sort( Comparator.comparingInt( b -> getReqCount( b, "biome" ) ) );
-
-            for( String regKey : biomesToAdd )
-            {
-                if ( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ) != null )
-                {
-                    tempList.add( new ListButton( 0, 0, 1, 9, regKey, type, "", button ->
+                    for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                     {
-                        System.out.println( "clicc" );
-                    }));
+                        if( !biomesToAdd.contains( entry.getKey() ) )
+                            biomesToAdd.add( entry.getKey() );
+                    }
                 }
-            }
-        }
-        else if( type.equals( "dimension" ) )
-        {
-            if( reqMap.containsKey( "all_dimensions" ) )
-            {
-                tempList.add( new ListButton( 0, 0, 1, 9, "all_dimensions", type, "", button ->
-                {
-                    System.out.println( "clicc" );
-                }));
-            }
 
-            if( reqMap.containsKey( "minecraft:overworld" ) )
-            {
-                tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:overworld", type, "", button ->
+                if( bonusMap != null )
                 {
-                    System.out.println( "clicc" );
-                }));
-            }
-
-            if( reqMap.containsKey( "minecraft:the_nether" ) )
-            {
-                tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:the_nether", type, "", button ->
-                {
-                    System.out.println( "clicc" );
-                }));
-            }
-
-            if( reqMap.containsKey( "minecraft:the_end" ) )
-            {
-                tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:the_end", type, "", button ->
-                {
-                    System.out.println( "clicc" );
-                }));
-            }
-
-            for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
-            {
-                if( !entry.getKey().equals( "all_dimensions" ) )
-                {
-                    if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
+                    for( Map.Entry<String, Map<String, Object>> entry : bonusMap.entrySet() )
                     {
-                        tempList.add( new ListButton( 0, 0, 1, 9, entry.getKey(), type, "", button ->
+                        if( !biomesToAdd.contains( entry.getKey() ) )
+                            biomesToAdd.add( entry.getKey() );
+                    }
+                }
+
+                if( scaleMap != null )
+                {
+                    for( Map.Entry<String, Map<String, Object>> entry : scaleMap.entrySet() )
+                    {
+                        if( !biomesToAdd.contains( entry.getKey() ) )
+                            biomesToAdd.add( entry.getKey() );
+                    }
+                }
+
+                biomesToAdd.sort( Comparator.comparingInt( b -> getReqCount( b, "biome" ) ) );
+
+                for( String regKey : biomesToAdd )
+                {
+                    if ( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ) != null )
+                    {
+                        tempList.add( new ListButton( 0, 0, 1, 9, regKey, type, "", button ->
                         {
                             System.out.println( "clicc" );
                         }));
                     }
                 }
-            }
-        }
-        else
-        {
-            for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
-            {
-                if( type.equals( "breedXp" ) || type.equals( "tameXp" ) )
+                break;
+
+            case "dimension":
+
+                if( reqMap.containsKey( "all_dimensions" ) )
+                {
+                    tempList.add( new ListButton( 0, 0, 1, 9, "all_dimensions", type, "", button ->
+                    {
+                        System.out.println( "clicc" );
+                    }));
+                }
+
+                if( reqMap.containsKey( "minecraft:overworld" ) )
+                {
+                    tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:overworld", type, "", button ->
+                    {
+                        System.out.println( "clicc" );
+                    }));
+                }
+
+                if( reqMap.containsKey( "minecraft:the_nether" ) )
+                {
+                    tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:the_nether", type, "", button ->
+                    {
+                        System.out.println( "clicc" );
+                    }));
+                }
+
+                if( reqMap.containsKey( "minecraft:the_end" ) )
+                {
+                    tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:the_end", type, "", button ->
+                    {
+                        System.out.println( "clicc" );
+                    }));
+                }
+
+                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                {
+                    if( !entry.getKey().equals( "all_dimensions" ) )
+                    {
+                        if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
+                        {
+                            tempList.add( new ListButton( 0, 0, 1, 9, entry.getKey(), type, "", button ->
+                            {
+                                System.out.println( "clicc" );
+                            }));
+                        }
+                    }
+                }
+                break;
+
+            case "mobInfo":
+                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
@@ -197,14 +197,34 @@ public class ScrollScreen extends Screen
                         }));
                     }
                 }
-                else if( XP.getItem( entry.getKey() ) != Items.AIR )
+                break;
+
+            case "breedXp":
+            case "tameXp":
+                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button ->
+                    if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
-                        System.out.println( "clicc" );
-                    }));
+                        tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button ->
+                        {
+                            System.out.println( "clicc" );
+                        }));
+                    }
                 }
-            }
+                break;
+
+            default:
+                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                {
+                    if( XP.getItem( entry.getKey() ) != Items.AIR )
+                    {
+                        tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button ->
+                        {
+                            System.out.println( "clicc" );
+                        }));
+                    }
+                }
+                break;
         }
 
         for( String keyWord : keyWords )
@@ -341,6 +361,7 @@ public class ScrollScreen extends Screen
                 case "tameXp":
                 case "craftXp":
                 case "breakXp":
+                case "mobInfo":
                     button.text.add( "" );
                     addXpToButton( button, reqMap.get( button.regKey ) );
                     break;
@@ -594,12 +615,11 @@ public class ScrollScreen extends Screen
 
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                if( type.equals( "biome" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) )
+                if( type.equals( "biome" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) || type.equals( "mobInfo" ) )
                     renderTooltip( button.title, mouseX, mouseY );
                 else if( button.itemStack != null )
                     renderTooltip( button.itemStack, mouseX, mouseY );
             }
-
 
             accumulativeHeight += button.getHeight();
         }
