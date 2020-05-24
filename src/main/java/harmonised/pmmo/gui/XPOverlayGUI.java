@@ -29,7 +29,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static int tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
 	private static ArrayList<Skill> skillsKeys;
 	private static double xp, goalXp, cooldown;
-	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0;
+	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0, minXpGrow = 0.2;
 	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0, maxVeinCharge = 64D;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
@@ -197,8 +197,8 @@ public class XPOverlayGUI extends AbstractGui
 					startLevel = Math.floor( aSkill.pos );
 
 					growAmount = ( aSkill.goalPos - aSkill.pos ) * 50;
-					if( growAmount < 0.2 )
-						growAmount = 0.2;
+					if( growAmount < minXpGrow )
+						growAmount = minXpGrow;
 
 					if( aSkill.pos < aSkill.goalPos )
 					{
@@ -449,72 +449,37 @@ public class XPOverlayGUI extends AbstractGui
 				maxXp = XP.xpAtLevel( maxLevel );
 
 			if( prefsTag.contains( "xpDropsAttachedToBar" ) )
-			{
-				if( prefsTag.getDouble( "xpDropsAttachedToBar" ) == 0 )
-					xpDropsAttachedToBar = false;
-				else
-					xpDropsAttachedToBar = true;
-			}
+				xpDropsAttachedToBar = prefsTag.getDouble("xpDropsAttachedToBar") != 0;
 			else
 				xpDropsAttachedToBar = Config.forgeConfig.xpDropsAttachedToBar.get();
 
 			if( prefsTag.contains( "xpBarAlwaysOn" ) )
-			{
-				if( prefsTag.getDouble( "xpBarAlwaysOn" ) == 0 )
-					xpBarAlwaysOn = false;
-				else
-					xpBarAlwaysOn = true;
-			}
+				xpBarAlwaysOn = prefsTag.getDouble("xpBarAlwaysOn") != 0;
 			else
 				xpBarAlwaysOn = Config.forgeConfig.xpBarAlwaysOn.get();
 
 			if( prefsTag.contains( "xpLeftDisplayAlwaysOn" ) )
-			{
-				if( prefsTag.getDouble( "xpLeftDisplayAlwaysOn" ) == 0 )
-					xpLeftDisplayAlwaysOn = false;
-				else
-					xpLeftDisplayAlwaysOn = true;
-			}
+				xpLeftDisplayAlwaysOn = prefsTag.getDouble("xpLeftDisplayAlwaysOn") != 0;
 			else
 				xpLeftDisplayAlwaysOn = Config.forgeConfig.xpLeftDisplayAlwaysOn.get();
 
 			if( prefsTag.contains( "showXpDrops" ) )
-			{
-				if( prefsTag.getDouble( "showXpDrops" ) == 0 )
-					showXpDrops = false;
-				else
-					showXpDrops = true;
-			}
+				showXpDrops = prefsTag.getDouble("showXpDrops") != 0;
 			else
 				showXpDrops = Config.forgeConfig.showXpDrops.get();
 
 			if( prefsTag.contains( "stackXpDrops" ) )
-			{
-				if( prefsTag.getDouble( "stackXpDrops" ) == 0 )
-					stackXpDrops = false;
-				else
-					stackXpDrops = true;
-			}
+				stackXpDrops = prefsTag.getDouble("stackXpDrops") != 0;
 			else
 				stackXpDrops = Config.forgeConfig.stackXpDrops.get();
 
 			if( prefsTag.contains( "lvlUpScreenshot" ) )
-			{
-				if( prefsTag.getDouble( "lvlUpScreenshot" ) == 0 )
-					lvlUpScreenshot = false;
-				else
-					lvlUpScreenshot = true;
-			}
+				lvlUpScreenshot = prefsTag.getDouble("lvlUpScreenshot") != 0;
 			else
 				lvlUpScreenshot = Config.forgeConfig.lvlUpScreenshot.get();
 
 			if( prefsTag.contains( "lvlUpScreenshotShowSkills" ) )
-			{
-				if( prefsTag.getDouble( "lvlUpScreenshotShowSkills" ) == 0 )
-					lvlUpScreenshotShowSkills = false;
-				else
-					lvlUpScreenshotShowSkills = true;
-			}
+				lvlUpScreenshotShowSkills = prefsTag.getDouble("lvlUpScreenshotShowSkills") != 0;
 			else
 				lvlUpScreenshotShowSkills = Config.forgeConfig.lvlUpScreenshotShowSkills.get();
 
@@ -549,6 +514,7 @@ public class XPOverlayGUI extends AbstractGui
 
 			biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
 			maxVeinCharge = Config.getConfig( "maxVeinCharge" );
+			minXpGrow = Config.getConfig( "minXpGrow" );
 		}
 	}
 

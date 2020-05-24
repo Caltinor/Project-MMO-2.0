@@ -46,7 +46,7 @@ public class PmmoCommand
     public static String[] suggestSkill = new String[18];
     public static String[] levelOrXp = new String[2];
     public static String[] suggestPref = new String[7];
-    public static String[] suggestGui = new String[17];
+    public static String[] suggestGui = new String[18];
     public static String[] suggestSearchRegistry = new String[5];
 
     public static void register( CommandDispatcher<CommandSource> dispatcher )
@@ -93,13 +93,14 @@ public class PmmoCommand
         suggestGui[7] = "xpDropOpacityPerTime";
         suggestGui[8] = "xpDropMaxOpacity";
         suggestGui[9] = "xpDropDecayAge";
-        suggestGui[10] = "showXpDrops";
-        suggestGui[11] = "stackXpDrops";
-        suggestGui[12] = "xpDropsAttachedToBar";
-        suggestGui[13] = "xpBarAlwaysOn";
-        suggestGui[14] = "xpLeftDisplayAlwaysOn";
-        suggestGui[15] = "lvlUpScreenshot";
-        suggestGui[16] = "lvlUpScreenshotShowSkills";
+        suggestGui[10] = "minXpGrow";
+        suggestGui[11] = "showXpDrops";
+        suggestGui[12] = "stackXpDrops";
+        suggestGui[13] = "xpDropsAttachedToBar";
+        suggestGui[14] = "xpBarAlwaysOn";
+        suggestGui[15] = "xpLeftDisplayAlwaysOn";
+        suggestGui[16] = "lvlUpScreenshot";
+        suggestGui[17] = "lvlUpScreenshotShowSkills";
 
         suggestSearchRegistry[0] = "item";
         suggestSearchRegistry[1] = "biome";

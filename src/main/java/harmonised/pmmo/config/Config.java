@@ -147,6 +147,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> xpDropOpacityPerTime;
         public ConfigHelper.ConfigValueListener<Double> xpDropMaxOpacity;
         public ConfigHelper.ConfigValueListener<Double> xpDropDecayAge;
+        public ConfigHelper.ConfigValueListener<Double> minXpGrow;
         public ConfigHelper.ConfigValueListener<Boolean> showXpDrops;
         public ConfigHelper.ConfigValueListener<Boolean> stackXpDrops;
         public ConfigHelper.ConfigValueListener<Boolean> xpDropsAttachedToBar;
@@ -670,6 +671,11 @@ public class Config
                         .comment( "At what age do xp drops start to decay?" )
                         .translation( "pmmo.xpDropDecayAge" )
                         .defineInRange( "xpDropDecayAge", 350D, 0, 5000) );
+
+                this.minXpGrow = subscriber.subscribe(builder
+                        .comment( "What is the minimum amount xp grows a set amount of time? (Default 0.2, increase to speed up growth)" )
+                        .translation( "pmmo.minXpGrow" )
+                        .defineInRange( "minXpGrow", 0.2D, 0.01D, 100D ) );
 
                 this.xpDropsAttachedToBar = subscriber.subscribe(builder
                         .comment( "Should xp drops sync up with the bar being open or closed? HIGHLY RECOMMEND TO KEEP FALSE IF YOU ARE MOVING XP DROP POSITIONS" )
