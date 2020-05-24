@@ -706,16 +706,16 @@ public class JsonConfig
                 double enchantLevelReq = (double) inMap.get( "enchantLevelReq" );
                 double xp = (double) inMap.get( "xp" );
 
-                if( endWeight < 1 )
-                    outMap.put( "endWeight", 1D );
+                if( endWeight < 0 )
+                    outMap.put( "endWeight", 0D );
                 else
                     outMap.put( "endWeight", endWeight );
 
                 if( startWeight > endWeight )
                     startWeight = endWeight;
 
-                if( startWeight < 1 )
-                    outMap.put( "startWeight", 1D );
+                if( startWeight < 0 )
+                    outMap.put( "startWeight", 0D );
                 else
                     outMap.put( "startWeight", startWeight );
 

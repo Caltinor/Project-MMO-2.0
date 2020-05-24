@@ -81,7 +81,7 @@ public class ScrollScreen extends Screen
 
         exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 7, I18n.format("" ), (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
+            Minecraft.getInstance().displayGuiScreen( new SkillsScreen( getTransComp( "pmmo.skills" ) ) );
         });
 
         Map<String, Map<String, Object>> reqMap = XP.getFullReqMap( type );
@@ -245,9 +245,9 @@ public class ScrollScreen extends Screen
                     {
                         for (Map.Entry<String, Object> entry : biomeBonusMap.entrySet()) {
                             if ( (double) entry.getValue() > 0 )
-                                skillText.add(" " + new TranslationTextComponent("pmmo.levelDisplay", new TranslationTextComponent("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").setStyle(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getFormattedText());
+                                skillText.add(" " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").setStyle(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getFormattedText());
                             if ( (double) entry.getValue() < 0 )
-                                skillText.add(" " + new TranslationTextComponent("pmmo.levelDisplay", new TranslationTextComponent("pmmo." + entry.getKey()), entry.getValue() + "%").setStyle(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getFormattedText());
+                                skillText.add(" " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), entry.getValue() + "%").setStyle(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getFormattedText());
                         }
                     }
 
@@ -265,15 +265,15 @@ public class ScrollScreen extends Screen
                             switch ( entry.getKey() )
                             {
                                 case "damageBonus":
-                                    scaleText.add( " " + new TranslationTextComponent("pmmo.enemyScaleDamage", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
+                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleDamage", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
                                     break;
 
                                 case "hpBonus":
-                                    scaleText.add( " " + new TranslationTextComponent("pmmo.enemyScaleHp", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
+                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleHp", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
                                     break;
 
                                 case "speedBonus":
-                                    scaleText.add( " " + new TranslationTextComponent("pmmo.enemyScaleSpeed", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
+                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleSpeed", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
                                     break;
                             }
                         }
@@ -287,7 +287,7 @@ public class ScrollScreen extends Screen
                             {
                                 Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                                 if ( effect != null )
-                                    effectText.add( " " + new TranslationTextComponent( effect.getDisplayName().getFormattedText() + " " + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
+                                    effectText.add( " " + getTransComp( effect.getDisplayName().getFormattedText() + " " + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
                             }
                         }
                     }
@@ -296,6 +296,7 @@ public class ScrollScreen extends Screen
                 case "ore":
                 case "log":
                 case "plant":
+                    button.text.add( "" );
                     Map<String, Object> breakMap = JsonConfig.data.get( "breakReq" ).get( button.regKey );
                     Map<String, Double> infoMap = XP.getReqMap( button.regKey, type );
                     List<String> infoText = new ArrayList<>();
@@ -304,14 +305,14 @@ public class ScrollScreen extends Screen
                     double extraDropped = XP.getExtraChance( player, button.regKey, type );
 
                     if ( extraDroppedPerLevel <= 0 )
-                        infoText.add( new TranslationTextComponent( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
+                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
                     else
-                        infoText.add( new TranslationTextComponent( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel) ).setStyle( XP.textStyle.get("green") ).getFormattedText() );
+                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel) ).setStyle( XP.textStyle.get("green") ).getFormattedText() );
 
                     if ( extraDropped <= 0 )
-                        infoText.add( new TranslationTextComponent( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                        infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                     else
-                        infoText.add( new TranslationTextComponent( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                        infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
 
                     if ( infoText.size() > 0 )
                         button.text.addAll( infoText );
@@ -319,18 +320,20 @@ public class ScrollScreen extends Screen
                     if ( breakMap != null )
                     {
                         if ( XP.checkReq( player, button.regKey, "break" ) )
-                            button.text.add( new TranslationTextComponent( "pmmo.break" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                            button.text.add( getTransComp( "pmmo.break" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                         else
-                            button.text.add( new TranslationTextComponent( "pmmo.break" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                            button.text.add( getTransComp( "pmmo.break" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                         addLevelsToButton( button, breakMap, player, false );
                     }
                     break;
 
                 case "worn":
+                    button.text.add( "" );
                     addPercentageToButton( button, reqMap.get( button.regKey ), XP.checkReq( player, button.regKey, "wear" ) );
-
+                    break;
 
                 case "held":
+                    button.text.add( "" );
                     addPercentageToButton( button, reqMap.get( button.regKey ), true );
                     break;
 
@@ -338,6 +341,7 @@ public class ScrollScreen extends Screen
                 case "tameXp":
                 case "craftXp":
                 case "breakXp":
+                    button.text.add( "" );
                     addXpToButton( button, reqMap.get( button.regKey ) );
                     break;
 
@@ -345,10 +349,10 @@ public class ScrollScreen extends Screen
                     if ( reqMap != null )
                     {
                         button.text.add( "" );
-                        button.text.add( new TranslationTextComponent( "pmmo.veinBlacklist" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                        button.text.add( getTransComp( "pmmo.veinBlacklist" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                         for ( Map.Entry<String, Object> entry : reqMap.get( button.regKey ).entrySet() )
                         {
-                            button.text.add( " " + new TranslationTextComponent( XP.getItem( entry.getKey() ).getTranslationKey() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                            button.text.add( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                         }
                     }
                     break;
@@ -356,27 +360,54 @@ public class ScrollScreen extends Screen
                 case "fishPool":
                     Map<String, Object> fishPoolMap = reqMap.get(button.regKey);
 
+                    int level = Skill.FISHING.getLevel( player );
+                    double weight = XP.getWeight( level, fishPoolMap );
+                    button.unlocked = weight > 0;
+                    Style color = button.unlocked ? XP.textStyle.get( "green" ) : XP.textStyle.get( "red" );
+
                     minCount = (int) (double) fishPoolMap.get( "minCount" );
                     maxCount = (int) (double) fishPoolMap.get( "maxCount" );
 
-                    button.text.add( " " + new TranslationTextComponent( "pmmo.xp", DP.dpSoft( (double) fishPoolMap.get("xp") ) ).getFormattedText() );
-                    if ( button.itemStack.isEnchantable() )
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).getFormattedText() );
+                    button.text.add( "" );
+                    button.text.add( " " + getTransComp( "pmmo.currentWeight", weight ).setStyle( color ).getFormattedText() );
 
                     if ( minCount == maxCount )
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.caughtAmount", minCount ).getFormattedText() );
+                        button.text.add( " " + getTransComp( "pmmo.caughtAmount", minCount ).setStyle( color ).getFormattedText() );
                     else
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.caughtAmountRange", minCount, maxCount ).getFormattedText() );
+                        button.text.add( " " + getTransComp( "pmmo.caughtAmountRange", minCount, maxCount ).setStyle( color ).getFormattedText() );
+
+                    button.text.add( " " + getTransComp( "pmmo.xp", DP.dpSoft( (double) fishPoolMap.get("xp") ) ).setStyle( color ).getFormattedText() );
+
+                    if ( button.itemStack.isEnchantable() )
+                    {
+                        if( (double) fishPoolMap.get( "enchantLevelReq" ) <= level && button.unlocked )
+                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                        else
+                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                    }
+
                     button.text.add( "" );
-                    button.text.add( " " + new TranslationTextComponent( "pmmo.startWeight", DP.dpSoft( (double) fishPoolMap.get("startWeight") ) ).getFormattedText() );
-                    button.text.add( " " + new TranslationTextComponent( "pmmo.startLevel", DP.dpSoft( (double) fishPoolMap.get("startLevel") ) ).getFormattedText() );
-                    button.text.add( " " + new TranslationTextComponent( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getFormattedText() );
-                    button.text.add( " " + new TranslationTextComponent( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getFormattedText() );
+//                    button.text.add( getTransComp( "pmmo.info" ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.startWeight", DP.dpSoft( (double) fishPoolMap.get("startWeight") ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( (double) fishPoolMap.get("startLevel") ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getFormattedText() );
                     break;
 
                 case "wear":
-                    addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
+                case "tool":
+                case "weapon":
+                case "use":
+                case "break":
+                case "place":
+                    button.text.add( "" );
 
+                    if( XP.checkReq( player, button.regKey, type ) )
+                        button.text.add( getTransComp( "pmmo." + type ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                    else
+                        button.text.add( getTransComp( "pmmo." + type ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+
+                    addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
                     break;
 
                 default:
@@ -387,7 +418,7 @@ public class ScrollScreen extends Screen
             {
                 button.text.add( "" );
                 skillText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
-                button.text.add( new TranslationTextComponent( "pmmo.xpModifiers" ).getFormattedText() );
+                button.text.add( getTransComp( "pmmo.xpModifiers" ).getFormattedText() );
                 button.text.addAll( skillText );
             }
 
@@ -397,7 +428,7 @@ public class ScrollScreen extends Screen
                     button.text.add( "" );
 
                 scaleText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
-                button.text.add( new TranslationTextComponent( "pmmo.enemyScaling" ).getFormattedText() );
+                button.text.add( getTransComp( "pmmo.enemyScaling" ).getFormattedText() );
                 button.text.addAll( scaleText );
             }
 
@@ -407,7 +438,7 @@ public class ScrollScreen extends Screen
                     button.text.add( "" );
 
                 effectText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
-                button.text.add( new TranslationTextComponent( "pmmo.biomeEffects" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                button.text.add( getTransComp( "pmmo.biomeEffects" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                 button.text.addAll( effectText );
             }
 
@@ -465,9 +496,9 @@ public class ScrollScreen extends Screen
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
             if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (double) inEntry.getValue() )
-                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
             else
-                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
         levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
@@ -481,7 +512,7 @@ public class ScrollScreen extends Screen
 
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
-            levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.xpDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+            levelsToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
         levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
@@ -500,12 +531,12 @@ public class ScrollScreen extends Screen
             if( metReq )
             {
                 if( value > 0 )
-                    levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                    levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                 else if( value < 0 )
-                    levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                    levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
             }
             else
-                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
         }
 
         levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
@@ -620,6 +651,11 @@ public class ScrollScreen extends Screen
     {
         scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+    
+    public static TranslationTextComponent getTransComp( String translationKey, Object... args )
+    {
+        return new TranslationTextComponent( translationKey, args );
     }
 
 }
