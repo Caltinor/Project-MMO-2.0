@@ -2,6 +2,7 @@ package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -18,7 +19,7 @@ import java.util.List;
 public class SkillsScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = new ResourceLocation( Reference.MOD_ID, "textures/gui/screenboxy.png" );
+    private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png");
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 256;
@@ -27,7 +28,7 @@ public class SkillsScreen extends Screen
     private int y;
     private MyScrollPanel myList;
     private Button exitButton;
-    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton, heldXpButton, wornXpButton, breedXpButton, tameXpButton, craftXpButton, breakXpButton;
+    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton, heldXpButton, wornXpButton, breedXpButton, tameXpButton, craftXpButton, breakXpButton, dimensionButton, fishPoolButton;
 
     public SkillsScreen(ITextComponent titleIn)
     {
@@ -164,6 +165,20 @@ public class SkillsScreen extends Screen
         });
 
         addButton( breakXpButton );
+
+        dimensionButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 2, 1, 9, I18n.format("Dimension" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.dimension" ), "dimension", Minecraft.getInstance().player ) );
+        });
+
+        addButton( dimensionButton );
+
+        fishPoolButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36 * 2, 1, 9, I18n.format("FishPool" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.fishPool" ), "fishPool", Minecraft.getInstance().player ) );
+        });
+
+        addButton( fishPoolButton );
 
         int column = 1;
         int skillID;

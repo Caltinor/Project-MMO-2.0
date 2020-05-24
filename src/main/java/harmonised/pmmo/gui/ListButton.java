@@ -31,14 +31,16 @@ import java.util.List;
 
 public class ListButton extends Button
 {
-    private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/items.png" );
+    private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
 //    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
+    public boolean unlocked = true;
     public ItemStack itemStack;
     public String regKey, title, buttonText;
     public List<String> text = new ArrayList<>();
     public List<String> tooltipText = new ArrayList<>();
+    Entity testEntity = null;
     LivingEntity entity = null;
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
@@ -51,13 +53,25 @@ public class ListButton extends Button
         this.elementOne = elementOne * 32;
         this.elementTwo = elementTwo * 32;
 
-        if( ForgeRegistries.ENTITIES.containsKey( new ResourceLocation( regKey ) ) )
-            entity = (LivingEntity) ForgeRegistries.ENTITIES.getValue( new ResourceLocation( regKey ) ).create( Minecraft.getInstance().world );
+        if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
+            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().world );
+
+        if( testEntity instanceof LivingEntity )
+            entity = (LivingEntity) testEntity;
 
         if( type.equals( "biome" ) )
-            this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( new ResourceLocation( regKey ) ).getTranslationKey() ).getString();
+            this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
         else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) )
-            this.title = new TranslationTextComponent( ForgeRegistries.ENTITIES.getValue( new ResourceLocation( regKey ) ).getTranslationKey() ).getString();
+            this.title = new TranslationTextComponent( ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
+        else if( type.equals( "dimension" ) )
+        {
+            if( regKey.equals( "all_dimensions" ) )
+                this.title = new TranslationTextComponent( "pmmo.allDimensions" ).getFormattedText();
+            else if( regKey.equals( "minecraft:overworld" ) || regKey.equals( "minecraft:the_nether" ) || regKey.equals( "minecraft:the_end" ) )
+                this.title = new TranslationTextComponent( regKey ).getFormattedText();
+            else if( ForgeRegistries.MOD_DIMENSIONS.containsKey( XP.getResLoc( regKey ) ) )
+                this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getFormattedText();
+        }
         else
             this.title = new TranslationTextComponent( itemStack.getTranslationKey() ).getString();
 

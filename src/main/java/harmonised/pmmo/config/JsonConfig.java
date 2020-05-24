@@ -37,9 +37,9 @@ public class JsonConfig
     private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
     private static final Logger LOGGER = LogManager.getLogger();
     private static JsonConfig defaultReq, customReq;
-    private static Effect invalidEffect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
-    private static Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
-//    private static Entity invalidEntity = ForgeRegistries.ENTITIES.getValue( new ResourceLocation( "inexistantmodthatwillneverexist:potatochan" ) );
+    private static Effect invalidEffect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
+    private static Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
+//    private static Entity invalidEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
 
     public static void init()
     {
@@ -379,7 +379,7 @@ public class JsonConfig
 
         for( String key : theMap.keySet() )
         {
-            Effect effect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( key ) );
+            Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( key ) );
             if( !effect.equals( invalidEffect ) )
                 anyValidEffects = true;
             else
@@ -429,7 +429,7 @@ public class JsonConfig
                 {
                     if( entry.getValue() instanceof Double )
                     {
-                        Potion potion = ForgeRegistries.POTION_TYPES.getValue( new ResourceLocation( entry.getKey() ) );
+                        Potion potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
 
                         if( !potion.equals( invalidEffect ) && (double) entry.getValue() >= 0 && (double) entry.getValue() < 255 )
                             outReq.get( key ).put( entry.getKey(), entry.getValue() );
@@ -764,7 +764,7 @@ public class JsonConfig
     {
         req.forEach( (key, value) ->
         {
-            Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( new ResourceLocation( key ) );
+            Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( key ) );
             if( !enchant.equals( invalidEnchant ) )
             {
                 Map<String, Object> inMap = value.requirements;

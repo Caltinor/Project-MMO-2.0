@@ -76,7 +76,7 @@ public class FishedHandler
                     currentWeight += weight;
                 }
 
-                Item item = ForgeRegistries.ITEMS.getValue( new ResourceLocation( matchKey ) );
+                Item item = XP.getItem( matchKey );
 
                 minCount = (int) Math.floor( (double) match.get( "minCount" ) );
                 maxCount = (int) Math.floor( (double) match.get( "maxCount" ) );
@@ -98,7 +98,7 @@ public class FishedHandler
 
                     for( Map.Entry<String, Map<String, Object>> entry : enchantMap.entrySet() )
                     {
-                        Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( new ResourceLocation( entry.getKey() ) );
+                        Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( entry.getKey() ) );
                         Map<String, Object> enchantInfo = entry.getValue();
 
                         if( enchant.canApply( itemStack ) )

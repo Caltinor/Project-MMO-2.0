@@ -128,7 +128,7 @@ public class DamageHandler
 
                     if( target.getEntityString() != null )
                     {
-                        slayerGap = XP.getSkillReqGap( player, new ResourceLocation( target.getEntityString() ), "slayer" );
+                        slayerGap = XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), "slayer" );
                         if( slayerGap > 0 )
                         {
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );

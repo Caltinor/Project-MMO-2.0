@@ -2,6 +2,7 @@ package harmonised.pmmo.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -11,7 +12,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class TileButton extends Button
 {
-    private final ResourceLocation bar = new ResourceLocation( Reference.MOD_ID, "textures/gui/items.png" );
+    private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
     public int elementOne;
     public int offsetOne;
     public int elementTwo;

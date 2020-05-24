@@ -420,7 +420,7 @@ public class XP
 
 	public static double getExtraChance( PlayerEntity player, String resLoc, String type )
 	{
-		return getExtraChance( player, new ResourceLocation( resLoc ), type );
+		return getExtraChance( player, XP.getResLoc( resLoc ), type );
 	}
 
 	public static double getExtraChance( PlayerEntity player, ResourceLocation resLoc, String type )
@@ -586,7 +586,31 @@ public class XP
 
 	public static boolean checkReq( PlayerEntity player, String res, String type )
 	{
-		return checkReq( player, new ResourceLocation( res ), type );
+		return checkReq( player, XP.getResLoc( res ), type );
+	}
+
+	public static ResourceLocation getResLoc( String regKey )
+	{
+		try
+		{
+			return new ResourceLocation( regKey );
+		}
+		catch( Exception e )
+		{
+			return null;
+		}
+	}
+
+	public static ResourceLocation getResLoc( String firstPart, String secondPart )
+	{
+		try
+		{
+			return new ResourceLocation( firstPart, secondPart );
+		}
+		catch( Exception e )
+		{
+			return null;
+		}
 	}
 
 	public static Map<String, Map<String, Object>> getFullReqMap( String type )
@@ -647,6 +671,12 @@ public class XP
 			case "breakxp":
 				return JsonConfig.data.get( "xpValueBreaking" );
 
+			case "dimension":
+				return JsonConfig.data.get( "veinBlacklist" );
+
+			case "fishpool":
+				return JsonConfig.data.get( "fishPool" );
+
 			default:
 				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP" );
 				return null;
@@ -674,6 +704,9 @@ public class XP
 
 	public static boolean checkReq( PlayerEntity player, ResourceLocation res, String type )
 	{
+		if( res == null )
+			return true;
+
 		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
 			return true;
 
@@ -723,13 +756,15 @@ public class XP
 		return highestReq;
 	}
 
-	public static Item getItem( String resLoc )
+	public static Item getItem( String regKey )
 	{
+		ResourceLocation resLoc = getResLoc( regKey );
+
 		if( resLoc != null )
 		{
-			Item item = ForgeRegistries.ITEMS.getValue( new ResourceLocation( resLoc ) );
-			Item item2 = ForgeRegistries.BLOCKS.getValue( new ResourceLocation( resLoc ) ).asItem();
-			if( !item.equals( Items.AIR ) )
+			Item item = ForgeRegistries.ITEMS.getValue( resLoc );
+			Item item2 = ForgeRegistries.BLOCKS.getValue( resLoc ).asItem();
+			if( item != null && !item.equals( Items.AIR ) )
 				return item;
 			else if( !item2.equals( Items.AIR ) )
 				return item2;
@@ -1263,7 +1298,7 @@ public class XP
 			{
 				for( Map.Entry<String, Object> entry : biomeEffect.entrySet() )
 				{
-					Effect effect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( entry.getKey() ) );
+					Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
 					if( effect != null )
 						player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( (double) entry.getValue() ), false, true ) );

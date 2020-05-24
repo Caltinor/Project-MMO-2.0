@@ -27,22 +27,15 @@ public class MyScrollPanel extends ScrollPanel
 {
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     PlayerEntity player;
-    String type;
+    String type, regKey;
     private final int boxWidth = 256;
     private final int boxHeight = 256;
     private final ArrayList<ListButton> buttons;
 
     private final Minecraft client;
-    private final int width;
-    private final int height;
-    private final int top;
-    private final int bottom;
-    private final int right;
-    private final int left;
-    private final int border = 4;
-
-    private final int barWidth = 6;
-    private final int barLeft;
+    private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
+    private int level, startLevel, endLevel;
+    private double startWeight, endWeight;
 
     public MyScrollPanel( Minecraft client, int width, int height, int top, int left, String type, PlayerEntity player, ArrayList<ListButton> buttons )
     {
@@ -93,23 +86,7 @@ public class MyScrollPanel extends ScrollPanel
                 button.x = this.right - button.getWidth() - 8;
                 button.y = relativeY + accumulativeHeight;
 
-                if( ( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) || type.equals( "breakXp" ) ) )
-                {
-                    if( XP.checkReq( player, button.regKey, "break" ) )
-                        fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
-                    else
-                        fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
-                }
-                else if( type.equals( "held" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "craftXp" ) )
-                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
-                else if( type.equals( "worn" ) )
-                {
-                    if( XP.checkReq( player, button.regKey, "wear" ) )
-                        fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
-                    else
-                        fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
-                }
-                else if( XP.checkReq( player, button.regKey, type ) )
+                if( button.unlocked )
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
                 else
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);

@@ -1,4 +1,7 @@
 {
+  "minecraft:overworld": "Overworld",
+  "minecraft:the_nether": "Nether",
+  "minecraft:the_end": "End",
   "category.pmmo": "Project MMO",
   "key.pmmo.showGui": "Show GUI",
   "key.pmmo.toggleTooltip": "Toggle Tooltip",
@@ -139,5 +142,17 @@
   "pmmo.enemyScaleSpeed": "Enemies Speed Scale: %1$s%%",
   "pmmo.biomeEffects": "Biome Effects",
   "pmmo.skills": "Skills",
-  "pmmo.veinCharge": "Your vein ability is at %1$s%% charge!"
+  "pmmo.veinCharge": "Your vein ability is at %1$s%% charge!",
+  "pmmo.veinBlacklist": "Blacklisted blocks from Veining",
+  "pmmo.allDimensions": "All Dimensions",
+  "pmmo.startWeight": "Start Weight: %1$s",
+  "pmmo.startLevel": "Start Level: %1$s",
+  "pmmo.endWeight": "End Weight: %1$s",
+  "pmmo.endLevel": "End Level: %1$s",
+  "pmmo.xp": "Xp: %1$s",
+  "pmmo.minCount": "Minimum Caught: %1$s",
+  "pmmo.maxCount": "Maximum Caught: %1$s",
+  "pmmo.enchantLevelReq": "Level Required for Enchanted: %1$s",
+  "pmmo.caughtAmount": "Caught: %1$s",
+  "pmmo.caughtAmountRange": "Caught: %1$s-%2$s"
 }

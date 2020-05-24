@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -17,7 +18,7 @@ import java.util.List;
 public class MainScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = new ResourceLocation( Reference.MOD_ID, "textures/gui/screenboxy.png" );
+    private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 256;

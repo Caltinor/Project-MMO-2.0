@@ -46,6 +46,8 @@ public class DP
 
 	public static String dpSoft( Double input )
 	{
+		if( input % 1 == 0 )
+			return String.format( Locale.ENGLISH , "%.0f", input );
 		if( (input * 10) % 1 == 0 )
 			return String.format( Locale.ENGLISH , "%.1f", input );
 		else

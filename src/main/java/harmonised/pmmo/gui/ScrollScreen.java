@@ -34,12 +34,12 @@ import java.util.*;
 public class ScrollScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = new ResourceLocation( Reference.MOD_ID, "textures/gui/screenboxy.png" );
+    private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    MainWindow sr = Minecraft.getInstance().getMainWindow();
     private int boxWidth = 256;
     private int boxHeight = 256;
-    private int x, y, scrollX, scrollY, buttonX, buttonY;
+    private int x, y, scrollX, scrollY, buttonX, buttonY, accumulativeHeight, buttonsSize, buttonsLoaded, futureHeight, minCount, maxCount;
     private Button exitButton;
     private MyScrollPanel scrollPanel;
     private PlayerEntity player;
@@ -85,7 +85,7 @@ public class ScrollScreen extends Screen
         });
 
         Map<String, Map<String, Object>> reqMap = XP.getFullReqMap( type );
-
+        
         tempList = new ArrayList<>();
         listButtons = new ArrayList<>();
 
@@ -126,12 +126,60 @@ public class ScrollScreen extends Screen
 
             for( String regKey : biomesToAdd )
             {
-                if ( ForgeRegistries.BIOMES.getValue( new ResourceLocation( regKey ) ) != null )
+                if ( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ) != null )
                 {
                     tempList.add( new ListButton( 0, 0, 1, 9, regKey, type, "", button ->
                     {
                         System.out.println( "clicc" );
                     }));
+                }
+            }
+        }
+        else if( type.equals( "dimension" ) )
+        {
+            if( reqMap.containsKey( "all_dimensions" ) )
+            {
+                tempList.add( new ListButton( 0, 0, 1, 9, "all_dimensions", type, "", button ->
+                {
+                    System.out.println( "clicc" );
+                }));
+            }
+
+            if( reqMap.containsKey( "minecraft:overworld" ) )
+            {
+                tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:overworld", type, "", button ->
+                {
+                    System.out.println( "clicc" );
+                }));
+            }
+
+            if( reqMap.containsKey( "minecraft:the_nether" ) )
+            {
+                tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:the_nether", type, "", button ->
+                {
+                    System.out.println( "clicc" );
+                }));
+            }
+
+            if( reqMap.containsKey( "minecraft:the_end" ) )
+            {
+                tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:the_end", type, "", button ->
+                {
+                    System.out.println( "clicc" );
+                }));
+            }
+
+            for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+            {
+                if( !entry.getKey().equals( "all_dimensions" ) )
+                {
+                    if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
+                    {
+                        tempList.add( new ListButton( 0, 0, 1, 9, entry.getKey(), type, "", button ->
+                        {
+                            System.out.println( "clicc" );
+                        }));
+                    }
                 }
             }
         }
@@ -141,7 +189,7 @@ public class ScrollScreen extends Screen
             {
                 if( type.equals( "breedXp" ) || type.equals( "tameXp" ) )
                 {
-                    if( ForgeRegistries.ENTITIES.containsKey( new ResourceLocation( entry.getKey() ) ) )
+                    if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
                         tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button ->
                         {
@@ -183,113 +231,157 @@ public class ScrollScreen extends Screen
             List<String> scaleText = new ArrayList<>();
             List<String> effectText = new ArrayList<>();
 
-            if( type.equals( "biome" ) )
+            switch (type)
             {
-                if( reqMap.containsKey( button.regKey ) )
+                case "biome":
+                    if ( reqMap.containsKey( button.regKey ) )
+                        addLevelsToButton(button, reqMap.get(button.regKey), player, false);
+
+                    Map<String, Object> biomeBonusMap = JsonConfig.data.get("biomeXpBonus").get(button.regKey);
+                    Map<String, Object> biomeMobMultiplierMap = JsonConfig.data.get("biomeMobMultiplier").get(button.regKey);
+                    Map<String, Object> biomeEffectsMap = JsonConfig.data.get("biomeEffect").get(button.regKey);
+
+                    if ( biomeBonusMap != null )
+                    {
+                        for (Map.Entry<String, Object> entry : biomeBonusMap.entrySet()) {
+                            if ( (double) entry.getValue() > 0 )
+                                skillText.add(" " + new TranslationTextComponent("pmmo.levelDisplay", new TranslationTextComponent("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").setStyle(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getFormattedText());
+                            if ( (double) entry.getValue() < 0 )
+                                skillText.add(" " + new TranslationTextComponent("pmmo.levelDisplay", new TranslationTextComponent("pmmo." + entry.getKey()), entry.getValue() + "%").setStyle(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getFormattedText());
+                        }
+                    }
+
+                    if ( biomeMobMultiplierMap != null )
+                    {
+                        for ( Map.Entry<String, Object> entry : biomeMobMultiplierMap.entrySet() )
+                        {
+                            Style styleColor = new Style();
+
+                            if ( (double) entry.getValue() > 1 )
+                                styleColor = XP.textStyle.get("red");
+                            else if ( (double) entry.getValue() < 1 )
+                                styleColor = XP.textStyle.get("green");
+
+                            switch ( entry.getKey() )
+                            {
+                                case "damageBonus":
+                                    scaleText.add( " " + new TranslationTextComponent("pmmo.enemyScaleDamage", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
+                                    break;
+
+                                case "hpBonus":
+                                    scaleText.add( " " + new TranslationTextComponent("pmmo.enemyScaleHp", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
+                                    break;
+
+                                case "speedBonus":
+                                    scaleText.add( " " + new TranslationTextComponent("pmmo.enemyScaleSpeed", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getFormattedText() );
+                                    break;
+                            }
+                        }
+                    }
+
+                    if ( biomeEffectsMap != null )
+                    {
+                        for ( Map.Entry<String, Object> entry : biomeEffectsMap.entrySet() )
+                        {
+                            if ( ForgeRegistries.POTIONS.containsKey( XP.getResLoc( entry.getKey() ) ) )
+                            {
+                                Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
+                                if ( effect != null )
+                                    effectText.add( " " + new TranslationTextComponent( effect.getDisplayName().getFormattedText() + " " + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
+                            }
+                        }
+                    }
+                    break;
+
+                case "ore":
+                case "log":
+                case "plant":
+                    Map<String, Object> breakMap = JsonConfig.data.get( "breakReq" ).get( button.regKey );
+                    Map<String, Double> infoMap = XP.getReqMap( button.regKey, type );
+                    List<String> infoText = new ArrayList<>();
+                    String transKey = "pmmo." + type + "ExtraDrop";
+                    double extraDroppedPerLevel = infoMap.get( "extraChance" );
+                    double extraDropped = XP.getExtraChance( player, button.regKey, type );
+
+                    if ( extraDroppedPerLevel <= 0 )
+                        infoText.add( new TranslationTextComponent( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
+                    else
+                        infoText.add( new TranslationTextComponent( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel) ).setStyle( XP.textStyle.get("green") ).getFormattedText() );
+
+                    if ( extraDropped <= 0 )
+                        infoText.add( new TranslationTextComponent( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                    else
+                        infoText.add( new TranslationTextComponent( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+
+                    if ( infoText.size() > 0 )
+                        button.text.addAll( infoText );
+
+                    if ( breakMap != null )
+                    {
+                        if ( XP.checkReq( player, button.regKey, "break" ) )
+                            button.text.add( new TranslationTextComponent( "pmmo.break" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                        else
+                            button.text.add( new TranslationTextComponent( "pmmo.break" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                        addLevelsToButton( button, breakMap, player, false );
+                    }
+                    break;
+
+                case "worn":
+                    addPercentageToButton( button, reqMap.get( button.regKey ), XP.checkReq( player, button.regKey, "wear" ) );
+
+
+                case "held":
+                    addPercentageToButton( button, reqMap.get( button.regKey ), true );
+                    break;
+
+                case "breedXp":
+                case "tameXp":
+                case "craftXp":
+                case "breakXp":
+                    addXpToButton( button, reqMap.get( button.regKey ) );
+                    break;
+
+                case "dimension":
+                    if ( reqMap != null )
+                    {
+                        button.text.add( "" );
+                        button.text.add( new TranslationTextComponent( "pmmo.veinBlacklist" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                        for ( Map.Entry<String, Object> entry : reqMap.get( button.regKey ).entrySet() )
+                        {
+                            button.text.add( " " + new TranslationTextComponent( XP.getItem( entry.getKey() ).getTranslationKey() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                        }
+                    }
+                    break;
+
+                case "fishPool":
+                    Map<String, Object> fishPoolMap = reqMap.get(button.regKey);
+
+                    minCount = (int) (double) fishPoolMap.get( "minCount" );
+                    maxCount = (int) (double) fishPoolMap.get( "maxCount" );
+
+                    button.text.add( " " + new TranslationTextComponent( "pmmo.xp", DP.dpSoft( (double) fishPoolMap.get("xp") ) ).getFormattedText() );
+                    if ( button.itemStack.isEnchantable() )
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).getFormattedText() );
+
+                    if ( minCount == maxCount )
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.caughtAmount", minCount ).getFormattedText() );
+                    else
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.caughtAmountRange", minCount, maxCount ).getFormattedText() );
+                    button.text.add( "" );
+                    button.text.add( " " + new TranslationTextComponent( "pmmo.startWeight", DP.dpSoft( (double) fishPoolMap.get("startWeight") ) ).getFormattedText() );
+                    button.text.add( " " + new TranslationTextComponent( "pmmo.startLevel", DP.dpSoft( (double) fishPoolMap.get("startLevel") ) ).getFormattedText() );
+                    button.text.add( " " + new TranslationTextComponent( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getFormattedText() );
+                    button.text.add( " " + new TranslationTextComponent( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getFormattedText() );
+                    break;
+
+                case "wear":
                     addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
 
-                Map<String, Object> biomeBonusMap = JsonConfig.data.get( "biomeXpBonus" ).get( button.regKey );
-                Map<String, Object> biomeMobMultiplierMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( button.regKey );
-                Map<String, Object> biomeEffectsMap = JsonConfig.data.get( "biomeEffect" ).get( button.regKey );
+                    break;
 
-                if( biomeBonusMap != null )
-                {
-                    for( Map.Entry<String, Object> entry : biomeBonusMap.entrySet() )
-                    {
-                        if( (double) entry.getValue() > 0 )
-                            skillText.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "+" + entry.getValue() + "%" ).setStyle( XP.skillStyle.get( Skill.getSkill( entry.getKey() ) ) ).getFormattedText() );
-                        if( (double) entry.getValue() < 0 )
-                            skillText.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), entry.getValue() + "%" ).setStyle( XP.skillStyle.get( Skill.getSkill( entry.getKey() ) ) ).getFormattedText() );
-                    }
-                }
-
-                if( biomeMobMultiplierMap != null )
-                {
-                    for( Map.Entry<String, Object> entry : biomeMobMultiplierMap.entrySet() )
-                    {
-                        Style styleColor = new Style();
-
-                        if( (double) entry.getValue() > 1 )
-                            styleColor = XP.textStyle.get( "red" );
-                        else if( (double) entry.getValue() < 1 )
-                            styleColor = XP.textStyle.get( "green" );
-
-                        switch( entry.getKey() )
-                        {
-                            case "damageBonus":
-                                scaleText.add( " " + new TranslationTextComponent( "pmmo.enemyScaleDamage", DP.dp( (double) entry.getValue() * 100 ) ).setStyle( styleColor ).getFormattedText() );
-                                break;
-
-                            case "hpBonus":
-                                scaleText.add( " " + new TranslationTextComponent( "pmmo.enemyScaleHp", DP.dp( (double) entry.getValue() * 100 ) ).setStyle( styleColor ).getFormattedText() );
-                                break;
-
-                            case "speedBonus":
-                                scaleText.add( " " + new TranslationTextComponent( "pmmo.enemyScaleSpeed", DP.dp( (double) entry.getValue() * 100 ) ).setStyle( styleColor ).getFormattedText() );
-                                break;
-                        }
-                    }
-                }
-
-                if( biomeEffectsMap != null )
-                {
-                    for( Map.Entry<String, Object> entry : biomeEffectsMap.entrySet() )
-                    {
-                        if( ForgeRegistries.POTIONS.containsKey( new ResourceLocation( entry.getKey() ) ) )
-                        {
-                            Effect effect = ForgeRegistries.POTIONS.getValue( new ResourceLocation( entry.getKey() ) );
-                            if( effect != null )
-                                effectText.add( " " + new TranslationTextComponent( effect.getDisplayName().getFormattedText() + " " + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
-                        }
-                    }
-                }
+                default:
+                    break;
             }
-            else if( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) )
-            {
-                Map<String, Object> breakMap = JsonConfig.data.get( "breakReq" ).get( button.regKey );
-                Map<String, Double> infoMap = XP.getReqMap( button.regKey, type );
-                List<String> infoText = new ArrayList<>();
-                String transKey = "pmmo." + type + "ExtraDrop";
-                double extraDroppedPerLevel = infoMap.get( "extraChance" );
-                double extraDropped = XP.getExtraChance( player, button.regKey, type );
-
-                if( extraDroppedPerLevel <= 0 )
-                    infoText.add( new TranslationTextComponent( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
-                else
-                    infoText.add( new TranslationTextComponent( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
-
-                if( extraDropped <= 0 )
-                    infoText.add( new TranslationTextComponent( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
-                else
-                    infoText.add( new TranslationTextComponent( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
-
-                if( infoText.size() > 0 )
-                    button.text.addAll( infoText );
-
-                if( breakMap != null )
-                {
-                    if( XP.checkReq( player, button.regKey, "break" ) )
-                        button.text.add( new TranslationTextComponent( "pmmo.break" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
-                    else
-                        button.text.add( new TranslationTextComponent( "pmmo.break" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
-                    addLevelsToButton( button, breakMap, player, false );
-                }
-            }
-            else if( type.equals( "worn" ) )
-            {
-                if( XP.checkReq( player, button.regKey, "wear" ) )
-                    addPercentageToButton( button, reqMap.get( button.regKey ), true );
-                else
-                    addPercentageToButton( button, reqMap.get( button.regKey ), false );
-            }
-            else if( type.equals( "held" ) )
-                addPercentageToButton( button, reqMap.get( button.regKey ), true );
-            else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "craftXp" ) || type.equals( "breakXp" ) )
-            {
-                addXpToButton( button, reqMap.get( button.regKey ) );
-            }
-            else
-                addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
 
             if( skillText.size() > 0 )
             {
@@ -318,6 +410,37 @@ public class ScrollScreen extends Screen
                 button.text.add( new TranslationTextComponent( "pmmo.biomeEffects" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                 button.text.addAll( effectText );
             }
+
+            switch( type )
+            {
+                case "ore":
+                case "log":
+                case "plant":
+                case "breakXp":
+                        button.unlocked = XP.checkReq( player, button.regKey, "break" );
+                    break;
+
+                case "worn":
+                        button.unlocked = XP.checkReq( player, button.regKey, "wear" );
+                    break;
+
+                case "fishPool":
+
+                    break;
+
+                case "wear":
+                case "tool":
+                case "weapon":
+                case "use":
+                case "break":
+                case "place":
+                case "biome":
+                    button.unlocked = XP.checkReq( player, button.regKey, type );
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         //SORT BUTTONS
@@ -341,19 +464,10 @@ public class ScrollScreen extends Screen
 
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
-            String valueText;
-
-            double value = (double) inEntry.getValue();
-
-            if( value % 1 == 0 )
-                valueText = Integer.toString( (int) Math.floor( value ) );
+            if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (double) inEntry.getValue() )
+                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
             else
-                valueText = DP.dp( value );
-
-            if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevel( player ) < value )
-                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), valueText ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
-            else
-                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), valueText ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
         levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
@@ -367,16 +481,7 @@ public class ScrollScreen extends Screen
 
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
-            String valueText;
-
-            double value = (double) inEntry.getValue();
-
-            if( value % 1 == 0 )
-                valueText = Integer.toString( (int) Math.floor( value ) );
-            else
-                valueText = DP.dpSoft( value );
-
-            levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.xpDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), valueText ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+            levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.xpDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
         levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
@@ -443,30 +548,29 @@ public class ScrollScreen extends Screen
 
         scrollPanel.render( mouseX, mouseY, partialTicks );
 
-        int startI = (int) Math.floor( scrollPanel.getScroll() / 36D );
-        if( startI < 0 )
-            startI = 0;
-
         ListButton button;
 
-        for( int i = startI; i < startI + 7; i++ )
+        accumulativeHeight = 0;
+        buttonsSize = listButtons.size();
+        buttonsLoaded = 0;
+
+        for( int i = 0; i < buttonsSize; i++ )
         {
-            if( listButtons.size() - 1 >= i )
+            button = listButtons.get( i );
+
+            buttonX = mouseX - button.x;
+            buttonY = mouseY - button.y;
+
+            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                button = listButtons.get( i );
-                buttonX = mouseX - button.x;
-                buttonY = mouseY - button.y;
-
-//                renderTooltip( mouseX + " " + mouseY, mouseX, mouseY );
-
-                if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
-                {
-                    if( type.equals( "biome" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) )
-                        renderTooltip( button.title, mouseX, mouseY );
-                    else if( button.itemStack != null )
-                        renderTooltip( button.itemStack, mouseX, mouseY );
-                }
+                if( type.equals( "biome" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) )
+                    renderTooltip( button.title, mouseX, mouseY );
+                else if( button.itemStack != null )
+                    renderTooltip( button.itemStack, mouseX, mouseY );
             }
+
+
+            accumulativeHeight += button.getHeight();
         }
 
 //        renderTooltip( mouseX + " " + mouseY, mouseX, mouseY );
