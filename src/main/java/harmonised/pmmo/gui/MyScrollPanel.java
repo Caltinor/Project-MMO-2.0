@@ -93,10 +93,22 @@ public class MyScrollPanel extends ScrollPanel
                 button.x = this.right - button.getWidth() - 8;
                 button.y = relativeY + accumulativeHeight;
 
-                if( XP.checkReq( player, button.regKey, "break" ) && ( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) || type.equals( "break" ) || type.equals( "breakXp" ) ) )
+                if( ( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) || type.equals( "breakXp" ) ) )
+                {
+                    if( XP.checkReq( player, button.regKey, "break" ) )
+                        fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
+                    else
+                        fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
+                }
+                else if( type.equals( "held" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "craftXp" ) )
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
-                else if( type.equals( "held" ) || type.equals( "worn" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "craftXp" ) )
-                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
+                else if( type.equals( "worn" ) )
+                {
+                    if( XP.checkReq( player, button.regKey, "wear" ) )
+                        fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
+                    else
+                        fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
+                }
                 else if( XP.checkReq( player, button.regKey, type ) )
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
                 else

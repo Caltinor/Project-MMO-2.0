@@ -139,7 +139,17 @@ public class ScrollScreen extends Screen
         {
             for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
             {
-                if( XP.getItem( entry.getKey() ) != Items.AIR )
+                if( type.equals( "breedXp" ) || type.equals( "tameXp" ) )
+                {
+                    if( ForgeRegistries.ENTITIES.containsKey( new ResourceLocation( entry.getKey() ) ) )
+                    {
+                        tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button ->
+                        {
+                            System.out.println( "clicc" );
+                        }));
+                    }
+                }
+                else if( XP.getItem( entry.getKey() ) != Items.AIR )
                 {
                     tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button ->
                     {
@@ -175,8 +185,6 @@ public class ScrollScreen extends Screen
 
             if( type.equals( "biome" ) )
             {
-                button.tooltipText.add( button.title );
-
                 if( reqMap.containsKey( button.regKey ) )
                     addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
 
@@ -267,38 +275,56 @@ public class ScrollScreen extends Screen
                     addLevelsToButton( button, breakMap, player, false );
                 }
             }
-            else if( type.equals( "held" ) || type.equals( "worn" ) )
-                addPercentageToButton( button, reqMap.get( button.regKey ), player );
+            else if( type.equals( "worn" ) )
+            {
+                if( XP.checkReq( player, button.regKey, "wear" ) )
+                    addPercentageToButton( button, reqMap.get( button.regKey ), true );
+                else
+                    addPercentageToButton( button, reqMap.get( button.regKey ), false );
+            }
+            else if( type.equals( "held" ) )
+                addPercentageToButton( button, reqMap.get( button.regKey ), true );
             else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "craftXp" ) || type.equals( "breakXp" ) )
+            {
                 addXpToButton( button, reqMap.get( button.regKey ) );
+            }
             else
                 addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
 
             if( skillText.size() > 0 )
             {
-//                skillText.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+                button.text.add( "" );
+                skillText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
                 button.text.add( new TranslationTextComponent( "pmmo.xpModifiers" ).getFormattedText() );
                 button.text.addAll( skillText );
             }
 
             if( scaleText.size() > 0 )
             {
-                scaleText.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+                if( skillText.size() > 0 )
+                    button.text.add( "" );
+
+                scaleText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
                 button.text.add( new TranslationTextComponent( "pmmo.enemyScaling" ).getFormattedText() );
                 button.text.addAll( scaleText );
             }
 
             if( effectText.size() > 0 )
             {
-                effectText.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+                if( skillText.size() > 0 || scaleText.size() > 0 )
+                    button.text.add( "" );
+
+                effectText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
                 button.text.add( new TranslationTextComponent( "pmmo.biomeEffects" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                 button.text.addAll( effectText );
             }
         }
 
-        //SORT
-        if( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) )
+        //SORT BUTTONS
+        if( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) || type.equals( "breakXp" ) )
             listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, "break" ) ) );
+        else if( type.equals( "worn" ) )
+            listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, "wear" ) ) );
         else
             listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, type ) ) );
 
@@ -330,7 +356,7 @@ public class ScrollScreen extends Screen
                 levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), valueText ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
-        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
 
         button.text.addAll( levelsToAdd );
     }
@@ -348,17 +374,17 @@ public class ScrollScreen extends Screen
             if( value % 1 == 0 )
                 valueText = Integer.toString( (int) Math.floor( value ) );
             else
-                valueText = DP.dp( value );
+                valueText = DP.dpSoft( value );
 
             levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.xpDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), valueText ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
-        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
 
         button.text.addAll( levelsToAdd );
     }
 
-    private static void addPercentageToButton( ListButton button, Map<String, Object> map, PlayerEntity player )
+    private static void addPercentageToButton( ListButton button, Map<String, Object> map, boolean metReq )
     {
         List<String> levelsToAdd = new ArrayList<>();
 
@@ -366,18 +392,23 @@ public class ScrollScreen extends Screen
         {
             double value = (double) inEntry.getValue();
 
-            if( value > 0 )
-                levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
-            else if( value < 0 )
+            if( metReq )
+            {
+                if( value > 0 )
+                    levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                else if( value < 0 )
+                    levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+            }
+            else
                 levelsToAdd.add( " " + new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
         }
 
-        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextLevel).reversed() );
+        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
 
         button.text.addAll( levelsToAdd );
     }
 
-    private static int getTextLevel( String comp )
+    private static int getTextInt( String comp )
     {
         String number = comp.replaceAll("\\D+","");
 
@@ -430,10 +461,10 @@ public class ScrollScreen extends Screen
 
                 if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
                 {
-                    if( button.elementTwo == 0 )
+                    if( type.equals( "biome" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) )
+                        renderTooltip( button.title, mouseX, mouseY );
+                    else if( button.itemStack != null )
                         renderTooltip( button.itemStack, mouseX, mouseY );
-                    else if( type.equals( "biome" ) )
-                        renderTooltip( button.tooltipText, mouseX, mouseY );
                 }
             }
         }
