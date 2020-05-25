@@ -106,6 +106,11 @@ public enum Skill
         return XP.getLevel( this, player );
     }
 
+    public double getLevelDecimal( PlayerEntity player )
+    {
+        return XP.getLevelDecimal( this, player );
+    }
+
     public double getXp( PlayerEntity player )
     {
         return XP.getXp( this, player );

@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -35,6 +36,7 @@ public class ListButton extends Button
 //    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
+    public double mobWidth, mobHeight, mobScale;
     public boolean unlocked = true;
     public ItemStack itemStack;
     public String regKey, title, buttonText;
@@ -59,21 +61,35 @@ public class ListButton extends Button
         if( testEntity instanceof LivingEntity )
             entity = (LivingEntity) testEntity;
 
-        if( type.equals( "biome" ) )
-            this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
-        else if( type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "mobInfo" ) )
-            this.title = new TranslationTextComponent( ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
-        else if( type.equals( "dimension" ) )
+        switch( type )
         {
-            if( regKey.equals( "all_dimensions" ) )
-                this.title = new TranslationTextComponent( "pmmo.allDimensions" ).getFormattedText();
-            else if( regKey.equals( "minecraft:overworld" ) || regKey.equals( "minecraft:the_nether" ) || regKey.equals( "minecraft:the_end" ) )
-                this.title = new TranslationTextComponent( regKey ).getFormattedText();
-            else if( ForgeRegistries.MOD_DIMENSIONS.containsKey( XP.getResLoc( regKey ) ) )
-                this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getFormattedText();
+            case "fishEnchantPool":
+                this.title = new TranslationTextComponent( ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( regKey ) ).getDisplayName( 1 ).getString().replace( " I", "" ) ).getString();
+                break;
+
+            case "biome":
+                this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
+                break;
+
+            case "breedXp":
+            case "tameXp":
+            case "killReq":
+                this.title = new TranslationTextComponent( ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
+                break;
+
+            case "dimension":
+                if( regKey.equals( "all_dimensions" ) )
+                    this.title = new TranslationTextComponent( "pmmo.allDimensions" ).getFormattedText();
+                else if( regKey.equals( "minecraft:overworld" ) || regKey.equals( "minecraft:the_nether" ) || regKey.equals( "minecraft:the_end" ) )
+                    this.title = new TranslationTextComponent( regKey ).getFormattedText();
+                else if( ForgeRegistries.MOD_DIMENSIONS.containsKey( XP.getResLoc( regKey ) ) )
+                    this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getFormattedText();
+                break;
+
+            default:
+                this.title = new TranslationTextComponent( itemStack.getTranslationKey() ).getString();
+                break;
         }
-        else
-            this.title = new TranslationTextComponent( itemStack.getTranslationKey() ).getString();
 
         if( elementOne > 23 )
             offsetOne = 192;
@@ -137,7 +153,16 @@ public class ListButton extends Button
             itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
 
         if( entity != null )
-            drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 4, 16, entity );
+        {
+            mobHeight = entity.getSize( Pose.STANDING ).height;
+            mobWidth = entity.getSize( Pose.STANDING ).width;
+            mobScale = 27;
+
+            if( mobHeight > 0 )
+                mobScale /= Math.max(mobHeight, mobWidth);
+
+            drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, entity );
+        }
 
         this.renderBg(minecraft, x, y);
         int j = getFGColor();

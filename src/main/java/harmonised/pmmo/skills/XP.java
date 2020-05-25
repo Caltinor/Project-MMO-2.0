@@ -641,7 +641,7 @@ public class XP
 			case "biome":
 				return JsonConfig.data.get( "biomeReq" );
 
-			case "mobinfo":
+			case "killreq":
 				return JsonConfig.data.get( "killReq" );
 
 			case "ore":
@@ -676,6 +676,9 @@ public class XP
 
 			case "fishpool":
 				return JsonConfig.data.get( "fishPool" );
+
+			case "fishenchantpool":
+				return JsonConfig.data.get( "fishEnchantPool" );
 
 			default:
 				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP" );

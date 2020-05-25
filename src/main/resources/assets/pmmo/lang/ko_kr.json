@@ -80,7 +80,7 @@
 	"pmmo.armor": "방어구",
 	"pmmo.tool": "도구",
 	"pmmo.weapon": "무기",
-	"pmmo.xpValueBreaking": "경험치 값",
+	"pmmo.xpValue": "경험치 값",
 	"pmmo.xpValueCrafting": "Craft Xp Value",
 	"pmmo.placeDown": "놓을 수 있는 블록",
 	"pmmo.plant": "Plant",

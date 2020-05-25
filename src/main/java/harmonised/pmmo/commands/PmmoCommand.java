@@ -43,7 +43,7 @@ import java.util.Map;
 public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    public static String[] suggestSkill = new String[18];
+    public static String[] suggestSkill = new String[20];
     public static String[] levelOrXp = new String[2];
     public static String[] suggestPref = new String[7];
     public static String[] suggestGui = new String[18];
@@ -68,7 +68,9 @@ public class PmmoCommand
         suggestSkill[14] = "Crafting";
         suggestSkill[15] = "Magic";
         suggestSkill[16] = "Slayer";
-        suggestSkill[17] = "Fletching";
+        suggestSkill[17] = "Hunter";
+        suggestSkill[18] = "Fletching";
+        suggestSkill[19] = "Taming";
 
 //        suggestClear[0] = "iagreetothetermsandconditions";
 

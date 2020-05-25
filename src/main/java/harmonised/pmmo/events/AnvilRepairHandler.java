@@ -141,7 +141,7 @@ public class AnvilRepairHandler
                     newEnchants.replace( enchant, maxEnchantLevel );
                 else
                     newEnchants.remove( enchant );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getDisplayName( 1 ).getString().replace( " I", "" ), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
             }
             else if( enchant.getMaxLevel() + maxPlayerBypass < startLevel && !creative )
             {
@@ -149,7 +149,7 @@ public class AnvilRepairHandler
                     newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
                 else
                     newEnchants.remove( enchant );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantmentDegradedWarning", enchant.getRegistryName().toString(), "" + (enchant.getMaxLevel() + maxPlayerBypass), false, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantmentDegradedWarning", enchant.getDisplayName( 1 ).getString().replace( " I", "" ), "" + (enchant.getMaxLevel() + maxPlayerBypass), false, 2 ), (ServerPlayerEntity) player );
             }
             else if( lEnchants.get( enchant ) != null && rEnchants.get( enchant ) != null )
             {
@@ -157,7 +157,7 @@ public class AnvilRepairHandler
                 {
                     if( startLevel + 1 > maxEnchantLevel && !creative )
                     {
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getRegistryName().toString(), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getDisplayName( 1 ).getString().replace( " I", "" ), "" + maxEnchantLevel, false, 2 ), (ServerPlayerEntity) player );
                     }
                     else if( startLevel + 1 > enchant.getMaxLevel() + maxPlayerBypass && !creative )
                     {
@@ -170,7 +170,7 @@ public class AnvilRepairHandler
                             if( Math.ceil( Math.random() * 100 ) <= bypassChance ) //success
                             {
                                 newEnchants.replace( enchant, startLevel + 1 );
-                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
+                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getDisplayName( 1 ).getString().replace( " I", "" ), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
                             }
                             else if( Math.ceil( Math.random() * 100 ) <= failedBypassPenaltyChance ) //fucked up twice
                             {
@@ -178,18 +178,18 @@ public class AnvilRepairHandler
                                     newEnchants.replace( enchant, startLevel - 1 );
                                 else
                                     newEnchants.remove( enchant );
-                                NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.enchantUpgradeAndSaveFail", enchant.getRegistryName().toString(), "" + bypassChance, "" + failedBypassPenaltyChance, false, 2 ), (ServerPlayerEntity) player );
+                                NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.enchantUpgradeAndSaveFail", enchant.getDisplayName( 1 ).getString().replace( " I", "" ), "" + bypassChance, "" + failedBypassPenaltyChance, false, 2 ), (ServerPlayerEntity) player );
                             }
                             else	//only fucked up once
                             {
                                 newEnchants.replace( enchant, startLevel );
-                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeFail", enchant.getRegistryName().toString(), "" + bypassChance, false, 3 ), (ServerPlayerEntity) player );
+                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeFail", enchant.getDisplayName( 1 ).getString().replace( " I", "" ), "" + bypassChance, false, 3 ), (ServerPlayerEntity) player );
                             }
                         }
                         else
                         {
                             newEnchants.replace( enchant, startLevel + 1 );
-                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getRegistryName().toString(), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
+                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getDisplayName( 1 ).getString().replace( " I", "" ), "" + (startLevel + 1), false, 1 ), (ServerPlayerEntity) player );
                         }
                     }
                 }

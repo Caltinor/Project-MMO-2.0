@@ -165,11 +165,12 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> farmingBonusSpeed;
 
         //Mining
-        public ConfigHelper.ConfigValueListener<Double> blockHardnessLimit;
+        public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForBreaking;
 
         //Building
         public ConfigHelper.ConfigValueListener<Integer> levelsPerHardnessReach;
         public ConfigHelper.ConfigValueListener<Double> maxReach;
+        public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
 
         //Excavation
 
@@ -752,10 +753,10 @@ public class Config
 
             builder.push( "Mining" );
             {
-                this.blockHardnessLimit = subscriber.subscribe(builder
-                        .comment( "Hardest considered block (1 hardness = 1 build/remove xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
-                        .translation( "pmmo.blockHardnessLimit" )
-                        .defineInRange( "blockHardnessLimit", 250D, 0, 1000000) );
+                this.blockHardnessLimitForBreaking = subscriber.subscribe(builder
+                        .comment( "Hardest considered block (1 hardness = 1 remove xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
+                        .translation( "pmmo.blockHardnessLimitForBreaking" )
+                        .defineInRange( "blockHardnessLimitForBreaking", 250D, 0, 1000000) );
 
                 builder.pop();
             }
@@ -771,6 +772,11 @@ public class Config
                         .comment( "What is the maximum reach a player can have" )
                         .translation( "pmmo.maxReach" )
                         .defineInRange( "maxReach", 20D, 0, 1000) );
+
+                this.blockHardnessLimitForPlacing = subscriber.subscribe(builder
+                        .comment( "Hardest considered block (1 hardness = 1 build xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
+                        .translation( "pmmo.blockHardnessLimitForPlacing" )
+                        .defineInRange( "blockHardnessLimitForPlacing", 250D, 0, 1000000) );
 
                 builder.pop();
             }

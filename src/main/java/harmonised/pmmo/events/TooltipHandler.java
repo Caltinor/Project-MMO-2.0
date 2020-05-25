@@ -61,7 +61,7 @@ public class TooltipHandler
 
                 if( xpValueBreaking != null && xpValueBreaking.size() > 0 )      //XP VALUE
                 {
-                    tooltip.add( new TranslationTextComponent( "pmmo.xpValueBreaking" ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.xpValue" ) );
 
                     for( String key : xpValueBreaking.keySet() )
                     {

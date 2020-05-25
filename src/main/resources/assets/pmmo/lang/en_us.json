@@ -93,7 +93,7 @@
   "pmmo.armor": "Armor",
   "pmmo.tool": "Tool",
   "pmmo.weapon": "Weapon",
-  "pmmo.xpValueBreaking": "Xp Value",
+  "pmmo.xpValue": "Xp Value",
   "pmmo.xpValueCrafting": "Craft Xp Value",
   "pmmo.placeDown": "Place Down",
   "pmmo.plant": "Plant",
@@ -154,5 +154,13 @@
   "pmmo.maxCount": "Maximum Caught: %1$s",
   "pmmo.enchantLevelReq": "Level Required for Enchanted: %1$s",
   "pmmo.caughtAmount": "Caught: %1$s",
-  "pmmo.caughtAmountRange": "Caught: %1$s-%2$s"
+  "pmmo.caughtAmountRange": "Caught: %1$s-%2$s",
+  "pmmo.rareDrops": "Rare Drops",
+  "pmmo.dropChance": "1 in %1$s chance",
+  "pmmo.toHarm": "To Harm",
+  "pmmo.currentWeight": "Current Weight: %1$s",
+  "pmmo.levelsPerTier": "Levels per Tier: %1$s",
+  "pmmo.chancePerLevel": "Chance per Level: %1$s%%",
+  "pmmo.currentChance": "Current Chance: %1$s%%",
+  "pmmo.maxEnchantLevel": "Max Enchantment Level: %1$s"
 }

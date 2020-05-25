@@ -123,14 +123,14 @@ public class BlockBrokenHandler
             return;
 
         Material material = event.getState().getMaterial();
-        double blockHardnessLimit = Config.forgeConfig.blockHardnessLimit.get();
+        double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
         boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
         ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( material ).name().toLowerCase();
 //			String regKey = block.getRegistryName().toString();
         double hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
-        if( hardness > blockHardnessLimit )
-            hardness = blockHardnessLimit;
+        if( hardness > blockHardnessLimitForBreaking )
+            hardness = blockHardnessLimitForBreaking;
 
         boolean isEffective = false;
 

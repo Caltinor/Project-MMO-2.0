@@ -45,10 +45,10 @@ public class BlockPlacedHandler
 
                 if( XP.checkReq( player, block.getRegistryName(), "place" ) )
                 {
-                    double blockHardnessLimit = Config.forgeConfig.blockHardnessLimit.get();
+                    double blockHardnessLimitForPlacing = Config.forgeConfig.blockHardnessLimitForPlacing.get();
                     double blockHardness = block.getBlockHardness(block.getDefaultState(), event.getWorld(), event.getPos());
-                    if ( blockHardness > blockHardnessLimit )
-                        blockHardness = blockHardnessLimit;
+                    if ( blockHardness > blockHardnessLimitForPlacing )
+                        blockHardness = blockHardnessLimitForPlacing;
                     String playerName = player.getName().toString();
                     BlockPos blockPos = event.getPos();
                     UUID playerUUID = player.getUniqueID();

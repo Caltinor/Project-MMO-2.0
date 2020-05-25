@@ -2,6 +2,7 @@ package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -17,6 +18,8 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.IRendersAsItem;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
@@ -33,6 +36,8 @@ import java.util.*;
 
 public class ScrollScreen extends Screen
 {
+    private static double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
+    private static double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
 
@@ -89,9 +94,10 @@ public class ScrollScreen extends Screen
         tempList = new ArrayList<>();
         listButtons = new ArrayList<>();
 
-        switch( type )
+        switch( type )      //How it's made: Buttons!
         {
             case "biome":
+            {
                 Map<String, Map<String, Object>> bonusMap = JsonConfig.data.get( "biomeXpBonus" );
                 Map<String, Map<String, Object>> scaleMap = JsonConfig.data.get( "biomeMobMultiplier" );
                 List<String> biomesToAdd = new ArrayList<>();
@@ -135,10 +141,11 @@ public class ScrollScreen extends Screen
                         }));
                     }
                 }
+            }
                 break;
 
             case "dimension":
-
+            {
                 if( reqMap.containsKey( "all_dimensions" ) )
                 {
                     tempList.add( new ListButton( 0, 0, 1, 9, "all_dimensions", type, "", button ->
@@ -184,9 +191,58 @@ public class ScrollScreen extends Screen
                         }
                     }
                 }
+            }
                 break;
 
-            case "mobInfo":
+            case "killreq":
+            {
+                Map<String, Map<String, Object>> killXpMap = JsonConfig.data.get( "killXp" );
+                Map<String, Map<String, Object>> rareDropMap = JsonConfig.data.get( "mobRareDrop" );
+                ArrayList<String> mobsToAdd = new ArrayList<>();
+
+                if( reqMap != null )
+                {
+                    for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                    {
+                        if( !mobsToAdd.contains( entry.getKey() ) )
+                            mobsToAdd.add( entry.getKey() );
+                    }
+                }
+
+                if( killXpMap != null )
+                {
+                    for( Map.Entry<String, Map<String, Object>> entry : killXpMap.entrySet() )
+                    {
+                        if( !mobsToAdd.contains( entry.getKey() ) )
+                            mobsToAdd.add( entry.getKey() );
+                    }
+                }
+
+                if( rareDropMap != null )
+                {
+                    for( Map.Entry<String, Map<String, Object>> entry : rareDropMap.entrySet() )
+                    {
+                        if( !mobsToAdd.contains( entry.getKey() ) )
+                            mobsToAdd.add( entry.getKey() );
+                    }
+                }
+
+                for( String regKey : mobsToAdd )
+                {
+                    if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
+                    {
+                        tempList.add( new ListButton( 0, 0, 1, 0, regKey, type, "", button ->
+                        {
+                            System.out.println( "clicc" );
+                        }));
+                    }
+                }
+            }
+                break;
+
+            case "breedXp":
+            case "tameXp":
+            {
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
@@ -197,13 +253,13 @@ public class ScrollScreen extends Screen
                         }));
                     }
                 }
+            }
                 break;
 
-            case "breedXp":
-            case "tameXp":
+            case "fishEnchantPool":
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
-                    if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
+                    if( ForgeRegistries.ENCHANTMENTS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
                         tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button ->
                         {
@@ -214,6 +270,7 @@ public class ScrollScreen extends Screen
                 break;
 
             default:
+            {
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
                     if( XP.getItem( entry.getKey() ) != Items.AIR )
@@ -224,6 +281,7 @@ public class ScrollScreen extends Screen
                         }));
                     }
                 }
+            }
                 break;
         }
 
@@ -251,9 +309,10 @@ public class ScrollScreen extends Screen
             List<String> scaleText = new ArrayList<>();
             List<String> effectText = new ArrayList<>();
 
-            switch (type)
+            switch (type)   //Individual Button Handling
             {
                 case "biome":
+                {
                     if ( reqMap.containsKey( button.regKey ) )
                         addLevelsToButton(button, reqMap.get(button.regKey), player, false);
 
@@ -311,11 +370,13 @@ public class ScrollScreen extends Screen
                             }
                         }
                     }
+                }
                     break;
 
                 case "ore":
                 case "log":
                 case "plant":
+                {
                     button.text.add( "" );
                     Map<String, Object> breakMap = JsonConfig.data.get( "breakReq" ).get( button.regKey );
                     Map<String, Double> infoMap = XP.getReqMap( button.regKey, type );
@@ -345,28 +406,107 @@ public class ScrollScreen extends Screen
                             button.text.add( getTransComp( "pmmo.break" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                         addLevelsToButton( button, breakMap, player, false );
                     }
+                }
                     break;
 
                 case "worn":
+                {
                     button.text.add( "" );
                     addPercentageToButton( button, reqMap.get( button.regKey ), XP.checkReq( player, button.regKey, "wear" ) );
+                }
                     break;
 
                 case "held":
+                {
                     button.text.add( "" );
                     addPercentageToButton( button, reqMap.get( button.regKey ), true );
+                }
                     break;
 
                 case "breedXp":
                 case "tameXp":
                 case "craftXp":
                 case "breakXp":
-                case "mobInfo":
+                {
                     button.text.add( "" );
                     addXpToButton( button, reqMap.get( button.regKey ) );
+                }
+                    break;
+
+                case "fishEnchantPool":
+                {
+                    Map<String, Object> enchantMap = reqMap.get( button.regKey );
+
+                    double fishLevel = Skill.FISHING.getLevelDecimal( player );
+
+                    double levelReq = (double) enchantMap.get( "levelReq" );
+                    double chancePerLevel = (double) enchantMap.get( "chancePerLevel" );
+                    double maxChance = (double) enchantMap.get( "maxChance" );
+                    double maxLevel = (double) enchantMap.get( "maxLevel" );
+                    double levelsPerTier = (double) enchantMap.get( "levelPerLevel" );
+
+                    double curChance = (fishLevel - levelReq) * chancePerLevel;
+                    if( curChance > maxChance )
+                        curChance = maxChance;
+                    if( curChance < 0 )
+                        curChance = 0;
+
+                    button.unlocked = levelReq <= fishLevel;
+                    Style color = XP.textStyle.get( button.unlocked ? "green" : "red" );
+
+                    button.text.add( "" );
+
+                    button.text.add( " " + getTransComp( "pmmo.currentChance", DP.dpSoft( curChance ) ).setStyle( color ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( levelReq ) ).setStyle( color ).getFormattedText() );
+
+                    button.text.add( "" );
+                    button.text.add( " " + getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).getFormattedText() );
+                    if( maxLevel > 1 )
+                        button.text.add( " " + getTransComp( "pmmo.levelsPerTier", DP.dpSoft( levelsPerTier ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", DP.dpSoft( maxLevel ) ).getFormattedText() );
+                }
+                    break;
+
+                case "killreq":
+                {
+                    Map<String, Object> killXpMap = JsonConfig.data.get("killXp").get( button.regKey );
+                    Map<String, Object> rareDropMap = JsonConfig.data.get("mobRareDrop").get(button.regKey);
+                    button.unlocked = XP.checkReq( player, button.regKey, type );
+                    Style color = XP.textStyle.get( button.unlocked ? "green" : "red" );
+
+                    if ( reqMap.containsKey( button.regKey ) )
+                    {
+                        button.text.add( "" );
+                        button.text.add( getTransComp( "pmmo.toHarm" ).setStyle( color ).getFormattedText() );
+                        addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
+                    }
+
+                    button.text.add( "" );
+                    button.text.add( getTransComp( "pmmo.xpValue" ).setStyle( color ).getFormattedText() );
+                    if ( killXpMap != null )
+                        addXpToButton( button, killXpMap );
+                    else
+                    {
+                        if( button.entity instanceof AnimalEntity )
+                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).setStyle( color ).getFormattedText() );
+                        else if( button.entity instanceof MobEntity)
+                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).setStyle( color ).getFormattedText() );
+                    }
+
+                    if ( rareDropMap != null )
+                    {
+                        button.text.add( "" );
+                        button.text.add( getTransComp( "pmmo.rareDrops" ).setStyle( color ).getFormattedText() );
+                        for( Map.Entry<String, Object> entry : rareDropMap.entrySet() )
+                        {
+                            button.text.add( " " + new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getFormattedText() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( (double) entry.getValue() ) ).getFormattedText() ).setStyle( color ).getFormattedText() );
+                        }
+                    }
+                }
                     break;
 
                 case "dimension":
+                {
                     if ( reqMap != null )
                     {
                         button.text.add( "" );
@@ -376,15 +516,17 @@ public class ScrollScreen extends Screen
                             button.text.add( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                         }
                     }
+                }
                     break;
 
                 case "fishPool":
+                {
                     Map<String, Object> fishPoolMap = reqMap.get(button.regKey);
 
-                    int level = Skill.FISHING.getLevel( player );
-                    double weight = XP.getWeight( level, fishPoolMap );
+                    double level = Skill.FISHING.getLevelDecimal( player );
+                    double weight = XP.getWeight( (int) level, fishPoolMap );
                     button.unlocked = weight > 0;
-                    Style color = button.unlocked ? XP.textStyle.get( "green" ) : XP.textStyle.get( "red" );
+                    Style color = XP.textStyle.get( button.unlocked ? "green" : "red" );
 
                     minCount = (int) (double) fishPoolMap.get( "minCount" );
                     maxCount = (int) (double) fishPoolMap.get( "maxCount" );
@@ -413,6 +555,7 @@ public class ScrollScreen extends Screen
                     button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( (double) fishPoolMap.get("startLevel") ) ).getFormattedText() );
                     button.text.add( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getFormattedText() );
                     button.text.add( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getFormattedText() );
+                }
                     break;
 
                 case "wear":
@@ -421,6 +564,7 @@ public class ScrollScreen extends Screen
                 case "use":
                 case "break":
                 case "place":
+                {
                     button.text.add( "" );
 
                     if( XP.checkReq( player, button.regKey, type ) )
@@ -429,6 +573,7 @@ public class ScrollScreen extends Screen
                         button.text.add( getTransComp( "pmmo." + type ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
 
                     addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
+                }
                     break;
 
                 default:
@@ -463,7 +608,7 @@ public class ScrollScreen extends Screen
                 button.text.addAll( effectText );
             }
 
-            switch( type )
+            switch( type )  //Unlock/Lock buttons if necessary
             {
                 case "ore":
                 case "log":
@@ -516,7 +661,7 @@ public class ScrollScreen extends Screen
 
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
-            if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevel( player ) < (double) inEntry.getValue() )
+            if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevelDecimal( player ) < (double) inEntry.getValue() )
                 levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
             else
                 levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
@@ -529,16 +674,16 @@ public class ScrollScreen extends Screen
 
     private static void addXpToButton( ListButton button, Map<String, Object> map )
     {
-        List<String> levelsToAdd = new ArrayList<>();
+        List<String> xpToAdd = new ArrayList<>();
 
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
-            levelsToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+            xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
-        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+        xpToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
 
-        button.text.addAll( levelsToAdd );
+        button.text.addAll( xpToAdd );
     }
 
     private static void addPercentageToButton( ListButton button, Map<String, Object> map, boolean metReq )
@@ -615,7 +760,7 @@ public class ScrollScreen extends Screen
 
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                if( type.equals( "biome" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) || type.equals( "mobInfo" ) )
+                if( type.equals( "biome" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) || type.equals( "killreq" ) || type.equals( "fishEnchantPool" ) )
                     renderTooltip( button.title, mouseX, mouseY );
                 else if( button.itemStack != null )
                     renderTooltip( button.itemStack, mouseX, mouseY );

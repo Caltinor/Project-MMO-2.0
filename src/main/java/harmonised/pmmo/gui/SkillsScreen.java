@@ -28,7 +28,7 @@ public class SkillsScreen extends Screen
     private int y;
     private MyScrollPanel myList;
     private Button exitButton;
-    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton, heldXpButton, wornXpButton, breedXpButton, tameXpButton, craftXpButton, breakXpButton, dimensionButton, fishPoolButton, mobButton;
+    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton, heldXpButton, wornXpButton, breedXpButton, tameXpButton, craftXpButton, breakXpButton, dimensionButton, fishPoolButton, mobButton, fishEnchantButton;
 
     public SkillsScreen(ITextComponent titleIn)
     {
@@ -182,10 +182,17 @@ public class SkillsScreen extends Screen
 
         mobButton = new TileButton( x + 24, y + 24 + 36 * 3, 1, 9, I18n.format("Mobs" ), (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.mobInfo" ), "mobInfo", Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.mobInfo" ), "killreq", Minecraft.getInstance().player ) );
         });
 
         addButton( mobButton );
+
+        fishEnchantButton = new TileButton( x + 24 + 36, y + 24 + 36 * 3, 1, 9, I18n.format("FishEnchant" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.fishEnchantPool" ), "fishEnchantPool", Minecraft.getInstance().player ) );
+        });
+
+        addButton( fishEnchantButton );
 
         int column = 1;
         int skillID;
