@@ -42,7 +42,7 @@
   "pmmo.invalidItem": "%1$s é um item inválido! Por favor, verifique sua configuração",
   "pmmo.salvagesInto": "Recicla em %1$s %2$s",
   "pmmo.salvagesFrom": "Pode ser reciclado de outros itens",
-  "pmmo.salvagesFromItem": "%1$s de %2$s",
+  "pmmo.valueFromValue": "%1$s de %2$s",
   "pmmo.baseChance": "%1$s%% Chance Base",
   "pmmo.perLevelChance": "Chance de %1$s%% Por Nível",
   "pmmo.totalChance": "%1$s%% Chance Total",

@@ -27,8 +27,6 @@ public class SkillsScreen extends Screen
     private int x;
     private int y;
     private MyScrollPanel myList;
-    private Button exitButton;
-    private Button wearButton, toolButton, weaponButton, useButton, placeButton, breakButton, biomeButton, oreButton, logButton, plantButton, heldXpButton, wornXpButton, breedXpButton, tameXpButton, craftXpButton, breakXpButton, dimensionButton, fishPoolButton, mobButton, fishEnchantButton;
 
     public SkillsScreen(ITextComponent titleIn)
     {
@@ -47,152 +45,166 @@ public class SkillsScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 7, I18n.format("" ), (something) ->
+        Button exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, I18n.format(""), (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
+            Minecraft.getInstance().displayGuiScreen(new MainScreen(new TranslationTextComponent("pmmo.potato")));
         });
 
-        addButton( exitButton );
+        addButton(exitButton);
 
-        wearButton = new TileButton( x + 24, y + 24, 1, 3, I18n.format("Wear" ), (something) ->
+        Button wearButton = new TileButton(x + 24, y + 24, 1, 3, I18n.format("Wear"), (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.armor" ), "wear", Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen(new ScrollScreen(new TranslationTextComponent("pmmo.armor"), "wear", Minecraft.getInstance().player));
         });
 
-        addButton( wearButton );
+        addButton(wearButton);
 
-        toolButton = new TileButton( x + 24 + 36, y + 24, 1, 3, I18n.format("Tool" ), (something) ->
+        Button toolButton = new TileButton( x + 24 + 36, y + 24, 1, 3, I18n.format("Tool" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.tool" ), "tool", Minecraft.getInstance().player ) );
         });
 
         addButton( toolButton );
 
-        weaponButton = new TileButton( x + 24 + 36 * 2, y + 24, 1, 3, I18n.format("Weapon" ), (something) ->
+        Button weaponButton = new TileButton( x + 24 + 36 * 2, y + 24, 1, 3, I18n.format("Weapon" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.weapon" ), "weapon", Minecraft.getInstance().player ) );
         });
 
         addButton( weaponButton );
 
-        useButton = new TileButton( x + 24 + 36 * 3, y + 24, 1, 3, I18n.format("Use" ), (something) ->
+        Button useButton = new TileButton( x + 24 + 36 * 3, y + 24, 1, 3, I18n.format("Use" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.use" ), "use", Minecraft.getInstance().player ) );
         });
 
         addButton( useButton );
 
-        placeButton = new TileButton( x + 24 + 36 * 4, y + 24, 1, 8, I18n.format("Place" ), (something) ->
+        Button placeButton = new TileButton( x + 24 + 36 * 4, y + 24, 1, 8, I18n.format("Place" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.place" ), "place", Minecraft.getInstance().player ) );
         });
 
         addButton( placeButton );
 
-        breakButton = new TileButton( x + 24 + 36 * 5, y + 24, 1, 0, I18n.format("Break" ), (something) ->
+        Button breakButton = new TileButton( x + 24 + 36 * 5, y + 24, 1, 0, I18n.format("Break" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.break" ), "break", Minecraft.getInstance().player ) );
         });
 
         addButton( breakButton );
 
-        biomeButton = new TileButton( x + 24, y + 24 + 36, 1, 9, I18n.format("Biome" ), (something) ->
+        Button biomeButton = new TileButton( x + 24, y + 24 + 36, 1, 9, I18n.format("Biome" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.biome" ), "biome", Minecraft.getInstance().player ) );
         });
 
         addButton( biomeButton );
 
-        oreButton = new TileButton( x + 24 + 36, y + 24 + 36, 1, 0, I18n.format("Ores" ), (something) ->
+        Button oreButton = new TileButton( x + 24 + 36, y + 24 + 36, 1, 0, I18n.format("Ores" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.ore" ), "ore", Minecraft.getInstance().player ) );
         });
 
         addButton( oreButton );
 
-        logButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36, 1, 0, I18n.format("Logs" ), (something) ->
+        Button logButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36, 1, 0, I18n.format("Logs" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.log" ), "log", Minecraft.getInstance().player ) );
         });
 
         addButton( logButton );
 
-        plantButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36, 1, 0, I18n.format("Plants" ), (something) ->
+        Button plantButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36, 1, 0, I18n.format("Plants" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.plant" ), "plant", Minecraft.getInstance().player ) );
         });
 
         addButton( plantButton );
 
-        heldXpButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36, 1, 0, I18n.format("Held" ), (something) ->
+        Button heldXpButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36, 1, 0, I18n.format("Held" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.held" ), "held", Minecraft.getInstance().player ) );
         });
 
         addButton( heldXpButton );
 
-        wornXpButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36, 1, 0, I18n.format("Worn" ), (something) ->
+        Button wornXpButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36, 1, 0, I18n.format("Worn" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.worn" ), "worn", Minecraft.getInstance().player ) );
         });
 
         addButton( wornXpButton );
 
-        breedXpButton = new TileButton( x + 24, y + 24 + 36 * 2, 1, 0, I18n.format("BreedXp" ), (something) ->
+        Button breedXpButton = new TileButton( x + 24, y + 24 + 36 * 2, 1, 0, I18n.format("BreedXp" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.breedXp" ), "breedXp", Minecraft.getInstance().player ) );
         });
 
         addButton( breedXpButton );
 
-        tameXpButton = new TileButton( x + 24 + 36, y + 24 + 36 * 2, 1, 0, I18n.format("TameXp" ), (something) ->
+        Button tameXpButton = new TileButton( x + 24 + 36, y + 24 + 36 * 2, 1, 0, I18n.format("TameXp" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.tameXp" ), "tameXp", Minecraft.getInstance().player ) );
         });
 
         addButton( tameXpButton );
 
-        craftXpButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 2, 1, 0, I18n.format("CraftXp" ), (something) ->
+        Button craftXpButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 2, 1, 0, I18n.format("CraftXp" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.craftXp" ), "craftXp", Minecraft.getInstance().player ) );
         });
 
         addButton( craftXpButton );
 
-        breakXpButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 2, 1, 0, I18n.format("BreakXp" ), (something) ->
+        Button breakXpButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 2, 1, 0, I18n.format("BreakXp" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.breakXp" ), "breakXp", Minecraft.getInstance().player ) );
         });
 
         addButton( breakXpButton );
 
-        dimensionButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 2, 1, 9, I18n.format("Dimension" ), (something) ->
+        Button dimensionButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 2, 1, 9, I18n.format("Dimension" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.dimension" ), "dimension", Minecraft.getInstance().player ) );
         });
 
         addButton( dimensionButton );
 
-        fishPoolButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36 * 2, 1, 9, I18n.format("FishPool" ), (something) ->
+        Button fishPoolButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36 * 2, 1, 9, I18n.format("FishPool" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.fishPool" ), "fishPool", Minecraft.getInstance().player ) );
         });
 
         addButton( fishPoolButton );
 
-        mobButton = new TileButton( x + 24, y + 24 + 36 * 3, 1, 9, I18n.format("Mobs" ), (something) ->
+        Button mobButton = new TileButton( x + 24, y + 24 + 36 * 3, 1, 9, I18n.format("Mobs" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.mobInfo" ), "killreq", Minecraft.getInstance().player ) );
         });
 
         addButton( mobButton );
 
-        fishEnchantButton = new TileButton( x + 24 + 36, y + 24 + 36 * 3, 1, 9, I18n.format("FishEnchant" ), (something) ->
+        Button fishEnchantButton = new TileButton( x + 24 + 36, y + 24 + 36 * 3, 1, 9, I18n.format("FishEnchant" ), (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.fishEnchantPool" ), "fishEnchantPool", Minecraft.getInstance().player ) );
         });
 
         addButton( fishEnchantButton );
+
+        Button salvageToButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 3, 1, 9, I18n.format("SalvagesTo" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.salvagesTo" ), "salvagesTo", Minecraft.getInstance().player ) );
+        });
+
+        addButton( salvageToButton );
+
+        Button salvageFromButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 3, 1, 9, I18n.format("SalvagesFrom" ), (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( "pmmo.salvagesFrom" ), "salvagesFrom", Minecraft.getInstance().player ) );
+        });
+
+        addButton( salvageFromButton );
 
         int column = 1;
         int skillID;

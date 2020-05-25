@@ -226,9 +226,9 @@ public class TooltipHandler
                     salvageInfo = JsonConfig.data.get( "salvageInfo" ).get( key );
 
                     if( salvageInfo != null && (double) salvageInfo.get( "levelReq" ) <= level )
-                        tooltip.add( new TranslationTextComponent( "pmmo.salvagesFromItem", " " + value, displayName ).setStyle( XP.textStyle.get( "green" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.valueFromValue", " " + value, displayName ).setStyle( XP.textStyle.get( "green" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.salvagesFromItem", " " + value, displayName ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.valueFromValue", " " + value, displayName ).setStyle( XP.textStyle.get( "red" ) ) );
                 }
             }
         }

@@ -146,6 +146,9 @@ public class ScrollScreen extends Screen
 
             case "dimension":
             {
+                if( reqMap == null )
+                    break;
+
                 if( reqMap.containsKey( "all_dimensions" ) )
                 {
                     tempList.add( new ListButton( 0, 0, 1, 9, "all_dimensions", type, "", button ->
@@ -243,6 +246,9 @@ public class ScrollScreen extends Screen
             case "breedXp":
             case "tameXp":
             {
+                if( reqMap == null )
+                    break;
+
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
@@ -257,6 +263,9 @@ public class ScrollScreen extends Screen
                 break;
 
             case "fishEnchantPool":
+                if( reqMap == null )
+                    break;
+
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
                     if( ForgeRegistries.ENCHANTMENTS.containsKey( XP.getResLoc( entry.getKey() ) ) )
@@ -271,6 +280,9 @@ public class ScrollScreen extends Screen
 
             default:
             {
+                if( reqMap == null )
+                    return;
+
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
                 {
                     if( XP.getItem( entry.getKey() ) != Items.AIR )
@@ -576,6 +588,87 @@ public class ScrollScreen extends Screen
                 }
                     break;
 
+                case "salvagesFrom":
+                {
+                    Map<String, Map<String, Object>> salvagesToMap = XP.getFullReqMap( "salvagesTo" );
+                    Map<String, Double> levelReqs = new HashMap<>();
+                    List<String> sortedItems = new ArrayList<>();
+                    if( reqMap == null || salvagesToMap == null )
+                        return;
+                    double smithLevel = Skill.SMITHING.getLevelDecimal( player );
+
+                    boolean anyPassed = false;
+
+                    for( Map.Entry<String, Object> entry : reqMap.get( button.regKey ).entrySet() )
+                    {
+                        double levelReq = (double) salvagesToMap.get( entry.getKey() ).get( "levelReq" );
+                        levelReqs.put( entry.getKey(), levelReq );
+                        sortedItems.add( entry.getKey() );
+                    }
+
+                    sortedItems.sort( Comparator.comparingDouble( a -> (double) reqMap.get( button.regKey ).get( a ) ) );
+                    sortedItems.sort( Comparator.comparingDouble( levelReqs::get ) );
+
+                    for( String key : sortedItems )
+                    {
+                        double levelReq = levelReqs.get( key );
+                        boolean passed = levelReq <= smithLevel;
+                        String itemName = getTransComp( XP.getItem( key ).getTranslationKey() ).getFormattedText();
+
+                        double chance = (smithLevel - levelReq) * (double) salvagesToMap.get( key ).get( "chancePerLevel" );
+                        double maxChance = (double) salvagesToMap.get( key ).get( "maxChance" );
+
+                        if( chance > maxChance )
+                            chance = maxChance;
+
+                        if( passed )
+                        {
+                            anyPassed = true;
+                            button.text.add( " " + getTransComp( "pmmo.valueValueChance", DP.dpSoft( (double) reqMap.get( button.regKey ).get( key ) ), itemName, chance ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
+                        }
+                        else
+                            button.text.add( " " + getTransComp( "pmmo.salvagesFromLevelFromItem", DP.dpSoft( (double) reqMap.get( button.regKey ).get( key ) ), DP.dpSoft( levelReq ), itemName ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                    }
+
+                    button.unlocked = anyPassed;
+                }
+                    break;
+
+                case "salvagesTo":
+                {
+                    if( reqMap == null )
+                        return;
+                    double smithLevel = Skill.SMITHING.getLevelDecimal( player );
+                    String outputName = getTransComp( XP.getItem( (String) reqMap.get( button.regKey ).get( "salvageItem" ) ).getTranslationKey() ).getString();
+                    double levelReq = (double) reqMap.get( button.regKey ).get( "levelReq" );
+                    double salvageMax = (double) reqMap.get( button.regKey ).get( "salvageMax" );
+                    double baseChance = (double) reqMap.get( button.regKey ).get( "baseChance" );
+                    double chancePerLevel = (double) reqMap.get( button.regKey ).get( "chancePerLevel" );
+                    double maxChance = (double) reqMap.get( button.regKey ).get( "maxChance" );
+                    double xpPerItem = (double) reqMap.get( button.regKey ).get( "xpPerItem" );
+
+                    double chance = 0;
+                    button.unlocked = levelReq <= smithLevel;
+                    if( button.unlocked )
+                        chance = baseChance + ( smithLevel - levelReq ) * chancePerLevel;
+                    if( chance > maxChance )
+                        chance = maxChance;
+
+                    Style color = XP.textStyle.get( chance > 0 ? "green" : "red" );
+
+                    button.text.add( "" );
+                    button.text.add( getTransComp( "pmmo.canBeSalvagedFromLevel", DP.dpSoft( levelReq ) ).setStyle( color ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.valueValue", DP.dpSoft( salvageMax ), outputName ).setStyle( color ).getFormattedText() );
+                    button.text.add( "" );
+                    button.text.add( getTransComp( "pmmo.xpPerItem", DP.dpSoft( xpPerItem ) ).setStyle( color ).getFormattedText() );
+                    button.text.add( getTransComp( "pmmo.chancePerItem", DP.dpSoft( chance ) ).setStyle( color ).getFormattedText() );
+                    button.text.add( "" );
+                    button.text.add( getTransComp( "pmmo.baseChance", DP.dpSoft( baseChance ) ).setStyle( color ).getFormattedText() );
+                    button.text.add( getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).setStyle( color ).getFormattedText() );
+                    button.text.add( getTransComp( "pmmo.maxChancePerItem", DP.dpSoft( maxChance ) ).setStyle( color ).getFormattedText() );
+                }
+                    break;
+
                 default:
                     break;
             }
@@ -641,13 +734,28 @@ public class ScrollScreen extends Screen
         }
 
         //SORT BUTTONS
-        if( type.equals( "ore" ) || type.equals( "log" ) || type.equals( "plant" ) || type.equals( "breakXp" ) )
-            listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, "break" ) ) );
-        else if( type.equals( "worn" ) )
-            listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, "wear" ) ) );
-        else
-            listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, type ) ) );
 
+        switch( type )
+        {
+            case "ore":
+            case "log":
+            case "plant":
+            case "breakXp":
+                listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, "break" ) ) );
+                break;
+
+            case "worn":
+                listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, "wear" ) ) );
+                break;
+
+            case "salvagesTo":
+                listButtons.sort( Comparator.comparingDouble( b -> (double) reqMap.get( b.regKey ).get( "levelReq" ) ) );
+                break;
+
+            default:
+                listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, type ) ) );
+                break;
+        }
         scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 42, boxHeight - 21, scrollY, scrollX, type, player, listButtons );
 
         children.add( scrollPanel );

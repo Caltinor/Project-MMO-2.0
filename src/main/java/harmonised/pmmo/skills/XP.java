@@ -680,6 +680,12 @@ public class XP
 			case "fishenchantpool":
 				return JsonConfig.data.get( "fishEnchantPool" );
 
+			case "salvagesto":
+				return JsonConfig.data.get( "salvageInfo" );
+
+			case "salvagesfrom":
+				return JsonConfig.data.get( "salvagesFrom" );
+
 			default:
 				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP" );
 				return null;

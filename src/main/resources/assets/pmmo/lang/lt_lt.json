@@ -39,7 +39,7 @@
 	"pmmo.invalidItem": "%1$s yra netaisiklingas! Prašome patikrinti savo Config",
 	"pmmo.salvagesInto": "Perdirbama į %1$s %2$s, %3$sxp už kiekviena",
 	"pmmo.salvagesFrom": "Galima perdirbti iš kitų dalykų",
-	"pmmo.salvagesFromItem": "%1$s iš %2$s",
+	"pmmo.valueFromValue": "%1$s iš %2$s",
 	"pmmo.baseChance": " %1$s%% Pagrindo Šansas",
 	"pmmo.perLevelChance": " %1$s%% Šansas per lygį",
 	"pmmo.totalChance": " %1$s%% Visutinis Šansas",

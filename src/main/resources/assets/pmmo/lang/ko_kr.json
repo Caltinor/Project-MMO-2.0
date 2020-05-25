@@ -39,7 +39,7 @@
 	"pmmo.invalidItem": "%1$s is an invalid item! Please check your config",
 	"pmmo.salvagesInto": "Salvages into %1$s %2$s, %3$sxp each",
 	"pmmo.salvagesFrom": "Can be salvaged from other items",
-	"pmmo.salvagesFromItem": "%1$s from %2$s",
+	"pmmo.valueFromValue": "%1$s from %2$s",
 	"pmmo.baseChance": " %1$s%% Base Chance",
 	"pmmo.perLevelChance": " %1$s%% Per Level Chance",
 	"pmmo.totalChance": " %1$s%% Total Chance",
