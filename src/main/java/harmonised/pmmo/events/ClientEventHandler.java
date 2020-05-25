@@ -46,7 +46,8 @@ public class ClientEventHandler
 
             if( wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() )
             {
-                if( Minecraft.getInstance().player.getDisplayName().getString().equals( "Dev" ) )
+                String name = Minecraft.getInstance().player.getDisplayName().getString();
+                if( name.equals( "Dev" ) || name.equals( "MareoftheStars" ) || name.equals( "Harmonised" ) )
                     Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
 
                 wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
