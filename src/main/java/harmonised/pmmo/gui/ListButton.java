@@ -5,6 +5,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -73,7 +74,7 @@ public class ListButton extends Button
 
             case "breedXp":
             case "tameXp":
-            case "killReq":
+            case "kill":
                 this.title = new TranslationTextComponent( ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
                 break;
 
@@ -167,6 +168,11 @@ public class ListButton extends Button
         this.renderBg(minecraft, x, y);
         int j = getFGColor();
         this.drawCenteredString(fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
+    }
+
+    public void clickAction()
+    {
+//        LogHandler.LOGGER.debug( "Clicked " + this.title + " Button" );
     }
 
     public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)

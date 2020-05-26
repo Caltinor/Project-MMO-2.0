@@ -641,7 +641,7 @@ public class XP
 			case "biome":
 				return JsonConfig.data.get( "biomeReq" );
 
-			case "killreq":
+			case "kill":
 				return JsonConfig.data.get( "killReq" );
 
 			case "ore":

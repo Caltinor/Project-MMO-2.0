@@ -87,7 +87,7 @@ public class MyScrollPanel extends ScrollPanel
                 button.y = relativeY + accumulativeHeight;
 
                 if( button.unlocked )
-                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x55444444, 0x55222222);
+                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x22444444, 0x33222222);
                 else
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
 
