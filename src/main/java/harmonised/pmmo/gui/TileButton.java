@@ -17,12 +17,14 @@ public class TileButton extends Button
     public int offsetOne;
     public int elementTwo;
     public int offsetTwo;
+    public String transKey;
 
-    public TileButton(int posX, int posY, int elementOne, int elementTwo, String text, IPressable onPress)
+    public TileButton(int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress)
     {
         super(posX, posY, 32, 32, text, onPress);
         this.elementOne = elementOne * 32;
         this.elementTwo = elementTwo * 32;
+        this.transKey = transKey;
 
         if( elementOne > 23 )
             offsetOne = 192;
