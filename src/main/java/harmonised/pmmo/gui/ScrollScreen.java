@@ -133,7 +133,7 @@ public class ScrollScreen extends Screen
                 {
                     if ( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ) != null )
                     {
-                        tempList.add( new ListButton( 0, 0, 1, 9, regKey, type, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 1, 8, regKey, type, "", button -> ((ListButton) button).clickAction() ) );
                     }
                 }
             }
@@ -146,22 +146,22 @@ public class ScrollScreen extends Screen
 
                 if( reqMap.containsKey( "all_dimensions" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 9, "all_dimensions", type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 1, 8, "all_dimensions", type, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
                 if( reqMap.containsKey( "minecraft:overworld" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:overworld", type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 1, 8, "minecraft:overworld", type, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
                 if( reqMap.containsKey( "minecraft:the_nether" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:the_nether", type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 1, 8, "minecraft:the_nether", type, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
                 if( reqMap.containsKey( "minecraft:the_end" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 9, "minecraft:the_end", type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 1, 8, "minecraft:the_end", type, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
@@ -170,7 +170,7 @@ public class ScrollScreen extends Screen
                     {
                         if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
                         {
-                            tempList.add( new ListButton( 0, 0, 1, 9, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
+                            tempList.add( new ListButton( 0, 0, 1, 8, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
                         }
                     }
                 }
