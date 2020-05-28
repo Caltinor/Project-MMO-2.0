@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainScreen extends Screen
@@ -25,9 +26,7 @@ public class MainScreen extends Screen
     private int boxHeight = 256;
     private int x;
     private int y;
-    private MyScrollPanel myList;
-    private Button exitButton;
-    private Button skillsButton;
+    private List<TileButton> tileButtons;
 
     public MainScreen(ITextComponent titleIn)
     {
@@ -43,32 +42,50 @@ public class MainScreen extends Screen
     @Override
     protected void init()
     {
+        tileButtons = new ArrayList<>();
+
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton( x + boxWidth - 24, y - 8, 0, 7, "", "", (something) ->
+        TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (something) ->
         {
             Minecraft.getInstance().player.closeScreen();
         });
 
-        skillsButton = new TileButton( x + 24, y + 24, 1, 8, "", "pmmo.skills", (something) ->
+        TileButton listsButton = new TileButton(x + 24, y + 24, 1, 5, "pmmo.lists", "", (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.skills" ) ) );
+            Minecraft.getInstance().displayGuiScreen(new SkillsScreen(new TranslationTextComponent("pmmo.skills")));
         });
 
-        addButton( exitButton );
-        addButton( skillsButton );
+        TileButton skillsButton = new TileButton( x + 24 + 36, y + 24, 1, 6, "pmmo.stats", "", (something) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
+        });
+
+        tileButtons.add(exitButton);
+        tileButtons.add(listsButton);
+        tileButtons.add(skillsButton);
+
+        for( TileButton button : tileButtons )
+        {
+            addButton( button );
+        }
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks)
     {
         renderBackground( 1 );
+        super.render(mouseX, mouseY, partialTicks);
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        super.render(mouseX, mouseY, partialTicks);
+        for( TileButton button : tileButtons )
+        {
+            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
+                renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
+        }
     }
 
     @Override

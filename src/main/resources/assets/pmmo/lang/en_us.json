@@ -198,5 +198,7 @@
   "pmmo.salvagesToTitle": "Items that can be Salvaged",
   "pmmo.salvagesFromTitle": "Items that are a result of Salvaging",
   "pmmo.wear": "To Wear",
-  "pmmo.place": "To Place"
+  "pmmo.place": "To Place",
+  "pmmo.lists": "Lists",
+  "pmmo.stats": "Stats"
 }
