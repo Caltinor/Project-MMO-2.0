@@ -120,7 +120,7 @@ public class SkillsScreen extends Screen
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( ((TileButton) button).transKey ), "dimension", Minecraft.getInstance().player ) );
         });
-        TileButton fishPoolButton = new TileButton( 0, 0, 3, 25, "pmmo.fishPoolTitle","", (button) ->
+        TileButton fishPoolButton = new TileButton( 0, 0, 3, 24, "pmmo.fishPoolTitle","", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( ((TileButton) button).transKey ), "fishPool", Minecraft.getInstance().player ) );
         });
@@ -128,15 +128,15 @@ public class SkillsScreen extends Screen
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( ((TileButton) button).transKey ), "kill", Minecraft.getInstance().player ) );
         });
-        TileButton fishEnchantButton = new TileButton( 0, 0, 3, 27, "pmmo.fishEnchantTitle", "", (button) ->
+        TileButton fishEnchantButton = new TileButton( 0, 0, 3, 25, "pmmo.fishEnchantTitle", "", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( ((TileButton) button).transKey ), "fishEnchantPool", Minecraft.getInstance().player ) );
         });
-        TileButton salvageToButton = new TileButton( 0, 0, 3, 28, "pmmo.salvagesToTitle", "", (button) ->
+        TileButton salvageToButton = new TileButton( 0, 0, 3, 27, "pmmo.salvagesToTitle", "", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( ((TileButton) button).transKey ), "salvagesTo", Minecraft.getInstance().player ) );
         });
-        TileButton salvageFromButton = new TileButton( 0, 0, 3, 29, "pmmo.salvagesFromTitle", "", (button) ->
+        TileButton salvageFromButton = new TileButton( 0, 0, 3, 28, "pmmo.salvagesFromTitle", "", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( ((TileButton) button).transKey ), "salvagesFrom", Minecraft.getInstance().player ) );
         });
