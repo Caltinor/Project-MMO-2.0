@@ -307,10 +307,10 @@
 			"combat": 20
 		},
 		"minecraft:iron_axe": {
-			"combat": 30
+			"combat": 25
 		},
 		"minecraft:iron_sword": {
-			"combat": 25
+			"combat": 20
 		},
 		"minecraft:stone_pickaxe": {
 			"combat": 5
@@ -1317,7 +1317,7 @@
 	},
 	"kill_xp": {
 		"minecraft:silverfish": {
-			"slayer": 1000
+			"slayer": 35
 		},
 		"minecraft:zombie": {
 			"slayer": 15
@@ -2890,13 +2890,13 @@
 			"levelReq": 8
 		},
 		"minecraft:diorite": {
-			"salvageItem": "minecraft:quartz",
+			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 1,
-			"baseChance": 1,
+			"baseChance": 50,
 			"chancePerLevel": 1,
-			"maxChance": 100,
-			"xpPerItem": 1,
-			"levelReq": 12
+			"maxChance": 90,
+			"xpPerItem": 0.1,
+			"levelReq": 1
 		},
 		"minecraft:melon": {
 			"salvageItem": "minecraft:melon_slice",
@@ -2924,6 +2924,24 @@
 			"maxChance": 90,
 			"xpPerItem": 0.35,
 			"levelReq": 3
+		},
+		"minecraft:andesite": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 1,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"maxChance": 90,
+			"xpPerItem": 0.1,
+			"levelReq": 1
+		},
+		"minecraft:granite": {
+			"salvageItem": "minecraft:cobblestone",
+			"salvageMax": 1,
+			"baseChance": 50,
+			"chancePerLevel": 1,
+			"maxChance": 90,
+			"xpPerItem": 0.1,
+			"levelReq": 1
 		}
 	},
 	"fish_pool": {

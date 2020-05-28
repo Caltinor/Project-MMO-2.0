@@ -24,17 +24,17 @@ public class CheckStatCommand
         Skill skill = Skill.getSkill( args[3] );
         String skillName = skill.name().toLowerCase();
 
-        if( skill.getValue() != 0 || skillName.toLowerCase().equals( "power" ) )
+        if( skill.getValue() != 0 || args[3].toLowerCase().equals( "power" ) )
         {
             try
             {
                 double level = 1;
 
                 ServerPlayerEntity target = EntityArgument.getPlayer( context, "player name" );
-                if( skillName.toLowerCase().equals( "power" ) )
+                if( args[3].toLowerCase().equals( "power" ) )
                 {
                     level = XP.getPowerLevel( target );
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( new Style().setColor( TextFormatting.AQUA ) ) ), false );
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).setStyle( new Style().setColor( TextFormatting.AQUA ) ) ), false );
                 }
                 else
                 {
@@ -63,7 +63,7 @@ public class CheckStatCommand
             }
         }
         else
-            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
+            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", args[3] ).setStyle( XP.textStyle.get( "red" ) ), false );
 
         return 1;
     }

@@ -370,7 +370,7 @@ public class XPOverlayGUI extends AbstractGui
 							else
 								tempString = "";
 
-							drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 30, 3 + listIndex, color );
+							drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 32, 3 + listIndex, color );
 						}
 
 						listIndex += 9;
