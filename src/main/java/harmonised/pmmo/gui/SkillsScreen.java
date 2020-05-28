@@ -149,7 +149,6 @@ public class SkillsScreen extends Screen
         tileButtons.add( useButton );
         tileButtons.add( placeButton );
         tileButtons.add( breakButton );
-        tileButtons.add( biomeButton );
         tileButtons.add( oreButton );
         tileButtons.add( logButton );
         tileButtons.add( plantButton );
@@ -160,8 +159,9 @@ public class SkillsScreen extends Screen
         tileButtons.add( craftXpButton );
         tileButtons.add( breakXpButton );
         tileButtons.add( dimensionButton );
-        tileButtons.add( fishPoolButton );
+        tileButtons.add( biomeButton );
         tileButtons.add( mobButton );
+        tileButtons.add( fishPoolButton );
         tileButtons.add( fishEnchantButton );
         tileButtons.add( salvageToButton );
         tileButtons.add( salvageFromButton );

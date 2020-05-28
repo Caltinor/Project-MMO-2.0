@@ -182,9 +182,9 @@
   "pmmo.placeTitle": "Placing Blocks Requirements",
   "pmmo.breakTitle": "Breaking Blocks Requirements",
   "pmmo.biomeTitle": "Surviving in Biomes Requirements",
-  "pmmo.oreTitle": "Ores Dictionary",
-  "pmmo.logTitle": "Logs Dictionary",
-  "pmmo.plantTitle": "Plants Dictionary",
+  "pmmo.oreTitle": "Ores",
+  "pmmo.logTitle": "Logs",
+  "pmmo.plantTitle": "Plants",
   "pmmo.heldTitle": "Main Hand Xp Boosting Items",
   "pmmo.wornTitle": "Worn Xp Boosting Items",
   "pmmo.breedXpTitle": "Breeding Animals Xp Rewards",
@@ -200,5 +200,6 @@
   "pmmo.wear": "To Wear",
   "pmmo.place": "To Place",
   "pmmo.lists": "Lists",
-  "pmmo.stats": "Stats"
+  "pmmo.stats": "Stats",
+  "pmmo.exit": "Exit"
 }

@@ -47,22 +47,22 @@ public class MainScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (something) ->
+        TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "pmmo.exit", "", (something) ->
         {
             Minecraft.getInstance().player.closeScreen();
         });
 
-        TileButton listsButton = new TileButton(x + 24, y + 24, 1, 5, "pmmo.lists", "", (something) ->
+        TileButton listsButton = new TileButton(x + 24 + 36 * 1, y + 24 + 36 * 2, 3, 5, "pmmo.lists", "", (something) ->
         {
             Minecraft.getInstance().displayGuiScreen(new SkillsScreen(new TranslationTextComponent("pmmo.skills")));
         });
 
-        TileButton skillsButton = new TileButton( x + 24 + 36, y + 24, 1, 6, "pmmo.stats", "", (something) ->
+        TileButton skillsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 2, 3, 6, "pmmo.stats", "", (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new SkillsScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
         });
 
-        tileButtons.add(exitButton);
+        addButton(exitButton);
         tileButtons.add(listsButton);
         tileButtons.add(skillsButton);
 
