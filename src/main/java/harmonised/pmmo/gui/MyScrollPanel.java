@@ -70,10 +70,6 @@ public class MyScrollPanel extends ScrollPanel
     @Override
     protected void drawPanel(int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
-        int startI = (int) Math.floor( this.scrollDistance / 36D );
-        if( startI < 0 )
-            startI = 0;
-
         ListButton button;
 
         int accumulativeHeight = 0;
@@ -81,11 +77,11 @@ public class MyScrollPanel extends ScrollPanel
         for( int i = 0; i < buttons.size(); i++ )
         {
             button = buttons.get( i );
-            if( i >= startI || i <= startI + 7 )
-            {
-                button.x = this.right - button.getWidth() - 8;
-                button.y = relativeY + accumulativeHeight;
+            button.x = this.right - button.getWidth() - 8;
+            button.y = relativeY + accumulativeHeight;
 
+            if( accumulativeHeight + buttons.get( i ).getHeight() + 5 > scrollDistance && accumulativeHeight - height <= scrollDistance )
+            {
                 if( button.unlocked )
                     fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x22444444, 0x33222222);
                 else
