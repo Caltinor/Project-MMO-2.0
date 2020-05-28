@@ -16,14 +16,14 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '2.41.12'
+version = '2.41.13'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO-1.15'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200504-1.15.1'
+    mappings channel: 'snapshot', version: '20200528-1.15.1'
     runs {
         client {
             workingDirectory project.file('run')
@@ -94,7 +94,7 @@ repositories
 
 dependencies
 {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.1.30'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.2.5'
     implementation 'com.google.code.gson:gson:2.8.6'
 
     compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
@@ -102,6 +102,7 @@ dependencies
 
     runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")
     runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
+    runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
 
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2")
     compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2:api")
