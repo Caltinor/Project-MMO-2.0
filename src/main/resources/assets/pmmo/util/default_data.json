@@ -1284,6 +1284,24 @@
 		},
 		"minecraft:beacon": {
 			"crafting": 1000
+		},
+		"minecraft:iron_ingot": {
+			"crafting": 0
+		},
+		"minecraft:iron_block": {
+			"crafting": 0
+		},
+		"minecraft:gold_ingot": {
+			"crafting": 0
+		},
+		"minecraft:gold_block": {
+			"crafting": 0
+		},
+		"minecraft:diamond": {
+			"crafting": 0
+		},
+		"minecraft:diamond_block": {
+			"crafting": 0
 		}
 	},
 	"breeding_xp": {

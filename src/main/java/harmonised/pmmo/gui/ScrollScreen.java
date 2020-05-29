@@ -32,6 +32,10 @@ public class ScrollScreen extends Screen
     private static double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
+    private static final double defaultBreedingXp = Config.forgeConfig.defaultBreedingXp.get();
+    private static final double defaultTamingXp = Config.forgeConfig.defaultTamingXp.get();
+    private static final double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
+    private static final Style greenColor = XP.textStyle.get( "green" );
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     private int boxWidth = 256;
@@ -125,7 +129,7 @@ public class ScrollScreen extends Screen
                 {
                     if ( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ) != null )
                     {
-                        tempList.add( new ListButton( 0, 0, 1, 8, regKey, type, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 8, regKey, type, "", button -> ((ListButton) button).clickAction() ) );
                     }
                 }
             }
@@ -138,22 +142,22 @@ public class ScrollScreen extends Screen
 
                 if( reqMap.containsKey( "all_dimensions" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 8, "all_dimensions", type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 8, "all_dimensions", type, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
                 if( reqMap.containsKey( "minecraft:overworld" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 8, "minecraft:overworld", type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:overworld", type, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
                 if( reqMap.containsKey( "minecraft:the_nether" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 8, "minecraft:the_nether", type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_nether", type, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
                 if( reqMap.containsKey( "minecraft:the_end" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 1, 8, "minecraft:the_end", type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_end", type, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
                 for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
@@ -162,7 +166,7 @@ public class ScrollScreen extends Screen
                     {
                         if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
                         {
-                            tempList.add( new ListButton( 0, 0, 1, 8, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
+                            tempList.add( new ListButton( 0, 0, 3, 8, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
                         }
                     }
                 }
@@ -206,7 +210,7 @@ public class ScrollScreen extends Screen
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 1, 0, regKey, type, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 0, regKey, type, "", button -> ((ListButton) button).clickAction() ) );
                     }
                 }
             }
@@ -222,7 +226,7 @@ public class ScrollScreen extends Screen
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 0, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
                     }
                 }
             }
@@ -236,7 +240,7 @@ public class ScrollScreen extends Screen
                 {
                     if( ForgeRegistries.ENCHANTMENTS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 25, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
                     }
                 }
                 break;
@@ -250,7 +254,7 @@ public class ScrollScreen extends Screen
                 {
                     if( XP.getItem( entry.getKey() ) != Items.AIR )
                     {
-                        tempList.add( new ListButton( 0, 0, 1, 0, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 0, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
                     }
                 }
             }
@@ -398,10 +402,14 @@ public class ScrollScreen extends Screen
                 case "breedXp":
                 case "tameXp":
                 case "craftXp":
+                {
+                    addXpToButton( button, reqMap.get( button.regKey ) );
+                }
+                    break;
+
                 case "breakXp":
                 {
-                    button.text.add( "" );
-                    addXpToButton( button, reqMap.get( button.regKey ) );
+                    addXpToButton( button, reqMap.get( button.regKey ), "break", player );
                 }
                     break;
 
@@ -414,8 +422,17 @@ public class ScrollScreen extends Screen
                     double levelReq = (double) enchantMap.get( "levelReq" );
                     double chancePerLevel = (double) enchantMap.get( "chancePerLevel" );
                     double maxChance = (double) enchantMap.get( "maxChance" );
-                    double maxLevel = (double) enchantMap.get( "maxLevel" );
+                    double maxLevel = (int) (double) enchantMap.get( "maxLevel" );
                     double levelsPerTier = (double) enchantMap.get( "levelPerLevel" );
+                    double maxLevelAvailable;
+                    if( levelsPerTier == 0 )
+                        maxLevelAvailable = maxLevel;
+                    else
+                        maxLevelAvailable = Math.floor( ( fishLevel - levelReq ) / levelsPerTier );
+                    if( maxLevelAvailable < 0 )
+                        maxLevelAvailable = 0;
+                    if( maxLevelAvailable > maxLevel )
+                        maxLevelAvailable = maxLevel;
 
                     double curChance = (fishLevel - levelReq) * chancePerLevel;
                     if( curChance > maxChance )
@@ -423,19 +440,20 @@ public class ScrollScreen extends Screen
                     if( curChance < 0 )
                         curChance = 0;
 
-                    button.unlocked = levelReq <= fishLevel;
+                    button.unlocked = maxLevelAvailable > 0;
                     Style color = XP.textStyle.get( button.unlocked ? "green" : "red" );
 
                     button.text.add( "" );
 
                     button.text.add( " " + getTransComp( "pmmo.currentChance", DP.dpSoft( curChance ) ).setStyle( color ).getFormattedText() );
                     button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( levelReq ) ).setStyle( color ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevelAvailable ).setStyle( color ).getFormattedText() );
 
                     button.text.add( "" );
                     button.text.add( " " + getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).getFormattedText() );
                     if( maxLevel > 1 )
                         button.text.add( " " + getTransComp( "pmmo.levelsPerTier", DP.dpSoft( levelsPerTier ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", DP.dpSoft( maxLevel ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevel ).getFormattedText() );
                 }
                     break;
 
@@ -717,6 +735,44 @@ public class ScrollScreen extends Screen
                 listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, type ) ) );
                 break;
         }
+
+        switch( type ) //default buttons
+        {
+            case "breedXp":
+                ListButton otherAnimalsBreedButton = new ListButton( 0, 0, 3, 20, "pmmo.otherAnimals", type, "", button -> ((ListButton) button).clickAction() );
+                otherAnimalsBreedButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( defaultBreedingXp ) ).setStyle( greenColor ).getFormattedText() );
+                listButtons.add( otherAnimalsBreedButton );
+                break;
+
+            case "tameXp":
+            {
+                ListButton otherAnimalsTameButton = new ListButton( 0, 0, 3, 21, "pmmo.otherAnimals", type, "", button -> ((ListButton) button).clickAction() );
+                otherAnimalsTameButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( defaultTamingXp ) ).setStyle( greenColor ).getFormattedText() );
+                listButtons.add( otherAnimalsTameButton );
+            }
+                break;
+
+            case "kill":
+            {
+                ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", type, "", button -> ((ListButton) button).clickAction() );
+                otherAggresiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).setStyle( greenColor ).getFormattedText() );
+                listButtons.add( otherAggresiveMobsButton );
+
+                ListButton otherPassiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherPassiveMobs", type, "", button -> ((ListButton) button).clickAction() );
+                otherPassiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).setStyle( greenColor ).getFormattedText() );
+                listButtons.add( otherPassiveMobsButton );
+            }
+                break;
+
+            case "craftXp":
+            {
+                ListButton otherCraftsButton = new ListButton( 0, 0, 3, 22, "pmmo.otherCrafts", type, "", button -> ((ListButton) button).clickAction() );
+                otherCraftsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( defaultCraftingXp ) ).setStyle( greenColor ).getFormattedText() );
+                listButtons.add( otherCraftsButton );
+            }
+                break;
+        }
+
         scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 42, boxHeight - 21, scrollY, scrollX, type, player, listButtons );
 
         children.add( scrollPanel );
@@ -748,6 +804,23 @@ public class ScrollScreen extends Screen
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
             xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+        }
+
+        xpToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+
+        button.text.addAll( xpToAdd );
+    }
+
+    private static void addXpToButton( ListButton button, Map<String, Object> map, String type, PlayerEntity player )
+    {
+        List<String> xpToAdd = new ArrayList<>();
+
+        for( Map.Entry<String, Object> inEntry : map.entrySet() )
+        {
+            if( XP.checkReq( player, button.regKey, type ) )
+                xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+            else
+                xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
         }
 
         xpToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
@@ -831,7 +904,7 @@ public class ScrollScreen extends Screen
 
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                if( type.equals( "biome" ) || type.equals( "kill" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) || type.equals( "fishEnchantPool" ) )
+                if( type.equals( "biome" ) || type.equals( "kill" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) || type.equals( "fishEnchantPool" ) || button.regKey.equals( "pmmo.otherCrafts" ) )
                     renderTooltip( button.title, mouseX, mouseY );
                 else if( button.itemStack != null )
                     renderTooltip( button.itemStack, mouseX, mouseY );

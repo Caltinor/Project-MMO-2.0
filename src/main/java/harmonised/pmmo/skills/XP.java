@@ -627,7 +627,8 @@ public class XP
 				return JsonConfig.data.get( "weaponReq" );
 
 			case "mob":
-				return JsonConfig.data.get( "mobReq" );
+			case "killreq":
+				return JsonConfig.data.get( "killReq" );
 
 			case "use":
 				return JsonConfig.data.get( "useReq" );
@@ -1071,7 +1072,7 @@ public class XP
 
 
 
-	public static void awardXp( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip, boolean ignoreBonuses )
+	public static void awardXpMap( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip, boolean ignoreBonuses )
 	{
 		for( Map.Entry<String, Object> entry : map.entrySet() )
 		{

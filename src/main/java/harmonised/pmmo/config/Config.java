@@ -93,7 +93,6 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> biomeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeXpBonusEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> xpValueEnabled;
-        public ConfigHelper.ConfigValueListener<Boolean> xpValueCraftingEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> oreEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> logEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> plantEnabled;
@@ -103,8 +102,6 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> levelUpCommandEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> heldItemXpBoostEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> wornItemXpBoostEnabled;
-        public ConfigHelper.ConfigValueListener<Boolean> breedingXpEnabled;
-        public ConfigHelper.ConfigValueListener<Boolean> tamingXpEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
         //Levels
@@ -177,8 +174,8 @@ public class Config
         //Woodcutting
 
         //Farming
-
-        public ConfigHelper.ConfigValueListener<Double> breedingXp;
+        public ConfigHelper.ConfigValueListener<Boolean> tamingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Double> defaultBreedingXp;
 
         //Agility
         public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
@@ -228,6 +225,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> fishPoolMaxChance;
 
         //Crafting
+        public ConfigHelper.ConfigValueListener<Boolean> xpValueCraftingEnabled;
+        public ConfigHelper.ConfigValueListener<Double> defaultCraftingXp;
 
         //Magic
 
@@ -235,6 +234,9 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> passiveMobHunterXp;
         public ConfigHelper.ConfigValueListener<Double> aggresiveMobSlayerXp;
 
+        //Taming
+        public ConfigHelper.ConfigValueListener<Boolean> breedingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Double> defaultTamingXp;
 
         public ConfigImplementation(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber)
         {
@@ -426,11 +428,6 @@ public class Config
                         .comment( "Should xp values for breaking things first time be enabled? False means only Hardness xp is awarded for breaking" )
                         .translation( "pmmo.xpValueEnabled" )
                         .define( "xpValueEnabled", true) );
-
-                this.xpValueCraftingEnabled = subscriber.subscribe(builder
-                        .comment( "Should xp values for crafting be enabled? False means only static of 1xp is awarded upon crafting" )
-                        .translation( "pmmo.xpValueCraftingEnabled" )
-                        .define( "xpValueCraftingEnabled", true) );
 
                 this.oreEnabled = subscriber.subscribe(builder
                         .comment( "Should ores be enabled? False means no extra chance" )
@@ -796,10 +793,10 @@ public class Config
                         .translation( "pmmo.breedingXpEnabled" )
                         .define( "breedingXpEnabled", true) );
 
-                this.breedingXp = subscriber.subscribe(builder
-                        .comment( "How much xp should be awarded in Farming for breeding two animals? (Json Overrides this)" )
-                        .translation( "pmmo.breedingXp" )
-                        .defineInRange( "breedingXp", 10.0D, 0, 1000000) );
+                this.defaultBreedingXp = subscriber.subscribe(builder
+                        .comment( "How much xp should be awarded in Farming for breeding two animals? (Json Overrides this) (Set to 0 to disable default xp)" )
+                        .translation( "pmmo.defaultBreedingXp" )
+                        .defineInRange( "defaultBreedingXp", 10.0D, 0, 1000000) );
 
                 builder.pop();
             }
@@ -996,6 +993,16 @@ public class Config
 
             builder.push( "Crafting" );
             {
+                this.xpValueCraftingEnabled = subscriber.subscribe(builder
+                        .comment( "Should xp values for crafting be enabled? False means the default value is used" )
+                        .translation( "pmmo.xpValueCraftingEnabled" )
+                        .define( "xpValueCraftingEnabled", true) );
+
+                this.defaultCraftingXp = subscriber.subscribe(builder
+                        .comment( "How much xp should be awarded in Crafting for each item crafted? (Json Overrides this) (Set to 0 to disable default xp)" )
+                        .translation( "pmmo.defaultCraftingXp" )
+                        .defineInRange( "defaultCraftingXp", 1D, 0, 1000000) );
+
                 builder.pop();
             }
 
@@ -1005,7 +1012,6 @@ public class Config
                         .comment( "How much slayer xp is awarded upon killing an aggresive mob by default" )
                         .translation( "pmmo.aggresiveMobSlayerXp" )
                         .defineInRange( "aggresiveMobSlayerXp", 0D, 0, 10000) );
-
 
                 builder.pop();
             }
@@ -1023,9 +1029,14 @@ public class Config
             builder.push( "Taming" );
             {
                 this.tamingXpEnabled = subscriber.subscribe(builder
-                        .comment( "Do players get xp for taming animals? (no default values, need to fill them in json config)" )
+                        .comment( "Do players get xp for taming animals?" )
                         .translation( "pmmo.tamingXpEnabled" )
                         .define( "tamingXpEnabled", true) );
+
+                this.defaultTamingXp = subscriber.subscribe(builder
+                        .comment( "How much xp should be awarded in Taming for Taming an animal? (Json Overrides this) (Set to 0 to disable default xp)" )
+                        .translation( "pmmo.defaultTamingXp" )
+                        .defineInRange( "defaultTamingXp", 0D, 0, 1000000) );
 
                 builder.pop();
             }

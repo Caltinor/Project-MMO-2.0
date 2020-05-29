@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -13,6 +14,8 @@ import java.util.Map;
 
 public class CraftedHandler
 {
+    private static final double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
+
     public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
     {
         PlayerEntity player = event.getPlayer();
@@ -20,7 +23,7 @@ public class CraftedHandler
         {
             double durabilityMultiplier = 1;
             Map<String, Double> award = new HashMap<>();
-            award.put( "crafting", 1D );
+            award.put( "crafting", defaultCraftingXp );
             ItemStack itemStack = event.getCrafting();
             ResourceLocation resLoc = itemStack.getItem().getRegistryName();
 

@@ -113,7 +113,7 @@ public class EventHandler
 	@SubscribeEvent
 	public static void animalTaming( AnimalTameEvent event )
 	{
-		TamingHandler.handleAnimalTaming( event );
+		TameHandler.handleAnimalTaming( event );
 	}
 
 	@SubscribeEvent

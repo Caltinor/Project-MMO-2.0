@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
@@ -18,6 +19,7 @@ public class MainScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
+    private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 256;
@@ -50,12 +52,12 @@ public class MainScreen extends Screen
             Minecraft.getInstance().player.closeScreen();
         });
 
-        TileButton glossaryButton = new TileButton(x + 24 + 36 * 1, y + 24 + 36 * 5, 3, 5, "pmmo.glossary", "", (something) ->
+        TileButton glossaryButton = new TileButton(x + 24 + 36 * 1, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", "", (something) ->
         {
             Minecraft.getInstance().displayGuiScreen(new GlossaryScreen(new TranslationTextComponent("pmmo.skills") ) );
         });
 
-        TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 5, 3, 6, "pmmo.stats", "", (something) ->
+        TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new StatsScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
         });
@@ -79,13 +81,17 @@ public class MainScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        fillGradient(x + 20, y + 16, x + 232, y + 200, 0x22444444, 0x33222222);
+//        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
         for( TileButton button : tileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
                 renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
+
+        RenderSystem.enableBlend();
+        Minecraft.getInstance().getTextureManager().bindTexture( logo );
+        this.blit( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override
@@ -99,12 +105,11 @@ public class MainScreen extends Screen
         else
             this.renderDirtBackground(p_renderBackground_1_);
 
+
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
-
-//        RenderSystem.enableBlend();
-
+        RenderSystem.disableBlend();
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }
 

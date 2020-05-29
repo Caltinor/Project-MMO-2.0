@@ -67,7 +67,7 @@ public class StatsScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        fillGradient(x + 20, y + 16, x + 232, y + 200, 0x22444444, 0x33222222);
+//        fillGradient(x + 20, y + 16, x + 232, y + 200, 0x22444444, 0x33222222);
 
         for( TileButton button : tileButtons )
         {

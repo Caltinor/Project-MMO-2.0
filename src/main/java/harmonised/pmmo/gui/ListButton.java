@@ -92,6 +92,16 @@ public class ListButton extends Button
                 break;
         }
 
+        switch( regKey )
+        {
+            case "pmmo.otherCrafts":
+            case "pmmo.otherAnimals":
+            case "pmmo.otherPassiveMobs":
+            case "pmmo.otherAggresiveMobs":
+                this.title = new TranslationTextComponent( new TranslationTextComponent( regKey ).getFormattedText() ).getString();
+                break;
+        }
+
         if( elementOne > 23 )
             offsetOne = 192;
         else if( elementOne > 15 )
