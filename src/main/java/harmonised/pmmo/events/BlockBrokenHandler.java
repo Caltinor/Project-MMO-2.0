@@ -42,7 +42,7 @@ public class BlockBrokenHandler
         PlayerEntity player = event.getPlayer();
 
 
-        if( !( player instanceof FakePlayer ) || player instanceof PMMOFakePlayer )
+        if( !( player instanceof FakePlayer ) )
             processReq( event );
     }
 

@@ -181,7 +181,7 @@
   "pmmo.useTitle": "Using Items and Blocks Requirements",
   "pmmo.placeTitle": "Placing Blocks Requirements",
   "pmmo.breakTitle": "Breaking Blocks Requirements",
-  "pmmo.biomeTitle": "Surviving in Biomes Requirements",
+  "pmmo.biomeTitle": "Biomes Info",
   "pmmo.oreTitle": "Ores",
   "pmmo.logTitle": "Logs",
   "pmmo.plantTitle": "Plants",
@@ -199,7 +199,8 @@
   "pmmo.salvagesFromTitle": "Items that are a result of Salvaging",
   "pmmo.wear": "To Wear",
   "pmmo.place": "To Place",
-  "pmmo.lists": "Lists",
+  "pmmo.glossary": "Glossary",
   "pmmo.stats": "Stats",
-  "pmmo.exit": "Exit"
+  "pmmo.exit": "Exit",
+  "pmmo.creativeWarning": "All entries will be shown as unlocked in Creative mode!"
 }

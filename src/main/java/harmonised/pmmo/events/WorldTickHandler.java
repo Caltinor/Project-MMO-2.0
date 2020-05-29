@@ -1,11 +1,9 @@
 package harmonised.pmmo.events;
 
-import com.mojang.authlib.GameProfile;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.skills.PMMOFakePlayer;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.skills.XP;
@@ -14,24 +12,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class WorldTickHandler
@@ -70,7 +64,9 @@ public class WorldTickHandler
         CompoundNBT abilitiesTag;
         double cost;
         boolean correctBlock, correctItem, correctHeldItem;
-        
+
+        if( event.world.getServer() == null )
+            return;
         
         for( PlayerEntity player : event.world.getServer().getPlayerList().getPlayers() )
         {

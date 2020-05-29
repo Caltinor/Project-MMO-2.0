@@ -1,35 +1,27 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
-import it.unimi.dsi.fastutil.ints.IntComparators;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.client.gui.ScrollPanel;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
@@ -84,7 +76,7 @@ public class ScrollScreen extends Screen
 
         Button exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen(new SkillsScreen(getTransComp("pmmo.skills")));
+            Minecraft.getInstance().displayGuiScreen(new GlossaryScreen(getTransComp("pmmo.skills")));
         });
 
         Map<String, Map<String, Object>> reqMap = XP.getFullReqMap( type );
@@ -812,7 +804,10 @@ public class ScrollScreen extends Screen
     {
         renderBackground( 1 );
 
-        drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+        if( font.getStringWidth( title.getString() ) > 220 )
+            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+        else
+            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -846,7 +841,6 @@ public class ScrollScreen extends Screen
         }
 
 //        renderTooltip( mouseX + " " + mouseY, mouseX, mouseY );
-//        drawCenteredString(Minecraft.getInstance().fontRenderer, player.getDisplayName().getString() + " " + type,x + boxWidth / 2, y + boxHeight / 2, 50000 );
         super.render(mouseX, mouseY, partialTicks);
     }
 
@@ -855,7 +849,7 @@ public class ScrollScreen extends Screen
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
 

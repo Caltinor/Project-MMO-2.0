@@ -14,21 +14,21 @@ import net.minecraft.util.text.TranslationTextComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainScreen extends Screen
+public class StatsScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    MainWindow sr = Minecraft.getInstance().getMainWindow();
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
     private int y;
     private List<TileButton> tileButtons;
 
-    public MainScreen(ITextComponent titleIn)
+    public StatsScreen( ITextComponent titleIn )
     {
-        super(titleIn);
+        super( titleIn );
     }
 
 //    @Override
@@ -47,27 +47,15 @@ public class MainScreen extends Screen
 
         TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "pmmo.exit", "", (something) ->
         {
-            Minecraft.getInstance().player.closeScreen();
-        });
-
-        TileButton glossaryButton = new TileButton(x + 24 + 36 * 1, y + 24 + 36 * 5, 3, 5, "pmmo.glossary", "", (something) ->
-        {
-            Minecraft.getInstance().displayGuiScreen(new GlossaryScreen(new TranslationTextComponent("pmmo.skills") ) );
-        });
-
-        TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 5, 3, 6, "pmmo.stats", "", (something) ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new StatsScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
+            Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
         });
 
         addButton(exitButton);
-        tileButtons.add(glossaryButton);
-        tileButtons.add(statsButton);
 
-        for( TileButton button : tileButtons )
-        {
-            addButton( button );
-        }
+//        for( TileButton button : tileButtons )
+//        {
+//            addButton( button );
+//        }
     }
 
     @Override

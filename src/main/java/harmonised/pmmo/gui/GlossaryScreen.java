@@ -17,7 +17,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkillsScreen extends Screen
+public class GlossaryScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png");
@@ -29,8 +29,9 @@ public class SkillsScreen extends Screen
     private int y;
     private MyScrollPanel myList;
     private List<TileButton> tileButtons;
+    private String creativeText;
 
-    public SkillsScreen(ITextComponent titleIn)
+    public GlossaryScreen(ITextComponent titleIn)
     {
         super(titleIn);
     }
@@ -48,13 +49,15 @@ public class SkillsScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
+        creativeText = new TranslationTextComponent( "pmmo.creativeWarning" ).getString();
+
         TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
         });
         TileButton wearButton = new TileButton(0, 0, 3, 9, "pmmo.wearTitle", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen ( new TranslationTextComponent( ((TileButton) button).transKey ), "wear", Minecraft.getInstance().player));
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen ( new TranslationTextComponent( ((TileButton) button).transKey ), "wear", Minecraft.getInstance().player) );
         });
         TileButton toolButton = new TileButton( 0, 0, 3, 10, "pmmo.toolTitle", "", (button) ->
         {
@@ -218,6 +221,14 @@ public class SkillsScreen extends Screen
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
                 renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
+
+        if( Minecraft.getInstance().player.isCreative() )
+        {
+            if( font.getStringWidth( creativeText ) > 220 )
+                drawCenteredString(Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 10, 0xffff00 );
+            else
+                drawCenteredString(Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 5, 0xffff00 );
+        }
     }
 
     @Override
@@ -225,7 +236,7 @@ public class SkillsScreen extends Screen
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
+            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
 
