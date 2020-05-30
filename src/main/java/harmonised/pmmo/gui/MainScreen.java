@@ -52,14 +52,14 @@ public class MainScreen extends Screen
             Minecraft.getInstance().player.closeScreen();
         });
 
-        TileButton glossaryButton = new TileButton(x + 24 + 36 * 1, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", "", (something) ->
+        TileButton glossaryButton = new TileButton(x + 24 + 36 * 1, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", "", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen(new GlossaryScreen(new TranslationTextComponent("pmmo.skills") ) );
         });
 
-        TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (something) ->
+        TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new StatsScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( ((TileButton) button).transKey ), "stats", Minecraft.getInstance().player ) );
         });
 
         addButton(exitButton);

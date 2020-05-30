@@ -44,6 +44,11 @@ public class DP
 		return String.format( Locale.ENGLISH , "%.2f", input );
 	}
 
+	public static String dpCustom( Double input, int decPlaces )
+	{
+		return String.format( Locale.ENGLISH , "%." + decPlaces + "f", input );
+	}
+
 	public static String dpSoft( Double input )
 	{
 		if( input % 1 == 0 )

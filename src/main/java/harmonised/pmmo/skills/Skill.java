@@ -36,13 +36,14 @@ public enum Skill
     SLAYER( 16 ),
     HUNTER( 17 ),
     FLETCHING( 18 ),
-    TAMING( 19 );
+    TAMING( 19 ),
+    ENGINEERING( 20 );
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static Map< String, Integer > map = new HashMap<>();
+    private static final Map< String, Integer > map = new HashMap<>();
 //    Skill[] VALUES = values();
 
-    private int value;
+    private final int value;
 
     static
     {
@@ -56,6 +57,8 @@ public enum Skill
     {
         this.value = i;
     }
+
+//    public static
 
     public static int getInt( String i )
     {

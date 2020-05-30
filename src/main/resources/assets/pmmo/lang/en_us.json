@@ -36,6 +36,7 @@
   "pmmo.fletching": "Fletching",
   "pmmo.taming": "Taming",
   "pmmo.hunter": "Hunter",
+  "pmmo.engineering": "Engineering",
   "pmmo.welcome": "Thank you for using Project MMO! Most features can be tweaked in config.",
   "pmmo.savedFall": "Saved %1$s fall damage!",
   "pmmo.extraDrop": "%1$s Extra %2$s Dropped!",
@@ -206,5 +207,8 @@
   "pmmo.glossary": "Glossary",
   "pmmo.stats": "Stats",
   "pmmo.exit": "Exit",
-  "pmmo.creativeWarning": "All entries will be shown as unlocked in Creative mode!"
+  "pmmo.creativeWarning": "All entries will be shown as unlocked in Creative mode!",
+  "pmmo.currentXp": "Current Xp: %1$s",
+  "pmmo.nextLevelXp": "Next Level: %1$s",
+  "pmmo.RemainderXp": "Remainder: %1$s"
 }

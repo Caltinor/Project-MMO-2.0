@@ -107,6 +107,12 @@ public class BlockBrokenHandler
         }
     }
 
+    private static boolean rollChance( double extraChance )
+    {
+//        System.out.println( Math.random() + " " + extraChance );
+        return Math.random() < extraChance;
+    }
+
     private static void processBroken( BlockEvent.BreakEvent event )
     {
         BlockState state = event.getState();
@@ -132,16 +138,18 @@ public class BlockBrokenHandler
         if( hardness > blockHardnessLimitForBreaking )
             hardness = blockHardnessLimitForBreaking;
 
-        boolean isEffective = false;
+        boolean isEffective = true;
 
-        for( ToolType toolType : player.getHeldItemMainhand().getToolTypes() )
-        {
-            if( state.isToolEffective( toolType ) )
-            {
-                isEffective = true;
-                break;
-            }
-        }
+//        for( ToolType toolType : player.getHeldItemMainhand().getToolTypes() )
+//        {
+//            ToolType blockToolType = block.getHarvestTool( state );
+//
+//            if( toolType == blockToolType )
+//            {
+//                isEffective = true;
+//                break;
+//            }
+//        }
 
         String awardMsg = "";
         Map<String, Double> award = new HashMap<>();
@@ -285,25 +293,27 @@ public class BlockBrokenHandler
                 award.put( skill, hardness );
 
                 double extraChance = XP.getExtraChance( player, block.getRegistryName(), "plant" ) / 100;
-                int guaranteedDrop = 0;
-                int extraDrop = 0;
 
-                guaranteedDrop = (int) Math.floor( extraChance );
-                extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
+                int guaranteedDrop = (int) extraChance;
+                int extraDrop;
 
-                if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
+                if( rollChance( extraChance % 1 ) )
                     extraDrop = 1;
+                else
+                    extraDrop = 0;
 
-                if( guaranteedDrop + extraDrop > 0 )
+                int totalExtraDrops = guaranteedDrop + extraDrop;
+
+                if( totalExtraDrops > 0 )
                 {
                     XP.dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
-                int totalDrops = theDropCount + guaranteedDrop + extraDrop;
+                int totalDrops = theDropCount + totalExtraDrops;
 
                 award = XP.multiplyMap( XP.addMaps( award, XP.getXp( block.getRegistryName() ) ), totalDrops );
-                awardMsg = "harvesting " + ( theDropCount) + " + " + ( guaranteedDrop + extraDrop ) + " crops";
+                awardMsg = "harvesting " + ( theDropCount) + " + " + totalExtraDrops + " crops";
             }
             else if( !wasPlaced )
                 awardMsg = "breaking a plant";
@@ -322,27 +332,28 @@ public class BlockBrokenHandler
             {
                 double extraChance = XP.getExtraChance( player, block.getRegistryName(), "ore" ) / 100;
 
-                int guaranteedDrop = 0;
-                int extraDrop = 0;
+                int guaranteedDrop = (int) extraChance;
+                int extraDrop;
 
-                guaranteedDrop = (int)Math.floor( extraChance );
-                extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
-
-
-                if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
+                if( rollChance( extraChance % 1 ) )
                     extraDrop = 1;
+                else
+                    extraDrop = 0;
+
+                int totalExtraDrops = guaranteedDrop + extraDrop;
 
                 if( !noDropOre && wasPlaced )
                     award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName() ), ( drops.get( 0 ).getCount() ) ) );
 
                 awardMsg = "mining a block";
 
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName() ), ( guaranteedDrop + extraDrop ) ) );
-                if( guaranteedDrop + extraDrop > 0 )
+                if( totalExtraDrops > 0 )
                 {
                     XP.dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
+
+                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName() ), totalExtraDrops ) );
             }
             else
                 awardMsg = "mining a block";
@@ -351,29 +362,25 @@ public class BlockBrokenHandler
         {
             if( !wasPlaced )			//EXTRA DROPS
             {
-                double extraChance = XP.getExtraChance( player, block.getRegistryName(), "log" ) / 100;
+                double extraChance = XP.getExtraChance( player, block.getRegistryName(), "log" ) / 100D;
 
-                int guaranteedDrop = 0;
-                int extraDrop = 0;
+                int guaranteedDrop = (int) extraChance;
+                int extraDrop;
 
-                if( ( extraChance ) > 1 )
-                {
-                    guaranteedDrop = (int)Math.floor( extraChance );
-                    extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
-                }
-
-                extraChance *= 100;
-
-                if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
+                if( rollChance( extraChance % 1 ) )
                     extraDrop = 1;
+                else
+                    extraDrop = 0;
 
-                if( guaranteedDrop + extraDrop > 0 )
+                int totalExtraDrops = guaranteedDrop + extraDrop;
+
+                if( totalExtraDrops > 0 )
                 {
                     XP.dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + (guaranteedDrop + extraDrop), drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName() ), ( drops.get( 0 ).getCount() + guaranteedDrop + extraDrop ) ) );
+                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName() ), ( drops.get( 0 ).getCount() + totalExtraDrops ) ) );
 
                 awardMsg = "cutting a block";
             }

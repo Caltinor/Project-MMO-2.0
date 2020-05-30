@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.Reference;
@@ -85,6 +86,10 @@ public class ListButton extends Button
                     this.title = new TranslationTextComponent( regKey ).getFormattedText();
                 else if( ForgeRegistries.MOD_DIMENSIONS.containsKey( XP.getResLoc( regKey ) ) )
                     this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getFormattedText();
+                break;
+
+            case "stats":
+                this.title = new TranslationTextComponent( "pmmo." + regKey ).setStyle( XP.skillStyle.get(Skill.getSkill( regKey ) ) ).getFormattedText();
                 break;
 
             default:

@@ -687,8 +687,11 @@ public class XP
 			case "salvagesfrom":
 				return JsonConfig.data.get( "salvagesFrom" );
 
+			case "stats":
+				return null;
+
 			default:
-				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP" );
+				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP \"" + type + "\"" );
 				return null;
 		}
 	}

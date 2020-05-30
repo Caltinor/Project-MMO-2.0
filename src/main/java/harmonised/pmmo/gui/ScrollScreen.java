@@ -44,6 +44,7 @@ public class ScrollScreen extends Screen
     private MyScrollPanel scrollPanel;
     private final PlayerEntity player;
     private final String type;
+    private final double baseXp = Config.getConfig( "baseXp" );
     private ArrayList<ListButton> listButtons = new ArrayList<>();
 
     public ScrollScreen( ITextComponent titleIn, String type, PlayerEntity player )
@@ -78,9 +79,12 @@ public class ScrollScreen extends Screen
         scrollX = x + 16;
         scrollY = y + 10;
 
-        Button exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (something) ->
+        Button exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen(new GlossaryScreen(getTransComp("pmmo.skills")));
+            if( type.equals( "stats" ) )
+                Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
+            else
+                Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( getTransComp( "pmmo.skills" ) ) );
         });
 
         Map<String, Map<String, Object>> reqMap = XP.getFullReqMap( type );
@@ -233,6 +237,7 @@ public class ScrollScreen extends Screen
                 break;
 
             case "fishEnchantPool":
+            {
                 if( reqMap == null )
                     break;
 
@@ -243,6 +248,16 @@ public class ScrollScreen extends Screen
                         tempList.add( new ListButton( 0, 0, 3, 25, entry.getKey(), type, "", button -> ((ListButton) button).clickAction() ) );
                     }
                 }
+                break;
+            }
+
+            case "stats":
+            {
+                for( int i = 1; i <= 20; i++ )
+                {
+                    tempList.add( new ListButton( 0, 0, 3, 6, Skill.getSkill( i ).name().toLowerCase(), type, "", button -> ((ListButton) button).clickAction() ) );
+                }
+            }
                 break;
 
             default:
@@ -358,13 +373,13 @@ public class ScrollScreen extends Screen
                     Map<String, Double> infoMap = XP.getReqMap( button.regKey, type );
                     List<String> infoText = new ArrayList<>();
                     String transKey = "pmmo." + type + "ExtraDrop";
-                    double extraDroppedPerLevel = infoMap.get( "extraChance" );
-                    double extraDropped = XP.getExtraChance( player, button.regKey, type );
+                    double extraDroppedPerLevel = infoMap.get( "extraChance" ) / 100;
+                    double extraDropped = XP.getExtraChance( player, button.regKey, type ) / 100;
 
                     if ( extraDroppedPerLevel <= 0 )
-                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
+                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
                     else
-                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dp( extraDroppedPerLevel) ).setStyle( XP.textStyle.get("green") ).getFormattedText() );
+                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("green") ).getFormattedText() );
 
                     if ( extraDropped <= 0 )
                         infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
@@ -647,6 +662,32 @@ public class ScrollScreen extends Screen
                 }
                     break;
 
+                case "stats":
+                {
+                    Skill skill = Skill.getSkill( button.regKey );
+
+                    if( XPOverlayGUI.skills.containsKey( skill ) )
+                    {
+                        double curXp = XPOverlayGUI.skills.get( skill ).xp;
+                        double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
+
+                        button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), XP.levelAtXp( curXp ) ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
+
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() );
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
+                    }
+                    else
+                    {
+                        button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), 1 ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
+
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.currentXp", 0 ).getFormattedText() );
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.nextLevelXp", baseXp ).getFormattedText() );
+                        button.text.add( " " + new TranslationTextComponent( "pmmo.RemainderXp", baseXp ).getFormattedText() );
+                    }
+                }
+                    break;
+
                 default:
                     break;
             }
@@ -895,6 +936,8 @@ public class ScrollScreen extends Screen
         accumulativeHeight = 0;
         buttonsSize = listButtons.size();
 
+        super.render(mouseX, mouseY, partialTicks);
+
         for( int i = 0; i < buttonsSize; i++ )
         {
             button = listButtons.get( i );
@@ -904,7 +947,7 @@ public class ScrollScreen extends Screen
 
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                if( type.equals( "biome" ) || type.equals( "kill" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) || type.equals( "fishEnchantPool" ) || button.regKey.equals( "pmmo.otherCrafts" ) )
+                if( type.equals( "biome" ) || type.equals( "kill" ) || type.equals( "breedXp" ) || type.equals( "tameXp" ) || type.equals( "dimension" ) || type.equals( "fishEnchantPool" ) || type.equals( "stats" ) || button.regKey.equals( "pmmo.otherCrafts" ) )
                     renderTooltip( button.title, mouseX, mouseY );
                 else if( button.itemStack != null )
                     renderTooltip( button.itemStack, mouseX, mouseY );
@@ -914,7 +957,6 @@ public class ScrollScreen extends Screen
         }
 
 //        renderTooltip( mouseX + " " + mouseY, mouseX, mouseY );
-        super.render(mouseX, mouseY, partialTicks);
     }
 
     @Override

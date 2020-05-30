@@ -70,6 +70,11 @@ public class XPOverlayGUI extends AbstractGui
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
 				MainWindow sr = minecraft.getMainWindow();
+//				drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+//				drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+//				drawCenteredString( fontRenderer, "Fully Customizable - Modpack Maker friendly!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+//				drawCenteredString( fontRenderer, "GUI that covers every feature of PMMO, including Modpack changes, Live!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+
 				barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
 				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
 				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
