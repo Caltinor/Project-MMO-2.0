@@ -253,9 +253,12 @@ public class ScrollScreen extends Screen
 
             case "stats":
             {
-                for( int i = 1; i <= 20; i++ )
+                Set<Skill> skills = XPOverlayGUI.skills.keySet();
+                
+                for( Skill skill : skills )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 6, Skill.getSkill( i ).name().toLowerCase(), type, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 6, skill.name().toLowerCase(), type, "", button -> ((ListButton) button).clickAction() ) );
+
                 }
             }
                 break;
@@ -666,25 +669,14 @@ public class ScrollScreen extends Screen
                 {
                     Skill skill = Skill.getSkill( button.regKey );
 
-                    if( XPOverlayGUI.skills.containsKey( skill ) )
-                    {
-                        double curXp = XPOverlayGUI.skills.get( skill ).xp;
-                        double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
+                    double curXp = XPOverlayGUI.skills.get( skill ).xp;
+                    double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
 
-                        button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), XP.levelAtXp( curXp ) ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
+                    button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), XP.levelAtXp( curXp ) ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
 
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() );
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
-                    }
-                    else
-                    {
-                        button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), 1 ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
-
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.currentXp", 0 ).getFormattedText() );
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.nextLevelXp", baseXp ).getFormattedText() );
-                        button.text.add( " " + new TranslationTextComponent( "pmmo.RemainderXp", baseXp ).getFormattedText() );
-                    }
+                    button.text.add( " " + new TranslationTextComponent( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() );
+                    button.text.add( " " + new TranslationTextComponent( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );
+                    button.text.add( " " + new TranslationTextComponent( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
                 }
                     break;
 

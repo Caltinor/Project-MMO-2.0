@@ -93,6 +93,7 @@ public class MyScrollPanel extends ScrollPanel
                     drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 4, button.y + 2, 0x54fc54 );
                 else
                     drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 4, button.y + 2, 0xfc5454 );
+
                 for( String line : button.text )
                 {
                     drawString( Minecraft.getInstance().fontRenderer, line, this.left + 4, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );

@@ -188,7 +188,6 @@ public class PmmoCommand
                   )))
                   .then( Commands.literal( "checkstats" )
                   .then( Commands.argument( "player name", EntityArgument.player() )
-                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
                   .executes( CheckStatsCommand::execute )
                   ))
                   .then( Commands.literal( "checkbiome" )
