@@ -6,6 +6,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.arguments.EntityArgument;
@@ -21,9 +22,25 @@ public class CheckStatsCommand
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
-        String playerName = args[2];
 
-        System.out.println( "requested playerName " + playerName );
+        if( sender == null )
+        {
+            LogHandler.LOGGER.error( "Error: Pmmo checkstats sent by non-player" );
+            return -1;
+        }
+
+        try
+        {
+            PlayerEntity target = EntityArgument.getPlayer( context, "player name" );
+        }
+        catch( CommandSyntaxException e )
+        {
+            LogHandler.LOGGER.error( "Error: Invalid Player requested at CheckStats Command \"" + args[2] + "\"", e );
+
+            sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+
+            return -1;
+        }
 
         return 1;
     }
