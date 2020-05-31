@@ -1,16 +1,21 @@
 package harmonised.pmmo.network;
 
+import com.mojang.authlib.GameProfile;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.gui.MainScreen;
+import harmonised.pmmo.gui.ScrollScreen;
+import harmonised.pmmo.gui.TileButton;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.common.util.FakePlayer;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessageUpdateNBT
@@ -59,6 +64,19 @@ public class MessageUpdateNBT
                     break;
 
                 case "stats":
+                    UUID uuid = UUID.fromString( packet.reqPackage.getString( "UUID" ) );
+                    packet.reqPackage.remove( "UUID" );
+
+                    String name = packet.reqPackage.getString( "name" );
+                    packet.reqPackage.remove( "name" );
+
+                    if( !XP.playerNames.containsKey( uuid ) )
+                        XP.playerNames.put( uuid, name );
+
+                    XP.skills.put( uuid, NBTHelper.nbtToMap( packet.reqPackage ) );
+
+                    if( name.equals( "Dev" ) || name.equals( "MareoftheStars" ) || name.equals( "Harmonised" ) )
+                        ClientHandler.openStats( uuid );
                     break;
 
                 default:

@@ -1,6 +1,8 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.gui.MainScreen;
+import harmonised.pmmo.gui.ScrollScreen;
+import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageKeypress;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -15,6 +17,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEventHandler
@@ -46,9 +51,21 @@ public class ClientEventHandler
 
             if( wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() )
             {
+                UUID uuid = Minecraft.getInstance().player.getUniqueID();
                 String name = Minecraft.getInstance().player.getDisplayName().getString();
+
+                XP.playerNames.put( uuid, name );
+
+                if( !XP.skills.containsKey( uuid ) )
+                    XP.skills.put( uuid, new HashMap<>() );
+
+                XPOverlayGUI.skills.forEach( (skill, aSkill) ->
+                {
+                    XP.skills.get( uuid ).put( skill.name().toLowerCase(), aSkill.goalXp );
+                });
+
                 if( name.equals( "Dev" ) || name.equals( "MareoftheStars" ) || name.equals( "Harmonised" ) )
-                    Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
+                    Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
 
                 wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
 //                NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );

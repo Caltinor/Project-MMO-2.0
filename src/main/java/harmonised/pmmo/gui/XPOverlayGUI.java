@@ -12,6 +12,7 @@ import harmonised.pmmo.util.Reference;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;

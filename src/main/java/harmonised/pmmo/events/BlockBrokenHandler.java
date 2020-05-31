@@ -41,7 +41,6 @@ public class BlockBrokenHandler
     {
         PlayerEntity player = event.getPlayer();
 
-
         if( !( player instanceof FakePlayer ) )
             processReq( event );
     }

@@ -3,10 +3,13 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.gui.XPOverlayGUI;
 
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.skills.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessageXp
@@ -51,10 +54,26 @@ public class MessageXp
 	{
 		ctx.get().enqueueWork(() ->
 		{
+			UUID uuid = Minecraft.getInstance().player.getUniqueID();
+			String name = Minecraft.getInstance().player.getName().getString();
+
 			if( packet.skill == 42069 )
+			{
+				XP.skills.remove( uuid );
 				XPOverlayGUI.clearXP();
+			}
 			else
+			{
+				if(  !XP.playerNames.containsKey( uuid ) )
+					XP.playerNames.put( uuid, name );
+
+				if(  !XP.skills.containsKey( uuid ) )
+					XP.skills.put( uuid, new HashMap<>() );
+
+				XP.skills.get( uuid ).put( Skill.getString( packet.skill ), packet.xp + packet.gainedXp );
+
 				XPOverlayGUI.makeXpDrop( packet.xp, Skill.getSkill( packet.skill ), 10000, packet.gainedXp, packet.skip );
+			}
 		});
 		ctx.get().setPacketHandled(true);
 	}

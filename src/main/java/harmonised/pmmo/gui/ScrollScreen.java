@@ -46,12 +46,16 @@ public class ScrollScreen extends Screen
     private final String type;
     private final double baseXp = Config.getConfig( "baseXp" );
     private ArrayList<ListButton> listButtons = new ArrayList<>();
+    private UUID uuid;
+    private ITextComponent title;
 
-    public ScrollScreen( ITextComponent titleIn, String type, PlayerEntity player )
+    public ScrollScreen( UUID uuid, ITextComponent titleIn, String type, PlayerEntity player )
     {
         super(titleIn);
+        this.title = titleIn;
         this.player = player;
         this.type = type;
+        this.uuid = uuid;
     }
 
 //    @Override
@@ -82,9 +86,9 @@ public class ScrollScreen extends Screen
         Button exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (button) ->
         {
             if( type.equals( "stats" ) )
-                Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.potato" ) ) );
+                Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
             else
-                Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( getTransComp( "pmmo.skills" ) ) );
+                Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ) ) );
         });
 
         Map<String, Map<String, Object>> reqMap = XP.getFullReqMap( type );
@@ -253,12 +257,11 @@ public class ScrollScreen extends Screen
 
             case "stats":
             {
-                Set<Skill> skills = XPOverlayGUI.skills.keySet();
-                
-                for( Skill skill : skills )
-                {
-                    tempList.add( new ListButton( 0, 0, 3, 6, skill.name().toLowerCase(), type, "", button -> ((ListButton) button).clickAction() ) );
+                Set<String> skills = XP.skills.get( uuid ).keySet();
 
+                for( String skill : skills )
+                {
+                    tempList.add( new ListButton( 0, 0, 3, 6, skill, type, "", button -> ((ListButton) button).clickAction() ) );
                 }
             }
                 break;
@@ -669,14 +672,14 @@ public class ScrollScreen extends Screen
                 {
                     Skill skill = Skill.getSkill( button.regKey );
 
-                    double curXp = XPOverlayGUI.skills.get( skill ).xp;
+                    double curXp = XP.getXpOffline( skill, uuid );
                     double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
 
                     button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), XP.levelAtXp( curXp ) ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
 
-                    button.text.add( " " + new TranslationTextComponent( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() );
-                    button.text.add( " " + new TranslationTextComponent( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );
-                    button.text.add( " " + new TranslationTextComponent( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
                 }
                     break;
 
@@ -762,6 +765,10 @@ public class ScrollScreen extends Screen
 
             case "salvagesTo":
                 listButtons.sort( Comparator.comparingDouble( b -> (double) reqMap.get( b.regKey ).get( "levelReq" ) ) );
+                break;
+
+            case "stats":
+                listButtons.sort( Comparator.comparingDouble( b -> XP.getXpOffline( Skill.getSkill( ((ListButton) b).regKey ), uuid ) ).reversed() );
                 break;
 
             default:
@@ -909,6 +916,9 @@ public class ScrollScreen extends Screen
     public void render(int mouseX, int mouseY, float partialTicks)
     {
         renderBackground( 1 );
+
+        if( type.equals( "stats" ) )
+            title = getTransComp( "pmmo.playerStats", XP.playerNames.get( uuid ) );
 
         if( font.getStringWidth( title.getString() ) > 220 )
             drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );

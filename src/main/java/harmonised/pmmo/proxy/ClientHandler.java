@@ -1,5 +1,6 @@
 package harmonised.pmmo.proxy;
 
+import harmonised.pmmo.gui.ScrollScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.skills.AttributeHandler;
@@ -9,12 +10,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class ClientHandler
 {
@@ -65,5 +68,10 @@ public class ClientHandler
                 LogHandler.LOGGER.error( "ERROR MessageUpdateNBT WRONG TYPE" );
                 break;
         }
+    }
+
+    public static void openStats( UUID uuid )
+    {
+        Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), "stats", Minecraft.getInstance().player ) );
     }
 }

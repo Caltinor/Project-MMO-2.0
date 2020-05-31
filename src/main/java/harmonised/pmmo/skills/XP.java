@@ -54,6 +54,8 @@ public class XP
 	public static Set<UUID> isVeining = new HashSet<>();
 	public static Map<Skill, Style> skillStyle = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
+	public static Map<UUID, Map<String, Double>> skills = new HashMap<>();
+	public static Map<UUID, String> playerNames = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
 	private static boolean broadcastMilestone = Config.forgeConfig.broadcastMilestone.get();
@@ -80,6 +82,7 @@ public class XP
 		skillColors.put( Skill.HUNTER, 0xcf7815 );
 		skillColors.put( Skill.FLETCHING, 0xff9700 );
 		skillColors.put( Skill.TAMING, 0xffffff );
+		skillColors.put( Skill.ENGINEERING, 0xffffff );
 
 		skillStyle.put( Skill.MINING, new Style().setColor( TextFormatting.AQUA ) );
 		skillStyle.put( Skill.BUILDING, new Style().setColor( TextFormatting.AQUA ) );
@@ -96,10 +99,11 @@ public class XP
 		skillStyle.put( Skill.FISHING, new Style().setColor( TextFormatting.AQUA ) );
 		skillStyle.put( Skill.CRAFTING, new Style().setColor( TextFormatting.GOLD ) );
 		skillStyle.put( Skill.MAGIC, new Style().setColor( TextFormatting.BLUE ) );
-		skillStyle.put( Skill.SLAYER, new Style().setColor( TextFormatting.DARK_GRAY ) );
+		skillStyle.put( Skill.SLAYER, new Style().setColor( TextFormatting.GRAY ) );
 		skillStyle.put( Skill.HUNTER, new Style().setColor( TextFormatting.GOLD ) );
 		skillStyle.put( Skill.FLETCHING, new Style().setColor( TextFormatting.DARK_GREEN ) );
 		skillStyle.put( Skill.TAMING, new Style().setColor( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.ENGINEERING, new Style().setColor( TextFormatting.WHITE ) );
 
 //		skillStyle.put(Skill.MINING, TextFormatting.AQUA );
 //		skillStyle.put( Skill.BUILDING, TextFormatting.AQUA );
@@ -389,13 +393,38 @@ public class XP
 
 		if( player.world.isRemote() )
 		{
-			if( XPOverlayGUI.skills.containsKey( skill ) )
-				startXp = XPOverlayGUI.skills.get( skill ).goalXp;
+			if( XP.skills.containsKey( player.getUniqueID() ) && XP.skills.get( player.getUniqueID() ).containsKey( skill.name().toLowerCase() ) )
+				startXp = XP.skills.get( player.getUniqueID() ).get( skill.name().toLowerCase() );
 		}
 		else
 			startXp = getSkillsTag( player ).getDouble( skill.name().toLowerCase() );
 
 		return startXp;
+	}
+
+	public static double getXpOffline( Skill skill, UUID uuid )
+	{
+		double startXp = 0;
+
+		if( XP.skills.containsKey( uuid ) && XP.skills.get( uuid ).containsKey( skill.name().toLowerCase() ) )
+			startXp = XP.skills.get( uuid ).get( skill.name().toLowerCase() );
+
+		return startXp;
+	}
+
+	public static int getLevelOffline( Skill skill, UUID uuid )
+	{
+		return levelAtXp( getXpOffline( skill, uuid ) );
+	}
+
+	public static double getLevelDecimalOffline( Skill skill, UUID uuid )
+	{
+		double startLevel = 1;
+
+		if( XP.skills.containsKey( uuid ) && XP.skills.get( uuid ).containsKey( skill.name().toLowerCase() ) )
+			startLevel = levelAtXpDecimal( XP.skills.get( uuid ).get( skill.name().toLowerCase() ) );
+
+		return startLevel;
 	}
 
 	public static double getLevelDecimal( Skill skill, PlayerEntity player )

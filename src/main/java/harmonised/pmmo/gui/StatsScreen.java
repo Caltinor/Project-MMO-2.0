@@ -13,6 +13,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class StatsScreen extends Screen
 {
@@ -25,10 +26,12 @@ public class StatsScreen extends Screen
     private int x;
     private int y;
     private List<TileButton> tileButtons;
+    private UUID uuid;
 
-    public StatsScreen( ITextComponent titleIn )
+    public StatsScreen( UUID uuid, ITextComponent titleIn )
     {
         super( titleIn );
+        this.uuid = uuid;
     }
 
 //    @Override
@@ -47,7 +50,7 @@ public class StatsScreen extends Screen
 
         TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "pmmo.exit", "", (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new MainScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
+            Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
         });
 
         addButton(exitButton);

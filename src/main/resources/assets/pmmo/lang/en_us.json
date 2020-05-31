@@ -206,6 +206,7 @@
   "pmmo.place": "To Place",
   "pmmo.glossary": "Glossary",
   "pmmo.stats": "Stats",
+  "pmmo.playerStats": "%1$s Stats",
   "pmmo.exit": "Exit",
   "pmmo.creativeWarning": "All entries will be shown as unlocked in Creative mode!",
   "pmmo.currentXp": "Current Xp: %1$s",

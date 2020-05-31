@@ -14,6 +14,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MainScreen extends Screen
 {
@@ -27,10 +28,12 @@ public class MainScreen extends Screen
     private int x;
     private int y;
     private List<TileButton> tileButtons;
+    private UUID uuid;
 
-    public MainScreen(ITextComponent titleIn)
+    public MainScreen( UUID uuid, ITextComponent titleIn )
     {
         super(titleIn);
+        this.uuid = uuid;
     }
 
 //    @Override
@@ -54,12 +57,12 @@ public class MainScreen extends Screen
 
         TileButton glossaryButton = new TileButton(x + 24 + 36 * 1, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen(new GlossaryScreen(new TranslationTextComponent("pmmo.skills") ) );
+            Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
         TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( new TranslationTextComponent( ((TileButton) button).transKey ), "stats", Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "stats", Minecraft.getInstance().player ) );
         });
 
         addButton(exitButton);
