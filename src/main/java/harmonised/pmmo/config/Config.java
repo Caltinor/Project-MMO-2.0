@@ -56,8 +56,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showDonatorWelcome;
-        public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
-
+        
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Double> veinMaxDistance;
@@ -108,7 +107,11 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> maxLevel;
         public ConfigHelper.ConfigValueListener<Integer> baseXp;
         public ConfigHelper.ConfigValueListener<Integer> xpIncreasePerLevel;
+        public ConfigHelper.ConfigValueListener<Integer> levelsPerMilestone;
         public ConfigHelper.ConfigValueListener<Boolean> wipeAllSkillsUponDeathPermanently;
+        public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
+        public ConfigHelper.ConfigValueListener<Boolean> levelUpFirework;
+        public ConfigHelper.ConfigValueListener<Boolean> milestoneLevelUpFirework;
 
         //Multipliers
         public ConfigHelper.ConfigValueListener<Double> globalMultiplier;
@@ -256,12 +259,7 @@ public class Config
                         .comment( "Should your personal Donator Welcome message come up?" )
                         .translation( "pmmo.showDonatorWelcome" )
                         .define( "showDonatorWelcome", true) );
-
-                this.broadcastMilestone = subscriber.subscribe(builder
-                        .comment( "Should every 10th level up be broadcast to everyone?" )
-                        .translation( "pmmo.broadcastMilestone" )
-                        .define( "broadcastMilestone", true) );
-
+                
                 builder.pop();
             }
 
@@ -499,11 +497,31 @@ public class Config
                         .translation( "pmmo.xpIncreasePerLevel" )
                         .defineInRange( "xpIncreasePerLevel", 50, 1, 1000000 ) );
 
+                this.levelsPerMilestone = subscriber.subscribe(builder
+                        .comment( "Every how many levels should a level up broadcast be sent to all players? (10 = every 10 levels)" )
+                        .translation( "pmmo.levelsPerMilestone" )
+                        .defineInRange( "levelsPerMilestone", 10, 1, 1000000 ) );
+
                 this.wipeAllSkillsUponDeathPermanently = subscriber.subscribe(builder
                         .comment( "Should a player have all their skills wiped to level 1 upon death?" )
                         .translation( "pmmo.wipeAllSkillsUponDeathPermanently" )
                         .define( "wipeAllSkillsUponDeathPermanently", false ) );
 
+                this.broadcastMilestone = subscriber.subscribe(builder
+                        .comment( "Should every 10th level up be broadcast to everyone?" )
+                        .translation( "pmmo.broadcastMilestone" )
+                        .define( "broadcastMilestone", true) );
+
+                this.levelUpFirework = subscriber.subscribe(builder
+                        .comment( "Should fireworks appear on level up?" )
+                        .translation( "pmmo.levelUpFirework" )
+                        .define( "levelUpFirework", true) );
+
+                this.milestoneLevelUpFirework = subscriber.subscribe(builder
+                        .comment( "Should fireworks appear on Milestone level up, to other players?" )
+                        .translation( "pmmo.milestoneLevelUpFirework" )
+                        .define( "milestoneLevelUpFirework", true) );
+                
                 builder.pop();
             }
 

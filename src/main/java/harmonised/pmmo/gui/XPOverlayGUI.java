@@ -613,8 +613,6 @@ public class XPOverlayGUI extends AbstractGui
 			screenshots.add( player.getDisplayName().getString() + " " + skill.name().toLowerCase() + " " + level );
 
 		NetworkHandler.sendToServer( new MessageLevelUp( skill.getValue(), level ) );
-
-		System.out.println( player.getBlockState() );
 	}
 	
 	public static void makeXpDrop( double xp, Skill skillIn, int cooldown, double gainedXp, boolean skip )

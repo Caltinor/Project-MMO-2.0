@@ -41,6 +41,10 @@ public class TooltipHandler
                 Item item = itemStack.getItem();
                 List<ITextComponent> tooltip = event.getToolTip();
                 int level;
+
+                if( item.getRegistryName() == null )
+                    return;
+
                 String regKey = item.getRegistryName().toString();
                 float hardness;
                 double dValue;

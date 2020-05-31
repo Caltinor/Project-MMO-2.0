@@ -15,11 +15,14 @@ import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
+import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.IntArrayNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -1031,6 +1034,9 @@ public class XP
 
 	public static double getItemBoost( PlayerEntity player, Skill skill )
 	{
+		if( player.getHeldItemMainhand().getItem().getRegistryName() == null )
+			return 0;
+
 		double itemBoost = 0;
 
 		String skillName = skill.toString().toLowerCase();
@@ -1291,6 +1297,35 @@ public class XP
 		}
 
 		return gap;
+	}
+
+	public static void spawnRocket( World world, BlockPos pos, Skill skill )
+	{
+		CompoundNBT nbt = new CompoundNBT();
+		CompoundNBT fw = new CompoundNBT();
+		ListNBT explosion = new ListNBT();
+		CompoundNBT l = new CompoundNBT();
+
+		int[] colors = new int[1];
+		colors[0] = skillColors.get( skill );
+//		int[] fadeColors = {0xff0000, 0x00ff00, 0x0000ff};
+
+		l.putInt( "Flicker", 1 );
+		l.putInt( "Trail", 0 );
+		l.putInt( "Type", 1 );
+		l.put( "Colors", new IntArrayNBT( colors ) );
+//		l.put( "FadeColors", new IntArrayNBT( fadeColors ) );
+		explosion.add(l);
+
+		fw.put( "Explosions", explosion );
+		fw.putInt( "Flight", 1 );
+		nbt.put( "Fireworks", fw );
+
+		ItemStack itemStack = new ItemStack( Items.FIREWORK_ROCKET );
+		itemStack.setTag( nbt );
+
+		FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
+		world.addEntity( fireworkRocketEntity );
 	}
 
 	public static void applyWornPenalty(PlayerEntity player, Item item)

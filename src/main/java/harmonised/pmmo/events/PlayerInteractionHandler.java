@@ -40,6 +40,10 @@ public class PlayerInteractionHandler
             Item item = itemStack.getItem();
             Block goldBlock 	= 	Blocks.GOLD_BLOCK;
             Block smithBlock    =   Blocks.SMITHING_TABLE;
+
+            if( item.getRegistryName() == null )
+                return;
+
             String regKey = item.getRegistryName().toString();
             int startLevel;
             boolean isRemote = player.world.isRemote();
