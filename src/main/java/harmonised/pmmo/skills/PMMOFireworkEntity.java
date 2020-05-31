@@ -7,12 +7,6 @@ import net.minecraft.world.World;
 
 public class PMMOFireworkEntity extends FireworkRocketEntity
 {
-
-    public PMMOFireworkEntity(EntityType<? extends FireworkRocketEntity> p_i50164_1_, World p_i50164_2_)
-    {
-        super(p_i50164_1_, p_i50164_2_);
-    }
-
     public PMMOFireworkEntity(World worldIn, double x, double y, double z, ItemStack givenItem) {
         super(EntityType.FIREWORK_ROCKET, worldIn);
         this.fireworkAge = 0;

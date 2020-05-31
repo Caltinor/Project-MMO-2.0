@@ -2,8 +2,6 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.gui.XPOverlayGUI;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 

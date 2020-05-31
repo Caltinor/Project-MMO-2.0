@@ -39,12 +39,9 @@ import java.util.stream.Collectors;
 
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 

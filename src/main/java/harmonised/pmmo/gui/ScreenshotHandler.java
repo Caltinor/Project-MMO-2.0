@@ -3,13 +3,7 @@ package harmonised.pmmo.gui;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.resources.SimpleResource;
 import net.minecraft.util.ScreenShotHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.util.text.event.ClickEvent;
 
 import java.io.File;
 import java.text.DateFormat;

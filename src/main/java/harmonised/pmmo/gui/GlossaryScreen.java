@@ -1,15 +1,12 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;

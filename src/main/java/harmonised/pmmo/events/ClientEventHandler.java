@@ -25,7 +25,6 @@ import java.util.UUID;
 public class ClientEventHandler
 {
     private static boolean wasCrawling = false, wasVeining = false, wasOpenMenu = false, tooltipKeyWasPressed = false;
-    private static final Logger LOGGER = LogManager.getLogger();
 
     public static void subscribeClientEvents( IEventBus eventBus )
     {

@@ -4,14 +4,10 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.LogHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessageLevelUp

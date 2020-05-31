@@ -4,8 +4,6 @@ import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,18 +1,12 @@
 package harmonised.pmmo.network;
 
-import com.mojang.authlib.GameProfile;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.gui.MainScreen;
-import harmonised.pmmo.gui.ScrollScreen;
-import harmonised.pmmo.gui.TileButton;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.UUID;

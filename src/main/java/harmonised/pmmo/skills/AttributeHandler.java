@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.events.PlayerTickHandler;
 import harmonised.pmmo.events.WorldTickHandler;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -21,20 +20,20 @@ public class AttributeHandler
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");
 	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
-	private static int levelsPerHardnessReach = Config.forgeConfig.levelsPerHardnessReach.get();
-	private static int levelsPerHeart = Config.forgeConfig.levelsPerHeart.get();
-	private static int levelsPerDamage = Config.forgeConfig.levelsPerDamage.get();
-	private static double maxSpeedBoost = Config.forgeConfig.maxSpeedBoost.get();
-	private static double speedBoostPerLevel = Config.forgeConfig.speedBoostPerLevel.get();
-	private static int maxHeartCap = Config.forgeConfig.maxHeartCap.get();
-	private static double maxReach = Config.forgeConfig.maxReach.get();
-	private static double maxDamage = Config.forgeConfig.maxDamage.get();
-	private static double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
-	private static double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();
-	private static double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
-	private static double mobHPBoostPerPowerLevel = Config.forgeConfig.mobHPBoostPerPowerLevel.get();
-	private static double maxMobDamageBoost = Config.forgeConfig.maxMobDamageBoost.get();
-	private static double mobDamageBoostPerPowerLevel = Config.forgeConfig.mobDamageBoostPerPowerLevel.get();
+	private static final int levelsPerHardnessReach = Config.forgeConfig.levelsPerHardnessReach.get();
+	private static final int levelsPerHeart = Config.forgeConfig.levelsPerHeart.get();
+	private static final int levelsPerDamage = Config.forgeConfig.levelsPerDamage.get();
+	private static final double maxSpeedBoost = Config.forgeConfig.maxSpeedBoost.get();
+	private static final double speedBoostPerLevel = Config.forgeConfig.speedBoostPerLevel.get();
+	private static final int maxHeartCap = Config.forgeConfig.maxHeartCap.get();
+	private static final double maxReach = Config.forgeConfig.maxReach.get();
+	private static final double maxDamage = Config.forgeConfig.maxDamage.get();
+	private static final double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
+	private static final double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();
+	private static final double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
+	private static final double mobHPBoostPerPowerLevel = Config.forgeConfig.mobHPBoostPerPowerLevel.get();
+	private static final double maxMobDamageBoost = Config.forgeConfig.maxMobDamageBoost.get();
+	private static final double mobDamageBoostPerPowerLevel = Config.forgeConfig.mobDamageBoostPerPowerLevel.get();
 
 
 	public static void updateAll( PlayerEntity player )
