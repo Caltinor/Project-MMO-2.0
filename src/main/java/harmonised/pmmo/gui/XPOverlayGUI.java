@@ -70,9 +70,11 @@ public class XPOverlayGUI extends AbstractGui
 					doInit();
 					init = true;
 				}
+
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
 				MainWindow sr = minecraft.getMainWindow();
+
 //				drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Fully Customizable - Modpack Maker friendly!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
@@ -330,7 +332,7 @@ public class XPOverlayGUI extends AbstractGui
 					}
 				}
 
-				if( guiOn )
+				if( guiOn && !minecraft.gameSettings.showDebugInfo )
 				{
 					listIndex = 0;
 
@@ -578,6 +580,8 @@ public class XPOverlayGUI extends AbstractGui
 			screenshots.add( player.getDisplayName().getString() + " " + skill.name().toLowerCase() + " " + level );
 
 		NetworkHandler.sendToServer( new MessageLevelUp( skill.getValue(), level ) );
+
+		System.out.println( player.getBlockState() );
 	}
 	
 	public static void makeXpDrop( double xp, Skill skillIn, int cooldown, double gainedXp, boolean skip )
