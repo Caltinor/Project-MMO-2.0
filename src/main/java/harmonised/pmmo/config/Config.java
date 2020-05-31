@@ -521,7 +521,7 @@ public class Config
                         .comment( "Should fireworks appear on Milestone level up, to other players?" )
                         .translation( "pmmo.milestoneLevelUpFirework" )
                         .define( "milestoneLevelUpFirework", true) );
-                
+
                 builder.pop();
             }
 

@@ -52,7 +52,6 @@ public class XP
 {
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
 	private static Map<Skill, Integer> skillColors = new HashMap<>();
-	private static final Logger LOGGER = LogManager.getLogger();
 	public static Set<UUID> isCrawling = new HashSet<>();
 	public static Set<UUID> isVeining = new HashSet<>();
 	public static Map<Skill, Style> skillStyle = new HashMap<>();
@@ -1316,13 +1315,13 @@ public class XP
 		explosion.add(l);
 
 		fw.put( "Explosions", explosion );
-		fw.putInt( "Flight", 1 );
+		fw.putInt( "Flight", 0 );
 		nbt.put( "Fireworks", fw );
 
 		ItemStack itemStack = new ItemStack( Items.FIREWORK_ROCKET );
 		itemStack.setTag( nbt );
 
-		FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
+		FireworkRocketEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
 		world.addEntity( fireworkRocketEntity );
 	}
 
