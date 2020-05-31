@@ -55,7 +55,7 @@ public class PrefCommand
             {
                 prefsTag.putDouble( match, value );
 
-                NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, "prefs" ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
                 AttributeHandler.updateAll( player );
 
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasBeenSet", match, args[3] ), false );

@@ -13,11 +13,11 @@ import java.util.function.Supplier;
 public class MessageUpdateReq
 {
     private CompoundNBT reqPackage = new CompoundNBT();
-    private String outputName;
+    private int type;
 
-    public MessageUpdateReq( Map<String, Map<String, Map<String, Object>>> theMap, String outputName )
+    public MessageUpdateReq( Map<String, Map<String, Map<String, Object>>> theMap, int type )
     {
-        this.outputName = outputName;
+        this.type = type;
 
         for( String reqKey : theMap.keySet() )
         {
@@ -45,7 +45,7 @@ public class MessageUpdateReq
     {
         MessageUpdateReq packet = new MessageUpdateReq();
         packet.reqPackage = buf.readCompoundTag();
-        packet.outputName = buf.readString();
+        packet.type = buf.readInt();
 
         return packet;
     }
@@ -53,7 +53,7 @@ public class MessageUpdateReq
     public static void encode(MessageUpdateReq packet, PacketBuffer buf )
     {
         buf.writeCompoundTag( packet.reqPackage );
-        buf.writeString( packet.outputName );
+        buf.writeInt( packet.type );
     }
 
     public static void handlePacket(MessageUpdateReq packet, Supplier<NetworkEvent.Context> ctx )
@@ -62,32 +62,25 @@ public class MessageUpdateReq
         {
             Map<String, Map<String, Map<String, Object>>> newPackage = new HashMap<>();
 
-            if( !packet.outputName.toLowerCase().equals( "wipe" ) )
+            for( String reqKey : packet.reqPackage.keySet() )
             {
-                for( String reqKey : packet.reqPackage.keySet() )
+                newPackage.put( reqKey, new HashMap<>() );
+                for( String topKey : packet.reqPackage.getCompound( reqKey ).keySet() )
                 {
-                    newPackage.put( reqKey, new HashMap<>() );
-                    for( String topKey : packet.reqPackage.getCompound( reqKey ).keySet() )
+                    newPackage.get( reqKey ).put( topKey, new HashMap<>() );
+                    for( String botKey : packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).keySet() )
                     {
-                        newPackage.get( reqKey ).put( topKey, new HashMap<>() );
-                        for( String botKey : packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).keySet() )
-                        {
-                            if( botKey.equals( "salvageItem" ) )
-                                newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).getString( botKey ) );
-                            else
-                                newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).getDouble( botKey ) );
-                        }
+                        if( botKey.equals( "salvageItem" ) )
+                            newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).getString( botKey ) );
+                        else
+                            newPackage.get( reqKey ).get( topKey ).put( botKey, packet.reqPackage.getCompound( reqKey ).getCompound( topKey ).getDouble( botKey ) );
                     }
                 }
             }
 
-            switch( packet.outputName.toLowerCase() )
+            switch( packet.type )
             {
-//                case "wipe":
-//                    Requirements.resetRequirements();
-//                    break;
-
-                case "json":
+                case 0: //json
                     JsonConfig.data = newPackage;
                     break;
 

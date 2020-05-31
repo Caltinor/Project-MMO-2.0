@@ -211,5 +211,6 @@
   "pmmo.creativeWarning": "All entries will be shown as unlocked in Creative mode!",
   "pmmo.currentXp": "Current Xp: %1$s",
   "pmmo.nextLevelXp": "Next Level: %1$s",
-  "pmmo.RemainderXp": "Remainder: %1$s"
+  "pmmo.RemainderXp": "Remainder: %1$s",
+  "pmmo.canVein": "Can Vein %1$s %2$s"
 }

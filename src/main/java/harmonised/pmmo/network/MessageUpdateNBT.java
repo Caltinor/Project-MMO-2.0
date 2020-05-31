@@ -21,11 +21,11 @@ import java.util.function.Supplier;
 public class MessageUpdateNBT
 {
     public CompoundNBT reqPackage = new CompoundNBT();
-    public String outputName;
+    public int type;
 
-    public MessageUpdateNBT( CompoundNBT theNBT, String outputName )
+    public MessageUpdateNBT( CompoundNBT theNBT, int type )
     {
-        this.outputName = outputName;
+        this.type = type;
         reqPackage = theNBT;
     }
 
@@ -37,7 +37,7 @@ public class MessageUpdateNBT
     {
         MessageUpdateNBT packet = new MessageUpdateNBT();
         packet.reqPackage = buf.readCompoundTag();
-        packet.outputName = buf.readString();
+        packet.type = buf.readInt();
 
         return packet;
     }
@@ -45,25 +45,25 @@ public class MessageUpdateNBT
     public static void encode( MessageUpdateNBT packet, PacketBuffer buf )
     {
         buf.writeCompoundTag( packet.reqPackage );
-        buf.writeString( packet.outputName );
+        buf.writeInt( packet.type );
     }
 
     public static void handlePacket( MessageUpdateNBT packet, Supplier<NetworkEvent.Context> ctx )
     {
         ctx.get().enqueueWork(() ->
         {
-            switch( packet.outputName )
+            switch( packet.type )
             {
-                case "prefs":
-                case "abilities":
+                case 0: //abilities
+                case 1: //prefs
                     ClientHandler.updateNBTTag( packet );
                     break;
 
-                case "config":
+                case 2: //config
                     Config.config = NBTHelper.nbtToMap( packet.reqPackage );
                     break;
 
-                case "stats":
+                case 3: //stats
                     UUID uuid = UUID.fromString( packet.reqPackage.getString( "UUID" ) );
                     packet.reqPackage.remove( "UUID" );
 
@@ -80,7 +80,7 @@ public class MessageUpdateNBT
                     break;
 
                 default:
-                    LogHandler.LOGGER.error( "WRONG SYNC NAME" );
+                    LogHandler.LOGGER.error( "WRONG SYNC ID" );
                     break;
             }
         });

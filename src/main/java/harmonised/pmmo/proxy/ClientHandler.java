@@ -43,9 +43,9 @@ public class ClientHandler
         CompoundNBT newPackage = packet.reqPackage;
         Set<String> keySet = new HashSet<>( newPackage.keySet() );
 
-        switch( packet.outputName.toLowerCase() )
+        switch( packet.type )
         {
-            case "prefs":
+            case 0:
                 CompoundNBT prefsTag = XP.getPreferencesTag( player );
                 for( String tag : keySet )
                 {
@@ -56,7 +56,7 @@ public class ClientHandler
                 XPOverlayGUI.doInit();
                 break;
 
-            case "abilities":
+            case 1:
                 CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
                 for( String tag : keySet )
                 {

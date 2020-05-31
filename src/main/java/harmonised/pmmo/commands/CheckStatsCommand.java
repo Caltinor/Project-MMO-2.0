@@ -50,7 +50,7 @@ public class CheckStatsCommand
             packetSkillsTag.putString( "UUID", target.getUniqueID().toString() );
             packetSkillsTag.putString( "name", target.getName().getString() );
 
-            NetworkHandler.sendToPlayer( new MessageUpdateNBT( packetSkillsTag, "stats" ), (ServerPlayerEntity) sender );
+            NetworkHandler.sendToPlayer( new MessageUpdateNBT( packetSkillsTag, 3 ), (ServerPlayerEntity) sender );
         }
         catch( CommandSyntaxException e )
         {

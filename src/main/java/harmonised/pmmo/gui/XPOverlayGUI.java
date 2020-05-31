@@ -3,6 +3,7 @@ package harmonised.pmmo.gui;
 import java.util.*;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.MessageLevelUp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -12,6 +13,8 @@ import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -20,6 +23,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -40,22 +47,24 @@ public class XPOverlayGUI extends AbstractGui
 	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, veinKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills;
 	private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
-	private static Minecraft minecraft = Minecraft.getInstance();
-	private static PlayerEntity player = minecraft.player;
+	private static Minecraft mc = Minecraft.getInstance();
+	private static PlayerEntity player = mc.player;
 	public static Map<Skill, ASkill> skills = new HashMap<>();
 //	private static ArrayList<String> skillsKeys = new ArrayList<String>();
 	private static ASkill aSkill;
 	private static Skill skill = Skill.INVALID_SKILL, tempSkill = Skill.INVALID_SKILL;
-	private static FontRenderer fontRenderer = minecraft.fontRenderer;
-	private static int maxLevel;
+	private static FontRenderer fontRenderer = mc.fontRenderer;
+	private static int maxLevel, color, breakAmount;
 	private static double maxXp;
 	private static XpDrop xpDrop;
-	private static int color;
-	private static long lastBonusUpdate = System.nanoTime();
+	private static long lastBonusUpdate = System.nanoTime(), lastVeinBlockUpdate = System.nanoTime();
 	private static double itemBoost, biomeBoost;
-	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0;
+	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
+	private static BlockState blockState, lastBlockState;
 	public static Set<String> screenshots = new HashSet<>();
-	public static boolean guiWasOn = true, guiOn = true;
+	public static boolean guiWasOn = true, guiOn = true, isVeining = false;
+	BlockPos blockPos, lastBlockPos;
+
 
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
@@ -73,7 +82,7 @@ public class XPOverlayGUI extends AbstractGui
 
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
-				MainWindow sr = minecraft.getMainWindow();
+				MainWindow sr = mc.getMainWindow();
 
 //				drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
@@ -284,7 +293,8 @@ public class XPOverlayGUI extends AbstractGui
 
 
 				{   // VEIN STUFF
-					veinPosGoal = XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) / maxVeinCharge;
+					veinLeft = XP.getAbilitiesTag( player ).getDouble( "veinLeft" );
+					veinPosGoal = veinLeft / maxVeinCharge;
 					addAmount = (veinPosGoal - veinPos) * (timeDiff / 200000000D);
 					if( addAmount < 0.00003 )
 						addAmount = 0.00003;
@@ -327,12 +337,35 @@ public class XPOverlayGUI extends AbstractGui
 //						System.out.println( veinPos * maxVeinCharge );
 						drawCenteredString( fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
+						if( mc.objectMouseOver != null && mc.objectMouseOver.getType() == RayTraceResult.Type.BLOCK )
+						{
+							blockPos = ((BlockRayTraceResult) mc.objectMouseOver).getPos();
+							blockState = mc.world.getBlockState( blockPos );
+
+							if( lastBlockState == null )
+								lastBlockState = blockState;
+
+							if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
+								lastVeinBlockUpdate = System.nanoTime();
+//
+							if( !isVeining && System.nanoTime() - lastVeinBlockUpdate > 100000000L )
+							{
+								lastBlockState = blockState;
+								lastBlockPos = blockPos;
+							}
+						}
+
+						if( lastBlockState != null )
+						{
+							breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
+							drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.canVein", breakAmount, new TranslationTextComponent( lastBlockState.getBlock().getTranslationKey() ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
+						}
+
 						RenderSystem.disableBlend();
 						RenderSystem.popMatrix();
 					}
 				}
-
-				if( guiOn && !minecraft.gameSettings.showDebugInfo )
+				if( guiOn && !mc.gameSettings.showDebugInfo )
 				{
 					listIndex = 0;
 
@@ -613,7 +646,7 @@ public class XPOverlayGUI extends AbstractGui
 				}
 			}
 
-//			System.out.println( minecraft.player.getDisplayName().getFormattedText() + " " + skill.name() + " has been set to: " + xp );
+//			System.out.println( mc.player.getDisplayName().getFormattedText() + " " + skill.name() + " has been set to: " + xp );
 		}
 		else if( stackXpDrops && xpDrops.size() > 0 )
 		{
