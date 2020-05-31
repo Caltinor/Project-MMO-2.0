@@ -58,7 +58,6 @@ public class XP
 	public static Map<UUID, String> playerNames = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
-	private static boolean broadcastMilestone = Config.forgeConfig.broadcastMilestone.get();
 	private static int debugInt = 0;
 	public static void initValues()
 	{
@@ -1228,17 +1227,6 @@ public class XP
 				{
 					LogHandler.LOGGER.error( "PMMO Level Up - compatskills command went wrong! args: " + commandArgs, e );
 				}
-			}
-
-			LogHandler.LOGGER.info( playerName + " " + currLevel + " " + skillName + " level up!" );
-
-			if( currLevel % 10 == 0 && broadcastMilestone )
-			{
-				player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
-				{
-					if( thePlayer.getUniqueID() != player.getUniqueID() )
-						NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.milestoneLevelUp", player.getDisplayName().getString(), "" + currLevel , "pmmo." + skillName, false, 3 ), thePlayer );
-				});
 			}
 
 			if( JsonConfig.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) != null )

@@ -36,6 +36,7 @@
 	"pmmo.fletching": "Fletching",
 	"pmmo.taming": "Taming",
 	"pmmo.hunter": "Hunter",
+	"pmmo.engineering": "Engineering",
 	"pmmo.welcome": "Merci de jouer à Projet MMO ! La plupart des caractéristiques sont modifiables dans le fichier de config.",
 	"pmmo.savedFall": " %1$s dégâts de chute épargnés !",
 	"pmmo.extraDrop": "%1$s supplémentaire %2$s droppé !",
@@ -151,6 +152,10 @@
 	"pmmo.veinCharge": "Your vein ability is at %1$s%% charge!",
 	"pmmo.veinBlacklist": "Blacklisted blocks from Veining",
 	"pmmo.allDimensions": "All Dimensions",
+	"pmmo.otherAnimals": "Other Animals",
+	"pmmo.otherCrafts": "Other Crafts",
+	"pmmo.otherAggresiveMobs": "Other Aggresive Mobs",
+	"pmmo.otherPassiveMobs": "Other Passive Mobs",
 	"pmmo.startWeight": "Start Weight: %1$s",
 	"pmmo.startLevel": "Start Level: %1$s",
 	"pmmo.endWeight": "End Weight: %1$s",
@@ -198,5 +203,13 @@
 	"pmmo.salvagesToTitle": "Items that can be Salvaged",
 	"pmmo.salvagesFromTitle": "Items that are a result of Salvaging",
 	"pmmo.wear": "To Wear",
-	"pmmo.place": "To Place"
+	"pmmo.place": "To Place",
+	"pmmo.glossary": "Glossary",
+	"pmmo.stats": "Stats",
+	"pmmo.playerStats": "%1$s Stats",
+	"pmmo.exit": "Exit",
+	"pmmo.creativeWarning": "All entries will be shown as unlocked in Creative mode!",
+	"pmmo.currentXp": "Current Xp: %1$s",
+	"pmmo.nextLevelXp": "Next Level: %1$s",
+	"pmmo.RemainderXp": "Remainder: %1$s"
 }

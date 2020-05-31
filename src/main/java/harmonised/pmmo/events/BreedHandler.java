@@ -5,6 +5,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
 import javax.annotation.Nullable;
@@ -15,7 +16,7 @@ public class BreedHandler
 
     public static void handleBreedEvent( BabyEntitySpawnEvent event )
     {
-        if( event.getChild() != null )
+        if( event.getChild() != null && event.getCausedByPlayer() != null && !(event.getCausedByPlayer() instanceof FakePlayer) )
         {
             String regKey = event.getChild().getEntityString();
 

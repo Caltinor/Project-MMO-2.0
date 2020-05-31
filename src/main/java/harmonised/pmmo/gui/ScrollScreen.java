@@ -495,7 +495,7 @@ public class ScrollScreen extends Screen
                     button.text.add( "" );
                     button.text.add( getTransComp( "pmmo.xpValue" ).setStyle( color ).getFormattedText() );
                     if ( killXpMap != null )
-                        addXpToButton( button, killXpMap );
+                        addXpToButton( button, killXpMap, type, player );
                     else
                     {
                         if( button.entity instanceof AnimalEntity )
@@ -675,7 +675,7 @@ public class ScrollScreen extends Screen
                     double curXp = XP.getXpOffline( skill, uuid );
                     double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
 
-                    button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), XP.levelAtXp( curXp ) ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
+                    button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
 
                     button.text.add( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() );
                     button.text.add( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );

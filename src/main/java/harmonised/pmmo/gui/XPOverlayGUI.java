@@ -3,6 +3,8 @@ package harmonised.pmmo.gui;
 import java.util.*;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.network.MessageLevelUp;
+import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
@@ -574,6 +576,8 @@ public class XPOverlayGUI extends AbstractGui
 
 		if( lvlUpScreenshot )
 			screenshots.add( player.getDisplayName().getString() + " " + skill.name().toLowerCase() + " " + level );
+
+		NetworkHandler.sendToServer( new MessageLevelUp( skill.getValue(), level ) );
 	}
 	
 	public static void makeXpDrop( double xp, Skill skillIn, int cooldown, double gainedXp, boolean skip )

@@ -101,7 +101,6 @@ public class WorldTickHandler
                                     world.destroyBlock(veinPos, false );
                                 else if( correctItem && correctHeldItem )
                                 {
-                                    System.out.println( "happened" );
                                     abilitiesTag.putDouble( "veinLeft", abilitiesTag.getDouble( "veinLeft" ) - cost );
                                     destroyBlock( world, veinPos, player, startItemStack );
                                 }

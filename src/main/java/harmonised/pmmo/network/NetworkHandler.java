@@ -17,6 +17,7 @@ public class NetworkHandler
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageUpdateReq.class, MessageUpdateReq::encode, MessageUpdateReq::decode, MessageUpdateReq::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageUpdateNBT.class, MessageUpdateNBT::encode, MessageUpdateNBT::decode, MessageUpdateNBT::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageGrow.class, MessageGrow::encode, MessageGrow::decode, MessageGrow::handlePacket );
+		ProjectMMOMod.HANDLER.registerMessage( index++, MessageLevelUp.class, MessageLevelUp::encode, MessageLevelUp::decode, MessageLevelUp::handlePacket );
 	}
 
 	public static void sendToPlayer( MessageXp packet, ServerPlayerEntity player )
@@ -50,6 +51,11 @@ public class NetworkHandler
 	}
 
 	public static void sendToServer( MessageKeypress packet )
+	{
+		ProjectMMOMod.HANDLER.sendToServer( packet );
+	}
+
+	public static void sendToServer( MessageLevelUp packet )
 	{
 		ProjectMMOMod.HANDLER.sendToServer( packet );
 	}
