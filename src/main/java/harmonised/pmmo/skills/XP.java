@@ -1176,8 +1176,6 @@ public class XP
 
 		String skillName = skill.name().toLowerCase();
 
-
-
 		if( !ignoreBonuses )
 			amount *= getMultiplier( player, skill );
 

@@ -216,6 +216,9 @@ public class XPOverlayGUI extends AbstractGui
 					startLevel = Math.floor( aSkill.pos );
 
 					growAmount = ( aSkill.goalPos - aSkill.pos ) * 50;
+
+					minXpGrow = 25;
+
 					if( growAmount < minXpGrow )
 						growAmount = minXpGrow;
 
@@ -223,17 +226,14 @@ public class XPOverlayGUI extends AbstractGui
 					{
 						aSkill.pos += 0.00005d * growAmount;
 						aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
-
-//						if( cooldown < 10000 )
-//							cooldown = 10000;
 					}
-					else if( aSkill.pos > aSkill.goalPos )
-						aSkill.pos = aSkill.goalPos;
-
 //					System.out.println( startLevel + " " + Math.floor( aSkill.pos ) );
 
 					if( startLevel < Math.floor( aSkill.pos ) )
 						sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );
+
+					if( aSkill.pos > aSkill.goalPos )
+						aSkill.pos = aSkill.goalPos;
 
 					if( aSkill.xp > aSkill.goalXp )
 						aSkill.xp = aSkill.goalXp;
@@ -269,7 +269,7 @@ public class XPOverlayGUI extends AbstractGui
 					if( aSkill.pos >= maxLevel )
 						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
 					else
-						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dp( Math.floor( aSkill.pos * 100 ) / 100 ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
+						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
 
 					if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( skill ) != null )
 					{
@@ -394,7 +394,7 @@ public class XPOverlayGUI extends AbstractGui
 						aSkill = skills.get( keySkill );
 						skillName = keySkill.name().toLowerCase();
 						level = XP.levelAtXpDecimal( aSkill.xp );
-						tempString = DP.dp( level );
+						tempString = DP.dp( Math.floor( level * 100D ) / 100D );
 						color = XP.getSkillColor( keySkill );
 						if( level >= maxLevel )
 							tempString = "" + maxLevel;

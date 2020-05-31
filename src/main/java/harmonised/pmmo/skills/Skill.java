@@ -148,7 +148,7 @@ public enum Skill
 
     public void addLevel( ServerPlayerEntity player, double addAmount, boolean ignoreBonuses )
     {
-        double missingXp = XP.xpAtLevelDecimal( this.getLevel( player ) + addAmount ) - this.getXp( player );
+        double missingXp = XP.xpAtLevelDecimal( this.getLevelDecimal( player ) + addAmount ) - this.getXp( player );
 
         this.addXp( player, missingXp, ignoreBonuses );
     }
@@ -176,11 +176,8 @@ public enum Skill
             XP.awardXp( player, this, "commandAdd", addAmount, false, true );
         else
             NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, this.getValue(), 0, true ), player );
+        player.sendStatusMessage( new TranslationTextComponent( "pmmo.addXp", new TranslationTextComponent( "pmmo." + skillName ).getString(), DP.dp(addAmount) ), false );
         skillsTag.putDouble( skillName, newLevelXp );
-
-
-        player.sendStatusMessage( new TranslationTextComponent( "pmmo.addXp", skillName, DP.dp(addAmount) ), false );
-
         AttributeHandler.updateAll( player );
     }
 }
