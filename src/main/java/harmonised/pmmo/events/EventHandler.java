@@ -133,4 +133,7 @@ public class EventHandler
 //	{
 //		PickupHandler.handlePickup( event );
 //	}
+
+//	@SubscribeEvent
+//	public static void furnace( PlayerEvent.ItemSmeltedEvent )
 }

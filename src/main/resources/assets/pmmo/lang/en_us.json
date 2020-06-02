@@ -212,5 +212,7 @@
   "pmmo.currentXp": "Current Xp: %1$s",
   "pmmo.nextLevelXp": "Next Level: %1$s",
   "pmmo.RemainderXp": "Remainder: %1$s",
-  "pmmo.canVein": "Can Vein %1$s %2$s"
+  "pmmo.canVein": "Can Vein %1$s %2$s",
+  "pmmo.cannotVein": "You cannot vein %1$s",
+  "pmmo.cannotVeinDimension": "You cannot vein %1$s in this dimension"
 }

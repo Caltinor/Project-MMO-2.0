@@ -56,8 +56,10 @@ public class XPOverlayGUI extends AbstractGui
 	private static double itemBoost, biomeBoost;
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
 	private static BlockState blockState, lastBlockState;
+	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	public static Set<String> screenshots = new HashSet<>();
-	public static boolean guiWasOn = true, guiOn = true, isVeining = false;
+	public static boolean guiWasOn = true, guiOn = true, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false;
+	MainWindow sr;
 	BlockPos blockPos, lastBlockPos;
 
 
@@ -77,7 +79,7 @@ public class XPOverlayGUI extends AbstractGui
 
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
-				MainWindow sr = mc.getMainWindow();
+				sr = mc.getMainWindow();
 
 //				drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
@@ -93,13 +95,6 @@ public class XPOverlayGUI extends AbstractGui
 
 				timeDiff = (System.nanoTime() - lastTime);
 				lastTime = System.nanoTime();
-
-				if( cooldown > 0 )
-					cooldown -= timeDiff / 1000000D;
-				themePos += ( 2.5 + 7.5 * ( aSkill.pos % Math.floor( aSkill.pos ) ) ) * (timeDiff / 1000000);
-
-				if( themePos > 10000 )
-					themePos =  themePos % 10000;
 
 				guiKey = ClientHandler.SHOW_GUI.isKeyDown();
 				veinKey = ClientHandler.VEIN_KEY.isKeyDown();
@@ -118,304 +113,358 @@ public class XPOverlayGUI extends AbstractGui
 				else
 					guiPressed = false;
 
-				if( xpDropsAttachedToBar )
-				{
-					if( cooldown <= 0 )
-						xpDropOffsetCap = -9;
-					else if ( guiKey || xpLeftDisplayAlwaysOn )
-					{
-						if( skills.get( skill ).xp >= maxXp )
-							xpDropOffsetCap = 25;
-						else
-							xpDropOffsetCap = 34;
-					}
-					else
-						xpDropOffsetCap = 16;
+				doRayTrace();
+				doCrosshair();
+				doVein();
+				doXpDrops();
+				doSkills();
+				doXpBar();
+				doSkillList();
 
-					if( xpDropOffset > xpDropOffsetCap )
-						xpDropOffset -= 1d * timeDiff / 10000000;
-
-					if( xpDropOffset < xpDropOffsetCap )
-						xpDropOffset = xpDropOffsetCap;
-				}
-
-				for( int i = 0; i < xpDrops.size(); i++ )				//update Xp Drops
-				{
-					xpDrop = xpDrops.get( i );
-					xpDrop.age += timeDiff / 5000000;
-					decayRate = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
-					decayAmount = decayRate * timeDiff / 10000000;
-
-					if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
-					{
-						aSkill = skills.get( xpDrop.skill );
-						skill = xpDrop.skill;
-
-						decayRate = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
-						if( stackXpDrops )
-						{
-							if( decayRate < 0.1 )
-								decayRate = 0.1;
-						}
-						else
-							if( decayRate < 1 )
-								decayRate = 1;
-
-						if( xpDrop.gainedXp - ( decayAmount ) < 0 )
-						{
-							aSkill.goalXp += xpDrop.gainedXp;
-							xpDrop.gainedXp = 0;
-						}
-						else
-						{
-							xpDrop.gainedXp -= decayRate;
-							aSkill.goalXp += decayRate;
-						}
-						aSkill.goalPos = XP.levelAtXpDecimal( aSkill.goalXp );
-					}
-
-					if( showXpDrops )
-					{
-						if( xpDropOffset == xpDropOffsetCap )
-							xpDrop.Y -= decayAmount;
-
-						if( xpDrop.Y < ( i * 9 ) - xpDropYLimit )
-							xpDrop.Y = ( i * 9 ) - xpDropYLimit;
-
-						tempInt = (int) Math.floor( xpDrop.Y * xpDropOpacityPerTime ); //Opacity Loss
-
-						if( tempInt < 0 )
-							tempInt = -tempInt;
-
-						if( tempInt > xpDropMaxOpacity )
-							tempAlpha = 0;
-						else
-							tempAlpha = (int) Math.floor( xpDropMaxOpacity - tempInt );
-
-						if( tempAlpha > 3 )
-							drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo." + xpDrop.skill.name().toLowerCase() ).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.skill ) );
-					}
-				}
-
-				if( xpDrops.size() > 0 && xpDrops.get( 0 ).gainedXp <= 0 )
-					xpDrops.remove( 0 );
+				if( cooldown > 0 )
+					cooldown -= timeDiff / 1000000D;
 
 				RenderSystem.disableBlend();
 				RenderSystem.color3f( 255, 255, 255 );
 				RenderSystem.popMatrix();
+			}
+		}
+	}
 
-				for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )		//Update Skills
+	private void doRayTrace()
+	{
+		if( mc.objectMouseOver != null && mc.objectMouseOver.getType() == RayTraceResult.Type.BLOCK )
+		{
+			lookingAtBlock = true;
+
+			blockPos = ((BlockRayTraceResult) mc.objectMouseOver).getPos();
+			blockState = mc.world.getBlockState( blockPos );
+
+			if( lastBlockState == null )
+				lastBlockState = blockState;
+
+			if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
+				lastVeinBlockUpdate = System.nanoTime();
+//
+			if( !isVeining && System.nanoTime() - lastVeinBlockUpdate > 100000000L )
+			{
+				lastBlockState = blockState;
+				lastBlockPos = blockPos;
+				if( lastBlockState.getBlock().getRegistryName() != null )
+					lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
+				lastBlockTransKey = lastBlockState.getBlock().getTranslationKey();
+				canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
+			}
+			canBreak = XP.checkReq( player, lastBlockRegKey, "break" );
+		}
+		else
+			lookingAtBlock = false;
+	}
+
+	private void doXpDrops()
+	{
+		if( xpDropsAttachedToBar )
+		{
+			if( cooldown <= 0 )
+				xpDropOffsetCap = -9;
+			else if ( guiKey || xpLeftDisplayAlwaysOn )
+			{
+				if( skills.get( skill ).xp >= maxXp )
+					xpDropOffsetCap = 25;
+				else
+					xpDropOffsetCap = 34;
+			}
+			else
+				xpDropOffsetCap = 16;
+
+			if( xpDropOffset > xpDropOffsetCap )
+				xpDropOffset -= 1d * timeDiff / 10000000;
+
+			if( xpDropOffset < xpDropOffsetCap )
+				xpDropOffset = xpDropOffsetCap;
+		}
+
+		for( int i = 0; i < xpDrops.size(); i++ )		//update Xp Drops
+		{
+			xpDrop = xpDrops.get( i );
+			xpDrop.age += timeDiff / 5000000;
+			decayRate = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
+			decayAmount = decayRate * timeDiff / 10000000;
+
+			if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
+			{
+				aSkill = skills.get( xpDrop.skill );
+				skill = xpDrop.skill;
+
+				decayRate = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
+				if( stackXpDrops )
 				{
-					aSkill = entry.getValue();
+					if( decayRate < 0.1 )
+						decayRate = 0.1;
+				}
+				else
+				if( decayRate < 1 )
+					decayRate = 1;
 
-					startLevel = Math.floor( aSkill.pos );
+				if( xpDrop.gainedXp - ( decayAmount ) < 0 )
+				{
+					aSkill.goalXp += xpDrop.gainedXp;
+					xpDrop.gainedXp = 0;
+				}
+				else
+				{
+					xpDrop.gainedXp -= decayRate;
+					aSkill.goalXp += decayRate;
+				}
+				aSkill.goalPos = XP.levelAtXpDecimal( aSkill.goalXp );
+			}
 
-					growAmount = ( aSkill.goalPos - aSkill.pos ) * 50;
+			if( showXpDrops )
+			{
+				if( xpDropOffset == xpDropOffsetCap )
+					xpDrop.Y -= decayAmount;
 
-					minXpGrow = 25;
+				if( xpDrop.Y < ( i * 9 ) - xpDropYLimit )
+					xpDrop.Y = ( i * 9 ) - xpDropYLimit;
 
-					if( growAmount < minXpGrow )
-						growAmount = minXpGrow;
+				tempInt = (int) Math.floor( xpDrop.Y * xpDropOpacityPerTime ); //Opacity Loss
 
-					if( aSkill.pos < aSkill.goalPos )
-					{
-						aSkill.pos += 0.00005d * growAmount;
-						aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
-					}
+				if( tempInt < 0 )
+					tempInt = -tempInt;
+
+				if( tempInt > xpDropMaxOpacity )
+					tempAlpha = 0;
+				else
+					tempAlpha = (int) Math.floor( xpDropMaxOpacity - tempInt );
+
+				if( tempAlpha > 3 )
+					drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo." + xpDrop.skill.name().toLowerCase() ).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.skill ) );
+			}
+		}
+
+		if( xpDrops.size() > 0 && xpDrops.get( 0 ).gainedXp <= 0 )
+			xpDrops.remove( 0 );
+	}
+
+	private void doSkills()
+	{
+		for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )		//Update Skills
+		{
+			aSkill = entry.getValue();
+
+			startLevel = Math.floor( aSkill.pos );
+
+			growAmount = ( aSkill.goalPos - aSkill.pos ) * 50;
+
+			minXpGrow = 25;
+
+			if( growAmount < minXpGrow )
+				growAmount = minXpGrow;
+
+			if( aSkill.pos < aSkill.goalPos )
+			{
+				aSkill.pos += 0.00005d * growAmount;
+				aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
+			}
 //					System.out.println( startLevel + " " + Math.floor( aSkill.pos ) );
 
-					if( startLevel < Math.floor( aSkill.pos ) )
-						sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );
+			if( startLevel < Math.floor( aSkill.pos ) )
+				sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );
 
-					if( aSkill.pos > aSkill.goalPos )
-						aSkill.pos = aSkill.goalPos;
+			if( aSkill.pos > aSkill.goalPos )
+				aSkill.pos = aSkill.goalPos;
 
-					if( aSkill.xp > aSkill.goalXp )
-						aSkill.xp = aSkill.goalXp;
-				}
+			if( aSkill.xp > aSkill.goalXp )
+				aSkill.xp = aSkill.goalXp;
+		}
+	}
 
-				if( cooldown > 0 )				//Xp Bar
+	private void doXpBar()
+	{
+		themePos += ( 2.5 + 7.5 * ( aSkill.pos % Math.floor( aSkill.pos ) ) ) * (timeDiff / 1000000);
+
+		if( themePos > 10000 )
+			themePos =  themePos % 10000;
+
+		if( cooldown > 0 )				//Xp Bar
+		{
+			RenderSystem.pushMatrix();
+			RenderSystem.enableBlend();
+			Minecraft.getInstance().getTextureManager().bindTexture( bar );
+			RenderSystem.color3f( 255, 255, 255 );
+
+			aSkill = skills.get( skill );
+
+			blit( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
+			if( theme == 1 )
+			{
+				blit( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
+			}
+			else
+			{
+				tempInt = (int) Math.floor( ( barWidth ) * ( aSkill.pos - Math.floor( aSkill.pos ) ) );
+
+				if( tempInt > 100 )
+					tempInt = 100;
+
+				if( aSkill.pos >= maxLevel )
+					tempInt = 100;
+
+				blit( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
+				blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
+			}
+			if( aSkill.pos >= maxLevel )
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
+			else
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
+
+			if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( skill ) != null )
+			{
+				if( skills.get( skill ).xp >= maxXp )
+					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.maxLevel" ).getString(), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
+				else
 				{
-					RenderSystem.pushMatrix();
-					RenderSystem.enableBlend();
-					Minecraft.getInstance().getTextureManager().bindTexture( bar );
-					RenderSystem.color3f( 255, 255, 255 );
+					if( goalXp >= maxXp )
+						goalXp =  maxXp;
 
-					aSkill = skills.get( skill );
-
-					blit( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
-					if( theme == 1 )
-					{
-						blit( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
-					}
-					else
-					{
-						tempInt = (int) Math.floor( ( barWidth ) * ( aSkill.pos - Math.floor( aSkill.pos ) ) );
-
-						if( tempInt > 100 )
-							tempInt = 100;
-
-						if( aSkill.pos >= maxLevel )
-							tempInt = 100;
-
-						blit( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
-						blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
-					}
-					if( aSkill.pos >= maxLevel )
-						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
-					else
-						drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
-
-					if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( skill ) != null )
-					{
-						if( skills.get( skill ).xp >= maxXp )
-							drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.maxLevel" ).getString(), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
-						else
-						{
-							if( goalXp >= maxXp )
-								goalXp =  maxXp;
-
-							goalXp = XP.xpAtLevel( XP.levelAtXp( aSkill.xp ) + 1 );
-							drawCenteredString( fontRenderer, DP.dprefix( skills.get( skill ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
-							drawCenteredString( fontRenderer,  new TranslationTextComponent( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getString(), barPosX + (barWidth / 2), 26 + barPosY, XP.getSkillColor( skill ) );
-						}
-					}
-
-					RenderSystem.disableBlend();
-					RenderSystem.popMatrix();
+					goalXp = XP.xpAtLevel( XP.levelAtXp( aSkill.xp ) + 1 );
+					drawCenteredString( fontRenderer, DP.dprefix( skills.get( skill ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
+					drawCenteredString( fontRenderer,  new TranslationTextComponent( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getString(), barPosX + (barWidth / 2), 26 + barPosY, XP.getSkillColor( skill ) );
 				}
+			}
 
+			RenderSystem.disableBlend();
+			RenderSystem.popMatrix();
+		}
+	}
 
+	private void doVein()
+	{   // VEIN STUFF
+		veinLeft = XP.getAbilitiesTag( player ).getDouble( "veinLeft" );
+		veinPosGoal = veinLeft / maxVeinCharge;
+		addAmount = (veinPosGoal - veinPos) * (timeDiff / 200000000D);
+		if( addAmount < 0.00003 )
+			addAmount = 0.00003;
+		lossAmount = -(veinPosGoal - veinPos) * (timeDiff / 200000000D);
 
-				{   // VEIN STUFF
-					veinLeft = XP.getAbilitiesTag( player ).getDouble( "veinLeft" );
-					veinPosGoal = veinLeft / maxVeinCharge;
-					addAmount = (veinPosGoal - veinPos) * (timeDiff / 200000000D);
-					if( addAmount < 0.00003 )
-						addAmount = 0.00003;
-					lossAmount = -(veinPosGoal - veinPos) * (timeDiff / 200000000D);
+		if( veinPos < veinPosGoal )
+		{
+			veinPos += addAmount;
+			if( veinPos > veinPosGoal )
+				veinPos = veinPosGoal;
+		}
+		else if( veinPos > veinPosGoal )
+		{
+			veinPos -= lossAmount;
+			if( veinPos < veinPosGoal )
+				veinPos = veinPosGoal;
+		}
 
-					if( veinPos < veinPosGoal )
-					{
-							veinPos += addAmount;
-							if( veinPos > veinPosGoal )
-								veinPos = veinPosGoal;
-					}
-					else if( veinPos > veinPosGoal )
-					{
-						veinPos -= lossAmount;
-						if( veinPos < veinPosGoal )
-							veinPos = veinPosGoal;
-					}
+		if( veinPos < 0 || veinPos > 1 )
+			veinPos = veinPosGoal;
 
-					if( veinPos < 0 || veinPos > 1 )
-						veinPos = veinPosGoal;
+		if( veinPos == 1D && lastVeinPos != 1D )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.veinCharge", 100 ).setStyle( XP.textStyle.get( "green" ) ), true );
 
-					if( veinPos == 1D && lastVeinPos != 1D )
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.veinCharge", 100 ).setStyle( XP.textStyle.get( "green" ) ), true );
-
-					lastVeinPos = veinPos;
+		lastVeinPos = veinPos;
 
 //					System.out.println( veinPosGoal );
 
-					if( veinKey && XP.isPlayerSurvival( player ) )
-					{
-						RenderSystem.pushMatrix();
-						RenderSystem.enableBlend();
-						Minecraft.getInstance().getTextureManager().bindTexture( bar );
+		veinBarPosX = (int) (sr.getScaledWidth() * veinBarOffsetX - barWidth / 2 );
+		veinBarPosY = (int) (sr.getScaledHeight() * veinBarOffsetY - barHeight / 2 );
 
-						veinBarPosX = (int) (sr.getScaledWidth() * veinBarOffsetX - barWidth / 2 );
-						veinBarPosY = (int) (sr.getScaledHeight() * veinBarOffsetY - barHeight / 2 );
 
-						blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
-						blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
+		if( veinKey && XP.isPlayerSurvival( player ) )
+		{
+			RenderSystem.pushMatrix();
+			RenderSystem.enableBlend();
+			Minecraft.getInstance().getTextureManager().bindTexture( bar );
+
+			blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
+			blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
 //						System.out.println( veinPos * maxVeinCharge );
-						drawCenteredString( fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
+			drawCenteredString( fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
-						if( mc.objectMouseOver != null && mc.objectMouseOver.getType() == RayTraceResult.Type.BLOCK )
-						{
-							blockPos = ((BlockRayTraceResult) mc.objectMouseOver).getPos();
-							blockState = mc.world.getBlockState( blockPos );
-
-							if( lastBlockState == null )
-								lastBlockState = blockState;
-
-							if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
-								lastVeinBlockUpdate = System.nanoTime();
-//
-							if( !isVeining && System.nanoTime() - lastVeinBlockUpdate > 100000000L )
-							{
-								lastBlockState = blockState;
-								lastBlockPos = blockPos;
-							}
-						}
-
-						if( lastBlockState != null )
-						{
-							breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
-							drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.canVein", breakAmount, new TranslationTextComponent( lastBlockState.getBlock().getTranslationKey() ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
-						}
-
-						RenderSystem.disableBlend();
-						RenderSystem.popMatrix();
-					}
-				}
-				if( guiOn && !mc.gameSettings.showDebugInfo )
+			if( lastBlockState != null && canBreak && ( lookingAtBlock || isVeining ) )
+			{
+				if( canVein )
 				{
-					listIndex = 0;
-
-					if( System.nanoTime() - lastBonusUpdate > 250000000 )
-					{
-						for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
-						{
-							tempSkill = entry.getKey();
-
-							itemBoost = XP.getItemBoost( player, tempSkill );
-							biomeBoost = XP.getBiomeBoost( player, tempSkill );
-
-							if( itemBoost + biomeBoost >= -100 )
-								skills.get( tempSkill ).bonus = itemBoost + biomeBoost;
-							else
-								skills.get( tempSkill ).bonus = -100;
-						}
-						lastBonusUpdate = System.nanoTime();
-					}
-
-					skillsKeys = new ArrayList<>( skills.keySet() );
-					skillsKeys.sort( Comparator.comparingDouble( a -> ((Skill) a).getXp( player ) ).reversed() );
-
-					for( Skill keySkill : skillsKeys )
-					{
-						aSkill = skills.get( keySkill );
-						skillName = keySkill.name().toLowerCase();
-						level = XP.levelAtXpDecimal( aSkill.xp );
-						tempString = DP.dp( Math.floor( level * 100D ) / 100D );
-						color = XP.getSkillColor( keySkill );
-						if( level >= maxLevel )
-							tempString = "" + maxLevel;
-						drawRightAlignedString( fontRenderer, tempString, levelGap + 4, 3 + listIndex, color );
-						drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
-						drawString( fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
-
-						if( aSkill.bonus != 0 )
-						{
-							bonus = Math.floor( aSkill.bonus * 100 ) / 100;
-
-							if( bonus > 0 )
-								tempString = "+" + ( bonus % 1 == 0 ? (int) Math.floor( bonus ) : DP.dp( bonus ) ) + "%";
-							else if ( bonus < 0 )
-								tempString = ( bonus % 1 == 0 ? (int) Math.floor( bonus ) : DP.dp( bonus ) ) + "%";
-							else
-								tempString = "";
-
-							drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 32, 3 + listIndex, color );
-						}
-
-						listIndex += 9;
-					}
+					breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
+					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.canVein", breakAmount, new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
 				}
+				else if( WorldTickHandler.canVeinDimension( lastBlockRegKey, player ) )
+					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.cannotVein", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+				else
+					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.cannotVeinDimension", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+			}
+
+			RenderSystem.disableBlend();
+			RenderSystem.popMatrix();
+		}
+	}
+
+	private void doSkillList()
+	{
+		if( guiOn && !mc.gameSettings.showDebugInfo )
+		{
+			listIndex = 0;
+
+			if( System.nanoTime() - lastBonusUpdate > 250000000 )
+			{
+				for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
+				{
+					tempSkill = entry.getKey();
+
+					itemBoost = XP.getItemBoost( player, tempSkill );
+					biomeBoost = XP.getBiomeBoost( player, tempSkill );
+
+					if( itemBoost + biomeBoost >= -100 )
+						skills.get( tempSkill ).bonus = itemBoost + biomeBoost;
+					else
+						skills.get( tempSkill ).bonus = -100;
+				}
+				lastBonusUpdate = System.nanoTime();
+			}
+
+			skillsKeys = new ArrayList<>( skills.keySet() );
+			skillsKeys.sort( Comparator.comparingDouble( a -> ((Skill) a).getXp( player ) ).reversed() );
+
+			for( Skill keySkill : skillsKeys )
+			{
+				aSkill = skills.get( keySkill );
+				skillName = keySkill.name().toLowerCase();
+				level = XP.levelAtXpDecimal( aSkill.xp );
+				tempString = DP.dp( Math.floor( level * 100D ) / 100D );
+				color = XP.getSkillColor( keySkill );
+				if( level >= maxLevel )
+					tempString = "" + maxLevel;
+				drawRightAlignedString( fontRenderer, tempString, levelGap + 4, 3 + listIndex, color );
+				drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
+				drawString( fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
+
+				if( aSkill.bonus != 0 )
+				{
+					bonus = Math.floor( aSkill.bonus * 100 ) / 100;
+
+					if( bonus > 0 )
+						tempString = "+" + ( bonus % 1 == 0 ? (int) Math.floor( bonus ) : DP.dp( bonus ) ) + "%";
+					else if ( bonus < 0 )
+						tempString = ( bonus % 1 == 0 ? (int) Math.floor( bonus ) : DP.dp( bonus ) ) + "%";
+					else
+						tempString = "";
+
+					drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 32, 3 + listIndex, color );
+				}
+
+				listIndex += 9;
 			}
 		}
+	}
+
+	private void doCrosshair()
+	{
+		if( veinKey && !canBreak && lookingAtBlock )
+			drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.toBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 	}
 
 	public static void doInit()

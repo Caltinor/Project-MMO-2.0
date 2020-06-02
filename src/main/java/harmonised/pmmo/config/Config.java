@@ -57,6 +57,7 @@ public class Config
         
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
+        public ConfigHelper.ConfigValueListener<Boolean> veinWoodTopToBottom;
         public ConfigHelper.ConfigValueListener<Double> veinMaxDistance;
         public ConfigHelper.ConfigValueListener<Double> veinMaxBlocks;
         public ConfigHelper.ConfigValueListener<Double> veinSpeed;
@@ -267,6 +268,11 @@ public class Config
                         .comment( "Is vein mining allowed? true = on, false = off" )
                         .translation( "pmmo.veiningAllowed" )
                         .define( "veiningAllowed", true) );
+
+                this.veinWoodTopToBottom = subscriber.subscribe(builder
+                        .comment( "Should veining wood material blocks start from the highest block?" )
+                        .translation( "pmmo.veinWoodTopToBottom" )
+                        .define( "veinWoodTopToBottom", true) );
 
                 this.veinMaxDistance = subscriber.subscribe(builder
                         .comment( "What is the maximum distance a player's vein can reach?" )

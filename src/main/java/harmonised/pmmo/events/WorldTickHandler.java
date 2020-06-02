@@ -35,6 +35,7 @@ public class WorldTickHandler
     public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
     private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, veinMaxBlocks, maxVeinCharge;
     private static int veinMaxDistance;
+    private static final boolean veinWoodTopToBottom = Config.forgeConfig.veinWoodTopToBottom.get();
 //    public static long lastVeinUpdateTime = System.nanoTime();
 
     public static void refreshVein()
@@ -146,30 +147,15 @@ public class WorldTickHandler
 
     public static void scheduleVein(PlayerEntity player, VeinInfo veinInfo )
     {
-        Skill skill = XP.getSkill( veinInfo.state.getMaterial() );
         double veinLeft = XP.getAbilitiesTag( player ).getDouble( "veinLeft" );
         double veinCost = getVeinCost( veinInfo.state, veinInfo.pos, player );
-        boolean limitY = skill == Skill.FARMING && veinInfo.state.getBlockHardness( veinInfo.world, veinInfo.pos ) == 0;
-        String dimensionKey = player.dimension.getRegistryName().toString();
         String blockKey = veinInfo.state.getBlock().getRegistryName().toString();
         ArrayList<BlockPos> blockPosArrayList;
-        Map<String, Object> globalBlacklist = null;
-        Map<String, Object> dimensionBlacklist = null;
 
-        if( JsonConfig.data.get( "veinBlacklist" ).containsKey( "all_dimensions" ) )
-            globalBlacklist = JsonConfig.data.get( "veinBlacklist" ).get( "all_dimensions" );
+        if( !( canVeinGlobal( blockKey, player ) && canVeinDimension( blockKey, player )  ) )
+            return;
 
-        if( JsonConfig.data.get( "veinBlacklist" ).containsKey( dimensionKey ) )
-            dimensionBlacklist = JsonConfig.data.get( "veinBlacklist" ).get( dimensionKey );
-
-        if( !player.isCreative() )
-        {
-            if( globalBlacklist != null && globalBlacklist.containsKey( blockKey ) )
-                return;
-            if( dimensionBlacklist != null && dimensionBlacklist.containsKey( blockKey ) )
-                return;
-        }
-        blockPosArrayList = getVeinShape( veinInfo, limitY, veinLeft, veinCost, player.isCreative() );
+        blockPosArrayList = getVeinShape( veinInfo, veinLeft, veinCost, player.isCreative(), false );
 
         if( blockPosArrayList.size() > 0 )
         {
@@ -179,18 +165,50 @@ public class WorldTickHandler
         }
     }
 
-    private static ArrayList<BlockPos> getVeinShape( VeinInfo veinInfo, boolean limitY, double veinLeft, double veinCost, boolean isCreative )
+    public static boolean canVeinGlobal( String blockKey, PlayerEntity player )
+    {
+        if( player.isCreative() )
+            return true;
+
+        String dimensionKey = player.dimension.getRegistryName().toString();
+        Map<String, Object> globalBlacklist = null;
+
+        if( JsonConfig.data.get( "veinBlacklist" ).containsKey( "all_dimensions" ) )
+            globalBlacklist = JsonConfig.data.get( "veinBlacklist" ).get( "all_dimensions" );
+
+        return globalBlacklist == null || !globalBlacklist.containsKey(blockKey);
+    }
+
+    public static boolean canVeinDimension( String blockKey, PlayerEntity player )
+    {
+        if( player.isCreative() )
+            return true;
+
+        String dimensionKey = player.dimension.getRegistryName().toString();
+        Map<String, Object> dimensionBlacklist = null;
+
+        if( JsonConfig.data.get( "veinBlacklist" ).containsKey( dimensionKey ) )
+            dimensionBlacklist = JsonConfig.data.get( "veinBlacklist" ).get( dimensionKey );
+
+        return dimensionBlacklist == null || !dimensionBlacklist.containsKey(blockKey);
+    }
+
+    private static ArrayList<BlockPos> getVeinShape( VeinInfo veinInfo, double veinLeft, double veinCost, boolean isCreative, boolean isLooped )
     {
         Set<BlockPos> vein = new HashSet<>();
         ArrayList<BlockPos> outVein = new ArrayList<>();
         ArrayList<BlockPos> curLayer = new ArrayList<>();
         ArrayList<BlockPos> nextLayer = new ArrayList<>();
         BlockPos originPos = veinInfo.pos;
+        BlockPos highestPos = originPos;
         curLayer.add( originPos );
         BlockPos curPos2;
         Block block = veinInfo.state.getBlock();
+        Material material = veinInfo.state.getMaterial();
+        Skill skill = XP.getSkill( material );
+
         int yLimit = 1;
-        if( limitY )
+        if( skill.equals( Skill.FARMING ) )
             yLimit = 0;
 
         while( ( isCreative || veinLeft > veinCost * vein.size() ) && vein.size() <= veinMaxBlocks )
@@ -211,6 +229,9 @@ public class WorldTickHandler
                                     vein.add( curPos2 );
                                     outVein.add( curPos2 );
                                     nextLayer.add( curPos2 );
+
+                                    if( curPos2.getY() > highestPos.getY() )
+                                        highestPos = new BlockPos( curPos2 );
                                 }
                             }
                         }
@@ -223,6 +244,12 @@ public class WorldTickHandler
 
             curLayer = nextLayer;
             nextLayer = new ArrayList<>();
+        }
+
+        if( veinWoodTopToBottom && material.equals( Material.WOOD ) && !isLooped )
+        {
+            veinInfo.pos = highestPos;
+            return getVeinShape( veinInfo, veinLeft, veinCost, isCreative, true );
         }
 
         return outVein;
