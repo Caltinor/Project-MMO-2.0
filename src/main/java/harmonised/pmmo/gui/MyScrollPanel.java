@@ -72,20 +72,20 @@ public class MyScrollPanel extends ScrollPanel
             if( accumulativeHeight + buttons.get( i ).getHeight() + 5 > scrollDistance && accumulativeHeight - height <= scrollDistance )
             {
                 if( button.unlocked )
-                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x22444444, 0x33222222);
+                    fillGradient(this.left + 4, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x22444444, 0x33222222);
                 else
-                    fillGradient(this.left + 2, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
+                    fillGradient(this.left + 4, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
 
                 button.render( mouseX, mouseY, 0 );
 
                 if( button.unlocked )
-                    drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 4, button.y + 2, 0x54fc54 );
+                    drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0x54fc54 );
                 else
-                    drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 4, button.y + 2, 0xfc5454 );
+                    drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0xfc5454 );
 
                 for( String line : button.text )
                 {
-                    drawString( Minecraft.getInstance().fontRenderer, line, this.left + 4, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
+                    drawString( Minecraft.getInstance().fontRenderer, line, this.left + 6, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
                 }
             }
             accumulativeHeight += button.getHeight() + 4;

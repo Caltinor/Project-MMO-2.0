@@ -266,13 +266,11 @@ public class XPOverlayGUI extends AbstractGui
 				aSkill.pos += 0.00005d * growAmount;
 				aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
 			}
-//					System.out.println( startLevel + " " + Math.floor( aSkill.pos ) );
-
-			if( startLevel < Math.floor( aSkill.pos ) )
-				sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );
-
 			if( aSkill.pos > aSkill.goalPos )
 				aSkill.pos = aSkill.goalPos;
+
+			if( startLevel < (int) aSkill.pos )
+				sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );
 
 			if( aSkill.xp > aSkill.goalXp )
 				aSkill.xp = aSkill.goalXp;

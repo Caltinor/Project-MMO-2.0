@@ -58,7 +58,7 @@
   "pmmo.valueChance": "%1$s %2$s%%",
   "pmmo.valueValueChance": "%1$s %2$s %3$s%%",
   "pmmo.salvagesFrom": "Can be salvaged from other items",
-  "pmmo.salvagesFromLevelFromItem": "%1$s at lvl %2$s, from %3$s",
+  "pmmo.salvagesFromLevelFromItem": "%1$s at lvl %2$s <- %3$s",
   "pmmo.baseChance": "%1$s%% Base Chance",
   "pmmo.perLevelChance": "%1$s%% Per Level Chance",
   "pmmo.totalChance": "%1$s%% Total Chance",

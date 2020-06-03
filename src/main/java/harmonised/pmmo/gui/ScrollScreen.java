@@ -611,7 +611,6 @@ public class ScrollScreen extends Screen
                     for( String key : sortedItems )
                     {
                         double levelReq = levelReqs.get( key );
-                        boolean passed = levelReq <= smithLevel;
                         String itemName = getTransComp( XP.getItem( key ).getTranslationKey() ).getFormattedText();
 
                         double chance = (smithLevel - levelReq) * (double) salvagesToMap.get( key ).get( "chancePerLevel" );
@@ -619,6 +618,8 @@ public class ScrollScreen extends Screen
 
                         if( chance > maxChance )
                             chance = maxChance;
+
+                        boolean passed = levelReq <= smithLevel && chance > 0;
 
                         if( passed )
                         {
@@ -813,7 +814,7 @@ public class ScrollScreen extends Screen
                 break;
         }
 
-        scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 42, boxHeight - 21, scrollY, scrollX, type, player, listButtons );
+        scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, type, player, listButtons );
 
         children.add( scrollPanel );
 

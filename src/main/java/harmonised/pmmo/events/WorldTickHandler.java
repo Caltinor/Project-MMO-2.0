@@ -205,13 +205,18 @@ public class WorldTickHandler
         BlockPos curPos2;
         Block block = veinInfo.state.getBlock();
         Material material = veinInfo.state.getMaterial();
+        String regKey = block.getRegistryName().toString();
         Skill skill = XP.getSkill( material );
 
         int yLimit = 1;
-        if( skill.equals( Skill.FARMING ) )
-            yLimit = 0;
 
-        while( ( isCreative || veinLeft > veinCost * vein.size() ) && vein.size() <= veinMaxBlocks )
+        if( JsonConfig.data.get( "blockSpecific" ).containsKey( regKey ) )
+        {
+            if( JsonConfig.data.get( "blockSpecific" ).get( regKey ).containsKey( "growsUpwards" ) )
+                yLimit = 0;
+        }
+
+        while( ( isCreative || veinLeft > veinCost * vein.size() || ( veinWoodTopToBottom && !isLooped && skill.equals( Skill.WOODCUTTING  ) ) ) && vein.size() <= veinMaxBlocks )
         {
             for( BlockPos curPos : curLayer )
             {
