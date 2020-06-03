@@ -1180,6 +1180,7 @@ public class XP
 			return;
 
 		String playerName = player.getDisplayName().getString();
+//		BlockPos playerPos =
 		int startLevel;
 		int currLevel;
 		double startXp = 0;
