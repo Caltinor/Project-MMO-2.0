@@ -85,9 +85,9 @@ public class BlockPlacedHandler
                         NetworkHandler.sendToPlayer( new MessageGrow( 1, offItemStack.getCount() ), (ServerPlayerEntity) player );
 
                     if( JsonConfig.data.get( "plantInfo" ).containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable)
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
                     else
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
                     event.setCanceled( true );
                 }

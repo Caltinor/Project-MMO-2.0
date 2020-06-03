@@ -2,9 +2,12 @@ package harmonised.pmmo.config;
 
 import com.google.gson.*;
 import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.events.BlockBrokenHandler;
+import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.LogHandler;
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -22,6 +25,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -33,8 +37,8 @@ public class JsonConfig
     private static ArrayList<String> validAttributes = new ArrayList<>();
     private static ArrayList<String> validFishEnchantInfo = new ArrayList<>();
     private static String dataPath = "pmmo/data.json";
-    private static String templateDataPath = "pmmo/default_data.json";
-    private static String defaultDataPath = "/assets/pmmo/util/default_data.json";
+    private static String defaultDataPath = "pmmo/default_data.json";
+    private static String hardDataPath = "/assets/pmmo/util/default_data.json";
     private static final Logger LOGGER = LogManager.getLogger();
     private static JsonConfig defaultReq, customReq;
     private static Effect invalidEffect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
@@ -47,27 +51,35 @@ public class JsonConfig
         validAttributes.add( "hpBonus" );
         validAttributes.add( "damageBonus" );
 
-        File templateData = FMLPaths.CONFIGDIR.get().resolve( templateDataPath ).toFile();
-        File data = FMLPaths.CONFIGDIR.get().resolve( dataPath ).toFile();
+        File defaultDataFile = FMLPaths.CONFIGDIR.get().resolve( defaultDataPath ).toFile();
+        File dataFile = FMLPaths.CONFIGDIR.get().resolve( dataPath ).toFile();
 
         initMaps();
 
-        createData( templateData ); //always rewrite template data with hardcoded one
-        if ( !data.exists() )   //If no data file, create one
-            createData( data );
+        createData( defaultDataFile ); //always rewrite template data with hardcoded one
+        if ( !dataFile.exists() )   //If no data file, create one
+            createData( dataFile );
 
-        defaultReq = JsonConfig.readFromFile( templateData.getPath() );
-        customReq = JsonConfig.readFromFile( data.getPath() );
+        defaultReq = JsonConfig.readFromFile( defaultDataFile.getPath() );
+        customReq = JsonConfig.readFromFile( dataFile.getPath() );
 
         if( Config.forgeConfig.loadDefaultConfig.get() )
             updateFinal( defaultReq );
         updateFinal( customReq );
+        
+//        postProcess( localData );
+        
+        JsonConfig.data = localData;
     }
 
     private static void initMaps()
     {
         initMap( localData );
         initMap( data );
+    }
+
+    private static void postProcess( Map<String, Map<String, Map<String, Object>>> dataToProcess )
+    {
     }
 
     private static void initMap( Map<String, Map<String, Map<String, Object>>> map )
@@ -100,6 +112,7 @@ public class JsonConfig
         map.put( "heldItemXpBoost", new HashMap<>() );
         map.put( "wornItemXpBoost", new HashMap<>() );
         map.put( "playerSpecific", new HashMap<>() );
+        map.put( "blockSpecific", new HashMap<>() );
         map.put( "veinBlacklist", new HashMap<>() );
     }
 
@@ -135,6 +148,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> heldItemXpBoost = new HashMap<>();
     private final Map<String, RequirementItem> wornItemXpBoost = new HashMap<>();
     private final Map<String, RequirementItem> playerSpecific = new HashMap<>();
+    private final Map<String, RequirementItem> blockSpecific = new HashMap<>();
     private final Map<String, RequirementItem> veinBlacklist = new HashMap<>();
 
     // -----------------------------------------------------------------------------
@@ -222,7 +236,8 @@ public class JsonConfig
         if( Config.forgeConfig.wornItemXpBoostEnabled.get() )
             updateReqSkills( req.wornItemXpBoost, localData.get( "wornItemXpBoost" ) );
 
-        updatePlayerSpecific( req.playerSpecific, localData.get( "playerSpecific" ) );
+        updateSpecific( req.blockSpecific, localData.get( "blockSpecific" ) );
+        updateSpecific( req.playerSpecific, localData.get( "playerSpecific" ) );
 
         if( Config.forgeConfig.breedingXpEnabled.get() )
             updateReqSkills( req.xpValueBreeding, localData.get( "xpValueBreeding" ) );
@@ -231,8 +246,6 @@ public class JsonConfig
             updateReqSkills( req.xpValueTaming, localData.get( "xpValueTaming" ) );
 
         updateReqVein( req.veinBlacklist, localData.get( "veinBlacklist" ) );
-
-        data = localData;
     }
 
     private static class Deserializer implements JsonDeserializer<JsonConfig>
@@ -271,6 +284,7 @@ public class JsonConfig
             deserializeGroup(obj, "held_item_xp_boost", req.heldItemXpBoost::put, context);
             deserializeGroup(obj, "worn_item_xp_boost", req.wornItemXpBoost::put, context);
             deserializeGroup(obj, "player_specific", req.playerSpecific::put, context);
+            deserializeGroup(obj, "block_specific", req.blockSpecific::put, context);
             deserializeGroup(obj, "vein_blacklist", req.veinBlacklist::put, context);
 
             return req;
@@ -329,7 +343,7 @@ public class JsonConfig
             LogHandler.LOGGER.error( "Could not create template json config!", dataFile.getPath(), e );
         }
 
-        try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( defaultDataPath );
+        try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( hardDataPath );
              FileOutputStream outputStream = new FileOutputStream( dataFile ); )
         {
             IOUtils.copy( inputStream, outputStream );
@@ -891,7 +905,7 @@ public class JsonConfig
         });
     }
 
-    private static void updatePlayerSpecific( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
+    private static void updateSpecific( Map<String, RequirementItem> req, Map<String, Map<String, Object>> outReq )
     {
         req.forEach( (key, value) ->
         {

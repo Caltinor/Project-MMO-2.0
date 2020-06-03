@@ -26,14 +26,12 @@ import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
 public class BlockBrokenHandler
 {
-    public static final UUID fakePlayerUUID = UUID.fromString( "b34010cd-f217-43a9-8e22-373404c25378" );
-    //    private static boolean matched = true;
-
     public static void handleBroken( BlockEvent.BreakEvent event )
     {
         PlayerEntity player = event.getPlayer();
@@ -70,18 +68,18 @@ public class BlockBrokenHandler
 
             if( XP.correctHarvestTool( material ).equals( "axe" ) )
             {
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
             }
             else if( JsonConfig.data.get( "plantInfo" ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
             {
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
             }
             else
             {
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
             }
 
             for( Map.Entry<String, Object> entry : JsonConfig.data.get( "breakReq" ).get( block.getRegistryName().toString() ).entrySet() )
@@ -112,6 +110,7 @@ public class BlockBrokenHandler
     {
         BlockState state = event.getState();
         Block block = state.getBlock();
+        String regKey = block.getRegistryName().toString();
         World world = event.getWorld().getWorld();
         PlayerEntity player = event.getPlayer();
 
@@ -174,12 +173,7 @@ public class BlockBrokenHandler
         else
             drops = new ArrayList<>();
 
-        Block sugarCane = Blocks.SUGAR_CANE;
-        Block cactus = Blocks.CACTUS;
-        Block kelp = Blocks.KELP_PLANT;
-        Block bamboo = Blocks.BAMBOO;
-
-        if( block.equals( sugarCane ) || block.equals( cactus ) || block.equals( kelp ) || block.equals( bamboo ) ) //Handle Sugar Cane / Cactus
+        if( JsonConfig.data.get( "blockSpecific" ).containsKey( regKey ) && JsonConfig.data.get( "blockSpecific" ).get( regKey ).containsKey( "growsUpwards" ) ) //Handle Upwards Growing Plants
         {
             Block baseBlock = event.getState().getBlock();
             BlockPos baseBlockPos = event.getPos();

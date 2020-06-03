@@ -16,6 +16,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -1322,13 +1323,13 @@ public class XP
 		world.addEntity( fireworkRocketEntity );
 	}
 
-	public static void applyWornPenalty(PlayerEntity player, Item item)
+	public static void applyWornPenalty( PlayerEntity player, ItemStack itemStack, boolean dropItem )
 	{
-		if( !checkReq( player, item.getRegistryName(), "wear" ) )
+		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+
+		if( !checkReq( player, resLoc, "wear" ) )
 		{
-			int gap = getSkillReqGap( player, item.getRegistryName(), "wear" );
-			if( gap > 0 )
-			    player.sendStatusMessage( new TranslationTextComponent( "pmmo.toWear", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+			int gap = getSkillReqGap( player, resLoc, "wear" );
 
 			if( gap > 9 )
 				gap = 9;
@@ -1336,6 +1337,17 @@ public class XP
 			player.addPotionEffect( new EffectInstance( Effects.MINING_FATIGUE, 75, gap, false, true ) );
 			player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
+
+			if( dropItem )
+			{
+				ItemStack droppedItemStack = itemStack.copy();
+				player.dropItem( droppedItemStack, false, false );
+				itemStack.setCount( 0 );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+			}
+			else
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWear", new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 		}
 	}
 
@@ -1367,8 +1379,8 @@ public class XP
 				{
 					if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
 					{
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.toSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 						{
 							int startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );

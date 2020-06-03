@@ -77,7 +77,7 @@ public class PlayerInteractionHandler
                     event.setCanceled( true );
 
                     if( isRemote )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.toPlaceDown", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToPlaceDown", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                 }
             }
             else if( !XP.checkReq( player, item.getRegistryName(), "use" ) )
@@ -85,7 +85,7 @@ public class PlayerInteractionHandler
                event.setCanceled( true );
 
                if( isRemote )
-                   player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                   player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
             }
 
             if( event instanceof PlayerInteractEvent.RightClickBlock)
@@ -99,8 +99,8 @@ public class PlayerInteractionHandler
                         event.setCanceled( true );
                         if( isRemote && event.getHand().equals( Hand.MAIN_HAND ) )
                         {
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.toUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
 //                            if( JsonConfig.data.get( "useReq" ).containsKey( block.getRegistryName().toString() ) )
 //                            {

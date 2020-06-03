@@ -101,7 +101,7 @@ public class TooltipHandler
                 }
 
                 if( wearReq != null && wearReq.size() > 0 )
-                    addTooltipTextSkill( "pmmo.armor", "wear", wearReq, event );
+                    addTooltipTextSkill( "pmmo.toWear", "wear", wearReq, event );
 
                 if( wornItemXpBoost != null && wornItemXpBoost.size() > 0 )
                     addTooltipTextSkillPercentage( "pmmo.itemXpBoostWorn", wornItemXpBoost, event );

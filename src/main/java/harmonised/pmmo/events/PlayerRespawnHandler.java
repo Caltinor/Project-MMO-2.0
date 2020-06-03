@@ -11,5 +11,6 @@ public class PlayerRespawnHandler
         PlayerEntity player = event.getPlayer();
 
         AttributeHandler.updateAll( player );
+        player.setHealth( player.getMaxHealth() );
     }
 }

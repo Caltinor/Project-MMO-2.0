@@ -122,7 +122,7 @@ public class DamageHandler
                 {
                     int weaponGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
                     if( weaponGap > 0 )
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.toUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
                     int slayerGap = 0;
 
@@ -131,8 +131,8 @@ public class DamageHandler
                         slayerGap = XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), "killReq" );
                         if( slayerGap > 0 )
                         {
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.toDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
                             for( Map.Entry<String, Object> entry : JsonConfig.data.get( "killReq" ).get( target.getEntityString() ).entrySet() )
                             {

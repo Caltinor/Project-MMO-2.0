@@ -63,7 +63,7 @@ public class PlayerTickHandler
             double gap = ( (System.nanoTime() - lastAward.get( playerUUID) ) / 1000000000D );
             double veinGap = ( (System.nanoTime() - lastVeinAward.get( playerUUID) ) / 1000000000D );
 
-            if( gap > 1 )
+            if( gap > 0.5 )
             {
                 int swimLevel = XP.getLevel( Skill.SWIMMING, player );
                 int flyLevel = XP.getLevel( Skill.FLYING, player );
@@ -83,19 +83,19 @@ public class PlayerTickHandler
                         {
                             for (int i = 0; i < value.getSlots(); i++)
                             {
-                                XP.applyWornPenalty( player, value.getStackInSlot(i).getItem() );
+                                XP.applyWornPenalty( player, value.getStackInSlot(i), true );
                             }
                         });
                     }
 
                     if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 39 ).getItem() );
+                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 39 ), false );
                     if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 38 ).getItem() );
+                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 38 ), false );
                     if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 37 ).getItem() );
+                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 37 ), false );
                     if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 36 ).getItem() );
+                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 36 ), false );
                 }
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 

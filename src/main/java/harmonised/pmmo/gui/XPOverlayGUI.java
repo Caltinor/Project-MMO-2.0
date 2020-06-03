@@ -464,7 +464,7 @@ public class XPOverlayGUI extends AbstractGui
 	private void doCrosshair()
 	{
 		if( veinKey && !canBreak && lookingAtBlock )
-			drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.toBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+			drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 	}
 
 	public static void doInit()
