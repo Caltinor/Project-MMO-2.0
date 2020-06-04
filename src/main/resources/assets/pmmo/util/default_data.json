@@ -80,65 +80,113 @@
 			"endurance": 15,
 			"swimming": 5
 		},
+		"oresandmetals:elder_rune_helmet": {
+			"endurance": 90
+		},
+		"oresandmetals:elder_rune_chestplate": {
+			"endurance": 90
+		},
+		"oresandmetals:elder_rune_leggings": {
+			"endurance": 90
+		},
+		"oresandmetals:elder_rune_boots": {
+			"endurance": 90
+		},
+		"oresandmetals:banite_helmet": {
+			"endurance": 80
+		},
+		"oresandmetals:banite_chestplate": {
+			"endurance": 80
+		},
+		"oresandmetals:banite_leggings": {
+			"endurance": 80
+		},
+		"oresandmetals:banite_boots": {
+			"endurance": 80
+		},
+		"oresandmetals:necronium_helmet": {
+			"endurance": 70
+		},
+		"oresandmetals:necronium_chestplate": {
+			"endurance": 70
+		},
+		"oresandmetals:necronium_leggings": {
+			"endurance": 70
+		},
+		"oresandmetals:necronium_boots": {
+			"endurance": 70
+		},
+		"oresandmetals:orikalkum_helmet": {
+			"endurance": 60
+		},
+		"oresandmetals:orikalkum_chestplate": {
+			"endurance": 60
+		},
+		"oresandmetals:orikalkum_leggings": {
+			"endurance": 60
+		},
+		"oresandmetals:orikalkum_boots": {
+			"endurance": 60
+		},
 		"oresandmetals:rune_helmet": {
-			"endurance": 40
+			"endurance": 50
 		},
 		"oresandmetals:rune_chestplate": {
-			"endurance": 40
+			"endurance": 50
 		},
 		"oresandmetals:rune_leggings": {
-			"endurance": 40
+			"endurance": 50
 		},
 		"oresandmetals:rune_boots": {
-			"endurance": 40
+			"endurance": 50
 		},
 		"oresandmetals:adamant_helmet": {
-			"endurance": 30
+			"endurance": 35
 		},
 		"oresandmetals:adamant_chestplate": {
-			"endurance": 30
+			"endurance": 35
 		},
 		"oresandmetals:adamant_leggings": {
-			"endurance": 30
+			"endurance": 35
 		},
 		"oresandmetals:adamant_boots": {
-			"endurance": 30
+			"endurance": 35
 		},
 		"oresandmetals:mithril_helmet": {
-			"endurance": 20
+			"endurance": 25
 		},
 		"oresandmetals:mithril_chestplate": {
-			"endurance": 20
+			"endurance": 25
 		},
 		"oresandmetals:mithril_leggings": {
-			"endurance": 20
+			"endurance": 25
 		},
 		"oresandmetals:mithril_boots": {
-			"endurance": 20
+			"endurance": 25
 		},
 		"oresandmetals:steel_helmet": {
-			"endurance": 10
+			"endurance": 15
 		},
 		"oresandmetals:steel_chestplate": {
-			"endurance": 10
+			"endurance": 15
 		},
 		"oresandmetals:steel_leggings": {
-			"endurance": 10
+			"endurance": 15
 		},
 		"oresandmetals:steel_boots": {
-			"endurance": 10
+			"endurance": 15
 		},
 		"oresandmetals:bronze_helmet": {
-			"endurance": 1
+			"endurance": 5
 		},
 		"oresandmetals:bronze_chestplate": {
-			"endurance": 1
+			"endurance": 5
 		},
 		"oresandmetals:bronze_leggings": {
-			"endurance": 1
+			"endurance": 5
 		},
 		"oresandmetals:bronze_boots": {
-			"endurance": 1
+			"endurance": 5
 		}
 	},
 	"tool_requirement": {
@@ -191,16 +239,16 @@
 			"farming": 20
 		},
 		"minecraft:stone_pickaxe": {
-			"mining": 5
+			"mining": 10
 		},
 		"minecraft:stone_shovel": {
-			"excavation": 5
+			"excavation": 10
 		},
 		"minecraft:stone_axe": {
-			"woodcutting": 5
+			"woodcutting": 10
 		},
 		"minecraft:stone_hoe": {
-			"farming": 5
+			"farming": 10
 		},
 		"minecraft:wooden_pickaxe": {
 			"mining": 1
@@ -214,50 +262,86 @@
 		"minecraft:wooden_hoe": {
 			"farming": 1
 		},
+		"oresandmetals:elder_rune_pickaxe": {
+			"mining": 90
+		},
+		"oresandmetals:elder_rune_shovel": {
+			"excavation": 90
+		},
+		"oresandmetals:elder_rune_axe": {
+			"woodcutting": 90
+		},
+		"oresandmetals:banite_pickaxe": {
+			"mining": 80
+		},
+		"oresandmetals:banite_shovel": {
+			"excavation": 80
+		},
+		"oresandmetals:banite_axe": {
+			"woodcutting": 80
+		},
+		"oresandmetals:necronium_pickaxe": {
+			"mining": 70
+		},
+		"oresandmetals:necronium_shovel": {
+			"excavation": 70
+		},
+		"oresandmetals:necronium_axe": {
+			"woodcutting": 70
+		},
+		"oresandmetals:orikalkum_pickaxe": {
+			"mining": 60
+		},
+		"oresandmetals:orikalkum_shovel": {
+			"excavation": 60
+		},
+		"oresandmetals:orikalkum_axe": {
+			"woodcutting": 60
+		},
 		"oresandmetals:rune_pickaxe": {
-			"mining": 40
+			"mining": 50
 		},
 		"oresandmetals:rune_shovel": {
-			"excavation": 40
+			"excavation": 50
 		},
 		"oresandmetals:rune_axe": {
-			"woodcutting": 40
+			"woodcutting": 50
 		},
 		"oresandmetals:adamant_pickaxe": {
-			"mining": 30
+			"mining": 35
 		},
 		"oresandmetals:adamant_shovel": {
-			"excavation": 30
+			"excavation": 35
 		},
 		"oresandmetals:adamant_axe": {
-			"woodcutting": 30
+			"woodcutting": 35
 		},
 		"oresandmetals:mithril_pickaxe": {
-			"mining": 20
+			"mining": 25
 		},
 		"oresandmetals:mithril_shovel": {
-			"excavation": 20
+			"excavation": 25
 		},
 		"oresandmetals:mithril_axe": {
-			"woodcutting": 20
+			"woodcutting": 25
 		},
 		"oresandmetals:steel_pickaxe": {
-			"mining": 10
+			"mining": 15
 		},
 		"oresandmetals:steel_shovel": {
-			"excavation": 10
+			"excavation": 15
 		},
 		"oresandmetals:steel_axe": {
-			"woodcutting": 10
+			"woodcutting": 15
 		},
 		"oresandmetals:bronze_pickaxe": {
-			"mining": 1
+			"mining": 5
 		},
 		"oresandmetals:bronze_shovel": {
-			"excavation": 1
+			"excavation": 5
 		},
 		"oresandmetals:bronze_axe": {
-			"woodcutting": 1
+			"woodcutting": 5
 		}
 	},
 	"weapon_requirement": {
@@ -313,16 +397,16 @@
 			"combat": 20
 		},
 		"minecraft:stone_pickaxe": {
-			"combat": 5
-		},
-		"minecraft:stone_shovel": {
-			"combat": 5
-		},
-		"minecraft:stone_axe": {
 			"combat": 10
 		},
+		"minecraft:stone_shovel": {
+			"combat": 10
+		},
+		"minecraft:stone_axe": {
+			"combat": 15
+		},
 		"minecraft:stone_sword": {
-			"combat": 5
+			"combat": 10
 		},
 		"minecraft:wooden_pickaxe": {
 			"combat": 1
@@ -336,65 +420,113 @@
 		"minecraft:wooden_sword": {
 			"combat": 1
 		},
+		"oresandmetals:elder_rune_pickaxe": {
+			"combat": 90
+		},
+		"oresandmetals:elder_rune_shovel": {
+			"combat": 90
+		},
+		"oresandmetals:elder_rune_axe": {
+			"combat": 90
+		},
+		"oresandmetals:elder_rune_sword": {
+			"combat": 90
+		},
+		"oresandmetals:banite_pickaxe": {
+			"combat": 80
+		},
+		"oresandmetals:banite_shovel": {
+			"combat": 80
+		},
+		"oresandmetals:banite_axe": {
+			"combat": 80
+		},
+		"oresandmetals:banite_sword": {
+			"combat": 80
+		},
+		"oresandmetals:necronium_pickaxe": {
+			"combat": 70
+		},
+		"oresandmetals:necronium_shovel": {
+			"combat": 70
+		},
+		"oresandmetals:necronium_axe": {
+			"combat": 70
+		},
+		"oresandmetals:necronium_sword": {
+			"combat": 70
+		},
+		"oresandmetals:orikalkum_pickaxe": {
+			"combat": 60
+		},
+		"oresandmetals:orikalkum_shovel": {
+			"combat": 60
+		},
+		"oresandmetals:orikalkum_axe": {
+			"combat": 60
+		},
+		"oresandmetals:orikalkum_sword": {
+			"combat": 60
+		},
 		"oresandmetals:rune_pickaxe": {
-			"combat": 40
+			"combat": 50
 		},
 		"oresandmetals:rune_shovel": {
-			"combat": 40
+			"combat": 50
 		},
 		"oresandmetals:rune_axe": {
-			"combat": 40
+			"combat": 50
 		},
 		"oresandmetals:rune_sword": {
-			"combat": 40
+			"combat": 50
 		},
 		"oresandmetals:adamant_pickaxe": {
-			"combat": 30
+			"combat": 35
 		},
 		"oresandmetals:adamant_shovel": {
-			"combat": 30
+			"combat": 35
 		},
 		"oresandmetals:adamant_axe": {
-			"combat": 30
+			"combat": 35
 		},
 		"oresandmetals:adamant_sword": {
-			"combat": 30
+			"combat": 35
 		},
 		"oresandmetals:mithril_pickaxe": {
-			"combat": 20
+			"combat": 25
 		},
 		"oresandmetals:mithril_shovel": {
-			"combat": 20
+			"combat": 25
 		},
 		"oresandmetals:mithril_axe": {
-			"combat": 20
+			"combat": 25
 		},
 		"oresandmetals:mithril_sword": {
-			"combat": 20
+			"combat": 25
 		},
 		"oresandmetals:steel_pickaxe": {
-			"combat": 10
+			"combat": 15
 		},
 		"oresandmetals:steel_shovel": {
-			"combat": 10
+			"combat": 15
 		},
 		"oresandmetals:steel_axe": {
-			"combat": 10
+			"combat": 15
 		},
 		"oresandmetals:steel_sword": {
-			"combat": 10
+			"combat": 15
 		},
 		"oresandmetals:bronze_pickaxe": {
-			"combat": 1
+			"combat": 5
 		},
 		"oresandmetals:bronze_shovel": {
-			"combat": 1
+			"combat": 5
 		},
 		"oresandmetals:bronze_axe": {
-			"combat": 1
+			"combat": 5
 		},
 		"oresandmetals:bronze_sword": {
-			"combat": 1
+			"combat": 5
 		}
 	},
 	"use_requirement": {
@@ -454,20 +586,41 @@
 		"minecraft:barrier": {
 			"mining": 999
 		},
+		"oresandmetals:light_animica_ore": {
+			"mining": 90
+		},
+		"oresandmetals:dark_animica_ore": {
+			"mining": 90
+		},
+		"oresandmetals:banite_ore": {
+			"mining": 80
+		},
+		"oresandmetals:necrite_ore": {
+			"mining": 70
+		},
+		"oresandmetals:phasmatite_ore": {
+			"mining": 70
+		},
+		"oresandmetals:orichalcite_ore": {
+			"mining": 60
+		},
+		"oresandmetals:drakolith_ore": {
+			"mining": 60
+		},
 		"oresandmetals:runite_ore": {
-			"mining": 40
+			"mining": 50
 		},
 		"oresandmetals:adamantite_ore": {
-			"mining": 30
+			"mining": 35
 		},
 		"oresandmetals:mithril_ore": {
-			"mining": 20
+			"mining": 25
 		},
 		"oresandmetals:tin_ore": {
-			"mining": 1
+			"mining": 5
 		},
 		"oresandmetals:copper_ore": {
-			"mining": 1
+			"mining": 5
 		}
 	},
 	"held_item_xp_boost": {
@@ -765,13 +918,13 @@
 			"woodcutting": 12
 		},
 		"minecraft:spruce_log": {
-			"woodcutting": 9
+			"woodcutting": 5
 		},
 		"minecraft:jungle_log": {
-			"woodcutting": 9
+			"woodcutting": 4.5
 		},
 		"minecraft:dark_oak_log": {
-			"woodcutting": 10
+			"woodcutting": 7
 		},
 		"minecraft:acacia_log": {
 			"woodcutting": 14
@@ -783,13 +936,13 @@
 			"woodcutting": 12
 		},
 		"minecraft:spruce_wood": {
-			"woodcutting": 9
+			"woodcutting": 5
 		},
 		"minecraft:jungle_wood": {
-			"woodcutting": 9
+			"woodcutting": 4.5
 		},
 		"minecraft:dark_oak_wood": {
-			"woodcutting": 10
+			"woodcutting": 7
 		},
 		"minecraft:acacia_wood": {
 			"woodcutting": 14
@@ -1021,6 +1174,27 @@
 		},
 		"minecraft:leather": {
 			"fishing": 25
+		},
+		"oresandmetals:light_animica_ore": {
+			"mining": 85
+		},
+		"oresandmetals:dark_animica_ore": {
+			"mining": 85
+		},
+		"oresandmetals:banite_ore": {
+			"mining": 75
+		},
+		"oresandmetals:necrite_ore": {
+			"mining": 65
+		},
+		"oresandmetals:phasmatite_ore": {
+			"mining": 65
+		},
+		"oresandmetals:orichalcite_ore": {
+			"mining": 55
+		},
+		"oresandmetals:drakolith_ore": {
+			"mining": 55
 		},
 		"oresandmetals:runite_ore": {
 			"mining": 45

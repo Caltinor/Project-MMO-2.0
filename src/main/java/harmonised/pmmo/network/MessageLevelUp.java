@@ -67,11 +67,11 @@ public class MessageLevelUp
                 {
                     if( otherPlayer.getUniqueID() != player.getUniqueID() )
                     {
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, "pmmo." + skillName ), false );
+                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).setStyle( XP.skillStyle.get( skill ) ), false );
 //                        NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.milestoneLevelUp", player.getDisplayName().getString(), "" + packet.level, "pmmo." + skillName, false, 3 ), otherPlayer );
 
                         if( milestoneLevelUpFirework )
-                            XP.spawnRocket( player.world, otherPlayer.getPosition(), skill );
+                            XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );
                     }
                 });
             }

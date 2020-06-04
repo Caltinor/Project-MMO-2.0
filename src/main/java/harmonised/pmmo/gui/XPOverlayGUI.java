@@ -141,24 +141,32 @@ public class XPOverlayGUI extends AbstractGui
 			blockState = mc.world.getBlockState( blockPos );
 
 			if( lastBlockState == null )
-				lastBlockState = blockState;
+			{
+				updateLastBlock();
+				canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
+			}
 
 			if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
 				lastVeinBlockUpdate = System.nanoTime();
 //
 			if( !isVeining && System.nanoTime() - lastVeinBlockUpdate > 100000000L )
 			{
-				lastBlockState = blockState;
-				lastBlockPos = blockPos;
-				if( lastBlockState.getBlock().getRegistryName() != null )
-					lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
-				lastBlockTransKey = lastBlockState.getBlock().getTranslationKey();
+				updateLastBlock();
 				canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
 			}
 			canBreak = XP.checkReq( player, lastBlockRegKey, "break" );
 		}
 		else
 			lookingAtBlock = false;
+	}
+
+	private void updateLastBlock()
+	{
+		lastBlockState = blockState;
+		lastBlockPos = blockPos;
+		if( lastBlockState.getBlock().getRegistryName() != null )
+			lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
+		lastBlockTransKey = lastBlockState.getBlock().getTranslationKey();
 	}
 
 	private void doXpDrops()
@@ -388,13 +396,16 @@ public class XPOverlayGUI extends AbstractGui
 				if( canVein )
 				{
 					breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
-					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.canVein", breakAmount, new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
+					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.canVein", breakAmount, new TranslationTextComponent( lastBlockTransKey ) ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
 				}
 				else if( WorldTickHandler.canVeinDimension( lastBlockRegKey, player ) )
 					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.cannotVein", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
 				else
 					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.cannotVeinDimension", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
 			}
+			else if( veinKey && !canBreak && lookingAtBlock )
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+
 
 			RenderSystem.disableBlend();
 			RenderSystem.popMatrix();
@@ -461,8 +472,6 @@ public class XPOverlayGUI extends AbstractGui
 
 	private void doCrosshair()
 	{
-		if( veinKey && !canBreak && lookingAtBlock )
-			drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 	}
 
 	public static void doInit()

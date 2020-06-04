@@ -297,32 +297,32 @@ public class Config
                 this.minVeinHardness = subscriber.subscribe(builder
                         .comment( "What is the lowest hardness for each block veined? (Crops have 0 hardness, this makes crops not infinitely veined)" )
                         .translation( "pmmo.minVeinHardness" )
-                        .defineInRange( "minVeinHardness", 0.5D, 0, 10000) );
+                        .defineInRange( "minVeinHardness", 1D, 0, 10000) );
 
                 this.levelsPerHardnessMining = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 64) * 128 = 100 hardness worth of blocks, which is 2.0 Obsidian, or 33.3 Coal Ore)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of blocks, which is 2.0 Obsidian, or 33.3 Coal Ore)" )
                         .translation( "pmmo.levelsPerHardnessMining" )
-                        .defineInRange( "levelsPerHardnessMining", 64D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessMining", 160D, 0.01, 10000) );
 
                 this.levelsPerHardnessWoodcutting = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 64) * 128 = 100 hardness worth of logs, which is 50 Logs)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of logs, which is 50 Logs)" )
                         .translation( "pmmo.levelsPerHardnessWoodcutting" )
-                        .defineInRange( "levelsPerHardnessWoodcutting", 64D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessWoodcutting", 160D, 0.01, 10000) );
 
                 this.levelsPerHardnessExcavation = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 32) * 128 = 50 hardness worth of logs, which is 100 Dirt)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 80) * 320 = 50 hardness worth of logs, which is 100 Dirt)" )
                         .translation( "pmmo.levelsPerHardnessExcavation" )
-                        .defineInRange( "levelsPerHardnessExcavation", 32D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessExcavation", 80D, 0.01, 10000) );
 
                 this.levelsPerHardnessFarming = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? Plants have no hardness, but there is a minimum hardness while veining config in here, which is 0.5 by default, making it 100 plants at level 50 farming, with 128 charge, if this is set to 32" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? Plants have no hardness, but there is a minimum hardness while veining config in here, which is 0.5 by default, making it 50 plants at level 50 farming, with 320 charge, if this is set to 160" )
                         .translation( "pmmo.levelsPerHardnessFarming" )
-                        .defineInRange( "levelsPerHardnessFarming", 32D, 0.1, 10000) );
+                        .defineInRange( "levelsPerHardnessFarming", 160D, 0.1, 10000) );
 
                 this.maxVeinCharge = subscriber.subscribe(builder
                         .comment( "How much vein charge can a player hold at max? (1 recharges every second)" )
                         .translation( "pmmo.maxVeinCharge" )
-                        .defineInRange( "maxVeinCharge", 128D, 0, 100000) );
+                        .defineInRange( "maxVeinCharge", 320D, 0, 100000) );
 
                 builder.pop();
             }
