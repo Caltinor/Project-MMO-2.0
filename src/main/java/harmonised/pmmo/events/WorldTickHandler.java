@@ -43,12 +43,12 @@ public class WorldTickHandler
         activeVein = new HashMap<>();
         veinSet = new HashMap<>();
 
-        minVeinCost = Config.forgeConfig.minVeinCost.get();
-        minVeinHardness = Config.forgeConfig.minVeinHardness.get();
-        levelsPerHardnessMining = Config.forgeConfig.levelsPerHardnessMining.get();
-        levelsPerHardnessWoodcutting = Config.forgeConfig.levelsPerHardnessWoodcutting.get();
-        levelsPerHardnessExcavation = Config.forgeConfig.levelsPerHardnessExcavation.get();
-        levelsPerHardnessFarming = Config.forgeConfig.levelsPerHardnessFarming.get();
+        minVeinCost = Config.getConfig( "minVeinCost" );
+        minVeinHardness = Config.getConfig( "minVeinHardness" );
+        levelsPerHardnessMining = Config.getConfig( "levelsPerHardnessMining" );
+        levelsPerHardnessWoodcutting = Config.getConfig( "levelsPerHardnessWoodcutting" );
+        levelsPerHardnessExcavation = Config.getConfig( "levelsPerHardnessExcavation" );
+        levelsPerHardnessFarming = Config.getConfig( "levelsPerHardnessFarming" );
         veinMaxDistance = (int) Math.floor( Config.forgeConfig.veinMaxDistance.get() );
         veinMaxBlocks = Config.forgeConfig.veinMaxBlocks.get();
         maxVeinCharge = Config.forgeConfig.maxVeinCharge.get();
@@ -296,6 +296,8 @@ public class WorldTickHandler
         if( cost < minVeinCost )
             cost = minVeinCost;
 
+        Map<String, Double> test = Config.config;
+        System.out.println( cost );
         return cost;
     }
 

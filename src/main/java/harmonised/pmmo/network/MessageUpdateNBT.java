@@ -1,6 +1,7 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.LogHandler;
@@ -55,6 +56,7 @@ public class MessageUpdateNBT
 
                 case 2: //config
                     Config.config = NBTHelper.nbtToMap( packet.reqPackage );
+                    WorldTickHandler.refreshVein();
                     break;
 
                 case 3: //stats

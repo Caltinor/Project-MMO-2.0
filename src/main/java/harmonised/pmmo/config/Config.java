@@ -33,6 +33,12 @@ public class Config
         localConfig.put( "maxJumpBoost", forgeConfig.maxJumpBoost.get() );
         localConfig.put( "levelsCrouchJumpBoost", (double) forgeConfig.levelsCrouchJumpBoost.get() );
         localConfig.put( "levelsSprintJumpBoost", (double) forgeConfig.levelsSprintJumpBoost.get() );
+        localConfig.put( "levelsPerHardnessMining", forgeConfig.levelsPerHardnessMining.get() );
+        localConfig.put( "levelsPerHardnessWoodcutting", forgeConfig.levelsPerHardnessWoodcutting.get() );
+        localConfig.put( "levelsPerHardnessExcavation", forgeConfig.levelsPerHardnessExcavation.get() );
+        localConfig.put( "levelsPerHardnessFarming", forgeConfig.levelsPerHardnessFarming.get() );
+        localConfig.put( "minVeinCost", forgeConfig.minVeinCost.get() );
+        localConfig.put( "minVeinHardness", forgeConfig.minVeinHardness.get() );
         localConfig.put( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
 
         if( Config.forgeConfig.crawlingAllowed.get() )
