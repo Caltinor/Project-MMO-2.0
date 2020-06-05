@@ -83,7 +83,7 @@
   "pmmo.fallInfo": "%1$s%% Fall Damage Save Chance",
   "pmmo.enduranceInfo": "%1$s%% Damage Reduction",
   "pmmo.combatInfo": "%1$s Extra Damage",
-  "pmmo.sprintInfo": "%1$s Sprint Speed Bonus",
+  "pmmo.sprintInfo": "%1$s%% Sprint Speed Bonus",
   "pmmo.underwaterNightVisionLocked": "Underwater Nightvision is locked until level %1$s Swimming",
   "pmmo.underwaterNightVisionUnLocked": "Underwater Nightvision is unlocked since level %1$s Swimming",
   "pmmo.notSkilledEnoughToSurvive": "%1$s is too harsh for you to survive in it!",

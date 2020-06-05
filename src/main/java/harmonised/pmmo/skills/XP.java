@@ -14,6 +14,7 @@ import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -1341,7 +1342,7 @@ public class XP
 			player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
 
-			if( dropItem )
+			if( dropItem || EnchantmentHelper.hasBindingCurse( itemStack ) )
 			{
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );

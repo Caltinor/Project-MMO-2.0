@@ -297,7 +297,7 @@ public class PlayerInteractionHandler
                             }
                         }
 
-                        if( block.equals( diamondBlock ) && event.getHand() == Hand.MAIN_HAND )
+                        if( block.equals( diamondBlock ) && event.getHand() == Hand.MAIN_HAND && !player.world.isRemote() )
                         {
                             int agilityLevel = XP.getLevel( Skill.AGILITY, player );
                             int enduranceLevel = XP.getLevel( Skill.ENDURANCE, player );
@@ -305,15 +305,12 @@ public class PlayerInteractionHandler
                             int swimLevel = XP.getLevel( Skill.SMITHING, player );
                             int nightvisionUnlockLevel = (int) Math.floor( Config.getConfig( "nightvisionUnlockLevel" ) );	//Swimming
 
-                            double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();			//Agility
-                            double saveChancePerLevel = Config.forgeConfig.saveChancePerLevel.get() / 100;
-                            double speedBoostPerLevel = Config.getConfig( "speedBoostPerLevel" );
-                            double maxSpeedBoost = Config.getConfig( "maxSpeedBoost" );
+                            double maxFallSaveChance = Config.getConfig( "maxFallSaveChance" );			//Agility
+                            double saveChancePerLevel = Config.getConfig( "saveChancePerLevel" ) / 100;
 
-                            int levelsPerDamage = Config.forgeConfig.levelsPerDamage.get();					//Combat
-
-                            double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();			//Endurance
-                            double maxEndurance = Config.forgeConfig.maxEndurance.get();
+                            double levelsPerDamage = Config.getConfig( "levelsPerDamage" );				//Combat
+                            double endurancePerLevel = Config.getConfig( "endurancePerLevel" );			//Endurance
+                            double maxEndurance = Config.getConfig( "maxEndurance" );
                             double endurePercent = (enduranceLevel * endurancePerLevel);
                             if( endurePercent > maxEndurance )
                                 endurePercent = maxEndurance;
@@ -321,15 +318,14 @@ public class PlayerInteractionHandler
                             double reach = AttributeHandler.getReach( player );
                             double agilityChance = agilityLevel * saveChancePerLevel;
 
-                            double extraDamage = Math.floor( combatLevel / levelsPerDamage );
-
-                            double speedBonus = agilityLevel * speedBoostPerLevel;
-
                             if( agilityChance > maxFallSaveChance )
                                 agilityChance = maxFallSaveChance;
 
-                            if( speedBonus > maxSpeedBoost )
-                                speedBonus = maxSpeedBoost;
+                            double extraDamage = Math.floor( (double) combatLevel / levelsPerDamage );
+                            double speedBonus = ( AttributeHandler.getSpeedBoost( player ) / AttributeHandler.getBaseSpeed( player ) ) * 100D;
+
+                            System.out.println( AttributeHandler.getBaseSpeed( player ) );
+                            System.out.println( AttributeHandler.getSpeedBoost( player ) );
 
                             XP.sendMessage( "_________________________________" , false, player );
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.buildingInfo", DP.dp( reach ) ), false );

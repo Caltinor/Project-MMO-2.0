@@ -20,14 +20,14 @@ public class AttributeHandler
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");
 	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
-	private static final int levelsPerHardnessReach = Config.forgeConfig.levelsPerHardnessReach.get();
-	private static final int levelsPerHeart = Config.forgeConfig.levelsPerHeart.get();
-	private static final int levelsPerDamage = Config.forgeConfig.levelsPerDamage.get();
-	private static final double maxSpeedBoost = Config.forgeConfig.maxSpeedBoost.get();
-	private static final double speedBoostPerLevel = Config.forgeConfig.speedBoostPerLevel.get();
-	private static final int maxHeartCap = Config.forgeConfig.maxHeartCap.get();
-	private static final double maxReach = Config.forgeConfig.maxReach.get();
-	private static final double maxDamage = Config.forgeConfig.maxDamage.get();
+	private static double levelsPerOneReach;
+	private static double levelsPerHeart;
+	private static double levelsPerDamage;
+	private static double maxSpeedBoost;
+	private static double speedBoostPerLevel;
+	private static int maxHeartCap;
+	private static double maxReach;
+	private static double maxDamage;
 	private static final double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
 	private static final double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();
 	private static final double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
@@ -35,6 +35,17 @@ public class AttributeHandler
 	private static final double maxMobDamageBoost = Config.forgeConfig.maxMobDamageBoost.get();
 	private static final double mobDamageBoostPerPowerLevel = Config.forgeConfig.mobDamageBoostPerPowerLevel.get();
 
+	public static void init()
+	{
+		levelsPerOneReach = Config.getConfig( "levelsPerOneReach" );
+		levelsPerHeart = Config.getConfig( "levelsPerHeart" );
+		levelsPerDamage = Config.getConfig( "levelsPerDamage" );
+		maxSpeedBoost = Config.getConfig( "maxSpeedBoost" );
+		speedBoostPerLevel = Config.getConfig( "speedBoostPerLevel" );
+		maxHeartCap = (int) Config.getConfig( "maxHeartCap" );
+		maxReach = Config.getConfig( "maxReach" );
+		maxDamage = Config.getConfig( "maxDamage" );
+	}
 
 	public static void updateAll( PlayerEntity player )
 	{
@@ -61,7 +72,7 @@ public class AttributeHandler
 		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double buildLevel = XP.getLevel( Skill.BUILDING, player );
-		double reach = -0.91 + ( buildLevel / levelsPerHardnessReach );
+		double reach = -0.91 + ( buildLevel / levelsPerOneReach );
 		double maxReachPref = prefsTag.getDouble( "maxReach" );
 		if( reach > maxReach )
 			reach = maxReach;
@@ -75,21 +86,33 @@ public class AttributeHandler
 			reachAttribute.applyModifier( reachModifier );
 		}
 	}
-	
-	public static void updateSpeed( PlayerEntity player )
+
+	public static double getBaseSpeed( PlayerEntity player )
 	{
-		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		return player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED ).getBaseValue();
+	}
+
+	public static double getSpeedBoost( PlayerEntity player )
+	{
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double agilityLevel = XP.getLevel( Skill.AGILITY, player );
 		double maxSpeedBoostPref = prefsTag.getDouble( "maxSpeedBoost" );
 		double speedBoost = agilityLevel * speedBoostPerLevel;
-		double baseValue = speedAttribute.getBaseValue();
+		double baseValue = getBaseSpeed( player );
 		double maxSpeed = baseValue * (maxSpeedBoost / 100);
 		if( maxSpeed > baseValue * (maxSpeedBoostPref / 100) && prefsTag.contains( "maxSpeedBoost" ) )
 			maxSpeed = baseValue * (maxSpeedBoostPref / 100);
 
 		if( speedBoost > maxSpeed )
 			speedBoost = maxSpeed;
+
+		return speedBoost;
+	}
+	
+	public static void updateSpeed( PlayerEntity player )
+	{
+		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		double speedBoost = getSpeedBoost( player );
 
 		if( speedBoost > 0 )
 		{

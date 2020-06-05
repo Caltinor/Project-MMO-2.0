@@ -273,7 +273,7 @@ public class WorldTickHandler
                 yLimit = 0;
         }
 
-        while( ( isCreative || veinLeft > veinCost * vein.size() || ( veinWoodTopToBottom && !isLooped && skill.equals( Skill.WOODCUTTING  ) ) ) && vein.size() <= veinMaxBlocks )
+        while( ( isCreative || veinLeft * 2 > veinCost * vein.size() || ( veinWoodTopToBottom && !isLooped && skill.equals( Skill.WOODCUTTING  ) ) ) && vein.size() <= veinMaxBlocks )
         {
             for( BlockPos curPos : curLayer )
             {
@@ -322,9 +322,14 @@ public class WorldTickHandler
         Material material = state.getMaterial();
         Skill skill = XP.getSkill( material );
         double cost;
+//        double startHardness = state.getBlockHardness( player.world, pos );
         double hardness = state.getBlockHardness( player.world, pos );
+
         if( hardness < minVeinHardness )
             hardness = minVeinHardness;
+
+//        if( startHardness == 0 )
+//            hardness = 0;
 
         switch( skill )
         {

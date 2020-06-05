@@ -31,8 +31,19 @@ public class Config
         localConfig.put( "speedBoostPerLevel", forgeConfig.speedBoostPerLevel.get() );
         localConfig.put( "maxSpeedBoost", forgeConfig.maxSpeedBoost.get() );
         localConfig.put( "maxJumpBoost", forgeConfig.maxJumpBoost.get() );
-        localConfig.put( "levelsCrouchJumpBoost", (double) forgeConfig.levelsCrouchJumpBoost.get() );
-        localConfig.put( "levelsSprintJumpBoost", (double) forgeConfig.levelsSprintJumpBoost.get() );
+        localConfig.put( "maxFallSaveChance", forgeConfig.maxFallSaveChance.get() );
+        localConfig.put( "saveChancePerLevel", forgeConfig.saveChancePerLevel.get() );
+        localConfig.put( "levelsCrouchJumpBoost", forgeConfig.levelsCrouchJumpBoost.get() );
+        localConfig.put( "levelsSprintJumpBoost", forgeConfig.levelsSprintJumpBoost.get() );
+        localConfig.put( "levelsPerDamage", forgeConfig.levelsPerDamage.get() );
+        localConfig.put( "levelsPerOneReach", forgeConfig.levelsPerOneReach.get() );
+        localConfig.put( "endurancePerLevel", forgeConfig.endurancePerLevel.get() );
+        localConfig.put( "maxEndurance", forgeConfig.maxEndurance.get() );
+        localConfig.put( "levelsPerHeart", forgeConfig.levelsPerHeart.get() );
+        localConfig.put( "maxHeartCap", (double) forgeConfig.maxHeartCap.get() );
+        localConfig.put( "maxReach", forgeConfig.maxReach.get() );
+        localConfig.put( "maxDamage", forgeConfig.maxDamage.get() );
+
         localConfig.put( "levelsPerHardnessMining", forgeConfig.levelsPerHardnessMining.get() );
         localConfig.put( "levelsPerHardnessWoodcutting", forgeConfig.levelsPerHardnessWoodcutting.get() );
         localConfig.put( "levelsPerHardnessExcavation", forgeConfig.levelsPerHardnessExcavation.get() );
@@ -176,7 +187,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForBreaking;
 
         //Building
-        public ConfigHelper.ConfigValueListener<Integer> levelsPerHardnessReach;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerOneReach;
         public ConfigHelper.ConfigValueListener<Double> maxReach;
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
 
@@ -194,18 +205,18 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> maxJumpBoost;
         public ConfigHelper.ConfigValueListener<Double> maxSpeedBoost;
         public ConfigHelper.ConfigValueListener<Double> speedBoostPerLevel;
-        public ConfigHelper.ConfigValueListener<Integer> levelsCrouchJumpBoost;
-        public ConfigHelper.ConfigValueListener<Integer> levelsSprintJumpBoost;
+        public ConfigHelper.ConfigValueListener<Double> levelsCrouchJumpBoost;
+        public ConfigHelper.ConfigValueListener<Double> levelsSprintJumpBoost;
 
         //Endurance
         public ConfigHelper.ConfigValueListener<Double> endurancePerLevel;
         public ConfigHelper.ConfigValueListener<Double> maxEndurance;
-        public ConfigHelper.ConfigValueListener<Integer> levelsPerHeart;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerHeart;
         public ConfigHelper.ConfigValueListener<Integer> maxHeartCap;
 
         //Combat
-        public ConfigHelper.ConfigValueListener<Integer> levelsPerDamage;
-        public ConfigHelper.ConfigValueListener<Integer> maxDamage;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerDamage;
+        public ConfigHelper.ConfigValueListener<Double> maxDamage;
 
         //Archery
 
@@ -306,12 +317,12 @@ public class Config
                 this.minVeinCost = subscriber.subscribe(builder
                         .comment( "How much is the lowest cost for each block veined? (1 = 1 charge, 1 charge regens per second)" )
                         .translation( "pmmo.minVeinCost" )
-                        .defineInRange( "minVeinCost", 2D, 0.01, 10000) );
+                        .defineInRange( "minVeinCost", 0.5D, 0.01, 10000) );
 
                 this.minVeinHardness = subscriber.subscribe(builder
                         .comment( "What is the lowest hardness for each block veined? (Crops have 0 hardness, this makes crops not infinitely veined)" )
                         .translation( "pmmo.minVeinHardness" )
-                        .defineInRange( "minVeinHardness", 0.2D, 0, 10000) );
+                        .defineInRange( "minVeinHardness", 0.5D, 0, 10000) );
 
                 this.levelsPerHardnessMining = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of blocks, which is 2.0 Obsidian, or 33.3 Coal Ore)" )
@@ -324,12 +335,12 @@ public class Config
                         .defineInRange( "levelsPerHardnessWoodcutting", 160D, 0.01, 10000) );
 
                 this.levelsPerHardnessExcavation = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 80) * 320 = 50 hardness worth of ground, which is 100 Dirt)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 320) * 320 = 50 hardness worth of ground, which is 100 Dirt)" )
                         .translation( "pmmo.levelsPerHardnessExcavation" )
-                        .defineInRange( "levelsPerHardnessExcavation", 80D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessExcavation", 320D, 0.01, 10000) );
 
                 this.levelsPerHardnessFarming = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? Plants have no hardness, but there is a minimum hardness while veining config in here, which is 0.5 by default, making it 50 plants at level 50 farming, with 320 charge, if this is set to 160" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? Plants have no hardness, but there is a minimum hardness while veining config in here, which is 0.5 by default, making it 200 plants at level 50 farming, with 320 charge, if this is set to 160" )
                         .translation( "pmmo.levelsPerHardnessFarming" )
                         .defineInRange( "levelsPerHardnessFarming", 160D, 0.1, 10000) );
 
@@ -801,10 +812,10 @@ public class Config
 
             builder.push( "Building" );
             {
-                this.levelsPerHardnessReach = subscriber.subscribe(builder
+                this.levelsPerOneReach = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of reach" )
-                        .translation( "pmmo.levelsPerHardnessReach" )
-                        .defineInRange( "levelsPerHardnessReach", 25, 0, 1000) );
+                        .translation( "pmmo.levelsPerOneReach" )
+                        .defineInRange( "levelsPerOneReach", 25D, 0, 1000) );
 
                 this.maxReach = subscriber.subscribe(builder
                         .comment( "What is the maximum reach a player can have" )
@@ -862,12 +873,12 @@ public class Config
                 this.levelsCrouchJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Crouching" )
                         .translation( "pmmo.levelsCrouchJumpBoost" )
-                        .defineInRange( "levelsCrouchJumpBoost", 33, 0, 1000) );
+                        .defineInRange( "levelsCrouchJumpBoost", 33D, 0, 1000) );
 
                 this.levelsSprintJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Sprinting" )
                         .translation( "pmmo.levelsSprintJumpBoost" )
-                        .defineInRange( "levelsSprintJumpBoost", 50, 0, 1000) );
+                        .defineInRange( "levelsSprintJumpBoost", 50D, 0, 1000) );
 
                 this.maxSpeedBoost = subscriber.subscribe(builder
                         .comment( "How much speed boost you can get from Agility (100 = 100% vanilla + 100% = twice as fast max)" )
@@ -897,7 +908,7 @@ public class Config
                 this.levelsPerHeart = subscriber.subscribe(builder
                         .comment( "Per how many levels you gain 1 Max Heart" )
                         .translation( "pmmo.levelsPerHeart" )
-                        .defineInRange( "levelsPerHeart", 10, 0, 1000) );
+                        .defineInRange( "levelsPerHeart", 10D, 0, 1000) );
 
                 this.maxHeartCap = subscriber.subscribe(builder
                         .comment( "How many Max Hearts you can have (20 means 10 vanilla + 20 boosted)" )
@@ -912,12 +923,12 @@ public class Config
                 this.levelsPerDamage = subscriber.subscribe(builder
                         .comment( "Per how many levels you gain 1 Extra Damage" )
                         .translation( "pmmo.levelsPerDamage" )
-                        .defineInRange( "levelsPerDamage", 20, 0, 1000) );
+                        .defineInRange( "levelsPerDamage", 20D, 0, 1000) );
 
                 this.maxDamage = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
                         .translation( "pmmo.maxDamage" )
-                        .defineInRange( "maxDamage", 10, 0, 1000) );
+                        .defineInRange( "maxDamage", 10D, 0, 1000) );
 
                 builder.pop();
             }
