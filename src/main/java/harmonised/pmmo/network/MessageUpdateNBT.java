@@ -71,8 +71,7 @@ public class MessageUpdateNBT
 
                     XP.skills.put( uuid, NBTHelper.nbtToMap( packet.reqPackage ) );
 
-                    if( name.equals( "Dev" ) || name.equals( "MareoftheStars" ) || name.equals( "Harmonised" ) )
-                        ClientHandler.openStats( uuid );
+                    ClientHandler.openStats( uuid );
                     break;
 
                 default:
