@@ -180,14 +180,7 @@ public class XP
 
 	public static Skill getSkill( BlockState state )
 	{
-		if( state.isToolEffective( ToolType.PICKAXE ) )
-			return Skill.MINING;
-		else if( state.isToolEffective( ToolType.AXE ) )
-			return Skill.WOODCUTTING;
-		else if( state.isToolEffective( ToolType.SHOVEL ) )
-			return Skill.EXCAVATION;
-		else
-			return Skill.INVALID_SKILL;
+		return getSkill( state.getMaterial() );
 	}
 
 	public static Skill getSkillFromTool( String tool )

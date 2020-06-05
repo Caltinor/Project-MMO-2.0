@@ -9,6 +9,7 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -350,7 +351,7 @@ public class PlayerInteractionHandler
         }
         catch( Exception e )
         {
-            System.out.println( e );
+            LogHandler.LOGGER.error( e );
         }
     }
 }

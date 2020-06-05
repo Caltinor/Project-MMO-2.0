@@ -19,10 +19,12 @@ import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -66,8 +68,10 @@ public class WorldTickHandler
         BlockPos veinPos;
         BlockState veinState;
         CompoundNBT abilitiesTag;
+        Skill skill;
         double cost;
-        boolean correctBlock, correctItem, correctHeldItem;
+        boolean correctBlock, correctItem, correctHeldItem, fullyGrown;
+        int age = -1, maxAge = -2;
 
         if( event.world.getServer() == null )
             return;
@@ -83,12 +87,61 @@ public class WorldTickHandler
                     startItemStack = veinInfo.itemStack;
                     startItem = veinInfo.startItem;
                     veinPos = veinSet.get( player ).get( 0 );
-                    veinState = veinInfo.state;
+                    veinState = world.getBlockState( veinPos );
                     abilitiesTag = XP.getAbilitiesTag( player );
                     cost = getVeinCost( veinState, veinPos, player );
                     correctBlock = world.getBlockState( veinPos ).getBlock().equals( veinInfo.state.getBlock() );
                     correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
                     correctHeldItem = player.getHeldItemMainhand().getItem().equals( startItem );
+                    fullyGrown = true;
+                    skill = XP.getSkill( veinState );
+
+                    if( skill.equals( Skill.FARMING ) )
+                    {
+                        if( veinState.has( BlockStateProperties.AGE_0_1 ) )
+                        {
+                            age = veinState.get( BlockStateProperties.AGE_0_1 );
+                            maxAge = 1;
+                        }
+                        else if( veinState.has( BlockStateProperties.AGE_0_2 ) )
+                        {
+                            age = veinState.get( BlockStateProperties.AGE_0_2 );
+                            maxAge = 2;
+                        }
+                        else if( veinState.has( BlockStateProperties.AGE_0_3 ) )
+                        {
+                            age = veinState.get( BlockStateProperties.AGE_0_3 );
+                            maxAge = 3;
+                        }
+                        else if( veinState.has( BlockStateProperties.AGE_0_5 ) )
+                        {
+                            age = veinState.get( BlockStateProperties.AGE_0_5 );
+                            maxAge = 5;
+                        }
+                        else if( veinState.has( BlockStateProperties.AGE_0_7 ) )
+                        {
+                            age = veinState.get( BlockStateProperties.AGE_0_7 );
+                            maxAge = 7;
+                        }
+                        else if( veinState.has( BlockStateProperties.AGE_0_15 ) )
+                        {
+                            age = veinState.get( BlockStateProperties.AGE_0_15 );
+                            maxAge = 15;
+                        }
+                        else if( veinState.has( BlockStateProperties.AGE_0_25 ) )
+                        {
+                            age = veinState.get( BlockStateProperties.AGE_0_25 );
+                            maxAge = 25;
+                        }
+                        else if( veinState.has( BlockStateProperties.PICKLES_1_4 ) )
+                        {
+                            age = veinState.get( BlockStateProperties.PICKLES_1_4 );
+                            maxAge = 4;
+                        }
+
+                        if( age != maxAge )
+                            fullyGrown = false;
+                    }
 
                     if( ( abilitiesTag.getDouble( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
                     {
@@ -105,8 +158,11 @@ public class WorldTickHandler
                                     world.destroyBlock(veinPos, false );
                                 else if( correctItem && correctHeldItem )
                                 {
-                                    abilitiesTag.putDouble( "veinLeft", abilitiesTag.getDouble( "veinLeft" ) - cost );
-                                    destroyBlock( world, veinPos, player, startItemStack );
+                                    if( fullyGrown )
+                                    {
+                                        abilitiesTag.putDouble("veinLeft", abilitiesTag.getDouble("veinLeft") - cost);
+                                        destroyBlock(world, veinPos, player, startItemStack);
+                                    }
                                 }
                                 else
                                 {
@@ -172,7 +228,6 @@ public class WorldTickHandler
         if( player.isCreative() )
             return true;
 
-        String dimensionKey = player.dimension.getRegistryName().toString();
         Map<String, Object> globalBlacklist = null;
 
         if( JsonConfig.data.get( "veinBlacklist" ).containsKey( "all_dimensions" ) )
@@ -301,8 +356,6 @@ public class WorldTickHandler
 
         if( cost < minVeinCost )
             cost = minVeinCost;
-
-        System.out.println( cost );
 
         return cost;
     }

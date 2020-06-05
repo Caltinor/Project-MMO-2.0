@@ -9,7 +9,7 @@ public class SleepHandler
 {
     private static final boolean sleepRechargesWorldPlayersVeinCharge = Config.forgeConfig.sleepRechargesWorldPlayersVeinCharge.get();
     private static final double maxVeinCharge = Config.forgeConfig.maxVeinCharge.get();
-    
+
     public static void handleSleepFinished( SleepFinishedTimeEvent event )
     {
         if( sleepRechargesWorldPlayersVeinCharge )
