@@ -71,8 +71,8 @@ public class BlockPlacedHandler
                     else
                         lastPosPlaced.put(playerUUID, blockPos);
 
-                    if ( XP.getXp(block.getRegistryName()) != null )
-                        PlacedBlocks.orePlaced(event.getWorld().getWorld(), event.getPos());
+                    ChunkDataHandler.addPos( event.getWorld().getDimension().getType().getRegistryName(), event.getPos(), player.getUniqueID() );
+                    PlacedBlocks.orePlaced( event.getWorld().getWorld(), event.getPos() );
                 }
                 else
                 {

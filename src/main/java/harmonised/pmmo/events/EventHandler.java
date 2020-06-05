@@ -1,12 +1,12 @@
 package harmonised.pmmo.events;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.*;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.*;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
@@ -142,5 +142,17 @@ public class EventHandler
 	public static void sleepDone( SleepFinishedTimeEvent event )
 	{
 		SleepHandler.handleSleepFinished( event );
+	}
+
+	@SubscribeEvent
+	public static void chunkDataLoad( ChunkDataEvent.Load event )
+	{
+		ChunkDataHandler.handleChunkDataLoad( event );
+	}
+
+	@SubscribeEvent
+	public static void chunkDataSave( ChunkDataEvent.Save event )
+	{
+		ChunkDataHandler.handleChunkDataSave( event );
 	}
 }
