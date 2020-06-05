@@ -132,7 +132,7 @@ public class XP
 		PlayerConnectedHandler.dandelionDonators.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );
 		PlayerConnectedHandler.ironDonators.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );
 ////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
-		materialHarvestTool.put( Material.ANVIL, "pickaxe" );				//PICKAXE
+		materialHarvestTool.put( Material.ANVIL, "pickaxe" );		//PICKAXE
 		materialHarvestTool.put( Material.GLASS, "pickaxe" );
 		materialHarvestTool.put( Material.ICE, "pickaxe" );
 		materialHarvestTool.put( Material.IRON, "pickaxe" );
@@ -144,25 +144,33 @@ public class XP
 		materialHarvestTool.put( Material.BARRIER, "pickaxe" );
 		materialHarvestTool.put( Material.MISCELLANEOUS, "pickaxe" );
 
-		materialHarvestTool.put( Material.WOOD, "axe" );					//AXE
+		materialHarvestTool.put( Material.WOOD, "axe" );			//AXE
 		materialHarvestTool.put( Material.LEAVES, "axe" );
 		materialHarvestTool.put( Material.GOURD, "axe" );
 
-		materialHarvestTool.put( Material.CLAY, "shovel" );					//SHOVEL
+		materialHarvestTool.put( Material.CLAY, "shovel" );			//SHOVEL
 		materialHarvestTool.put( Material.EARTH, "shovel" );
 		materialHarvestTool.put( Material.SAND, "shovel" );
 		materialHarvestTool.put( Material.SNOW, "shovel" );
 		materialHarvestTool.put( Material.SEA_GRASS, "shovel" );
 		materialHarvestTool.put( Material.SNOW_BLOCK, "shovel" );
-		materialHarvestTool.put( Material.ORGANIC, "shovel" );
 
-		materialHarvestTool.put( Material.PLANTS, "hoe" );					//HOE
+		materialHarvestTool.put( Material.PLANTS, "hoe" );			//HOE
 		materialHarvestTool.put( Material.OCEAN_PLANT, "hoe" );
 		materialHarvestTool.put( Material.CACTUS, "hoe" );
 		materialHarvestTool.put( Material.CORAL, "hoe" );
 		materialHarvestTool.put( Material.TALL_PLANTS, "hoe" );
 		materialHarvestTool.put( Material.BAMBOO, "hoe" );
 		materialHarvestTool.put( Material.BAMBOO_SAPLING, "hoe" );
+		materialHarvestTool.put( Material.ORGANIC, "hoe" );
+
+		materialHarvestTool.put( Material.WOOL, "shears" );			//SHEARS (Crafting)
+		materialHarvestTool.put( Material.CARPET, "shears" );
+		materialHarvestTool.put( Material.TNT, "shears" );
+		materialHarvestTool.put( Material.DRAGON_EGG, "shears" );
+		materialHarvestTool.put( Material.WEB, "shears" );
+		materialHarvestTool.put( Material.CAKE, "shears" );
+		materialHarvestTool.put( Material.SPONGE, "shears" );
 	}
 
 	public static Skill getSkill( Material material )
@@ -200,6 +208,9 @@ public class XP
 
 			case "hoe":
 				return Skill.FARMING;
+
+			case "shears":
+				return Skill.CRAFTING;
 
 			default:
 				return Skill.INVALID_SKILL;
@@ -1271,9 +1282,7 @@ public class XP
 
 	private static int getGap( int a, int b )
 	{
-		int gap = a - b;
-
-		return gap;
+		return a - b;
 	}
 
 	public static int getSkillReqGap(PlayerEntity player, ResourceLocation res, String type)

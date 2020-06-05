@@ -37,6 +37,7 @@ public class Config
         localConfig.put( "levelsPerHardnessWoodcutting", forgeConfig.levelsPerHardnessWoodcutting.get() );
         localConfig.put( "levelsPerHardnessExcavation", forgeConfig.levelsPerHardnessExcavation.get() );
         localConfig.put( "levelsPerHardnessFarming", forgeConfig.levelsPerHardnessFarming.get() );
+        localConfig.put( "levelsPerHardnessCrafting", forgeConfig.levelsPerHardnessCrafting.get() );
         localConfig.put( "minVeinCost", forgeConfig.minVeinCost.get() );
         localConfig.put( "minVeinHardness", forgeConfig.minVeinHardness.get() );
         localConfig.put( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
@@ -64,6 +65,7 @@ public class Config
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> veinWoodTopToBottom;
+        public ConfigHelper.ConfigValueListener<Boolean> sleepRechargesWorldPlayersVeinCharge;
         public ConfigHelper.ConfigValueListener<Double> veinMaxDistance;
         public ConfigHelper.ConfigValueListener<Double> veinMaxBlocks;
         public ConfigHelper.ConfigValueListener<Double> veinSpeed;
@@ -74,6 +76,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessWoodcutting;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessExcavation;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessFarming;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessCrafting;
 
         //Mob Scaling
         public ConfigHelper.ConfigValueListener<Double> maxMobSpeedBoost;
@@ -253,17 +256,17 @@ public class Config
                 this.crawlingAllowed = subscriber.subscribe(builder
                         .comment( "Is crawling allowed? true = on, false = off" )
                         .translation( "pmmo.crawlingAllowed" )
-                        .define( "crawlingAllowed", true) );
+                        .define( "crawlingAllowed", true ) );
 
                 this.showWelcome = subscriber.subscribe(builder
                         .comment( "Should the Welcome message come up?" )
                         .translation( "pmmo.showWelcome" )
-                        .define( "showWelcome", true) );
+                        .define( "showWelcome", true ) );
 
                 this.showDonatorWelcome = subscriber.subscribe(builder
                         .comment( "Should your personal Donator Welcome message come up?" )
                         .translation( "pmmo.showDonatorWelcome" )
-                        .define( "showDonatorWelcome", true) );
+                        .define( "showDonatorWelcome", true ) );
                 
                 builder.pop();
             }
@@ -273,13 +276,18 @@ public class Config
                 this.veiningAllowed = subscriber.subscribe(builder
                         .comment( "Is vein mining allowed? true = on, false = off" )
                         .translation( "pmmo.veiningAllowed" )
-                        .define( "veiningAllowed", true) );
+                        .define( "veiningAllowed", true ) );
 
                 this.veinWoodTopToBottom = subscriber.subscribe(builder
                         .comment( "Should veining wood material blocks start from the highest block?" )
                         .translation( "pmmo.veinWoodTopToBottom" )
-                        .define( "veinWoodTopToBottom", true) );
+                        .define( "veinWoodTopToBottom", true ) );
 
+                this.sleepRechargesWorldPlayersVeinCharge = subscriber.subscribe(builder
+                        .comment( "Should a succesful sleep recharge every player currently in that world Vein Charge?" )
+                        .translation( "pmmo.sleepRechargesWorldPlayersVeinCharge" )
+                        .define( "sleepRechargesWorldPlayersVeinCharge", true ) );
+                
                 this.veinMaxDistance = subscriber.subscribe(builder
                         .comment( "What is the maximum distance a player's vein can reach?" )
                         .translation( "pmmo.veinMaxDistance" )
@@ -296,14 +304,14 @@ public class Config
                         .defineInRange( "veinSpeed", 1D, 1, 10000) );
 
                 this.minVeinCost = subscriber.subscribe(builder
-                        .comment( "How much is the lowest cost for each block veined? (1 = 1% of max)" )
+                        .comment( "How much is the lowest cost for each block veined? (1 = 1 charge, 1 charge regens per second)" )
                         .translation( "pmmo.minVeinCost" )
-                        .defineInRange( "minVeinCost", 0.1D, 0.01, 100) );
+                        .defineInRange( "minVeinCost", 2D, 0.01, 10000) );
 
                 this.minVeinHardness = subscriber.subscribe(builder
                         .comment( "What is the lowest hardness for each block veined? (Crops have 0 hardness, this makes crops not infinitely veined)" )
                         .translation( "pmmo.minVeinHardness" )
-                        .defineInRange( "minVeinHardness", 1D, 0, 10000) );
+                        .defineInRange( "minVeinHardness", 0.2D, 0, 10000) );
 
                 this.levelsPerHardnessMining = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of blocks, which is 2.0 Obsidian, or 33.3 Coal Ore)" )
@@ -316,7 +324,7 @@ public class Config
                         .defineInRange( "levelsPerHardnessWoodcutting", 160D, 0.01, 10000) );
 
                 this.levelsPerHardnessExcavation = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 80) * 320 = 50 hardness worth of logs, which is 100 Dirt)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 80) * 320 = 50 hardness worth of ground, which is 100 Dirt)" )
                         .translation( "pmmo.levelsPerHardnessExcavation" )
                         .defineInRange( "levelsPerHardnessExcavation", 80D, 0.01, 10000) );
 
@@ -324,6 +332,11 @@ public class Config
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? Plants have no hardness, but there is a minimum hardness while veining config in here, which is 0.5 by default, making it 50 plants at level 50 farming, with 320 charge, if this is set to 160" )
                         .translation( "pmmo.levelsPerHardnessFarming" )
                         .defineInRange( "levelsPerHardnessFarming", 160D, 0.1, 10000) );
+
+                this.levelsPerHardnessCrafting = subscriber.subscribe(builder
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 80, your level is 50, and you have 320 charge, you can vein (50 / 80) * 320 = 200 hardness worth of Crafting Related (Such as wool, carpet, bed) blocks, which depends on how hard they are)" )
+                        .translation( "pmmo.levelsPerHardnessCrafting" )
+                        .defineInRange( "levelsPerHardnessCrafting", 160D, 0.1, 10000) );
 
                 this.maxVeinCharge = subscriber.subscribe(builder
                         .comment( "How much vein charge can a player hold at max? (1 recharges every second)" )
@@ -368,7 +381,7 @@ public class Config
                 this.biomeMobMultiplierEnabled = subscriber.subscribe(builder
                         .comment( "Should mob xp multipliers inside of biomes be enabled? False means no multipliers" )
                         .translation( "pmmo.biomeMobMultiplierEnabled" )
-                        .define( "biomeMobMultiplierEnabled", true) );
+                        .define( "biomeMobMultiplierEnabled", true ) );
 
 
                 builder.pop();
@@ -379,113 +392,113 @@ public class Config
                 this.wearReqEnabled = subscriber.subscribe(builder
                         .comment( "Should wear requirements be enabled? False means no requirements" )
                         .translation( "pmmo.wearReqEnabled" )
-                        .define( "wearReqEnabled", true) );
+                        .define( "wearReqEnabled", true ) );
 
                 this.toolReqEnabled = subscriber.subscribe(builder
                         .comment( "Should tool requirements be enabled? False means no requirements" )
                         .translation( "pmmo.toolReqEnabled" )
-                        .define( "toolReqEnabled", true) );
+                        .define( "toolReqEnabled", true ) );
 
                 this.weaponReqEnabled = subscriber.subscribe(builder
                         .comment( "Should weapon requirements be enabled? False means no requirements" )
                         .translation( "pmmo.weaponReqEnabled" )
-                        .define( "weaponReqEnabled", true) );
+                        .define( "weaponReqEnabled", true ) );
 
                 this.killReqEnabled = subscriber.subscribe(builder
                         .comment( "Should mob kill req be enabled? False means no requirements" )
                         .translation( "pmmo.killReqEnabled" )
-                        .define( "killReqEnabled", true) );
+                        .define( "killReqEnabled", true ) );
 
                 this.killXpEnabled = subscriber.subscribe(builder
                         .comment( "Should mob kill xp be enabled? False means no requirements" )
                         .translation( "pmmo.killXpEnabled" )
-                        .define( "killXpEnabled", true) );
+                        .define( "killXpEnabled", true ) );
 
                 this.mobRareDropEnabled = subscriber.subscribe(builder
                         .comment( "Should mob rare drops be enabled? False means no requirements" )
                         .translation( "pmmo.mobRareDropEnabled" )
-                        .define( "mobRareDropEnabled", true) );
+                        .define( "mobRareDropEnabled", true ) );
 
 
                 this.useReqEnabled = subscriber.subscribe(builder
                         .comment( "Should use requirements be enabled? False means no requirements" )
                         .translation( "pmmo.useReqEnabled" )
-                        .define( "useReqEnabled", true) );
+                        .define( "useReqEnabled", true ) );
 
                 this.placeReqEnabled = subscriber.subscribe(builder
                         .comment( "Should place requirements be enabled? False means no requirements" )
                         .translation( "pmmo.placeReqEnabled" )
-                        .define( "placeReqEnabled", true) );
+                        .define( "placeReqEnabled", true ) );
 
                 this.breakReqEnabled = subscriber.subscribe(builder
                         .comment( "Should break requirements be enabled? False means no requirements" )
                         .translation( "pmmo.breakReqEnabled" )
-                        .define( "breakReqEnabled", true) );
+                        .define( "breakReqEnabled", true ) );
 
                 this.biomeReqEnabled = subscriber.subscribe(builder
                         .comment( "Should biome requirements be enabled? False means no requirements" )
                         .translation( "pmmo.biomeReqEnabled" )
-                        .define( "biomeReqEnabled", true) );
+                        .define( "biomeReqEnabled", true ) );
 
                 this.biomeXpBonusEnabled = subscriber.subscribe(builder
                         .comment( "Should xp multipliers be enabled? False means no multipliers" )
                         .translation( "pmmo.biomeXpBonusEnabled" )
-                        .define( "biomeXpBonusEnabled", true) );
+                        .define( "biomeXpBonusEnabled", true ) );
 
                 this.xpValueEnabled = subscriber.subscribe(builder
                         .comment( "Should xp values for breaking things first time be enabled? False means only Hardness xp is awarded for breaking" )
                         .translation( "pmmo.xpValueEnabled" )
-                        .define( "xpValueEnabled", true) );
+                        .define( "xpValueEnabled", true ) );
 
                 this.oreEnabled = subscriber.subscribe(builder
                         .comment( "Should ores be enabled? False means no extra chance" )
                         .translation( "pmmo.oreEnabled" )
-                        .define( "oreEnabled", true) );
+                        .define( "oreEnabled", true ) );
 
                 this.logEnabled = subscriber.subscribe(builder
                         .comment( "Should logs be enabled? False means no extra chance" )
                         .translation( "pmmo.logEnabled" )
-                        .define( "logEnabled", true) );
+                        .define( "logEnabled", true ) );
 
                 this.plantEnabled = subscriber.subscribe(builder
                         .comment( "Should plants be enabled? False means no extra chance" )
                         .translation( "pmmo.plantEnabled" )
-                        .define( "plantEnabled", true) );
+                        .define( "plantEnabled", true ) );
 
                 this.salvageEnabled = subscriber.subscribe(builder
                         .comment( "Is Salvaging items using the Repairing skill enabled? False = off" )
                         .translation( "pmmo.salvageEnabled" )
-                        .define( "salvageEnabled", true) );
+                        .define( "salvageEnabled", true ) );
 
                 this.fishPoolEnabled = subscriber.subscribe(builder
                         .comment( "Is catching items from Fish Pool while Fishing enabled? False = off" )
                         .translation( "pmmo.fishPoolEnabled" )
-                        .define( "fishPoolEnabled", true) );
+                        .define( "fishPoolEnabled", true ) );
 
                 this.fishEnchantPoolEnabled = subscriber.subscribe(builder
                         .comment( "Should fished items have a chance at being Enchanted? enabled? False = off" )
                         .translation( "pmmo.fishEnchantPoolEnabled" )
-                        .define( "fishEnchantPoolEnabled", true) );
+                        .define( "fishEnchantPoolEnabled", true ) );
 
                 this.levelUpCommandEnabled = subscriber.subscribe(builder
                         .comment( "Commands being fired on specific level ups enabled? False = off" )
                         .translation( "pmmo.levelUpCommandEnabled" )
-                        .define( "levelUpCommandEnabled", true) );
+                        .define( "levelUpCommandEnabled", true ) );
 
                 this.heldItemXpBoostEnabled = subscriber.subscribe(builder
                         .comment( "Main held items xp multiplier enabled? False = off" )
                         .translation( "pmmo.heldItemXpBoostEnabled" )
-                        .define( "heldItemXpBoostEnabled", true) );
+                        .define( "heldItemXpBoostEnabled", true ) );
 
                 this.wornItemXpBoostEnabled = subscriber.subscribe(builder
                         .comment( "worn items xp boost enabled? False = off" )
                         .translation( "pmmo.wornItemXpBoostEnabled" )
-                        .define( "wornItemXpBoostEnabled", true) );
+                        .define( "wornItemXpBoostEnabled", true ) );
 
                 this.loadDefaultConfig = subscriber.subscribe(builder
                         .comment( "Should config from default_data.json be loaded? False means only data.json is loaded" )
                         .translation( "pmmo.loadDefaultConfig" )
-                        .define( "loadDefaultConfig", true) );
+                        .define( "loadDefaultConfig", true ) );
 
                 builder.pop();
             }
@@ -520,17 +533,17 @@ public class Config
                 this.broadcastMilestone = subscriber.subscribe(builder
                         .comment( "Should every 10th level up be broadcast to everyone?" )
                         .translation( "pmmo.broadcastMilestone" )
-                        .define( "broadcastMilestone", true) );
+                        .define( "broadcastMilestone", true ) );
 
                 this.levelUpFirework = subscriber.subscribe(builder
                         .comment( "Should fireworks appear on level up?" )
                         .translation( "pmmo.levelUpFirework" )
-                        .define( "levelUpFirework", true) );
+                        .define( "levelUpFirework", true ) );
 
                 this.milestoneLevelUpFirework = subscriber.subscribe(builder
                         .comment( "Should fireworks appear on Milestone level up, to other players?" )
                         .translation( "pmmo.milestoneLevelUpFirework" )
-                        .define( "milestoneLevelUpFirework", true) );
+                        .define( "milestoneLevelUpFirework", true ) );
 
                 builder.pop();
             }
@@ -819,7 +832,7 @@ public class Config
                 this.breedingXpEnabled = subscriber.subscribe(builder
                         .comment( "Do players get xp for breeding animals?" )
                         .translation( "pmmo.breedingXpEnabled" )
-                        .define( "breedingXpEnabled", true) );
+                        .define( "breedingXpEnabled", true ) );
 
                 this.defaultBreedingXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Farming for breeding two animals? (Json Overrides this) (Set to 0 to disable default xp)" )
@@ -948,7 +961,7 @@ public class Config
                 this.bypassEnchantLimit = subscriber.subscribe(builder
                         .comment( "Anvil combination limits enchantments to max level set in this config" )
                         .translation( "pmmo.bypassEnchantLimit" )
-                        .define( "bypassEnchantLimit", true) );
+                        .define( "bypassEnchantLimit", true ) );
 
                 this.levelsPerOneEnchantBypass = subscriber.subscribe(builder
                         .comment( "How many levels per each Enchantment Level Bypass above max level enchantment can support in vanilla" )
@@ -1024,7 +1037,7 @@ public class Config
                 this.xpValueCraftingEnabled = subscriber.subscribe(builder
                         .comment( "Should xp values for crafting be enabled? False means the default value is used" )
                         .translation( "pmmo.xpValueCraftingEnabled" )
-                        .define( "xpValueCraftingEnabled", true) );
+                        .define( "xpValueCraftingEnabled", true ) );
 
                 this.defaultCraftingXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Crafting for each item crafted? (Json Overrides this) (Set to 0 to disable default xp)" )
@@ -1059,7 +1072,7 @@ public class Config
                 this.tamingXpEnabled = subscriber.subscribe(builder
                         .comment( "Do players get xp for taming animals?" )
                         .translation( "pmmo.tamingXpEnabled" )
-                        .define( "tamingXpEnabled", true) );
+                        .define( "tamingXpEnabled", true ) );
 
                 this.defaultTamingXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Taming for Taming an animal? (Json Overrides this) (Set to 0 to disable default xp)" )

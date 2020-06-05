@@ -61,7 +61,10 @@ public class BlockBrokenHandler
             passedBreakReq = XP.checkReq( player, block.getRegistryName(), "break" );
 
         if( passedBreakReq )
-            processBroken( event );
+        {
+            if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" ) )
+                processBroken( event );
+        }
         else
         {
             int startLevel;

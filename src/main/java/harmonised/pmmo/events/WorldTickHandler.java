@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 
 import java.util.*;
 
@@ -33,7 +34,7 @@ public class WorldTickHandler
 {
     public static Map<PlayerEntity, VeinInfo> activeVein;
     public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
-    private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, veinMaxBlocks, maxVeinCharge;
+    private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, levelsPerHardnessCrafting, veinMaxBlocks, maxVeinCharge;
     private static int veinMaxDistance;
     private static final boolean veinWoodTopToBottom = Config.forgeConfig.veinWoodTopToBottom.get();
 //    public static long lastVeinUpdateTime = System.nanoTime();
@@ -49,6 +50,7 @@ public class WorldTickHandler
         levelsPerHardnessWoodcutting = Config.getConfig( "levelsPerHardnessWoodcutting" );
         levelsPerHardnessExcavation = Config.getConfig( "levelsPerHardnessExcavation" );
         levelsPerHardnessFarming = Config.getConfig( "levelsPerHardnessFarming" );
+        levelsPerHardnessCrafting = Config.getConfig( "levelsPerHardnessCrafting" );
         veinMaxDistance = (int) Math.floor( Config.forgeConfig.veinMaxDistance.get() );
         veinMaxBlocks = Config.forgeConfig.veinMaxBlocks.get();
         maxVeinCharge = Config.forgeConfig.maxVeinCharge.get();
@@ -152,7 +154,7 @@ public class WorldTickHandler
         String blockKey = veinInfo.state.getBlock().getRegistryName().toString();
         ArrayList<BlockPos> blockPosArrayList;
 
-        if( !( canVeinGlobal( blockKey, player ) && canVeinDimension( blockKey, player )  ) )
+        if( !( canVeinGlobal( blockKey, player ) && canVeinDimension( blockKey, player )  ) || !XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" ) )
             return;
 
         blockPosArrayList = getVeinShape( veinInfo, veinLeft, veinCost, player.isCreative(), false );
@@ -287,17 +289,21 @@ public class WorldTickHandler
                 cost = hardness / ( Skill.FARMING.getLevel( player ) / levelsPerHardnessFarming );
                 break;
 
+            case CRAFTING:
+                cost = hardness / ( Skill.CRAFTING.getLevel( player ) / levelsPerHardnessCrafting );
+                break;
+
             default:
-                if( !state.getBlock().equals( Blocks.AIR ) )
-                    LogHandler.LOGGER.error( "WRONG SKILL AT VEIN COST: " + state.getBlock().getRegistryName() );
-                return 0D;
+                if( !state.getBlock().equals( Blocks.AIR ) && !skill.equals( Skill.INVALID_SKILL ) )
+                    LogHandler.LOGGER.error( "WRONG SKILL AT VEIN COST: " + state.getBlock().getRegistryName() + " " + skill.name() );
+                return hardness;
         }
 
         if( cost < minVeinCost )
             cost = minVeinCost;
 
-        Map<String, Double> test = Config.config;
         System.out.println( cost );
+
         return cost;
     }
 
@@ -323,5 +329,13 @@ public class WorldTickHandler
         abilitiesTag.putDouble( "veinLeft", veinLeft );
 
         NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
+    }
+
+    public static void handleSleepFinished(SleepFinishedTimeEvent event )
+    {
+        event.getWorld().getWorld().getPlayers().forEach( player ->
+        {
+            XP.getAbilitiesTag( player ).putDouble( "veinLeft", maxVeinCharge );
+        });
     }
 }

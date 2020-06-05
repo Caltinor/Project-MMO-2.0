@@ -1,11 +1,13 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.skills.XP;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
@@ -136,4 +138,10 @@ public class EventHandler
 
 //	@SubscribeEvent
 //	public static void furnace( PlayerEvent.ItemSmeltedEvent )
+
+	@SubscribeEvent
+	public static void sleepDone( SleepFinishedTimeEvent event )
+	{
+		WorldTickHandler.handleSleepFinished( event );
+	}
 }

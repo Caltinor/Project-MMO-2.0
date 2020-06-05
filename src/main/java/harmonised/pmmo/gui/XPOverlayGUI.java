@@ -19,6 +19,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -57,8 +59,9 @@ public class XPOverlayGUI extends AbstractGui
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
 	private static BlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
+	private static Item lastToolHeld = Items.AIR;
 	public static Set<String> screenshots = new HashSet<>();
-	public static boolean guiWasOn = true, guiOn = true, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false;
+	public static boolean guiWasOn = true, guiOn = true, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
 	MainWindow sr;
 	BlockPos blockPos, lastBlockPos;
 
@@ -141,19 +144,14 @@ public class XPOverlayGUI extends AbstractGui
 			blockState = mc.world.getBlockState( blockPos );
 
 			if( lastBlockState == null )
-			{
 				updateLastBlock();
-				canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
-			}
 
 			if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
 				lastVeinBlockUpdate = System.nanoTime();
 //
 			if( !isVeining && System.nanoTime() - lastVeinBlockUpdate > 100000000L )
-			{
 				updateLastBlock();
-				canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
-			}
+
 			canBreak = XP.checkReq( player, lastBlockRegKey, "break" );
 		}
 		else
@@ -166,6 +164,7 @@ public class XPOverlayGUI extends AbstractGui
 		lastBlockPos = blockPos;
 		if( lastBlockState.getBlock().getRegistryName() != null )
 			lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
+		canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
 		lastBlockTransKey = lastBlockState.getBlock().getTranslationKey();
 	}
 
@@ -382,14 +381,26 @@ public class XPOverlayGUI extends AbstractGui
 
 		if( veinKey && XP.isPlayerSurvival( player ) )
 		{
-			RenderSystem.pushMatrix();
-			RenderSystem.enableBlend();
 			Minecraft.getInstance().getTextureManager().bindTexture( bar );
 
 			blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
 			blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
 //						System.out.println( veinPos * maxVeinCharge );
 			drawCenteredString( fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
+
+			metToolReq = XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
+
+			if( !metToolReq )
+			{
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				return;
+			}
+
+			if( lookingAtBlock && !canBreak )
+			{
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				return;
+			}
 
 			if( lastBlockState != null && canBreak && ( lookingAtBlock || isVeining ) )
 			{
@@ -403,12 +414,6 @@ public class XPOverlayGUI extends AbstractGui
 				else
 					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.cannotVeinDimension", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
 			}
-			else if( veinKey && !canBreak && lookingAtBlock )
-				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
-
-
-			RenderSystem.disableBlend();
-			RenderSystem.popMatrix();
 		}
 	}
 
@@ -653,7 +658,7 @@ public class XPOverlayGUI extends AbstractGui
 		player = Minecraft.getInstance().player;
 		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( XP.skillStyle.get( skill ) ), false);
 		if( skill == Skill.SWIMMING && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightVisionUnlocked" ).setStyle( XP.skillStyle.get( skill ) ), true );
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightvisionUnlocked" ).setStyle( XP.skillStyle.get( skill ) ), true );
 
 		guiWasOn = guiOn;
 

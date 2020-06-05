@@ -74,7 +74,7 @@ public class ClientEventHandler
             {
                 TooltipHandler.tooltipOn = !TooltipHandler.tooltipOn;
                 if( TooltipHandler.tooltipOn )
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( "pmmo.TooltipHandler.tooltipOn" ), true );
+                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooltipOn" ), true );
                 else
                     Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooltipOff" ), true );
             }

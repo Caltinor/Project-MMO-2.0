@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.IPlantable;
@@ -98,6 +99,7 @@ public class TooltipHandler
                     hardness = ((BlockItem) item).getBlock().getBlockHardness( ((BlockItem) item).getBlock().getDefaultState(), null, null );
                     if( hardness > 0 )
                         tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo.hardness", DP.dp( hardness ) ).getString() ) );
+//                    tooltip.add( new StringTextComponent( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
                 }
 
                 if( wearReq != null && wearReq.size() > 0 )

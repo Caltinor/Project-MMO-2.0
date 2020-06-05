@@ -37,7 +37,7 @@
   "pmmo.taming": "Taming",
   "pmmo.hunter": "Hunter",
   "pmmo.engineering": "Engineering",
-  "pmmo.welcome": "Thank you for using Project MMO! Most features can be tweaked in config.",
+  "pmmo.welcome": "Welcome to Project MMO! Default Menu Key: P, most features can be tweaked in config!",
   "pmmo.savedFall": "Saved %1$s fall damage!",
   "pmmo.extraDrop": "%1$s Extra %2$s Dropped!",
   "pmmo.extraFished": "Reeled in %1$s extra %2$s!",
