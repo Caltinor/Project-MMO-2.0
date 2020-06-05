@@ -1,6 +1,5 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.skills.XP;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -142,6 +141,6 @@ public class EventHandler
 	@SubscribeEvent
 	public static void sleepDone( SleepFinishedTimeEvent event )
 	{
-		WorldTickHandler.handleSleepFinished( event );
+		SleepHandler.handleSleepFinished( event );
 	}
 }

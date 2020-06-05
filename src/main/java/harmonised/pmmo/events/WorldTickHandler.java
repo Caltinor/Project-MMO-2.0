@@ -330,12 +330,4 @@ public class WorldTickHandler
 
         NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
     }
-
-    public static void handleSleepFinished(SleepFinishedTimeEvent event )
-    {
-        event.getWorld().getWorld().getPlayers().forEach( player ->
-        {
-            XP.getAbilitiesTag( player ).putDouble( "veinLeft", maxVeinCharge );
-        });
-    }
 }
