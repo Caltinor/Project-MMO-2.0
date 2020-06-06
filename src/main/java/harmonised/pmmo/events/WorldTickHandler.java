@@ -68,6 +68,7 @@ public class WorldTickHandler
         BlockPos veinPos;
         BlockState veinState;
         CompoundNBT abilitiesTag;
+        String regKey;
         Skill skill;
         double cost;
         boolean correctBlock, correctItem, correctHeldItem, fullyGrown;
@@ -89,6 +90,7 @@ public class WorldTickHandler
                     veinPos = veinSet.get( player ).get( 0 );
                     veinState = world.getBlockState( veinPos );
                     abilitiesTag = XP.getAbilitiesTag( player );
+                    regKey = veinState.getBlock().getRegistryName().toString();
                     cost = getVeinCost( veinState, veinPos, player );
                     correctBlock = world.getBlockState( veinPos ).getBlock().equals( veinInfo.state.getBlock() );
                     correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
@@ -96,7 +98,7 @@ public class WorldTickHandler
                     fullyGrown = true;
                     skill = XP.getSkill( veinState );
 
-                    if( skill.equals( Skill.FARMING ) )
+                    if( skill.equals( Skill.FARMING ) && !( JsonConfig.data.get( "blockSpecific" ).containsKey( regKey ) && JsonConfig.data.get( "blockSpecific" ).get( regKey ).containsKey( "growsUpwards" ) ) )
                     {
                         if( veinState.has( BlockStateProperties.AGE_0_1 ) )
                         {

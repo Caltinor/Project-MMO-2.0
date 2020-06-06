@@ -5,7 +5,6 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageGrow;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.skills.PlacedBlocks;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.block.Block;
@@ -70,9 +69,6 @@ public class BlockPlacedHandler
                         lastPosPlaced.replace(playerUUID, event.getPos());
                     else
                         lastPosPlaced.put(playerUUID, blockPos);
-
-                    ChunkDataHandler.addPos( event.getWorld().getDimension().getType().getRegistryName(), event.getPos(), player.getUniqueID() );
-                    PlacedBlocks.orePlaced( event.getWorld().getWorld(), event.getPos() );
                 }
                 else
                 {
@@ -91,6 +87,8 @@ public class BlockPlacedHandler
 
                     event.setCanceled( true );
                 }
+
+                ChunkDataHandler.addPos( event.getWorld().getDimension().getType().getRegistryName(), event.getPos(), player.getUniqueID() );
             }
         }
     }

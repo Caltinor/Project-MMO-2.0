@@ -127,7 +127,7 @@ public class BlockBrokenHandler
 
         Material material = event.getState().getMaterial();
         double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
-        boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld().getWorld(), event.getPos() );
+        boolean wasPlaced = ChunkDataHandler.checkPos(event.getWorld().getDimension().getType().getRegistryName(), event.getPos(), player.getUniqueID());
         ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( material ).name().toLowerCase();
 //			String regKey = block.getRegistryName().toString();
@@ -189,11 +189,11 @@ public class BlockBrokenHandler
             extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
 
             int height = 0;
-            BlockPos currBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
-            block =  world.getBlockState( currBlockPos ).getBlock();
-            for( ; ( block.equals( baseBlock ) ); )
+            BlockPos curBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
+            block =  world.getBlockState( curBlockPos ).getBlock();
+            while( block.equals( baseBlock ) )
             {
-                wasPlaced = PlacedBlocks.isPlayerPlaced( world, currBlockPos );
+                wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), curBlockPos, player.getUniqueID() );
                 if( !wasPlaced )
                 {
                     rewardable++;
@@ -203,8 +203,8 @@ public class BlockBrokenHandler
                         extraDrop++;
                 }
                 height++;
-                currBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
-                block =  world.getBlockState( currBlockPos ).getBlock();
+                curBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
+                block =  world.getBlockState( curBlockPos ).getBlock();
             }
 
             int dropsLeft = guaranteedDrop + extraDrop;
@@ -382,10 +382,7 @@ public class BlockBrokenHandler
         else
         {
             if( !wasPlaced )
-            {
                 award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName() ), drops.size() ) );
-                PlacedBlocks.removeOre( event.getWorld().getWorld(), event.getPos() );
-            }
 
             switch( XP.getSkill( material ) )
             {
