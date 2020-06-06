@@ -127,7 +127,7 @@ public class BlockBrokenHandler
 
         Material material = event.getState().getMaterial();
         double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
-        boolean wasPlaced = ChunkDataHandler.checkPos(event.getWorld().getDimension().getType().getRegistryName(), event.getPos(), player.getUniqueID());
+        boolean wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), event.getPos() );
         ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( material ).name().toLowerCase();
 //			String regKey = block.getRegistryName().toString();
@@ -193,7 +193,7 @@ public class BlockBrokenHandler
             block =  world.getBlockState( curBlockPos ).getBlock();
             while( block.equals( baseBlock ) )
             {
-                wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), curBlockPos, player.getUniqueID() );
+                wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), curBlockPos );
                 if( !wasPlaced )
                 {
                     rewardable++;

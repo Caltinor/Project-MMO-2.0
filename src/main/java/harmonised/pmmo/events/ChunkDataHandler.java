@@ -120,7 +120,7 @@ public class ChunkDataHandler
 //        System.out.println( blockMap.size() );
     }
 
-    public static boolean checkPos( ResourceLocation dimResLoc, BlockPos blockPos, UUID uuid )
+    public static boolean checkPos( ResourceLocation dimResLoc, BlockPos blockPos )
     {
         ChunkPos chunkPos = new ChunkPos( blockPos );
 

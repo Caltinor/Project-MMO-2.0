@@ -1092,19 +1092,12 @@ public class XP
 		Map<String, Object> biomeMap = JsonConfig.data.get( "biomeXpBonus" ).get( biomeKey );
 
 		if( biomeMap != null && biomeMap.containsKey( skillName ) )
-		{
 			theBiomeBoost = (double) biomeMap.get( skillName );
 
-			if( !checkReq( player, resLoc, "biome" ) )
-			{
-				if( theBiomeBoost > -biomePenaltyMultiplier * 100 )
-					biomeBoost = -biomePenaltyMultiplier * 100;
-				else
-					biomeBoost = theBiomeBoost;
-			}
-			else
-				biomeBoost = theBiomeBoost;
-		}
+		if( checkReq( player, resLoc, "biome" ) )
+			biomeBoost = theBiomeBoost;
+		else
+			biomeBoost = Math.min( theBiomeBoost, -biomePenaltyMultiplier * 100 );
 
 		return biomeBoost;
 	}
@@ -1185,7 +1178,6 @@ public class XP
 			return;
 
 		String playerName = player.getDisplayName().getString();
-//		BlockPos playerPos =
 		int startLevel;
 		int currLevel;
 		double startXp = 0;
