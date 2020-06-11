@@ -70,6 +70,9 @@ public class MessageXp
 				if(  !XP.skills.containsKey( uuid ) )
 					XP.skills.put( uuid, new HashMap<>() );
 
+				if( XP.skills.get( uuid ).size() == 0 )
+					XPOverlayGUI.guiOn = true;
+
 				XP.skills.get( uuid ).put( Skill.getString( packet.skill ), packet.xp + packet.gainedXp );
 
 				XPOverlayGUI.makeXpDrop( packet.xp, Skill.getSkill( packet.skill ), 10000, packet.gainedXp, packet.skip );

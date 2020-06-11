@@ -574,7 +574,7 @@ public class ScrollScreen extends Screen
                 case "weapon":
                 case "use":
                 case "break":
-                case "place":
+                case "placeDown":
                 {
                     button.text.add( "" );
 
@@ -738,7 +738,7 @@ public class ScrollScreen extends Screen
                 case "weapon":
                 case "use":
                 case "break":
-                case "place":
+                case "placeDown":
                 case "biome":
                     button.unlocked = XP.checkReq( player, button.regKey, type );
                     break;
@@ -988,6 +988,15 @@ public class ScrollScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
+        if( button == 1 )
+        {
+            if( type.equals( "stats" ) )
+                Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
+            else
+                Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ) ) );
+            return true;
+        }
+
         for( ListButton a : listButtons )
         {
             int buttonX = (int) mouseX - a.x;
@@ -997,7 +1006,6 @@ public class ScrollScreen extends Screen
             {
                 a.onClick( mouseX, mouseY );
             }
-
         }
         scrollPanel.mouseClicked( mouseX, mouseY, button );
         return super.mouseClicked(mouseX, mouseY, button);

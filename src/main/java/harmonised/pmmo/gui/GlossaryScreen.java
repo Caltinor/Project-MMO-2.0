@@ -73,7 +73,7 @@ public class GlossaryScreen extends Screen
         });
         TileButton placeButton = new TileButton( 0, 0, 3, 13, "pmmo.placeTitle", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "place", Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "placeDown", Minecraft.getInstance().player ) );
         });
         TileButton breakButton = new TileButton( 0, 0, 3, 14, "pmmo.breakTitle", "", (button) ->
         {
@@ -256,6 +256,12 @@ public class GlossaryScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
+        if( button ==1 )
+        {
+            Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
+            return true;
+        }
+
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

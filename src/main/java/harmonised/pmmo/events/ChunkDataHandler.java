@@ -5,7 +5,6 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.world.ChunkDataEvent;
 
 import java.util.*;
@@ -34,6 +33,8 @@ public class ChunkDataHandler
                     placedMap.put( dimResLoc, new HashMap<>() );
 
                 CompoundNBT placedPosNBT = ( (CompoundNBT) levelNBT.get( "placedPos" ) );
+                if( placedPosNBT == null )
+                    return;
                 Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
                 Map<BlockPos, UUID> blockMap = new HashMap<>();
                 Set<String> keySet = placedPosNBT.keySet();
@@ -120,7 +121,7 @@ public class ChunkDataHandler
 //        System.out.println( blockMap.size() );
     }
 
-    public static boolean checkPos( ResourceLocation dimResLoc, BlockPos blockPos )
+    public static UUID checkPos( ResourceLocation dimResLoc, BlockPos blockPos )
     {
         ChunkPos chunkPos = new ChunkPos( blockPos );
 
@@ -134,6 +135,6 @@ public class ChunkDataHandler
 
         Map<BlockPos, UUID> blockMap = chunkMap.get( chunkPos );
 
-        return blockMap.containsKey( blockPos );
+        return blockMap.get( blockPos );
     }
 }

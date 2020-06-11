@@ -39,6 +39,7 @@ public class WorldTickHandler
     private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, levelsPerHardnessCrafting, veinMaxBlocks, maxVeinCharge;
     private static int veinMaxDistance;
     private static final boolean veinWoodTopToBottom = Config.forgeConfig.veinWoodTopToBottom.get();
+    private static final boolean veiningOtherPlayerBlocksAllowed = Config.forgeConfig.veiningOtherPlayerBlocksAllowed.get();
 //    public static long lastVeinUpdateTime = System.nanoTime();
 
     public static void refreshVein()
@@ -71,7 +72,8 @@ public class WorldTickHandler
         String regKey;
         Skill skill;
         double cost;
-        boolean correctBlock, correctItem, correctHeldItem, fullyGrown;
+        boolean correctBlock, correctItem, correctHeldItem, fullyGrown, isOwner;
+        UUID blockUUID, playerUUID;
         int age = -1, maxAge = -2;
 
         if( event.world.getServer() == null )
@@ -79,6 +81,8 @@ public class WorldTickHandler
         
         for( PlayerEntity player : event.world.getServer().getPlayerList().getPlayers() )
         {
+            playerUUID = player.getUniqueID();
+
             for( int i = 0; i < veinSpeed; i++ )
             {
                 if( activeVein.containsKey( player ) && veinSet.get( player ).size() > 0 )
@@ -96,6 +100,8 @@ public class WorldTickHandler
                     correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
                     correctHeldItem = player.getHeldItemMainhand().getItem().equals( startItem );
                     fullyGrown = true;
+                    blockUUID = ChunkDataHandler.checkPos( world.dimension.getType().getRegistryName(), veinPos );
+                    isOwner = blockUUID == null || blockUUID.equals( playerUUID );
                     skill = XP.getSkill( veinState );
 
                     if( skill.equals( Skill.FARMING ) && !( JsonConfig.data.get( "blockSpecific" ).containsKey( regKey ) && JsonConfig.data.get( "blockSpecific" ).get( regKey ).containsKey( "growsUpwards" ) ) )
@@ -141,7 +147,7 @@ public class WorldTickHandler
                             maxAge = 4;
                         }
 
-                        if( age != maxAge )
+                        if( age != maxAge && age > 0 )
                             fullyGrown = false;
                     }
 
@@ -160,10 +166,13 @@ public class WorldTickHandler
                                     world.destroyBlock(veinPos, false );
                                 else if( correctItem && correctHeldItem )
                                 {
-                                    if( fullyGrown )
+                                    if( veiningOtherPlayerBlocksAllowed || isOwner )
                                     {
-                                        abilitiesTag.putDouble("veinLeft", abilitiesTag.getDouble("veinLeft") - cost);
-                                        destroyBlock(world, veinPos, player, startItemStack);
+                                        if( fullyGrown )
+                                        {
+                                            abilitiesTag.putDouble("veinLeft", abilitiesTag.getDouble("veinLeft") - cost);
+                                            destroyBlock(world, veinPos, player, startItemStack);
+                                        }
                                     }
                                 }
                                 else
@@ -310,8 +319,9 @@ public class WorldTickHandler
             nextLayer = new ArrayList<>();
         }
 
-        if( veinWoodTopToBottom && material.equals( Material.WOOD ) && !isLooped )
+        if( !isLooped )
         {
+            if( ( veinWoodTopToBottom && material.equals( Material.WOOD ) ) /* || block.equals( Blocks.SAND ) || block.equals( Blocks.GRAVEL ) */ )
             veinInfo.pos = highestPos;
             return getVeinShape( veinInfo, veinLeft, veinCost, isCreative, true );
         }

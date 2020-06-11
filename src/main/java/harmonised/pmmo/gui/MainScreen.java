@@ -125,6 +125,11 @@ public class MainScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
+        if( button == 1 )
+        {
+            Minecraft.getInstance().player.closeScreen();
+            return true;
+        }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

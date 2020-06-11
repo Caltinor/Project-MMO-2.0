@@ -51,7 +51,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static ASkill aSkill;
 	private static Skill skill = Skill.INVALID_SKILL, tempSkill = Skill.INVALID_SKILL;
 	private static FontRenderer fontRenderer = mc.fontRenderer;
-	private static int maxLevel, color, breakAmount;
+	private static int maxLevel, color, breakAmount, veinMaxBlocks;
 	private static double maxXp;
 	private static XpDrop xpDrop;
 	private static long lastBonusUpdate = System.nanoTime(), lastVeinBlockUpdate = System.nanoTime();
@@ -61,7 +61,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	private static Item lastToolHeld = Items.AIR;
 	public static Set<String> screenshots = new HashSet<>();
-	public static boolean guiWasOn = true, guiOn = true, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
+	public static boolean guiWasOn = false, guiOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
 	MainWindow sr;
 	BlockPos blockPos, lastBlockPos;
 
@@ -407,6 +407,8 @@ public class XPOverlayGUI extends AbstractGui
 				if( canVein )
 				{
 					breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
+					if( breakAmount > veinMaxBlocks )
+						breakAmount = veinMaxBlocks;
 					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.canVein", breakAmount, new TranslationTextComponent( lastBlockTransKey ) ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
 				}
 				else if( WorldTickHandler.canVeinDimension( lastBlockRegKey, player ) )
@@ -621,6 +623,7 @@ public class XPOverlayGUI extends AbstractGui
 
 			biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
 			maxVeinCharge = Config.getConfig( "maxVeinCharge" );
+			veinMaxBlocks = (int) Config.getConfig( "veinMaxBlocks" );
 		}
 	}
 

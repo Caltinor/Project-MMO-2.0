@@ -108,6 +108,12 @@ public class StatsScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
+        if( button == 1 )
+        {
+            Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
+            return true;
+        }
+
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

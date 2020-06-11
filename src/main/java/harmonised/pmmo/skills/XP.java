@@ -667,6 +667,7 @@ public class XP
 				return JsonConfig.data.get( "useReq" );
 
 			case "place":
+			case "placedown":
 				return JsonConfig.data.get( "placeReq" );
 
 			case "break":

@@ -536,12 +536,14 @@
 		"minecraft:stonecutter": {
 			"crafting": 10,
 			"building": 10
+		},
+		"minecraft:enchanting_table": {
+			"mining": 25
 		}
 	},
 	"place_requirement": {
 		"minecraft:enchanting_table": {
-			"building": 25,
-			"mining": 25
+			"building": 25
 		},
 		"minecraft:bedrock": {
 			"building": 999
@@ -1611,11 +1613,9 @@
 			"minecraft:beetroot": 40
 		},
 		"minecraft:sheep": {
-			"minecraft:wool": 10,
-			"minecraft:string": 3
+			"minecraft:string": 10
 		},
 		"minecraft:chicken": {
-			"minecraft:feather": 3,
 			"minecraft:egg": 10
 		}
 	},

@@ -52,6 +52,7 @@ public class Config
         localConfig.put( "minVeinCost", forgeConfig.minVeinCost.get() );
         localConfig.put( "minVeinHardness", forgeConfig.minVeinHardness.get() );
         localConfig.put( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
+        localConfig.put( "veinMaxBlocks", (double) forgeConfig.veinMaxBlocks.get() );
 
         if( Config.forgeConfig.crawlingAllowed.get() )
             localConfig.put( "crawlingAllowed", 1D );
@@ -72,14 +73,15 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showDonatorWelcome;
-        
+
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> veinWoodTopToBottom;
         public ConfigHelper.ConfigValueListener<Boolean> sleepRechargesWorldPlayersVeinCharge;
+        public ConfigHelper.ConfigValueListener<Boolean> veiningOtherPlayerBlocksAllowed;
+        public ConfigHelper.ConfigValueListener<Integer> veinMaxBlocks;
+        public ConfigHelper.ConfigValueListener<Integer> veinSpeed;
         public ConfigHelper.ConfigValueListener<Double> veinMaxDistance;
-        public ConfigHelper.ConfigValueListener<Double> veinMaxBlocks;
-        public ConfigHelper.ConfigValueListener<Double> veinSpeed;
         public ConfigHelper.ConfigValueListener<Double> minVeinCost;
         public ConfigHelper.ConfigValueListener<Double> minVeinHardness;
         public ConfigHelper.ConfigValueListener<Double> maxVeinCharge;
@@ -278,7 +280,7 @@ public class Config
                         .comment( "Should your personal Donator Welcome message come up?" )
                         .translation( "pmmo.showDonatorWelcome" )
                         .define( "showDonatorWelcome", true ) );
-                
+
                 builder.pop();
             }
 
@@ -298,7 +300,12 @@ public class Config
                         .comment( "Should a succesful sleep recharge every player currently in that world Vein Charge?" )
                         .translation( "pmmo.sleepRechargesWorldPlayersVeinCharge" )
                         .define( "sleepRechargesWorldPlayersVeinCharge", true ) );
-                
+
+                this.veiningOtherPlayerBlocksAllowed = subscriber.subscribe(builder
+                        .comment( "Should players be allowed to vein blocks that they did not place?" )
+                        .translation( "pmmo.veiningOtherPlayerBlocksAllowed" )
+                        .define( "veiningOtherPlayerBlocksAllowed", false ) );
+
                 this.veinMaxDistance = subscriber.subscribe(builder
                         .comment( "What is the maximum distance a player's vein can reach?" )
                         .translation( "pmmo.veinMaxDistance" )
@@ -307,12 +314,12 @@ public class Config
                 this.veinMaxBlocks = subscriber.subscribe(builder
                         .comment( "How many blocks max can be veined?" )
                         .translation( "pmmo.veinMaxBlocks" )
-                        .defineInRange( "veinMaxBlocks", 10000D, 1, 1000000) );
+                        .defineInRange( "veinMaxBlocks", 10000, 1, 1000000) );
 
                 this.veinSpeed = subscriber.subscribe(builder
                         .comment( "How many blocks get broken every tick?" )
                         .translation( "pmmo.veinSpeed" )
-                        .defineInRange( "veinSpeed", 1D, 1, 10000) );
+                        .defineInRange( "veinSpeed", 1, 1, 10000) );
 
                 this.minVeinCost = subscriber.subscribe(builder
                         .comment( "How much is the lowest cost for each block veined? (1 = 1 charge, 1 charge regens per second)" )
