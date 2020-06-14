@@ -34,6 +34,7 @@ public class MainScreen extends Screen
     {
         super(titleIn);
         this.uuid = uuid;
+        GlossaryScreen.history = new ArrayList<>();
     }
 
 //    @Override

@@ -3,6 +3,8 @@ https://www.curseforge.com/minecraft/mc-mods/project-mmo
 I am a new mod dev, so please let me know if the following is not correct:
 I believe I have API support for my mod! You should be able to access my mod's Levels by the methods
 
+(If you want to use my API with customizable-by-user values, please contact me! I have an idea of how that could be done, and that is a new method that takes in an ENUM I provide to specify what you want done, with a Registry Name that you provide)
+
 Skill.SKILLNAME.getLevel( player ) returns level int
 Skill.SKILLNAME.getXp( player ) returns xp double
 Skill.SKILLNAME.setLevel( player ) sets level double

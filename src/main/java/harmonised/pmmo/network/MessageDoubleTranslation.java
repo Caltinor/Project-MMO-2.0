@@ -2,9 +2,13 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.skills.XP;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -68,6 +72,11 @@ public class MessageDoubleTranslation
     {
         ctx.get().enqueueWork(() ->
         {
+            PlayerEntity player = Minecraft.getInstance().player;
+
+            if( player == null )
+                return;
+
             switch( packet.color )
             {
                 case 0: //white
@@ -77,7 +86,7 @@ public class MessageDoubleTranslation
                 case 1: //green
                     if( packet.tKey.equals( "pmmo.extraDrop" ) )
                     {
-                        if( !regKey.equals( packet.sKey ) )
+                        if( !regKey.equals( packet.sKey ) ) //item type
                         {
                             regKey = packet.sKey;
                             lastAmount = 0;
@@ -93,7 +102,7 @@ public class MessageDoubleTranslation
 
                         lastTime = System.nanoTime();
 
-                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                        player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
                     }
                     else
                         Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );

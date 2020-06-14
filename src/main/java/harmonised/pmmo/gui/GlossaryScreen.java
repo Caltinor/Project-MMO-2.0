@@ -8,11 +8,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class GlossaryScreen extends Screen
@@ -29,6 +32,9 @@ public class GlossaryScreen extends Screen
     private List<TileButton> tileButtons;
     private String creativeText;
     private UUID uuid;
+    public static List<Character> history = new ArrayList<>();
+    private static String[] weaster = { "1523", "3251", "911" };
+    private static Random rand = new Random();
 
     public GlossaryScreen( UUID uuid, ITextComponent titleIn )
     {
@@ -51,96 +57,119 @@ public class GlossaryScreen extends Screen
 
         creativeText = new TranslationTextComponent( "pmmo.creativeWarning" ).getString();
 
-        TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (button) ->
+        TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
         });
-        TileButton wearButton = new TileButton(0, 0, 3, 9, "pmmo.wearTitle", "", (button) ->
+        TileButton wearButton = new TileButton(0, 0, 3, 9, "pmmo.wearTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen ( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "wear", Minecraft.getInstance().player) );
         });
-        TileButton toolButton = new TileButton( 0, 0, 3, 10, "pmmo.toolTitle", "", (button) ->
+        TileButton toolButton = new TileButton( 0, 0, 3, 10, "pmmo.toolTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "tool", Minecraft.getInstance().player ) );
         });
-        TileButton weaponButton = new TileButton( 0, 0, 3, 11, "pmmo.weaponTitle", "", (button) ->
+        TileButton weaponButton = new TileButton( 0, 0, 3, 11, "pmmo.weaponTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "weapon", Minecraft.getInstance().player ) );
         });
-        TileButton useButton = new TileButton( 0, 0, 3, 12, "pmmo.useTitle", "", (button) ->
+        TileButton useButton = new TileButton( 0, 0, 3, 12, "pmmo.useTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "use", Minecraft.getInstance().player ) );
         });
-        TileButton placeButton = new TileButton( 0, 0, 3, 13, "pmmo.placeTitle", "", (button) ->
+        TileButton placeButton = new TileButton( 0, 0, 3, 13, "pmmo.placeTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "placeDown", Minecraft.getInstance().player ) );
         });
-        TileButton breakButton = new TileButton( 0, 0, 3, 14, "pmmo.breakTitle", "", (button) ->
+        TileButton breakButton = new TileButton( 0, 0, 3, 14, "pmmo.breakTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "break", Minecraft.getInstance().player ) );
         });
-        TileButton biomeButton = new TileButton( 0, 0, 3, 8, "pmmo.biomeTitle", "", (button) ->
+        TileButton biomeButton = new TileButton( 0, 0, 3, 8, "pmmo.biomeTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "biome", Minecraft.getInstance().player ) );
         });
-        TileButton oreButton = new TileButton( 0, 0, 3, 15, "pmmo.oreTitle", "", (button) ->
+        TileButton oreButton = new TileButton( 0, 0, 3, 15, "pmmo.oreTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "ore", Minecraft.getInstance().player ) );
         });
-        TileButton logButton = new TileButton( 0, 0, 3, 16, "pmmo.logTitle", "", (button) ->
+        TileButton logButton = new TileButton( 0, 0, 3, 16, "pmmo.logTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "log", Minecraft.getInstance().player ) );
         });
-        TileButton plantButton = new TileButton( 0, 0, 3, 17, "pmmo.plantTitle", "", (button) ->
+        TileButton plantButton = new TileButton( 0, 0, 3, 17, "pmmo.plantTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "plant", Minecraft.getInstance().player ) );
         });
-        TileButton heldXpButton = new TileButton( 0, 0, 3, 19, "pmmo.heldTitle", "", (button) ->
+        TileButton heldXpButton = new TileButton( 0, 0, 3, 19, "pmmo.heldTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "held", Minecraft.getInstance().player ) );
         });
-        TileButton wornXpButton = new TileButton( 0, 0, 3, 18, "pmmo.wornTitle", "", (button) ->
+        TileButton wornXpButton = new TileButton( 0, 0, 3, 18, "pmmo.wornTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "worn", Minecraft.getInstance().player ) );
         });
-        TileButton breedXpButton = new TileButton( 0, 0, 3, 20, "pmmo.breedXpTitle", "", (button) ->
+        TileButton breedXpButton = new TileButton( 0, 0, 3, 20, "pmmo.breedXpTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "breedXp", Minecraft.getInstance().player ) );
         });
-        TileButton tameXpButton = new TileButton( 0, 0, 3, 21, "pmmo.tameXpTitle", "", (button) ->
+        TileButton tameXpButton = new TileButton( 0, 0, 3, 21, "pmmo.tameXpTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "tameXp", Minecraft.getInstance().player ) );
         });
-        TileButton craftXpButton = new TileButton( 0, 0, 3, 22, "pmmo.craftXpTitle", "", (button) ->
+        TileButton craftXpButton = new TileButton( 0, 0, 3, 22, "pmmo.craftXpTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "craftXp", Minecraft.getInstance().player ) );
         });
-        TileButton breakXpButton = new TileButton( 0, 0, 3, 23, "pmmo.breakXpTitle","", (button) ->
+        TileButton breakXpButton = new TileButton( 0, 0, 3, 23, "pmmo.breakXpTitle","", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "breakXp", Minecraft.getInstance().player ) );
         });
-        TileButton dimensionButton = new TileButton( 0, 0, 3, 8, "pmmo.dimensionTitle","", (button) ->
+        TileButton dimensionButton = new TileButton( 0, 0, 3, 8, "pmmo.dimensionTitle","", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "dimension", Minecraft.getInstance().player ) );
         });
-        TileButton fishPoolButton = new TileButton( 0, 0, 3, 24, "pmmo.fishPoolTitle","", (button) ->
+        TileButton fishPoolButton = new TileButton( 0, 0, 3, 24, "pmmo.fishPoolTitle","", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "fishPool", Minecraft.getInstance().player ) );
         });
-        TileButton mobButton = new TileButton( 0, 0, 3, 26, "pmmo.mobTitle" ,"", (button) ->
+        TileButton mobButton = new TileButton( 0, 0, 3, 26, "pmmo.mobTitle" ,"", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "kill", Minecraft.getInstance().player ) );
         });
-        TileButton fishEnchantButton = new TileButton( 0, 0, 3, 25, "pmmo.fishEnchantTitle", "", (button) ->
+        TileButton fishEnchantButton = new TileButton( 0, 0, 3, 25, "pmmo.fishEnchantTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "fishEnchantPool", Minecraft.getInstance().player ) );
         });
-        TileButton salvageToButton = new TileButton( 0, 0, 3, 27, "pmmo.salvagesToTitle", "", (button) ->
+        TileButton salvageToButton = new TileButton( 0, 0, 3, 27, "pmmo.salvagesToTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "salvagesTo", Minecraft.getInstance().player ) );
         });
-        TileButton salvageFromButton = new TileButton( 0, 0, 3, 28, "pmmo.salvagesFromTitle", "", (button) ->
+        TileButton salvageFromButton = new TileButton( 0, 0, 3, 28, "pmmo.salvagesFromTitle", "", button ->
         {
+            updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), "salvagesFrom", Minecraft.getInstance().player ) );
         });
 
@@ -174,8 +203,10 @@ public class GlossaryScreen extends Screen
 
         for( TileButton button : tileButtons )
         {
-            button.x = x + 24 + col * 36;
-            button.y = y + 24 + row * 36;
+            button.index = row * 6 + col;
+            
+            button.x = x + 22 + col * 36;
+            button.y = y + 22 + row * 36;
             addButton( button );
             if( ++col > 5 )
             {
@@ -183,28 +214,62 @@ public class GlossaryScreen extends Screen
                 row++;
             }
         }
+    }
+    
+    public void updateHistory( int index )
+    {
+        if( index >= 10 )
+        {
+            history = new ArrayList<>();
+            return;
+        }
 
-        int column = 1;
-        int skillID;
-//        for( int i = 0; i < 4; i++ )
-//        {
-//            for( int j = 1; j <= 6; j++ )
-//            {
-//                skillID = i * 6 + j;
-//                if(Skill.getSkill( j ) != Skill.INVALID_SKILL )
-//                {
-//                    Button button = new TileButton( x + 24 + (j - 1) * 34, y + 16 + i * 34, 1, 0, I18n.format("" ), (button) ->
-//                    {
-//                        button.
-//                    });
-//
-//                    tileButtons.add( button );
-//                }
-//
-//                if( i % 6 == 0 )
-//                    column++;
-//            }
-//        }
+        boolean combo = false;
+
+        for( char c : Integer.toString( index + 1 ).toCharArray() )
+        {
+            if( !combo )
+                combo = updateHistory( c );
+        }
+
+        if( combo )
+            Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
+    }
+
+    public boolean updateHistory( char index )
+    {
+        history.add( index );
+        int historyLength = history.size();
+        int passLength, startPos, pos;
+        boolean passed;
+
+//        System.out.println( history );
+
+        for( String pass : weaster )
+        {
+            passLength = pass.length();
+
+            if( historyLength >= passLength )
+            {
+                passed = true;
+                pos = 0;
+                startPos = historyLength - passLength;
+
+                for( char c : pass.toCharArray() )
+                {
+                    if( history.get( startPos + pos ) != c )
+                        passed = false;
+                    pos++;
+                }
+
+                if( passed )
+                {
+                    Minecraft.getInstance().player.playSound(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -256,7 +321,7 @@ public class GlossaryScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        if( button ==1 )
+        if( button == 1 )
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
             return true;

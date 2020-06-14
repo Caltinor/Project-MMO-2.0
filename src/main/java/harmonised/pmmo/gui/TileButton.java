@@ -17,6 +17,7 @@ public class TileButton extends Button
     public int offsetOne;
     public int elementTwo;
     public int offsetTwo;
+    public int index;
     public String transKey;
 
     public TileButton(int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress)
