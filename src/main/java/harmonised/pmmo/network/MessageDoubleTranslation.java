@@ -72,11 +72,6 @@ public class MessageDoubleTranslation
     {
         ctx.get().enqueueWork(() ->
         {
-            PlayerEntity player = Minecraft.getInstance().player;
-
-            if( player == null )
-                return;
-
             switch( packet.color )
             {
                 case 0: //white
@@ -102,7 +97,7 @@ public class MessageDoubleTranslation
 
                         lastTime = System.nanoTime();
 
-                        player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
                     }
                     else
                         Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
