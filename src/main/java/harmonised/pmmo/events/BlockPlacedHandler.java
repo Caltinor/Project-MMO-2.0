@@ -14,6 +14,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.storage.MapData;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
@@ -31,6 +35,14 @@ public class BlockPlacedHandler
         if( event.getEntity() instanceof PlayerEntity && !(event.getEntity() instanceof FakePlayer) )
         {
             PlayerEntity player = (PlayerEntity) event.getEntity();
+
+//            World world = DimensionManager.getWorld(  player.getServer(), DimensionType.OVERWORLD, false, false );
+//            MapData test = world.
+
+//            player.getServer().getPlayerList().getPlayers().forEach( a ->
+//            {
+//                System.out.println( a.getUniqueID() );
+//            });
 
             if ( XP.isPlayerSurvival( player ) )
             {

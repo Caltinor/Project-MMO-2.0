@@ -6,7 +6,7 @@ modLoader="javafml"
            version="${file.jarVersion}"
            displayName="Project MMO"
            displayURL="https://www.curseforge.com/minecraft/mc-mods/project-mmo"
-           credits="Friend who gave me feedback >w<"
+           credits="MMD were there when this mod needed them, including the start"
            authors="Harmonised"
            description='''
            Adds many different skills and benefits thanks to the skills to the game!

@@ -3,9 +3,15 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.skills.XP;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.storage.MapData;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import java.util.HashSet;
@@ -25,6 +31,7 @@ public class PlayerConnectedHandler
         PlayerEntity player = event.getPlayer();
         if( !player.world.isRemote() )
         {
+            migrateTags( player );
             XP.syncPlayer( player );
 
             if( lapisDonators.contains( player.getUniqueID() ) )
@@ -45,5 +52,10 @@ public class PlayerConnectedHandler
             if( showWelcome )
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.welcome" ), false );
         }
+    }
+
+    private static void migrateTags( PlayerEntity player )
+    {
+
     }
 }
