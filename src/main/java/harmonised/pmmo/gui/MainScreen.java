@@ -22,6 +22,7 @@ public class MainScreen extends Screen
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
+    private static TileButton exitButton;
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 256;
@@ -52,7 +53,7 @@ public class MainScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "pmmo.exit", "", (something) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "pmmo.exit", "", (something) ->
         {
             Minecraft.getInstance().player.closeScreen();
         });
@@ -62,6 +63,11 @@ public class MainScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
+        TileButton donatorButton = new TileButton((int) (x + 24 + 36 * 2.5), y + 24 + 36 * 4, 1, 0, "pmmo.donator", "", (button) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new DonatorScreen( uuid, new TranslationTextComponent( "pmmo.donator" ) ) );
+        });
+
         TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), JType.STATS, Minecraft.getInstance().player ) );
@@ -69,6 +75,7 @@ public class MainScreen extends Screen
 
         addButton(exitButton);
         tileButtons.add(glossaryButton);
+        tileButtons.add(donatorButton);
         tileButtons.add(statsButton);
 
         for( TileButton button : tileButtons )

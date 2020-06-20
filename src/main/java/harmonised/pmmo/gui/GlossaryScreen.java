@@ -23,6 +23,7 @@ public class GlossaryScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png");
+    private static TileButton exitButton;
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 256;
@@ -58,7 +59,7 @@ public class GlossaryScreen extends Screen
 
         creativeText = new TranslationTextComponent( "pmmo.creativeWarning" ).getString();
 
-        TileButton exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", button ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", button ->
         {
             updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
@@ -324,7 +325,7 @@ public class GlossaryScreen extends Screen
     {
         if( button == 1 )
         {
-            Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
+            exitButton.onPress();
             return true;
         }
 

@@ -1,6 +1,8 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
@@ -15,13 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class StatsScreen extends Screen
+public class DonatorScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
+    private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();
+    MainWindow sr = Minecraft.getInstance().getMainWindow();;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -29,10 +32,11 @@ public class StatsScreen extends Screen
     private List<TileButton> tileButtons;
     private UUID uuid;
 
-    public StatsScreen( UUID uuid, ITextComponent titleIn )
+    public DonatorScreen( UUID uuid, ITextComponent titleIn )
     {
-        super( titleIn );
+        super(titleIn);
         this.uuid = uuid;
+        GlossaryScreen.history = new ArrayList<>();
     }
 
 //    @Override
@@ -54,12 +58,30 @@ public class StatsScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
         });
 
-        addButton(exitButton);
+        TileButton ironButton = new TileButton( x + 24 + 36, y + 24 + 36 * 5, 1, 0, "pmmo.ironTitle","", button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.DONATOR_IRON, Minecraft.getInstance().player ) );
+        });
 
-//        for( TileButton button : tileButtons )
-//        {
-//            addButton( button );
-//        }
+        TileButton dandelionButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36 * 5, 1, 0, "pmmo.dandelionTitle","", button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.DONATOR_DANDELION, Minecraft.getInstance().player ) );
+        });
+
+        TileButton lapisButton = new TileButton( (int) (x + 24 + 36 * 2.5), y + 24 + 36, 1, 0, "pmmo.lapisTitle","", button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.DONATOR_LAPIS, Minecraft.getInstance().player ) );
+        });
+
+        addButton(exitButton);
+        tileButtons.add( ironButton );
+        tileButtons.add( dandelionButton );
+        tileButtons.add( lapisButton );
+
+        for( TileButton button : tileButtons )
+        {
+            addButton( button );
+        }
     }
 
     @Override
@@ -71,13 +93,17 @@ public class StatsScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        fillGradient(x + 20, y + 16, x + 232, y + 200, 0x22444444, 0x33222222);
+//        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
         for( TileButton button : tileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
                 renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
+
+        RenderSystem.enableBlend();
+        Minecraft.getInstance().getTextureManager().bindTexture( logo );
+        this.blit( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override
@@ -91,12 +117,11 @@ public class StatsScreen extends Screen
         else
             this.renderDirtBackground(p_renderBackground_1_);
 
+
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
-
-//        RenderSystem.enableBlend();
-
+        RenderSystem.disableBlend();
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
@@ -114,7 +139,6 @@ public class StatsScreen extends Screen
             exitButton.onPress();
             return true;
         }
-
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

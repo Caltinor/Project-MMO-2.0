@@ -37,6 +37,7 @@ public class ScrollScreen extends Screen
     private static final double defaultTamingXp = Config.forgeConfig.defaultTamingXp.get();
     private static final double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
     private static final Style greenColor = XP.textStyle.get( "green" );
+    private static Button exitButton;
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     private int boxWidth = 256;
@@ -84,12 +85,24 @@ public class ScrollScreen extends Screen
         scrollX = x + 16;
         scrollY = y + 10;
 
-        Button exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (button) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (button) ->
         {
-            if( jType.equals( JType.STATS ) )
-                Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
-            else
-                Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ) ) );
+            switch( jType )
+            {
+                case STATS:
+                    Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
+                    break;
+
+                case DONATOR_IRON:
+                case DONATOR_DANDELION:
+                case DONATOR_LAPIS:
+                    Minecraft.getInstance().displayGuiScreen( new DonatorScreen( uuid, new TranslationTextComponent( "pmmo.donator" ) ) );
+                    break;
+
+                default:
+                    Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ) ) );
+                    break;
+            }
         });
 
         Map<String, Map<String, Object>> reqMap = JsonConfig.data.get( jType );
@@ -984,10 +997,7 @@ public class ScrollScreen extends Screen
     {
         if( button == 1 )
         {
-            if( jType.equals( JType.STATS ) )
-                Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
-            else
-                Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ) ) );
+            exitButton.onPress();
             return true;
         }
 
