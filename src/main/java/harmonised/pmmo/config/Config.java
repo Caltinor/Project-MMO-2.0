@@ -1,6 +1,6 @@
 package harmonised.pmmo.config;
 
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;

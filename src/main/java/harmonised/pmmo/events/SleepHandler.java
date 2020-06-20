@@ -1,8 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.skills.XP;
-import net.minecraftforge.common.ForgeConfig;
+import harmonised.pmmo.util.XP;
 import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 
 public class SleepHandler

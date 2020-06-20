@@ -4,7 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;

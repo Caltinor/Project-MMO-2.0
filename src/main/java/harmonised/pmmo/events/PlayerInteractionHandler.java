@@ -7,7 +7,7 @@ import harmonised.pmmo.network.MessageTripleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;

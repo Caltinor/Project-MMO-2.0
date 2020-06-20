@@ -3,7 +3,7 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.proxy.ClientHandler;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;

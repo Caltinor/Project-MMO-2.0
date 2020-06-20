@@ -8,7 +8,7 @@ import harmonised.pmmo.network.MessageLevelUp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 

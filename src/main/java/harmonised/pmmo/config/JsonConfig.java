@@ -2,19 +2,15 @@ package harmonised.pmmo.config;
 
 import com.google.gson.*;
 import harmonised.pmmo.ProjectMMOMod;
-import harmonised.pmmo.events.BlockBrokenHandler;
-import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
-import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -25,7 +21,6 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.function.BiConsumer;
 

@@ -1,6 +1,6 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;

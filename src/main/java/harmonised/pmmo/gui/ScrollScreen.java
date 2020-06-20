@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;

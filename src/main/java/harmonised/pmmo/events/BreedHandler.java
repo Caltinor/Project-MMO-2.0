@@ -3,12 +3,9 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.skills.XP;
-import net.minecraft.entity.player.PlayerEntity;
+import harmonised.pmmo.util.XP;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
-
-import javax.annotation.Nullable;
 
 public class BreedHandler
 {

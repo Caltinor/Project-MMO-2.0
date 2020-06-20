@@ -7,7 +7,7 @@ import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -24,11 +24,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 
 import java.util.*;
 

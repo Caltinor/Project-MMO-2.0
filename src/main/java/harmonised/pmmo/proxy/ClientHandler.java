@@ -4,7 +4,7 @@ import harmonised.pmmo.gui.ScrollScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.skills.AttributeHandler;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;

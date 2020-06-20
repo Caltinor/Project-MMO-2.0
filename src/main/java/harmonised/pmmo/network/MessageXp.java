@@ -3,7 +3,7 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.gui.XPOverlayGUI;
 
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.skills.XP;
+import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

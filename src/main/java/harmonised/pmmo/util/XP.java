@@ -1,4 +1,4 @@
-package harmonised.pmmo.skills;
+package harmonised.pmmo.util;
 
 import java.util.*;
 
@@ -9,15 +9,14 @@ import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
-import harmonised.pmmo.util.DP;
-import harmonised.pmmo.util.LogHandler;
-import harmonised.pmmo.util.NBTHelper;
+import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.skills.PMMOFireworkEntity;
+import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.FireworkRocketEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -39,7 +38,6 @@ import net.minecraft.world.biome.Biome;
 
 import java.util.stream.Collectors;
 
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.IItemHandler;

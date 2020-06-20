@@ -5,6 +5,7 @@ import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.LogHandler;
+import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,7 +20,7 @@ public enum Skill
 {
     INVALID_SKILL( 0 ),
     MINING( 1 ),
-    BUILDING(2),
+    BUILDING(2 ),
     EXCAVATION( 3 ),
     WOODCUTTING( 4 ),
     FARMING( 5 ),
@@ -39,7 +40,6 @@ public enum Skill
     TAMING( 19 ),
     ENGINEERING( 20 );
 
-    private static final Logger LOGGER = LogManager.getLogger();
     private static final Map< String, Integer > map = new HashMap<>();
 //    Skill[] VALUES = values();
 
