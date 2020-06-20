@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.util.XP;
@@ -236,7 +237,7 @@ public class AttributeHandler
 	private static double getBiomeMobMultiplier( MobEntity mob, String type )
 	{
 		String biomeKey = mob.world.getBiome( mob.getPosition() ).getRegistryName().toString();
-		Map<String, Object> theMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( biomeKey );
+		Map<String, Object> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 		double multiplier = 1;
 
 		if( theMap != null && theMap.containsKey( type ) )

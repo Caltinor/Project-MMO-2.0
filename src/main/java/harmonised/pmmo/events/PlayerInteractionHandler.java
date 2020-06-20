@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageTripleTranslation;
@@ -54,7 +55,7 @@ public class PlayerInteractionHandler
             {
                 if( XP.isPlayerSurvival( player ) )
                 {
-                    if( JsonConfig.data.get( "salvageInfo" ).containsKey( regKey ) )
+                    if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
                     {
                         matched = XP.scanBlock( smithBlock, 1, player );
                         if( !matched )
@@ -73,7 +74,7 @@ public class PlayerInteractionHandler
 
             if( item instanceof BlockItem )
             {
-                if( !XP.checkReq( player, item.getRegistryName(), "place" ) )
+                if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_PLACE ) )
                 {
                     event.setCanceled( true );
 
@@ -81,7 +82,7 @@ public class PlayerInteractionHandler
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToPlaceDown", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                 }
             }
-            else if( !XP.checkReq( player, item.getRegistryName(), "use" ) )
+            else if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_USE ) )
             {
                event.setCanceled( true );
 
@@ -93,7 +94,7 @@ public class PlayerInteractionHandler
             {
                 Block block = player.world.getBlockState( event.getPos() ).getBlock();
 
-                if( !XP.checkReq( player, block.getRegistryName(), "use" ) )
+                if( !XP.checkReq( player, block.getRegistryName(), JType.REQ_USE ) )
                 {
                     if( XP.isPlayerSurvival( player ) )
                     {
@@ -103,9 +104,9 @@ public class PlayerInteractionHandler
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
-//                            if( JsonConfig.data.get( "useReq" ).containsKey( block.getRegistryName().toString() ) )
+//                            if( JsonConfig.data.get( JType.REQ_USE ).containsKey( block.getRegistryName().toString() ) )
 //                            {
-                                for( Map.Entry<String, Object> entry : JsonConfig.data.get( "useReq" ).get( block.getRegistryName().toString() ).entrySet() )
+                                for( Map.Entry<String, Object> entry : JsonConfig.data.get( JType.REQ_USE ).get( block.getRegistryName().toString() ).entrySet() )
                                 {
                                     startLevel = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
 
@@ -151,7 +152,7 @@ public class PlayerInteractionHandler
 
                         if( ( block.equals( goldBlock ) || block.equals( smithBlock ) ) )
                         {
-                            if( JsonConfig.data.get( "salvageInfo" ).containsKey( regKey ) )
+                            if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
                                 event.setCanceled( true );
 
                             if( isRemote )
@@ -164,11 +165,11 @@ public class PlayerInteractionHandler
 
                                 if( !item.equals( Items.AIR ) )
                                 {
-                                    if( JsonConfig.data.get( "salvageInfo" ).containsKey( regKey ) )
+                                    if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
                                     {
                                         if( player.getPosition().withinDistance( event.getPos(), 2 ) )
                                         {
-                                            Map<String, Object> theMap = JsonConfig.data.get( "salvageInfo" ).get( regKey );
+                                            Map<String, Object> theMap = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
                                             Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
                                             if( !salvageItem.equals( Items.AIR ) )
                                             {

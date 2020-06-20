@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -28,11 +29,11 @@ public class FishedHandler
         double award = 10D;
         for( ItemStack itemStack : items )
         {
-            Map<String, Double> itemXp = XP.getXp( itemStack.getItem().getRegistryName() );
+            Map<String, Double> itemXp = XP.getXp( itemStack.getItem().getRegistryName(), JType.XP_VALUE_GENERAL );
             if( itemXp.containsKey( "fishing" ) )
                 award = itemXp.get( "fishing" );
         }
-        Map<String, Map<String, Object>> fishPool = JsonConfig.data.get( "fishPool" );
+        Map<String, Map<String, Object>> fishPool = JsonConfig.data.get( JType.FISH_POOL );
 
         if( fishPool != null )
         {
@@ -92,7 +93,7 @@ public class FishedHandler
 
                 if( itemStack.isEnchantable() )
                 {
-                    Map<String, Map<String, Object>> enchantMap = JsonConfig.data.get( "fishEnchantPool" );
+                    Map<String, Map<String, Object>> enchantMap = JsonConfig.data.get( JType.FISH_ENCHANT_POOL );
                     Map<Enchantment, Integer> outEnchants = new HashMap<>();
 
                     for( Map.Entry<String, Map<String, Object>> entry : enchantMap.entrySet() )

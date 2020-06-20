@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageTripleTranslation;
@@ -25,8 +26,6 @@ import java.util.Set;
 
 public class AnvilRepairHandler
 {
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public static void handleAnvilRepair( AnvilRepairEvent event )
     {
         try
@@ -64,8 +63,8 @@ public class AnvilRepairHandler
                     oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
 
                     double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-                    if( JsonConfig.data.get( "salvageInfo" ).containsKey( oItem.getItem().getRegistryName().toString() ) )
-                        award *= (double) JsonConfig.data.get( "salvageInfo" ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
+                    if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( oItem.getItem().getRegistryName().toString() ) )
+                        award *= (double) JsonConfig.data.get( JType.SALVAGE_TO ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
 
                     if( award > 0 )
                     {

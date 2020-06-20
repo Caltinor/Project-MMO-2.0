@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageGrow;
@@ -50,7 +51,7 @@ public class BlockPlacedHandler
                     return;
                 }
 
-                if( XP.checkReq( player, block.getRegistryName(), "place" ) )
+                if( XP.checkReq( player, block.getRegistryName(), JType.REQ_PLACE ) )
                 {
                     double blockHardnessLimitForPlacing = Config.forgeConfig.blockHardnessLimitForPlacing.get();
                     double blockHardness = block.getBlockHardness(block.getDefaultState(), event.getWorld(), event.getPos());
@@ -88,7 +89,7 @@ public class BlockPlacedHandler
                     if( offItemStack.getItem() instanceof BlockItem )
                         NetworkHandler.sendToPlayer( new MessageGrow( 1, offItemStack.getCount() ), (ServerPlayerEntity) player );
 
-                    if( JsonConfig.data.get( "plantInfo" ).containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable)
+                    if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable)
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlant", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
                     else
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );

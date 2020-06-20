@@ -1,6 +1,7 @@
 package harmonised.pmmo.skills;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.DP;
@@ -40,8 +41,10 @@ public enum Skill
     TAMING( 19 ),
     ENGINEERING( 20 );
 
-    private static final Map< String, Integer > map = new HashMap<>();
-//    Skill[] VALUES = values();
+    public static final Map<Skill, Integer > skillMap = new HashMap<>();
+    public static final Map< Integer, Skill > intMap = new HashMap<>();
+    public static final Map< String, Skill > stringMap = new HashMap<>();
+    //    Skill[] VALUES = values();
 
     private final int value;
 
@@ -49,8 +52,16 @@ public enum Skill
     {
         for( Skill skill : Skill.values() )
         {
-            map.put( skill.name().toLowerCase(), skill.value );
+            skillMap.put( skill, skill.value );
+            intMap.put( skill.value, skill );
+            stringMap.put( skill.toString(), skill );
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.name().toLowerCase();
     }
 
     Skill( int i )
@@ -62,8 +73,8 @@ public enum Skill
 
     public static int getInt( String i )
     {
-        if( map.get( i.toLowerCase() ) != null )
-            return map.get( i.toLowerCase() );
+        if( stringMap.get( i.toLowerCase() ) != null )
+            return stringMap.get( i.toLowerCase() ).getValue();
         else
             return 0;
     }

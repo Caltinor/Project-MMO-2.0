@@ -755,7 +755,7 @@
 			"flying": 20
 		}
 	},
-	"xp_value": {
+	"breaking_xp": {
 		"minecraft:nether_quartz_ore": {
 			"mining": 1.5
 		},
@@ -1157,30 +1157,6 @@
 		"minecraft:sweet_berry_bush": {
 			"farming": 1.25
 		},
-		"minecraft:pufferfish": {
-			"fishing": 35
-		},
-		"minecraft:name_tag": {
-			"fishing": 60
-		},
-		"minecraft:cod": {
-			"fishing": 20
-		},
-		"minecraft:salmon": {
-			"fishing": 25
-		},
-		"minecraft:tropical_fish": {
-			"fishing": 200
-		},
-		"minecraft:saddle": {
-			"fishing": 75
-		},
-		"minecraft:tripwire_hook": {
-			"fishing": 35
-		},
-		"minecraft:leather": {
-			"fishing": 25
-		},
 		"oresandmetals:light_animica_ore": {
 			"mining": 85
 		},
@@ -1216,6 +1192,32 @@
 		},
 		"oresandmetals:copper_ore": {
 			"mining": 5
+		}
+	},
+	"general_xp": {
+		"minecraft:pufferfish": {
+			"fishing": 35
+		},
+		"minecraft:name_tag": {
+			"fishing": 60
+		},
+		"minecraft:cod": {
+			"fishing": 20
+		},
+		"minecraft:salmon": {
+			"fishing": 25
+		},
+		"minecraft:tropical_fish": {
+			"fishing": 200
+		},
+		"minecraft:saddle": {
+			"fishing": 75
+		},
+		"minecraft:tripwire_hook": {
+			"fishing": 35
+		},
+		"minecraft:leather": {
+			"fishing": 25
 		}
 	},
 	"crafting_xp": {

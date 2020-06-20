@@ -3,6 +3,7 @@ package harmonised.pmmo.gui;
 import java.util.*;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.MessageLevelUp;
 import harmonised.pmmo.network.NetworkHandler;
@@ -152,7 +153,7 @@ public class XPOverlayGUI extends AbstractGui
 			if( !isVeining && System.nanoTime() - lastVeinBlockUpdate > 100000000L )
 				updateLastBlock();
 
-			canBreak = XP.checkReq( player, lastBlockRegKey, "break" );
+			canBreak = XP.checkReq( player, lastBlockRegKey, JType.REQ_BREAK );
 		}
 		else
 			lookingAtBlock = false;
@@ -388,7 +389,7 @@ public class XPOverlayGUI extends AbstractGui
 //						System.out.println( veinPos * maxVeinCharge );
 			drawCenteredString( fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
-			metToolReq = XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" );
+			metToolReq = XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL );
 
 			if( !metToolReq )
 			{
@@ -605,6 +606,12 @@ public class XPOverlayGUI extends AbstractGui
 
 			if( xpDropOffsetY < 0 || xpDropOffsetY > 1 )
 				xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
+
+			if( veinBarOffsetX < 0 || veinBarOffsetX > 1 )
+				veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
+
+			if( veinBarOffsetY < 0 || veinBarOffsetY > 1 )
+				veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
 
 			if( xpDropSpawnDistance < 0 || xpDropSpawnDistance > 1000 )
 				xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();

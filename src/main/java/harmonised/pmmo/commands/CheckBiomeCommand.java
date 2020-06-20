@@ -1,6 +1,7 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -18,7 +19,7 @@ public class CheckBiomeCommand
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String biomeKey = sender.world.getBiome( sender.getPosition() ).getRegistryName().toString();
         String transKey = sender.world.getBiome( sender.getPosition() ).getTranslationKey();
-        Map<String, Object> theMap = JsonConfig.data.get( "biomeMobMultiplier" ).get( biomeKey );
+        Map<String, Object> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 
         String damageBonus = "100";
         String hpBonus = "100";

@@ -111,8 +111,10 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> biomeEffectEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeXpBonusEnabled;
-        public ConfigHelper.ConfigValueListener<Boolean> xpValueEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> xpValueBreakingEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> xpValueGeneralEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> oreEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> logEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> plantEnabled;
@@ -458,15 +460,25 @@ public class Config
                         .translation( "pmmo.biomeReqEnabled" )
                         .define( "biomeReqEnabled", true ) );
 
+                this.biomeEffectEnabled = subscriber.subscribe(builder
+                        .comment( "Should biome negative effects be enabled? False means no negative effects" )
+                        .translation( "pmmo.biomeEffectEnabled" )
+                        .define( "biomeEffectEnabled", true ) );
+
                 this.biomeXpBonusEnabled = subscriber.subscribe(builder
                         .comment( "Should xp multipliers be enabled? False means no multipliers" )
                         .translation( "pmmo.biomeXpBonusEnabled" )
                         .define( "biomeXpBonusEnabled", true ) );
 
-                this.xpValueEnabled = subscriber.subscribe(builder
+                this.xpValueGeneralEnabled = subscriber.subscribe(builder
+                        .comment( "Should xp values for general things be enabled? (Such as catching fish)" )
+                        .translation( "pmmo.xpValueGeneralEnabled" )
+                        .define( "xpValueGeneralEnabled", true ) );
+
+                this.xpValueBreakingEnabled = subscriber.subscribe(builder
                         .comment( "Should xp values for breaking things first time be enabled? False means only Hardness xp is awarded for breaking" )
-                        .translation( "pmmo.xpValueEnabled" )
-                        .define( "xpValueEnabled", true ) );
+                        .translation( "pmmo.xpValueBreakingEnabled" )
+                        .define( "xpValueBreakingEnabled", true ) );
 
                 this.oreEnabled = subscriber.subscribe(builder
                         .comment( "Should ores be enabled? False means no extra chance" )

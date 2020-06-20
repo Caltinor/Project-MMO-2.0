@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.config.JType;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -16,7 +17,8 @@ public class MyScrollPanel extends ScrollPanel
 {
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     PlayerEntity player;
-    String type, regKey;
+    String regKey;
+    JType jType;
     private final int boxWidth = 256;
     private final int boxHeight = 256;
     private final ArrayList<ListButton> buttons;
@@ -26,11 +28,11 @@ public class MyScrollPanel extends ScrollPanel
     private int level, startLevel, endLevel;
     private double startWeight, endWeight;
 
-    public MyScrollPanel( Minecraft client, int width, int height, int top, int left, String type, PlayerEntity player, ArrayList<ListButton> buttons )
+    public MyScrollPanel( Minecraft client, int width, int height, int top, int left, JType jType, PlayerEntity player, ArrayList<ListButton> buttons )
     {
         super(client, width, height, top, left);
         this.player = player;
-        this.type = type;
+        this.jType = jType;
         this.buttons = buttons;
 
         this.client = client;

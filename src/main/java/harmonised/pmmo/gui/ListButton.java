@@ -3,6 +3,7 @@ package harmonised.pmmo.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
@@ -41,7 +42,7 @@ public class ListButton extends Button
     LivingEntity entity = null;
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-    public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, String type, String buttonText, IPressable onPress)
+    public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, JType jType, String buttonText, IPressable onPress)
     {
         super(posX, posY, 32, 32, "", onPress);
         this.regKey = regKey;
@@ -56,23 +57,23 @@ public class ListButton extends Button
         if( testEntity instanceof LivingEntity )
             entity = (LivingEntity) testEntity;
 
-        switch( type )
+        switch( jType )
         {
-            case "fishEnchantPool":
+            case FISH_ENCHANT_POOL:
                 this.title = new TranslationTextComponent( ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( regKey ) ).getDisplayName( 1 ).getString().replace( " I", "" ) ).getString();
                 break;
 
-            case "biome":
+            case REQ_BIOME:
                 this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
                 break;
 
-            case "breedXp":
-            case "tameXp":
-            case "kill":
+            case XP_VALUE_BREED:
+            case XP_VALUE_TAME:
+            case XP_VALUE_KILL:
                 this.title = new TranslationTextComponent( ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
                 break;
 
-            case "dimension":
+            case DIMENSION:
                 if( regKey.equals( "all_dimensions" ) )
                     this.title = new TranslationTextComponent( "pmmo.allDimensions" ).getFormattedText();
                 else if( regKey.equals( "minecraft:overworld" ) || regKey.equals( "minecraft:the_nether" ) || regKey.equals( "minecraft:the_end" ) )
@@ -81,7 +82,7 @@ public class ListButton extends Button
                     this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getFormattedText();
                 break;
 
-            case "stats":
+            case STATS:
                 this.title = new TranslationTextComponent( "pmmo." + regKey ).setStyle( XP.skillStyle.get(Skill.getSkill( regKey ) ) ).getFormattedText();
                 break;
 

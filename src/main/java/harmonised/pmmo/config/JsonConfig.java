@@ -26,18 +26,18 @@ import java.util.function.BiConsumer;
 
 public class JsonConfig
 {
-    public static Map<String, Map<String, Map<String, Object>>> localData = new HashMap<>();
-    public static Map<String, Map<String, Map<String, Object>>> data = new HashMap<>();
+    public static Map<JType, Map<String, Map<String, Object>>> localData = new HashMap<>();
+    public static Map<JType, Map<String, Map<String, Object>>> data = new HashMap<>();
 
-    private static ArrayList<String> validAttributes = new ArrayList<>();
-    private static ArrayList<String> validFishEnchantInfo = new ArrayList<>();
-    private static String dataPath = "pmmo/data.json";
-    private static String defaultDataPath = "pmmo/default_data.json";
-    private static String hardDataPath = "/assets/pmmo/util/default_data.json";
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final ArrayList<String> validAttributes = new ArrayList<>();
+    private static final ArrayList<String> validFishEnchantInfo = new ArrayList<>();
+    private static final String dataPath = "pmmo/data.json";
+    private static final String defaultDataPath = "pmmo/default_data.json";
+    private static final String hardDataPath = "/assets/pmmo/util/default_data.json";
+    private static final Effect invalidEffect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
+    private static final Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
     private static JsonConfig defaultReq, customReq;
-    private static Effect invalidEffect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
-    private static Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
+
 //    private static Entity invalidEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
 
     public static void init()
@@ -77,38 +77,12 @@ public class JsonConfig
     {
     }
 
-    private static void initMap( Map<String, Map<String, Map<String, Object>>> map )
+    private static void initMap( Map<JType, Map<String, Map<String, Object>>> map )
     {
-        map.put( "wearReq", new HashMap<>() );
-        map.put( "toolReq", new HashMap<>() );
-        map.put( "weaponReq", new HashMap<>() );
-        map.put( "useReq", new HashMap<>() );
-        map.put( "placeReq", new HashMap<>() );
-        map.put( "breakReq", new HashMap<>() );
-        map.put( "biomeReq", new HashMap<>() );
-        map.put( "biomeXpBonus", new HashMap<>() );
-        map.put( "biomeEffect", new HashMap<>() );
-        map.put( "biomeMobMultiplier", new HashMap<>() );
-        map.put( "xpValueBreaking", new HashMap<>() );
-        map.put( "xpValueCrafting", new HashMap<>() );
-        map.put( "xpValueBreeding", new HashMap<>() );
-        map.put( "xpValueTaming", new HashMap<>() );
-        map.put( "oreInfo", new HashMap<>() );
-        map.put( "logInfo", new HashMap<>() );
-        map.put( "plantInfo", new HashMap<>() );
-        map.put( "salvageInfo", new HashMap<>() );
-        map.put( "salvagesFrom", new HashMap<>() );
-        map.put( "fishPool", new HashMap<>() );
-        map.put( "fishEnchantPool", new HashMap<>() );
-        map.put( "killReq", new HashMap<>() );
-        map.put( "killXp", new HashMap<>() );
-        map.put( "mobRareDrop", new HashMap<>() );
-        map.put( "levelUpCommand", new HashMap<>() );
-        map.put( "heldItemXpBoost", new HashMap<>() );
-        map.put( "wornItemXpBoost", new HashMap<>() );
-        map.put( "playerSpecific", new HashMap<>() );
-        map.put( "blockSpecific", new HashMap<>() );
-        map.put( "veinBlacklist", new HashMap<>() );
+        JType.jTypeMap.forEach(  ( jType, value ) ->
+        {
+            map.put( jType, new HashMap<>() );
+        });
     }
 
     public static class RequirementItem
@@ -129,6 +103,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> biomeEff = new HashMap<>();
     private final Map<String, RequirementItem> biomeXpBonus = new HashMap<>();
     private final Map<String, RequirementItem> biomeMobMultiplier = new HashMap<>();
+    private final Map<String, RequirementItem> xpValueGeneral = new HashMap<>();
     private final Map<String, RequirementItem> xpValueBreaking = new HashMap<>();
     private final Map<String, RequirementItem> xpValueCrafting = new HashMap<>();
     private final Map<String, RequirementItem> xpValueBreeding = new HashMap<>();
@@ -160,87 +135,90 @@ public class JsonConfig
     private static void updateFinal( JsonConfig req )
     {
         if( Config.forgeConfig.wearReqEnabled.get() )
-            updateReqSkills( req.wears, localData.get( "wearReq" ) );
+            updateReqSkills( req.wears, localData.get( JType.REQ_WEAR ) );
 
         if( Config.forgeConfig.toolReqEnabled.get() )
-            updateReqSkills( req.tools, localData.get( "toolReq" ) );
+            updateReqSkills( req.tools, localData.get( JType.REQ_TOOL ) );
 
         if( Config.forgeConfig.weaponReqEnabled.get() )
-            updateReqSkills( req.weapons, localData.get( "weaponReq" ) );
+            updateReqSkills( req.weapons, localData.get( JType.REQ_WEAPON ) );
 
         if( Config.forgeConfig.useReqEnabled.get() )
-            updateReqSkills( req.use, localData.get( "useReq" ) );
+            updateReqSkills( req.use, localData.get( JType.REQ_USE ) );
 
-        if( Config.forgeConfig.xpValueEnabled.get() )
-            updateReqSkills( req.xpValueBreaking, localData.get( "xpValueBreaking" ) );
+        if( Config.forgeConfig.xpValueGeneralEnabled.get() )
+            updateReqSkills( req.xpValueGeneral, localData.get( JType.XP_VALUE_GENERAL ) );
+
+        if( Config.forgeConfig.xpValueBreakingEnabled.get() )
+            updateReqSkills( req.xpValueBreaking, localData.get( JType.XP_VALUE_BREAK ) );
 
         if( Config.forgeConfig.xpValueCraftingEnabled.get() )
-            updateReqSkills( req.xpValueCrafting, localData.get( "xpValueCrafting" ) );
+            updateReqSkills( req.xpValueCrafting, localData.get( JType.XP_VALUE_CRAFT ) );
 
         if( Config.forgeConfig.placeReqEnabled.get() )
-            updateReqSkills( req.placing, localData.get( "placeReq" ) );
+            updateReqSkills( req.placing, localData.get( JType.REQ_PLACE ) );
 
         if( Config.forgeConfig.breakReqEnabled.get() )
-            updateReqSkills( req.breaking, localData.get( "breakReq" ) );
+            updateReqSkills( req.breaking, localData.get( JType.REQ_BREAK ) );
 
         if( Config.forgeConfig.biomeReqEnabled.get() )
-        {
-            updateReqSkills( req.biome, localData.get( "biomeReq" ) );
-            updateReqEffects( req.biomeEff, localData.get( "biomeEffect" ) );
-        }
+            updateReqSkills( req.biome, localData.get( JType.REQ_BIOME ) );
+
+        if( Config.forgeConfig.biomeEffectEnabled.get() )
+            updateReqEffects( req.biomeEff, localData.get( JType.BIOME_EFFECT ) );
 
         if( Config.forgeConfig.biomeXpBonusEnabled.get() )
-            updateReqSkills( req.biomeXpBonus, localData.get( "biomeXpBonus" ) );
+            updateReqSkills( req.biomeXpBonus, localData.get( JType.XP_BONUS_BIOME ) );
 
         if( Config.forgeConfig.biomeMobMultiplierEnabled.get() )
-            updateReqAttributes( req.biomeMobMultiplier, localData.get( "biomeMobMultiplier" ) );
+            updateReqAttributes( req.biomeMobMultiplier, localData.get( JType.BIOME_MOB_MULTIPLIER ) );
 
         if( Config.forgeConfig.oreEnabled.get() )
-            updateReqExtra( req.ores, localData.get( "oreInfo" ) );
+            updateReqExtra( req.ores, localData.get( JType.INFO_ORE ) );
 
         if( Config.forgeConfig.logEnabled.get() )
-            updateReqExtra( req.logs, localData.get( "logInfo" ) );
+            updateReqExtra( req.logs, localData.get( JType.INFO_LOG ) );
 
         if( Config.forgeConfig.plantEnabled.get() )
-            updateReqExtra( req.plants, localData.get( "plantInfo" ) );
+            updateReqExtra( req.plants, localData.get( JType.INFO_PLANT ) );
 
         if( Config.forgeConfig.salvageEnabled.get() )
-            updateReqSalvage( req.salvage, localData.get( "salvageInfo" ) );
+            updateReqSalvage( req.salvage, localData.get( JType.SALVAGE_TO ) );
 
         if( Config.forgeConfig.fishPoolEnabled.get() )
-            updateReqfishPool( req.fishPool, localData.get( "fishPool" ) );
+            updateReqfishPool( req.fishPool, localData.get( JType.FISH_POOL ) );
 
         if( Config.forgeConfig.fishEnchantPoolEnabled.get() )
-            updateReqFishEnchantPool( req.fishEnchantPool, localData.get( "fishEnchantPool" ) );
+            updateReqFishEnchantPool( req.fishEnchantPool, localData.get( JType.FISH_ENCHANT_POOL ) );
 
         if( Config.forgeConfig.killReqEnabled.get() )
-            updateReqSkills( req.killReq, localData.get( "killReq" ) );
+            updateReqSkills( req.killReq, localData.get( JType.REQ_KILL ) );
 
         if( Config.forgeConfig.killXpEnabled.get() )
-            updateReqSkills( req.killXp, localData.get( "killXp" ) );
+            updateReqSkills( req.killXp, localData.get( JType.XP_VALUE_KILL ) );
 
         if( Config.forgeConfig.mobRareDropEnabled.get() )
-            updateEntityItem( req.mobRareDrop, localData.get( "mobRareDrop" ) );
+            updateEntityItem( req.mobRareDrop, localData.get( JType.MOB_RARE_DROP ) );
 
         if( Config.forgeConfig.mobRareDropEnabled.get() )
-            updateCommand( req.levelUpCommand, localData.get( "levelUpCommand" ) );
+            updateCommand( req.levelUpCommand, localData.get( JType.LEVEL_UP_COMMAND ) );
 
         if( Config.forgeConfig.heldItemXpBoostEnabled.get() )
-            updateReqSkills( req.heldItemXpBoost, localData.get( "heldItemXpBoost" ) );
+            updateReqSkills( req.heldItemXpBoost, localData.get( JType.XP_BONUS_HELD ) );
 
         if( Config.forgeConfig.wornItemXpBoostEnabled.get() )
-            updateReqSkills( req.wornItemXpBoost, localData.get( "wornItemXpBoost" ) );
+            updateReqSkills( req.wornItemXpBoost, localData.get( JType.XP_BONUS_WORN ) );
 
-        updateSpecific( req.blockSpecific, localData.get( "blockSpecific" ) );
-        updateSpecific( req.playerSpecific, localData.get( "playerSpecific" ) );
+        updateSpecific( req.blockSpecific, localData.get( JType.BLOCK_SPECIFIC ) );
+        updateSpecific( req.playerSpecific, localData.get( JType.PLAYER_SPECIFIC ) );
 
         if( Config.forgeConfig.breedingXpEnabled.get() )
-            updateReqSkills( req.xpValueBreeding, localData.get( "xpValueBreeding" ) );
+            updateReqSkills( req.xpValueBreeding, localData.get( JType.XP_VALUE_BREED ) );
 
         if( Config.forgeConfig.tamingXpEnabled.get() )
-            updateReqSkills( req.xpValueTaming, localData.get( "xpValueTaming" ) );
+            updateReqSkills( req.xpValueTaming, localData.get( JType.XP_VALUE_TAME ) );
 
-        updateReqVein( req.veinBlacklist, localData.get( "veinBlacklist" ) );
+        updateReqVein( req.veinBlacklist, localData.get( JType.VEIN_BLACKLIST ) );
     }
 
     private static class Deserializer implements JsonDeserializer<JsonConfig>
@@ -262,10 +240,11 @@ public class JsonConfig
             deserializeGroup(obj, "place_requirement", req.placing::put, context);
             deserializeGroup(obj, "break_requirement", req.breaking::put, context);
             deserializeGroup(obj, "biome_requirement", req.biome::put, context);
-            deserializeGroup(obj, "biome_xp_bonus", req.biomeXpBonus::put, context);
+            deserializeGroup(obj, "xp_bonus_biome", req.biomeXpBonus::put, context);
             deserializeGroup(obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context);
             deserializeGroup(obj, "biome_effect", req.biomeEff::put, context);
-            deserializeGroup(obj, "xp_value", req.xpValueBreaking::put, context);
+            deserializeGroup(obj, "general_xp", req.xpValueGeneral::put, context);
+            deserializeGroup(obj, "breaking_xp", req.xpValueBreaking::put, context);
             deserializeGroup(obj, "crafting_xp", req.xpValueCrafting::put, context);
             deserializeGroup(obj, "breeding_xp", req.xpValueBreeding::put, context);
             deserializeGroup(obj, "taming_xp", req.xpValueTaming::put, context);
@@ -588,7 +567,7 @@ public class JsonConfig
                     else
                         outMap.put( "maxChance", maxChance );
 
-                    Map<String, Map<String, Object>> localSalvagesFrom = localData.get( "salvagesFrom" );
+                    Map<String, Map<String, Object>> localSalvagesFrom = localData.get( JType.SALVAGE_FROM );
 
                     if( !localSalvagesFrom.containsKey( salvageItem ) )
                         localSalvagesFrom.put( salvageItem, new HashMap<>() );

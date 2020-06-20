@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateBoolean;
 import harmonised.pmmo.network.MessageUpdateNBT;
@@ -102,7 +103,7 @@ public class WorldTickHandler
                     isOwner = blockUUID == null || blockUUID.equals( playerUUID );
                     skill = XP.getSkill( veinState );
 
-                    if( skill.equals( Skill.FARMING ) && !( JsonConfig.data.get( "blockSpecific" ).containsKey( regKey ) && JsonConfig.data.get( "blockSpecific" ).get( regKey ).containsKey( "growsUpwards" ) ) )
+                    if( skill.equals( Skill.FARMING ) && !( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) )
                     {
                         if( veinState.has( BlockStateProperties.AGE_0_1 ) )
                         {
@@ -219,7 +220,7 @@ public class WorldTickHandler
         String blockKey = veinInfo.state.getBlock().getRegistryName().toString();
         ArrayList<BlockPos> blockPosArrayList;
 
-        if( !( canVeinGlobal( blockKey, player ) && canVeinDimension( blockKey, player )  ) || !XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), "tool" ) )
+        if( !( canVeinGlobal( blockKey, player ) && canVeinDimension( blockKey, player )  ) || !XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
             return;
 
         blockPosArrayList = getVeinShape( veinInfo, veinLeft, veinCost, player.isCreative(), false );
@@ -239,8 +240,8 @@ public class WorldTickHandler
 
         Map<String, Object> globalBlacklist = null;
 
-        if( JsonConfig.data.get( "veinBlacklist" ).containsKey( "all_dimensions" ) )
-            globalBlacklist = JsonConfig.data.get( "veinBlacklist" ).get( "all_dimensions" );
+        if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( "all_dimensions" ) )
+            globalBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST ).get( "all_dimensions" );
 
         return globalBlacklist == null || !globalBlacklist.containsKey(blockKey);
     }
@@ -253,8 +254,8 @@ public class WorldTickHandler
         String dimensionKey = player.dimension.getRegistryName().toString();
         Map<String, Object> dimensionBlacklist = null;
 
-        if( JsonConfig.data.get( "veinBlacklist" ).containsKey( dimensionKey ) )
-            dimensionBlacklist = JsonConfig.data.get( "veinBlacklist" ).get( dimensionKey );
+        if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( dimensionKey ) )
+            dimensionBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST ).get( dimensionKey );
 
         return dimensionBlacklist == null || !dimensionBlacklist.containsKey(blockKey);
     }
@@ -276,9 +277,9 @@ public class WorldTickHandler
 
         int yLimit = 1;
 
-        if( JsonConfig.data.get( "blockSpecific" ).containsKey( regKey ) )
+        if( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) )
         {
-            if( JsonConfig.data.get( "blockSpecific" ).get( regKey ).containsKey( "growsUpwards" ) )
+            if( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) )
                 yLimit = 0;
         }
 

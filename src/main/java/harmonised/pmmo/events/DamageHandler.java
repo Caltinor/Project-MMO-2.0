@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
@@ -119,7 +120,7 @@ public class DamageHandler
 
                 if( XP.isPlayerSurvival( player ) )
                 {
-                    int weaponGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), "weapon" );
+                    int weaponGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_WEAPON );
                     if( weaponGap > 0 )
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
@@ -127,13 +128,13 @@ public class DamageHandler
 
                     if( target.getEntityString() != null )
                     {
-                        slayerGap = XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), "killReq" );
+                        slayerGap = XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), JType.REQ_KILL );
                         if( slayerGap > 0 )
                         {
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
-                            for( Map.Entry<String, Object> entry : JsonConfig.data.get( "killReq" ).get( target.getEntityString() ).entrySet() )
+                            for( Map.Entry<String, Object> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ).entrySet() )
                             {
                                 int level = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
 

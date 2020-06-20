@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -100,9 +101,9 @@ public class DeathHandler
 //            double normalMaxHp = target.getAttribute( SharedMonsterAttributes.MAX_HEALTH ).getBaseValue();
 //            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
-            if( JsonConfig.data.get( "killXp" ).containsKey( target.getEntityString() ) )
+            if( JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )
             {
-                Map<String, Object> killXp = JsonConfig.data.get( "killXp" ).get( target.getEntityString() );
+                Map<String, Object> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
                 for( Map.Entry<String, Object> entry : killXp.entrySet() )
                 {
                     XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * scaleValue, false, false );
@@ -113,9 +114,9 @@ public class DeathHandler
             else if( target instanceof MobEntity)
                 XP.awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false, false );
 
-            if( JsonConfig.data.get( "mobRareDrop" ).containsKey( target.getEntityString() ) )
+            if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getEntityString() ) )
             {
-                Map<String, Object> dropTable = JsonConfig.data.get( "mobRareDrop" ).get( target.getEntityString() );
+                Map<String, Object> dropTable = JsonConfig.data.get( JType.MOB_RARE_DROP ).get( target.getEntityString() );
 
                 double chance;
 

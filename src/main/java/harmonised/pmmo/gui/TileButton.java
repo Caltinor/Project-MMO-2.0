@@ -20,7 +20,7 @@ public class TileButton extends Button
     public int index;
     public String transKey;
 
-    public TileButton(int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress)
+    public TileButton( int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress )
     {
         super(posX, posY, 32, 32, text, onPress);
         this.elementOne = elementOne * 32;

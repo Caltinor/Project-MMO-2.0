@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.PlayerConnectedHandler;
@@ -209,13 +210,13 @@ public class XP
 		}
 	}
 
-	public static Map<String, Double> getXp(ResourceLocation registryName)
+	public static Map<String, Double> getXp( ResourceLocation registryName, JType jType )
 	{
 		Map<String, Double> theMap = new HashMap<>();
 
-		if( JsonConfig.data.get( "xpValueBreaking" ).containsKey( registryName.toString() ) )
+		if( JsonConfig.data.get( jType ).containsKey( registryName.toString() ) )
 		{
-			for( Map.Entry<String, Object> entry : JsonConfig.data.get( "xpValueBreaking" ).get( registryName.toString() ).entrySet() )
+			for( Map.Entry<String, Object> entry : JsonConfig.data.get( jType ).get( registryName.toString() ).entrySet() )
 			{
 				if( entry.getValue() instanceof Double )
 					theMap.put( entry.getKey(), (double) entry.getValue() );
@@ -224,22 +225,6 @@ public class XP
 
 		return theMap;
 	}
-
-    public static Map<String, Double> getXpCrafting(ResourceLocation registryName)
-    {
-        Map<String, Double> theMap = new HashMap<>();
-
-        if( JsonConfig.data.get( "xpValueCrafting" ).containsKey( registryName.toString() ) )
-        {
-            for( Map.Entry<String, Object> entry : JsonConfig.data.get( "xpValueCrafting" ).get( registryName.toString() ).entrySet() )
-            {
-                if( entry.getValue() instanceof Double )
-                    theMap.put( entry.getKey(), (double) entry.getValue() );
-            }
-        }
-
-        return theMap;
-    }
 
 	public static Integer getSkillColor( Skill skill )
 	{
@@ -449,41 +434,41 @@ public class XP
 		return (int) Math.floor( (double) object );
 	}
 
-	public static double getExtraChance( PlayerEntity player, String resLoc, String type )
+	public static double getExtraChance( PlayerEntity player, String resLoc, JType jType )
 	{
-		return getExtraChance( player, XP.getResLoc( resLoc ), type );
+		return getExtraChance( player, XP.getResLoc( resLoc ), jType );
 	}
 
-	public static double getExtraChance( PlayerEntity player, ResourceLocation resLoc, String type )
+	public static double getExtraChance( PlayerEntity player, ResourceLocation resLoc, JType jType )
 	{
 		String regKey = resLoc.toString();
 		double extraChancePerLevel = 0;
 		double extraChance;
 		int highestReq = 1;
-		if( JsonConfig.data.get( "breakReq" ).containsKey( resLoc.toString() ) )
-			highestReq = JsonConfig.data.get( "breakReq" ).get( resLoc.toString() ).entrySet().stream().map(a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
+		if( JsonConfig.data.get( JType.REQ_BREAK ).containsKey( resLoc.toString() ) )
+			highestReq = JsonConfig.data.get( JType.REQ_BREAK ).get( resLoc.toString() ).entrySet().stream().map(a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
 		int startLevel = 1;
 
-		switch( type )
+		switch( jType )
 		{
-			case "ore":
-				if( JsonConfig.data.get( "oreInfo" ).containsKey( regKey ) && JsonConfig.data.get( "oreInfo" ).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( "oreInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( "oreInfo" ).get( regKey ).get( "extraChance" );
+			case INFO_ORE:
+				if( JsonConfig.data.get( JType.INFO_ORE ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_ORE).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_ORE ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_ORE ).get( regKey ).get( "extraChance" );
 				startLevel = getLevel( Skill.MINING, player );
 				break;
 
-			case "log":
-				if( JsonConfig.data.get( "logInfo" ).containsKey( regKey ) && JsonConfig.data.get( "logInfo" ).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( "logInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( "logInfo" ).get( regKey ).get( "extraChance" );
+			case INFO_LOG:
+				if( JsonConfig.data.get( JType.INFO_LOG ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).get( "extraChance" );
 				startLevel = getLevel( Skill.WOODCUTTING, player );
 				break;
 
-			case "plant":
-				if( JsonConfig.data.get( "plantInfo" ).containsKey( regKey ) && JsonConfig.data.get( "plantInfo" ).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( "plantInfo" ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( "plantInfo" ).get( regKey ).get( "extraChance" );
+			case INFO_PLANT:
+				if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).get( "extraChance" );
 				startLevel = getLevel( Skill.FARMING, player );
 				break;
 
@@ -615,9 +600,9 @@ public class XP
         }
     }
 
-	public static boolean checkReq( PlayerEntity player, String res, String type )
+	public static boolean checkReq( PlayerEntity player, String res, JType jType )
 	{
-		return checkReq( player, XP.getResLoc( res ), type );
+		return checkReq( player, XP.getResLoc( res ), jType );
 	}
 
 	public static ResourceLocation getResLoc( String regKey )
@@ -628,7 +613,7 @@ public class XP
 		}
 		catch( Exception e )
 		{
-			return null;
+			return new ResourceLocation( "" );
 		}
 	}
 
@@ -644,93 +629,9 @@ public class XP
 		}
 	}
 
-	public static Map<String, Map<String, Object>> getFullReqMap( String type )
+	public static Map<String, Double> getReqMap( String registryName, JType type )
 	{
-		switch( type.toLowerCase() )
-		{
-			case "wear":
-				return JsonConfig.data.get( "wearReq" );
-
-			case "tool":
-				return JsonConfig.data.get( "toolReq" );
-
-			case "weapon":
-				return JsonConfig.data.get( "weaponReq" );
-
-			case "mob":
-			case "killreq":
-				return JsonConfig.data.get( "killReq" );
-
-			case "use":
-				return JsonConfig.data.get( "useReq" );
-
-			case "place":
-			case "placedown":
-				return JsonConfig.data.get( "placeReq" );
-
-			case "break":
-				return JsonConfig.data.get( "breakReq" );
-
-			case "biome":
-				return JsonConfig.data.get( "biomeReq" );
-
-			case "kill":
-				return JsonConfig.data.get( "killReq" );
-
-			case "ore":
-				return JsonConfig.data.get( "oreInfo" );
-
-			case "log":
-				return JsonConfig.data.get( "logInfo" );
-
-			case "plant":
-				return JsonConfig.data.get( "plantInfo" );
-
-			case "held":
-				return JsonConfig.data.get( "heldItemXpBoost" );
-
-			case "worn":
-				return JsonConfig.data.get( "wornItemXpBoost" );
-
-			case "breedxp":
-				return JsonConfig.data.get( "xpValueBreeding" );
-
-			case "tamexp":
-				return JsonConfig.data.get( "xpValueTaming" );
-
-			case "craftxp":
-				return JsonConfig.data.get( "xpValueCrafting" );
-
-			case "breakxp":
-				return JsonConfig.data.get( "xpValueBreaking" );
-
-			case "dimension":
-				return JsonConfig.data.get( "veinBlacklist" );
-
-			case "fishpool":
-				return JsonConfig.data.get( "fishPool" );
-
-			case "fishenchantpool":
-				return JsonConfig.data.get( "fishEnchantPool" );
-
-			case "salvagesto":
-				return JsonConfig.data.get( "salvageInfo" );
-
-			case "salvagesfrom":
-				return JsonConfig.data.get( "salvagesFrom" );
-
-			case "stats":
-				return null;
-
-			default:
-				LogHandler.LOGGER.error( "INVALID FULLMAP AT GETFULLMAP \"" + type + "\"" );
-				return null;
-		}
-	}
-
-	public static Map<String, Double> getReqMap( String registryName, String type )
-	{
-		Map<String, Map<String, Object>> fullMap = getFullReqMap( type );
+		Map<String, Map<String, Object>> fullMap = JsonConfig.data.get( type );
 		Map<String, Double> map = null;
 
 		if( fullMap != null && fullMap.containsKey( registryName ) )
@@ -747,7 +648,7 @@ public class XP
 		return map;
 	}
 
-	public static boolean checkReq( PlayerEntity player, ResourceLocation res, String type )
+	public static boolean checkReq( PlayerEntity player, ResourceLocation res, JType jType )
 	{
 		if( res == null )
 			return true;
@@ -755,14 +656,14 @@ public class XP
 		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
 			return true;
 
-		if( JsonConfig.data.get( "playerSpecific" ).containsKey( player.getUniqueID().toString() ) )
+		if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).containsKey( player.getUniqueID().toString() ) )
 		{
-			if( JsonConfig.data.get( "playerSpecific" ).get( player.getUniqueID().toString() ).containsKey( "ignoreReq" ) )
+			if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).get( player.getUniqueID().toString() ).containsKey( "ignoreReq" ) )
 				return true;
 		}
 
 		String registryName = res.toString();
-		Map<String, Double> reqMap = getReqMap( registryName, type );
+		Map<String, Double> reqMap = getReqMap( registryName, jType );
 		double startLevel;
 		boolean failedReq = false;
 
@@ -783,11 +684,11 @@ public class XP
 		return !failedReq;
 	}
 
-	public static int getHighestReq( String regKey, String type )
+	public static int getHighestReq( String regKey, JType jType )
 	{
 		int highestReq = 1;
 
-		Map<String, Double> map = XP.getReqMap( regKey, type );
+		Map<String, Double> map = XP.getReqMap( regKey, jType );
 
 		if( map != null )
 		{
@@ -918,11 +819,11 @@ public class XP
 		if( !item.equals( Items.AIR ) )
 		{
 			String regName = item.getRegistryName().toString();
-			Map<String, Object> itemXpMap = JsonConfig.data.get( "wornItemXpBoost" ).get( regName );
+			Map<String, Object> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );
 
 			if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
 			{
-				if( checkReq( player, item.getRegistryName(), "wear" ) )
+				if( checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
 				{
 					boost = (double) itemXpMap.get( skillName );
 				}
@@ -932,7 +833,7 @@ public class XP
 		return boost;
 	}
 
-	public static double getSkillMultiplier( PlayerEntity player, Skill skill )
+	public static double getSkillMultiplier( Skill skill )
 	{
 		double skillMultiplier = 1;
 
@@ -1042,7 +943,7 @@ public class XP
 
 		String skillName = skill.toString().toLowerCase();
 		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
-		Map<String, Object> heldMap = JsonConfig.data.get( "heldItemXpBoost" ).get( regKey );
+		Map<String, Object> heldMap = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
 		PlayerInventory inv = player.inventory;
 
 		if( heldMap != null )
@@ -1088,12 +989,12 @@ public class XP
 		Biome biome = player.world.getBiome( player.getPosition() );
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
-		Map<String, Object> biomeMap = JsonConfig.data.get( "biomeXpBonus" ).get( biomeKey );
+		Map<String, Object> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
 
 		if( biomeMap != null && biomeMap.containsKey( skillName ) )
 			theBiomeBoost = (double) biomeMap.get( skillName );
 
-		if( checkReq( player, resLoc, "biome" ) )
+		if( checkReq( player, resLoc, JType.REQ_BIOME ) )
 			biomeBoost = theBiomeBoost;
 		else
 			biomeBoost = Math.min( theBiomeBoost, -biomePenaltyMultiplier * 100 );
@@ -1111,11 +1012,19 @@ public class XP
 		}
 	}
 
+	public static void awardXpMapDouble( PlayerEntity player, Map<String, Double> map, String sourceName, boolean skip, boolean ignoreBonuses )
+	{
+		for( Map.Entry<String, Double> entry : map.entrySet() )
+		{
+			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, entry.getValue(), skip, ignoreBonuses );
+		}
+	}
+
 	public static double getMultiplier( PlayerEntity player, Skill skill )
 	{
 		double multiplier = 1;
 
-		double skillMultiplier = getSkillMultiplier( player, skill );
+		double skillMultiplier = getSkillMultiplier( skill );
 		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
 		double itemBoost = getItemBoost( player, skill );
 		double biomeBoost = getBiomeBoost( player, skill );
@@ -1227,9 +1136,9 @@ public class XP
 				}
 			}
 
-			if( JsonConfig.data.get( "levelUpCommand" ).get( skillName.toLowerCase() ) != null )
+			if( JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() ) != null )
 			{
-				Map<String, Object> commandMap = JsonConfig.data.get( "levelUpCommand" ).get( skillName.toLowerCase() );
+				Map<String, Object> commandMap = JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() );
 
 				for( Map.Entry<String, Object> entry : commandMap.entrySet() )
 				{
@@ -1270,13 +1179,13 @@ public class XP
 		return a - b;
 	}
 
-	public static int getSkillReqGap(PlayerEntity player, ResourceLocation res, String type)
+	public static int getSkillReqGap(PlayerEntity player, ResourceLocation res, JType jType )
 	{
 		int gap = 0;
 
-		if( !checkReq( player, res, type ) )
+		if( !checkReq( player, res, jType ) )
 		{
-			Map<String, Double> reqs = getReqMap( res.toString(), type );
+			Map<String, Double> reqs = getReqMap( res.toString(), jType );
 
 			if( reqs != null )
 			{
@@ -1322,9 +1231,9 @@ public class XP
 	{
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
 
-		if( !checkReq( player, resLoc, "wear" ) )
+		if( !checkReq( player, resLoc, JType.REQ_WEAR ) )
 		{
-			int gap = getSkillReqGap( player, resLoc, "wear" );
+			int gap = getSkillReqGap( player, resLoc, JType.REQ_WEAR );
 
 			if( gap > 9 )
 				gap = 9;
@@ -1352,15 +1261,15 @@ public class XP
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
-		Map<String, Object> biomeReq = JsonConfig.data.get( "biomeReq" ).get( biomeKey );
-		Map<String, Object> biomeEffect = JsonConfig.data.get( "biomeEffect" ).get( biomeKey );
+		Map<String, Object> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
+		Map<String, Object> biomeEffect = JsonConfig.data.get( JType.BIOME_EFFECT ).get( biomeKey );
 
 		if( !lastBiome.containsKey( playerUUID ) )
 			lastBiome.put( playerUUID, "none" );
 
 		if( biomeReq != null && biomeEffect != null )
 		{
-			if( !checkReq( player, resLoc, "biome" ) )
+			if( !checkReq( player, resLoc, JType.REQ_BIOME ) )
 			{
 				for( Map.Entry<String, Object> entry : biomeEffect.entrySet() )
 				{
@@ -1393,7 +1302,7 @@ public class XP
 		lastBiome.put( playerUUID, biomeKey );
 	}
 	
-	public static double getWeight(int startLevel, Map<String, Object> fishItem)
+	public static double getWeight( int startLevel, Map<String, Object> fishItem )
 	{
 		return DP.map( startLevel, (double) fishItem.get( "startLevel" ), (double) fishItem.get( "endLevel" ), (double) fishItem.get( "startWeight" ), (double) fishItem.get( "endWeight" ) );
 	}

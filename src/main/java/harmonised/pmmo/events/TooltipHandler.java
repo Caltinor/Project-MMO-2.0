@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -49,22 +50,37 @@ public class TooltipHandler
                 double dValue;
                 Material material = null;
 
-                Map<String, Object> wearReq = JsonConfig.data.get( "wearReq" ).get( regKey );
-                Map<String, Object> toolReq = JsonConfig.data.get( "toolReq" ).get( regKey );
-                Map<String, Object> weaponReq = JsonConfig.data.get( "weaponReq" ).get( regKey );
-                Map<String, Object> useReq = JsonConfig.data.get( "useReq" ).get( regKey );
-                Map<String, Object> placeReq = JsonConfig.data.get( "placeReq" ).get( regKey );
-                Map<String, Object> breakReq = JsonConfig.data.get( "breakReq" ).get( regKey );
-                Map<String, Object> xpValueBreaking = JsonConfig.data.get( "xpValueBreaking" ).get( regKey );
-                Map<String, Object> xpValueCrafting = JsonConfig.data.get( "xpValueCrafting" ).get( regKey );
-                Map<String, Object> salvageInfo = JsonConfig.data.get( "salvageInfo" ).get( regKey );
-                Map<String, Object> salvagesFrom = JsonConfig.data.get( "salvagesFrom" ).get( regKey );
-                Map<String, Object> heldItemXpBoost = JsonConfig.data.get( "heldItemXpBoost" ).get( regKey );
-                Map<String, Object> wornItemXpBoost = JsonConfig.data.get( "wornItemXpBoost" ).get( regKey );
+                Map<String, Object> wearReq = JsonConfig.data.get( JType.REQ_WEAR ).get( regKey );
+                Map<String, Object> toolReq = JsonConfig.data.get( JType.REQ_TOOL ).get( regKey );
+                Map<String, Object> weaponReq = JsonConfig.data.get( JType.REQ_WEAPON ).get( regKey );
+                Map<String, Object> useReq = JsonConfig.data.get( JType.REQ_USE ).get( regKey );
+                Map<String, Object> placeReq = JsonConfig.data.get( JType.REQ_PLACE ).get( regKey );
+                Map<String, Object> breakReq = JsonConfig.data.get( JType.REQ_BREAK ).get( regKey );
+                Map<String, Object> xpValueGeneral = JsonConfig.data.get( JType.XP_VALUE_GENERAL ).get( regKey );
+                Map<String, Object> xpValueBreaking = JsonConfig.data.get( JType.XP_VALUE_BREAK ).get( regKey );
+                Map<String, Object> xpValueCrafting = JsonConfig.data.get( JType.XP_VALUE_CRAFT).get( regKey );
+                Map<String, Object> salvageInfo = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
+                Map<String, Object> salvagesFrom = JsonConfig.data.get( JType.SALVAGE_FROM ).get( regKey );
+                Map<String, Object> heldItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
+                Map<String, Object> wornItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regKey );
+
+                if( xpValueGeneral != null && xpValueGeneral.size() > 0 )      //XP VALUE
+                {
+                    tooltip.add( new TranslationTextComponent( "pmmo.xpValue" ) );
+
+                    for( String key : xpValueGeneral.keySet() )
+                    {
+                        if( xpValueGeneral.get( key ) instanceof Double )
+                        {
+                            dValue = (double) xpValueGeneral.get( key );
+                            tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ) );
+                        }
+                    }
+                }
 
                 if( xpValueBreaking != null && xpValueBreaking.size() > 0 )      //XP VALUE
                 {
-                    tooltip.add( new TranslationTextComponent( "pmmo.xpValue" ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.xpValueBreak" ) );
 
                     for( String key : xpValueBreaking.keySet() )
                     {
@@ -78,7 +94,7 @@ public class TooltipHandler
 
                 if( xpValueCrafting != null && xpValueCrafting.size() > 0 )      //XP VALUE
                 {
-                    tooltip.add( new TranslationTextComponent( "pmmo.xpValueCrafting" ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.xpValueCraft" ) );
 
                     for( String key : xpValueCrafting.keySet() )
                     {
@@ -101,64 +117,64 @@ public class TooltipHandler
                 }
 
                 if( wearReq != null && wearReq.size() > 0 )
-                    addTooltipTextSkill( "pmmo.toWear", "wear", wearReq, event );
+                    addTooltipTextSkill( "pmmo.toWear", JType.REQ_WEAR, wearReq, event );
 
                 if( wornItemXpBoost != null && wornItemXpBoost.size() > 0 )
                     addTooltipTextSkillPercentage( "pmmo.itemXpBoostWorn", wornItemXpBoost, event );
 
                 if( toolReq != null && toolReq.size() > 0 )
-                    addTooltipTextSkill( "pmmo.tool", "tool", toolReq, event );
+                    addTooltipTextSkill( "pmmo.tool", JType.REQ_TOOL, toolReq, event );
                 if( weaponReq != null && weaponReq.size() > 0 )
-                    addTooltipTextSkill( "pmmo.weapon", "weapon", weaponReq, event );
+                    addTooltipTextSkill( "pmmo.weapon", JType.REQ_WEAPON, weaponReq, event );
 
                 if( heldItemXpBoost != null && heldItemXpBoost.size() > 0 )
                     addTooltipTextSkillPercentage( "pmmo.itemXpBoostHeld", heldItemXpBoost, event );
 
 
                 if( useReq != null && useReq.size() > 0 )
-                    addTooltipTextSkill( "pmmo.use", "use", useReq, event );
+                    addTooltipTextSkill( "pmmo.use", JType.REQ_USE, useReq, event );
 
 //            if( wearReq != null && wearReq.size() > 0 )
 //                addTooltipTextSkill( "pmmo.wear", "mob", mobReq, event );
 
                 if( placeReq != null && placeReq.size() > 0 )
                 {
-                    if( JsonConfig.data.get( "plantInfo" ).containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable)
-                        addTooltipTextSkill( "pmmo.plant", "place", placeReq, event );
+                    if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable)
+                        addTooltipTextSkill( "pmmo.plant", JType.REQ_PLACE, placeReq, event );
                     else
-                        addTooltipTextSkill( "pmmo.placeDown", "place", placeReq, event );
+                        addTooltipTextSkill( "pmmo.place", JType.REQ_PLACE, placeReq, event );
                 }
 
                 if( breakReq != null && breakReq.size() > 0 )
                 {
                     if( XP.correctHarvestTool( material ).equals( "axe" ) )
-                        addTooltipTextSkill( "pmmo.chop", "break", breakReq, event );
-                    else if( JsonConfig.data.get( "plantInfo" ).containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable )
-                        addTooltipTextSkill( "pmmo.harvest", "break", breakReq, event );
+                        addTooltipTextSkill( "pmmo.chop", JType.REQ_BREAK, breakReq, event );
+                    else if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable )
+                        addTooltipTextSkill( "pmmo.harvest", JType.REQ_BREAK, breakReq, event );
                     else
-                        addTooltipTextSkill( "pmmo.break", "break", breakReq, event );
+                        addTooltipTextSkill( "pmmo.break", JType.REQ_BREAK, breakReq, event );
                 }
 
-                if( JsonConfig.data.get( "oreInfo" ).containsKey( regKey ) && JsonConfig.data.get( "oreInfo" ).get( regKey ).containsKey( "extraChance" ) )
+                if( JsonConfig.data.get( JType.INFO_ORE ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_ORE ).get( regKey ).containsKey( "extraChance" ) )
                 {
-                    if( XP.getExtraChance( player, item.getRegistryName(), "ore" ) > 0 )  //ORE EXTRA CHANCE
-                        tooltip.add( new TranslationTextComponent( "pmmo.oreExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "ore" ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                    if( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_ORE ) > 0 )  //ORE EXTRA CHANCE
+                        tooltip.add( new TranslationTextComponent( "pmmo.oreExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_ORE ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
                     else
                         tooltip.add( new TranslationTextComponent( "pmmo.oreExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
                 }
 
-                if( JsonConfig.data.get( "logInfo" ).containsKey( regKey ) && JsonConfig.data.get( "logInfo" ).get( regKey ).containsKey( "extraChance" ) )
+                if( JsonConfig.data.get( JType.INFO_LOG ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).containsKey( "extraChance" ) )
                 {
-                    if( XP.getExtraChance( player, item.getRegistryName(), "log" ) > 0 )  //ORE EXTRA CHANCE
-                        tooltip.add( new TranslationTextComponent( "pmmo.logExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "log" ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                    if( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_LOG ) > 0 )  //ORE EXTRA CHANCE
+                        tooltip.add( new TranslationTextComponent( "pmmo.logExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_LOG ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
                     else
                         tooltip.add( new TranslationTextComponent( "pmmo.logExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
                 }
 
-                if( JsonConfig.data.get( "plantInfo" ).containsKey( regKey ) && JsonConfig.data.get( "plantInfo" ).get( regKey ).containsKey( "extraChance" ) )
+                if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).containsKey( "extraChance" ) )
                 {
-                    if( XP.getExtraChance( player, item.getRegistryName(), "plant" ) > 0 )  //ORE EXTRA CHANCE
-                        tooltip.add( new TranslationTextComponent( "pmmo.plantExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), "plant" ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                    if( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_PLANT ) > 0 )  //ORE EXTRA CHANCE
+                        tooltip.add( new TranslationTextComponent( "pmmo.plantExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_PLANT ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
                     else
                         tooltip.add( new TranslationTextComponent( "pmmo.plantExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
                 }
@@ -227,7 +243,7 @@ public class TooltipHandler
                     String displayName = new TranslationTextComponent( XP.getItem( (String) salvageArray[salvageArrayPos] ).getTranslationKey() ).getString();
                     int value = (int) Math.floor( (double) salvagesFrom.get( key ) );
 
-                    salvageInfo = JsonConfig.data.get( "salvageInfo" ).get( key );
+                    salvageInfo = JsonConfig.data.get( JType.SALVAGE_TO ).get( key );
 
                     if( salvageInfo != null && (double) salvageInfo.get( "levelReq" ) <= level )
                         tooltip.add( new TranslationTextComponent( "pmmo.valueFromValue", " " + value, displayName ).setStyle( XP.textStyle.get( "green" ) ) );
@@ -238,7 +254,7 @@ public class TooltipHandler
         }
     }
 
-    private static void addTooltipTextSkill( String tKey, String type, Map<String, Object> theMap, ItemTooltipEvent event )
+    private static void addTooltipTextSkill( String tKey, JType jType, Map<String, Object> theMap, ItemTooltipEvent event )
     {
         PlayerEntity player = event.getPlayer();
         List<ITextComponent> tooltip = event.getToolTip();
@@ -247,7 +263,7 @@ public class TooltipHandler
 
         if( theMap.size() > 0 )
         {
-            if( XP.checkReq( player, item.getRegistryName(), type ) )
+            if( XP.checkReq( player, item.getRegistryName(), jType ) )
                 tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( "green" ) ) );
             else
                 tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( "red" ) ) );

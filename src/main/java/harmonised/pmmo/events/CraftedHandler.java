@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -26,9 +27,10 @@ public class CraftedHandler
             award.put( "crafting", defaultCraftingXp );
             ItemStack itemStack = event.getCrafting();
             ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+            Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_TAME );
 
-            if( JsonConfig.data.get( "xpValueCrafting" ).containsKey( resLoc.toString() ) )
-                XP.addMaps( award, XP.getXpCrafting( resLoc ) );
+            if( xpValue.size() > 0 )
+                XP.addMaps( award, xpValue );
 
             if( itemStack.isDamageable() )
                 durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamage() ) / (double) itemStack.getMaxDamage();
