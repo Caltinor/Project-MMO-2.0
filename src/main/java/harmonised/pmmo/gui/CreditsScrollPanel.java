@@ -49,7 +49,7 @@ public class CreditsScrollPanel extends ScrollPanel
     @Override
     protected int getContentHeight()
     {
-        int height = 0;
+        int height = 48;
 
         for( int i = 0; i < buttons.size(); i += 3 )
         {

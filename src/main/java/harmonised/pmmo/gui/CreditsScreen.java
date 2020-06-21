@@ -3,6 +3,7 @@ package harmonised.pmmo.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
@@ -29,19 +30,16 @@ public class CreditsScreen extends Screen
     private int x;
     private int y;
     private int scrollX, scrollY;
-    private ArrayList<ListButtonBig> listButtons;
     private UUID uuid;
+    private ArrayList<ListButtonBig> listButtons;
     private CreditsScrollPanel scrollPanel;
     private int scroll;
 
-    public CreditsScreen(UUID uuid, ITextComponent titleIn, int scroll )
+    public CreditsScreen( UUID uuid, ITextComponent titleIn, int scroll )
     {
         super(titleIn);
         this.uuid = uuid;
-        GlossaryScreen.history = new ArrayList<>();
         this.scroll = scroll;
-
-
     }
 
 //    @Override
@@ -59,40 +57,70 @@ public class CreditsScreen extends Screen
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
         scrollX = x + 16;
         scrollY = y + 10;
-        
+
+        if( firstTime )
+        {
+            CreditorScreen.initCreditors();
+            firstTime = false;
+        }
+
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
         });
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 2, "Lucifer#0666", button ->
+        PlayerConnectedHandler.lapisPatreons.forEach( a ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ), "pmmo.lapisPatreon", scrollPanel.getScroll() ) );
+            listButtons.add( new ListButtonBig( 0, 0, 1, 2, CreditorScreen.uuidName.get( a.toString() ), button ->
+            {
+                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.lapisPatreon", scrollPanel.getScroll() ) );
+            }));
+        });
+
+        PlayerConnectedHandler.dandelionPatreons.forEach( a ->
+        {
+            listButtons.add( new ListButtonBig( 0, 0, 1, 3, CreditorScreen.uuidName.get( a.toString() ), button ->
+            {
+                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.dandelionPatreon", scrollPanel.getScroll() ) );
+            }));
+        });
+
+        PlayerConnectedHandler.ironPatreons.forEach( a ->
+        {
+            listButtons.add( new ListButtonBig( 0, 0, 1, 4, CreditorScreen.uuidName.get( a.toString() ), button ->
+            {
+                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.ironPatreon", scrollPanel.getScroll() ) );
+            }));
+        });
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "Tyrius#0842", button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 3, "Tyrius#0842", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "didis54#5815", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ), "pmmo.dandelionPatreon", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 4, "didis54#5815", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "neothiamin#1798", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString(  "2ea5efa1-756b-4c9e-9605-7f53830d6cfa"), "pmmo.ironPatreon", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "BusanDaek#3970", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "BusanDaek#3970", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString(  "1951c4ee-52e1-421c-927b-43fb941add98"), "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "deezer911#5693", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "deezer911#5693", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString(  "d3167127-daa9-485b-ab14-c842c888e087"), "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "TorukM4kt00#0246", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "TorukM4kt00#0246", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString(  "bfacfe26-94d7-4c6a-a337-fee6aad555bb"), "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
         }));
 
         addButton(exitButton);

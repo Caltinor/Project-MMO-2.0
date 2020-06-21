@@ -19,11 +19,11 @@ import java.util.*;
 
 public class CreditorScreen extends Screen
 {
+    public static final HashMap<String, String> uuidName = new HashMap<>();
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
-    private static final Map<String, List<String>> creditorsInfo = new HashMap<>();
+    public static final Map<String, List<String>> creditorsInfo = new HashMap<>();
     private static Map<String, Integer> colors = new HashMap<>();
-    private static boolean firstTime = true;
     private static TileButton exitButton;
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
@@ -32,15 +32,17 @@ public class CreditorScreen extends Screen
     private int x;
     private int y;
     private List<TileButton> tileButtons;
-    private UUID uuid;
+//    private UUID uuid;
+    public String playerName;
     private int lastScroll;
     private int color;
     private String transKey;
 
-    public CreditorScreen( UUID uuid, String transKey, int lastScroll )
+    public CreditorScreen( String playerName, String transKey, int lastScroll )
     {
         super( new TranslationTextComponent( transKey ) );
-        this.uuid = uuid;
+//        this.uuid = uuid;
+        this.playerName = playerName;
         this.lastScroll = lastScroll;
         this.transKey = transKey;
     }
@@ -61,7 +63,7 @@ public class CreditorScreen extends Screen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( "pmmo.credits" ), lastScroll ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.credits" ), lastScroll ) );
         });
 
         addButton(exitButton);
@@ -70,12 +72,6 @@ public class CreditorScreen extends Screen
 //        {
 //            addButton( button );
 //        }
-
-        if( firstTime )
-        {
-            initCreditors();
-            firstTime = false;
-        }
     }
 
     @Override
@@ -89,15 +85,15 @@ public class CreditorScreen extends Screen
 
         color = 0xffffff;
 
-        if( colors.containsKey( transKey ) )
-            color = colors.get( transKey );
+        if( colors.containsKey( playerName ) )
+            color = colors.get( playerName );
 
         if( font.getStringWidth( title.getString() ) > 220 )
             drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, color );
         else
             drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, color );
 
-        List<String> list = creditorsInfo.get( uuid.toString() );
+        List<String> list = creditorsInfo.get( playerName );
 
         for( int i = 0; i < list.size(); i++ )
         {
@@ -163,57 +159,87 @@ public class CreditorScreen extends Screen
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
-    private static void initCreditors()
+    public static void initCreditors()
     {
+        uuidName.put( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a", "Lucifer#0666" );
+        uuidName.put( "8eb0578d-c113-49d3-abf6-a6d36f6d1116", "Tyrius#0842" );
+        uuidName.put( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa", "didis54#5815" );
+//        uuidName.put( "3066eaa7-6387-489d-b04b-cce7b505ee87", "neothiamin#1798" );
+//        uuidName.put( "1951c4ee-52e1-421c-927b-43fb941add98", "BusanDaek#3970" );
+//        uuidName.put( "d3167127-daa9-485b-ab14-c842c888e087", "deezer911#5693" );
+//        uuidName.put( "bfacfe26-94d7-4c6a-a337-fee6aad555bb", "TorukM4kt00#0246" );
+
         List<String> list;
 
         /////////LAPIS//////////////
-        PlayerConnectedHandler.lapisPatreons.forEach( a -> creditorsInfo.put(a.toString(), new ArrayList<>()) );
+        PlayerConnectedHandler.lapisPatreons.forEach( a ->
+        {
+            colors.put( uuidName.get( a.toString() ), 0x5555ff );
+            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
+        });
         //LUCIFER
-        list = creditorsInfo.get( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" );
+        list = creditorsInfo.get( "Lucifer#0666" );
         list.add( "Lucifer#0666" );
         list.add( "First Lapis Tier Patreon" );
-        list.add( "Discord Member Since 28/04/2020" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "28/04/2020" ).getString() );
 
         /////////DANDELION//////////
         //TYRIUS
-        PlayerConnectedHandler.dandelionPatreons.forEach( a -> creditorsInfo.put(a.toString(), new ArrayList<>()) );
-        list = creditorsInfo.get( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" );
+        PlayerConnectedHandler.dandelionPatreons.forEach( a ->
+        {
+            colors.put( uuidName.get( a.toString() ), 0xffff33 );
+            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
+        });
+        list = creditorsInfo.get( "Tyrius#0842" );
         list.add( "Tyrius#0842" );
         list.add( "First Dandelion Tier Patreon" );
-        list.add( "Discord Member Since 19/03/2020" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "19/03/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.authorOfModpack", "The Cosmic Tree" ).getString() );
 
         /////////IRON///////////////
         //DIDIS54
-        PlayerConnectedHandler.ironPatreons.forEach( a -> creditorsInfo.put(a.toString(), new ArrayList<>()) );
-        list = creditorsInfo.get( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" );
+        PlayerConnectedHandler.ironPatreons.forEach( a ->
+        {
+            colors.put( uuidName.get( a.toString() ), 0xeeeeee );
+            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
+        } );
+        list = creditorsInfo.get( "didis54#5815" );
         list.add( "didis54#5815" );
         list.add( "First Iron Tier Patreon" );
-        list.add( "Discord Member Since 11/04/2020" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/04/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.authorOfModpack", "Anarkhe Revolution" ).getString() );
+
+        /////////MODPACK////////////
+        //BUSANDAEK
+        list = new ArrayList<>();
+        list.add( "neothiamin#1798" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/04/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.authorOfModpack", "Skillful Survival" ).getString() );
+        creditorsInfo.put( "neothiamin#1798", list );
 
         /////////TRANSLATOR/////////
         //BUSANDAEK
         list = new ArrayList<>();
         list.add( "BusanDaek#3970" );
         list.add( "Translated Korean" );
-        list.add( "Discord Member Since 31/03/2020" );
-        creditorsInfo.put("1951c4ee-52e1-421c-927b-43fb941add98", list );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "31/03/2020" ).getString() );
+        creditorsInfo.put( "BusanDaek#3970", list );
         //MAREOFTHESTARS
         list = new ArrayList<>();
         list.add( "deezer911#5693" );
         list.add( "Translated French" );
-        list.add( "Discord Member Since 11/03/2020" );
-        creditorsInfo.put("d3167127-daa9-485b-ab14-c842c888e087", list );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/03/2020" ).getString() );
+        creditorsInfo.put( "deezer911#5693", list );
         //TORUKM4KT00#0246
         list = new ArrayList<>();
         list.add( "TorukM4kt00#0246" );
         list.add( "Translated Portuguese - Brazil" );
-        list.add( "Discord Member Since 13/05/2020" );
-        creditorsInfo.put("bfacfe26-94d7-4c6a-a337-fee6aad555bb", list );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
+        creditorsInfo.put( "TorukM4kt00#0246", list );
 
         /////////COLOR//////////////
-        colors.put("pmmo.lapisPatreon", 0x5555ff );
-        colors.put("pmmo.dandelionPatreon", 0xffff33 );
-        colors.put("pmmo.ironPatreon", 0xeeeeee );
+//        colors.put( "pmmo.lapisPatreon", 0x5555ff );
+//        colors.put( "pmmo.dandelionPatreon", 0xffff33 );
+//        colors.put( "pmmo.ironPatreon", 0xeeeeee );
     }
 }

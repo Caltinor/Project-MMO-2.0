@@ -222,5 +222,7 @@
   "pmmo.RemainderXp": "Remainder: %1$s",
   "pmmo.canVein": "Can Vein %1$s %2$s",
   "pmmo.cannotVein": "You cannot vein %1$s",
-  "pmmo.cannotVeinDimension": "You cannot vein %1$s in this dimension"
+  "pmmo.cannotVeinDimension": "You cannot vein %1$s in this dimension",
+  "pmmo.discordMemberSince": "Discord Member Since %1$s",
+  "pmmo.authorOfModpack": "Author of the Modpack %1$s"
 }
