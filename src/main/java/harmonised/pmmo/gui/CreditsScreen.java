@@ -13,16 +13,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-public class DonatorScreen extends Screen
+public class CreditsScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
+    private static boolean firstTime = true;
     private static TileButton exitButton;
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
@@ -30,14 +28,20 @@ public class DonatorScreen extends Screen
     private int boxHeight = 256;
     private int x;
     private int y;
-    private List<TileButtonBig> tileButtons;
+    private int scrollX, scrollY;
+    private ArrayList<ListButtonBig> listButtons;
     private UUID uuid;
+    private CreditsScrollPanel scrollPanel;
+    private int scroll;
 
-    public DonatorScreen( UUID uuid, ITextComponent titleIn )
+    public CreditsScreen(UUID uuid, ITextComponent titleIn, int scroll )
     {
         super(titleIn);
         this.uuid = uuid;
         GlossaryScreen.history = new ArrayList<>();
+        this.scroll = scroll;
+
+
     }
 
 //    @Override
@@ -49,55 +53,63 @@ public class DonatorScreen extends Screen
     @Override
     protected void init()
     {
-        tileButtons = new ArrayList<>();
+        listButtons = new ArrayList<>();
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
-
+        scrollX = x + 16;
+        scrollY = y + 10;
+        
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
         });
 
-        TileButtonBig didisButton = new TileButtonBig( 0, 0, 1, 2, "didis54#5815","", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 2, "Lucifer#0666", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButtonBig) button).transKey ), JType.DONATOR_IRON, Minecraft.getInstance().player ) );
-        });
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ), "pmmo.lapisPatreon", scrollPanel.getScroll() ) );
+        }));
 
-        TileButtonBig tyriusButton = new TileButtonBig( 0, 0, 1, 3, "Tyrius#0842","", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 3, "Tyrius#0842", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButtonBig) button).transKey ), JType.DONATOR_DANDELION, Minecraft.getInstance().player ) );
-        });
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ), "pmmo.dandelionPatreon", scrollPanel.getScroll() ) );
+        }));
 
-        TileButtonBig luciferButton = new TileButtonBig( 0, 0, 1, 4, "Lucifer#0666","", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 4, "didis54#5815", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButtonBig) button).transKey ), JType.DONATOR_LAPIS, Minecraft.getInstance().player ) );
-        });
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString(  "2ea5efa1-756b-4c9e-9605-7f53830d6cfa"), "pmmo.ironPatreon", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "BusanDaek#3970", button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString(  "1951c4ee-52e1-421c-927b-43fb941add98"), "pmmo.translator", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "deezer911#5693", button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString(  "d3167127-daa9-485b-ab14-c842c888e087"), "pmmo.translator", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "TorukM4kt00#0246", button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( UUID.fromString(  "bfacfe26-94d7-4c6a-a337-fee6aad555bb"), "pmmo.translator", scrollPanel.getScroll() ) );
+        }));
 
         addButton(exitButton);
-        tileButtons.add( didisButton );
-        tileButtons.add( tyriusButton );
-        tileButtons.add( luciferButton );
 
-        tileButtons.sort( Comparator.comparingInt( a -> ((TileButtonBig) a).elementTwo ).reversed() );
+//        for( int i = 0; i < 25; i++ )
+//        {
+//            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "Lucifer#0666","", button ->
+//            {
+//                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( uuid, new TranslationTextComponent( ((ListButtonBig) button).transKey ), scrollPanel.getScroll() ) );
+//            }));
+//        }
 
-        int i = 1;
+        listButtons.sort( Comparator.comparingInt( a -> ((ListButtonBig) a).elementTwo ) );
 
-        for( TileButtonBig button : tileButtons )
-        {
-            if( i % 3 == 1 )
-            {
-                button.x = sr.getScaledWidth() / 2 - 32;
-                button.y = y + 12 + ( (i - 1) / 3) * 46;
-            }
-            else
-            {
-                button.x = sr.getScaledWidth() / 2 - 32 + (i % 3 == 2 ? -28 : +28 );
-                button.y = y + 12 + 46 + ( (i - 1) / 3) * 46;
-            }
-            i++;
-            addButton( button );
-        }
+        scrollPanel = new CreditsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, JType.CREDITS, listButtons );
+        scrollPanel.setScroll(scroll);
+        children.add( scrollPanel );
     }
 
     @Override
@@ -105,22 +117,24 @@ public class DonatorScreen extends Screen
     {
         renderBackground( 1 );
         super.render(mouseX, mouseY, partialTicks);
+        scrollPanel.render( mouseX,mouseY,partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
 //        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
-        for( TileButtonBig button : tileButtons )
+        for( ListButtonBig button : listButtons )
         {
-            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 64 && mouseY < button.y + 64 )
-                renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
+            if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
+                renderTooltip( button.playerName, mouseX, mouseY );
         }
 
         if( font.getStringWidth( title.getString() ) > 220 )
             drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
             drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+
     }
 
     @Override
@@ -145,6 +159,8 @@ public class DonatorScreen extends Screen
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
     {
+        if( listButtons.size() >= 7 )
+            scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
         return super.mouseScrolled(mouseX, mouseY, scroll);
     }
 
@@ -156,18 +172,28 @@ public class DonatorScreen extends Screen
             exitButton.onPress();
             return true;
         }
+
+        for( ListButtonBig a : listButtons )
+        {
+            if( mouseX > a.x + 3 && mouseY > a.y && mouseX < a.x + 60 && mouseY < a.y + 64 )
+                a.onPress();
+        }
+
+        scrollPanel.mouseClicked( mouseX, mouseY, button );
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button)
     {
+        scrollPanel.mouseReleased( mouseX, mouseY, button );
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
     {
+        scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 

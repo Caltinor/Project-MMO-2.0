@@ -72,7 +72,7 @@ public class Config
         //Miscellaneous
         public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
-        public ConfigHelper.ConfigValueListener<Boolean> showDonatorWelcome;
+        public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
 
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
@@ -278,10 +278,10 @@ public class Config
                         .translation( "pmmo.showWelcome" )
                         .define( "showWelcome", true ) );
 
-                this.showDonatorWelcome = subscriber.subscribe(builder
+                this.showPatreonWelcome = subscriber.subscribe(builder
                         .comment( "Should your personal Donator Welcome message come up?" )
-                        .translation( "pmmo.showDonatorWelcome" )
-                        .define( "showDonatorWelcome", true ) );
+                        .translation( "pmmo.showPatreonWelcome" )
+                        .define( "showPatreonWelcome", true ) );
 
                 builder.pop();
             }

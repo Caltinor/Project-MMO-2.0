@@ -30,7 +30,7 @@ public class GlossaryScreen extends Screen
     private int boxHeight = 256;
     private int x;
     private int y;
-    private MyScrollPanel myList;
+    private ListScrollPanel myList;
     private List<TileButton> tileButtons;
     private String creativeText;
     private UUID uuid;
@@ -61,7 +61,7 @@ public class GlossaryScreen extends Screen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", "", button ->
         {
-            updateHistory( ( (TileButton) button ).index );
+            history = new ArrayList<>();
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
         });
         TileButton wearButton = new TileButton(0, 0, 3, 9, "pmmo.wearTitle", "", button ->

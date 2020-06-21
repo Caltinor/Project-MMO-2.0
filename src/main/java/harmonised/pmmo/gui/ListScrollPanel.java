@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
-public class MyScrollPanel extends ScrollPanel
+public class ListScrollPanel extends ScrollPanel
 {
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     PlayerEntity player;
@@ -28,7 +28,7 @@ public class MyScrollPanel extends ScrollPanel
     private int level, startLevel, endLevel;
     private double startWeight, endWeight;
 
-    public MyScrollPanel( Minecraft client, int width, int height, int top, int left, JType jType, PlayerEntity player, ArrayList<ListButton> buttons )
+    public ListScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, PlayerEntity player, ArrayList<ListButton> buttons )
     {
         super(client, width, height, top, left);
         this.player = player;

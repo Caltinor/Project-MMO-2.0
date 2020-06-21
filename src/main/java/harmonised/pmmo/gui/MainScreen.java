@@ -36,7 +36,6 @@ public class MainScreen extends Screen
     {
         super(titleIn);
         this.uuid = uuid;
-        GlossaryScreen.history = new ArrayList<>();
     }
 
 //    @Override
@@ -63,15 +62,15 @@ public class MainScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
-        TileButton donatorButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 4, 1, 0, "pmmo.donator", "", (button) ->
+        TileButton creditsButton = new TileButton( x + 24 + (int) (36 * 2.5), y + 24 + 36 * 4, 3, 4, "pmmo.credits", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new DonatorScreen( uuid, new TranslationTextComponent( "pmmo.creditsTitle" ) ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( "pmmo.credits" ), 0 ) );
         });
 
-        TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 1, 0, "pmmo.prefs", "", (button) ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( uuid, new TranslationTextComponent( "pmmo.prefs" ) ) );
-        });
+//        TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 0, "pmmo.prefs", "", (button) ->
+//        {
+//            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( uuid, new TranslationTextComponent( "pmmo.prefs" ) ) );
+//        });
 
         TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (button) ->
         {
@@ -80,8 +79,8 @@ public class MainScreen extends Screen
 
         addButton(exitButton);
         tileButtons.add(glossaryButton);
-        tileButtons.add(donatorButton);
-        tileButtons.add(prefsButton);
+        tileButtons.add(creditsButton);
+//        tileButtons.add(prefsButton);
         tileButtons.add(statsButton);
 
         for( TileButton button : tileButtons )

@@ -43,7 +43,7 @@ public class ScrollScreen extends Screen
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x, y, scrollX, scrollY, buttonX, buttonY, accumulativeHeight, buttonsSize, buttonsLoaded, futureHeight, minCount, maxCount;
-    private MyScrollPanel scrollPanel;
+    private ListScrollPanel scrollPanel;
     private final PlayerEntity player;
     private final JType jType;
     private final double baseXp = Config.getConfig( "baseXp" );
@@ -84,6 +84,7 @@ public class ScrollScreen extends Screen
         y = (sr.getScaledHeight() / 2) - (boxHeight / 2);
         scrollX = x + 16;
         scrollY = y + 10;
+        buttonX = scrollX + 4;
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", "", (button) ->
         {
@@ -91,12 +92,6 @@ public class ScrollScreen extends Screen
             {
                 case STATS:
                     Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
-                    break;
-
-                case DONATOR_IRON:
-                case DONATOR_DANDELION:
-                case DONATOR_LAPIS:
-                    Minecraft.getInstance().displayGuiScreen( new DonatorScreen( uuid, new TranslationTextComponent( "pmmo.donator" ) ) );
                     break;
 
                 default:
@@ -274,7 +269,7 @@ public class ScrollScreen extends Screen
 
                 for( String skill : skills )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 6, skill, jType, "", button -> ((ListButton) button).clickAction() ) );
+                    listButtons.add( new ListButton( 0, 0, 3, 6, skill, jType, "", button -> ((ListButton) button).clickAction() ) );
                 }
             }
                 break;
@@ -823,11 +818,8 @@ public class ScrollScreen extends Screen
             }
                 break;
         }
-
-        scrollPanel = new MyScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, jType, player, listButtons );
-
+        scrollPanel = new ListScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, jType, player, listButtons );
         children.add( scrollPanel );
-
         addButton(exitButton);
     }
 
@@ -935,9 +927,6 @@ public class ScrollScreen extends Screen
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
-        scrollX = x + 16;
-        scrollY = y + 10;
-        buttonX = scrollX + 4;
 
         scrollPanel.render( mouseX, mouseY, partialTicks );
 

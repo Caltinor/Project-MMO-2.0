@@ -41,9 +41,10 @@ public enum JType
     VEIN_BLACKLIST(31),
     STATS(100),
     DIMENSION(101),
-    DONATOR_IRON(102),
-    DONATOR_DANDELION(103),
-    DONATOR_LAPIS(104);
+    CREDITS(102),
+    DONATOR_IRON(103),
+    DONATOR_DANDELION(104),
+    DONATOR_LAPIS(105);
 
     public static final Map< JType, Integer > jTypeMap = new HashMap<>();
     public static final Map< Integer, JType > intMap = new HashMap<>();
