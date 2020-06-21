@@ -183,6 +183,7 @@
   "pmmo.currentChance": "Current Chance: %1$s%%",
   "pmmo.maxEnchantLevel": "Max Enchantment Level: %1$s",
   "pmmo.requiredLevel": "Required Level: %1$s",
+  "pmmo.creditsTitle": "Project MMO Credits",
   "pmmo.wearTitle": "Wearing Requirements",
   "pmmo.toolTitle": "Using Tools Requirements",
   "pmmo.weaponTitle": "Using Weapons Requirements",

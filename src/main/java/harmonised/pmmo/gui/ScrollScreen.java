@@ -85,7 +85,7 @@ public class ScrollScreen extends Screen
         scrollX = x + 16;
         scrollY = y + 10;
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", (button) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", "", (button) ->
         {
             switch( jType )
             {

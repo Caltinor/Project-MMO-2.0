@@ -59,7 +59,7 @@ public class GlossaryScreen extends Screen
 
         creativeText = new TranslationTextComponent( "pmmo.creativeWarning" ).getString();
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "", "", button ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", "", button ->
         {
             updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );

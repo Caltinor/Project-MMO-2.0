@@ -53,19 +53,24 @@ public class MainScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 0, 7, "pmmo.exit", "", (something) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
         {
             Minecraft.getInstance().player.closeScreen();
         });
 
-        TileButton glossaryButton = new TileButton(x + 24 + 36 * 1, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", "", (button) ->
+        TileButton glossaryButton = new TileButton(x + 24 + 36, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", "", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( "pmmo.skills" ) ) );
         });
 
-        TileButton donatorButton = new TileButton((int) (x + 24 + 36 * 2.5), y + 24 + 36 * 4, 1, 0, "pmmo.donator", "", (button) ->
+        TileButton donatorButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 4, 1, 0, "pmmo.donator", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new DonatorScreen( uuid, new TranslationTextComponent( "pmmo.donator" ) ) );
+            Minecraft.getInstance().displayGuiScreen( new DonatorScreen( uuid, new TranslationTextComponent( "pmmo.creditsTitle" ) ) );
+        });
+
+        TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 1, 0, "pmmo.prefs", "", (button) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( uuid, new TranslationTextComponent( "pmmo.prefs" ) ) );
         });
 
         TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (button) ->
@@ -76,6 +81,7 @@ public class MainScreen extends Screen
         addButton(exitButton);
         tileButtons.add(glossaryButton);
         tileButtons.add(donatorButton);
+        tileButtons.add(prefsButton);
         tileButtons.add(statsButton);
 
         for( TileButton button : tileButtons )
@@ -136,7 +142,7 @@ public class MainScreen extends Screen
     {
         if( button == 1 )
         {
-            Minecraft.getInstance().player.closeScreen();
+            exitButton.onPress();
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);

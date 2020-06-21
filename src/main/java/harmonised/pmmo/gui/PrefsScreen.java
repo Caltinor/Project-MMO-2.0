@@ -14,11 +14,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class DonatorScreen extends Screen
+public class PrefsScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
@@ -30,10 +29,10 @@ public class DonatorScreen extends Screen
     private int boxHeight = 256;
     private int x;
     private int y;
-    private List<TileButtonBig> tileButtons;
+    private List<TileButton> tileButtons;
     private UUID uuid;
 
-    public DonatorScreen( UUID uuid, ITextComponent titleIn )
+    public PrefsScreen( UUID uuid, ITextComponent titleIn )
     {
         super(titleIn);
         this.uuid = uuid;
@@ -59,43 +58,28 @@ public class DonatorScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
         });
 
-        TileButtonBig didisButton = new TileButtonBig( 0, 0, 1, 2, "didis54#5815","", button ->
+        TileButton ironButton = new TileButton( x + 24 + 36, y + 24 + 36 * 5, 1, 0, "pmmo.ironTitle","", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButtonBig) button).transKey ), JType.DONATOR_IRON, Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.DONATOR_IRON, Minecraft.getInstance().player ) );
         });
 
-        TileButtonBig tyriusButton = new TileButtonBig( 0, 0, 1, 3, "Tyrius#0842","", button ->
+        TileButton dandelionButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36 * 5, 1, 0, "pmmo.dandelionTitle","", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButtonBig) button).transKey ), JType.DONATOR_DANDELION, Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.DONATOR_DANDELION, Minecraft.getInstance().player ) );
         });
 
-        TileButtonBig luciferButton = new TileButtonBig( 0, 0, 1, 4, "Lucifer#0666","", button ->
+        TileButton lapisButton = new TileButton( (int) (x + 24 + 36 * 2.5), y + 24 + 36, 1, 0, "pmmo.lapisTitle","", button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButtonBig) button).transKey ), JType.DONATOR_LAPIS, Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.DONATOR_LAPIS, Minecraft.getInstance().player ) );
         });
 
         addButton(exitButton);
-        tileButtons.add( didisButton );
-        tileButtons.add( tyriusButton );
-        tileButtons.add( luciferButton );
+        tileButtons.add( ironButton );
+        tileButtons.add( dandelionButton );
+        tileButtons.add( lapisButton );
 
-        tileButtons.sort( Comparator.comparingInt( a -> ((TileButtonBig) a).elementTwo ).reversed() );
-
-        int i = 1;
-
-        for( TileButtonBig button : tileButtons )
+        for( TileButton button : tileButtons )
         {
-            if( i % 3 == 1 )
-            {
-                button.x = sr.getScaledWidth() / 2 - 32;
-                button.y = y + 12 + ( (i - 1) / 3) * 46;
-            }
-            else
-            {
-                button.x = sr.getScaledWidth() / 2 - 32 + (i % 3 == 2 ? -28 : +28 );
-                button.y = y + 12 + 46 + ( (i - 1) / 3) * 46;
-            }
-            i++;
             addButton( button );
         }
     }
@@ -111,16 +95,15 @@ public class DonatorScreen extends Screen
 
 //        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
-        for( TileButtonBig button : tileButtons )
+        for( TileButton button : tileButtons )
         {
-            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 64 && mouseY < button.y + 64 )
+            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
                 renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
 
-        if( font.getStringWidth( title.getString() ) > 220 )
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
-        else
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+        RenderSystem.enableBlend();
+        Minecraft.getInstance().getTextureManager().bindTexture( logo );
+        this.blit( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override

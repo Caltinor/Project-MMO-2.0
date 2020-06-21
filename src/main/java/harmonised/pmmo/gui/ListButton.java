@@ -28,7 +28,8 @@ import java.util.List;
 
 public class ListButton extends Button
 {
-    private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
+    private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
+    private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
 //    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
@@ -42,7 +43,7 @@ public class ListButton extends Button
     LivingEntity entity = null;
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-    public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, JType jType, String buttonText, IPressable onPress)
+    public ListButton( int posX, int posY, int elementOne, int elementTwo, String regKey, JType jType, String buttonText, IPressable onPress )
     {
         super(posX, posY, 32, 32, "", onPress);
         this.regKey = regKey;
@@ -141,24 +142,15 @@ public class ListButton extends Button
     {
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontrenderer = minecraft.fontRenderer;
-        minecraft.getTextureManager().bindTexture( bar );
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
         int i = this.getYImage(this.isHovered());
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-
-        if( this.isHovered() )
-        {
-            this.blit(this.x, this.y, this.offsetOne + 32, this.elementOne, this.width, this.height);
-            this.blit(this.x, this.y, this.offsetTwo + 32, this.elementTwo, this.width, this.height);
-        }
-        else
-        {
-            this.blit(this.x, this.y, this.offsetOne, this.elementOne, this.width, this.height);
-            this.blit(this.x, this.y, this.offsetTwo, this.elementTwo, this.width, this.height);
-        }
-
+        minecraft.getTextureManager().bindTexture( buttons );
+        this.blit(this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height);
+        minecraft.getTextureManager().bindTexture( items );
+        this.blit(this.x, this.y, this.offsetTwo + ( this.isHovered() ? 32 : 0 ), this.elementTwo, this.width, this.height);
         if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
             itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
 

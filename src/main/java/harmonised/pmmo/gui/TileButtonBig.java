@@ -10,10 +10,9 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class TileButton extends Button
+public class TileButtonBig extends Button
 {
-    private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
-    private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
+    private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big.png" );
     public int elementOne;
     public int offsetOne;
     public int elementTwo;
@@ -21,28 +20,20 @@ public class TileButton extends Button
     public int index;
     public String transKey;
 
-    public TileButton( int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress )
+    public TileButtonBig( int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress )
     {
-        super(posX, posY, 32, 32, text, onPress);
-        this.elementOne = elementOne * 32;
-        this.elementTwo = elementTwo * 32;
+        super(posX, posY, 64, 64, text, onPress);
+        this.elementOne = elementOne * 64;
+        this.elementTwo = elementTwo * 64;
         this.transKey = transKey;
 
-        if( elementOne > 23 )
-            offsetOne = 192;
-        else if( elementOne > 15 )
+        if( elementOne > 3 )
             offsetOne = 128;
-        else if( elementOne > 7 )
-            offsetOne = 64;
         else
             offsetOne = 0;
 
-        if( elementTwo > 23 )
-            offsetTwo = 192;
-        else if( elementTwo > 15 )
+        if( elementTwo > 3 )
             offsetTwo = 128;
-        else if( elementTwo > 7 )
-            offsetTwo = 64;
         else
             offsetTwo = 0;
     }
@@ -57,10 +48,10 @@ public class TileButton extends Button
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        minecraft.getTextureManager().bindTexture( buttons );
-        this.blit(this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height );
         minecraft.getTextureManager().bindTexture( items );
-        this.blit(this.x, this.y, this.offsetTwo + ( this.isHovered() ? 32 : 0 ), this.elementTwo, this.width, this.height );
+        this.blit(this.x, this.y, this.offsetOne + ( this.isHovered() ? 64 : 0 ), this.elementOne, this.width, this.height );
+//        minecraft.getTextureManager().bindTexture( items );
+        this.blit(this.x, this.y, this.offsetTwo + ( this.isHovered() ? 64 : 0 ), this.elementTwo, this.width, this.height );
         this.renderBg(minecraft, p_renderButton_1_, p_renderButton_2_);
         int j = getFGColor();
         this.drawCenteredString(fontrenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
