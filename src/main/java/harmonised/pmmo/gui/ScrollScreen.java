@@ -265,7 +265,11 @@ public class ScrollScreen extends Screen
 
             case STATS:
             {
-                Set<String> skills = XP.skills.get( uuid ).keySet();
+                Set<String> skills;
+                if( XP.skills.containsKey( uuid ) )
+                    skills = XP.skills.get( uuid ).keySet();
+                else
+                    skills = new HashSet<>();
 
                 for( String skill : skills )
                 {
@@ -684,8 +688,11 @@ public class ScrollScreen extends Screen
                     button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
 
                     button.text.add( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
+                    if( skill.getLevel( player ) != Config.getConfig( "maxLevel" ) )
+                    {
+                        button.text.add( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );
+                        button.text.add( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
+                    }
                 }
                     break;
 
