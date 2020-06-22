@@ -127,6 +127,7 @@ public class XP
 		textStyle.put( "green", new Style().setColor( TextFormatting.GREEN ) );
 		textStyle.put( "yellow", new Style().setColor( TextFormatting.YELLOW ) );
 		textStyle.put( "grey", new Style().setColor( TextFormatting.GRAY ) );
+		textStyle.put( "blue", new Style().setColor( TextFormatting.BLUE ) );
 ////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS

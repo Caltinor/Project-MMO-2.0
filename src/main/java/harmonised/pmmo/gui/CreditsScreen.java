@@ -71,56 +71,56 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 2, CreditorScreen.uuidName.get( a.toString() ), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lapisPatreon" ).setStyle( XP.textStyle.get( "blue" ) ).getFormattedText(), button ->
             {
-                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.lapisPatreon", scrollPanel.getScroll() ) );
+                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
         });
 
         PlayerConnectedHandler.dandelionPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 3, CreditorScreen.uuidName.get( a.toString() ), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.dandelionPatreon" ).setStyle( XP.textStyle.get( "yellow" ) ).getFormattedText(), button ->
             {
-                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.dandelionPatreon", scrollPanel.getScroll() ) );
+                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
         });
 
         PlayerConnectedHandler.ironPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 4, CreditorScreen.uuidName.get( a.toString() ), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.ironPatreon" ).setStyle( XP.textStyle.get( "grey" ) ).getFormattedText(), button ->
             {
-                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.ironPatreon", scrollPanel.getScroll() ) );
+                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
         });
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "Tyrius#0842", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Tyrius#0842", new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString(), button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "didis54#5815", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "didis54#5815", new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString(), button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "neothiamin#1798", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "neothiamin#1798", new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString(), button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "BusanDaek#3970", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ko_kr", "BusanDaek#3970", new TranslationTextComponent( "pmmo.translated", "Korean" ).getString(), button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "deezer911#5693", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "fr_fr", "deezer911#5693", new TranslationTextComponent( "pmmo.translated", "French" ).getString(), button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "TorukM4kt00#0246", button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "pt_br", "TorukM4kt00#0246", new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString(), button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "pmmo.translator", scrollPanel.getScroll() ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
         addButton(exitButton);
@@ -155,7 +155,10 @@ public class CreditsScreen extends Screen
         for( ListButtonBig button : listButtons )
         {
             if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
-                renderTooltip( button.playerName, mouseX, mouseY );
+            {
+                renderTooltip( button.tooltipText, mouseX, mouseY );
+                break;
+            }
         }
 
         if( font.getStringWidth( title.getString() ) > 220 )

@@ -23,6 +23,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,15 +45,18 @@ public class ListButtonBig extends Button
     LivingEntity entity = null;
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
-    public ListButtonBig( int posX, int posY, int elementOne, int elementTwo, String playerName, IPressable onPress )
+    public ListButtonBig(int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, IPressable onPress )
     {
-        super(posX, posY, 64, 64, "", onPress);
+        super(posX, posY, 64, 64, buttonText, onPress);
 //        this.regKey = regKey;
-//        this.buttonText = buttonText;
+        this.buttonText = buttonText;
         this.itemStack = new ItemStack( XP.getItem( regKey ) );
         this.elementOne = elementOne * 64;
         this.elementTwo = elementTwo * 64;
         this.playerName = playerName;
+        tooltipText.add( playerName );
+        if( tooltip != null )
+            this.tooltipText.add( tooltip );
 
         if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
             testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().world );

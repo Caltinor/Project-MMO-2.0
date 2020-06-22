@@ -14,75 +14,60 @@ import org.apache.logging.log4j.Logger;
 public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    public static String[] suggestSkill = new String[21];
-    public static String[] levelOrXp = new String[2];
-    public static String[] suggestPref = new String[7];
-    public static String[] suggestGui = new String[18];
-    public static String[] suggestSearchRegistry = new String[5];
-
+    public static String[] suggestSkill = { "Power",
+                                            "Mining",
+                                            "Building",
+                                            "Excavation",
+                                            "Woodcutting",
+                                            "Farming",
+                                            "Agility",
+                                            "Endurance",
+                                            "Combat",
+                                            "Archery",
+                                            "Smithing",
+                                            "Flying",
+                                            "Swimming",
+                                            "Fishing",
+                                            "Crafting",
+                                            "Magic",
+                                            "Slayer",
+                                            "Hunter",
+                                            "Fletching",
+                                            "Taming",
+                                            "Engineering" };
+    public static String[] levelOrXp = { "level", "xp" };
+    public static String[] suggestPref = { "maxReachBoost",
+                                           "maxSpeedBoost",
+                                           "maxSprintJumpBoost",
+                                           "maxCrouchJumpBoost",
+                                           "maxExtraHeartBoost",
+                                           "maxExtraDamageBoost",
+                                           "wipeAllSkillsUponDeathPermanently" };
+    public static String[] suggestGui = { "barOffsetX",
+                                          "barOffsetY",
+                                          "veinBarOffsetX",
+                                          "veinBarOffsetY",
+                                          "xpDropOffsetX",
+                                          "xpDropOffsetY",
+                                          "xpDropSpawnDistance",
+                                          "xpDropOpacityPerTime",
+                                          "xpDropMaxOpacity",
+                                          "xpDropDecayAge",
+                                          "minXpGrow",
+                                          "showXpDrops",
+                                          "stackXpDrops",
+                                          "xpDropsAttachedToBar",
+                                          "xpBarAlwaysOn",
+                                          "xpLeftDisplayAlwaysOn",
+                                          "lvlUpScreenshot",
+                                          "lvlUpScreenshotShowSkills" };
+    public static String[] suggestSearchRegistry = { "item",
+                                                     "biome",
+                                                     "enchant",
+                                                     "potionEffect",
+                                                     "entity" };
     public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
-        suggestSkill[0]  = "Power";
-        suggestSkill[1]  = "Mining";
-        suggestSkill[2]  = "Building";
-        suggestSkill[3]  = "Excavation";
-        suggestSkill[4]  = "Woodcutting";
-        suggestSkill[5]  = "Farming";
-        suggestSkill[6]  = "Agility";
-        suggestSkill[7]  = "Endurance";
-        suggestSkill[8]  = "Combat";
-        suggestSkill[9]  = "Archery";
-        suggestSkill[10] = "Smithing";
-        suggestSkill[11] = "Flying";
-        suggestSkill[12] = "Swimming";
-        suggestSkill[13] = "Fishing";
-        suggestSkill[14] = "Crafting";
-        suggestSkill[15] = "Magic";
-        suggestSkill[16] = "Slayer";
-        suggestSkill[17] = "Hunter";
-        suggestSkill[18] = "Fletching";
-        suggestSkill[19] = "Taming";
-        suggestSkill[20] = "Engineering";
-
-//        suggestClear[0] = "iagreetothetermsandconditions";
-
-        levelOrXp[0] = "level";
-        levelOrXp[1] = "xp";
-
-        suggestPref[0] = "maxReachBoost";
-        suggestPref[1] = "maxSpeedBoost";
-        suggestPref[2] = "maxSprintJumpBoost";
-        suggestPref[3] = "maxCrouchJumpBoost";
-        suggestPref[4] = "maxExtraHeartBoost";
-        suggestPref[5] = "maxExtraDamageBoost";
-        suggestPref[6] = "wipeAllSkillsUponDeathPermanently";
-
-        suggestGui[0] = "barOffsetX";
-        suggestGui[1] = "barOffsetY";
-        suggestGui[2] = "veinBarOffsetX";
-        suggestGui[3] = "veinBarOffsetY";
-        suggestGui[4] = "xpDropOffsetX";
-        suggestGui[5] = "xpDropOffsetY";
-        suggestGui[6] = "xpDropSpawnDistance";
-        suggestGui[7] = "xpDropOpacityPerTime";
-        suggestGui[8] = "xpDropMaxOpacity";
-        suggestGui[9] = "xpDropDecayAge";
-        suggestGui[10] = "minXpGrow";
-        suggestGui[11] = "showXpDrops";
-        suggestGui[12] = "stackXpDrops";
-        suggestGui[13] = "xpDropsAttachedToBar";
-        suggestGui[14] = "xpBarAlwaysOn";
-        suggestGui[15] = "xpLeftDisplayAlwaysOn";
-        suggestGui[16] = "lvlUpScreenshot";
-        suggestGui[17] = "lvlUpScreenshotShowSkills";
-
-        suggestSearchRegistry[0] = "item";
-        suggestSearchRegistry[1] = "biome";
-        suggestSearchRegistry[2] = "enchant";
-        suggestSearchRegistry[3] = "potionEffect";
-        suggestSearchRegistry[4] = "entity";
-
-
 //        int i = 0;
 //
 //        for( Biome biome : ForgeRegistries.BIOMES.getValues() )

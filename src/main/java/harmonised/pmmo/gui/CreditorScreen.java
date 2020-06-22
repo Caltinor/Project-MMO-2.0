@@ -23,7 +23,7 @@ public class CreditorScreen extends Screen
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     public static final Map<String, List<String>> creditorsInfo = new HashMap<>();
-    private static Map<String, Integer> colors = new HashMap<>();
+    public static Map<String, Integer> colors = new HashMap<>();
     private static TileButton exitButton;
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();;
@@ -88,10 +88,10 @@ public class CreditorScreen extends Screen
         if( colors.containsKey( playerName ) )
             color = colors.get( playerName );
 
-        if( font.getStringWidth( title.getString() ) > 220 )
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, color );
-        else
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, color );
+//        if( font.getStringWidth( title.getString() ) > 220 )
+//            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, color );
+//        else
+//            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, color );
 
         List<String> list = creditorsInfo.get( playerName );
 
@@ -194,7 +194,7 @@ public class CreditorScreen extends Screen
         list.add( "Tyrius#0842" );
         list.add( "First Dandelion Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "19/03/2020" ).getString() );
-        list.add( new TranslationTextComponent( "pmmo.authorOfModpack", "The Cosmic Tree" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString() );
 
         /////////IRON///////////////
         //DIDIS54
@@ -207,33 +207,33 @@ public class CreditorScreen extends Screen
         list.add( "didis54#5815" );
         list.add( "First Iron Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/04/2020" ).getString() );
-        list.add( new TranslationTextComponent( "pmmo.authorOfModpack", "Anarkhe Revolution" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString() );
 
         /////////MODPACK////////////
         //BUSANDAEK
         list = new ArrayList<>();
         list.add( "neothiamin#1798" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/04/2020" ).getString() );
-        list.add( new TranslationTextComponent( "pmmo.authorOfModpack", "Skillful Survival" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString() );
         creditorsInfo.put( "neothiamin#1798", list );
 
         /////////TRANSLATOR/////////
         //BUSANDAEK
         list = new ArrayList<>();
         list.add( "BusanDaek#3970" );
-        list.add( "Translated Korean" );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Korean" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "31/03/2020" ).getString() );
         creditorsInfo.put( "BusanDaek#3970", list );
         //MAREOFTHESTARS
         list = new ArrayList<>();
         list.add( "deezer911#5693" );
-        list.add( "Translated French" );
+        list.add( new TranslationTextComponent( "pmmo.translated", "French" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/03/2020" ).getString() );
         creditorsInfo.put( "deezer911#5693", list );
         //TORUKM4KT00#0246
         list = new ArrayList<>();
         list.add( "TorukM4kt00#0246" );
-        list.add( "Translated Portuguese - Brazil" );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
         creditorsInfo.put( "TorukM4kt00#0246", list );
 
