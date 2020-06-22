@@ -17,8 +17,6 @@ import java.util.List;
 public class CreditsScrollPanel extends ScrollPanel
 {
     MainWindow sr = Minecraft.getInstance().getMainWindow();
-    PlayerEntity player;
-    String regKey;
     JType jType;
     private final int boxWidth = 256;
     private final int boxHeight = 256;
@@ -26,13 +24,10 @@ public class CreditsScrollPanel extends ScrollPanel
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
-    private int level, startLevel, endLevel;
-    private double startWeight, endWeight;
 
     public CreditsScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, List<ListButtonBig> buttons )
     {
         super(client, width, height, top, left);
-        this.player = player;
         this.jType = jType;
         this.buttons = buttons;
 

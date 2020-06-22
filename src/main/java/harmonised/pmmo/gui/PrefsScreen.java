@@ -33,6 +33,8 @@ public class PrefsScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
+    private int i;
+    private double value;
     private static Button exitButton;
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();
@@ -59,6 +61,7 @@ public class PrefsScreen extends Screen
     @Override
     protected void init()
     {
+        prefSliders = new ArrayList<>();
         x = (sr.getScaledWidth() / 2) - (boxWidth / 2);
         y = (sr.getScaledHeight() / 2) - (boxHeight / 2);
         scrollX = x + 16;
@@ -75,10 +78,27 @@ public class PrefsScreen extends Screen
         prefSliders.add( new PrefSlider("girth", "", "%", 0, 100, 50, 50, false, true ) );
         prefSliders.add( new PrefSlider("length", "", "%", 0, 100, 50, 50, false, true ) );
 
-        int i = 0;
+        i = 0;
 
         for( PrefSlider prefSlider : prefSliders )
         {
+            prefSlider.textField.setResponder( text ->
+            {
+                try
+                {
+                    value = Double.parseDouble( text );
+                    if( value > prefSlider.slider.maxValue )
+                        value = prefSlider.slider.maxValue;
+                    if( value < prefSlider.slider.minValue )
+                        value = prefSlider.slider.minValue;
+                    prefSlider.slider.setValue( value );
+                    prefSlider.slider.setMessage( prefSlider.prefix + DP.dpSoft( value ) + prefSlider.suffix );
+                }
+                catch( Exception e )
+                {
+                    System.out.println( "wrong value" );
+                }
+            });
             addButton( prefSlider.button );
             addButton( prefSlider.slider );
             addButton( prefSlider.textField );
@@ -192,7 +212,9 @@ public class PrefsScreen extends Screen
     {
         for( PrefSlider prefSlider : prefSliders )
         {
-            if( mouseX > prefSlider.slider.x && mouseX < prefSlider.slider.x - prefSlider.slider.getWidth() && mouseY > prefSlider.slider.y && mouseY < prefSlider.slider.y - prefSlider.slider.getHeight() )
+            renderTooltip( mouseX + " " + mouseY + " " + prefSlider.slider.x + " " + prefSlider.slider.y, (int) mouseX, (int) mouseY );
+
+            if( mouseX > prefSlider.slider.x && mouseX < prefSlider.slider.x - prefSlider.slider.getWidth() && mouseY > prefSlider.slider.y && mouseY < prefSlider.slider.y + prefSlider.slider.getHeight() )
             {
                 prefSlider.textField.setText( DP.dpSoft( prefSlider.slider.getValue() ) );
                 break;

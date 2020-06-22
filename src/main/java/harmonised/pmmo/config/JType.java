@@ -7,7 +7,7 @@ import java.util.Map;
 
 public enum JType
 {
-    EMPTY(0),
+    NONE(0),
     REQ_WEAR(1),
     REQ_TOOL(2),
     REQ_WEAPON(3),

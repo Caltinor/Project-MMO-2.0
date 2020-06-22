@@ -136,7 +136,7 @@ public class CreditsScreen extends Screen
         listButtons.sort( Comparator.comparingInt( a -> ((ListButtonBig) a).elementTwo ) );
 
         scrollPanel = new CreditsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, JType.CREDITS, listButtons );
-        scrollPanel.setScroll(scroll);
+        scrollPanel.setScroll( scroll );
         children.add( scrollPanel );
     }
 

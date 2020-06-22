@@ -105,6 +105,11 @@ public class ListScrollPanel extends ScrollPanel
         return (int) this.scrollDistance;
     }
 
+    public void setScroll( int scroll )
+    {
+        this.scrollDistance = scroll;
+    }
+
     public int getTop()
     {
         return this.top;

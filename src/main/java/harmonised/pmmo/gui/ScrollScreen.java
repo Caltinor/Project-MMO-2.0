@@ -98,6 +98,7 @@ public class ScrollScreen extends Screen
                     Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ) ) );
                     break;
             }
+            MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
         });
 
         Map<String, Map<String, Object>> reqMap = JsonConfig.data.get( jType );
@@ -826,8 +827,11 @@ public class ScrollScreen extends Screen
                 break;
         }
         scrollPanel = new ListScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, jType, player, listButtons );
+        if( !MainScreen.scrollAmounts.containsKey( jType ) )
+            MainScreen.scrollAmounts.put( jType, 0 );
+        scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
-        addButton(exitButton);
+        addButton( exitButton );
     }
 
     private static void addLevelsToButton( ListButton button, Map<String, Object> map, PlayerEntity player, boolean ignoreReq )
@@ -982,7 +986,7 @@ public class ScrollScreen extends Screen
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+    public boolean mouseScrolled( double mouseX, double mouseY, double scroll )
     {
         scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
         return super.mouseScrolled(mouseX, mouseY, scroll);

@@ -13,13 +13,15 @@ public class PrefSlider
     public Slider slider;
     public Button button;
     public TextFieldWidget textField;
-    public String preference;
+    public String preference, prefix, suffix;
     public double defaultVal;
     public int width = 150, height = 16;
 
     public PrefSlider( String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr )
     {
         this.preference = preference;
+        this.prefix = prefix;
+        this.suffix = suffix;
 
         if( defaultVal > maxVal )
             defaultVal = maxVal;
