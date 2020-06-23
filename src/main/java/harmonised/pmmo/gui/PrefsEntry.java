@@ -1,16 +1,17 @@
 package harmonised.pmmo.gui;
 
 import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraftforge.fml.client.gui.widget.Slider;
+import net.minecraft.nbt.CompoundNBT;
 
-public class PrefSlider
+public class PrefsEntry
 {
     public static FontRenderer font = Minecraft.getInstance().fontRenderer;
-    public Slider slider;
+    public PrefsSlider slider;
     public Button button;
     public TextFieldWidget textField;
     public String preference, prefix, suffix;
@@ -18,7 +19,7 @@ public class PrefSlider
     public final int sliderWidth = 150, height = 16;
     private final int textFieldWidth = 36;
 
-    public PrefSlider( String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr )
+    public PrefsEntry(String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr )
     {
         this.preference = preference;
         this.prefix = prefix;
@@ -35,14 +36,13 @@ public class PrefSlider
 
         this.defaultVal = defaultVal;
 
-        slider = new Slider( 0, 0, sliderWidth, height, prefix, suffix, minVal, maxVal, curVal, showDec, showStr, button ->
+        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, prefix, suffix, minVal, maxVal, curVal, showDec, showStr, button ->
         {
         });
 
         textField = new TextFieldWidget(font, 0, 0, textFieldWidth, height, "" );
         textField.setMaxStringLength( 5 );
         textField.setText( DP.dpSoft( curVal ) );
-
         button = new Button(0, 0, height, height, "R", button ->
         {
             resetValue();

@@ -486,152 +486,149 @@ public class XPOverlayGUI extends AbstractGui
 	{
 		player = Minecraft.getInstance().player;
 
-		if( player != null )
-		{
-			CompoundNBT prefsTag = XP.getPreferencesTag( player );
+		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 
-			if( prefsTag.contains( "barOffsetX" ) )
-				barOffsetX = prefsTag.getDouble( "barOffsetX" );
-			else
-				barOffsetX = Config.forgeConfig.barOffsetX.get();
+		if( prefsTag.contains( "barOffsetX" ) )
+			barOffsetX = prefsTag.getDouble( "barOffsetX" );
+		else
+			barOffsetX = Config.forgeConfig.barOffsetX.get();
 
-			if( prefsTag.contains( "barOffsetY" ) )
-				barOffsetY = prefsTag.getDouble( "barOffsetY" );
-			else
-				barOffsetY = Config.forgeConfig.barOffsetY.get();
+		if( prefsTag.contains( "barOffsetY" ) )
+			barOffsetY = prefsTag.getDouble( "barOffsetY" );
+		else
+			barOffsetY = Config.forgeConfig.barOffsetY.get();
 
-			if( prefsTag.contains( "veinBarOffsetX" ) )
-				veinBarOffsetX = prefsTag.getDouble( "veinBarOffsetX" );
-			else
-				veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
+		if( prefsTag.contains( "veinBarOffsetX" ) )
+			veinBarOffsetX = prefsTag.getDouble( "veinBarOffsetX" );
+		else
+			veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
 
-			if( prefsTag.contains( "veinBarOffsetY" ) )
-				veinBarOffsetY = prefsTag.getDouble( "veinBarOffsetY" );
-			else
-				veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
+		if( prefsTag.contains( "veinBarOffsetY" ) )
+			veinBarOffsetY = prefsTag.getDouble( "veinBarOffsetY" );
+		else
+			veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
 
-			if( prefsTag.contains( "xpDropOffsetX" ) )
-				xpDropOffsetX = prefsTag.getDouble( "xpDropOffsetX" );
-			else
-				xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
+		if( prefsTag.contains( "xpDropOffsetX" ) )
+			xpDropOffsetX = prefsTag.getDouble( "xpDropOffsetX" );
+		else
+			xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
 
-			if( prefsTag.contains( "xpDropOffsetY" ) )
-				xpDropOffsetY = prefsTag.getDouble( "xpDropOffsetY" );
-			else
-				xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
+		if( prefsTag.contains( "xpDropOffsetY" ) )
+			xpDropOffsetY = prefsTag.getDouble( "xpDropOffsetY" );
+		else
+			xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
 
-			if( prefsTag.contains( "xpDropSpawnDistance" ) )
-				xpDropSpawnDistance = prefsTag.getDouble( "xpDropSpawnDistance" );
-			else
-				xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
+		if( prefsTag.contains( "xpDropSpawnDistance" ) )
+			xpDropSpawnDistance = prefsTag.getDouble( "xpDropSpawnDistance" );
+		else
+			xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
 
-			if( prefsTag.contains( "xpDropOpacityPerTime" ) )
-				xpDropOpacityPerTime = prefsTag.getDouble( "xpDropOpacityPerTime" );
-			else
-				xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
+		if( prefsTag.contains( "xpDropOpacityPerTime" ) )
+			xpDropOpacityPerTime = prefsTag.getDouble( "xpDropOpacityPerTime" );
+		else
+			xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
 
-			if( prefsTag.contains( "xpDropMaxOpacity" ) )
-				xpDropMaxOpacity = prefsTag.getDouble( "xpDropMaxOpacity" );
-			else
-				xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
+		if( prefsTag.contains( "xpDropMaxOpacity" ) )
+			xpDropMaxOpacity = prefsTag.getDouble( "xpDropMaxOpacity" );
+		else
+			xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
 
-			if( prefsTag.contains( "minXpGrow" ) )
-				minXpGrow = prefsTag.getDouble( "minXpGrow" );
-			else
-				minXpGrow = Config.forgeConfig.minXpGrow.get();
+		if( prefsTag.contains( "minXpGrow" ) )
+			minXpGrow = prefsTag.getDouble( "minXpGrow" );
+		else
+			minXpGrow = Config.forgeConfig.minXpGrow.get();
 
-			if( prefsTag.contains( "xpDropDecayAge" ) )
-				xpDropDecayAge = (int) Math.floor( prefsTag.getDouble( "xpDropDecayAge" ) );
-			else
-				xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
+		if( prefsTag.contains( "xpDropDecayAge" ) )
+			xpDropDecayAge = (int) Math.floor( prefsTag.getDouble( "xpDropDecayAge" ) );
+		else
+			xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
 
-			if( prefsTag.contains( "maxLevel" ) )
-				maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
-			else
-				maxLevel = (int) Math.floor( Config.forgeConfig.maxLevel.get() );
+		if( prefsTag.contains( "maxLevel" ) )
+			maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+		else
+			maxLevel = (int) Math.floor( Config.forgeConfig.maxLevel.get() );
 
-			if( prefsTag.contains( "maxXp" ) )
-				maxXp = (int) Math.floor( Config.getConfig( "maxXp" ) );
-			else
-				maxXp = XP.xpAtLevel( maxLevel );
+		if( prefsTag.contains( "maxXp" ) )
+			maxXp = (int) Math.floor( Config.getConfig( "maxXp" ) );
+		else
+			maxXp = XP.xpAtLevel( maxLevel );
 
-			if( prefsTag.contains( "xpDropsAttachedToBar" ) )
-				xpDropsAttachedToBar = prefsTag.getDouble("xpDropsAttachedToBar") != 0;
-			else
-				xpDropsAttachedToBar = Config.forgeConfig.xpDropsAttachedToBar.get();
+		if( prefsTag.contains( "xpDropsAttachedToBar" ) )
+			xpDropsAttachedToBar = prefsTag.getDouble("xpDropsAttachedToBar") != 0;
+		else
+			xpDropsAttachedToBar = Config.forgeConfig.xpDropsAttachedToBar.get();
 
-			if( prefsTag.contains( "xpBarAlwaysOn" ) )
-				xpBarAlwaysOn = prefsTag.getDouble("xpBarAlwaysOn") != 0;
-			else
-				xpBarAlwaysOn = Config.forgeConfig.xpBarAlwaysOn.get();
+		if( prefsTag.contains( "xpBarAlwaysOn" ) )
+			xpBarAlwaysOn = prefsTag.getDouble("xpBarAlwaysOn") != 0;
+		else
+			xpBarAlwaysOn = Config.forgeConfig.xpBarAlwaysOn.get();
 
-			if( prefsTag.contains( "xpLeftDisplayAlwaysOn" ) )
-				xpLeftDisplayAlwaysOn = prefsTag.getDouble("xpLeftDisplayAlwaysOn") != 0;
-			else
-				xpLeftDisplayAlwaysOn = Config.forgeConfig.xpLeftDisplayAlwaysOn.get();
+		if( prefsTag.contains( "xpLeftDisplayAlwaysOn" ) )
+			xpLeftDisplayAlwaysOn = prefsTag.getDouble("xpLeftDisplayAlwaysOn") != 0;
+		else
+			xpLeftDisplayAlwaysOn = Config.forgeConfig.xpLeftDisplayAlwaysOn.get();
 
-			if( prefsTag.contains( "showXpDrops" ) )
-				showXpDrops = prefsTag.getDouble("showXpDrops") != 0;
-			else
-				showXpDrops = Config.forgeConfig.showXpDrops.get();
+		if( prefsTag.contains( "showXpDrops" ) )
+			showXpDrops = prefsTag.getDouble("showXpDrops") != 0;
+		else
+			showXpDrops = Config.forgeConfig.showXpDrops.get();
 
-			if( prefsTag.contains( "stackXpDrops" ) )
-				stackXpDrops = prefsTag.getDouble("stackXpDrops") != 0;
-			else
-				stackXpDrops = Config.forgeConfig.stackXpDrops.get();
+		if( prefsTag.contains( "stackXpDrops" ) )
+			stackXpDrops = prefsTag.getDouble("stackXpDrops") != 0;
+		else
+			stackXpDrops = Config.forgeConfig.stackXpDrops.get();
 
-			if( prefsTag.contains( "lvlUpScreenshot" ) )
-				lvlUpScreenshot = prefsTag.getDouble("lvlUpScreenshot") != 0;
-			else
-				lvlUpScreenshot = Config.forgeConfig.lvlUpScreenshot.get();
+		if( prefsTag.contains( "lvlUpScreenshot" ) )
+			lvlUpScreenshot = prefsTag.getDouble("lvlUpScreenshot") != 0;
+		else
+			lvlUpScreenshot = Config.forgeConfig.lvlUpScreenshot.get();
 
-			if( prefsTag.contains( "lvlUpScreenshotShowSkills" ) )
-				lvlUpScreenshotShowSkills = prefsTag.getDouble("lvlUpScreenshotShowSkills") != 0;
-			else
-				lvlUpScreenshotShowSkills = Config.forgeConfig.lvlUpScreenshotShowSkills.get();
+		if( prefsTag.contains( "lvlUpScreenshotShowSkills" ) )
+			lvlUpScreenshotShowSkills = prefsTag.getDouble("lvlUpScreenshotShowSkills") != 0;
+		else
+			lvlUpScreenshotShowSkills = Config.forgeConfig.lvlUpScreenshotShowSkills.get();
 
-			if( !xpDropsAttachedToBar )
-				xpDropYLimit = 999999999;
-			else
-				xpDropYLimit = 0;
+		if( !xpDropsAttachedToBar )
+			xpDropYLimit = 999999999;
+		else
+			xpDropYLimit = 0;
 
-			if( barOffsetX < 0 || barOffsetX > 1 )
-				barOffsetX = Config.forgeConfig.barOffsetX.get();
+		if( barOffsetX < 0 || barOffsetX > 1 )
+			barOffsetX = Config.forgeConfig.barOffsetX.get();
 
-			if( barOffsetY < 0 || barOffsetY > 1 )
-				barOffsetY = Config.forgeConfig.barOffsetY.get();
+		if( barOffsetY < 0 || barOffsetY > 1 )
+			barOffsetY = Config.forgeConfig.barOffsetY.get();
 
-			if( xpDropOffsetX < 0 || xpDropOffsetX > 1 )
-				xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
+		if( xpDropOffsetX < 0 || xpDropOffsetX > 1 )
+			xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
 
-			if( xpDropOffsetY < 0 || xpDropOffsetY > 1 )
-				xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
+		if( xpDropOffsetY < 0 || xpDropOffsetY > 1 )
+			xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
 
-			if( veinBarOffsetX < 0 || veinBarOffsetX > 1 )
-				veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
+		if( veinBarOffsetX < 0 || veinBarOffsetX > 1 )
+			veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
 
-			if( veinBarOffsetY < 0 || veinBarOffsetY > 1 )
-				veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
+		if( veinBarOffsetY < 0 || veinBarOffsetY > 1 )
+			veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
 
-			if( xpDropSpawnDistance < 0 || xpDropSpawnDistance > 1000 )
-				xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
+		if( xpDropSpawnDistance < 0 || xpDropSpawnDistance > 1000 )
+			xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
 
-			if( xpDropOpacityPerTime < 0 || xpDropOpacityPerTime > 255 )
-				xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
+		if( xpDropOpacityPerTime < 0 || xpDropOpacityPerTime > 255 )
+			xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
 
-			if( xpDropMaxOpacity < 0 || xpDropMaxOpacity > 255 )
-				xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
+		if( xpDropMaxOpacity < 0 || xpDropMaxOpacity > 255 )
+			xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
 
-			if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
-				xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
+		if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
+			xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
 
-			if( minXpGrow < 0.01 || minXpGrow > 100 )
-				minXpGrow = Config.getConfig( "minXpGrow" );
+		if( minXpGrow < 0.01 || minXpGrow > 100 )
+			minXpGrow = Config.getConfig( "minXpGrow" );
 
-			biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
-			maxVeinCharge = Config.getConfig( "maxVeinCharge" );
-			veinMaxBlocks = (int) Config.getConfig( "veinMaxBlocks" );
-		}
+		biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
+		maxVeinCharge = Config.getConfig( "maxVeinCharge" );
+		veinMaxBlocks = (int) Config.getConfig( "veinMaxBlocks" );
 	}
 
 //	@SubscribeEvent

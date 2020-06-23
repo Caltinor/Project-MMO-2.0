@@ -120,6 +120,11 @@ public class ListScrollPanel extends ScrollPanel
         return this.top + this.border - (int) this.scrollDistance;
     }
 
+    private int getMaxScroll()
+    {
+        return this.getContentHeight() - (this.height - this.border);
+    }
+
     @Override
     public void render(int mouseX, int mouseY, float partialTicks)
     {

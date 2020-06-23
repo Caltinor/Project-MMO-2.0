@@ -4,11 +4,14 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
+import harmonised.pmmo.network.MessageUpdateNBT;
+import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.PMMOPoseSetter;
 import net.minecraft.entity.Pose;
@@ -29,6 +32,8 @@ public class PlayerTickHandler
 {
     private static Map<UUID, Long> lastAward = new HashMap<>();
     private static Map<UUID, Long> lastVeinAward = new HashMap<>();
+    public static boolean syncPrefs = false;
+
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
         PlayerEntity player = event.player;
@@ -176,6 +181,12 @@ public class PlayerTickHandler
                     XPOverlayGUI.screenshots.remove( key );
                     XPOverlayGUI.guiOn = XPOverlayGUI.guiWasOn;
                 }
+            }
+
+            if( syncPrefs )
+            {
+                NetworkHandler.sendToServer( new MessageUpdateNBT( XP.getPreferencesTag(Minecraft.getInstance().player ), 0 ) );
+                syncPrefs = false;
             }
         }
     }

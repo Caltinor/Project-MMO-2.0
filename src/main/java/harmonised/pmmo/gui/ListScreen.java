@@ -98,7 +98,6 @@ public class ListScreen extends Screen
                     Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ) ) );
                     break;
             }
-            MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
         });
 
         Map<String, Map<String, Object>> reqMap = JsonConfig.data.get( jType );
@@ -962,7 +961,7 @@ public class ListScreen extends Screen
             accumulativeHeight += button.getHeight();
         }
 
-//        renderTooltip( mouseX + " " + mouseY, mouseX, mouseY );
+        MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
     }
 
     @Override

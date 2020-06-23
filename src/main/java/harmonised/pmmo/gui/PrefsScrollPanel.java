@@ -1,14 +1,12 @@
 package harmonised.pmmo.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import harmonised.pmmo.config.JType;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.client.gui.ScrollPanel;
 import org.lwjgl.opengl.GL11;
 
@@ -19,14 +17,14 @@ public class PrefsScrollPanel extends ScrollPanel
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     private final int boxWidth = 256;
     private final int boxHeight = 256;
-    private final ArrayList<PrefSlider> prefSliders;
-    private PrefSlider prefSlider;
+    private final ArrayList<PrefsEntry> prefSliders;
+    private PrefsEntry prefEntry;
     private FontRenderer font = Minecraft.getInstance().fontRenderer;
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
 
-    public PrefsScrollPanel(Minecraft client, int width, int height, int top, int left, ArrayList<PrefSlider> prefSliders )
+    public PrefsScrollPanel(Minecraft client, int width, int height, int top, int left, ArrayList<PrefsEntry> prefSliders )
     {
         super(client, width, height, top, left);
         this.prefSliders = prefSliders;
@@ -46,7 +44,7 @@ public class PrefsScrollPanel extends ScrollPanel
     {
         int height = -4;
 
-        for( PrefSlider a : prefSliders )
+        for( PrefsEntry a : prefSliders )
         {
             height += a.getHeight() + 2;
         }
@@ -59,22 +57,22 @@ public class PrefsScrollPanel extends ScrollPanel
     {
         for( int i = 0; i < prefSliders.size(); i++ )
         {
-            prefSlider = prefSliders.get( i );
-            prefSlider.setX( this.left + 4 );
-            prefSlider.setY( 7 + relativeY + ( prefSlider.getHeight() + 2) * i );
+            prefEntry = prefSliders.get( i );
+            prefEntry.setX( this.left + 4 );
+            prefEntry.setY( 7 + relativeY + ( prefEntry.getHeight() + 2) * i );
 
-            if( prefSlider.getY() + prefSlider.getHeight() > this.top && prefSlider.getY() - prefSlider.getHeight() < this.bottom )
+            if( prefEntry.getY() + prefEntry.getHeight() > this.top && prefEntry.getY() - prefEntry.getHeight() < this.bottom )
             {
-                if( prefSlider.defaultVal == prefSlider.slider.getValue() )
-                    fillGradient(this.left + 4, prefSlider.getY() - 11, this.right - 2, prefSlider.getY() + prefSlider.slider.getHeight() + 2, 0xaa444444, 0xaa222222);
+                if( prefEntry.defaultVal == prefEntry.slider.getValue() )
+                    fillGradient(this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + prefEntry.slider.getHeight() + 2, 0xaa444444, 0xaa222222);
                 else
-                    fillGradient(this.left + 4, prefSlider.getY() - 11, this.right - 2, prefSlider.getY() + prefSlider.slider.getHeight() + 2, 0x22444444, 0x33222222);
+                    fillGradient(this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + prefEntry.slider.getHeight() + 2, 0x22444444, 0x33222222);
 
 
-                drawCenteredString( font, prefSlider.preference, prefSlider.getX() + prefSlider.slider.getWidth() / 2, prefSlider.getY() - 9, 0xffffff );
-                prefSlider.slider.render(mouseX, mouseY, 0);
-                prefSlider.button.render(mouseX, mouseY, 0);
-                prefSlider.textField.render(mouseX, mouseY, 0);
+                drawCenteredString( font, prefEntry.preference, prefEntry.getX() + prefEntry.slider.getWidth() / 2, prefEntry.getY() - 9, 0xffffff );
+                prefEntry.slider.render(mouseX, mouseY, 0);
+                prefEntry.button.render(mouseX, mouseY, 0);
+                prefEntry.textField.render(mouseX, mouseY, 0);
             }
         }
     }

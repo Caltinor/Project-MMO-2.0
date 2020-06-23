@@ -36,14 +36,19 @@ public class NetworkHandler
 		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
-	public static void sendToPlayer(MessageUpdateReq packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageUpdateReq packet, ServerPlayerEntity player )
 	{
 		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
-	public static void sendToPlayer(MessageUpdateNBT packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageUpdateNBT packet, ServerPlayerEntity player )
 	{
 		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+	}
+
+	public static void sendToServer( MessageUpdateNBT packet )
+	{
+		ProjectMMOMod.HANDLER.sendToServer( packet );
 	}
 
 	public static void sendToPlayer( MessageGrow packet, ServerPlayerEntity player )

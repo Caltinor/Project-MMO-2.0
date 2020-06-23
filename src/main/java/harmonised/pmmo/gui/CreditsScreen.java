@@ -67,7 +67,6 @@ public class CreditsScreen extends Screen
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
-            MainScreen.scrollAmounts.replace( jType, scrollPanel.getScroll() );
         });
 
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
@@ -169,6 +168,7 @@ public class CreditsScreen extends Screen
         else
             drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
+        MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
     }
 
     @Override
@@ -201,8 +201,6 @@ public class CreditsScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        MainScreen.scrollAmounts.replace( jType, scrollPanel.getScroll() );
-
         if( button == 1 )
         {
             exitButton.onPress();
