@@ -42,7 +42,7 @@ public class PrefsScreen extends Screen
     private int boxHeight = 256;
     private int x, y, scrollX, scrollY, buttonX, buttonY, accumulativeHeight, buttonsSize, buttonsLoaded, futureHeight, minCount, maxCount;
     private PrefsScrollPanel scrollPanel;
-    private ArrayList<ListButton> listButtons = new ArrayList<>();
+    private ArrayList<ListButton> prefButtons = new ArrayList<>();
     private ArrayList<PrefSlider> prefSliders = new ArrayList<>();
     private ITextComponent title;
 
@@ -61,7 +61,6 @@ public class PrefsScreen extends Screen
     @Override
     protected void init()
     {
-        prefSliders = new ArrayList<>();
         x = (sr.getScaledWidth() / 2) - (boxWidth / 2);
         y = (sr.getScaledHeight() / 2) - (boxHeight / 2);
         scrollX = x + 16;
@@ -73,10 +72,25 @@ public class PrefsScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new MainScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.stats" ) ) );
         });
 
-        listButtons = new ArrayList<>();
-
-        prefSliders.add( new PrefSlider("girth", "", "%", 0, 100, 50, 50, false, true ) );
-        prefSliders.add( new PrefSlider("length", "", "%", 0, 100, 50, 50, false, true ) );
+        prefButtons = new ArrayList<>();
+        prefSliders = new ArrayList<>();
+        prefSliders.add( new PrefSlider("barOffsetX", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("barOffsetY", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("veinBarOffsetX", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("veinBarOffsetY", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpDropOffsetX", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpDropOffsetY", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpDropSpawnDistance", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpDropOpacityPerTime", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpDropMaxOpacity", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpDropDecayAge", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("minXpGrow", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("showXpDrops", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("stackXpDrops", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpDropsAttachedToBar", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpBarAlwaysOn", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("xpLeftDisplayAlwaysOn", "", "%", 0, 100, 50, 50, false, true ) );
+        prefSliders.add( new PrefSlider("lvlUpScreenshot", "", "%", 0, 100, 50, 50, false, true ) );
 
         i = 0;
 
@@ -96,20 +110,18 @@ public class PrefsScreen extends Screen
                 }
                 catch( Exception e )
                 {
-                    System.out.println( "wrong value" );
+//                    System.out.println( "wrong value" );
                 }
             });
-            addButton( prefSlider.button );
-            addButton( prefSlider.slider );
-            addButton( prefSlider.textField );
-            prefSlider.updateX( x + 24 );
-            prefSlider.updateY( y + 24 + 18 * i++ );
+            prefSlider.textField.setValidator( text -> text.matches( "^[0-9]{0,3}[.]?[0-9]*$" ) && text.replace( ".", "" ).length() < 5 );
+            prefSlider.setX( x + 24 );
+            prefSlider.setY( y + 24 + 18 * i++ );
         }
 
 //        new Slider()
 //        new TextFieldWidget()
 
-        scrollPanel = new PrefsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  listButtons );
+        scrollPanel = new PrefsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefSliders );
         children.add( scrollPanel );
         addButton(exitButton);
     }
@@ -128,30 +140,7 @@ public class PrefsScreen extends Screen
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
         scrollPanel.render( mouseX, mouseY, partialTicks );
-
-        ListButton button;
-
-        accumulativeHeight = 0;
-        buttonsSize = listButtons.size();
-
         super.render(mouseX, mouseY, partialTicks);
-
-        for( int i = 0; i < buttonsSize; i++ )
-        {
-            button = listButtons.get( i );
-
-            buttonX = mouseX - button.x;
-            buttonY = mouseY - button.y;
-
-            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
-            {
-                renderTooltip("over button", mouseX, mouseY );
-            }
-
-            accumulativeHeight += button.getHeight();
-        }
-
-//        renderTooltip( mouseX + " " + mouseY, mouseX, mouseY );
     }
 
     @Override
@@ -186,16 +175,16 @@ public class PrefsScreen extends Screen
             return true;
         }
 
-        for( ListButton a : listButtons )
+        for( PrefSlider prefSlider : prefSliders )
         {
-            int buttonX = (int) mouseX - a.x;
-            int buttonY = (int) mouseY- a.y;
-
-            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
+            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
             {
-                a.onClick( mouseX, mouseY );
+                prefSlider.mouseClicked( mouseX, mouseY, button );
+                if ( prefSlider.textField.mouseClicked( mouseX, mouseY, button ) )
+                    this.setFocused( prefSlider.textField );
             }
         }
+
         scrollPanel.mouseClicked( mouseX, mouseY, button );
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -203,26 +192,27 @@ public class PrefsScreen extends Screen
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button)
     {
+        for( PrefSlider prefSlider : prefSliders )
+        {
+            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
+                prefSlider.mouseReleased( mouseX, mouseY, button );
+        }
+
         scrollPanel.mouseReleased( mouseX, mouseY, button );
         return super.mouseReleased( mouseX, mouseY, button );
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
+    public boolean mouseDragged( double mouseX, double mouseY, int button, double deltaX, double deltaY )
     {
         for( PrefSlider prefSlider : prefSliders )
         {
-            renderTooltip( mouseX + " " + mouseY + " " + prefSlider.slider.x + " " + prefSlider.slider.y, (int) mouseX, (int) mouseY );
-
-            if( mouseX > prefSlider.slider.x && mouseX < prefSlider.slider.x - prefSlider.slider.getWidth() && mouseY > prefSlider.slider.y && mouseY < prefSlider.slider.y + prefSlider.slider.getHeight() )
-            {
-                prefSlider.textField.setText( DP.dpSoft( prefSlider.slider.getValue() ) );
-                break;
-            }
+            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
+                prefSlider.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
         }
 
         scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
     }
 
     public static TranslationTextComponent getTransComp( String translationKey, Object... args )

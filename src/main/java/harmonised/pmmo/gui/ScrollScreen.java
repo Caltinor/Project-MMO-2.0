@@ -941,17 +941,13 @@ public class ScrollScreen extends Screen
 
         scrollPanel.render( mouseX, mouseY, partialTicks );
 
-        ListButton button;
-
         accumulativeHeight = 0;
         buttonsSize = listButtons.size();
 
         super.render(mouseX, mouseY, partialTicks);
 
-        for( int i = 0; i < buttonsSize; i++ )
+        for( ListButton button : listButtons )
         {
-            button = listButtons.get( i );
-
             buttonX = mouseX - button.x;
             buttonY = mouseY - button.y;
 

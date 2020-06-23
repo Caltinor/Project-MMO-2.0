@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -18,15 +19,17 @@ public class PrefsScrollPanel extends ScrollPanel
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     private final int boxWidth = 256;
     private final int boxHeight = 256;
-    private final ArrayList<ListButton> buttons;
+    private final ArrayList<PrefSlider> prefSliders;
+    private PrefSlider prefSlider;
+    private FontRenderer font = Minecraft.getInstance().fontRenderer;
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
 
-    public PrefsScrollPanel(Minecraft client, int width, int height, int top, int left, ArrayList<ListButton> buttons )
+    public PrefsScrollPanel(Minecraft client, int width, int height, int top, int left, ArrayList<PrefSlider> prefSliders )
     {
         super(client, width, height, top, left);
-        this.buttons = buttons;
+        this.prefSliders = prefSliders;
 
         this.client = client;
         this.width = width;
@@ -43,7 +46,7 @@ public class PrefsScrollPanel extends ScrollPanel
     {
         int height = 0;
 
-        for( ListButton a : buttons )
+        for( PrefSlider a : prefSliders )
         {
             height += a.getHeight() + 4;
         }
@@ -54,30 +57,19 @@ public class PrefsScrollPanel extends ScrollPanel
     @Override
     protected void drawPanel(int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
-        ListButton button;
-
-        int accumulativeHeight = 0;
-
-        for( int i = 0; i < buttons.size(); i++ )
+        for( int i = 0; i < prefSliders.size(); i++ )
         {
-            button = buttons.get( i );
-            button.x = this.right - button.getWidth() - 8;
-            button.y = relativeY + accumulativeHeight;
+            prefSlider = prefSliders.get( i );
+            prefSlider.setX( this.left + 4 );
+            prefSlider.setY( relativeY + ( prefSlider.getHeight() + 2) * i );
 
-            if( accumulativeHeight + buttons.get( i ).getHeight() + 5 > scrollDistance && accumulativeHeight - height <= scrollDistance )
+            if( prefSlider.getY() + prefSlider.getHeight() > this.top && prefSlider.getY() < this.bottom )
             {
-                fillGradient(this.left + 4, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
-
-                button.render( mouseX, mouseY, 0 );
-
-                drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0xfc5454 );
-
-                for( String line : button.text )
-                {
-                    drawString( Minecraft.getInstance().fontRenderer, line, this.left + 6, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
-                }
+                drawCenteredString( font, prefSlider.preference, prefSlider.getX() + prefSlider.slider.getWidth() / 2, prefSlider.getY() - 9, 0xffffff );
+                prefSlider.slider.render(mouseX, mouseY, 0);
+                prefSlider.button.render(mouseX, mouseY, 0);
+                prefSlider.textField.render(mouseX, mouseY, 0);
             }
-            accumulativeHeight += button.getHeight() + 4;
         }
     }
 

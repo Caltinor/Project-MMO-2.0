@@ -25,8 +25,7 @@ public class ListScrollPanel extends ScrollPanel
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
-    private int level, startLevel, endLevel;
-    private double startWeight, endWeight;
+    int accumulativeHeight;
 
     public ListScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, PlayerEntity player, ArrayList<ListButton> buttons )
     {
@@ -61,22 +60,18 @@ public class ListScrollPanel extends ScrollPanel
     @Override
     protected void drawPanel(int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
-        ListButton button;
-
-        int accumulativeHeight = 0;
-
-        for( int i = 0; i < buttons.size(); i++ )
+        accumulativeHeight = 0;
+        for( ListButton button : buttons )
         {
-            button = buttons.get( i );
             button.x = this.right - button.getWidth() - 8;
             button.y = relativeY + accumulativeHeight;
 
-            if( accumulativeHeight + buttons.get( i ).getHeight() + 5 > scrollDistance && accumulativeHeight - height <= scrollDistance )
+            if( button.y + button.getHeight() + 2 > this.top && button.y - 2 < this.bottom )
             {
                 if( button.unlocked )
-                    fillGradient(this.left + 4, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0x22444444, 0x33222222);
+                    fillGradient(this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0x22444444, 0x33222222);
                 else
-                    fillGradient(this.left + 4, relativeY + accumulativeHeight - 2, this.right - 2, relativeY + accumulativeHeight + button.getHeight() + 2, 0xaa444444, 0xaa222222);
+                    fillGradient(this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0xaa444444, 0xaa222222);
 
                 button.render( mouseX, mouseY, 0 );
 
