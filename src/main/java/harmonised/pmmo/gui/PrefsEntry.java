@@ -45,9 +45,9 @@ public class PrefsEntry
 
         if( !isSwitch )
         {
-            textField = new TextFieldWidget(font, 0, 0, textFieldWidth, height, "" );
+            textField = new TextFieldWidget( font, 0, 0, textFieldWidth, height, "" );
             textField.setMaxStringLength( 5 );
-            textField.setText( DP.dpSoft( curVal ) );
+            textField.setText( slider.getMessage() );
         }
         button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, isSwitch ? "RESET" : "R", button ->
         {
@@ -59,11 +59,9 @@ public class PrefsEntry
     {
         slider.setValue( defaultVal );
         if( isSwitch )
-        {
             slider.setMessage( slider.getValue() == 1 ? "On" : "Off" );
-        }
         else
-            textField.setText(DP.dpSoft( defaultVal ) );
+            textField.setText( slider.getMessage() );
     }
 
     public int getWidth()

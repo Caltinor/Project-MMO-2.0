@@ -27,9 +27,9 @@ public class AttributeHandler
 	private static double levelsPerDamage;
 	private static double maxSpeedBoost;
 	private static double speedBoostPerLevel;
-	private static int maxHeartCap;
-	private static double maxReachBoost;
-	private static double maxDamageBoost;
+	private static int maxExtraHeartBoost;
+	private static double maxExtraReachBoost;
+	private static double maxExtraDamageBoost;
 	private static final double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
 	private static final double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();
 	private static final double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
@@ -44,9 +44,9 @@ public class AttributeHandler
 		levelsPerDamage = Config.getConfig( "levelsPerDamage" );
 		maxSpeedBoost = Config.getConfig( "maxSpeedBoost" );
 		speedBoostPerLevel = Config.getConfig( "speedBoostPerLevel" );
-		maxHeartCap = (int) Config.getConfig( "maxHeartCap" );
-		maxReachBoost = Config.getConfig( "maxReachBoost" );
-		maxDamageBoost = Config.getConfig( "maxDamageBoost" );
+		maxExtraHeartBoost = (int) Config.getConfig( "maxExtraHeartBoost" );
+		maxExtraReachBoost = Config.getConfig( "maxExtraReachBoost" );
+		maxExtraDamageBoost = Config.getConfig( "maxExtraDamageBoost" );
 	}
 
 	public static void updateAll( PlayerEntity player )
@@ -75,10 +75,10 @@ public class AttributeHandler
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double buildLevel = XP.getLevel( Skill.BUILDING, player );
 		double reach = -0.91 + ( buildLevel / levelsPerOneReach );
-		double maxReachPref = prefsTag.getDouble( "maxReachBoost" );
-		if( reach > maxReachBoost )
-			reach = maxReachBoost;
-		if( reach > maxReachPref && prefsTag.contains( "maxReachBoost" ) )
+		double maxReachPref = prefsTag.getDouble( "maxExtraReachBoost" );
+		if( reach > maxExtraReachBoost )
+			reach = maxExtraReachBoost;
+		if( reach > maxReachPref && prefsTag.contains( "maxExtraReachBoost" ) )
 			reach = maxReachPref;
 
 		if( reachAttribute.getModifier( reachModifierID ) == null || reachAttribute.getModifier( reachModifierID ).getAmount() != reach )
@@ -140,14 +140,14 @@ public class AttributeHandler
 		IAttributeInstance hpAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double enduranceLevel = XP.getLevel( Skill.ENDURANCE, player );
-		int maxHP = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
-		int maxHPPref = (int) Math.floor(prefsTag.getDouble( "maxExtraHeart" ) * 2);
-		if( maxHP > maxHeartCap * 2 )
-			maxHP = maxHeartCap * 2;
-		if( maxHP > maxHPPref && prefsTag.contains( "maxExtraHeart" ) )
-			maxHP = maxHPPref;
+		int heartBoost = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
+		int maxHPPref = (int) Math.floor(prefsTag.getDouble( "maxExtraHeartBoost" ) * 2);
+		if( heartBoost > maxExtraHeartBoost * 2 )
+			heartBoost = maxExtraHeartBoost * 2;
+		if( heartBoost > maxHPPref && prefsTag.contains( "maxExtraHeartBoost" ) )
+			heartBoost = maxHPPref;
 
-		AttributeModifier hpModifier = new AttributeModifier( hpModifierID, "Max HP Bonus thanks to Endurance Level", maxHP, AttributeModifier.Operation.ADDITION );
+		AttributeModifier hpModifier = new AttributeModifier( hpModifierID, "Max HP Bonus thanks to Endurance Level", heartBoost, AttributeModifier.Operation.ADDITION );
 		hpAttribute.removeModifier( hpModifierID );
 		hpAttribute.applyModifier( hpModifier );
 	}
@@ -159,8 +159,8 @@ public class AttributeHandler
 		double maxDamagePref = prefsTag.getDouble( "maxExtraDamageBoost" );
 		double combatLevel = XP.getLevel( Skill.COMBAT, player );
 		double damageBoost = combatLevel / levelsPerDamage;
-		if( damageBoost > maxDamageBoost )
-			damageBoost = maxDamageBoost;
+		if( damageBoost > maxExtraDamageBoost )
+			damageBoost = maxExtraDamageBoost;
 		if( damageBoost > maxDamagePref && prefsTag.contains( "maxExtraDamageBoost" ) )
 			damageBoost = maxDamagePref;
 

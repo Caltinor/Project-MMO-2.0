@@ -28,8 +28,8 @@ public class JumpHandler
                 double jumpBoost = 0;
                 double maxJumpBoost = Config.getConfig( "maxJumpBoost" );
                 double maxJumpBoostPref = maxJumpBoost;
-                int levelsCrouchJumpBoost = (int) Math.floor( Config.getConfig( "levelsCrouchJumpBoost" ) );
-                int levelsSprintJumpBoost = (int) Math.floor( Config.getConfig( "levelsSprintJumpBoost" ) );
+                int levelsPerCrouchJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerCrouchJumpBoost" ) );
+                int levelsPerSprintJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerSprintJumpBoost" ) );
 
                 agilityLevel = XP.getLevel( Skill.AGILITY, player );
 
@@ -37,14 +37,14 @@ public class JumpHandler
                 {
                     if( prefsTag.contains( "maxCrouchJumpBoost" ) )
                         maxJumpBoostPref = 0.14 * (prefsTag.getDouble( "maxCrouchJumpBoost" ) / 100);
-                    jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsCrouchJumpBoost );
+                    jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsPerCrouchJumpBoost );
                 }
 
                 if (player.isSprinting())
                 {
                     if( prefsTag.contains( "maxSprintJumpBoost" ) )
                         maxJumpBoostPref = 0.14 * (prefsTag.getDouble( "maxSprintJumpBoost" ) / 100);
-                    jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsSprintJumpBoost );
+                    jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsPerSprintJumpBoost );
                 }
 
                 if ( jumpBoost > maxJumpBoost )

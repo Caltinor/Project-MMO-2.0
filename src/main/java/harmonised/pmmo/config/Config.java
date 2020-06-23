@@ -33,16 +33,16 @@ public class Config
         localConfig.put( "maxJumpBoost", forgeConfig.maxJumpBoost.get() );
         localConfig.put( "maxFallSaveChance", forgeConfig.maxFallSaveChance.get() );
         localConfig.put( "saveChancePerLevel", forgeConfig.saveChancePerLevel.get() );
-        localConfig.put( "levelsCrouchJumpBoost", forgeConfig.levelsCrouchJumpBoost.get() );
-        localConfig.put( "levelsSprintJumpBoost", forgeConfig.levelsSprintJumpBoost.get() );
+        localConfig.put( "levelsPerCrouchJumpBoost", forgeConfig.levelsPerCrouchJumpBoost.get() );
+        localConfig.put( "levelsPerSprintJumpBoost", forgeConfig.levelsPerSprintJumpBoost.get() );
         localConfig.put( "levelsPerDamage", forgeConfig.levelsPerDamage.get() );
         localConfig.put( "levelsPerOneReach", forgeConfig.levelsPerOneReach.get() );
         localConfig.put( "endurancePerLevel", forgeConfig.endurancePerLevel.get() );
         localConfig.put( "maxEndurance", forgeConfig.maxEndurance.get() );
         localConfig.put( "levelsPerHeart", forgeConfig.levelsPerHeart.get() );
-        localConfig.put( "maxHeartCap", (double) forgeConfig.maxHeartCap.get() );
-        localConfig.put( "maxReachBoost", forgeConfig.maxReachBoost.get() );
-        localConfig.put( "maxDamageBoost", forgeConfig.maxDamageBoost.get() );
+        localConfig.put( "maxExtraHeartBoost", (double) forgeConfig.maxExtraHeartBoost.get() );
+        localConfig.put( "maxExtraReachBoost", forgeConfig.maxExtraReachBoost.get() );
+        localConfig.put( "maxExtraDamageBoost", forgeConfig.maxExtraDamageBoost.get() );
 
         localConfig.put( "levelsPerHardnessMining", forgeConfig.levelsPerHardnessMining.get() );
         localConfig.put( "levelsPerHardnessWoodcutting", forgeConfig.levelsPerHardnessWoodcutting.get() );
@@ -192,7 +192,7 @@ public class Config
 
         //Building
         public ConfigHelper.ConfigValueListener<Double> levelsPerOneReach;
-        public ConfigHelper.ConfigValueListener<Double> maxReachBoost;
+        public ConfigHelper.ConfigValueListener<Double> maxExtraReachBoost;
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
 
         //Excavation
@@ -209,18 +209,18 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> maxJumpBoost;
         public ConfigHelper.ConfigValueListener<Double> maxSpeedBoost;
         public ConfigHelper.ConfigValueListener<Double> speedBoostPerLevel;
-        public ConfigHelper.ConfigValueListener<Double> levelsCrouchJumpBoost;
-        public ConfigHelper.ConfigValueListener<Double> levelsSprintJumpBoost;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerCrouchJumpBoost;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerSprintJumpBoost;
 
         //Endurance
         public ConfigHelper.ConfigValueListener<Double> endurancePerLevel;
         public ConfigHelper.ConfigValueListener<Double> maxEndurance;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHeart;
-        public ConfigHelper.ConfigValueListener<Integer> maxHeartCap;
+        public ConfigHelper.ConfigValueListener<Integer> maxExtraHeartBoost;
 
         //Combat
         public ConfigHelper.ConfigValueListener<Double> levelsPerDamage;
-        public ConfigHelper.ConfigValueListener<Double> maxDamageBoost;
+        public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoost;
 
         //Archery
 
@@ -836,10 +836,10 @@ public class Config
                         .translation( "pmmo.levelsPerOneReach" )
                         .defineInRange( "levelsPerOneReach", 25D, 0, 1000) );
 
-                this.maxReachBoost = subscriber.subscribe(builder
+                this.maxExtraReachBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum reach a player can have" )
-                        .translation( "pmmo.maxReachBoost" )
-                        .defineInRange( "maxReachBoost", 20D, 0, 1000) );
+                        .translation( "pmmo.maxExtraReachBoost" )
+                        .defineInRange( "maxExtraReachBoost", 20D, 0, 1000) );
 
                 this.blockHardnessLimitForPlacing = subscriber.subscribe(builder
                         .comment( "Hardest considered block (1 hardness = 1 build xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
@@ -889,15 +889,15 @@ public class Config
                         .translation( "pmmo.maxJumpBoost" )
                         .defineInRange( "maxJumpBoost", 0.33D, 0, 100) );
 
-                this.levelsCrouchJumpBoost = subscriber.subscribe(builder
+                this.levelsPerCrouchJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Crouching" )
-                        .translation( "pmmo.levelsCrouchJumpBoost" )
-                        .defineInRange( "levelsCrouchJumpBoost", 33D, 0, 1000) );
+                        .translation( "pmmo.levelsPerCrouchJumpBoost" )
+                        .defineInRange( "levelsPerCrouchJumpBoost", 33D, 0, 1000) );
 
-                this.levelsSprintJumpBoost = subscriber.subscribe(builder
+                this.levelsPerSprintJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Sprinting" )
-                        .translation( "pmmo.levelsSprintJumpBoost" )
-                        .defineInRange( "levelsSprintJumpBoost", 50D, 0, 1000) );
+                        .translation( "pmmo.levelsPerSprintJumpBoost" )
+                        .defineInRange( "levelsPerSprintJumpBoost", 50D, 0, 1000) );
 
                 this.maxSpeedBoost = subscriber.subscribe(builder
                         .comment( "How much speed boost you can get from Agility (100 = 100% vanilla + 100% = twice as fast max)" )
@@ -929,10 +929,10 @@ public class Config
                         .translation( "pmmo.levelsPerHeart" )
                         .defineInRange( "levelsPerHeart", 10D, 0, 1000) );
 
-                this.maxHeartCap = subscriber.subscribe(builder
+                this.maxExtraHeartBoost = subscriber.subscribe(builder
                         .comment( "How many Max Hearts you can have (20 means 10 vanilla + 20 boosted)" )
-                        .translation( "pmmo.maxHeartCap" )
-                        .defineInRange( "maxHeartCap", 100, 0, 1000) );
+                        .translation( "pmmo.maxExtraHeartBoost" )
+                        .defineInRange( "maxExtraHeartBoost", 100, 0, 1000) );
 
                 builder.pop();
             }
@@ -944,10 +944,10 @@ public class Config
                         .translation( "pmmo.levelsPerDamage" )
                         .defineInRange( "levelsPerDamage", 20D, 0, 1000) );
 
-                this.maxDamageBoost = subscriber.subscribe(builder
+                this.maxExtraDamageBoost = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
-                        .translation( "pmmo.maxDamageBoost" )
-                        .defineInRange( "maxDamageBoost", 10D, 0, 1000) );
+                        .translation( "pmmo.maxExtraDamageBoost" )
+                        .defineInRange( "maxExtraDamageBoost", 100D, 0, 1000) );
 
                 builder.pop();
             }

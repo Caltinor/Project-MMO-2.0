@@ -73,13 +73,24 @@ public class PrefsScreen extends Screen
         switch( jType )
         {
             case SETTINGS:
-                value = Math.min(Skill.BUILDING.getLevel( player ) / Config.getConfig( "levelsPerOneReach" ), Config.getConfig( "maxReachBoost" ) );
-                prefsEntries.add( new PrefsEntry("maxReachBoost", "", "", 0, value, prefsTag.contains( "maxReachBoost" ) ? prefsTag.getDouble( "maxReachBoost" ) : 100, 100, true, true, true, false ) );
-                prefsEntries.add( new PrefsEntry("maxExtraHeartBoost", "", "", 0, 100, prefsTag.contains( "maxExtraHeartBoost" ) ? prefsTag.getDouble( "maxExtraHeartBoost" ) : 100, 100, true, true, true, false ) );
-                prefsEntries.add( new PrefsEntry("maxExtraDamageBoost", "", "", 0, 100, prefsTag.contains( "maxExtraDamageBoost" ) ? prefsTag.getDouble( "maxExtraDamageBoost" ) : 100, 100, true, true, true, false ) );
-                prefsEntries.add( new PrefsEntry("maxSpeedBoost", "", "", 0, 10, prefsTag.contains( "maxSpeedBoost" ) ? prefsTag.getDouble( "maxSpeedBoost" ) : 10, 10, true, true, true, false ) );
-                prefsEntries.add( new PrefsEntry("maxSprintJumpBoost", "", "", 0, 10, prefsTag.contains( "maxSprintJumpBoost" ) ? prefsTag.getDouble( "maxSprintJumpBoost" ) : 10, 10, true, true, true, false ) );
-                prefsEntries.add( new PrefsEntry("maxCrouchJumpBoost", "", "", 0, 10, prefsTag.contains( "maxCrouchJumpBoost" ) ? prefsTag.getDouble( "maxCrouchJumpBoost" ) : 10, 10, true, true, true, false ) );
+
+                value = Math.min( Skill.BUILDING.getLevel( player ) / Config.getConfig( "levelsPerOneReach" ), Config.getConfig( "maxExtraReachBoost" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraReachBoost", "", "", 0, value, prefsTag.contains( "maxExtraReachBoost" ) ? prefsTag.getDouble( "maxExtraReachBoost" ) : value, value, true, true, true, false ) );
+
+                value = Math.min( Skill.ENDURANCE.getLevel( player ) / Config.getConfig( "levelsPerHeart" ), Config.getConfig( "maxExtraHeartBoost" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraHeartBoost", "", "", 0, value, prefsTag.contains( "maxExtraHeartBoost" ) ? prefsTag.getDouble( "maxExtraHeartBoost" ) : value, value, false, true, true, false ) );
+
+                value = Math.min( Skill.COMBAT.getLevel( player ) / Config.getConfig( "levelsPerDamage" ), Config.getConfig( "maxExtraDamageBoost" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraDamageBoost", "", "", 0, value, prefsTag.contains( "maxExtraDamageBoost" ) ? prefsTag.getDouble( "maxExtraDamageBoost" ) : value, value, false, true, true, false ) );
+
+                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "speedBoostPerLevel" ), Config.getConfig( "maxSpeedBoost" ) );
+                prefsEntries.add( new PrefsEntry("maxSpeedBoost", "", "", 0, value, prefsTag.contains( "maxSpeedBoost" ) ? prefsTag.getDouble( "maxSpeedBoost" ) : value, value, true, true, true, false ) );
+
+                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "levelsPerSprintJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
+                prefsEntries.add( new PrefsEntry("maxSprintJumpBoost", "", "", 0, value, prefsTag.contains( "maxSprintJumpBoost" ) ? prefsTag.getDouble( "maxSprintJumpBoost" ) : value, value, true, true, true, false ) );
+
+                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "levelsPerCrouchJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
+                prefsEntries.add( new PrefsEntry("maxCrouchJumpBoost", "", "", 0, value, prefsTag.contains( "maxCrouchJumpBoost" ) ? prefsTag.getDouble( "maxCrouchJumpBoost" ) : value, value, true, true, true, false ) );
 
                 prefsEntries.add( new PrefsEntry("wipeAllSkillsUponDeathPermanently", "", "", 0, 1, prefsTag.contains( "wipeAllSkillsUponDeathPermanently" ) ? prefsTag.getDouble( "wipeAllSkillsUponDeathPermanently" ) : 0, 0, false, true, false, true ) );
                 break;
@@ -140,7 +151,7 @@ public class PrefsScreen extends Screen
                 XPOverlayGUI.doInit();
                 PlayerTickHandler.syncPrefs = true;
             });
-            prefEntry.resetValue();
+            prefEntry.slider.updateSlider();
             prefEntry.setX( x + 24 );
             prefEntry.setY( y + 24 + 18 * i++ );
         }
@@ -174,7 +185,7 @@ public class PrefsScreen extends Screen
         for( PrefsEntry prefEntry : prefsEntries )
         {
             if( mouseX >= prefEntry.button.x && mouseX < prefEntry.button.x + prefEntry.button.getWidth() && mouseY >= prefEntry.button.y && mouseY < prefEntry.button.y + prefEntry.button.getHeight() )
-                renderTooltip( prefEntry.isSwitch ? ( prefEntry.slider.getValue() == 1 ? "ON" : "OFF" ) : DP.dpSoft( prefEntry.defaultVal ), mouseX, mouseY );
+                renderTooltip( prefEntry.isSwitch ? ( prefEntry.slider.getValue() == 1 ? "ON" : "OFF" ) : prefEntry.removeIfMax && prefEntry.defaultVal == prefEntry.slider.maxValue ? "MAX" : DP.dpSoft( prefEntry.defaultVal ), mouseX, mouseY );
         }
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );

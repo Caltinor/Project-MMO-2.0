@@ -24,6 +24,10 @@ public class ServerHandler
         {
             case 0:
                 CompoundNBT prefsTag = XP.getPreferencesTag( player );
+                for( String tag : new HashSet<>( prefsTag.keySet() ) )
+                {
+                    prefsTag.remove( tag );
+                }
                 for( String tag : keySet )
                 {
                     prefsTag.putDouble( tag, newPackage.getDouble( tag ) );

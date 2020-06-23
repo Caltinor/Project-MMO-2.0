@@ -36,7 +36,7 @@ public class PmmoCommand
                                             "Taming",
                                             "Engineering" };
     public static String[] levelOrXp = { "level", "xp" };
-    public static String[] suggestPref = { "maxReachBoost",
+    public static String[] suggestPref = { "maxExtraReachBoost",
                                            "maxSpeedBoost",
                                            "maxSprintJumpBoost",
                                            "maxCrouchJumpBoost",
