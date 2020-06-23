@@ -15,13 +15,11 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.*;
 
-public class MainScreen extends Screen
+public class PrefsChoiceScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
-    private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
     private static TileButton exitButton;
-    public static Map<JType, Integer> scrollAmounts = new HashMap<>();
 
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     private int boxWidth = 256;
@@ -29,19 +27,11 @@ public class MainScreen extends Screen
     private int x;
     private int y;
     private List<TileButton> tileButtons;
-    private UUID uuid;
 
-    public MainScreen( UUID uuid, ITextComponent titleIn )
+    public PrefsChoiceScreen( ITextComponent titleIn )
     {
         super(titleIn);
-        this.uuid = uuid;
     }
-
-//    @Override
-//    public boolean isPauseScreen()
-//    {
-//        return false;
-//    }
 
     @Override
     protected void init()
@@ -53,34 +43,22 @@ public class MainScreen extends Screen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
         {
-            Minecraft.getInstance().player.closeScreen();
+            Minecraft.getInstance().displayGuiScreen( new MainScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.potato" ) ) );
         });
 
-        TileButton glossaryButton = new TileButton(x + 24 + 36, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", "", (button) ->
+        TileButton settingsButton = new TileButton( (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ) ) );
+            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TranslationTextComponent( ((TileButton) button).transKey ), JType.SETTINGS ) );
         });
 
-        TileButton creditsButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", "", (button) ->
+        TileButton guiSettingsButton = new TileButton( (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.CREDITS ) );
+            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TranslationTextComponent( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
         });
 
-        TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", "", (button) ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( ((TileButton) button).transKey ) ) );
-        });
-
-        TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (button) ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), JType.STATS, Minecraft.getInstance().player ) );
-        });
-
-        addButton(exitButton);
-        tileButtons.add(glossaryButton);
-        tileButtons.add(creditsButton);
-        tileButtons.add(prefsButton);
-        tileButtons.add(statsButton);
+        addButton( exitButton );
+        tileButtons.add( settingsButton );
+        tileButtons.add( guiSettingsButton );
 
         for( TileButton button : tileButtons )
         {
@@ -104,10 +82,6 @@ public class MainScreen extends Screen
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
                 renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
-
-        RenderSystem.enableBlend();
-        Minecraft.getInstance().getTextureManager().bindTexture( logo );
-        this.blit( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override

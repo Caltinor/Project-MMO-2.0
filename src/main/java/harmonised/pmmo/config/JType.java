@@ -42,7 +42,8 @@ public enum JType
     STATS(100),
     DIMENSION(101),
     CREDITS(102),
-    PREFERENCES(103);
+    SETTINGS(103),
+    GUI_SETTINGS(104);
 
     public static final Map< JType, Integer > jTypeMap = new HashMap<>();
     public static final Map< Integer, JType > intMap = new HashMap<>();

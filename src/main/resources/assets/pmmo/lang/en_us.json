@@ -226,5 +226,7 @@
   "pmmo.creatorOfModpack": "Creator of the Modpack %1$s",
   "pmmo.translated": "Translated %1$s",
   "pmmo.helpedTranslating": "Helped Translating %1$s",
-  "pmmo.preferences": "Preferences"
+  "pmmo.preferences": "Preferences",
+  "pmmo.settings": "Settings",
+  "pmmo.guiSettings": "GUI Settings"
 }

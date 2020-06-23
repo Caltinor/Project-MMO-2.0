@@ -41,8 +41,8 @@ public class Config
         localConfig.put( "maxEndurance", forgeConfig.maxEndurance.get() );
         localConfig.put( "levelsPerHeart", forgeConfig.levelsPerHeart.get() );
         localConfig.put( "maxHeartCap", (double) forgeConfig.maxHeartCap.get() );
-        localConfig.put( "maxReach", forgeConfig.maxReach.get() );
-        localConfig.put( "maxDamage", forgeConfig.maxDamage.get() );
+        localConfig.put( "maxReachBoost", forgeConfig.maxReachBoost.get() );
+        localConfig.put( "maxDamageBoost", forgeConfig.maxDamageBoost.get() );
 
         localConfig.put( "levelsPerHardnessMining", forgeConfig.levelsPerHardnessMining.get() );
         localConfig.put( "levelsPerHardnessWoodcutting", forgeConfig.levelsPerHardnessWoodcutting.get() );
@@ -192,7 +192,7 @@ public class Config
 
         //Building
         public ConfigHelper.ConfigValueListener<Double> levelsPerOneReach;
-        public ConfigHelper.ConfigValueListener<Double> maxReach;
+        public ConfigHelper.ConfigValueListener<Double> maxReachBoost;
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
 
         //Excavation
@@ -220,7 +220,7 @@ public class Config
 
         //Combat
         public ConfigHelper.ConfigValueListener<Double> levelsPerDamage;
-        public ConfigHelper.ConfigValueListener<Double> maxDamage;
+        public ConfigHelper.ConfigValueListener<Double> maxDamageBoost;
 
         //Archery
 
@@ -693,28 +693,28 @@ public class Config
                 this.barOffsetX = subscriber.subscribe(builder
                         .comment( "GUI bar position X (Width)" )
                         .translation( "pmmo.barOffsetX" )
-                        .defineInRange( "barOffsetX", 0.5D, 0, 1) );
+                        .defineInRange( "barOffsetX", 0.5D, 0, 100) );
 
                 this.barOffsetY = subscriber.subscribe(builder
                         .comment( "GUI bar position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
                         .translation( "pmmo.barOffsetY" )
-                        .defineInRange( "barOffsetY", 0D, 0, 1) );
+                        .defineInRange( "barOffsetY", 0D, 0, 100) );
 
                 this.veinBarOffsetX = subscriber.subscribe(builder
                         .comment( "GUI bar position X (Width)" )
                         .translation( "pmmo.veinBarOffsetX" )
-                        .defineInRange( "veinBarOffsetX", 0.5D, 0, 1) );
+                        .defineInRange( "veinBarOffsetX", 0.5D, 0, 100) );
 
                 this.veinBarOffsetY = subscriber.subscribe(builder
                         .comment( "GUI bar position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
                         .translation( "pmmo.veinBarOffsetY" )
-                        .defineInRange( "veinBarOffsetY", 0.65D, 0, 1) );
+                        .defineInRange( "veinBarOffsetY", 0.65D, 0, 100) );
 
 
                 this.xpDropOffsetX = subscriber.subscribe(builder
                         .comment( "GUI Xp drops position X (Width)" )
                         .translation( "pmmo.xpDropOffsetX" )
-                        .defineInRange( "xpDropOffsetX", 0.5D, 0, 1) );
+                        .defineInRange( "xpDropOffsetX", 0.5D, 0, 100) );
 
                 this.xpDropOffsetY = subscriber.subscribe(builder
                         .comment( "GUI Xp drops position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
@@ -836,10 +836,10 @@ public class Config
                         .translation( "pmmo.levelsPerOneReach" )
                         .defineInRange( "levelsPerOneReach", 25D, 0, 1000) );
 
-                this.maxReach = subscriber.subscribe(builder
+                this.maxReachBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum reach a player can have" )
-                        .translation( "pmmo.maxReach" )
-                        .defineInRange( "maxReach", 20D, 0, 1000) );
+                        .translation( "pmmo.maxReachBoost" )
+                        .defineInRange( "maxReachBoost", 20D, 0, 1000) );
 
                 this.blockHardnessLimitForPlacing = subscriber.subscribe(builder
                         .comment( "Hardest considered block (1 hardness = 1 build xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
@@ -944,10 +944,10 @@ public class Config
                         .translation( "pmmo.levelsPerDamage" )
                         .defineInRange( "levelsPerDamage", 20D, 0, 1000) );
 
-                this.maxDamage = subscriber.subscribe(builder
+                this.maxDamageBoost = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
-                        .translation( "pmmo.maxDamage" )
-                        .defineInRange( "maxDamage", 10D, 0, 1000) );
+                        .translation( "pmmo.maxDamageBoost" )
+                        .defineInRange( "maxDamageBoost", 10D, 0, 1000) );
 
                 builder.pop();
             }

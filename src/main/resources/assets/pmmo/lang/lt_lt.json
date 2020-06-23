@@ -142,7 +142,6 @@
 	"pmmo.lapisPatreon": "Lapis Tier Patreon",
 	"pmmo.dandelionPatreon": "Dandelion Tier Patreon",
 	"pmmo.ironPatreon": "Iron Tier Patreon",
-	"pmmo.translator": "Translator",
 	"pmmo.milestoneLevelUp": "%1$s has reached level %2$s in %3$s!",
 	"pmmo.tooltipOn": "PMMO Informacija buvo įjungta",
 	"pmmo.tooltipOff": "PMMO Informacija buvo išjungta",
@@ -222,5 +221,12 @@
 	"pmmo.RemainderXp": "Remainder: %1$s",
 	"pmmo.canVein": "Can Vein %1$s %2$s",
 	"pmmo.cannotVein": "You cannot vein %1$s",
-	"pmmo.cannotVeinDimension": "You cannot vein %1$s in this dimension"
+	"pmmo.cannotVeinDimension": "You cannot vein %1$s in this dimension",
+	"pmmo.discordMemberSince": "Discord Member Since %1$s",
+	"pmmo.creatorOfModpack": "Creator of the Modpack %1$s",
+	"pmmo.translated": "Translated %1$s",
+	"pmmo.helpedTranslating": "Helped Translating %1$s",
+	"pmmo.preferences": "Preferences",
+	"pmmo.settings": "Settings",
+	"pmmo.guiSettings": "GUI Settings"
 }

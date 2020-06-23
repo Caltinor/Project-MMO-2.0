@@ -28,8 +28,8 @@ public class AttributeHandler
 	private static double maxSpeedBoost;
 	private static double speedBoostPerLevel;
 	private static int maxHeartCap;
-	private static double maxReach;
-	private static double maxDamage;
+	private static double maxReachBoost;
+	private static double maxDamageBoost;
 	private static final double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
 	private static final double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();
 	private static final double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
@@ -45,8 +45,8 @@ public class AttributeHandler
 		maxSpeedBoost = Config.getConfig( "maxSpeedBoost" );
 		speedBoostPerLevel = Config.getConfig( "speedBoostPerLevel" );
 		maxHeartCap = (int) Config.getConfig( "maxHeartCap" );
-		maxReach = Config.getConfig( "maxReach" );
-		maxDamage = Config.getConfig( "maxDamage" );
+		maxReachBoost = Config.getConfig( "maxReachBoost" );
+		maxDamageBoost = Config.getConfig( "maxDamageBoost" );
 	}
 
 	public static void updateAll( PlayerEntity player )
@@ -75,10 +75,10 @@ public class AttributeHandler
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double buildLevel = XP.getLevel( Skill.BUILDING, player );
 		double reach = -0.91 + ( buildLevel / levelsPerOneReach );
-		double maxReachPref = prefsTag.getDouble( "maxReach" );
-		if( reach > maxReach )
-			reach = maxReach;
-		if( reach > maxReachPref && prefsTag.contains( "maxReach" ) )
+		double maxReachPref = prefsTag.getDouble( "maxReachBoost" );
+		if( reach > maxReachBoost )
+			reach = maxReachBoost;
+		if( reach > maxReachPref && prefsTag.contains( "maxReachBoost" ) )
 			reach = maxReachPref;
 
 		if( reachAttribute.getModifier( reachModifierID ) == null || reachAttribute.getModifier( reachModifierID ).getAmount() != reach )
@@ -159,8 +159,8 @@ public class AttributeHandler
 		double maxDamagePref = prefsTag.getDouble( "maxExtraDamageBoost" );
 		double combatLevel = XP.getLevel( Skill.COMBAT, player );
 		double damageBoost = combatLevel / levelsPerDamage;
-		if( damageBoost > maxDamage )
-			damageBoost = maxDamage;
+		if( damageBoost > maxDamageBoost )
+			damageBoost = maxDamageBoost;
 		if( damageBoost > maxDamagePref && prefsTag.contains( "maxExtraDamageBoost" ) )
 			damageBoost = maxDamagePref;
 

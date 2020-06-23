@@ -18,12 +18,15 @@ public class PrefsEntry
     public double defaultVal;
     public final int sliderWidth = 150, height = 16;
     private final int textFieldWidth = 36;
+    public final boolean isSwitch, removeIfMax;
 
-    public PrefsEntry(String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr )
+    public PrefsEntry(String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr, boolean removeIfMax, boolean isSwitch )
     {
         this.preference = preference;
         this.prefix = prefix;
         this.suffix = suffix;
+        this.isSwitch = isSwitch;
+        this.removeIfMax = removeIfMax;
 
         if( defaultVal > maxVal )
             defaultVal = maxVal;
@@ -36,14 +39,17 @@ public class PrefsEntry
 
         this.defaultVal = defaultVal;
 
-        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, prefix, suffix, minVal, maxVal, curVal, showDec, showStr, button ->
+        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, prefix, suffix, minVal, maxVal, curVal, showDec, showStr, isSwitch, button ->
         {
         });
 
-        textField = new TextFieldWidget(font, 0, 0, textFieldWidth, height, "" );
-        textField.setMaxStringLength( 5 );
-        textField.setText( DP.dpSoft( curVal ) );
-        button = new Button(0, 0, height, height, "R", button ->
+        if( !isSwitch )
+        {
+            textField = new TextFieldWidget(font, 0, 0, textFieldWidth, height, "" );
+            textField.setMaxStringLength( 5 );
+            textField.setText( DP.dpSoft( curVal ) );
+        }
+        button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, isSwitch ? "RESET" : "R", button ->
         {
             resetValue();
         });
@@ -52,7 +58,12 @@ public class PrefsEntry
     public void resetValue()
     {
         slider.setValue( defaultVal );
-        textField.setText(DP.dpSoft( defaultVal ) );
+        if( isSwitch )
+        {
+            slider.setMessage( slider.getValue() == 1 ? "On" : "Off" );
+        }
+        else
+            textField.setText(DP.dpSoft( defaultVal ) );
     }
 
     public int getWidth()
@@ -78,15 +89,22 @@ public class PrefsEntry
     public void setX( int x )
     {
         slider.x = x;
-        textField.x = x + sliderWidth;
-        button.x = x + sliderWidth + textFieldWidth;
+
+        if( isSwitch )
+            button.x = x + sliderWidth;
+        else
+        {
+            button.x = x + sliderWidth + textFieldWidth;
+            textField.x = x + sliderWidth;
+        }
     }
 
     public void setY( int y )
     {
         slider.y = y;
         button.y = y;
-        textField.y = y;
+        if( !isSwitch )
+            textField.y = y;
     }
 
     public void mouseClicked( double mouseX, double mouseY, int button )
