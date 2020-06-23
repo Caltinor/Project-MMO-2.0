@@ -68,17 +68,17 @@ public class MainScreen extends Screen
 
         TileButton creditsButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( "pmmo.credits" ), 0 ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( "pmmo.credits" ), JType.CREDITS ) );
         });
 
         TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TranslationTextComponent( "pmmo.preferences" ) ) );
+            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TranslationTextComponent( "pmmo.preferences" ), JType.PREFERENCES ) );
         });
 
         TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), JType.STATS, Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), JType.STATS, Minecraft.getInstance().player ) );
         });
 
         addButton(exitButton);

@@ -1,7 +1,7 @@
 package harmonised.pmmo.proxy;
 
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.gui.ScrollScreen;
+import harmonised.pmmo.gui.ListScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.skills.AttributeHandler;
@@ -73,6 +73,6 @@ public class ClientHandler
 
     public static void openStats( UUID uuid )
     {
-        Minecraft.getInstance().displayGuiScreen( new ScrollScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), JType.STATS, Minecraft.getInstance().player ) );
+        Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), JType.STATS, Minecraft.getInstance().player ) );
     }
 }

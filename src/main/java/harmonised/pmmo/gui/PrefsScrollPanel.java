@@ -44,11 +44,11 @@ public class PrefsScrollPanel extends ScrollPanel
     @Override
     protected int getContentHeight()
     {
-        int height = 0;
+        int height = -4;
 
         for( PrefSlider a : prefSliders )
         {
-            height += a.getHeight() + 4;
+            height += a.getHeight() + 2;
         }
 
         return height;
@@ -61,10 +61,16 @@ public class PrefsScrollPanel extends ScrollPanel
         {
             prefSlider = prefSliders.get( i );
             prefSlider.setX( this.left + 4 );
-            prefSlider.setY( relativeY + ( prefSlider.getHeight() + 2) * i );
+            prefSlider.setY( 7 + relativeY + ( prefSlider.getHeight() + 2) * i );
 
-            if( prefSlider.getY() + prefSlider.getHeight() > this.top && prefSlider.getY() < this.bottom )
+            if( prefSlider.getY() + prefSlider.getHeight() > this.top && prefSlider.getY() - prefSlider.getHeight() < this.bottom )
             {
+                if( prefSlider.defaultVal == prefSlider.slider.getValue() )
+                    fillGradient(this.left + 4, prefSlider.getY() - 11, this.right - 2, prefSlider.getY() + prefSlider.slider.getHeight() + 2, 0xaa444444, 0xaa222222);
+                else
+                    fillGradient(this.left + 4, prefSlider.getY() - 11, this.right - 2, prefSlider.getY() + prefSlider.slider.getHeight() + 2, 0x22444444, 0x33222222);
+
+
                 drawCenteredString( font, prefSlider.preference, prefSlider.getX() + prefSlider.slider.getWidth() / 2, prefSlider.getY() - 9, 0xffffff );
                 prefSlider.slider.render(mouseX, mouseY, 0);
                 prefSlider.button.render(mouseX, mouseY, 0);
@@ -82,6 +88,11 @@ public class PrefsScrollPanel extends ScrollPanel
     public int getScroll()
     {
         return (int) this.scrollDistance;
+    }
+
+    public void setScroll( int scroll )
+    {
+        this.scrollDistance = scroll;
     }
 
     public int getTop()

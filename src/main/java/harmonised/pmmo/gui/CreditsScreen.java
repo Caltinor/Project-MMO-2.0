@@ -30,16 +30,16 @@ public class CreditsScreen extends Screen
     private int x;
     private int y;
     private int scrollX, scrollY;
+    private JType jType;
     private UUID uuid;
     private ArrayList<ListButtonBig> listButtons;
     private CreditsScrollPanel scrollPanel;
-    private int scroll;
 
-    public CreditsScreen( UUID uuid, ITextComponent titleIn, int scroll )
+    public CreditsScreen( UUID uuid, ITextComponent titleIn, JType jType )
     {
         super(titleIn);
         this.uuid = uuid;
-        this.scroll = scroll;
+        this.jType = jType;
     }
 
 //    @Override
@@ -67,6 +67,7 @@ public class CreditsScreen extends Screen
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
+            MainScreen.scrollAmounts.replace( jType, scrollPanel.getScroll() );
         });
 
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
@@ -136,7 +137,9 @@ public class CreditsScreen extends Screen
         listButtons.sort( Comparator.comparingInt( a -> ((ListButtonBig) a).elementTwo ) );
 
         scrollPanel = new CreditsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, JType.CREDITS, listButtons );
-        scrollPanel.setScroll( scroll );
+        if( !MainScreen.scrollAmounts.containsKey( jType ) )
+            MainScreen.scrollAmounts.put( jType, 0 );
+        scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
     }
 
@@ -198,6 +201,8 @@ public class CreditsScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
+        MainScreen.scrollAmounts.replace( jType, scrollPanel.getScroll() );
+
         if( button == 1 )
         {
             exitButton.onPress();

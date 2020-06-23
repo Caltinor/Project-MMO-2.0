@@ -63,7 +63,7 @@ public class CreditorScreen extends Screen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.credits" ), lastScroll ) );
+            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.credits" ), JType.CREDITS ) );
         });
 
         addButton(exitButton);

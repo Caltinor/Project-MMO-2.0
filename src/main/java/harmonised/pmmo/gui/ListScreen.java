@@ -27,7 +27,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
-public class ScrollScreen extends Screen
+public class ListScreen extends Screen
 {
     private static double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
     private static double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
@@ -51,7 +51,7 @@ public class ScrollScreen extends Screen
     private UUID uuid;
     private ITextComponent title;
 
-    public ScrollScreen( UUID uuid, ITextComponent titleIn, JType jType, PlayerEntity player )
+    public ListScreen(UUID uuid, ITextComponent titleIn, JType jType, PlayerEntity player )
     {
         super(titleIn);
         this.title = titleIn;
@@ -704,7 +704,7 @@ public class ScrollScreen extends Screen
             if( skillText.size() > 0 )
             {
                 button.text.add( "" );
-                skillText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+                skillText.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
                 button.text.add( getTransComp( "pmmo.xpModifiers" ).getFormattedText() );
                 button.text.addAll( skillText );
             }
@@ -714,7 +714,7 @@ public class ScrollScreen extends Screen
                 if( skillText.size() > 0 )
                     button.text.add( "" );
 
-                scaleText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+                scaleText.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
                 button.text.add( getTransComp( "pmmo.enemyScaling" ).getFormattedText() );
                 button.text.addAll( scaleText );
             }
@@ -724,7 +724,7 @@ public class ScrollScreen extends Screen
                 if( skillText.size() > 0 || scaleText.size() > 0 )
                     button.text.add( "" );
 
-                effectText.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+                effectText.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
                 button.text.add( getTransComp( "pmmo.biomeEffects" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                 button.text.addAll( effectText );
             }
@@ -846,7 +846,7 @@ public class ScrollScreen extends Screen
                 levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
-        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+        levelsToAdd.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
 
         button.text.addAll( levelsToAdd );
     }
@@ -860,7 +860,7 @@ public class ScrollScreen extends Screen
             xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
         }
 
-        xpToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+        xpToAdd.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
 
         button.text.addAll( xpToAdd );
     }
@@ -874,7 +874,7 @@ public class ScrollScreen extends Screen
             xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( XP.checkReq( player, button.regKey, jType ) ? "green" : "red" ) ).getFormattedText() );
         }
 
-        xpToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+        xpToAdd.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
 
         button.text.addAll( xpToAdd );
     }
@@ -898,7 +898,7 @@ public class ScrollScreen extends Screen
                 levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
         }
 
-        levelsToAdd.sort( Comparator.comparingInt(ScrollScreen::getTextInt).reversed() );
+        levelsToAdd.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
 
         button.text.addAll( levelsToAdd );
     }

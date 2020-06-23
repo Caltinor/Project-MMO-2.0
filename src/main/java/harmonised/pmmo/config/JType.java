@@ -42,9 +42,7 @@ public enum JType
     STATS(100),
     DIMENSION(101),
     CREDITS(102),
-    DONATOR_IRON(103),
-    DONATOR_DANDELION(104),
-    DONATOR_LAPIS(105);
+    PREFERENCES(103);
 
     public static final Map< JType, Integer > jTypeMap = new HashMap<>();
     public static final Map< Integer, JType > intMap = new HashMap<>();

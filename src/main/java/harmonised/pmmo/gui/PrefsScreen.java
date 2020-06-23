@@ -40,16 +40,18 @@ public class PrefsScreen extends Screen
     MainWindow sr = Minecraft.getInstance().getMainWindow();
     private int boxWidth = 256;
     private int boxHeight = 256;
-    private int x, y, scrollX, scrollY, buttonX, buttonY, accumulativeHeight, buttonsSize, buttonsLoaded, futureHeight, minCount, maxCount;
+    private int x, y, scrollX, scrollY, buttonX;
     private PrefsScrollPanel scrollPanel;
+    private final JType jType;
     private ArrayList<ListButton> prefButtons = new ArrayList<>();
     private ArrayList<PrefSlider> prefSliders = new ArrayList<>();
     private ITextComponent title;
 
-    public PrefsScreen( ITextComponent titleIn )
+    public PrefsScreen( ITextComponent titleIn, JType jType )
     {
         super(titleIn);
         this.title = titleIn;
+        this.jType = jType;
     }
 
 //    @Override
@@ -70,6 +72,7 @@ public class PrefsScreen extends Screen
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", "", (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.stats" ) ) );
+            MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
         });
 
         prefButtons = new ArrayList<>();
@@ -122,6 +125,9 @@ public class PrefsScreen extends Screen
 //        new TextFieldWidget()
 
         scrollPanel = new PrefsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefSliders );
+        if( !MainScreen.scrollAmounts.containsKey( jType ) )
+            MainScreen.scrollAmounts.put( jType, 0 );
+        scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
         addButton(exitButton);
     }
@@ -140,6 +146,13 @@ public class PrefsScreen extends Screen
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
         scrollPanel.render( mouseX, mouseY, partialTicks );
+
+        for( PrefSlider prefSlider : prefSliders )
+        {
+            if( mouseX >= prefSlider.button.x && mouseX < prefSlider.button.x + prefSlider.button.getWidth() && mouseY >= prefSlider.button.y && mouseY < prefSlider.button.y + prefSlider.button.getHeight() )
+                renderTooltip( DP.dpSoft( prefSlider.defaultVal ), mouseX, mouseY );
+        }
+
         super.render(mouseX, mouseY, partialTicks);
     }
 
