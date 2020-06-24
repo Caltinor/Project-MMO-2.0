@@ -27,6 +27,9 @@ public class ClientHandler
     public static final KeyBinding CRAWL_KEY = new KeyBinding( "key.pmmo.crawl", GLFW.GLFW_KEY_C, "category.pmmo" );
     public static final KeyBinding VEIN_KEY = new KeyBinding( "key.pmmo.vein", GLFW.GLFW_KEY_GRAVE_ACCENT, "category.pmmo" );
     public static final KeyBinding OPEN_MENU = new KeyBinding( "key.pmmo.openMenu", GLFW.GLFW_KEY_P, "category.pmmo" );
+    public static final KeyBinding OPEN_SETTINGS = new KeyBinding( "key.pmmo.openSettings", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo" );
+    public static final KeyBinding OPEN_SKILLS = new KeyBinding( "key.pmmo.openSkills", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo" );
+    public static final KeyBinding OPEN_GLOSSARY = new KeyBinding( "key.pmmo.openGlossary", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo" );
 
     public static void init()
     {
@@ -36,6 +39,9 @@ public class ClientHandler
         ClientRegistry.registerKeyBinding( CRAWL_KEY );
         ClientRegistry.registerKeyBinding( VEIN_KEY );
         ClientRegistry.registerKeyBinding( OPEN_MENU );
+        ClientRegistry.registerKeyBinding( OPEN_SETTINGS );
+        ClientRegistry.registerKeyBinding( OPEN_SKILLS );
+        ClientRegistry.registerKeyBinding( OPEN_GLOSSARY );
     }
 
     public static void updateNBTTag( MessageUpdateNBT packet )

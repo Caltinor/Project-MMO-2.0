@@ -185,7 +185,7 @@ public class PrefsScreen extends Screen
         for( PrefsEntry prefEntry : prefsEntries )
         {
             if( mouseX >= prefEntry.button.x && mouseX < prefEntry.button.x + prefEntry.button.getWidth() && mouseY >= prefEntry.button.y && mouseY < prefEntry.button.y + prefEntry.button.getHeight() )
-                renderTooltip( prefEntry.isSwitch ? ( prefEntry.slider.getValue() == 1 ? "ON" : "OFF" ) : prefEntry.removeIfMax && prefEntry.defaultVal == prefEntry.slider.maxValue ? "MAX" : DP.dpSoft( prefEntry.defaultVal ), mouseX, mouseY );
+                renderTooltip( prefEntry.isSwitch ? ( prefEntry.defaultVal == 1 ? "ON" : "OFF" ) : prefEntry.removeIfMax && prefEntry.defaultVal == prefEntry.slider.maxValue ? "MAX" : DP.dpSoft( prefEntry.defaultVal ), mouseX, mouseY );
         }
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );

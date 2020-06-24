@@ -1,7 +1,7 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.gui.MainScreen;
-import harmonised.pmmo.gui.XPOverlayGUI;
+import harmonised.pmmo.config.JType;
+import harmonised.pmmo.gui.*;
 import harmonised.pmmo.network.MessageKeypress;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEventHandler
 {
-    private static boolean wasCrawling = false, wasVeining = false, wasOpenMenu = false, tooltipKeyWasPressed = false;
+    private static boolean wasCrawling = false, wasVeining = false, wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
 
     public static void subscribeClientEvents( IEventBus eventBus )
     {
@@ -45,7 +45,7 @@ public class ClientEventHandler
                 NetworkHandler.sendToServer( new MessageKeypress( ClientHandler.VEIN_KEY.isKeyDown(), 1 ) );
             }
 
-            if( wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() )
+            if( wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() || wasOpenSettings != ClientHandler.OPEN_SETTINGS.isKeyDown() || wasOpenSkills != ClientHandler.OPEN_SKILLS.isKeyDown() || wasOpenGlossary != ClientHandler.OPEN_GLOSSARY.isKeyDown() )
             {
                 UUID uuid = Minecraft.getInstance().player.getUniqueID();
                 String name = Minecraft.getInstance().player.getDisplayName().getString();
@@ -60,9 +60,26 @@ public class ClientEventHandler
                     XP.skills.get( uuid ).put( skill.name().toLowerCase(), aSkill.goalXp );
                 });
 
-                Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
-
-                wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
+                if( ClientHandler.OPEN_MENU.isKeyDown() )
+                {
+                    Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
+                    wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
+                }
+                else if( ClientHandler.OPEN_SETTINGS.isKeyDown() )
+                {
+                    Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( "pmmo.preferences" ) ) );
+                    wasOpenSettings = ClientHandler.OPEN_SETTINGS.isKeyDown();
+                }
+                else if( ClientHandler.OPEN_SKILLS.isKeyDown() )
+                {
+                    Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), JType.STATS, Minecraft.getInstance().player ) );
+                    wasOpenSkills = ClientHandler.OPEN_SKILLS.isKeyDown();
+                }
+                else if( ClientHandler.OPEN_GLOSSARY.isKeyDown() )
+                {
+                    Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( "pmmo.glossary" ) ) );
+                    wasOpenGlossary = ClientHandler.OPEN_GLOSSARY.isKeyDown();
+                }
 //                NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
             }
 

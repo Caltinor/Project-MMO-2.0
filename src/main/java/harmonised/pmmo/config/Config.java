@@ -85,6 +85,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> minVeinCost;
         public ConfigHelper.ConfigValueListener<Double> minVeinHardness;
         public ConfigHelper.ConfigValueListener<Double> maxVeinCharge;
+        public ConfigHelper.ConfigValueListener<Double> exhaustionPerBlock;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessMining;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessWoodcutting;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessExcavation;
@@ -362,6 +363,11 @@ public class Config
                         .comment( "How much vein charge can a player hold at max? (1 recharges every second)" )
                         .translation( "pmmo.maxVeinCharge" )
                         .defineInRange( "maxVeinCharge", 320D, 0, 100000) );
+
+                this.exhaustionPerBlock = subscriber.subscribe(builder
+                        .comment( "How much hunger should be exhausted per block veined?" )
+                        .translation( "pmmo.exhaustionPerBlock" )
+                        .defineInRange( "exhaustionPerBlock", 0.2D, 0, 20) );
 
                 builder.pop();
             }

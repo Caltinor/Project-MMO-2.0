@@ -35,7 +35,7 @@ public class WorldTickHandler
 {
     public static Map<PlayerEntity, VeinInfo> activeVein;
     public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
-    private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, levelsPerHardnessCrafting, veinMaxBlocks, maxVeinCharge;
+    private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, levelsPerHardnessCrafting, veinMaxBlocks, maxVeinCharge, exhaustionPerBlock;
     private static int veinMaxDistance;
     private static final boolean veinWoodTopToBottom = Config.forgeConfig.veinWoodTopToBottom.get();
     private static final boolean veiningOtherPlayerBlocksAllowed = Config.forgeConfig.veiningOtherPlayerBlocksAllowed.get();
@@ -54,6 +54,7 @@ public class WorldTickHandler
         levelsPerHardnessFarming = Config.getConfig( "levelsPerHardnessFarming" );
         levelsPerHardnessCrafting = Config.getConfig( "levelsPerHardnessCrafting" );
         veinMaxDistance = (int) Math.floor( Config.forgeConfig.veinMaxDistance.get() );
+        exhaustionPerBlock = Config.forgeConfig.exhaustionPerBlock.get();
         veinMaxBlocks = Config.forgeConfig.veinMaxBlocks.get();
         maxVeinCharge = Config.forgeConfig.maxVeinCharge.get();
     }
@@ -163,14 +164,15 @@ public class WorldTickHandler
                             {
                                 if( player.isCreative() )
                                     world.destroyBlock(veinPos, false );
-                                else if( correctItem && correctHeldItem )
+                                else if( correctItem && correctHeldItem && player.getFoodStats().getFoodLevel() > 0 )
                                 {
                                     if( veiningOtherPlayerBlocksAllowed || isOwner )
                                     {
                                         if( fullyGrown )
                                         {
                                             abilitiesTag.putDouble("veinLeft", abilitiesTag.getDouble("veinLeft") - cost);
-                                            destroyBlock(world, veinPos, player, startItemStack);
+                                            destroyBlock( world, veinPos, player, startItemStack );
+                                            player.addExhaustion( (float) exhaustionPerBlock );
                                         }
                                     }
                                 }
@@ -204,12 +206,12 @@ public class WorldTickHandler
     {
         BlockState blockstate = world.getBlockState(pos);
         IFluidState ifluidstate = world.getFluidState(pos);
-        world.playEvent(2001, pos, Block.getStateId(blockstate));
+        world.playEvent(2001, pos, Block.getStateId(blockstate) );
 
         TileEntity tileentity = blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
         Block.spawnDrops(blockstate, world, pos, tileentity, player, toolUsed );
 
-        if( world.setBlockState(pos, ifluidstate.getBlockState(), 3) && !player.isCreative() )
+        if( world.setBlockState(pos, ifluidstate.getBlockState(), 3) && toolUsed.isDamageable() && !player.isCreative() )
             toolUsed.damageItem( 1, player, (a) -> a.sendBreakAnimation( Hand.MAIN_HAND ) );
     }
 
