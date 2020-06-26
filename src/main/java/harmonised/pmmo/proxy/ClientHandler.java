@@ -4,6 +4,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.ListScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdateNBT;
+import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
@@ -80,5 +81,10 @@ public class ClientHandler
     public static void openStats( UUID uuid )
     {
         Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), JType.STATS, Minecraft.getInstance().player ) );
+    }
+
+    public static void syncPrefsToServer()
+    {
+        NetworkHandler.sendToServer( new MessageUpdateNBT( XP.getPreferencesTag(Minecraft.getInstance().player ), 0 ) );
     }
 }

@@ -6,6 +6,7 @@ import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdateNBT;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -38,10 +39,7 @@ public class PlayerTickHandler
     {
         PlayerEntity player = event.player;
         boolean crawlingAllowed;
-        if( Config.getConfig( "crawlingAllowed" ) == 0 )
-            crawlingAllowed = false;
-        else
-            crawlingAllowed = true;
+        crawlingAllowed = Config.getConfig("crawlingAllowed") != 0;
 
         if( XP.isCrawling.contains( player.getUniqueID() ) && crawlingAllowed )
             PMMOPoseSetter.setPose( player, Pose.SWIMMING );
@@ -185,7 +183,7 @@ public class PlayerTickHandler
 
             if( syncPrefs )
             {
-                NetworkHandler.sendToServer( new MessageUpdateNBT( XP.getPreferencesTag(Minecraft.getInstance().player ), 0 ) );
+                ClientHandler.syncPrefsToServer();
                 syncPrefs = false;
             }
         }
