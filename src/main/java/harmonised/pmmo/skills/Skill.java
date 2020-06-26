@@ -150,6 +150,7 @@ public enum Skill
 
             skillsTag.putDouble( this.name().toLowerCase(), setAmount );
             AttributeHandler.updateAll( player );
+            XP.updateRecipes( player );
 
             NetworkHandler.sendToPlayer( new MessageXp( setAmount, this.getValue(), 0, false ), (ServerPlayerEntity) player );
         }
@@ -190,5 +191,6 @@ public enum Skill
         player.sendStatusMessage( new TranslationTextComponent( "pmmo.addXp", new TranslationTextComponent( "pmmo." + skillName ).getString(), DP.dp(addAmount) ), false );
         skillsTag.putDouble( skillName, newLevelXp );
         AttributeHandler.updateAll( player );
+        XP.updateRecipes( player );
     }
 }

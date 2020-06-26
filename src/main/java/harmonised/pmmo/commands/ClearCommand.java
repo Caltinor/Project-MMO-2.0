@@ -6,6 +6,7 @@ import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.LogHandler;
+import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.arguments.EntityArgument;
@@ -34,10 +35,10 @@ public class ClearCommand
             {
                 String playerName = player.getDisplayName().getString();
                 AttributeHandler.updateAll( player );
+                XP.updateRecipes( player );
 
                 NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0, true ), player );
                 player.getPersistentData().getCompound( "pmmo" ).put( "skills", new CompoundNBT() );
-
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsCleared" ), false );
 
                 LogHandler.LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );

@@ -120,6 +120,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> playerSpecific = new HashMap<>();
     private final Map<String, RequirementItem> blockSpecific = new HashMap<>();
     private final Map<String, RequirementItem> veinBlacklist = new HashMap<>();
+    private final Map<String, RequirementItem> crafts = new HashMap<>();
 
     // -----------------------------------------------------------------------------
     //
@@ -219,6 +220,9 @@ public class JsonConfig
             updateReqSkills( req.xpValueTaming, localData.get( JType.XP_VALUE_TAME ) );
 
         updateReqVein( req.veinBlacklist, localData.get( JType.VEIN_BLACKLIST ) );
+
+        if( Config.forgeConfig.craftReqEnabled.get() )
+            updateReqSkills( req.crafts, localData.get( JType.REQ_CRAFT ) );
     }
 
     private static class Deserializer implements JsonDeserializer<JsonConfig>
@@ -230,45 +234,46 @@ public class JsonConfig
             JsonConfig req = new JsonConfig();
 
             JsonObject obj = json.getAsJsonObject();
-            deserializeGroup(obj, "wear_requirement", req.wears::put, context);
-            deserializeGroup(obj, "tool_requirement", req.tools::put, context);
-            deserializeGroup(obj, "weapon_requirement", req.weapons::put, context);
-            deserializeGroup(obj, "kill_requirement", req.killReq::put, context);
-            deserializeGroup(obj, "kill_xp", req.killXp::put, context);
-            deserializeGroup(obj, "mob_rare_drop", req.mobRareDrop::put, context);
-            deserializeGroup(obj, "use_requirement", req.use::put, context);
-            deserializeGroup(obj, "place_requirement", req.placing::put, context);
-            deserializeGroup(obj, "break_requirement", req.breaking::put, context);
-            deserializeGroup(obj, "biome_requirement", req.biome::put, context);
-            deserializeGroup(obj, "xp_bonus_biome", req.biomeXpBonus::put, context);
-            deserializeGroup(obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context);
-            deserializeGroup(obj, "biome_effect", req.biomeEff::put, context);
-            deserializeGroup(obj, "general_xp", req.xpValueGeneral::put, context);
-            deserializeGroup(obj, "breaking_xp", req.xpValueBreaking::put, context);
-            deserializeGroup(obj, "crafting_xp", req.xpValueCrafting::put, context);
-            deserializeGroup(obj, "breeding_xp", req.xpValueBreeding::put, context);
-            deserializeGroup(obj, "taming_xp", req.xpValueTaming::put, context);
-            deserializeGroup(obj, "ore", req.ores::put, context);
-            deserializeGroup(obj, "log", req.logs::put, context);
-            deserializeGroup(obj, "plant", req.plants::put, context);
-            deserializeGroup(obj, "salvage", req.salvage::put, context);
-            deserializeGroup(obj, "fish_pool", req.fishPool::put, context);
-            deserializeGroup(obj, "fish_enchant_pool", req.fishEnchantPool::put, context);
-            deserializeGroup(obj, "level_up_command", req.levelUpCommand::put, context);
-            deserializeGroup(obj, "held_item_xp_boost", req.heldItemXpBoost::put, context);
-            deserializeGroup(obj, "worn_item_xp_boost", req.wornItemXpBoost::put, context);
-            deserializeGroup(obj, "player_specific", req.playerSpecific::put, context);
-            deserializeGroup(obj, "block_specific", req.blockSpecific::put, context);
-            deserializeGroup(obj, "vein_blacklist", req.veinBlacklist::put, context);
+            deserializeGroup( obj, "wear_requirement", req.wears::put, context );
+            deserializeGroup( obj, "tool_requirement", req.tools::put, context );
+            deserializeGroup( obj, "weapon_requirement", req.weapons::put, context );
+            deserializeGroup( obj, "kill_requirement", req.killReq::put, context );
+            deserializeGroup( obj, "kill_xp", req.killXp::put, context );
+            deserializeGroup( obj, "mob_rare_drop", req.mobRareDrop::put, context );
+            deserializeGroup( obj, "use_requirement", req.use::put, context );
+            deserializeGroup( obj, "place_requirement", req.placing::put, context );
+            deserializeGroup( obj, "break_requirement", req.breaking::put, context );
+            deserializeGroup( obj, "biome_requirement", req.biome::put, context );
+            deserializeGroup( obj, "xp_bonus_biome", req.biomeXpBonus::put, context );
+            deserializeGroup( obj, "biome_mob_multiplier", req.biomeMobMultiplier::put, context );
+            deserializeGroup( obj, "biome_effect", req.biomeEff::put, context );
+            deserializeGroup( obj, "general_xp", req.xpValueGeneral::put, context );
+            deserializeGroup( obj, "breaking_xp", req.xpValueBreaking::put, context );
+            deserializeGroup( obj, "crafting_xp", req.xpValueCrafting::put, context );
+            deserializeGroup( obj, "breeding_xp", req.xpValueBreeding::put, context );
+            deserializeGroup( obj, "taming_xp", req.xpValueTaming::put, context );
+            deserializeGroup( obj, "ore", req.ores::put, context );
+            deserializeGroup( obj, "log", req.logs::put, context );
+            deserializeGroup( obj, "plant", req.plants::put, context );
+            deserializeGroup( obj, "salvage", req.salvage::put, context );
+            deserializeGroup( obj, "fish_pool", req.fishPool::put, context );
+            deserializeGroup( obj, "fish_enchant_pool", req.fishEnchantPool::put, context );
+            deserializeGroup( obj, "level_up_command", req.levelUpCommand::put, context );
+            deserializeGroup( obj, "held_item_xp_boost", req.heldItemXpBoost::put, context );
+            deserializeGroup( obj, "worn_item_xp_boost", req.wornItemXpBoost::put, context );
+            deserializeGroup( obj, "player_specific", req.playerSpecific::put, context );
+            deserializeGroup( obj, "block_specific", req.blockSpecific::put, context );
+            deserializeGroup( obj, "vein_blacklist", req.veinBlacklist::put, context );
+            deserializeGroup( obj, "craft_requirement", req.crafts::put, context );
 
             return req;
         }
 
-        private void deserializeGroup(JsonObject obj, String requirementGroupName, BiConsumer<String, RequirementItem> putter, JsonDeserializationContext context)
+        private void deserializeGroup( JsonObject obj, String requirementGroupName, BiConsumer<String, RequirementItem> putter, JsonDeserializationContext context )
         {
-            if (obj.has(requirementGroupName))
+            if ( obj.has( requirementGroupName ) )
             {
-                JsonObject wears = JSONUtils.getJsonObject(obj, requirementGroupName);
+                JsonObject wears = JSONUtils.getJsonObject( obj, requirementGroupName);
                 for(Map.Entry<String, JsonElement> entries : wears.entrySet())
                 {
                     String name = entries.getKey();

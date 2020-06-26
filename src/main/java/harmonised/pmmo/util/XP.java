@@ -22,6 +22,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
@@ -183,6 +184,18 @@ public class XP
 	{
 		return getSkill( state.getMaterial() );
 	}
+
+//	public static Skill getSkill( Block block )
+//	{
+//		if( block.getTags().contains( getResLoc(  "forge:ores") ) )
+//			return Skill.MINING;
+//		else if( block.getTags().contains( getResLoc( "forge:logs" ) ) )
+//			return Skill.WOODCUTTING;
+//		else if( block.getTags().contains( getResLoc( "forge:plants" ) ) )
+//			return Skill.FARMING;
+//		else
+//			return Skill.INVALID_SKILL;
+//	}
 
 	public static Skill getSkillFromTool( String tool )
 	{
@@ -572,6 +585,7 @@ public class XP
         Set<String> keySet = new HashSet<>( skillsTag.keySet() );
 
 		syncPlayerConfig( player );
+		updateRecipes( (ServerPlayerEntity) player );
 
         NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
@@ -1069,12 +1083,18 @@ public class XP
 	{
 		double maxXp = Config.getConfig( "maxXp" );
 
+		if( !(player instanceof ServerPlayerEntity) )
+		{
+			LogHandler.LOGGER.error( "CLIENT PLAYER XP AWARD ATTEMPTED! THIS SHOULD NOT HAPPEN! SOURCE: " + sourceName + ", SKILL: " + skill.name() + ", AMOUNT: " + amount );
+			return;
+		}
+
 		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
 			return;
 
 		if( skill.getValue() == 0 )
 		{
-			LogHandler.LOGGER.error( "Invalid skill at awardXp" );
+			LogHandler.LOGGER.error( "INVALID SKILL AT AWARD XP! SOURCE: " + sourceName + ", AMOUNT: " + amount );
 			return;
 		}
 
@@ -1121,6 +1141,7 @@ public class XP
 		if( startLevel != currLevel )
 		{
 			AttributeHandler.updateAll( player );
+			updateRecipes( (ServerPlayerEntity) player );
 
 			if( ModList.get().isLoaded( "compatskills" ) )
 			{
@@ -1147,7 +1168,6 @@ public class XP
 					if( startLevel < commandLevel && currLevel >= commandLevel )
 					{
 						String command = entry.getKey().replace( ">player<", playerName ).replace( ">level<", "" + commandLevel );
-
 						try
 						{
 							player.getServer().getCommandManager().getDispatcher().execute( command, player.getServer().getCommandSource() );
@@ -1173,6 +1193,24 @@ public class XP
 			sendMessage( skillName + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
 			LogHandler.LOGGER.info( playerName + " " + skillName + " max startLevel reached" );
 		}
+	}
+
+	public static void updateRecipes( ServerPlayerEntity player )
+	{
+		Collection<IRecipe<?>> allRecipes = player.getServer().getRecipeManager().getRecipes();
+		Collection<IRecipe<?>> removeRecipes = new HashSet<>();
+		Collection<IRecipe<?>> newRecipes = new HashSet<>();
+
+		for( IRecipe<?> recipe : allRecipes )
+		{
+			if( XP.checkReq( player, recipe.getRecipeOutput().getItem().getRegistryName(), JType.REQ_CRAFT ) )
+				newRecipes.add( recipe );
+			else
+				removeRecipes.add( recipe );
+		}
+
+		player.getRecipeBook().remove( removeRecipes, player );
+		player.getRecipeBook().add( newRecipes, player );
 	}
 
 	private static int getGap( int a, int b )

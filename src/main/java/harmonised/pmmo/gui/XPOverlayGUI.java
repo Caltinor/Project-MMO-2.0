@@ -117,11 +117,14 @@ public class XPOverlayGUI extends AbstractGui
 				else
 					guiPressed = false;
 
-				doRayTrace();
-				doCrosshair();
-				doVein();
+				if( !Minecraft.getInstance().isGamePaused() )
+				{
+					doRayTrace();
+					doCrosshair();
+					doVein();
+					doSkills();
+				}
 				doXpDrops();
-				doSkills();
 				doXpBar();
 				doSkillList();
 
@@ -199,32 +202,35 @@ public class XPOverlayGUI extends AbstractGui
 			decayRate = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
 			decayAmount = decayRate * timeDiff / 10000000;
 
-			if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
+			if( !mc.isGamePaused() )
 			{
-				aSkill = skills.get( xpDrop.skill );
-				skill = xpDrop.skill;
+				if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
+				{
+					aSkill = skills.get( xpDrop.skill );
+					skill = xpDrop.skill;
 
-				decayRate = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
-				if( stackXpDrops )
-				{
-					if( decayRate < 0.1 )
-						decayRate = 0.1;
-				}
-				else
-				if( decayRate < 1 )
-					decayRate = 1;
+					decayRate = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
+					if( stackXpDrops )
+					{
+						if( decayRate < 0.1 )
+							decayRate = 0.1;
+					}
+					else
+					if( decayRate < 1 )
+						decayRate = 1;
 
-				if( xpDrop.gainedXp - ( decayAmount ) < 0 )
-				{
-					aSkill.goalXp += xpDrop.gainedXp;
-					xpDrop.gainedXp = 0;
+					if( xpDrop.gainedXp - ( decayAmount ) < 0 )
+					{
+						aSkill.goalXp += xpDrop.gainedXp;
+						xpDrop.gainedXp = 0;
+					}
+					else
+					{
+						xpDrop.gainedXp -= decayRate;
+						aSkill.goalXp += decayRate;
+					}
+					aSkill.goalPos = XP.levelAtXpDecimal( aSkill.goalXp );
 				}
-				else
-				{
-					xpDrop.gainedXp -= decayRate;
-					aSkill.goalXp += decayRate;
-				}
-				aSkill.goalPos = XP.levelAtXpDecimal( aSkill.goalXp );
 			}
 
 			if( showXpDrops )
@@ -274,6 +280,7 @@ public class XPOverlayGUI extends AbstractGui
 				aSkill.pos += 0.00005d * growAmount;
 				aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
 			}
+
 			if( aSkill.pos > aSkill.goalPos )
 				aSkill.pos = aSkill.goalPos;
 

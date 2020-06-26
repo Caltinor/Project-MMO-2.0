@@ -73,6 +73,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
+        public ConfigHelper.ConfigValueListener<Boolean> craftReqEnabled;
 
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
@@ -283,6 +284,11 @@ public class Config
                         .comment( "Should your personal Donator Welcome message come up?" )
                         .translation( "pmmo.showPatreonWelcome" )
                         .define( "showPatreonWelcome", true ) );
+
+                this.craftReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should certain items be restricted from being crafted, without the level requirement?" )
+                        .translation( "pmmo.craftReqEnabled" )
+                        .define( "craftReqEnabled", true ) );
 
                 builder.pop();
             }

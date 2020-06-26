@@ -69,9 +69,6 @@ public class SetCommand
                         if( sender != null )
                             sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
-
-                    AttributeHandler.updateAll( player );
-
                     LogHandler.LOGGER.info( "PMMO Command Set: " + playerName + " " + args[4] + " has been set to " + args[5] + " " + args[6] );
                 }
             }

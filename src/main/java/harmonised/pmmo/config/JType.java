@@ -39,6 +39,7 @@ public enum JType
     PLAYER_SPECIFIC(29),
     BLOCK_SPECIFIC(30),
     VEIN_BLACKLIST(31),
+    REQ_CRAFT(32),
     STATS(100),
     DIMENSION(101),
     CREDITS(102),

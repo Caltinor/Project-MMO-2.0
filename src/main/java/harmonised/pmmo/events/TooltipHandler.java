@@ -52,6 +52,7 @@ public class TooltipHandler
                 double dValue;
                 Material material = null;
 
+                Map<String, Object> craftReq = JsonConfig.data.get( JType.REQ_CRAFT ).get( regKey );
                 Map<String, Object> wearReq = JsonConfig.data.get( JType.REQ_WEAR ).get( regKey );
                 Map<String, Object> toolReq = JsonConfig.data.get( JType.REQ_TOOL ).get( regKey );
                 Map<String, Object> weaponReq = JsonConfig.data.get( JType.REQ_WEAPON ).get( regKey );
@@ -68,7 +69,7 @@ public class TooltipHandler
 
                 if( xpValueGeneral != null && xpValueGeneral.size() > 0 )      //XP VALUE
                 {
-                    tooltip.add( new TranslationTextComponent( "pmmo.xpValue" ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.xpValueBreak" ) );
 
                     for( String key : xpValueGeneral.keySet() )
                     {
@@ -118,6 +119,9 @@ public class TooltipHandler
 //                    tooltip.add( new StringTextComponent( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
                 }
 
+                if( craftReq != null && craftReq.size() > 0 )
+                    addTooltipTextSkill( "pmmo.toCraft", JType.REQ_CRAFT, craftReq, event );
+
                 if( wearReq != null && wearReq.size() > 0 )
                     addTooltipTextSkill( "pmmo.toWear", JType.REQ_WEAR, wearReq, event );
 
@@ -132,12 +136,8 @@ public class TooltipHandler
                 if( heldItemXpBoost != null && heldItemXpBoost.size() > 0 )
                     addTooltipTextSkillPercentage( "pmmo.itemXpBoostHeld", heldItemXpBoost, event );
 
-
                 if( useReq != null && useReq.size() > 0 )
                     addTooltipTextSkill( "pmmo.use", JType.REQ_USE, useReq, event );
-
-//            if( wearReq != null && wearReq.size() > 0 )
-//                addTooltipTextSkill( "pmmo.wear", "mob", mobReq, event );
 
                 if( placeReq != null && placeReq.size() > 0 )
                 {
@@ -265,10 +265,7 @@ public class TooltipHandler
 
         if( theMap.size() > 0 )
         {
-            if( XP.checkReq( player, item.getRegistryName(), jType ) )
-                tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( "green" ) ) );
-            else
-                tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( "red" ) ) );
+            tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( XP.checkReq( player, item.getRegistryName(), jType ) ? "green" : "red" ) ) );
 
             for( String key : theMap.keySet() )
             {
@@ -277,11 +274,7 @@ public class TooltipHandler
                 if( theMap.get( key ) instanceof Double )
                 {
                     value = (double) theMap.get( key );
-
-                    if( level < value )
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dpSoft( value ) ).setStyle( XP.textStyle.get( "red" ) ) );
-                    else
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dpSoft( value ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dpSoft( value ) ).setStyle( XP.textStyle.get( level < value ? "red" : "green" ) ) );
                 }
             }
         }

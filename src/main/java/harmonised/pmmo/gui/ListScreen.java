@@ -435,7 +435,6 @@ public class ListScreen extends Screen
 
                 case XP_VALUE_BREED:
                 case XP_VALUE_TAME:
-                case XP_VALUE_CRAFT:
                 {
                     addXpToButton( button, reqMap.get( button.regKey ) );
                 }
@@ -444,6 +443,12 @@ public class ListScreen extends Screen
                 case XP_VALUE_BREAK:
                 {
                     addXpToButton( button, reqMap.get( button.regKey ), JType.REQ_BREAK, player );
+                }
+                    break;
+
+                case XP_VALUE_CRAFT:
+                {
+                    addXpToButton( button, reqMap.get( button.regKey ), JType.REQ_CRAFT, player );
                 }
                     break;
 
@@ -588,6 +593,7 @@ public class ListScreen extends Screen
                 case REQ_WEAPON:
                 case REQ_USE:
                 case REQ_BREAK:
+                case REQ_CRAFT:
                 case REQ_PLACE:
                 {
                     button.text.add( "" );
@@ -734,6 +740,7 @@ public class ListScreen extends Screen
                 case INFO_LOG:
                 case INFO_PLANT:
                 case XP_VALUE_BREAK:
+                case XP_VALUE_CRAFT:
                         button.unlocked = XP.checkReq( player, button.regKey, JType.REQ_BREAK );
                     break;
 
@@ -750,6 +757,7 @@ public class ListScreen extends Screen
                 case REQ_WEAPON:
                 case REQ_USE:
                 case REQ_BREAK:
+                case REQ_CRAFT:
                 case REQ_PLACE:
                 case REQ_BIOME:
                     button.unlocked = XP.checkReq( player, button.regKey, jType );

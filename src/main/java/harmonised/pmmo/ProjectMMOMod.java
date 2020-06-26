@@ -12,6 +12,7 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -66,11 +67,13 @@ public class ProjectMMOMod
         ChunkDataHandler.init();
     }
 
-    private void serverStart(FMLServerStartingEvent event)
+    private void serverStart( FMLServerStartingEvent event )
     {
         Config.initServer();
         PmmoCommand.register( event.getCommandDispatcher() );
         WorldTickHandler.refreshVein();
         AttributeHandler.init();
+        if( Config.forgeConfig.craftReqEnabled.get() )
+            event.getServer().getGameRules().get( GameRules.DO_LIMITED_CRAFTING ).set(true, event.getServer() );
     }
 }

@@ -94,6 +94,11 @@ public class GlossaryScreen extends Screen
             updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_BREAK, Minecraft.getInstance().player ) );
         });
+        TileButton craftButton = new TileButton( 0, 0, 3, 29, "pmmo.craftTitle", "", button ->
+        {
+            updateHistory( ( (TileButton) button ).index );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_CRAFT, Minecraft.getInstance().player ) );
+        });
         TileButton biomeButton = new TileButton( 0, 0, 3, 8, "pmmo.biomeTitle", "", button ->
         {
             updateHistory( ( (TileButton) button ).index );
@@ -183,6 +188,7 @@ public class GlossaryScreen extends Screen
         tileButtons.add( useButton );
         tileButtons.add( placeButton );
         tileButtons.add( breakButton );
+        tileButtons.add( craftButton );
         tileButtons.add( oreButton );
         tileButtons.add( logButton );
         tileButtons.add( plantButton );

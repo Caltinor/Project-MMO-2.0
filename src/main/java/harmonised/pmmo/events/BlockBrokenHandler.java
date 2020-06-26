@@ -17,9 +17,11 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
@@ -42,7 +44,6 @@ public class BlockBrokenHandler
     private static void processReq( BlockEvent.BreakEvent event )
     {
         PlayerEntity player = event.getPlayer();
-
         BlockState blockState = event.getState();
         Block block = blockState.getBlock();
         World world = event.getWorld().getWorld();
@@ -50,7 +51,6 @@ public class BlockBrokenHandler
 
         Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
         boolean passedBreakReq = true;
-
 
         if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
             passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), JType.REQ_BREAK );
@@ -162,7 +162,7 @@ public class BlockBrokenHandler
 
         List<ItemStack> drops;
 
-        if( world instanceof ServerWorld)
+        if( world instanceof ServerWorld )
         {
             LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
                     .withRandom(world.rand)
@@ -313,7 +313,7 @@ public class BlockBrokenHandler
             else if( !wasPlaced )
                 awardMsg = "breaking a plant";
         }
-        else if( XP.getExtraChance( player, block.getRegistryName(), JType.INFO_ORE ) > 0 && isEffective )		//IS ORE
+        else if( XP.getExtraChance( player, block.getRegistryName(), JType.INFO_ORE ) > 0 )		//IS ORE
         {
             boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
             boolean noDropOre = false;
