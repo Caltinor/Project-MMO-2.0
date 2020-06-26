@@ -63,7 +63,10 @@ public class BlockBrokenHandler
         if( passedBreakReq )
         {
             if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
+            {
                 processBroken( event );
+                ChunkDataHandler.delPos( world.dimension.getType().getRegistryName(), event.getPos() );
+            }
         }
         else
         {
@@ -420,7 +423,5 @@ public class BlockBrokenHandler
                 XP.awardXp( player, Skill.getSkill( skillName ), awardMsg, award.get( skillName ) / (gap + 1), false, false );
             }
         }
-
-        ChunkDataHandler.delPos( world.dimension.getType().getRegistryName(), event.getPos() );
     }
 }

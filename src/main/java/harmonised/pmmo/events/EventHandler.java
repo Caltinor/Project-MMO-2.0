@@ -11,6 +11,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
+import javax.swing.event.ChangeEvent;
+
 @Mod.EventBusSubscriber
 public class EventHandler
 {
@@ -154,5 +156,16 @@ public class EventHandler
 	public static void chunkDataSave( ChunkDataEvent.Save event )
 	{
 		ChunkDataHandler.handleChunkDataSave( event );
+	}
+
+	@SubscribeEvent
+	public static void pistonPush( PistonEvent event )
+	{
+		PistonEventHandler.handlePistonPush( event );
+	}
+
+	@SubscribeEvent
+	public static void blockChange( BlockEvent.NeighborNotifyEvent event )
+	{
 	}
 }

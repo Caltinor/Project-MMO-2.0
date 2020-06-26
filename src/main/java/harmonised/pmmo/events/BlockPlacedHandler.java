@@ -33,14 +33,6 @@ public class BlockPlacedHandler
         {
             PlayerEntity player = (PlayerEntity) event.getEntity();
 
-//            World world = DimensionManager.getWorld(  player.getServer(), DimensionType.OVERWORLD, false, false );
-//            MapData test = world.
-
-//            player.getServer().getPlayerList().getPlayers().forEach( a ->
-//            {
-//                System.out.println( a.getUniqueID() );
-//            });
-
             if ( XP.isPlayerSurvival( player ) )
             {
                 Block block = event.getPlacedBlock().getBlock();

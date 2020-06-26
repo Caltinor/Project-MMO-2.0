@@ -392,7 +392,7 @@ public class WorldTickHandler
             veinLeft = 0D;
 
         if( !activeVein.containsKey( player ) )
-            veinLeft += gap;
+            veinLeft += Math.min( gap, 2 );
 
         if( veinLeft > maxVeinCharge )
             veinLeft = maxVeinCharge;
