@@ -991,7 +991,16 @@ public class ListScreen extends Screen
     @Override
     public boolean mouseScrolled( double mouseX, double mouseY, double scroll )
     {
-        scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
+        accumulativeHeight = 0;
+        for( ListButton listButton : listButtons )
+        {
+            accumulativeHeight += listButton.getHeight();
+            if( accumulativeHeight > scrollPanel.getBottom() - scrollPanel.getTop() )
+            {
+                scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
+                break;
+            }
+        }
         return super.mouseScrolled(mouseX, mouseY, scroll);
     }
 

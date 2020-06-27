@@ -81,19 +81,19 @@ public class PlayerTickHandler
                         {
                             for (int i = 0; i < value.getSlots(); i++)
                             {
-                                XP.applyWornPenalty( player, value.getStackInSlot(i), true );
+                                XP.applyWornPenalty( player, value.getStackInSlot(i) );
                             }
                         });
                     }
 
                     if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 39 ), false );
+                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 39 ) );
                     if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 38 ), false );
+                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 38 ) );
                     if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 37 ), false );
+                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 37 ) );
                     if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 36 ), false );
+                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 36 ) );
                 }
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 

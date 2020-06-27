@@ -211,7 +211,8 @@ public class PrefsScreen extends Screen
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
     {
-        scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
+        if( prefsEntries.size() >= 9 )
+            scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
         return super.mouseScrolled(mouseX, mouseY, scroll);
     }
 

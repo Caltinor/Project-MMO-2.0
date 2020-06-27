@@ -60,6 +60,7 @@ public class XP
 	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
 	private static int debugInt = 0;
+	private static boolean alwaysDropWornItems = Config.forgeConfig.alwaysDropWornItems.get();
 	public static void initValues()
 	{
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
@@ -1266,7 +1267,7 @@ public class XP
 		world.addEntity( fireworkRocketEntity );
 	}
 
-	public static void applyWornPenalty( PlayerEntity player, ItemStack itemStack, boolean dropItem )
+	public static void applyWornPenalty( PlayerEntity player, ItemStack itemStack )
 	{
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
 
@@ -1281,7 +1282,7 @@ public class XP
 			player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
 
-			if( dropItem || EnchantmentHelper.hasBindingCurse( itemStack ) )
+			if( alwaysDropWornItems || EnchantmentHelper.hasBindingCurse( itemStack ) )
 			{
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );

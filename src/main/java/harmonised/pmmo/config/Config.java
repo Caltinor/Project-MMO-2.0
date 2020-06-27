@@ -74,6 +74,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> craftReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> alwaysDropWornItems;
 
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
@@ -289,6 +290,11 @@ public class Config
                         .comment( "Should certain items be restricted from being crafted, without the level requirement?" )
                         .translation( "pmmo.craftReqEnabled" )
                         .define( "craftReqEnabled", true ) );
+
+                this.alwaysDropWornItems = subscriber.subscribe(builder
+                        .comment( "When a Wear requirement is not met, should the item be dropped?" )
+                        .translation( "pmmo.alwaysDropWornItems" )
+                        .define( "alwaysDropWornItems", false ) );
 
                 builder.pop();
             }
