@@ -682,6 +682,8 @@ public class XPOverlayGUI extends AbstractGui
 		if( lvlUpScreenshot )
 			screenshots.add( player.getDisplayName().getString() + " " + skill.name().toLowerCase() + " " + level );
 
+//		XP.scanUnlocks( level, skill );
+
 		NetworkHandler.sendToServer( new MessageLevelUp( skill.getValue(), level ) );
 	}
 	

@@ -15,6 +15,7 @@ import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.FireworkRocketEntity;
@@ -1212,6 +1213,11 @@ public class XP
 
 		player.getRecipeBook().remove( removeRecipes, player );
 		player.getRecipeBook().add( newRecipes, player );
+	}
+
+	public static void scanUnlocks( int level, Skill skill )
+	{
+
 	}
 
 	private static int getGap( int a, int b )
