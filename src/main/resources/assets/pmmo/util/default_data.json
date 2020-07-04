@@ -629,6 +629,11 @@
 			"mining": 5
 		}
 	},
+	"craft_requirement": {
+		"minecraft:barrier": {
+			"crafting": 999
+		}
+	},
 	"held_item_xp_boost": {
 		"minecraft:golden_pickaxe": {
 			"mining": 50
