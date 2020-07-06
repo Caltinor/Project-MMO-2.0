@@ -21,9 +21,9 @@ public class BreakSpeedHandler
 
 
         if( !XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK ) )
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( event.getState().getBlock().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( event.getState().getBlock().getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
         else if( toolGap > 0 )
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
 
         int startLevel = XP.getLevel( Skill.getSkill( skill ), player );
 

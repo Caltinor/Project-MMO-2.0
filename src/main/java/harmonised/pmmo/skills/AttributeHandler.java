@@ -11,7 +11,7 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -61,7 +61,7 @@ public class AttributeHandler
 
 	public static double getReach( PlayerEntity player )
 	{
-		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
+		ModifiableAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
 		
 		if( reachAttribute.getModifier( reachModifierID ) == null )
 			return ( reachAttribute.getBaseValue() );
@@ -71,7 +71,7 @@ public class AttributeHandler
 	
 	public static void updateReach( PlayerEntity player )
 	{
-		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
+		ModifiableAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double buildLevel = XP.getLevel( Skill.BUILDING, player );
 		double reach = -0.91 + ( buildLevel / levelsPerOneReach );
@@ -113,7 +113,7 @@ public class AttributeHandler
 	
 	public static void updateSpeed( PlayerEntity player )
 	{
-		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		ModifiableAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		double speedBoost = getSpeedBoost( player );
 
 		if( speedBoost > 0 )
@@ -131,13 +131,13 @@ public class AttributeHandler
 	
 	public static void resetSpeed( PlayerEntity player )
 	{
-		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		ModifiableAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		speedAttribute.removeModifier( speedModifierID );
 	}
 	
 	public static void updateHP( PlayerEntity player )
 	{
-		IAttributeInstance hpAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		ModifiableAttributeInstance hpAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double enduranceLevel = XP.getLevel( Skill.ENDURANCE, player );
 		int heartBoost = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
@@ -154,7 +154,7 @@ public class AttributeHandler
 	
 	public static void updateDamage( PlayerEntity player )
 	{
-		IAttributeInstance damageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		ModifiableAttributeInstance damageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double maxDamagePref = prefsTag.getDouble( "maxExtraDamageBoost" );
 		double combatLevel = XP.getLevel( Skill.COMBAT, player );
@@ -172,7 +172,7 @@ public class AttributeHandler
 	public static void updateHP( MobEntity mob, float bonus )
 	{
 //		System.out.println( mob.getDisplayName().getString() );
-		IAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		ModifiableAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		if( hpAttribute != null )
 		{
 			if( !(mob instanceof AnimalEntity) )
@@ -194,7 +194,7 @@ public class AttributeHandler
 
 	public static void updateDamage( MobEntity mob, float bonus )
 	{
-		IAttributeInstance damageAttribute = mob.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		ModifiableAttributeInstance damageAttribute = mob.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
 		if( damageAttribute != null )
 		{
 //			System.out.println( "damage boost " + bonus / damageAttribute.getBaseValue() + " " + bonus + " " + damageAttribute.getBaseValue() );
@@ -215,7 +215,7 @@ public class AttributeHandler
 
 	public static void updateSpeed( MobEntity mob, float bonus )
 	{
-		IAttributeInstance speedAttribute = mob.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		ModifiableAttributeInstance speedAttribute = mob.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		if( speedAttribute != null )
 		{
 			if( !(mob instanceof  AnimalEntity) )
@@ -236,7 +236,7 @@ public class AttributeHandler
 
 	private static double getBiomeMobMultiplier( MobEntity mob, String type )
 	{
-		String biomeKey = mob.world.getBiome( mob.getPosition() ).getRegistryName().toString();
+		String biomeKey = mob.world.getBiome( mob.getPositionVec() ).getRegistryName().toString();
 		Map<String, Object> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 		double multiplier = 1;
 

@@ -2,6 +2,7 @@ package harmonised.pmmo.skills;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.FireworkRocketEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 

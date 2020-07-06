@@ -149,9 +149,9 @@ public class FishedHandler
                         EnchantmentHelper.setEnchantments( outEnchants, itemStack );
                 }
 
-                XP.dropItemStack( itemStack, player.world, player.getPosition() );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                XP.dropItemStack( itemStack, player.world, player.getPositionVec() );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "green" ) ), true );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "green" ) ), false );
 
                 award += (double) match.get( "xp" ) * count;
             }

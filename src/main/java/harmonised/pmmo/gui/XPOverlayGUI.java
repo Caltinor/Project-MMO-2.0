@@ -377,7 +377,7 @@ public class XPOverlayGUI extends AbstractGui
 			veinPos = veinPosGoal;
 
 		if( veinPos == 1D && lastVeinPos != 1D )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.veinCharge", 100 ).setStyle( XP.textStyle.get( "green" ) ), true );
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.veinCharge", 100 ).func_240703_c_( XP.textStyle.get( "green" ) ), true );
 
 		lastVeinPos = veinPos;
 
@@ -400,13 +400,13 @@ public class XPOverlayGUI extends AbstractGui
 
 			if( !metToolReq )
 			{
-				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 				return;
 			}
 
 			if( lookingAtBlock && !canBreak )
 			{
-				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 				return;
 			}
 
@@ -670,9 +670,9 @@ public class XPOverlayGUI extends AbstractGui
 	public static void sendLvlUp( int level, Skill skill )
 	{
 		player = Minecraft.getInstance().player;
-		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( XP.skillStyle.get( skill ) ), false);
+		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).func_240703_c_( XP.skillStyle.get( skill ) ), false);
 		if( skill == Skill.SWIMMING && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightvisionUnlocked" ).setStyle( XP.skillStyle.get( skill ) ), true );
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightvisionUnlocked" ).func_240703_c_( XP.skillStyle.get( skill ) ), true );
 
 		guiWasOn = guiOn;
 

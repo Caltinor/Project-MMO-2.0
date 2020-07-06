@@ -71,7 +71,7 @@ public class DeathHandler
                 }
 
                 if( totalLost > 0 )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
                 
                 XP.syncPlayer( player );
             }
@@ -128,10 +128,10 @@ public class DeathHandler
                     if( Math.floor( Math.random() * chance ) == 0 )
                     {
                         ItemStack itemStack = new ItemStack( XP.getItem( entry.getKey() ) );
-                        XP.dropItemStack( itemStack, player.world, target.getPosition() );
+                        XP.dropItemStack( itemStack, player.world, target.getPositionVec() );
 
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "green" ) ), false );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "green" ) ), true );
                     }
                 }
             }

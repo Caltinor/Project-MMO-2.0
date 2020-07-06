@@ -22,6 +22,7 @@ import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
@@ -32,6 +33,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -357,7 +359,7 @@ public class XP
 
 	public static void sendMessage( String msg, boolean bar, PlayerEntity player, TextFormatting format )
 	{
-		player.sendStatusMessage( new StringTextComponent( msg ).setStyle( new Style().setColor( format ) ), bar );
+		player.sendStatusMessage( new StringTextComponent( msg ).func_240703_c_( new Style().setColor( format ) ), bar );
 	}
 
 	public static Map<String, Double> multiplyMap( Map<String, Double> mapOne, double multiplier )
@@ -512,7 +514,12 @@ public class XP
 		}
 	}
 
-	public static void dropItemStack(ItemStack itemStack, World world, BlockPos pos)
+	public static void dropItemStack( ItemStack itemStack, World world, Vector3d pos )
+	{
+		dropItemStack( itemStack, world, new BlockPos( pos ) );
+	}
+
+	public static void dropItemStack( ItemStack itemStack, World world, BlockPos pos )
 	{
 		Block.spawnAsEntity( world, pos, itemStack );
 	}
@@ -745,7 +752,7 @@ public class XP
 	public static boolean scanBlock( Block block, int radius, PlayerEntity player )
 	{
 		Block currBlock;
-		BlockPos playerPos = player.getPosition();
+		BlockPos playerPos = player.getPositionVec();
 		boolean matched = false;
 
 		for( int x = -radius; x <= radius; x++ )
@@ -1002,7 +1009,7 @@ public class XP
 		double biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
 		String skillName = skill.toString().toLowerCase();
 
-		Biome biome = player.world.getBiome( player.getPosition() );
+		Biome biome = player.world.getBiome( player.getPositionVec() );
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
 		Map<String, Object> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
@@ -1243,7 +1250,17 @@ public class XP
 		return gap;
 	}
 
+	public static BlockPos vecToBlock( Vector3d pos )
+	{
+		return new BlockPos( pos );
+	}
+
 	public static void spawnRocket( World world, BlockPos pos, Skill skill )
+	{
+		spawnRocket( world, new Vector3d( pos.getX(), pos.getY(), pos.getZ() ), skill );
+	}
+
+	public static void spawnRocket( World world, Vector3d pos, Skill skill )
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		CompoundNBT fw = new CompoundNBT();
@@ -1292,17 +1309,17 @@ public class XP
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );
 				itemStack.setCount( 0 );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), false );
 			}
 			else
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWear", new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWear", new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), true );
 		}
 	}
 
 	public static void checkBiomeLevelReq(PlayerEntity player)
 	{
-		Biome biome = player.world.getBiome( player.getPosition() );
+		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
@@ -1328,16 +1345,16 @@ public class XP
 				{
 					if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
 					{
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), true );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), false );
 						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 						{
 							int startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 							if( startLevel < (double) entry.getValue() )
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).func_240703_c_( textStyle.get( "red" ) ), false );
 							else
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).func_240703_c_( textStyle.get( "green" ) ), false );
 						}
 					}
 				}

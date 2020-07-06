@@ -17,8 +17,8 @@ public class CheckBiomeCommand
     public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
-        String biomeKey = sender.world.getBiome( sender.getPosition() ).getRegistryName().toString();
-        String transKey = sender.world.getBiome( sender.getPosition() ).getTranslationKey();
+        String biomeKey = sender.world.getBiome( sender.getPositionVec() ).getRegistryName().toString();
+        String transKey = sender.world.getBiome( sender.getPositionVec() ).getTranslationKey();
         Map<String, Object> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 
         String damageBonus = "100";
@@ -35,9 +35,9 @@ public class CheckBiomeCommand
                 speedBonus = DP.dp( (double) theMap.get( "damageBonus" ) * 100 );
         }
 
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobDamageBoost", new TranslationTextComponent( damageBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobHpBoost", new TranslationTextComponent( hpBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
-        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobSpeedBoost", new TranslationTextComponent( speedBonus ).setStyle( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).setStyle( XP.textStyle.get( "grey" ) ) ), false );
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobDamageBoost", new TranslationTextComponent( damageBonus ).func_240703_c_( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).func_240703_c_( XP.textStyle.get( "grey" ) ) ), false );
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobHpBoost", new TranslationTextComponent( hpBonus ).func_240703_c_( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).func_240703_c_( XP.textStyle.get( "grey" ) ) ), false );
+        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.mobSpeedBoost", new TranslationTextComponent( speedBonus ).func_240703_c_( XP.textStyle.get( "grey" ) ), new TranslationTextComponent( transKey ).func_240703_c_( XP.textStyle.get( "grey" ) ) ), false );
 
         return 1;
     }

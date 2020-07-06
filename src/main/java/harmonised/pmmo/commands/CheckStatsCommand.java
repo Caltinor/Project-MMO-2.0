@@ -51,7 +51,7 @@ public class CheckStatsCommand
         {
             LogHandler.LOGGER.error( "Error: Invalid Player requested at CheckStats Command \"" + args[2] + "\"", e );
 
-            sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+            sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
             return -1;
         }
 

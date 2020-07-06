@@ -98,7 +98,7 @@ public class PlayerTickHandler
                 Block waterBlock = Blocks.WATER;
                 Block tallSeagrassBlock = Blocks.TALL_SEAGRASS;
                 Block kelpBlock = Blocks.KELP_PLANT;
-                BlockPos playerPos = player.getPosition();
+                BlockPos playerPos = player.getPositionVec();
                 Block currBlock;
                 boolean waterBelow = true;
 

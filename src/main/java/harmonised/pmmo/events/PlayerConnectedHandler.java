@@ -36,15 +36,15 @@ public class PlayerConnectedHandler
             {
                 player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
                 {
-                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).setStyle( new Style().setColor( TextFormatting.BLUE ) ), false );
+                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).func_240703_c_( new Style().setColor( TextFormatting.BLUE ) ), false );
                 });
             }
             else if( showPatreonWelcome )
             {
                 if( dandelionPatreons.contains( player.getUniqueID() ) )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.dandelionPatreonWelcome", player.getDisplayName().getString() ).setStyle( XP.textStyle.get( "yellow" ) ), false );
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.dandelionPatreonWelcome", player.getDisplayName().getString() ).func_240703_c_( XP.textStyle.get( "yellow" ) ), false );
                 else if( ironPatreons.contains( player.getUniqueID() ) )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.ironPatreonWelcome", player.getDisplayName().getString() ).setStyle( XP.textStyle.get( "grey" ) ), false );
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.ironPatreonWelcome", player.getDisplayName().getString() ).func_240703_c_( XP.textStyle.get( "grey" ) ), false );
             }
 
             if( showWelcome )

@@ -8,6 +8,7 @@ import harmonised.pmmo.util.LogHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -54,10 +55,10 @@ public class MessageLevelUp
             ServerPlayerEntity player = ctx.get().getSender();
             Skill skill = Skill.getSkill( packet.skill );
             String skillName = skill.name().toLowerCase();
-            Vec3d playerPos = player.getPositionVec();
+            Vector3d playerPos = player.getPositionVec();
 
             if( levelUpFirework )
-                XP.spawnRocket( player.world, player.getPosition(), skill );
+                XP.spawnRocket( player.world, player.getPositionVec(), skill );
 
             LogHandler.LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
 
@@ -67,11 +68,11 @@ public class MessageLevelUp
                 {
                     if( otherPlayer.getUniqueID() != player.getUniqueID() )
                     {
-                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).setStyle( XP.skillStyle.get( skill ) ), false );
+                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).func_240703_c_( XP.skillStyle.get( skill ) ), false );
 //                        NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.milestoneLevelUp", player.getDisplayName().getString(), "" + packet.level, "pmmo." + skillName, false, 3 ), otherPlayer );
 
                         if( milestoneLevelUpFirework )
-                            XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );
+                            XP.spawnRocket( otherPlayer.world, otherPlayer.getPositionVec(), skill );
                     }
                 });
             }

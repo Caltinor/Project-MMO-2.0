@@ -160,25 +160,25 @@ public class TooltipHandler
                 if( JsonConfig.data.get( JType.INFO_ORE ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_ORE ).get( regKey ).containsKey( "extraChance" ) )
                 {
                     if( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_ORE ) > 0 )  //ORE EXTRA CHANCE
-                        tooltip.add( new TranslationTextComponent( "pmmo.oreExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_ORE ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.oreExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_ORE ) / 100 ) ).func_240703_c_( XP.textStyle.get( "green" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.oreExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.oreExtraDrop", 0 ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                 }
 
                 if( JsonConfig.data.get( JType.INFO_LOG ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).containsKey( "extraChance" ) )
                 {
                     if( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_LOG ) > 0 )  //ORE EXTRA CHANCE
-                        tooltip.add( new TranslationTextComponent( "pmmo.logExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_LOG ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.logExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_LOG ) / 100 ) ).func_240703_c_( XP.textStyle.get( "green" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.logExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.logExtraDrop", 0 ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                 }
 
                 if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).containsKey( "extraChance" ) )
                 {
                     if( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_PLANT ) > 0 )  //ORE EXTRA CHANCE
-                        tooltip.add( new TranslationTextComponent( "pmmo.plantExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_PLANT ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.plantExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_PLANT ) / 100 ) ).func_240703_c_( XP.textStyle.get( "green" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.plantExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.plantExtraDrop", 0 ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                 }
 
                 if( salvageInfo != null && !XP.getItem( (String) salvageInfo.get( "salvageItem" ) ).equals( Items.AIR ) )
@@ -207,24 +207,24 @@ public class TooltipHandler
 
                     if( finalLevel < 0 )
                     {
-                        tooltip.add( new TranslationTextComponent( "pmmo.cannotSalvageLackLevel", reqLevel ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.cannotSalvageLackLevel", reqLevel ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                     }
                     else
                     {
                         if( potentialReturnAmount > 0 )
-                            tooltip.add( new TranslationTextComponent( "pmmo.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TranslationTextComponent( "pmmo.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "green" ) ) );
                         else
-                            tooltip.add( new TranslationTextComponent( "pmmo.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ) );
+                            tooltip.add( new TranslationTextComponent( "pmmo.salvagesInto", potentialReturnAmount, new TranslationTextComponent( salvageItem.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                         if( chance > 0 )
-                            tooltip.add( new TranslationTextComponent( "pmmo.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TranslationTextComponent( "pmmo.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).func_240703_c_( XP.textStyle.get( "green" ) ) );
                         else
-                            tooltip.add( new TranslationTextComponent( "pmmo.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( "red" ) ) );
+                            tooltip.add( new TranslationTextComponent( "pmmo.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                     }
                 }
 
                 if( salvagesFrom != null )
                 {
-                    tooltip.add( new TranslationTextComponent( "pmmo.salvagesFrom" ).setStyle( XP.textStyle.get( "green" ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.salvagesFrom" ).func_240703_c_( XP.textStyle.get( "green" ) ) );
                     level = XP.getLevel( Skill.SMITHING, player );
 
                     if( !lastKey.equals( regKey ) )
@@ -248,9 +248,9 @@ public class TooltipHandler
                     salvageInfo = JsonConfig.data.get( JType.SALVAGE_TO ).get( key );
 
                     if( salvageInfo != null && (double) salvageInfo.get( "levelReq" ) <= level )
-                        tooltip.add( new TranslationTextComponent( "pmmo.valueFromValue", " " + value, displayName ).setStyle( XP.textStyle.get( "green" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.valueFromValue", " " + value, displayName ).func_240703_c_( XP.textStyle.get( "green" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.valueFromValue", " " + value, displayName ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.valueFromValue", " " + value, displayName ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                 }
             }
         }
@@ -265,7 +265,7 @@ public class TooltipHandler
 
         if( theMap.size() > 0 )
         {
-            tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( XP.checkReq( player, item.getRegistryName(), jType ) ? "green" : "red" ) ) );
+            tooltip.add( new TranslationTextComponent( tKey ).func_240703_c_( XP.textStyle.get( XP.checkReq( player, item.getRegistryName(), jType ) ? "green" : "red" ) ) );
 
             for( String key : theMap.keySet() )
             {
@@ -274,7 +274,7 @@ public class TooltipHandler
                 if( theMap.get( key ) instanceof Double )
                 {
                     value = (double) theMap.get( key );
-                    tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dpSoft( value ) ).setStyle( XP.textStyle.get( level < value ? "red" : "green" ) ) );
+                    tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dpSoft( value ) ).func_240703_c_( XP.textStyle.get( level < value ? "red" : "green" ) ) );
                 }
             }
         }
@@ -287,7 +287,7 @@ public class TooltipHandler
 
         if( theMap.size() > 0 )
         {
-            tooltip.add( new TranslationTextComponent( tKey ).setStyle( XP.textStyle.get( "green" ) ) );
+            tooltip.add( new TranslationTextComponent( tKey ).func_240703_c_( XP.textStyle.get( "green" ) ) );
 
             for( String key : theMap.keySet() )
             {
@@ -295,9 +295,9 @@ public class TooltipHandler
                 {
                     value = (double) theMap.get( key );
                     if( value < 0 )
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " " + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " " + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " +" + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).setStyle( XP.skillStyle.get( Skill.getSkill( key ) ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " +" + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).func_240703_c_( XP.skillStyle.get( Skill.getSkill( key ) ) ) );
                 }
             }
         }

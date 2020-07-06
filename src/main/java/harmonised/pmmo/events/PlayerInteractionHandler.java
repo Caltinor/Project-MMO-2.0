@@ -66,7 +66,7 @@ public class PlayerInteractionHandler
                             event.setCanceled( true );
 
 //							if( isRemote )
-//								player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotUseProximity", new TranslationTextComponent( matchedBlock.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+//								player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotUseProximity", new TranslationTextComponent( matchedBlock.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
                         }
                     }
                 }
@@ -79,7 +79,7 @@ public class PlayerInteractionHandler
                     event.setCanceled( true );
 
                     if( isRemote )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToPlaceDown", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToPlaceDown", new TranslationTextComponent( item.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
                 }
             }
             else if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_USE ) )
@@ -87,7 +87,7 @@ public class PlayerInteractionHandler
                event.setCanceled( true );
 
                if( isRemote )
-                   player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                   player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( item.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
             }
 
             if( event instanceof PlayerInteractEvent.RightClickBlock)
@@ -101,8 +101,8 @@ public class PlayerInteractionHandler
                         event.setCanceled( true );
                         if( isRemote && event.getHand().equals( Hand.MAIN_HAND ) )
                         {
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
+                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
 
 //                            if( JsonConfig.data.get( JType.REQ_USE ).containsKey( block.getRegistryName().toString() ) )
 //                            {
@@ -115,9 +115,9 @@ public class PlayerInteractionHandler
                                         entryValue = (double) entry.getValue();
 
                                     if( startLevel < entryValue )
-                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + DP.dpSoft( entryValue ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + DP.dpSoft( entryValue ) ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
                                     else
-                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + DP.dpSoft( entryValue ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + DP.dpSoft( entryValue ) ).func_240703_c_( XP.textStyle.get( "green" ) ), false );
                                 }
 //                            }
                         }
@@ -167,7 +167,7 @@ public class PlayerInteractionHandler
                                 {
                                     if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
                                     {
-                                        if( player.getPosition().withinDistance( event.getPos(), 2 ) )
+                                        if( player.getPositionVec().withinDistance( event.getPos(), 2 ) )
                                         {
                                             Map<String, Object> theMap = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
                                             Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
@@ -259,9 +259,9 @@ public class PlayerInteractionHandler
                                                                     EnchantmentHelper.setEnchantments( newEnchantMap, salvagedBook );
                                                                     block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
                                                                     if( fullEnchants )
-                                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedAllEnchants" ).setStyle( XP.textStyle.get( "green" ) ), false );
+                                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedAllEnchants" ).func_240703_c_( XP.textStyle.get( "green" ) ), false );
                                                                     else
-                                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedSomeEnchants" ).setStyle( XP.textStyle.get( "yellow" ) ), false );
+                                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedSomeEnchants" ).func_240703_c_( XP.textStyle.get( "yellow" ) ), false );
                                                                 }
                                                             }
                                                             player.getHeldItemOffhand().shrink( 1 );
@@ -269,7 +269,7 @@ public class PlayerInteractionHandler
                                                             player.sendBreakAnimation(Hand.OFF_HAND );
                                                         }
                                                         else
-                                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.survivalOnlyWarning" ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.survivalOnlyWarning" ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
                                                     }
                                                     else
                                                     {
@@ -282,18 +282,18 @@ public class PlayerInteractionHandler
                                                     }
                                                 }
                                                 else
-                                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvageLackLevelLonger", reqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvageLackLevelLonger", reqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
                                             }
                                             else
-                                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSalvageItem", theMap.get( "salvageItem" ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSalvageItem", theMap.get( "salvageItem" ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
                                         }
                                         else
                                         {
-                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooFarAwayToSalvage" ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooFarAwayToSalvage" ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
                                         }
                                     }
                                     else
-                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ), true );
                                 }
                             }
                         }

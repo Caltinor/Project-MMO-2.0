@@ -3,7 +3,7 @@ package harmonised.pmmo.curios;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.IItemHandler;
-import top.theillusivec4.curios.api.CuriosAPI;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.stream.Stream;
 
@@ -25,8 +25,8 @@ public class Curios
     {
         public static Stream<IItemHandler> getCurios(PlayerEntity player)
         {
-            return CuriosAPI.getCuriosHandler(player)
-                    .map((curiosHandler) -> curiosHandler.getCurioMap().values().stream().map(c -> (IItemHandler) c))
+            return CuriosApi.getCuriosHelper().getCuriosHandler( player )
+                    .map((curiosHandler) -> curiosHandler.getCurios().values().stream().map(c -> (IItemHandler) c))
                     .orElse(Stream.empty());
         }
     }

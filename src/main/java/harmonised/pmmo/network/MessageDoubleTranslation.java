@@ -93,18 +93,18 @@ public class MessageDoubleTranslation
 
                         lastTime = System.nanoTime();
 
-                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).func_240703_c_( XP.textStyle.get( "green" ) ), packet.bar );
                     }
                     else
-                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + packet.fKey ), new TranslationTextComponent( packet.sKey ) ).func_240703_c_( XP.textStyle.get( "green" ) ), packet.bar );
                     break;
 
                 case 2: //red
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "red" ) ), packet.bar );
+                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ) ).func_240703_c_( XP.textStyle.get( "red" ) ), packet.bar );
                     break;
 
                 case 3: //yellow
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "yellow" ) ), packet.bar );
+                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ) ).func_240703_c_( XP.textStyle.get( "yellow" ) ), packet.bar );
                     break;
             }
         });

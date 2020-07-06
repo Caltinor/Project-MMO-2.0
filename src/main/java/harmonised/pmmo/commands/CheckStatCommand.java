@@ -34,12 +34,12 @@ public class CheckStatCommand
                 if( args[3].toLowerCase().equals( "power" ) )
                 {
                     level = XP.getPowerLevel( target );
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).setStyle( new Style().setColor( TextFormatting.AQUA ) ) ), false );
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).func_240703_c_( new Style().setColor( TextFormatting.AQUA ) ) ), false );
                 }
                 else
                 {
                     level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( XP.skillStyle.get( skill ) ) ), false );
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).func_240703_c_( XP.skillStyle.get( skill ) ) ), false );
                 }
 
                 //EXTRA INFO
@@ -53,17 +53,17 @@ public class CheckStatCommand
                         if( fishPoolChance > fishPoolMaxChance )
                             fishPoolChance = fishPoolMaxChance;
 
-                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( XP.skillStyle.get( skill ) ), false );
+                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).func_240703_c_( XP.skillStyle.get( skill ) ), false );
                         break;
                 }
             }
             catch( CommandSyntaxException e )
             {
-                sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+                sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
             }
         }
         else
-            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", args[3] ).setStyle( XP.textStyle.get( "red" ) ), false );
+            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", args[3] ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
 
         return 1;
     }
