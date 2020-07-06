@@ -1,25 +1,53 @@
-https://www.curseforge.com/minecraft/mc-mods/project-mmo
+-------------------------------------------
+Source installation information for modders
+-------------------------------------------
+This code follows the Minecraft Forge installation methodology. It will apply
+some small patches to the vanilla MCP source code, giving you and it access 
+to some of the data and functions you need to build a successful mod.
 
-I am a new mod dev, so please let me know if the following is not correct:
-I believe I have API support for my mod! You should be able to access my mod's Levels by the methods
+Note also that the patches are built against "unrenamed" MCP source code (aka
+srgnames) - this means that you will not be able to read them directly against
+normal code.
 
-(If you want to use my API with customizable-by-user values, please contact me! I have an idea of how that could be done, and that is a new method that takes in an ENUM I provide to specify what you want done, with a Registry Name that you provide)
+Source pack installation information:
 
-Skill.SKILLNAME.getLevel( player ) returns level int
-Skill.SKILLNAME.getXp( player ) returns xp double
-Skill.SKILLNAME.setLevel( player ) sets level double
-Skill.SKILLNAME.setXp( player ) sets xp double
-Skill.SKILLNAME.addLevel( player ) rewards level double
-Skill.SKILLNAME.addXp( player ) rewards xp double
+Standalone source installation
+==============================
 
-XP.getLevelDecimal (takes in skillName + player, returns level as double, works on client/server)
-XP.xpAtLevel (takes in a level as int, returns double xp value)
-XP.xpAtLevelDecimal (takes in a level as double, returns double xp value)
-XP.getSkillsTag (takes in player, returns PMMO Skills CompoundNBT of all the player's xp values, as doubles)
+See the Forge Documentation online for more detailed instructions:
+http://mcforge.readthedocs.io/en/latest/gettingstarted/
 
-To use the API, include these two lines in your gradle.build
+Step 1: Open your command-line and browse to the folder where you extracted the zip file.
 
-repositories { maven { url "http://dvs1.progwml6.com/files/maven/" } }
-dependencies { compileOnly fg.deobf("curse.maven:project-mmo:${version}") }
+Step 2: You're left with a choice.
+If you prefer to use Eclipse:
+1. Run the following command: "gradlew genEclipseRuns" (./gradlew genEclipseRuns if you are on Mac/Linux)
+2. Open Eclipse, Import > Existing Gradle Project > Select Folder 
+   or run "gradlew eclipse" to generate the project.
+(Current Issue)
+4. Open Project > Run/Debug Settings > Edit runClient and runServer > Environment
+5. Edit MOD_CLASSES to show [modid]%%[Path]; 2 times rather then the generated 4.
 
-If you have issues with this, or know what could be wrong, please contact me on Discord, or otherwise!
+If you prefer to use IntelliJ:
+1. Open IDEA, and import project.
+2. Select your build.gradle file and have it import.
+3. Run the following command: "gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
+4. Refresh the Gradle Project in IDEA if required.
+
+If at any point you are missing libraries in your IDE, or you've run into problems you can run "gradlew --refresh-dependencies" to refresh the local cache. "gradlew clean" to reset everything {this does not affect your code} and then start the processs again.
+
+Should it still not work, 
+Refer to #ForgeGradle on EsperNet for more information about the gradle environment.
+or the Forge Project Discord discord.gg/UvedJ9m
+
+Forge source installation
+=========================
+MinecraftForge ships with this code and installs it as part of the forge
+installation process, no further action is required on your part.
+
+LexManos' Install Video
+=======================
+https://www.youtube.com/watch?v=8VEdtQLuLO0&feature=youtu.be
+
+For more details update more often refer to the Forge Forums:
+http://www.minecraftforge.net/forum/index.php/topic,14048.0.html
