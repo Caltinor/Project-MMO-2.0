@@ -22,8 +22,6 @@ import java.util.Collection;
 
 public class AddCommand
 {
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         String[] args = context.getInput().split( " " );

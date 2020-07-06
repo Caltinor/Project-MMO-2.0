@@ -4,17 +4,13 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
-import harmonised.pmmo.network.MessageUpdateNBT;
-import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.PMMOPoseSetter;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -42,7 +38,7 @@ public class PlayerTickHandler
         crawlingAllowed = Config.getConfig("crawlingAllowed") != 0;
 
         if( XP.isCrawling.contains( player.getUniqueID() ) && crawlingAllowed )
-            PMMOPoseSetter.setPose( player, Pose.SWIMMING );
+            player.setPose( Pose.SWIMMING );
 
         if( XP.isPlayerSurvival( player ) && player.isAlive() )
         {
