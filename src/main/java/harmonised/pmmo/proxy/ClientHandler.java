@@ -25,7 +25,6 @@ public class ClientHandler
 {
     public static final KeyBinding SHOW_GUI = new KeyBinding( "key.pmmo.showGui", GLFW.GLFW_KEY_TAB, "category.pmmo" );
     public static final KeyBinding TOGGLE_TOOLTIP = new KeyBinding( "key.pmmo.toggleTooltip", GLFW.GLFW_KEY_F6, "category.pmmo" );
-    public static final KeyBinding CRAWL_KEY = new KeyBinding( "key.pmmo.crawl", GLFW.GLFW_KEY_C, "category.pmmo" );
     public static final KeyBinding VEIN_KEY = new KeyBinding( "key.pmmo.vein", GLFW.GLFW_KEY_GRAVE_ACCENT, "category.pmmo" );
     public static final KeyBinding OPEN_MENU = new KeyBinding( "key.pmmo.openMenu", GLFW.GLFW_KEY_P, "category.pmmo" );
     public static final KeyBinding OPEN_SETTINGS = new KeyBinding( "key.pmmo.openSettings", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo" );
@@ -37,7 +36,6 @@ public class ClientHandler
         MinecraftForge.EVENT_BUS.register( new XPOverlayGUI() );
         ClientRegistry.registerKeyBinding( SHOW_GUI );
         ClientRegistry.registerKeyBinding( TOGGLE_TOOLTIP );
-        ClientRegistry.registerKeyBinding( CRAWL_KEY );
         ClientRegistry.registerKeyBinding( VEIN_KEY );
         ClientRegistry.registerKeyBinding( OPEN_MENU );
         ClientRegistry.registerKeyBinding( OPEN_SETTINGS );

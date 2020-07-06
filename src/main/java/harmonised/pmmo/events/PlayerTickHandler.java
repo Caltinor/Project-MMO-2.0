@@ -11,7 +11,6 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Pose;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -34,11 +33,6 @@ public class PlayerTickHandler
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
         PlayerEntity player = event.player;
-        boolean crawlingAllowed;
-        crawlingAllowed = Config.getConfig("crawlingAllowed") != 0;
-
-        if( XP.isCrawling.contains( player.getUniqueID() ) && crawlingAllowed )
-            player.setPose( Pose.SWIMMING );
 
         if( XP.isPlayerSurvival( player ) && player.isAlive() )
         {
