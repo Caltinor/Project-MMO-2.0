@@ -52,7 +52,6 @@ public class XP
 {
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
 	private static Map<Skill, Integer> skillColors = new HashMap<>();
-	public static Set<UUID> isCrawling = new HashSet<>();
 	public static Set<UUID> isVeining = new HashSet<>();
 	public static Map<Skill, Style> skillStyle = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();

@@ -54,11 +54,6 @@ public class Config
         localConfig.put( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
         localConfig.put( "veinMaxBlocks", (double) forgeConfig.veinMaxBlocks.get() );
 
-        if( Config.forgeConfig.crawlingAllowed.get() )
-            localConfig.put( "crawlingAllowed", 1D );
-        else
-            localConfig.put( "crawlingAllowed", 0D );
-
         if( Config.forgeConfig.veiningAllowed.get() )
             localConfig.put( "veiningAllowed", 1D );
         else
@@ -70,7 +65,6 @@ public class Config
     public static class ConfigImplementation
     {
         //Miscellaneous
-        public ConfigHelper.ConfigValueListener<Boolean> crawlingAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> craftReqEnabled;
@@ -271,11 +265,6 @@ public class Config
         {
             builder.push( "Miscellaneous" );
             {
-                this.crawlingAllowed = subscriber.subscribe(builder
-                        .comment( "Is crawling allowed? true = on, false = off" )
-                        .translation( "pmmo.crawlingAllowed" )
-                        .define( "crawlingAllowed", true ) );
-
                 this.showWelcome = subscriber.subscribe(builder
                         .comment( "Should the Welcome message come up?" )
                         .translation( "pmmo.showWelcome" )

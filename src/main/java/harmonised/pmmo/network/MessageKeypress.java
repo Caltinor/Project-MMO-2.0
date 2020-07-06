@@ -43,14 +43,7 @@ public class MessageKeypress
         {
             UUID playerUUID = ctx.get().getSender().getUniqueID();
 
-            if( packet.key == 0 )
-            {
-                if( packet.keyState )
-                    XP.isCrawling.add( playerUUID );
-                else
-                    XP.isCrawling.remove( playerUUID );
-            }
-            else if( packet.key == 1 )
+            if( packet.key == 1 )
             {
                 if( packet.keyState )
                     XP.isVeining.add( playerUUID );

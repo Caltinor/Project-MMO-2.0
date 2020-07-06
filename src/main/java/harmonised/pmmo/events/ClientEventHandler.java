@@ -21,7 +21,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientEventHandler
 {
-    private static boolean wasCrawling = false, wasVeining = false, wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
+    private static boolean wasVeining = false, wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
 
     public static void subscribeClientEvents( IEventBus eventBus )
     {
@@ -33,12 +33,6 @@ public class ClientEventHandler
     {
         if( Minecraft.getInstance().player != null )
         {
-            if( wasCrawling != ClientHandler.CRAWL_KEY.isKeyDown() )
-            {
-                wasCrawling = ClientHandler.CRAWL_KEY.isKeyDown();
-                NetworkHandler.sendToServer( new MessageKeypress( ClientHandler.CRAWL_KEY.isKeyDown(), 0 ) );
-            }
-
             if( wasVeining != ClientHandler.VEIN_KEY.isKeyDown() )
             {
                 wasVeining = ClientHandler.VEIN_KEY.isKeyDown();
@@ -80,7 +74,6 @@ public class ClientEventHandler
                     Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( "pmmo.glossary" ) ) );
                     wasOpenGlossary = ClientHandler.OPEN_GLOSSARY.isKeyDown();
                 }
-//                NetworkHandler.sendToServer( new MessageCrawling( ClientHandler.CRAWL_KEY.isKeyDown() ) );
             }
 
             if( !(Minecraft.getInstance().player == null) && ClientHandler.TOGGLE_TOOLTIP.isKeyDown() && !tooltipKeyWasPressed )
@@ -93,11 +86,6 @@ public class ClientEventHandler
             }
 
             tooltipKeyWasPressed = ClientHandler.TOGGLE_TOOLTIP.isKeyDown();
-
-            if( ClientHandler.CRAWL_KEY.isKeyDown() )
-                XP.isCrawling.add( Minecraft.getInstance().player.getUniqueID() );
-            else
-                XP.isCrawling.remove( Minecraft.getInstance().player.getUniqueID() );
         }
     }
 
