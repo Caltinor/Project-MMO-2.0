@@ -19,8 +19,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.TickEvent;
 
-import java.util.func_235901_b_hMap;
-import java.util.func_235901_b_hSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 

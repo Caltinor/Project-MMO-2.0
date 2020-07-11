@@ -12,7 +12,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import java.util.Collection;
-import java.util.func_235901_b_hSet;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 

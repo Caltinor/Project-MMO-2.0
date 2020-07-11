@@ -14,7 +14,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.func_235901_b_hMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public enum Skill

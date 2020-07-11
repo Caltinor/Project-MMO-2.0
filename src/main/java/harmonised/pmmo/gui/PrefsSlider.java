@@ -1,5 +1,8 @@
 package harmonised.pmmo.gui;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.Slider;
 
 import java.util.function.Consumer;
@@ -10,7 +13,7 @@ public class PrefsSlider extends Slider
     private final boolean isSwitch;
     public String preference;
 
-    public PrefsSlider( int xPos, int yPos, int width, int height, String preference, String prefix, String suf, double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr, boolean isSwitch, IPressable handler )
+    public PrefsSlider(int xPos, int yPos, int width, int height, String preference, ITextComponent prefix, ITextComponent suf, double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr, boolean isSwitch, IPressable handler )
     {
         super(xPos, yPos, width, height, prefix, suf, minVal, maxVal, currentVal, showDec, drawStr, handler);
         this.preference = preference;
@@ -24,7 +27,7 @@ public class PrefsSlider extends Slider
         {
             this.sliderValue = this.sliderValue < 0.5 ? 0 : 1;
             if(drawString)
-                setMessage( this.sliderValue == 1 ? "On" : "Off" );
+                setMessage( new StringTextComponent( this.sliderValue == 1 ? "On" : "Off" ));
         }
         else
         {
@@ -63,7 +66,7 @@ public class PrefsSlider extends Slider
             }
 
             if(drawString)
-                setMessage(dispString + val + suffix);
+                setMessage( new StringTextComponent( dispString + val + suffix ));
         }
 
         if (parent != null)

@@ -59,7 +59,7 @@ public class MessageLevelUp
             if( levelUpFirework )
                 XP.spawnRocket( player.world, player.getPositionVec(), skill );
 
-            LogHandler.LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
+            LogHandler.LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.world.func_234922_V_().func_240901_a_().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
 
             if( packet.level % levelsPerMilestone == 0 && broadcastMilestone )
             {

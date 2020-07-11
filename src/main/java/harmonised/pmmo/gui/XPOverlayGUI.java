@@ -2,6 +2,7 @@ package harmonised.pmmo.gui;
 
 import java.util.*;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.WorldTickHandler;
@@ -61,6 +62,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static BlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	private static Item lastToolHeld = Items.AIR;
+	private static MatrixStack stack;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean guiWasOn = false, guiOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
 	MainWindow sr;
@@ -84,6 +86,7 @@ public class XPOverlayGUI extends AbstractGui
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
 				sr = mc.getMainWindow();
+				stack = event.getMatrixStack();
 
 //				drawCenteredString( stack,  fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( stack,  fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
@@ -124,7 +127,7 @@ public class XPOverlayGUI extends AbstractGui
 					doVein();
 					doSkills();
 				}
-				doXpDrops();
+				doXpDrops( stack );
 				doXpBar();
 				doSkillList();
 
@@ -172,7 +175,7 @@ public class XPOverlayGUI extends AbstractGui
 		lastBlockTransKey = lastBlockState.getBlock().getTranslationKey();
 	}
 
-	private void doXpDrops()
+	private void doXpDrops( MatrixStack stack )
 	{
 		if( xpDropsAttachedToBar )
 		{
@@ -252,7 +255,7 @@ public class XPOverlayGUI extends AbstractGui
 					tempAlpha = (int) Math.floor( xpDropMaxOpacity - tempInt );
 
 				if( tempAlpha > 3 )
-					drawCenteredString( stack,  fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo." + xpDrop.skill.name().toLowerCase() ).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.skill ) );
+					drawCenteredString( stack, fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslationTextComponent( "pmmo." + xpDrop.skill.name().toLowerCase() ).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.skill ) );
 			}
 		}
 
@@ -462,7 +465,8 @@ public class XPOverlayGUI extends AbstractGui
 				color = XP.getSkillColor( keySkill );
 				if( level >= maxLevel )
 					tempString = "" + maxLevel;
-				drawRightAlignedString( fontRenderer, tempString, levelGap + 4, 3 + listIndex, color );
+//				drawRightAlignedString( fontRenderer, tempString, levelGap + 4, 3 + listIndex, color );
+				//COUT
 				drawString( stack,  fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
 				drawString( stack,  fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
 

@@ -17,7 +17,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.func_235901_b_hSet;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 

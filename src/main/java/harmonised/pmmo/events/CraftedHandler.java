@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
-import java.util.func_235901_b_hMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class CraftedHandler

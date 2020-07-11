@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.func_235901_b_hMap;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.function.Supplier;
 

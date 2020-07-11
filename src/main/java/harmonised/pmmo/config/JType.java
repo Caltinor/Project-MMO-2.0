@@ -2,7 +2,7 @@ package harmonised.pmmo.config;
 
 import harmonised.pmmo.skills.Skill;
 
-import java.util.func_235901_b_hMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public enum JType

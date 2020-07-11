@@ -15,7 +15,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.func_235901_b_hMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class FishedHandler

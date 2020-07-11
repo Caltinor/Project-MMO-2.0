@@ -19,8 +19,8 @@ import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.func_235901_b_hMap;
-import java.util.func_235901_b_hSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 

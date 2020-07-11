@@ -77,7 +77,7 @@ public class PmmoCommand
 
         dispatcher.register( Commands.literal( "pmmo" )
                   .then( Commands.literal( "admin" )
-                  .requires( player -> { return player.func_235901_b_PermissionLevel( 2 ); })
+                  .requires( player -> { return player.hasPermissionLevel( 2 ); })
                   .then( Commands.argument( "target", EntityArgument.players() )
                   .then( Commands.literal( "set" )
                   .then( Commands.argument( "Skill", StringArgumentType.word() )
@@ -100,7 +100,7 @@ public class PmmoCommand
                   .then( Commands.literal( "clear" )
                   .executes( ClearCommand::execute ) )))
                   .then( Commands.literal( "reload" )
-                  .requires( player -> { return player.func_235901_b_PermissionLevel( 2 ); } )
+                  .requires( player -> { return player.hasPermissionLevel( 2 ); } )
                   .executes( ReloadConfigCommand::execute )
                   )
                   .then( Commands.literal( "resync" )

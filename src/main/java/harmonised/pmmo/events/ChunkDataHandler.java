@@ -27,7 +27,7 @@ public class ChunkDataHandler
         {
             if( levelNBT.contains( "placedPos" ) )
             {
-                ResourceLocation dimResLoc = event.getWorld().func_234922_V_().func_240901_a_();
+                ResourceLocation dimResLoc = event.getWorld().getWorld().func_234922_V_().func_240901_a_();
                 ChunkPos chunkPos = event.getChunk().getPos();
 
                 if( !placedMap.containsKey( dimResLoc ) )

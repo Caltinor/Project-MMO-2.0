@@ -180,13 +180,14 @@ public class ListScreen extends Screen
                     tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_end", jType, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
-                for( Map.Entry<String, Map<String, Object>> entry : veinBlacklist.entrySet() )
-                {
-                    if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
-                    {
-                        tempList.add( new ListButton( 0, 0, 3, 8, entry.getKey(), jType, "", button -> ((ListButton) button).clickAction() ) );
-                    }
-                }
+//                for( Map.Entry<String, Map<String, Object>> entry : veinBlacklist.entrySet() )
+//                {
+//                    if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
+//                    {
+//                        tempList.add( new ListButton( 0, 0, 3, 8, entry.getKey(), jType, "", button -> ((ListButton) button).clickAction() ) );
+//                    }
+//                }
+                //COUT
             }
                 break;
 
@@ -979,7 +980,7 @@ public class ListScreen extends Screen
         if (this.minecraft != null)
         {
             this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
         }
 
         boxHeight = 256;

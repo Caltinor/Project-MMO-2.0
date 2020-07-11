@@ -20,7 +20,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.HashMap;
-import java.util.func_235901_b_hMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,7 +46,7 @@ public class BlockPlacedHandler
                 if( XP.checkReq( player, block.getRegistryName(), JType.REQ_PLACE ) )
                 {
                     double blockHardnessLimitForPlacing = Config.forgeConfig.blockHardnessLimitForPlacing.get();
-                    double blockHardness = block.getBlockHardness(block.getDefaultState(), event.getWorld(), event.getPos());
+                    double blockHardness = event.getPlacedBlock().getBlockHardness( event.getWorld(), event.getPos() );
                     if ( blockHardness > blockHardnessLimitForPlacing )
                         blockHardness = blockHardnessLimitForPlacing;
                     String playerName = player.getName().toString();

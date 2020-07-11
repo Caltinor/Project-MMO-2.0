@@ -5,7 +5,7 @@ import harmonised.pmmo.util.LogHandler;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
-import java.util.func_235901_b_hMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Config

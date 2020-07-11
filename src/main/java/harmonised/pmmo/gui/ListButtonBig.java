@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -41,7 +42,7 @@ public class ListButtonBig extends Button
     public ItemStack itemStack;
     public String regKey, title, buttonText;
     public List<String> text = new ArrayList<>();
-    public List<String> tooltipText = new ArrayList<>();
+    public List<ITextComponent> tooltipText = new ArrayList<>();
     String playerName;
     Entity testEntity = null;
     LivingEntity entity = null;
@@ -56,9 +57,9 @@ public class ListButtonBig extends Button
         this.elementOne = elementOne * 64;
         this.elementTwo = elementTwo * 64;
         this.playerName = playerName;
-        tooltipText.add( playerName );
+        tooltipText.add( new TranslationTextComponent( playerName ) );
         if( tooltip != null )
-            this.tooltipText.add( tooltip );
+            this.tooltipText.add( new TranslationTextComponent( playerName ) );
 
         if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
             testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().world );

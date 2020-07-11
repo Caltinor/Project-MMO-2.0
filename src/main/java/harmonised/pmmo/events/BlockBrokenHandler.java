@@ -132,7 +132,7 @@ public class BlockBrokenHandler
         ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( material ).name().toLowerCase();
 //			String regKey = block.getRegistryName().toString();
-        double hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
+        double hardness = state.getBlockHardness( event.getWorld(), event.getPos() );
         if( hardness > blockHardnessLimitForBreaking )
             hardness = blockHardnessLimitForBreaking;
 

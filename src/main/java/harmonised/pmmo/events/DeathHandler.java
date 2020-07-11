@@ -18,7 +18,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Collection;
-import java.util.func_235901_b_hSet;
+import java.util.HashSet;
 import java.util.Map;
 
 public class DeathHandler

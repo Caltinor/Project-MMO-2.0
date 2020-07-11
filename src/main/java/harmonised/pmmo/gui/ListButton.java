@@ -20,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -45,7 +47,7 @@ public class ListButton extends Button
 
     public ListButton( int posX, int posY, int elementOne, int elementTwo, String regKey, JType jType, String buttonText, IPressable onPress )
     {
-        super(posX, posY, 32, 32, "", onPress);
+        super(posX, posY, 32, 32, new TranslationTextComponent( "" ), onPress);
         this.regKey = regKey;
         this.buttonText = buttonText;
         this.itemStack = new ItemStack( XP.getItem( regKey ) );
@@ -79,8 +81,9 @@ public class ListButton extends Button
                     this.title = new TranslationTextComponent( "pmmo.allDimensions" ).getString();
                 else if( regKey.equals( "minecraft:overworld" ) || regKey.equals( "minecraft:the_nether" ) || regKey.equals( "minecraft:the_end" ) )
                     this.title = new TranslationTextComponent( regKey ).getString();
-                else if( ForgeRegistries.MOD_DIMENSIONS.containsKey( XP.getResLoc( regKey ) ) )
-                    this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getString();
+//                else if( ForgeRegistries.MOD_DIMENSIONS.containsKey( XP.getResLoc( regKey ) ) )
+//                    this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getString();
+                //COUT
                 break;
 
             case STATS:

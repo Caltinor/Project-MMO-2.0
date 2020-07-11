@@ -113,7 +113,8 @@ public class TooltipHandler
                 {
                     material = ( (BlockItem) item).getBlock().getDefaultState().getMaterial();
 
-                    hardness = ((BlockItem) item).getBlock().blockHardness;
+//                    hardness = ((BlockItem) item).getBlock().blockHardness;
+                    hardness = ((BlockItem) item).getBlock().getDefaultState().getBlockHardness( null, null );
                     if( hardness > 0 )
                         tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo.hardness", DP.dp( hardness ) ).getString() ) );
 //                    tooltip.add( new StringTextComponent( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );

@@ -7,6 +7,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class PrefsEntry
 {
@@ -39,17 +41,17 @@ public class PrefsEntry
 
         this.defaultVal = defaultVal;
 
-        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, prefix, suffix, minVal, maxVal, curVal, showDec, showStr, isSwitch, button ->
+        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, new StringTextComponent( prefix ), new StringTextComponent( suffix ), minVal, maxVal, curVal, showDec, showStr, isSwitch, button ->
         {
         });
 
         if( !isSwitch )
         {
-            textField = new TextFieldWidget( font, 0, 0, textFieldWidth, height, "" );
+            textField = new TextFieldWidget( font, 0, 0, textFieldWidth, height, new TranslationTextComponent( "" ) );
             textField.setMaxStringLength( 5 );
-            textField.setText( slider.getMessage() );
+            textField.setText( slider.getMessage().getString() );
         }
-        button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, isSwitch ? "RESET" : "R", button ->
+        button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, new TranslationTextComponent( isSwitch ? "RESET" : "R" ), button ->
         {
             resetValue();
         });
@@ -59,9 +61,9 @@ public class PrefsEntry
     {
         slider.setValue( defaultVal );
         if( isSwitch )
-            slider.setMessage( slider.getValue() == 1 ? "On" : "Off" );
+            slider.setMessage( new StringTextComponent( slider.getValue() == 1 ? "On" : "Off" ));
         else
-            textField.setText( slider.getMessage() );
+            textField.setText( slider.getMessage().getString() );
     }
 
     public int getWidth()

@@ -11,7 +11,6 @@ import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.skills.AttributeHandler;
-import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -1296,8 +1295,9 @@ public class XP
 		ItemStack itemStack = new ItemStack( Items.FIREWORK_ROCKET );
 		itemStack.setTag( nbt );
 
-		FireworkRocketEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
-		world.addEntity( fireworkRocketEntity );
+//		FireworkRocketEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
+//		world.addEntity( fireworkRocketEntity );
+		//COUT
 	}
 
 	public static void applyWornPenalty( PlayerEntity player, ItemStack itemStack )
@@ -1315,7 +1315,7 @@ public class XP
 			player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
 
-			if( alwaysDropWornItems || EnchantmentHelper.func_235901_b_BindingCurse( itemStack ) )
+			if( alwaysDropWornItems || EnchantmentHelper.hasBindingCurse( itemStack ) )
 			{
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );
