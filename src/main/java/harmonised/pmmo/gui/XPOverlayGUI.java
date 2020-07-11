@@ -465,8 +465,6 @@ public class XPOverlayGUI extends AbstractGui
 				color = XP.getSkillColor( keySkill );
 				if( level >= maxLevel )
 					tempString = "" + maxLevel;
-//				drawRightAlignedString( fontRenderer, tempString, levelGap + 4, 3 + listIndex, color );
-				//COUT
 				drawString( stack, fontRenderer, tempString, levelGap + 4 - fontRenderer.getStringWidth( tempString ), 3 + listIndex, color );
 				drawString( stack, fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
 				drawString( stack, fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
