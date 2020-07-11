@@ -467,8 +467,9 @@ public class XPOverlayGUI extends AbstractGui
 					tempString = "" + maxLevel;
 //				drawRightAlignedString( fontRenderer, tempString, levelGap + 4, 3 + listIndex, color );
 				//COUT
-				drawString( stack,  fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
-				drawString( stack,  fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
+				drawString( stack, fontRenderer, tempString, levelGap + 4 - fontRenderer.getStringWidth( tempString ), 3 + listIndex, color );
+				drawString( stack, fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
+				drawString( stack, fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
 
 				if( aSkill.bonus != 0 )
 				{
