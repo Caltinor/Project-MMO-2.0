@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
@@ -67,9 +68,9 @@ public class PrefsChoiceScreen extends Screen
     }
 
     @Override
-    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( MatrixStack stack,  1 );
+        renderBackground( stack,  1 );
         super.render( stack, mouseX, mouseY, partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
@@ -80,7 +81,7 @@ public class PrefsChoiceScreen extends Screen
         for( TileButton button : tileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
+                renderTooltip( stack, new TranslationTextComponent( button.transKey ), mouseX, mouseY );
         }
     }
 
@@ -90,7 +91,7 @@ public class PrefsChoiceScreen extends Screen
         if (this.minecraft != null)
         {
             this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
         }
         else
             this.renderDirtBackground(p_renderBackground_1_);

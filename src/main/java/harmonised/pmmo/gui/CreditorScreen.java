@@ -90,9 +90,9 @@ public class CreditorScreen extends Screen
             color = colors.get( playerName );
 
 //        if( font.getStringWidth( title.getString() ) > 220 )
-//            drawCenteredString( stack,  font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, color );
+//            drawCenteredString( stack,  font, title.getString(), sr.getScaledWidth() / 2, y - 10, color );
 //        else
-//            drawCenteredString( stack,  font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, color );
+//            drawCenteredString( stack,  font, title.getString(), sr.getScaledWidth() / 2, y - 5, color );
 
         List<String> list = creditorsInfo.get( playerName );
 
@@ -106,7 +106,7 @@ public class CreditorScreen extends Screen
 //        for( TileButton button : tileButtons )
 //        {
 //            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-//                renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
+//                renderTooltip( stack,  new TranslationTextComponent( button.transKey ).getString(), mouseX, mouseY );
 //        }
 
         RenderSystem.enableBlend();

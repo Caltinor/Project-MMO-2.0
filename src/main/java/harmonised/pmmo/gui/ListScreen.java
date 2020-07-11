@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -334,9 +335,9 @@ public class ListScreen extends Screen
                     {
                         for (Map.Entry<String, Object> entry : biomeBonusMap.entrySet()) {
                             if ( (double) entry.getValue() > 0 )
-                                skillText.add(" " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").func_240703_c_(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getFormattedText());
+                                skillText.add(" " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").func_240703_c_(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getString());
                             if ( (double) entry.getValue() < 0 )
-                                skillText.add(" " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), entry.getValue() + "%").func_240703_c_(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getFormattedText());
+                                skillText.add(" " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), entry.getValue() + "%").func_240703_c_(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getString());
                         }
                     }
 
@@ -344,7 +345,7 @@ public class ListScreen extends Screen
                     {
                         for ( Map.Entry<String, Object> entry : biomeMobMultiplierMap.entrySet() )
                         {
-                            Style styleColor = Style.EMPTY();
+                            Style styleColor = Style.EMPTY;
 
                             if ( (double) entry.getValue() > 1 )
                                 styleColor = XP.textStyle.get("red");
@@ -354,15 +355,15 @@ public class ListScreen extends Screen
                             switch ( entry.getKey() )
                             {
                                 case "damageBonus":
-                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleDamage", DP.dp( (double) entry.getValue() * 100) ).func_240703_c_( styleColor ).getFormattedText() );
+                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleDamage", DP.dp( (double) entry.getValue() * 100) ).func_240703_c_( styleColor ).getString() );
                                     break;
 
                                 case "hpBonus":
-                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleHp", DP.dp( (double) entry.getValue() * 100) ).func_240703_c_( styleColor ).getFormattedText() );
+                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleHp", DP.dp( (double) entry.getValue() * 100) ).func_240703_c_( styleColor ).getString() );
                                     break;
 
                                 case "speedBonus":
-                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleSpeed", DP.dp( (double) entry.getValue() * 100) ).func_240703_c_( styleColor ).getFormattedText() );
+                                    scaleText.add( " " + getTransComp("pmmo.enemyScaleSpeed", DP.dp( (double) entry.getValue() * 100) ).func_240703_c_( styleColor ).getString() );
                                     break;
                             }
                         }
@@ -376,7 +377,7 @@ public class ListScreen extends Screen
                             {
                                 Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                                 if ( effect != null )
-                                    effectText.add( " " + getTransComp( effect.getDisplayName().getFormattedText() + " " + (int) ( (double) entry.getValue() + 1) ).func_240703_c_( XP.textStyle.get("red") ).getFormattedText() );
+                                    effectText.add( " " + getTransComp( effect.getDisplayName().getString() + " " + (int) ( (double) entry.getValue() + 1) ).func_240703_c_( XP.textStyle.get("red") ).getString() );
                             }
                         }
                     }
@@ -396,14 +397,14 @@ public class ListScreen extends Screen
                     double extraDropped = XP.getExtraChance( player, button.regKey, jType ) / 100;
 
                     if ( extraDroppedPerLevel <= 0 )
-                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).func_240703_c_( XP.textStyle.get("red") ).getFormattedText() );
+                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).func_240703_c_( XP.textStyle.get("red") ).getString() );
                     else
-                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).func_240703_c_( XP.textStyle.get("green") ).getFormattedText() );
+                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).func_240703_c_( XP.textStyle.get("green") ).getString() );
 
                     if ( extraDropped <= 0 )
-                        infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                        infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
                     else
-                        infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).func_240703_c_( XP.textStyle.get( "green" ) ).getFormattedText() );
+                        infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).func_240703_c_( XP.textStyle.get( "green" ) ).getString() );
 
                     if ( infoText.size() > 0 )
                         button.text.addAll( infoText );
@@ -411,9 +412,9 @@ public class ListScreen extends Screen
                     if ( breakMap != null )
                     {
                         if ( XP.checkReq( player, button.regKey, JType.REQ_BREAK ) )
-                            button.text.add( getTransComp( "pmmo.break" ).func_240703_c_( XP.textStyle.get( "green" ) ).getFormattedText() );
+                            button.text.add( getTransComp( "pmmo.break" ).func_240703_c_( XP.textStyle.get( "green" ) ).getString() );
                         else
-                            button.text.add( getTransComp( "pmmo.break" ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                            button.text.add( getTransComp( "pmmo.break" ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
                         addLevelsToButton( button, breakMap, player, false );
                     }
                 }
@@ -484,15 +485,15 @@ public class ListScreen extends Screen
 
                     button.text.add( "" );
 
-                    button.text.add( " " + getTransComp( "pmmo.currentChance", DP.dpSoft( curChance ) ).func_240703_c_( color ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( levelReq ) ).func_240703_c_( color ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevelAvailable ).func_240703_c_( color ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.currentChance", DP.dpSoft( curChance ) ).func_240703_c_( color ).getString() );
+                    button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( levelReq ) ).func_240703_c_( color ).getString() );
+                    button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevelAvailable ).func_240703_c_( color ).getString() );
 
                     button.text.add( "" );
-                    button.text.add( " " + getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).getString() );
                     if( maxLevel > 1 )
-                        button.text.add( " " + getTransComp( "pmmo.levelsPerTier", DP.dpSoft( levelsPerTier ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevel ).getFormattedText() );
+                        button.text.add( " " + getTransComp( "pmmo.levelsPerTier", DP.dpSoft( levelsPerTier ) ).getString() );
+                    button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevel ).getString() );
                 }
                     break;
 
@@ -506,29 +507,29 @@ public class ListScreen extends Screen
                     if ( reqMap.containsKey( button.regKey ) )
                     {
                         button.text.add( "" );
-                        button.text.add( getTransComp( "pmmo.toHarm" ).func_240703_c_( color ).getFormattedText() );
+                        button.text.add( getTransComp( "pmmo.toHarm" ).func_240703_c_( color ).getString() );
                         addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
                     }
 
                     button.text.add( "" );
-                    button.text.add( getTransComp( "pmmo.xpValue" ).func_240703_c_( color ).getFormattedText() );
+                    button.text.add( getTransComp( "pmmo.xpValue" ).func_240703_c_( color ).getString() );
                     if ( killXpMap != null )
                         addXpToButton( button, killXpMap, jType, player );
                     else
                     {
                         if( button.entity instanceof AnimalEntity )
-                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).func_240703_c_( color ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).func_240703_c_( color ).getString() );
                         else if( button.entity instanceof MobEntity)
-                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).func_240703_c_( color ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).func_240703_c_( color ).getString() );
                     }
 
                     if ( rareDropMap != null )
                     {
                         button.text.add( "" );
-                        button.text.add( getTransComp( "pmmo.rareDrops" ).func_240703_c_( color ).getFormattedText() );
+                        button.text.add( getTransComp( "pmmo.rareDrops" ).func_240703_c_( color ).getString() );
                         for( Map.Entry<String, Object> entry : rareDropMap.entrySet() )
                         {
-                            button.text.add( " " + new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getFormattedText() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( (double) entry.getValue() ) ).getFormattedText() ).func_240703_c_( color ).getFormattedText() );
+                            button.text.add( " " + new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getString() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( (double) entry.getValue() ) ).getString() ).func_240703_c_( color ).getString() );
                         }
                     }
                 }
@@ -540,10 +541,10 @@ public class ListScreen extends Screen
                     if( veinBlacklist != null )
                     {
                         button.text.add( "" );
-                        button.text.add( getTransComp( "pmmo.veinBlacklist" ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                        button.text.add( getTransComp( "pmmo.veinBlacklist" ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
                         for ( Map.Entry<String, Object> entry : veinBlacklist.get( button.regKey ).entrySet() )
                         {
-                            button.text.add( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                            button.text.add( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
                         }
                     }
                 }
@@ -562,29 +563,29 @@ public class ListScreen extends Screen
                     maxCount = (int) (double) fishPoolMap.get( "maxCount" );
 
                     button.text.add( "" );
-                    button.text.add( " " + getTransComp( "pmmo.currentWeight", weight ).func_240703_c_( color ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.currentWeight", weight ).func_240703_c_( color ).getString() );
 
                     if ( minCount == maxCount )
-                        button.text.add( " " + getTransComp( "pmmo.caughtAmount", minCount ).func_240703_c_( color ).getFormattedText() );
+                        button.text.add( " " + getTransComp( "pmmo.caughtAmount", minCount ).func_240703_c_( color ).getString() );
                     else
-                        button.text.add( " " + getTransComp( "pmmo.caughtAmountRange", minCount, maxCount ).func_240703_c_( color ).getFormattedText() );
+                        button.text.add( " " + getTransComp( "pmmo.caughtAmountRange", minCount, maxCount ).func_240703_c_( color ).getString() );
 
-                    button.text.add( " " + getTransComp( "pmmo.xpEach", DP.dpSoft( (double) fishPoolMap.get("xp") ) ).func_240703_c_( color ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.xpEach", DP.dpSoft( (double) fishPoolMap.get("xp") ) ).func_240703_c_( color ).getString() );
 
                     if ( button.itemStack.isEnchantable() )
                     {
                         if( (double) fishPoolMap.get( "enchantLevelReq" ) <= level && button.unlocked )
-                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).func_240703_c_( XP.textStyle.get( "green" ) ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).func_240703_c_( XP.textStyle.get( "green" ) ).getString() );
                         else
-                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
                     }
 
                     button.text.add( "" );
-//                    button.text.add( getTransComp( "pmmo.info" ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.startWeight", DP.dpSoft( (double) fishPoolMap.get("startWeight") ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( (double) fishPoolMap.get("startLevel") ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getFormattedText() );
+//                    button.text.add( getTransComp( "pmmo.info" ).getString() );
+                    button.text.add( " " + getTransComp( "pmmo.startWeight", DP.dpSoft( (double) fishPoolMap.get("startWeight") ) ).getString() );
+                    button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( (double) fishPoolMap.get("startLevel") ) ).getString() );
+                    button.text.add( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getString() );
+                    button.text.add( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getString() );
                 }
                     break;
 
@@ -597,7 +598,7 @@ public class ListScreen extends Screen
                 case REQ_PLACE:
                 {
                     button.text.add( "" );
-                    button.text.add( getTransComp( "pmmo." + jType.toString().replace( "req_", "" ) ).func_240703_c_( XP.textStyle.get( XP.checkReq( player, button.regKey, jType ) ? "green" : "red" ) ).getFormattedText() );
+                    button.text.add( getTransComp( "pmmo." + jType.toString().replace( "req_", "" ) ).func_240703_c_( XP.textStyle.get( XP.checkReq( player, button.regKey, jType ) ? "green" : "red" ) ).getString() );
                     addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
                 }
                     break;
@@ -626,7 +627,7 @@ public class ListScreen extends Screen
                     for( String key : sortedItems )
                     {
                         double levelReq = levelReqs.get( key );
-                        String itemName = getTransComp( XP.getItem( key ).getTranslationKey() ).getFormattedText();
+                        String itemName = getTransComp( XP.getItem( key ).getTranslationKey() ).getString();
 
                         double chance = (smithLevel - levelReq) * (double) salvagesToMap.get( key ).get( "chancePerLevel" );
                         double maxChance = (double) salvagesToMap.get( key ).get( "maxChance" );
@@ -639,10 +640,10 @@ public class ListScreen extends Screen
                         if( passed )
                         {
                             anyPassed = true;
-                            button.text.add( " " + getTransComp( "pmmo.valueValueChance", DP.dpSoft( (double) reqMap.get( button.regKey ).get( key ) ), itemName, DP.dpSoft( chance ) ).func_240703_c_( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.valueValueChance", DP.dpSoft( (double) reqMap.get( button.regKey ).get( key ) ), itemName, DP.dpSoft( chance ) ).func_240703_c_( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getString() );
                         }
                         else
-                            button.text.add( " " + getTransComp( "pmmo.salvagesFromLevelFromItem", DP.dpSoft( (double) reqMap.get( button.regKey ).get( key ) ), DP.dpSoft( levelReq ), itemName ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.salvagesFromLevelFromItem", DP.dpSoft( (double) reqMap.get( button.regKey ).get( key ) ), DP.dpSoft( levelReq ), itemName ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
                     }
 
                     button.unlocked = anyPassed;
@@ -672,15 +673,15 @@ public class ListScreen extends Screen
                     Style color = XP.textStyle.get( chance > 0 ? "green" : "red" );
 
                     button.text.add( "" );
-                    button.text.add( getTransComp( "pmmo.canBeSalvagedFromLevel", DP.dpSoft( levelReq ) ).func_240703_c_( color ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.valueValue", DP.dpSoft( salvageMax ), outputName ).func_240703_c_( color ).getFormattedText() );
+                    button.text.add( getTransComp( "pmmo.canBeSalvagedFromLevel", DP.dpSoft( levelReq ) ).func_240703_c_( color ).getString() );
+                    button.text.add( " " + getTransComp( "pmmo.valueValue", DP.dpSoft( salvageMax ), outputName ).func_240703_c_( color ).getString() );
                     button.text.add( "" );
-                    button.text.add( getTransComp( "pmmo.xpPerItem", DP.dpSoft( xpPerItem ) ).func_240703_c_( color ).getFormattedText() );
-                    button.text.add( getTransComp( "pmmo.chancePerItem", DP.dpSoft( chance ) ).func_240703_c_( color ).getFormattedText() );
+                    button.text.add( getTransComp( "pmmo.xpPerItem", DP.dpSoft( xpPerItem ) ).func_240703_c_( color ).getString() );
+                    button.text.add( getTransComp( "pmmo.chancePerItem", DP.dpSoft( chance ) ).func_240703_c_( color ).getString() );
                     button.text.add( "" );
-                    button.text.add( getTransComp( "pmmo.baseChance", DP.dpSoft( baseChance ) ).func_240703_c_( color ).getFormattedText() );
-                    button.text.add( getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).func_240703_c_( color ).getFormattedText() );
-                    button.text.add( getTransComp( "pmmo.maxChancePerItem", DP.dpSoft( maxChance ) ).func_240703_c_( color ).getFormattedText() );
+                    button.text.add( getTransComp( "pmmo.baseChance", DP.dpSoft( baseChance ) ).func_240703_c_( color ).getString() );
+                    button.text.add( getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).func_240703_c_( color ).getString() );
+                    button.text.add( getTransComp( "pmmo.maxChancePerItem", DP.dpSoft( maxChance ) ).func_240703_c_( color ).getString() );
                 }
                     break;
 
@@ -691,13 +692,13 @@ public class ListScreen extends Screen
                     double curXp = XP.getXpOffline( skill, uuid );
                     double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
 
-                    button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).func_240703_c_( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getFormattedText();
+                    button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).func_240703_c_( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getString();
 
-                    button.text.add( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ).getString() );
                     if( skill.getLevel( player ) != Config.getConfig( "maxLevel" ) )
                     {
-                        button.text.add( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() );
-                        button.text.add( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
+                        button.text.add( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getString() );
+                        button.text.add( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getString() );
                     }
                 }
                     break;
@@ -710,7 +711,7 @@ public class ListScreen extends Screen
             {
                 button.text.add( "" );
                 skillText.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
-                button.text.add( getTransComp( "pmmo.xpModifiers" ).getFormattedText() );
+                button.text.add( getTransComp( "pmmo.xpModifiers" ).getString() );
                 button.text.addAll( skillText );
             }
 
@@ -720,7 +721,7 @@ public class ListScreen extends Screen
                     button.text.add( "" );
 
                 scaleText.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
-                button.text.add( getTransComp( "pmmo.enemyScaling" ).getFormattedText() );
+                button.text.add( getTransComp( "pmmo.enemyScaling" ).getString() );
                 button.text.addAll( scaleText );
             }
 
@@ -730,7 +731,7 @@ public class ListScreen extends Screen
                     button.text.add( "" );
 
                 effectText.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
-                button.text.add( getTransComp( "pmmo.biomeEffects" ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                button.text.add( getTransComp( "pmmo.biomeEffects" ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
                 button.text.addAll( effectText );
             }
 
@@ -801,14 +802,14 @@ public class ListScreen extends Screen
         {
             case XP_VALUE_BREED:
                 ListButton otherAnimalsBreedButton = new ListButton( 0, 0, 3, 20, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickAction() );
-                otherAnimalsBreedButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( defaultBreedingXp ) ).func_240703_c_( greenColor ).getFormattedText() );
+                otherAnimalsBreedButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( defaultBreedingXp ) ).func_240703_c_( greenColor ).getString() );
                 listButtons.add( otherAnimalsBreedButton );
                 break;
 
             case XP_VALUE_TAME:
             {
                 ListButton otherAnimalsTameButton = new ListButton( 0, 0, 3, 21, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickAction() );
-                otherAnimalsTameButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( defaultTamingXp ) ).func_240703_c_( greenColor ).getFormattedText() );
+                otherAnimalsTameButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( defaultTamingXp ) ).func_240703_c_( greenColor ).getString() );
                 listButtons.add( otherAnimalsTameButton );
             }
                 break;
@@ -816,11 +817,11 @@ public class ListScreen extends Screen
             case XP_VALUE_KILL:
             {
                 ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", button -> ((ListButton) button).clickAction() );
-                otherAggresiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).func_240703_c_( greenColor ).getFormattedText() );
+                otherAggresiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).func_240703_c_( greenColor ).getString() );
                 listButtons.add( otherAggresiveMobsButton );
 
                 ListButton otherPassiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherPassiveMobs", jType, "", button -> ((ListButton) button).clickAction() );
-                otherPassiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).func_240703_c_( greenColor ).getFormattedText() );
+                otherPassiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).func_240703_c_( greenColor ).getString() );
                 listButtons.add( otherPassiveMobsButton );
             }
                 break;
@@ -828,7 +829,7 @@ public class ListScreen extends Screen
             case XP_VALUE_CRAFT:
             {
                 ListButton otherCraftsButton = new ListButton( 0, 0, 3, 22, "pmmo.otherCrafts", jType, "", button -> ((ListButton) button).clickAction() );
-                otherCraftsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( defaultCraftingXp ) ).func_240703_c_( greenColor ).getFormattedText() );
+                otherCraftsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( defaultCraftingXp ) ).func_240703_c_( greenColor ).getString() );
                 listButtons.add( otherCraftsButton );
             }
                 break;
@@ -848,9 +849,9 @@ public class ListScreen extends Screen
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
             if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevelDecimal( player ) < (double) inEntry.getValue() )
-                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
             else
-                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).func_240703_c_( XP.textStyle.get( "green" ) ).getFormattedText() );
+                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).func_240703_c_( XP.textStyle.get( "green" ) ).getString() );
         }
 
         levelsToAdd.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
@@ -864,7 +865,7 @@ public class ListScreen extends Screen
 
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
-            xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).func_240703_c_( XP.textStyle.get( "green" ) ).getFormattedText() );
+            xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).func_240703_c_( XP.textStyle.get( "green" ) ).getString() );
         }
 
         xpToAdd.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
@@ -878,7 +879,7 @@ public class ListScreen extends Screen
 
         for( Map.Entry<String, Object> inEntry : map.entrySet() )
         {
-            xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).func_240703_c_( XP.textStyle.get( XP.checkReq( player, button.regKey, jType ) ? "green" : "red" ) ).getFormattedText() );
+            xpToAdd.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).func_240703_c_( XP.textStyle.get( XP.checkReq( player, button.regKey, jType ) ? "green" : "red" ) ).getString() );
         }
 
         xpToAdd.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
@@ -897,12 +898,12 @@ public class ListScreen extends Screen
             if( metReq )
             {
                 if( value > 0 )
-                    levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).func_240703_c_( XP.textStyle.get( "green" ) ).getFormattedText() );
+                    levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).func_240703_c_( XP.textStyle.get( "green" ) ).getString() );
                 else if( value < 0 )
-                    levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                    levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
             }
             else
-                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText() );
+                levelsToAdd.add( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).func_240703_c_( XP.textStyle.get( "red" ) ).getString() );
         }
 
         levelsToAdd.sort( Comparator.comparingInt(ListScreen::getTextInt).reversed() );
@@ -931,17 +932,17 @@ public class ListScreen extends Screen
     }
 
     @Override
-    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( MatrixStack stack,  1 );
+        renderBackground( stack,  1 );
 
         if( jType.equals( JType.STATS ) )
             title = getTransComp( "pmmo.playerStats", XP.playerNames.get( uuid ) );
 
         if( font.getStringWidth( title.getString() ) > 220 )
-            drawCenteredString( stack,  font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+            drawCenteredString( stack, font, title.getString(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
-            drawCenteredString( stack,  font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( stack, font, title.getString(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -961,9 +962,9 @@ public class ListScreen extends Screen
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
                 if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.XP_VALUE_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.STATS ) || button.regKey.equals( "pmmo.otherCrafts" ) )
-                    renderTooltip( button.title, mouseX, mouseY );
+                    renderTooltip( stack, new TranslationTextComponent( button.title ), mouseX, mouseY );
                 else if( button.itemStack != null )
-                    renderTooltip( button.itemStack, mouseX, mouseY );
+                    renderTooltip( stack, button.itemStack, mouseX, mouseY );
             }
 
             accumulativeHeight += button.getHeight();

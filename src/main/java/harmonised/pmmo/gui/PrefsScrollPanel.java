@@ -1,5 +1,6 @@
 package harmonised.pmmo.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -25,7 +26,7 @@ public class PrefsScrollPanel extends ScrollPanel
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
 
-    public PrefsScrollPanel(Minecraft client, int width, int height, int top, int left, ArrayList<PrefsEntry> prefsEntries )
+    public PrefsScrollPanel( MatrixStack stack, Minecraft client, int width, int height, int top, int left, ArrayList<PrefsEntry> prefsEntries )
     {
         super(client, width, height, top, left);
         this.prefsEntries = prefsEntries;

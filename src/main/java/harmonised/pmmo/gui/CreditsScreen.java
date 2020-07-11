@@ -72,7 +72,7 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lapisPatreon" ).func_240703_c_( XP.textStyle.get( "blue" ) ).getFormattedText(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lapisPatreon" ).func_240703_c_( XP.textStyle.get( "blue" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -80,7 +80,7 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.dandelionPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.dandelionPatreon" ).func_240703_c_( XP.textStyle.get( "yellow" ) ).getFormattedText(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.dandelionPatreon" ).func_240703_c_( XP.textStyle.get( "yellow" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -88,7 +88,7 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.ironPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.ironPatreon" ).func_240703_c_( XP.textStyle.get( "grey" ) ).getFormattedText(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.ironPatreon" ).func_240703_c_( XP.textStyle.get( "grey" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -178,7 +178,7 @@ public class CreditsScreen extends Screen
         if (this.minecraft != null)
         {
             this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
         }
         else
             this.renderDirtBackground(p_renderBackground_1_);

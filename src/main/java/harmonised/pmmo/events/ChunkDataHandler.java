@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.util.XP;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
@@ -53,7 +54,7 @@ public class ChunkDataHandler
 
     public static void handleChunkDataSave( ChunkDataEvent.Save event )
     {
-        ResourceLocation dimResLoc = event.getWorld().func_234922_V_().func_240901_a_();
+        ResourceLocation dimResLoc = event.getWorld().getWorld().func_234922_V_().func_240901_a_();
         if( placedMap.containsKey( dimResLoc ) )
         {
             ChunkPos chunkPos = event.getChunk().getPos();
@@ -72,7 +73,7 @@ public class ChunkDataHandler
                 {
                     insidesNBT = new CompoundNBT();
                     insidesNBT.put( "pos", NBTUtil.writeBlockPos( entry.getKey() ) );
-                    insidesNBT.put( "UUID", NBTUtil.writeUniqueId( entry.getValue() ) );
+                    insidesNBT.put( "UUID", XP.writeUniqueId( entry.getValue() ) );
                     newPlacedNBT.put( i++ + "", insidesNBT );
                 }
 

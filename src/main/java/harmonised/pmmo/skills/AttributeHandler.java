@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.ForgeMod;
 
 public class AttributeHandler
 {
@@ -61,7 +62,7 @@ public class AttributeHandler
 
 	public static double getReach( PlayerEntity player )
 	{
-		ModifiableAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
+		ModifiableAttributeInstance reachAttribute = player.getAttribute( ForgeMod.REACH_DISTANCE.get() );
 		
 		if( reachAttribute.getModifier( reachModifierID ) == null )
 			return ( reachAttribute.getBaseValue() );
@@ -71,7 +72,7 @@ public class AttributeHandler
 	
 	public static void updateReach( PlayerEntity player )
 	{
-		ModifiableAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
+		ModifiableAttributeInstance reachAttribute = player.getAttribute( ForgeMod.REACH_DISTANCE.get() );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double buildLevel = XP.getLevel( Skill.BUILDING, player );
 		double reach = -0.91 + ( buildLevel / levelsPerOneReach );
@@ -236,7 +237,7 @@ public class AttributeHandler
 
 	private static double getBiomeMobMultiplier( MobEntity mob, String type )
 	{
-		String biomeKey = mob.world.getBiome( mob.getPositionVec() ).getRegistryName().toString();
+		String biomeKey = mob.world.getBiome( XP.vecToBlock( mob.getPositionVec() ) ).getRegistryName().toString();
 		Map<String, Object> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 		double multiplier = 1;
 

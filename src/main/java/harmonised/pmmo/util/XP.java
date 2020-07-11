@@ -1000,6 +1000,14 @@ public class XP
 		return itemBoost;
 	}
 
+	public static CompoundNBT writeUniqueId( UUID uuid )
+	{
+		CompoundNBT compoundnbt = new CompoundNBT();
+		compoundnbt.putLong("M", uuid.getMostSignificantBits());
+		compoundnbt.putLong("L", uuid.getLeastSignificantBits());
+		return compoundnbt;
+	}
+
 	public static double getBiomeBoost( PlayerEntity player, Skill skill )
 	{
 		double biomeBoost = 0;

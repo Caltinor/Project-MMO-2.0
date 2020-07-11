@@ -76,15 +76,15 @@ public class ListButton extends Button
 
             case DIMENSION:
                 if( regKey.equals( "all_dimensions" ) )
-                    this.title = new TranslationTextComponent( "pmmo.allDimensions" ).getFormattedText();
+                    this.title = new TranslationTextComponent( "pmmo.allDimensions" ).getString();
                 else if( regKey.equals( "minecraft:overworld" ) || regKey.equals( "minecraft:the_nether" ) || regKey.equals( "minecraft:the_end" ) )
-                    this.title = new TranslationTextComponent( regKey ).getFormattedText();
+                    this.title = new TranslationTextComponent( regKey ).getString();
                 else if( ForgeRegistries.MOD_DIMENSIONS.containsKey( XP.getResLoc( regKey ) ) )
-                    this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getFormattedText();
+                    this.title = new TranslationTextComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getString();
                 break;
 
             case STATS:
-                this.title = new TranslationTextComponent( "pmmo." + regKey ).func_240703_c_( XP.skillStyle.get(Skill.getSkill( regKey ) ) ).getFormattedText();
+                this.title = new TranslationTextComponent( "pmmo." + regKey ).func_240703_c_( XP.skillStyle.get(Skill.getSkill( regKey ) ) ).getString();
                 break;
 
             default:
@@ -98,7 +98,7 @@ public class ListButton extends Button
             case "pmmo.otherAnimals":
             case "pmmo.otherPassiveMobs":
             case "pmmo.otherAggresiveMobs":
-                this.title = new TranslationTextComponent( new TranslationTextComponent( regKey ).getFormattedText() ).getString();
+                this.title = new TranslationTextComponent( new TranslationTextComponent( regKey ).getString() ).getString();
                 break;
         }
 

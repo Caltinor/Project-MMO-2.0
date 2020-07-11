@@ -400,13 +400,13 @@ public class XPOverlayGUI extends AbstractGui
 
 			if( !metToolReq )
 			{
-				drawCenteredString( stack,  fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( stack,  fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getString(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 				return;
 			}
 
 			if( lookingAtBlock && !canBreak )
 			{
-				drawCenteredString( stack,  fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( stack,  fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).func_240703_c_( XP.textStyle.get( "red" ) ).getString(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 				return;
 			}
 
@@ -716,7 +716,7 @@ public class XPOverlayGUI extends AbstractGui
 				}
 			}
 
-//			System.out.println( mc.player.getDisplayName().getFormattedText() + " " + skill.name() + " has been set to: " + xp );
+//			System.out.println( mc.player.getDisplayName().getString() + " " + skill.name() + " has been set to: " + xp );
 		}
 		else if( stackXpDrops && xpDrops.size() > 0 )
 		{

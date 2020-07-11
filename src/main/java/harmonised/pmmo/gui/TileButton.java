@@ -1,5 +1,6 @@
 package harmonised.pmmo.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.util.XP;
@@ -9,6 +10,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileButton extends Button
 {
@@ -23,7 +25,7 @@ public class TileButton extends Button
 
     public TileButton( int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress )
     {
-        super(posX, posY, 32, 32, text, onPress);
+        super(posX, posY, 32, 32, new TranslationTextComponent( text ), onPress);
         this.elementOne = elementOne * 32;
         this.elementTwo = elementTwo * 32;
         this.transKey = transKey;
@@ -48,7 +50,7 @@ public class TileButton extends Button
     }
 
     @Override
-    public void renderButton( MatrixStack stack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_)
+    public void renderButton(MatrixStack stack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_)
     {
         Minecraft minecraft = Minecraft.getInstance();
         FontRenderer fontrenderer = minecraft.fontRenderer;

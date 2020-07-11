@@ -283,7 +283,7 @@ public class GlossaryScreen extends Screen
     @Override
     public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( MatrixStack stack,  1 );
+        renderBackground( stack,  1 );
         super.render( stack, mouseX, mouseY, partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
@@ -292,7 +292,7 @@ public class GlossaryScreen extends Screen
         for( TileButton button : tileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
+                renderTooltip( stack,  new TranslationTextComponent( button.transKey ), mouseX, mouseY );
         }
 
         if( Minecraft.getInstance().player.isCreative() )

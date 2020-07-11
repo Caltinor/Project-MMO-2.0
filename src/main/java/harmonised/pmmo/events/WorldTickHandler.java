@@ -16,6 +16,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -204,10 +205,10 @@ public class WorldTickHandler
     public static void destroyBlock( World world, BlockPos pos, PlayerEntity player, ItemStack toolUsed )
     {
         BlockState blockstate = world.getBlockState(pos);
-        IFluidState ifluidstate = world.getFluidState(pos);
+        FluidState ifluidstate = world.getFluidState(pos);
         world.playEvent(2001, pos, Block.getStateId(blockstate) );
 
-        TileEntity tileentity = blockstate.func_235901_b_TileEntity() ? world.getTileEntity(pos) : null;
+        TileEntity tileentity = blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
         Block.spawnDrops(blockstate, world, pos, tileentity, player, toolUsed );
 
         if( world.setBlockState(pos, ifluidstate.getBlockState(), 3) && toolUsed.isDamageable() && !player.isCreative() )
@@ -252,7 +253,7 @@ public class WorldTickHandler
         if( player.isCreative() )
             return true;
 
-        String dimensionKey = player.dimension.getRegistryName().toString();
+        String dimensionKey = player.world.func_234922_V_().func_240901_a_().toString();
         Map<String, Object> dimensionBlacklist = null;
 
         if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( dimensionKey ) )
