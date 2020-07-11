@@ -52,6 +52,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
@@ -556,9 +557,18 @@ public class XP
 			Block block = event.getPlacedBlock().getBlock();
 			NBTTagCompound persistTag = getPersistTag( player );
 			NBTTagCompound skillsTag = getSkillsTag( persistTag );
-			float blockHardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos());
-			if( blockHardness > 50 )
-				blockHardness = 50;
+			float blockHardness;
+
+			try
+			{
+				blockHardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos());
+				if( blockHardness > 50 )
+					blockHardness = 50;
+			}
+			catch( Exception e )
+			{
+				blockHardness = 1;
+			}
 //			int buildLevel = levelAtXp( skillsTag.getFloat( "building" ) );
 			String playerName = player.getName();
 			BlockPos blockPos = event.getPos();
@@ -607,9 +617,17 @@ public class XP
 				ResourceLocation blockRegistry = block.getRegistryName();
 				Material material = block.getMaterial( block.getDefaultState() );
 				boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld(), event.getPos() );
-				float blockHardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos());
-				if( blockHardness > 50 )
-					blockHardness = 50;
+				float blockHardness;
+				try
+				{
+					blockHardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos());
+					if( blockHardness > 50 )
+						blockHardness = 50;
+				}
+				catch( Exception e )
+				{
+					blockHardness = 1;
+				}
 				float award = blockHardness;
 				List<ItemStack> drops = event.getDrops();		
 				if( material.equals( Material.PLANTS ) && drops.size() > 0 ) //IS PLANT
@@ -785,10 +803,17 @@ public class XP
 					World world = event.getWorld();
 					Block baseBlock = event.getState().getBlock();
 					BlockPos baseBlockPos = event.getPos();
-					
-					float hardness = baseBlock.getBlockHardness( baseBlock.getDefaultState(), event.getWorld(), event.getPos() );
-					if( hardness > 50 )
-						hardness = 50;
+					float hardness;
+					try
+					{
+						hardness = baseBlock.getBlockHardness( baseBlock.getDefaultState(), event.getWorld(), event.getPos());
+						if( hardness > 50 )
+							hardness = 50;
+					}
+					catch( Exception e )
+					{
+						hardness = 1;
+					}
 					float award = 0;
 					float rewardable = 0;
 					float extraChance = getPlantDoubleChance( baseBlock.getRegistryName() ) * currLevel;
@@ -1253,41 +1278,48 @@ public class XP
 	
 	public static void handleAnvilRepair( AnvilRepairEvent event )
 	{
-		EntityPlayer player = event.getEntityPlayer();
-		if( !player.world.isRemote && event.getItemInput().getItem().isDamageable() )
+		try
 		{
-			NBTTagCompound persistTag = getPersistTag( player );
-			NBTTagCompound skillsTag = getSkillsTag( persistTag );
-			
-			int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
-			float bonusRepair = 0.0025f * currLevel / ( 1f + 0.01f * currLevel );
-			int maxCost = (int) Math.floor( 50 - ( currLevel / 4 ) );
-			if( maxCost < 20 )
-				maxCost = 20;
-			
-			event.setBreakChance( event.getBreakChance() / ( 1f + 0.01f * currLevel ) );
-			
-//			ItemStack rItem = event.getIngredientInput();
-			ItemStack lItem = event.getItemInput();
-			ItemStack oItem = event.getItemResult();
-			
-			if( oItem.getRepairCost() > maxCost )
-				oItem.setRepairCost( maxCost );
-						
-			float repaired = oItem.getItemDamage() - lItem.getItemDamage();
-			if( repaired < 0 )
-				repaired = -repaired;
-			
-			oItem.setItemDamage( (int) Math.floor( oItem.getItemDamage() - repaired * bonusRepair ) );
-			
-			float award = (float) ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-			award *= getRepairXp( getToolItem( lItem.getItem().getRegistryName() ).getItem().getRegistryName() );
-
-			if( award > 0 )
+			EntityPlayer player = event.getEntityPlayer();
+			if( !player.world.isRemote && event.getItemInput().getItem().isDamageable() )
 			{
-				player.sendStatusMessage( new TextComponentString( "repaired " + (int) repaired + " + " + (int) ( repaired * bonusRepair ) + " extra!" ), true );
-				awardXp( player, "repairing", "repairing " + oItem.getDisplayName() + " by: " + repaired, award, false );
+				NBTTagCompound persistTag = getPersistTag( player );
+				NBTTagCompound skillsTag = getSkillsTag( persistTag );
+
+				int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
+				float bonusRepair = 0.0025f * currLevel / ( 1f + 0.01f * currLevel );
+				int maxCost = (int) Math.floor( 50 - ( currLevel / 4 ) );
+				if( maxCost < 20 )
+					maxCost = 20;
+
+				event.setBreakChance( event.getBreakChance() / ( 1f + 0.01f * currLevel ) );
+
+//				ItemStack rItem = event.getIngredientInput();
+				ItemStack lItem = event.getItemInput();
+				ItemStack oItem = event.getItemResult();
+
+				if( oItem.getRepairCost() > maxCost )
+					oItem.setRepairCost( maxCost );
+
+				float repaired = oItem.getItemDamage() - lItem.getItemDamage();
+				if( repaired < 0 )
+					repaired = -repaired;
+
+				oItem.setItemDamage( (int) Math.floor( oItem.getItemDamage() - repaired * bonusRepair ) );
+
+				float award = (float) ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
+				award *= getRepairXp( getToolItem( lItem.getItem().getRegistryName() ).getItem().getRegistryName() );
+
+				if( award > 0 )
+				{
+					player.sendStatusMessage( new TextComponentString( "repaired " + (int) repaired + " + " + (int) ( repaired * bonusRepair ) + " extra!" ), true );
+					awardXp( player, "repairing", "repairing " + oItem.getDisplayName() + " by: " + repaired, award, false );
+				}
 			}
+		}
+		catch( Exception e )
+		{
+			System.out.println( e );
 		}
 	}
 	
@@ -1332,6 +1364,9 @@ public class XP
 	
 	public static void awardXp( EntityPlayer player, String skill, String sourceName, float amount, boolean skip )
 	{
+		if( player instanceof FakePlayer )
+			return;
+
 		if( amount <= 0.0f || player.world.isRemote )
 			return;
 		
@@ -1339,12 +1374,6 @@ public class XP
 		{
 			System.out.println( "INVALID SKILL" );
 			return;
-		}
-		
-		for( char letter : player.getName().toCharArray() )
-		{
-			if( !( letter >= 'a' && letter <= 'z' ) && !( letter >= 'A' && letter <= 'Z' ) && !( letter >= '0' && letter <= '9' ) && !( letter == '\u00a7' ) )
-				return;
 		}
 		
 //		System.out.println( amount );
