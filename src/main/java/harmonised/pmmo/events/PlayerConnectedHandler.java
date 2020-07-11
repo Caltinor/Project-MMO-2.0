@@ -36,7 +36,7 @@ public class PlayerConnectedHandler
             {
                 player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
                 {
-                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).func_240703_c_( new Style().setColor( TextFormatting.BLUE ) ), false );
+                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).func_240703_c_( Style.field_240709_b_.func_240712_a_( TextFormatting.BLUE ) ), false );
                 });
             }
             else if( showPatreonWelcome )

@@ -15,10 +15,8 @@ import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
-import net.minecraft.entity.item.FireworkRocketEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -87,26 +85,26 @@ public class XP
 		skillColors.put( Skill.TAMING, 0xffffff );
 		skillColors.put( Skill.ENGINEERING, 0xffffff );
 
-		skillStyle.put( Skill.MINING, new Style().setColor( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.BUILDING, new Style().setColor( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.EXCAVATION, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.WOODCUTTING, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FARMING, new Style().setColor( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.AGILITY, new Style().setColor( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.ENDURANCE, new Style().setColor( TextFormatting.DARK_RED ) );
-		skillStyle.put( Skill.COMBAT, new Style().setColor( TextFormatting.RED ) );
-		skillStyle.put( Skill.ARCHERY, new Style().setColor( TextFormatting.YELLOW ) );
-		skillStyle.put( Skill.SMITHING, new Style().setColor( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.FLYING, new Style().setColor( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.SWIMMING, new Style().setColor( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.FISHING, new Style().setColor( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.CRAFTING, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.MAGIC, new Style().setColor( TextFormatting.BLUE ) );
-		skillStyle.put( Skill.SLAYER, new Style().setColor( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.HUNTER, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FLETCHING, new Style().setColor( TextFormatting.DARK_GREEN ) );
-		skillStyle.put( Skill.TAMING, new Style().setColor( TextFormatting.WHITE ) );
-		skillStyle.put( Skill.ENGINEERING, new Style().setColor( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.MINING, Style.field_240709_b_.func_240712_a_( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.BUILDING, Style.field_240709_b_.func_240712_a_( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.EXCAVATION, Style.field_240709_b_.func_240712_a_( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.WOODCUTTING, Style.field_240709_b_.func_240712_a_( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.FARMING, Style.field_240709_b_.func_240712_a_( TextFormatting.GREEN ) );
+		skillStyle.put( Skill.AGILITY, Style.field_240709_b_.func_240712_a_( TextFormatting.GREEN ) );
+		skillStyle.put( Skill.ENDURANCE, Style.field_240709_b_.func_240712_a_( TextFormatting.DARK_RED ) );
+		skillStyle.put( Skill.COMBAT, Style.field_240709_b_.func_240712_a_( TextFormatting.RED ) );
+		skillStyle.put( Skill.ARCHERY, Style.field_240709_b_.func_240712_a_( TextFormatting.YELLOW ) );
+		skillStyle.put( Skill.SMITHING, Style.field_240709_b_.func_240712_a_( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.FLYING, Style.field_240709_b_.func_240712_a_( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.SWIMMING, Style.field_240709_b_.func_240712_a_( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.FISHING, Style.field_240709_b_.func_240712_a_( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.CRAFTING, Style.field_240709_b_.func_240712_a_( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.MAGIC, Style.field_240709_b_.func_240712_a_( TextFormatting.BLUE ) );
+		skillStyle.put( Skill.SLAYER, Style.field_240709_b_.func_240712_a_( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.HUNTER, Style.field_240709_b_.func_240712_a_( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.FLETCHING, Style.field_240709_b_.func_240712_a_( TextFormatting.DARK_GREEN ) );
+		skillStyle.put( Skill.TAMING, Style.field_240709_b_.func_240712_a_( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.ENGINEERING, Style.field_240709_b_.func_240712_a_( TextFormatting.WHITE ) );
 
 //		skillStyle.put(Skill.MINING, TextFormatting.AQUA );
 //		skillStyle.put( Skill.BUILDING, TextFormatting.AQUA );
@@ -127,11 +125,11 @@ public class XP
 //		skillStyle.put( Skill.FLETCHING, TextFormatting.DARK_GREEN );
 //		skillStyle.put( Skill.TAMING, TextFormatting.WHITE );
 ////////////////////////////////////Style//////////////////////////////////////////////
-		textStyle.put( "red", new Style().setColor( TextFormatting.RED ) );
-		textStyle.put( "green", new Style().setColor( TextFormatting.GREEN ) );
-		textStyle.put( "yellow", new Style().setColor( TextFormatting.YELLOW ) );
-		textStyle.put( "grey", new Style().setColor( TextFormatting.GRAY ) );
-		textStyle.put( "blue", new Style().setColor( TextFormatting.BLUE ) );
+		textStyle.put( "red", Style.field_240709_b_.func_240712_a_( TextFormatting.RED ) );
+		textStyle.put( "green", Style.field_240709_b_.func_240712_a_( TextFormatting.GREEN ) );
+		textStyle.put( "yellow", Style.field_240709_b_.func_240712_a_( TextFormatting.YELLOW ) );
+		textStyle.put( "grey", Style.field_240709_b_.func_240712_a_( TextFormatting.GRAY ) );
+		textStyle.put( "blue", Style.field_240709_b_.func_240712_a_( TextFormatting.BLUE ) );
 ////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
@@ -359,7 +357,7 @@ public class XP
 
 	public static void sendMessage( String msg, boolean bar, PlayerEntity player, TextFormatting format )
 	{
-		player.sendStatusMessage( new StringTextComponent( msg ).func_240703_c_( new Style().setColor( format ) ), bar );
+		player.sendStatusMessage( new StringTextComponent( msg ).func_240703_c_( Style.field_240709_b_.func_240712_a_( format ) ), bar );
 	}
 
 	public static Map<String, Double> multiplyMap( Map<String, Double> mapOne, double multiplier )
@@ -752,7 +750,7 @@ public class XP
 	public static boolean scanBlock( Block block, int radius, PlayerEntity player )
 	{
 		Block currBlock;
-		BlockPos playerPos = player.getPositionVec();
+		BlockPos playerPos = vecToBlock( player.getPositionVec() );
 		boolean matched = false;
 
 		for( int x = -radius; x <= radius; x++ )
@@ -1009,7 +1007,7 @@ public class XP
 		double biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
 		String skillName = skill.toString().toLowerCase();
 
-		Biome biome = player.world.getBiome( player.getPositionVec() );
+		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
 		Map<String, Object> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
@@ -1253,6 +1251,11 @@ public class XP
 	public static BlockPos vecToBlock( Vector3d pos )
 	{
 		return new BlockPos( pos );
+	}
+
+	public static Vector3d blockToVec( BlockPos pos )
+	{
+		return new Vector3d( pos.getX(), pos.getY(), pos.getZ() );
 	}
 
 	public static void spawnRocket( World world, BlockPos pos, Skill skill )

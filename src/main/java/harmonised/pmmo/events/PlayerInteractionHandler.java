@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
@@ -167,7 +168,7 @@ public class PlayerInteractionHandler
                                 {
                                     if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
                                     {
-                                        if( player.getPositionVec().withinDistance( event.getPos(), 2 ) )
+                                        if( player.getPositionVec().func_237488_a_( XP.blockToVec( event.getPos() ), 2 ) )
                                         {
                                             Map<String, Object> theMap = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
                                             Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );

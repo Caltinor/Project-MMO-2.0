@@ -7,7 +7,6 @@ import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
