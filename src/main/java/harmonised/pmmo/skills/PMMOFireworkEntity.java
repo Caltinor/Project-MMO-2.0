@@ -13,7 +13,7 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
         this.fireworkAge = 0;
         this.setPosition(x, y, z);
         int i = 1;
-        if (!givenItem.isEmpty() && givenItem.hasTag()) {
+        if (!givenItem.isEmpty() && givenItem.func_235901_b_Tag()) {
             this.dataManager.set(FIREWORK_ITEM, givenItem.copy());
             i += givenItem.getOrCreateChildTag("Fireworks").getByte("Flight");
         }

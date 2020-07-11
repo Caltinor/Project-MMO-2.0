@@ -9,7 +9,6 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -86,13 +85,13 @@ public class AttributeHandler
 		{
 			AttributeModifier reachModifier = new AttributeModifier( reachModifierID, "Reach bonus thanks to Build Level", reach, AttributeModifier.Operation.ADDITION );
 			reachAttribute.removeModifier( reachModifierID );
-			reachAttribute.applyModifier( reachModifier );
+			reachAttribute.func_233769_c_( reachModifier );
 		}
 	}
 
 	public static double getBaseSpeed( PlayerEntity player )
 	{
-		return player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED ).getBaseValue();
+		return player.getAttribute( Attributes.MOVEMENT_SPEED ).getBaseValue();
 	}
 
 	public static double getSpeedBoost( PlayerEntity player )
@@ -114,7 +113,7 @@ public class AttributeHandler
 	
 	public static void updateSpeed( PlayerEntity player )
 	{
-		ModifiableAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		ModifiableAttributeInstance speedAttribute = player.getAttribute( Attributes.MOVEMENT_SPEED );
 		double speedBoost = getSpeedBoost( player );
 
 		if( speedBoost > 0 )
@@ -123,7 +122,7 @@ public class AttributeHandler
 			{
 				AttributeModifier speedModifier = new AttributeModifier( speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, AttributeModifier.Operation.ADDITION );
 				speedAttribute.removeModifier( speedModifierID );
-				speedAttribute.applyModifier( speedModifier );
+				speedAttribute.func_233769_c_( speedModifier );
 
 //				System.out.println( speedModifier.getAmount() );
 			}
@@ -132,13 +131,13 @@ public class AttributeHandler
 	
 	public static void resetSpeed( PlayerEntity player )
 	{
-		ModifiableAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		ModifiableAttributeInstance speedAttribute = player.getAttribute( Attributes.MOVEMENT_SPEED );
 		speedAttribute.removeModifier( speedModifierID );
 	}
 	
 	public static void updateHP( PlayerEntity player )
 	{
-		ModifiableAttributeInstance hpAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		ModifiableAttributeInstance hpAttribute = player.getAttribute( Attributes.MAX_HEALTH );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double enduranceLevel = XP.getLevel( Skill.ENDURANCE, player );
 		int heartBoost = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
@@ -150,12 +149,12 @@ public class AttributeHandler
 
 		AttributeModifier hpModifier = new AttributeModifier( hpModifierID, "Max HP Bonus thanks to Endurance Level", heartBoost, AttributeModifier.Operation.ADDITION );
 		hpAttribute.removeModifier( hpModifierID );
-		hpAttribute.applyModifier( hpModifier );
+		hpAttribute.func_233769_c_( hpModifier );
 	}
 	
 	public static void updateDamage( PlayerEntity player )
 	{
-		ModifiableAttributeInstance damageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		ModifiableAttributeInstance damageAttribute = player.getAttribute( Attributes.ATTACK_DAMAGE );
 		CompoundNBT prefsTag = XP.getPreferencesTag( player );
 		double maxDamagePref = prefsTag.getDouble( "maxExtraDamageBoost" );
 		double combatLevel = XP.getLevel( Skill.COMBAT, player );
@@ -167,13 +166,13 @@ public class AttributeHandler
 
 		AttributeModifier damageModifier = new AttributeModifier( damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );
 		damageAttribute.removeModifier( damageModifierID );
-		damageAttribute.applyModifier( damageModifier );
+		damageAttribute.func_233769_c_( damageModifier );
 	}
 
 	public static void updateHP( MobEntity mob, float bonus )
 	{
 //		System.out.println( mob.getDisplayName().getString() );
-		ModifiableAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		ModifiableAttributeInstance hpAttribute = mob.getAttribute( Attributes.MAX_HEALTH );
 		if( hpAttribute != null )
 		{
 			if( !(mob instanceof AnimalEntity) )
@@ -187,7 +186,7 @@ public class AttributeHandler
 			AttributeModifier hpModifier = new AttributeModifier(hpModifierID, "Max HP Bonus thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
 
 			hpAttribute.removeModifier(hpModifierID);
-			hpAttribute.applyModifier(hpModifier);
+			hpAttribute.func_233769_c_(hpModifier);
 
 //			mob.setHealth( newHealth );
 		}
@@ -195,7 +194,7 @@ public class AttributeHandler
 
 	public static void updateDamage( MobEntity mob, float bonus )
 	{
-		ModifiableAttributeInstance damageAttribute = mob.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		ModifiableAttributeInstance damageAttribute = mob.getAttribute( Attributes.ATTACK_DAMAGE );
 		if( damageAttribute != null )
 		{
 //			System.out.println( "damage boost " + bonus / damageAttribute.getBaseValue() + " " + bonus + " " + damageAttribute.getBaseValue() );
@@ -208,7 +207,7 @@ public class AttributeHandler
 
 			AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
 			damageAttribute.removeModifier(damageModifierID);
-			damageAttribute.applyModifier(damageModifier);
+			damageAttribute.func_233769_c_(damageModifier);
 		}
 //		else
 //			System.out.println( mob.getDisplayName().getString() );
@@ -216,7 +215,7 @@ public class AttributeHandler
 
 	public static void updateSpeed( MobEntity mob, float bonus )
 	{
-		ModifiableAttributeInstance speedAttribute = mob.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		ModifiableAttributeInstance speedAttribute = mob.getAttribute( Attributes.MOVEMENT_SPEED );
 		if( speedAttribute != null )
 		{
 			if( !(mob instanceof  AnimalEntity) )
@@ -230,7 +229,7 @@ public class AttributeHandler
 
 				AttributeModifier speedModifier = new AttributeModifier(speedModifierID, "Movement Speed Boost thanks to Nearby Player Power Level", bonus / 100, AttributeModifier.Operation.ADDITION);
 				speedAttribute.removeModifier(speedModifierID);
-				speedAttribute.applyModifier(speedModifier);
+				speedAttribute.func_233769_c_(speedModifier);
 			}
 		}
 	}

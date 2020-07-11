@@ -85,26 +85,26 @@ public class XP
 		skillColors.put( Skill.TAMING, 0xffffff );
 		skillColors.put( Skill.ENGINEERING, 0xffffff );
 
-		skillStyle.put( Skill.MINING, Style.field_240709_b_.func_240712_a_( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.BUILDING, Style.field_240709_b_.func_240712_a_( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.EXCAVATION, Style.field_240709_b_.func_240712_a_( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.WOODCUTTING, Style.field_240709_b_.func_240712_a_( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FARMING, Style.field_240709_b_.func_240712_a_( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.AGILITY, Style.field_240709_b_.func_240712_a_( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.ENDURANCE, Style.field_240709_b_.func_240712_a_( TextFormatting.DARK_RED ) );
-		skillStyle.put( Skill.COMBAT, Style.field_240709_b_.func_240712_a_( TextFormatting.RED ) );
-		skillStyle.put( Skill.ARCHERY, Style.field_240709_b_.func_240712_a_( TextFormatting.YELLOW ) );
-		skillStyle.put( Skill.SMITHING, Style.field_240709_b_.func_240712_a_( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.FLYING, Style.field_240709_b_.func_240712_a_( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.SWIMMING, Style.field_240709_b_.func_240712_a_( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.FISHING, Style.field_240709_b_.func_240712_a_( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.CRAFTING, Style.field_240709_b_.func_240712_a_( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.MAGIC, Style.field_240709_b_.func_240712_a_( TextFormatting.BLUE ) );
-		skillStyle.put( Skill.SLAYER, Style.field_240709_b_.func_240712_a_( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.HUNTER, Style.field_240709_b_.func_240712_a_( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FLETCHING, Style.field_240709_b_.func_240712_a_( TextFormatting.DARK_GREEN ) );
-		skillStyle.put( Skill.TAMING, Style.field_240709_b_.func_240712_a_( TextFormatting.WHITE ) );
-		skillStyle.put( Skill.ENGINEERING, Style.field_240709_b_.func_240712_a_( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.MINING, Style.EMPTY.setFormatting( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.BUILDING, Style.EMPTY.setFormatting( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.EXCAVATION, Style.EMPTY.setFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.WOODCUTTING, Style.EMPTY.setFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.FARMING, Style.EMPTY.setFormatting( TextFormatting.GREEN ) );
+		skillStyle.put( Skill.AGILITY, Style.EMPTY.setFormatting( TextFormatting.GREEN ) );
+		skillStyle.put( Skill.ENDURANCE, Style.EMPTY.setFormatting( TextFormatting.DARK_RED ) );
+		skillStyle.put( Skill.COMBAT, Style.EMPTY.setFormatting( TextFormatting.RED ) );
+		skillStyle.put( Skill.ARCHERY, Style.EMPTY.setFormatting( TextFormatting.YELLOW ) );
+		skillStyle.put( Skill.SMITHING, Style.EMPTY.setFormatting( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.FLYING, Style.EMPTY.setFormatting( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.SWIMMING, Style.EMPTY.setFormatting( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.FISHING, Style.EMPTY.setFormatting( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.CRAFTING, Style.EMPTY.setFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.MAGIC, Style.EMPTY.setFormatting( TextFormatting.BLUE ) );
+		skillStyle.put( Skill.SLAYER, Style.EMPTY.setFormatting( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.HUNTER, Style.EMPTY.setFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.FLETCHING, Style.EMPTY.setFormatting( TextFormatting.DARK_GREEN ) );
+		skillStyle.put( Skill.TAMING, Style.EMPTY.setFormatting( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.ENGINEERING, Style.EMPTY.setFormatting( TextFormatting.WHITE ) );
 
 //		skillStyle.put(Skill.MINING, TextFormatting.AQUA );
 //		skillStyle.put( Skill.BUILDING, TextFormatting.AQUA );
@@ -125,11 +125,11 @@ public class XP
 //		skillStyle.put( Skill.FLETCHING, TextFormatting.DARK_GREEN );
 //		skillStyle.put( Skill.TAMING, TextFormatting.WHITE );
 ////////////////////////////////////Style//////////////////////////////////////////////
-		textStyle.put( "red", Style.field_240709_b_.func_240712_a_( TextFormatting.RED ) );
-		textStyle.put( "green", Style.field_240709_b_.func_240712_a_( TextFormatting.GREEN ) );
-		textStyle.put( "yellow", Style.field_240709_b_.func_240712_a_( TextFormatting.YELLOW ) );
-		textStyle.put( "grey", Style.field_240709_b_.func_240712_a_( TextFormatting.GRAY ) );
-		textStyle.put( "blue", Style.field_240709_b_.func_240712_a_( TextFormatting.BLUE ) );
+		textStyle.put( "red", Style.EMPTY.setFormatting( TextFormatting.RED ) );
+		textStyle.put( "green", Style.EMPTY.setFormatting( TextFormatting.GREEN ) );
+		textStyle.put( "yellow", Style.EMPTY.setFormatting( TextFormatting.YELLOW ) );
+		textStyle.put( "grey", Style.EMPTY.setFormatting( TextFormatting.GRAY ) );
+		textStyle.put( "blue", Style.EMPTY.setFormatting( TextFormatting.BLUE ) );
 ////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
@@ -357,7 +357,7 @@ public class XP
 
 	public static void sendMessage( String msg, boolean bar, PlayerEntity player, TextFormatting format )
 	{
-		player.sendStatusMessage( new StringTextComponent( msg ).func_240703_c_( Style.field_240709_b_.func_240712_a_( format ) ), bar );
+		player.sendStatusMessage( new StringTextComponent( msg ).func_240703_c_( Style.EMPTY.setFormatting( format ) ), bar );
 	}
 
 	public static Map<String, Double> multiplyMap( Map<String, Double> mapOne, double multiplier )
@@ -1307,7 +1307,7 @@ public class XP
 			player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
 
-			if( alwaysDropWornItems || EnchantmentHelper.hasBindingCurse( itemStack ) )
+			if( alwaysDropWornItems || EnchantmentHelper.func_235901_b_BindingCurse( itemStack ) )
 			{
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );

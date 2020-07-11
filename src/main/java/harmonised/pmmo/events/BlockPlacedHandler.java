@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.HashMap;
+import java.util.func_235901_b_hMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -89,7 +90,7 @@ public class BlockPlacedHandler
                     event.setCanceled( true );
                 }
 
-                ChunkDataHandler.addPos( event.getWorld().getDimension().getType().getRegistryName(), event.getPos(), player.getUniqueID() );
+                ChunkDataHandler.addPos( event.getWorld().getWorld().func_234922_V_().func_240901_a_(), event.getPos(), player.getUniqueID() );
             }
         }
     }

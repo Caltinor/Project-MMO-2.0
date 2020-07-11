@@ -344,7 +344,7 @@ public class ListScreen extends Screen
                     {
                         for ( Map.Entry<String, Object> entry : biomeMobMultiplierMap.entrySet() )
                         {
-                            Style styleColor = new Style();
+                            Style styleColor = Style.EMPTY();
 
                             if ( (double) entry.getValue() > 1 )
                                 styleColor = XP.textStyle.get("red");
@@ -931,27 +931,27 @@ public class ListScreen extends Screen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( 1 );
+        renderBackground( MatrixStack stack,  1 );
 
         if( jType.equals( JType.STATS ) )
             title = getTransComp( "pmmo.playerStats", XP.playerNames.get( uuid ) );
 
         if( font.getStringWidth( title.getString() ) > 220 )
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+            drawCenteredString( stack,  font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( stack,  font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        scrollPanel.render( mouseX, mouseY, partialTicks );
+        scrollPanel.render( stack,  mouseX, mouseY, partialTicks );
 
         accumulativeHeight = 0;
         buttonsSize = listButtons.size();
 
-        super.render(mouseX, mouseY, partialTicks);
+        super.render( stack, mouseX, mouseY, partialTicks );
 
         for( ListButton button : listButtons )
         {
@@ -973,11 +973,11 @@ public class ListScreen extends Screen
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void renderBackground( MatrixStack stack, int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
 
@@ -985,7 +985,7 @@ public class ListScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
 
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

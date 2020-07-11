@@ -54,7 +54,7 @@ public class PrefsScrollPanel extends ScrollPanel
     }
 
     @Override
-    protected void drawPanel(int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
+    protected void drawPanel( MatrixStack stack, int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
         for( int i = 0; i < prefsEntries.size(); i++ )
         {
@@ -68,23 +68,23 @@ public class PrefsScrollPanel extends ScrollPanel
                 if( prefEntry.isSwitch )
                 {
                     if( slider.getValue() == 1 )
-                        fillGradient(this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0x22444444, 0x33222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0x22444444, 0x33222222);
                     else
-                        fillGradient(this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
                 }
                 else
                 {
                     if( (float) prefEntry.defaultVal == (float) slider.getValue() )
-                        fillGradient(this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
                     else
-                        fillGradient(this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0x22444444, 0x33222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0x22444444, 0x33222222);
                 }
 
-                drawCenteredString( font, prefEntry.preference, prefEntry.getX() + slider.getWidth() / 2, prefEntry.getY() - 9, 0xffffff );
-                slider.render(mouseX, mouseY, 0);
-                prefEntry.button.render(mouseX, mouseY, 0);
+                drawCenteredString( stack,  font, prefEntry.preference, prefEntry.getX() + slider.getWidth() / 2, prefEntry.getY() - 9, 0xffffff );
+                slider.render( stack, mouseX, mouseY, 0);
+                prefEntry.button.render( stack, mouseX, mouseY, 0);
                 if( !prefEntry.isSwitch )
-                    prefEntry.textField.render(mouseX, mouseY, 0);
+                    prefEntry.textField.render( stack, mouseX, mouseY, 0);
             }
         }
     }
@@ -121,13 +121,13 @@ public class PrefsScrollPanel extends ScrollPanel
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
     {
 //        this.drawBackground();
 
 //        if (Minecraft.getInstance().world != null)
 //        {
-//            this.fillGradient(0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
+//            this.fillGradient( stack, 0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
 //            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super ) );
 //        }
 
@@ -159,7 +159,7 @@ public class PrefsScrollPanel extends ScrollPanel
 //        }
 
         int baseY = this.top + border - (int)this.scrollDistance;
-        this.drawPanel(right, baseY, tess, mouseX, mouseY);
+        this.drawPanel( stack, right, baseY, tess, mouseX, mouseY);
 
         RenderSystem.disableDepthTest();
 

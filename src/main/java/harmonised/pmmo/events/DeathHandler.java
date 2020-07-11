@@ -18,7 +18,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.func_235901_b_hSet;
 import java.util.Map;
 
 public class DeathHandler
@@ -98,7 +98,7 @@ public class DeathHandler
             if( scaleValue > 10 )
                 scaleValue = 10;
 
-//            double normalMaxHp = target.getAttribute( SharedMonsterAttributes.MAX_HEALTH ).getBaseValue();
+//            double normalMaxHp = target.getAttribute( Attributes.MAX_HEALTH ).getBaseValue();
 //            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
             if( JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )

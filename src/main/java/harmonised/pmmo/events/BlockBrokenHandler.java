@@ -17,6 +17,8 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -61,7 +63,7 @@ public class BlockBrokenHandler
             if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
             {
                 processBroken( event );
-                ChunkDataHandler.delPos( world.dimension.getType().getRegistryName(), event.getPos() );
+                ChunkDataHandler.delPos( world.func_234922_V_().func_240901_a_(), event.getPos() );
             }
         }
         else
@@ -126,7 +128,7 @@ public class BlockBrokenHandler
 
         Material material = event.getState().getMaterial();
         double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
-        boolean wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), event.getPos() ) != null;
+        boolean wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getWorld().func_234922_V_().func_240901_a_(), event.getPos() ) != null;
         ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( material ).name().toLowerCase();
 //			String regKey = block.getRegistryName().toString();
@@ -192,7 +194,7 @@ public class BlockBrokenHandler
             block =  world.getBlockState( curBlockPos ).getBlock();
             while( block.equals( baseBlock ) )
             {
-                wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), curBlockPos ) != null;
+                wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getWorld().func_234922_V_().func_240901_a_(), curBlockPos ) != null;
                 if( !wasPlaced )
                 {
                     rewardable++;
@@ -235,42 +237,42 @@ public class BlockBrokenHandler
             if( !wasPlaced )
                 award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
 
-            if( state.has( BlockStateProperties.AGE_0_1 ) )
+            if( state.func_235901_b_( BlockStateProperties.AGE_0_1 ) )
             {
                 age = state.get( BlockStateProperties.AGE_0_1 );
                 maxAge = 1;
             }
-            else if( state.has( BlockStateProperties.AGE_0_2 ) )
+            else if( state.func_235901_b_( BlockStateProperties.AGE_0_2 ) )
             {
                 age = state.get( BlockStateProperties.AGE_0_2 );
                 maxAge = 2;
             }
-            else if( state.has( BlockStateProperties.AGE_0_3 ) )
+            else if( state.func_235901_b_( BlockStateProperties.AGE_0_3 ) )
             {
                 age = state.get( BlockStateProperties.AGE_0_3 );
                 maxAge = 3;
             }
-            else if( state.has( BlockStateProperties.AGE_0_5 ) )
+            else if( state.func_235901_b_( BlockStateProperties.AGE_0_5 ) )
             {
                 age = state.get( BlockStateProperties.AGE_0_5 );
                 maxAge = 5;
             }
-            else if( state.has( BlockStateProperties.AGE_0_7 ) )
+            else if( state.func_235901_b_( BlockStateProperties.AGE_0_7 ) )
             {
                 age = state.get( BlockStateProperties.AGE_0_7 );
                 maxAge = 7;
             }
-            else if( state.has( BlockStateProperties.AGE_0_15) )
+            else if( state.func_235901_b_( BlockStateProperties.AGE_0_15) )
             {
                 age = state.get( BlockStateProperties.AGE_0_15 );
                 maxAge = 15;
             }
-            else if( state.has( BlockStateProperties.AGE_0_25 ) )
+            else if( state.func_235901_b_( BlockStateProperties.AGE_0_25 ) )
             {
                 age = state.get( BlockStateProperties.AGE_0_25 );
                 maxAge = 25;
             }
-            else if( state.has( BlockStateProperties.PICKLES_1_4 ) )
+            else if( state.func_235901_b_( BlockStateProperties.PICKLES_1_4 ) )
             {
                 age = state.get( BlockStateProperties.PICKLES_1_4 );
                 maxAge = 4;

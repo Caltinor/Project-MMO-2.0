@@ -26,7 +26,7 @@ public class ChunkDataHandler
         {
             if( levelNBT.contains( "placedPos" ) )
             {
-                ResourceLocation dimResLoc = event.getWorld().getDimension().getType().getRegistryName();
+                ResourceLocation dimResLoc = event.getWorld().func_234922_V_().func_240901_a_();
                 ChunkPos chunkPos = event.getChunk().getPos();
 
                 if( !placedMap.containsKey( dimResLoc ) )
@@ -53,7 +53,7 @@ public class ChunkDataHandler
 
     public static void handleChunkDataSave( ChunkDataEvent.Save event )
     {
-        ResourceLocation dimResLoc = event.getWorld().getDimension().getType().getRegistryName();
+        ResourceLocation dimResLoc = event.getWorld().func_234922_V_().func_240901_a_();
         if( placedMap.containsKey( dimResLoc ) )
         {
             ChunkPos chunkPos = event.getChunk().getPos();

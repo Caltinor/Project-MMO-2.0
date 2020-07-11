@@ -27,21 +27,21 @@ public class PistonEventHandler
             UUID uuid;
             if( event.getPistonMoveType().equals( PistonEvent.PistonMoveType.EXTEND ) )
             {
-                uuid = ChunkDataHandler.checkPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction ) );
+                uuid = ChunkDataHandler.checkPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction ) );
                 if( uuid != null )
                 {
-                    ChunkDataHandler.addPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction, 2 ), uuid );
-                    ChunkDataHandler.delPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction ) );
+                    ChunkDataHandler.addPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction, 2 ), uuid );
+                    ChunkDataHandler.delPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction ) );
                 }
             }
             else
             {
                 BlockState state = world.getBlockState( pistonPos );
-                if( state.has( MovingPistonBlock.TYPE ) && state.get( MovingPistonBlock.TYPE ).equals( PistonType.STICKY ) )
+                if( state.func_235901_b_( MovingPistonBlock.TYPE ) && state.get( MovingPistonBlock.TYPE ).equals( PistonType.STICKY ) )
                 {
                     uuid = UUID.fromString( "80008135-1337-3251-1523-852369874125" );
-                    ChunkDataHandler.addPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction ), uuid );
-                    ChunkDataHandler.delPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction, 2 ) );
+                    ChunkDataHandler.addPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction ), uuid );
+                    ChunkDataHandler.delPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction, 2 ) );
                 }
             }
         }

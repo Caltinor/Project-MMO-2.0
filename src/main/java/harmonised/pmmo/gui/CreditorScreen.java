@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.PlayerConnectedHandler;
@@ -75,10 +76,10 @@ public class CreditorScreen extends Screen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( 1 );
-        super.render(mouseX, mouseY, partialTicks);
+        renderBackground( stack,  1 );
+        super.render( stack, mouseX, mouseY, partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -89,18 +90,18 @@ public class CreditorScreen extends Screen
             color = colors.get( playerName );
 
 //        if( font.getStringWidth( title.getString() ) > 220 )
-//            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, color );
+//            drawCenteredString( stack,  font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, color );
 //        else
-//            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, color );
+//            drawCenteredString( stack,  font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, color );
 
         List<String> list = creditorsInfo.get( playerName );
 
         for( int i = 0; i < list.size(); i++ )
         {
-            drawCenteredString(font, "§l" + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
+            drawCenteredString( stack, font, "§l" + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
         }
 
-//        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
+//        fillGradient( stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
 //        for( TileButton button : tileButtons )
 //        {
@@ -112,12 +113,12 @@ public class CreditorScreen extends Screen
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void renderBackground( MatrixStack stack, int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
+            this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
         }
         else
             this.renderDirtBackground(p_renderBackground_1_);
@@ -127,7 +128,7 @@ public class CreditorScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

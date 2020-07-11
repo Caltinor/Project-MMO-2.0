@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
-import java.util.HashSet;
+import java.util.func_235901_b_hSet;
 import java.util.Set;
 
 public class ServerHandler

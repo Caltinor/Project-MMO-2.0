@@ -109,7 +109,7 @@ public class DamageHandler
 
             if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
             {
-//				IAttributeInstance test = target.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+//				IAttributeInstance test = target.getAttribute( Attributes.MOVEMENT_SPEED );
 //				if( !(target instanceof AnimalEntity) )
 //					System.out.println( test.getValue() + " " + test.getBaseValue() );
 

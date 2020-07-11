@@ -17,8 +17,8 @@ public class CheckBiomeCommand
     public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
-        String biomeKey = sender.world.getBiome( sender.getPositionVec() ).getRegistryName().toString();
-        String transKey = sender.world.getBiome( sender.getPositionVec() ).getTranslationKey();
+        String biomeKey = sender.world.getBiome( XP.vecToBlock( sender.getPositionVec() ) ).getRegistryName().toString();
+        String transKey = sender.world.getBiome( XP.vecToBlock( sender.getPositionVec() ) ).getTranslationKey();
         Map<String, Object> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 
         String damageBonus = "100";

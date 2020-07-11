@@ -19,8 +19,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.TickEvent;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.func_235901_b_hMap;
+import java.util.func_235901_b_hSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -98,7 +98,7 @@ public class PlayerTickHandler
                 Block waterBlock = Blocks.WATER;
                 Block tallSeagrassBlock = Blocks.TALL_SEAGRASS;
                 Block kelpBlock = Blocks.KELP_PLANT;
-                BlockPos playerPos = player.getPositionVec();
+                BlockPos playerPos = XP.vecToBlock( player.getPositionVec() );
                 Block currBlock;
                 boolean waterBelow = true;
 

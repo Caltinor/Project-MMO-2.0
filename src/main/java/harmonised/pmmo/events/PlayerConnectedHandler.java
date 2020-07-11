@@ -12,7 +12,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.func_235901_b_hSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,7 +36,7 @@ public class PlayerConnectedHandler
             {
                 player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
                 {
-                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).func_240703_c_( Style.field_240709_b_.func_240712_a_( TextFormatting.BLUE ) ), false );
+                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).func_240703_c_( Style.EMPTY.setFormatting( TextFormatting.BLUE ) ), false );
                 });
             }
             else if( showPatreonWelcome )

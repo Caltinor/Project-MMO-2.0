@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.func_235901_b_hMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -271,7 +271,7 @@ public class JsonConfig
 
         private void deserializeGroup( JsonObject obj, String requirementGroupName, BiConsumer<String, RequirementItem> putter, JsonDeserializationContext context )
         {
-            if ( obj.has( requirementGroupName ) )
+            if ( obj.func_235901_b_( requirementGroupName ) )
             {
                 JsonObject wears = JSONUtils.getJsonObject( obj, requirementGroupName);
                 for(Map.Entry<String, JsonElement> entries : wears.entrySet())

@@ -89,15 +89,15 @@ public class MainScreen extends Screen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( 1 );
-        super.render(mouseX, mouseY, partialTicks);
+        renderBackground( MatrixStack stack,  1 );
+        super.render( stack, mouseX, mouseY, partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
+//        fillGradient( stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
         for( TileButton button : tileButtons )
         {
@@ -107,15 +107,15 @@ public class MainScreen extends Screen
 
         RenderSystem.enableBlend();
         Minecraft.getInstance().getTextureManager().bindTexture( logo );
-        this.blit( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
+        this.blit( stack,  sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void renderBackground( MatrixStack stack, int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
         else
@@ -126,7 +126,7 @@ public class MainScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override
