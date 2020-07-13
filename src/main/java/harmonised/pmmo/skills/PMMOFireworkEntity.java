@@ -1,15 +1,14 @@
 //package harmonised.pmmo.skills;
 //
 //import net.minecraft.entity.EntityType;
-//import net.minecraft.entity.item.FireworkRocketEntity;
 //import net.minecraft.entity.projectile.FireworkRocketEntity;
 //import net.minecraft.item.ItemStack;
 //import net.minecraft.world.World;
 //
 //public class PMMOFireworkEntity extends FireworkRocketEntity
 //{
-//    public FireworkRocketEntity(World worldIn, double x, double y, double z, ItemStack givenItem) {
-//        super(EntityType.FIREWORK_ROCKET, worldIn);
+//    public PMMOFireworkEntity(World worldIn, double x, double y, double z, ItemStack givenItem) {
+//        super(worldIn, x, y, z, givenItem);
 //        this.fireworkAge = 0;
 //        this.setPosition(x, y, z);
 //        int i = 1;
@@ -23,7 +22,7 @@
 //    }
 //
 //    @Override
-//    public void func_213893_k()
+//    private void func_213893_k()
 //    {
 //        this.world.setEntityState(this, (byte)17);
 ////        this.dealExplosionDamage();
