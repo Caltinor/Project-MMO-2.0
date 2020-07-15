@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.1"
+        classpath "com.wynprice.cursemaven:CurseMaven:2.1.5"
     }
 }
 
@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16-1.0.2'
+version = '1.16-1.0.3'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO'
 
@@ -102,7 +102,7 @@ dependencies
 //    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3")
 
 //    runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
-//    runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")
+            runtimeOnly fg.deobf("curse.maven:curio-of-undying:2994182")
 //    runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
 //    runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
 

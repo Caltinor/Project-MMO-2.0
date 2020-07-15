@@ -972,18 +972,19 @@ public class XP
 				itemBoost += (double) heldMap.get( skillName );
 		}
 
-		if( Curios.isLoaded() )
-		{
-			Collection<IItemHandler> curiosItems = Curios.getCurios(player).collect(Collectors.toSet());
-
-			for( IItemHandler value : curiosItems )
-			{
-				for (int i = 0; i < value.getSlots(); i++)
-				{
-					itemBoost += getWornXpBoost( player, value.getStackInSlot(i).getItem(), skillName );
-				}
-			};
-		}
+//		if( Curios.isLoaded() )
+//		{
+//			Collection<IItemHandler> curiosItems = Curios.getCurios(player).collect(Collectors.toSet());
+//
+//			for( IItemHandler value : curiosItems )
+//			{
+//				for (int i = 0; i < value.getSlots(); i++)
+//				{
+//					itemBoost += getWornXpBoost( player, value.getStackInSlot(i).getItem(), skillName );
+//				}
+//			};
+//		}
+		//COUT
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
 			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
