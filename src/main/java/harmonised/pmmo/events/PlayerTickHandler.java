@@ -14,15 +14,18 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.TickEvent;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class PlayerTickHandler
 {
@@ -65,17 +68,16 @@ public class PlayerTickHandler
 
                 if( !player.world.isRemote() )
                 {
-//                    if( Curios.isLoaded() )
-//                    {
-//                        Curios.getCurios(player).forEach(value ->
-//                        {
-//                            for (int i = 0; i < value.getSlots(); i++)
-//                            {
-//                                XP.applyWornPenalty( player, value.getStackInSlot(i) );
-//                            }
-//                        });
-//                    }
-                    //COUT
+                    if( Curios.isLoaded() )
+                    {
+                        Curios.getCurios(player).forEach(value ->
+                        {
+                            for (int i = 0; i < value.getSlots(); i++)
+                            {
+                                XP.applyWornPenalty( player, value.getStacks().getStackInSlot(i) );
+                            }
+                        });
+                    }
 
                     if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
                         XP.applyWornPenalty( player, player.inventory.getStackInSlot( 39 ) );
