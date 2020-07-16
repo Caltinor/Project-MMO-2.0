@@ -61,9 +61,10 @@ public class PrefsEntry
     {
         slider.setValue( defaultVal );
         if( isSwitch )
-            slider.setMessage( new StringTextComponent( slider.getValue() == 1 ? "On" : "Off" ));
+            slider.setMessage( new StringTextComponent( slider.getValue() == 1 ? "On" : "Off" ) );
         else
             textField.setText( slider.getMessage().getString() );
+        System.out.println( slider.getMessage().getString() );
     }
 
     public int getWidth()

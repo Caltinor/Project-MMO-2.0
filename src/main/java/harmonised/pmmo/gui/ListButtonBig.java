@@ -59,7 +59,7 @@ public class ListButtonBig extends Button
         this.playerName = playerName;
         tooltipText.add( new TranslationTextComponent( playerName ) );
         if( tooltip != null )
-            this.tooltipText.add( new TranslationTextComponent( playerName ) );
+            this.tooltipText.add( new TranslationTextComponent( tooltip ) );
 
         if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
             testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().world );
