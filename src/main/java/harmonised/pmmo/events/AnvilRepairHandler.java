@@ -28,66 +28,67 @@ public class AnvilRepairHandler
 {
     public static void handleAnvilRepair( AnvilRepairEvent event )
     {
-        try
-        {
-            PlayerEntity player = event.getPlayer();
-            if( !player.world.isRemote )
-            {
-                boolean bypassEnchantLimit = Config.forgeConfig.bypassEnchantLimit.get();
-                int currLevel = XP.getLevel( Skill.SMITHING, player );
-                ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
-                ItemStack lItem = event.getItemInput();
-                ItemStack oItem = event.getItemResult();
-
-                if( event.getItemInput().getItem().isDamageable() )
-                {
-                    double anvilCostReductionPerLevel = Config.forgeConfig.anvilCostReductionPerLevel.get();
-                    double extraChanceToNotBreakAnvilPerLevel = Config.forgeConfig.extraChanceToNotBreakAnvilPerLevel.get() / 100;
-                    double anvilFinalItemBonusRepaired = Config.forgeConfig.anvilFinalItemBonusRepaired.get() / 100;
-                    int anvilFinalItemMaxCostToAnvil = Config.forgeConfig.anvilFinalItemMaxCostToAnvil.get();
-
-                    double bonusRepair = anvilFinalItemBonusRepaired * currLevel;
-                    int maxCost = (int) Math.floor( 50 - ( currLevel * anvilCostReductionPerLevel ) );
-                    if( maxCost < anvilFinalItemMaxCostToAnvil )
-                        maxCost = anvilFinalItemMaxCostToAnvil;
-
-                    event.setBreakChance( event.getBreakChance() / ( 1f + (float) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
-
-                    if( oItem.getRepairCost() > maxCost )
-                        oItem.setRepairCost( maxCost );
-
-                    float repaired = oItem.getDamage() - lItem.getDamage();
-                    if( repaired < 0 )
-                        repaired = -repaired;
-
-                    oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
-
-                    double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-                    if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( oItem.getItem().getRegistryName().toString() ) )
-                        award *= (double) JsonConfig.data.get( JType.SALVAGE_TO ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
-
-                    if( award > 0 )
-                    {
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
-                        XP.awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false, false );
-                    }
-                }
-
-                if( bypassEnchantLimit )
-                {
-                    Map<Enchantment, Integer> lEnchants = EnchantmentHelper.getEnchantments( rItem );
-                    Map<Enchantment, Integer> rEnchants = EnchantmentHelper.getEnchantments( lItem );
-
-                    Map<Enchantment, Integer> newEnchants = mergeEnchants( lEnchants, rEnchants, player, currLevel );
-
-                    EnchantmentHelper.setEnchantments( newEnchants, oItem );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            LogHandler.LOGGER.error( "ANVIL FAILED, PLEASE REPORT", e );
-        }
+//        try
+//        {
+//            PlayerEntity player = event.getPlayer();
+//            if( !player.world.isRemote )
+//            {
+//                boolean bypassEnchantLimit = Config.forgeConfig.bypassEnchantLimit.get();
+//                int currLevel = XP.getLevel( Skill.SMITHING, player );
+//                ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
+//                ItemStack lItem = event.getItemInput();
+//                ItemStack oItem = event.getItemResult();
+//
+//                if( event.getItemInput().getItem().isDamageable() )
+//                {
+//                    double anvilCostReductionPerLevel = Config.forgeConfig.anvilCostReductionPerLevel.get();
+//                    double extraChanceToNotBreakAnvilPerLevel = Config.forgeConfig.extraChanceToNotBreakAnvilPerLevel.get() / 100;
+//                    double anvilFinalItemBonusRepaired = Config.forgeConfig.anvilFinalItemBonusRepaired.get() / 100;
+//                    int anvilFinalItemMaxCostToAnvil = Config.forgeConfig.anvilFinalItemMaxCostToAnvil.get();
+//
+//                    double bonusRepair = anvilFinalItemBonusRepaired * currLevel;
+//                    int maxCost = (int) Math.floor( 50 - ( currLevel * anvilCostReductionPerLevel ) );
+//                    if( maxCost < anvilFinalItemMaxCostToAnvil )
+//                        maxCost = anvilFinalItemMaxCostToAnvil;
+//
+//                    event.setBreakChance( event.getBreakChance() / ( 1f + (float) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
+//
+//                    if( oItem.getRepairCost() > maxCost )
+//                        oItem.setRepairCost( maxCost );
+//
+//                    float repaired = oItem.getDamage() - lItem.getDamage();
+//                    if( repaired < 0 )
+//                        repaired = -repaired;
+//
+//                    oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
+//
+//                    double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
+//                    if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( oItem.getItem().getRegistryName().toString() ) )
+//                        award *= (double) JsonConfig.data.get( JType.SALVAGE_TO ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
+//
+//                    if( award > 0 )
+//                    {
+//                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
+//                        XP.awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false, false );
+//                    }
+//                }
+//
+//                if( bypassEnchantLimit )
+//                {
+//                    Map<Enchantment, Integer> lEnchants = EnchantmentHelper.getEnchantments( rItem );
+//                    Map<Enchantment, Integer> rEnchants = EnchantmentHelper.getEnchantments( lItem );
+//
+//                    Map<Enchantment, Integer> newEnchants = mergeEnchants( lEnchants, rEnchants, player, currLevel );
+//
+//                    EnchantmentHelper.setEnchantments( newEnchants, oItem );
+//                }
+//            }
+//        }
+//        catch( Exception e )
+//        {
+//            LogHandler.LOGGER.error( "ANVIL FAILED, PLEASE REPORT", e );
+//        }
+        //COUT
     }
 
     public static Map<Enchantment, Integer> mergeEnchants( Map<Enchantment, Integer> lEnchants, Map<Enchantment, Integer> rEnchants, PlayerEntity player, int currLevel )
