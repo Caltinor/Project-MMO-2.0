@@ -38,6 +38,22 @@ CTEventManager.register(new MCUseHoeEvent(event =>
 }));
 `
 
+//Set player levels
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	Levels.setLevels( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+}));
+`
+
+//Set player xp
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	Levels.setXp( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+}));
+`
+
 This script (.zs) will check for level 10 agility, and level 50 farming.
 If the player has all of the stats specified, it will return true
 Else, it will return false if any 1 is not met.

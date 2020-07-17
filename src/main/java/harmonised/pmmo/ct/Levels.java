@@ -79,4 +79,50 @@ public class Levels
         else
             LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
     }
+
+    @ZenCodeType.Method("setXp")
+    public static void setXp( MapData args, MCPlayerEntity mcPlayer )
+    {
+        PlayerEntity player = mcPlayer.getInternal();
+        if( player instanceof ServerPlayerEntity )
+        {
+            CompoundNBT xpAwards = args.getInternal();
+            Skill skill;
+            for( String key : xpAwards.keySet() )
+            {
+                skill = Skill.getSkill( key );
+                if( skill.equals( Skill.INVALID_SKILL ) )
+                    LogHandler.LOGGER.error( "ZenScript -> PMMO -> setXp -> Invalid Skill Provided! \"" + key + "\"" );
+                else
+                    skill.setXp( (ServerPlayerEntity) player, xpAwards.getDouble( key ) );
+            }
+        }
+        else if( player instanceof ClientPlayerEntity )
+            LogHandler.LOGGER.error( "ZenScript -> PMMO -> setXp -> Called from Client!" );
+        else
+            LogHandler.LOGGER.error( "ZenScript -> PMMO -> setXp -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
+    }
+
+    @ZenCodeType.Method("setLevels")
+    public static void setLevels( MapData args, MCPlayerEntity mcPlayer )
+    {
+        PlayerEntity player = mcPlayer.getInternal();
+        if( player instanceof ServerPlayerEntity )
+        {
+            CompoundNBT xpAwards = args.getInternal();
+            Skill skill;
+            for( String key : xpAwards.keySet() )
+            {
+                skill = Skill.getSkill( key );
+                if( skill.equals( Skill.INVALID_SKILL ) )
+                    LogHandler.LOGGER.error( "ZenScript -> PMMO -> setLevels -> Invalid Skill Provided! \"" + key + "\"" );
+                else
+                    skill.setLevel( (ServerPlayerEntity) player, xpAwards.getDouble( key ) );
+            }
+        }
+        else if( player instanceof ClientPlayerEntity )
+            LogHandler.LOGGER.error( "ZenScript -> PMMO -> setLevels -> Called from Client!" );
+        else
+            LogHandler.LOGGER.error( "ZenScript -> PMMO -> setLevels -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
+    }
 }
