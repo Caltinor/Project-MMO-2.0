@@ -188,7 +188,7 @@ public enum Skill
             XP.awardXp( player, this, "commandAdd", addAmount, false, true );
         else
             NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, this.getValue(), 0, true ), player );
-        player.sendStatusMessage( new TranslationTextComponent( "pmmo.addXp", new TranslationTextComponent( "pmmo." + skillName ).getString(), DP.dp(addAmount) ), false );
+//        player.sendStatusMessage( new TranslationTextComponent( "pmmo.addXp", new TranslationTextComponent( "pmmo." + skillName ).getString(), DP.dp(addAmount) ), false );
         skillsTag.putDouble( skillName, newLevelXp );
         AttributeHandler.updateAll( player );
         XP.updateRecipes( player );
