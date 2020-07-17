@@ -58,6 +58,7 @@ public class PrefsEntry
     public void resetValue()
     {
         slider.setValue( defaultVal );
+        slider.updateSlider();
         if( isSwitch )
             slider.setMessage( slider.getValue() == 1 ? "On" : "Off" );
         else

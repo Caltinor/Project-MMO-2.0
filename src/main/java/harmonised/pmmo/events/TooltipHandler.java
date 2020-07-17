@@ -61,7 +61,7 @@ public class TooltipHandler
                 Map<String, Object> breakReq = JsonConfig.data.get( JType.REQ_BREAK ).get( regKey );
                 Map<String, Object> xpValueGeneral = JsonConfig.data.get( JType.XP_VALUE_GENERAL ).get( regKey );
                 Map<String, Object> xpValueBreaking = JsonConfig.data.get( JType.XP_VALUE_BREAK ).get( regKey );
-                Map<String, Object> xpValueCrafting = JsonConfig.data.get( JType.XP_VALUE_CRAFT).get( regKey );
+                Map<String, Object> xpValueCrafting = JsonConfig.data.get( JType.XP_VALUE_CRAFT ).get( regKey );
                 Map<String, Object> salvageInfo = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
                 Map<String, Object> salvagesFrom = JsonConfig.data.get( JType.SALVAGE_FROM ).get( regKey );
                 Map<String, Object> heldItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );

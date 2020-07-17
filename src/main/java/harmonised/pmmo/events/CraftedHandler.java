@@ -27,8 +27,7 @@ public class CraftedHandler
             award.put( "crafting", defaultCraftingXp );
             ItemStack itemStack = event.getCrafting();
             ResourceLocation resLoc = itemStack.getItem().getRegistryName();
-            Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_TAME );
-
+            Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_CRAFT );
             if( xpValue.size() > 0 )
                 XP.addMaps( award, xpValue );
 
