@@ -56,9 +56,7 @@ public class MessageUpdateNBT
                     if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
                         ClientHandler.updateNBTTag( packet );
                     else
-                    {
                         ServerHandler.updateNBTTag( packet, ctx.get().getSender() );
-                    }
                     break;
 
                 case 2: //config
