@@ -148,7 +148,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> enduranceMultiplier;
         public ConfigHelper.ConfigValueListener<Double> combatMultiplier;
         public ConfigHelper.ConfigValueListener<Double> archeryMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> repairingMultiplier;
+        public ConfigHelper.ConfigValueListener<Double> smithingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> flyingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> swimmingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> fishingMultiplier;
@@ -221,7 +221,9 @@ public class Config
 
         //Archery
 
-        //Repairing
+        //Smithing
+        public ConfigHelper.ConfigValueListener<Boolean> anvilHandlingEnabled;
+
         public ConfigHelper.ConfigValueListener<Double> maxSalvageEnchantChance;
         public ConfigHelper.ConfigValueListener<Double> enchantSaveChancePerLevel;
         public ConfigHelper.ConfigValueListener<Boolean> bypassEnchantLimit;
@@ -657,10 +659,10 @@ public class Config
                         .translation( "pmmo.archeryMultiplier" )
                         .defineInRange( "archeryMultiplier", 1D, 0, 1000) );
 
-                this.repairingMultiplier = subscriber.subscribe(builder
+                this.smithingMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains in Repairing (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.repairingMultiplier" )
-                        .defineInRange( "repairingMultiplier", 1D, 0, 1000) );
+                        .translation( "pmmo.smithingMultiplier" )
+                        .defineInRange( "smithingMultiplier", 1D, 0, 1000) );
 
                 this.flyingMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains in Flying (1 = normal, 2 = twice as much)" )
@@ -965,6 +967,11 @@ public class Config
             }
             builder.push( "Smithing" );
             {
+                this.anvilHandlingEnabled = subscriber.subscribe(builder
+                        .comment( "Should PMMO anvil handling be enabled? (xp rewards for repair, and also Enchantment handling) (some mod items break, if you experience lost enchantments, set this to false)" )
+                        .translation( "pmmo.anvilHandlingEnabled" )
+                        .define( "anvilHandlingEnabled", true ) );
+
                 this.maxSalvageEnchantChance = subscriber.subscribe(builder
                         .comment( "Max Percentage chance to return each Enchantment Level" )
                         .translation( "pmmo.maxSalvageEnchantChance" )

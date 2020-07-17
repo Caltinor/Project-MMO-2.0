@@ -1,6 +1,30 @@
 https://www.curseforge.com/minecraft/mc-mods/project-mmo
 
 I am a new mod dev, so please let me know if the following is not correct:
+
+///Craft Tweaker Support
+
+Example of Craft Tweaker use with PMMO
+
+`
+import crafttweaker.api.data.MapData;
+import crafttweaker.api.data.IData;
+import mods.pmmo.ct.Levels;
+import crafttweaker.api.events.CTEventManager;
+import crafttweaker.api.event.entity.player.MCUseHoeEvent;
+
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	var metLevelsSpecified = Levels.checkLevels( new MapData( {"agility": 10 as IData, "farming": 50 as IData} ), event.getPlayer() );
+}));
+`
+
+This script (.zs) will check for level 10 agility, and level 50 farming.
+If the player has all of the stats specified, it will return true
+Else, it will return false if any 1 is not met.
+
+///API
+
 I believe I have API support for my mod! You should be able to access my mod's Levels by the methods
 
 (If you want to use my API with customizable-by-user values, please contact me! I have an idea of how that could be done, and that is a new method that takes in an ENUM I provide to specify what you want done, with a Registry Name that you provide)

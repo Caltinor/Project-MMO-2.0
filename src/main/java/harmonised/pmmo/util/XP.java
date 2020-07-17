@@ -897,7 +897,7 @@ public class XP
 				break;
 
 			case SMITHING:
-				skillMultiplier = Config.forgeConfig.repairingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.smithingMultiplier.get();
 				break;
 
 			case FLYING:
