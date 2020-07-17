@@ -1,5 +1,6 @@
 package harmonised.pmmo.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -11,6 +12,7 @@ public class PrefsSlider extends Slider
 {
     private Consumer<PrefsSlider> guiResponder;
     private final boolean isSwitch;
+    private static double lastValue;
     public String preference;
 
     public PrefsSlider(int xPos, int yPos, int width, int height, String preference, ITextComponent prefix, ITextComponent suf, double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr, boolean isSwitch, IPressable handler )
@@ -66,12 +68,12 @@ public class PrefsSlider extends Slider
             }
 
             if(drawString)
-                setMessage( new StringTextComponent( dispString + val + suffix ));
+                setMessage( new StringTextComponent( dispString.getString() + val + suffix.getString() ));
         }
 
         if (parent != null)
         {
-            parent.onChangeSliderValue(this);
+            parent.onChangeSliderValue( this );
         }
 
         if (this.guiResponder != null)

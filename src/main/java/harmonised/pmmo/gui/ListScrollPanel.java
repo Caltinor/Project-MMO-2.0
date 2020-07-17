@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.gui.ScrollPanel;
 import org.lwjgl.opengl.GL11;
 
@@ -77,13 +78,13 @@ public class ListScrollPanel extends ScrollPanel
                 button.render( stack,  mouseX, mouseY, 0 );
 
                 if( button.unlocked )
-                    drawString( stack,  Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0x54fc54 );
+                    drawString( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0x54fc54 );
                 else
-                    drawString( stack,  Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0xfc5454 );
+                    drawString( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0xfc5454 );
 
-                for( String line : button.text )
+                for( ITextComponent line : button.text )
                 {
-                    drawString( stack,  Minecraft.getInstance().fontRenderer, line, this.left + 6, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
+                    drawString( stack, Minecraft.getInstance().fontRenderer, line.getString(), this.left + 6, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
                 }
             }
             accumulativeHeight += button.getHeight() + 4;

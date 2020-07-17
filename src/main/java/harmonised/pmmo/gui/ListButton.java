@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -39,8 +40,8 @@ public class ListButton extends Button
     public boolean unlocked = true;
     public ItemStack itemStack;
     public String regKey, title, buttonText;
-    public List<String> text = new ArrayList<>();
-    public List<String> tooltipText = new ArrayList<>();
+    public List<ITextComponent> text = new ArrayList<>();
+    public List<ITextComponent> tooltipText = new ArrayList<>();
     Entity testEntity = null;
     LivingEntity entity = null;
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
@@ -129,7 +130,7 @@ public class ListButton extends Button
     {
         int height = 11;
 
-        for( String a : text )
+        for( ITextComponent a : text )
         {
             height += 9;
         }
