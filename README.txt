@@ -12,10 +12,29 @@ import crafttweaker.api.data.IData;
 import mods.pmmo.ct.Levels;
 import crafttweaker.api.events.CTEventManager;
 import crafttweaker.api.event.entity.player.MCUseHoeEvent;
+`
 
+//Check if the player has met the required stats
+`
 CTEventManager.register(new MCUseHoeEvent(event =>
 {
 	var metLevelsSpecified = Levels.checkLevels( new MapData( {"agility": 10 as IData, "farming": 50 as IData} ), event.getPlayer() );
+}));
+`
+
+//Award the player levels
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	Levels.awardLevels( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+}));
+`
+
+//Award the player Xp (the extra boolean is ignoreBonuses, such as xp boosting items, or biomes)
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	Levels.awardXp( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer(), true );
 }));
 `
 
