@@ -239,16 +239,16 @@
 			"farming": 20
 		},
 		"minecraft:stone_pickaxe": {
-			"mining": 10
+			"mining": 5
 		},
 		"minecraft:stone_shovel": {
-			"excavation": 10
+			"excavation": 5
 		},
 		"minecraft:stone_axe": {
-			"woodcutting": 10
+			"woodcutting": 5
 		},
 		"minecraft:stone_hoe": {
-			"farming": 10
+			"farming": 5
 		},
 		"minecraft:wooden_pickaxe": {
 			"mining": 1
