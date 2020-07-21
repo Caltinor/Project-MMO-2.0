@@ -31,12 +31,6 @@ public class AttributeHandler
 	private static int maxExtraHeartBoost;
 	private static double maxExtraReachBoost;
 	private static double maxExtraDamageBoost;
-	private static final double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
-	private static final double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();
-	private static final double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
-	private static final double mobHPBoostPerPowerLevel = Config.forgeConfig.mobHPBoostPerPowerLevel.get();
-	private static final double maxMobDamageBoost = Config.forgeConfig.maxMobDamageBoost.get();
-	private static final double mobDamageBoostPerPowerLevel = Config.forgeConfig.mobDamageBoostPerPowerLevel.get();
 
 	public static void init()
 	{
@@ -176,6 +170,8 @@ public class AttributeHandler
 		ModifiableAttributeInstance hpAttribute = mob.getAttribute( Attributes.MAX_HEALTH );
 		if( hpAttribute != null )
 		{
+			double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
+			double mobHPBoostPerPowerLevel = Config.forgeConfig.mobHPBoostPerPowerLevel.get();
 			if( !(mob instanceof AnimalEntity) )
 				bonus *= mobHPBoostPerPowerLevel;
 
@@ -198,9 +194,9 @@ public class AttributeHandler
 		ModifiableAttributeInstance damageAttribute = mob.getAttribute( Attributes.ATTACK_DAMAGE );
 		if( damageAttribute != null )
 		{
-//			System.out.println( "damage boost " + bonus / damageAttribute.getBaseValue() + " " + bonus + " " + damageAttribute.getBaseValue() );
+			double maxMobDamageBoost = Config.forgeConfig.maxMobDamageBoost.get();
+			double mobDamageBoostPerPowerLevel = Config.forgeConfig.mobDamageBoostPerPowerLevel.get();
 			bonus *= mobDamageBoostPerPowerLevel;
-
 			bonus *= getBiomeMobMultiplier( mob, "damageBonus" );
 
 			if( bonus > maxMobDamageBoost )
@@ -221,6 +217,8 @@ public class AttributeHandler
 		{
 			if( !(mob instanceof  AnimalEntity) )
 			{
+				double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
+				double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();
 				bonus *= mobSpeedBoostPerPowerLevel;
 
 				bonus *= getBiomeMobMultiplier( mob, "speedBonus" );

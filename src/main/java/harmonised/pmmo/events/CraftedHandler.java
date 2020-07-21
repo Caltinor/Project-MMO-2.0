@@ -15,13 +15,12 @@ import java.util.Map;
 
 public class CraftedHandler
 {
-    private static final double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
-
     public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
     {
         PlayerEntity player = event.getPlayer();
         if( !player.world.isRemote() )
         {
+            double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
             double durabilityMultiplier = 1;
             Map<String, Double> award = new HashMap<>();
             award.put( "crafting", defaultCraftingXp );

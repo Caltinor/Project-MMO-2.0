@@ -146,17 +146,17 @@ public class EventHandler
 		SleepHandler.handleSleepFinished( event );
 	}
 
-//	@SubscribeEvent
-//	public static void chunkDataLoad( ChunkDataEvent.Load event )
-//	{
-//		ChunkDataHandler.handleChunkDataLoad( event );
-//	}
-//
-//	@SubscribeEvent
-//	public static void chunkDataSave( ChunkDataEvent.Save event )
-//	{
-//		ChunkDataHandler.handleChunkDataSave( event );
-//	}
+	@SubscribeEvent
+	public static void chunkDataLoad( ChunkDataEvent.Load event )
+	{
+		ChunkDataHandler.handleChunkDataLoad( event );
+	}
+
+	@SubscribeEvent
+	public static void chunkDataSave( ChunkDataEvent.Save event )
+	{
+		ChunkDataHandler.handleChunkDataSave( event );
+	}
 
 	@SubscribeEvent
 	public static void pistonPush( PistonEvent event )

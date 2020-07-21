@@ -12,12 +12,11 @@ import java.util.Map;
 
 public class BreedHandler
 {
-    private static final double defaultBreedingXp = Config.forgeConfig.defaultBreedingXp.get();
-
     public static void handleBreedEvent( BabyEntitySpawnEvent event )
     {
         if( event.getChild() != null && event.getCausedByPlayer() != null && !(event.getCausedByPlayer() instanceof FakePlayer) )
         {
+            double defaultBreedingXp = Config.forgeConfig.defaultBreedingXp.get();
             String regKey = event.getChild().getEntityString();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_BREED );
 

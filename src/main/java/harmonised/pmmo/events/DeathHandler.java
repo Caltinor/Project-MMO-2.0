@@ -23,14 +23,13 @@ import java.util.Map;
 
 public class DeathHandler
 {
-    private static double deathXpPenaltyMultiplier = Config.forgeConfig.deathXpPenaltyMultiplier.get();
-    private static double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
-    private static double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
-
     public static void handleDeath( LivingDeathEvent event )
     {
         LivingEntity target = event.getEntityLiving();
         Entity source = event.getSource().getTrueSource();
+        double deathXpPenaltyMultiplier = Config.forgeConfig.deathXpPenaltyMultiplier.get();
+        double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
+        double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
 
         if( target instanceof PlayerEntity && !( target instanceof FakePlayer) )
         {

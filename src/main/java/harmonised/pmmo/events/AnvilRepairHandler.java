@@ -26,11 +26,9 @@ import java.util.Set;
 
 public class AnvilRepairHandler
 {
-    private static final boolean anvilHandlingEnabled = Config.forgeConfig.anvilHandlingEnabled.get();
-
     public static void handleAnvilRepair( AnvilRepairEvent event )
     {
-        if( anvilHandlingEnabled )
+        if( Config.forgeConfig.anvilHandlingEnabled.get() )
         try
         {
             PlayerEntity player = event.getPlayer();

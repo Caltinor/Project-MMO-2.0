@@ -14,6 +14,7 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -40,6 +41,7 @@ public class ProjectMMOMod
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::modsLoading );
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::clientLoading );
         MinecraftForge.EVENT_BUS.addListener( this::serverAboutToStart );
+        MinecraftForge.EVENT_BUS.addListener( this::registerCommands );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
 
 //        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
@@ -67,10 +69,14 @@ public class ProjectMMOMod
         ChunkDataHandler.init();
     }
 
+    private void registerCommands( RegisterCommandsEvent event )
+    {
+        PmmoCommand.register( event.getDispatcher() );
+    }
+
     private void serverStart( FMLServerStartingEvent event )
     {
         Config.initServer();
-        PmmoCommand.register( event.getCommandDispatcher() );
         WorldTickHandler.refreshVein();
         AttributeHandler.init();
         if( Config.forgeConfig.craftReqEnabled.get() )

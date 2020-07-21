@@ -18,8 +18,6 @@ import java.util.UUID;
 
 public class PlayerConnectedHandler
 {
-    private static boolean showWelcome = Config.forgeConfig.showWelcome.get();
-    private static boolean showPatreonWelcome = Config.forgeConfig.showPatreonWelcome.get();
     public static Set<UUID> lapisPatreons = new HashSet<>();
     public static Set<UUID> dandelionPatreons = new HashSet<>();
     public static Set<UUID> ironPatreons = new HashSet<>();
@@ -29,6 +27,8 @@ public class PlayerConnectedHandler
         PlayerEntity player = event.getPlayer();
         if( !player.world.isRemote() )
         {
+            boolean showWelcome = Config.forgeConfig.showWelcome.get();
+            boolean showPatreonWelcome = Config.forgeConfig.showPatreonWelcome.get();
             migrateTags( player );
             XP.syncPlayer( player );
 

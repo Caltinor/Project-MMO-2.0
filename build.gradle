@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16-3.10.2'
+version = '1.16-3.10.6'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO'
 
@@ -100,7 +100,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.16.1-32.0.66'
+            minecraft 'net.minecraftforge:forge:1.16.1-32.0.70'
             implementation 'com.google.code.gson:gson:2.8.6'
 
 //            compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
@@ -110,10 +110,10 @@ dependencies
 //            runtimeOnly fg.deobf("curse.maven:curio-of-undying:2994182")
 //            runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
 //            runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
-            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.1:7.0.0.9")
-            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.1:7.0.0.9")
-            runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.16.1-3.0-beta2")
-            compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.16.1-3.0-beta2:api")
+            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.1:7.0.0.12")
+            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.1:7.0.0.12")
+            runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.16.1-3.0-beta4")
+            compileOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.16.1-3.0-beta4:api")
         }
 
 jar {
