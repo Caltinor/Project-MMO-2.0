@@ -16,7 +16,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16-3.10.6'
+version = '1.16-3.11'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO'
 
@@ -111,7 +111,7 @@ dependencies
 //            runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
 //            runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
 
-            runtimeOnly fg.deobf("curse.maven:azuredoom-doom-mod:3009638")
+//            runtimeOnly fg.deobf("curse.maven:azuredoom-doom-mod:3009638")
 
             runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.1:7.0.0.12")
             compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.1:7.0.0.12")
