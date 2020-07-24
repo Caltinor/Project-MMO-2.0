@@ -614,16 +614,16 @@
 			"farming": 20
 		},
 		"minecraft:stone_pickaxe": {
-			"mining": 5
+			"mining": 10
 		},
 		"minecraft:stone_shovel": {
-			"excavation": 5
+			"excavation": 10
 		},
 		"minecraft:stone_axe": {
-			"woodcutting": 5
+			"woodcutting": 10
 		},
 		"minecraft:stone_hoe": {
-			"farming": 5
+			"farming": 10
 		},
 		"minecraft:wooden_pickaxe": {
 			"mining": 1
@@ -1476,10 +1476,12 @@
 			"farming": 12
 		},
 		"minecraft:bamboo": {
-			"farming": 1.2
+			"farming": 1.2,
+			"woodcutting": 0.4
 		},
 		"minecraft:bamboo_sapling": {
-			"farming": 1.2
+			"farming": 1.2,
+			"woodcutting": 0.4
 		},
 		"minecraft:kelp": {
 			"farming": 2
