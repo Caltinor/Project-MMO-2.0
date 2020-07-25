@@ -109,6 +109,11 @@ public class CreditsScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Darth Revan#7341", new TranslationTextComponent( "pmmo.creatorOfModpack", "Zombie Textiles" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
         listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ko_kr", "BusanDaek#3970", new TranslationTextComponent( "pmmo.translated", "Korean" ).getString(), button ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
@@ -120,6 +125,11 @@ public class CreditsScreen extends Screen
         }));
 
         listButtons.add( new ListButtonBig( 0, 0, 1, 6, "pt_br", "TorukM4kt00#0246", new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ru_ru", "starche#7569", new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString(), button ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
