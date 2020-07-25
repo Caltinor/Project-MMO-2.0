@@ -97,7 +97,10 @@ public class CreditorScreen extends Screen
 
         for( int i = 0; i < list.size(); i++ )
         {
-            drawCenteredString(font, "§l" + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
+            if( list.get(i).contains( "§l" ) )
+                drawCenteredString(font, list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
+            else
+                drawCenteredString(font, "§l" + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
         }
 
 //        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
@@ -209,13 +212,18 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString() );
 
-        /////////MODPACK////////////
-        //BUSANDAEK
+        //NEOTHIAMIN
         list = new ArrayList<>();
         list.add( "neothiamin#1798" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString() );
         creditorsInfo.put( "neothiamin#1798", list );
+        //DARTH_REVAN#7341
+        list = new ArrayList<>();
+        list.add( "Darth Revan#7341" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/04/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Zombie Textiles" ).getString() );
+        creditorsInfo.put( "Darth Revan#7341", list );
 
         /////////TRANSLATOR/////////
         //BUSANDAEK
@@ -236,6 +244,12 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
         creditorsInfo.put( "TorukM4kt00#0246", list );
+        //STARCHE#0246
+        list = new ArrayList<>();
+        list.add( "starche#7569" );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
+        creditorsInfo.put( "starche#7569", list );
 
         /////////COLOR//////////////
 //        colors.put( "pmmo.lapisPatreon", 0x5555ff );
