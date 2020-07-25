@@ -194,26 +194,13 @@ public class CreditorScreen extends Screen
             colors.put( uuidName.get( a.toString() ), 0xffff33 );
             creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
         });
-        list = creditorsInfo.get( "Tyrius#0842" );
-        list.add( "Tyrius#0842" );
-        list.add( "First Dandelion Tier Patreon" );
-        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "19/03/2020" ).getString() );
-        list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString() );
-
-        /////////IRON///////////////
-        //DIDIS54
-        PlayerConnectedHandler.ironPatreons.forEach( a ->
-        {
-            colors.put( uuidName.get( a.toString() ), 0xeeeeee );
-            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
-        } );
         list = creditorsInfo.get( "didis54#5815" );
         list.add( "didis54#5815" );
         list.add( "First Iron Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.helpedTranslating", "French" ).getString() );
 
-        /////////MODPACK////////////
         //NEOTHIAMIN
         list = new ArrayList<>();
         list.add( "neothiamin#1798" );
@@ -231,26 +218,26 @@ public class CreditorScreen extends Screen
         //BUSANDAEK
         list = new ArrayList<>();
         list.add( "BusanDaek#3970" );
-        list.add( new TranslationTextComponent( "pmmo.translated", "Korean" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "31/03/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Korean" ).getString() );
         creditorsInfo.put( "BusanDaek#3970", list );
         //MAREOFTHESTARS
         list = new ArrayList<>();
         list.add( "deezer911#5693" );
-        list.add( new TranslationTextComponent( "pmmo.translated", "French" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/03/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.helpedTranslating", "French" ).getString() );
         creditorsInfo.put( "deezer911#5693", list );
         //TORUKM4KT00#0246
         list = new ArrayList<>();
         list.add( "TorukM4kt00#0246" );
-        list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         creditorsInfo.put( "TorukM4kt00#0246", list );
         //STARCHE#0246
         list = new ArrayList<>();
         list.add( "starche#7569" );
-        list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         creditorsInfo.put( "starche#7569", list );
 
         /////////COLOR//////////////
