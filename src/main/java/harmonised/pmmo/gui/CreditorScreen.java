@@ -211,6 +211,7 @@ public class CreditorScreen extends Screen
         list.add( "First Iron Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.helpedTranslating", "French" ).getString() );
 
         //NEOTHIAMIN
         list = new ArrayList<>();
@@ -229,26 +230,26 @@ public class CreditorScreen extends Screen
         //BUSANDAEK
         list = new ArrayList<>();
         list.add( "BusanDaek#3970" );
-        list.add( new TranslationTextComponent( "pmmo.translated", "Korean" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "31/03/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Korean" ).getString() );
         creditorsInfo.put( "BusanDaek#3970", list );
         //MAREOFTHESTARS
         list = new ArrayList<>();
         list.add( "deezer911#5693" );
-        list.add( new TranslationTextComponent( "pmmo.translated", "French" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/03/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.helpedTranslating", "French" ).getString() );
         creditorsInfo.put( "deezer911#5693", list );
         //TORUKM4KT00#0246
         list = new ArrayList<>();
         list.add( "TorukM4kt00#0246" );
-        list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         creditorsInfo.put( "TorukM4kt00#0246", list );
         //STARCHE#0246
         list = new ArrayList<>();
         list.add( "starche#7569" );
-        list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         creditorsInfo.put( "starche#7569", list );
 
         /////////COLOR//////////////
