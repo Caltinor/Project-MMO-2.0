@@ -166,7 +166,6 @@ public class AttributeHandler
 
 	public static void updateHP( MobEntity mob, float bonus )
 	{
-//		System.out.println( mob.getDisplayName().getString() );
 		ModifiableAttributeInstance hpAttribute = mob.getAttribute( Attributes.MAX_HEALTH );
 		if( hpAttribute != null )
 		{
