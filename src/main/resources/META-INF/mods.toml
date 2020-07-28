@@ -7,6 +7,7 @@ modLoader="javafml"
            displayName="Project MMO"
            displayURL="https://www.curseforge.com/minecraft/mc-mods/project-mmo"
            credits="MMD were there when this mod needed them, including the start"
+           license="All rights reserved"
            authors="Harmonised"
            description='''
            Adds many different skills and benefits thanks to the skills to the game!

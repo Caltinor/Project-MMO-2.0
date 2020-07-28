@@ -170,6 +170,7 @@ public class AttributeHandler
 		ModifiableAttributeInstance hpAttribute = mob.getAttribute( Attributes.MAX_HEALTH );
 		if( hpAttribute != null )
 		{
+			boolean wasMaxHealth = mob.getHealth() == mob.getMaxHealth();
 			double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
 			double mobHPBoostPerPowerLevel = Config.forgeConfig.mobHPBoostPerPowerLevel.get();
 			if( !(mob instanceof AnimalEntity) )
@@ -185,7 +186,8 @@ public class AttributeHandler
 			hpAttribute.removeModifier(hpModifierID);
 			hpAttribute.func_233769_c_(hpModifier);
 
-//			mob.setHealth( newHealth );
+			if( wasMaxHealth )
+				mob.setHealth( mob.getMaxHealth() );
 		}
 	}
 
