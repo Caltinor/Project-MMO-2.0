@@ -563,7 +563,7 @@ public class XP
 
 	public static float getPowerLevel( PlayerEntity player )
     {
-		int powerLevel = getLevel( Skill.ENDURANCE, player );
+		int enduranceLevel = getLevel( Skill.ENDURANCE, player );
 
 		int combatLevel = getLevel( Skill.COMBAT, player );
 		int archeryLevel = getLevel( Skill.ARCHERY, player );
@@ -575,7 +575,7 @@ public class XP
 		if( maxOffensive < magicLevel )
 			maxOffensive = magicLevel;
 
-		return ( powerLevel + (maxOffensive * 1.5f) ) / 50;
+		return ( enduranceLevel + (maxOffensive * 1.5f) ) / 50;
     }
 
 	public static void syncPlayerConfig( PlayerEntity player )
