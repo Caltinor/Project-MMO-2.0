@@ -171,10 +171,10 @@ public class AttributeHandler
 
 	public static void updateHP( MobEntity mob, float bonus )
 	{
-//		System.out.println( mob.getDisplayName().getString() );
 		IAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		if( hpAttribute != null )
 		{
+			boolean wasMaxHealth = mob.getHealth() == mob.getMaxHealth();
 			if( !(mob instanceof AnimalEntity) )
 				bonus *= mobHPBoostPerPowerLevel;
 
@@ -188,7 +188,8 @@ public class AttributeHandler
 			hpAttribute.removeModifier(hpModifierID);
 			hpAttribute.applyModifier(hpModifier);
 
-//			mob.setHealth( newHealth );
+			if( wasMaxHealth )
+				mob.setHealth( mob.getMaxHealth() );
 		}
 	}
 
