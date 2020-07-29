@@ -4304,5 +4304,22 @@
 		"minecraft:the_end": {
 			"minecraft:end_stone": 0
 		}
+	},
+	"trigger_xp": {
+		"doomweapon.consume.inmortal": {
+			"magic": 10
+		},
+		"doomweapon.consume.invisible": {
+			"magic": 10
+		},
+		"doomweapon.consume.mega": {
+			"magic": 10
+		},
+		"doomweapon.consume.power": {
+			"magic": 10
+		},
+		"doomweapon.consume.soul": {
+			"magic": 10
+		}
 	}
 }
