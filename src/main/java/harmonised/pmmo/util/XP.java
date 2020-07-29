@@ -1032,24 +1032,6 @@ public class XP
 		return biomeBoost;
 	}
 
-
-
-	public static void awardXpMap( PlayerEntity player, Map<String, Object> map, String sourceName, boolean skip, boolean ignoreBonuses )
-	{
-		for( Map.Entry<String, Object> entry : map.entrySet() )
-		{
-			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip, ignoreBonuses );
-		}
-	}
-
-	public static void awardXpMapDouble( PlayerEntity player, Map<String, Double> map, String sourceName, boolean skip, boolean ignoreBonuses )
-	{
-		for( Map.Entry<String, Double> entry : map.entrySet() )
-		{
-			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, entry.getValue(), skip, ignoreBonuses );
-		}
-	}
-
 	public static double getMultiplier( PlayerEntity player, Skill skill )
 	{
 		double multiplier = 1;
@@ -1207,6 +1189,32 @@ public class XP
 		{
 			sendMessage( skillName + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
 			LogHandler.LOGGER.info( playerName + " " + skillName + " max startLevel reached" );
+		}
+	}
+
+	public static void awardXpTrigger( ServerPlayerEntity player, String triggerKey, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
+	{
+		if( JsonConfig.data.get( JType.XP_VALUE_TRIGGER ).containsKey( triggerKey ) )
+		{
+			awardXpMap( player, JsonConfig.data.get( JType.XP_VALUE_TRIGGER ).get( triggerKey ), sourceName, skip, ignoreBonuses );
+		}
+		else
+			LogHandler.LOGGER.error( "TRIGGER XP AWARD \"" + triggerKey + "\" DOES NOT HAVE ANY VALUES, CANNOT AWARD" );
+	}
+
+	public static void awardXpMap( PlayerEntity player, Map<String, Object> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
+	{
+		for( Map.Entry<String, Object> entry : map.entrySet() )
+		{
+			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip, ignoreBonuses );
+		}
+	}
+
+	public static void awardXpMapDouble( PlayerEntity player, Map<String, Double> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
+	{
+		for( Map.Entry<String, Double> entry : map.entrySet() )
+		{
+			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, entry.getValue(), skip, ignoreBonuses );
 		}
 	}
 
