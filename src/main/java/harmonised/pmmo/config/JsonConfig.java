@@ -61,9 +61,9 @@ public class JsonConfig
         if( Config.forgeConfig.loadDefaultConfig.get() )
             updateFinal( defaultReq );
         updateFinal( customReq );
-        
+
 //        postProcess( localData );
-        
+
         JsonConfig.data = localData;
     }
 
@@ -108,6 +108,7 @@ public class JsonConfig
     private final Map<String, RequirementItem> xpValueCrafting = new HashMap<>();
     private final Map<String, RequirementItem> xpValueBreeding = new HashMap<>();
     private final Map<String, RequirementItem> xpValueTaming = new HashMap<>();
+    private final Map<String, RequirementItem> xpValueTrigger = new HashMap<>();
     private final Map<String, RequirementItem> ores = new HashMap<>();
     private final Map<String, RequirementItem> logs = new HashMap<>();
     private final Map<String, RequirementItem> plants = new HashMap<>();
@@ -155,6 +156,14 @@ public class JsonConfig
 
         if( Config.forgeConfig.xpValueCraftingEnabled.get() )
             updateReqSkills( req.xpValueCrafting, localData.get( JType.XP_VALUE_CRAFT ) );
+
+        if( Config.forgeConfig.breedingXpEnabled.get() )
+            updateReqSkills( req.xpValueBreeding, localData.get( JType.XP_VALUE_BREED ) );
+
+        if( Config.forgeConfig.tamingXpEnabled.get() )
+            updateReqSkills( req.xpValueTaming, localData.get( JType.XP_VALUE_TAME ) );
+
+        updateReqSkills( req.xpValueTrigger, localData.get( JType.XP_VALUE_TRIGGER ) );
 
         if( Config.forgeConfig.placeReqEnabled.get() )
             updateReqSkills( req.placing, localData.get( JType.REQ_PLACE ) );
@@ -213,12 +222,6 @@ public class JsonConfig
         updateSpecific( req.blockSpecific, localData.get( JType.BLOCK_SPECIFIC ) );
         updateSpecific( req.playerSpecific, localData.get( JType.PLAYER_SPECIFIC ) );
 
-        if( Config.forgeConfig.breedingXpEnabled.get() )
-            updateReqSkills( req.xpValueBreeding, localData.get( JType.XP_VALUE_BREED ) );
-
-        if( Config.forgeConfig.tamingXpEnabled.get() )
-            updateReqSkills( req.xpValueTaming, localData.get( JType.XP_VALUE_TAME ) );
-
         updateReqVein( req.veinBlacklist, localData.get( JType.VEIN_BLACKLIST ) );
 
         if( Config.forgeConfig.craftReqEnabled.get() )
@@ -252,6 +255,7 @@ public class JsonConfig
             deserializeGroup( obj, "crafting_xp", req.xpValueCrafting::put, context );
             deserializeGroup( obj, "breeding_xp", req.xpValueBreeding::put, context );
             deserializeGroup( obj, "taming_xp", req.xpValueTaming::put, context );
+            deserializeGroup( obj, "trigger_xp", req.xpValueTrigger::put, context );
             deserializeGroup( obj, "ore", req.ores::put, context );
             deserializeGroup( obj, "log", req.logs::put, context );
             deserializeGroup( obj, "plant", req.plants::put, context );
