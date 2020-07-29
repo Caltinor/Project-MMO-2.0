@@ -1086,7 +1086,7 @@ public class XP
 
 		if( !(player instanceof ServerPlayerEntity) )
 		{
-			LogHandler.LOGGER.error( "CLIENT PLAYER XP AWARD ATTEMPTED! THIS SHOULD NOT HAPPEN! SOURCE: " + sourceName + ", SKILL: " + skill.name() + ", AMOUNT: " + amount );
+			LogHandler.LOGGER.error( "NOT ServerPlayerEntity PLAYER XP AWARD ATTEMPTED! THIS SHOULD NOT HAPPEN! SOURCE: " + sourceName + ", SKILL: " + skill.name() + ", AMOUNT: " + amount );
 			return;
 		}
 
