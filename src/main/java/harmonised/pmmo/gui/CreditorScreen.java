@@ -194,6 +194,20 @@ public class CreditorScreen extends Screen
             colors.put( uuidName.get( a.toString() ), 0xffff33 );
             creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
         });
+        list = creditorsInfo.get( "Tyrius#0842" );
+        list.add( "Tyrius#0842" );
+        list.add( "First Dandelion Tier Patreon" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "19/03/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.helpedFillingInModValues", "Botania" ).getString() );
+
+        /////////IRON///////////////
+        //DIDIS54
+        PlayerConnectedHandler.ironPatreons.forEach( a ->
+        {
+            colors.put( uuidName.get( a.toString() ), 0xeeeeee );
+            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
+        } );
         list = creditorsInfo.get( "didis54#5815" );
         list.add( "didis54#5815" );
         list.add( "First Iron Tier Patreon" );
@@ -239,10 +253,5 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         creditorsInfo.put( "starche#7569", list );
-
-        /////////COLOR//////////////
-//        colors.put( "pmmo.lapisPatreon", 0x5555ff );
-//        colors.put( "pmmo.dandelionPatreon", 0xffff33 );
-//        colors.put( "pmmo.ironPatreon", 0xeeeeee );
     }
 }
