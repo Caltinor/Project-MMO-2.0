@@ -198,6 +198,7 @@ public class CreditorScreen extends Screen
         list.add( "First Dandelion Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "19/03/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.helpedFillingInModValues", "Botania" ).getString() );
 
         /////////IRON///////////////
         //DIDIS54
@@ -251,10 +252,5 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         creditorsInfo.put( "starche#7569", list );
-
-        /////////COLOR//////////////
-//        colors.put( "pmmo.lapisPatreon", 0x5555ff );
-//        colors.put( "pmmo.dandelionPatreon", 0xffff33 );
-//        colors.put( "pmmo.ironPatreon", 0xeeeeee );
     }
 }
