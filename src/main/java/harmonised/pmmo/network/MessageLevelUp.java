@@ -6,6 +6,7 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -52,11 +53,12 @@ public class MessageLevelUp
         ctx.get().enqueueWork(() ->
         {
             ServerPlayerEntity player = ctx.get().getSender();
+            CompoundNBT prefsTag = XP.getPreferencesTag( player );
             Skill skill = Skill.getSkill( packet.skill );
             String skillName = skill.name().toLowerCase();
             Vector3d playerPos = player.getPositionVec();
 
-            if( levelUpFirework )
+            if( levelUpFirework && !( prefsTag.contains( "spawnFireworksCausedByMe" ) && prefsTag.getDouble( "spawnFireworksCausedByMe" ) == 0 ) )
                 XP.spawnRocket( player.world, player.getPositionVec(), skill );
 
             LogHandler.LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.world.func_234922_V_().func_240901_a_().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
@@ -67,11 +69,13 @@ public class MessageLevelUp
                 {
                     if( otherPlayer.getUniqueID() != player.getUniqueID() )
                     {
+                        CompoundNBT otherPrefsTag = XP.getPreferencesTag( otherPlayer );
                         otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).func_240703_c_( XP.skillStyle.get( skill ) ), false );
-//                        NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.milestoneLevelUp", player.getDisplayName().getString(), "" + packet.level, "pmmo." + skillName, false, 3 ), otherPlayer );
-
                         if( milestoneLevelUpFirework )
-                            XP.spawnRocket( otherPlayer.world, otherPlayer.getPositionVec(), skill );
+                        {
+                            if( !( otherPrefsTag.contains( "spawnFireworksCausedByOthers" ) && otherPrefsTag.getDouble( "spawnFireworksCausedByOthers" ) == 0 ) )
+                                XP.spawnRocket( otherPlayer.world, otherPlayer.getPositionVec(), skill );
+                        }
                     }
                 });
             }
