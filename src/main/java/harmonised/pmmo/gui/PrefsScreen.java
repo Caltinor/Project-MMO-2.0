@@ -93,11 +93,15 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("maxCrouchJumpBoost", "", "", 0, value, prefsTag.contains( "maxCrouchJumpBoost" ) ? prefsTag.getDouble( "maxCrouchJumpBoost" ) : value, value, true, true, true, false ) );
 
                 prefsEntries.add( new PrefsEntry("wipeAllSkillsUponDeathPermanently", "", "", 0, 1, prefsTag.contains( "wipeAllSkillsUponDeathPermanently" ) ? prefsTag.getDouble( "wipeAllSkillsUponDeathPermanently" ) : 0, 0, false, true, false, true ) );
+
+                prefsEntries.add( new PrefsEntry("spawnFireworksCausedByMe", "", "", 0, 1, prefsTag.contains( "spawnFireworksCausedByMe" ) ? prefsTag.getDouble( "spawnFireworksCausedByMe" ) : 1, 1, false, true, false, true ) );
+
+                prefsEntries.add( new PrefsEntry("spawnFireworksCausedByOthers", "", "", 0, 1, prefsTag.contains( "spawnFireworksCausedByOthers" ) ? prefsTag.getDouble( "spawnFireworksCausedByOthers" ) : 1, 1, false, true, false, true ) );
                 break;
 
             case GUI_SETTINGS:
                 prefsEntries.add( new PrefsEntry("barOffsetX", "", "", 0, 1, prefsTag.contains( "barOffsetX" ) ? prefsTag.getDouble( "barOffsetX" ) : 0.5, 0.5, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("barOffsetY", "", "", 0, 1, prefsTag.contains( "barOffsetY" ) ? prefsTag.getDouble( "barOffsetY " ) : 0, 0, true, true, false, false ) );
+                prefsEntries.add( new PrefsEntry("barOffsetY", "", "", 0, 1, prefsTag.contains( "barOffsetY" ) ? prefsTag.getDouble( "barOffsetY" ) : 0, 0, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("veinBarOffsetX", "", "", 0, 1, prefsTag.contains( "veinBarOffsetX" ) ? prefsTag.getDouble( "veinBarOffsetX" ) : 0.5, 0.5, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("veinBarOffsetY", "", "", 0, 1, prefsTag.contains( "veinBarOffsetY" ) ? prefsTag.getDouble( "veinBarOffsetY" ) : 0.65, 0.65, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("xpDropOffsetX", "", "", 0, 1, prefsTag.contains( "xpDropOffsetX" ) ? prefsTag.getDouble( "xpDropOffsetX" ) : 0.5, 0.5, true, true, false, false ) );
