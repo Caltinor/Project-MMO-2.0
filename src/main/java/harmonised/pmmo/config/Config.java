@@ -168,6 +168,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> xpDropMaxOpacity;
         public ConfigHelper.ConfigValueListener<Double> xpDropDecayAge;
         public ConfigHelper.ConfigValueListener<Double> minXpGrow;
+        public ConfigHelper.ConfigValueListener<Boolean> showSkillsListAtCorner;
         public ConfigHelper.ConfigValueListener<Boolean> showXpDrops;
         public ConfigHelper.ConfigValueListener<Boolean> stackXpDrops;
         public ConfigHelper.ConfigValueListener<Boolean> xpDropsAttachedToBar;
@@ -759,6 +760,11 @@ public class Config
                         .comment( "Should xp drops sync up with the bar being open or closed? HIGHLY RECOMMEND TO KEEP FALSE IF YOU ARE MOVING XP DROP POSITIONS" )
                         .translation( "pmmo.xpDropsAttachedToBar" )
                         .define( "xpDropsAttachedToBar", true ) );
+
+                this.showSkillsListAtCorner = subscriber.subscribe(builder
+                        .comment( "If Off, The skills list at the top left corner will no longer appear (You still have the GUI to show you all of your skills info)" )
+                        .translation( "pmmo.showSkillsListAtCorner" )
+                        .define( "showSkillsListAtCorner", true ) );
 
                 this.showXpDrops = subscriber.subscribe(builder
                         .comment( "If Off, xp drops will no longer appear" )

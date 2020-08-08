@@ -43,7 +43,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String skillName = "none";
-	private static boolean stackXpDrops = true, init = false, showXpDrops = true, guiKey = false, veinKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills;
+	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, guiKey = false, veinKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills;
 	private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft mc = Minecraft.getInstance();
@@ -129,7 +129,9 @@ public class XPOverlayGUI extends AbstractGui
 				}
 				doXpDrops( stack );
 				doXpBar();
-				doSkillList();
+
+				if( showSkillsListAtCorner )
+					doSkillList();
 
 				if( cooldown > 0 )
 					cooldown -= timeDiff / 1000000D;
@@ -577,6 +579,11 @@ public class XPOverlayGUI extends AbstractGui
 			xpLeftDisplayAlwaysOn = prefsTag.getDouble("xpLeftDisplayAlwaysOn") != 0;
 		else
 			xpLeftDisplayAlwaysOn = Config.forgeConfig.xpLeftDisplayAlwaysOn.get();
+
+		if( prefsTag.contains( "showSkillsListAtCorner" ) )
+			showSkillsListAtCorner = prefsTag.getDouble("showSkillsListAtCorner") != 0;
+		else
+			showSkillsListAtCorner = Config.forgeConfig.showSkillsListAtCorner.get();
 
 		if( prefsTag.contains( "showXpDrops" ) )
 			showXpDrops = prefsTag.getDouble("showXpDrops") != 0;

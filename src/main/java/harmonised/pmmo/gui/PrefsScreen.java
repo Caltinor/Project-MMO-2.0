@@ -113,6 +113,7 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("xpDropDecayAge", "", "", 0, 5000, prefsTag.contains( "xpDropDecayAge" ) ? prefsTag.getDouble( "xpDropDecayAge" ) : 350, 350, false, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("minXpGrow", "", "", 0.01, 100, prefsTag.contains( "minXpGrow" ) ? prefsTag.getDouble( "minXpGrow" ) : 1, 1, true, true, false, false ) );
 
+                prefsEntries.add( new PrefsEntry("showSkillsListAtCorner", "", "", 0, 1, prefsTag.contains( "showSkillsListAtCorner" ) ? prefsTag.getDouble( "showSkillsListAtCorner" ) : 1, 1, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("showXpDrops", "", "", 0, 1, prefsTag.contains( "showXpDrops" ) ? prefsTag.getDouble( "showXpDrops" ) : 1, 1, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("stackXpDrops", "", "", 0, 1, prefsTag.contains( "stackXpDrops" ) ? prefsTag.getDouble( "stackXpDrops" ) : 1, 1, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("xpDropsAttachedToBar", "", "", 0, 1, prefsTag.contains( "xpDropsAttachedToBar" ) ? prefsTag.getDouble( "xpDropsAttachedToBar" ) : 1, 1, false, true, false, true ) );
