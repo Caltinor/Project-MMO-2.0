@@ -1569,8 +1569,8 @@ public class XP
 					{
 						player.addPotionEffect( new PotionEffect( MobEffects.NIGHT_VISION, 250, 0, true, false ) );
 					}
-					else if( player.isPotionActive( MobEffects.NIGHT_VISION ) && player.getActivePotionEffect( MobEffects.NIGHT_VISION ).getIsAmbient() )
-						player.removePotionEffect( MobEffects.NIGHT_VISION );
+//					else if( player.isPotionActive( MobEffects.NIGHT_VISION ) && player.getActivePotionEffect( MobEffects.NIGHT_VISION ).getIsAmbient() )
+//						player.removePotionEffect( MobEffects.NIGHT_VISION );
 					
 					if( player.isSprinting() )
 					{
