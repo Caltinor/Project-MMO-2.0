@@ -1,1217 +1,1556 @@
 {
-	"wear_requirement": {
-		"minecraft:elytra": {
+	"wear_requirement":
+	{
+		"minecraft:elytra":
+		{
 			"agility": 40,
 			"endurance": 20
 		},
-		"minecraft:netherite_helmet": {
+		"minecraft:netherite_helmet":
+		{
 			"endurance": 60
 		},
-		"minecraft:netherite_chestplate": {
+		"minecraft:netherite_chestplate":
+		{
 			"endurance": 60
 		},
-		"minecraft:netherite_leggings": {
+		"minecraft:netherite_leggings":
+		{
 			"endurance": 60
 		},
-		"minecraft:netherite_boots": {
+		"minecraft:netherite_boots":
+		{
 			"endurance": 60
 		},
-		"minecraft:diamond_helmet": {
+		"minecraft:diamond_helmet":
+		{
 			"endurance": 40
 		},
-		"minecraft:diamond_chestplate": {
+		"minecraft:diamond_chestplate":
+		{
 			"endurance": 40
 		},
-		"minecraft:diamond_leggings": {
+		"minecraft:diamond_leggings":
+		{
 			"endurance": 40
 		},
-		"minecraft:diamond_boots": {
+		"minecraft:diamond_boots":
+		{
 			"endurance": 40
 		},
-		"minecraft:iron_helmet": {
+		"minecraft:iron_helmet":
+		{
 			"endurance": 30
 		},
-		"minecraft:iron_chestplate": {
+		"minecraft:iron_chestplate":
+		{
 			"endurance": 30
 		},
-		"minecraft:iron_leggings": {
+		"minecraft:iron_leggings":
+		{
 			"endurance": 30
 		},
-		"minecraft:iron_boots": {
+		"minecraft:iron_boots":
+		{
 			"endurance": 30
 		},
-		"minecraft:chainmail_helmet": {
+		"minecraft:chainmail_helmet":
+		{
 			"endurance": 20
 		},
-		"minecraft:chainmail_chestplate": {
+		"minecraft:chainmail_chestplate":
+		{
 			"endurance": 20
 		},
-		"minecraft:chainmail_leggings": {
+		"minecraft:chainmail_leggings":
+		{
 			"endurance": 20
 		},
-		"minecraft:chainmail_boots": {
+		"minecraft:chainmail_boots":
+		{
 			"endurance": 20
 		},
-		"minecraft:golden_helmet": {
+		"minecraft:golden_helmet":
+		{
 			"endurance": 10
 		},
-		"minecraft:golden_chestplate": {
+		"minecraft:golden_chestplate":
+		{
 			"endurance": 10
 		},
-		"minecraft:golden_leggings": {
+		"minecraft:golden_leggings":
+		{
 			"endurance": 10
 		},
-		"minecraft:golden_boots": {
+		"minecraft:golden_boots":
+		{
 			"endurance": 10
 		},
-		"minecraft:leather_helmet": {
+		"minecraft:leather_helmet":
+		{
 			"endurance": 5
 		},
-		"minecraft:leather_chestplate": {
+		"minecraft:leather_chestplate":
+		{
 			"endurance": 5
 		},
-		"minecraft:leather_leggings": {
+		"minecraft:leather_leggings":
+		{
 			"endurance": 5
 		},
-		"minecraft:leather_boots": {
+		"minecraft:leather_boots":
+		{
 			"endurance": 5
 		},
-		"minecraft:turtle_helmet": {
+		"minecraft:turtle_helmet":
+		{
 			"endurance": 15,
 			"swimming": 5
 		},
-		"oresandmetals:elder_rune_helmet": {
+		"oresandmetals:elder_rune_helmet":
+		{
 			"endurance": 90
 		},
-		"oresandmetals:elder_rune_chestplate": {
+		"oresandmetals:elder_rune_chestplate":
+		{
 			"endurance": 90
 		},
-		"oresandmetals:elder_rune_leggings": {
+		"oresandmetals:elder_rune_leggings":
+		{
 			"endurance": 90
 		},
-		"oresandmetals:elder_rune_boots": {
+		"oresandmetals:elder_rune_boots":
+		{
 			"endurance": 90
 		},
-		"oresandmetals:banite_helmet": {
+		"oresandmetals:banite_helmet":
+		{
 			"endurance": 80
 		},
-		"oresandmetals:banite_chestplate": {
+		"oresandmetals:banite_chestplate":
+		{
 			"endurance": 80
 		},
-		"oresandmetals:banite_leggings": {
+		"oresandmetals:banite_leggings":
+		{
 			"endurance": 80
 		},
-		"oresandmetals:banite_boots": {
+		"oresandmetals:banite_boots":
+		{
 			"endurance": 80
 		},
-		"oresandmetals:necronium_helmet": {
+		"oresandmetals:necronium_helmet":
+		{
 			"endurance": 70
 		},
-		"oresandmetals:necronium_chestplate": {
+		"oresandmetals:necronium_chestplate":
+		{
 			"endurance": 70
 		},
-		"oresandmetals:necronium_leggings": {
+		"oresandmetals:necronium_leggings":
+		{
 			"endurance": 70
 		},
-		"oresandmetals:necronium_boots": {
+		"oresandmetals:necronium_boots":
+		{
 			"endurance": 70
 		},
-		"oresandmetals:orikalkum_helmet": {
+		"oresandmetals:orikalkum_helmet":
+		{
 			"endurance": 60
 		},
-		"oresandmetals:orikalkum_chestplate": {
+		"oresandmetals:orikalkum_chestplate":
+		{
 			"endurance": 60
 		},
-		"oresandmetals:orikalkum_leggings": {
+		"oresandmetals:orikalkum_leggings":
+		{
 			"endurance": 60
 		},
-		"oresandmetals:orikalkum_boots": {
+		"oresandmetals:orikalkum_boots":
+		{
 			"endurance": 60
 		},
-		"oresandmetals:rune_helmet": {
+		"oresandmetals:rune_helmet":
+		{
 			"endurance": 50
 		},
-		"oresandmetals:rune_chestplate": {
+		"oresandmetals:rune_chestplate":
+		{
 			"endurance": 50
 		},
-		"oresandmetals:rune_leggings": {
+		"oresandmetals:rune_leggings":
+		{
 			"endurance": 50
 		},
-		"oresandmetals:rune_boots": {
+		"oresandmetals:rune_boots":
+		{
 			"endurance": 50
 		},
-		"oresandmetals:adamant_helmet": {
+		"oresandmetals:adamant_helmet":
+		{
 			"endurance": 35
 		},
-		"oresandmetals:adamant_chestplate": {
+		"oresandmetals:adamant_chestplate":
+		{
 			"endurance": 35
 		},
-		"oresandmetals:adamant_leggings": {
+		"oresandmetals:adamant_leggings":
+		{
 			"endurance": 35
 		},
-		"oresandmetals:adamant_boots": {
+		"oresandmetals:adamant_boots":
+		{
 			"endurance": 35
 		},
-		"oresandmetals:mithril_helmet": {
+		"oresandmetals:mithril_helmet":
+		{
 			"endurance": 25
 		},
-		"oresandmetals:mithril_chestplate": {
+		"oresandmetals:mithril_chestplate":
+		{
 			"endurance": 25
 		},
-		"oresandmetals:mithril_leggings": {
+		"oresandmetals:mithril_leggings":
+		{
 			"endurance": 25
 		},
-		"oresandmetals:mithril_boots": {
+		"oresandmetals:mithril_boots":
+		{
 			"endurance": 25
 		},
-		"oresandmetals:steel_helmet": {
+		"oresandmetals:steel_helmet":
+		{
 			"endurance": 15
 		},
-		"oresandmetals:steel_chestplate": {
+		"oresandmetals:steel_chestplate":
+		{
 			"endurance": 15
 		},
-		"oresandmetals:steel_leggings": {
+		"oresandmetals:steel_leggings":
+		{
 			"endurance": 15
 		},
-		"oresandmetals:steel_boots": {
+		"oresandmetals:steel_boots":
+		{
 			"endurance": 15
 		},
-		"oresandmetals:bronze_helmet": {
+		"oresandmetals:bronze_helmet":
+		{
 			"endurance": 5
 		},
-		"oresandmetals:bronze_chestplate": {
+		"oresandmetals:bronze_chestplate":
+		{
 			"endurance": 5
 		},
-		"oresandmetals:bronze_leggings": {
+		"oresandmetals:bronze_leggings":
+		{
 			"endurance": 5
 		},
-		"oresandmetals:bronze_boots": {
+		"oresandmetals:bronze_boots":
+		{
 			"endurance": 5
 		},
-		"doomweapon:astro_doom_helmet": {
+		"doomweapon:astro_doom_helmet":
+		{
 			"endurance": 90,
 			"combat": 90,
 			"agility": 90
 		},
-		"doomweapon:astro_doom_chestplate": {
+		"doomweapon:astro_doom_chestplate":
+		{
 			"endurance": 90,
 			"combat": 90,
 			"agility": 90
 		},
-		"doomweapon:astro_doom_leggings": {
+		"doomweapon:astro_doom_leggings":
+		{
 			"endurance": 90,
 			"combat": 90,
 			"agility": 90
 		},
-		"doomweapon:astro_doom_boots": {
+		"doomweapon:astro_doom_boots":
+		{
 			"endurance": 90,
 			"combat": 90,
 			"agility": 90
 		},
-		"doomweapon:classic_doom_helmet": {
+		"doomweapon:classic_doom_helmet":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:classic_doom_chestplate": {
+		"doomweapon:classic_doom_chestplate":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:classic_doom_leggings": {
+		"doomweapon:classic_doom_leggings":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:classic_doom_boots": {
+		"doomweapon:classic_doom_boots":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:classic_red_chestplate": {
+		"doomweapon:classic_red_chestplate":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:classic_red_leggings": {
+		"doomweapon:classic_red_leggings":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:classic_black_chestplate": {
+		"doomweapon:classic_black_chestplate":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:classic_bronze_chestplate": {
+		"doomweapon:classic_bronze_chestplate":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:classic_bronze_leggings": {
+		"doomweapon:classic_bronze_leggings":
+		{
 			"endurance": 100,
 			"combat": 100,
 			"agility": 90
 		},
-		"doomweapon:crimson_doom_helmet": {
+		"doomweapon:crimson_doom_helmet":
+		{
 			"endurance": 110,
 			"combat": 110,
 			"agility": 90
 		},
-		"doomweapon:crimson_doom_chestplate": {
+		"doomweapon:crimson_doom_chestplate":
+		{
 			"endurance": 110,
 			"combat": 110,
 			"agility": 90
 		},
-		"doomweapon:crimson_doom_leggings": {
+		"doomweapon:crimson_doom_leggings":
+		{
 			"endurance": 110,
 			"combat": 110,
 			"agility": 90
 		},
-		"doomweapon:crimson_doom_boots": {
+		"doomweapon:crimson_doom_boots":
+		{
 			"endurance": 110,
 			"combat": 110,
 			"agility": 90
 		},
-		"doomweapon:cultist_doom_helmet": {
+		"doomweapon:cultist_doom_helmet":
+		{
 			"endurance": 110,
 			"combat": 110,
 			"agility": 90
 		},
-		"doomweapon:cultist_doom_chestplate": {
+		"doomweapon:cultist_doom_chestplate":
+		{
 			"endurance": 120,
 			"combat": 120,
 			"agility": 90
 		},
-		"doomweapon:cultist_doom_leggings": {
+		"doomweapon:cultist_doom_leggings":
+		{
 			"endurance": 120,
 			"combat": 120,
 			"agility": 90
 		},
-		"doomweapon:cultist_doom_boots": {
+		"doomweapon:cultist_doom_boots":
+		{
 			"endurance": 120,
 			"combat": 120,
 			"agility": 90
 		},
-		"doomweapon:demonic_doom_helmet": {
+		"doomweapon:demonic_doom_helmet":
+		{
 			"endurance": 130,
 			"combat": 130,
 			"agility": 90
 		},
-		"doomweapon:demonic_doom_chestplate": {
+		"doomweapon:demonic_doom_chestplate":
+		{
 			"endurance": 130,
 			"combat": 130,
 			"agility": 90
 		},
-		"doomweapon:demonic_doom_leggings": {
+		"doomweapon:demonic_doom_leggings":
+		{
 			"endurance": 130,
 			"combat": 130,
 			"agility": 90
 		},
-		"doomweapon:demonic_doom_boots": {
+		"doomweapon:demonic_doom_boots":
+		{
 			"endurance": 130,
 			"combat": 130,
 			"agility": 90
 		},
-		"doomweapon:doomicorn_doom_helmet": {
+		"doomweapon:doomicorn_doom_helmet":
+		{
 			"endurance": 140,
 			"combat": 140,
 			"agility": 90
 		},
-		"doomweapon:doomicorn_doom_chestplate": {
+		"doomweapon:doomicorn_doom_chestplate":
+		{
 			"endurance": 140,
 			"combat": 140,
 			"agility": 90
 		},
-		"doomweapon:doomicorn_doom_leggings": {
+		"doomweapon:doomicorn_doom_leggings":
+		{
 			"endurance": 140,
 			"combat": 140,
 			"agility": 90
 		},
-		"doomweapon:doomicorn_doom_boots": {
+		"doomweapon:doomicorn_doom_boots":
+		{
 			"endurance": 140,
 			"combat": 140,
 			"agility": 90
 		},
-		"doomweapon:ember_doom_helmet": {
+		"doomweapon:ember_doom_helmet":
+		{
 			"endurance": 150,
 			"combat": 150,
 			"agility": 90
 		},
-		"doomweapon:ember_doom_chestplate": {
+		"doomweapon:ember_doom_chestplate":
+		{
 			"endurance": 150,
 			"combat": 150,
 			"agility": 90
 		},
-		"doomweapon:ember_doom_leggings": {
+		"doomweapon:ember_doom_leggings":
+		{
 			"endurance": 150,
 			"combat": 150,
 			"agility": 90
 		},
-		"doomweapon:ember_doom_boots": {
+		"doomweapon:ember_doom_boots":
+		{
 			"endurance": 150,
 			"combat": 150,
 			"agility": 90
 		},
-		"doomweapon:gold_doom_helmet": {
+		"doomweapon:gold_doom_helmet":
+		{
 			"endurance": 160,
 			"combat": 160,
 			"agility": 90
 		},
-		"doomweapon:gold_doom_chestplate": {
+		"doomweapon:gold_doom_chestplate":
+		{
 			"endurance": 160,
 			"combat": 160,
 			"agility": 90
 		},
-		"doomweapon:gold_doom_leggings": {
+		"doomweapon:gold_doom_leggings":
+		{
 			"endurance": 160,
 			"combat": 160,
 			"agility": 90
 		},
-		"doomweapon:gold_doom_boots": {
+		"doomweapon:gold_doom_boots":
+		{
 			"endurance": 160,
 			"combat": 160,
 			"agility": 90
 		},
-		"doomweapon:maykr_doom_helmet": {
+		"doomweapon:maykr_doom_helmet":
+		{
 			"endurance": 170,
 			"combat": 170,
 			"agility": 90
 		},
-		"doomweapon:maykr_doom_chestplate": {
+		"doomweapon:maykr_doom_chestplate":
+		{
 			"endurance": 170,
 			"combat": 170,
 			"agility": 90
 		},
-		"doomweapon:maykr_doom_leggings": {
+		"doomweapon:maykr_doom_leggings":
+		{
 			"endurance": 170,
 			"combat": 170,
 			"agility": 90
 		},
-		"doomweapon:maykr_doom_boots": {
+		"doomweapon:maykr_doom_boots":
+		{
 			"endurance": 170,
 			"combat": 170,
 			"agility": 90
 		},
-		"doomweapon:midnight_doom_helmet": {
+		"doomweapon:midnight_doom_helmet":
+		{
 			"endurance": 180,
 			"combat": 180,
 			"agility": 90
 		},
-		"doomweapon:midnight_doom_chestplate": {
+		"doomweapon:midnight_doom_chestplate":
+		{
 			"endurance": 180,
 			"combat": 180,
 			"agility": 90
 		},
-		"doomweapon:midnight_doom_leggings": {
+		"doomweapon:midnight_doom_leggings":
+		{
 			"endurance": 180,
 			"combat": 180,
 			"agility": 90
 		},
-		"doomweapon:midnight_doom_boots": {
+		"doomweapon:midnight_doom_boots":
+		{
 			"endurance": 180,
 			"combat": 180,
 			"agility": 90
 		},
-		"doomweapon:redneck_doom_leggings": {
+		"doomweapon:redneck_doom_leggings":
+		{
 			"endurance": 190,
 			"combat": 190,
 			"agility": 90
 		},
-		"doomweapon:redneck_doom_boots": {
+		"doomweapon:redneck_doom_boots":
+		{
 			"endurance": 190,
 			"combat": 190,
 			"agility": 90
 		},
-		"doomweapon:nightmare_doom_helmet": {
+		"doomweapon:nightmare_doom_helmet":
+		{
 			"endurance": 200,
 			"combat": 200,
 			"agility": 90
 		},
-		"doomweapon:nightmare_doom_chestplate": {
+		"doomweapon:nightmare_doom_chestplate":
+		{
 			"endurance": 200,
 			"combat": 200,
 			"agility": 90
 		},
-		"doomweapon:nightmare_doom_leggings": {
+		"doomweapon:nightmare_doom_leggings":
+		{
 			"endurance": 200,
 			"combat": 200,
 			"agility": 90
 		},
-		"doomweapon:nightmare_doom_boots": {
+		"doomweapon:nightmare_doom_boots":
+		{
 			"endurance": 200,
 			"combat": 200,
 			"agility": 90
 		},
-		"doomweapon:painter_doom_helmet": {
+		"doomweapon:painter_doom_helmet":
+		{
 			"endurance": 210,
 			"combat": 210,
 			"agility": 90
 		},
-		"doomweapon:painter_doom_chestplate": {
+		"doomweapon:painter_doom_chestplate":
+		{
 			"endurance": 210,
 			"combat": 210,
 			"agility": 90
 		},
-		"doomweapon:painter_doom_leggings": {
+		"doomweapon:painter_doom_leggings":
+		{
 			"endurance": 210,
 			"combat": 210,
 			"agility": 90
 		},
-		"doomweapon:painter_doom_boots": {
+		"doomweapon:painter_doom_boots":
+		{
 			"endurance": 210,
 			"combat": 210,
 			"agility": 90
 		},
-		"doomweapon:phobos_doom_helmet": {
+		"doomweapon:phobos_doom_helmet":
+		{
 			"endurance": 220,
 			"combat": 220,
 			"agility": 90
 		},
-		"doomweapon:phobos_doom_chestplate": {
+		"doomweapon:phobos_doom_chestplate":
+		{
 			"endurance": 220,
 			"combat": 220,
 			"agility": 90
 		},
-		"doomweapon:phobos_doom_leggings": {
+		"doomweapon:phobos_doom_leggings":
+		{
 			"endurance": 220,
 			"combat": 220,
 			"agility": 90
 		},
-		"doomweapon:phobos_doom_boots": {
+		"doomweapon:phobos_doom_boots":
+		{
 			"endurance": 220,
 			"combat": 220,
 			"agility": 90
 		},
-		"doomweapon:praetor_doom_helmet": {
+		"doomweapon:praetor_doom_helmet":
+		{
 			"endurance": 230,
 			"combat": 230,
 			"agility": 90
 		},
-		"doomweapon:praetor_doom_chestplate": {
+		"doomweapon:praetor_doom_chestplate":
+		{
 			"endurance": 230,
 			"combat": 230,
 			"agility": 90
 		},
-		"doomweapon:praetor_doom_leggings": {
+		"doomweapon:praetor_doom_leggings":
+		{
 			"endurance": 230,
 			"combat": 230,
 			"agility": 90
 		},
-		"doomweapon:praetor_doom_boots": {
+		"doomweapon:praetor_doom_boots":
+		{
 			"endurance": 230,
 			"combat": 230,
 			"agility": 90
 		},
-		"doomweapon:purplepony_doom_helmet": {
+		"doomweapon:purplepony_doom_helmet":
+		{
 			"endurance": 240,
 			"combat": 240,
 			"agility": 90
 		},
-		"doomweapon:purplepony_doom_chestplate": {
+		"doomweapon:purplepony_doom_chestplate":
+		{
 			"endurance": 240,
 			"combat": 240,
 			"agility": 90
 		},
-		"doomweapon:purplepony_doom_leggings": {
+		"doomweapon:purplepony_doom_leggings":
+		{
 			"endurance": 240,
 			"combat": 240,
 			"agility": 90
 		},
-		"doomweapon:purplepony_doom_boots": {
+		"doomweapon:purplepony_doom_boots":
+		{
 			"endurance": 240,
 			"combat": 240,
 			"agility": 90
 		},
-		"doomweapon:sentinel_doom_helmet": {
+		"doomweapon:sentinel_doom_helmet":
+		{
 			"endurance": 250,
 			"combat": 250,
 			"agility": 90
 		},
-		"doomweapon:sentinel_doom_chestplate": {
+		"doomweapon:sentinel_doom_chestplate":
+		{
 			"endurance": 250,
 			"combat": 250,
 			"agility": 90
 		},
-		"doomweapon:sentinel_doom_leggings": {
+		"doomweapon:sentinel_doom_leggings":
+		{
 			"endurance": 250,
 			"combat": 250,
 			"agility": 90
 		},
-		"doomweapon:sentinel_doom_boots": {
+		"doomweapon:sentinel_doom_boots":
+		{
 			"endurance": 250,
 			"combat": 250,
 			"agility": 90
 		},
-		"doomweapon:zombie_doom_helmet": {
+		"doomweapon:zombie_doom_helmet":
+		{
 			"endurance": 300,
 			"combat": 300,
 			"agility": 90
 		},
-		"doomweapon:zombie_doom_chestplate": {
+		"doomweapon:zombie_doom_chestplate":
+		{
 			"endurance": 300,
 			"combat": 300,
 			"agility": 90
 		},
-		"doomweapon:zombie_doom_leggings": {
+		"doomweapon:zombie_doom_leggings":
+		{
 			"endurance": 300,
 			"combat": 300,
 			"agility": 90
 		},
-		"doomweapon:zombie_doom_boots": {
+		"doomweapon:zombie_doom_boots":
+		{
 			"endurance": 300,
 			"combat": 300,
 			"agility": 90
 		}
 	},
-	"tool_requirement": {
-		"minecraft:netherite_pickaxe": {
+	"tool_requirement":
+	{
+		"minecraft:netherite_pickaxe":
+		{
 			"mining": 60
 		},
-		"minecraft:netherite_shovel": {
+		"minecraft:netherite_shovel":
+		{
 			"excavation": 60
 		},
-		"minecraft:netherite_axe": {
+		"minecraft:netherite_axe":
+		{
 			"woodcutting": 60
 		},
-		"minecraft:netherite_hoe": {
+		"minecraft:netherite_hoe":
+		{
 			"farming": 40
 		},
-		"minecraft:diamond_pickaxe": {
+		"minecraft:diamond_pickaxe":
+		{
 			"mining": 40
 		},
-		"minecraft:diamond_shovel": {
+		"minecraft:diamond_shovel":
+		{
 			"excavation": 40
 		},
-		"minecraft:diamond_axe": {
+		"minecraft:diamond_axe":
+		{
 			"woodcutting": 40
 		},
-		"minecraft:diamond_hoe": {
+		"minecraft:diamond_hoe":
+		{
 			"farming": 30
 		},
-		"minecraft:golden_pickaxe": {
+		"minecraft:golden_pickaxe":
+		{
 			"mining": 30
 		},
-		"minecraft:golden_shovel": {
+		"minecraft:golden_shovel":
+		{
 			"excavation": 30
 		},
-		"minecraft:golden_axe": {
+		"minecraft:golden_axe":
+		{
 			"woodcutting": 30
 		},
-		"minecraft:golden_hoe": {
+		"minecraft:golden_hoe":
+		{
 			"farming": 50
 		},
-		"minecraft:iron_pickaxe": {
+		"minecraft:iron_pickaxe":
+		{
 			"mining": 20
 		},
-		"minecraft:iron_shovel": {
+		"minecraft:iron_shovel":
+		{
 			"excavation": 20
 		},
-		"minecraft:iron_axe": {
+		"minecraft:iron_axe":
+		{
 			"woodcutting": 20
 		},
-		"minecraft:iron_hoe": {
+		"minecraft:iron_hoe":
+		{
 			"farming": 20
 		},
-		"minecraft:stone_pickaxe": {
+		"minecraft:stone_pickaxe":
+		{
 			"mining": 10
 		},
-		"minecraft:stone_shovel": {
+		"minecraft:stone_shovel":
+		{
 			"excavation": 10
 		},
-		"minecraft:stone_axe": {
+		"minecraft:stone_axe":
+		{
 			"woodcutting": 10
 		},
-		"minecraft:stone_hoe": {
+		"minecraft:stone_hoe":
+		{
 			"farming": 10
 		},
-		"minecraft:wooden_pickaxe": {
+		"minecraft:wooden_pickaxe":
+		{
 			"mining": 1
 		},
-		"minecraft:wooden_shovel": {
+		"minecraft:wooden_shovel":
+		{
 			"excavation": 1
 		},
-		"minecraft:wooden_axe": {
+		"minecraft:wooden_axe":
+		{
 			"woodcutting": 1
 		},
-		"minecraft:wooden_hoe": {
+		"minecraft:wooden_hoe":
+		{
 			"farming": 1
 		},
-		"oresandmetals:elder_rune_pickaxe": {
+		"oresandmetals:elder_rune_pickaxe":
+		{
 			"mining": 90
 		},
-		"oresandmetals:elder_rune_shovel": {
+		"oresandmetals:elder_rune_shovel":
+		{
 			"excavation": 90
 		},
-		"oresandmetals:elder_rune_axe": {
+		"oresandmetals:elder_rune_axe":
+		{
 			"woodcutting": 90
 		},
-		"oresandmetals:banite_pickaxe": {
+		"oresandmetals:banite_pickaxe":
+		{
 			"mining": 80
 		},
-		"oresandmetals:banite_shovel": {
+		"oresandmetals:banite_shovel":
+		{
 			"excavation": 80
 		},
-		"oresandmetals:banite_axe": {
+		"oresandmetals:banite_axe":
+		{
 			"woodcutting": 80
 		},
-		"oresandmetals:necronium_pickaxe": {
+		"oresandmetals:necronium_pickaxe":
+		{
 			"mining": 70
 		},
-		"oresandmetals:necronium_shovel": {
+		"oresandmetals:necronium_shovel":
+		{
 			"excavation": 70
 		},
-		"oresandmetals:necronium_axe": {
+		"oresandmetals:necronium_axe":
+		{
 			"woodcutting": 70
 		},
-		"oresandmetals:orikalkum_pickaxe": {
+		"oresandmetals:orikalkum_pickaxe":
+		{
 			"mining": 60
 		},
-		"oresandmetals:orikalkum_shovel": {
+		"oresandmetals:orikalkum_shovel":
+		{
 			"excavation": 60
 		},
-		"oresandmetals:orikalkum_axe": {
+		"oresandmetals:orikalkum_axe":
+		{
 			"woodcutting": 60
 		},
-		"oresandmetals:rune_pickaxe": {
+		"oresandmetals:rune_pickaxe":
+		{
 			"mining": 50
 		},
-		"oresandmetals:rune_shovel": {
+		"oresandmetals:rune_shovel":
+		{
 			"excavation": 50
 		},
-		"oresandmetals:rune_axe": {
+		"oresandmetals:rune_axe":
+		{
 			"woodcutting": 50
 		},
-		"oresandmetals:adamant_pickaxe": {
+		"oresandmetals:adamant_pickaxe":
+		{
 			"mining": 35
 		},
-		"oresandmetals:adamant_shovel": {
+		"oresandmetals:adamant_shovel":
+		{
 			"excavation": 35
 		},
-		"oresandmetals:adamant_axe": {
+		"oresandmetals:adamant_axe":
+		{
 			"woodcutting": 35
 		},
-		"oresandmetals:mithril_pickaxe": {
+		"oresandmetals:mithril_pickaxe":
+		{
 			"mining": 25
 		},
-		"oresandmetals:mithril_shovel": {
+		"oresandmetals:mithril_shovel":
+		{
 			"excavation": 25
 		},
-		"oresandmetals:mithril_axe": {
+		"oresandmetals:mithril_axe":
+		{
 			"woodcutting": 25
 		},
-		"oresandmetals:steel_pickaxe": {
+		"oresandmetals:steel_pickaxe":
+		{
 			"mining": 15
 		},
-		"oresandmetals:steel_shovel": {
+		"oresandmetals:steel_shovel":
+		{
 			"excavation": 15
 		},
-		"oresandmetals:steel_axe": {
+		"oresandmetals:steel_axe":
+		{
 			"woodcutting": 15
 		},
-		"oresandmetals:bronze_pickaxe": {
+		"oresandmetals:bronze_pickaxe":
+		{
 			"mining": 5
 		},
-		"oresandmetals:bronze_shovel": {
+		"oresandmetals:bronze_shovel":
+		{
 			"excavation": 5
 		},
-		"oresandmetals:bronze_axe": {
+		"oresandmetals:bronze_axe":
+		{
 			"woodcutting": 5
 		},
-		"doomweapon:argent_axe": {
+		"doomweapon:argent_axe":
+		{
 			"woodcutting": 100
 		},
-		"doomweapon:argent_hoe": {
+		"doomweapon:argent_hoe":
+		{
 			"farming": 100
 		},
-		"doomweapon:argent_paxel": {
+		"doomweapon:argent_paxel":
+		{
 			"woodcutting": 100,
 			"excavation": 100,
 			"mining": 100
 		},
-		"doomweapon:argent_pickaxe": {
+		"doomweapon:argent_pickaxe":
+		{
 			"mining": 100
 		},
-		"doomweapon:argent_shovel": {
+		"doomweapon:argent_shovel":
+		{
 			"excavation": 100
 		}
 	},
-	"weapon_requirement": {
-		"minecraft:crossbow": {
+	"weapon_requirement":
+	{
+		"minecraft:crossbow":
+		{
 			"archery": 10
 		},
-		"minecraft:netherite_pickaxe": {
+		"minecraft:netherite_pickaxe":
+		{
 			"combat": 60
 		},
-		"minecraft:netherite_shovel": {
+		"minecraft:netherite_shovel":
+		{
 			"combat": 60
 		},
-		"minecraft:netherite_axe": {
+		"minecraft:netherite_axe":
+		{
 			"combat": 65
 		},
-		"minecraft:netherite_sword": {
+		"minecraft:netherite_sword":
+		{
 			"combat": 60
 		},
-		"minecraft:diamond_pickaxe": {
+		"minecraft:diamond_pickaxe":
+		{
 			"combat": 40
 		},
-		"minecraft:diamond_shovel": {
+		"minecraft:diamond_shovel":
+		{
 			"combat": 40
 		},
-		"minecraft:diamond_axe": {
+		"minecraft:diamond_axe":
+		{
 			"combat": 45
 		},
-		"minecraft:diamond_sword": {
+		"minecraft:diamond_sword":
+		{
 			"combat": 40
 		},
-		"minecraft:golden_pickaxe": {
+		"minecraft:golden_pickaxe":
+		{
 			"combat": 30
 		},
-		"minecraft:golden_shovel": {
+		"minecraft:golden_shovel":
+		{
 			"combat": 30
 		},
-		"minecraft:golden_axe": {
+		"minecraft:golden_axe":
+		{
 			"combat": 35
 		},
-		"minecraft:golden_sword": {
+		"minecraft:golden_sword":
+		{
 			"combat": 30
 		},
-		"minecraft:iron_pickaxe": {
+		"minecraft:iron_pickaxe":
+		{
 			"combat": 20
 		},
-		"minecraft:iron_shovel": {
+		"minecraft:iron_shovel":
+		{
 			"combat": 20
 		},
-		"minecraft:iron_axe": {
+		"minecraft:iron_axe":
+		{
 			"combat": 25
 		},
-		"minecraft:iron_sword": {
+		"minecraft:iron_sword":
+		{
 			"combat": 20
 		},
-		"minecraft:stone_pickaxe": {
+		"minecraft:stone_pickaxe":
+		{
 			"combat": 10
 		},
-		"minecraft:stone_shovel": {
+		"minecraft:stone_shovel":
+		{
 			"combat": 10
 		},
-		"minecraft:stone_axe": {
+		"minecraft:stone_axe":
+		{
 			"combat": 15
 		},
-		"minecraft:stone_sword": {
+		"minecraft:stone_sword":
+		{
 			"combat": 10
 		},
-		"minecraft:wooden_pickaxe": {
+		"minecraft:wooden_pickaxe":
+		{
 			"combat": 1
 		},
-		"minecraft:wooden_shovel": {
+		"minecraft:wooden_shovel":
+		{
 			"combat": 1
 		},
-		"minecraft:wooden_axe": {
+		"minecraft:wooden_axe":
+		{
 			"combat": 1
 		},
-		"minecraft:wooden_sword": {
+		"minecraft:wooden_sword":
+		{
 			"combat": 1
 		},
-		"oresandmetals:elder_rune_pickaxe": {
+		"oresandmetals:elder_rune_pickaxe":
+		{
 			"combat": 90
 		},
-		"oresandmetals:elder_rune_shovel": {
+		"oresandmetals:elder_rune_shovel":
+		{
 			"combat": 90
 		},
-		"oresandmetals:elder_rune_axe": {
+		"oresandmetals:elder_rune_axe":
+		{
 			"combat": 90
 		},
-		"oresandmetals:elder_rune_sword": {
+		"oresandmetals:elder_rune_sword":
+		{
 			"combat": 90
 		},
-		"oresandmetals:banite_pickaxe": {
+		"oresandmetals:banite_pickaxe":
+		{
 			"combat": 80
 		},
-		"oresandmetals:banite_shovel": {
+		"oresandmetals:banite_shovel":
+		{
 			"combat": 80
 		},
-		"oresandmetals:banite_axe": {
+		"oresandmetals:banite_axe":
+		{
 			"combat": 80
 		},
-		"oresandmetals:banite_sword": {
+		"oresandmetals:banite_sword":
+		{
 			"combat": 80
 		},
-		"oresandmetals:necronium_pickaxe": {
+		"oresandmetals:necronium_pickaxe":
+		{
 			"combat": 70
 		},
-		"oresandmetals:necronium_shovel": {
+		"oresandmetals:necronium_shovel":
+		{
 			"combat": 70
 		},
-		"oresandmetals:necronium_axe": {
+		"oresandmetals:necronium_axe":
+		{
 			"combat": 70
 		},
-		"oresandmetals:necronium_sword": {
+		"oresandmetals:necronium_sword":
+		{
 			"combat": 70
 		},
-		"oresandmetals:orikalkum_pickaxe": {
+		"oresandmetals:orikalkum_pickaxe":
+		{
 			"combat": 60
 		},
-		"oresandmetals:orikalkum_shovel": {
+		"oresandmetals:orikalkum_shovel":
+		{
 			"combat": 60
 		},
-		"oresandmetals:orikalkum_axe": {
+		"oresandmetals:orikalkum_axe":
+		{
 			"combat": 60
 		},
-		"oresandmetals:orikalkum_sword": {
+		"oresandmetals:orikalkum_sword":
+		{
 			"combat": 60
 		},
-		"oresandmetals:rune_pickaxe": {
+		"oresandmetals:rune_pickaxe":
+		{
 			"combat": 50
 		},
-		"oresandmetals:rune_shovel": {
+		"oresandmetals:rune_shovel":
+		{
 			"combat": 50
 		},
-		"oresandmetals:rune_axe": {
+		"oresandmetals:rune_axe":
+		{
 			"combat": 50
 		},
-		"oresandmetals:rune_sword": {
+		"oresandmetals:rune_sword":
+		{
 			"combat": 50
 		},
-		"oresandmetals:adamant_pickaxe": {
+		"oresandmetals:adamant_pickaxe":
+		{
 			"combat": 35
 		},
-		"oresandmetals:adamant_shovel": {
+		"oresandmetals:adamant_shovel":
+		{
 			"combat": 35
 		},
-		"oresandmetals:adamant_axe": {
+		"oresandmetals:adamant_axe":
+		{
 			"combat": 35
 		},
-		"oresandmetals:adamant_sword": {
+		"oresandmetals:adamant_sword":
+		{
 			"combat": 35
 		},
-		"oresandmetals:mithril_pickaxe": {
+		"oresandmetals:mithril_pickaxe":
+		{
 			"combat": 25
 		},
-		"oresandmetals:mithril_shovel": {
+		"oresandmetals:mithril_shovel":
+		{
 			"combat": 25
 		},
-		"oresandmetals:mithril_axe": {
+		"oresandmetals:mithril_axe":
+		{
 			"combat": 25
 		},
-		"oresandmetals:mithril_sword": {
+		"oresandmetals:mithril_sword":
+		{
 			"combat": 25
 		},
-		"oresandmetals:steel_pickaxe": {
+		"oresandmetals:steel_pickaxe":
+		{
 			"combat": 15
 		},
-		"oresandmetals:steel_shovel": {
+		"oresandmetals:steel_shovel":
+		{
 			"combat": 15
 		},
-		"oresandmetals:steel_axe": {
+		"oresandmetals:steel_axe":
+		{
 			"combat": 15
 		},
-		"oresandmetals:steel_sword": {
+		"oresandmetals:steel_sword":
+		{
 			"combat": 15
 		},
-		"oresandmetals:bronze_pickaxe": {
+		"oresandmetals:bronze_pickaxe":
+		{
 			"combat": 5
 		},
-		"oresandmetals:bronze_shovel": {
+		"oresandmetals:bronze_shovel":
+		{
 			"combat": 5
 		},
-		"oresandmetals:bronze_axe": {
+		"oresandmetals:bronze_axe":
+		{
 			"combat": 5
 		},
-		"oresandmetals:bronze_sword": {
+		"oresandmetals:bronze_sword":
+		{
 			"combat": 5
 		},
-		"doomweapon:cruciblesword": {
+		"doomweapon:cruciblesword":
+		{
 			"combat": 100,
 			"endurance": 100,
 			"agility": 90
 		},
-		"doomweapon:argent_sword": {
+		"doomweapon:argent_sword":
+		{
 			"combat": 90,
 			"endurance": 90,
 			"agility": 90
 		},
-		"doomweapon:chainsaw": {
+		"doomweapon:chainsaw":
+		{
 			"combat": 90,
 			"endurance": 90,
 			"agility": 90
 		},
-		"doomweapon:cruciblesword_closed": {
+		"doomweapon:cruciblesword_closed":
+		{
 			"combat": 100,
 			"endurance": 100,
 			"agility": 90
 		},
-		"doomweapon:axe_marauder_open": {
+		"doomweapon:axe_marauder_open":
+		{
 			"combat": 100,
 			"endurance": 100,
 			"agility": 90
 		},
-		"doomweapon:axe_marauder_closed": {
+		"doomweapon:axe_marauder_closed":
+		{
 			"combat": 100,
 			"endurance": 100,
 			"agility": 90
 		},
-		"doomweapon:supershotgun": {
+		"doomweapon:supershotgun":
+		{
 			"combat": 100,
 			"archery": 100
 		},
-		"doomweapon:shotgun": {
+		"doomweapon:shotgun":
+		{
 			"combat": 90,
 			"archery": 90
 		},
-		"doomweapon:bfg9000": {
+		"doomweapon:bfg9000":
+		{
 			"combat": 300,
 			"archery": 200,
 			"endurance": 300
 		},
-		"doomweapon:plasmagun": {
+		"doomweapon:plasmagun":
+		{
 			"combat": 200,
 			"archery": 100,
 			"endurance": 200
 		},
-		"doomweapon:rocketlauncher": {
+		"doomweapon:rocketlauncher":
+		{
 			"combat": 100,
 			"archery": 100,
 			"endurance": 100
 		},
-		"doomweapon:ballista": {
+		"doomweapon:ballista":
+		{
 			"combat": 100,
 			"archery": 100,
 			"endurance": 100
 		},
-		"doomweapon:chaingun": {
+		"doomweapon:chaingun":
+		{
 			"combat": 100,
 			"archery": 100,
 			"endurance": 100
 		},
-		"doomweapon:pistol": {
+		"doomweapon:pistol":
+		{
 			"combat": 90,
 			"archery": 90,
 			"endurance": 90
 		}
 	},
-	"use_requirement": {
-		"minecraft:firework_rocket": {
+	"use_requirement":
+	{
+		"minecraft:firework_rocket":
+		{
 			"flying": 5
 		},
-		"minecraft:stonecutter": {
+		"minecraft:stonecutter":
+		{
 			"crafting": 10,
 			"building": 10
 		},
-		"minecraft:enchanting_table": {
+		"minecraft:enchanting_table":
+		{
 			"mining": 25
 		}
 	},
-	"place_requirement": {
-		"minecraft:enchanting_table": {
+	"place_requirement":
+	{
+		"minecraft:enchanting_table":
+		{
 			"building": 25
 		},
-		"minecraft:bedrock": {
+		"minecraft:bedrock":
+		{
 			"building": 999
 		},
-		"minecraft:command_block": {
+		"minecraft:command_block":
+		{
 			"building": 999
 		},
-		"minecraft:barrier": {
+		"minecraft:barrier":
+		{
 			"building": 999
 		},
-		"minecraft:scaffolding": {
+		"minecraft:scaffolding":
+		{
 			"building": 10
 		},
-		"minecraft:oak_sapling": {
+		"minecraft:oak_sapling":
+		{
 			"farming": 5,
 			"woodcutting": 10
 		},
-		"minecraft:birch_sapling": {
+		"minecraft:birch_sapling":
+		{
 			"farming": 10,
 			"woodcutting": 15
 		},
-		"minecraft:spruce_sapling": {
+		"minecraft:spruce_sapling":
+		{
 			"farming": 15,
 			"woodcutting": 30
 		},
-		"minecraft:jungle_sapling": {
+		"minecraft:jungle_sapling":
+		{
 			"farming": 20,
 			"woodcutting": 35
 		},
-		"minecraft:dark_oak_sapling": {
+		"minecraft:dark_oak_sapling":
+		{
 			"farming": 10,
 			"woodcutting": 25
 		},
-		"minecraft:acacia_sapling": {
+		"minecraft:acacia_sapling":
+		{
 			"farming": 5,
 			"woodcutting": 15
 		}
 	},
-	"break_requirement": {
-		"minecraft:bedrock": {
+	"break_requirement":
+	{
+		"minecraft:bedrock":
+		{
 			"mining": 999
 		},
-		"minecraft:command_block": {
+		"minecraft:command_block":
+		{
 			"mining": 999
 		},
-		"minecraft:barrier": {
+		"minecraft:barrier":
+		{
 			"mining": 999
 		},
-		"oresandmetals:light_animica_ore": {
+		"oresandmetals:light_animica_ore":
+		{
 			"mining": 90
 		},
-		"oresandmetals:dark_animica_ore": {
+		"oresandmetals:dark_animica_ore":
+		{
 			"mining": 90
 		},
-		"oresandmetals:banite_ore": {
+		"oresandmetals:banite_ore":
+		{
 			"mining": 80
 		},
-		"oresandmetals:necrite_ore": {
+		"oresandmetals:necrite_ore":
+		{
 			"mining": 70
 		},
-		"oresandmetals:phasmatite_ore": {
+		"oresandmetals:phasmatite_ore":
+		{
 			"mining": 70
 		},
-		"oresandmetals:orichalcite_ore": {
+		"oresandmetals:orichalcite_ore":
+		{
 			"mining": 60
 		},
-		"oresandmetals:drakolith_ore": {
+		"oresandmetals:drakolith_ore":
+		{
 			"mining": 60
 		},
-		"oresandmetals:runite_ore": {
+		"oresandmetals:runite_ore":
+		{
 			"mining": 50
 		},
-		"oresandmetals:adamantite_ore": {
+		"oresandmetals:adamantite_ore":
+		{
 			"mining": 35
 		},
-		"oresandmetals:mithril_ore": {
+		"oresandmetals:mithril_ore":
+		{
 			"mining": 25
 		},
-		"oresandmetals:tin_ore": {
+		"oresandmetals:tin_ore":
+		{
 			"mining": 5
 		},
-		"oresandmetals:copper_ore": {
+		"oresandmetals:copper_ore":
+		{
 			"mining": 5
 		}
 	},
-	"craft_requirement": {
-		"minecraft:barrier": {
+	"craft_requirement":
+	{
+		"minecraft:barrier":
+		{
 			"crafting": 999
 		}
 	},
-	"held_item_xp_boost": {
-		"minecraft:golden_pickaxe": {
+	"held_item_xp_boost":
+	{
+		"minecraft:golden_pickaxe":
+		{
 			"mining": 50
 		},
-		"minecraft:golden_shovel": {
+		"minecraft:golden_shovel":
+		{
 			"excavation": 50
 		},
-		"minecraft:golden_axe": {
+		"minecraft:golden_axe":
+		{
 			"woodcutting": 50,
 			"combat": 50
 		},
-		"minecraft:golden_sword": {
+		"minecraft:golden_sword":
+		{
 			"combat": 50
 		},
-		"minecraft:golden_hoe": {
+		"minecraft:golden_hoe":
+		{
 			"farming": 20
 		},
-		"minecraft:netherite_hoe": {
+		"minecraft:netherite_hoe":
+		{
 			"farming": 15
 		},
-		"minecraft:diamond_hoe": {
+		"minecraft:diamond_hoe":
+		{
 			"farming": 10
 		},
-		"minecraft:iron_hoe": {
+		"minecraft:iron_hoe":
+		{
 			"farming": 5
 		},
-		"minecraft:stone_hoe": {
+		"minecraft:stone_hoe":
+		{
 			"farming": 2.5
 		},
-		"minecraft:wooden_hoe": {
+		"minecraft:wooden_hoe":
+		{
 			"farming": 1
 		}
 	},
-	"worn_item_xp_boost": {
-		"minecraft:golden_helmet": {
+	"worn_item_xp_boost":
+	{
+		"minecraft:golden_helmet":
+		{
 			"mining": 5,
 			"endurance": 5
 		},
-		"minecraft:golden_chestplate": {
+		"minecraft:golden_chestplate":
+		{
 			"mining": 5,
 			"endurance": 5
 		},
-		"minecraft:golden_leggings": {
+		"minecraft:golden_leggings":
+		{
 			"mining": 5,
 			"endurance": 5
 		},
-		"minecraft:golden_boots": {
+		"minecraft:golden_boots":
+		{
 			"mining": 5,
 			"endurance": 5
 		},
-		"minecraft:chainmail_helmet": {
+		"minecraft:chainmail_helmet":
+		{
 			"combat": 5
 		},
-		"minecraft:chainmail_chestplate": {
+		"minecraft:chainmail_chestplate":
+		{
 			"combat": 5
 		},
-		"minecraft:chainmail_leggings": {
+		"minecraft:chainmail_leggings":
+		{
 			"combat": 5
 		},
-		"minecraft:chainmail_boots": {
+		"minecraft:chainmail_boots":
+		{
 			"combat": 5
 		},
-		"minecraft:iron_helmet": {
+		"minecraft:iron_helmet":
+		{
 			"smithing": 2.5
 		},
-		"minecraft:iron_chestplate": {
+		"minecraft:iron_chestplate":
+		{
 			"smithing": 2.5
 		},
-		"minecraft:iron_leggings": {
+		"minecraft:iron_leggings":
+		{
 			"smithing": 2.5
 		},
-		"minecraft:iron_boots": {
+		"minecraft:iron_boots":
+		{
 			"smithing": 2.5
 		},
-		"minecraft:leather_helmet": {
+		"minecraft:leather_helmet":
+		{
 			"agility": 2.5,
 			"farming": 2.5,
 			"woodcutting": 2.5,
 			"fishing": 2.5
 		},
-		"minecraft:leather_chestplate": {
+		"minecraft:leather_chestplate":
+		{
 			"agility": 2.5,
 			"farming": 2.5,
 			"woodcutting": 2.5,
 			"fishing": 2.5
 		},
-		"minecraft:leather_leggings": {
+		"minecraft:leather_leggings":
+		{
 			"agility": 2.5,
 			"farming": 2.5,
 			"woodcutting": 2.5,
 			"fishing": 2.5
 		},
-		"minecraft:leather_boots": {
+		"minecraft:leather_boots":
+		{
 			"agility": 2.5,
 			"farming": 2.5,
 			"woodcutting": 2.5,
 			"fishing": 2.5
 		},
-		"minecraft:turtle_helmet": {
+		"minecraft:turtle_helmet":
+		{
 			"swimming": 15,
 			"fishing": 7.5
 		},
-		"minecraft:shield": {
+		"minecraft:shield":
+		{
 			"endurance": 12.5,
 			"combat": 5
 		},
-		"minecraft:dragon_head": {
+		"minecraft:dragon_head":
+		{
 			"flying": 50,
 			"slayer": 25
 		},
-		"minecraft:carved_pumpkin": {
+		"minecraft:carved_pumpkin":
+		{
 			"slayer": 5
 		},
-		"minecraft:heart_of_the_sea": {
+		"minecraft:heart_of_the_sea":
+		{
 			"swimming": 25,
 			"fishing": 10
 		},
-		"minecraft:nether_star": {
+		"minecraft:nether_star":
+		{
 			"slayer": 25,
 			"combat": 10,
 			"endurance": 10,
@@ -1220,2001 +1559,2557 @@
 			"flying": 20
 		}
 	},
-	"breaking_xp": {
-		"minecraft:nether_quartz_ore": {
+	"breaking_xp":
+	{
+		"minecraft:nether_quartz_ore":
+		{
 			"mining": 1.5
 		},
-		"minecraft:nether_quartz": {
+		"minecraft:nether_quartz":
+		{
 			"mining": 1.5
 		},
-		"minecraft:coal_ore": {
+		"minecraft:coal_ore":
+		{
 			"mining": 2
 		},
-		"minecraft:iron_ore": {
+		"minecraft:iron_ore":
+		{
 			"mining": 12
 		},
-		"minecraft:gold_ore": {
+		"minecraft:gold_ore":
+		{
 			"mining": 22
 		},
-		"minecraft:diamond_ore": {
+		"minecraft:diamond_ore":
+		{
 			"mining": 35
 		},
-		"minecraft:redstone_ore": {
+		"minecraft:redstone_ore":
+		{
 			"mining": 1.5
 		},
-		"minecraft:lapis_ore": {
+		"minecraft:lapis_ore":
+		{
 			"mining": 5
 		},
-		"minecraft:emerald_ore": {
+		"minecraft:emerald_ore":
+		{
 			"mining": 60
 		},
-		"minecraft:granite": {
+		"minecraft:granite":
+		{
 			"mining": 0.4
 		},
-		"minecraft:polished_granite": {
+		"minecraft:polished_granite":
+		{
 			"mining": 0.4
 		},
-		"minecraft:diorite": {
+		"minecraft:diorite":
+		{
 			"mining": 0.3
 		},
-		"minecraft:polished_diorite": {
+		"minecraft:polished_diorite":
+		{
 			"mining": 0.3
 		},
-		"minecraft:andesite": {
+		"minecraft:andesite":
+		{
 			"mining": 0.5
 		},
-		"minecraft:polished_andesite": {
+		"minecraft:polished_andesite":
+		{
 			"mining": 0.5
 		},
-		"minecraft:stone": {
+		"minecraft:stone":
+		{
 			"mining": 0.1
 		},
-		"minecraft:stone_bricks": {
+		"minecraft:stone_bricks":
+		{
 			"mining": 0.7
 		},
-		"minecraft:cobblestone": {
+		"minecraft:cobblestone":
+		{
 			"mining": 0.5
 		},
-		"minecraft:mossy_cobblestone": {
+		"minecraft:mossy_cobblestone":
+		{
 			"mining": 1.5
 		},
-		"minecraft:netherrack": {
+		"minecraft:netherrack":
+		{
 			"mining": 0.1
 		},
-		"minecraft:nether_bricks": {
+		"minecraft:nether_bricks":
+		{
 			"mining": 1.5
 		},
-		"minecraft:ice": {
+		"minecraft:ice":
+		{
 			"mining": 0.1
 		},
-		"minecraft:rail": {
+		"minecraft:rail":
+		{
 			"mining": 0.8
 		},
-		"minecraft:prismarine": {
+		"minecraft:prismarine":
+		{
 			"mining": 2.5
 		},
-		"minecraft:dark_prismarine": {
+		"minecraft:dark_prismarine":
+		{
 			"mining": 3.5
 		},
-		"minecraft:prismarine_bricks": {
+		"minecraft:prismarine_bricks":
+		{
 			"mining": 4
 		},
-		"minecraft:purpur_block": {
+		"minecraft:purpur_block":
+		{
 			"mining": 2
 		},
-		"minecraft:purpur_pillar": {
+		"minecraft:purpur_pillar":
+		{
 			"mining": 2.5
 		},
-		"minecraft:infested_stone": {
+		"minecraft:infested_stone":
+		{
 			"mining": 200
 		},
-		"minecraft:infested_cobblestone": {
+		"minecraft:infested_cobblestone":
+		{
 			"mining": 200
 		},
-		"minecraft:infested_stone_bricks": {
+		"minecraft:infested_stone_bricks":
+		{
 			"mining": 200
 		},
-		"minecraft:infested_mossy_stone_bricks": {
+		"minecraft:infested_mossy_stone_bricks":
+		{
 			"mining": 200
 		},
-		"minecraft:infested_cracked_stone_bricks": {
+		"minecraft:infested_cracked_stone_bricks":
+		{
 			"mining": 200
 		},
-		"minecraft:infested_chiseled_stone_bricks": {
+		"minecraft:infested_chiseled_stone_bricks":
+		{
 			"mining": 200
 		},
-		"minecraft:bedrock": {
+		"minecraft:bedrock":
+		{
 			"mining": 9001
 		},
-		"minecraft:dirt": {
+		"minecraft:dirt":
+		{
 			"excavation": 1.5
 		},
-		"minecraft:podzol": {
+		"minecraft:podzol":
+		{
 			"excavation": 3,
 			"farming": 1
 		},
-		"minecraft:mycelium": {
+		"minecraft:mycelium":
+		{
 			"excavation": 6,
 			"farming": 1
 		},
-		"minecraft:coarse_dirt": {
+		"minecraft:coarse_dirt":
+		{
 			"excavation": 1.7
 		},
-		"minecraft:grass_block": {
+		"minecraft:grass_block":
+		{
 			"excavation": 2
 		},
-		"minecraft:sand": {
+		"minecraft:sand":
+		{
 			"excavation": 1
 		},
-		"minecraft:red_sand": {
+		"minecraft:red_sand":
+		{
 			"excavation": 1.2
 		},
-		"minecraft:clay": {
+		"minecraft:clay":
+		{
 			"excavation": 5
 		},
-		"minecraft:clay_ball": {
+		"minecraft:clay_ball":
+		{
 			"excavation": 5
 		},
-		"minecraft:gravel": {
+		"minecraft:gravel":
+		{
 			"excavation": 2
 		},
-		"minecraft:soul_sand": {
+		"minecraft:soul_sand":
+		{
 			"excavation": 5
 		},
-		"minecraft:snow_block": {
+		"minecraft:snow_block":
+		{
 			"excavation": 3.5
 		},
-		"minecraft:oak_sapling": {
+		"minecraft:oak_sapling":
+		{
 			"woodcutting": 15
 		},
-		"minecraft:birch_sapling": {
+		"minecraft:birch_sapling":
+		{
 			"woodcutting": 12
 		},
-		"minecraft:spruce_sapling": {
+		"minecraft:spruce_sapling":
+		{
 			"woodcutting": 10
 		},
-		"minecraft:jungle_sapling": {
+		"minecraft:jungle_sapling":
+		{
 			"woodcutting": 24
 		},
-		"minecraft:dark_oak_sapling": {
+		"minecraft:dark_oak_sapling":
+		{
 			"woodcutting": 18
 		},
-		"minecraft:acacia_sapling": {
+		"minecraft:acacia_sapling":
+		{
 			"woodcutting": 26
 		},
-		"minecraft:oak_log": {
+		"minecraft:oak_log":
+		{
 			"woodcutting": 8
 		},
-		"minecraft:birch_log": {
+		"minecraft:birch_log":
+		{
 			"woodcutting": 12
 		},
-		"minecraft:spruce_log": {
+		"minecraft:spruce_log":
+		{
 			"woodcutting": 5
 		},
-		"minecraft:jungle_log": {
+		"minecraft:jungle_log":
+		{
 			"woodcutting": 4.5
 		},
-		"minecraft:dark_oak_log": {
+		"minecraft:dark_oak_log":
+		{
 			"woodcutting": 7
 		},
-		"minecraft:acacia_log": {
+		"minecraft:acacia_log":
+		{
 			"woodcutting": 14
 		},
-		"minecraft:oak_wood": {
+		"minecraft:oak_wood":
+		{
 			"woodcutting": 8
 		},
-		"minecraft:birch_wood": {
+		"minecraft:birch_wood":
+		{
 			"woodcutting": 12
 		},
-		"minecraft:spruce_wood": {
+		"minecraft:spruce_wood":
+		{
 			"woodcutting": 5
 		},
-		"minecraft:jungle_wood": {
+		"minecraft:jungle_wood":
+		{
 			"woodcutting": 4.5
 		},
-		"minecraft:dark_oak_wood": {
+		"minecraft:dark_oak_wood":
+		{
 			"woodcutting": 7
 		},
-		"minecraft:acacia_wood": {
+		"minecraft:acacia_wood":
+		{
 			"woodcutting": 14
 		},
-		"minecraft:oak_planks": {
+		"minecraft:oak_planks":
+		{
 			"woodcutting": 5
 		},
-		"minecraft:birch_planks": {
+		"minecraft:birch_planks":
+		{
 			"woodcutting": 5
 		},
-		"minecraft:spruce_planks": {
+		"minecraft:spruce_planks":
+		{
 			"woodcutting": 5
 		},
-		"minecraft:jungle_planks": {
+		"minecraft:jungle_planks":
+		{
 			"woodcutting": 5
 		},
-		"minecraft:dark_oak_planks": {
+		"minecraft:dark_oak_planks":
+		{
 			"woodcutting": 5
 		},
-		"minecraft:acacia_planks": {
+		"minecraft:acacia_planks":
+		{
 			"woodcutting": 5
 		},
-		"minecraft:oak_leaves": {
+		"minecraft:oak_leaves":
+		{
 			"woodcutting": 0.5
 		},
-		"minecraft:birch_leaves": {
+		"minecraft:birch_leaves":
+		{
 			"woodcutting": 0.7
 		},
-		"minecraft:spruce_leaves": {
+		"minecraft:spruce_leaves":
+		{
 			"woodcutting": 1.5
 		},
-		"minecraft:jungle_leaves": {
+		"minecraft:jungle_leaves":
+		{
 			"woodcutting": 0.9
 		},
-		"minecraft:dark_oak_leaves": {
+		"minecraft:dark_oak_leaves":
+		{
 			"woodcutting": 0.6
 		},
-		"minecraft:acacia_leaves": {
+		"minecraft:acacia_leaves":
+		{
 			"woodcutting": 1.1
 		},
-		"minecraft:bookshelf": {
+		"minecraft:bookshelf":
+		{
 			"woodcutting": 50
 		},
-		"minecraft:brown_mushroom_block": {
+		"minecraft:brown_mushroom_block":
+		{
 			"farming": 3
 		},
-		"minecraft:brown_mushroom": {
+		"minecraft:brown_mushroom":
+		{
 			"farming": 10
 		},
-		"minecraft:red_mushroom_block": {
+		"minecraft:red_mushroom_block":
+		{
 			"farming": 4
 		},
-		"minecraft:red_mushroom": {
+		"minecraft:red_mushroom":
+		{
 			"farming": 12
 		},
-		"minecraft:sugar_cane": {
+		"minecraft:sugar_cane":
+		{
 			"farming": 10
 		},
-		"minecraft:cactus": {
+		"minecraft:cactus":
+		{
 			"farming": 12
 		},
-		"minecraft:bamboo": {
+		"minecraft:bamboo":
+		{
 			"farming": 1.2,
 			"woodcutting": 0.4
 		},
-		"minecraft:bamboo_sapling": {
+		"minecraft:bamboo_sapling":
+		{
 			"farming": 1.2,
 			"woodcutting": 0.4
 		},
-		"minecraft:kelp": {
+		"minecraft:kelp":
+		{
 			"farming": 2
 		},
-		"minecraft:kelp_plant": {
+		"minecraft:kelp_plant":
+		{
 			"farming": 2
 		},
-		"minecraft:sea_pickle": {
+		"minecraft:sea_pickle":
+		{
 			"farming": 4
 		},
-		"minecraft:wheat": {
+		"minecraft:wheat":
+		{
 			"farming": 12
 		},
-		"minecraft:wheat_seeds": {
+		"minecraft:wheat_seeds":
+		{
 			"farming": 12
 		},
-		"minecraft:beetroot": {
+		"minecraft:beetroot":
+		{
 			"farming": 15
 		},
-		"minecraft:beetroots": {
+		"minecraft:beetroots":
+		{
 			"farming": 15
 		},
-		"minecraft:carrot": {
+		"minecraft:carrot":
+		{
 			"farming": 4.5
 		},
-		"minecraft:carrots": {
+		"minecraft:carrots":
+		{
 			"farming": 4.5
 		},
-		"minecraft:potato": {
+		"minecraft:potato":
+		{
 			"farming": 3.5
 		},
-		"minecraft:potatoes": {
+		"minecraft:potatoes":
+		{
 			"farming": 3.5
 		},
-		"minecraft:melon": {
+		"minecraft:melon":
+		{
 			"farming": 7.5
 		},
-		"minecraft:melon_seeds": {
+		"minecraft:melon_seeds":
+		{
 			"farming": 7.5
 		},
-		"minecraft:melon_slice": {
+		"minecraft:melon_slice":
+		{
 			"farming": 7.5
 		},
-		"minecraft:pumpkin": {
+		"minecraft:pumpkin":
+		{
 			"farming": 7.5
 		},
-		"minecraft:pumpkin_seeds": {
+		"minecraft:pumpkin_seeds":
+		{
 			"farming": 7.5
 		},
-		"minecraft:chorus_flower": {
+		"minecraft:chorus_flower":
+		{
 			"farming": 35
 		},
-		"minecraft:cocoa": {
+		"minecraft:cocoa":
+		{
 			"farming": 30
 		},
-		"minecraft:chorus_plant": {
+		"minecraft:chorus_plant":
+		{
 			"farming": 2.5
 		},
-		"minecraft:nether_wart": {
+		"minecraft:nether_wart":
+		{
 			"farming": 5
 		},
-		"minecraft:lily_pad": {
+		"minecraft:lily_pad":
+		{
 			"farming": 5
 		},
-		"minecraft:dandelion": {
+		"minecraft:dandelion":
+		{
 			"farming": 8
 		},
-		"minecraft:white_tulip": {
+		"minecraft:white_tulip":
+		{
 			"farming": 8.5
 		},
-		"minecraft:pink_tulip": {
+		"minecraft:pink_tulip":
+		{
 			"farming": 6
 		},
-		"minecraft:red_tulip": {
+		"minecraft:red_tulip":
+		{
 			"farming": 7.5
 		},
-		"minecraft:oxeye_daisy": {
+		"minecraft:oxeye_daisy":
+		{
 			"farming": 8.5
 		},
-		"minecraft:sunflower": {
+		"minecraft:sunflower":
+		{
 			"farming": 17.5
 		},
-		"minecraft:lilac": {
+		"minecraft:lilac":
+		{
 			"farming": 16.5
 		},
-		"minecraft:rose_bush": {
+		"minecraft:rose_bush":
+		{
 			"farming": 13.5
 		},
-		"minecraft:peony": {
+		"minecraft:peony":
+		{
 			"farming": 17.5
 		},
-		"minecraft:dead_bush": {
+		"minecraft:dead_bush":
+		{
 			"farming": 5
 		},
-		"minecraft:cobweb": {
+		"minecraft:cobweb":
+		{
 			"farming": 5
 		},
-		"minecraft:orange_tulip": {
+		"minecraft:orange_tulip":
+		{
 			"farming": 16.5
 		},
-		"minecraft:wither_rose": {
+		"minecraft:wither_rose":
+		{
 			"farming": 35
 		},
-		"minecraft:allium": {
+		"minecraft:allium":
+		{
 			"farming": 12.5
 		},
-		"minecraft:poppy": {
+		"minecraft:poppy":
+		{
 			"farming": 11.5
 		},
-		"minecraft:vine": {
+		"minecraft:vine":
+		{
 			"farming": 3.5
 		},
-		"minecraft:grass": {
+		"minecraft:grass":
+		{
 			"farming": 2.5
 		},
-		"minecraft:fern": {
+		"minecraft:fern":
+		{
 			"farming": 3.5
 		},
-		"minecraft:sea_grass": {
+		"minecraft:sea_grass":
+		{
 			"farming": 4.5
 		},
-		"minecraft:large_fern": {
+		"minecraft:large_fern":
+		{
 			"farming": 5.5
 		},
-		"minecraft:tall_grass": {
+		"minecraft:tall_grass":
+		{
 			"farming": 6
 		},
-		"minecraft:cornflower": {
+		"minecraft:cornflower":
+		{
 			"farming": 5.5
 		},
-		"minecraft:azure_bluet": {
+		"minecraft:azure_bluet":
+		{
 			"farming": 4.5
 		},
-		"minecraft:lily_of_the_valley": {
+		"minecraft:lily_of_the_valley":
+		{
 			"farming": 9.5
 		},
-		"minecraft:blue_orchid": {
+		"minecraft:blue_orchid":
+		{
 			"farming": 20
 		},
-		"minecraft:sweet_berry_bush": {
+		"minecraft:sweet_berry_bush":
+		{
 			"farming": 1.25
 		},
-		"oresandmetals:light_animica_ore": {
+		"oresandmetals:light_animica_ore":
+		{
 			"mining": 85
 		},
-		"oresandmetals:dark_animica_ore": {
+		"oresandmetals:dark_animica_ore":
+		{
 			"mining": 85
 		},
-		"oresandmetals:banite_ore": {
+		"oresandmetals:banite_ore":
+		{
 			"mining": 75
 		},
-		"oresandmetals:necrite_ore": {
+		"oresandmetals:necrite_ore":
+		{
 			"mining": 65
 		},
-		"oresandmetals:phasmatite_ore": {
+		"oresandmetals:phasmatite_ore":
+		{
 			"mining": 65
 		},
-		"oresandmetals:orichalcite_ore": {
+		"oresandmetals:orichalcite_ore":
+		{
 			"mining": 55
 		},
-		"oresandmetals:drakolith_ore": {
+		"oresandmetals:drakolith_ore":
+		{
 			"mining": 55
 		},
-		"oresandmetals:runite_ore": {
+		"oresandmetals:runite_ore":
+		{
 			"mining": 45
 		},
-		"oresandmetals:adamantite_ore": {
+		"oresandmetals:adamantite_ore":
+		{
 			"mining": 30
 		},
-		"oresandmetals:mithril_ore": {
+		"oresandmetals:mithril_ore":
+		{
 			"mining": 20
 		},
-		"oresandmetals:tin_ore": {
+		"oresandmetals:tin_ore":
+		{
 			"mining": 5
 		},
-		"oresandmetals:copper_ore": {
+		"oresandmetals:copper_ore":
+		{
 			"mining": 5
 		}
 	},
-	"general_xp": {
-		"minecraft:pufferfish": {
+	"general_xp":
+	{
+		"minecraft:pufferfish":
+		{
 			"fishing": 35
 		},
-		"minecraft:name_tag": {
+		"minecraft:name_tag":
+		{
 			"fishing": 60
 		},
-		"minecraft:cod": {
+		"minecraft:cod":
+		{
 			"fishing": 20
 		},
-		"minecraft:salmon": {
+		"minecraft:salmon":
+		{
 			"fishing": 25
 		},
-		"minecraft:tropical_fish": {
+		"minecraft:tropical_fish":
+		{
 			"fishing": 200
 		},
-		"minecraft:saddle": {
+		"minecraft:saddle":
+		{
 			"fishing": 75
 		},
-		"minecraft:tripwire_hook": {
+		"minecraft:tripwire_hook":
+		{
 			"fishing": 35
 		},
-		"minecraft:leather": {
+		"minecraft:leather":
+		{
 			"fishing": 25
 		}
 	},
-	"crafting_xp": {
-		"minecraft:netherite_helmet": {
+	"crafting_xp":
+	{
+		"minecraft:netherite_helmet":
+		{
 			"crafting": 1000,
 			"smithing": 200
 		},
-		"minecraft:netherite_chestplate": {
+		"minecraft:netherite_chestplate":
+		{
 			"crafting": 1600,
 			"smithing": 320
 		},
-		"minecraft:netherite_leggings": {
+		"minecraft:netherite_leggings":
+		{
 			"crafting": 1400,
 			"smithing": 280
 		},
-		"minecraft:netherite_boots": {
+		"minecraft:netherite_boots":
+		{
 			"crafting": 800,
 			"smithing": 160
 		},
-		"minecraft:netherite_pickaxe": {
+		"minecraft:netherite_pickaxe":
+		{
 			"crafting": 600,
 			"smithing": 120
 		},
-		"minecraft:netherite_shovel": {
+		"minecraft:netherite_shovel":
+		{
 			"crafting": 200,
 			"smithing": 40
 		},
-		"minecraft:netherite_hoe": {
+		"minecraft:netherite_hoe":
+		{
 			"crafting": 400,
 			"smithing": 80
 		},
-		"minecraft:netherite_axe": {
+		"minecraft:netherite_axe":
+		{
 			"crafting": 600,
 			"smithing": 120
 		},
-		"minecraft:netherite_sword": {
+		"minecraft:netherite_sword":
+		{
 			"crafting": 400,
 			"smithing": 80
 		},
-		"minecraft:diamond_helmet": {
+		"minecraft:diamond_helmet":
+		{
 			"crafting": 300,
 			"smithing": 60
 		},
-		"minecraft:diamond_chestplate": {
+		"minecraft:diamond_chestplate":
+		{
 			"crafting": 480,
 			"smithing": 96
 		},
-		"minecraft:diamond_leggings": {
+		"minecraft:diamond_leggings":
+		{
 			"crafting": 420,
 			"smithing": 84
 		},
-		"minecraft:diamond_boots": {
+		"minecraft:diamond_boots":
+		{
 			"crafting": 240,
 			"smithing": 48
 		},
-		"minecraft:diamond_pickaxe": {
+		"minecraft:diamond_pickaxe":
+		{
 			"crafting": 180,
 			"smithing": 36
 		},
-		"minecraft:diamond_shovel": {
+		"minecraft:diamond_shovel":
+		{
 			"crafting": 60,
 			"smithing": 12
 		},
-		"minecraft:diamond_hoe": {
+		"minecraft:diamond_hoe":
+		{
 			"crafting": 120,
 			"smithing": 24
 		},
-		"minecraft:diamond_axe": {
+		"minecraft:diamond_axe":
+		{
 			"crafting": 180,
 			"smithing": 36
 		},
-		"minecraft:diamond_sword": {
+		"minecraft:diamond_sword":
+		{
 			"crafting": 120,
 			"smithing": 24
 		},
-		"minecraft:golden_helmet": {
+		"minecraft:golden_helmet":
+		{
 			"crafting": 150,
 			"smithing": 30
 		},
-		"minecraft:golden_chestplate": {
+		"minecraft:golden_chestplate":
+		{
 			"crafting": 240,
 			"smithing": 48
 		},
-		"minecraft:golden_leggings": {
+		"minecraft:golden_leggings":
+		{
 			"crafting": 210,
 			"smithing": 42
 		},
-		"minecraft:golden_boots": {
+		"minecraft:golden_boots":
+		{
 			"crafting": 120,
 			"smithing": 24
 		},
-		"minecraft:golden_pickaxe": {
+		"minecraft:golden_pickaxe":
+		{
 			"crafting": 90,
 			"smithing": 18
 		},
-		"minecraft:golden_shovel": {
+		"minecraft:golden_shovel":
+		{
 			"crafting": 30,
 			"smithing": 6
 		},
-		"minecraft:golden_hoe": {
+		"minecraft:golden_hoe":
+		{
 			"crafting": 60,
 			"smithing": 12
 		},
-		"minecraft:golden_axe": {
+		"minecraft:golden_axe":
+		{
 			"crafting": 90,
 			"smithing": 18
 		},
-		"minecraft:golden_sword": {
+		"minecraft:golden_sword":
+		{
 			"crafting": 60,
 			"smithing": 12
 		},
-		"minecraft:clock": {
+		"minecraft:clock":
+		{
 			"crafting": 125
 		},
-		"minecraft:light_weighted_pressure_plate": {
+		"minecraft:light_weighted_pressure_plate":
+		{
 			"crafting": 60
 		},
-		"minecraft:iron_helmet": {
+		"minecraft:iron_helmet":
+		{
 			"crafting": 50,
 			"smithing": 10
 		},
-		"minecraft:iron_chestplate": {
+		"minecraft:iron_chestplate":
+		{
 			"crafting": 80,
 			"smithing": 16
 		},
-		"minecraft:iron_leggings": {
+		"minecraft:iron_leggings":
+		{
 			"crafting": 70,
 			"smithing": 14
 		},
-		"minecraft:iron_boots": {
+		"minecraft:iron_boots":
+		{
 			"crafting": 40,
 			"smithing": 8
 		},
-		"minecraft:iron_pickaxe": {
+		"minecraft:iron_pickaxe":
+		{
 			"crafting": 30,
 			"smithing": 6
 		},
-		"minecraft:iron_shovel": {
+		"minecraft:iron_shovel":
+		{
 			"crafting": 10,
 			"smithing": 2
 		},
-		"minecraft:iron_hoe": {
+		"minecraft:iron_hoe":
+		{
 			"crafting": 20,
 			"smithing": 4
 		},
-		"minecraft:iron_axe": {
+		"minecraft:iron_axe":
+		{
 			"crafting": 30,
 			"smithing": 6
 		},
-		"minecraft:iron_sword": {
+		"minecraft:iron_sword":
+		{
 			"crafting": 20,
 			"smithing": 4
 		},
-		"minecraft:anvil": {
+		"minecraft:anvil":
+		{
 			"crafting": 310,
 			"smithing": 62
 		},
-		"minecraft:iron_trapdoor": {
+		"minecraft:iron_trapdoor":
+		{
 			"crafting": 40
 		},
-		"minecraft:iron_door": {
+		"minecraft:iron_door":
+		{
 			"crafting": 20
 		},
-		"minecraft:hopper": {
+		"minecraft:hopper":
+		{
 			"crafting": 58
 		},
-		"minecraft:compass": {
+		"minecraft:compass":
+		{
 			"crafting": 45
 		},
-		"minecraft:minecart": {
+		"minecraft:minecart":
+		{
 			"crafting": 50
 		},
-		"minecraft:bucket": {
+		"minecraft:bucket":
+		{
 			"crafting": 30
 		},
-		"minecraft:cauldron": {
+		"minecraft:cauldron":
+		{
 			"crafting": 70
 		},
-		"minecraft:flint_and_steel": {
+		"minecraft:flint_and_steel":
+		{
 			"crafting": 12
 		},
-		"minecraft:shears": {
+		"minecraft:shears":
+		{
 			"crafting": 20
 		},
-		"minecraft:blast_furnace": {
+		"minecraft:blast_furnace":
+		{
 			"crafting": 61
 		},
-		"minecraft:heavy_weighted_pressure_plate": {
+		"minecraft:heavy_weighted_pressure_plate":
+		{
 			"crafting": 20
 		},
-		"minecraft:leather_helmet": {
+		"minecraft:leather_helmet":
+		{
 			"crafting": 75,
 			"smithing": 15
 		},
-		"minecraft:leather_chestplate": {
+		"minecraft:leather_chestplate":
+		{
 			"crafting": 120,
 			"smithing": 24
 		},
-		"minecraft:leather_leggings": {
+		"minecraft:leather_leggings":
+		{
 			"crafting": 105,
 			"smithing": 21
 		},
-		"minecraft:leather_boots": {
+		"minecraft:leather_boots":
+		{
 			"crafting": 60,
 			"smithing": 12
 		},
-		"minecraft:turtle_helmet": {
+		"minecraft:turtle_helmet":
+		{
 			"crafting": 100,
 			"smithing": 20
 		},
-		"minecraft:crossbow": {
+		"minecraft:crossbow":
+		{
 			"crafting": 20,
 			"smithing": 10
 		},
-		"minecraft:stone_pickaxe": {
+		"minecraft:stone_pickaxe":
+		{
 			"crafting": 15,
 			"smithing": 3
 		},
-		"minecraft:stone_shovel": {
+		"minecraft:stone_shovel":
+		{
 			"crafting": 5,
 			"smithing": 1
 		},
-		"minecraft:stone_hoe": {
+		"minecraft:stone_hoe":
+		{
 			"crafting": 10,
 			"smithing": 2
 		},
-		"minecraft:stone_axe": {
+		"minecraft:stone_axe":
+		{
 			"crafting": 15,
 			"smithing": 3
 		},
-		"minecraft:stone_sword": {
+		"minecraft:stone_sword":
+		{
 			"crafting": 10,
 			"smithing": 2
 		},
-		"minecraft:wooden_pickaxe": {
+		"minecraft:wooden_pickaxe":
+		{
 			"crafting": 9
 		},
-		"minecraft:wooden_shovel": {
+		"minecraft:wooden_shovel":
+		{
 			"crafting": 3
 		},
-		"minecraft:wooden_hoe": {
+		"minecraft:wooden_hoe":
+		{
 			"crafting": 6
 		},
-		"minecraft:wooden_axe": {
+		"minecraft:wooden_axe":
+		{
 			"crafting": 9
 		},
-		"minecraft:wooden_sword": {
+		"minecraft:wooden_sword":
+		{
 			"crafting": 6
 		},
-		"minecraft:beacon": {
+		"minecraft:beacon":
+		{
 			"crafting": 1000
 		},
-		"minecraft:iron_ingot": {
+		"minecraft:iron_ingot":
+		{
 			"crafting": 0
 		},
-		"minecraft:iron_block": {
+		"minecraft:iron_block":
+		{
 			"crafting": 0
 		},
-		"minecraft:gold_ingot": {
+		"minecraft:gold_ingot":
+		{
 			"crafting": 0
 		},
-		"minecraft:gold_block": {
+		"minecraft:gold_block":
+		{
 			"crafting": 0
 		},
-		"minecraft:diamond": {
+		"minecraft:diamond":
+		{
 			"crafting": 0
 		},
-		"minecraft:diamond_block": {
+		"minecraft:diamond_block":
+		{
 			"crafting": 0
 		},
-		"botania:terrasteel_helmet": {
+		"botania:terrasteel_helmet":
+		{
 			"crafting": 70,
 			"magic": 70
 		},
-		"botania:terrasteel_chestplate": {
+		"botania:terrasteel_chestplate":
+		{
 			"crafting": 70,
 			"magic": 70
 		},
-		"botania:terrasteel_leggings": {
+		"botania:terrasteel_leggings":
+		{
 			"crafting": 70,
 			"magic": 70
 		},
-		"botania:terrasteel_boots": {
+		"botania:terrasteel_boots":
+		{
 			"crafting": 70,
 			"magic": 70
 		},
-		"botania:manasteel_helmet": {
+		"botania:manasteel_helmet":
+		{
 			"crafting": 20,
 			"magic": 20
 		},
-		"botania:manasteel_chestplate": {
+		"botania:manasteel_chestplate":
+		{
 			"crafting": 20,
 			"magic": 20
 		},
-		"botania:manasteel_leggings": {
+		"botania:manasteel_leggings":
+		{
 			"crafting": 20,
 			"magic": 20
 		},
-		"botania:manasteel_boots": {
+		"botania:manasteel_boots":
+		{
 			"crafting": 20,
 			"magic": 20
 		},
-		"botania:elementium_helmet": {
+		"botania:elementium_helmet":
+		{
 			"crafting": 30,
 			"magic": 30
 		},
-		"botania:elementium_chestplate": {
+		"botania:elementium_chestplate":
+		{
 			"crafting": 30,
 			"magic": 30
 		},
-		"botania:elementium_leggings": {
+		"botania:elementium_leggings":
+		{
 			"crafting": 30,
 			"magic": 30
 		},
-		"botania:elementium_boots": {
+		"botania:elementium_boots":
+		{
 			"crafting": 30,
 			"magic": 30
 		},
-		"botania:manaweave_helmet": {
+		"botania:manaweave_helmet":
+		{
 			"crafting": 10,
 			"magic": 10
 		},
-		"botania:manaweave_chestplate": {
+		"botania:manaweave_chestplate":
+		{
 			"crafting": 10,
 			"magic": 10
 		},
-		"botania:manaweave_leggings": {
+		"botania:manaweave_leggings":
+		{
 			"crafting": 10,
 			"magic": 10
 		},
-		"botania:manaweave_boots": {
+		"botania:manaweave_boots":
+		{
 			"crafting": 10,
 			"magic": 10
 		},
-		"botania:glass_pickaxe": {
+		"botania:glass_pickaxe":
+		{
 			"crafting": 10,
 			"magic": 1
 		},
-		"botania:manasteel_pick": {
+		"botania:manasteel_pick":
+		{
 			"crafting": 10,
 			"magic": 40
 		},
-		"botania:elementium_pickaxe": {
+		"botania:elementium_pickaxe":
+		{
 			"crafting": 10,
 			"magic": 40
 		},
-		"botania:terra_pick": {
+		"botania:terra_pick":
+		{
 			"crafting": 60,
 			"magic": 60
 		},
-		"botania:manasteel_axe": {
+		"botania:manasteel_axe":
+		{
 			"magic": 40,
 			"crafting": 10
 		},
-		"botania:elementium_axe": {
+		"botania:elementium_axe":
+		{
 			"magic": 40,
 			"crafting": 10
 		},
-		"botania:terra_axe": {
+		"botania:terra_axe":
+		{
 			"magic": 60,
 			"crafting": 10
 		},
-		"botania:manasteel_shovel": {
+		"botania:manasteel_shovel":
+		{
 			"magic": 40,
 			"crafting": 10
 		},
-		"botania:elementium_shovel": {
+		"botania:elementium_shovel":
+		{
 			"magic": 40,
 			"crafting": 10
 		},
-		"botania:ender_dagger": {
+		"botania:ender_dagger":
+		{
 			"magic": 10,
 			"crafting": 10
 		},
-		"botania:manasteel_sword": {
+		"botania:manasteel_sword":
+		{
 			"magic": 10,
 			"crafting": 10
 		},
-		"botania:elementium_sword": {
+		"botania:elementium_sword":
+		{
 			"magic": 10,
 			"crafting": 10
 		},
-		"botania:terra_sword": {
+		"botania:terra_sword":
+		{
 			"magic": 60,
 			"crafting": 10
 		},
-		"botania:star_sword": {
+		"botania:star_sword":
+		{
 			"magic": 60,
 			"crafting": 10
 		},
-		"botania:thunder_sword": {
+		"botania:thunder_sword":
+		{
 			"magic": 90,
 			"crafting": 10
 		},
-		"botania:manasteel_shears": {
+		"botania:manasteel_shears":
+		{
 			"magic": 40,
 			"crafting": 10
 		},
-		"botania:elementium_shears": {
+		"botania:elementium_shears":
+		{
 			"magic": 50,
 			"crafting": 10
 		},
-		"botania:red_string": {
+		"botania:red_string":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:gaia_ingot": {
+		"botania:gaia_ingot":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:manaweave_cloth": {
+		"botania:manaweave_cloth":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_normal": {
+		"botania:lens_normal":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_speed": {
+		"botania:lens_speed":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_power": {
+		"botania:lens_power":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_time": {
+		"botania:lens_time":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_efficiency": {
+		"botania:lens_efficiency":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_bounce": {
+		"botania:lens_bounce":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_gravity": {
+		"botania:lens_gravity":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_mine": {
+		"botania:lens_mine":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_damage": {
+		"botania:lens_damage":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_phantom": {
+		"botania:lens_phantom":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_magnet": {
+		"botania:lens_magnet":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_explosive": {
+		"botania:lens_explosive":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_influence": {
+		"botania:lens_influence":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_weight": {
+		"botania:lens_weight":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_paint": {
+		"botania:lens_paint":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_fire": {
+		"botania:lens_fire":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_piston": {
+		"botania:lens_piston":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_light": {
+		"botania:lens_light":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_warp": {
+		"botania:lens_warp":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_redirect": {
+		"botania:lens_redirect":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_firework": {
+		"botania:lens_firework":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_flare": {
+		"botania:lens_flare":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_messenger": {
+		"botania:lens_messenger":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_tripwire": {
+		"botania:lens_tripwire":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:lens_storm": {
+		"botania:lens_storm":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:mana_tablet": {
+		"botania:mana_tablet":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_gun": {
+		"botania:mana_gun":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:fertilizer": {
+		"botania:fertilizer":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:horn_grass": {
+		"botania:horn_grass":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:horn_leaves": {
+		"botania:horn_leaves":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:horn_snow": {
+		"botania:horn_snow":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:mana_mirror": {
+		"botania:mana_mirror":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:tiny_planet": {
+		"botania:tiny_planet":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_ring": {
+		"botania:mana_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:aura_ring": {
+		"botania:aura_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_ring_greater": {
+		"botania:mana_ring_greater":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:aura_ring_greater": {
+		"botania:aura_ring_greater":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:travel_belt": {
+		"botania:travel_belt":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:knockback_belt": {
+		"botania:knockback_belt":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:ice_pendant": {
+		"botania:ice_pendant":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:lava_pendant": {
+		"botania:lava_pendant":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:magnet_ring": {
+		"botania:magnet_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:water_ring": {
+		"botania:water_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mining_ring": {
+		"botania:mining_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:diva_charm": {
+		"botania:diva_charm":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:flight_tiara": {
+		"botania:flight_tiara":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:water_rod": {
+		"botania:water_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:open_bucket": {
+		"botania:open_bucket":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spawner_mover": {
+		"botania:spawner_mover":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pixie_ring": {
+		"botania:pixie_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:super_travel_belt": {
+		"botania:super_travel_belt":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:rainbow_rod": {
+		"botania:rainbow_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:tornado_wand": {
+		"botania:tornado_wand":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:fire_rod": {
+		"botania:fire_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:slingshot": {
+		"botania:slingshot":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:laputa_shard": {
+		"botania:laputa_shard":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:virus_necrodermal": {
+		"botania:virus_necrodermal":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:virus_nullodermal": {
+		"botania:virus_nullodermal":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:reach_ring": {
+		"botania:reach_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:skydirt_rod": {
+		"botania:skydirt_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:itemfinder": {
+		"botania:itemfinder":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:super_lava_pendant": {
+		"botania:super_lava_pendant":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:ender_hand": {
+		"botania:ender_hand":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spark": {
+		"botania:spark":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spark_upgrade_dispersive": {
+		"botania:spark_upgrade_dispersive":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spark_upgrade_dominant": {
+		"botania:spark_upgrade_dominant":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spark_upgrade_recessive": {
+		"botania:spark_upgrade_recessive":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spark_upgrade_isolated": {
+		"botania:spark_upgrade_isolated":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:divining_rod": {
+		"botania:divining_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:gravity_rod": {
+		"botania:gravity_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:vial": {
+		"botania:vial":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:flask": {
+		"botania:flask":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:blood_pendant": {
+		"botania:blood_pendant":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:missle_rod": {
+		"botania:missle_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:holy_cloak": {
+		"botania:holy_cloak":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:unholy_cloak": {
+		"botania:unholy_cloak":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:balance_cloak": {
+		"botania:balance_cloak":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:crafting_halo": {
+		"botania:crafting_halo":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:monocle": {
+		"botania:monocle":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:clip": {
+		"botania:clip":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:cobble_rod": {
+		"botania:cobble_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:smelt_rod": {
+		"botania:smelt_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:world_seed": {
+		"botania:world_seed":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spell_cloth": {
+		"botania:spell_cloth":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:thorn_chakram": {
+		"botania:thorn_chakram":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:flare_chakram": {
+		"botania:flare_chakram":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_1_1": {
+		"botania:pattern_1_1":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_2_2": {
+		"botania:pattern_2_2":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_1_2": {
+		"botania:pattern_1_2":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_2_1": {
+		"botania:pattern_2_1":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_1_3": {
+		"botania:pattern_1_3":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_3_1": {
+		"botania:pattern_3_1":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_2_3": {
+		"botania:pattern_2_3":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_3_2": {
+		"botania:pattern_3_2":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pattern_donut": {
+		"botania:pattern_donut":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:corporea_spark": {
+		"botania:corporea_spark":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:corporea_spark_master": {
+		"botania:corporea_spark_master":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:livingwood_bow": {
+		"botania:livingwood_bow":
+		{
 			"magic": 50,
 			"crafting": 50,
 			"fletching": 50
 		},
-		"botania:crystal_bow": {
+		"botania:crystal_bow":
+		{
 			"magic": 50,
 			"crafting": 50,
 			"fletching": 50
 		},
-		"botania:cosmetic_black_bowtie": {
+		"botania:cosmetic_black_bowtie":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_black_tie": {
+		"botania:cosmetic_black_tie":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_red_glasses": {
+		"botania:cosmetic_red_glasses":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_puffy_scarf": {
+		"botania:cosmetic_puffy_scarf":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_engineer_goggles": {
+		"botania:cosmetic_engineer_goggles":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_eyepatch": {
+		"botania:cosmetic_eyepatch":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_wicked_eyepatch": {
+		"botania:cosmetic_wicked_eyepatch":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_red_ribbons": {
+		"botania:cosmetic_red_ribbons":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_pink_flower_bud": {
+		"botania:cosmetic_pink_flower_bud":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_pink_dotted_bows": {
+		"botania:cosmetic_pink_dotted_bows":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_blue_butterfly": {
+		"botania:cosmetic_blue_butterfly":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_cat_ears": {
+		"botania:cosmetic_cat_ears":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_witch_pin": {
+		"botania:cosmetic_witch_pin":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_devil_tail": {
+		"botania:cosmetic_devil_tail":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_kamui_eye": {
+		"botania:cosmetic_kamui_eye":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_googly_eyes": {
+		"botania:cosmetic_googly_eyes":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_four_leaf_clover": {
+		"botania:cosmetic_four_leaf_clover":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_clock_eye": {
+		"botania:cosmetic_clock_eye":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_unicorn_horn": {
+		"botania:cosmetic_unicorn_horn":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_devil_horns": {
+		"botania:cosmetic_devil_horns":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_hyper_plus": {
+		"botania:cosmetic_hyper_plus":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_batanist_emblem": {
+		"botania:cosmetic_batanist_emblem":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_ancient_mask": {
+		"botania:cosmetic_ancient_mask":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_eerie_mask": {
+		"botania:cosmetic_eerie_mask":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_alien_antenna": {
+		"botania:cosmetic_alien_antenna":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_anaglyph_glasses": {
+		"botania:cosmetic_anaglyph_glasses":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_orange_shades": {
+		"botania:cosmetic_orange_shades":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_groucho_glasses": {
+		"botania:cosmetic_groucho_glasses":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_thick_eyebrows": {
+		"botania:cosmetic_thick_eyebrows":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_lusitanic_shield": {
+		"botania:cosmetic_lusitanic_shield":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_tiny_potato_mask": {
+		"botania:cosmetic_tiny_potato_mask":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_questgiver_mark": {
+		"botania:cosmetic_questgiver_mark":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cosmetic_thinking_hand": {
+		"botania:cosmetic_thinking_hand":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:swap_ring": {
+		"botania:swap_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:flower_bag": {
+		"botania:flower_bag":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:phantom_ink": {
+		"botania:phantom_ink":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:pool_minecart": {
+		"botania:pool_minecart":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:keep_ivy": {
+		"botania:keep_ivy":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:black_hole_talisman": {
+		"botania:black_hole_talisman":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:temperance_stone": {
+		"botania:temperance_stone":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:incense_stick": {
+		"botania:incense_stick":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:obedience_stick": {
+		"botania:obedience_stick":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:cacophonium": {
+		"botania:cacophonium":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:slime_bottle": {
+		"botania:slime_bottle":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:exchange_rod": {
+		"botania:exchange_rod":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:magnet_ring_greater": {
+		"botania:magnet_ring_greater":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:auto_crafting_halo": {
+		"botania:auto_crafting_halo":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:sextant": {
+		"botania:sextant":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:speed_up_belt": {
+		"botania:speed_up_belt":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:bauble_box": {
+		"botania:bauble_box":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:dodge_ring": {
+		"botania:dodge_ring":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:invisibility_cloak": {
+		"botania:invisibility_cloak":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:cloud_pendant": {
+		"botania:cloud_pendant":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:super_cloud_pendant": {
+		"botania:super_cloud_pendant":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:third_eye": {
+		"botania:third_eye":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:astrolabe": {
+		"botania:astrolabe":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:goddess_charm": {
+		"botania:goddess_charm":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_default": {
+		"botania:apothecary_default":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_forest": {
+		"botania:apothecary_forest":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_plains": {
+		"botania:apothecary_plains":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_mountain": {
+		"botania:apothecary_mountain":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_fungal": {
+		"botania:apothecary_fungal":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_swamp": {
+		"botania:apothecary_swamp":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_desert": {
+		"botania:apothecary_desert":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_taiga": {
+		"botania:apothecary_taiga":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_mesa": {
+		"botania:apothecary_mesa":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:apothecary_mossy": {
+		"botania:apothecary_mossy":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_spreader": {
+		"botania:mana_spreader":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:redstone_spreader": {
+		"botania:redstone_spreader":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:elven_spreader": {
+		"botania:elven_spreader":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:gaia_spreader": {
+		"botania:gaia_spreader":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_pool": {
+		"botania:mana_pool":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:diluted_pool": {
+		"botania:diluted_pool":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:fabulous_pool": {
+		"botania:fabulous_pool":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:runic_altar": {
+		"botania:runic_altar":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_distributor": {
+		"botania:mana_distributor":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_void": {
+		"botania:mana_void":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_detector": {
+		"botania:mana_detector":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:turntable": {
+		"botania:turntable":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:tiny_planet_block": {
+		"botania:tiny_planet_block":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:alchemy_catalyst": {
+		"botania:alchemy_catalyst":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:open_crate": {
+		"botania:open_crate":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:crafty_crate": {
+		"botania:crafty_crate":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:forest_eye": {
+		"botania:forest_eye":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:drum_wild": {
+		"botania:drum_wild":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:drum_gathering": {
+		"botania:drum_gathering":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:drum_canopy": {
+		"botania:drum_canopy":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:abstruse_platform": {
+		"botania:abstruse_platform":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spectral_platform": {
+		"botania:spectral_platform":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:alfheim_portal": {
+		"botania:alfheim_portal":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:conjuration_catalyst": {
+		"botania:conjuration_catalyst":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:spawner_claw": {
+		"botania:spawner_claw":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:ender_eye_block": {
+		"botania:ender_eye_block":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:starfield": {
+		"botania:starfield":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:mana_fluxfield": {
+		"botania:mana_fluxfield":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:terra_plate": {
+		"botania:terra_plate":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:red_string_container": {
+		"botania:red_string_container":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:red_string_dispenser": {
+		"botania:red_string_dispenser":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:red_string_fertilizer": {
+		"botania:red_string_fertilizer":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:red_string_comparator": {
+		"botania:red_string_comparator":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:red_string_relay": {
+		"botania:red_string_relay":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:prism": {
+		"botania:prism":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:corporea_funnel": {
+		"botania:corporea_funnel":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:corporea_interceptor": {
+		"botania:corporea_interceptor":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:incense_plate": {
+		"botania:incense_plate":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:ghost_rail": {
+		"botania:ghost_rail":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:spark_changer": {
+		"botania:spark_changer":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cocoon": {
+		"botania:cocoon":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:light_relay": {
+		"botania:light_relay":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:detector_light_relay": {
+		"botania:detector_light_relay":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:fork_light_relay": {
+		"botania:fork_light_relay":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:toggle_light_relay": {
+		"botania:toggle_light_relay":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:light_launcher": {
+		"botania:light_launcher":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:mana_bomb": {
+		"botania:mana_bomb":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:bifrost_perm": {
+		"botania:bifrost_perm":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:cell_block": {
+		"botania:cell_block":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:red_string_interceptor": {
+		"botania:red_string_interceptor":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:corporea_retainer": {
+		"botania:corporea_retainer":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:corporea_crystal_cube": {
+		"botania:corporea_crystal_cube":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:mana_pylon": {
+		"botania:mana_pylon":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:natura_pylon": {
+		"botania:natura_pylon":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:gaia_pylon": {
+		"botania:gaia_pylon":
+		{
 			"magic": 50,
 			"crafting": 50
 		},
-		"botania:teru_teru_bozu": {
+		"botania:teru_teru_bozu":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:avatar": {
+		"botania:avatar":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:bellows": {
+		"botania:bellows":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:brewery": {
+		"botania:brewery":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:corporea_index": {
+		"botania:corporea_index":
+		{
 			"magic": 5,
 			"crafting": 5
 		},
-		"botania:hourglass": {
+		"botania:hourglass":
+		{
 			"magic": 5,
 			"crafting": 5
 		}
 	},
-	"breeding_xp": {
-		"minecraft:chicken": {
+	"breeding_xp":
+	{
+		"minecraft:chicken":
+		{
 			"farming": 10
 		},
-		"minecraft:sheep": {
+		"minecraft:sheep":
+		{
 			"farming": 30
 		},
-		"minecraft:cow": {
+		"minecraft:cow":
+		{
 			"farming": 35
 		},
-		"minecraft:pig": {
+		"minecraft:pig":
+		{
 			"farming": 25
 		}
 	},
-	"player_specific": {
-		"UUID-GOES-HERE": {
+	"player_specific":
+	{
+		"UUID-GOES-HERE":
+		{
 			"ignoreReq": 1
 		}
 	},
-	"block_specific": {
-		"minecraft:sugar_cane": {
+	"block_specific":
+	{
+		"minecraft:sugar_cane":
+		{
 			"growsUpwards": 1
 		},
-		"minecraft:kelp": {
+		"minecraft:kelp":
+		{
 			"growsUpwards": 1
 		},
-		"minecraft:kelp_plant": {
+		"minecraft:kelp_plant":
+		{
 			"growsUpwards": 1
 		},
-		"minecraft:bamboo": {
+		"minecraft:bamboo":
+		{
 			"growsUpwards": 1
 		},
-		"minecraft:cactus": {
+		"minecraft:cactus":
+		{
 			"growsUpwards": 1
 		}
 	},
-	"taming_xp": {
-		"minecraft:exampleanimal": {
+	"taming_xp":
+	{
+		"minecraft:exampleanimal":
+		{
 			"taming": 10
 		}
 	},
-	"kill_requirement": {
-		"minecraft:silverfish": {
+	"kill_requirement":
+	{
+		"minecraft:silverfish":
+		{
 			"slayer": 10
 		}
 	},
-	"kill_xp": {
-		"minecraft:silverfish": {
+	"kill_xp":
+	{
+		"minecraft:silverfish":
+		{
 			"slayer": 35
 		},
-		"minecraft:zombie": {
+		"minecraft:zombie":
+		{
 			"slayer": 15
 		},
-		"minecraft:creeper": {
+		"minecraft:creeper":
+		{
 			"slayer": 25
 		},
-		"minecraft:spider": {
+		"minecraft:spider":
+		{
 			"slayer": 20
 		},
-		"minecraft:skeleton": {
+		"minecraft:skeleton":
+		{
 			"slayer": 25
 		},
-		"minecraft:enderman": {
+		"minecraft:enderman":
+		{
 			"slayer": 35
 		},
-		"minecraft:wither_skeleton": {
+		"minecraft:wither_skeleton":
+		{
 			"slayer": 40
 		},
-		"minecraft:slime": {
+		"minecraft:slime":
+		{
 			"slayer": 5
 		},
-		"minecraft:blaze": {
+		"minecraft:blaze":
+		{
 			"slayer": 30
 		},
-		"minecraft:drowned": {
+		"minecraft:drowned":
+		{
 			"slayer": 25
 		},
-		"minecraft:evoker": {
+		"minecraft:evoker":
+		{
 			"slayer": 40
 		},
-		"minecraft:ravager": {
+		"minecraft:ravager":
+		{
 			"slayer": 50
 		},
-		"minecraft:vindicator": {
+		"minecraft:vindicator":
+		{
 			"slayer": 35
 		},
-		"minecraft:cave_spider": {
+		"minecraft:cave_spider":
+		{
 			"slayer": 25
 		},
-		"minecraft:guardian": {
+		"minecraft:guardian":
+		{
 			"slayer": 25
 		},
-		"minecraft:elder_guardian": {
+		"minecraft:elder_guardian":
+		{
 			"slayer": 100
 		},
-		"minecraft:husk": {
+		"minecraft:husk":
+		{
 			"slayer": 45
 		},
-		"minecraft:magma_cube": {
+		"minecraft:magma_cube":
+		{
 			"slayer": 7.5
 		},
-		"minecraft:zombie_pigman": {
+		"minecraft:zombie_pigman":
+		{
 			"slayer": 25
 		},
-		"minecraft:zombie_villager": {
+		"minecraft:zombie_villager":
+		{
 			"slayer": 15
 		},
-		"minecraft:ender_dragon": {
+		"minecraft:ender_dragon":
+		{
 			"slayer": 2500
 		},
-		"minecraft:wither": {
+		"minecraft:wither":
+		{
 			"slayer": 1000
 		}
 	},
-	"mob_rare_drop": {
-		"minecraft:ender_dragon": {
+	"mob_rare_drop":
+	{
+		"minecraft:ender_dragon":
+		{
 			"minecraft:dragon_head": 1,
 			"minecraft:dragon_egg": 10
 		},
-		"minecraft:slime": {
+		"minecraft:slime":
+		{
 			"minecraft:slime_block": 100
 		},
-		"minecraft:zombie": {
+		"minecraft:zombie":
+		{
 			"minecraft:beetroot": 40
 		},
-		"minecraft:sheep": {
+		"minecraft:sheep":
+		{
 			"minecraft:string": 10
 		},
-		"minecraft:chicken": {
+		"minecraft:chicken":
+		{
 			"minecraft:egg": 10
 		}
 	},
-	"biome_mob_multiplier": {
-		"minecraft:plains": {
+	"biome_mob_multiplier":
+	{
+		"minecraft:plains":
+		{
 			"speedBonus": 0.75,
 			"hpBonus": 0.75,
 			"damageBonus": 0.75
 		},
-		"minecraft:river": {
+		"minecraft:river":
+		{
 			"speedBonus": 0.75,
 			"hpBonus": 0.75,
 			"damageBonus": 0.75
 		},
-		"minecraft:beaches": {
+		"minecraft:beaches":
+		{
 			"speedBonus": 0.75,
 			"hpBonus": 0.75,
 			"damageBonus": 0.75
 		},
-		"minecraft:desert": {
+		"minecraft:desert":
+		{
 			"speedBonus": 0.75,
 			"hpBonus": 0.75,
 			"damageBonus": 0.75
 		},
-		"minecraft:the_end": {
+		"minecraft:the_end":
+		{
 			"speedBonus": 1.25,
 			"hpBonus": 2,
 			"damageBonus": 1.25
 		},
-		"minecraft:nether": {
+		"minecraft:nether":
+		{
 			"hpBonus": 1.5,
 			"damageBonus": 1.5
 		},
-		"minecraft:jungle": {
+		"minecraft:jungle":
+		{
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		},
-		"minecraft:jungle_hills": {
+		"minecraft:jungle_hills":
+		{
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		},
-		"minecraft:bamboo_jungle": {
+		"minecraft:bamboo_jungle":
+		{
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		},
-		"minecraft:bamboo_jungle_hills": {
+		"minecraft:bamboo_jungle_hills":
+		{
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		},
-		"minecraft:jungle_edge": {
+		"minecraft:jungle_edge":
+		{
 			"speedBonus": 1.5,
 			"hpBonus": 1.25
 		}
 	},
-	"biome_xp_bonus": {
-		"minecraft:river": {
+	"biome_xp_bonus":
+	{
+		"minecraft:river":
+		{
 			"fishing": 5
 		},
-		"minecraft:desert": {
+		"minecraft:desert":
+		{
 			"excavation": 10,
 			"farming": -15
 		},
-		"minecraft:the_end": {
+		"minecraft:the_end":
+		{
 			"flying": 100,
 			"combat": 20,
 			"archery": 50,
 			"endurance": 20
 		},
-		"minecraft:nether": {
+		"minecraft:nether":
+		{
 			"combat": 25,
 			"archery": 25,
 			"endurance": 25,
 			"flying": 250,
 			"farming": -25
 		},
-		"minecraft:jungle": {
+		"minecraft:jungle":
+		{
 			"agility": 25,
 			"swimming": 25,
 			"fishing": 25,
@@ -3223,7 +4118,8 @@
 			"woodcutting": -25,
 			"farming": -25
 		},
-		"minecraft:jungle_hills": {
+		"minecraft:jungle_hills":
+		{
 			"agility": 25,
 			"swimming": 25,
 			"fishing": 25,
@@ -3232,7 +4128,8 @@
 			"woodcutting": -75,
 			"farming": -75
 		},
-		"minecraft:bamboo_jungle": {
+		"minecraft:bamboo_jungle":
+		{
 			"agility": 25,
 			"swimming": 25,
 			"fishing": 25,
@@ -3241,7 +4138,8 @@
 			"woodcutting": -25,
 			"farming": -25
 		},
-		"minecraft:bamboo_jungle_hills": {
+		"minecraft:bamboo_jungle_hills":
+		{
 			"agility": 25,
 			"swimming": 25,
 			"fishing": 25,
@@ -3250,7 +4148,8 @@
 			"woodcutting": -75,
 			"farming": -75
 		},
-		"minecraft:jungle_edge": {
+		"minecraft:jungle_edge":
+		{
 			"agility": 25,
 			"swimming": 25,
 			"fishing": 25,
@@ -3259,226 +4158,266 @@
 			"woodcutting": -75,
 			"farming": -75
 		},
-		"minecraft:ocean": {
+		"minecraft:ocean":
+		{
 			"swimming": 25,
 			"fishing": 10
 		},
-		"minecraft:deep_ocean": {
+		"minecraft:deep_ocean":
+		{
 			"swimming": 50,
 			"fishing": 20
 		},
-		"minecraft:cold_ocean": {
+		"minecraft:cold_ocean":
+		{
 			"swimming": 50,
 			"fishing": 30
 		},
-		"minecraft:frozen_ocean": {
+		"minecraft:frozen_ocean":
+		{
 			"swimming": 75,
 			"fishing": 40
 		},
-		"minecraft:deep_frozen_ocean": {
+		"minecraft:deep_frozen_ocean":
+		{
 			"swimming": 100,
 			"fishing": 50
 		}
 	},
-	"biome_requirement": {
-		"minecraft:jungle": {
-			"agility": 20,
-			"endurance": 10
-		},
-		"minecraft:jungle_hills": {
-			"agility": 20,
-			"endurance": 10
-		},
-		"minecraft:bamboo_jungle": {
-			"agility": 20,
-			"endurance": 10
-		},
-		"minecraft:bamboo_jungle_hills": {
-			"agility": 20,
-			"endurance": 10
-		},
-		"minecraft:jungle_edge": {
-			"agility": 20,
-			"endurance": 10
-		},
-		"minecraft:ocean": {
-			"swimming": 5
-		},
-		"minecraft:deep_ocean": {
-			"swimming": 15
-		},
-		"minecraft:cold_ocean": {
-			"swimming": 25,
-			"endurance": 15
-		},
-		"minecraft:frozen_ocean": {
-			"swimming": 35,
-			"endurance": 15
-		},
-		"minecraft:deep_frozen_ocean": {
-			"swimming": 35,
-			"endurance": 25
-		}
-	},
-	"biome_effect": {
-		"minecraft:jungle": {
+	"biome_effect":
+	{
+		"minecraft:jungle":
+		{
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},
-		"minecraft:jungle_hills": {
+		"minecraft:jungle_hills":
+		{
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},
-		"minecraft:bamboo_jungle": {
+		"minecraft:bamboo_jungle":
+		{
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},
-		"minecraft:bamboo_jungle_hills": {
+		"minecraft:bamboo_jungle_hills":
+		{
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},
-		"minecraft:jungle_edge": {
+		"minecraft:jungle_edge":
+		{
 			"minecraft:slowness": 0,
 			"minecraft:weakness": 0
 		},
-		"minecraft:ocean": {
+		"minecraft:ocean":
+		{
 			"minecraft:slowness": 0
 		},
-		"minecraft:deep_ocean": {
+		"minecraft:deep_ocean":
+		{
 			"minecraft:slowness": 0
 		},
-		"minecraft:cold_ocean": {
+		"minecraft:cold_ocean":
+		{
 			"minecraft:slowness": 1,
 			"minecraft:weakness": 0
 		},
-		"minecraft:frozen_ocean": {
+		"minecraft:frozen_ocean":
+		{
 			"minecraft:slowness": 2,
 			"minecraft:weakness": 1
 		},
-		"minecraft:deep_frozen_ocean": {
+		"minecraft:deep_frozen_ocean":
+		{
 			"minecraft:slowness": 3,
 			"minecraft:weakness": 2
 		}
 	},
-	"ore": {
-		"minecraft:nether_quartz_ore": {
+	"biome_requirement":
+	{
+		"minecraft:deep_ocean":
+		{
+			"swimming": 15
+		},
+		"minecraft:cold_ocean":
+		{
+			"swimming": 25,
+			"endurance": 15
+		},
+		"minecraft:frozen_ocean":
+		{
+			"swimming": 35,
+			"endurance": 15
+		},
+		"minecraft:deep_frozen_ocean":
+		{
+			"swimming": 35,
+			"endurance": 25
+		}
+	},
+	"ore":
+	{
+		"minecraft:nether_quartz_ore":
+		{
 			"extraChance": 0.55
 		},
-		"minecraft:coal_ore": {
+		"minecraft:coal_ore":
+		{
 			"extraChance": 1
 		},
-		"minecraft:iron_ore": {
+		"minecraft:iron_ore":
+		{
 			"extraChance": 0.75
 		},
-		"minecraft:gold_ore": {
+		"minecraft:gold_ore":
+		{
 			"extraChance": 0.5
 		},
-		"minecraft:diamond_ore": {
+		"minecraft:diamond_ore":
+		{
 			"extraChance": 0.33
 		},
-		"minecraft:redstone_ore": {
+		"minecraft:redstone_ore":
+		{
 			"extraChance": 2
 		},
-		"minecraft:lapis_ore": {
+		"minecraft:lapis_ore":
+		{
 			"extraChance": 1.5
 		},
-		"minecraft:emerald_ore": {
+		"minecraft:emerald_ore":
+		{
 			"extraChance": 0.75
 		},
-		"minecraft:glowstone": {
+		"minecraft:glowstone":
+		{
 			"extraChance": 2
 		}
 	},
-	"log": {
-		"minecraft:oak_log": {
+	"log":
+	{
+		"minecraft:oak_log":
+		{
 			"extraChance": 1
 		},
-		"minecraft:birch_log": {
+		"minecraft:birch_log":
+		{
 			"extraChance": 0.85
 		},
-		"minecraft:spruce_log": {
+		"minecraft:spruce_log":
+		{
 			"extraChance": 0.65
 		},
-		"minecraft:jungle_log": {
+		"minecraft:jungle_log":
+		{
 			"extraChance": 0.55
 		},
-		"minecraft:dark_oak_log": {
+		"minecraft:dark_oak_log":
+		{
 			"extraChance": 0.5
 		},
-		"minecraft:acacia_log": {
+		"minecraft:acacia_log":
+		{
 			"extraChance": 1.25
 		},
-		"minecraft:oak_wood": {
+		"minecraft:oak_wood":
+		{
 			"extraChance": 1
 		},
-		"minecraft:birch_wood": {
+		"minecraft:birch_wood":
+		{
 			"extraChance": 0.85
 		},
-		"minecraft:spruce_wood": {
+		"minecraft:spruce_wood":
+		{
 			"extraChance": 0.65
 		},
-		"minecraft:jungle_wood": {
+		"minecraft:jungle_wood":
+		{
 			"extraChance": 0.55
 		},
-		"minecraft:dark_oak_wood": {
+		"minecraft:dark_oak_wood":
+		{
 			"extraChance": 0.5
 		},
-		"minecraft:acacia_wood": {
+		"minecraft:acacia_wood":
+		{
 			"extraChance": 1.25
 		}
 	},
-	"plant": {
-		"minecraft:cocoa_beans": {
+	"plant":
+	{
+		"minecraft:cocoa_beans":
+		{
 			"extraChance": 1.5
 		},
-		"minecraft:wheat": {
+		"minecraft:wheat":
+		{
 			"extraChance": 0.5
 		},
-		"minecraft:melon": {
+		"minecraft:melon":
+		{
 			"extraChance": 1
 		},
-		"minecraft:pumpkin": {
+		"minecraft:pumpkin":
+		{
 			"extraChance": 0.6
 		},
-		"minecraft:beetroot": {
+		"minecraft:beetroot":
+		{
 			"extraChance": 1
 		},
-		"minecraft:cactus": {
+		"minecraft:cactus":
+		{
 			"extraChance": 0.45
 		},
-		"minecraft:sugar_cane": {
+		"minecraft:sugar_cane":
+		{
 			"extraChance": 0.33
 		},
-		"minecraft:kelp": {
+		"minecraft:kelp":
+		{
 			"extraChance": 0.25
 		},
-		"minecraft:kelp_plant": {
+		"minecraft:kelp_plant":
+		{
 			"extraChance": 0.25
 		},
-		"minecraft:bamboo": {
+		"minecraft:bamboo":
+		{
 			"extraChance": 0.35
 		},
-		"minecraft:sea_pickle": {
+		"minecraft:sea_pickle":
+		{
 			"extraChance": 1.5
 		},
-		"minecraft:potatoes": {
+		"minecraft:potatoes":
+		{
 			"extraChance": 1.5
 		},
-		"minecraft:potato": {
+		"minecraft:potato":
+		{
 			"extraChance": 1.5
 		},
-		"minecraft:carrots": {
+		"minecraft:carrots":
+		{
 			"extraChance": 1.5
 		},
-		"minecraft:carrot": {
+		"minecraft:carrot":
+		{
 			"extraChance": 1.5
 		},
-		"minecraft:nether_wart": {
+		"minecraft:nether_wart":
+		{
 			"extraChance": 0.75
 		}
 	},
-	"salvage": {
-		"minecraft:diamond_helmet": {
+	"salvage":
+	{
+		"minecraft:diamond_helmet":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 5,
 			"baseChance": 0.5,
@@ -3487,7 +4426,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_chestplate": {
+		"minecraft:diamond_chestplate":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 8,
 			"baseChance": 0.5,
@@ -3496,7 +4436,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_leggings": {
+		"minecraft:diamond_leggings":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 7,
 			"baseChance": 0.5,
@@ -3505,7 +4446,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_boots": {
+		"minecraft:diamond_boots":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 4,
 			"baseChance": 0.5,
@@ -3514,7 +4456,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_horse_armor": {
+		"minecraft:diamond_horse_armor":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 7,
 			"baseChance": 0.5,
@@ -3523,7 +4466,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_sword": {
+		"minecraft:diamond_sword":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 2,
 			"baseChance": 0.5,
@@ -3532,7 +4476,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_axe": {
+		"minecraft:diamond_axe":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 3,
 			"baseChance": 0.5,
@@ -3541,7 +4486,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_pickaxe": {
+		"minecraft:diamond_pickaxe":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 3,
 			"baseChance": 0.5,
@@ -3550,7 +4496,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_hoe": {
+		"minecraft:diamond_hoe":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 2,
 			"baseChance": 0.5,
@@ -3559,7 +4506,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:diamond_shovel": {
+		"minecraft:diamond_shovel":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 1,
 			"baseChance": 0.5,
@@ -3568,7 +4516,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:jukebox": {
+		"minecraft:jukebox":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 1,
 			"baseChance": 0.5,
@@ -3577,7 +4526,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:enchanting_table": {
+		"minecraft:enchanting_table":
+		{
 			"salvageItem": "minecraft:diamond",
 			"salvageMax": 2,
 			"baseChance": 0.5,
@@ -3586,7 +4536,8 @@
 			"xpPerItem": 75,
 			"levelReq": 40
 		},
-		"minecraft:golden_helmet": {
+		"minecraft:golden_helmet":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 5,
 			"baseChance": 15,
@@ -3595,7 +4546,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_chestplate": {
+		"minecraft:golden_chestplate":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 8,
 			"baseChance": 15,
@@ -3604,7 +4556,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_leggings": {
+		"minecraft:golden_leggings":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 7,
 			"baseChance": 15,
@@ -3613,7 +4566,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_boots": {
+		"minecraft:golden_boots":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 4,
 			"baseChance": 15,
@@ -3622,7 +4576,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_horse_armor": {
+		"minecraft:golden_horse_armor":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 7,
 			"baseChance": 15,
@@ -3631,7 +4586,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_sword": {
+		"minecraft:golden_sword":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 2,
 			"baseChance": 15,
@@ -3640,7 +4596,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_axe": {
+		"minecraft:golden_axe":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 3,
 			"baseChance": 15,
@@ -3649,7 +4606,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_pickaxe": {
+		"minecraft:golden_pickaxe":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 3,
 			"baseChance": 15,
@@ -3658,7 +4616,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_hoe": {
+		"minecraft:golden_hoe":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 2,
 			"baseChance": 15,
@@ -3667,7 +4626,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_shovel": {
+		"minecraft:golden_shovel":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 1,
 			"baseChance": 15,
@@ -3676,7 +4636,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:clock": {
+		"minecraft:clock":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 4,
 			"baseChance": 15,
@@ -3685,7 +4646,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_apple": {
+		"minecraft:golden_apple":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 8,
 			"baseChance": 15,
@@ -3694,7 +4656,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:golden_carrot": {
+		"minecraft:golden_carrot":
+		{
 			"salvageItem": "minecraft:gold_nugget",
 			"salvageMax": 8,
 			"baseChance": 20,
@@ -3703,7 +4666,8 @@
 			"xpPerItem": 4,
 			"levelReq": 15
 		},
-		"minecraft:light_weighted_pressure_plate": {
+		"minecraft:light_weighted_pressure_plate":
+		{
 			"salvageItem": "minecraft:gold_ingot",
 			"salvageMax": 2,
 			"baseChance": 15,
@@ -3712,7 +4676,8 @@
 			"xpPerItem": 35,
 			"levelReq": 30
 		},
-		"minecraft:chainmail_helmet": {
+		"minecraft:chainmail_helmet":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 5,
 			"baseChance": 35,
@@ -3721,7 +4686,8 @@
 			"xpPerItem": 50,
 			"levelReq": 20
 		},
-		"minecraft:chainmail_chestplate": {
+		"minecraft:chainmail_chestplate":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 8,
 			"baseChance": 35,
@@ -3730,7 +4696,8 @@
 			"xpPerItem": 50,
 			"levelReq": 20
 		},
-		"minecraft:chainmail_leggings": {
+		"minecraft:chainmail_leggings":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 7,
 			"baseChance": 35,
@@ -3739,7 +4706,8 @@
 			"xpPerItem": 50,
 			"levelReq": 20
 		},
-		"minecraft:chainmail_boots": {
+		"minecraft:chainmail_boots":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 4,
 			"baseChance": 35,
@@ -3748,7 +4716,8 @@
 			"xpPerItem": 50,
 			"levelReq": 20
 		},
-		"minecraft:iron_helmet": {
+		"minecraft:iron_helmet":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 5,
 			"baseChance": 15,
@@ -3757,7 +4726,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_chestplate": {
+		"minecraft:iron_chestplate":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 8,
 			"baseChance": 15,
@@ -3766,7 +4736,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_leggings": {
+		"minecraft:iron_leggings":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 7,
 			"baseChance": 15,
@@ -3775,7 +4746,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_boots": {
+		"minecraft:iron_boots":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 4,
 			"baseChance": 15,
@@ -3784,7 +4756,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_horse_armor": {
+		"minecraft:iron_horse_armor":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 7,
 			"baseChance": 15,
@@ -3793,7 +4766,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_sword": {
+		"minecraft:iron_sword":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 2,
 			"baseChance": 15,
@@ -3802,7 +4776,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_axe": {
+		"minecraft:iron_axe":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 3,
 			"baseChance": 15,
@@ -3811,7 +4786,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_pickaxe": {
+		"minecraft:iron_pickaxe":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 3,
 			"baseChance": 15,
@@ -3820,7 +4796,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_hoe": {
+		"minecraft:iron_hoe":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 2,
 			"baseChance": 15,
@@ -3829,7 +4806,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_shovel": {
+		"minecraft:iron_shovel":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 1,
 			"baseChance": 15,
@@ -3838,7 +4816,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:anvil": {
+		"minecraft:anvil":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 31,
 			"baseChance": 15,
@@ -3847,7 +4826,8 @@
 			"xpPerItem": 10,
 			"levelReq": 30
 		},
-		"minecraft:chipped_anvil": {
+		"minecraft:chipped_anvil":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 20,
 			"baseChance": 10,
@@ -3856,7 +4836,8 @@
 			"xpPerItem": 10,
 			"levelReq": 20
 		},
-		"minecraft:damaged_anvil": {
+		"minecraft:damaged_anvil":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 10,
 			"baseChance": 5,
@@ -3865,7 +4846,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_trapdoor": {
+		"minecraft:iron_trapdoor":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 4,
 			"baseChance": 15,
@@ -3874,7 +4856,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:iron_door": {
+		"minecraft:iron_door":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 6,
 			"baseChance": 15,
@@ -3883,7 +4866,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:hopper": {
+		"minecraft:hopper":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 5,
 			"baseChance": 15,
@@ -3892,7 +4876,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:compass": {
+		"minecraft:compass":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 4,
 			"baseChance": 15,
@@ -3901,7 +4886,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:minecart": {
+		"minecraft:minecart":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 5,
 			"baseChance": 15,
@@ -3910,7 +4896,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:bucket": {
+		"minecraft:bucket":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 3,
 			"baseChance": 15,
@@ -3919,7 +4906,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:cauldron": {
+		"minecraft:cauldron":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 7,
 			"baseChance": 15,
@@ -3928,7 +4916,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:flint_and_steel": {
+		"minecraft:flint_and_steel":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 1,
 			"baseChance": 15,
@@ -3937,7 +4926,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:shears": {
+		"minecraft:shears":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 2,
 			"baseChance": 15,
@@ -3946,7 +4936,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:blast_furnace": {
+		"minecraft:blast_furnace":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 5,
 			"baseChance": 15,
@@ -3955,7 +4946,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:heavy_weighted_pressure_plate": {
+		"minecraft:heavy_weighted_pressure_plate":
+		{
 			"salvageItem": "minecraft:iron_ingot",
 			"salvageMax": 2,
 			"baseChance": 15,
@@ -3964,7 +4956,8 @@
 			"xpPerItem": 10,
 			"levelReq": 10
 		},
-		"minecraft:leather_helmet": {
+		"minecraft:leather_helmet":
+		{
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 5,
 			"baseChance": 20,
@@ -3973,7 +4966,8 @@
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
-		"minecraft:leather_chestplate": {
+		"minecraft:leather_chestplate":
+		{
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 8,
 			"baseChance": 20,
@@ -3982,7 +4976,8 @@
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
-		"minecraft:leather_leggings": {
+		"minecraft:leather_leggings":
+		{
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 7,
 			"baseChance": 20,
@@ -3991,7 +4986,8 @@
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
-		"minecraft:leather_boots": {
+		"minecraft:leather_boots":
+		{
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 4,
 			"baseChance": 20,
@@ -4000,7 +4996,8 @@
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
-		"minecraft:leather_horse_armor": {
+		"minecraft:leather_horse_armor":
+		{
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 7,
 			"baseChance": 20,
@@ -4009,7 +5006,8 @@
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
-		"minecraft:item_frame": {
+		"minecraft:item_frame":
+		{
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 1,
 			"baseChance": 20,
@@ -4018,7 +5016,8 @@
 			"xpPerItem": 7.5,
 			"levelReq": 1
 		},
-		"minecraft:book": {
+		"minecraft:book":
+		{
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 1,
 			"baseChance": 20,
@@ -4027,7 +5026,8 @@
 			"xpPerItem": 10,
 			"levelReq": 1
 		},
-		"minecraft:writable_book": {
+		"minecraft:writable_book":
+		{
 			"salvageItem": "minecraft:book",
 			"salvageMax": 1,
 			"baseChance": 25,
@@ -4036,7 +5036,8 @@
 			"xpPerItem": 12.5,
 			"levelReq": 1
 		},
-		"minecraft:saddle": {
+		"minecraft:saddle":
+		{
 			"salvageItem": "minecraft:leather",
 			"salvageMax": 5,
 			"baseChance": 20,
@@ -4045,7 +5046,8 @@
 			"xpPerItem": 25,
 			"levelReq": 1
 		},
-		"minecraft:stone_sword": {
+		"minecraft:stone_sword":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 2,
 			"baseChance": 25,
@@ -4054,7 +5056,8 @@
 			"xpPerItem": 5,
 			"levelReq": 1
 		},
-		"minecraft:stone_axe": {
+		"minecraft:stone_axe":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 3,
 			"baseChance": 25,
@@ -4063,7 +5066,8 @@
 			"xpPerItem": 5,
 			"levelReq": 1
 		},
-		"minecraft:stone_pickaxe": {
+		"minecraft:stone_pickaxe":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 3,
 			"baseChance": 25,
@@ -4072,7 +5076,8 @@
 			"xpPerItem": 5,
 			"levelReq": 1
 		},
-		"minecraft:stone_hoe": {
+		"minecraft:stone_hoe":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 2,
 			"baseChance": 25,
@@ -4081,7 +5086,8 @@
 			"xpPerItem": 5,
 			"levelReq": 1
 		},
-		"minecraft:stone_shovel": {
+		"minecraft:stone_shovel":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 1,
 			"baseChance": 25,
@@ -4090,7 +5096,8 @@
 			"xpPerItem": 5,
 			"levelReq": 5
 		},
-		"minecraft:wooden_sword": {
+		"minecraft:wooden_sword":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 2,
 			"baseChance": 35,
@@ -4099,7 +5106,8 @@
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
-		"minecraft:wooden_axe": {
+		"minecraft:wooden_axe":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 3,
 			"baseChance": 35,
@@ -4108,7 +5116,8 @@
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
-		"minecraft:wooden_pickaxe": {
+		"minecraft:wooden_pickaxe":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 3,
 			"baseChance": 35,
@@ -4117,7 +5126,8 @@
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
-		"minecraft:wooden_hoe": {
+		"minecraft:wooden_hoe":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 2,
 			"baseChance": 35,
@@ -4126,7 +5136,8 @@
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
-		"minecraft:wooden_shovel": {
+		"minecraft:wooden_shovel":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 1,
 			"baseChance": 35,
@@ -4135,7 +5146,8 @@
 			"xpPerItem": 2.5,
 			"levelReq": 1
 		},
-		"minecraft:elytra": {
+		"minecraft:elytra":
+		{
 			"salvageItem": "minecraft:phantom_membrane",
 			"salvageMax": 5,
 			"baseChance": 15,
@@ -4144,7 +5156,8 @@
 			"xpPerItem": 100,
 			"levelReq": 1
 		},
-		"minecraft:fishing_rod": {
+		"minecraft:fishing_rod":
+		{
 			"salvageItem": "minecraft:string",
 			"salvageMax": 2,
 			"baseChance": 45,
@@ -4153,7 +5166,8 @@
 			"xpPerItem": 7,
 			"levelReq": 1
 		},
-		"minecraft:bow": {
+		"minecraft:bow":
+		{
 			"salvageItem": "minecraft:string",
 			"salvageMax": 3,
 			"baseChance": 60,
@@ -4162,7 +5176,8 @@
 			"xpPerItem": 7,
 			"levelReq": 1
 		},
-		"minecraft:beacon": {
+		"minecraft:beacon":
+		{
 			"salvageItem": "minecraft:nether_star",
 			"salvageMax": 1,
 			"baseChance": 0.5,
@@ -4171,7 +5186,8 @@
 			"xpPerItem": 200,
 			"levelReq": 50
 		},
-		"minecraft:tnt": {
+		"minecraft:tnt":
+		{
 			"salvageItem": "minecraft:gunpowder",
 			"salvageMax": 5,
 			"baseChance": 25,
@@ -4180,7 +5196,8 @@
 			"xpPerItem": 4,
 			"levelReq": 15
 		},
-		"minecraft:brewing_stand": {
+		"minecraft:brewing_stand":
+		{
 			"salvageItem": "minecraft:blaze_rod",
 			"salvageMax": 1,
 			"baseChance": 15,
@@ -4189,7 +5206,8 @@
 			"xpPerItem": 10,
 			"levelReq": 25
 		},
-		"minecraft:gravel": {
+		"minecraft:gravel":
+		{
 			"salvageItem": "minecraft:flint",
 			"salvageMax": 1,
 			"baseChance": 20,
@@ -4198,7 +5216,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:ender_eye": {
+		"minecraft:ender_eye":
+		{
 			"salvageItem": "minecraft:ender_pearl",
 			"salvageMax": 1,
 			"baseChance": 10,
@@ -4207,7 +5226,8 @@
 			"xpPerItem": 10,
 			"levelReq": 15
 		},
-		"minecraft:magma_cream": {
+		"minecraft:magma_cream":
+		{
 			"salvageItem": "minecraft:slime_ball",
 			"salvageMax": 1,
 			"baseChance": 30,
@@ -4216,7 +5236,8 @@
 			"xpPerItem": 15,
 			"levelReq": 20
 		},
-		"minecraft:jack_o_lantern": {
+		"minecraft:jack_o_lantern":
+		{
 			"salvageItem": "minecraft:carved_pumpkin",
 			"salvageMax": 1,
 			"baseChance": 30,
@@ -4225,7 +5246,8 @@
 			"xpPerItem": 3,
 			"levelReq": 1
 		},
-		"minecraft:furnace": {
+		"minecraft:furnace":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 8,
 			"baseChance": 20,
@@ -4234,7 +5256,8 @@
 			"xpPerItem": 1.25,
 			"levelReq": 5
 		},
-		"minecraft:cobblestone_wall": {
+		"minecraft:cobblestone_wall":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 1,
 			"baseChance": 20,
@@ -4243,7 +5266,8 @@
 			"xpPerItem": 1.25,
 			"levelReq": 5
 		},
-		"minecraft:sandstone_wall": {
+		"minecraft:sandstone_wall":
+		{
 			"salvageItem": "minecraft:sandstone",
 			"salvageMax": 1,
 			"baseChance": 25,
@@ -4252,7 +5276,8 @@
 			"xpPerItem": 1,
 			"levelReq": 5
 		},
-		"minecraft:end_stone_brick_wall": {
+		"minecraft:end_stone_brick_wall":
+		{
 			"salvageItem": "minecraft:end_stone_bricks",
 			"salvageMax": 1,
 			"baseChance": 15,
@@ -4261,7 +5286,8 @@
 			"xpPerItem": 2.5,
 			"levelReq": 10
 		},
-		"minecraft:mossy_cobblestone": {
+		"minecraft:mossy_cobblestone":
+		{
 			"salvageItem": "minecraft:vine",
 			"salvageMax": 1,
 			"baseChance": 1,
@@ -4270,7 +5296,8 @@
 			"xpPerItem": 5,
 			"levelReq": 15
 		},
-		"minecraft:turtle_helmet": {
+		"minecraft:turtle_helmet":
+		{
 			"salvageItem": "minecraft:scute",
 			"salvageMax": 5,
 			"baseChance": 20,
@@ -4279,7 +5306,8 @@
 			"xpPerItem": 15,
 			"levelReq": 15
 		},
-		"minecraft:wheat": {
+		"minecraft:wheat":
+		{
 			"salvageItem": "minecraft:wheat_seeds",
 			"salvageMax": 3,
 			"baseChance": 30,
@@ -4288,7 +5316,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:beetroot": {
+		"minecraft:beetroot":
+		{
 			"salvageItem": "minecraft:beetroot_seeds",
 			"salvageMax": 3,
 			"baseChance": 20,
@@ -4297,7 +5326,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:ladder": {
+		"minecraft:ladder":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 2,
 			"baseChance": 30,
@@ -4306,7 +5336,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:oak_leaves": {
+		"minecraft:oak_leaves":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 3,
 			"baseChance": 30,
@@ -4315,7 +5346,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:birch_leaves": {
+		"minecraft:birch_leaves":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 2,
 			"baseChance": 30,
@@ -4324,7 +5356,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:spruce_leaves": {
+		"minecraft:spruce_leaves":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 1,
 			"baseChance": 30,
@@ -4333,7 +5366,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:jungle_leaves": {
+		"minecraft:jungle_leaves":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 3,
 			"baseChance": 30,
@@ -4342,7 +5376,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:dark_oak_leaves": {
+		"minecraft:dark_oak_leaves":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 3,
 			"baseChance": 30,
@@ -4351,7 +5386,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:acacia_leaves": {
+		"minecraft:acacia_leaves":
+		{
 			"salvageItem": "minecraft:stick",
 			"salvageMax": 1,
 			"baseChance": 30,
@@ -4360,7 +5396,8 @@
 			"xpPerItem": 1,
 			"levelReq": 1
 		},
-		"minecraft:nether_bricks": {
+		"minecraft:nether_bricks":
+		{
 			"salvageItem": "minecraft:nether_brick",
 			"salvageMax": 4,
 			"baseChance": 10,
@@ -4369,7 +5406,8 @@
 			"xpPerItem": 1.5,
 			"levelReq": 15
 		},
-		"minecraft:end_crystal": {
+		"minecraft:end_crystal":
+		{
 			"salvageItem": "minecraft:ghast_tear",
 			"salvageMax": 1,
 			"baseChance": 20,
@@ -4378,7 +5416,8 @@
 			"xpPerItem": 25,
 			"levelReq": 40
 		},
-		"minecraft:egg": {
+		"minecraft:egg":
+		{
 			"salvageItem": "minecraft:chicken_spawn_egg",
 			"salvageMax": 1,
 			"baseChance": 12.5,
@@ -4387,7 +5426,8 @@
 			"xpPerItem": 3,
 			"levelReq": 10
 		},
-		"minecraft:ghast_tear": {
+		"minecraft:ghast_tear":
+		{
 			"salvageItem": "minecraft:ghast_spawn_egg",
 			"salvageMax": 1,
 			"baseChance": 12.5,
@@ -4396,7 +5436,8 @@
 			"xpPerItem": 10,
 			"levelReq": 25
 		},
-		"minecraft:wither_rose": {
+		"minecraft:wither_rose":
+		{
 			"salvageItem": "minecraft:wither_skeleton_spawn_egg",
 			"salvageMax": 3,
 			"baseChance": 12.5,
@@ -4405,7 +5446,8 @@
 			"xpPerItem": 10,
 			"levelReq": 60
 		},
-		"minecraft:bedrock": {
+		"minecraft:bedrock":
+		{
 			"salvageItem": "minecraft:nether_star",
 			"salvageMax": 666,
 			"baseChance": 0.01,
@@ -4414,7 +5456,8 @@
 			"xpPerItem": 200,
 			"levelReq": 999
 		},
-		"minecraft:emerald_ore": {
+		"minecraft:emerald_ore":
+		{
 			"salvageItem": "minecraft:zombie_villager_spawn_egg",
 			"salvageMax": 1,
 			"baseChance": 25,
@@ -4423,7 +5466,8 @@
 			"xpPerItem": 50,
 			"levelReq": 1
 		},
-		"minecraft:prismarine_bricks": {
+		"minecraft:prismarine_bricks":
+		{
 			"salvageItem": "minecraft:prismarine_shard",
 			"salvageMax": 9,
 			"baseChance": 10,
@@ -4432,7 +5476,8 @@
 			"xpPerItem": 1,
 			"levelReq": 15
 		},
-		"minecraft:dark_prismarine": {
+		"minecraft:dark_prismarine":
+		{
 			"salvageItem": "minecraft:prismarine_shard",
 			"salvageMax": 8,
 			"baseChance": 10,
@@ -4441,7 +5486,8 @@
 			"xpPerItem": 1,
 			"levelReq": 15
 		},
-		"minecraft:prismarine": {
+		"minecraft:prismarine":
+		{
 			"salvageItem": "minecraft:prismarine_shard",
 			"salvageMax": 4,
 			"baseChance": 10,
@@ -4450,7 +5496,8 @@
 			"xpPerItem": 1,
 			"levelReq": 15
 		},
-		"minecraft:sea_lantern": {
+		"minecraft:sea_lantern":
+		{
 			"salvageItem": "minecraft:prismarine_crystals",
 			"salvageMax": 5,
 			"baseChance": 10,
@@ -4459,7 +5506,8 @@
 			"xpPerItem": 2,
 			"levelReq": 15
 		},
-		"minecraft:flower_pot": {
+		"minecraft:flower_pot":
+		{
 			"salvageItem": "minecraft:brick",
 			"salvageMax": 3,
 			"baseChance": 20,
@@ -4468,7 +5516,8 @@
 			"xpPerItem": 2,
 			"levelReq": 3
 		},
-		"minecraft:bricks": {
+		"minecraft:bricks":
+		{
 			"salvageItem": "minecraft:brick",
 			"salvageMax": 4,
 			"baseChance": 20,
@@ -4477,7 +5526,8 @@
 			"xpPerItem": 2,
 			"levelReq": 3
 		},
-		"minecraft:honeycomb_block": {
+		"minecraft:honeycomb_block":
+		{
 			"salvageItem": "minecraft:honeycomb",
 			"salvageMax": 4,
 			"baseChance": 20,
@@ -4486,7 +5536,8 @@
 			"xpPerItem": 2,
 			"levelReq": 10
 		},
-		"minecraft:scaffolding": {
+		"minecraft:scaffolding":
+		{
 			"salvageItem": "minecraft:bamboo",
 			"salvageMax": 1,
 			"baseChance": 50,
@@ -4495,7 +5546,8 @@
 			"xpPerItem": 2,
 			"levelReq": 12
 		},
-		"minecraft:quartz_block": {
+		"minecraft:quartz_block":
+		{
 			"salvageItem": "minecraft:quartz",
 			"salvageMax": 4,
 			"baseChance": 20,
@@ -4504,7 +5556,8 @@
 			"xpPerItem": 1.5,
 			"levelReq": 15
 		},
-		"minecraft:daylight_detector": {
+		"minecraft:daylight_detector":
+		{
 			"salvageItem": "minecraft:quartz",
 			"salvageMax": 3,
 			"baseChance": 20,
@@ -4513,7 +5566,8 @@
 			"xpPerItem": 4.5,
 			"levelReq": 15
 		},
-		"minecraft:lead": {
+		"minecraft:lead":
+		{
 			"salvageItem": "minecraft:string",
 			"salvageMax": 2,
 			"baseChance": 50,
@@ -4522,7 +5576,8 @@
 			"xpPerItem": 7.5,
 			"levelReq": 8
 		},
-		"minecraft:nether_wart_block": {
+		"minecraft:nether_wart_block":
+		{
 			"salvageItem": "minecraft:nether_wart",
 			"salvageMax": 9,
 			"baseChance": 20,
@@ -4531,7 +5586,8 @@
 			"xpPerItem": 2,
 			"levelReq": 10
 		},
-		"minecraft:dragon_head": {
+		"minecraft:dragon_head":
+		{
 			"salvageItem": "minecraft:dragon_egg",
 			"salvageMax": 1,
 			"baseChance": 10,
@@ -4540,7 +5596,8 @@
 			"xpPerItem": 100,
 			"levelReq": 50
 		},
-		"minecraft:redstone_torch": {
+		"minecraft:redstone_torch":
+		{
 			"salvageItem": "minecraft:redstone",
 			"salvageMax": 1,
 			"baseChance": 60,
@@ -4549,7 +5606,8 @@
 			"xpPerItem": 1.5,
 			"levelReq": 5
 		},
-		"minecraft:trapped_chest": {
+		"minecraft:trapped_chest":
+		{
 			"salvageItem": "minecraft:chest",
 			"salvageMax": 1,
 			"baseChance": 30,
@@ -4558,7 +5616,8 @@
 			"xpPerItem": 1.5,
 			"levelReq": 5
 		},
-		"minecraft:chest": {
+		"minecraft:chest":
+		{
 			"salvageItem": "minecraft:oak_planks",
 			"salvageMax": 8,
 			"baseChance": 40,
@@ -4567,7 +5626,8 @@
 			"xpPerItem": 0.8,
 			"levelReq": 10
 		},
-		"minecraft:packed_ice": {
+		"minecraft:packed_ice":
+		{
 			"salvageItem": "minecraft:ice",
 			"salvageMax": 9,
 			"baseChance": 50,
@@ -4576,7 +5636,8 @@
 			"xpPerItem": 0.1,
 			"levelReq": 1
 		},
-		"minecraft:blue_ice": {
+		"minecraft:blue_ice":
+		{
 			"salvageItem": "minecraft:packed_ice",
 			"salvageMax": 9,
 			"baseChance": 35,
@@ -4585,7 +5646,8 @@
 			"xpPerItem": 0.5,
 			"levelReq": 5
 		},
-		"minecraft:magma_block": {
+		"minecraft:magma_block":
+		{
 			"salvageItem": "minecraft:magma_cream",
 			"salvageMax": 4,
 			"baseChance": 15,
@@ -4594,7 +5656,8 @@
 			"xpPerItem": 0.5,
 			"levelReq": 30
 		},
-		"minecraft:sandstone": {
+		"minecraft:sandstone":
+		{
 			"salvageItem": "minecraft:sand",
 			"salvageMax": 4,
 			"baseChance": 15,
@@ -4603,7 +5666,8 @@
 			"xpPerItem": 0.5,
 			"levelReq": 5
 		},
-		"minecraft:red_sandstone": {
+		"minecraft:red_sandstone":
+		{
 			"salvageItem": "minecraft:red_sand",
 			"salvageMax": 4,
 			"baseChance": 15,
@@ -4612,7 +5676,8 @@
 			"xpPerItem": 0.5,
 			"levelReq": 5
 		},
-		"minecraft:soul_sand": {
+		"minecraft:soul_sand":
+		{
 			"salvageItem": "minecraft:nether_wart",
 			"salvageMax": 1,
 			"baseChance": 0.5,
@@ -4621,7 +5686,8 @@
 			"xpPerItem": 0.5,
 			"levelReq": 25
 		},
-		"minecraft:conduit": {
+		"minecraft:conduit":
+		{
 			"salvageItem": "minecraft:heart_of_the_sea",
 			"salvageMax": 1,
 			"baseChance": 10,
@@ -4630,7 +5696,8 @@
 			"xpPerItem": 50,
 			"levelReq": 25
 		},
-		"minecraft:bone_block": {
+		"minecraft:bone_block":
+		{
 			"salvageItem": "minecraft:bone",
 			"salvageMax": 3,
 			"baseChance": 20,
@@ -4639,7 +5706,8 @@
 			"xpPerItem": 2,
 			"levelReq": 8
 		},
-		"minecraft:melon": {
+		"minecraft:melon":
+		{
 			"salvageItem": "minecraft:melon_slice",
 			"salvageMax": 9,
 			"baseChance": 30,
@@ -4648,7 +5716,8 @@
 			"xpPerItem": 0.35,
 			"levelReq": 3
 		},
-		"minecraft:emerald": {
+		"minecraft:emerald":
+		{
 			"salvageItem": "minecraft:experience_bottle",
 			"salvageMax": 16,
 			"baseChance": 1,
@@ -4657,7 +5726,8 @@
 			"xpPerItem": 1,
 			"levelReq": 15
 		},
-		"minecraft:glass_bottle": {
+		"minecraft:glass_bottle":
+		{
 			"salvageItem": "minecraft:glass",
 			"salvageMax": 1,
 			"baseChance": 20,
@@ -4666,7 +5736,8 @@
 			"xpPerItem": 0.35,
 			"levelReq": 3
 		},
-		"minecraft:andesite": {
+		"minecraft:andesite":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 1,
 			"baseChance": 50,
@@ -4675,7 +5746,8 @@
 			"xpPerItem": 0.1,
 			"levelReq": 1
 		},
-		"minecraft:granite": {
+		"minecraft:granite":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 1,
 			"baseChance": 50,
@@ -4684,7 +5756,8 @@
 			"xpPerItem": 0.1,
 			"levelReq": 1
 		},
-		"minecraft:diorite": {
+		"minecraft:diorite":
+		{
 			"salvageItem": "minecraft:cobblestone",
 			"salvageMax": 1,
 			"baseChance": 50,
@@ -4694,8 +5767,10 @@
 			"levelReq": 1
 		}
 	},
-	"fish_pool": {
-		"minecraft:leather_helmet": {
+	"fish_pool":
+	{
+		"minecraft:leather_helmet":
+		{
 			"startWeight": 100,
 			"startLevel": 5,
 			"endWeight": 10,
@@ -4703,7 +5778,8 @@
 			"xp": 35,
 			"enchantLevelReq": 1
 		},
-		"minecraft:leather_chestplate": {
+		"minecraft:leather_chestplate":
+		{
 			"startWeight": 100,
 			"startLevel": 5,
 			"endWeight": 10,
@@ -4711,7 +5787,8 @@
 			"xp": 35,
 			"enchantLevelReq": 1
 		},
-		"minecraft:leather_leggings": {
+		"minecraft:leather_leggings":
+		{
 			"startWeight": 100,
 			"startLevel": 5,
 			"endWeight": 10,
@@ -4719,7 +5796,8 @@
 			"xp": 35,
 			"enchantLevelReq": 1
 		},
-		"minecraft:leather_boots": {
+		"minecraft:leather_boots":
+		{
 			"startWeight": 100,
 			"startLevel": 5,
 			"endWeight": 10,
@@ -4727,7 +5805,8 @@
 			"xp": 35,
 			"enchantLevelReq": 1
 		},
-		"minecraft:wooden_shovel": {
+		"minecraft:wooden_shovel":
+		{
 			"startWeight": 100,
 			"startLevel": 1,
 			"endWeight": 5,
@@ -4735,7 +5814,8 @@
 			"xp": 15,
 			"enchantLevelReq": 1
 		},
-		"minecraft:wooden_pickaxe": {
+		"minecraft:wooden_pickaxe":
+		{
 			"startWeight": 100,
 			"startLevel": 1,
 			"endWeight": 5,
@@ -4743,7 +5823,8 @@
 			"xp": 15,
 			"enchantLevelReq": 1
 		},
-		"minecraft:wooden_axe": {
+		"minecraft:wooden_axe":
+		{
 			"startWeight": 100,
 			"startLevel": 1,
 			"endWeight": 5,
@@ -4751,7 +5832,8 @@
 			"xp": 15,
 			"enchantLevelReq": 1
 		},
-		"minecraft:wooden_sword": {
+		"minecraft:wooden_sword":
+		{
 			"startWeight": 100,
 			"startLevel": 1,
 			"endWeight": 5,
@@ -4759,7 +5841,8 @@
 			"xp": 15,
 			"enchantLevelReq": 1
 		},
-		"minecraft:wooden_hoe": {
+		"minecraft:wooden_hoe":
+		{
 			"startWeight": 100,
 			"startLevel": 1,
 			"endWeight": 10,
@@ -4767,7 +5850,8 @@
 			"xp": 15,
 			"enchantLevelReq": 1
 		},
-		"minecraft:bow": {
+		"minecraft:bow":
+		{
 			"startWeight": 100,
 			"startLevel": 1,
 			"endWeight": 25,
@@ -4775,7 +5859,8 @@
 			"xp": 35,
 			"enchantLevelReq": 10
 		},
-		"minecraft:fishing_rod": {
+		"minecraft:fishing_rod":
+		{
 			"startWeight": 40,
 			"startLevel": 1,
 			"endWeight": 100,
@@ -4783,7 +5868,8 @@
 			"xp": 35,
 			"enchantLevelReq": 10
 		},
-		"minecraft:chainmail_helmet": {
+		"minecraft:chainmail_helmet":
+		{
 			"startWeight": 50,
 			"startLevel": 15,
 			"endWeight": 15,
@@ -4791,7 +5877,8 @@
 			"xp": 35,
 			"enchantLevelReq": 10
 		},
-		"minecraft:chainmail_chestplate": {
+		"minecraft:chainmail_chestplate":
+		{
 			"startWeight": 50,
 			"startLevel": 15,
 			"endWeight": 15,
@@ -4799,7 +5886,8 @@
 			"xp": 35,
 			"enchantLevelReq": 10
 		},
-		"minecraft:chainmail_leggings": {
+		"minecraft:chainmail_leggings":
+		{
 			"startWeight": 50,
 			"startLevel": 15,
 			"endWeight": 15,
@@ -4807,7 +5895,8 @@
 			"xp": 35,
 			"enchantLevelReq": 10
 		},
-		"minecraft:chainmail_boots": {
+		"minecraft:chainmail_boots":
+		{
 			"startWeight": 50,
 			"startLevel": 15,
 			"endWeight": 15,
@@ -4815,7 +5904,8 @@
 			"xp": 35,
 			"enchantLevelReq": 10
 		},
-		"minecraft:iron_helmet": {
+		"minecraft:iron_helmet":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4823,7 +5913,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:iron_chestplate": {
+		"minecraft:iron_chestplate":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4831,7 +5922,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:iron_leggings": {
+		"minecraft:iron_leggings":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4839,7 +5931,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:iron_boots": {
+		"minecraft:iron_boots":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4847,7 +5940,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:iron_shovel": {
+		"minecraft:iron_shovel":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4855,7 +5949,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:iron_pickaxe": {
+		"minecraft:iron_pickaxe":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4863,7 +5958,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:iron_axe": {
+		"minecraft:iron_axe":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4871,7 +5967,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:iron_sword": {
+		"minecraft:iron_sword":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4879,7 +5976,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:iron_hoe": {
+		"minecraft:iron_hoe":
+		{
 			"startWeight": 75,
 			"startLevel": 20,
 			"endWeight": 20,
@@ -4887,7 +5985,8 @@
 			"xp": 45,
 			"enchantLevelReq": 20
 		},
-		"minecraft:golden_helmet": {
+		"minecraft:golden_helmet":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4895,7 +5994,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:golden_chestplate": {
+		"minecraft:golden_chestplate":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4903,7 +6003,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:golden_leggings": {
+		"minecraft:golden_leggings":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4911,7 +6012,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:golden_boots": {
+		"minecraft:golden_boots":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4919,7 +6021,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:golden_shovel": {
+		"minecraft:golden_shovel":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4927,7 +6030,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:golden_pickaxe": {
+		"minecraft:golden_pickaxe":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4935,7 +6039,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:golden_axe": {
+		"minecraft:golden_axe":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4943,7 +6048,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:golden_sword": {
+		"minecraft:golden_sword":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4951,7 +6057,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:golden_hoe": {
+		"minecraft:golden_hoe":
+		{
 			"startWeight": 5,
 			"startLevel": 35,
 			"endWeight": 35,
@@ -4959,7 +6066,8 @@
 			"xp": 55,
 			"enchantLevelReq": 45
 		},
-		"minecraft:diamond_helmet": {
+		"minecraft:diamond_helmet":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -4967,7 +6075,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:diamond_chestplate": {
+		"minecraft:diamond_chestplate":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -4975,7 +6084,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:diamond_leggings": {
+		"minecraft:diamond_leggings":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -4983,7 +6093,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:diamond_boots": {
+		"minecraft:diamond_boots":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -4991,7 +6102,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:diamond_shovel": {
+		"minecraft:diamond_shovel":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -4999,7 +6111,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:diamond_pickaxe": {
+		"minecraft:diamond_pickaxe":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -5007,7 +6120,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:diamond_axe": {
+		"minecraft:diamond_axe":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -5015,7 +6129,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:diamond_sword": {
+		"minecraft:diamond_sword":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -5023,7 +6138,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:diamond_hoe": {
+		"minecraft:diamond_hoe":
+		{
 			"startWeight": 0,
 			"startLevel": 50,
 			"endWeight": 25,
@@ -5031,7 +6147,8 @@
 			"xp": 150,
 			"enchantLevelReq": 60
 		},
-		"minecraft:netherite_helmet": {
+		"minecraft:netherite_helmet":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5039,7 +6156,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:netherite_chestplate": {
+		"minecraft:netherite_chestplate":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5047,7 +6165,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:netherite_leggings": {
+		"minecraft:netherite_leggings":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5055,7 +6174,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:netherite_boots": {
+		"minecraft:netherite_boots":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5063,7 +6183,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:netherite_shovel": {
+		"minecraft:netherite_shovel":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5071,7 +6192,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:netherite_pickaxe": {
+		"minecraft:netherite_pickaxe":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5079,7 +6201,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:netherite_axe": {
+		"minecraft:netherite_axe":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5087,7 +6210,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:netherite_sword": {
+		"minecraft:netherite_sword":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5095,7 +6219,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:netherite_hoe": {
+		"minecraft:netherite_hoe":
+		{
 			"startWeight": 0,
 			"startLevel": 100,
 			"endWeight": 3,
@@ -5103,7 +6228,8 @@
 			"xp": 350,
 			"enchantLevelReq": 120
 		},
-		"minecraft:kelp": {
+		"minecraft:kelp":
+		{
 			"startWeight": 500,
 			"startLevel": 1,
 			"endWeight": 25,
@@ -5112,7 +6238,8 @@
 			"minCount": 5,
 			"maxCount": 64
 		},
-		"minecraft:lily_pad": {
+		"minecraft:lily_pad":
+		{
 			"startWeight": 500,
 			"startLevel": 1,
 			"endWeight": 25,
@@ -5121,7 +6248,8 @@
 			"minCount": 5,
 			"maxCount": 24
 		},
-		"minecraft:string": {
+		"minecraft:string":
+		{
 			"startWeight": 200,
 			"startLevel": 1,
 			"endWeight": 15,
@@ -5130,7 +6258,8 @@
 			"minCount": 5,
 			"maxCount": 32
 		},
-		"minecraft:heart_of_the_sea": {
+		"minecraft:heart_of_the_sea":
+		{
 			"startWeight": 1,
 			"startLevel": 1,
 			"endWeight": 1,
@@ -5139,7 +6268,8 @@
 			"minCount": 1,
 			"maxCount": 1
 		},
-		"minecraft:nautilus_shell": {
+		"minecraft:nautilus_shell":
+		{
 			"startWeight": 1,
 			"startLevel": 1,
 			"endWeight": 5,
@@ -5148,7 +6278,8 @@
 			"minCount": 1,
 			"maxCount": 3
 		},
-		"minecraft:nether_star": {
+		"minecraft:nether_star":
+		{
 			"startWeight": 0,
 			"startLevel": 200,
 			"endWeight": 1,
@@ -5158,175 +6289,202 @@
 			"maxCount": 1
 		}
 	},
-	"fish_enchant_pool": {
-		"minecraft:bane_of_arthropods": {
+	"fish_enchant_pool":
+	{
+		"minecraft:bane_of_arthropods":
+		{
 			"levelReq": 15,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 90,
 			"maxLevel": 10
 		},
-		"minecraft:depth_strider": {
+		"minecraft:depth_strider":
+		{
 			"levelReq": 20,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 90,
 			"maxLevel": 5
 		},
-		"minecraft:efficiency": {
+		"minecraft:efficiency":
+		{
 			"levelReq": 25,
 			"levelPerLevel": 30,
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"maxLevel": 10
 		},
-		"minecraft:feather_falling": {
+		"minecraft:feather_falling":
+		{
 			"levelReq": 5,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 85,
 			"maxLevel": 5
 		},
-		"minecraft:fortune": {
+		"minecraft:fortune":
+		{
 			"levelReq": 35,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 75,
 			"maxLevel": 5
 		},
-		"minecraft:frost_walker": {
+		"minecraft:frost_walker":
+		{
 			"levelReq": 25,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"maxLevel": 5
 		},
-		"minecraft:looting": {
+		"minecraft:looting":
+		{
 			"levelReq": 35,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 75,
 			"maxLevel": 5
 		},
-		"minecraft:luck_of_the_sea": {
+		"minecraft:luck_of_the_sea":
+		{
 			"levelReq": 15,
 			"levelPerLevel": 15,
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"maxLevel": 5
 		},
-		"minecraft:lure": {
+		"minecraft:lure":
+		{
 			"levelReq": 20,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 85,
 			"maxLevel": 5
 		},
-		"minecraft:mending": {
+		"minecraft:mending":
+		{
 			"levelReq": 50,
 			"chancePerLevel": 1,
 			"maxChance": 50
 		},
-		"minecraft:silk_touch": {
+		"minecraft:silk_touch":
+		{
 			"levelReq": 40,
 			"chancePerLevel": 1,
 			"maxChance": 50
 		},
-		"minecraft:channeling": {
+		"minecraft:channeling":
+		{
 			"levelReq": 35,
 			"chancePerLevel": 1,
 			"maxChance": 50
 		},
-		"minecraft:multishot": {
+		"minecraft:multishot":
+		{
 			"levelReq": 35,
 			"chancePerLevel": 1,
 			"maxChance": 50
 		},
-		"minecraft:projectile_protection": {
+		"minecraft:projectile_protection":
+		{
 			"levelReq": 15,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 85,
 			"maxLevel": 8
 		},
-		"minecraft:blast_protection": {
+		"minecraft:blast_protection":
+		{
 			"levelReq": 25,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"maxLevel": 8
 		},
-		"minecraft:protection": {
+		"minecraft:protection":
+		{
 			"levelReq": 20,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 75,
 			"maxLevel": 8
 		},
-		"minecraft:sharpness": {
+		"minecraft:sharpness":
+		{
 			"levelReq": 20,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"maxLevel": 8
 		},
-		"minecraft:sweeping": {
+		"minecraft:sweeping":
+		{
 			"levelReq": 15,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 85,
 			"maxLevel": 5
 		},
-		"minecraft:smite": {
+		"minecraft:smite":
+		{
 			"levelReq": 15,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 90,
 			"maxLevel": 5
 		},
-		"minecraft:thorns": {
+		"minecraft:thorns":
+		{
 			"levelReq": 15,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 85,
 			"maxLevel": 8
 		},
-		"minecraft:unbreaking": {
+		"minecraft:unbreaking":
+		{
 			"levelReq": 15,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 75,
 			"maxLevel": 5
 		},
-		"minecraft:quick_charge": {
+		"minecraft:quick_charge":
+		{
 			"levelReq": 20,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"maxLevel": 5
 		},
-		"minecraft:power": {
+		"minecraft:power":
+		{
 			"levelReq": 20,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"maxLevel": 8
 		},
-		"minecraft:punch": {
+		"minecraft:punch":
+		{
 			"levelReq": 15,
 			"levelPerLevel": 20,
 			"chancePerLevel": 1,
 			"maxChance": 90,
 			"maxLevel": 10
 		},
-		"minecraft:piercing": {
+		"minecraft:piercing":
+		{
 			"levelReq": 35,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"maxLevel": 7
 		},
-		"minecraft:riptide": {
+		"minecraft:riptide":
+		{
 			"levelReq": 25,
 			"levelPerLevel": 25,
 			"chancePerLevel": 1,
@@ -5334,13 +6492,17 @@
 			"maxLevel": 7
 		}
 	},
-	"level_up_command": {
-		"fishing": {
+	"level_up_command":
+	{
+		"fishing":
+		{
 			"give >player< minecraft:cookie >level<": 100
 		}
 	},
-	"vein_blacklist": {
-		"all_dimensions": {
+	"vein_blacklist":
+	{
+		"all_dimensions":
+		{
 			"minecraft:furnace": 0,
 			"minecraft:chest": 0,
 			"minecraft:trapped_chest": 0,
@@ -5349,30 +6511,39 @@
 			"minecraft:dropper": 0,
 			"minecraft:dispenser": 0
 		},
-		"minecraft:overworld": {
+		"minecraft:overworld":
+		{
 			"minecraft:stone": 0
 		},
-		"minecraft:the_nether": {
+		"minecraft:the_nether":
+		{
 			"minecraft:netherrack": 0
 		},
-		"minecraft:the_end": {
+		"minecraft:the_end":
+		{
 			"minecraft:end_stone": 0
 		}
 	},
-	"trigger_xp": {
-		"doomweapon.consume.inmortal": {
+	"trigger_xp":
+	{
+		"doomweapon.consume.inmortal":
+		{
 			"magic": 90
 		},
-		"doomweapon.consume.invisible": {
+		"doomweapon.consume.invisible":
+		{
 			"magic": 35
 		},
-		"doomweapon.consume.mega": {
+		"doomweapon.consume.mega":
+		{
 			"magic": 105
 		},
-		"doomweapon.consume.power": {
+		"doomweapon.consume.power":
+		{
 			"magic": 60
 		},
-		"doomweapon.consume.soul": {
+		"doomweapon.consume.soul":
+		{
 			"magic": 50
 		}
 	}
