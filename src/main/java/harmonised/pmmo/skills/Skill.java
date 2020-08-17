@@ -39,7 +39,30 @@ public enum Skill
     HUNTER( 17 ),
     FLETCHING( 18 ),
     TAMING( 19 ),
-    ENGINEERING( 20 );
+    ENGINEERING( 20 ),
+    BLOOD_MAGIC( 21 ),
+    ASTRAL_MAGIC( 22 ),
+    GOOD_MAGIC( 23 ),
+    EVIL_MAGIC( 24 ),
+    ARCANE_MAGIC( 25 ),
+    ELEMENTAL( 26 ),
+    EARTH( 27 ),
+    WATER( 28 ),
+    AIR( 29 ),
+    FIRE( 30 ),
+    LIGHTNING( 31 ),
+    VOID( 32 ),
+    THAUMATIC( 33 ),
+    SUMMONING( 34 ),
+    INVENTION( 35 ),
+    RUNECRAFTING( 36 ),
+    PRAYER( 37 ),
+    COOKING( 38 ),
+    FIREMAKING( 39 ),
+    AFKING( 40 ),
+    TRADING( 41 ),
+    BANKSTANDING( 42 ),
+    SAILING( 43 );
 
     public static final Map<Skill, Integer > skillMap = new HashMap<>();
     public static final Map< Integer, Skill > intMap = new HashMap<>();

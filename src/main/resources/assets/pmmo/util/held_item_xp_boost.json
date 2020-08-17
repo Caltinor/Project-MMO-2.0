@@ -1,0 +1,43 @@
+{
+	"minecraft:golden_pickaxe":
+	{
+		"mining": 50
+	},
+	"minecraft:golden_shovel":
+	{
+		"excavation": 50
+	},
+	"minecraft:golden_axe":
+	{
+		"woodcutting": 50,
+		"combat": 50
+	},
+	"minecraft:golden_sword":
+	{
+		"combat": 50
+	},
+	"minecraft:golden_hoe":
+	{
+		"farming": 20
+	},
+	"minecraft:netherite_hoe":
+	{
+		"farming": 15
+	},
+	"minecraft:diamond_hoe":
+	{
+		"farming": 10
+	},
+	"minecraft:iron_hoe":
+	{
+		"farming": 5
+	},
+	"minecraft:stone_hoe":
+	{
+		"farming": 2.5
+	},
+	"minecraft:wooden_hoe":
+	{
+		"farming": 1
+	}
+}

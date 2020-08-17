@@ -40,15 +40,6 @@ public class PrefCommand
             }
         }
 
-        for( String element : PmmoCommand.suggestGui )
-        {
-            if( args[2].toLowerCase().equals( element.toLowerCase() ) )
-            {
-                match = element;
-                matched = true;
-            }
-        }
-
         if( matched )
         {
             if( value != null )

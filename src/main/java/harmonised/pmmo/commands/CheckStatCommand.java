@@ -39,7 +39,7 @@ public class CheckStatCommand
                 else
                 {
                     level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).func_240703_c_( XP.skillStyle.get( skill ) ) ), false );
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).func_240703_c_( XP.getSkillStyle( skill ) ) ), false );
                 }
 
                 //EXTRA INFO
@@ -53,7 +53,7 @@ public class CheckStatCommand
                         if( fishPoolChance > fishPoolMaxChance )
                             fishPoolChance = fishPoolMaxChance;
 
-                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).func_240703_c_( XP.skillStyle.get( skill ) ), false );
+                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).func_240703_c_( XP.getSkillStyle( skill ) ), false );
                         break;
                 }
             }

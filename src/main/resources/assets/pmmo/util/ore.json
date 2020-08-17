@@ -1,0 +1,38 @@
+{
+	"minecraft:nether_quartz_ore":
+	{
+		"extraChance": 0.55
+	},
+	"minecraft:coal_ore":
+	{
+		"extraChance": 1
+	},
+	"minecraft:iron_ore":
+	{
+		"extraChance": 0.75
+	},
+	"minecraft:gold_ore":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:diamond_ore":
+	{
+		"extraChance": 0.33
+	},
+	"minecraft:redstone_ore":
+	{
+		"extraChance": 2
+	},
+	"minecraft:lapis_ore":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:emerald_ore":
+	{
+		"extraChance": 0.75
+	},
+	"minecraft:glowstone":
+	{
+		"extraChance": 2
+	}
+}

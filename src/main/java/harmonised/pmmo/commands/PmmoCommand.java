@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import harmonised.pmmo.skills.Skill;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -11,30 +12,12 @@ import net.minecraft.command.arguments.EntityArgument;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
+
 public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    public static String[] suggestSkill = { "Power",
-                                            "Mining",
-                                            "Building",
-                                            "Excavation",
-                                            "Woodcutting",
-                                            "Farming",
-                                            "Agility",
-                                            "Endurance",
-                                            "Combat",
-                                            "Archery",
-                                            "Smithing",
-                                            "Flying",
-                                            "Swimming",
-                                            "Fishing",
-                                            "Crafting",
-                                            "Magic",
-                                            "Slayer",
-                                            "Hunter",
-                                            "Fletching",
-                                            "Taming",
-                                            "Engineering" };
+    public static String[] suggestSkill;
     public static String[] levelOrXp = { "level", "xp" };
     public static String[] suggestPref = { "maxExtraReachBoost",
                                            "maxSpeedBoost",
@@ -43,29 +26,21 @@ public class PmmoCommand
                                            "maxExtraHeartBoost",
                                            "maxExtraDamageBoost",
                                            "wipeAllSkillsUponDeathPermanently" };
-    public static String[] suggestGui = { "barOffsetX",
-                                          "barOffsetY",
-                                          "veinBarOffsetX",
-                                          "veinBarOffsetY",
-                                          "xpDropOffsetX",
-                                          "xpDropOffsetY",
-                                          "xpDropSpawnDistance",
-                                          "xpDropOpacityPerTime",
-                                          "xpDropMaxOpacity",
-                                          "xpDropDecayAge",
-                                          "minXpGrow",
-                                          "showXpDrops",
-                                          "stackXpDrops",
-                                          "xpDropsAttachedToBar",
-                                          "xpBarAlwaysOn",
-                                          "xpLeftDisplayAlwaysOn",
-                                          "lvlUpScreenshot",
-                                          "lvlUpScreenshotShowSkills" };
     public static String[] suggestSearchRegistry = { "item",
                                                      "biome",
                                                      "enchant",
                                                      "potionEffect",
                                                      "entity" };
+    public static void init()
+    {
+        suggestSkill = new String[ Skill.skillMap.size() ];
+        int i = 0;
+        for( Skill skill : Skill.skillMap.keySet() )
+        {
+            suggestSkill[ i++ ] = skill.toString().toLowerCase();
+        }
+    }
+
     public static void register( CommandDispatcher<CommandSource> dispatcher )
     {
 //        int i = 0;

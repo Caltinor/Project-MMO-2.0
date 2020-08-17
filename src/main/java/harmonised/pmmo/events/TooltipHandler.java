@@ -298,7 +298,7 @@ public class TooltipHandler
                     if( value < 0 )
                         tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " " + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).func_240703_c_( XP.textStyle.get( "red" ) ) );
                     else
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " +" + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).func_240703_c_( XP.skillStyle.get( Skill.getSkill( key ) ) ) );
+                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplayPercentage", " +" + DP.dp( value ), new TranslationTextComponent( "pmmo." + key ).getString() ).func_240703_c_( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
                 }
             }
         }

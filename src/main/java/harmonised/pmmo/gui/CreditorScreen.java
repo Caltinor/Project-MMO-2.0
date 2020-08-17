@@ -168,6 +168,7 @@ public class CreditorScreen extends Screen
         uuidName.put( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a", "Lucifer#0666" );
         uuidName.put( "8eb0578d-c113-49d3-abf6-a6d36f6d1116", "Tyrius#0842" );
         uuidName.put( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa", "didis54#5815" );
+        uuidName.put( "0bc51f06-9906-41ea-9fb4-7e9be169c980", "stressindicator#8819" );
 //        uuidName.put( "3066eaa7-6387-489d-b04b-cce7b505ee87", "neothiamin#1798" );
 //        uuidName.put( "1951c4ee-52e1-421c-927b-43fb941add98", "BusanDaek#3970" );
 //        uuidName.put( "d3167127-daa9-485b-ab14-c842c888e087", "deezer911#5693" );
@@ -202,18 +203,23 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.helpedFillingInModValues", "Botania" ).getString() );
 
         /////////IRON///////////////
-        //DIDIS54
         PlayerConnectedHandler.ironPatreons.forEach( a ->
         {
             colors.put( uuidName.get( a.toString() ), 0xeeeeee );
             creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
         } );
+        //DIDIS54
         list = creditorsInfo.get( "didis54#5815" );
         list.add( "didis54#5815" );
         list.add( "First Iron Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.helpedTranslating", "French" ).getString() );
+
+        //STRESSINDICATOR
+        list = creditorsInfo.get( "stressindicator#8819" );
+        list.add( "stressindicator#8819" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/08/2020" ).getString() );
 
         //NEOTHIAMIN
         list = new ArrayList<>();

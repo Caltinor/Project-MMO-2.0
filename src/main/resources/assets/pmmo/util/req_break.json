@@ -1,0 +1,62 @@
+{
+	"minecraft:bedrock":
+	{
+		"mining": 999
+	},
+	"minecraft:command_block":
+	{
+		"mining": 999
+	},
+	"minecraft:barrier":
+	{
+		"mining": 999
+	},
+	"info_oresandmetals:light_animica_info_ore":
+	{
+		"mining": 90
+	},
+	"info_oresandmetals:dark_animica_info_ore":
+	{
+		"mining": 90
+	},
+	"info_oresandmetals:banite_info_ore":
+	{
+		"mining": 80
+	},
+	"info_oresandmetals:necrite_info_ore":
+	{
+		"mining": 70
+	},
+	"info_oresandmetals:phasmatite_info_ore":
+	{
+		"mining": 70
+	},
+	"info_oresandmetals:orichalcite_info_ore":
+	{
+		"mining": 60
+	},
+	"info_oresandmetals:drakolith_info_ore":
+	{
+		"mining": 60
+	},
+	"info_oresandmetals:runite_info_ore":
+	{
+		"mining": 50
+	},
+	"info_oresandmetals:adamantite_info_ore":
+	{
+		"mining": 35
+	},
+	"info_oresandmetals:mithril_info_ore":
+	{
+		"mining": 25
+	},
+	"info_oresandmetals:tin_info_ore":
+	{
+		"mining": 5
+	},
+	"info_oresandmetals:copper_info_ore":
+	{
+		"mining": 5
+	}
+}

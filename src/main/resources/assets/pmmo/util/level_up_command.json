@@ -1,0 +1,6 @@
+{
+	"fishing":
+	{
+		"give >player< minecraft:cookie >level<": 100
+	}
+}

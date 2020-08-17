@@ -88,7 +88,7 @@ public class ListButton extends Button
                 break;
 
             case STATS:
-                this.title = new TranslationTextComponent( "pmmo." + regKey ).func_240703_c_( XP.skillStyle.get(Skill.getSkill( regKey ) ) ).getString();
+                this.title = new TranslationTextComponent( "pmmo." + regKey ).func_240703_c_( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
                 break;
 
             default:

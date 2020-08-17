@@ -70,7 +70,7 @@ public class MessageLevelUp
                     if( otherPlayer.getUniqueID() != player.getUniqueID() )
                     {
                         CompoundNBT otherPrefsTag = XP.getPreferencesTag( otherPlayer );
-                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).func_240703_c_( XP.skillStyle.get( skill ) ), false );
+                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).func_240703_c_( XP.getSkillStyle( skill ) ), false );
                         if( milestoneLevelUpFirework )
                         {
                             if( !( otherPrefsTag.contains( "spawnFireworksCausedByOthers" ) && otherPrefsTag.getDouble( "spawnFireworksCausedByOthers" ) == 0 ) )

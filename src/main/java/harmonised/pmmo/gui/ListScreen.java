@@ -336,9 +336,9 @@ public class ListScreen extends Screen
                     {
                         for (Map.Entry<String, Object> entry : biomeBonusMap.entrySet()) {
                             if ( (double) entry.getValue() > 0 )
-                                skillText.add(new StringTextComponent( getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").func_240703_c_(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getString() ));
+                                skillText.add(new StringTextComponent( getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").func_240703_c_(XP.getSkillStyle(Skill.getSkill(entry.getKey()))).getString() ));
                             if ( (double) entry.getValue() < 0 )
-                                skillText.add(new StringTextComponent( getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), entry.getValue() + "%").func_240703_c_(XP.skillStyle.get(Skill.getSkill(entry.getKey()))).getString() ));
+                                skillText.add(new StringTextComponent( getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), entry.getValue() + "%").func_240703_c_(XP.getSkillStyle(Skill.getSkill(entry.getKey()))).getString() ));
                         }
                     }
 
@@ -693,7 +693,7 @@ public class ListScreen extends Screen
                     double curXp = XP.getXpOffline( skill, uuid );
                     double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
 
-                    button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).func_240703_c_( XP.skillStyle.get(Skill.getSkill( button.regKey ) ) ).getString();
+                    button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).func_240703_c_( XP.getSkillStyle( Skill.getSkill( button.regKey ) ) ).getString();
 
                     button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ).getString() ) );
                     if( skill.getLevel( player ) != Config.getConfig( "maxLevel" ) )

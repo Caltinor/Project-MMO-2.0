@@ -1,0 +1,24 @@
+{
+	"all_dimensions":
+	{
+		"minecraft:furnace": 0,
+		"minecraft:chest": 0,
+		"minecraft:trapped_chest": 0,
+		"minecraft:shulker_box": 0,
+		"minecraft:barrel": 0,
+		"minecraft:dropper": 0,
+		"minecraft:dispenser": 0
+	},
+	"minecraft:overworld":
+	{
+		"minecraft:stone": 0
+	},
+	"minecraft:the_nether":
+	{
+		"minecraft:netherrack": 0
+	},
+	"minecraft:the_end":
+	{
+		"minecraft:end_stone": 0
+	}
+}

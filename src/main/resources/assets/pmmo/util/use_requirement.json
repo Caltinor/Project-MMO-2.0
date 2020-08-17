@@ -1,0 +1,15 @@
+{
+	"minecraft:firework_rocket":
+	{
+		"flying": 5
+	},
+	"minecraft:stonecutter":
+	{
+		"crafting": 10,
+		"building": 10
+	},
+	"minecraft:enchanting_table":
+	{
+		"mining": 25
+	}
+}
