@@ -134,6 +134,7 @@ public class XP
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
 		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );		//DIDIS
+		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );		//STRESSINDICATOR
 ////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
 		materialHarvestTool.put( Material.ANVIL, "pickaxe" );		//PICKAXE
 		materialHarvestTool.put( Material.GLASS, "pickaxe" );
@@ -174,6 +175,11 @@ public class XP
 		materialHarvestTool.put( Material.WEB, "shears" );
 		materialHarvestTool.put( Material.CAKE, "shears" );
 		materialHarvestTool.put( Material.SPONGE, "shears" );
+	}
+
+	public static Style getSkillStyle( Skill skill )
+	{
+		return skillStyle.getOrDefault( skill, new Style() );
 	}
 
 	public static Skill getSkill( Material material )
@@ -1259,7 +1265,7 @@ public class XP
 		CompoundNBT l = new CompoundNBT();
 
 		int[] colors = new int[1];
-		colors[0] = skillColors.get( skill );
+		colors[0] = XP.getSkillColor( skill );
 //		int[] fadeColors = {0xff0000, 0x00ff00, 0x0000ff};
 
 		l.putInt( "Flicker", 1 );

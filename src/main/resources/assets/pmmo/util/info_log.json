@@ -1,0 +1,50 @@
+{
+	"minecraft:oak_info_log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:birch_info_log":
+	{
+		"extraChance": 0.85
+	},
+	"minecraft:spruce_info_log":
+	{
+		"extraChance": 0.65
+	},
+	"minecraft:jungle_info_log":
+	{
+		"extraChance": 0.55
+	},
+	"minecraft:dark_oak_info_log":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:acacia_info_log":
+	{
+		"extraChance": 1.25
+	},
+	"minecraft:oak_wood":
+	{
+		"extraChance": 1
+	},
+	"minecraft:birch_wood":
+	{
+		"extraChance": 0.85
+	},
+	"minecraft:spruce_wood":
+	{
+		"extraChance": 0.65
+	},
+	"minecraft:jungle_wood":
+	{
+		"extraChance": 0.55
+	},
+	"minecraft:dark_oak_wood":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:acacia_wood":
+	{
+		"extraChance": 1.25
+	}
+}

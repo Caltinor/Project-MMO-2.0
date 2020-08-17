@@ -44,6 +44,7 @@ public class ProjectMMOMod
 
 //        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
 
+        PmmoCommand.init();
         Config.init();
     }
 

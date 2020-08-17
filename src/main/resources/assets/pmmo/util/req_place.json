@@ -1,0 +1,52 @@
+{
+	"minecraft:enchanting_table":
+	{
+		"building": 25
+	},
+	"minecraft:bedrock":
+	{
+		"building": 999
+	},
+	"minecraft:command_block":
+	{
+		"building": 999
+	},
+	"minecraft:barrier":
+	{
+		"building": 999
+	},
+	"minecraft:scaffolding":
+	{
+		"building": 10
+	},
+	"minecraft:oak_sapling":
+	{
+		"farming": 5,
+		"woodcutting": 10
+	},
+	"minecraft:birch_sapling":
+	{
+		"farming": 10,
+		"woodcutting": 15
+	},
+	"minecraft:spruce_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"minecraft:jungle_sapling":
+	{
+		"farming": 20,
+		"woodcutting": 35
+	},
+	"minecraft:dark_oak_sapling":
+	{
+		"farming": 10,
+		"woodcutting": 25
+	},
+	"minecraft:acacia_sapling":
+	{
+		"farming": 5,
+		"woodcutting": 15
+	}
+}

@@ -1,0 +1,228 @@
+{
+	"minecraft:netherite_pickaxe":
+	{
+		"mining": 60
+	},
+	"minecraft:netherite_shovel":
+	{
+		"excavation": 60
+	},
+	"minecraft:netherite_axe":
+	{
+		"woodcutting": 60
+	},
+	"minecraft:netherite_hoe":
+	{
+		"farming": 40
+	},
+	"minecraft:diamond_pickaxe":
+	{
+		"mining": 40
+	},
+	"minecraft:diamond_shovel":
+	{
+		"excavation": 40
+	},
+	"minecraft:diamond_axe":
+	{
+		"woodcutting": 40
+	},
+	"minecraft:diamond_hoe":
+	{
+		"farming": 30
+	},
+	"minecraft:golden_pickaxe":
+	{
+		"mining": 30
+	},
+	"minecraft:golden_shovel":
+	{
+		"excavation": 30
+	},
+	"minecraft:golden_axe":
+	{
+		"woodcutting": 30
+	},
+	"minecraft:golden_hoe":
+	{
+		"farming": 50
+	},
+	"minecraft:iron_pickaxe":
+	{
+		"mining": 20
+	},
+	"minecraft:iron_shovel":
+	{
+		"excavation": 20
+	},
+	"minecraft:iron_axe":
+	{
+		"woodcutting": 20
+	},
+	"minecraft:iron_hoe":
+	{
+		"farming": 20
+	},
+	"minecraft:stone_pickaxe":
+	{
+		"mining": 10
+	},
+	"minecraft:stone_shovel":
+	{
+		"excavation": 10
+	},
+	"minecraft:stone_axe":
+	{
+		"woodcutting": 10
+	},
+	"minecraft:stone_hoe":
+	{
+		"farming": 10
+	},
+	"minecraft:wooden_pickaxe":
+	{
+		"mining": 1
+	},
+	"minecraft:wooden_shovel":
+	{
+		"excavation": 1
+	},
+	"minecraft:wooden_axe":
+	{
+		"woodcutting": 1
+	},
+	"minecraft:wooden_hoe":
+	{
+		"farming": 1
+	},
+	"oresandmetals:elder_rune_pickaxe":
+	{
+		"mining": 90
+	},
+	"oresandmetals:elder_rune_shovel":
+	{
+		"excavation": 90
+	},
+	"oresandmetals:elder_rune_axe":
+	{
+		"woodcutting": 90
+	},
+	"oresandmetals:banite_pickaxe":
+	{
+		"mining": 80
+	},
+	"oresandmetals:banite_shovel":
+	{
+		"excavation": 80
+	},
+	"oresandmetals:banite_axe":
+	{
+		"woodcutting": 80
+	},
+	"oresandmetals:necronium_pickaxe":
+	{
+		"mining": 70
+	},
+	"oresandmetals:necronium_shovel":
+	{
+		"excavation": 70
+	},
+	"oresandmetals:necronium_axe":
+	{
+		"woodcutting": 70
+	},
+	"oresandmetals:orikalkum_pickaxe":
+	{
+		"mining": 60
+	},
+	"oresandmetals:orikalkum_shovel":
+	{
+		"excavation": 60
+	},
+	"oresandmetals:orikalkum_axe":
+	{
+		"woodcutting": 60
+	},
+	"oresandmetals:rune_pickaxe":
+	{
+		"mining": 50
+	},
+	"oresandmetals:rune_shovel":
+	{
+		"excavation": 50
+	},
+	"oresandmetals:rune_axe":
+	{
+		"woodcutting": 50
+	},
+	"oresandmetals:adamant_pickaxe":
+	{
+		"mining": 35
+	},
+	"oresandmetals:adamant_shovel":
+	{
+		"excavation": 35
+	},
+	"oresandmetals:adamant_axe":
+	{
+		"woodcutting": 35
+	},
+	"oresandmetals:mithril_pickaxe":
+	{
+		"mining": 25
+	},
+	"oresandmetals:mithril_shovel":
+	{
+		"excavation": 25
+	},
+	"oresandmetals:mithril_axe":
+	{
+		"woodcutting": 25
+	},
+	"oresandmetals:steel_pickaxe":
+	{
+		"mining": 15
+	},
+	"oresandmetals:steel_shovel":
+	{
+		"excavation": 15
+	},
+	"oresandmetals:steel_axe":
+	{
+		"woodcutting": 15
+	},
+	"oresandmetals:bronze_pickaxe":
+	{
+		"mining": 5
+	},
+	"oresandmetals:bronze_shovel":
+	{
+		"excavation": 5
+	},
+	"oresandmetals:bronze_axe":
+	{
+		"woodcutting": 5
+	},
+	"doomweapon:argent_axe":
+	{
+		"woodcutting": 100
+	},
+	"doomweapon:argent_hoe":
+	{
+		"farming": 100
+	},
+	"doomweapon:argent_paxel":
+	{
+		"woodcutting": 100,
+		"excavation": 100,
+		"mining": 100
+	},
+	"doomweapon:argent_pickaxe":
+	{
+		"mining": 100
+	},
+	"doomweapon:argent_shovel":
+	{
+		"excavation": 100
+	}
+}

@@ -1,0 +1,202 @@
+{
+	"minecraft:bane_of_arthropods":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"maxLevel": 10
+	},
+	"minecraft:depth_strider":
+	{
+		"levelReq": 20,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"maxLevel": 5
+	},
+	"minecraft:efficiency":
+	{
+		"levelReq": 25,
+		"levelPerLevel": 30,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 10
+	},
+	"minecraft:feather_falling":
+	{
+		"levelReq": 5,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 85,
+		"maxLevel": 5
+	},
+	"minecraft:fortune":
+	{
+		"levelReq": 35,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 75,
+		"maxLevel": 5
+	},
+	"minecraft:frost_walker":
+	{
+		"levelReq": 25,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 5
+	},
+	"minecraft:looting":
+	{
+		"levelReq": 35,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 75,
+		"maxLevel": 5
+	},
+	"minecraft:luck_of_the_sea":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 15,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 5
+	},
+	"minecraft:lure":
+	{
+		"levelReq": 20,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 85,
+		"maxLevel": 5
+	},
+	"minecraft:mending":
+	{
+		"levelReq": 50,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"minecraft:silk_touch":
+	{
+		"levelReq": 40,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"minecraft:channeling":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"minecraft:multishot":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"minecraft:projectile_protection":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 85,
+		"maxLevel": 8
+	},
+	"minecraft:blast_protection":
+	{
+		"levelReq": 25,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 8
+	},
+	"minecraft:protection":
+	{
+		"levelReq": 20,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 75,
+		"maxLevel": 8
+	},
+	"minecraft:sharpness":
+	{
+		"levelReq": 20,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 8
+	},
+	"minecraft:sweeping":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 85,
+		"maxLevel": 5
+	},
+	"minecraft:smite":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"maxLevel": 5
+	},
+	"minecraft:thorns":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 85,
+		"maxLevel": 8
+	},
+	"minecraft:unbreaking":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 75,
+		"maxLevel": 5
+	},
+	"minecraft:quick_charge":
+	{
+		"levelReq": 20,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 5
+	},
+	"minecraft:power":
+	{
+		"levelReq": 20,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 8
+	},
+	"minecraft:punch":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"maxLevel": 10
+	},
+	"minecraft:piercing":
+	{
+		"levelReq": 35,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 7
+	},
+	"minecraft:riptide":
+	{
+		"levelReq": 25,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 85,
+		"maxLevel": 7
+	}
+}
