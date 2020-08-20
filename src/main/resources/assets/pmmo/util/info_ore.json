@@ -1,33 +1,33 @@
 {
-	"minecraft:nether_quartz_info_ore":
+	"minecraft:nether_quartz_ore":
 	{
 		"extraChance": 0.55
 	},
-	"minecraft:coal_info_ore":
+	"minecraft:coal_ore":
 	{
 		"extraChance": 1
 	},
-	"minecraft:iron_info_ore":
+	"minecraft:iron_ore":
 	{
 		"extraChance": 0.75
 	},
-	"minecraft:gold_info_ore":
+	"minecraft:gold_ore":
 	{
 		"extraChance": 0.5
 	},
-	"minecraft:diamond_info_ore":
+	"minecraft:diamond_ore":
 	{
 		"extraChance": 0.33
 	},
-	"minecraft:redstone_info_ore":
+	"minecraft:redstone_ore":
 	{
 		"extraChance": 2
 	},
-	"minecraft:lapis_info_ore":
+	"minecraft:lapis_ore":
 	{
 		"extraChance": 1.5
 	},
-	"minecraft:emerald_info_ore":
+	"minecraft:emerald_ore":
 	{
 		"extraChance": 0.75
 	},

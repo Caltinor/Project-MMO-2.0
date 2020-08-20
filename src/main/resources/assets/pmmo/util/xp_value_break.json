@@ -1,5 +1,5 @@
 {
-	"minecraft:nether_quartz_info_ore":
+	"minecraft:nether_quartz_ore":
 	{
 		"mining": 1.5
 	},
@@ -7,31 +7,31 @@
 	{
 		"mining": 1.5
 	},
-	"minecraft:coal_info_ore":
+	"minecraft:coal_ore":
 	{
 		"mining": 2
 	},
-	"minecraft:iron_info_ore":
+	"minecraft:iron_ore":
 	{
 		"mining": 12
 	},
-	"minecraft:gold_info_ore":
+	"minecraft:gold_ore":
 	{
 		"mining": 22
 	},
-	"minecraft:diamond_info_ore":
+	"minecraft:diamond_ore":
 	{
 		"mining": 35
 	},
-	"minecraft:redstone_info_ore":
+	"minecraft:redstone_ore":
 	{
 		"mining": 1.5
 	},
-	"minecraft:lapis_info_ore":
+	"minecraft:lapis_ore":
 	{
 		"mining": 5
 	},
-	"minecraft:emerald_info_ore":
+	"minecraft:emerald_ore":
 	{
 		"mining": 60
 	},
@@ -213,27 +213,27 @@
 	{
 		"woodcutting": 26
 	},
-	"minecraft:oak_info_log":
+	"minecraft:oak_log":
 	{
 		"woodcutting": 8
 	},
-	"minecraft:birch_info_log":
+	"minecraft:birch_log":
 	{
 		"woodcutting": 12
 	},
-	"minecraft:spruce_info_log":
+	"minecraft:spruce_log":
 	{
 		"woodcutting": 5
 	},
-	"minecraft:jungle_info_log":
+	"minecraft:jungle_log":
 	{
 		"woodcutting": 4.5
 	},
-	"minecraft:dark_oak_info_log":
+	"minecraft:dark_oak_log":
 	{
 		"woodcutting": 7
 	},
-	"minecraft:acacia_info_log":
+	"minecraft:acacia_log":
 	{
 		"woodcutting": 14
 	},
@@ -351,7 +351,7 @@
 	{
 		"farming": 2
 	},
-	"minecraft:kelp_info_plant":
+	"minecraft:kelp_plant":
 	{
 		"farming": 2
 	},
@@ -419,7 +419,7 @@
 	{
 		"farming": 30
 	},
-	"minecraft:chorus_info_plant":
+	"minecraft:chorus_plant":
 	{
 		"farming": 2.5
 	},
@@ -535,51 +535,51 @@
 	{
 		"farming": 1.25
 	},
-	"info_oresandmetals:light_animica_info_ore":
+	"info_oresandmetals:light_animica_ore":
 	{
 		"mining": 85
 	},
-	"info_oresandmetals:dark_animica_info_ore":
+	"info_oresandmetals:dark_animica_ore":
 	{
 		"mining": 85
 	},
-	"info_oresandmetals:banite_info_ore":
+	"info_oresandmetals:banite_ore":
 	{
 		"mining": 75
 	},
-	"info_oresandmetals:necrite_info_ore":
+	"info_oresandmetals:necrite_ore":
 	{
 		"mining": 65
 	},
-	"info_oresandmetals:phasmatite_info_ore":
+	"info_oresandmetals:phasmatite_ore":
 	{
 		"mining": 65
 	},
-	"info_oresandmetals:orichalcite_info_ore":
+	"info_oresandmetals:orichalcite_ore":
 	{
 		"mining": 55
 	},
-	"info_oresandmetals:drakolith_info_ore":
+	"info_oresandmetals:drakolith_ore":
 	{
 		"mining": 55
 	},
-	"info_oresandmetals:runite_info_ore":
+	"info_oresandmetals:runite_ore":
 	{
 		"mining": 45
 	},
-	"info_oresandmetals:adamantite_info_ore":
+	"info_oresandmetals:adamantite_ore":
 	{
 		"mining": 30
 	},
-	"info_oresandmetals:mithril_info_ore":
+	"info_oresandmetals:mithril_ore":
 	{
 		"mining": 20
 	},
-	"info_oresandmetals:tin_info_ore":
+	"info_oresandmetals:tin_ore":
 	{
 		"mining": 5
 	},
-	"info_oresandmetals:copper_info_ore":
+	"info_oresandmetals:copper_ore":
 	{
 		"mining": 5
 	}

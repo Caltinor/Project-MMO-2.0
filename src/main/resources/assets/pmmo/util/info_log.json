@@ -1,25 +1,25 @@
 {
-	"minecraft:oak_info_log":
+	"minecraft:oak_log":
 	{
 		"extraChance": 1
 	},
-	"minecraft:birch_info_log":
+	"minecraft:birch_log":
 	{
 		"extraChance": 0.85
 	},
-	"minecraft:spruce_info_log":
+	"minecraft:spruce_log":
 	{
 		"extraChance": 0.65
 	},
-	"minecraft:jungle_info_log":
+	"minecraft:jungle_log":
 	{
 		"extraChance": 0.55
 	},
-	"minecraft:dark_oak_info_log":
+	"minecraft:dark_oak_log":
 	{
 		"extraChance": 0.5
 	},
-	"minecraft:acacia_info_log":
+	"minecraft:acacia_log":
 	{
 		"extraChance": 1.25
 	},

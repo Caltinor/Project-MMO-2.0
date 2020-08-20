@@ -75,6 +75,7 @@ Skill.SKILLNAME.setLevel sets level double
 Skill.SKILLNAME.setXp sets xp double
 Skill.SKILLNAME.addLevel rewards level double
 Skill.SKILLNAME.addXp rewards xp double
+XP.getXp( ResourceLocation item, JType type ) returns a Map<String, Double> of the xp/level values stored for that item, in that type
 
 XP.getLevelDecimal (takes in skillName + player, returns level as double, works on client/server)
 XP.xpAtLevel (takes in a level as int, returns double xp value)
