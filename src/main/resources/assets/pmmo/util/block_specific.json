@@ -18,9 +18,5 @@
 	"minecraft:cactus":
 	{
 		"growsUpwards": 1
-	},
-	"minecraft:kelp_info_plant":
-	{
-		"growsUpwards": 1
 	}
 }
