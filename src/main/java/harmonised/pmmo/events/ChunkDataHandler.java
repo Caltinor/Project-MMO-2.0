@@ -23,10 +23,10 @@ public class ChunkDataHandler
 
     public static void handleChunkDataLoad( ChunkDataEvent.Load event )
     {
-        CompoundNBT levelNBT = event.getData();
-
-        if( levelNBT != null )
+        CompoundNBT chunkNBT = event.getData();
+        if( chunkNBT != null )
         {
+            CompoundNBT levelNBT = chunkNBT.getCompound( "Level" );
             if( levelNBT.contains( "placedPos" ) )
             {
                 World world = (World) event.getWorld();
