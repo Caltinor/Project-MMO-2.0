@@ -9,6 +9,7 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +28,9 @@ public class CreditorScreen extends Screen
     public static Map<String, Integer> colors = new HashMap<>();
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    Minecraft minecraft = Minecraft.getInstance();
+    MainWindow sr = minecraft.getWindow();
+    FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -124,14 +127,14 @@ public class CreditorScreen extends Screen
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
         }
         else
-            this.renderDirtBackground(p_renderBackground_1_);
+            this.renderBackground( stack, p_renderBackground_1_ );
 
 
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
-        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

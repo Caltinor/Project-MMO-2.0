@@ -69,7 +69,7 @@ public class AddCommand
                         LogHandler.LOGGER.error( "PMMO Command Add: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
                         if( sender != null )
-                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
+                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
 
                     LogHandler.LOGGER.info( "PMMO Command Add: " + playerName + " " + args[4] + " has had " + args[6] + " " + args[5] + " added" );
@@ -85,7 +85,7 @@ public class AddCommand
             LogHandler.LOGGER.error( "PMMO Command Add: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
 
             if( sender != null )
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
+                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
         }
 
         return 1;

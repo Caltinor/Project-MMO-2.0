@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -21,27 +22,27 @@ public class PistonEventHandler
     {
         if( !event.getWorld().isRemote() )
         {
-            World world = event.getWorld().getWorld();
+            World world = (World) event.getWorld();
             BlockPos pistonPos = event.getPos();
             Direction direction = event.getDirection();
             UUID uuid;
             if( event.getPistonMoveType().equals( PistonEvent.PistonMoveType.EXTEND ) )
             {
-                uuid = ChunkDataHandler.checkPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction ) );
+                uuid = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction ) );
                 if( uuid != null )
                 {
-                    ChunkDataHandler.addPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction, 2 ), uuid );
-                    ChunkDataHandler.delPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction ) );
+                    ChunkDataHandler.addPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction, 2 ), uuid );
+                    ChunkDataHandler.delPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction ) );
                 }
             }
             else
             {
                 BlockState state = world.getBlockState( pistonPos );
-                if( state.func_235901_b_( MovingPistonBlock.TYPE ) && state.get( MovingPistonBlock.TYPE ).equals( PistonType.STICKY ) )
+                if( state.contains( MovingPistonBlock.TYPE ) && state.get( MovingPistonBlock.TYPE ).equals( PistonType.STICKY ) )
                 {
                     uuid = UUID.fromString( "80008135-1337-3251-1523-852369874125" );
-                    ChunkDataHandler.addPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction ), uuid );
-                    ChunkDataHandler.delPos( world.func_234922_V_().func_240901_a_(), pistonPos.offset( direction, 2 ) );
+                    ChunkDataHandler.addPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction ), uuid );
+                    ChunkDataHandler.delPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction, 2 ) );
                 }
             }
         }

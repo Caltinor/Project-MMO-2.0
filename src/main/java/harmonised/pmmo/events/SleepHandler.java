@@ -13,7 +13,7 @@ public class SleepHandler
     {
         if( sleepRechargesWorldPlayersVeinCharge )
         {
-            event.getWorld().getWorld().getPlayers().forEach( player ->
+            event.getWorld().getPlayers().forEach( player ->
             {
                 XP.getAbilitiesTag( player ).putDouble( "veinLeft", maxVeinCharge );
             });

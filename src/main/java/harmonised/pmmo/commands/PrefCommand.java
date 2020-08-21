@@ -57,7 +57,7 @@ public class PrefCommand
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.func_235901_b_UnsetValue", "" + match ), false );
         }
         else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[2] ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
 
         return 1;
     }

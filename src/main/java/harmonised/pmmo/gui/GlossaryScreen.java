@@ -7,6 +7,7 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +27,9 @@ public class GlossaryScreen extends Screen
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    Minecraft minecraft = Minecraft.getInstance();
+    MainWindow sr = minecraft.getWindow();
+    FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -241,7 +244,7 @@ public class GlossaryScreen extends Screen
         }
 
         if( combo )
-            Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
+            Minecraft.getInstance().player.func_213823_a( SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
     }
 
     public boolean updateHistory( char index )
@@ -272,7 +275,7 @@ public class GlossaryScreen extends Screen
 
                 if( passed )
                 {
-                    Minecraft.getInstance().player.playSound(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
+                    Minecraft.getInstance().player.func_213823_a(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
                     return true;
                 }
             }
@@ -317,7 +320,7 @@ public class GlossaryScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
 
-        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

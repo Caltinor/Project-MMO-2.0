@@ -18,7 +18,7 @@ public class ReloadConfigCommand
         {
             XP.syncPlayerConfig( player );
             XP.updateRecipes( player );
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.jsonConfigReload" ).func_240703_c_( XP.textStyle.get( "green" ) ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.jsonConfigReload" ).setStyle( XP.textStyle.get( "green" ) ), false );
         });
 
         return 1;

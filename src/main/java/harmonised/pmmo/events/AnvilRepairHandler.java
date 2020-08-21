@@ -161,7 +161,7 @@ public class AnvilRepairHandler
                     }
                     else if( startLevel + 1 > enchant.getMaxLevel() + maxPlayerBypass && !creative )
                     {
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantLackOfLevelWarning", enchant.getDisplayName( 1 ).getString().replace( " I", "" ) ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantLackOfLevelWarning", enchant.getDisplayName( 1 ).getString().replace( " I", "" ) ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
                     else
                     {

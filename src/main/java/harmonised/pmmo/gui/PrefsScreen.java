@@ -11,6 +11,7 @@ import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -31,7 +32,9 @@ public class PrefsScreen extends Screen
     private double value;
     private static Button exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();
+    Minecraft minecraft = Minecraft.getInstance();
+    MainWindow sr = minecraft.getWindow();
+    FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x, y, scrollX, scrollY, buttonX;
@@ -211,7 +214,7 @@ public class PrefsScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
 
-        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
@@ -35,6 +36,7 @@ public class BlockPlacedHandler
 
             if ( XP.isPlayerSurvival( player ) )
             {
+                World world = (World) event.getWorld();
                 Block block = event.getPlacedBlock().getBlock();
 
                 if( block.equals( Blocks.WATER ) )
@@ -89,7 +91,7 @@ public class BlockPlacedHandler
                     event.setCanceled( true );
                 }
 
-                ChunkDataHandler.addPos( event.getWorld().getWorld().func_234922_V_().func_240901_a_(), event.getPos(), player.getUniqueID() );
+                ChunkDataHandler.addPos( XP.getDimensionResLoc( world, world.getDimension() ), event.getPos(), player.getUniqueID() );
             }
         }
     }

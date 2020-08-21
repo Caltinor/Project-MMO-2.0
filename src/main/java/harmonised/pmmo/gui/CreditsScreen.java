@@ -9,6 +9,7 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
@@ -25,7 +26,9 @@ public class CreditsScreen extends Screen
     private static boolean firstTime = true;
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    Minecraft minecraft = Minecraft.getInstance();
+    MainWindow sr = minecraft.getWindow();
+    FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -72,7 +75,7 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lapisPatreon" ).func_240703_c_( XP.textStyle.get( "blue" ) ).getString(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lapisPatreon" ).setStyle( XP.textStyle.get( "blue" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -80,7 +83,7 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.dandelionPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.dandelionPatreon" ).func_240703_c_( XP.textStyle.get( "yellow" ) ).getString(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.dandelionPatreon" ).setStyle( XP.textStyle.get( "yellow" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -88,7 +91,7 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.ironPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.ironPatreon" ).func_240703_c_( XP.textStyle.get( "grey" ) ).getString(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.ironPatreon" ).setStyle( XP.textStyle.get( "grey" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -168,21 +171,20 @@ public class CreditsScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        fillGradient( stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
-
-        for( ListButtonBig button : listButtons )
-        {
-            if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
-            {
-                renderTooltip( stack, button.tooltipText, mouseX, mouseY );
-                break;
-            }
-        }
+//        for( ListButtonBig button : listButtons )
+//        {
+//            if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
+//            {
+//                renderTooltip( stack, button.tooltipText, mouseX, mouseY );
+//                break;
+//            }
+//        }
+        //COUT
 
         if( font.getStringWidth( title.getString() ) > 220 )
-            drawCenteredString( stack,  font, title, sr.getScaledWidth() / 2, y - 10, 0xffffff );
+            drawCenteredString( stack,  font, title.toString(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
-            drawCenteredString( stack,  font, title, sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( stack,  font, title.toString(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
     }
@@ -196,14 +198,14 @@ public class CreditsScreen extends Screen
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
         }
         else
-            this.renderDirtBackground(p_renderBackground_1_);
+            this.renderBackground( stack, p_renderBackground_1_ );
 
 
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
-        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

@@ -27,7 +27,7 @@ public class PmmoCommand
                                            "maxExtraDamageBoost",
                                            "wipeAllSkillsUponDeathPermanently" };
     public static String[] suggestSearchRegistry = { "item",
-                                                     "biome",
+//                                                     "biome",
                                                      "enchant",
                                                      "potionEffect",
                                                      "entity" };

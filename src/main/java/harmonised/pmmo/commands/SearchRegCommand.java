@@ -42,16 +42,16 @@ public class SearchRegCommand
                 }
                 break;
 
-            case "biome":
-                for( Biome item : ForgeRegistries.BIOMES )
-                {
-                    String regName = item.getRegistryName().toString();
-                    if( regName.contains( query ) )
-                    {
-                        append( regName, listOut, listOutExtra, listOutForBuilder );
-                    }
-                }
-                break;
+//            case "biome":
+//                for( Biome item : ForgeRegistries.BIOMES )
+//                {
+//                    String regName = item.getRegistryName().toString();
+//                    if( regName.contains( query ) )
+//                    {
+//                        append( regName, listOut, listOutExtra, listOutForBuilder );
+//                    }
+//                }
+//                break;
 
             case "enchant":
                 for( Enchantment item : ForgeRegistries.ENCHANTMENTS )

@@ -32,10 +32,12 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -86,26 +88,26 @@ public class XP
 		skillColors.put( Skill.TAMING, 0xffffff );
 		skillColors.put( Skill.ENGINEERING, 0xffffff );
 
-		skillStyle.put( Skill.MINING, Style.EMPTY.setFormatting( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.BUILDING, Style.EMPTY.setFormatting( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.EXCAVATION, Style.EMPTY.setFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.WOODCUTTING, Style.EMPTY.setFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FARMING, Style.EMPTY.setFormatting( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.AGILITY, Style.EMPTY.setFormatting( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.ENDURANCE, Style.EMPTY.setFormatting( TextFormatting.DARK_RED ) );
-		skillStyle.put( Skill.COMBAT, Style.EMPTY.setFormatting( TextFormatting.RED ) );
-		skillStyle.put( Skill.ARCHERY, Style.EMPTY.setFormatting( TextFormatting.YELLOW ) );
-		skillStyle.put( Skill.SMITHING, Style.EMPTY.setFormatting( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.FLYING, Style.EMPTY.setFormatting( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.SWIMMING, Style.EMPTY.setFormatting( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.FISHING, Style.EMPTY.setFormatting( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.CRAFTING, Style.EMPTY.setFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.MAGIC, Style.EMPTY.setFormatting( TextFormatting.BLUE ) );
-		skillStyle.put( Skill.SLAYER, Style.EMPTY.setFormatting( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.HUNTER, Style.EMPTY.setFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FLETCHING, Style.EMPTY.setFormatting( TextFormatting.DARK_GREEN ) );
-		skillStyle.put( Skill.TAMING, Style.EMPTY.setFormatting( TextFormatting.WHITE ) );
-		skillStyle.put( Skill.ENGINEERING, Style.EMPTY.setFormatting( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.MINING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.BUILDING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.EXCAVATION, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.WOODCUTTING, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.FARMING, Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
+		skillStyle.put( Skill.AGILITY, Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
+		skillStyle.put( Skill.ENDURANCE, Style.EMPTY.withFormatting( TextFormatting.DARK_RED ) );
+		skillStyle.put( Skill.COMBAT, Style.EMPTY.withFormatting( TextFormatting.RED ) );
+		skillStyle.put( Skill.ARCHERY, Style.EMPTY.withFormatting( TextFormatting.YELLOW ) );
+		skillStyle.put( Skill.SMITHING, Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.FLYING, Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.SWIMMING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.FISHING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
+		skillStyle.put( Skill.CRAFTING, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.MAGIC, Style.EMPTY.withFormatting( TextFormatting.BLUE ) );
+		skillStyle.put( Skill.SLAYER, Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
+		skillStyle.put( Skill.HUNTER, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.FLETCHING, Style.EMPTY.withFormatting( TextFormatting.DARK_GREEN ) );
+		skillStyle.put( Skill.TAMING, Style.EMPTY.withFormatting( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.ENGINEERING, Style.EMPTY.withFormatting( TextFormatting.WHITE ) );
 
 //		skillStyle.put(Skill.MINING, TextFormatting.AQUA );
 //		skillStyle.put( Skill.BUILDING, TextFormatting.AQUA );
@@ -126,11 +128,11 @@ public class XP
 //		skillStyle.put( Skill.FLETCHING, TextFormatting.DARK_GREEN );
 //		skillStyle.put( Skill.TAMING, TextFormatting.WHITE );
 ////////////////////////////////////Style//////////////////////////////////////////////
-		textStyle.put( "red", Style.EMPTY.setFormatting( TextFormatting.RED ) );
-		textStyle.put( "green", Style.EMPTY.setFormatting( TextFormatting.GREEN ) );
-		textStyle.put( "yellow", Style.EMPTY.setFormatting( TextFormatting.YELLOW ) );
-		textStyle.put( "grey", Style.EMPTY.setFormatting( TextFormatting.GRAY ) );
-		textStyle.put( "blue", Style.EMPTY.setFormatting( TextFormatting.BLUE ) );
+		textStyle.put( "red", Style.EMPTY.withFormatting( TextFormatting.RED ) );
+		textStyle.put( "green", Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
+		textStyle.put( "yellow", Style.EMPTY.withFormatting( TextFormatting.YELLOW ) );
+		textStyle.put( "grey", Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
+		textStyle.put( "blue", Style.EMPTY.withFormatting( TextFormatting.BLUE ) );
 ////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
@@ -253,6 +255,16 @@ public class XP
 		return skillColors.getOrDefault( skill, 0xffffff );
 	}
 
+	public static ResourceLocation getBiomeResLoc( World world, Biome biome )
+	{
+		return world.getRegistryManager().get( Registry.BIOME_KEY ).getKey( biome );
+	}
+
+	public static ResourceLocation getDimensionResLoc( World world, DimensionType dimensionType )
+	{
+		return world.getRegistryManager().get( Registry.DIMENSION_TYPE_KEY ).getKey( dimensionType );
+	}
+
 	public static String correctHarvestTool(Material material)
 	{
 		if( material == null )
@@ -361,7 +373,7 @@ public class XP
 
 	public static void sendMessage( String msg, boolean bar, PlayerEntity player, TextFormatting format )
 	{
-		player.sendStatusMessage( new StringTextComponent( msg ).func_240703_c_( Style.EMPTY.setFormatting( format ) ), bar );
+		player.sendStatusMessage( new StringTextComponent( msg ).setStyle( Style.EMPTY.withFormatting( format ) ), bar );
 	}
 
 	public static Map<String, Double> multiplyMap( Map<String, Double> mapOne, double multiplier )
@@ -1020,7 +1032,7 @@ public class XP
 		String skillName = skill.toString().toLowerCase();
 
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
-		ResourceLocation resLoc = biome.getRegistryName();
+		ResourceLocation resLoc = getBiomeResLoc( player.world, biome );
 		String biomeKey = resLoc.toString();
 		Map<String, Object> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
 
@@ -1332,18 +1344,18 @@ public class XP
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );
 				itemStack.setCount( 0 );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), true );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), false );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 			}
 			else
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWear", new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWear", new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
 		}
 	}
 
 	public static void checkBiomeLevelReq(PlayerEntity player)
 	{
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
-		ResourceLocation resLoc = biome.getRegistryName();
+		ResourceLocation resLoc = getBiomeResLoc( player.world, biome );
 		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
 		Map<String, Object> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
@@ -1368,16 +1380,16 @@ public class XP
 				{
 					if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
 					{
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), true );
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).func_240703_c_( textStyle.get( "red" ) ), false );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( Util.makeTranslationKey( "biome", resLoc ) ) ).setStyle( textStyle.get( "red" ) ), true );
+						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( Util.makeTranslationKey( "biome", resLoc ) ) ).setStyle( textStyle.get( "red" ) ), false );
 						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 						{
 							int startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
 							if( startLevel < (double) entry.getValue() )
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).func_240703_c_( textStyle.get( "red" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
 							else
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).func_240703_c_( textStyle.get( "green" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
 						}
 					}
 				}

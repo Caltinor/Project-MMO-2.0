@@ -70,7 +70,7 @@ public class DeathHandler
                 }
 
                 if( totalLost > 0 )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).func_240703_c_( XP.textStyle.get( "red" ) ), false );
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).setStyle( XP.textStyle.get( "red" ) ), false );
                 
                 XP.syncPlayer( player );
             }
@@ -97,7 +97,7 @@ public class DeathHandler
             if( scaleValue > 10 )
                 scaleValue = 10;
 
-//            double normalMaxHp = target.getAttribute( Attributes.MAX_HEALTH ).getBaseValue();
+//            double normalMaxHp = target.getAttribute( Attributes.GENERIC_MAX_HEALTH ).getBaseValue();
 //            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
             if( JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )
@@ -129,8 +129,8 @@ public class DeathHandler
                         ItemStack itemStack = new ItemStack( XP.getItem( entry.getKey() ) );
                         XP.dropItemStack( itemStack, player.world, target.getPositionVec() );
 
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "green" ) ), false );
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).func_240703_c_( XP.textStyle.get( "green" ) ), true );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
                     }
                 }
             }

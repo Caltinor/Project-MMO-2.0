@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.world.ChunkDataEvent;
 
 import java.util.*;
@@ -28,7 +29,8 @@ public class ChunkDataHandler
         {
             if( levelNBT.contains( "placedPos" ) )
             {
-                ResourceLocation dimResLoc = event.getWorld().getWorld().func_234922_V_().func_240901_a_();
+                World world = (World) event.getWorld();
+                ResourceLocation dimResLoc = XP.getDimensionResLoc( world, world.getDimension() );
                 ChunkPos chunkPos = event.getChunk().getPos();
 
                 if( !placedMap.containsKey( dimResLoc ) )
@@ -55,7 +57,8 @@ public class ChunkDataHandler
 
     public static void handleChunkDataSave( ChunkDataEvent.Save event )
     {
-        ResourceLocation dimResLoc = event.getWorld().getWorld().func_234922_V_().func_240901_a_();
+        World world = (World) event.getWorld();
+        ResourceLocation dimResLoc = XP.getDimensionResLoc( world, world.getDimension() );
         if( placedMap.containsKey( dimResLoc ) )
         {
             ChunkPos chunkPos = event.getChunk().getPos();
