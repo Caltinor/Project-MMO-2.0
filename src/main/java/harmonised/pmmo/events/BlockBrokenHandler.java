@@ -193,8 +193,11 @@ public class BlockBrokenHandler
 
             int height = 0;
             BlockPos curBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
+            BlockPos nextPos;
+            Block nextBlock;
             block =  world.getBlockState( curBlockPos ).getBlock();
-            while( block.equals( baseBlock ) )
+            boolean correctBlock = block.equals( baseBlock );
+            while( correctBlock )
             {
                 wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), curBlockPos ) != null;
                 if( !wasPlaced )
@@ -206,8 +209,15 @@ public class BlockBrokenHandler
                         extraDrop++;
                 }
                 height++;
-                curBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
-                block =  world.getBlockState( curBlockPos ).getBlock();
+                nextPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
+                nextBlock = world.getBlockState( nextPos ).getBlock();
+                if( nextBlock.equals( baseBlock ) )
+                {
+                    curBlockPos = nextPos;
+                    block = nextBlock;
+                }
+                else
+                    correctBlock = false;
             }
 
             int dropsLeft = guaranteedDrop + extraDrop;

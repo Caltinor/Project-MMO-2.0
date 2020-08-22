@@ -33,6 +33,6 @@
 	},
 	"minecraft:glowstone":
 	{
-		"extraChance": 2
+		"extraChance": 0.1
 	}
 }
