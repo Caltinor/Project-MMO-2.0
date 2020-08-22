@@ -164,7 +164,7 @@ public class BlockBrokenHandler
         {
             LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
                     .withRandom(world.rand)
-//                    .withParameter( LootParameters.POSITION, event.getPos() )
+                    .withParameter( LootParameters.ORIGIN, player.getPositionVec() )
                     .withParameter( LootParameters.TOOL, toolUsed )
                     .withParameter( LootParameters.THIS_ENTITY, player )
                     .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
@@ -191,8 +191,11 @@ public class BlockBrokenHandler
 
             int height = 0;
             BlockPos curBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
+            BlockPos nextPos;
+            Block nextBlock;
             block =  world.getBlockState( curBlockPos ).getBlock();
-            while( block.equals( baseBlock ) )
+            boolean correctBlock = block.equals( baseBlock );
+            while( correctBlock )
             {
                 wasPlaced = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world, world.getDimension() ), curBlockPos ) != null;
                 if( !wasPlaced )
@@ -204,8 +207,15 @@ public class BlockBrokenHandler
                         extraDrop++;
                 }
                 height++;
-                curBlockPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
-                block =  world.getBlockState( curBlockPos ).getBlock();
+                nextPos = new BlockPos( baseBlockPos.getX(), baseBlockPos.getY() + height, baseBlockPos.getZ() );
+                nextBlock = world.getBlockState( nextPos ).getBlock();
+                if( nextBlock.equals( baseBlock ) )
+                {
+                    curBlockPos = nextPos;
+                    block = nextBlock;
+                }
+                else
+                    correctBlock = false;
             }
 
             int dropsLeft = guaranteedDrop + extraDrop;
