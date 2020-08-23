@@ -240,6 +240,9 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> anvilFinalItemBonusRepaired;
         public ConfigHelper.ConfigValueListener<Integer> anvilFinalItemMaxCostToAnvil;
 
+        public ConfigHelper.ConfigValueListener<Boolean> smeltingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> smeltingEnabled;
+
         //Flying
 
         //Swimming
@@ -1042,6 +1045,16 @@ public class Config
                         .comment( "false = Upgrade Chance if only rolled if you are trying to upgrade your item ABOVE vanilla max level. true = you ALWAYS have an upgrade chance level." )
                         .translation( "pmmo.alwaysUseUpgradeChance" )
                         .define( "alwaysUseUpgradeChance", false) );
+
+                this.smeltingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for smelting items in a Furnace?" )
+                        .translation( "pmmo.smeltingXpEnabled" )
+                        .define( "smeltingXpEnabled", true ) );
+
+                this.smeltingEnabled = subscriber.subscribe(builder
+                        .comment( "Do Furnaces produce extra items according to Item Owner Smithing level?" )
+                        .translation( "pmmo.smeltingEnabled" )
+                        .define( "smeltingEnabled", true ) );
 
                 builder.pop();
             }

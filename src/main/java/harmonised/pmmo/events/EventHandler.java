@@ -6,8 +6,11 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.*;
+import net.minecraftforge.event.village.VillagerTradesEvent;
+import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.event.world.*;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
@@ -90,7 +93,7 @@ public class EventHandler
 		CraftedHandler.handleCrafted( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void breakSpeed( PlayerEvent.BreakSpeed event )
 	{
 		BreakSpeedHandler.handleBreakSpeed( event );
@@ -166,7 +169,8 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void blockChange( BlockEvent.NeighborNotifyEvent event )
+	public static void pickUpEntity( EntityItemPickupEvent event )
 	{
+		ItemHandler.handleItemEntityPickup( event );
 	}
 }

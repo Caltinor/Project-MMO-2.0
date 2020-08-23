@@ -254,6 +254,9 @@ public class WorldTickHandler
             return true;
 
         World world = player.world;
+        if( player.world == null )
+            return true;
+
         String dimensionKey = XP.getDimensionResLoc( world, world.getDimension() ).toString();
         Map<String, Object> dimensionBlacklist = null;
 

@@ -503,6 +503,13 @@ public class XP
 				startLevel = getLevel( Skill.FARMING, player );
 				break;
 
+			case INFO_SMELT:
+				if( JsonConfig.data.get( JType.INFO_SMELT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).get( "extraChance" );
+				startLevel = getLevel( Skill.SMITHING, player );
+				break;
+
 			default:
 				LogHandler.LOGGER.error( "WRONG getExtraChance CHANCE TYPE! PLEASE REPORT!" );
 				return 0;
@@ -513,6 +520,12 @@ public class XP
 			extraChance = 0;
 
 		return extraChance;
+	}
+
+	public static boolean rollChance( double extraChance )
+	{
+//        System.out.println( Math.random() + " " + extraChance );
+		return Math.random() < extraChance;
 	}
 
 	public static void dropItems(int dropsLeft, Item item, World world, BlockPos pos)
