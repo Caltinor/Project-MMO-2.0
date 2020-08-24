@@ -148,7 +148,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> enduranceMultiplier;
         public ConfigHelper.ConfigValueListener<Double> combatMultiplier;
         public ConfigHelper.ConfigValueListener<Double> archeryMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> repairingMultiplier;
+        public ConfigHelper.ConfigValueListener<Double> smithingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> flyingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> swimmingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> fishingMultiplier;
@@ -222,7 +222,9 @@ public class Config
 
         //Archery
 
-        //Repairing
+        //Smithing
+        public ConfigHelper.ConfigValueListener<Boolean> anvilHandlingEnabled;
+
         public ConfigHelper.ConfigValueListener<Double> maxSalvageEnchantChance;
         public ConfigHelper.ConfigValueListener<Double> enchantSaveChancePerLevel;
         public ConfigHelper.ConfigValueListener<Boolean> bypassEnchantLimit;
@@ -237,6 +239,13 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> extraChanceToNotBreakAnvilPerLevel;
         public ConfigHelper.ConfigValueListener<Double> anvilFinalItemBonusRepaired;
         public ConfigHelper.ConfigValueListener<Integer> anvilFinalItemMaxCostToAnvil;
+
+        public ConfigHelper.ConfigValueListener<Boolean> smeltingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> smeltingEnabled;
+
+        //Cooking
+        public ConfigHelper.ConfigValueListener<Boolean> cookingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> cookingEnabled;
 
         //Flying
 
@@ -658,10 +667,10 @@ public class Config
                         .translation( "pmmo.archeryMultiplier" )
                         .defineInRange( "archeryMultiplier", 1D, 0, 1000) );
 
-                this.repairingMultiplier = subscriber.subscribe(builder
+                this.smithingMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains in Repairing (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.repairingMultiplier" )
-                        .defineInRange( "repairingMultiplier", 1D, 0, 1000) );
+                        .translation( "pmmo.smithingMultiplier" )
+                        .defineInRange( "smithingMultiplier", 1D, 0, 1000) );
 
                 this.flyingMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains in Flying (1 = normal, 2 = twice as much)" )
@@ -866,11 +875,11 @@ public class Config
             {
                 builder.pop();
             }
-                builder.push( "Woodcutting" );
+            builder.push( "Woodcutting" );
             {
                 builder.pop();
             }
-                builder.push( "Farming" );
+            builder.push( "Farming" );
             {
                 this.breedingXpEnabled = subscriber.subscribe(builder
                         .comment( "Do players get xp for breeding animals?" )
@@ -971,6 +980,11 @@ public class Config
             }
             builder.push( "Smithing" );
             {
+                this.anvilHandlingEnabled = subscriber.subscribe(builder
+                        .comment( "Should PMMO anvil handling be enabled? (xp rewards for repair, and also Enchantment handling) (some mod items break, if you experience lost enchantments, set this to false)" )
+                        .translation( "pmmo.anvilHandlingEnabled" )
+                        .define( "anvilHandlingEnabled", true ) );
+
                 this.maxSalvageEnchantChance = subscriber.subscribe(builder
                         .comment( "Max Percentage chance to return each Enchantment Level" )
                         .translation( "pmmo.maxSalvageEnchantChance" )
@@ -1035,6 +1049,31 @@ public class Config
                         .comment( "false = Upgrade Chance if only rolled if you are trying to upgrade your item ABOVE vanilla max level. true = you ALWAYS have an upgrade chance level." )
                         .translation( "pmmo.alwaysUseUpgradeChance" )
                         .define( "alwaysUseUpgradeChance", false) );
+
+                this.smeltingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for Smelting items in a Furnace?" )
+                        .translation( "pmmo.smeltingXpEnabled" )
+                        .define( "smeltingXpEnabled", true ) );
+
+                this.smeltingEnabled = subscriber.subscribe(builder
+                        .comment( "Do Furnaces produce extra items according to Item Owner Smithing level?" )
+                        .translation( "pmmo.smeltingEnabled" )
+                        .define( "smeltingEnabled", true ) );
+
+                builder.pop();
+            }
+
+            builder.push( "Cooking" );
+            {
+                this.cookingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for Cooking items in Furnaces/Smokers/Fireplaces?" )
+                        .translation( "pmmo.cookingXpEnabled" )
+                        .define( "cookingXpEnabled", true ) );
+
+                this.cookingEnabled = subscriber.subscribe(builder
+                        .comment( "Do Furnaces/Smokers/Fireplaces produce extra items according to Item Owner Cooking level?" )
+                        .translation( "pmmo.cookingEnabled" )
+                        .define( "cookingEnabled", true ) );
 
                 builder.pop();
             }

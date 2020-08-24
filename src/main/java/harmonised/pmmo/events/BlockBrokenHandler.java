@@ -106,12 +106,6 @@ public class BlockBrokenHandler
         }
     }
 
-    private static boolean rollChance( double extraChance )
-    {
-//        System.out.println( Math.random() + " " + extraChance );
-        return Math.random() < extraChance;
-    }
-
     private static void processBroken( BlockEvent.BreakEvent event )
     {
         BlockState state = event.getState();
@@ -302,7 +296,7 @@ public class BlockBrokenHandler
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
 
-                if( rollChance( extraChance % 1 ) )
+                if( XP.rollChance( extraChance % 1 ) )
                     extraDrop = 1;
                 else
                     extraDrop = 0;
@@ -340,7 +334,7 @@ public class BlockBrokenHandler
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
 
-                if( rollChance( extraChance % 1 ) )
+                if( XP.rollChance( extraChance % 1 ) )
                     extraDrop = 1;
                 else
                     extraDrop = 0;
@@ -372,7 +366,7 @@ public class BlockBrokenHandler
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
 
-                if( rollChance( extraChance % 1 ) )
+                if( XP.rollChance( extraChance % 1 ) )
                     extraDrop = 1;
                 else
                     extraDrop = 0;

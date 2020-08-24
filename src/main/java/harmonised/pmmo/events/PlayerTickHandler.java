@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
@@ -14,6 +15,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +31,7 @@ public class PlayerTickHandler
 {
     private static Map<UUID, Long> lastAward = new HashMap<>();
     private static Map<UUID, Long> lastVeinAward = new HashMap<>();
+    private static Map<UUID, Long> lastInvCheck = new HashMap<>();
     public static boolean syncPrefs = false;
 
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
@@ -47,9 +51,12 @@ public class PlayerTickHandler
                 lastAward.put( playerUUID, System.nanoTime() );
             if( !lastVeinAward.containsKey( playerUUID ) )
                 lastVeinAward.put( playerUUID, System.nanoTime() );
+            if( !lastInvCheck.containsKey( playerUUID ) )
+                lastInvCheck.put( playerUUID, System.nanoTime() );
 
             double gap = ( (System.nanoTime() - lastAward.get( playerUUID) ) / 1000000000D );
             double veinGap = ( (System.nanoTime() - lastVeinAward.get( playerUUID) ) / 1000000000D );
+            double invGap = ( (System.nanoTime() - lastInvCheck.get( playerUUID) ) / 1000000000D );
 
             if( gap > 0.5 )
             {
@@ -148,10 +155,27 @@ public class PlayerTickHandler
 //				}
             }
 
-            if( veinGap > 0.25 && !player.world.isRemote() )
+            if( !player.world.isRemote() )
             {
-                WorldTickHandler.updateVein( player, veinGap );
-                lastVeinAward.put( playerUUID, System.nanoTime() );
+                if( veinGap > 0.25 )
+                {
+                    WorldTickHandler.updateVein( player, veinGap );
+                    lastVeinAward.put( playerUUID, System.nanoTime() );
+                }
+
+                if( invGap > 1 )
+                {
+
+                    for( ItemStack itemStack : player.inventory.mainInventory )
+                    {
+                        tagOwnership( itemStack, playerUUID );
+                    }
+                    for( ItemStack itemStack : player.inventory.offHandInventory )
+                    {
+                        tagOwnership( itemStack, playerUUID );
+                    }
+                    lastInvCheck.put( playerUUID, System.nanoTime() );
+                }
             }
         }
 
@@ -172,6 +196,24 @@ public class PlayerTickHandler
                 ClientHandler.syncPrefsToServer();
                 syncPrefs = false;
             }
+        }
+    }
+
+    public static void tagOwnership(ItemStack itemStack, UUID uuid )
+    {
+        if( !itemStack.isEmpty() )
+        {
+            CompoundNBT tag = itemStack.getTag();
+            String regKey = itemStack.getItem().getRegistryName().toString();
+            if( XP.hasElement( regKey, JType.INFO_SMELT ) || XP.hasElement( regKey, JType.XP_VALUE_SMELT ) || XP.hasElement( regKey, JType.INFO_COOK ) || XP.hasElement( regKey, JType.XP_VALUE_COOK ) )
+            {
+                if( tag == null )
+                    itemStack.setTag( new CompoundNBT() );
+
+                itemStack.getTag().putUniqueId( "lastOwner", uuid );
+            }
+            else if( tag != null && tag.contains( "lastOwner" ) )
+                tag.remove( "lastOwner" );
         }
     }
 }

@@ -493,6 +493,20 @@ public class XP
 				startLevel = getLevel( Skill.FARMING, player );
 				break;
 
+			case INFO_SMELT:
+				if( JsonConfig.data.get( JType.INFO_SMELT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).get( "extraChance" );
+				startLevel = getLevel( Skill.SMITHING, player );
+				break;
+
+			case INFO_COOK:
+				if( JsonConfig.data.get( JType.INFO_COOK ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" );
+				startLevel = getLevel( Skill.COOKING, player );
+				break;
+
 			default:
 				LogHandler.LOGGER.error( "WRONG getExtraChance CHANCE TYPE! PLEASE REPORT!" );
 				return 0;
@@ -503,6 +517,16 @@ public class XP
 			extraChance = 0;
 
 		return extraChance;
+	}
+
+	public static boolean hasElement( String key, JType jType )
+	{
+		return JsonConfig.data.get( jType ).containsKey( key );
+	}
+
+	public static boolean rollChance( double extraChance )
+	{
+		return Math.random() < extraChance;
 	}
 
 	public static void dropItems(int dropsLeft, Item item, World world, BlockPos pos)
@@ -898,7 +922,7 @@ public class XP
 				break;
 
 			case SMITHING:
-				skillMultiplier = Config.forgeConfig.repairingMultiplier.get();
+				skillMultiplier = Config.forgeConfig.smithingMultiplier.get();
 				break;
 
 			case FLYING:
