@@ -392,6 +392,8 @@ public class ListScreen extends Screen
                 case INFO_ORE:
                 case INFO_LOG:
                 case INFO_PLANT:
+                case INFO_SMELT:
+                case INFO_COOK:
                 {
                     button.text.add( new StringTextComponent( "" ) );
                     Map<String, Object> breakMap = JsonConfig.data.get( JType.REQ_BREAK ).get( button.regKey );
@@ -401,20 +403,20 @@ public class ListScreen extends Screen
                     double extraDroppedPerLevel = infoMap.get( "extraChance" ) / 100;
                     double extraDropped = XP.getExtraChance( player, button.regKey, jType ) / 100;
 
-                    if ( extraDroppedPerLevel <= 0 )
-                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("red") ) );
-                    else
-                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("green") ) );
-
                     if ( extraDropped <= 0 )
                         infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "red" ) ) );
                     else
                         infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "green" ) ) );
 
+                    if ( extraDroppedPerLevel <= 0 )
+                        infoText.add( getTransComp( "pmmo.extraPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("red") ) );
+                    else
+                        infoText.add( getTransComp( "pmmo.extraPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("green") ) );
+
                     if ( infoText.size() > 0 )
                         button.text.addAll( infoText );
 
-                    if ( breakMap != null )
+                    if ( breakMap != null && jType != JType.INFO_SMELT && jType != JType.INFO_COOK )
                     {
                         if ( XP.checkReq( player, button.regKey, JType.REQ_BREAK ) )
                             button.text.add( getTransComp( "pmmo.break" ).setStyle( XP.textStyle.get( "green" ) ) );
@@ -441,6 +443,8 @@ public class ListScreen extends Screen
 
                 case XP_VALUE_BREED:
                 case XP_VALUE_TAME:
+                case XP_VALUE_SMELT:
+                case XP_VALUE_COOK:
                 {
                     addXpToButton( button, reqMap.get( button.regKey ) );
                 }

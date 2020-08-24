@@ -26,7 +26,7 @@ public class AbstractFurnaceTileEntityShrinkMixin extends TileEntity
     }
 
     @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "func_214007_c", remap = false, locals = LocalCapture.CAPTURE_FAILEXCEPTION )
-    private void projectmmo$$handleSmeltingSet( IRecipe<?> p_214007_1_, CallbackInfo info )
+    private void projectmmo$$handleSmeltingShrink( IRecipe<?> p_214007_1_, CallbackInfo info )
     {
         FurnaceHandler.handleSmelted( items.get(0), items.get(2), this.getWorld(), 0 );
         FurnaceHandler.handleSmelted( items.get(0), items.get(2), this.getWorld(), 1 );
