@@ -41,7 +41,7 @@
 	},
 	"minecraft:coal_ore":
 	{
-		"smithing": 2
+		"smithing": 8
 	},
 	"minecraft:iron_ore":
 	{
@@ -79,26 +79,6 @@
 	{
 		"smithing": 60
 	},
-	"minecraft:wet_sponge":
-	{
-		"smithing": 4,
-		"crafting": 15
-	},
-	"minecraft:cactus":
-	{
-		"smithing": 2,
-		"crafting": 4
-	},
-	"minecraft:sea_pickle":
-	{
-		"smithing": 1,
-		"crafting": 7.5
-	},
-	"minecraft:chorus_fruit":
-	{
-		"smithing": 3.5,
-		"crafting": 22.5
-	},
 	"minecraft:clay_ball":
 	{
 		"smithing": 1.5,
@@ -108,11 +88,6 @@
 	{
 		"smithing": 6,
 		"crafting": 14
-	},
-	"minecraft:kelp":
-	{
-		"smithing": 0.25,
-		"crafting": 1
 	},
 	"minecraft:chainmail_helmet":
 	{
@@ -209,26 +184,6 @@
 	"minecraft:golden_horse_armor":
 	{
 		"smithing": 100
-	},
-	"minecraft:raw_mutton":
-	{
-		"cooking": 15
-	},
-	"minecraft:raw_rabbit":
-	{
-		"cooking": 20
-	},
-	"minecraft:raw_salmon":
-	{
-		"cooking": 12.5
-	},
-	"minecraft:raw_beef":
-	{
-		"cooking": 12.5
-	},
-	"minecraft:potato":
-	{
-		"cooking": 7.5
 	},
 	"minecraft:oak_log":
 	{

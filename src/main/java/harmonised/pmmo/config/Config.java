@@ -243,6 +243,10 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> smeltingXpEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> smeltingEnabled;
 
+        //Cooking
+        public ConfigHelper.ConfigValueListener<Boolean> cookingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> cookingEnabled;
+
         //Flying
 
         //Swimming
@@ -1047,7 +1051,7 @@ public class Config
                         .define( "alwaysUseUpgradeChance", false) );
 
                 this.smeltingXpEnabled = subscriber.subscribe(builder
-                        .comment( "Do players get xp for smelting items in a Furnace?" )
+                        .comment( "Do players get xp for Smelting items in a Furnace?" )
                         .translation( "pmmo.smeltingXpEnabled" )
                         .define( "smeltingXpEnabled", true ) );
 
@@ -1055,6 +1059,21 @@ public class Config
                         .comment( "Do Furnaces produce extra items according to Item Owner Smithing level?" )
                         .translation( "pmmo.smeltingEnabled" )
                         .define( "smeltingEnabled", true ) );
+
+                builder.pop();
+            }
+
+            builder.push( "Cooking" );
+            {
+                this.cookingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for Cooking items in Furnaces/Smokers/Fireplaces?" )
+                        .translation( "pmmo.cookingXpEnabled" )
+                        .define( "cookingXpEnabled", true ) );
+
+                this.cookingEnabled = subscriber.subscribe(builder
+                        .comment( "Do Furnaces/Smokers/Fireplaces produce extra items according to Item Owner Cooking level?" )
+                        .translation( "pmmo.cookingEnabled" )
+                        .define( "cookingEnabled", true ) );
 
                 builder.pop();
             }

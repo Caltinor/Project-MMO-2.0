@@ -510,6 +510,13 @@ public class XP
 				startLevel = getLevel( Skill.SMITHING, player );
 				break;
 
+			case INFO_COOK:
+				if( JsonConfig.data.get( JType.INFO_COOK ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" );
+				startLevel = getLevel( Skill.COOKING, player );
+				break;
+
 			default:
 				LogHandler.LOGGER.error( "WRONG getExtraChance CHANCE TYPE! PLEASE REPORT!" );
 				return 0;
@@ -522,9 +529,18 @@ public class XP
 		return extraChance;
 	}
 
+	public static boolean hasElement( ResourceLocation key, JType jType )
+	{
+		return hasElement( key.toString(), jType );
+	}
+
+	public static boolean hasElement( String key, JType jType )
+	{
+		return JsonConfig.data.get( jType ).containsKey( key );
+	}
+
 	public static boolean rollChance( double extraChance )
 	{
-//        System.out.println( Math.random() + " " + extraChance );
 		return Math.random() < extraChance;
 	}
 

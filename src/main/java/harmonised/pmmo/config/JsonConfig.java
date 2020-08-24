@@ -108,6 +108,9 @@ public class JsonConfig
         if( Config.forgeConfig.smeltingXpEnabled.get() )
             jTypes.add( JType.XP_VALUE_SMELT );
 
+        if( Config.forgeConfig.cookingXpEnabled.get() )
+            jTypes.add( JType.XP_VALUE_COOK );
+
         jTypes.add( JType.XP_VALUE_TRIGGER );
 
         if( Config.forgeConfig.placeReqEnabled.get() )
@@ -139,6 +142,9 @@ public class JsonConfig
 
         if( Config.forgeConfig.smeltingEnabled.get() )
             jTypes.add( JType.INFO_SMELT );
+
+        if( Config.forgeConfig.cookingEnabled.get() )
+            jTypes.add( JType.INFO_COOK );
 
         if( Config.forgeConfig.salvageEnabled.get() )
             jTypes.add( JType.SALVAGE_TO );
@@ -260,6 +266,9 @@ public class JsonConfig
         if( jTypes.contains( JType.XP_VALUE_SMELT ) )
             updateReqSkills( rawData.get( JType.XP_VALUE_SMELT ), localData.get( JType.XP_VALUE_SMELT ) );
 
+        if( jTypes.contains( JType.XP_VALUE_COOK ) )
+            updateReqSkills( rawData.get( JType.XP_VALUE_COOK ), localData.get( JType.XP_VALUE_COOK ) );
+
         if( jTypes.contains( JType.XP_VALUE_KILL ) )
             updateReqSkills( rawData.get( JType.XP_VALUE_KILL ), localData.get( JType.XP_VALUE_KILL ) );
 
@@ -277,6 +286,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.INFO_SMELT ) )
             updateReqExtra( rawData.get( JType.INFO_SMELT ), localData.get( JType.INFO_SMELT ) );
+
+        if( jTypes.contains( JType.INFO_COOK ) )
+            updateReqExtra( rawData.get( JType.INFO_COOK ), localData.get( JType.INFO_COOK ) );
 
         if( jTypes.contains( JType.BIOME_EFFECT ) )
             updateReqEffects( rawData.get( JType.BIOME_EFFECT ), localData.get( JType.BIOME_EFFECT ) );

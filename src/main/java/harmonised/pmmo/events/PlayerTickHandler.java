@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
@@ -167,15 +168,14 @@ public class PlayerTickHandler
 
                 if( invGap > 1 )
                 {
+
                     for( ItemStack itemStack : player.inventory.mainInventory )
                     {
-                        if( !itemStack.isEmpty() )
-                        {
-                            if( itemStack.getTag() == null )
-                                itemStack.setTag( new CompoundNBT() );
-
-                            itemStack.getTag().putUniqueId( "lastOwner", player.getUniqueID() );
-                        }
+                        tagOwnership( itemStack, playerUUID );
+                    }
+                    for( ItemStack itemStack : player.inventory.offHandInventory )
+                    {
+                        tagOwnership( itemStack, playerUUID );
                     }
                     lastInvCheck.put( playerUUID, System.nanoTime() );
                 }
@@ -199,6 +199,24 @@ public class PlayerTickHandler
                 ClientHandler.syncPrefsToServer();
                 syncPrefs = false;
             }
+        }
+    }
+
+    public static void tagOwnership( ItemStack itemStack, UUID uuid )
+    {
+        if( !itemStack.isEmpty() )
+        {
+            CompoundNBT tag = itemStack.getTag();
+            String regKey = itemStack.getItem().getRegistryName().toString();
+            if( XP.hasElement( regKey, JType.INFO_SMELT ) || XP.hasElement( regKey, JType.XP_VALUE_SMELT ) || XP.hasElement( regKey, JType.INFO_COOK ) || XP.hasElement( regKey, JType.XP_VALUE_COOK ) )
+            {
+                if( tag == null )
+                    itemStack.setTag( new CompoundNBT() );
+
+                itemStack.getTag().putUniqueId( "lastOwner", uuid );
+            }
+            else if( tag != null && tag.contains( "lastOwner" ) )
+                tag.remove( "lastOwner" );
         }
     }
 }

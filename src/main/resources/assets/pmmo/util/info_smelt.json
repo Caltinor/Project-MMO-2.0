@@ -79,18 +79,6 @@
 	{
 		"extraChance": 0.33
 	},
-	"minecraft:cactus":
-	{
-		"extraChance": 2
-	},
-	"minecraft:sea_pickle":
-	{
-		"extraChance": 2
-	},
-	"minecraft:chorus_fruit":
-	{
-		"extraChance": 0.33
-	},
 	"minecraft:clay_ball":
 	{
 		"extraChance": 0.5
@@ -98,10 +86,6 @@
 	"minecraft:clay":
 	{
 		"extraChance": 0.5
-	},
-	"minecraft:kelp":
-	{
-		"extraChance": 0.6
 	},
 	"minecraft:chainmail_helmet":
 	{
@@ -198,26 +182,6 @@
 	"minecraft:golden_horse_armor":
 	{
 		"extraChance": 50
-	},
-	"minecraft:raw_mutton":
-	{
-		"extraChance": 1
-	},
-	"minecraft:raw_rabbit":
-	{
-		"extraChance": 1
-	},
-	"minecraft:raw_salmon":
-	{
-		"extraChance": 1.5
-	},
-	"minecraft:raw_beef":
-	{
-		"extraChance": 1
-	},
-	"minecraft:potato":
-	{
-		"extraChance": 0.5
 	},
 	"minecraft:oak_log":
 	{

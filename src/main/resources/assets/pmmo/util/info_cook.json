@@ -1,0 +1,50 @@
+{
+	"minecraft:mutton":
+	{
+		"extraChance": 1
+	},
+	"minecraft:rabbit":
+	{
+		"extraChance": 1
+	},
+	"minecraft:salmon":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:cod":
+	{
+		"extraChance": 1.75
+	},
+	"minecraft:beef":
+	{
+		"extraChance": 0.75
+	},
+	"minecraft:porkchop":
+	{
+		"extraChance": 1.25
+	},
+	"minecraft:chicken":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:potato":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:cactus":
+	{
+		"extraChance": 2
+	},
+	"minecraft:sea_pickle":
+	{
+		"extraChance": 2
+	},
+	"minecraft:chorus_fruit":
+	{
+		"extraChance": 0.33
+	},
+	"minecraft:kelp":
+	{
+		"extraChance": 0.6
+	}
+}

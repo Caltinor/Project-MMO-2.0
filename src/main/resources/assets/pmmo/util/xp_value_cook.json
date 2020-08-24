@@ -1,0 +1,59 @@
+{
+	"minecraft:mutton":
+	{
+		"cooking": 7.5
+	},
+	"minecraft:rabbit":
+	{
+		"cooking": 15
+	},
+	"minecraft:salmon":
+	{
+		"cooking": 7.5
+	},
+	"minecraft:cod":
+	{
+		"cooking": 5
+	},
+	"minecraft:beef":
+	{
+		"cooking": 10
+	},
+	"minecraft:porkchop":
+	{
+		"cooking": 12.5
+	},
+	"minecraft:chicken":
+	{
+		"cooking": 7.5
+	},
+	"minecraft:potato":
+	{
+		"cooking": 5
+	},
+	"minecraft:wet_sponge":
+	{
+		"cooking": 15,
+		"crafting": 15
+	},
+	"minecraft:cactus":
+	{
+		"cooking": 12.5,
+		"crafting": 4
+	},
+	"minecraft:sea_pickle":
+	{
+		"cooking": 10,
+		"crafting": 3
+	},
+	"minecraft:chorus_fruit":
+	{
+		"cooking": 25,
+		"crafting": 22.5
+	},
+	"minecraft:kelp":
+	{
+		"cooking": 10,
+		"crafting": 5
+	}
+}

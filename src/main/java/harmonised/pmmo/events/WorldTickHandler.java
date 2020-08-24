@@ -23,6 +23,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -254,14 +255,17 @@ public class WorldTickHandler
             return true;
 
         World world = player.world;
-        if( player.world == null )
+        if( world == null )
             return true;
 
-        String dimensionKey = XP.getDimensionResLoc( world, world.getDimension() ).toString();
+        ResourceLocation dimensionKey = XP.getDimensionResLoc( world, world.getDimension() );
+        if( dimensionKey == null )
+            return true;
+
         Map<String, Object> dimensionBlacklist = null;
 
-        if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( dimensionKey ) )
-            dimensionBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST ).get( dimensionKey );
+        if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( dimensionKey.toString() ) )
+            dimensionBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST ).get( dimensionKey.toString() );
 
         return dimensionBlacklist == null || !dimensionBlacklist.containsKey(blockKey);
     }
