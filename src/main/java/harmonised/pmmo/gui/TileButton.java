@@ -13,12 +13,14 @@ import net.minecraft.util.math.MathHelper;
 public class TileButton extends Button
 {
     private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
+    private final ResourceLocation items2 = XP.getResLoc( Reference.MOD_ID, "textures/gui/items2.png" );
     private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
     public int elementOne;
     public int offsetOne;
     public int elementTwo;
     public int offsetTwo;
     public int index;
+    public int page = 0;
     public String transKey;
 
     public TileButton( int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress )
@@ -36,6 +38,12 @@ public class TileButton extends Button
             offsetOne = 64;
         else
             offsetOne = 0;
+
+        if( elementTwo >= 32 )
+        {
+            page = 1;
+            elementTwo -= 32;
+        }
 
         if( elementTwo > 23 )
             offsetTwo = 192;
@@ -59,7 +67,7 @@ public class TileButton extends Button
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         minecraft.getTextureManager().bindTexture( buttons );
         this.blit(this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height );
-        minecraft.getTextureManager().bindTexture( items );
+        minecraft.getTextureManager().bindTexture( page == 0 ? items : items2 );
         this.blit(this.x, this.y, this.offsetTwo + ( this.isHovered() ? 32 : 0 ), this.elementTwo, this.width, this.height );
         this.renderBg(minecraft, p_renderButton_1_, p_renderButton_2_);
         int j = getFGColor();

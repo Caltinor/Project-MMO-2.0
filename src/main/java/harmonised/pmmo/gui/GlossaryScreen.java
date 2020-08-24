@@ -119,6 +119,16 @@ public class GlossaryScreen extends Screen
             updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_PLANT, Minecraft.getInstance().player ) );
         });
+        TileButton smeltButton = new TileButton( 0, 0, 3, 30, "pmmo.smeltTitle", "", button ->
+        {
+            updateHistory( ( (TileButton) button ).index );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_SMELT, Minecraft.getInstance().player ) );
+        });
+        TileButton cookButton = new TileButton( 0, 0, 3, 32, "pmmo.cookTitle", "", button ->
+        {
+            updateHistory( ( (TileButton) button ).index );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_COOK, Minecraft.getInstance().player ) );
+        });
         TileButton heldXpButton = new TileButton( 0, 0, 3, 19, "pmmo.heldTitle", "", button ->
         {
             updateHistory( ( (TileButton) button ).index );
@@ -148,6 +158,16 @@ public class GlossaryScreen extends Screen
         {
             updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_BREAK, Minecraft.getInstance().player ) );
+        });
+        TileButton smeltXpButton = new TileButton( 0, 0, 3, 31, "pmmo.smeltXpTitle","", button ->
+        {
+            updateHistory( ( (TileButton) button ).index );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_SMELT, Minecraft.getInstance().player ) );
+        });
+        TileButton cookXpButton = new TileButton( 0, 0, 3, 33, "pmmo.cookXpTitle","", button ->
+        {
+            updateHistory( ( (TileButton) button ).index );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_COOK, Minecraft.getInstance().player ) );
         });
         TileButton dimensionButton = new TileButton( 0, 0, 3, 8, "pmmo.dimensionTitle","", button ->
         {
@@ -192,12 +212,16 @@ public class GlossaryScreen extends Screen
         tileButtons.add( oreButton );
         tileButtons.add( logButton );
         tileButtons.add( plantButton );
+        tileButtons.add( smeltButton );
+        tileButtons.add( cookButton );
         tileButtons.add( heldXpButton );
         tileButtons.add( wornXpButton );
         tileButtons.add( breedXpButton );
         tileButtons.add( tameXpButton );
         tileButtons.add( craftXpButton );
         tileButtons.add( breakXpButton );
+        tileButtons.add( smeltXpButton );
+        tileButtons.add( cookXpButton );
         tileButtons.add( dimensionButton );
         tileButtons.add( biomeButton );
         tileButtons.add( mobButton );
