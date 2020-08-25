@@ -403,9 +403,9 @@ public class ListScreen extends Screen
                         infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
 
                     if ( extraDroppedPerLevel <= 0 )
-                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
+                        infoText.add( getTransComp( "pmmo.extraPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
                     else
-                        infoText.add( getTransComp( "pmmo.extraDropPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("green") ).getFormattedText() );
+                        infoText.add( getTransComp( "pmmo.extraPerLevel", DP.dpCustom( extraDroppedPerLevel, 4 ) ).setStyle( XP.textStyle.get("green") ).getFormattedText() );
 
                     if ( infoText.size() > 0 )
                         button.text.addAll( infoText );

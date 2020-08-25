@@ -10,13 +10,6 @@ public class ItemHandler
 {
     public static void handleItemEntityPickup( EntityItemPickupEvent event )
     {
-        ItemStack itemStack = event.getItem().getItem();
-        PlayerEntity player = event.getPlayer();
-
-        if( itemStack.getTag() == null )
-            itemStack.setTag( new CompoundNBT() );
-
-        itemStack.getTag().putUniqueId( "lastOwner", player.getUniqueID() );
-
+        PlayerTickHandler.tagOwnership( event.getItem().getItem(), event.getPlayer().getUniqueID() );
     }
 }
