@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin( AbstractFurnaceTileEntity.class )
 public class AbstractFurnaceTileEntityShrinkMixin extends TileEntity
@@ -25,7 +24,7 @@ public class AbstractFurnaceTileEntityShrinkMixin extends TileEntity
         super(p_i48289_1_);
     }
 
-    @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "func_214007_c", remap = false, locals = LocalCapture.CAPTURE_FAILEXCEPTION )
+    @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "func_214007_c" )
     private void projectmmo$$handleSmeltingShrink( IRecipe<?> p_214007_1_, CallbackInfo info )
     {
         FurnaceHandler.handleSmelted( items.get(0), items.get(2), this.getWorld(), 0 );

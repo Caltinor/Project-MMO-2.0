@@ -53,7 +53,7 @@ public class ListScrollPanel extends ScrollPanel
 
         for( ListButton a : buttons )
         {
-            height += a.getHeight() + 4;
+            height += a.unusedGetHeight() + 4;
         }
 
         return height;
@@ -68,12 +68,12 @@ public class ListScrollPanel extends ScrollPanel
             button.x = this.right - button.getWidth() - 8;
             button.y = relativeY + accumulativeHeight;
 
-            if( button.y + button.getHeight() + 2 > this.top && button.y - 2 < this.bottom )
+            if( button.y + button.unusedGetHeight() + 2 > this.top && button.y - 2 < this.bottom )
             {
                 if( button.unlocked )
-                    fillGradient( stack, this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0x22444444, 0x33222222);
+                    fillGradient( stack, this.left + 4, button.y - 2, this.right - 2, button.y + button.unusedGetHeight() + 2, 0x22444444, 0x33222222);
                 else
-                    fillGradient( stack, this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0xaa444444, 0xaa222222);
+                    fillGradient( stack, this.left + 4, button.y - 2, this.right - 2, button.y + button.unusedGetHeight() + 2, 0xaa444444, 0xaa222222);
 
                 button.render( stack,  mouseX, mouseY, 0 );
 
@@ -87,7 +87,7 @@ public class ListScrollPanel extends ScrollPanel
                     drawStringWithShadow( stack, Minecraft.getInstance().fontRenderer, line.getString(), this.left + 6, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
                 }
             }
-            accumulativeHeight += button.getHeight() + 4;
+            accumulativeHeight += button.unusedGetHeight() + 4;
         }
     }
 

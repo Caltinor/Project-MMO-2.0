@@ -77,7 +77,7 @@ public class CreditsScrollPanel extends ScrollPanel
                 button.y = relativeY + 12 + 46 + ( i / 3) * 92;
             }
 
-            if( accumulativeHeight + buttons.get( i ).getHeight() > scrollDistance && accumulativeHeight - height - 32 <= scrollDistance )
+            if( accumulativeHeight + buttons.get( i ).unusedGetHeight() > scrollDistance && accumulativeHeight - height - 32 <= scrollDistance )
             {
                 button.render( stack,  mouseX, mouseY, 0 );
             }

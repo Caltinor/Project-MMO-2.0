@@ -80,7 +80,7 @@ public class ListButtonBig extends Button
     }
 
     @Override
-    public int getHeight()
+    public int unusedGetHeight()
     {
         return height;
     }

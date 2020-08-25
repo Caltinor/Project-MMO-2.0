@@ -129,7 +129,7 @@ public class ListButton extends Button
     }
 
     @Override
-    public int getHeight()
+    public int unusedGetHeight()
     {
         int height = 11;
 

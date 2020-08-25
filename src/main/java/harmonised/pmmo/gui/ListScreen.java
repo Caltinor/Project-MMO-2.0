@@ -976,7 +976,7 @@ public class ListScreen extends Screen
                     renderTooltip( stack, button.itemStack, mouseX, mouseY );
             }
 
-            accumulativeHeight += button.getHeight();
+            accumulativeHeight += button.unusedGetHeight();
         }
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
@@ -1004,7 +1004,7 @@ public class ListScreen extends Screen
         accumulativeHeight = 0;
         for( ListButton listButton : listButtons )
         {
-            accumulativeHeight += listButton.getHeight();
+            accumulativeHeight += listButton.unusedGetHeight();
             if( accumulativeHeight > scrollPanel.getBottom() - scrollPanel.getTop() )
             {
                 scrollPanel.mouseScrolled( mouseX, mouseY, scroll );

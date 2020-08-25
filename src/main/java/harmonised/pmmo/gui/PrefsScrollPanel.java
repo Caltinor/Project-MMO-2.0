@@ -69,16 +69,16 @@ public class PrefsScrollPanel extends ScrollPanel
                 if( prefEntry.isSwitch )
                 {
                     if( slider.getValue() == 1 )
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0x22444444, 0x33222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.unusedGetHeight() + 2, 0x22444444, 0x33222222);
                     else
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.unusedGetHeight() + 2, 0xaa444444, 0xaa222222);
                 }
                 else
                 {
                     if( (float) prefEntry.defaultVal == (float) slider.getValue() )
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.unusedGetHeight() + 2, 0xaa444444, 0xaa222222);
                     else
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeight() + 2, 0x22444444, 0x33222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.unusedGetHeight() + 2, 0x22444444, 0x33222222);
                 }
 
                 drawCenteredString( stack,  font, prefEntry.preference, prefEntry.getX() + slider.getWidth() / 2, prefEntry.getY() - 9, 0xffffff );

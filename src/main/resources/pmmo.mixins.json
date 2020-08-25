@@ -4,8 +4,6 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "pmmo.refmap.json",
   "mixins": [
-    "AbstractFurnaceTileEntityShrinkMixin",
-    "CampfireTileEntitySetMixin"
   ],
   "server":[
   ],
