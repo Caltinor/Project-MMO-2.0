@@ -27,9 +27,11 @@ public class JsonConfig
 {
     public static Gson gson = new Gson();
     public static final Type mapType = new TypeToken<Map<String, Map<String, Object>>>(){}.getType();
+//    public static final Type mapType2 = new TypeToken<Map<String, Map<String, Map<String, Object>>>>(){}.getType();
 
     public static Set<JType> jTypes;
     private static Map<JType, Map<String, Map<String, Object>>> rawData = new HashMap<>();
+//    private static Map<JType, Map<String, Map<String, Map<String, Object>>>> rawData2 = new HashMap<>();
     public static Map<JType, Map<String, Map<String, Object>>> localData = new HashMap<>();
     public static Map<JType, Map<String, Map<String, Object>>> data = new HashMap<>();
 
@@ -179,6 +181,9 @@ public class JsonConfig
 
         if( Config.forgeConfig.craftReqEnabled.get() )
             jTypes.add( JType.REQ_CRAFT );
+
+        if( Config.forgeConfig.treasureEnabled.get() )
+            jTypes.add( JType.TREASURE );
     }
 
     private static void initData()
@@ -207,12 +212,15 @@ public class JsonConfig
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
 
             try
-                    (
-                            InputStream input = new FileInputStream( file.getPath() );
-                            Reader reader = new BufferedReader( new InputStreamReader( input ) );
-                    )
+            (
+                    InputStream input = new FileInputStream( file.getPath() );
+                    Reader reader = new BufferedReader( new InputStreamReader( input ) );
+            )
             {
-                rawData.put( jType, gson.fromJson( reader, mapType ) );
+//                if( jType.equals( JType.TREASURE ) )
+//                    rawData.put( jType, gson.fromJson( reader, mapType2 ) );
+//                else
+                    rawData.put( jType, gson.fromJson( reader, mapType ) );
             }
             catch (IOException e)
             {
@@ -331,6 +339,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.REQ_CRAFT ) )
             updateReqSkills( rawData.get( JType.REQ_CRAFT ), localData.get( JType.REQ_CRAFT ) );
+
+//        if( jTypes.contains( JType.TREASURE ) )
+//            updateTreasure( rawData2.get( JType.TREASURE ), localData2.get( JType.TREASURE ) );
     }
 
     private static void createData( File dataFile, String fileName )
@@ -916,5 +927,10 @@ public class JsonConfig
         }
 
         return anyValidAttributes;
+    }
+
+    private static void updateTreasure( Map<String, Map<String, Map<String, Object>>> theMap, Map<String, Map<String, Map<String, Object>>> output )
+    {
+
     }
 }

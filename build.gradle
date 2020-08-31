@@ -103,7 +103,7 @@ dependencies
     compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3")
 
-    runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
+//    runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
     runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")
     runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
 //    runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")

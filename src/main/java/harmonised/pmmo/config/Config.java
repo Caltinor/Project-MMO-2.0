@@ -194,6 +194,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
 
         //Excavation
+        public ConfigHelper.ConfigValueListener<Boolean> treasureEnabled;
 
         //Woodcutting
 
@@ -700,7 +701,7 @@ public class Config
                 this.deathXpPenaltyMultiplier = subscriber.subscribe(builder
                         .comment( "How much of the xp above whole level you loose (1 = 100% = from 5.5 to 5.0, 0.5 = 50% = from 5.5 to 5.25" )
                         .translation( "pmmo.deathXpPenaltyMultiplier" )
-                        .defineInRange( "deathXpPenaltyMultiplier", 1D, 0, 1) );
+                        .defineInRange( "deathXpPenaltyMultiplier", 0.5D, 0, 1) );
 
                 builder.pop();
             }
@@ -873,6 +874,11 @@ public class Config
 
             builder.push( "Excavation" );
             {
+                this.treasureEnabled = subscriber.subscribe(builder
+                        .comment( "Can players find treasure while breaking blocks?" )
+                        .translation( "pmmo.treasureEnabled" )
+                        .define( "treasureEnabled", true ) );
+
                 builder.pop();
             }
             builder.push( "Woodcutting" );

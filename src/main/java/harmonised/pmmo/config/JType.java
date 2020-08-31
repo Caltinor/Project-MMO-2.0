@@ -44,6 +44,7 @@ public enum JType
     BLOCK_SPECIFIC(34),
     VEIN_BLACKLIST(35),
     REQ_CRAFT(36),
+    TREASURE(37),
     SALVAGE_FROM(100),
     STATS(101),
     DIMENSION(102),
