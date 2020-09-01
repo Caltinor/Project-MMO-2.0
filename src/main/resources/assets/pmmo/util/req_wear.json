@@ -698,5 +698,37 @@
 		"endurance": 300,
 		"combat": 300,
 		"agility": 90
+	},
+	"minecolonies:pirate_hat":
+	{
+		"endurance": 30
+	},
+	"minecolonies:pirate_top":
+	{
+		"endurance": 30
+	},
+	"minecolonies:pirate_leggins":
+	{
+		"endurance": 30
+	},
+	"minecolonies:pirate_boots":
+	{
+		"endurance": 30
+	},
+	"minecolonies:pirate_cap":
+	{
+		"endurance": 45
+	},
+	"minecolonies:pirate_chest":
+	{
+		"endurance": 45
+	},
+	"minecolonies:pirate_legs":
+	{
+		"endurance": 45
+	},
+	"minecolonies:pirate_shoes":
+	{
+		"endurance": 45
 	}
 }

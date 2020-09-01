@@ -1,9 +1,11 @@
 package harmonised.pmmo.mixin;
 
+import harmonised.pmmo.events.BrewHandler;
 import harmonised.pmmo.events.FurnaceHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.BrewingStandTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
@@ -13,21 +15,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin( AbstractFurnaceTileEntity.class )
-public class AbstractFurnaceTileEntityShrinkMixin extends TileEntity
+@Mixin( BrewingStandTileEntity.class )
+public class BrewingStandTileEntityShrinkMixin extends TileEntity
 {
     @Shadow
-    protected NonNullList<ItemStack> items;
+    private NonNullList<ItemStack> brewingItemStacks;
 
-    public AbstractFurnaceTileEntityShrinkMixin(TileEntityType<?> p_i48289_1_)
+    public BrewingStandTileEntityShrinkMixin(TileEntityType<?> p_i48289_1_)
     {
         super(p_i48289_1_);
     }
 
-    @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "smelt" )
-    private void projectmmo$$handleSmeltingShrink( IRecipe<?> p_214007_1_, CallbackInfo info )
+    @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "brewPotions" )
+    private void projectmmo$$handleSmeltingShrink( CallbackInfo info )
     {
-        FurnaceHandler.handleSmelted( items.get(0), items.get(2), this.getWorld(), 0 );
-        FurnaceHandler.handleSmelted( items.get(0), items.get(2), this.getWorld(), 1 );
+        BrewHandler.handlePotionBrew( brewingItemStacks, this.getWorld() );
     }
 }

@@ -22,6 +22,7 @@ public class Config
 
     public static void initServer()
     {
+        //Info that will also be sent to Client so it's accessible
         localConfig.put( "baseXp", (double) forgeConfig.baseXp.get() );
         localConfig.put( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
         localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
@@ -194,7 +195,6 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
 
         //Excavation
-        public ConfigHelper.ConfigValueListener<Boolean> treasureEnabled;
 
         //Woodcutting
 
@@ -247,6 +247,10 @@ public class Config
         //Cooking
         public ConfigHelper.ConfigValueListener<Boolean> cookingXpEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> cookingEnabled;
+
+        //Alchemy
+        public ConfigHelper.ConfigValueListener<Boolean> brewingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> brewingEnabled;
 
         //Flying
 
@@ -701,7 +705,7 @@ public class Config
                 this.deathXpPenaltyMultiplier = subscriber.subscribe(builder
                         .comment( "How much of the xp above whole level you loose (1 = 100% = from 5.5 to 5.0, 0.5 = 50% = from 5.5 to 5.25" )
                         .translation( "pmmo.deathXpPenaltyMultiplier" )
-                        .defineInRange( "deathXpPenaltyMultiplier", 0.5D, 0, 1) );
+                        .defineInRange( "deathXpPenaltyMultiplier", 1D, 0, 1) );
 
                 builder.pop();
             }
@@ -874,11 +878,6 @@ public class Config
 
             builder.push( "Excavation" );
             {
-                this.treasureEnabled = subscriber.subscribe(builder
-                        .comment( "Can players find treasure while breaking blocks?" )
-                        .translation( "pmmo.treasureEnabled" )
-                        .define( "treasureEnabled", true ) );
-
                 builder.pop();
             }
             builder.push( "Woodcutting" );
@@ -1080,6 +1079,21 @@ public class Config
                         .comment( "Do Furnaces/Smokers/Fireplaces produce extra items according to Item Owner Cooking level?" )
                         .translation( "pmmo.cookingEnabled" )
                         .define( "cookingEnabled", true ) );
+
+                builder.pop();
+            }
+
+            builder.push( "Alchemy" );
+            {
+                this.brewingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for Brewing potions in Brewing Stands?" )
+                        .translation( "pmmo.brewingXpEnabled" )
+                        .define( "brewingXpEnabled", true ) );
+
+                this.brewingEnabled = subscriber.subscribe(builder
+                        .comment( "Does Brewing provide a chance to produce Extra potions?" )
+                        .translation( "pmmo.brewingEnabled" )
+                        .define( "brewingEnabled", true ) );
 
                 builder.pop();
             }

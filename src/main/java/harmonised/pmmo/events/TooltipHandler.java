@@ -64,6 +64,7 @@ public class TooltipHandler
                 Map<String, Object> xpValueCrafting = JsonConfig.data.get( JType.XP_VALUE_CRAFT ).get( regKey );
                 Map<String, Object> xpValueSmelting = JsonConfig.data.get( JType.XP_VALUE_SMELT ).get( regKey );
                 Map<String, Object> xpValueCooking = JsonConfig.data.get( JType.XP_VALUE_COOK ).get( regKey );
+                Map<String, Object> xpValueBrewing = JsonConfig.data.get( JType.XP_VALUE_BREW ).get( regKey );
                 Map<String, Object> salvageInfo = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
                 Map<String, Object> salvagesFrom = JsonConfig.data.get( JType.SALVAGE_FROM ).get( regKey );
                 Map<String, Object> heldItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
@@ -148,6 +149,20 @@ public class TooltipHandler
                     }
                 }
 
+                if( xpValueBrewing != null && xpValueBrewing.size() > 0 )      //XP BREW
+                {
+                    tooltip.add( new TranslationTextComponent( "pmmo.xpValueBrew" ) );
+
+                    for( String key : xpValueBrewing.keySet() )
+                    {
+                        if( xpValueBrewing.get( key ) instanceof Double )
+                        {
+                            dValue = (double) xpValueBrewing.get( key );
+                            tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                        }
+                    }
+                }
+
                 if( craftReq != null && craftReq.size() > 0 )
                     addTooltipTextSkill( "pmmo.toCraft", JType.REQ_CRAFT, craftReq, event );
 
@@ -224,6 +239,14 @@ public class TooltipHandler
                         tooltip.add( new TranslationTextComponent( "pmmo.cookExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_COOK ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
                     else
                         tooltip.add( new TranslationTextComponent( "pmmo.cookExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                }
+
+                if( JsonConfig.data.get( JType.INFO_BREW ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).containsKey( "extraChance" ) )
+                {
+                    if( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_BREW ) > 0 )  //BREW EXTRA CHANCE
+                        tooltip.add( new TranslationTextComponent( "pmmo.brewExtraDrop", DP.dp( XP.getExtraChance( player, item.getRegistryName(), JType.INFO_BREW ) / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                    else
+                        tooltip.add( new TranslationTextComponent( "pmmo.brewExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
                 }
 
                 if( salvageInfo != null && !XP.getItem( (String) salvageInfo.get( "salvageItem" ) ).equals( Items.AIR ) )

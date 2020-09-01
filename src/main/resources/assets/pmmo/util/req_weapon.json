@@ -324,5 +324,17 @@
 		"combat": 90,
 		"archery": 90,
 		"endurance": 90
+	},
+	"minecolonies:chiefsword":
+	{
+		"combat": 35
+	},
+	"minecolonies:iron_scimitar":
+	{
+		"combat": 15
+	},
+	"minecolonies:pharaoscepter":
+	{
+		"combat": 100
 	}
 }

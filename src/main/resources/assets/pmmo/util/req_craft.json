@@ -2,5 +2,328 @@
 	"minecraft:barrier":
 	{
 		"crafting": 999
+	},
+	"appliedenergistics2:controller":
+	{
+		"crafting": 100,
+		"smithing": 50,
+		"magic": 5
+	},
+	"appliedenergistics2:drive":
+	{
+		"crafting": 100,
+		"smithing": 50
+	},
+	"appliedenergistics2:io_port":
+	{
+		"crafting": 115,
+		"smithing": 60
+	},
+	"appliedenergistics2:terminal":
+	{
+		"crafting": 100
+	},
+	"appliedenergistics2:pattern_terminal":
+	{
+		"crafting": 140
+	},
+	"appliedenergistics2:crafting_terminal":
+	{
+		"crafting": 130
+	},
+	"appliedenergistics2:interface_terminal":
+	{
+		"crafting": 160,
+		"smithing": 75
+	},
+	"appliedenergistics2:fluid_terminal":
+	{
+		"crafting": 140,
+		"smithing": 60
+	},
+	"appliedenergistics2:annihilation_plane":
+	{
+		"crafting": 140,
+		"smithing": 90
+	},
+	"appliedenergistics2:formation_plane":
+	{
+		"crafting": 115,
+		"smithing": 80
+	},
+	"appliedenergistics2:fluid_annihilation_plane":
+	{
+		"crafting": 135,
+		"smithing": 85
+	},
+	"appliedenergistics2:fluid_formation_plane":
+	{
+		"crafting": 135,
+		"smithing": 75
+	},
+	"appliedenergistics2:interface":
+	{
+		"crafting": 135,
+		"smithing": 65
+	},
+	"appliedenergistics2:fluid_interface":
+	{
+		"crafting": 130,
+		"smithing": 60
+	},
+	"appliedenergistics2:quartz_growth_accelerator":
+	{
+		"crafting": 150,
+		"smithing": 60,
+		"magic": 15
+	},
+	"appliedenergistics2:4k_crafting_storage":
+	{
+		"crafting": 130,
+		"smithing": 45
+	},
+	"appliedenergistics2:16k_crafting_storage":
+	{
+		"crafting": 160,
+		"smithing": 85
+	},
+	"appliedenergistics2:64k_crafting_storage":
+	{
+		"crafting": 190,
+		"smithing": 100
+	},
+	"appliedenergistics2:vibration_chamber":
+	{
+		"crafting": 25,
+		"smithing": 20
+	},
+	"appliedenergistics2:molecular_assembler":
+	{
+		"crafting": 180,
+		"smithing": 90
+	},
+	"appliedenergistics2:1k_cell_component":
+	{
+		"crafting": 100,
+		"smithing": 30
+	},
+	"appliedenergistics2:4k_cell_component":
+	{
+		"crafting": 120,
+		"smithing": 40
+	},
+	"appliedenergistics2:16k_cell_component":
+	{
+		"crafting": 150,
+		"smithing": 80
+	},
+	"appliedenergistics2:64k_cell_component":
+	{
+		"crafting": 200,
+		"smithing": 100
+	},
+	"appliedenergistics2:1k_fluid_cell_component":
+	{
+		"crafting": 100,
+		"smithing": 20
+	},
+	"appliedenergistics2:4k_fluid_cell_component":
+	{
+		"crafting": 110,
+		"smithing": 40
+	},
+	"appliedenergistics2:16k_fluid_cell_component":
+	{
+		"crafting": 130,
+		"smithing": 60
+	},
+	"appliedenergistics2:64k_fluid_cell_component":
+	{
+		"crafting": 150,
+		"smithing": 80
+	},
+	"appliedenergistics2:wireless_terminal":
+	{
+		"crafting": 300,
+		"smithing": 120,
+		"magic": 15
+	},
+	"appliedenergistics2:wireless_booster":
+	{
+		"crafting": 160,
+		"smithing": 75
+	},
+	"appliedenergistics2:wireless_access_point":
+	{
+		"crafting": 140,
+		"smithing": 50
+	},
+	"appliedenergistics2:wireless_receiver":
+	{
+		"crafting": 140,
+		"smithing": 50
+	},
+	"appliedenergistics2:basic_card":
+	{
+		"crafting": 120
+	},
+	"appliedenergistics2:advanced_card":
+	{
+		"crafting": 150
+	},
+	"appliedenergistics2:inscriber":
+	{
+		"crafting": 110
+	},
+	"appliedenergistics2:charger":
+	{
+		"crafting": 105
+	},
+	"appliedenergistics2:condenser":
+	{
+		"crafting": 250
+	},
+	"appliedenergistics2:1k_storage_cell":
+	{
+		"crafting": 100,
+		"smithing": 30
+	},
+	"appliedenergistics2:4k_storage_cell":
+	{
+		"crafting": 120,
+		"smithing": 40
+	},
+	"appliedenergistics2:16k_storage_cell":
+	{
+		"crafting": 150,
+		"smithing": 80
+	},
+	"appliedenergistics2:64k_storage_cell":
+	{
+		"crafting": 200,
+		"smithing": 100
+	},
+	"appliedenergistics2:1k_fluid_storage_cell":
+	{
+		"crafting": 100,
+		"smithing": 20
+	},
+	"appliedenergistics2:4k_fluid_storage_cell":
+	{
+		"crafting": 110,
+		"smithing": 40
+	},
+	"appliedenergistics2:16k_fluid_storage_cell":
+	{
+		"crafting": 130,
+		"smithing": 60
+	},
+	"appliedenergistics2:64k_fluid_storage_cell":
+	{
+		"crafting": 150,
+		"smithing": 80
+	},
+	"appliedenergistics2:spatial_pylon":
+	{
+		"crafting": 160,
+		"smithing": 50,
+		"magic": 5
+	},
+	"appliedenergistics2:spatial_io_port":
+	{
+		"crafting": 160,
+		"smithing": 50,
+		"magic": 5
+	},
+	"appliedenergistics2:2_cubed_spatial_storage_cell":
+	{
+		"crafting": 160
+	},
+	"appliedenergistics2:2_cubed_spatial_cell_component":
+	{
+		"crafting": 160
+	},
+	"appliedenergistics2:16_cubed_spatial_storage_cell":
+	{
+		"crafting": 240
+	},
+	"appliedenergistics2:16_cubed_spatial_cell_component":
+	{
+		"crafting": 240
+	},
+	"appliedenergistics2:128_cubed_spatial_storage_cell":
+	{
+		"crafting": 560
+	},
+	"appliedenergistics2:128_cubed_spatial_cell_component":
+	{
+		"crafting": 560
+	},
+	"appliedenergistics2:certus_crystal_seed":
+	{
+		"crafting": 50
+	},
+	"appliedenergistics2:fluix_crystal_seed":
+	{
+		"crafting": 60
+	},
+	"appliedenergistics2:nether_quartz_seed":
+	{
+		"crafting": 40
+	},
+	"ironchest:iron_to_gold_chest_upgrade":
+	{
+		"building": 30
+	},
+	"ironchest:gold_to_diamond_chest_upgrade":
+	{
+		"building": 40
+	},
+	"ironchest:diamond_to_crystal_chest_upgrade":
+	{
+		"building": 50
+	},
+	"ironchest:wood_to_iron_chest_upgrade":
+	{
+		"building": 20
+	},
+	"ironchest:diamond_to_obsidian_chest_upgrade":
+	{
+		"building": 50
+	},
+	"ironchest:iron_chest":
+	{
+		"building": 20
+	},
+	"ironchest:gold_chest":
+	{
+		"building": 30
+	},
+	"ironchest:diamond_chest":
+	{
+		"building": 40
+	},
+	"ironchest:crystal_chest":
+	{
+		"building": 50
+	},
+	"ironchest:obsidian_chest":
+	{
+		"building": 50
+	},
+	"enderstorage:ender_chest":
+	{
+		"crafting": 60,
+		"magic": 4
+	},
+	"enderstorage:ender_tank":
+	{
+		"crafting": 50,
+		"magic": 3
+	},
+	"enderstorage:ender_pouch":
+	{
+		"crafting": 75,
+		"magic": 5
 	}
 }

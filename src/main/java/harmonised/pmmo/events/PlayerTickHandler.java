@@ -199,13 +199,13 @@ public class PlayerTickHandler
         }
     }
 
-    public static void tagOwnership(ItemStack itemStack, UUID uuid )
+    public static void tagOwnership( ItemStack itemStack, UUID uuid )
     {
         if( !itemStack.isEmpty() )
         {
             CompoundNBT tag = itemStack.getTag();
             String regKey = itemStack.getItem().getRegistryName().toString();
-            if( XP.hasElement( regKey, JType.INFO_SMELT ) || XP.hasElement( regKey, JType.XP_VALUE_SMELT ) || XP.hasElement( regKey, JType.INFO_COOK ) || XP.hasElement( regKey, JType.XP_VALUE_COOK ) )
+            if( XP.hasElement( regKey, JType.INFO_SMELT ) || XP.hasElement( regKey, JType.XP_VALUE_SMELT ) || XP.hasElement( regKey, JType.INFO_COOK ) || XP.hasElement( regKey, JType.XP_VALUE_COOK ) || XP.hasElement( regKey, JType.INFO_BREW ) || XP.hasElement( regKey, JType.XP_VALUE_BREW ) )
             {
                 if( tag == null )
                     itemStack.setTag( new CompoundNBT() );

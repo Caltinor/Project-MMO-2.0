@@ -48,5 +48,170 @@
 	{
 		"farming": 5,
 		"woodcutting": 15
+	},
+	"appliedenergistics2:controller":
+	{
+		"building": 50
+	},
+	"appliedenergistics2:drive":
+	{
+		"building": 50
+	},
+	"appliedenergistics2:io_port":
+	{
+		"building": 65
+	},
+	"appliedenergistics2:terminal":
+	{
+		"building": 25
+	},
+	"appliedenergistics2:pattern_terminal":
+	{
+		"building": 40
+	},
+	"appliedenergistics2:crafting_terminal":
+	{
+		"building": 30
+	},
+	"appliedenergistics2:interface_terminal":
+	{
+		"building": 60
+	},
+	"appliedenergistics2:fluid_terminal":
+	{
+		"building": 40
+	},
+	"appliedenergistics2:annihilation_plane":
+	{
+		"building": 75
+	},
+	"appliedenergistics2:formation_plane":
+	{
+		"building": 65
+	},
+	"appliedenergistics2:fluid_annihilation_plane":
+	{
+		"building": 70
+	},
+	"appliedenergistics2:fluid_formation_plane":
+	{
+		"building": 60
+	},
+	"appliedenergistics2:interface":
+	{
+		"building": 65
+	},
+	"appliedenergistics2:fluid_interface":
+	{
+		"building": 60
+	},
+	"appliedenergistics2:quartz_growth_accelerator":
+	{
+		"building": 55,
+		"magic": 10
+	},
+	"appliedenergistics2:crafting_accelerator":
+	{
+		"building": 55
+	},
+	"appliedenergistics2:1k_crafting_storage":
+	{
+		"building": 30
+	},
+	"appliedenergistics2:4k_crafting_storage":
+	{
+		"building": 45
+	},
+	"appliedenergistics2:16k_crafting_storage":
+	{
+		"building": 60
+	},
+	"appliedenergistics2:64k_crafting_storage":
+	{
+		"building": 80
+	},
+	"appliedenergistics2:vibration_chamber":
+	{
+		"building": 25
+	},
+	"appliedenergistics2:molecular_assembler":
+	{
+		"building": 60
+	},
+	"appliedenergistics2:wireless_access_point":
+	{
+		"building": 50
+	},
+	"appliedenergistics2:wireless_receiver":
+	{
+		"building": 50
+	},
+	"appliedenergistics2:security_station":
+	{
+		"building": 55
+	},
+	"appliedenergistics2:condenser":
+	{
+		"building": 75
+	},
+	"appliedenergistics2:spatial_pylon":
+	{
+		"building": 50
+	},
+	"appliedenergistics2:spatial_io_port":
+	{
+		"building": 50
+	},
+	"appliedenergistics2:storage_bus":
+	{
+		"building": 25
+	},
+	"appliedenergistics2:fluid_storage_bus":
+	{
+		"building": 20
+	},
+	"appliedenergistics2:import_bus":
+	{
+		"building": 35
+	},
+	"appliedenergistics2:fluid_import_bus":
+	{
+		"building": 30
+	},
+	"appliedenergistics2:export_bus":
+	{
+		"building": 35
+	},
+	"appliedenergistics2:fluid_export_bus":
+	{
+		"building": 30
+	},
+	"ironchest:iron_chest":
+	{
+		"building": 20
+	},
+	"ironchest:gold_chest":
+	{
+		"building": 30
+	},
+	"ironchest:diamond_chest":
+	{
+		"building": 40
+	},
+	"ironchest:crystal_chest":
+	{
+		"building": 50
+	},
+	"ironchest:obsidian_chest":
+	{
+		"building": 50
+	},
+	"enderstorage:ender_chest":
+	{
+		"building": 50
+	},
+	"enderstorage:ender_tank":
+	{
+		"building": 40
 	}
 }

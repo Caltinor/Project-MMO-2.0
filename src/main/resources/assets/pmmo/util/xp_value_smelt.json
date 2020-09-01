@@ -276,5 +276,21 @@
 	"minecraft:terracotta":
 	{
 		"smithing": 1.5
+	},
+	"appliedenergistics2:gold_dust":
+	{
+		"smithing": 16
+	},
+	"appliedenergistics2:iron_dust":
+	{
+		"smithing": 24
+	},
+	"appliedenergistics2:nether_quartz_dust":
+	{
+		"smithing": 12
+	},
+	"appliedenergistics2:certus_quartz_dust":
+	{
+		"smithing": 16
 	}
 }

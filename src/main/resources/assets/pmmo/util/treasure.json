@@ -1,0 +1,10 @@
+{
+	"minecraft:glowstone_dust":
+	{
+		"startChance": 1,
+		"startLevel": 5,
+		"endChance": 10,
+		"endLevel": 100,
+		"xp": 35
+	}
+}

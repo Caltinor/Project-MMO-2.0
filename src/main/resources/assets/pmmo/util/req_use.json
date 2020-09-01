@@ -11,5 +11,158 @@
 	"minecraft:enchanting_table":
 	{
 		"mining": 25
+	},
+	"appliedenergistics2:drive":
+	{
+		"crafting": 100,
+		"smithing": 50
+	},
+	"appliedenergistics2:io_port":
+	{
+		"crafting": 115,
+		"smithing": 60,
+		"magic": 10
+	},
+	"appliedenergistics2:terminal":
+	{
+		"crafting": 100,
+		"smithing": 50
+	},
+	"appliedenergistics2:pattern_terminal":
+	{
+		"crafting": 140,
+		"smithing": 50
+	},
+	"appliedenergistics2:crafting_terminal":
+	{
+		"crafting": 130,
+		"smithing": 50
+	},
+	"appliedenergistics2:interface_terminal":
+	{
+		"crafting": 160,
+		"smithing": 75
+	},
+	"appliedenergistics2:fluid_terminal":
+	{
+		"crafting": 140,
+		"smithing": 60
+	},
+	"appliedenergistics2:quartz_growth_accelerator":
+	{
+		"crafting": 150,
+		"smithing": 60,
+		"magic": 15
+	},
+	"appliedenergistics2:wireless_terminal":
+	{
+		"crafting": 300,
+		"smithing": 120,
+		"magic": 15
+	},
+	"appliedenergistics2:inscriber":
+	{
+		"crafting": 110,
+		"smithing": 50
+	},
+	"appliedenergistics2:charger":
+	{
+		"crafting": 105,
+		"smithing": 50
+	},
+	"appliedenergistics2:security_station":
+	{
+		"crafting": 135,
+		"smithing": 50,
+		"magic": 5
+	},
+	"appliedenergistics2:condenser":
+	{
+		"crafting": 250
+	},
+	"appliedenergistics2:biometric_card":
+	{
+		"smithing": 30
+	},
+	"appliedenergistics2:memory_card":
+	{
+		"smithing": 40
+	},
+	"appliedenergistics2:network_tool":
+	{
+		"smithing": 25
+	},
+	"appliedenergistics2:spatial_io_port":
+	{
+		"crafting": 160,
+		"smithing": 50,
+		"magic": 5
+	},
+	"ironchest:iron_to_gold_chest_upgrade":
+	{
+		"building": 30
+	},
+	"ironchest:gold_to_diamond_chest_upgrade":
+	{
+		"building": 40
+	},
+	"ironchest:diamond_to_crystal_chest_upgrade":
+	{
+		"building": 50
+	},
+	"ironchest:wood_to_iron_chest_upgrade":
+	{
+		"building": 20
+	},
+	"ironchest:diamond_to_obsidian_chest_upgrade":
+	{
+		"building": 50
+	},
+	"ironchest:iron_chest":
+	{
+		"building": 20
+	},
+	"ironchest:gold_chest":
+	{
+		"building": 30
+	},
+	"ironchest:diamond_chest":
+	{
+		"building": 40
+	},
+	"ironchest:crystal_chest":
+	{
+		"building": 50
+	},
+	"ironchest:obsidian_chest":
+	{
+		"building": 50
+	},
+	"enderstorage:ender_chest":
+	{
+		"building": 50,
+		"magic": 4
+	},
+	"enderstorage:ender_tank":
+	{
+		"building": 40,
+		"magic": 3
+	},
+	"enderstorage:ender_pouch":
+	{
+		"magic": 5
+	},
+	"minecolonies:blockhuttownhall":
+	{
+		"mining": 15,
+		"woodcutting": 15,
+		"excavation": 15,
+		"building": 15,
+		"farming": 15,
+		"fishing": 15,
+		"combat": 15,
+		"smithing": 15,
+		"crafting": 15,
+		"cooking": 15
 	}
 }

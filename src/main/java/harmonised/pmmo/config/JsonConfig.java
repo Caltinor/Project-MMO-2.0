@@ -27,11 +27,9 @@ public class JsonConfig
 {
     public static Gson gson = new Gson();
     public static final Type mapType = new TypeToken<Map<String, Map<String, Object>>>(){}.getType();
-//    public static final Type mapType2 = new TypeToken<Map<String, Map<String, Map<String, Object>>>>(){}.getType();
 
     public static Set<JType> jTypes;
     private static Map<JType, Map<String, Map<String, Object>>> rawData = new HashMap<>();
-//    private static Map<JType, Map<String, Map<String, Map<String, Object>>>> rawData2 = new HashMap<>();
     public static Map<JType, Map<String, Map<String, Object>>> localData = new HashMap<>();
     public static Map<JType, Map<String, Map<String, Object>>> data = new HashMap<>();
 
@@ -113,6 +111,9 @@ public class JsonConfig
         if( Config.forgeConfig.cookingXpEnabled.get() )
             jTypes.add( JType.XP_VALUE_COOK );
 
+        if( Config.forgeConfig.brewingXpEnabled.get() )
+            jTypes.add( JType.XP_VALUE_BREW );
+
         jTypes.add( JType.XP_VALUE_TRIGGER );
 
         if( Config.forgeConfig.placeReqEnabled.get() )
@@ -148,6 +149,9 @@ public class JsonConfig
         if( Config.forgeConfig.cookingEnabled.get() )
             jTypes.add( JType.INFO_COOK );
 
+        if( Config.forgeConfig.brewingEnabled.get() )
+            jTypes.add( JType.INFO_BREW );
+
         if( Config.forgeConfig.salvageEnabled.get() )
             jTypes.add( JType.SALVAGE_TO );
 
@@ -181,9 +185,6 @@ public class JsonConfig
 
         if( Config.forgeConfig.craftReqEnabled.get() )
             jTypes.add( JType.REQ_CRAFT );
-
-        if( Config.forgeConfig.treasureEnabled.get() )
-            jTypes.add( JType.TREASURE );
     }
 
     private static void initData()
@@ -212,15 +213,12 @@ public class JsonConfig
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
 
             try
-            (
-                    InputStream input = new FileInputStream( file.getPath() );
-                    Reader reader = new BufferedReader( new InputStreamReader( input ) );
-            )
+                    (
+                            InputStream input = new FileInputStream( file.getPath() );
+                            Reader reader = new BufferedReader( new InputStreamReader( input ) );
+                    )
             {
-//                if( jType.equals( JType.TREASURE ) )
-//                    rawData.put( jType, gson.fromJson( reader, mapType2 ) );
-//                else
-                    rawData.put( jType, gson.fromJson( reader, mapType ) );
+                rawData.put( jType, gson.fromJson( reader, mapType ) );
             }
             catch (IOException e)
             {
@@ -280,6 +278,9 @@ public class JsonConfig
         if( jTypes.contains( JType.XP_VALUE_KILL ) )
             updateReqSkills( rawData.get( JType.XP_VALUE_KILL ), localData.get( JType.XP_VALUE_KILL ) );
 
+        if( jTypes.contains( JType.XP_VALUE_BREW ) )
+            updateReqSkills( rawData.get( JType.XP_VALUE_BREW ), localData.get( JType.XP_VALUE_BREW ) );
+
         if( jTypes.contains( JType.XP_VALUE_TRIGGER ) )
             updateReqSkills( rawData.get( JType.XP_VALUE_TRIGGER ), localData.get( JType.XP_VALUE_TRIGGER ) );
 
@@ -297,6 +298,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.INFO_COOK ) )
             updateReqExtra( rawData.get( JType.INFO_COOK ), localData.get( JType.INFO_COOK ) );
+
+        if( jTypes.contains( JType.INFO_BREW ) )
+            updateReqExtra( rawData.get( JType.INFO_BREW ), localData.get( JType.INFO_BREW ) );
 
         if( jTypes.contains( JType.BIOME_EFFECT ) )
             updateReqEffects( rawData.get( JType.BIOME_EFFECT ), localData.get( JType.BIOME_EFFECT ) );
@@ -339,9 +343,6 @@ public class JsonConfig
 
         if( jTypes.contains( JType.REQ_CRAFT ) )
             updateReqSkills( rawData.get( JType.REQ_CRAFT ), localData.get( JType.REQ_CRAFT ) );
-
-//        if( jTypes.contains( JType.TREASURE ) )
-//            updateTreasure( rawData2.get( JType.TREASURE ), localData2.get( JType.TREASURE ) );
     }
 
     private static void createData( File dataFile, String fileName )
@@ -927,10 +928,5 @@ public class JsonConfig
         }
 
         return anyValidAttributes;
-    }
-
-    private static void updateTreasure( Map<String, Map<String, Map<String, Object>>> theMap, Map<String, Map<String, Map<String, Object>>> output )
-    {
-
     }
 }

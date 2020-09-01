@@ -5,7 +5,8 @@
   "refmap": "pmmo.refmap.json",
   "mixins": [
     "AbstractFurnaceTileEntityShrinkMixin",
-    "CampfireTileEntitySetMixin"
+    "CampfireTileEntitySetMixin",
+    "BrewingStandTileEntityShrinkMixin"
   ],
   "server":[
   ],

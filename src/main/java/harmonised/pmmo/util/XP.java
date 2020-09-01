@@ -84,6 +84,8 @@ public class XP
 		skillColors.put( Skill.FLETCHING, 0xff9700 );
 		skillColors.put( Skill.TAMING, 0xffffff );
 		skillColors.put( Skill.ENGINEERING, 0xffffff );
+		skillColors.put( Skill.COOKING, 0xe69900 );
+		skillColors.put( Skill.ALCHEMY, 0xe69900 );
 
 		skillStyle.put( Skill.MINING, new Style().setColor( TextFormatting.AQUA ) );
 		skillStyle.put( Skill.BUILDING, new Style().setColor( TextFormatting.AQUA ) );
@@ -105,6 +107,8 @@ public class XP
 		skillStyle.put( Skill.FLETCHING, new Style().setColor( TextFormatting.DARK_GREEN ) );
 		skillStyle.put( Skill.TAMING, new Style().setColor( TextFormatting.WHITE ) );
 		skillStyle.put( Skill.ENGINEERING, new Style().setColor( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.COOKING, new Style().setColor( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.ALCHEMY, new Style().setColor( TextFormatting.GOLD ) );
 
 //		skillStyle.put(Skill.MINING, TextFormatting.AQUA );
 //		skillStyle.put( Skill.BUILDING, TextFormatting.AQUA );
@@ -505,6 +509,13 @@ public class XP
 					if( JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" );
 				startLevel = getLevel( Skill.COOKING, player );
+				break;
+
+			case INFO_BREW:
+				if( JsonConfig.data.get( JType.INFO_BREW ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).get( "extraChance" );
+				startLevel = getLevel( Skill.ALCHEMY, player );
 				break;
 
 			default:
