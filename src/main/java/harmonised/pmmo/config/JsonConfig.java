@@ -111,6 +111,9 @@ public class JsonConfig
         if( Config.forgeConfig.cookingXpEnabled.get() )
             jTypes.add( JType.XP_VALUE_COOK );
 
+        if( Config.forgeConfig.brewingXpEnabled.get() )
+            jTypes.add( JType.XP_VALUE_BREW );
+
         jTypes.add( JType.XP_VALUE_TRIGGER );
 
         if( Config.forgeConfig.placeReqEnabled.get() )
@@ -145,6 +148,9 @@ public class JsonConfig
 
         if( Config.forgeConfig.cookingEnabled.get() )
             jTypes.add( JType.INFO_COOK );
+
+        if( Config.forgeConfig.brewingEnabled.get() )
+            jTypes.add( JType.INFO_BREW );
 
         if( Config.forgeConfig.salvageEnabled.get() )
             jTypes.add( JType.SALVAGE_TO );
@@ -272,6 +278,9 @@ public class JsonConfig
         if( jTypes.contains( JType.XP_VALUE_KILL ) )
             updateReqSkills( rawData.get( JType.XP_VALUE_KILL ), localData.get( JType.XP_VALUE_KILL ) );
 
+        if( jTypes.contains( JType.XP_VALUE_BREW ) )
+            updateReqSkills( rawData.get( JType.XP_VALUE_BREW ), localData.get( JType.XP_VALUE_BREW ) );
+
         if( jTypes.contains( JType.XP_VALUE_TRIGGER ) )
             updateReqSkills( rawData.get( JType.XP_VALUE_TRIGGER ), localData.get( JType.XP_VALUE_TRIGGER ) );
 
@@ -289,6 +298,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.INFO_COOK ) )
             updateReqExtra( rawData.get( JType.INFO_COOK ), localData.get( JType.INFO_COOK ) );
+
+        if( jTypes.contains( JType.INFO_BREW ) )
+            updateReqExtra( rawData.get( JType.INFO_BREW ), localData.get( JType.INFO_BREW ) );
 
         if( jTypes.contains( JType.BIOME_EFFECT ) )
             updateReqEffects( rawData.get( JType.BIOME_EFFECT ), localData.get( JType.BIOME_EFFECT ) );

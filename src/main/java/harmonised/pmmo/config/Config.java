@@ -22,6 +22,7 @@ public class Config
 
     public static void initServer()
     {
+        //Info that will also be sent to Client so it's accessible
         localConfig.put( "baseXp", (double) forgeConfig.baseXp.get() );
         localConfig.put( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
         localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
@@ -246,6 +247,10 @@ public class Config
         //Cooking
         public ConfigHelper.ConfigValueListener<Boolean> cookingXpEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> cookingEnabled;
+
+        //Alchemy
+        public ConfigHelper.ConfigValueListener<Boolean> brewingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> brewingEnabled;
 
         //Flying
 
@@ -1074,6 +1079,21 @@ public class Config
                         .comment( "Do Furnaces/Smokers/Fireplaces produce extra items according to Item Owner Cooking level?" )
                         .translation( "pmmo.cookingEnabled" )
                         .define( "cookingEnabled", true ) );
+
+                builder.pop();
+            }
+
+            builder.push( "Alchemy" );
+            {
+                this.brewingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for Brewing potions in Brewing Stands?" )
+                        .translation( "pmmo.brewingXpEnabled" )
+                        .define( "brewingXpEnabled", true ) );
+
+                this.brewingEnabled = subscriber.subscribe(builder
+                        .comment( "Does Brewing provide a chance to produce Extra potions?" )
+                        .translation( "pmmo.brewingEnabled" )
+                        .define( "brewingEnabled", true ) );
 
                 builder.pop();
             }

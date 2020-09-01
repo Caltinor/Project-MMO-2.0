@@ -49,12 +49,12 @@ public class PrefCommand
                 NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
                 AttributeHandler.updateAll( player );
 
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.func_235901_b_BeenSet", match, args[3] ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasBeenSet", match, args[3] ), false );
             }
             else if( prefsTag.contains( match ) )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.func_235901_b_TheValue", "" + match, "" + prefsTag.getDouble( match ) ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasTheValue", "" + match, "" + prefsTag.getDouble( match ) ), false );
             else
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.func_235901_b_UnsetValue", "" + match ), false );
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasUnsetValue", "" + match ), false );
         }
         else
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );

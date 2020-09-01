@@ -29,6 +29,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -64,6 +65,7 @@ public class XP
 	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
 	private static int debugInt = 0;
 	private static boolean alwaysDropWornItems = Config.forgeConfig.alwaysDropWornItems.get();
+
 	public static void initValues()
 	{
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
@@ -87,6 +89,8 @@ public class XP
 		skillColors.put( Skill.FLETCHING, 0xff9700 );
 		skillColors.put( Skill.TAMING, 0xffffff );
 		skillColors.put( Skill.ENGINEERING, 0xffffff );
+		skillColors.put( Skill.COOKING, 0xe69900 );
+		skillColors.put( Skill.ALCHEMY, 0xe69900 );
 
 		skillStyle.put( Skill.MINING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
 		skillStyle.put( Skill.BUILDING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
@@ -108,6 +112,8 @@ public class XP
 		skillStyle.put( Skill.FLETCHING, Style.EMPTY.withFormatting( TextFormatting.DARK_GREEN ) );
 		skillStyle.put( Skill.TAMING, Style.EMPTY.withFormatting( TextFormatting.WHITE ) );
 		skillStyle.put( Skill.ENGINEERING, Style.EMPTY.withFormatting( TextFormatting.WHITE ) );
+		skillStyle.put( Skill.COOKING, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
+		skillStyle.put( Skill.ALCHEMY, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
 
 //		skillStyle.put(Skill.MINING, TextFormatting.AQUA );
 //		skillStyle.put( Skill.BUILDING, TextFormatting.AQUA );
@@ -515,6 +521,13 @@ public class XP
 					if( JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" ) instanceof Double )
 						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" );
 				startLevel = getLevel( Skill.COOKING, player );
+				break;
+
+			case INFO_BREW:
+				if( JsonConfig.data.get( JType.INFO_BREW ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).containsKey( "extraChance" ) )
+					if( JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).get( "extraChance" ) instanceof Double )
+						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).get( "extraChance" );
+				startLevel = getLevel( Skill.ALCHEMY, player );
 				break;
 
 			default:

@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.brewing.PotionBrewEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.*;
@@ -144,7 +145,7 @@ public class EventHandler
 //	@SubscribeEvent
 //	public static void furnace( PlayerEvent.ItemSmeltedEvent )
 
-	@SubscribeEvent
+	@SubscribeEvent	//Recharge Vein
 	public static void sleepDone( SleepFinishedTimeEvent event )
 	{
 		SleepHandler.handleSleepFinished( event );
@@ -162,13 +163,13 @@ public class EventHandler
 		ChunkDataHandler.handleChunkDataSave( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent	//De-Cheese
 	public static void pistonPush( PistonEvent event )
 	{
 		PistonEventHandler.handlePistonPush( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent	//Tag lastOwner
 	public static void pickUpEntity( EntityItemPickupEvent event )
 	{
 		ItemHandler.handleItemEntityPickup( event );
