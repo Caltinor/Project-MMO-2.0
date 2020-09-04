@@ -1,22 +1,15 @@
 package harmonised.pmmo.events;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.brewing.PotionBrewEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.*;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.event.world.*;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
-
-import javax.swing.event.ChangeEvent;
 
 @Mod.EventBusSubscriber
 public class EventHandler
@@ -173,5 +166,23 @@ public class EventHandler
 	public static void pickUpEntity( EntityItemPickupEvent event )
 	{
 		ItemHandler.handleItemEntityPickup( event );
+	}
+
+	@SubscribeEvent
+	public static void saplingGrow( SaplingGrowTreeEvent event )
+	{
+		GrowHandler.handleSaplingGrow( event );
+	}
+
+	@SubscribeEvent
+	public static void cropGrow( BlockEvent.CropGrowEvent event )
+	{
+		GrowHandler.handleCropGrow( event );
+	}
+
+	@SubscribeEvent
+	public static void bonemeal( BonemealEvent event )
+	{
+		GrowHandler.handleBonemeal( event );
 	}
 }

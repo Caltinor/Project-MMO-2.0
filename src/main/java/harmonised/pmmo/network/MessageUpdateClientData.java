@@ -11,12 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class MessageUpdateReq
+public class MessageUpdateClientData
 {
     private CompoundNBT reqPackage = new CompoundNBT();
     private int type;
 
-    public MessageUpdateReq(Map<JType, Map<String, Map<String, Object>>> theMap, int type )
+    public MessageUpdateClientData(Map<JType, Map<String, Map<String, Object>>> theMap, int type )
     {
         this.type = type;
 
@@ -38,26 +38,26 @@ public class MessageUpdateReq
         }
     }
 
-    MessageUpdateReq()
+    MessageUpdateClientData()
     {
     }
 
-    public static MessageUpdateReq decode(PacketBuffer buf )
+    public static MessageUpdateClientData decode(PacketBuffer buf )
     {
-        MessageUpdateReq packet = new MessageUpdateReq();
+        MessageUpdateClientData packet = new MessageUpdateClientData();
         packet.reqPackage = buf.readCompoundTag();
         packet.type = buf.readInt();
 
         return packet;
     }
 
-    public static void encode(MessageUpdateReq packet, PacketBuffer buf )
+    public static void encode(MessageUpdateClientData packet, PacketBuffer buf )
     {
         buf.writeCompoundTag( packet.reqPackage );
         buf.writeInt( packet.type );
     }
 
-    public static void handlePacket(MessageUpdateReq packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageUpdateClientData packet, Supplier<NetworkEvent.Context> ctx )
     {
         ctx.get().enqueueWork(() ->
         {

@@ -65,7 +65,7 @@
 	},
 	"minecraft:redstone_ore":
 	{
-		"smithing": 20
+		"smithing": 15
 	},
 	"minecraft:lapis_ore":
 	{
@@ -292,5 +292,25 @@
 	"appliedenergistics2:certus_quartz_dust":
 	{
 		"smithing": 16
+	},
+	"create:copper_ore":
+	{
+		"smithing": 14
+	},
+	"create:zinc_ore":
+	{
+		"smithing": 16
+	},
+	"endreborn:wolframium_horse_armor":
+	{
+		"smithing": 20
+	},
+	"endreborn:end_wolframium_ore":
+	{
+		"smithing": 14
+	},
+	"biomesoplenty:mud_ball":
+	{
+		"smithing": 1.2
 	}
 }

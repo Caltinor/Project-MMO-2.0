@@ -29,7 +29,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -46,7 +45,6 @@ import java.util.stream.Collectors;
 
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
@@ -266,9 +264,9 @@ public class XP
 		return world.getRegistryManager().get( Registry.BIOME_KEY ).getKey( biome );
 	}
 
-	public static ResourceLocation getDimensionResLoc( World world, DimensionType dimensionType )
+	public static ResourceLocation getDimensionResLoc( World world )
 	{
-		return world.getRegistryManager().get( Registry.DIMENSION_TYPE_KEY ).getKey( dimensionType );
+		return world.getRegistryManager().get( Registry.DIMENSION_TYPE_KEY ).getKey( world.getDimension() );
 	}
 
 	public static String correctHarvestTool(Material material)
@@ -637,8 +635,8 @@ public class XP
 
 	public static void syncPlayerConfig( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdateReq( JsonConfig.localData, 0 ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateNBT( NBTHelper.mapToNBT( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateClientData( JsonConfig.localData, 0 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapToNBT( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayer( PlayerEntity player )
@@ -652,8 +650,8 @@ public class XP
 		updateRecipes( (ServerPlayerEntity) player );
 
         NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
 		AttributeHandler.updateAll( player );
 
         for( String tag : keySet )

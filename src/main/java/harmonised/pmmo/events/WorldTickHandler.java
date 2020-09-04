@@ -4,7 +4,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateBoolean;
-import harmonised.pmmo.network.MessageUpdateNBT;
+import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
@@ -101,7 +101,7 @@ public class WorldTickHandler
                     correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
                     correctHeldItem = player.getHeldItemMainhand().getItem().equals( startItem );
                     fullyGrown = true;
-                    blockUUID = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world, world.getDimension() ), veinPos );
+                    blockUUID = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), veinPos );
                     isOwner = blockUUID == null || blockUUID.equals( playerUUID );
                     skill = XP.getSkill( veinState );
 
@@ -258,7 +258,7 @@ public class WorldTickHandler
         if( world == null )
             return true;
 
-        ResourceLocation dimensionKey = XP.getDimensionResLoc( world, world.getDimension() );
+        ResourceLocation dimensionKey = XP.getDimensionResLoc( world );
         if( dimensionKey == null )
             return true;
 
@@ -407,6 +407,6 @@ public class WorldTickHandler
 
         abilitiesTag.putDouble( "veinLeft", veinLeft );
 
-        NetworkHandler.sendToPlayer( new MessageUpdateNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
+        NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
     }
 }

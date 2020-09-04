@@ -63,7 +63,7 @@ public class BlockBrokenHandler
             if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
             {
                 processBroken( event );
-                ChunkDataHandler.delPos( XP.getDimensionResLoc( world, world.getDimension() ), event.getPos() );
+                ChunkDataHandler.delPos( XP.getDimensionResLoc( world ), event.getPos() );
             }
         }
         else
@@ -122,7 +122,7 @@ public class BlockBrokenHandler
 
         Material material = event.getState().getMaterial();
         double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
-        boolean wasPlaced = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world, world.getDimension() ), event.getPos() ) != null;
+        boolean wasPlaced = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), event.getPos() ) != null;
         ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( material ).name().toLowerCase();
 //			String regKey = block.getRegistryName().toString();
@@ -191,7 +191,7 @@ public class BlockBrokenHandler
             boolean correctBlock = block.equals( baseBlock );
             while( correctBlock )
             {
-                wasPlaced = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world, world.getDimension() ), curBlockPos ) != null;
+                wasPlaced = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), curBlockPos ) != null;
                 if( !wasPlaced )
                 {
                     rewardable++;

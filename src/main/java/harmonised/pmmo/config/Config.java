@@ -200,6 +200,7 @@ public class Config
 
         //Farming
         public ConfigHelper.ConfigValueListener<Boolean> tamingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> growingXpEnabled;
         public ConfigHelper.ConfigValueListener<Double> defaultBreedingXp;
 
         //Agility
@@ -1175,6 +1176,11 @@ public class Config
                         .comment( "Do players get xp for taming animals?" )
                         .translation( "pmmo.tamingXpEnabled" )
                         .define( "tamingXpEnabled", true ) );
+
+                this.growingXpEnabled= subscriber.subscribe(builder
+                        .comment( "Do players get xp for growing Trees?" )
+                        .translation( "pmmo.growingXpEnabledXpEnabled" )
+                        .define( "growingXpEnabledXpEnabled", true ) );
 
                 this.defaultTamingXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Taming for Taming an animal? (Json Overrides this) (Set to 0 to disable default xp)" )

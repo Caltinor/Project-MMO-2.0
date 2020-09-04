@@ -46,5 +46,117 @@
 	"minecraft:acacia_wood":
 	{
 		"extraChance": 1.25
+	},
+	"biomesoplenty:fir_wood":
+	{
+		"extraChance": 0.7
+	},
+	"biomesoplenty:redwood_wood":
+	{
+		"extraChance": 0.8
+	},
+	"biomesoplenty:cherry_wood":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:mahogany_wood":
+	{
+		"extraChance": 0.85
+	},
+	"biomesoplenty:jacaranda_wood":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:palm_wood":
+	{
+		"extraChance": 1.5
+	},
+	"biomesoplenty:willow_wood":
+	{
+		"extraChance": 1.25
+	},
+	"biomesoplenty:dead_wood":
+	{
+		"extraChance": 1.75
+	},
+	"biomesoplenty:magic_wood":
+	{
+		"extraChance": 1.2
+	},
+	"biomesoplenty:umbran_wood":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:hellbark_wood":
+	{
+		"extraChance": 1.1
+	},
+	"biomesoplenty:fir_log":
+	{
+		"extraChance": 0.7
+	},
+	"biomesoplenty:redwood_log":
+	{
+		"extraChance": 0.8
+	},
+	"biomesoplenty:cherry_log":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:mahogany_log":
+	{
+		"extraChance": 0.85
+	},
+	"biomesoplenty:jacaranda_log":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:palm_log":
+	{
+		"extraChance": 1.5
+	},
+	"biomesoplenty:willow_log":
+	{
+		"extraChance": 1.25
+	},
+	"biomesoplenty:dead_log":
+	{
+		"extraChance": 1.75
+	},
+	"biomesoplenty:magic_log":
+	{
+		"extraChance": 1.2
+	},
+	"biomesoplenty:umbran_log":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:hellbark_log":
+	{
+		"extraChance": 1.1
+	},
+	"traverse:fir_wood":
+	{
+		"extraChance": 0.8
+	},
+	"traverse:fir_log":
+	{
+		"extraChance": 0.8
+	},
+	"autumnity:sappy_maple_wood":
+	{
+		"extraChance": 1.35
+	},
+	"autumnity:maple_wood":
+	{
+		"extraChance": 1.25
+	},
+	"autumnity:sappy_maple_log":
+	{
+		"extraChance": 1.35
+	},
+	"autumnity:maple_log":
+	{
+		"extraChance": 1.25
 	}
 }

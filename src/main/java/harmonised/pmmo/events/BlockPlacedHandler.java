@@ -91,7 +91,7 @@ public class BlockPlacedHandler
                     event.setCanceled( true );
                 }
 
-                ChunkDataHandler.addPos( XP.getDimensionResLoc( world, world.getDimension() ), event.getPos(), player.getUniqueID() );
+                ChunkDataHandler.addPos( XP.getDimensionResLoc( world ), event.getPos(), player.getUniqueID() );
             }
         }
     }

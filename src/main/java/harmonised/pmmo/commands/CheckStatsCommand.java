@@ -2,7 +2,7 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import harmonised.pmmo.network.MessageUpdateNBT;
+import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
@@ -45,7 +45,7 @@ public class CheckStatsCommand
             packetSkillsTag.putString( "UUID", target.getUniqueID().toString() );
             packetSkillsTag.putString( "name", target.getName().getString() );
 
-            NetworkHandler.sendToPlayer( new MessageUpdateNBT( packetSkillsTag, 3 ), (ServerPlayerEntity) sender );
+            NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( packetSkillsTag, 3 ), (ServerPlayerEntity) sender );
         }
         catch( CommandSyntaxException e )
         {

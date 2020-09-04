@@ -1,7 +1,7 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
-import harmonised.pmmo.network.MessageUpdateNBT;
+import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
@@ -46,7 +46,7 @@ public class PrefCommand
             {
                 prefsTag.putDouble( match, value );
 
-                NetworkHandler.sendToPlayer( new MessageUpdateNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
                 AttributeHandler.updateAll( player );
 
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasBeenSet", match, args[3] ), false );

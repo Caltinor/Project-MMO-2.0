@@ -28,11 +28,11 @@ public class PistonEventHandler
             UUID uuid;
             if( event.getPistonMoveType().equals( PistonEvent.PistonMoveType.EXTEND ) )
             {
-                uuid = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction ) );
+                uuid = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), pistonPos.offset( direction ) );
                 if( uuid != null )
                 {
-                    ChunkDataHandler.addPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction, 2 ), uuid );
-                    ChunkDataHandler.delPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction ) );
+                    ChunkDataHandler.addPos( XP.getDimensionResLoc( world ), pistonPos.offset( direction, 2 ), uuid );
+                    ChunkDataHandler.delPos( XP.getDimensionResLoc( world ), pistonPos.offset( direction ) );
                 }
             }
             else
@@ -41,8 +41,8 @@ public class PistonEventHandler
                 if( state.contains( MovingPistonBlock.TYPE ) && state.get( MovingPistonBlock.TYPE ).equals( PistonType.STICKY ) )
                 {
                     uuid = UUID.fromString( "80008135-1337-3251-1523-852369874125" );
-                    ChunkDataHandler.addPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction ), uuid );
-                    ChunkDataHandler.delPos( XP.getDimensionResLoc( world, world.getDimension() ), pistonPos.offset( direction, 2 ) );
+                    ChunkDataHandler.addPos( XP.getDimensionResLoc( world ), pistonPos.offset( direction ), uuid );
+                    ChunkDataHandler.delPos( XP.getDimensionResLoc( world ), pistonPos.offset( direction, 2 ) );
                 }
             }
         }

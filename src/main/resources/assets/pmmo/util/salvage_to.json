@@ -1329,6 +1329,16 @@
 		"xpPerItem": 0.1,
 		"levelReq": 1
 	},
+	"minecraft:rotten_flesh":
+	{
+		"salvageItem": "minecraft:leather",
+		"salvageMax": 1,
+		"baseChance": 20,
+		"chancePerLevel": 0.8,
+		"maxChance": 90,
+		"xpPerItem": 0.1,
+		"levelReq": 12
+	},
 	"minecraft:granite":
 	{
 		"salvageItem": "minecraft:cobblestone",

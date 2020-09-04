@@ -3,7 +3,7 @@ package harmonised.pmmo.proxy;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.ListScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
-import harmonised.pmmo.network.MessageUpdateNBT;
+import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
@@ -43,7 +43,7 @@ public class ClientHandler
         ClientRegistry.registerKeyBinding( OPEN_GLOSSARY );
     }
 
-    public static void updateNBTTag( MessageUpdateNBT packet )
+    public static void updateNBTTag( MessageUpdatePlayerNBT packet )
     {
         PlayerEntity player = Minecraft.getInstance().player;
         CompoundNBT newPackage = packet.reqPackage;
@@ -83,6 +83,6 @@ public class ClientHandler
 
     public static void syncPrefsToServer()
     {
-        NetworkHandler.sendToServer( new MessageUpdateNBT( XP.getPreferencesTag(Minecraft.getInstance().player ), 0 ) );
+        NetworkHandler.sendToServer( new MessageUpdatePlayerNBT( XP.getPreferencesTag(Minecraft.getInstance().player ), 0 ) );
     }
 }

@@ -15,37 +15,37 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class MessageUpdateNBT
+public class MessageUpdatePlayerNBT
 {
     public CompoundNBT reqPackage = new CompoundNBT();
     public int type;
 
-    public MessageUpdateNBT( CompoundNBT theNBT, int type )
+    public MessageUpdatePlayerNBT(CompoundNBT theNBT, int type )
     {
         this.type = type;
         reqPackage = theNBT;
     }
 
-    MessageUpdateNBT()
+    MessageUpdatePlayerNBT()
     {
     }
 
-    public static MessageUpdateNBT decode( PacketBuffer buf )
+    public static MessageUpdatePlayerNBT decode(PacketBuffer buf )
     {
-        MessageUpdateNBT packet = new MessageUpdateNBT();
+        MessageUpdatePlayerNBT packet = new MessageUpdatePlayerNBT();
         packet.reqPackage = buf.readCompoundTag();
         packet.type = buf.readInt();
 
         return packet;
     }
 
-    public static void encode( MessageUpdateNBT packet, PacketBuffer buf )
+    public static void encode(MessageUpdatePlayerNBT packet, PacketBuffer buf )
     {
         buf.writeCompoundTag( packet.reqPackage );
         buf.writeInt( packet.type );
     }
 
-    public static void handlePacket( MessageUpdateNBT packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageUpdatePlayerNBT packet, Supplier<NetworkEvent.Context> ctx )
     {
         ctx.get().enqueueWork(() ->
         {
