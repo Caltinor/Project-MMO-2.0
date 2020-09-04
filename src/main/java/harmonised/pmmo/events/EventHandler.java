@@ -173,4 +173,10 @@ public class EventHandler
 	{
 		GrowHandler.handleSaplingGrow( event );
 	}
+
+	@SubscribeEvent
+	public static void cropGrow( BlockEvent.CropGrowEvent.Post event )
+	{
+		GrowHandler.handleCropGrow( event );
+	}
 }

@@ -268,7 +268,7 @@ public class BlockBrokenHandler
                 age = state.get( BlockStateProperties.AGE_0_7 );
                 maxAge = 7;
             }
-            else if( state.has( BlockStateProperties.AGE_0_15) )
+            else if( state.has( BlockStateProperties.AGE_0_15 ) )
             {
                 age = state.get( BlockStateProperties.AGE_0_15 );
                 maxAge = 15;

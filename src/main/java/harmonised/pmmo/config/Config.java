@@ -177,6 +177,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> xpLeftDisplayAlwaysOn;
         public ConfigHelper.ConfigValueListener<Boolean> lvlUpScreenshot;
         public ConfigHelper.ConfigValueListener<Boolean> lvlUpScreenshotShowSkills;
+        public ConfigHelper.ConfigValueListener<Boolean> xpDropsShowXpBar;
 
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
@@ -809,6 +810,11 @@ public class Config
                         .translation( "pmmo.lvlUpScreenshotShowSkills" )
                         .define( "lvlUpScreenshotShowSkills", false ) );
 
+                this.xpDropsShowXpBar = subscriber.subscribe(builder
+                        .comment( "Should Xp Drops make the Xp Bar pop up?" )
+                        .translation( "pmmo.xpDropsShowXpBar" )
+                        .define( "xpDropsShowXpBar", true ) );
+
                 builder.pop();
             }
 
@@ -1177,8 +1183,8 @@ public class Config
                         .translation( "pmmo.tamingXpEnabled" )
                         .define( "tamingXpEnabled", true ) );
 
-                this.growingXpEnabled= subscriber.subscribe(builder
-                        .comment( "Do players get xp for growing Trees?" )
+                this.growingXpEnabled = subscriber.subscribe(builder
+                        .comment( "Do players get xp for growing Plants? (Different from Harvest xp)" )
                         .translation( "pmmo.growingXpEnabledXpEnabled" )
                         .define( "growingXpEnabledXpEnabled", true ) );
 

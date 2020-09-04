@@ -95,13 +95,13 @@ repositories
 
 dependencies
 {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.2.5'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.2.36'
     implementation 'com.google.code.gson:gson:2.8.6'
 
     compile 'org.spongepowered:mixin:0.8'
 
-    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3")
+    compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.3.15:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.3.15")
 
 //    runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
     runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")

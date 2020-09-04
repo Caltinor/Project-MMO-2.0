@@ -1209,8 +1209,7 @@ public class XP
 		if( player instanceof ServerPlayerEntity )
 			NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
 
-		if( !skip )
-			LogHandler.LOGGER.debug( ( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getDouble( skillName ) ) );
+		LogHandler.LOGGER.debug( ( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getDouble( skillName ) ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
