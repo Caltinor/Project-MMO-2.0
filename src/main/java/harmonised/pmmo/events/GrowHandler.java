@@ -1,8 +1,14 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ChorusFlowerBlock;
+import net.minecraft.block.ChorusPlantBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
@@ -34,16 +40,32 @@ public class GrowHandler
         }
     }
 
-    public static void handleCropGrow( BlockEvent.CropGrowEvent event )
+    public static void handleCropGrow( BlockEvent.CropGrowEvent.Post event )
     {
         World world = (World) event.getWorld();
         BlockPos pos = event.getPos();
-        UUID uuid = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), pos );
+        ResourceLocation resLoc = event.getWorld().getBlockState( pos ).getBlock().getRegistryName();
+        BlockState state = world.getBlockState( pos );
+        UUID uuid = null;
+
+        uuid = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), pos );
+
+        if( uuid == null && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( resLoc.toString() ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( resLoc.toString() ).containsKey( "growsUpwards" ) )
+        {
+            BlockPos tempPos = pos;
+            Block block = state.getBlock();
+
+            while( world.getBlockState( tempPos.down() ).getBlock().equals( block ) && uuid == null )
+            {
+                tempPos = tempPos.down();
+                uuid = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), tempPos );
+            }
+        }
+
         PlayerEntity player = world.getServer().getPlayerList().getPlayerByUUID( uuid );
 
         if( player != null )
         {
-            BlockState state = world.getBlockState( pos );
             int age = -1;
             int maxAge = -1;
 
@@ -72,7 +94,7 @@ public class GrowHandler
                 age = state.get( BlockStateProperties.AGE_0_7 );
                 maxAge = 7;
             }
-            else if( state.contains( BlockStateProperties.AGE_0_15) )
+            else if( state.contains( BlockStateProperties.AGE_0_15 ) )
             {
                 age = state.get( BlockStateProperties.AGE_0_15 );
                 maxAge = 15;
@@ -90,20 +112,11 @@ public class GrowHandler
 
             if( age != -1 && age == maxAge )
             {
-                ResourceLocation resLoc = event.getWorld().getBlockState( pos ).getBlock().getRegistryName();
                 Map<String, Double> award = XP.getXp( resLoc, JType.XP_VALUE_GROW );
 
                 if( award.size() > 0 )
-                    XP.awardXpMapDouble( player, award, "Growing a Tree at " + pos, true, false );
+                    XP.awardXpMapDouble( player, award, "Growing a Crop at " + pos, true, false );
             }
-        }
-    }
-
-    public static void handleBonemeal( BonemealEvent event )
-    {
-        if( !event.getWorld().isRemote() )
-        {
-            System.out.println( "bonemeal" );
         }
     }
 }

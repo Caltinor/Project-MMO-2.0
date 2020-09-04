@@ -123,6 +123,7 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("xpBarAlwaysOn", "", "", 0, 1, prefsTag.contains( "xpBarAlwaysOn" ) ? prefsTag.getDouble( "xpBarAlwaysOn" ) : 0, 0, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("xpLeftDisplayAlwaysOn", "", "", 0, 1, prefsTag.contains( "xpLeftDisplayAlwaysOn" ) ? prefsTag.getDouble( "xpLeftDisplayAlwaysOn" ) : 0, 0, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("lvlUpScreenshot", "", "", 0, 1, prefsTag.contains( "lvlUpScreenshot" ) ? prefsTag.getDouble( "lvlUpScreenshot" ) : 0, 0, false, true, false, true ) );
+                prefsEntries.add( new PrefsEntry("xpDropsShowXpBar", "", "", 0, 1, prefsTag.contains( "xpDropsShowXpBar" ) ? prefsTag.getDouble( "xpDropsShowXpBar" ) : 1, 1, false, true, false, true ) );
                 break;
         }
 

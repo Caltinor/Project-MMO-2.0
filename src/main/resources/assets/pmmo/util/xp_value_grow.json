@@ -23,6 +23,74 @@
 	{
 		"farming": 30
 	},
+	"minecraft:sugar_cane":
+	{
+		"farming": 5
+	},
+	"minecraft:cactus":
+	{
+		"farming": 6
+	},
+	"minecraft:bamboo":
+	{
+		"farming": 1.2
+	},
+	"minecraft:bamboo_sapling":
+	{
+		"farming": 1.2
+	},
+	"minecraft:kelp":
+	{
+		"farming": 2
+	},
+	"minecraft:kelp_plant":
+	{
+		"farming": 2
+	},
+	"minecraft:sea_pickle":
+	{
+		"farming": 4
+	},
+	"minecraft:wheat":
+	{
+		"farming": 20
+	},
+	"minecraft:wheat_seeds":
+	{
+		"farming": 20
+	},
+	"minecraft:beetroot":
+	{
+		"farming": 30
+	},
+	"minecraft:beetroots":
+	{
+		"farming": 30
+	},
+	"minecraft:carrot":
+	{
+		"farming": 17.5
+	},
+	"minecraft:carrots":
+	{
+		"farming": 17.5
+	},
+	"minecraft:potato":
+	{
+		"farming": 15
+	},
+	"minecraft:potatoes":
+	{
+		"farming": 15
+	},
+	"minecraft:cocoa":
+	{
+		"farming": 30
+	},
+	"minecraft:nether_wart":
+	{
+		"farming": 10
+	},
 	"biomesoplenty:origin_sapling":
 	{
 		"farming": 5

@@ -175,14 +175,8 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void cropGrow( BlockEvent.CropGrowEvent event )
+	public static void cropGrow( BlockEvent.CropGrowEvent.Post event )
 	{
 		GrowHandler.handleCropGrow( event );
-	}
-
-	@SubscribeEvent
-	public static void bonemeal( BonemealEvent event )
-	{
-		GrowHandler.handleBonemeal( event );
 	}
 }

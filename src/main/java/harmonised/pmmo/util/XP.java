@@ -1029,18 +1029,19 @@ public class XP
 				itemBoost += (double) heldMap.get( skillName );
 		}
 
-		if( Curios.isLoaded() )
-		{
-			Collection<ICurioStacksHandler> curiosItems = Curios.getCurios(player).collect(Collectors.toSet());
-
-			for( ICurioStacksHandler value : curiosItems )
-			{
-				for (int i = 0; i < value.getSlots(); i++)
-				{
-					itemBoost += getWornXpBoost( player, value.getStacks().getStackInSlot(i).getItem(), skillName );
-				}
-			};
-		}
+//		if( Curios.isLoaded() )
+//		{
+//			Collection<ICurioStacksHandler> curiosItems = Curios.getCurios(player).collect(Collectors.toSet());
+//
+//			for( ICurioStacksHandler value : curiosItems )
+//			{
+//				for (int i = 0; i < value.getSlots(); i++)
+//				{
+//					itemBoost += getWornXpBoost( player, value.getStacks().getStackInSlot(i).getItem(), skillName );
+//				}
+//			};
+//		}
+		//COUT
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
 			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
@@ -1237,8 +1238,7 @@ public class XP
 		if( player instanceof ServerPlayerEntity )
 			NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
 
-		if( !skip )
-			LogHandler.LOGGER.debug( ( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getDouble( skillName ) ) );
+		LogHandler.LOGGER.debug( ( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getDouble( skillName ) ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{

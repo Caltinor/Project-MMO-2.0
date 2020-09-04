@@ -331,65 +331,65 @@
 	},
 	"minecraft:sugar_cane":
 	{
-		"farming": 10
+		"farming": 1.5
 	},
 	"minecraft:cactus":
 	{
-		"farming": 12
+		"farming": 2
 	},
 	"minecraft:bamboo":
 	{
-		"farming": 1.2,
+		"farming": 0.2,
 		"woodcutting": 0.4
 	},
 	"minecraft:bamboo_sapling":
 	{
-		"farming": 1.2,
+		"farming": 0.2,
 		"woodcutting": 0.4
 	},
 	"minecraft:kelp":
 	{
-		"farming": 2
+		"farming": 1
 	},
 	"minecraft:kelp_plant":
 	{
-		"farming": 2
+		"farming": 1
 	},
 	"minecraft:sea_pickle":
 	{
-		"farming": 4
+		"farming": 1
 	},
 	"minecraft:wheat":
 	{
-		"farming": 12
+		"farming": 1
 	},
 	"minecraft:wheat_seeds":
 	{
-		"farming": 12
+		"farming": 1
 	},
 	"minecraft:beetroot":
 	{
-		"farming": 15
+		"farming": 1.5
 	},
 	"minecraft:beetroots":
 	{
-		"farming": 15
+		"farming": 1.5
 	},
 	"minecraft:carrot":
 	{
-		"farming": 4.5
+		"farming": 1
 	},
 	"minecraft:carrots":
 	{
-		"farming": 4.5
+		"farming": 1
 	},
 	"minecraft:potato":
 	{
-		"farming": 3.5
+		"farming": 0.75
 	},
 	"minecraft:potatoes":
 	{
-		"farming": 3.5
+		"farming": 0.75
 	},
 	"minecraft:melon":
 	{
@@ -411,21 +411,21 @@
 	{
 		"farming": 7.5
 	},
+	"minecraft:cocoa":
+	{
+		"farming": 2
+	},
+	"minecraft:nether_wart":
+	{
+		"farming": 1
+	},
 	"minecraft:chorus_flower":
 	{
 		"farming": 35
 	},
-	"minecraft:cocoa":
-	{
-		"farming": 30
-	},
 	"minecraft:chorus_plant":
 	{
 		"farming": 2.5
-	},
-	"minecraft:nether_wart":
-	{
-		"farming": 5
 	},
 	"minecraft:lily_pad":
 	{

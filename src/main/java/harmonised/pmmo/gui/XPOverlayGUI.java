@@ -43,7 +43,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String skillName = "none";
-	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, guiKey = false, veinKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills;
+	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, guiKey = false, veinKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills, xpDropsShowXpBar;
 	private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft mc = Minecraft.getInstance();
@@ -212,7 +212,9 @@ public class XPOverlayGUI extends AbstractGui
 				if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 				{
 					aSkill = skills.get( xpDrop.skill );
-					skill = xpDrop.skill;
+					
+					if( !xpDrop.skip )
+						skill = xpDrop.skill;
 
 					decayRate = xpDrop.gainedXp * 0.03 * timeDiff / 10000000;
 					if( stackXpDrops )
@@ -605,6 +607,11 @@ public class XPOverlayGUI extends AbstractGui
 		else
 			lvlUpScreenshotShowSkills = Config.forgeConfig.lvlUpScreenshotShowSkills.get();
 
+		if( prefsTag.contains( "xpDropsShowXpBar" ) )
+			xpDropsShowXpBar = prefsTag.getDouble("xpDropsShowXpBar" ) != 0;
+		else
+			xpDropsShowXpBar = Config.forgeConfig.xpDropsShowXpBar.get();
+
 		if( !xpDropsAttachedToBar )
 			xpDropYLimit = 999999999;
 		else
@@ -715,7 +722,9 @@ public class XPOverlayGUI extends AbstractGui
 			aSkill.goalPos = aSkill.pos;
 			aSkill.xp = xp;
 			aSkill.goalXp = xp;
-			XPOverlayGUI.cooldown = cooldown;
+
+			if( xpDropsShowXpBar )
+				XPOverlayGUI.cooldown = cooldown;
 
 			for( int i = 0; i < xpDrops.size(); i++ )
 			{
@@ -751,8 +760,8 @@ public class XPOverlayGUI extends AbstractGui
 			else
 				xpDrops.add( new XpDrop( 0, xpDropSpawnDistance, skillIn, xp, gainedXp, skip ) );
 		}
-		
-		if( !skip )
+
+		if( xpDropsShowXpBar && !skip )
 			XPOverlayGUI.cooldown = cooldown;
 
 		levelGap = 0;
