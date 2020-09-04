@@ -1,6 +1,5 @@
 package harmonised.pmmo.events;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -11,8 +10,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
-
-import javax.swing.event.ChangeEvent;
 
 @Mod.EventBusSubscriber
 public class EventHandler
@@ -169,5 +166,11 @@ public class EventHandler
 	public static void pickUpEntity( EntityItemPickupEvent event )
 	{
 		ItemHandler.handleItemEntityPickup( event );
+	}
+
+	@SubscribeEvent
+	public static void saplingGrow( SaplingGrowTreeEvent event )
+	{
+		GrowHandler.handleSaplingGrow( event );
 	}
 }

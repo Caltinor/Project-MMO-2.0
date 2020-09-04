@@ -730,5 +730,29 @@
 	"minecolonies:pirate_shoes":
 	{
 		"endurance": 45
+	},
+	"create:goggles":
+	{
+		"crafting": 25
+	},
+	"endreborn:wolframium_helmet":
+	{
+		"endurance": 32
+	},
+	"endreborn:wolframium_chestplate":
+	{
+		"endurance": 32
+	},
+	"endreborn:wolframium_leggings":
+	{
+		"endurance": 32
+	},
+	"endreborn:wolframium_boots":
+	{
+		"endurance": 32
+	},
+	"endreborn:ender_boots":
+	{
+		"endurance": 45
 	}
 }

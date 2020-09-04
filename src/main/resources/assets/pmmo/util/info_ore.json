@@ -34,5 +34,21 @@
 	"minecraft:glowstone":
 	{
 		"extraChance": 0.1
+	},
+	"create:copper_ore":
+	{
+		"extraChance": 0.8
+	},
+	"create:zinc_ore":
+	{
+		"extraChance": 0.75
+	},
+	"endreborn:obsidian_ore":
+	{
+		"extraChance": 0.8
+	},
+	"endreborn:end_wolframium_ore":
+	{
+		"extraChance": 1.2
 	}
 }

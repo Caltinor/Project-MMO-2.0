@@ -274,5 +274,41 @@
 	"minecraft:terracotta":
 	{
 		"extraChance": 1.5
+	},
+	"appliedenergistics2:gold_dust":
+	{
+		"extraChance": 0.5
+	},
+	"appliedenergistics2:iron_dust":
+	{
+		"extraChance": 1
+	},
+	"appliedenergistics2:nether_quartz_dust":
+	{
+		"extraChance": 1
+	},
+	"appliedenergistics2:certus_quartz_dust":
+	{
+		"extraChance": 1.2
+	},
+	"create:copper_ore":
+	{
+		"extraChance": 0.85
+	},
+	"create:zinc_ore":
+	{
+		"extraChance": 0.7
+	},
+	"endreborn:wolframium_horse_armor":
+	{
+		"extraChance": 50
+	},
+	"endreborn:end_wolframium_ore":
+	{
+		"extraChance": 1.2
+	},
+	"biomesoplenty:mud_ball":
+	{
+		"extraChance": 1.2
 	}
 }

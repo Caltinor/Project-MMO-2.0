@@ -1907,5 +1907,143 @@
 	"appliedenergistics2:charged_quartz_ore":
 	{
 		"mining": 20
+	},
+	"create:copper_ore":
+	{
+		"mining": 18
+	},
+	"create:zinc_ore":
+	{
+		"mining": 22
+	},
+	"endreborn:quartz_ore":
+	{
+		"mining": 12
+	},
+	"endreborn:obsidian_ore":
+	{
+		"mining": 50
+	},
+	"endreborn:wolframium_ore":
+	{
+		"mining": 12
+	},
+	"endreborn:end_wolframium_ore":
+	{
+		"mining": 14
+	},
+	"biomesoplenty:fir_wood":
+	{
+		"woodcutting": 8
+	},
+	"biomesoplenty:redwood_wood":
+	{
+		"woodcutting": 7
+	},
+	"biomesoplenty:cherry_wood":
+	{
+		"woodcutting": 15
+	},
+	"biomesoplenty:mahogany_wood":
+	{
+		"woodcutting": 8
+	},
+	"biomesoplenty:jacaranda_wood":
+	{
+		"woodcutting": 9
+	},
+	"biomesoplenty:palm_wood":
+	{
+		"woodcutting": 12
+	},
+	"biomesoplenty:willow_wood":
+	{
+		"woodcutting": 14
+	},
+	"biomesoplenty:dead_wood":
+	{
+		"woodcutting": 6
+	},
+	"biomesoplenty:magic_wood":
+	{
+		"woodcutting": 15,
+		"magic": 5
+	},
+	"biomesoplenty:umbran_wood":
+	{
+		"woodcutting": 9
+	},
+	"biomesoplenty:hellbark_wood":
+	{
+		"woodcutting": 10
+	},
+	"biomesoplenty:fir_log":
+	{
+		"woodcutting": 8
+	},
+	"biomesoplenty:redwood_log":
+	{
+		"woodcutting": 7
+	},
+	"biomesoplenty:cherry_log":
+	{
+		"woodcutting": 15
+	},
+	"biomesoplenty:mahogany_log":
+	{
+		"woodcutting": 8
+	},
+	"biomesoplenty:jacaranda_log":
+	{
+		"woodcutting": 9
+	},
+	"biomesoplenty:palm_log":
+	{
+		"woodcutting": 12
+	},
+	"biomesoplenty:willow_log":
+	{
+		"woodcutting": 14
+	},
+	"biomesoplenty:dead_log":
+	{
+		"woodcutting": 6
+	},
+	"biomesoplenty:magic_log":
+	{
+		"woodcutting": 15,
+		"magic": 5
+	},
+	"biomesoplenty:umbran_log":
+	{
+		"woodcutting": 9
+	},
+	"biomesoplenty:hellbark_log":
+	{
+		"woodcutting": 10
+	},
+	"traverse:fir_wood":
+	{
+		"woodcutting": 7
+	},
+	"traverse:fir_log":
+	{
+		"woodcutting": 7
+	},
+	"autumnity:sappy_maple_wood":
+	{
+		"woodcutting": 13
+	},
+	"autumnity:maple_wood":
+	{
+		"woodcutting": 13
+	},
+	"autumnity:sappy_maple_log":
+	{
+		"woodcutting": 13
+	},
+	"autumnity:maple_log":
+	{
+		"woodcutting": 13
 	}
 }

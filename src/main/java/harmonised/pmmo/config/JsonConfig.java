@@ -49,7 +49,7 @@ public class JsonConfig
         validAttributes.add( "damageBonus" );
 
         initMaps();         //populate maps
-        initJTypes();       //check which JTypes should be read from data
+        initJTypes();       //check (from config) which JTypes should be read from data
         initData();         //copy over defaults if files aren't found (to do: check if valid json)
         readRawData();      //read in the data from /config/pmmo/
         processRawData();   //turn Raw data into Usable data
@@ -113,6 +113,9 @@ public class JsonConfig
 
         if( Config.forgeConfig.brewingXpEnabled.get() )
             jTypes.add( JType.XP_VALUE_BREW );
+
+        if( Config.forgeConfig.growingXpEnabled.get() )
+            jTypes.add( JType.XP_VALUE_GROW );
 
         jTypes.add( JType.XP_VALUE_TRIGGER );
 
@@ -280,6 +283,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.XP_VALUE_BREW ) )
             updateReqSkills( rawData.get( JType.XP_VALUE_BREW ), localData.get( JType.XP_VALUE_BREW ) );
+
+        if( jTypes.contains( JType.XP_VALUE_GROW ) )
+            updateReqSkills( rawData.get( JType.XP_VALUE_GROW ), localData.get( JType.XP_VALUE_GROW ) );
 
         if( jTypes.contains( JType.XP_VALUE_TRIGGER ) )
             updateReqSkills( rawData.get( JType.XP_VALUE_TRIGGER ), localData.get( JType.XP_VALUE_TRIGGER ) );

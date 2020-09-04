@@ -224,5 +224,73 @@
 	"doomweapon:argent_shovel":
 	{
 		"excavation": 100
+	},
+	"appliedenergistics2:certus_quartz_axe":
+	{
+		"woodcutting": 30
+	},
+	"appliedenergistics2:certus_quartz_shovel":
+	{
+		"excavation": 30
+	},
+	"appliedenergistics2:certus_quartz_hoe":
+	{
+		"farming": 30
+	},
+	"appliedenergistics2:certus_quartz_pickaxe":
+	{
+		"mining": 30
+	},
+	"create:deforester":
+	{
+		"woodcutting": 100
+	},
+	"endreborn:wolframium_axe":
+	{
+		"woodcutting": 35
+	},
+	"endreborn:wolframium_shovel":
+	{
+		"excavation": 35
+	},
+	"endreborn:wolframium_hoe":
+	{
+		"farming": 35
+	},
+	"endreborn:wolframium_pickaxe":
+	{
+		"mining": 35
+	},
+	"endreborn:endorium_axe":
+	{
+		"woodcutting": 60
+	},
+	"endreborn:endorium_shovel":
+	{
+		"excavation": 60
+	},
+	"endreborn:endorium_hoe":
+	{
+		"farming": 60
+	},
+	"endreborn:endorium_pickaxe":
+	{
+		"mining": 60
+	},
+	"endreborn:end_stone_axe":
+	{
+		"woodcutting": 20
+	},
+	"endreborn:end_stone_shovel":
+	{
+		"excavation": 20
+	},
+	"endreborn:end_stone_hoe":
+	{
+		"farming": 20
+	},
+	"endreborn:end_stone_pickaxe":
+	{
+		"mining": 20
 	}
 }

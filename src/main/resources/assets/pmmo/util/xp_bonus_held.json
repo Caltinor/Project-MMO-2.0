@@ -39,5 +39,17 @@
 	"minecraft:wooden_hoe":
 	{
 		"farming": 1
+	},
+	"endreborn:wolframium_hoe":
+	{
+		"farming": 15
+	},
+	"endreborn:endorium_hoe":
+	{
+		"farming": 30
+	},
+	"endreborn:end_stone_hoe":
+	{
+		"farming": 5
 	}
 }

@@ -65,6 +65,7 @@ public class TooltipHandler
                 Map<String, Object> xpValueSmelting = JsonConfig.data.get( JType.XP_VALUE_SMELT ).get( regKey );
                 Map<String, Object> xpValueCooking = JsonConfig.data.get( JType.XP_VALUE_COOK ).get( regKey );
                 Map<String, Object> xpValueBrewing = JsonConfig.data.get( JType.XP_VALUE_BREW ).get( regKey );
+                Map<String, Object> xpValueGrowing = JsonConfig.data.get( JType.XP_VALUE_GROW ).get( regKey );
                 Map<String, Object> salvageInfo = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
                 Map<String, Object> salvagesFrom = JsonConfig.data.get( JType.SALVAGE_FROM ).get( regKey );
                 Map<String, Object> heldItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
@@ -158,6 +159,19 @@ public class TooltipHandler
                         if( xpValueBrewing.get( key ) instanceof Double )
                         {
                             dValue = (double) xpValueBrewing.get( key );
+                            tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                        }
+                    }
+                }
+                if( xpValueGrowing != null && xpValueGrowing.size() > 0 )      //XP GROW
+                {
+                    tooltip.add( new TranslationTextComponent( "pmmo.xpValueGrow" ) );
+
+                    for( String key : xpValueGrowing.keySet() )
+                    {
+                        if( xpValueGrowing.get( key ) instanceof Double )
+                        {
+                            dValue = (double) xpValueGrowing.get( key );
                             tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
                         }
                     }

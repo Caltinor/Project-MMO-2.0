@@ -325,5 +325,25 @@
 	{
 		"crafting": 75,
 		"magic": 5
+	},
+	"create:redstone_link":
+	{
+		"crafting": 55
+	},
+	"endreborn:ender_transmitter":
+	{
+		"crafting": 80
+	},
+	"storagedrawers:controller":
+	{
+		"crafting": 40
+	},
+	"storagedrawers:controller_slave":
+	{
+		"crafting": 50
+	},
+	"storagedrawers:compacting_drawers_3":
+	{
+		"crafting": 30
 	}
 }

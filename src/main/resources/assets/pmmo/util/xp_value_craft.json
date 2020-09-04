@@ -370,5 +370,100 @@
 	"minecraft:hay_block":
 	{
 		"crafting": 0
+	},
+	"minecraft:wolfarium_helmet":
+	{
+		"crafting": 100,
+		"smithing": 20
+	},
+	"minecraft:wolfarium_chestplate":
+	{
+		"crafting": 160,
+		"smithing": 32
+	},
+	"minecraft:wolfarium_leggings":
+	{
+		"crafting": 140,
+		"smithing": 28
+	},
+	"minecraft:wolfarium_boots":
+	{
+		"crafting": 80,
+		"smithing": 16
+	},
+	"minecraft:wolframium_sword":
+	{
+		"crafting": 40,
+		"smithing": 8
+	},
+	"minecraft:wolframium_axe":
+	{
+		"crafting": 60,
+		"smithing": 12
+	},
+	"minecraft:wolframium_shovel":
+	{
+		"crafting": 20,
+		"smithing": 4
+	},
+	"minecraft:wolframium_hoe":
+	{
+		"crafting": 40,
+		"smithing": 8
+	},
+	"minecraft:wolfarium_pickaxe":
+	{
+		"crafting": 60,
+		"smithing": 12
+	},
+	"minecraft:endorium_sword":
+	{
+		"crafting": 400,
+		"smithing": 80
+	},
+	"minecraft:endorium_axe":
+	{
+		"crafting": 600,
+		"smithing": 120
+	},
+	"minecraft:endorium_shovel":
+	{
+		"crafting": 200,
+		"smithing": 40
+	},
+	"minecraft:endorium_hoe":
+	{
+		"crafting": 400,
+		"smithing": 80
+	},
+	"minecraft:endorium_pickaxe":
+	{
+		"crafting": 600,
+		"smithing": 120
+	},
+	"minecraft:end_stone_sword":
+	{
+		"crafting": 20,
+		"smithing": 4
+	},
+	"minecraft:end_stone_axe":
+	{
+		"crafting": 30,
+		"smithing": 6
+	},
+	"minecraft:end_stone_shovel":
+	{
+		"crafting": 10,
+		"smithing": 2
+	},
+	"minecraft:end_stone_hoe":
+	{
+		"crafting": 20,
+		"smithing": 4
+	},
+	"minecraft:end_stone_pickaxe":
+	{
+		"crafting": 30,
+		"smithing": 6
 	}
 }

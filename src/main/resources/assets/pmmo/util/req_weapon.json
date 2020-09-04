@@ -325,6 +325,22 @@
 		"archery": 90,
 		"endurance": 90
 	},
+	"appliedenergistics2:certus_quartz_sword":
+	{
+		"combat": 30
+	},
+	"appliedenergistics2:certus_quartz_axe":
+	{
+		"combat": 35
+	},
+	"appliedenergistics2:certus_quartz_shovel":
+	{
+		"combat": 30
+	},
+	"appliedenergistics2:certus_quartz_pickaxe":
+	{
+		"combat": 30
+	},
 	"minecolonies:chiefsword":
 	{
 		"combat": 35
@@ -335,6 +351,58 @@
 	},
 	"minecolonies:pharaoscepter":
 	{
-		"combat": 100
+		"archery": 75
+	},
+	"create:deforester":
+	{
+		"combat": 75
+	},
+	"endreborn:wolframium_sword":
+	{
+		"combat": 35
+	},
+	"endreborn:wolframium_axe":
+	{
+		"combat": 45
+	},
+	"endreborn:wolframium_shovel":
+	{
+		"combat": 35
+	},
+	"endreborn:wolframium_pickaxe":
+	{
+		"combat": 35
+	},
+	"endreborn:endorium_sword":
+	{
+		"combat": 60
+	},
+	"endreborn:endorium_axe":
+	{
+		"combat": 60
+	},
+	"endreborn:endorium_shovel":
+	{
+		"combat": 60
+	},
+	"endreborn:endorium_pickaxe":
+	{
+		"combat": 60
+	},
+	"endreborn:end_stone_sword":
+	{
+		"combat": 20
+	},
+	"endreborn:end_stone_axe":
+	{
+		"combat": 20
+	},
+	"endreborn:end_stone_shovel":
+	{
+		"combat": 20
+	},
+	"endreborn:end_stone_pickaxe":
+	{
+		"combat": 20
 	}
 }
