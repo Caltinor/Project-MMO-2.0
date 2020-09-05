@@ -53,7 +53,7 @@ public class JsonConfig
         initData();         //copy over defaults if files aren't found (to do: check if valid json)
         readRawData();      //read in the data from /config/pmmo/
         processRawData();   //turn Raw data into Usable data
-        
+
         JsonConfig.data = localData;
     }
 
@@ -128,8 +128,11 @@ public class JsonConfig
         if( Config.forgeConfig.biomeReqEnabled.get() )
             jTypes.add( JType.REQ_BIOME );
 
-        if( Config.forgeConfig.biomeEffectEnabled.get() )
-            jTypes.add( JType.BIOME_EFFECT );
+        if( Config.forgeConfig.negativeBiomeEffectEnabled.get() )
+            jTypes.add( JType.BIOME_EFFECT_NEGATIVE );
+
+        if( Config.forgeConfig.positiveBiomeEffectEnabled.get() )
+            jTypes.add( JType.BIOME_EFFECT_POSITIVE );
 
         if( Config.forgeConfig.biomeXpBonusEnabled.get() )
             jTypes.add( JType.XP_BONUS_BIOME );
@@ -189,7 +192,7 @@ public class JsonConfig
         if( Config.forgeConfig.craftReqEnabled.get() )
             jTypes.add( JType.REQ_CRAFT );
     }
-    
+
     private static void initData()
     {
         String fileName;
@@ -216,10 +219,10 @@ public class JsonConfig
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
 
             try
-            (
-                InputStream input = new FileInputStream( file.getPath() );
-                Reader reader = new BufferedReader( new InputStreamReader( input ) );
-            )
+                    (
+                            InputStream input = new FileInputStream( file.getPath() );
+                            Reader reader = new BufferedReader( new InputStreamReader( input ) );
+                    )
             {
                 rawData.put( jType, gson.fromJson( reader, mapType ) );
             }
@@ -308,8 +311,11 @@ public class JsonConfig
         if( jTypes.contains( JType.INFO_BREW ) )
             updateReqExtra( rawData.get( JType.INFO_BREW ), localData.get( JType.INFO_BREW ) );
 
-        if( jTypes.contains( JType.BIOME_EFFECT ) )
-            updateReqEffects( rawData.get( JType.BIOME_EFFECT ), localData.get( JType.BIOME_EFFECT ) );
+        if( jTypes.contains( JType.BIOME_EFFECT_NEGATIVE ) )
+            updateReqEffects( rawData.get( JType.BIOME_EFFECT_NEGATIVE ), localData.get( JType.BIOME_EFFECT_NEGATIVE ) );
+
+        if( jTypes.contains( JType.BIOME_EFFECT_POSITIVE ) )
+            updateReqEffects( rawData.get( JType.BIOME_EFFECT_POSITIVE ), localData.get( JType.BIOME_EFFECT_POSITIVE ) );
 
         if( jTypes.contains( JType.BIOME_MOB_MULTIPLIER ) )
             updateReqAttributes( rawData.get( JType.BIOME_MOB_MULTIPLIER ), localData.get( JType.BIOME_MOB_MULTIPLIER ) );

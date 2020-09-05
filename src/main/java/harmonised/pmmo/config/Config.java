@@ -109,7 +109,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeReqEnabled;
-        public ConfigHelper.ConfigValueListener<Boolean> biomeEffectEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> negativeBiomeEffectEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> positiveBiomeEffectEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeXpBonusEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> xpValueBreakingEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> xpValueGeneralEnabled;
@@ -484,10 +485,15 @@ public class Config
                         .translation( "pmmo.biomeReqEnabled" )
                         .define( "biomeReqEnabled", true ) );
 
-                this.biomeEffectEnabled = subscriber.subscribe(builder
+                this.negativeBiomeEffectEnabled = subscriber.subscribe(builder
                         .comment( "Should biome negative effects be enabled? False means no negative effects" )
-                        .translation( "pmmo.biomeEffectEnabled" )
-                        .define( "biomeEffectEnabled", true ) );
+                        .translation( "pmmo.negativeBiomeEffectEnabled" )
+                        .define( "negativeBiomeEffectEnabled", true ) );
+
+                this.positiveBiomeEffectEnabled = subscriber.subscribe(builder
+                        .comment( "Should biome positive effects be enabled? False means no positive effects" )
+                        .translation( "pmmo.positiveBiomeEffectEnabled" )
+                        .define( "positiveBiomeEffectEnabled", true ) );
 
                 this.biomeXpBonusEnabled = subscriber.subscribe(builder
                         .comment( "Should xp multipliers be enabled? False means no multipliers" )
@@ -707,7 +713,7 @@ public class Config
                 this.deathXpPenaltyMultiplier = subscriber.subscribe(builder
                         .comment( "How much of the xp above whole level you loose (1 = 100% = from 5.5 to 5.0, 0.5 = 50% = from 5.5 to 5.25" )
                         .translation( "pmmo.deathXpPenaltyMultiplier" )
-                        .defineInRange( "deathXpPenaltyMultiplier", 1D, 0, 1) );
+                        .defineInRange( "deathXpPenaltyMultiplier", 0.5D, 0, 1) );
 
                 builder.pop();
             }
@@ -887,11 +893,11 @@ public class Config
             {
                 builder.pop();
             }
-                builder.push( "Woodcutting" );
+            builder.push( "Woodcutting" );
             {
                 builder.pop();
             }
-                builder.push( "Farming" );
+            builder.push( "Farming" );
             {
                 this.breedingXpEnabled = subscriber.subscribe(builder
                         .comment( "Do players get xp for breeding animals?" )

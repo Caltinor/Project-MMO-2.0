@@ -133,6 +133,11 @@ public class GlossaryScreen extends Screen
             updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_COOK, Minecraft.getInstance().player ) );
         });
+        TileButton brewButton = new TileButton( 0, 0, 3, 34, "pmmo.brewTitle", "", button ->
+        {
+            updateHistory( ( (TileButton) button ).index );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_BREW, Minecraft.getInstance().player ) );
+        });
         TileButton heldXpButton = new TileButton( 0, 0, 3, 19, "pmmo.heldTitle", "", button ->
         {
             updateHistory( ( (TileButton) button ).index );
@@ -172,6 +177,16 @@ public class GlossaryScreen extends Screen
         {
             updateHistory( ( (TileButton) button ).index );
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_COOK, Minecraft.getInstance().player ) );
+        });
+        TileButton brewXpButton = new TileButton( 0, 0, 3, 35, "pmmo.brewXpTitle","", button ->
+        {
+            updateHistory( ( (TileButton) button ).index );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_BREW, Minecraft.getInstance().player ) );
+        });
+        TileButton growXpButton = new TileButton( 0, 0, 3, 35, "pmmo.growXpTitle","", button ->
+        {
+            updateHistory( ( (TileButton) button ).index );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_GROW, Minecraft.getInstance().player ) );
         });
         TileButton dimensionButton = new TileButton( 0, 0, 3, 8, "pmmo.dimensionTitle","", button ->
         {
@@ -218,6 +233,7 @@ public class GlossaryScreen extends Screen
         tileButtons.add( plantButton );
         tileButtons.add( smeltButton );
         tileButtons.add( cookButton );
+        tileButtons.add( brewButton );
         tileButtons.add( heldXpButton );
         tileButtons.add( wornXpButton );
         tileButtons.add( breedXpButton );
@@ -226,6 +242,8 @@ public class GlossaryScreen extends Screen
         tileButtons.add( breakXpButton );
         tileButtons.add( smeltXpButton );
         tileButtons.add( cookXpButton );
+        tileButtons.add( brewXpButton );
+        tileButtons.add( growXpButton );
         tileButtons.add( dimensionButton );
         tileButtons.add( biomeButton );
         tileButtons.add( mobButton );

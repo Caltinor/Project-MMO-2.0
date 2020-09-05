@@ -51,6 +51,22 @@
 	{
 		"smithing": 2.5
 	},
+	"minecraft:diamond_helmet":
+	{
+		"magic": 2.5
+	},
+	"minecraft:diamond_chestplate":
+	{
+		"magic": 2.5
+	},
+	"minecraft:diamond_leggings":
+	{
+		"magic": 2.5
+	},
+	"minecraft:diamond_boots":
+	{
+		"magic": 2.5
+	},
 	"minecraft:leather_helmet":
 	{
 		"agility": 2.5,

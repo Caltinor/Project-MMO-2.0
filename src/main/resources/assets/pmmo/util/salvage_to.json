@@ -1358,5 +1358,65 @@
 		"maxChance": 90,
 		"xpPerItem": 0.1,
 		"levelReq": 1
+	},
+	"minecraft:dolomite":
+	{
+		"salvageItem": "minecraft:cobblestone",
+		"salvageMax": 1,
+		"baseChance": 55,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"xpPerItem": 0.1,
+		"levelReq": 1
+	},
+	"minecraft:gabbro":
+	{
+		"salvageItem": "minecraft:cobblestone",
+		"salvageMax": 1,
+		"baseChance": 40,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"xpPerItem": 0.1,
+		"levelReq": 1
+	},
+	"minecraft:limestone":
+	{
+		"salvageItem": "minecraft:cobblestone",
+		"salvageMax": 1,
+		"baseChance": 50,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"xpPerItem": 0.1,
+		"levelReq": 1
+	},
+	"minecraft:weathered_limestone":
+	{
+		"salvageItem": "minecraft:cobblestone",
+		"salvageMax": 1,
+		"baseChance": 40,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"xpPerItem": 0.1,
+		"levelReq": 1
+	},
+	"minecraft:scoria":
+	{
+		"salvageItem": "minecraft:cobblestone",
+		"salvageMax": 1,
+		"baseChance": 60,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"xpPerItem": 0.1,
+		"levelReq": 1
+	},
+	"minecraft:dark_scoria":
+	{
+		"salvageItem": "minecraft:cobblestone",
+		"salvageMax": 1,
+		"baseChance": 55,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"xpPerItem": 0.1,
+		"levelReq": 1
 	}
 }

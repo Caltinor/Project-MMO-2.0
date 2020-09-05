@@ -27,8 +27,10 @@ public class GrowHandler
     {
         World world = (World) event.getWorld();
         BlockPos pos = event.getPos();
-        UUID uuid = ChunkDataHandler.checkPos(XP.getDimensionResLoc( world ), pos );
+        ResourceLocation dimResLoc = XP.getDimensionResLoc( world );
+        UUID uuid = ChunkDataHandler.checkPos( dimResLoc, pos );
         PlayerEntity player = world.getServer().getPlayerList().getPlayerByUUID( uuid );
+        ChunkDataHandler.delPos( dimResLoc, pos );
 
         if( player != null )
         {
