@@ -221,7 +221,7 @@ public class BlockBrokenHandler
             }
 
             totalDrops = rewardable + dropsLeft;
-            award = XP.addMaps( award, XP.multiplyMap( XP.getXp( baseBlock.getRegistryName(), JType.XP_VALUE_BREAK ), totalDrops ) );
+            award = XP.addMaps( award, XP.multiplyMap( XP.getXp( baseBlock.getRegistryName(), JType.XP_VALUE_BREAK ), Math.max( totalDrops, 1 ) ) );
 
             awardMsg = "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra";
         }
@@ -309,7 +309,7 @@ public class BlockBrokenHandler
 
                 int totalDrops = theDropCount + totalExtraDrops;
 
-                award = XP.multiplyMap( XP.addMaps( award, XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ) ), totalDrops );
+                award = XP.multiplyMap( XP.addMaps( award, XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ) ), Math.max( totalDrops, 1 ) );
                 awardMsg = "harvesting " + ( theDropCount) + " + " + totalExtraDrops + " crops";
             }
             else if( !wasPlaced )
@@ -387,7 +387,7 @@ public class BlockBrokenHandler
         else
         {
             if( !wasPlaced )
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), drops.size() ) );
+                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), Math.max( drops.size(), 1 ) ) );
 
             switch( XP.getSkill( material ) )
             {

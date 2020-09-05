@@ -80,7 +80,7 @@ public class MessageDoubleTranslation
                         if( !regKey.equals( packet.sKey ) ) //item type
                         {
                             regKey = packet.sKey;
-                            lastAmount = 0;
+                            lastAmount = Integer.parseInt( packet.fKey );
                         }
 
                         if( System.nanoTime() - lastTime < 3000000000L )
@@ -89,11 +89,11 @@ public class MessageDoubleTranslation
                             lastAmount += Integer.parseInt( packet.fKey );
                         }
                         else
-                            lastAmount = 0;
+                            lastAmount = Integer.parseInt( packet.fKey );
 
                         lastTime = System.nanoTime();
 
-                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + ( Integer.parseInt( packet.fKey ) + lastAmount ) ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                        Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + lastAmount ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
                     }
                     else
                         Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( "" + packet.fKey ), new TranslationTextComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
