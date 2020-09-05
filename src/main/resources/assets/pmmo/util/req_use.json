@@ -14,51 +14,48 @@
 	},
 	"appliedenergistics2:drive":
 	{
-		"crafting": 100,
-		"smithing": 50
+		"crafting": 50,
+		"smithing": 25
 	},
 	"appliedenergistics2:io_port":
 	{
-		"crafting": 115,
-		"smithing": 60,
-		"magic": 10
+		"crafting": 60,
+		"smithing": 35
 	},
 	"appliedenergistics2:terminal":
 	{
-		"crafting": 100,
-		"smithing": 50
+		"crafting": 35,
+		"smithing": 25
 	},
 	"appliedenergistics2:pattern_terminal":
 	{
-		"crafting": 140,
-		"smithing": 50
+		"crafting": 45,
+		"smithing": 35
 	},
 	"appliedenergistics2:crafting_terminal":
 	{
-		"crafting": 130,
-		"smithing": 50
+		"crafting": 40,
+		"smithing": 30
 	},
 	"appliedenergistics2:interface_terminal":
 	{
-		"crafting": 160,
-		"smithing": 75
+		"crafting": 50,
+		"smithing": 40
 	},
 	"appliedenergistics2:fluid_terminal":
 	{
-		"crafting": 140,
-		"smithing": 60
+		"crafting": 40,
+		"smithing": 30
 	},
 	"appliedenergistics2:quartz_growth_accelerator":
 	{
-		"crafting": 150,
-		"smithing": 60,
-		"magic": 15
+		"crafting": 50,
+		"smithing": 30
 	},
 	"appliedenergistics2:wireless_terminal":
 	{
-		"crafting": 300,
-		"smithing": 120,
-		"magic": 15
+		"crafting": 90,
+		"smithing": 50
 	},
 	"appliedenergistics2:inscriber":
 	{
@@ -72,13 +69,12 @@
 	},
 	"appliedenergistics2:security_station":
 	{
-		"crafting": 135,
-		"smithing": 50,
-		"magic": 5
+		"crafting": 35,
+		"smithing": 15
 	},
 	"appliedenergistics2:condenser":
 	{
-		"crafting": 250
+		"crafting": 75
 	},
 	"appliedenergistics2:biometric_card":
 	{
@@ -94,9 +90,8 @@
 	},
 	"appliedenergistics2:spatial_io_port":
 	{
-		"crafting": 160,
-		"smithing": 50,
-		"magic": 5
+		"crafting": 60,
+		"smithing": 30
 	},
 	"ironchest:iron_to_gold_chest_upgrade":
 	{
@@ -145,6 +140,14 @@
 	"ironchest:diamond_chest":
 	{
 		"building": 40
+	},
+	"ironchest:copper_chest":
+	{
+		"building": 10
+	},
+	"ironchest:silver_chest":
+	{
+		"building": 20
 	},
 	"ironchest:crystal_chest":
 	{

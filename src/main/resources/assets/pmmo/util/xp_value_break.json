@@ -497,11 +497,11 @@
 	},
 	"minecraft:grass":
 	{
-		"farming": 2.5
+		"farming": 0.25
 	},
 	"minecraft:fern":
 	{
-		"farming": 3.5
+		"farming": 0.35
 	},
 	"minecraft:sea_grass":
 	{
@@ -513,7 +513,7 @@
 	},
 	"minecraft:tall_grass":
 	{
-		"farming": 6
+		"farming": 4.5
 	},
 	"minecraft:cornflower":
 	{
@@ -1915,6 +1915,54 @@
 	"create:zinc_ore":
 	{
 		"mining": 22
+	},
+	"create:dolomite":
+	{
+		"mining": 0.25
+	},
+	"create:polished_dolomite":
+	{
+		"mining": 0.25
+	},
+	"create:gabbro":
+	{
+		"mining": 0.35
+	},
+	"create:polished_gabbro":
+	{
+		"mining": 0.35
+	},
+	"create:limestone":
+	{
+		"mining": 0.3
+	},
+	"create:polished_limestone":
+	{
+		"mining": 0.3
+	},
+	"create:weathered_limestone":
+	{
+		"mining": 0.3
+	},
+	"create:polished_weathered_limestone":
+	{
+		"mining": 0.3
+	},
+	"create:scoria":
+	{
+		"mining": 0.35
+	},
+	"create:polished_scoria":
+	{
+		"mining": 0.35
+	},
+	"create:dark_scoria":
+	{
+		"mining": 0.4
+	},
+	"create:polished_dark_scoria":
+	{
+		"mining": 0.4
 	},
 	"endreborn:quartz_ore":
 	{

@@ -1355,38 +1355,48 @@ public class XP
 		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
 		Map<String, Object> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
-		Map<String, Object> biomeEffect = JsonConfig.data.get( JType.BIOME_EFFECT ).get( biomeKey );
+		Map<String, Object> negativeBiomeEffect = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE ).get( biomeKey );
+		Map<String, Object> positiveBiomeEffect = JsonConfig.data.get( JType.BIOME_EFFECT_POSITIVE ).get( biomeKey );
 
 		if( !lastBiome.containsKey( playerUUID ) )
 			lastBiome.put( playerUUID, "none" );
 
-		if( biomeReq != null && biomeEffect != null )
+		if( checkReq( player, resLoc, JType.REQ_BIOME ) )
 		{
-			if( !checkReq( player, resLoc, JType.REQ_BIOME ) )
+			if( positiveBiomeEffect != null )
 			{
-				for( Map.Entry<String, Object> entry : biomeEffect.entrySet() )
+				for( Map.Entry<String, Object> entry : positiveBiomeEffect.entrySet() )
 				{
 					Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
 					if( effect != null )
-						player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( (double) entry.getValue() ), false, true ) );
+						player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( (double) entry.getValue() ), false, false ) );
 				}
+			}
+		}
+		else if( negativeBiomeEffect != null )
+		{
+			for( Map.Entry<String, Object> entry : negativeBiomeEffect.entrySet() )
+			{
+				Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
-				if( player.world.isRemote() )
+				if( effect != null )
+					player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( (double) entry.getValue() ), false, true ) );
+			}
+			if( player.world.isRemote() )
+			{
+				if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
 				{
-					if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+					for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 					{
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
-						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
-						{
-							int startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
+						int startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
 
-							if( startLevel < (double) entry.getValue() )
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
-							else
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
-						}
+						if( startLevel < (double) entry.getValue() )
+							player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
+						else
+							player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
 					}
 				}
 			}

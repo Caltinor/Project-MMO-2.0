@@ -11,7 +11,7 @@
 		"hpBonus": 0.75,
 		"damageBonus": 0.75
 	},
-	"minecraft:beaches":
+	"minecraft:beach":
 	{
 		"speedBonus": 0.75,
 		"hpBonus": 0.75,

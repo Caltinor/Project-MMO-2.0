@@ -22,8 +22,10 @@ public class GrowHandler
     {
         World world = (World) event.getWorld();
         BlockPos pos = event.getPos();
-        UUID uuid = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), pos );
+        ResourceLocation dimResLoc = event.getWorld().getDimension().getType().getRegistryName();
+        UUID uuid = ChunkDataHandler.checkPos( dimResLoc, pos );
         PlayerEntity player = world.getServer().getPlayerList().getPlayerByUUID( uuid );
+        ChunkDataHandler.delPos( dimResLoc, pos );
 
         if( player != null )
         {
@@ -108,8 +110,6 @@ public class GrowHandler
             if( age != -1 && age == maxAge )
             {
                 Map<String, Double> award = XP.getXp( resLoc, JType.XP_VALUE_GROW );
-
-                System.out.println( "GROWN" );
 
                 if( award.size() > 0 )
                     XP.awardXpMapDouble( player, award, "Growing a Crop at " + pos, true, false );

@@ -328,7 +328,7 @@ public class ListScreen extends Screen
 
                     Map<String, Object> biomeBonusMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get(button.regKey);
                     Map<String, Object> biomeMobMultiplierMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get(button.regKey);
-                    Map<String, Object> biomeEffectsMap = JsonConfig.data.get( JType.BIOME_EFFECT ).get(button.regKey);
+                    Map<String, Object> biomeEffectsMap = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE ).get(button.regKey);
 
                     if ( biomeBonusMap != null )
                     {
@@ -388,6 +388,7 @@ public class ListScreen extends Screen
                 case INFO_PLANT:
                 case INFO_SMELT:
                 case INFO_COOK:
+                case INFO_BREW:
                 {
                     button.text.add( "" );
                     Map<String, Object> breakMap = JsonConfig.data.get( JType.REQ_BREAK ).get( button.regKey );
@@ -410,7 +411,7 @@ public class ListScreen extends Screen
                     if ( infoText.size() > 0 )
                         button.text.addAll( infoText );
 
-                    if ( breakMap != null && jType != JType.INFO_SMELT && jType != JType.INFO_COOK )
+                    if ( breakMap != null && ( jType.equals( JType.INFO_ORE ) || jType.equals( JType.INFO_LOG ) || jType.equals( JType.INFO_PLANT ) ) )
                     {
                         if ( XP.checkReq( player, button.regKey, JType.REQ_BREAK ) )
                             button.text.add( getTransComp( "pmmo.break" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
@@ -439,6 +440,8 @@ public class ListScreen extends Screen
                 case XP_VALUE_TAME:
                 case XP_VALUE_SMELT:
                 case XP_VALUE_COOK:
+                case XP_VALUE_BREW:
+                case XP_VALUE_GROW:
                 {
                     addXpToButton( button, reqMap.get( button.regKey ) );
                 }
