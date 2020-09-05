@@ -74,7 +74,7 @@ public class Config
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> veinWoodTopToBottom;
-        public ConfigHelper.ConfigValueListener<Boolean> sleepRechargesWorldPlayersVeinCharge;
+        public ConfigHelper.ConfigValueListener<Boolean> sleepRechargesAllPlayersVeinCharge;
         public ConfigHelper.ConfigValueListener<Boolean> veiningOtherPlayerBlocksAllowed;
         public ConfigHelper.ConfigValueListener<Integer> veinMaxBlocks;
         public ConfigHelper.ConfigValueListener<Integer> veinSpeed;
@@ -317,10 +317,10 @@ public class Config
                         .translation( "pmmo.veinWoodTopToBottom" )
                         .define( "veinWoodTopToBottom", true ) );
 
-                this.sleepRechargesWorldPlayersVeinCharge = subscriber.subscribe(builder
+                this.sleepRechargesAllPlayersVeinCharge = subscriber.subscribe(builder
                         .comment( "Should a succesful sleep recharge every player currently in that world Vein Charge?" )
-                        .translation( "pmmo.sleepRechargesWorldPlayersVeinCharge" )
-                        .define( "sleepRechargesWorldPlayersVeinCharge", true ) );
+                        .translation( "pmmo.sleepRechargesAllPlayersVeinCharge" )
+                        .define( "sleepRechargesAllPlayersVeinCharge", true ) );
 
                 this.veiningOtherPlayerBlocksAllowed = subscriber.subscribe(builder
                         .comment( "Should players be allowed to vein blocks that they did not place?" )

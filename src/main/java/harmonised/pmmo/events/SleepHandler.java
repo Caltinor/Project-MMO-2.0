@@ -6,14 +6,14 @@ import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 
 public class SleepHandler
 {
-    private static final boolean sleepRechargesWorldPlayersVeinCharge = Config.forgeConfig.sleepRechargesWorldPlayersVeinCharge.get();
+    private static final boolean sleepRechargesAllPlayersVeinCharge = Config.forgeConfig.sleepRechargesAllPlayersVeinCharge.get();
     private static final double maxVeinCharge = Config.forgeConfig.maxVeinCharge.get();
 
     public static void handleSleepFinished( SleepFinishedTimeEvent event )
     {
-        if( sleepRechargesWorldPlayersVeinCharge )
+        if( sleepRechargesAllPlayersVeinCharge )
         {
-            event.getWorld().getWorld().getPlayers().forEach( player ->
+            event.getWorld().getWorld().getServer().getPlayerList().getPlayers().forEach( player ->
             {
                 XP.getAbilitiesTag( player ).putDouble( "veinLeft", maxVeinCharge );
             });
