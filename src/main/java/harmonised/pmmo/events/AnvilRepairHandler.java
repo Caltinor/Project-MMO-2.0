@@ -35,7 +35,7 @@ public class AnvilRepairHandler
             if( !player.world.isRemote )
             {
                 boolean bypassEnchantLimit = Config.forgeConfig.bypassEnchantLimit.get();
-                int currLevel = XP.getLevel( Skill.SMITHING, player );
+                int currLevel = Skill.SMITHING.getLevel( player );
                 ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
                 ItemStack lItem = event.getItemInput();
                 ItemStack oItem = event.getItemResult();

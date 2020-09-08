@@ -1,7 +1,10 @@
 package harmonised.pmmo.config;
 
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -11,7 +14,11 @@ import java.util.Map;
 public class Config
 {
     public static Map<String, Double> localConfig = new HashMap<>();
-    public static Map<String, Double> config = new HashMap<>();
+    private static Map<String, Double> config = new HashMap<>();
+
+    //Client only, too lazy to put it somewhere better
+    private static final Map<String, Double> abilities = new HashMap<>();
+    private static final Map<String, Double> preferences = new HashMap<>();
 
     public static ConfigImplementation forgeConfig;
 
@@ -1215,5 +1222,44 @@ public class Config
             LogHandler.LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
             return -1;
         }
+    }
+
+    public static Map<Skill, Double> getXpMap(PlayerEntity player )
+    {
+        if( player.world.isRemote() )
+            return XP.getOfflineXpMap( player.getUniqueID() );
+        else
+            return PmmoSavedData.get().getXpMap( player.getUniqueID() );
+    }
+
+    public static Map<String, Double> getConfigMap()
+    {
+        return config;
+    }
+
+    public static void setConfigMap( Map<String, Double> inMap )
+    {
+        config = inMap;
+    }
+
+    public static Map<String, Double> getPreferencesMap( PlayerEntity player )
+    {
+        if( player.world.isRemote() )
+            return preferences;
+        else
+            return PmmoSavedData.get().getPreferencesMap( player.getUniqueID() );
+    }
+
+    public static Map<String, Double> getAbilitiesMap( PlayerEntity player )
+    {
+        if( player.world.isRemote() )
+            return abilities;
+        else
+            return PmmoSavedData.get().getAbilitiesMap( player.getUniqueID() );
+    }
+
+    public static void setPreferencesMap( Map<String, Double> newPreferencesMap )
+    {
+        config = newPreferencesMap;
     }
 }

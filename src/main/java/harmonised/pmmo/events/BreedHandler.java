@@ -21,7 +21,7 @@ public class BreedHandler
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_BREED );
 
             if( xpValue.size() > 0 )
-                XP.awardXpMapDouble( event.getCausedByPlayer(), xpValue, "breeding", false, false );
+                XP.awardXpMapDouble( event.getCausedByPlayer().getUniqueID(), xpValue, "breeding", false, false );
             else
                 XP.awardXp( event.getCausedByPlayer(), Skill.FARMING, "breeding", defaultBreedingXp, false, false );
         }

@@ -1,9 +1,12 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
@@ -12,13 +15,16 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PrefCommand
 {
     public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
-        CompoundNBT prefsTag = XP.getPreferencesTag( player );
+        Map<String, Double> prefsMap = Config.getPreferencesMap( player );
         Double value = null;
         if( args.length > 3 )
         {
@@ -44,15 +50,15 @@ public class PrefCommand
         {
             if( value != null )
             {
-                prefsTag.putDouble( match, value );
+                prefsMap.put( match, value );
 
-                NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( prefsMap ), 0 ), (ServerPlayerEntity) player );
                 AttributeHandler.updateAll( player );
 
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasBeenSet", match, args[3] ), false );
             }
-            else if( prefsTag.contains( match ) )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasTheValue", "" + match, "" + prefsTag.getDouble( match ) ), false );
+            else if( prefsMap.containsKey( match ) )
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasTheValue", "" + match, "" + prefsMap.get( match ) ), false );
             else
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasUnsetValue", "" + match ), false );
         }

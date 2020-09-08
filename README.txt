@@ -80,7 +80,7 @@ XP.getXp( ResourceLocation item, JType type ) returns a Map<String, Double> of t
 XP.getLevelDecimal (takes in skillName + player, returns level as double, works on client/server)
 XP.xpAtLevel (takes in a level as int, returns double xp value)
 XP.xpAtLevelDecimal (takes in a level as double, returns double xp value)
-XP.getSkillsTag (takes in player, returns PMMO Skills CompoundNBT of all the player's xp values, as doubles)
+XP.getxpMap (takes in player, returns PMMO Skills CompoundNBT of all the player's xp values, as doubles)
 
 To use the API, include these two lines in your gradle.build
 

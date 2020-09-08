@@ -5,6 +5,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -270,15 +271,11 @@ public class ListScreen extends Screen
 
             case STATS:
             {
-                Set<String> skills;
-                if( XP.skills.containsKey( uuid ) )
-                    skills = XP.skills.get( uuid ).keySet();
-                else
-                    skills = new HashSet<>();
+                Set<Skill> skills = XP.getOfflineXpMap( uuid ).keySet();
 
-                for( String skill : skills )
+                for( Skill skill : skills )
                 {
-                    listButtons.add( new ListButton( 0, 0, 3, 6, skill, jType, "", button -> ((ListButton) button).clickAction() ) );
+                    listButtons.add( new ListButton( 0, 0, 3, 6, skill.toString(), jType, "", button -> ((ListButton) button).clickAction() ) );
                 }
             }
                 break;
@@ -417,7 +414,7 @@ public class ListScreen extends Screen
                     List<ITextComponent> infoText = new ArrayList<>();
                     String transKey = "pmmo." + jType.toString().replace( "info_", "" ) + "ExtraDrop";
                     double extraDroppedPerLevel = infoMap.get( "extraChance" ) / 100;
-                    double extraDropped = XP.getExtraChance( player, button.regKey, jType ) / 100;
+                    double extraDropped = XP.getExtraChance( player.getUniqueID(), button.regKey, jType, true ) / 100;
 
                     if ( extraDropped <= 0 )
                         infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "red" ) ) );
@@ -716,7 +713,7 @@ public class ListScreen extends Screen
                 {
                     Skill skill = Skill.getSkill( button.regKey );
 
-                    double curXp = XP.getXpOffline( skill, uuid );
+                    double curXp = XP.getOfflineXp( skill, uuid );
                     double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
 
                     button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( XP.getSkillStyle( Skill.getSkill( button.regKey ) ) ).getString();
@@ -817,7 +814,7 @@ public class ListScreen extends Screen
                 break;
 
             case STATS:
-                listButtons.sort( Comparator.comparingDouble( b -> XP.getXpOffline( Skill.getSkill( ((ListButton) b).regKey ), uuid ) ).reversed() );
+                listButtons.sort( Comparator.comparingDouble( b -> XP.getOfflineXp( Skill.getSkill( ((ListButton) b).regKey ), uuid ) ).reversed() );
                 break;
 
             default:

@@ -1,6 +1,7 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -13,6 +14,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class MessageLevelUp
@@ -54,13 +56,13 @@ public class MessageLevelUp
         ctx.get().enqueueWork(() ->
         {
             ServerPlayerEntity player = ctx.get().getSender();
-            CompoundNBT prefsTag = XP.getPreferencesTag( player );
+            Map<String, Double> prefsMap = Config.getPreferencesMap( player );
             Skill skill = Skill.getSkill( packet.skill );
             String skillName = skill.name().toLowerCase();
             Vector3d playerPos = player.getPositionVec();
             World world = player.world;
 
-            if( levelUpFirework && !( prefsTag.contains( "spawnFireworksCausedByMe" ) && prefsTag.getDouble( "spawnFireworksCausedByMe" ) == 0 ) )
+            if( levelUpFirework && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
                 XP.spawnRocket( player.world, player.getPositionVec(), skill );
 
             LogHandler.LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + XP.getDimensionResLoc( world ).toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
@@ -71,11 +73,11 @@ public class MessageLevelUp
                 {
                     if( otherPlayer.getUniqueID() != player.getUniqueID() )
                     {
-                        CompoundNBT otherPrefsTag = XP.getPreferencesTag( otherPlayer );
+                        Map<String, Double> otherprefsMap = Config.getPreferencesMap( player );
                         otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).setStyle( XP.getSkillStyle( skill ) ), false );
                         if( milestoneLevelUpFirework )
                         {
-                            if( !( otherPrefsTag.contains( "spawnFireworksCausedByOthers" ) && otherPrefsTag.getDouble( "spawnFireworksCausedByOthers" ) == 0 ) )
+                            if( !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
                                 XP.spawnRocket( otherPlayer.world, otherPlayer.getPositionVec(), skill );
                         }
                     }

@@ -7,6 +7,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -70,13 +71,15 @@ public class AttributeHandler
 	public static void updateReach( PlayerEntity player )
 	{
 		ModifiableAttributeInstance reachAttribute = player.getAttribute( ForgeMod.REACH_DISTANCE.get() );
-		CompoundNBT prefsTag = XP.getPreferencesTag( player );
-		double buildLevel = XP.getLevel( Skill.BUILDING, player );
+		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		double buildLevel = Skill.BUILDING.getLevel( player );
 		double reach = -0.91 + ( buildLevel / levelsPerOneReach );
-		double maxReachPref = prefsTag.getDouble( "maxExtraReachBoost" );
+		Double maxReachPref = null;
+		if( prefsMap.containsKey( "maxExtraReachBoost" ) )
+			maxReachPref = prefsMap.get( "maxExtraReachBoost" );
 		if( reach > maxExtraReachBoost )
 			reach = maxExtraReachBoost;
-		if( reach > maxReachPref && prefsTag.contains( "maxExtraReachBoost" ) )
+		if( maxReachPref != null && reach > maxReachPref )
 			reach = maxReachPref;
 
 		if( reachAttribute.getModifier( reachModifierID ) == null || reachAttribute.getModifier( reachModifierID ).getAmount() != reach )
@@ -94,13 +97,15 @@ public class AttributeHandler
 
 	public static double getSpeedBoost( PlayerEntity player )
 	{
-		CompoundNBT prefsTag = XP.getPreferencesTag( player );
-		double agilityLevel = XP.getLevel( Skill.AGILITY, player );
-		double maxSpeedBoostPref = prefsTag.getDouble( "maxSpeedBoost" );
+		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		double agilityLevel = Skill.AGILITY.getLevel( player );
+		Double maxSpeedBoostPref = null;
+		if( prefsMap.containsKey( "maxSpeedBoost" ) )
+			maxSpeedBoostPref = prefsMap.get( "maxSpeedBoost" );
 		double speedBoost = agilityLevel * speedBoostPerLevel;
 		double baseValue = getBaseSpeed( player );
 		double maxSpeed = baseValue * (maxSpeedBoost / 100);
-		if( maxSpeed > baseValue * (maxSpeedBoostPref / 100) && prefsTag.contains( "maxSpeedBoost" ) )
+		if( maxSpeedBoostPref != null && maxSpeed > baseValue * (maxSpeedBoostPref / 100) )
 			maxSpeed = baseValue * (maxSpeedBoostPref / 100);
 
 		if( speedBoost > maxSpeed )
@@ -136,13 +141,15 @@ public class AttributeHandler
 	public static void updateHP( PlayerEntity player )
 	{
 		ModifiableAttributeInstance hpAttribute = player.getAttribute( Attributes.GENERIC_MAX_HEALTH );
-		CompoundNBT prefsTag = XP.getPreferencesTag( player );
-		double enduranceLevel = XP.getLevel( Skill.ENDURANCE, player );
+		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		double enduranceLevel = Skill.ENDURANCE.getLevel( player );
 		int heartBoost = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
-		int maxHPPref = (int) Math.floor(prefsTag.getDouble( "maxExtraHeartBoost" ) * 2);
+		Integer maxHPPref = null;
+		if( prefsMap.containsKey( "maxExtraHeartBoost" ) )
+			maxHPPref = (int) Math.floor( prefsMap.get( "maxExtraHeartBoost" ) * 2);
 		if( heartBoost > maxExtraHeartBoost * 2 )
 			heartBoost = maxExtraHeartBoost * 2;
-		if( heartBoost > maxHPPref && prefsTag.contains( "maxExtraHeartBoost" ) )
+		if( maxHPPref != null && heartBoost > maxHPPref )
 			heartBoost = maxHPPref;
 
 		AttributeModifier hpModifier = new AttributeModifier( hpModifierID, "Max HP Bonus thanks to Endurance Level", heartBoost, AttributeModifier.Operation.ADDITION );
@@ -153,13 +160,15 @@ public class AttributeHandler
 	public static void updateDamage( PlayerEntity player )
 	{
 		ModifiableAttributeInstance damageAttribute = player.getAttribute( Attributes.GENERIC_ATTACK_DAMAGE );
-		CompoundNBT prefsTag = XP.getPreferencesTag( player );
-		double maxDamagePref = prefsTag.getDouble( "maxExtraDamageBoost" );
-		double combatLevel = XP.getLevel( Skill.COMBAT, player );
+		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		Double maxDamagePref = null;
+		if( prefsMap.containsKey( "maxExtraDamageBoost" ) )
+			maxDamagePref = prefsMap.get( "maxExtraDamageBoost" );
+		double combatLevel = Skill.COMBAT.getLevel( player );
 		double damageBoost = combatLevel / levelsPerDamage;
 		if( damageBoost > maxExtraDamageBoost )
 			damageBoost = maxExtraDamageBoost;
-		if( damageBoost > maxDamagePref && prefsTag.contains( "maxExtraDamageBoost" ) )
+		if( maxDamagePref != null && damageBoost > maxDamagePref )
 			damageBoost = maxDamagePref;
 
 		AttributeModifier damageModifier = new AttributeModifier( damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );

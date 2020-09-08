@@ -45,14 +45,14 @@ public class MessageUpdatePlayerNBT
         buf.writeInt( packet.type );
     }
 
-    public static void handlePacket(MessageUpdatePlayerNBT packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket( MessageUpdatePlayerNBT packet, Supplier<NetworkEvent.Context> ctx )
     {
         ctx.get().enqueueWork(() ->
         {
             switch( packet.type )
             {
-                case 0: //abilities
-                case 1: //prefs
+                case 0: //prefs
+                case 1: //abilities
                     if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
                         ClientHandler.updateNBTTag( packet );
                     else
@@ -62,7 +62,7 @@ public class MessageUpdatePlayerNBT
                 case 2: //config
                     if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
                     {
-                        Config.config = NBTHelper.nbtToMap( packet.reqPackage );
+                        Config.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
                         WorldTickHandler.refreshVein();
                     }
                     else
@@ -81,8 +81,7 @@ public class MessageUpdatePlayerNBT
                         if( !XP.playerNames.containsKey( uuid ) )
                             XP.playerNames.put( uuid, name );
 
-                        XP.skills.put( uuid, NBTHelper.nbtToMap( packet.reqPackage ) );
-
+                        XP.setOfflineXpMap( uuid, NBTHelper.nbtToMapSkill( packet.reqPackage ) );
                         ClientHandler.openStats( uuid );
                     }
                     else

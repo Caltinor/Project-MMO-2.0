@@ -1,6 +1,8 @@
 package harmonised.pmmo.proxy;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.XP;
@@ -8,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class ServerHandler
@@ -20,16 +23,17 @@ public class ServerHandler
         switch( packet.type )
         {
             case 0:
-                CompoundNBT prefsTag = XP.getPreferencesTag( player );
-                for( String tag : new HashSet<>( prefsTag.keySet() ) )
+                Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+                for( String tag : keySet )
                 {
-                    prefsTag.remove( tag );
+                    prefsMap.remove( tag );
                 }
                 for( String tag : keySet )
                 {
-                    prefsTag.putDouble( tag, newPackage.getDouble( tag ) );
+                    prefsMap.put( tag, newPackage.getDouble( tag ) );
                 }
                 AttributeHandler.updateAll( player );
+                PmmoSavedData.get().setDirty( true );
                 break;
 
             default:

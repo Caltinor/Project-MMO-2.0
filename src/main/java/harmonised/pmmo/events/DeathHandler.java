@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -18,6 +19,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -36,26 +38,26 @@ public class DeathHandler
             PlayerEntity player = (PlayerEntity) event.getEntity();
             if( !player.world.isRemote() )
             {
-                CompoundNBT skillsTag = XP.getSkillsTag( player );
-                CompoundNBT prefsTag = XP.getPreferencesTag( player );
+                Map<Skill, Double> xpMap = Config.getXpMap( player );
+                Map<String, Double> prefsMap = Config.getPreferencesMap( player );
                 double totalLost = 0;
                 boolean wipeAllSkills = Config.forgeConfig.wipeAllSkillsUponDeathPermanently.get();
-                if( prefsTag.contains( "wipeAllSkillsUponDeathPermanently" ) && prefsTag.getDouble( "wipeAllSkillsUponDeathPermanently" ) != 0 )
+                if( prefsMap.containsKey( "wipeAllSkillsUponDeathPermanently" ) && prefsMap.get( "wipeAllSkillsUponDeathPermanently" ) != 0 )
                     wipeAllSkills = true;
 
                 if( wipeAllSkills )
                 {
-                    for( String key : new HashSet<String>( skillsTag.keySet() ) )
+                    for( Map.Entry<Skill, Double> entry : new HashMap<>( xpMap ).entrySet() )
                     {
-                        totalLost += skillsTag.getDouble( key );
-                        skillsTag.remove( key );
+                        totalLost += entry.getValue();
+                        xpMap.remove( entry.getKey() );
                     }
                 }
                 else
                 {
-                    for( String key : new HashSet<String>( skillsTag.keySet() ) )
+                    for( Map.Entry<Skill, Double> entry : new HashMap<>( xpMap ).entrySet() )
                     {
-                        double startXp = skillsTag.getDouble( key );
+                        double startXp = entry.getValue();
                         double floorXp = XP.xpAtLevelDecimal( Math.floor( XP.levelAtXpDecimal( startXp ) ) );
                         double diffXp = startXp - floorXp;
                         double lostXp = diffXp * deathXpPenaltyMultiplier;
@@ -63,9 +65,9 @@ public class DeathHandler
                         totalLost += lostXp;
 
                         if( finalXp > 0 )
-                            skillsTag.putDouble( key, finalXp );
+                            xpMap.put( entry.getKey(), finalXp );
                         else
-                            skillsTag.remove( key );
+                            xpMap.remove( entry.getKey() );
                     }
                 }
 
@@ -83,10 +85,10 @@ public class DeathHandler
 
             for( PlayerEntity thePlayer : nearbyPlayers )
             {
-                if( XP.getPowerLevel( player ) > 1 )
+                if( XP.getPowerLevel( player.getUniqueID() ) > 1 )
                     scaleValue += 1;
                 else
-                    scaleValue += XP.getPowerLevel( thePlayer );
+                    scaleValue += XP.getPowerLevel( thePlayer.getUniqueID() );
             }
 
             scaleValue /= 5;

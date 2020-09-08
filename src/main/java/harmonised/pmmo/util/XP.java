@@ -6,10 +6,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.PlayerConnectedHandler;
-import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.*;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
@@ -37,16 +36,12 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
-import java.util.stream.Collectors;
 
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import javax.annotation.Nullable;
 
@@ -57,8 +52,8 @@ public class XP
 	public static Set<UUID> isVeining = new HashSet<>();
 	public static Map<Skill, Style> skillStyle = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
-	public static Map<UUID, Map<String, Double>> skills = new HashMap<>();
 	public static Map<UUID, String> playerNames = new HashMap<>();
+	public static Map<UUID, Map<Skill, Double>> offlineXp = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
 	private static int debugInt = 0;
@@ -404,77 +399,17 @@ public class XP
 		return mapOne;
 	}
 
-	public static int getLevel( Skill skill, PlayerEntity player )
-	{
-		return levelAtXp( getXp( skill, player ) );
-	}
-
-	public static double getXp( Skill skill, PlayerEntity player )
-	{
-		double startXp = 0;
-
-		if( player.world.isRemote() )
-		{
-			if( XP.skills.containsKey( player.getUniqueID() ) && XP.skills.get( player.getUniqueID() ).containsKey( skill.name().toLowerCase() ) )
-				startXp = XP.skills.get( player.getUniqueID() ).get( skill.name().toLowerCase() );
-		}
-		else
-			startXp = getSkillsTag( player ).getDouble( skill.name().toLowerCase() );
-
-		return startXp;
-	}
-
-	public static double getXpOffline( Skill skill, UUID uuid )
-	{
-		double startXp = 0;
-
-		if( XP.skills.containsKey( uuid ) && XP.skills.get( uuid ).containsKey( skill.name().toLowerCase() ) )
-			startXp = XP.skills.get( uuid ).get( skill.name().toLowerCase() );
-
-		return startXp;
-	}
-
-	public static int getLevelOffline( Skill skill, UUID uuid )
-	{
-		return levelAtXp( getXpOffline( skill, uuid ) );
-	}
-
-	public static double getLevelDecimalOffline( Skill skill, UUID uuid )
-	{
-		double startLevel = 1;
-
-		if( XP.skills.containsKey( uuid ) && XP.skills.get( uuid ).containsKey( skill.name().toLowerCase() ) )
-			startLevel = levelAtXpDecimal( XP.skills.get( uuid ).get( skill.name().toLowerCase() ) );
-
-		return startLevel;
-	}
-
-	public static double getLevelDecimal( Skill skill, PlayerEntity player )
-	{
-		double startLevel = 1;
-
-		if( player.world.isRemote() )
-		{
-			if( XPOverlayGUI.skills.containsKey( skill ) )
-				startLevel = levelAtXpDecimal( XPOverlayGUI.skills.get( skill ).goalXp );
-		}
-		else
-			startLevel = levelAtXpDecimal( getSkillsTag( player ).getDouble( skill.name().toLowerCase() ) );
-
-		return startLevel;
-	}
-
 	private static int doubleObjectToInt( Object object )
 	{
 		return (int) Math.floor( (double) object );
 	}
 
-	public static double getExtraChance( PlayerEntity player, String resLoc, JType jType )
+	public static double getExtraChance( UUID uuid, String resLoc, JType jType, boolean offline )
 	{
-		return getExtraChance( player, XP.getResLoc( resLoc ), jType );
+		return getExtraChance( uuid, XP.getResLoc( resLoc ), jType, offline );
 	}
 
-	public static double getExtraChance( PlayerEntity player, ResourceLocation resLoc, JType jType )
+	public static double getExtraChance( UUID uuid, ResourceLocation resLoc, JType jType, boolean offline )
 	{
 		String regKey = resLoc.toString();
 		double extraChancePerLevel = 0;
@@ -482,56 +417,45 @@ public class XP
 		int highestReq = 1;
 		if( JsonConfig.data.get( JType.REQ_BREAK ).containsKey( resLoc.toString() ) )
 			highestReq = JsonConfig.data.get( JType.REQ_BREAK ).get( resLoc.toString() ).entrySet().stream().map(a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
-		int startLevel = 1;
+		int startLevel;
+		Skill skill;
 
 		switch( jType )
 		{
 			case INFO_ORE:
-				if( JsonConfig.data.get( JType.INFO_ORE ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_ORE).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( JType.INFO_ORE ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_ORE ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( Skill.MINING, player );
+				skill = Skill.MINING;
 				break;
 
 			case INFO_LOG:
-				if( JsonConfig.data.get( JType.INFO_LOG ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( Skill.WOODCUTTING, player );
+				skill = Skill.WOODCUTTING;
 				break;
 
 			case INFO_PLANT:
-				if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( Skill.FARMING, player );
+				skill = Skill.FARMING;
 				break;
 
 			case INFO_SMELT:
-				if( JsonConfig.data.get( JType.INFO_SMELT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( Skill.SMITHING, player );
+				skill = Skill.SMITHING;
 				break;
 
 			case INFO_COOK:
-				if( JsonConfig.data.get( JType.INFO_COOK ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( Skill.COOKING, player );
+				skill = Skill.COOKING;
 				break;
 
 			case INFO_BREW:
-				if( JsonConfig.data.get( JType.INFO_BREW ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).containsKey( "extraChance" ) )
-					if( JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).get( "extraChance" ) instanceof Double )
-						extraChancePerLevel = (double) JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).get( "extraChance" );
-				startLevel = getLevel( Skill.ALCHEMY, player );
+				skill = Skill.ALCHEMY;
 				break;
 
 			default:
 				LogHandler.LOGGER.error( "WRONG getExtraChance CHANCE TYPE! PLEASE REPORT!" );
 				return 0;
 		}
+
+		startLevel = offline ? XP.getOfflineLevel( skill, uuid ) : skill.getLevel( uuid );
+
+		if( JsonConfig.data.get( jType ).containsKey( regKey ) && JsonConfig.data.get( jType ).get( regKey ).containsKey( "extraChance" ) )
+			if( JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" ) instanceof Double )
+				extraChancePerLevel = (double) JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" );
 
 		extraChance = (startLevel - highestReq) * extraChancePerLevel;
 		if( extraChance < 0 )
@@ -616,13 +540,13 @@ public class XP
 		return nearbyPlayers;
 	}
 
-	public static float getPowerLevel( PlayerEntity player )
+	public static float getPowerLevel( UUID uuid )
     {
-		int enduranceLevel = getLevel( Skill.ENDURANCE, player );
+		int enduranceLevel = Skill.ENDURANCE.getLevel( uuid );
 
-		int combatLevel = getLevel( Skill.COMBAT, player );
-		int archeryLevel = getLevel( Skill.ARCHERY, player );
-		int magicLevel = getLevel( Skill.MAGIC, player );
+		int combatLevel = Skill.COMBAT.getLevel( uuid );
+		int archeryLevel = Skill.ARCHERY.getLevel( uuid );
+		int magicLevel = Skill.MAGIC.getLevel( uuid );
 
 		int maxOffensive = combatLevel;
 		if( maxOffensive < archeryLevel )
@@ -636,15 +560,15 @@ public class XP
 	public static void syncPlayerConfig( PlayerEntity player )
 	{
 		NetworkHandler.sendToPlayer( new MessageUpdateClientData( JsonConfig.localData, 0 ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapToNBT( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayer( PlayerEntity player )
     {
-        CompoundNBT skillsTag = getSkillsTag( player );
-        CompoundNBT prefsTag = getPreferencesTag( player );
-		CompoundNBT abilitiesTag = getAbilitiesTag( player );
-        Set<String> keySet = new HashSet<>( skillsTag.keySet() );
+//    	UUID uuid = player.getUniqueID();
+//        CompoundNBT xpTag 		 = NBTHelper.mapSkillToNbt ( Config.getXpMap( player ) );
+        CompoundNBT prefsTag 	 = NBTHelper.mapStringToNbt( Config.getPreferencesMap( player ) );
+		CompoundNBT abilitiesTag = NBTHelper.mapStringToNbt( Config.getAbilitiesMap( player ) );
 
 		syncPlayerConfig( player );
 		updateRecipes( (ServerPlayerEntity) player );
@@ -654,26 +578,9 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
 		AttributeHandler.updateAll( player );
 
-        for( String tag : keySet )
+        for( Map.Entry<Skill, Double> entry : Config.getXpMap( player ).entrySet() )
         {
-            if( Skill.getInt( tag ) == 0 )
-            {
-                if( Skill.getInt( tag.toLowerCase() ) != 0 )
-                    skillsTag.put( tag.toLowerCase(), skillsTag.get(tag) );
-
-                if( tag.toLowerCase().equals( "repairing" ) )
-                    skillsTag.put( "smithing", skillsTag.get(tag) );
-
-                LogHandler.LOGGER.info( "REMOVING INVALID SKILL " + tag + " FROM PLAYER " + player.getDisplayName().getString() );
-                skillsTag.remove( tag );
-            }
-        }
-
-        keySet = new HashSet<>( skillsTag.keySet() );
-
-        for( String tag : keySet )
-        {
-            NetworkHandler.sendToPlayer( new MessageXp( skillsTag.getDouble( tag ), Skill.getInt( tag ), 0, true ), (ServerPlayerEntity) player );
+            NetworkHandler.sendToPlayer( new MessageXp( entry.getValue(), entry.getKey().getValue(), 0, true ), (ServerPlayerEntity) player );
         }
     }
 
@@ -751,7 +658,7 @@ public class XP
 		{
 			for( Map.Entry<String, Double> entry : reqMap.entrySet() )
 			{
-				startLevel = getLevelDecimal( Skill.getSkill( entry.getKey() ), player );
+				startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
 				if( startLevel < entry.getValue() )
 					failedReq = true;
@@ -828,66 +735,66 @@ public class XP
 		return matched;
 	}
 
-	public static CompoundNBT getPmmoTag( PlayerEntity player )
-	{
-		if( player != null )
-		{
-			CompoundNBT persistTag = player.getPersistentData();
-			CompoundNBT pmmoTag = null;
-
-			if( !persistTag.contains( "pmmo" ) )			//if Player doesn't have pmmo tag, make it
-			{
-				pmmoTag = new CompoundNBT();
-				persistTag.put( "pmmo", pmmoTag );
-			}
-			else
-			{
-				pmmoTag = persistTag.getCompound( "pmmo" );	//if Player has pmmo tag, use it
-			}
-
-			return pmmoTag;
-		}
-		else
-			return new CompoundNBT();
-	}
-
-	public static CompoundNBT getPmmoTagElement( PlayerEntity player, String element )
-	{
-		if( player != null )
-		{
-			CompoundNBT pmmoTag = getPmmoTag( player );
-			CompoundNBT elementTag = null;
-
-			if( !pmmoTag.contains( element ) )					//if Player doesn't have element tag, make it
-			{
-				elementTag = new CompoundNBT();
-				pmmoTag.put( element, elementTag );
-			}
-			else
-			{
-				elementTag = pmmoTag.getCompound( element );	//if Player has element tag, use it
-			}
-
-			return elementTag;
-		}
-		else
-			return new CompoundNBT();
-	}
-
-	public static CompoundNBT getSkillsTag( PlayerEntity player )
-	{
-		return getPmmoTagElement( player, "skills" );
-	}
-
-	public static CompoundNBT getPreferencesTag( PlayerEntity player )
-	{
-		return getPmmoTagElement( player, "preferences" );
-	}
-
-	public static CompoundNBT getAbilitiesTag( PlayerEntity player )
-	{
-		return getPmmoTagElement( player, "abilities" );
-	}
+//	public static CompoundNBT getPmmoTag( PlayerEntity player )
+//	{
+//		if( player != null )
+//		{
+//			CompoundNBT persistTag = player.getPersistentData();
+//			CompoundNBT pmmoTag = null;
+//
+//			if( !persistTag.contains( "pmmo" ) )			//if Player doesn't have pmmo tag, make it
+//			{
+//				pmmoTag = new CompoundNBT();
+//				persistTag.put( "pmmo", pmmoTag );
+//			}
+//			else
+//			{
+//				pmmoTag = persistTag.getCompound( "pmmo" );	//if Player has pmmo tag, use it
+//			}
+//
+//			return pmmoTag;
+//		}
+//		else
+//			return new CompoundNBT();
+//	}
+//
+//	public static CompoundNBT getPmmoTagElement( PlayerEntity player, String element )
+//	{
+//		if( player != null )
+//		{
+//			CompoundNBT pmmoTag = getPmmoTag( player );
+//			CompoundNBT elementTag = null;
+//
+//			if( !pmmoTag.contains( element ) )					//if Player doesn't have element tag, make it
+//			{
+//				elementTag = new CompoundNBT();
+//				pmmoTag.put( element, elementTag );
+//			}
+//			else
+//			{
+//				elementTag = pmmoTag.getCompound( element );	//if Player has element tag, use it
+//			}
+//
+//			return elementTag;
+//		}
+//		else
+//			return new CompoundNBT();
+//	}
+//
+//	public static CompoundNBT getxpMap( PlayerEntity player )
+//	{
+//		return getPmmoTagElement( player, "skills" );
+//	}
+//
+//	public static CompoundNBT getPreferencesTag( PlayerEntity player )
+//	{
+//		return getPmmoTagElement( player, "preferences" );
+//	}
+//
+//	public static CompoundNBT getabilitiesMap( PlayerEntity player )
+//	{
+//		return getPmmoTagElement( player, "abilities" );
+//	}
 
 	public static double getWornXpBoost( PlayerEntity player, Item item, String skillName )
 	{
@@ -1134,11 +1041,9 @@ public class XP
 
 	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses )
 	{
-		double maxXp = Config.getConfig( "maxXp" );
-
 		if( !(player instanceof ServerPlayerEntity) )
 		{
-			LogHandler.LOGGER.error( "NOT ServerPlayerEntity PLAYER XP AWARD ATTEMPTED! THIS SHOULD NOT HAPPEN! SOURCE: " + sourceName + ", SKILL: " + skill.name() + ", AMOUNT: " + amount );
+			LogHandler.LOGGER.error( "NOT ServerPlayerEntity PLAYER XP AWARD ATTEMPTED! THIS SHOULD NOT HAPPEN! SOURCE: " + sourceName + ", SKILL: " + skill.name() + ", AMOUNT: " + amount + ", CLASS: " + player.getClass().getName().toString() );
 			return;
 		}
 
@@ -1159,37 +1064,25 @@ public class XP
 		if( amount == 0 )
 			return;
 
+		UUID uuid = player.getUniqueID();
 		String playerName = player.getDisplayName().getString();
-		int startLevel;
-		int currLevel;
-		double startXp = 0;
+		int startLevel = skill.getLevel( uuid );
+		double startXp = skill.getXp( uuid );
+		double maxXp = Config.getConfig( "maxXp" );
 
-		CompoundNBT skillsTag = getSkillsTag( player );
+		if( startXp >= 2000000000 )
+			return;
 
-		if( !skillsTag.contains( skillName ) )
+		if( startXp + amount >= 2000000000 )
 		{
-			skillsTag.putDouble( skillName, amount );
-			startLevel = 1;
-		}
-		else
-		{
-			startLevel = levelAtXp( skillsTag.getDouble( skillName ) );
-			startXp = skillsTag.getDouble( skillName );
-
-			if( startXp >= 2000000000 )
-				return;
-
-			if( startXp + amount >= 2000000000 )
-			{
-				sendMessage( skillName + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-				LogHandler.LOGGER.info( player.getDisplayName().getString() + " " + skillName + " 2b cap reached" );
-				amount = 2000000000 - startXp;
-			}
-
-			skillsTag.putDouble( skillName, (startXp + amount) );
+			sendMessage( skillName + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
+			LogHandler.LOGGER.info( player.getDisplayName().getString() + " " + skillName + " 2b cap reached" );
+			amount = 2000000000 - startXp;
 		}
 
-		currLevel = levelAtXp( skillsTag.getDouble( skillName ) );
+		PmmoSavedData.get().addXp( skill, uuid, amount );
+
+		int currLevel = skill.getLevel( uuid );
 
 		if( startLevel != currLevel )
 		{
@@ -1235,10 +1128,8 @@ public class XP
 			}
 		}
 
-		if( player instanceof ServerPlayerEntity )
-			NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
-
-		LogHandler.LOGGER.debug( ( playerName + " +" + amount + "xp in "  + skillName + " for " + sourceName + " total xp: " + skillsTag.getDouble( skillName ) ) );
+		NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
+		LogHandler.LOGGER.debug( playerName + " +" + amount + "xp in: "  + skillName + " for: " + sourceName + " total xp: " + skill.getXp( uuid ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
@@ -1247,29 +1138,29 @@ public class XP
 		}
 	}
 
-	public static void awardXpTrigger( ServerPlayerEntity player, String triggerKey, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
+	public static void awardXpTrigger( UUID uuid, String triggerKey, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
 	{
 		if( JsonConfig.data.get( JType.XP_VALUE_TRIGGER ).containsKey( triggerKey ) )
 		{
-			awardXpMap( player, JsonConfig.data.get( JType.XP_VALUE_TRIGGER ).get( triggerKey ), sourceName, skip, ignoreBonuses );
+			awardXpMap( uuid, JsonConfig.data.get( JType.XP_VALUE_TRIGGER ).get( triggerKey ), sourceName, skip, ignoreBonuses );
 		}
 		else
 			LogHandler.LOGGER.error( "TRIGGER XP AWARD \"" + triggerKey + "\" DOES NOT HAVE ANY VALUES, CANNOT AWARD" );
 	}
 
-	public static void awardXpMap( PlayerEntity player, Map<String, Object> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
+	public static void awardXpMap( UUID uuid, Map<String, Object> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
 	{
 		for( Map.Entry<String, Object> entry : map.entrySet() )
 		{
-			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, (double) entry.getValue(), skip, ignoreBonuses );
+			Skill.getSkill( entry.getKey() ).addXp( uuid, (double) entry.getValue(), sourceName, skip, ignoreBonuses );
 		}
 	}
 
-	public static void awardXpMapDouble( PlayerEntity player, Map<String, Double> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
+	public static void awardXpMapDouble( UUID uuid, Map<String, Double> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
 	{
 		for( Map.Entry<String, Double> entry : map.entrySet() )
 		{
-			awardXp( player, Skill.getSkill( entry.getKey() ), sourceName, entry.getValue(), skip, ignoreBonuses );
+			Skill.getSkill( entry.getKey() ).addXp( uuid, entry.getValue(), sourceName, skip, ignoreBonuses );
 		}
 	}
 
@@ -1312,7 +1203,7 @@ public class XP
 			if( reqs != null )
 			{
 				gap = (int) Math.floor( reqs.entrySet().stream()
-						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), getLevel( Skill.getSkill( entry.getKey() ), player ) ) )
+						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), Skill.getSkill( entry.getKey() ).getLevel( player ) ) )
 						.reduce( 0, Math::max ) );
 			}
 		}
@@ -1442,7 +1333,7 @@ public class XP
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( getBiomeResLoc( player.world, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), false );
 						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
 						{
-							int startLevel = getLevel( Skill.getSkill( entry.getKey() ), player );
+							int startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
 							if( startLevel < (double) entry.getValue() )
 								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
@@ -1460,6 +1351,44 @@ public class XP
 	public static double getWeight( int startLevel, Map<String, Object> fishItem )
 	{
 		return DP.map( startLevel, (double) fishItem.get( "startLevel" ), (double) fishItem.get( "endLevel" ), (double) fishItem.get( "startWeight" ), (double) fishItem.get( "endWeight" ) );
+	}
+
+	public static Map<Skill, Double> getOfflineXpMap(UUID uuid)
+	{
+		if( !offlineXp.containsKey( uuid ) )
+			offlineXp.put( uuid, new HashMap<>() );
+		return offlineXp.get( uuid );
+	}
+
+	public static void setOfflineXpMap( UUID uuid, Map<Skill, Double> newOfflineXp )
+	{
+		offlineXp.put( uuid, newOfflineXp );
+	}
+
+	public static void removeOfflineXpUuid( UUID uuid )
+	{
+		offlineXp.remove( uuid );
+	}
+
+	public static void removeScheduledXpUuid( UUID uuid )
+	{
+		offlineXp.remove( uuid );
+	}
+
+	public static int getOfflineLevel( Skill skill, UUID uuid )
+	{
+		return levelAtXp( getOfflineXp( skill, uuid ) );
+	}
+
+	public static double getOfflineXp( Skill skill, UUID uuid )
+	{
+		if( skill.equals( Skill.INVALID_SKILL ) )
+		{
+			LogHandler.LOGGER.error( "Invalid Skill at getOfflineXp" );
+			return -1;
+		}
+
+		return offlineXp.getOrDefault( uuid, new HashMap<>() ).getOrDefault( skill, 0D );
 	}
 
 	public static int levelAtXp( float xp )

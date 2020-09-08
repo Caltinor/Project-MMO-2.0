@@ -2,8 +2,11 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
+import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.command.CommandException;
@@ -33,19 +36,12 @@ public class CheckStatsCommand
         {
             PlayerEntity target = EntityArgument.getPlayer( context, "player name" );
 
-            CompoundNBT skillsTag = XP.getSkillsTag( target );
-            CompoundNBT packetSkillsTag = new CompoundNBT();
-            Set<String> keys = skillsTag.keySet();
+            CompoundNBT packetxpMap = NBTHelper.mapSkillToNbt(Config.getXpMap( target ) );
 
-            keys.forEach( key ->
-            {
-                packetSkillsTag.putDouble( key, skillsTag.getDouble( key ) );
-            });
+            packetxpMap.putString( "UUID", target.getUniqueID().toString() );
+            packetxpMap.putString( "name", target.getName().getString() );
 
-            packetSkillsTag.putString( "UUID", target.getUniqueID().toString() );
-            packetSkillsTag.putString( "name", target.getName().getString() );
-
-            NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( packetSkillsTag, 3 ), (ServerPlayerEntity) sender );
+            NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( packetxpMap, 3 ), (ServerPlayerEntity) sender );
         }
         catch( CommandSyntaxException e )
         {

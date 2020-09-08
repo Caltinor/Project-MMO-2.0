@@ -43,29 +43,29 @@ public class PlayerTickHandler
 
         if( XP.isPlayerSurvival( player ) && player.isAlive() )
         {
-            UUID playerUUID = player.getUniqueID();
+            UUID uuid = player.getUniqueID();
 
             if( player.isSprinting() )
                 AttributeHandler.updateSpeed( player );
             else
                 AttributeHandler.resetSpeed( player );
 
-            if( !lastAward.containsKey( playerUUID ) )
-                lastAward.put( playerUUID, System.nanoTime() );
-            if( !lastVeinAward.containsKey( playerUUID ) )
-                lastVeinAward.put( playerUUID, System.nanoTime() );
-            if( !lastInvCheck.containsKey( playerUUID ) )
-                lastInvCheck.put( playerUUID, System.nanoTime() );
+            if( !lastAward.containsKey( uuid ) )
+                lastAward.put( uuid, System.nanoTime() );
+            if( !lastVeinAward.containsKey( uuid ) )
+                lastVeinAward.put( uuid, System.nanoTime() );
+            if( !lastInvCheck.containsKey( uuid ) )
+                lastInvCheck.put( uuid, System.nanoTime() );
 
-            double gap = ( (System.nanoTime() - lastAward.get( playerUUID) ) / 1000000000D );
-            double veinGap = ( (System.nanoTime() - lastVeinAward.get( playerUUID) ) / 1000000000D );
-            double invGap = ( (System.nanoTime() - lastInvCheck.get( playerUUID) ) / 1000000000D );
+            double gap = ( (System.nanoTime() - lastAward.get( uuid) ) / 1000000000D );
+            double veinGap = ( (System.nanoTime() - lastVeinAward.get( uuid) ) / 1000000000D );
+            double invGap = ( (System.nanoTime() - lastInvCheck.get( uuid) ) / 1000000000D );
 
             if( gap > 0.5 )
             {
-                int swimLevel = XP.getLevel( Skill.SWIMMING, player );
-                int flyLevel = XP.getLevel( Skill.FLYING, player );
-                int agilityLevel = XP.getLevel( Skill.AGILITY, player );
+                int swimLevel = Skill.SWIMMING.getLevel( player );
+                int flyLevel = Skill.FLYING.getLevel( player );
+                int agilityLevel = Skill.AGILITY.getLevel( player );
                 int nightvisionUnlockLevel = Config.forgeConfig.nightvisionUnlockLevel.get();
                 float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
                 float speedAmp = 0;
@@ -105,7 +105,7 @@ public class PlayerTickHandler
                 double flyAward  = ( 1D + flyLevel     / 30.77D ) * gap ;
                 double runAward  = ( 1D + agilityLevel / 30.77D ) * gap * ( 1D + speedAmp / 4D );
 
-                lastAward.replace( playerUUID, System.nanoTime() );
+                lastAward.replace( uuid, System.nanoTime() );
                 Block waterBlock = Blocks.WATER;
                 Block tallSeagrassBlock = Blocks.TALL_SEAGRASS;
                 Block kelpBlock = Blocks.KELP_PLANT;
@@ -149,13 +149,13 @@ public class PlayerTickHandler
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
 //				if( !player.world.isRemote() )
 //				{
-//					CompoundNBT abilitiesTag = getAbilitiesTag( player );
-//					if( !abilitiesTag.contains( "excavate" ) )
-//						abilitiesTag.putDouble( "excavate", 0 );
+//					Map<String, Double> abilitiesMap = getabilitiesMap( player );
+//					if( !abilitiesMap.contains( "excavate" ) )
+//						abilitiesMap.putDouble( "excavate", 0 );
 //
-//					abilitiesTag.putDouble( "excavate", abilitiesTag.getDouble( "excavate" ) + 1 );
+//					abilitiesMap.putDouble( "excavate", abilitiesMap.getDouble( "excavate" ) + 1 );
 //
-//					System.out.println( abilitiesTag.getDouble( "excavate" ) );
+//					System.out.println( abilitiesMap.getDouble( "excavate" ) );
 //				}
             }
 
@@ -164,7 +164,7 @@ public class PlayerTickHandler
                 if( veinGap > 0.25 )
                 {
                     WorldTickHandler.updateVein( player, veinGap );
-                    lastVeinAward.put( playerUUID, System.nanoTime() );
+                    lastVeinAward.put( uuid, System.nanoTime() );
                 }
 
                 if( invGap > 1 )
@@ -172,13 +172,13 @@ public class PlayerTickHandler
 
                     for( ItemStack itemStack : player.inventory.mainInventory )
                     {
-                        tagOwnership( itemStack, playerUUID );
+                        tagOwnership( itemStack, uuid );
                     }
                     for( ItemStack itemStack : player.inventory.offHandInventory )
                     {
-                        tagOwnership( itemStack, playerUUID );
+                        tagOwnership( itemStack, uuid );
                     }
-                    lastInvCheck.put( playerUUID, System.nanoTime() );
+                    lastInvCheck.put( uuid, System.nanoTime() );
                 }
             }
         }

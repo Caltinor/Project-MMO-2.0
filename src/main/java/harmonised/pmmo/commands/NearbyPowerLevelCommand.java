@@ -55,7 +55,7 @@ public class NearbyPowerLevelCommand
 
             for( PlayerEntity player : XP.getNearbyPlayers( target ) )
             {
-                totalPowerLevel += XP.getPowerLevel( player );
+                totalPowerLevel += XP.getPowerLevel( player.getUniqueID() );
             }
 
             LogHandler.LOGGER.info( "PMMO NearbyPowerLevel Command Output: " + totalPowerLevel );

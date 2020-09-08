@@ -88,7 +88,7 @@ public class BlockBrokenHandler
 
             for( Map.Entry<String, Object> entry : JsonConfig.data.get( JType.REQ_BREAK ).get( block.getRegistryName().toString() ).entrySet() )
             {
-                startLevel = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
+                startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
                 double entryValue = 1;
                 if( entry.getValue() instanceof Double )
@@ -111,8 +111,9 @@ public class BlockBrokenHandler
         String regKey = block.getRegistryName().toString();
         World world = (World) event.getWorld();
         PlayerEntity player = event.getPlayer();
+        Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 
-        boolean veiningAllowed = Config.config.containsKey("veiningAllowed") && Config.config.get("veiningAllowed") != 0;
+        boolean veiningAllowed = prefsMap.containsKey("veiningAllowed") && prefsMap.get("veiningAllowed") != 0;
 
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
@@ -176,7 +177,7 @@ public class BlockBrokenHandler
             Block baseBlock = event.getState().getBlock();
             BlockPos baseBlockPos = event.getPos();
 
-            double extraChance = XP.getExtraChance( player, block.getRegistryName(), JType.INFO_PLANT ) / 100;
+            double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
             int rewardable, guaranteedDrop, extraDrop, totalDrops, guaranteedDropEach;
             rewardable = extraDrop = guaranteedDrop = totalDrops = 0;
 
@@ -289,7 +290,7 @@ public class BlockBrokenHandler
                 award = new HashMap<>();
                 award.put( skill, hardness );
 
-                double extraChance = XP.getExtraChance( player, block.getRegistryName(), JType.INFO_PLANT ) / 100;
+                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -315,7 +316,7 @@ public class BlockBrokenHandler
             else if( !wasPlaced )
                 awardMsg = "breaking a plant";
         }
-        else if( XP.getExtraChance( player, block.getRegistryName(), JType.INFO_ORE ) > 0 )		//IS ORE
+        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) > 0 )		//IS ORE
         {
             boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
             boolean noDropOre = false;
@@ -327,7 +328,7 @@ public class BlockBrokenHandler
 
             if( noDropOre && !wasPlaced || !noDropOre && !isSilk )			//EXTRA DROPS
             {
-                double extraChance = XP.getExtraChance( player, block.getRegistryName(), JType.INFO_ORE ) / 100;
+                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) / 100;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -355,11 +356,11 @@ public class BlockBrokenHandler
             else
                 awardMsg = "mining a block";
         }
-        else if( XP.getExtraChance( player, block.getRegistryName(), JType.INFO_LOG ) > 0 && isEffective )
+        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
         {
             if( !wasPlaced )			//EXTRA DROPS
             {
-                double extraChance = XP.getExtraChance( player, block.getRegistryName(), JType.INFO_LOG ) / 100D;
+                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) / 100D;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;

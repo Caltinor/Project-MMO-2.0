@@ -6,8 +6,10 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateBoolean;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
+import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;
@@ -69,7 +71,7 @@ public class WorldTickHandler
         Item startItem;
         BlockPos veinPos;
         BlockState veinState;
-        CompoundNBT abilitiesTag;
+        Map<String, Double> abilitiesMap;
         String regKey;
         Skill skill;
         double cost;
@@ -94,7 +96,7 @@ public class WorldTickHandler
                     startItem = veinInfo.startItem;
                     veinPos = veinSet.get( player ).get( 0 );
                     veinState = world.getBlockState( veinPos );
-                    abilitiesTag = XP.getAbilitiesTag( player );
+                    abilitiesMap = Config.getAbilitiesMap( player );
                     regKey = veinState.getBlock().getRegistryName().toString();
                     cost = getVeinCost( veinState, veinPos, player );
                     correctBlock = world.getBlockState( veinPos ).getBlock().equals( veinInfo.state.getBlock() );
@@ -152,7 +154,7 @@ public class WorldTickHandler
                             fullyGrown = false;
                     }
 
-                    if( ( abilitiesTag.getDouble( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
+                    if( ( abilitiesMap.get( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
                     {
                         veinSet.get( player ).remove( 0 );
 
@@ -171,7 +173,7 @@ public class WorldTickHandler
                                     {
                                         if( fullyGrown )
                                         {
-                                            abilitiesTag.putDouble("veinLeft", abilitiesTag.getDouble("veinLeft") - cost);
+                                            abilitiesMap.put("veinLeft", abilitiesMap.get("veinLeft") - cost);
                                             destroyBlock( world, veinPos, player, startItemStack );
                                             player.addExhaustion( (float) exhaustionPerBlock );
                                         }
@@ -218,7 +220,7 @@ public class WorldTickHandler
 
     public static void scheduleVein(PlayerEntity player, VeinInfo veinInfo )
     {
-        double veinLeft = XP.getAbilitiesTag( player ).getDouble( "veinLeft" );
+        double veinLeft = Config.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
         double veinCost = getVeinCost( veinInfo.state, veinInfo.pos, player );
         String blockKey = veinInfo.state.getBlock().getRegistryName().toString();
         ArrayList<BlockPos> blockPosArrayList;
@@ -388,14 +390,12 @@ public class WorldTickHandler
 
     public static void updateVein( PlayerEntity player, double gap )
     {
-//        System.out.println( XP.getAbilitiesTag( player ).getDouble( "veinLeft" ) );
+        Map<String, Double> abilitiesMap = Config.getAbilitiesMap( player );
 
-        CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
+        if( !abilitiesMap.containsKey( "veinLeft" ) )
+            abilitiesMap.put( "veinLeft", maxVeinCharge );
 
-        if( !abilitiesTag.contains( "veinLeft" ) )
-            abilitiesTag.putDouble( "veinLeft", maxVeinCharge );
-
-        double veinLeft = abilitiesTag.getDouble( "veinLeft" );
+        double veinLeft = abilitiesMap.get( "veinLeft" );
         if( veinLeft < 0 )
             veinLeft = 0D;
 
@@ -405,8 +405,8 @@ public class WorldTickHandler
         if( veinLeft > maxVeinCharge )
             veinLeft = maxVeinCharge;
 
-        abilitiesTag.putDouble( "veinLeft", veinLeft );
+        abilitiesMap.put( "veinLeft", veinLeft );
 
-        NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
+        NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT(NBTHelper.mapStringToNbt( abilitiesMap ), 1 ), (ServerPlayerEntity) player );
     }
 }

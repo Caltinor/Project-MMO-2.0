@@ -23,7 +23,7 @@ public class FishedHandler
     public static void handleFished( ItemFishedEvent event )
     {
         PlayerEntity player = event.getPlayer();
-        int startLevel = XP.getLevel( Skill.FISHING, player );
+        int startLevel = Skill.FISHING.getLevel( player );
         int level;
         NonNullList<ItemStack> items = event.getDrops();
         double award = 10D;

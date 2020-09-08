@@ -14,8 +14,6 @@ import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TranslationTextComponent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,9 +59,9 @@ public class AddCommand
                     double newValue = DoubleArgumentType.getDouble( context, "Value To Add" );
 
                     if( type.equals( "level" ) )
-                        skill.addLevel( player, newValue, ignoreBonuses );
+                        skill.addLevel( player, newValue, "add level Command", false, ignoreBonuses );
                     else if( type.equals( "xp" ) )
-                        skill.addXp( player, newValue, ignoreBonuses );
+                        skill.addXp( player, newValue, "add xp Command", false, ignoreBonuses );
                     else
                     {
                         LogHandler.LOGGER.error( "PMMO Command Add: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );

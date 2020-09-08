@@ -26,7 +26,7 @@ public class SpawnHandler
                 for( PlayerEntity player : allPlayers )
                 {
                     if( XP.isPlayerSurvival( player ) )
-                        powerLevel += XP.getPowerLevel( player );
+                        powerLevel += XP.getPowerLevel( player.getUniqueID() );
                 }
 
                 AttributeHandler.updateHP( mob, powerLevel );
