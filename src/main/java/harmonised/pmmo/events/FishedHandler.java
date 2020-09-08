@@ -23,7 +23,7 @@ public class FishedHandler
     public static void handleFished( ItemFishedEvent event )
     {
         PlayerEntity player = event.getPlayer();
-        int startLevel = XP.getLevel( Skill.FISHING, player );
+        int startLevel = Skill.FISHING.getLevel( player );
         int level;
         NonNullList<ItemStack> items = event.getDrops();
         double award = 10D;
@@ -149,7 +149,7 @@ public class FishedHandler
                         EnchantmentHelper.setEnchantments( outEnchants, itemStack );
                 }
 
-                XP.dropItemStack( itemStack, player.world, player.getPosition() );
+                XP.dropItemStack( itemStack, player.world, player.getPositionVec() );
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
 

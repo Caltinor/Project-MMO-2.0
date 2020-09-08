@@ -4,6 +4,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.*;
 import harmonised.pmmo.network.MessageKeypress;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
@@ -46,12 +47,9 @@ public class ClientEventHandler
 
                 XP.playerNames.put( uuid, name );
 
-                if( !XP.skills.containsKey( uuid ) )
-                    XP.skills.put( uuid, new HashMap<>() );
-
                 XPOverlayGUI.skills.forEach( (skill, aSkill) ->
                 {
-                    XP.skills.get( uuid ).put( skill.name().toLowerCase(), aSkill.goalXp );
+                    XP.getOfflineXpMap( uuid ).put( skill, aSkill.goalXp );
                 });
 
                 if( ClientHandler.OPEN_MENU.isKeyDown() )

@@ -22,37 +22,33 @@ public class BrewHandler
         if( ingredient.getTag() != null && ingredient.getTag().hasUniqueId( "lastOwner" ) )
         {
             UUID uuid = ingredient.getTag().getUniqueId( "lastOwner" );
-            PlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID( uuid );
 
-            if( player != null )
+            double extraChance = XP.getExtraChance( uuid, brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.INFO_BREW, false ) / 100D;
+
+            int guaranteedDrop = (int) extraChance;
+            int extraDrop;
+
+            ItemStack potion;
+            int potionCount = 0;
+
+            for( int i = 0; i < 3; i++ )
             {
-                double extraChance = XP.getExtraChance( player, brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.INFO_BREW ) / 100D;
+                potion = brewingItemStacks.get(i);
 
-                int guaranteedDrop = (int) extraChance;
-                int extraDrop;
-
-                ItemStack potion;
-                int potionCount = 0;
-
-                for( int i = 0; i < 3; i++ )
+                if( !potion.isEmpty() )
                 {
-                    potion = brewingItemStacks.get(i);
-
-                    if( !potion.isEmpty() )
-                    {
-                        if( XP.rollChance( extraChance % 1 ) )
-                            extraDrop = 1;
-                        else
-                            extraDrop = 0;
-                        potionCount += 1 + guaranteedDrop + extraDrop;
-                        potion.grow(guaranteedDrop + extraDrop);
-                    }
+                    if( XP.rollChance( extraChance % 1 ) )
+                        extraDrop = 1;
+                    else
+                        extraDrop = 0;
+                    potionCount += 1 + guaranteedDrop + extraDrop;
+                    potion.grow(guaranteedDrop + extraDrop);
                 }
-
-                Map<String, Double> award = XP.multiplyMap( XP.getXp( brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
-
-                XP.awardXpMapDouble( player, award, "Brewing", true, false );
             }
+
+            Map<String, Double> award = XP.multiplyMap( XP.getXp( brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
+
+            XP.awardXpMapDouble( uuid, award, "Brewing", true, false );
         }
     }
 }

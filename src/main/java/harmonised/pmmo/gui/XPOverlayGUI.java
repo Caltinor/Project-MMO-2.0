@@ -2,11 +2,13 @@ package harmonised.pmmo.gui;
 
 import java.util.*;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.MessageLevelUp;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -61,6 +63,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static BlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	private static Item lastToolHeld = Items.AIR;
+	private static MatrixStack stack;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean guiWasOn = false, guiOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
 	MainWindow sr;
@@ -124,7 +127,7 @@ public class XPOverlayGUI extends AbstractGui
 					doVein();
 					doSkills();
 				}
-				doXpDrops();
+				doXpDrops( stack );
 				doXpBar();
 
 				if( showSkillsListAtCorner )
@@ -174,7 +177,7 @@ public class XPOverlayGUI extends AbstractGui
 		lastBlockTransKey = lastBlockState.getBlock().getTranslationKey();
 	}
 
-	private void doXpDrops()
+	private void doXpDrops( MatrixStack stack )
 	{
 		if( xpDropsAttachedToBar )
 		{
@@ -209,7 +212,7 @@ public class XPOverlayGUI extends AbstractGui
 				if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 				{
 					aSkill = skills.get( xpDrop.skill );
-
+					
 					if( !xpDrop.skip )
 						skill = xpDrop.skill;
 
@@ -357,7 +360,7 @@ public class XPOverlayGUI extends AbstractGui
 
 	private void doVein()
 	{   // VEIN STUFF
-		veinLeft = XP.getAbilitiesTag( player ).getDouble( "veinLeft" );
+		veinLeft = Config.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
 		veinPosGoal = veinLeft / maxVeinCharge;
 		addAmount = (veinPosGoal - veinPos) * (timeDiff / 200000000D);
 		if( addAmount < 0.00003 )
@@ -404,13 +407,13 @@ public class XPOverlayGUI extends AbstractGui
 
 			if( !metToolReq )
 			{
-				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ).getString(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 				return;
 			}
 
 			if( lookingAtBlock && !canBreak )
 			{
-				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getString(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 				return;
 			}
 
@@ -455,7 +458,7 @@ public class XPOverlayGUI extends AbstractGui
 			}
 
 			skillsKeys = new ArrayList<>( skills.keySet() );
-			skillsKeys.sort( Comparator.comparingDouble( a -> ((Skill) a).getXp( player ) ).reversed() );
+			skillsKeys.sort( Comparator.comparingDouble( a -> XP.getOfflineXp( (Skill) a, player.getUniqueID() ) ).reversed() );
 
 			for( Skill keySkill : skillsKeys )
 			{
@@ -466,7 +469,7 @@ public class XPOverlayGUI extends AbstractGui
 				color = XP.getSkillColor( keySkill );
 				if( level >= maxLevel )
 					tempString = "" + maxLevel;
-				drawRightAlignedString( fontRenderer, tempString, levelGap + 4, 3 + listIndex, color );
+				drawString( fontRenderer, tempString, levelGap + 4 - fontRenderer.getStringWidth( tempString ), 3 + listIndex, color );
 				drawString( fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
 				drawString( fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
 
@@ -497,115 +500,115 @@ public class XPOverlayGUI extends AbstractGui
 	{
 		player = Minecraft.getInstance().player;
 
-		CompoundNBT prefsTag = XP.getPreferencesTag( player );
+		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 
-		if( prefsTag.contains( "barOffsetX" ) )
-			barOffsetX = prefsTag.getDouble( "barOffsetX" );
+		if( prefsMap.containsKey( "barOffsetX" ) )
+			barOffsetX = prefsMap.get( "barOffsetX" );
 		else
 			barOffsetX = Config.forgeConfig.barOffsetX.get();
 
-		if( prefsTag.contains( "barOffsetY" ) )
-			barOffsetY = prefsTag.getDouble( "barOffsetY" );
+		if( prefsMap.containsKey( "barOffsetY" ) )
+			barOffsetY = prefsMap.get( "barOffsetY" );
 		else
 			barOffsetY = Config.forgeConfig.barOffsetY.get();
 
-		if( prefsTag.contains( "veinBarOffsetX" ) )
-			veinBarOffsetX = prefsTag.getDouble( "veinBarOffsetX" );
+		if( prefsMap.containsKey( "veinBarOffsetX" ) )
+			veinBarOffsetX = prefsMap.get( "veinBarOffsetX" );
 		else
 			veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
 
-		if( prefsTag.contains( "veinBarOffsetY" ) )
-			veinBarOffsetY = prefsTag.getDouble( "veinBarOffsetY" );
+		if( prefsMap.containsKey( "veinBarOffsetY" ) )
+			veinBarOffsetY = prefsMap.get( "veinBarOffsetY" );
 		else
 			veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
 
-		if( prefsTag.contains( "xpDropOffsetX" ) )
-			xpDropOffsetX = prefsTag.getDouble( "xpDropOffsetX" );
+		if( prefsMap.containsKey( "xpDropOffsetX" ) )
+			xpDropOffsetX = prefsMap.get( "xpDropOffsetX" );
 		else
 			xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
 
-		if( prefsTag.contains( "xpDropOffsetY" ) )
-			xpDropOffsetY = prefsTag.getDouble( "xpDropOffsetY" );
+		if( prefsMap.containsKey( "xpDropOffsetY" ) )
+			xpDropOffsetY = prefsMap.get( "xpDropOffsetY" );
 		else
 			xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
 
-		if( prefsTag.contains( "xpDropSpawnDistance" ) )
-			xpDropSpawnDistance = prefsTag.getDouble( "xpDropSpawnDistance" );
+		if( prefsMap.containsKey( "xpDropSpawnDistance" ) )
+			xpDropSpawnDistance = prefsMap.get( "xpDropSpawnDistance" );
 		else
 			xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
 
-		if( prefsTag.contains( "xpDropOpacityPerTime" ) )
-			xpDropOpacityPerTime = prefsTag.getDouble( "xpDropOpacityPerTime" );
+		if( prefsMap.containsKey( "xpDropOpacityPerTime" ) )
+			xpDropOpacityPerTime = prefsMap.get( "xpDropOpacityPerTime" );
 		else
 			xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
 
-		if( prefsTag.contains( "xpDropMaxOpacity" ) )
-			xpDropMaxOpacity = prefsTag.getDouble( "xpDropMaxOpacity" );
+		if( prefsMap.containsKey( "xpDropMaxOpacity" ) )
+			xpDropMaxOpacity = prefsMap.get( "xpDropMaxOpacity" );
 		else
 			xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
 
-		if( prefsTag.contains( "minXpGrow" ) )
-			minXpGrow = prefsTag.getDouble( "minXpGrow" );
+		if( prefsMap.containsKey( "minXpGrow" ) )
+			minXpGrow = prefsMap.get( "minXpGrow" );
 		else
 			minXpGrow = Config.forgeConfig.minXpGrow.get();
 
-		if( prefsTag.contains( "xpDropDecayAge" ) )
-			xpDropDecayAge = (int) Math.floor( prefsTag.getDouble( "xpDropDecayAge" ) );
+		if( prefsMap.containsKey( "xpDropDecayAge" ) )
+			xpDropDecayAge = (int) Math.floor( prefsMap.get( "xpDropDecayAge" ) );
 		else
 			xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
 
-		if( prefsTag.contains( "maxLevel" ) )
+		if( prefsMap.containsKey( "maxLevel" ) )
 			maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
 		else
 			maxLevel = (int) Math.floor( Config.forgeConfig.maxLevel.get() );
 
-		if( prefsTag.contains( "maxXp" ) )
+		if( prefsMap.containsKey( "maxXp" ) )
 			maxXp = (int) Math.floor( Config.getConfig( "maxXp" ) );
 		else
 			maxXp = XP.xpAtLevel( maxLevel );
 
-		if( prefsTag.contains( "xpDropsAttachedToBar" ) )
-			xpDropsAttachedToBar = prefsTag.getDouble("xpDropsAttachedToBar") != 0;
+		if( prefsMap.containsKey( "xpDropsAttachedToBar" ) )
+			xpDropsAttachedToBar = prefsMap.get("xpDropsAttachedToBar") != 0;
 		else
 			xpDropsAttachedToBar = Config.forgeConfig.xpDropsAttachedToBar.get();
 
-		if( prefsTag.contains( "xpBarAlwaysOn" ) )
-			xpBarAlwaysOn = prefsTag.getDouble("xpBarAlwaysOn") != 0;
+		if( prefsMap.containsKey( "xpBarAlwaysOn" ) )
+			xpBarAlwaysOn = prefsMap.get("xpBarAlwaysOn") != 0;
 		else
 			xpBarAlwaysOn = Config.forgeConfig.xpBarAlwaysOn.get();
 
-		if( prefsTag.contains( "xpLeftDisplayAlwaysOn" ) )
-			xpLeftDisplayAlwaysOn = prefsTag.getDouble("xpLeftDisplayAlwaysOn") != 0;
+		if( prefsMap.containsKey( "xpLeftDisplayAlwaysOn" ) )
+			xpLeftDisplayAlwaysOn = prefsMap.get("xpLeftDisplayAlwaysOn") != 0;
 		else
 			xpLeftDisplayAlwaysOn = Config.forgeConfig.xpLeftDisplayAlwaysOn.get();
 
-		if( prefsTag.contains( "showSkillsListAtCorner" ) )
-			showSkillsListAtCorner = prefsTag.getDouble("showSkillsListAtCorner") != 0;
+		if( prefsMap.containsKey( "showSkillsListAtCorner" ) )
+			showSkillsListAtCorner = prefsMap.get("showSkillsListAtCorner") != 0;
 		else
 			showSkillsListAtCorner = Config.forgeConfig.showSkillsListAtCorner.get();
 
-		if( prefsTag.contains( "showXpDrops" ) )
-			showXpDrops = prefsTag.getDouble("showXpDrops") != 0;
+		if( prefsMap.containsKey( "showXpDrops" ) )
+			showXpDrops = prefsMap.get("showXpDrops") != 0;
 		else
 			showXpDrops = Config.forgeConfig.showXpDrops.get();
 
-		if( prefsTag.contains( "stackXpDrops" ) )
-			stackXpDrops = prefsTag.getDouble("stackXpDrops") != 0;
+		if( prefsMap.containsKey( "stackXpDrops" ) )
+			stackXpDrops = prefsMap.get("stackXpDrops") != 0;
 		else
 			stackXpDrops = Config.forgeConfig.stackXpDrops.get();
 
-		if( prefsTag.contains( "lvlUpScreenshot" ) )
-			lvlUpScreenshot = prefsTag.getDouble("lvlUpScreenshot") != 0;
+		if( prefsMap.containsKey( "lvlUpScreenshot" ) )
+			lvlUpScreenshot = prefsMap.get("lvlUpScreenshot") != 0;
 		else
 			lvlUpScreenshot = Config.forgeConfig.lvlUpScreenshot.get();
 
-		if( prefsTag.contains( "lvlUpScreenshotShowSkills" ) )
-			lvlUpScreenshotShowSkills = prefsTag.getDouble("lvlUpScreenshotShowSkills") != 0;
+		if( prefsMap.containsKey( "lvlUpScreenshotShowSkills" ) )
+			lvlUpScreenshotShowSkills = prefsMap.get("lvlUpScreenshotShowSkills") != 0;
 		else
 			lvlUpScreenshotShowSkills = Config.forgeConfig.lvlUpScreenshotShowSkills.get();
 
-		if( prefsTag.contains( "xpDropsShowXpBar" ) )
-			xpDropsShowXpBar = prefsTag.getDouble("xpDropsShowXpBar" ) != 0;
+		if( prefsMap.containsKey( "xpDropsShowXpBar" ) )
+			xpDropsShowXpBar = prefsMap.get("xpDropsShowXpBar" ) != 0;
 		else
 			xpDropsShowXpBar = Config.forgeConfig.xpDropsShowXpBar.get();
 
@@ -665,7 +668,7 @@ public class XPOverlayGUI extends AbstractGui
 //			int i = "deadmau5".equals(displayNameIn) ? -10 : 0;
 //			matrixStack.push();
 //			matrixStack.translate(0.0D, (double)f, 0.0D);
-//			matrixStack.rotate(this.renderManager.getCameraOrientation());
+//			matrixStack.multiply(this.renderManager.getCameraOrientation());
 //			matrixStack.scale(-0.025F, -0.025F, 0.025F);
 //			Matrix4f matrix4f = matrixStackIn.getLast().getPositionMatrix();
 //			float f1 = Minecraft.getInstance().gameSettings.getTextBackgroundOpacity(0.25F);
@@ -732,7 +735,7 @@ public class XPOverlayGUI extends AbstractGui
 				}
 			}
 
-//			System.out.println( mc.player.getDisplayName().getFormattedText() + " " + skill.name() + " has been set to: " + xp );
+//			System.out.println( mc.player.getDisplayName().getString() + " " + skill.name() + " has been set to: " + xp );
 		}
 		else if( stackXpDrops && xpDrops.size() > 0 )
 		{

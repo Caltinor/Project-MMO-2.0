@@ -150,7 +150,7 @@ public class ListScreen extends Screen
                     }
                 }
             }
-                break;
+            break;
 
             case DIMENSION:
             {
@@ -187,7 +187,7 @@ public class ListScreen extends Screen
                     }
                 }
             }
-                break;
+            break;
 
             case REQ_KILL:
             {
@@ -230,7 +230,7 @@ public class ListScreen extends Screen
                     }
                 }
             }
-                break;
+            break;
 
             case XP_VALUE_BREED:
             case XP_VALUE_TAME:
@@ -246,7 +246,7 @@ public class ListScreen extends Screen
                     }
                 }
             }
-                break;
+            break;
 
             case FISH_ENCHANT_POOL:
             {
@@ -265,18 +265,14 @@ public class ListScreen extends Screen
 
             case STATS:
             {
-                Set<String> skills;
-                if( XP.skills.containsKey( uuid ) )
-                    skills = XP.skills.get( uuid ).keySet();
-                else
-                    skills = new HashSet<>();
+                Set<Skill> skills = XP.getOfflineXpMap( uuid ).keySet();
 
-                for( String skill : skills )
+                for( Skill skill : skills )
                 {
-                    listButtons.add( new ListButton( 0, 0, 3, 6, skill, jType, "", button -> ((ListButton) button).clickAction() ) );
+                    listButtons.add( new ListButton( 0, 0, 3, 6, skill.toString(), jType, "", button -> ((ListButton) button).clickAction() ) );
                 }
             }
-                break;
+            break;
 
             default:
             {
@@ -292,7 +288,7 @@ public class ListScreen extends Screen
                     }
                 }
             }
-                break;
+            break;
         }
 
         for( String keyWord : keyWords )
@@ -381,7 +377,7 @@ public class ListScreen extends Screen
                         }
                     }
                 }
-                    break;
+                break;
 
                 case INFO_ORE:
                 case INFO_LOG:
@@ -396,7 +392,7 @@ public class ListScreen extends Screen
                     List<String> infoText = new ArrayList<>();
                     String transKey = "pmmo." + jType.toString().replace( "info_", "" ) + "ExtraDrop";
                     double extraDroppedPerLevel = infoMap.get( "extraChance" ) / 100;
-                    double extraDropped = XP.getExtraChance( player, button.regKey, jType ) / 100;
+                    double extraDropped = XP.getExtraChance( player.getUniqueID(), button.regKey, jType, true ) / 100;
 
                     if ( extraDropped <= 0 )
                         infoText.add( getTransComp( transKey, DP.dp( extraDropped ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
@@ -420,21 +416,21 @@ public class ListScreen extends Screen
                         addLevelsToButton( button, breakMap, player, false );
                     }
                 }
-                    break;
+                break;
 
                 case XP_BONUS_WORN:
                 {
                     button.text.add( "" );
                     addPercentageToButton( button, reqMap.get( button.regKey ), XP.checkReq( player, button.regKey, JType.REQ_WEAR ) );
                 }
-                    break;
+                break;
 
                 case XP_BONUS_HELD:
                 {
                     button.text.add( "" );
                     addPercentageToButton( button, reqMap.get( button.regKey ), true );
                 }
-                    break;
+                break;
 
                 case XP_VALUE_BREED:
                 case XP_VALUE_TAME:
@@ -445,19 +441,19 @@ public class ListScreen extends Screen
                 {
                     addXpToButton( button, reqMap.get( button.regKey ) );
                 }
-                    break;
+                break;
 
                 case XP_VALUE_BREAK:
                 {
                     addXpToButton( button, reqMap.get( button.regKey ), JType.REQ_BREAK, player );
                 }
-                    break;
+                break;
 
                 case XP_VALUE_CRAFT:
                 {
                     addXpToButton( button, reqMap.get( button.regKey ), JType.REQ_CRAFT, player );
                 }
-                    break;
+                break;
 
                 case FISH_ENCHANT_POOL:
                 {
@@ -501,7 +497,7 @@ public class ListScreen extends Screen
                         button.text.add( " " + getTransComp( "pmmo.levelsPerTier", DP.dpSoft( levelsPerTier ) ).getFormattedText() );
                     button.text.add( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevel ).getFormattedText() );
                 }
-                    break;
+                break;
 
                 case REQ_KILL:
                 {
@@ -539,7 +535,7 @@ public class ListScreen extends Screen
                         }
                     }
                 }
-                    break;
+                break;
 
                 case DIMENSION:
                 {
@@ -554,7 +550,7 @@ public class ListScreen extends Screen
                         }
                     }
                 }
-                    break;
+                break;
 
                 case FISH_POOL:
                 {
@@ -593,7 +589,7 @@ public class ListScreen extends Screen
                     button.text.add( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getFormattedText() );
                     button.text.add( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getFormattedText() );
                 }
-                    break;
+                break;
 
                 case REQ_WEAR:
                 case REQ_TOOL:
@@ -607,7 +603,7 @@ public class ListScreen extends Screen
                     button.text.add( getTransComp( "pmmo." + jType.toString().replace( "req_", "" ) ).setStyle( XP.textStyle.get( XP.checkReq( player, button.regKey, jType ) ? "green" : "red" ) ).getFormattedText() );
                     addLevelsToButton( button, reqMap.get( button.regKey ), player, false );
                 }
-                    break;
+                break;
 
                 case SALVAGE_FROM:
                 {
@@ -654,7 +650,7 @@ public class ListScreen extends Screen
 
                     button.unlocked = anyPassed;
                 }
-                    break;
+                break;
 
                 case SALVAGE_TO:
                 {
@@ -689,13 +685,13 @@ public class ListScreen extends Screen
                     button.text.add( getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).setStyle( color ).getFormattedText() );
                     button.text.add( getTransComp( "pmmo.maxChancePerItem", DP.dpSoft( maxChance ) ).setStyle( color ).getFormattedText() );
                 }
-                    break;
+                break;
 
                 case STATS:
                 {
                     Skill skill = Skill.getSkill( button.regKey );
 
-                    double curXp = XP.getXpOffline( skill, uuid );
+                    double curXp = XP.getOfflineXp( skill, uuid );
                     double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
 
                     button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( XP.getSkillStyle(Skill.getSkill( button.regKey ) ) ).getFormattedText();
@@ -707,7 +703,7 @@ public class ListScreen extends Screen
                         button.text.add( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() );
                     }
                 }
-                    break;
+                break;
 
                 default:
                     break;
@@ -748,11 +744,11 @@ public class ListScreen extends Screen
                 case INFO_PLANT:
                 case XP_VALUE_BREAK:
                 case XP_VALUE_CRAFT:
-                        button.unlocked = XP.checkReq( player, button.regKey, JType.REQ_BREAK );
+                    button.unlocked = XP.checkReq( player, button.regKey, JType.REQ_BREAK );
                     break;
 
                 case XP_BONUS_WORN:
-                        button.unlocked = XP.checkReq( player, button.regKey, JType.REQ_WEAR );
+                    button.unlocked = XP.checkReq( player, button.regKey, JType.REQ_WEAR );
                     break;
 
                 case FISH_POOL:
@@ -796,7 +792,7 @@ public class ListScreen extends Screen
                 break;
 
             case STATS:
-                listButtons.sort( Comparator.comparingDouble( b -> XP.getXpOffline( Skill.getSkill( ((ListButton) b).regKey ), uuid ) ).reversed() );
+                listButtons.sort( Comparator.comparingDouble( b -> XP.getOfflineXp( Skill.getSkill( ((ListButton) b).regKey ), uuid ) ).reversed() );
                 break;
 
             default:
@@ -818,7 +814,7 @@ public class ListScreen extends Screen
                 otherAnimalsTameButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( defaultTamingXp ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherAnimalsTameButton );
             }
-                break;
+            break;
 
             case XP_VALUE_KILL:
             {
@@ -830,7 +826,7 @@ public class ListScreen extends Screen
                 otherPassiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherPassiveMobsButton );
             }
-                break;
+            break;
 
             case XP_VALUE_CRAFT:
             {
@@ -838,7 +834,7 @@ public class ListScreen extends Screen
                 otherCraftsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( defaultCraftingXp ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherCraftsButton );
             }
-                break;
+            break;
         }
         scrollPanel = new ListScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, jType, player, listButtons );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
@@ -1047,7 +1043,7 @@ public class ListScreen extends Screen
         scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
-    
+
     public static TranslationTextComponent getTransComp( String translationKey, Object... args )
     {
         return new TranslationTextComponent( translationKey, args );

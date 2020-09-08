@@ -15,44 +15,44 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class MessageUpdateNBT
+public class MessageUpdatePlayerNBT
 {
     public CompoundNBT reqPackage = new CompoundNBT();
     public int type;
 
-    public MessageUpdateNBT( CompoundNBT theNBT, int type )
+    public MessageUpdatePlayerNBT(CompoundNBT theNBT, int type )
     {
         this.type = type;
         reqPackage = theNBT;
     }
 
-    MessageUpdateNBT()
+    MessageUpdatePlayerNBT()
     {
     }
 
-    public static MessageUpdateNBT decode( PacketBuffer buf )
+    public static MessageUpdatePlayerNBT decode(PacketBuffer buf )
     {
-        MessageUpdateNBT packet = new MessageUpdateNBT();
+        MessageUpdatePlayerNBT packet = new MessageUpdatePlayerNBT();
         packet.reqPackage = buf.readCompoundTag();
         packet.type = buf.readInt();
 
         return packet;
     }
 
-    public static void encode( MessageUpdateNBT packet, PacketBuffer buf )
+    public static void encode(MessageUpdatePlayerNBT packet, PacketBuffer buf )
     {
         buf.writeCompoundTag( packet.reqPackage );
         buf.writeInt( packet.type );
     }
 
-    public static void handlePacket( MessageUpdateNBT packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket( MessageUpdatePlayerNBT packet, Supplier<NetworkEvent.Context> ctx )
     {
         ctx.get().enqueueWork(() ->
         {
             switch( packet.type )
             {
-                case 0: //abilities
-                case 1: //prefs
+                case 0: //prefs
+                case 1: //abilities
                     if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
                         ClientHandler.updateNBTTag( packet );
                     else
@@ -62,7 +62,7 @@ public class MessageUpdateNBT
                 case 2: //config
                     if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
                     {
-                        Config.config = NBTHelper.nbtToMap( packet.reqPackage );
+                        Config.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
                         WorldTickHandler.refreshVein();
                     }
                     else
@@ -81,8 +81,7 @@ public class MessageUpdateNBT
                         if( !XP.playerNames.containsKey( uuid ) )
                             XP.playerNames.put( uuid, name );
 
-                        XP.skills.put( uuid, NBTHelper.nbtToMap( packet.reqPackage ) );
-
+                        XP.setOfflineXpMap( uuid, NBTHelper.nbtToMapSkill( packet.reqPackage ) );
                         ClientHandler.openStats( uuid );
                     }
                     else

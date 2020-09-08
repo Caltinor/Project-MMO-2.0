@@ -19,7 +19,7 @@ public class TameHandler
         Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_TAME );
 
         if( xpValue.size() > 0 )
-            XP.awardXpMapDouble( event.getTamer(), xpValue, "taming", false, false );
+            XP.awardXpMapDouble( event.getTamer().getUniqueID(), xpValue, "taming", false, false );
 		else
 			XP.awardXp( event.getTamer(), Skill.TAMING, "taming", defaultTamingXp, false, false );
     }

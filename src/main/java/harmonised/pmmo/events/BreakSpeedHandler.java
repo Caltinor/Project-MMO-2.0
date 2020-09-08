@@ -25,7 +25,7 @@ public class BreakSpeedHandler
         else if( toolGap > 0 )
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
 
-        int startLevel = XP.getLevel( Skill.getSkill( skill ), player );
+        int startLevel = Skill.getSkill( skill ).getLevel( player );
 
         switch ( XP.correctHarvestTool( event.getState().getMaterial() ) )
         {

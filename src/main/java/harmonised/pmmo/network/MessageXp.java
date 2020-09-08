@@ -1,5 +1,6 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.gui.XPOverlayGUI;
 
 import harmonised.pmmo.skills.Skill;
@@ -8,15 +9,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.HashMap;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessageXp
 {
-	private double xp, gainedXp;
-	private int skill;
-	private boolean skip;
+	public double xp, gainedXp;
+	public int skill;
+	public boolean skip;
 	
 	public MessageXp( double xp, int skill, double gainedXp, boolean skip )
 	{
@@ -52,32 +52,6 @@ public class MessageXp
 
 	public static void handlePacket( MessageXp packet, Supplier<NetworkEvent.Context> ctx )
 	{
-		ctx.get().enqueueWork(() ->
-		{
-			UUID uuid = Minecraft.getInstance().player.getUniqueID();
-			String name = Minecraft.getInstance().player.getName().getString();
-
-			if( packet.skill == 42069 )
-			{
-				XP.skills.remove( uuid );
-				XPOverlayGUI.clearXP();
-			}
-			else
-			{
-				if(  !XP.playerNames.containsKey( uuid ) )
-					XP.playerNames.put( uuid, name );
-
-				if(  !XP.skills.containsKey( uuid ) )
-					XP.skills.put( uuid, new HashMap<>() );
-
-				if( XP.skills.get( uuid ).size() == 0 )
-					XPOverlayGUI.guiOn = true;
-
-				XP.skills.get( uuid ).put( Skill.getString( packet.skill ), packet.xp + packet.gainedXp );
-
-				XPOverlayGUI.makeXpDrop( packet.xp, Skill.getSkill( packet.skill ), 10000, packet.gainedXp, packet.skip );
-			}
-		});
-		ctx.get().setPacketHandled(true);
+		packetHandler.handleXpPacket( packet, ctx );
 	}
 }

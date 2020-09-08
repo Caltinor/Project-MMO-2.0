@@ -1,11 +1,14 @@
 package harmonised.pmmo.proxy;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.ListScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
-import harmonised.pmmo.network.MessageUpdateNBT;
+import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
 import net.minecraft.client.Minecraft;
@@ -18,6 +21,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,7 +47,7 @@ public class ClientHandler
         ClientRegistry.registerKeyBinding( OPEN_GLOSSARY );
     }
 
-    public static void updateNBTTag( MessageUpdateNBT packet )
+    public static void updateNBTTag( MessageUpdatePlayerNBT packet )
     {
         PlayerEntity player = Minecraft.getInstance().player;
         CompoundNBT newPackage = packet.reqPackage;
@@ -52,21 +56,20 @@ public class ClientHandler
         switch( packet.type )
         {
             case 0:
-                CompoundNBT prefsTag = XP.getPreferencesTag( player );
+                Map<String, Double> prefsMap = Config.getPreferencesMap( player );
                 for( String tag : keySet )
                 {
-                    prefsTag.putDouble( tag, newPackage.getDouble( tag ) );
+                    prefsMap.put( tag, newPackage.getDouble( tag ) );
                 }
                 AttributeHandler.updateAll( player );
-
                 XPOverlayGUI.doInit();
                 break;
 
             case 1:
-                CompoundNBT abilitiesTag = XP.getAbilitiesTag( player );
+                Map<String, Double> abilitiesMap = Config.getAbilitiesMap( player );
                 for( String tag : keySet )
                 {
-                    abilitiesTag.putDouble( tag, newPackage.getDouble( tag ) );
+                    abilitiesMap.put( tag, newPackage.getDouble( tag ) );
                 }
                 break;
 
@@ -83,6 +86,6 @@ public class ClientHandler
 
     public static void syncPrefsToServer()
     {
-        NetworkHandler.sendToServer( new MessageUpdateNBT( XP.getPreferencesTag(Minecraft.getInstance().player ), 0 ) );
+        NetworkHandler.sendToServer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.getPreferencesMap( Minecraft.getInstance().player ) ), 0 ) );
     }
 }

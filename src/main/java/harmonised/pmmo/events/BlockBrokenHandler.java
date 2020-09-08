@@ -17,11 +17,9 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.loot.LootContext;
@@ -46,7 +44,7 @@ public class BlockBrokenHandler
         PlayerEntity player = event.getPlayer();
         BlockState blockState = event.getState();
         Block block = blockState.getBlock();
-        World world = event.getWorld().getWorld();
+        World world = (World) event.getWorld();
         Material material = event.getState().getMaterial();
 
         Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
@@ -65,7 +63,7 @@ public class BlockBrokenHandler
             if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
             {
                 processBroken( event );
-                ChunkDataHandler.delPos( world.dimension.getType().getRegistryName(), event.getPos() );
+                ChunkDataHandler.delPos( world.getDimension().getType().getRegistryName(), event.getPos() );
             }
         }
         else
@@ -90,7 +88,7 @@ public class BlockBrokenHandler
 
             for( Map.Entry<String, Object> entry : JsonConfig.data.get( JType.REQ_BREAK ).get( block.getRegistryName().toString() ).entrySet() )
             {
-                startLevel = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
+                startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
                 double entryValue = 1;
                 if( entry.getValue() instanceof Double )
@@ -111,10 +109,11 @@ public class BlockBrokenHandler
         BlockState state = event.getState();
         Block block = state.getBlock();
         String regKey = block.getRegistryName().toString();
-        World world = event.getWorld().getWorld();
+        World world = (World) event.getWorld();
         PlayerEntity player = event.getPlayer();
+        Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 
-        boolean veiningAllowed = Config.config.containsKey("veiningAllowed") && Config.config.get("veiningAllowed") != 0;
+        boolean veiningAllowed = prefsMap.containsKey("veiningAllowed") && prefsMap.get("veiningAllowed") != 0;
 
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
@@ -124,11 +123,11 @@ public class BlockBrokenHandler
 
         Material material = event.getState().getMaterial();
         double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
-        boolean wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), event.getPos() ) != null;
+        boolean wasPlaced = ChunkDataHandler.checkPos( world.getDimension().getType().getRegistryName(), event.getPos() ) != null;
         ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( material ).name().toLowerCase();
 //			String regKey = block.getRegistryName().toString();
-        double hardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos() );
+        double hardness = state.getBlockHardness( event.getWorld(), event.getPos() );
         if( hardness > blockHardnessLimitForBreaking )
             hardness = blockHardnessLimitForBreaking;
 
@@ -178,7 +177,7 @@ public class BlockBrokenHandler
             Block baseBlock = event.getState().getBlock();
             BlockPos baseBlockPos = event.getPos();
 
-            double extraChance = XP.getExtraChance( player, block.getRegistryName(), JType.INFO_PLANT ) / 100;
+            double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
             int rewardable, guaranteedDrop, extraDrop, totalDrops, guaranteedDropEach;
             rewardable = extraDrop = guaranteedDrop = totalDrops = 0;
 
@@ -193,7 +192,7 @@ public class BlockBrokenHandler
             boolean correctBlock = block.equals( baseBlock );
             while( correctBlock )
             {
-                wasPlaced = ChunkDataHandler.checkPos( event.getWorld().getDimension().getType().getRegistryName(), curBlockPos ) != null;
+                wasPlaced = ChunkDataHandler.checkPos( world.getDimension().getType().getRegistryName(), curBlockPos ) != null;
                 if( !wasPlaced )
                 {
                     rewardable++;
@@ -223,7 +222,7 @@ public class BlockBrokenHandler
             }
 
             totalDrops = rewardable + dropsLeft;
-            award = XP.addMaps( award, XP.multiplyMap( XP.getXp( baseBlock.getRegistryName(), JType.XP_VALUE_BREAK ), totalDrops ) );
+            award = XP.addMaps( award, XP.multiplyMap( XP.getXp( baseBlock.getRegistryName(), JType.XP_VALUE_BREAK ), Math.max( totalDrops, 1 ) ) );
 
             awardMsg = "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra";
         }
@@ -291,7 +290,7 @@ public class BlockBrokenHandler
                 award = new HashMap<>();
                 award.put( skill, hardness );
 
-                double extraChance = XP.getExtraChance( player, block.getRegistryName(), JType.INFO_PLANT ) / 100;
+                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -311,13 +310,13 @@ public class BlockBrokenHandler
 
                 int totalDrops = theDropCount + totalExtraDrops;
 
-                award = XP.multiplyMap( XP.addMaps( award, XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ) ), totalDrops );
+                award = XP.multiplyMap( XP.addMaps( award, XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ) ), Math.max( totalDrops, 1 ) );
                 awardMsg = "harvesting " + ( theDropCount) + " + " + totalExtraDrops + " crops";
             }
             else if( !wasPlaced )
                 awardMsg = "breaking a plant";
         }
-        else if( XP.getExtraChance( player, block.getRegistryName(), JType.INFO_ORE ) > 0 )		//IS ORE
+        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) > 0 )		//IS ORE
         {
             boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
             boolean noDropOre = false;
@@ -329,7 +328,7 @@ public class BlockBrokenHandler
 
             if( noDropOre && !wasPlaced || !noDropOre && !isSilk )			//EXTRA DROPS
             {
-                double extraChance = XP.getExtraChance( player, block.getRegistryName(), JType.INFO_ORE ) / 100;
+                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) / 100;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -357,11 +356,11 @@ public class BlockBrokenHandler
             else
                 awardMsg = "mining a block";
         }
-        else if( XP.getExtraChance( player, block.getRegistryName(), JType.INFO_LOG ) > 0 && isEffective )
+        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
         {
             if( !wasPlaced )			//EXTRA DROPS
             {
-                double extraChance = XP.getExtraChance( player, block.getRegistryName(), JType.INFO_LOG ) / 100D;
+                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) / 100D;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -389,7 +388,7 @@ public class BlockBrokenHandler
         else
         {
             if( !wasPlaced )
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), drops.size() ) );
+                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), Math.max( drops.size(), 1 ) ) );
 
             switch( XP.getSkill( material ) )
             {

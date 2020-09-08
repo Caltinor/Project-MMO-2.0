@@ -1,21 +1,17 @@
 package harmonised.pmmo.skills;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.JType;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.util.DP;
-import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.XP;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.TranslationTextComponent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public enum Skill
 {
@@ -141,80 +137,92 @@ public enum Skill
 
     public int getLevel( PlayerEntity player )
     {
-        return XP.getLevel( this, player );
+        if( player.world.isRemote() )
+            return XP.levelAtXp( XP.getOfflineXp( this, player.getUniqueID() ) );
+        else
+            return getLevel( player.getUniqueID() );
+    }
+
+    public int getLevel( UUID uuid )
+    {
+        return PmmoSavedData.get().getLevel( this, uuid );
     }
 
     public double getLevelDecimal( PlayerEntity player )
     {
-        return XP.getLevelDecimal( this, player );
+        return getLevelDecimal( player.getUniqueID() );
+    }
+
+    public double getLevelDecimal( UUID uuid )
+    {
+        return PmmoSavedData.get().getLevelDecimal( this, uuid );
     }
 
     public double getXp( PlayerEntity player )
     {
-        return XP.getXp( this, player );
+        if( player.world.isRemote() )
+            return XP.getOfflineXp( this, player.getUniqueID() );
+        else
+            return getXp( player.getUniqueID() );
     }
 
-    public void setLevel( ServerPlayerEntity player, double setAmount )
+    public double getXp( UUID uuid )
     {
-        this.setXp( player, XP.xpAtLevelDecimal( setAmount ) );
+        return PmmoSavedData.get().getXp( this, uuid );
     }
 
-    public void setXp( ServerPlayerEntity player, double setAmount )
+    public void setLevel( ServerPlayerEntity player, double amount )
     {
-        if( this != Skill.INVALID_SKILL )
+        this.setXp( player, XP.xpAtLevelDecimal( amount ) );
+    }
+
+    public void setXp( UUID uuid, double amount )
+    {
+        ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID( uuid );
+
+        if( player == null )
+            PmmoSavedData.get().setXp( this, uuid, amount );
+        else
+            setXp( player, amount );
+    }
+
+    public void setXp( ServerPlayerEntity player, double amount )
+    {
+        if( PmmoSavedData.get().setXp( this, player.getUniqueID(), amount ) )
         {
-            CompoundNBT skillsTag = XP.getSkillsTag( player );
-            double maxXp = Config.getConfig( "maxXp" );
-
-            if( setAmount > maxXp )
-                setAmount = maxXp;
-
-            if( setAmount < 0 )
-                setAmount = 0;
-
-            skillsTag.putDouble( this.name().toLowerCase(), setAmount );
             AttributeHandler.updateAll( player );
             XP.updateRecipes( player );
 
-            NetworkHandler.sendToPlayer( new MessageXp( setAmount, this.getValue(), 0, false ), (ServerPlayerEntity) player );
+            NetworkHandler.sendToPlayer( new MessageXp( amount, this.getValue(), 0, false ), (ServerPlayerEntity) player );
         }
-        else
-            LogHandler.LOGGER.error( "Invalid skill at method setXp" );
     }
 
-    public void addLevel( ServerPlayerEntity player, double addAmount, boolean ignoreBonuses )
+    public void addLevel( UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        double missingXp = XP.xpAtLevelDecimal( this.getLevelDecimal( player ) + addAmount ) - this.getXp( player );
+        double missingXp = XP.xpAtLevelDecimal( this.getLevelDecimal( uuid ) + amount ) - this.getXp( uuid );
 
-        this.addXp( player, missingXp, ignoreBonuses );
+        this.addXp( uuid, missingXp, sourceName, skip, ignoreBonuses );
     }
 
-    public void addXp( ServerPlayerEntity player, double addAmount, boolean ignoreBonuses )
+    public void addLevel( ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        CompoundNBT skillsTag = XP.getSkillsTag( player );
-        double playerXp = this.getXp( player );
-        double maxXp = Config.getConfig( "maxXp" );
-        double newLevelXp;
-        String skillName = this.name().toLowerCase();
+        double missingXp = XP.xpAtLevelDecimal( this.getLevelDecimal( player ) + amount ) - this.getXp( player );
 
-        if( !ignoreBonuses )
-            addAmount *= XP.getMultiplier( player, this );
+        this.addXp( player, missingXp, sourceName, skip, ignoreBonuses );
+    }
 
-        newLevelXp = addAmount + playerXp;
+    public void addXp( UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
+    {
+        ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID( uuid );
 
-        if( newLevelXp > maxXp )
-            newLevelXp = maxXp;
-
-        if( newLevelXp < 0 )
-            newLevelXp = 0;
-
-        if( newLevelXp > playerXp )
-            XP.awardXp( player, this, "commandAdd", addAmount, false, true );
+        if( player == null )
+            PmmoSavedData.get().scheduleXp( this, uuid, amount, sourceName );
         else
-            NetworkHandler.sendToPlayer( new MessageXp( newLevelXp, this.getValue(), 0, true ), player );
-//        player.sendStatusMessage( new TranslationTextComponent( "pmmo.addXp", new TranslationTextComponent( "pmmo." + skillName ).getString(), DP.dp(addAmount) ), false );
-        skillsTag.putDouble( skillName, newLevelXp );
-        AttributeHandler.updateAll( player );
-        XP.updateRecipes( player );
+            addXp( player, amount, sourceName, skip, ignoreBonuses );
+    }
+
+    public void addXp( ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
+    {
+        XP.awardXp( player, this, sourceName, amount, skip, ignoreBonuses );
     }
 }

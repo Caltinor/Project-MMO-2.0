@@ -3,6 +3,7 @@ package harmonised.pmmo.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -33,12 +34,12 @@ public class CheckStatCommand
                 ServerPlayerEntity target = EntityArgument.getPlayer( context, "player name" );
                 if( args[3].toLowerCase().equals( "power" ) )
                 {
-                    level = XP.getPowerLevel( target );
+                    level = XP.getPowerLevel( target.getUniqueID() );
                     sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).setStyle( new Style().setColor( TextFormatting.AQUA ) ) ), false );
                 }
                 else
                 {
-                    level = XP.levelAtXpDecimal( XP.getSkillsTag( target ).getDouble( skillName ) );
+                    level = skill.getLevelDecimal( target.getUniqueID() );
                     sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( XP.getSkillStyle( skill ) ) ), false );
                 }
 

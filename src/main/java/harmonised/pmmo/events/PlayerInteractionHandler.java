@@ -28,6 +28,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class PlayerInteractionHandler
 {
@@ -108,7 +109,7 @@ public class PlayerInteractionHandler
 //                            {
                                 for( Map.Entry<String, Object> entry : JsonConfig.data.get( JType.REQ_USE ).get( block.getRegistryName().toString() ).entrySet() )
                                 {
-                                    startLevel = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
+                                    startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
                                     double entryValue = 1;
                                     if( entry.getValue() instanceof Double )
@@ -131,7 +132,7 @@ public class PlayerInteractionHandler
                     Block ironBlock		= 	Blocks.IRON_BLOCK;
                     Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
 
-                    int smithingLevel = XP.getLevel( Skill.SMITHING, player );
+                    int smithingLevel = Skill.SMITHING.getLevel( player );
                     int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
                     int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
                     int maxPlayerBypass = (int) Math.floor( (double) smithingLevel / (double) levelsPerOneEnchantBypass );
@@ -167,7 +168,7 @@ public class PlayerInteractionHandler
                                 {
                                     if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
                                     {
-                                        if( player.getPosition().withinDistance( event.getPos(), 2 ) )
+                                        if( player.getPositionVec().squareDistanceTo( XP.blockToVec( event.getPos() ) ) < 2 )
                                         {
                                             Map<String, Object> theMap = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
                                             Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
@@ -300,10 +301,11 @@ public class PlayerInteractionHandler
 
                         if( block.equals( diamondBlock ) && event.getHand() == Hand.MAIN_HAND && !player.world.isRemote() )
                         {
-                            int agilityLevel = XP.getLevel( Skill.AGILITY, player );
-                            int enduranceLevel = XP.getLevel( Skill.ENDURANCE, player );
-                            int combatLevel = XP.getLevel( Skill.COMBAT, player );
-                            int swimLevel = XP.getLevel( Skill.SMITHING, player );
+                            UUID uuid = player.getUniqueID();
+                            int agilityLevel = Skill.AGILITY.getLevel( uuid );
+                            int enduranceLevel = Skill.ENDURANCE.getLevel( uuid );
+                            int combatLevel = Skill.COMBAT.getLevel( uuid );
+                            int swimLevel = Skill.SMITHING.getLevel( uuid );
                             int nightvisionUnlockLevel = (int) Math.floor( Config.getConfig( "nightvisionUnlockLevel" ) );	//Swimming
 
                             double maxFallSaveChance = Config.getConfig( "maxFallSaveChance" );			//Agility

@@ -48,7 +48,7 @@ public class Levels
                 if( skill.equals( Skill.INVALID_SKILL ) )
                     LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardXp -> Invalid Skill Provided! \"" + key + "\"" );
                 else
-                    skill.addXp( (ServerPlayerEntity) player, xpAwards.getDouble( key ), ignoreBonuses );
+                    skill.addXp( (ServerPlayerEntity) player, xpAwards.getDouble( key ), "CraftTweaker", false, ignoreBonuses );
             }
         }
         else if( player instanceof ClientPlayerEntity )
@@ -71,7 +71,7 @@ public class Levels
                 if( skill.equals( Skill.INVALID_SKILL ) )
                     LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Invalid Skill Provided! \"" + key + "\"" );
                 else
-                    skill.addLevel( (ServerPlayerEntity) player, xpAwards.getDouble( key ), true );
+                    skill.addLevel( (ServerPlayerEntity) player, xpAwards.getDouble( key ), "CraftTweaker", false, true );
             }
         }
         else if( player instanceof ClientPlayerEntity )

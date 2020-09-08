@@ -5,6 +5,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.LivingEntity;
@@ -33,13 +34,13 @@ public class DamageHandler
             if( target instanceof PlayerEntity)		//player hurt
             {
                 PlayerEntity player = (PlayerEntity) target;
-                CompoundNBT skillsTag = XP.getSkillsTag( player );
+                Map<Skill, Double> xpMap = Config.getXpMap( player );
                 double agilityXp = 0;
                 double enduranceXp = 0;
                 boolean hideEndurance = false;
 
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
-                int enduranceLevel = XP.levelAtXp( skillsTag.getDouble( "endurance" ) );
+                int enduranceLevel = XP.levelAtXp( xpMap.get( "endurance" ) );
                 double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
                 double maxEndurance = Config.forgeConfig.maxEndurance.get();
                 double endurePercent = (enduranceLevel * endurancePerLevel);
@@ -59,7 +60,7 @@ public class DamageHandler
                 {
                     double award = startDmg;
 //					float savedExtra = 0;
-                    int agilityLevel = XP.levelAtXp( skillsTag.getDouble( "agility" ) );
+                    int agilityLevel = XP.levelAtXp( xpMap.get( "agility" ) );
                     int saved = 0;
 
                     double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
@@ -96,7 +97,7 @@ public class DamageHandler
                         hideEndurance = true;
 
                     if( event.getSource().getTrueSource() != null )
-                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getFormattedText(), enduranceXp, hideEndurance, false );
+                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getString(), enduranceXp, hideEndurance, false );
                     else
                         XP.awardXp( player, Skill.ENDURANCE, event.getSource().getDamageType(), enduranceXp, hideEndurance, false );
 
@@ -109,7 +110,7 @@ public class DamageHandler
 
             if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
             {
-//				IAttributeInstance test = target.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+//				IAttributeInstance test = target.getAttribute( Attributes.GENERIC_MOVEMENT_SPEED );
 //				if( !(target instanceof AnimalEntity) )
 //					System.out.println( test.getValue() + " " + test.getBaseValue() );
 
@@ -136,7 +137,7 @@ public class DamageHandler
 
                             for( Map.Entry<String, Object> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ).entrySet() )
                             {
-                                int level = XP.getLevel( Skill.getSkill( entry.getKey() ), player );
+                                int level = Skill.getSkill( entry.getKey() ).getLevel( player );
 
                                 if( level < (double) entry.getValue() )
                                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
