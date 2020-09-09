@@ -40,7 +40,7 @@ public class DamageHandler
                 boolean hideEndurance = false;
 
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
-                int enduranceLevel = XP.levelAtXp( xpMap.get( "endurance" ) );
+                int enduranceLevel = Skill.ENDURANCE.getLevel( player );
                 double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
                 double maxEndurance = Config.forgeConfig.maxEndurance.get();
                 double endurePercent = (enduranceLevel * endurancePerLevel);
@@ -60,7 +60,7 @@ public class DamageHandler
                 {
                     double award = startDmg;
 //					float savedExtra = 0;
-                    int agilityLevel = XP.levelAtXp( xpMap.get( "agility" ) );
+                    int agilityLevel = Skill.AGILITY.getLevel( player );
                     int saved = 0;
 
                     double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
