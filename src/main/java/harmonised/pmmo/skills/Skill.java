@@ -150,7 +150,10 @@ public enum Skill
 
     public double getLevelDecimal( PlayerEntity player )
     {
-        return getLevelDecimal( player.getUniqueID() );
+        if( player.world.isRemote() )
+            return XP.levelAtXpDecimal( XP.getOfflineXp( this, player.getUniqueID() ) );
+        else
+            return getLevelDecimal( player.getUniqueID() );
     }
 
     public double getLevelDecimal( UUID uuid )
