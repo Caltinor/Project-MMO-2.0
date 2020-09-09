@@ -226,16 +226,17 @@ public class XPOverlayGUI extends AbstractGui
 					if( decayRate < 1 )
 						decayRate = 1;
 
-					if( xpDrop.gainedXp - ( decayAmount ) < 0 )
+					if( xpDrop.gainedXp - ( decayRate ) < 0 )
 					{
 						aSkill.goalXp += xpDrop.gainedXp;
 						xpDrop.gainedXp = 0;
 					}
 					else
 					{
-						xpDrop.gainedXp -= decayRate;
 						aSkill.goalXp += decayRate;
+						xpDrop.gainedXp -= decayRate;
 					}
+
 					aSkill.goalPos = XP.levelAtXpDecimal( aSkill.goalXp );
 				}
 			}
@@ -283,13 +284,12 @@ public class XPOverlayGUI extends AbstractGui
 				growAmount = minXpGrow;
 
 			if( aSkill.pos < aSkill.goalPos )
-			{
 				aSkill.pos += 0.00005d * growAmount;
-				aSkill.xp   = XP.xpAtLevelDecimal( aSkill.pos );
-			}
 
 			if( aSkill.pos > aSkill.goalPos )
 				aSkill.pos = aSkill.goalPos;
+
+			aSkill.xp = XP.xpAtLevelDecimal( aSkill.pos );
 
 			if( startLevel < (int) aSkill.pos )
 				sendLvlUp( (int) Math.floor( aSkill.pos ), entry.getKey() );

@@ -54,32 +54,38 @@ public class MessageLevelUp
         ctx.get().enqueueWork(() ->
         {
             ServerPlayerEntity player = ctx.get().getSender();
-            Map<String, Double> prefsMap = Config.getPreferencesMap( player );
             Skill skill = Skill.getSkill( packet.skill );
-            String skillName = skill.name().toLowerCase();
-            Vec3d playerPos = player.getPositionVec();
 
-            if( levelUpFirework && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
-                XP.spawnRocket( player.world, player.getPosition(), skill );
-
-            LogHandler.LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
-
-            if( packet.level % levelsPerMilestone == 0 && broadcastMilestone )
+            if( packet.level <= skill.getLevel( player ) )
             {
-                player.server.getPlayerList().getPlayers().forEach( otherPlayer ->
+                Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+                String skillName = skill.name().toLowerCase();
+                Vec3d playerPos = player.getPositionVec();
+
+                if( levelUpFirework && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
+                    XP.spawnRocket( player.world, player.getPosition(), skill );
+
+                LogHandler.LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
+
+                if( packet.level % levelsPerMilestone == 0 && broadcastMilestone )
                 {
-                    if( otherPlayer.getUniqueID() != player.getUniqueID() )
+                    player.server.getPlayerList().getPlayers().forEach( otherPlayer ->
                     {
-                        Map<String, Double> otherprefsMap = Config.getPreferencesMap( otherPlayer );
-                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).setStyle( XP.getSkillStyle( skill ) ), false );
-                        if( milestoneLevelUpFirework )
+                        if( otherPlayer.getUniqueID() != player.getUniqueID() )
                         {
-                            if( !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
-                                XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );
+                            Map<String, Double> otherprefsMap = Config.getPreferencesMap( otherPlayer );
+                            otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).setStyle( XP.getSkillStyle( skill ) ), false );
+                            if( milestoneLevelUpFirework )
+                            {
+                                if( !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
+                                    XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
+            else
+                NetworkHandler.sendToPlayer( new MessageXp( skill.getXp( player ), skill.getValue(), 0, true ), player );
         });
         ctx.get().setPacketHandled(true);
     }
