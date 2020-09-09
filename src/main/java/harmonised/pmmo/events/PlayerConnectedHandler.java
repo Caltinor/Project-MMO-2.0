@@ -119,7 +119,7 @@ public class PlayerConnectedHandler
         for( Map.Entry<Skill, Double> entry : scheduledXp.entrySet() )
         {
             entry.getKey().addXp( uuid, entry.getValue(), "scheduledXp", false, false );
-//            LogHandler.LOGGER.info( "+" + entry.getValue() + " in " + entry.getKey().toString() );
+            LogHandler.LOGGER.info( "+" + entry.getValue() + " in " + entry.getKey().toString() );
         }
         XP.removeScheduledXpUuid( uuid );
     }

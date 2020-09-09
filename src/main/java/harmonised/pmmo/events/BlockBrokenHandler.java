@@ -111,9 +111,8 @@ public class BlockBrokenHandler
         String regKey = block.getRegistryName().toString();
         World world = (World) event.getWorld();
         PlayerEntity player = event.getPlayer();
-        Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-
-        boolean veiningAllowed = prefsMap.containsKey("veiningAllowed") && prefsMap.get("veiningAllowed") != 0;
+        Map<String, Double> configMap = Config.getConfigMap();
+        boolean veiningAllowed = configMap.containsKey("veiningAllowed") && configMap.get("veiningAllowed") != 0;
 
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );

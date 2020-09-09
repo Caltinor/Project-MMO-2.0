@@ -696,7 +696,7 @@ public class XP
 			Item item2 = ForgeRegistries.BLOCKS.getValue( resLoc ).asItem();
 			if( item != null && !item.equals( Items.AIR ) )
 				return item;
-			else if( !item2.equals( Items.AIR ) )
+			else if( item2 != null && !item2.equals( Items.AIR ) )
 				return item2;
 			else
 				return Items.AIR;
