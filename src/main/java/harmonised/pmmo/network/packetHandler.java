@@ -30,7 +30,7 @@ public class packetHandler
                     XP.playerNames.put( uuid, name );
 
                 if( Config.getXpMap( Minecraft.getInstance().player ).size() == 0 )
-                    XPOverlayGUI.guiOn = true;
+                    XPOverlayGUI.listOn = true;
 
                 XP.getOfflineXpMap( uuid ).put( Skill.getSkill( packet.skill ), packet.xp + packet.gainedXp );
 

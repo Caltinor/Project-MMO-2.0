@@ -64,8 +64,9 @@ public class AnvilRepairHandler
                     oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
 
                     double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-                    if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( oItem.getItem().getRegistryName().toString() ) )
-                        award *= (double) JsonConfig.data.get( JType.SALVAGE_TO ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
+//                    if( JsonConfig.data2.get( JType.SALVAGE ).containsKey( oItem.getItem().getRegistryName().toString() ) )
+//                        award *= (double) JsonConfig.data2.get( JType.SALVAGE ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
+                    //COUT
 
                     if( award > 0 )
                     {

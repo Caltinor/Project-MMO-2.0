@@ -57,9 +57,10 @@ public enum Skill
     FIREMAKING( 39 ),
     AFKING( 40 ),
     TRADING( 41 ),
-    BANKSTANDING( 42 ),
-    SAILING( 43 ),
-    ALCHEMY( 44 );
+    SAILING( 42 ),
+    ALCHEMY( 43 ),
+    CONSTRUCTION( 44 ),
+    LEATHERWORKING( 45 );
 
     public static final Map<Skill, Integer > skillMap = new HashMap<>();
     public static final Map< Integer, Skill > intMap = new HashMap<>();

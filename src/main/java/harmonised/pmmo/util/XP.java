@@ -32,10 +32,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -55,7 +52,6 @@ public class XP
 	public static Map<UUID, String> playerNames = new HashMap<>();
 	public static Map<UUID, Map<Skill, Double>> offlineXp = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
-	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
 	private static int debugInt = 0;
 	private static boolean alwaysDropWornItems = Config.forgeConfig.alwaysDropWornItems.get();
 
@@ -84,54 +80,19 @@ public class XP
 		skillColors.put( Skill.ENGINEERING, 0xffffff );
 		skillColors.put( Skill.COOKING, 0xe69900 );
 		skillColors.put( Skill.ALCHEMY, 0xe69900 );
+		skillColors.put( Skill.CONSTRUCTION, 0xffa31a );
+		skillColors.put( Skill.LEATHERWORKING, 0xffa31a );
 
-		skillStyle.put( Skill.MINING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.BUILDING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.EXCAVATION, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.WOODCUTTING, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FARMING, Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.AGILITY, Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.ENDURANCE, Style.EMPTY.withFormatting( TextFormatting.DARK_RED ) );
-		skillStyle.put( Skill.COMBAT, Style.EMPTY.withFormatting( TextFormatting.RED ) );
-		skillStyle.put( Skill.ARCHERY, Style.EMPTY.withFormatting( TextFormatting.YELLOW ) );
-		skillStyle.put( Skill.SMITHING, Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.FLYING, Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.SWIMMING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.FISHING, Style.EMPTY.withFormatting( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.CRAFTING, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.MAGIC, Style.EMPTY.withFormatting( TextFormatting.BLUE ) );
-		skillStyle.put( Skill.SLAYER, Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.HUNTER, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FLETCHING, Style.EMPTY.withFormatting( TextFormatting.DARK_GREEN ) );
-		skillStyle.put( Skill.TAMING, Style.EMPTY.withFormatting( TextFormatting.WHITE ) );
-		skillStyle.put( Skill.ENGINEERING, Style.EMPTY.withFormatting( TextFormatting.WHITE ) );
-		skillStyle.put( Skill.COOKING, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.ALCHEMY, Style.EMPTY.withFormatting( TextFormatting.GOLD ) );
-
-//		skillStyle.put(Skill.MINING, TextFormatting.AQUA );
-//		skillStyle.put( Skill.BUILDING, TextFormatting.AQUA );
-//		skillStyle.put( Skill.EXCAVATION, TextFormatting.GOLD );
-//		skillStyle.put( Skill.WOODCUTTING, TextFormatting.GOLD );
-//		skillStyle.put( Skill.FARMING, TextFormatting.GREEN );
-//		skillStyle.put( Skill.AGILITY, TextFormatting.GREEN );
-//		skillStyle.put( Skill.ENDURANCE, TextFormatting.DARK_RED );
-//		skillStyle.put( Skill.COMBAT, TextFormatting.RED);
-//		skillStyle.put( Skill.ARCHERY, TextFormatting.YELLOW );
-//		skillStyle.put( Skill.SMITHING, TextFormatting.GRAY );
-//		skillStyle.put( Skill.FLYING, TextFormatting.GRAY );
-//		skillStyle.put( Skill.SWIMMING, TextFormatting.AQUA );
-//		skillStyle.put( Skill.FISHING, TextFormatting.AQUA );
-//		skillStyle.put( Skill.CRAFTING, TextFormatting.GOLD );
-//		skillStyle.put( Skill.MAGIC, TextFormatting.BLUE );
-//		skillStyle.put( Skill.SLAYER, TextFormatting.DARK_GRAY );
-//		skillStyle.put( Skill.FLETCHING, TextFormatting.DARK_GREEN );
-//		skillStyle.put( Skill.TAMING, TextFormatting.WHITE );
+		for( Map.Entry<Skill, Integer> entry : skillColors.entrySet() )
+		{
+			skillStyle.put( entry.getKey(), Style.EMPTY.withColor(Color.fromRgb( entry.getValue() ) ) );
+		}
 ////////////////////////////////////Style//////////////////////////////////////////////
-		textStyle.put( "red", Style.EMPTY.withFormatting( TextFormatting.RED ) );
-		textStyle.put( "green", Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
-		textStyle.put( "yellow", Style.EMPTY.withFormatting( TextFormatting.YELLOW ) );
-		textStyle.put( "grey", Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
-		textStyle.put( "blue", Style.EMPTY.withFormatting( TextFormatting.BLUE ) );
+		textStyle.put( "red", 		Style.EMPTY.withFormatting( TextFormatting.RED ) );
+		textStyle.put( "green", 	Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
+		textStyle.put( "yellow", 	Style.EMPTY.withFormatting( TextFormatting.YELLOW ) );
+		textStyle.put( "grey", 		Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
+		textStyle.put( "blue", 		Style.EMPTY.withFormatting( TextFormatting.BLUE ) );
 ////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
@@ -239,10 +200,9 @@ public class XP
 
 		if( JsonConfig.data.get( jType ).containsKey( registryName.toString() ) )
 		{
-			for( Map.Entry<String, Object> entry : JsonConfig.data.get( jType ).get( registryName.toString() ).entrySet() )
+			for( Map.Entry<String, Double> entry : JsonConfig.data.get( jType ).get( registryName.toString() ).entrySet() )
 			{
-				if( entry.getValue() instanceof Double )
-					theMap.put( entry.getKey(), (double) entry.getValue() );
+				theMap.put( entry.getKey(), entry.getValue() );
 			}
 		}
 
@@ -399,9 +359,9 @@ public class XP
 		return mapOne;
 	}
 
-	private static int doubleObjectToInt( Object object )
+	private static int doubleDoubleToInt( Double object )
 	{
-		return (int) Math.floor( (double) object );
+		return (int) Math.floor( object );
 	}
 
 	public static double getExtraChance( UUID uuid, String resLoc, JType jType, boolean offline )
@@ -416,7 +376,7 @@ public class XP
 		double extraChance;
 		int highestReq = 1;
 		if( JsonConfig.data.get( JType.REQ_BREAK ).containsKey( resLoc.toString() ) )
-			highestReq = JsonConfig.data.get( JType.REQ_BREAK ).get( resLoc.toString() ).entrySet().stream().map(a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
+			highestReq = JsonConfig.data.get( JType.REQ_BREAK ).get( resLoc.toString() ).entrySet().stream().map(a -> doubleDoubleToInt( a.getValue() ) ).reduce( 0, Math::max );
 		int startLevel;
 		Skill skill;
 
@@ -455,7 +415,7 @@ public class XP
 
 		if( JsonConfig.data.get( jType ).containsKey( regKey ) && JsonConfig.data.get( jType ).get( regKey ).containsKey( "extraChance" ) )
 			if( JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" ) instanceof Double )
-				extraChancePerLevel = (double) JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" );
+				extraChancePerLevel = JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" );
 
 		extraChance = (startLevel - highestReq) * extraChancePerLevel;
 		if( extraChance < 0 )
@@ -559,7 +519,8 @@ public class XP
 
 	public static void syncPlayerConfig( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdateClientData( JsonConfig.localData, 0 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.data3ToNbt( JsonConfig.localData ), 4 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.data4ToNbt( JsonConfig.localData2 ), 5 ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
 	}
 
@@ -615,17 +576,17 @@ public class XP
 
 	public static Map<String, Double> getReqMap( String registryName, JType type )
 	{
-		Map<String, Map<String, Object>> fullMap = JsonConfig.data.get( type );
+		Map<String, Map<String, Double>> fullMap = JsonConfig.data.get( type );
 		Map<String, Double> map = null;
 
 		if( fullMap != null && fullMap.containsKey( registryName ) )
 		{
 			map = new HashMap<>();
 
-			for( Map.Entry<String, Object> entry : fullMap.get( registryName ).entrySet() )
+			for( Map.Entry<String, Double> entry : fullMap.get( registryName ).entrySet() )
 			{
 				if( entry.getValue() instanceof Double )
-					map.put( entry.getKey(), (double) entry.getValue() );
+					map.put( entry.getKey(), entry.getValue() );
 			}
 		}
 
@@ -690,19 +651,18 @@ public class XP
 	{
 		ResourceLocation resLoc = getResLoc( regKey );
 
-		if( resLoc != null )
-		{
-			Item item = ForgeRegistries.ITEMS.getValue( resLoc );
-			Item item2 = ForgeRegistries.BLOCKS.getValue( resLoc ).asItem();
-			if( item != null && !item.equals( Items.AIR ) )
-				return item;
-			else if( item2 != null && !item2.equals( Items.AIR ) )
-				return item2;
-			else
-				return Items.AIR;
-		}
+		Item item = ForgeRegistries.ITEMS.getValue( resLoc );
+
+		if( item != null && !item.equals( Items.AIR ) )
+			return item;
 		else
-			return Items.AIR;
+		{
+			Block block = ForgeRegistries.BLOCKS.getValue( resLoc );
+			if( block != null )
+				return block.asItem();
+		}
+
+		return Items.AIR;
 	}
 
 	public static Item getItem( ResourceLocation resLoc )
@@ -803,13 +763,13 @@ public class XP
 		if( !item.equals( Items.AIR ) )
 		{
 			String regName = item.getRegistryName().toString();
-			Map<String, Object> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );
+			Map<String, Double> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );
 
 			if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
 			{
 				if( checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
 				{
-					boost = (double) itemXpMap.get( skillName );
+					boost = itemXpMap.get( skillName );
 				}
 			}
 		}
@@ -817,73 +777,15 @@ public class XP
 		return boost;
 	}
 
-	public static double getSkillMultiplier( Skill skill )
+	public static double getGlobalMultiplier( Skill skill )
 	{
-		double skillMultiplier = 1;
+		return JsonConfig.data.get( JType.MULTIPLIERS ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill.toString(), 1D );
+	}
 
-		switch( skill )
-		{
-			case MINING:
-				skillMultiplier = Config.forgeConfig.miningMultiplier.get();
-				break;
-
-			case BUILDING:
-				skillMultiplier = Config.forgeConfig.buildingMultiplier.get();
-				break;
-
-			case EXCAVATION:
-				skillMultiplier = Config.forgeConfig.excavationMultiplier.get();
-				break;
-
-			case WOODCUTTING:
-				skillMultiplier = Config.forgeConfig.woodcuttingMultiplier.get();
-				break;
-
-			case FARMING:
-				skillMultiplier = Config.forgeConfig.farmingMultiplier.get();
-				break;
-
-			case AGILITY:
-				skillMultiplier = Config.forgeConfig.agilityMultiplier.get();
-				break;
-
-			case ENDURANCE:
-				skillMultiplier = Config.forgeConfig.enduranceMultiplier.get();
-				break;
-
-			case COMBAT:
-				skillMultiplier = Config.forgeConfig.combatMultiplier.get();
-				break;
-
-			case ARCHERY:
-				skillMultiplier = Config.forgeConfig.archeryMultiplier.get();
-				break;
-
-			case SMITHING:
-				skillMultiplier = Config.forgeConfig.smithingMultiplier.get();
-				break;
-
-			case FLYING:
-				skillMultiplier = Config.forgeConfig.flyingMultiplier.get();
-				break;
-
-			case SWIMMING:
-				skillMultiplier = Config.forgeConfig.swimmingMultiplier.get();
-				break;
-
-			case FISHING:
-				skillMultiplier = Config.forgeConfig.fishingMultiplier.get();
-				break;
-
-			case CRAFTING:
-				skillMultiplier = Config.forgeConfig.craftingMultiplier.get();
-				break;
-
-			default:
-				break;
-		}
-
-		return skillMultiplier;
+	public static double getDimensionMultiplier(Skill skill, PlayerEntity player )
+	{
+		String dimensionKey = XP.getDimensionResLoc( player.world ).toString();
+		return JsonConfig.data.get( JType.MULTIPLIERS ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 1D );
 	}
 
 	public static double getDifficultyMultiplier( PlayerEntity player, Skill skill )
@@ -927,13 +829,13 @@ public class XP
 
 		String skillName = skill.toString().toLowerCase();
 		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
-		Map<String, Object> heldMap = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
+		Map<String, Double> heldMap = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
 		PlayerInventory inv = player.inventory;
 
 		if( heldMap != null )
 		{
 			if( heldMap.containsKey( skillName ) )
-				itemBoost += (double) heldMap.get( skillName );
+				itemBoost += heldMap.get( skillName );
 		}
 
 //		if( Curios.isLoaded() )
@@ -982,10 +884,10 @@ public class XP
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
 		ResourceLocation resLoc = getBiomeResLoc( player.world, biome );
 		String biomeKey = resLoc.toString();
-		Map<String, Object> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
+		Map<String, Double> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
 
 		if( biomeMap != null && biomeMap.containsKey( skillName ) )
-			theBiomeBoost = (double) biomeMap.get( skillName );
+			theBiomeBoost = biomeMap.get( skillName );
 
 		if( checkReq( player, resLoc, JType.REQ_BIOME ) )
 			biomeBoost = theBiomeBoost;
@@ -997,19 +899,26 @@ public class XP
 
 	public static double getMultiplier( PlayerEntity player, Skill skill )
 	{
-		double multiplier = 1;
+		double multiplier = Config.forgeConfig.globalMultiplier.get();
 
-		double skillMultiplier = getSkillMultiplier( skill );
+		double globalMultiplier = getGlobalMultiplier( skill );
+		double dimensionMultiplier = getDimensionMultiplier( skill, player );
 		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
 		double itemBoost = getItemBoost( player, skill );
 		double biomeBoost = getBiomeBoost( player, skill );
 		double additiveMultiplier = 1 + (itemBoost + biomeBoost) / 100;
 
-		multiplier *= skillMultiplier;
+		multiplier *= globalMultiplier;
+		multiplier *= dimensionMultiplier;
 		multiplier *= difficultyMultiplier;
 		multiplier *= additiveMultiplier;
 
 		return multiplier;
+	}
+
+	public static double getHorizontalDistance( Vector3d p1, Vector3d p2 )
+	{
+		return Math.sqrt( Math.pow( ( p1.getX() - p2.getX() ), 2 ) + Math.pow( ( p1.getZ() - p2.getZ() ), 2 ) );
 	}
 
 	public static int getMaxVein( PlayerEntity player, Skill skill )
@@ -1106,11 +1015,11 @@ public class XP
 
 			if( JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() ) != null )
 			{
-				Map<String, Object> commandMap = JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() );
+				Map<String, Double> commandMap = JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() );
 
-				for( Map.Entry<String, Object> entry : commandMap.entrySet() )
+				for( Map.Entry<String, Double> entry : commandMap.entrySet() )
 				{
-					int commandLevel = (int) Math.floor( (double) entry.getValue() );
+					int commandLevel = (int) Math.floor( entry.getValue() );
 					if( startLevel < commandLevel && currLevel >= commandLevel )
 					{
 						String command = entry.getKey().replace( ">player<", playerName ).replace( ">level<", "" + commandLevel );
@@ -1148,15 +1057,7 @@ public class XP
 			LogHandler.LOGGER.error( "TRIGGER XP AWARD \"" + triggerKey + "\" DOES NOT HAVE ANY VALUES, CANNOT AWARD" );
 	}
 
-	public static void awardXpMap( UUID uuid, Map<String, Object> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
-	{
-		for( Map.Entry<String, Object> entry : map.entrySet() )
-		{
-			Skill.getSkill( entry.getKey() ).addXp( uuid, (double) entry.getValue(), sourceName, skip, ignoreBonuses );
-		}
-	}
-
-	public static void awardXpMapDouble( UUID uuid, Map<String, Double> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
+	public static void awardXpMap(UUID uuid, Map<String, Double> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
 	{
 		for( Map.Entry<String, Double> entry : map.entrySet() )
 		{
@@ -1219,6 +1120,11 @@ public class XP
 	public static Vector3d blockToVec( BlockPos pos )
 	{
 		return new Vector3d( pos.getX(), pos.getY(), pos.getZ() );
+	}
+
+	public static Vector3d blockToMiddleVec( BlockPos pos )
+	{
+		return new Vector3d( pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D );
 	}
 
 	public static void spawnRocket( World world, BlockPos pos, Skill skill )
@@ -1289,9 +1195,9 @@ public class XP
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = XP.getBiomeResLoc( player.world, biome ).toString();
 		UUID playerUUID = player.getUniqueID();
-		Map<String, Object> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
-		Map<String, Map<String, Object>> negativeEffects = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE );
-		Map<String, Map<String, Object>> positiveEffects = JsonConfig.data.get( JType.BIOME_EFFECT_POSITIVE );
+		Map<String, Double> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
+		Map<String, Map<String, Double>> negativeEffects = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE );
+		Map<String, Map<String, Double>> positiveEffects = JsonConfig.data.get( JType.BIOME_EFFECT_POSITIVE );
 
 		if( !lastBiome.containsKey( playerUUID ) )
 			lastBiome.put( playerUUID, "none" );
@@ -1300,30 +1206,30 @@ public class XP
 		{
 			if( positiveEffects != null )
 			{
-				Map<String, Object> positiveEffect = positiveEffects.get( biomeKey );
+				Map<String, Double> positiveEffect = positiveEffects.get( biomeKey );
 				if( positiveEffect != null )
 				{
-					for( Map.Entry<String, Object> entry : positiveEffect.entrySet() )
+					for( Map.Entry<String, Double> entry : positiveEffect.entrySet() )
 					{
 						Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
 						if( effect != null )
-							player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( (double) entry.getValue() ), false, false ) );
+							player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, false ) );
 					}
 				}
 			}
 		}
 		else if( negativeEffects != null )
 		{
-			Map<String, Object> negativeEffect = negativeEffects.get( biomeKey );
+			Map<String, Double> negativeEffect = negativeEffects.get( biomeKey );
 			if( negativeEffect != null )
 			{
-				for( Map.Entry<String, Object> entry : negativeEffect.entrySet() )
+				for( Map.Entry<String, Double> entry : negativeEffect.entrySet() )
 				{
 					Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
 					if( effect != null )
-						player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( (double) entry.getValue() ), false, true ) );
+						player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, true ) );
 				}
 				if( player.world.isRemote() )
 				{
@@ -1331,14 +1237,14 @@ public class XP
 					{
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( getBiomeResLoc( player.world, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), true );
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( getBiomeResLoc( player.world, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), false );
-						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
+						for( Map.Entry<String, Double> entry : biomeReq.entrySet() )
 						{
 							int startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
-							if( startLevel < (double) entry.getValue() )
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
+							if( startLevel < entry.getValue() )
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
 							else
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
+								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
 						}
 					}
 				}
@@ -1348,9 +1254,9 @@ public class XP
 		lastBiome.put( playerUUID, biomeKey );
 	}
 	
-	public static double getWeight( int startLevel, Map<String, Object> fishItem )
+	public static double getWeight( int startLevel, Map<String, Double> fishItem )
 	{
-		return DP.map( startLevel, (double) fishItem.get( "startLevel" ), (double) fishItem.get( "endLevel" ), (double) fishItem.get( "startWeight" ), (double) fishItem.get( "endWeight" ) );
+		return DP.mapCapped( startLevel, fishItem.get( "startLevel" ), fishItem.get( "endLevel" ), fishItem.get( "startWeight" ), fishItem.get( "endWeight" ) );
 	}
 
 	public static Map<Skill, Double> getOfflineXpMap(UUID uuid)

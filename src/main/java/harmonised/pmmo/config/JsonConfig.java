@@ -12,6 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -26,12 +27,18 @@ import java.util.function.BiConsumer;
 public class JsonConfig
 {
     public static Gson gson = new Gson();
-    public static final Type mapType = new TypeToken<Map<String, Map<String, Object>>>(){}.getType();
+    public static final Type mapType = new TypeToken<Map<String, Map<String, Double>>>(){}.getType();
+    public static final Type mapType2 = new TypeToken<Map<String, Map<String, Map<String, Double>>>>(){}.getType();
 
     public static Set<JType> jTypes;
-    private static Map<JType, Map<String, Map<String, Object>>> rawData = new HashMap<>();
-    public static Map<JType, Map<String, Map<String, Object>>> localData = new HashMap<>();
-    public static Map<JType, Map<String, Map<String, Object>>> data = new HashMap<>();
+    private static Map<JType, Map<String, Map<String, Double>>> rawData = new HashMap<>();
+    private static Map<JType, Map<String, Map<String, Map<String, Double>>>> rawData2 = new HashMap<>();
+    
+    public static Map<JType, Map<String, Map<String, Double>>> localData = new HashMap<>();
+    public static Map<JType, Map<String, Map<String, Map<String, Double>>>> localData2 = new HashMap<>();
+    
+    public static Map<JType, Map<String, Map<String, Double>>> data = new HashMap<>();
+    public static Map<JType, Map<String, Map<String, Map<String, Double>>>> data2 = new HashMap<>();
 
     private static final ArrayList<String> validAttributes = new ArrayList<>();
     private static final ArrayList<String> validFishEnchantInfo = new ArrayList<>();
@@ -39,11 +46,17 @@ public class JsonConfig
     private static final String hardDataPath = "/assets/pmmo/util/";
     private static final Effect invalidEffect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
     private static final Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
+    public static final Set<JType> jTypes2 = new HashSet<>();
 
 //    private static Entity invalidEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
 
     public static void init()
     {
+        jTypes2.add( JType.SALVAGE );
+        jTypes2.add( JType.SALVAGE_FROM );
+        jTypes2.add( JType.TREASURE );
+        jTypes2.add( JType.TREASURE_FROM );
+
         validAttributes.add( "speedBonus" );
         validAttributes.add( "hpBonus" );
         validAttributes.add( "damageBonus" );
@@ -55,22 +68,31 @@ public class JsonConfig
         processRawData();   //turn Raw data into Usable data
 
         JsonConfig.data = localData;
+        JsonConfig.data2 = localData2;
     }
 
     private static void initMaps()
     {
         initMap( localData );
         initMap( data );
+        initMap2( localData2 );
+        initMap2( data2 );
     }
 
-    private static void initMap( Map<JType, Map<String, Map<String, Object>>> map )
+    private static void initMap( Map<JType, Map<String, Map<String, Double>>> map )
     {
         for( Map.Entry<JType, Integer> entry : JType.jTypeMap.entrySet() )
         {
-            if( map.containsKey( entry.getKey() ) )
-                map.replace( entry.getKey(), new HashMap<>() );
-            else
+            if( !jTypes2.contains( entry.getKey() ) )
                 map.put( entry.getKey(), new HashMap<>() );
+        }
+    }
+
+    private static void initMap2( Map<JType, Map<String, Map<String, Map<String, Double>>>> map )
+    {
+        for( JType jType2 : jTypes2 )
+        {
+            map.put( jType2, new HashMap<>() );
         }
     }
 
@@ -117,8 +139,6 @@ public class JsonConfig
         if( Config.forgeConfig.growingXpEnabled.get() )
             jTypes.add( JType.XP_VALUE_GROW );
 
-        jTypes.add( JType.XP_VALUE_TRIGGER );
-
         if( Config.forgeConfig.placeReqEnabled.get() )
             jTypes.add( JType.REQ_PLACE );
 
@@ -159,7 +179,7 @@ public class JsonConfig
             jTypes.add( JType.INFO_BREW );
 
         if( Config.forgeConfig.salvageEnabled.get() )
-            jTypes.add( JType.SALVAGE_TO );
+            jTypes.add( JType.SALVAGE );
 
         if( Config.forgeConfig.fishPoolEnabled.get() )
             jTypes.add( JType.FISH_POOL );
@@ -185,12 +205,17 @@ public class JsonConfig
         if( Config.forgeConfig.wornItemXpBoostEnabled.get() )
             jTypes.add( JType.XP_BONUS_WORN );
 
+        if( Config.forgeConfig.craftReqEnabled.get() )
+            jTypes.add( JType.REQ_CRAFT );
+
+        if( Config.forgeConfig.treasureEnabled.get() )
+            jTypes.add( JType.TREASURE );
+
         jTypes.add( JType.BLOCK_SPECIFIC );
         jTypes.add( JType.PLAYER_SPECIFIC );
         jTypes.add( JType.VEIN_BLACKLIST );
-
-        if( Config.forgeConfig.craftReqEnabled.get() )
-            jTypes.add( JType.REQ_CRAFT );
+        jTypes.add( JType.XP_VALUE_TRIGGER );
+        jTypes.add( JType.MULTIPLIERS );
     }
 
     private static void initData()
@@ -210,6 +235,7 @@ public class JsonConfig
     private static void readRawData()
     {
         rawData = new HashMap<>();
+        rawData2 = new HashMap<>();
         File file;
         String fileName;
 
@@ -219,17 +245,23 @@ public class JsonConfig
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
 
             try
-                    (
-                            InputStream input = new FileInputStream( file.getPath() );
-                            Reader reader = new BufferedReader( new InputStreamReader( input ) );
-                    )
+            (
+                InputStream input = new FileInputStream( file.getPath() );
+                Reader reader = new BufferedReader( new InputStreamReader( input ) );
+            )
             {
-                rawData.put( jType, gson.fromJson( reader, mapType ) );
+                if( jTypes2.contains( jType ) )
+                    rawData2.put( jType, gson.fromJson( reader, mapType2 ) );
+                else
+                    rawData.put( jType, gson.fromJson( reader, mapType ) );
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 LogHandler.LOGGER.error( "ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + dataPath + fileName, e );
-                rawData.put( jType, new HashMap<>() );
+                if( jTypes2.contains( jType ) )
+                    rawData2.put( jType, new HashMap<>() );
+                else
+                    rawData.put( jType, new HashMap<>() );
             }
         }
     }
@@ -237,124 +269,130 @@ public class JsonConfig
     private static void processRawData()
     {
         if( jTypes.contains( JType.REQ_WEAR ) )
-            updateReqSkills( rawData.get( JType.REQ_WEAR ), localData.get( JType.REQ_WEAR ) );
+            updateDataSkills( JType.REQ_WEAR  );
 
         if( jTypes.contains( JType.REQ_TOOL ) )
-            updateReqSkills( rawData.get( JType.REQ_TOOL ), localData.get( JType.REQ_TOOL ) );
+            updateDataSkills( JType.REQ_TOOL );
 
         if( jTypes.contains( JType.REQ_WEAPON ) )
-            updateReqSkills( rawData.get( JType.REQ_WEAPON ), localData.get( JType.REQ_WEAPON ) );
+            updateDataSkills( JType.REQ_WEAPON );
 
         if( jTypes.contains( JType.REQ_USE ) )
-            updateReqSkills( rawData.get( JType.REQ_USE ), localData.get( JType.REQ_USE ) );
+            updateDataSkills( JType.REQ_USE );
 
         if( jTypes.contains( JType.REQ_PLACE ) )
-            updateReqSkills( rawData.get( JType.REQ_PLACE ), localData.get( JType.REQ_PLACE ) );
+            updateDataSkills( JType.REQ_PLACE );
 
         if( jTypes.contains( JType.REQ_BREAK ) )
-            updateReqSkills( rawData.get( JType.REQ_BREAK ), localData.get( JType.REQ_BREAK ) );
+            updateDataSkills( JType.REQ_BREAK );
 
         if( jTypes.contains( JType.REQ_BIOME ) )
-            updateReqSkills( rawData.get( JType.REQ_BIOME ), localData.get( JType.REQ_BIOME ) );
+            updateDataSkills( JType.REQ_BIOME );
 
         if( jTypes.contains( JType.REQ_KILL ) )
-            updateReqSkills( rawData.get( JType.REQ_KILL ), localData.get( JType.REQ_KILL ) );
-
-        if( jTypes.contains( JType.XP_VALUE_GENERAL ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_GENERAL ), localData.get( JType.XP_VALUE_GENERAL ) );
-
-        if( jTypes.contains( JType.XP_VALUE_BREAK ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_BREAK ), localData.get( JType.XP_VALUE_BREAK ) );
-
-        if( jTypes.contains( JType.XP_VALUE_CRAFT ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_CRAFT ), localData.get( JType.XP_VALUE_CRAFT ) );
-
-        if( jTypes.contains( JType.XP_VALUE_BREED ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_BREED ), localData.get( JType.XP_VALUE_BREED ) );
-
-        if( jTypes.contains( JType.XP_VALUE_TAME ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_TAME ), localData.get( JType.XP_VALUE_TAME ) );
-
-        if( jTypes.contains( JType.XP_VALUE_SMELT ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_SMELT ), localData.get( JType.XP_VALUE_SMELT ) );
-
-        if( jTypes.contains( JType.XP_VALUE_COOK ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_COOK ), localData.get( JType.XP_VALUE_COOK ) );
-
-        if( jTypes.contains( JType.XP_VALUE_KILL ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_KILL ), localData.get( JType.XP_VALUE_KILL ) );
-
-        if( jTypes.contains( JType.XP_VALUE_BREW ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_BREW ), localData.get( JType.XP_VALUE_BREW ) );
-
-        if( jTypes.contains( JType.XP_VALUE_GROW ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_GROW ), localData.get( JType.XP_VALUE_GROW ) );
-
-        if( jTypes.contains( JType.XP_VALUE_TRIGGER ) )
-            updateReqSkills( rawData.get( JType.XP_VALUE_TRIGGER ), localData.get( JType.XP_VALUE_TRIGGER ) );
-
-        if( jTypes.contains( JType.INFO_ORE ) )
-            updateReqExtra( rawData.get( JType.INFO_ORE ), localData.get( JType.INFO_ORE ) );
-
-        if( jTypes.contains( JType.INFO_LOG ) )
-            updateReqExtra( rawData.get( JType.INFO_LOG ), localData.get( JType.INFO_LOG ) );
-
-        if( jTypes.contains( JType.INFO_PLANT ) )
-            updateReqExtra( rawData.get( JType.INFO_PLANT ), localData.get( JType.INFO_PLANT ) );
-
-        if( jTypes.contains( JType.INFO_SMELT ) )
-            updateReqExtra( rawData.get( JType.INFO_SMELT ), localData.get( JType.INFO_SMELT ) );
-
-        if( jTypes.contains( JType.INFO_COOK ) )
-            updateReqExtra( rawData.get( JType.INFO_COOK ), localData.get( JType.INFO_COOK ) );
-
-        if( jTypes.contains( JType.INFO_BREW ) )
-            updateReqExtra( rawData.get( JType.INFO_BREW ), localData.get( JType.INFO_BREW ) );
-
-        if( jTypes.contains( JType.BIOME_EFFECT_NEGATIVE ) )
-            updateReqEffects( rawData.get( JType.BIOME_EFFECT_NEGATIVE ), localData.get( JType.BIOME_EFFECT_NEGATIVE ) );
-
-        if( jTypes.contains( JType.BIOME_EFFECT_POSITIVE ) )
-            updateReqEffects( rawData.get( JType.BIOME_EFFECT_POSITIVE ), localData.get( JType.BIOME_EFFECT_POSITIVE ) );
-
-        if( jTypes.contains( JType.BIOME_MOB_MULTIPLIER ) )
-            updateReqAttributes( rawData.get( JType.BIOME_MOB_MULTIPLIER ), localData.get( JType.BIOME_MOB_MULTIPLIER ) );
-
-        if( jTypes.contains( JType.XP_BONUS_BIOME ) )
-            updateReqSkills( rawData.get( JType.XP_BONUS_BIOME ), localData.get( JType.XP_BONUS_BIOME ) );
-
-        if( jTypes.contains( JType.XP_BONUS_HELD ) )
-            updateReqSkills( rawData.get( JType.XP_BONUS_HELD ), localData.get( JType.XP_BONUS_HELD ) );
-
-        if( jTypes.contains( JType.XP_BONUS_WORN ) )
-            updateReqSkills( rawData.get( JType.XP_BONUS_WORN ), localData.get( JType.XP_BONUS_WORN ) );
-
-        if( jTypes.contains( JType.SALVAGE_TO ) )
-            updateReqSalvage( rawData.get( JType.SALVAGE_TO ), localData.get( JType.SALVAGE_TO ) );
-
-        if( jTypes.contains( JType.FISH_POOL ) )
-            updateReqfishPool( rawData.get( JType.FISH_POOL ), localData.get( JType.FISH_POOL ) );
-
-        if( jTypes.contains( JType.FISH_ENCHANT_POOL ) )
-            updateReqFishEnchantPool( rawData.get( JType.FISH_ENCHANT_POOL ), localData.get( JType.FISH_ENCHANT_POOL ) );
-
-        if( jTypes.contains( JType.MOB_RARE_DROP ) )
-            updateEntityItem( rawData.get( JType.MOB_RARE_DROP ), localData.get( JType.MOB_RARE_DROP ) );
-
-        if( jTypes.contains( JType.LEVEL_UP_COMMAND ) )
-            updateCommand( rawData.get( JType.LEVEL_UP_COMMAND ), localData.get( JType.LEVEL_UP_COMMAND ) );
-
-        if( jTypes.contains( JType.PLAYER_SPECIFIC ) )
-            updateSpecific( rawData.get( JType.PLAYER_SPECIFIC ), localData.get( JType.PLAYER_SPECIFIC ) );
-
-        if( jTypes.contains( JType.BLOCK_SPECIFIC ) )
-            updateSpecific( rawData.get( JType.BLOCK_SPECIFIC ), localData.get( JType.BLOCK_SPECIFIC ) );
-
-        if( jTypes.contains( JType.VEIN_BLACKLIST ) )
-            updateReqVein( rawData.get( JType.VEIN_BLACKLIST ), localData.get( JType.VEIN_BLACKLIST ) );
+            updateDataSkills( JType.REQ_KILL );
 
         if( jTypes.contains( JType.REQ_CRAFT ) )
-            updateReqSkills( rawData.get( JType.REQ_CRAFT ), localData.get( JType.REQ_CRAFT ) );
+            updateDataSkills( JType.REQ_CRAFT );
+
+        if( jTypes.contains( JType.XP_VALUE_GENERAL ) )
+            updateDataSkills( JType.XP_VALUE_GENERAL );
+
+        if( jTypes.contains( JType.XP_VALUE_BREAK ) )
+            updateDataSkills( JType.XP_VALUE_BREAK );
+
+        if( jTypes.contains( JType.XP_VALUE_CRAFT ) )
+            updateDataSkills( JType.XP_VALUE_CRAFT );
+
+        if( jTypes.contains( JType.XP_VALUE_BREED ) )
+            updateDataSkills( JType.XP_VALUE_BREED );
+
+        if( jTypes.contains( JType.XP_VALUE_TAME ) )
+            updateDataSkills( JType.XP_VALUE_TAME );
+
+        if( jTypes.contains( JType.XP_VALUE_SMELT ) )
+            updateDataSkills( JType.XP_VALUE_SMELT );
+
+        if( jTypes.contains( JType.XP_VALUE_COOK ) )
+            updateDataSkills( JType.XP_VALUE_COOK );
+
+        if( jTypes.contains( JType.XP_VALUE_KILL ) )
+            updateDataSkills( JType.XP_VALUE_KILL );
+
+        if( jTypes.contains( JType.XP_VALUE_BREW ) )
+            updateDataSkills( JType.XP_VALUE_BREW );
+
+        if( jTypes.contains( JType.XP_VALUE_GROW ) )
+            updateDataSkills( JType.XP_VALUE_GROW );
+
+        if( jTypes.contains( JType.XP_VALUE_TRIGGER ) )
+            updateDataSkills( JType.XP_VALUE_TRIGGER );
+
+        if( jTypes.contains( JType.INFO_ORE ) )
+            updateDataExtra( rawData.get( JType.INFO_ORE ), localData.get( JType.INFO_ORE ) );
+
+        if( jTypes.contains( JType.INFO_LOG ) )
+            updateDataExtra( rawData.get( JType.INFO_LOG ), localData.get( JType.INFO_LOG ) );
+
+        if( jTypes.contains( JType.INFO_PLANT ) )
+            updateDataExtra( rawData.get( JType.INFO_PLANT ), localData.get( JType.INFO_PLANT ) );
+
+        if( jTypes.contains( JType.INFO_SMELT ) )
+            updateDataExtra( rawData.get( JType.INFO_SMELT ), localData.get( JType.INFO_SMELT ) );
+
+        if( jTypes.contains( JType.INFO_COOK ) )
+            updateDataExtra( rawData.get( JType.INFO_COOK ), localData.get( JType.INFO_COOK ) );
+
+        if( jTypes.contains( JType.INFO_BREW ) )
+            updateDataExtra( rawData.get( JType.INFO_BREW ), localData.get( JType.INFO_BREW ) );
+
+        if( jTypes.contains( JType.BIOME_EFFECT_NEGATIVE ) )
+            updateDataEffects( rawData.get( JType.BIOME_EFFECT_NEGATIVE ), localData.get( JType.BIOME_EFFECT_NEGATIVE ) );
+
+        if( jTypes.contains( JType.BIOME_EFFECT_POSITIVE ) )
+            updateDataEffects( rawData.get( JType.BIOME_EFFECT_POSITIVE ), localData.get( JType.BIOME_EFFECT_POSITIVE ) );
+
+        if( jTypes.contains( JType.BIOME_MOB_MULTIPLIER ) )
+            updateDataAttributes( rawData.get( JType.BIOME_MOB_MULTIPLIER ), localData.get( JType.BIOME_MOB_MULTIPLIER ) );
+
+        if( jTypes.contains( JType.XP_BONUS_BIOME ) )
+            updateDataSkills( JType.XP_BONUS_BIOME );
+
+        if( jTypes.contains( JType.XP_BONUS_HELD ) )
+            updateDataSkills( JType.XP_BONUS_HELD );
+
+        if( jTypes.contains( JType.XP_BONUS_WORN ) )
+            updateDataSkills( JType.XP_BONUS_WORN );
+
+        if( jTypes.contains( JType.SALVAGE ) )
+            updateDataSalvage( rawData2.get( JType.SALVAGE ), localData2.get( JType.SALVAGE ) );
+
+        if( jTypes.contains( JType.FISH_POOL ) )
+            updateDataFishPool( rawData.get( JType.FISH_POOL ), localData.get( JType.FISH_POOL ) );
+
+        if( jTypes.contains( JType.FISH_ENCHANT_POOL ) )
+            updateDataFishEnchantPool( rawData.get( JType.FISH_ENCHANT_POOL ), localData.get( JType.FISH_ENCHANT_POOL ) );
+
+        if( jTypes.contains( JType.MOB_RARE_DROP ) )
+            updateDataEntityItem( rawData.get( JType.MOB_RARE_DROP ), localData.get( JType.MOB_RARE_DROP ) );
+
+        if( jTypes.contains( JType.LEVEL_UP_COMMAND ) )
+            updateDataCommand( rawData.get( JType.LEVEL_UP_COMMAND ), localData.get( JType.LEVEL_UP_COMMAND ) );
+
+        if( jTypes.contains( JType.TREASURE ) )
+            updateDataTreasure( rawData2.get( JType.TREASURE ), localData2.get( JType.TREASURE ) );
+
+        if( jTypes.contains( JType.BLOCK_SPECIFIC ) )
+            updateDataSpecific( rawData.get( JType.BLOCK_SPECIFIC ), localData.get( JType.BLOCK_SPECIFIC ) );
+
+        if( jTypes.contains( JType.PLAYER_SPECIFIC ) )
+            updateDataSpecific( rawData.get( JType.PLAYER_SPECIFIC ), localData.get( JType.PLAYER_SPECIFIC ) );
+
+        if( jTypes.contains( JType.VEIN_BLACKLIST ) )
+            updateDataVein( rawData.get( JType.VEIN_BLACKLIST ), localData.get( JType.VEIN_BLACKLIST ) );
+
+        if( jTypes.contains( JType.MULTIPLIERS ) )
+            updateDataSkills( JType.MULTIPLIERS );
     }
 
     private static void createData( File dataFile, String fileName )
@@ -372,6 +410,7 @@ public class JsonConfig
         try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( hardDataPath + fileName );
              FileOutputStream outputStream = new FileOutputStream( dataFile ); )
         {
+            LogHandler.LOGGER.debug( "Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath() );
             IOUtils.copy( inputStream, outputStream );
         }
         catch( IOException e )
@@ -380,7 +419,7 @@ public class JsonConfig
         }
     }
 
-    private static boolean checkValidSkills( Map<String, Object> theMap )
+    private static boolean checkValidSkills( Map<String, Double> theMap )
     {
         boolean anyValidSkills = false;
 
@@ -389,13 +428,13 @@ public class JsonConfig
             if( Skill.getInt( key ) != 0 )
                 anyValidSkills = true;
             else
-                LogHandler.LOGGER.info( "Invalid skill " + key + " level " + (double) theMap.get( key ) );
+                LogHandler.LOGGER.info( "Invalid skill " + key + " level " + theMap.get( key ) );
         }
 
         return anyValidSkills;
     }
 
-    private static boolean checkValidEffects( Map<String, Object> theMap )
+    private static boolean checkValidEffects( Map<String, Double> theMap )
     {
         boolean anyValidEffects = false;
 
@@ -411,26 +450,25 @@ public class JsonConfig
         return anyValidEffects;
     }
 
-    private static void updateReqSkills( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataSkills( JType jType )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        Map<String, Map<String, Double>> input = rawData.get( jType );
+        Map<String, Map<String, Double>> output = localData.get( jType );
+
+        LogHandler.LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( checkValidSkills( element.getValue() ) )
             {
                 if(  !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
 
-                for( Map.Entry<String, Object> entry : element.getValue().entrySet() )
+                for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
-                    if( entry.getValue() instanceof Double )
-                    {
-                        if( Skill.getInt( entry.getKey() ) != 0 )
-                            output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
-                        else
-                            LogHandler.LOGGER.error( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
-                    }
-                    else
-                        LogHandler.LOGGER.error( entry.getValue() + " is not a Double!" );
+                   if( Skill.getInt( entry.getKey() ) != 0 )
+                       output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
+                   else
+                       LogHandler.LOGGER.error( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
                 }
             }
             else
@@ -438,28 +476,23 @@ public class JsonConfig
         };
     }
 
-    private static void updateReqEffects( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataEffects( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( checkValidEffects( element.getValue() ) )
             {
                 if(  !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
 
-                for( Map.Entry<String, Object> entry : element.getValue().entrySet() )
+                for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
-                    if( entry.getValue() instanceof Double )
-                    {
-                        Potion potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
+                    Potion potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
 
-                        if( !potion.equals( invalidEffect ) && (double) entry.getValue() >= 0 && (double) entry.getValue() < 255 )
-                            output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
-                        else
-                            LogHandler.LOGGER.error( entry.getKey() + " is either not a effect skill, or below 0, or above 255!" );
-                    }
+                    if( !potion.equals( invalidEffect ) && entry.getValue() >= 0 && entry.getValue() < 255 )
+                        output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LogHandler.LOGGER.error( entry.getValue() + " is not a Double!" );
+                        LogHandler.LOGGER.error( entry.getKey() + " is either not a effect skill, or below 0, or above 255!" );
                 }
             }
             else
@@ -467,26 +500,21 @@ public class JsonConfig
         };
     }
 
-    private static void updateReqExtra( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataExtra( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( !XP.getItem( element.getKey() ).equals( Items.AIR ) )
             {
                 if( !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
 
-                for( Map.Entry<String, Object> entry : element.getValue().entrySet() )
+                for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
-                    if( entry.getValue() instanceof Double )
-                    {
-                        if( entry.getKey().equals( "extraChance" ) && (double) entry.getValue() > 0 )
-                            output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
-                        else
-                            LogHandler.LOGGER.error( element.getKey() + " is either not \"extraChance\", or not above 0!" );
-                    }
+                    if( entry.getKey().equals( "extraChance" ) && entry.getValue() > 0 )
+                        output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LogHandler.LOGGER.error( element.getKey() + " is not a Double!" );
+                        LogHandler.LOGGER.error( element.getKey() + " is either not \"extraChance\", or not above 0!" );
                 }
             }
             else
@@ -494,151 +522,31 @@ public class JsonConfig
         };
     }
 
-    private static void updateReqSalvage( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataVein( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
-            if( !XP.getItem( element.getKey() ).equals( Items.AIR ) )
-            {
-                boolean failed = false;
-                Map<String, Object> inMap = element.getValue();
-
-                if( !( inMap.containsKey( "salvageItem" ) && inMap.get( "salvageItem" ) instanceof String ) )
-                {
-                    LogHandler.LOGGER.error( "Failed to load Salvage Item " + element.getKey() + " \"salvageItem\" is invalid" );
-                    failed = true;
-                }
-                else if( XP.getItem( (String) inMap.get( "salvageItem" ) ).equals( Items.AIR ) )
-                {
-                    LogHandler.LOGGER.error( "Failed to load Salvage Item " + element.getKey() + " \"salvageItem\" item does not exist" );
-                    failed = true;
-                }
-
-                if( !( inMap.containsKey( "salvageMax" ) && inMap.get( "salvageMax" ) instanceof Double ) )
-                {
-                    LogHandler.LOGGER.info( "Error loading Salvage Item " + element.getKey() + " \"salvageMax\" is invalid, loading default value 1 item" );
-                    inMap.put( "salvageMax", 1D );
-                }
-
-                if( !( inMap.containsKey( "baseChance" ) && inMap.get( "baseChance" ) instanceof Double ) )
-                {
-                    LogHandler.LOGGER.info( "Error loading Salvage Item " + element.getKey() + " \"baseChance\" is invalid, loading default value 50%" );
-                    inMap.put( "baseChance", 50D );
-                }
-
-                if( !( inMap.containsKey( "chancePerLevel" ) && inMap.get( "chancePerLevel" ) instanceof Double ) )
-                {
-                    LogHandler.LOGGER.info( "Error loading Salvage Item " + element.getKey() + " \"chancePerLevel\" is invalid, loading default value 0%" );
-                    inMap.put( "chancePerLevel", 0D );
-                }
-
-                if( !( inMap.containsKey( "maxChance" ) && inMap.get( "maxChance" ) instanceof Double ) )
-                {
-                    LogHandler.LOGGER.info( "Error loading Salvage Item " + element.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
-                    inMap.put( "maxChance", 80D );
-                }
-
-                if( !( inMap.containsKey( "xpPerItem" ) && inMap.get( "xpPerItem" ) instanceof Double ) )
-                {
-                    LogHandler.LOGGER.info( "Error loading Salvage Item " + element.getKey() + " \"xpPerItem\" is invalid, loading default value 0xp" );
-                    inMap.put( "xpPerItem", 0D );
-                }
-
-                if( !( inMap.containsKey( "levelReq" ) && inMap.get( "levelReq" ) instanceof Double ) )
-                {
-                    LogHandler.LOGGER.info( "Error loading Salvage Item " + element.getKey() + " \"levelReq\" is invalid, loading default value 1 level" );
-                    inMap.put( "levelReq", 1D );
-                }
-
-                if( !failed )
-                {
-                    if( !output.containsKey( element.getKey() ) )
-                        output.put( element.getKey(), new HashMap<>() );
-                    Map<String, Object> outMap = output.get( element.getKey() );
-                    String salvageItem = (String) inMap.get( "salvageItem" );
-                    double salvageMax = (double) inMap.get( "salvageMax" );
-                    double levelReq = (double) inMap.get( "levelReq" );
-                    double xpPerItem = (double) inMap.get( "xpPerItem" );
-                    double baseChance = (double) inMap.get( "baseChance" );
-                    double chancePerLevel = (double) inMap.get( "chancePerLevel" );
-                    double maxChance = (double) inMap.get( "maxChance" );
-
-                    outMap.put( "salvageItem", salvageItem );
-
-                    if( salvageMax < 1 )
-                        outMap.put( "salvageMax", 1 );
-                    else
-                        outMap.put( "salvageMax", salvageMax );
-
-                    if( levelReq < 1 )
-                        outMap.put( "levelReq", 1 );
-                    else
-                        outMap.put( "levelReq", levelReq );
-
-                    if( xpPerItem < 0 )
-                        outMap.put( "xpPerItem", 0 );
-                    else
-                        outMap.put( "xpPerItem", xpPerItem );
-
-                    if( baseChance < 0 )
-                        outMap.put( "baseChance", 0 );
-                    else if( baseChance > 100 )
-                        outMap.put( "baseChance", 100 );
-                    else
-                        outMap.put( "baseChance", baseChance );
-
-                    if( chancePerLevel < 0 )
-                        outMap.put( "chancePerLevel", 0 );
-                    else if( chancePerLevel > 100 )
-                        outMap.put( "chancePerLevel", 100 );
-                    else
-                        outMap.put( "chancePerLevel", chancePerLevel );
-
-                    if( maxChance < 0 )
-                        outMap.put( "maxChance", 0 );
-                    else if( maxChance > 100 )
-                        outMap.put( "maxChance", 100 );
-                    else
-                        outMap.put( "maxChance", maxChance );
-
-                    Map<String, Map<String, Object>> localSalvagesFrom = localData.get( JType.SALVAGE_FROM );
-
-                    if( !localSalvagesFrom.containsKey( salvageItem ) )
-                        localSalvagesFrom.put( salvageItem, new HashMap<>() );
-
-                    localSalvagesFrom.get( salvageItem ).put( element.getKey(), salvageMax );
-                }
-            }
-            else
-                LogHandler.LOGGER.info( "Could not load inexistant item " + element.getKey() );
-        };
-    }
-
-    private static void updateReqVein( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
-    {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
-        {
-            Map<String, Object> inMap = element.getValue();
+            Map<String, Double> inMap = element.getValue();
 
             if( !output.containsKey( element.getKey() ) )
                 output.put( element.getKey(), new HashMap<>() );
 
-            for( Map.Entry<String, Object> entry : inMap.entrySet() )
+            for( Map.Entry<String, Double> entry : inMap.entrySet() )
             {
                 if( XP.getItem( entry.getKey() ).equals( Items.AIR ) )
                     LogHandler.LOGGER.info( "Could not load inexistant item " + entry.getKey() + " into Vein Blacklist" );
                 else
                     output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
             }
-        };
+        }
     }
 
-    private static void updateEntityItem( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataEntityItem( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             output.put( element.getKey(), new HashMap<>() );
-            for( Map.Entry<String, Object> entry : element.getValue().entrySet() )
+            for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
             {
                 if( !XP.getItem( entry.getKey() ).equals( Items.AIR ) )
                     output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
@@ -648,68 +556,68 @@ public class JsonConfig
         };
     }
 
-    private static void updateReqfishPool( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataFishPool( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             Item item = XP.getItem( element.getKey() );
             if( !item.equals( Items.AIR ) )
             {
-                Map<String, Object> inMap = element.getValue();
+                Map<String, Double> inMap = element.getValue();
 
-                if( !( inMap.containsKey( "startWeight" ) && inMap.get( "startWeight" ) instanceof Double ) )
+                if( !( inMap.containsKey( "startWeight" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"startWeight\" is invalid, loading default value 1" );
                     inMap.put( "startWeight", 1D );
                 }
 
-                if( !( inMap.containsKey( "startLevel" ) && inMap.get( "startLevel" ) instanceof Double ) )
+                if( !( inMap.containsKey( "startLevel" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"startLevel\" is invalid, loading default value level 1" );
                     inMap.put( "startLevel", 1D );
                 }
 
-                if( !( inMap.containsKey( "endWeight" ) && inMap.get( "endWeight" ) instanceof Double ) )
+                if( !( inMap.containsKey( "endWeight" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"endWeight\" is invalid, loading default value 1" );
                     inMap.put( "endWeight", 1D );
                 }
 
-                if( !( inMap.containsKey( "endLevel" ) && inMap.get( "endLevel" ) instanceof Double ) )
+                if( !( inMap.containsKey( "endLevel" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"endLevel\" is invalid, loading default value level 1" );
                     inMap.put( "endLevel", 1D );
                 }
 
-                if( !( inMap.containsKey( "minCount" ) && inMap.get( "minCount" ) instanceof Double ) )
+                if( !( inMap.containsKey( "minCount" ) ) )
                 {
 //                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is invalid, loading default value 1 item" );
                     inMap.put( "minCount", 1D );
                 }
-                else if( (double) inMap.get( "minCount" ) > item.getMaxStackSize() )
+                else if( inMap.get( "minCount" ) > item.getMaxStackSize() )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is above Max Stack Size, loading default value 1 item" );
                     inMap.put( "minCount", (double) item.getMaxStackSize() );
                 }
 
-                if( !( inMap.containsKey( "maxCount" ) && inMap.get( "maxCount" ) instanceof Double ) )
+                if( !( inMap.containsKey( "maxCount" ) ) )
                 {
 //                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is invalid, loading default value 1" );
                     inMap.put( "maxCount", 1D );
                 }
-                else if( (double) inMap.get( "maxCount" ) > item.getMaxStackSize() )
+                else if( inMap.get( "maxCount" ) > item.getMaxStackSize() )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is above Max Stack Size, loading default value 1 item" );
                     inMap.put( "maxCount", (double) item.getMaxStackSize() );
                 }
 
-                if( !( inMap.containsKey( "enchantLevelReq" ) && inMap.get( "enchantLevelReq" ) instanceof Double ) )
+                if( !( inMap.containsKey( "enchantLevelReq" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"enchantLevelReq\" is invalid, loading default value level 1" );
                     inMap.put( "enchantLevelReq", 1D );
                 }
 
-                if( !( inMap.containsKey( "xp" ) && inMap.get( "xp" ) instanceof Double ) )
+                if( !( inMap.containsKey( "xp" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"xp\" is invalid, loading default value 1xp" );
                     inMap.put( "xp", 1D );
@@ -718,15 +626,15 @@ public class JsonConfig
                 if( !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
 
-                Map<String, Object> outMap = output.get( element.getKey() );
-                double startWeight = (double) inMap.get( "startWeight" );
-                double startLevel = (double) inMap.get( "startLevel" );
-                double endWeight = (double) inMap.get( "endWeight" );
-                double endLevel = (double) inMap.get( "endLevel" );
-                double minCount = (double) inMap.get( "minCount" );
-                double maxCount = (double) inMap.get( "maxCount" );
-                double enchantLevelReq = (double) inMap.get( "enchantLevelReq" );
-                double xp = (double) inMap.get( "xp" );
+                Map<String, Double> outMap = output.get( element.getKey() );
+                double startWeight = inMap.get( "startWeight" );
+                double startLevel = inMap.get( "startLevel" );
+                double endWeight = inMap.get( "endWeight" );
+                double endLevel = inMap.get( "endLevel" );
+                double minCount = inMap.get( "minCount" );
+                double maxCount = inMap.get( "maxCount" );
+                double enchantLevelReq = inMap.get( "enchantLevelReq" );
+                double xp = inMap.get( "xp" );
 
                 if( endWeight < 0 )
                     outMap.put( "endWeight", 0D );
@@ -782,40 +690,40 @@ public class JsonConfig
         };
     }
 
-    private static void updateReqFishEnchantPool( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataFishEnchantPool( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( element.getKey() ) );
             if( !enchant.equals( invalidEnchant ) )
             {
-                Map<String, Object> inMap = element.getValue();
+                Map<String, Double> inMap = element.getValue();
 
-                if( !( inMap.containsKey( "levelReq" ) && inMap.get( "levelReq" ) instanceof Double ) )
+                if( !( inMap.containsKey( "levelReq" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelReq\" is invalid, loading default value 1" );
                     inMap.put( "levelReq", 1D );
                 }
 
-                if( !( inMap.containsKey( "levelPerLevel" ) && inMap.get( "levelPerLevel" ) instanceof Double ) )
+                if( !( inMap.containsKey( "levelPerLevel" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelPerLevel\" is invalid, loading default value 0" );
                     inMap.put( "levelPerLevel", 0D );
                 }
 
-                if( !( inMap.containsKey( "chancePerLevel" ) && inMap.get( "chancePerLevel" ) instanceof Double ) )
+                if( !( inMap.containsKey( "chancePerLevel" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"chancePerLevel\" is invalid, loading default value 0" );
                     inMap.put( "chancePerLevel", 0D );
                 }
 
-                if( !( inMap.containsKey( "maxChance" ) && inMap.get( "maxChance" ) instanceof Double ) )
+                if( !( inMap.containsKey( "maxChance" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
                     inMap.put( "maxChance", 80D );
                 }
 
-                if( !( inMap.containsKey( "maxLevel" ) && inMap.get( "maxLevel" ) instanceof Double ) )
+                if( !( inMap.containsKey( "maxLevel" ) ) )
                 {
                     LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxLevel\" is invalid, loading default value " + enchant.getMaxLevel() );
                     inMap.put( "maxLevel", (double) enchant.getMaxLevel() );
@@ -824,12 +732,12 @@ public class JsonConfig
 
                 if( !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
-                Map<String, Object> outMap = output.get( element.getKey() );
-                double levelReq = (double) inMap.get( "levelReq" );
-                double levelPerLevel = (double) inMap.get( "levelPerLevel" );
-                double chancePerLevel = (double) inMap.get( "chancePerLevel" );
-                double maxChance = (double) inMap.get( "maxChance" );
-                double maxLevel = (double) inMap.get( "maxLevel" );
+                Map<String, Double> outMap = output.get( element.getKey() );
+                double levelReq = inMap.get( "levelReq" );
+                double levelPerLevel = inMap.get( "levelPerLevel" );
+                double chancePerLevel = inMap.get( "chancePerLevel" );
+                double maxChance = inMap.get( "maxChance" );
+                double maxLevel = inMap.get( "maxLevel" );
 
                 if( levelReq < 1 )
                     outMap.put( "levelReq", 1D );
@@ -854,7 +762,7 @@ public class JsonConfig
                     outMap.put( "maxChance", maxChance );
 
                 if( maxLevel < 1 )
-                    outMap.put( "maxLevel", enchant.getMaxLevel() );
+                    outMap.put( "maxLevel", (double) enchant.getMaxLevel() );
                 else
                     outMap.put( "maxLevel", maxLevel );
             }
@@ -863,16 +771,16 @@ public class JsonConfig
         };
     }
 
-    private static void updateReqAttributes( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataAttributes( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( checkValidAttributes( element.getValue() ) )
             {
                 if( !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
 
-                for( Map.Entry<String, Object> entry : element.getValue().entrySet() )
+                for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
                     if( validAttributes.contains( entry.getKey() ) )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
@@ -886,26 +794,21 @@ public class JsonConfig
         };
     }
 
-    private static void updateCommand( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataCommand( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( Skill.getInt( element.getKey() ) != 0 )
             {
                 if( !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
 
-                for( Map.Entry<String, Object> entry : element.getValue().entrySet() )
+                for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
-                    if( entry.getValue() instanceof Double )
-                    {
-                        if( (double) entry.getValue() >= 1 )
-                            output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
-                        else
-                            output.get( element.getKey() ).put( entry.getKey(), 1D );
-                    }
+                    if( entry.getValue() >= 1 )
+                        output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LogHandler.LOGGER.error( "Invalid level " + entry.getValue() );
+                        output.get( element.getKey() ).put( entry.getKey(), 1D );
                 }
             }
             else
@@ -913,21 +816,21 @@ public class JsonConfig
         };
     }
 
-    private static void updateSpecific( Map<String, Map<String, Object>> input, Map<String, Map<String, Object>> output )
+    private static void updateDataSpecific( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        for( Map.Entry<String, Map<String, Object>> element : input.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( !output.containsKey( element.getKey() ) )
                 output.put( element.getKey(), new HashMap<>() );
 
-            for( Map.Entry<String, Object> entry : element.getValue().entrySet() )
+            for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
             {
                 output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
             }
         };
     }
 
-    private static boolean checkValidAttributes( Map<String, Object> theMap )
+    private static boolean checkValidAttributes( Map<String, Double> theMap )
     {
         boolean anyValidAttributes = false;
 
@@ -940,5 +843,219 @@ public class JsonConfig
         }
 
         return anyValidAttributes;
+    }
+
+    private static void updateDataTreasure( Map<String, Map<String, Map<String, Double>>> input, Map<String, Map< String, Map<String, Double>>> output )
+    {
+        ResourceLocation blockResLoc;
+        String itemResLoc;
+        Map<String, Map<String, Double>> outputBlockMap;
+        Map<String, Double> outputItemMap;
+        Map<String, Double> inputItemMap;
+        Item item;
+        
+        for( Map.Entry<String, Map<String, Map<String, Double>>> blockEntry : input.entrySet() )
+        {
+            blockResLoc = XP.getResLoc( blockEntry.getKey() );
+            if( ForgeRegistries.BLOCKS.containsKey( blockResLoc ) )
+            {
+                output.put( blockEntry.getKey(), new HashMap<>() );
+                outputBlockMap = output.get( blockEntry.getKey() );
+                for( Map.Entry<String, Map<String, Double>> itemEntry : blockEntry.getValue().entrySet() )
+                {
+                    item = XP.getItem( itemEntry.getKey() );
+                    if( !item.equals( Items.AIR ) )
+                    {
+                        itemResLoc = item.getRegistryName().toString();
+                        inputItemMap = itemEntry.getValue();
+
+                        if( !( inputItemMap.containsKey( "startChance" ) ) )
+                        {
+                            LogHandler.LOGGER.debug( "Invalid or Missing startChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 0.1" );
+                            inputItemMap.put( "startChance", 0.1D );
+                        }
+                        if( !( inputItemMap.containsKey( "endChance" ) ) )
+                        {
+                            LogHandler.LOGGER.debug( "Invalid or Missing endChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            inputItemMap.put( "endChance", 1D );
+                        }
+                        if( !( inputItemMap.containsKey( "startLevel" ) ) )
+                        {
+                            LogHandler.LOGGER.debug( "Invalid or Missing startLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            inputItemMap.put( "startLevel", 1D );
+                        }
+                        if( !( inputItemMap.containsKey( "endLevel" ) ) )
+                        {
+                            LogHandler.LOGGER.debug( "Invalid or Missing endLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 100" );
+                            inputItemMap.put( "endLevel", 100D );
+                        }
+                        if( !( inputItemMap.containsKey( "minCount" ) ) )
+                        {
+                            LogHandler.LOGGER.debug( "Invalid or Missing minCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            inputItemMap.put( "minCount", 1D );
+                        }
+                        if( !( inputItemMap.containsKey( "maxCount" ) ) )
+                        {
+                            LogHandler.LOGGER.debug( "Invalid or Missing maxCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            inputItemMap.put( "maxCount", 1D );
+                        }
+                        if( !( inputItemMap.containsKey( "xpPerItem" ) ) )
+                        {
+                            LogHandler.LOGGER.debug( "Invalid or Missing xpPerItem Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            inputItemMap.put( "xpPerItem", 1D );
+                        }
+
+                        outputItemMap = new HashMap<>();
+                        double startChance = inputItemMap.get( "startChance" );
+                        double endChance   = inputItemMap.get( "endChance" );
+                        double startLevel  = inputItemMap.get( "startLevel" );
+                        double endLevel    = inputItemMap.get( "endLevel" );
+                        int minCount = (int) Math.floor( inputItemMap.get( "minCount" ) );
+                        int maxCount = (int) Math.floor( inputItemMap.get( "maxCount" ) );
+                        double xpPerItem = inputItemMap.get( "xpPerItem" );
+
+                        outputItemMap.put( "startChance", startChance );
+                        outputItemMap.put( "endChance", endChance );
+                        outputItemMap.put( "startLevel", startLevel );
+                        outputItemMap.put( "endLevel", endLevel );
+                        outputItemMap.put( "minCount", (double) minCount );
+                        outputItemMap.put( "maxCount", (double) maxCount );
+                        outputItemMap.put( "xpPerItem", xpPerItem );
+
+                        outputBlockMap.put( itemEntry.getKey(), outputItemMap );
+
+                        Map<String, Map<String, Map<String, Double>>> localSalvagesFrom = localData2.get( JType.TREASURE_FROM );
+
+                        if( !localSalvagesFrom.containsKey( itemResLoc ) )
+                            localSalvagesFrom.put( itemResLoc, new HashMap<>() );
+                        localSalvagesFrom.get( itemResLoc ).put( blockResLoc.toString(), outputItemMap );
+                    }
+                    else
+                        LogHandler.LOGGER.debug( "Inexistant Item " + itemEntry.getKey() + " in Treasure" );
+                }
+            }
+            else
+                LogHandler.LOGGER.debug( "Inexistant Block " + blockEntry.getKey() + " in Treasure" );
+        }
+    }
+
+    private static void updateDataSalvage( Map<String, Map<String, Map<String, Double>>> input, Map<String, Map< String, Map<String, Double>>> output )
+    {
+        Map<String, Map<String, Double>> outputSalvageFromItemMap;
+        ResourceLocation salvageFromItemResLoc;
+        String salvageToItemResLoc;
+        Map<String, Double> salvageToItemMap;
+        Item item;
+
+        for( Map.Entry<String, Map<String, Map<String, Double>>> inputSalvageFromItemEntry : input.entrySet() )
+        {
+            salvageFromItemResLoc = XP.getResLoc( inputSalvageFromItemEntry.getKey() );
+            if( !XP.getItem( salvageFromItemResLoc ).equals( Items.AIR ) )
+            {
+                output.put( salvageFromItemResLoc.toString(), new HashMap<>() );
+                outputSalvageFromItemMap = output.get( salvageFromItemResLoc.toString() );
+                for( Map.Entry<String, Map<String, Double>> inputSalvageToItemEntry : inputSalvageFromItemEntry.getValue().entrySet() )
+                {
+                    item = XP.getItem( inputSalvageToItemEntry.getKey() );
+                    salvageToItemResLoc = item.getRegistryName().toString();
+                    if( !item.equals( Items.AIR ) )
+                    {
+                        salvageToItemMap = inputSalvageToItemEntry.getValue();
+
+                        if( !( salvageToItemMap.containsKey( "salvageMax" ) ) )
+                        {
+                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"salvageMax\" is invalid, loading default value 1 item" );
+                            salvageToItemMap.put( "salvageMax", 1D );
+                        }
+
+                        if( !( salvageToItemMap.containsKey( "baseChance" ) ) )
+                        {
+                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"baseChance\" is invalid, loading default value 50%" );
+                            salvageToItemMap.put( "baseChance", 50D );
+                        }
+
+                        if( !( salvageToItemMap.containsKey( "chancePerLevel" ) ) )
+                        {
+                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"chancePerLevel\" is invalid, loading default value 0%" );
+                            salvageToItemMap.put( "chancePerLevel", 0D );
+                        }
+
+                        if( !( salvageToItemMap.containsKey( "maxChance" ) ) )
+                        {
+                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
+                            salvageToItemMap.put( "maxChance", 80D );
+                        }
+
+                        if( !( salvageToItemMap.containsKey( "xpPerItem" ) ) )
+                        {
+                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"xpPerItem\" is invalid, loading default value 0xp" );
+                            salvageToItemMap.put( "xpPerItem", 0D );
+                        }
+
+                        if( !( salvageToItemMap.containsKey( "levelReq" ) ) )
+                        {
+                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"levelReq\" is invalid, loading default value 1 level" );
+                            salvageToItemMap.put( "levelReq", 1D );
+                        }
+
+                        if( !outputSalvageFromItemMap.containsKey( inputSalvageToItemEntry.getKey() ) )
+                            outputSalvageFromItemMap.put( inputSalvageToItemEntry.getKey(), new HashMap<>() );
+                        Map<String, Double> outMap = outputSalvageFromItemMap.get( inputSalvageToItemEntry.getKey() );
+                        double salvageMax = salvageToItemMap.get( "salvageMax" );
+                        double levelReq = salvageToItemMap.get( "levelReq" );
+                        double xpPerItem = salvageToItemMap.get( "xpPerItem" );
+                        double baseChance = salvageToItemMap.get( "baseChance" );
+                        double chancePerLevel = salvageToItemMap.get( "chancePerLevel" );
+                        double maxChance = salvageToItemMap.get( "maxChance" );
+
+                        if( salvageMax < 1 )
+                            outMap.put( "salvageMax", 1D );
+                        else
+                            outMap.put( "salvageMax", salvageMax );
+
+                        if( levelReq < 1 )
+                            outMap.put( "levelReq", 1D );
+                        else
+                            outMap.put( "levelReq", levelReq );
+
+                        if( xpPerItem < 0 )
+                            outMap.put( "xpPerItem", 0D );
+                        else
+                            outMap.put( "xpPerItem", xpPerItem );
+
+                        if( baseChance < 0 )
+                            outMap.put( "baseChance", 0D );
+                        else if( baseChance > 100 )
+                            outMap.put( "baseChance", 100D );
+                        else
+                            outMap.put( "baseChance", baseChance );
+
+                        if( chancePerLevel < 0 )
+                            outMap.put( "chancePerLevel", 0D );
+                        else if( chancePerLevel > 100 )
+                            outMap.put( "chancePerLevel", 100D );
+                        else
+                            outMap.put( "chancePerLevel", chancePerLevel );
+
+                        if( maxChance < 0 )
+                            outMap.put( "maxChance", 0D );
+                        else if( maxChance > 100 )
+                            outMap.put( "maxChance", 100D );
+                        else
+                            outMap.put( "maxChance", maxChance );
+
+                        Map<String, Map<String, Map<String, Double>>> localSalvagesFrom = localData2.get( JType.SALVAGE_FROM );
+
+                        if( !localSalvagesFrom.containsKey( salvageToItemResLoc ) )
+                            localSalvagesFrom.put( salvageToItemResLoc, new HashMap<>() );
+                        localSalvagesFrom.get( salvageToItemResLoc ).put(  salvageFromItemResLoc.toString(), outMap );
+                    }
+                    else
+                        LogHandler.LOGGER.debug( "Inexistant To Item " + inputSalvageToItemEntry.getKey() + " in Salvage" );
+                }
+            }
+            else
+                LogHandler.LOGGER.debug( "Inexistant From Item " + inputSalvageFromItemEntry.getKey() + " in Salvage" );
+        }
     }
 }

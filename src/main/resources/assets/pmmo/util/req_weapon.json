@@ -341,6 +341,22 @@
 	{
 		"combat": 30
 	},
+	"appliedenergistics2:nether_quartz_sword":
+	{
+		"combat": 17
+	},
+	"appliedenergistics2:nether_quartz_axe":
+	{
+		"combat": 23
+	},
+	"appliedenergistics2:nether_quartz_shovel":
+	{
+		"combat": 17
+	},
+	"appliedenergistics2:nether_quartz_pickaxe":
+	{
+		"combat": 17
+	},
 	"minecolonies:chiefsword":
 	{
 		"combat": 35

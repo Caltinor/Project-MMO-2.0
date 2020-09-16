@@ -45,17 +45,17 @@ public class PrefsChoiceScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.potato" ) ) );
         });
 
-        TileButton settingsButton = new TileButton( (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", "", (button) ->
+        TileButton settingsButton = new TileButton( (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TranslationTextComponent( ((TileButton) button).transKey ), JType.SETTINGS ) );
         });
 
-        TileButton guiSettingsButton = new TileButton( (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", "", (button) ->
+        TileButton guiSettingsButton = new TileButton( (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TranslationTextComponent( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
         });

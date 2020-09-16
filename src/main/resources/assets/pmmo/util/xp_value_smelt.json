@@ -295,7 +295,7 @@
 	},
 	"create:copper_ore":
 	{
-		"smithing": 14
+		"smithing": 7
 	},
 	"create:zinc_ore":
 	{
@@ -304,6 +304,14 @@
 	"endreborn:wolframium_horse_armor":
 	{
 		"smithing": 20
+	},
+	"endreborn:quartz_ore":
+	{
+		"smithing": 13
+	},
+	"endreborn:wolframium_ore":
+	{
+		"smithing": 12
 	},
 	"endreborn:end_wolframium_ore":
 	{

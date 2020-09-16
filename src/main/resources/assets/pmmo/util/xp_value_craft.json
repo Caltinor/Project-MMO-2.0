@@ -371,6 +371,322 @@
 	{
 		"crafting": 0
 	},
+	"create:schematicannon":
+	{
+		"crafting": 50
+	},
+	"create:schematic_table":
+	{
+		"crafting": 10.4
+	},
+	"create:shaft":
+	{
+		"crafting": 3.25
+	},
+	"create:cogwheel":
+	{
+		"crafting": 4.1
+	},
+	"create:large_cogwheel":
+	{
+		"crafting": 6.2
+	},
+	"create:encased_shaft":
+	{
+		"crafting": 5
+	},
+	"create:gearbox":
+	{
+		"crafting": 5
+	},
+	"create:clutch":
+	{
+		"crafting": 4
+	},
+	"create:gearshift":
+	{
+		"crafting": 4
+	},
+	"create:adjustable_pulley":
+	{
+		"crafting": 10.8
+	},
+	"create:water_wheel":
+	{
+		"crafting": 14.5
+	},
+	"create:encased_fan":
+	{
+		"crafting": 6
+	},
+	"create:nozzle":
+	{
+		"crafting": 4.7
+	},
+	"create:turntable":
+	{
+		"crafting": 5.3
+	},
+	"create:hand_crank":
+	{
+		"crafting": 2
+	},
+	"create:cuckoo_clock":
+	{
+		"crafting": 16.7
+	},
+	"create:millstone":
+	{
+		"crafting": 8.8
+	},
+	"create:mechanical_press":
+	{
+		"crafting": 20.3
+	},
+	"create:mechanical_mixer":
+	{
+		"crafting": 20.3
+	},
+	"create:speedometer":
+	{
+		"crafting": 4
+	},
+	"create:basin":
+	{
+		"crafting": 12
+	},
+	"create:mechanical_piston":
+	{
+		"crafting": 20.3
+	},
+	"create:sticky_mechanical_piston":
+	{
+		"crafting": 12.3
+	},
+	"create:piston_extension_pole":
+	{
+		"crafting": 3
+	},
+	"create:mechanical_bearing":
+	{
+		"crafting": 6.4
+	},
+	"create:clockwork_bearing":
+	{
+		"crafting": 6.4
+	},
+	"create:rope_pulley":
+	{
+		"crafting": 8.8
+	},
+	"create:cart_assembler":
+	{
+		"crafting": 20.3
+	},
+	"create:linear_chassis":
+	{
+		"crafting": 12.5
+	},
+	"create:radial_chassis":
+	{
+		"crafting": 8.8
+	},
+	"create:mechanical_drill":
+	{
+		"crafting": 20.3
+	},
+	"create:mechanical_saw":
+	{
+		"crafting": 20.3
+	},
+	"create:deployer":
+	{
+		"crafting": 20.3
+	},
+	"create:portable_storage_interface":
+	{
+		"crafting": 12.5
+	},
+	"create:mechanical_harvester":
+	{
+		"crafting": 20.3
+	},
+	"create:mechanical_plough":
+	{
+		"crafting": 20.3
+	},
+	"create:andesite_casing":
+	{
+		"crafting": 8.8
+	},
+	"create:brass_casing":
+	{
+		"crafting": 8.8
+	},
+	"create:copper_casing":
+	{
+		"crafting": 8.8
+	},
+	"create:mechanical_crafter":
+	{
+		"crafting": 20.3
+	},
+	"create:sequenced_gearshift":
+	{
+		"crafting": 12.5
+	},
+	"create:rotation_speed_controller":
+	{
+		"crafting": 20.3
+	},
+	"create:redstone_contact":
+	{
+		"crafting": 10
+	},
+	"create:redstone_link":
+	{
+		"crafting": 10
+	},
+	"create:stockpile_switch":
+	{
+		"crafting": 10
+	},
+	"create:adjustable_crate":
+	{
+		"crafting": 10
+	},
+	"create:belt_observer":
+	{
+		"crafting": 10
+	},
+	"create:belt_tunnel":
+	{
+		"crafting": 10
+	},
+	"create:extractor":
+	{
+		"crafting": 12.5
+	},
+	"create:linked_extractor":
+	{
+		"crafting": 10
+	},
+	"create:funnel":
+	{
+		"crafting": 8.8
+	},
+	"create:transposer":
+	{
+		"crafting": 10
+	},
+	"create:linked_transposer":
+	{
+		"crafting": 10
+	},
+	"create:analog_lever":
+	{
+		"crafting": 10
+	},
+	"create:pulse_repeater":
+	{
+		"crafting": 10
+	},
+	"create:adjustable_repeater":
+	{
+		"crafting": 10
+	},
+	"create:adjustable_pulse_repeater":
+	{
+		"crafting": 18
+	},
+	"create:powered_latch":
+	{
+		"crafting": 8.8
+	},
+	"create:powered_toggle_latch":
+	{
+		"crafting": 10.6
+	},
+	"create:andesite_alloy":
+	{
+		"crafting": 3
+	},
+	"create:propeller":
+	{
+		"crafting": 7
+	},
+	"create:whisk":
+	{
+		"crafting": 7
+	},
+	"create:brass_hand":
+	{
+		"crafting": 7
+	},
+	"create:crafter_slot_cover":
+	{
+		"crafting": 3
+	},
+	"create:electron_tube":
+	{
+		"crafting": 6
+	},
+	"create:belt_connector":
+	{
+		"crafting": 10
+	},
+	"create:super_glue":
+	{
+		"crafting": 5
+	},
+	"create:sand_paper":
+	{
+		"crafting": 5
+	},
+	"create:red_sand_paper":
+	{
+		"crafting": 5
+	},
+	"create:wrench":
+	{
+		"crafting": 10
+	},
+	"create:goggles":
+	{
+		"crafting": 10
+	},
+	"create:filter":
+	{
+		"crafting": 6.5
+	},
+	"create:attribute_filter":
+	{
+		"crafting": 6.5
+	},
+	"create:tree_fertilizer":
+	{
+		"crafting": 10.4
+	},
+	"create:deforester":
+	{
+		"crafting": 120
+	},
+	"create:wand_of_symmetry":
+	{
+		"crafting": 100
+	},
+	"create:empty_schematic":
+	{
+		"crafting": 6.2
+	},
+	"create:schematic_and_quill":
+	{
+		"crafting": 8.5
+	},
+	"create:handheld_blockzapper":
+	{
+		"crafting": 120
+	},
 	"minecraft:wolfarium_helmet":
 	{
 		"crafting": 100,

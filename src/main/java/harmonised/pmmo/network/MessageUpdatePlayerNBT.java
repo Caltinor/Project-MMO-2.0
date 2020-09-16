@@ -1,7 +1,9 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
+import harmonised.pmmo.gui.GlossaryScreen;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.proxy.ServerHandler;
 import harmonised.pmmo.util.XP;
@@ -86,6 +88,16 @@ public class MessageUpdatePlayerNBT
                     }
                     else
                         LogHandler.LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
+                    break;
+
+                case 4: //data
+                    JsonConfig.data = NBTHelper.nbtToData3( packet.reqPackage );
+                    GlossaryScreen.initButtons();
+                    break;
+
+                case 5: //data2
+                    JsonConfig.data2 = NBTHelper.nbtToData4( packet.reqPackage );
+                    GlossaryScreen.initButtons();
                     break;
 
                 default:

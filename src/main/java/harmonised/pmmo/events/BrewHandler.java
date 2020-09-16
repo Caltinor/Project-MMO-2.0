@@ -2,13 +2,9 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.event.brewing.PotionBrewEvent;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.Map;
 import java.util.UUID;
@@ -48,7 +44,7 @@ public class BrewHandler
 
             Map<String, Double> award = XP.multiplyMap( XP.getXp( brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
 
-            XP.awardXpMapDouble( uuid, award, "Brewing", true, false );
+            XP.awardXpMap( uuid, award, "Brewing", true, false );
         }
     }
 }

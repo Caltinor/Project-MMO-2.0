@@ -108,11 +108,11 @@
 	"minecraft:dragon_head":
 	{
 		"flying": 50,
-		"slayer": 25
+		"combat": 25
 	},
 	"minecraft:carved_pumpkin":
 	{
-		"slayer": 5
+		"combat": 5
 	},
 	"minecraft:heart_of_the_sea":
 	{
@@ -121,7 +121,6 @@
 	},
 	"minecraft:nether_star":
 	{
-		"slayer": 25,
 		"combat": 10,
 		"endurance": 10,
 		"archery": 10,

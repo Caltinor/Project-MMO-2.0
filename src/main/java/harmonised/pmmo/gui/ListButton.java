@@ -69,11 +69,6 @@ public class ListButton extends Button
                 this.title = new TranslationTextComponent( ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( regKey ) ).getDisplayName( 1 ).getString().replace( " I", "" ) ).getString();
                 break;
 
-//            case REQ_BIOME:
-//                this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
-//                break;
-            //COUT
-
             case XP_VALUE_BREED:
             case XP_VALUE_TAME:
             case XP_VALUE_KILL:
@@ -92,6 +87,11 @@ public class ListButton extends Button
 
             case STATS:
                 this.title = new TranslationTextComponent( "pmmo." + regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
+                break;
+
+            case REQ_BIOME:
+//                this.title = new TranslationTextComponent( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
+                this.title = new TranslationTextComponent( regKey ).getString();
                 break;
 
             default:
@@ -180,7 +180,9 @@ public class ListButton extends Button
 
     public void clickAction()
     {
-        LogHandler.LOGGER.debug( "Clicked " + this.title + " Button" );
+//        LogHandler.LOGGER.debug( "Clicked " + this.title + " Button" );
+        GlossaryScreen.setButtonsToKey( regKey );
+        Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.glossary" ), false ) );
     }
 
     public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)

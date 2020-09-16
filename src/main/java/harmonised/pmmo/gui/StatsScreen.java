@@ -2,6 +2,7 @@ package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
@@ -53,7 +54,7 @@ public class StatsScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
         });

@@ -8,21 +8,6 @@
 		"excavation": 10,
 		"farming": -15
 	},
-	"minecraft:the_end":
-	{
-		"flying": 100,
-		"combat": 20,
-		"archery": 50,
-		"endurance": 20
-	},
-	"minecraft:nether":
-	{
-		"combat": 25,
-		"archery": 25,
-		"endurance": 25,
-		"flying": 250,
-		"farming": -25
-	},
 	"minecraft:jungle":
 	{
 		"agility": 25,

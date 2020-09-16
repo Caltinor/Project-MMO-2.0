@@ -3,12 +3,8 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 import java.util.Map;
 import java.util.UUID;
@@ -61,7 +57,7 @@ public class FurnaceHandler
 
             Map<String, Double> award = XP.multiplyMap( XP.getXp( input.getItem().getRegistryName(), xpType ), 1 + totalExtraDrops );
 
-            XP.awardXpMapDouble( uuid, award, source, true, false );
+            XP.awardXpMap( uuid, award, source, true, false );
         }
     }
 }

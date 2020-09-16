@@ -97,16 +97,20 @@ public class AttributeHandler
 
 	public static double getSpeedBoost( PlayerEntity player )
 	{
-		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-		double agilityLevel = Skill.AGILITY.getLevel( player );
+		int agilityLevel = Skill.AGILITY.getLevel( player );
+		return getSpeedBoost( agilityLevel, getBaseSpeed( player ) );
+	}
+
+	public static double getSpeedBoost( int agilityLevel, double baseSpeed )
+	{
+		Map<String, Double> prefsMap = Config.getPreferencesMapOffline();
 		Double maxSpeedBoostPref = null;
 		if( prefsMap.containsKey( "maxSpeedBoost" ) )
 			maxSpeedBoostPref = prefsMap.get( "maxSpeedBoost" );
 		double speedBoost = agilityLevel * speedBoostPerLevel;
-		double baseValue = getBaseSpeed( player );
-		double maxSpeed = baseValue * (maxSpeedBoost / 100);
-		if( maxSpeedBoostPref != null && maxSpeed > baseValue * (maxSpeedBoostPref / 100) )
-			maxSpeed = baseValue * (maxSpeedBoostPref / 100);
+		double maxSpeed = baseSpeed * (maxSpeedBoost / 100);
+		if( maxSpeedBoostPref != null && maxSpeed > baseSpeed * (maxSpeedBoostPref / 100) )
+			maxSpeed = baseSpeed * (maxSpeedBoostPref / 100);
 
 		if( speedBoost > maxSpeed )
 			speedBoost = maxSpeed;
@@ -250,7 +254,7 @@ public class AttributeHandler
 	{
 		Biome biome = mob.world.getBiome( new BlockPos( mob.getPositionVec() ) );
 		String biomeKey = XP.getBiomeResLoc( mob.world, biome ).toString();
-		Map<String, Object> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
+		Map<String, Double> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 		double multiplier = 1;
 
 		if( theMap != null && theMap.containsKey( type ) )

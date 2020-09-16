@@ -77,14 +77,12 @@ public class ListScrollPanel extends ScrollPanel
 
                 button.render( stack,  mouseX, mouseY, 0 );
 
-                if( button.unlocked )
-                    drawStringWithShadow( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0x54fc54 );
-                else
-                    drawStringWithShadow( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, 0xfc5454 );
+                drawStringWithShadow( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, button.unlocked ? 0x54fc54 : 0xfc5454 );
 
+                int i = 0;
                 for( ITextComponent line : button.text )
                 {
-                    drawStringWithShadow( stack, Minecraft.getInstance().fontRenderer, line.getString(), this.left + 6, button.y + 11 + ( button.text.indexOf( line ) * 9 ), 0xffffff );
+                    drawStringWithShadow( stack, Minecraft.getInstance().fontRenderer, line.getString(), this.left + 6, button.y + 11 + (i++ * 9), line.getStyle().getColor() == null ? 0xffffff : line.getStyle().getColor().getRgb() );
                 }
             }
             accumulativeHeight += button.unusedGetHeight() + 4;

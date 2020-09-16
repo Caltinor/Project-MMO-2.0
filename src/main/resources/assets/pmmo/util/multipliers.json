@@ -1,0 +1,18 @@
+{
+	"all_dimensions": {},
+	"minecraft:the_end":
+	{
+		"flying": 2,
+		"combat": 1.2,
+		"archery": 1.5,
+		"endurance": 1.2
+	},
+	"minecraft:the_nether":
+	{
+		"combat": 1.25,
+		"archery": 1.25,
+		"endurance": 1.25,
+		"flying": 2.5,
+		"farming": 0.75
+	}
+}

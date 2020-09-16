@@ -43,9 +43,17 @@
 	{
 		"extraChance": 0.75
 	},
+	"endreborn:quartz_ore":
+	{
+		"extraChance": 0.9
+	},
 	"endreborn:obsidian_ore":
 	{
 		"extraChance": 0.8
+	},
+	"endreborn:wolframium_ore":
+	{
+		"extraChance": 0.9
 	},
 	"endreborn:end_wolframium_ore":
 	{

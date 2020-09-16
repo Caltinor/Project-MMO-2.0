@@ -191,7 +191,7 @@ public class PlayerTickHandler
                 {
                     ScreenshotHandler.takeScreenshot( key, "levelup" );
                     XPOverlayGUI.screenshots.remove( key );
-                    XPOverlayGUI.guiOn = XPOverlayGUI.guiWasOn;
+                    XPOverlayGUI.listOn = XPOverlayGUI.listWasOn;
                 }
             }
 

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.events.BlockBrokenHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -22,10 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
@@ -91,7 +89,7 @@ public class ListScreen extends Screen
         scrollY = y + 10;
         buttonX = scrollX + 4;
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", "", (button) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.NONE, (button) ->
         {
             switch( jType )
             {
@@ -100,12 +98,13 @@ public class ListScreen extends Screen
                     break;
 
                 default:
-                    Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ) ) );
+                    Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ), false ) );
                     break;
             }
         });
 
-        Map<String, Map<String, Object>> reqMap = JsonConfig.data.get( jType );
+        Map<String, Map<String, Double>> reqMap = JsonConfig.data.get( jType );
+        Map<String, Map<String, Map<String, Double>>> reqMap2 = JsonConfig.data2.get( jType );
 
         ArrayList<ListButton> tempList = new ArrayList<>();
         listButtons = new ArrayList<>();
@@ -114,13 +113,13 @@ public class ListScreen extends Screen
         {
             case REQ_BIOME:
             {
-                Map<String, Map<String, Object>> bonusMap = JsonConfig.data.get( JType.XP_BONUS_BIOME );
-                Map<String, Map<String, Object>> scaleMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER );
+                Map<String, Map<String, Double>> bonusMap = JsonConfig.data.get( JType.XP_BONUS_BIOME );
+                Map<String, Map<String, Double>> scaleMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER );
                 List<String> biomesToAdd = new ArrayList<>();
 
                 if( reqMap != null )
                 {
-                    for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                    for( Map.Entry<String, Map<String, Double>> entry : reqMap.entrySet() )
                     {
                         if( !biomesToAdd.contains( entry.getKey() ) )
                             biomesToAdd.add( entry.getKey() );
@@ -129,7 +128,7 @@ public class ListScreen extends Screen
 
                 if( bonusMap != null )
                 {
-                    for( Map.Entry<String, Map<String, Object>> entry : bonusMap.entrySet() )
+                    for( Map.Entry<String, Map<String, Double>> entry : bonusMap.entrySet() )
                     {
                         if( !biomesToAdd.contains( entry.getKey() ) )
                             biomesToAdd.add( entry.getKey() );
@@ -138,7 +137,7 @@ public class ListScreen extends Screen
 
                 if( scaleMap != null )
                 {
-                    for( Map.Entry<String, Map<String, Object>> entry : scaleMap.entrySet() )
+                    for( Map.Entry<String, Map<String, Double>> entry : scaleMap.entrySet() )
                     {
                         if( !biomesToAdd.contains( entry.getKey() ) )
                             biomesToAdd.add( entry.getKey() );
@@ -159,7 +158,7 @@ public class ListScreen extends Screen
 
             case DIMENSION:
             {
-                Map<String, Map<String, Object>> veinBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST );
+                Map<String, Map<String, Double>> veinBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST );
                 if( veinBlacklist == null )
                     break;
 
@@ -184,7 +183,7 @@ public class ListScreen extends Screen
                     tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_end", jType, "", button -> ((ListButton) button).clickAction() ) );
                 }
 
-//                for( Map.Entry<String, Map<String, Object>> entry : veinBlacklist.entrySet() )
+//                for( Map.Entry<String, Map<String, Double>> entry : veinBlacklist.entrySet() )
 //                {
 //                    if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
 //                    {
@@ -197,13 +196,13 @@ public class ListScreen extends Screen
 
             case REQ_KILL:
             {
-                Map<String, Map<String, Object>> killXpMap = JsonConfig.data.get( JType.XP_VALUE_KILL );
-                Map<String, Map<String, Object>> rareDropMap = JsonConfig.data.get( JType.MOB_RARE_DROP );
+                Map<String, Map<String, Double>> killXpMap = JsonConfig.data.get( JType.XP_VALUE_KILL );
+                Map<String, Map<String, Double>> rareDropMap = JsonConfig.data.get( JType.MOB_RARE_DROP );
                 ArrayList<String> mobsToAdd = new ArrayList<>();
 
                 if( reqMap != null )
                 {
-                    for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                    for( Map.Entry<String, Map<String, Double>> entry : reqMap.entrySet() )
                     {
                         if( !mobsToAdd.contains( entry.getKey() ) )
                             mobsToAdd.add( entry.getKey() );
@@ -212,7 +211,7 @@ public class ListScreen extends Screen
 
                 if( killXpMap != null )
                 {
-                    for( Map.Entry<String, Map<String, Object>> entry : killXpMap.entrySet() )
+                    for( Map.Entry<String, Map<String, Double>> entry : killXpMap.entrySet() )
                     {
                         if( !mobsToAdd.contains( entry.getKey() ) )
                             mobsToAdd.add( entry.getKey() );
@@ -221,7 +220,7 @@ public class ListScreen extends Screen
 
                 if( rareDropMap != null )
                 {
-                    for( Map.Entry<String, Map<String, Object>> entry : rareDropMap.entrySet() )
+                    for( Map.Entry<String, Map<String, Double>> entry : rareDropMap.entrySet() )
                     {
                         if( !mobsToAdd.contains( entry.getKey() ) )
                             mobsToAdd.add( entry.getKey() );
@@ -244,7 +243,7 @@ public class ListScreen extends Screen
                 if( reqMap == null )
                     break;
 
-                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                for( Map.Entry<String, Map<String, Double>> entry : reqMap.entrySet() )
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
@@ -259,7 +258,7 @@ public class ListScreen extends Screen
                 if( reqMap == null )
                     break;
 
-                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                for( Map.Entry<String, Map<String, Double>> entry : reqMap.entrySet() )
                 {
                     if( ForgeRegistries.ENCHANTMENTS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
@@ -280,13 +279,27 @@ public class ListScreen extends Screen
             }
                 break;
 
+            case SALVAGE:
+            case SALVAGE_FROM:
+            case TREASURE:
+            case TREASURE_FROM:
+            {
+                if( reqMap2 == null )
+                    break;
+                for( Map.Entry<String, Map<String, Map<String, Double>>> salvageFromItemEntry : reqMap2.entrySet() )
+                {
+                    tempList.add( new ListButton( 0, 0, 3, 0, salvageFromItemEntry.getKey(), jType, "", button -> ((ListButton) button).clickAction() ) );
+                }
+            }
+                break;
+
             default:
             {
 
                 if( reqMap == null )
                     return;
 
-                for( Map.Entry<String, Map<String, Object>> entry : reqMap.entrySet() )
+                for( Map.Entry<String, Map<String, Double>> entry : reqMap.entrySet() )
                 {
                     if( XP.getItem( entry.getKey() ) != Items.AIR )
                     {
@@ -319,53 +332,57 @@ public class ListScreen extends Screen
         {
             List<ITextComponent> skillText = new ArrayList<>();
             List<ITextComponent> scaleText = new ArrayList<>();
-            List<ITextComponent> effectText = new ArrayList<>();
+            List<ITextComponent> negativeEffectText = new ArrayList<>();
+            List<ITextComponent> positiveEffectText = new ArrayList<>();
 
             switch (jType)   //Individual Button Handling
             {
                 case REQ_BIOME:
                 {
+                    button.text.add( new StringTextComponent( "" ) );
+
                     if ( reqMap.containsKey( button.regKey ) )
                         addLevelsToButton(button, reqMap.get(button.regKey), player, false);
 
-                    Map<String, Object> biomeBonusMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get(button.regKey);
-                    Map<String, Object> biomeMobMultiplierMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get(button.regKey);
-                    Map<String, Object> biomeNegativeEffectsMap = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE ).get(button.regKey);
-                    Map<String, Object> biomePositiveEffectsMap = JsonConfig.data.get( JType.BIOME_EFFECT_POSITIVE ).get(button.regKey);
+                    Map<String, Double> biomeBonusMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get(button.regKey);
+                    Map<String, Double> biomeMobMultiplierMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get(button.regKey);
+                    Map<String, Double> biomeNegativeEffectsMap = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE ).get(button.regKey);
+                    Map<String, Double> biomePositiveEffectsMap = JsonConfig.data.get( JType.BIOME_EFFECT_POSITIVE ).get(button.regKey);
 
                     if ( biomeBonusMap != null )
                     {
-                        for (Map.Entry<String, Object> entry : biomeBonusMap.entrySet()) {
-                            if ( (double) entry.getValue() > 0 )
-                                skillText.add(new StringTextComponent( getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").setStyle(XP.getSkillStyle(Skill.getSkill(entry.getKey()))).getString() ));
-                            if ( (double) entry.getValue() < 0 )
-                                skillText.add(new StringTextComponent( getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), entry.getValue() + "%").setStyle(XP.getSkillStyle(Skill.getSkill(entry.getKey()))).getString() ));
+                        for (Map.Entry<String, Double> entry : biomeBonusMap.entrySet())
+                        {
+                            if ( entry.getValue() > 0 )
+                                skillText.add( new StringTextComponent( " " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").getString() ).setStyle(XP.getSkillStyle(Skill.getSkill(entry.getKey()))));
+                            if ( entry.getValue() < 0 )
+                                skillText.add( new StringTextComponent( " " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), entry.getValue() + "%").getString() ).setStyle(XP.getSkillStyle(Skill.getSkill(entry.getKey()))));
                         }
                     }
 
                     if ( biomeMobMultiplierMap != null )
                     {
-                        for ( Map.Entry<String, Object> entry : biomeMobMultiplierMap.entrySet() )
+                        for ( Map.Entry<String, Double> entry : biomeMobMultiplierMap.entrySet() )
                         {
                             Style styleColor = Style.EMPTY;
 
-                            if ( (double) entry.getValue() > 1 )
+                            if ( entry.getValue() > 1 )
                                 styleColor = XP.textStyle.get("red");
-                            else if ( (double) entry.getValue() < 1 )
+                            else if ( entry.getValue() < 1 )
                                 styleColor = XP.textStyle.get("green");
 
                             switch ( entry.getKey() )
                             {
                                 case "damageBonus":
-                                    scaleText.add( new StringTextComponent( " " + getTransComp("pmmo.enemyScaleDamage", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getString() ) );
+                                    scaleText.add( new StringTextComponent( " " + getTransComp("pmmo.enemyScaleDamage", DP.dp( entry.getValue() * 100) ).getString() ).setStyle( styleColor ) );
                                     break;
 
                                 case "hpBonus":
-                                    scaleText.add( new StringTextComponent( " " + getTransComp("pmmo.enemyScaleHp", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getString() ) );
+                                    scaleText.add( new StringTextComponent( " " + getTransComp("pmmo.enemyScaleHp", DP.dp( entry.getValue() * 100) ).getString() ).setStyle( styleColor ) );
                                     break;
 
                                 case "speedBonus":
-                                    scaleText.add( new StringTextComponent( " " + getTransComp("pmmo.enemyScaleSpeed", DP.dp( (double) entry.getValue() * 100) ).setStyle( styleColor ).getString() ) );
+                                    scaleText.add( new StringTextComponent( " " + getTransComp("pmmo.enemyScaleSpeed", DP.dp( entry.getValue() * 100) ).getString() ).setStyle( styleColor ) );
                                     break;
                             }
                         }
@@ -373,28 +390,26 @@ public class ListScreen extends Screen
 
                     if ( biomeNegativeEffectsMap != null )
                     {
-                        for ( Map.Entry<String, Object> entry : biomeNegativeEffectsMap.entrySet() )
+                        for ( Map.Entry<String, Double> entry : biomeNegativeEffectsMap.entrySet() )
                         {
                             if ( ForgeRegistries.POTIONS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                             {
                                 Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                                 if ( effect != null )
-                                    effectText.add( new StringTextComponent( getTransComp( effect.getDisplayName().getString() + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get("red") ).getString() ) );
+                                    negativeEffectText.add( new StringTextComponent( " " + getTransComp( effect.getDisplayName().getString() + " " + (int) ( entry.getValue() + 1) ).getString() ).setStyle( XP.textStyle.get("red") ) );
                             }
                         }
                     }
 
-                    effectText.add( new StringTextComponent( "" ) );
-
                     if ( biomePositiveEffectsMap != null )
                     {
-                        for ( Map.Entry<String, Object> entry : biomePositiveEffectsMap.entrySet() )
+                        for ( Map.Entry<String, Double> entry : biomePositiveEffectsMap.entrySet() )
                         {
                             if ( ForgeRegistries.POTIONS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                             {
                                 Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                                 if ( effect != null )
-                                    effectText.add( new StringTextComponent( getTransComp( effect.getDisplayName().getString() + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get("green") ).getString() ) );
+                                    positiveEffectText.add( new StringTextComponent( " " + getTransComp( effect.getDisplayName().getString() + " " + (int) ( entry.getValue() + 1) ).getString() ).setStyle( XP.textStyle.get("green") ) );
                             }
                         }
                     }
@@ -409,7 +424,7 @@ public class ListScreen extends Screen
                 case INFO_BREW:
                 {
                     button.text.add( new StringTextComponent( "" ) );
-                    Map<String, Object> breakMap = JsonConfig.data.get( JType.REQ_BREAK ).get( button.regKey );
+                    Map<String, Double> breakMap = JsonConfig.data.get( JType.REQ_BREAK ).get( button.regKey );
                     Map<String, Double> infoMap = XP.getReqMap( button.regKey, jType );
                     List<ITextComponent> infoText = new ArrayList<>();
                     String transKey = "pmmo." + jType.toString().replace( "info_", "" ) + "ExtraDrop";
@@ -479,15 +494,15 @@ public class ListScreen extends Screen
 
                 case FISH_ENCHANT_POOL:
                 {
-                    Map<String, Object> enchantMap = reqMap.get( button.regKey );
+                    Map<String, Double> enchantMap = reqMap.get( button.regKey );
 
                     double fishLevel = Skill.FISHING.getLevelDecimal( player );
 
-                    double levelReq = (double) enchantMap.get( "levelReq" );
-                    double chancePerLevel = (double) enchantMap.get( "chancePerLevel" );
-                    double maxChance = (double) enchantMap.get( "maxChance" );
+                    double levelReq = enchantMap.get( "levelReq" );
+                    double chancePerLevel = enchantMap.get( "chancePerLevel" );
+                    double maxChance = enchantMap.get( "maxChance" );
                     double maxLevel = (int) (double) enchantMap.get( "maxLevel" );
-                    double levelsPerTier = (double) enchantMap.get( "levelPerLevel" );
+                    double levelsPerTier = enchantMap.get( "levelPerLevel" );
                     double maxLevelAvailable;
                     if( levelsPerTier == 0 )
                         maxLevelAvailable = maxLevel;
@@ -509,9 +524,9 @@ public class ListScreen extends Screen
 
                     button.text.add( new StringTextComponent( "" ) );
 
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentChance", DP.dpSoft( curChance ) ).setStyle( color ).getString() ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( levelReq ) ).setStyle( color ).getString() ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevelAvailable ).setStyle( color ).getString() ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentChance", DP.dpSoft( curChance ) ).getString() ).setStyle( color ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( levelReq ) ).getString() ).setStyle( color ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.maxEnchantLevel", (int) maxLevelAvailable ).getString() ).setStyle( color ) );
 
                     button.text.add( new StringTextComponent( "" ) );
                     button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).getString() ) );
@@ -523,8 +538,8 @@ public class ListScreen extends Screen
 
                 case REQ_KILL:
                 {
-                    Map<String, Object> killXpMap = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( button.regKey );
-                    Map<String, Object> rareDropMap = JsonConfig.data.get( JType.MOB_RARE_DROP ).get(button.regKey);
+                    Map<String, Double> killXpMap = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( button.regKey );
+                    Map<String, Double> rareDropMap = JsonConfig.data.get( JType.MOB_RARE_DROP ).get(button.regKey);
                     button.unlocked = XP.checkReq( player, button.regKey, jType );
                     Style color = XP.textStyle.get( button.unlocked ? "green" : "red" );
 
@@ -542,18 +557,18 @@ public class ListScreen extends Screen
                     else
                     {
                         if( button.entity instanceof AnimalEntity )
-                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).setStyle( color ).getString() ) );
+                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).getString() ).setStyle( color ) );
                         else if( button.entity instanceof MobEntity)
-                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).setStyle( color ).getString() ) );
+                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).getString() ).setStyle( color ) );
                     }
 
                     if ( rareDropMap != null )
                     {
                         button.text.add( new StringTextComponent( "" ) );
                         button.text.add( getTransComp( "pmmo.rareDrops" ).setStyle( color ) );
-                        for( Map.Entry<String, Object> entry : rareDropMap.entrySet() )
+                        for( Map.Entry<String, Double> entry : rareDropMap.entrySet() )
                         {
-                            button.text.add( new StringTextComponent(  new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ) + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( (double) entry.getValue() ) ) ).setStyle( color ).getString() ) );
+                            button.text.add( new StringTextComponent(  new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ) + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ) ).getString() ).setStyle( color ) );
                         }
                     }
                 }
@@ -561,14 +576,14 @@ public class ListScreen extends Screen
 
                 case DIMENSION:
                 {
-                    Map<String, Map<String, Object>> veinBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST );
+                    Map<String, Map<String, Double>> veinBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST );
                     if( veinBlacklist != null )
                     {
                         button.text.add( new StringTextComponent( "" ) );
                         button.text.add( getTransComp( "pmmo.veinBlacklist" ).setStyle( XP.textStyle.get( "red" ) ) );
-                        for ( Map.Entry<String, Object> entry : veinBlacklist.get( button.regKey ).entrySet() )
+                        for ( Map.Entry<String, Double> entry : veinBlacklist.get( button.regKey ).entrySet() )
                         {
-                            button.text.add( new StringTextComponent( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).setStyle( XP.textStyle.get( "red" ) ).getString() ) );
+                            button.text.add( new StringTextComponent( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
                         }
                     }
                 }
@@ -576,7 +591,7 @@ public class ListScreen extends Screen
 
                 case FISH_POOL:
                 {
-                    Map<String, Object> fishPoolMap = reqMap.get( button.regKey );
+                    Map<String, Double> fishPoolMap = reqMap.get( button.regKey );
 
                     double level = Skill.FISHING.getLevelDecimal( player );
                     double weight = XP.getWeight( (int) level, fishPoolMap );
@@ -587,29 +602,29 @@ public class ListScreen extends Screen
                     maxCount = (int) (double) fishPoolMap.get( "maxCount" );
 
                     button.text.add( new StringTextComponent( "" ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentWeight", weight ).setStyle( color ).getString() ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentWeight", weight ).getString() ).setStyle( color ) );
 
                     if ( minCount == maxCount )
-                        button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.caughtAmount", minCount ).setStyle( color ).getString() ) );
+                        button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.caughtAmount", minCount ).getString() ).setStyle( color ) );
                     else
-                        button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.caughtAmountRange", minCount, maxCount ).setStyle( color ).getString() ) );
+                        button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.caughtAmountRange", minCount, maxCount ).getString() ).setStyle( color ) );
 
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpEach", DP.dpSoft( (double) fishPoolMap.get("xp") ) ).setStyle( color ).getString() ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpEach", DP.dpSoft( fishPoolMap.get("xp") ) ).getString() ).setStyle( color ) );
 
                     if ( button.itemStack.isEnchantable() )
                     {
-                        if( (double) fishPoolMap.get( "enchantLevelReq" ) <= level && button.unlocked )
-                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "green" ) ).getString() ) );
+                        if( fishPoolMap.get( "enchantLevelReq" ) <= level && button.unlocked )
+                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( fishPoolMap.get( "enchantLevelReq" ) ) ).getString() ).setStyle( XP.textStyle.get( "green" ) ) );
                         else
-                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "red" ) ).getString() ) );
+                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( fishPoolMap.get( "enchantLevelReq" ) ) ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
                     }
 
                     button.text.add( new StringTextComponent( "" ) );
 //                    button.text.add( getTransComp( "pmmo.info" ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.startWeight", DP.dpSoft( (double) fishPoolMap.get("startWeight") ) ).getString() ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( (double) fishPoolMap.get("startLevel") ) ).getString() ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getString() ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getString() ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.startWeight", DP.dpSoft( fishPoolMap.get("startWeight") ) ).getString() ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( fishPoolMap.get("startLevel") ) ).getString() ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( fishPoolMap.get("endWeight") ) ).getString() ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( fishPoolMap.get("endLevel") ) ).getString() ) );
                 }
                     break;
 
@@ -627,87 +642,161 @@ public class ListScreen extends Screen
                 }
                     break;
 
+//                case SALVAGE_FROM:
+//                {
+//                    Map<String, Map<String, Double>> salvagesToMap = JsonConfig.data2.get( JType.SALVAGE );
+//                    Map<String, Double> levelReqs = new HashMap<>();
+//                    List<String> sortedItems = new ArrayList<>();
+//                    if( reqMap == null || salvagesToMap == null )
+//                        return;
+//                    double smithLevel = Skill.SMITHING.getLevelDecimal( player );
+//
+//                    boolean anyPassed = false;
+//
+//                    for( Map.Entry<String, Double> entry : reqMap.get( button.regKey ).entrySet() )
+//                    {
+//                        double levelReq = salvagesToMap.get( entry.getKey() ).get( "levelReq" );
+//                        levelReqs.put( entry.getKey(), levelReq );
+//                        sortedItems.add( entry.getKey() );
+//                    }
+//
+//                    sortedItems.sort( Comparator.comparingDouble( a -> reqMap.get( button.regKey ).get( a ) ) );
+//                    sortedItems.sort( Comparator.comparingDouble( levelReqs::get ) );
+//
+//                    for( String key : sortedItems )
+//                    {
+//                        double levelReq = levelReqs.get( key );
+//                        String itemName = getTransComp( XP.getItem( key ).getTranslationKey() ).getString();
+//
+//                        double chance = (smithLevel - levelReq) * salvagesToMap.get( key ).get( "chancePerLevel" );
+//                        double maxChance = salvagesToMap.get( key ).get( "maxChance" );
+//
+//                        if( chance > maxChance )
+//                            chance = maxChance;
+//
+//                        boolean passed = levelReq <= smithLevel && chance > 0;
+//
+//                        if( passed )
+//                        {
+//                            anyPassed = true;
+//                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.valueValueChance", DP.dpSoft( reqMap.get( button.regKey ).get( key ) ), itemName, DP.dpSoft( chance ) ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getString() ) );
+//                        }
+//                        else
+//                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.salvagesFromLevelFromItem", DP.dpSoft( reqMap.get( button.regKey ).get( key ) ), DP.dpSoft( levelReq ), itemName ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
+//                    }
+//
+//                    button.unlocked = anyPassed;
+//                }
+//                    break;
+
+                case SALVAGE:
                 case SALVAGE_FROM:
                 {
-                    Map<String, Map<String, Object>> salvagesToMap = JsonConfig.data.get( JType.SALVAGE_TO );
-                    Map<String, Double> levelReqs = new HashMap<>();
-                    List<String> sortedItems = new ArrayList<>();
-                    if( reqMap == null || salvagesToMap == null )
+                    if( reqMap2 == null )
                         return;
-                    double smithLevel = Skill.SMITHING.getLevelDecimal( player );
+                    int smithLevel = (int) Skill.SMITHING.getLevelDecimal( player );
+                    String outputName;
+                    double chance, levelReq, salvageMax, baseChance, chancePerLevel, maxChance, xpPerItem;
+                    Map<String, Double> salvageToItemMap;
+                    Style color;
+                    button.unlocked = false;
+                    int i = 0;
+                    List<String> toItemsList = new ArrayList<>( reqMap2.get( button.regKey ).keySet() );
+                    toItemsList.sort(Comparator.comparingInt( key -> (int) (double) reqMap2.get( button.regKey ).get( key ).get( "levelReq" ) ) );
 
-                    boolean anyPassed = false;
-
-                    for( Map.Entry<String, Object> entry : reqMap.get( button.regKey ).entrySet() )
+                    for( String salvageToItemKey : toItemsList )
                     {
-                        double levelReq = (double) salvagesToMap.get( entry.getKey() ).get( "levelReq" );
-                        levelReqs.put( entry.getKey(), levelReq );
-                        sortedItems.add( entry.getKey() );
-                    }
+                        salvageToItemMap = reqMap2.get( button.regKey ).get( salvageToItemKey );
+                        outputName       = getTransComp( XP.getItem( salvageToItemKey ).getTranslationKey() ).getString();
+                        levelReq         = salvageToItemMap.get( "levelReq" );
+                        salvageMax       = salvageToItemMap.get( "salvageMax" );
+                        baseChance       = salvageToItemMap.get( "baseChance" );
+                        chancePerLevel   = salvageToItemMap.get( "chancePerLevel" );
+                        maxChance        = salvageToItemMap.get( "maxChance" );
+                        xpPerItem        = salvageToItemMap.get( "xpPerItem" );
 
-                    sortedItems.sort( Comparator.comparingDouble( a -> (double) reqMap.get( button.regKey ).get( a ) ) );
-                    sortedItems.sort( Comparator.comparingDouble( levelReqs::get ) );
+                        chance = baseChance + ( chancePerLevel * ( smithLevel - levelReq ) );
 
-                    for( String key : sortedItems )
-                    {
-                        double levelReq = levelReqs.get( key );
-                        String itemName = getTransComp( XP.getItem( key ).getTranslationKey() ).getString();
-
-                        double chance = (smithLevel - levelReq) * (double) salvagesToMap.get( key ).get( "chancePerLevel" );
-                        double maxChance = (double) salvagesToMap.get( key ).get( "maxChance" );
-
+                        if( chance < 0 )
+                            chance = 0;
                         if( chance > maxChance )
                             chance = maxChance;
 
-                        boolean passed = levelReq <= smithLevel && chance > 0;
+                        color = XP.textStyle.get( chance > 0 ? "green" : "red" );
 
-                        if( passed )
-                        {
-                            anyPassed = true;
-                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.valueValueChance", DP.dpSoft( (double) reqMap.get( button.regKey ).get( key ) ), itemName, DP.dpSoft( chance ) ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getString() ) );
-                        }
-                        else
-                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.salvagesFromLevelFromItem", DP.dpSoft( (double) reqMap.get( button.regKey ).get( key ) ), DP.dpSoft( levelReq ), itemName ).setStyle( XP.textStyle.get( "red" ) ).getString() ) );
+                        if( chance > 0 && smithLevel >= levelReq )
+                            button.unlocked = true;
+
+                        if( i++ == 0 )
+                            button.text.add( new TranslationTextComponent( jType == JType.SALVAGE ? "pmmo.salvagesInto" : "pmmo.canBeSalvagedFrom" ) );
+                        button.text.add( new StringTextComponent( "____________________________" ) );
+                        button.text.add( new StringTextComponent( "" ) );
+                        button.text.add( new StringTextComponent( getTransComp( jType == JType.SALVAGE ? "pmmo.valueValue" : "pmmo.valueFromValue", DP.dpSoft( salvageMax ), outputName ).getString() ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.canBeSalvagedFromLevel", DP.dpSoft( levelReq ) ).setStyle( color ) );
+                        button.text.add( new StringTextComponent( "" ) );
+                        button.text.add( getTransComp( "pmmo.xpPerItem", DP.dpSoft( xpPerItem ) ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.chancePerItem", DP.dpSoft( chance ) ).setStyle( color ) );
+                        button.text.add( new StringTextComponent( "" ) );
+                        button.text.add( getTransComp( "pmmo.baseChance", DP.dpSoft( baseChance ) ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.maxChancePerItem", DP.dpSoft( maxChance ) ).setStyle( color ) );
                     }
-
-                    button.unlocked = anyPassed;
                 }
                     break;
 
-                case SALVAGE_TO:
+                case TREASURE:
+                case TREASURE_FROM:
                 {
-                    if( reqMap == null )
+                    if( reqMap2 == null )
                         return;
-                    double smithLevel = Skill.SMITHING.getLevelDecimal( player );
-                    String outputName = getTransComp( XP.getItem( (String) reqMap.get( button.regKey ).get( "salvageItem" ) ).getTranslationKey() ).getString();
-                    double levelReq = (double) reqMap.get( button.regKey ).get( "levelReq" );
-                    double salvageMax = (double) reqMap.get( button.regKey ).get( "salvageMax" );
-                    double baseChance = (double) reqMap.get( button.regKey ).get( "baseChance" );
-                    double chancePerLevel = (double) reqMap.get( button.regKey ).get( "chancePerLevel" );
-                    double maxChance = (double) reqMap.get( button.regKey ).get( "maxChance" );
-                    double xpPerItem = (double) reqMap.get( button.regKey ).get( "xpPerItem" );
+                    int excavationLevel = (int) Skill.EXCAVATION.getLevelDecimal( player );
+                    int startLevel, endLevel, minCount, maxCount;
+                    String outputName;
+                    double chance, startChance, endChance, xpPerItem;
+                    Map<String, Double> treasureToItemMap;
+                    Style color;
+                    button.unlocked = false;
+                    int i = 0;
+                    List<String> toItemsList = new ArrayList<>( reqMap2.get( button.regKey ).keySet() );
+                    toItemsList.sort(Comparator.comparingDouble( key -> BlockBrokenHandler.getTreasureItemChance( excavationLevel, reqMap2.get( button.regKey ).get( key ) ) ) );
 
-                    double chance = 0;
-                    button.unlocked = levelReq <= smithLevel;
-                    if( button.unlocked )
-                        chance = baseChance + ( smithLevel - levelReq ) * chancePerLevel;
-                    if( chance > maxChance )
-                        chance = maxChance;
+                    for( String treasureToItemKey : toItemsList )
+                    {
+                        treasureToItemMap = reqMap2.get( button.regKey ).get( treasureToItemKey );
+                        outputName      = getTransComp( XP.getItem( treasureToItemKey ).getTranslationKey() ).getString();
+                        startLevel      = (int) (double) treasureToItemMap.get( "startLevel" );
+                        endLevel        = (int) (double) treasureToItemMap.get( "endLevel" );
+                        startChance     = treasureToItemMap.get( "startChance" );
+                        endChance       = treasureToItemMap.get( "endChance" );
+                        xpPerItem       = treasureToItemMap.get( "xpPerItem" );
+                        minCount        = (int) (double) treasureToItemMap.get( "minCount" );
+                        maxCount        = (int) (double) treasureToItemMap.get( "maxCount" );
 
-                    Style color = XP.textStyle.get( chance > 0 ? "green" : "red" );
+                        chance = BlockBrokenHandler.getTreasureItemChance( excavationLevel, treasureToItemMap );
 
-                    button.text.add( new StringTextComponent( "" ) );
-                    button.text.add( getTransComp( "pmmo.canBeSalvagedFromLevel", DP.dpSoft( levelReq ) ).setStyle( color ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.valueValue", DP.dpSoft( salvageMax ), outputName ).setStyle( color ).getString() ) );
-                    button.text.add( new StringTextComponent( "" ) );
-                    button.text.add( getTransComp( "pmmo.xpPerItem", DP.dpSoft( xpPerItem ) ).setStyle( color ) );
-                    button.text.add( getTransComp( "pmmo.chancePerItem", DP.dpSoft( chance ) ).setStyle( color ) );
-                    button.text.add( new StringTextComponent( "" ) );
-                    button.text.add( getTransComp( "pmmo.baseChance", DP.dpSoft( baseChance ) ).setStyle( color ) );
-                    button.text.add( getTransComp( "pmmo.chancePerLevel", DP.dpSoft( chancePerLevel ) ).setStyle( color ) );
-                    button.text.add( getTransComp( "pmmo.maxChancePerItem", DP.dpSoft( maxChance ) ).setStyle( color ) );
+                        color = XP.textStyle.get( chance > 0 ? "green" : "red" );
+
+                        if( chance > 0  )
+                            button.unlocked = true;
+
+                        if( i++ == 0 )
+                            button.text.add( new TranslationTextComponent( jType == JType.TREASURE ? "pmmo.containsTreasure" : "pmmo.treasureFrom" ) );
+                        button.text.add( new StringTextComponent( "____________________________" ) );
+                        button.text.add( new StringTextComponent( "" ) );
+                        button.text.add( new StringTextComponent( outputName ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.xpPerItem", DP.dpSoft( xpPerItem ) ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.chancePerItem", DP.dpSoft( chance ) ).setStyle( color ) );
+                        button.text.add( new StringTextComponent( "" ) );
+                        button.text.add( getTransComp( "pmmo.minCount", minCount ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.maxCount", maxCount ).setStyle( color ) );
+                        button.text.add( new StringTextComponent( "" ) );
+                        button.text.add( getTransComp( "pmmo.startChance", startChance ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.startLevel", startLevel ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.endChance", endChance ).setStyle( color ) );
+                        button.text.add( getTransComp( "pmmo.endLevel", endLevel ).setStyle( color ) );
+                    }
                 }
-                    break;
+                break;
 
                 case STATS:
                 {
@@ -749,14 +838,24 @@ public class ListScreen extends Screen
                 button.text.addAll( scaleText );
             }
 
-            if( effectText.size() > 0 )
+            if( negativeEffectText.size() > 0 )
             {
                 if( skillText.size() > 0 || scaleText.size() > 0 )
                     button.text.add( new StringTextComponent( "" ) );
 
-                effectText.sort( Comparator.comparingInt( textComp -> getTextInt( ( (ITextComponent) textComp).getString() ) ).reversed() );
-                button.text.add( getTransComp( "pmmo.biomeEffects" ).setStyle( XP.textStyle.get( "red" ) ) );
-                button.text.addAll( effectText );
+                negativeEffectText.sort( Comparator.comparingInt( textComp -> getTextInt( ( (ITextComponent) textComp).getString() ) ).reversed() );
+                button.text.add( getTransComp( "pmmo.negativeBiomeEffects" ).setStyle( XP.textStyle.get( "red" ) ) );
+                button.text.addAll( negativeEffectText );
+            }
+
+            if( positiveEffectText.size() > 0 )
+            {
+                if( skillText.size() > 0 || scaleText.size() > 0 )
+                    button.text.add( new StringTextComponent( "" ) );
+
+                positiveEffectText.sort( Comparator.comparingInt( textComp -> getTextInt( ( (ITextComponent) textComp).getString() ) ).reversed() );
+                button.text.add( getTransComp( "pmmo.positiveBiomeEffects" ).setStyle( XP.textStyle.get( "green" ) ) );
+                button.text.addAll( positiveEffectText );
             }
 
             switch( jType )  //Unlock/Lock buttons if necessary
@@ -809,8 +908,9 @@ public class ListScreen extends Screen
                 listButtons.sort( Comparator.comparingInt( b -> XP.getHighestReq( b.regKey, JType.REQ_WEAR ) ) );
                 break;
 
-            case SALVAGE_TO:
-                listButtons.sort( Comparator.comparingDouble( b -> (double) reqMap.get( b.regKey ).get( "levelReq" ) ) );
+            case SALVAGE:
+            case SALVAGE_FROM:
+                listButtons.sort( Comparator.comparingDouble( b -> (double) getLowestSalvageReq( reqMap2.get( b.regKey ) ) ) );
                 break;
 
             case STATS:
@@ -826,14 +926,14 @@ public class ListScreen extends Screen
         {
             case XP_VALUE_BREED:
                 ListButton otherAnimalsBreedButton = new ListButton( 0, 0, 3, 20, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickAction() );
-                otherAnimalsBreedButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( defaultBreedingXp ) ).setStyle( greenColor ).getString() ) );
+                otherAnimalsBreedButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( defaultBreedingXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherAnimalsBreedButton );
                 break;
 
             case XP_VALUE_TAME:
             {
                 ListButton otherAnimalsTameButton = new ListButton( 0, 0, 3, 21, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickAction() );
-                otherAnimalsTameButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( defaultTamingXp ) ).setStyle( greenColor ).getString() ) );
+                otherAnimalsTameButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( defaultTamingXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherAnimalsTameButton );
             }
                 break;
@@ -841,11 +941,11 @@ public class ListScreen extends Screen
             case XP_VALUE_KILL:
             {
                 ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", button -> ((ListButton) button).clickAction() );
-                otherAggresiveMobsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).setStyle( greenColor ).getString() ) );
+                otherAggresiveMobsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherAggresiveMobsButton );
 
                 ListButton otherPassiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherPassiveMobs", jType, "", button -> ((ListButton) button).clickAction() );
-                otherPassiveMobsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).setStyle( greenColor ).getString() ) );
+                otherPassiveMobsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherPassiveMobsButton );
             }
                 break;
@@ -853,7 +953,7 @@ public class ListScreen extends Screen
             case XP_VALUE_CRAFT:
             {
                 ListButton otherCraftsButton = new ListButton( 0, 0, 3, 22, "pmmo.otherCrafts", jType, "", button -> ((ListButton) button).clickAction() );
-                otherCraftsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( defaultCraftingXp ) ).setStyle( greenColor ).getString() ) );
+                otherCraftsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( defaultCraftingXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherCraftsButton );
             }
                 break;
@@ -866,16 +966,16 @@ public class ListScreen extends Screen
         addButton( exitButton );
     }
 
-    private static void addLevelsToButton( ListButton button, Map<String, Object> map, PlayerEntity player, boolean ignoreReq )
+    private static void addLevelsToButton( ListButton button, Map<String, Double> map, PlayerEntity player, boolean ignoreReq )
     {
         List<ITextComponent> levelsToAdd = new ArrayList<>();
 
-        for( Map.Entry<String, Object> inEntry : map.entrySet() )
+        for( Map.Entry<String, Double> inEntry : map.entrySet() )
         {
-            if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevelDecimal( player ) < (double) inEntry.getValue() )
-                levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ).getString() ) );
+            if( !ignoreReq && Skill.getSkill( inEntry.getKey() ).getLevelDecimal( player ) < inEntry.getValue() )
+                levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( inEntry.getValue() ) ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
             else
-                levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getString() ) );
+                levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( inEntry.getValue() ) ).getString() ).setStyle( XP.textStyle.get( "green" ) ) );
         }
 
         levelsToAdd.sort( Comparator.comparingInt( textComp -> getTextInt( ( (ITextComponent) textComp).getString() ) ).reversed() );
@@ -883,13 +983,13 @@ public class ListScreen extends Screen
         button.text.addAll( levelsToAdd );
     }
 
-    private static void addXpToButton( ListButton button, Map<String, Object> map )
+    private static void addXpToButton( ListButton button, Map<String, Double> map )
     {
         List<ITextComponent> xpToAdd = new ArrayList<>();
 
-        for( Map.Entry<String, Object> inEntry : map.entrySet() )
+        for( Map.Entry<String, Double> inEntry : map.entrySet() )
         {
-            xpToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ).getString() ) );
+            xpToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( inEntry.getValue() ) ).getString() ).setStyle( XP.textStyle.get( "green" ) ) );
         }
 
         xpToAdd.sort( Comparator.comparingInt( textComp -> getTextInt( ( (ITextComponent) textComp).getString() ) ).reversed() );
@@ -897,13 +997,13 @@ public class ListScreen extends Screen
         button.text.addAll( xpToAdd );
     }
 
-    private static void addXpToButton( ListButton button, Map<String, Object> map, JType jType, PlayerEntity player )
+    private static void addXpToButton( ListButton button, Map<String, Double> map, JType jType, PlayerEntity player )
     {
         List<ITextComponent> xpToAdd = new ArrayList<>();
 
-        for( Map.Entry<String, Object> inEntry : map.entrySet() )
+        for( Map.Entry<String, Double> inEntry : map.entrySet() )
         {
-            xpToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( (double) inEntry.getValue() ) ).setStyle( XP.textStyle.get( XP.checkReq( player, button.regKey, jType ) ? "green" : "red" ) ).getString() ) );
+            xpToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( inEntry.getValue() ) ).getString() ).setStyle( XP.textStyle.get( XP.checkReq( player, button.regKey, jType ) ? "green" : "red" ) ) );
         }
 
         xpToAdd.sort( Comparator.comparingInt( textComp -> getTextInt( ( (ITextComponent) textComp).getString() ) ).reversed() );
@@ -911,23 +1011,23 @@ public class ListScreen extends Screen
         button.text.addAll( xpToAdd );
     }
 
-    private static void addPercentageToButton( ListButton button, Map<String, Object> map, boolean metReq )
+    private static void addPercentageToButton( ListButton button, Map<String, Double> map, boolean metReq )
     {
         List<ITextComponent> levelsToAdd = new ArrayList<>();
 
-        for( Map.Entry<String, Object> inEntry : map.entrySet() )
+        for( Map.Entry<String, Double> inEntry : map.entrySet() )
         {
-            double value = (double) inEntry.getValue();
+            double value = inEntry.getValue();
 
             if( metReq )
             {
                 if( value > 0 )
-                    levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).setStyle( XP.textStyle.get( "green" ) ).getString() ) );
+                    levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), "+" + value + "%" ).getString() ).setStyle( XP.textStyle.get( "green" ) ) );
                 else if( value < 0 )
-                    levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getString() ) );
+                    levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
             }
             else
-                levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).setStyle( XP.textStyle.get( "red" ) ).getString() ) );
+                levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), value + "%" ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
         }
 
         levelsToAdd.sort( Comparator.comparingInt( textComp -> getTextInt( ( (ITextComponent) textComp).getString() ) ).reversed() );
@@ -995,6 +1095,21 @@ public class ListScreen extends Screen
         }
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
+    }
+
+    public static double getLowestSalvageReq( Map<String, Map<String, Double>> map )
+    {
+        Integer lowestReq = null;
+        int levelReq;
+
+        for( Map.Entry<String, Map<String, Double>> entry : map.entrySet() )
+        {
+            levelReq = (int) (double) entry.getValue().get( "levelReq" );
+            if( lowestReq == null || levelReq < lowestReq )
+                lowestReq = levelReq;
+        }
+
+        return lowestReq;
     }
 
     @Override

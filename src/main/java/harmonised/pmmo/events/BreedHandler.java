@@ -2,7 +2,6 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraftforge.common.util.FakePlayer;
@@ -21,7 +20,7 @@ public class BreedHandler
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_BREED );
 
             if( xpValue.size() > 0 )
-                XP.awardXpMapDouble( event.getCausedByPlayer().getUniqueID(), xpValue, "breeding", false, false );
+                XP.awardXpMap( event.getCausedByPlayer().getUniqueID(), xpValue, "breeding", false, false );
             else
                 XP.awardXp( event.getCausedByPlayer(), Skill.FARMING, "breeding", defaultBreedingXp, false, false );
         }

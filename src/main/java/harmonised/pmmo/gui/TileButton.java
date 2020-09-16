@@ -3,6 +3,7 @@ package harmonised.pmmo.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
@@ -24,10 +25,14 @@ public class TileButton extends Button
     public int index;
     public int page = 0;
     public String transKey;
+    public JType jType;
 
-    public TileButton( int posX, int posY, int elementOne, int elementTwo, String transKey, String text, IPressable onPress )
+    public TileButton(int posX, int posY, int elementOne, int elementTwo, String transKey, JType jType, IPressable onPress )
     {
-        super(posX, posY, 32, 32, new TranslationTextComponent( text ), onPress);
+        super(posX, posY, 32, 32, new TranslationTextComponent( "" ), onPress);
+
+        this.jType = jType;
+
         this.elementOne = elementOne * 32;
         this.elementTwo = elementTwo * 32;
         this.transKey = transKey;
@@ -61,9 +66,9 @@ public class TileButton extends Button
     public void renderButton(MatrixStack stack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_)
     {
         Minecraft minecraft = Minecraft.getInstance();
-        FontRenderer fontrenderer = minecraft.fontRenderer;
+//        FontRenderer fontrenderer = minecraft.fontRenderer;
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-        int i = this.getYImage(this.isHovered());
+//        int i = this.getYImage(this.isHovered());
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -72,7 +77,7 @@ public class TileButton extends Button
         minecraft.getTextureManager().bindTexture( page == 0 ? items : items2 );
         this.drawTexture( stack, this.x, this.y, this.offsetTwo + ( this.isHovered() ? 32 : 0 ), this.elementTwo, this.width, this.height );
         this.renderBg( stack, minecraft, p_renderButton_1_, p_renderButton_2_);
-        int j = getFGColor();
-        this.drawCenteredString( stack, fontrenderer, this.getMessage().getString(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
+//        int j = getFGColor();
+//        drawCenteredString( stack, fontrenderer, new TranslationTextComponent( transKey ).getString(), this.x + this.width / 2, this.y + (this.height - 8) / 2, 0xffffff );
     }
 }

@@ -68,7 +68,7 @@ public class CreditsScreen extends Screen
             firstTime = false;
         }
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.stats" ) ) );
         });
@@ -138,6 +138,11 @@ public class CreditsScreen extends Screen
         }));
 
         listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ru_ru", "starche#7569", new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "nl_nl", "Dawnless#1153", new TranslationTextComponent( "pmmo.translated", "Dutch" ).getString(), button ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));

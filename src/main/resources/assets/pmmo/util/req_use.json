@@ -5,8 +5,15 @@
 	},
 	"minecraft:stonecutter":
 	{
-		"crafting": 10,
 		"building": 10
+	},
+	"minecraft:smoker":
+	{
+		"cooking": 10
+	},
+	"minecraft:blast_furnace":
+	{
+		"smithing": 10
 	},
 	"minecraft:enchanting_table":
 	{
@@ -190,7 +197,23 @@
 	},
 	"create:redstone_link":
 	{
-		"crafting": 55
+		"crafting": 30
+	},
+	"create:sand_paper":
+	{
+		"smithing": 5
+	},
+	"create:red_sand_paper":
+	{
+		"smithing": 5
+	},
+	"create:tree_fertilizer":
+	{
+		"farming": 10
+	},
+	"create:super_glue":
+	{
+		"building": 5
 	},
 	"storagedrawers:controller":
 	{

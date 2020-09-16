@@ -40,8 +40,6 @@ public class WorldTickHandler
     public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
     private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, levelsPerHardnessCrafting, veinMaxBlocks, maxVeinCharge, exhaustionPerBlock;
     private static int veinMaxDistance;
-    private static final boolean veinWoodTopToBottom = Config.forgeConfig.veinWoodTopToBottom.get();
-    private static final boolean veiningOtherPlayerBlocksAllowed = Config.forgeConfig.veiningOtherPlayerBlocksAllowed.get();
 //    public static long lastVeinUpdateTime = System.nanoTime();
 
     public static void refreshVein()
@@ -150,7 +148,7 @@ public class WorldTickHandler
                             maxAge = 4;
                         }
 
-                        if( age != maxAge && age > 0 )
+                        if( age != maxAge && age >= 0 )
                             fullyGrown = false;
                     }
 
@@ -169,7 +167,7 @@ public class WorldTickHandler
                                     world.destroyBlock(veinPos, false );
                                 else if( correctItem && correctHeldItem && player.getFoodStats().getFoodLevel() > 0 )
                                 {
-                                    if( veiningOtherPlayerBlocksAllowed || isOwner )
+                                    if( Config.forgeConfig.veiningOtherPlayerBlocksAllowed.get() || isOwner )
                                     {
                                         if( fullyGrown )
                                         {
@@ -243,7 +241,7 @@ public class WorldTickHandler
         if( player.isCreative() )
             return true;
 
-        Map<String, Object> globalBlacklist = null;
+        Map<String, Double> globalBlacklist = null;
 
         if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( "all_dimensions" ) )
             globalBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST ).get( "all_dimensions" );
@@ -264,7 +262,7 @@ public class WorldTickHandler
         if( dimensionKey == null )
             return true;
 
-        Map<String, Object> dimensionBlacklist = null;
+        Map<String, Double> dimensionBlacklist = null;
 
         if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( dimensionKey.toString() ) )
             dimensionBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST ).get( dimensionKey.toString() );
@@ -295,7 +293,7 @@ public class WorldTickHandler
                 yLimit = 0;
         }
 
-        while( ( isCreative || veinLeft * 10 > veinCost * vein.size() || ( veinWoodTopToBottom && !isLooped && skill.equals( Skill.WOODCUTTING  ) ) ) && vein.size() <= veinMaxBlocks )
+        while( ( isCreative || veinLeft * 10 > veinCost * vein.size() || ( Config.forgeConfig.veinWoodTopToBottom.get() && !isLooped && skill.equals( Skill.WOODCUTTING  ) ) ) && vein.size() <= veinMaxBlocks )
         {
             for( BlockPos curPos : curLayer )
             {
@@ -332,7 +330,7 @@ public class WorldTickHandler
 
         if( !isLooped )
         {
-            if( ( veinWoodTopToBottom && material.equals( Material.WOOD ) ) /* || block.equals( Blocks.SAND ) || block.equals( Blocks.GRAVEL ) */ )
+            if( ( Config.forgeConfig.veinWoodTopToBottom.get() && material.equals( Material.WOOD ) ) /* || block.equals( Blocks.SAND ) || block.equals( Blocks.GRAVEL ) */ )
             veinInfo.pos = highestPos;
             return getVeinShape( veinInfo, veinLeft, veinCost, isCreative, true );
         }
