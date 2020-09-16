@@ -121,6 +121,6 @@ public class PlayerConnectedHandler
             entry.getKey().addXp( uuid, entry.getValue(), "scheduledXp", false, false );
             LogHandler.LOGGER.info( "+" + entry.getValue() + " in " + entry.getKey().toString() );
         }
-        XP.removeScheduledXpUuid( uuid );
+        PmmoSavedData.get().removeScheduledXpUuid( uuid );
     }
 }

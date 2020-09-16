@@ -198,6 +198,11 @@ public class PmmoSavedData extends WorldSavedData
             LogHandler.LOGGER.error( "Invalid Skill at method addXp, amount: " + amount );
     }
 
+    public void removeScheduledXpUuid( UUID uuid )
+    {
+        scheduledXp.remove( uuid );
+    }
+
     public void setName( String name, UUID uuid )
     {
         this.name.put( uuid, name );

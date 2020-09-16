@@ -845,7 +845,7 @@ public class Config
                         .translation( "pmmo.defaultBreedingXp" )
                         .defineInRange( "defaultBreedingXp", 25.0D, 0, 1000000) );
 
-                this.defaultBreedingXp = subscriber.subscribe(builder
+                this.defaultCropGrowXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Farming for growing crops? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultBreedingXp" )
                         .defineInRange( "defaultBreedingXp", 15.0D, 0, 1000000) );
