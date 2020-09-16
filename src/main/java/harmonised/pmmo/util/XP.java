@@ -1313,11 +1313,6 @@ public class XP
 		offlineXp.remove( uuid );
 	}
 
-	public static void removeScheduledXpUuid( UUID uuid )
-	{
-		offlineXp.remove( uuid );
-	}
-
 	public static int getOfflineLevel( Skill skill, UUID uuid )
 	{
 		return levelAtXp( getOfflineXp( skill, uuid ) );
