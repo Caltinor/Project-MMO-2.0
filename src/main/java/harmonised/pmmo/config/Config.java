@@ -148,20 +148,6 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> easyMultiplier;
         public ConfigHelper.ConfigValueListener<Double> normalMultiplier;
         public ConfigHelper.ConfigValueListener<Double> hardMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> miningMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> buildingMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> excavationMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> woodcuttingMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> farmingMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> agilityMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> enduranceMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> combatMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> archeryMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> smithingMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> flyingMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> swimmingMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> fishingMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> craftingMultiplier;
         public ConfigHelper.ConfigValueListener<Double> biomePenaltyMultiplier;
         public ConfigHelper.ConfigValueListener<Double> deathXpPenaltyMultiplier;
 
@@ -204,6 +190,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
 
         //Excavation
+        public ConfigHelper.ConfigValueListener<Boolean> treasureEnabled;
 
         //Woodcutting
 
@@ -211,6 +198,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> tamingXpEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> growingXpEnabled;
         public ConfigHelper.ConfigValueListener<Double> defaultBreedingXp;
+        public ConfigHelper.ConfigValueListener<Double> defaultCropGrowXp;
+        public ConfigHelper.ConfigValueListener<Double> defaultSaplingGrowXp;
 
         //Agility
         public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
@@ -642,76 +631,6 @@ public class Config
                         .translation( "pmmo.hardMultiplier" )
                         .defineInRange( "hardMultiplier", 4/3D, 0, 1000) );
 
-                this.miningMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Mining (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.miningMultiplier" )
-                        .defineInRange( "miningMultiplier", 1D, 0, 1000) );
-
-                this.buildingMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Building (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.buildingMultiplier" )
-                        .defineInRange( "buildingMultiplier", 1D, 0, 1000) );
-
-                this.excavationMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Excavation (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.excavationMultiplier" )
-                        .defineInRange( "excavationMultiplier", 1D, 0, 1000) );
-
-                this.woodcuttingMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Woodcutting (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.woodcuttingMultiplier" )
-                        .defineInRange( "woodcuttingMultiplier", 1D, 0, 1000) );
-
-                this.farmingMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Farming (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.farmingMultiplier" )
-                        .defineInRange( "farmingMultiplier", 1D, 0, 1000) );
-
-                this.agilityMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Agility (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.agilityMultiplier" )
-                        .defineInRange( "agilityMultiplier", 1D, 0, 1000) );
-
-                this.enduranceMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Endurance (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.enduranceMultiplier" )
-                        .defineInRange( "enduranceMultiplier", 1D, 0, 1000) );
-
-                this.combatMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Combat (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.combatMultiplier" )
-                        .defineInRange( "combatMultiplier", 1D, 0, 1000) );
-
-                this.archeryMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Archery (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.archeryMultiplier" )
-                        .defineInRange( "archeryMultiplier", 1D, 0, 1000) );
-
-                this.smithingMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Repairing (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.smithingMultiplier" )
-                        .defineInRange( "smithingMultiplier", 1D, 0, 1000) );
-
-                this.flyingMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Flying (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.flyingMultiplier" )
-                        .defineInRange( "flyingMultiplier", 1D, 0, 1000) );
-
-                this.swimmingMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Swimming (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.swimmingMultiplier" )
-                        .defineInRange( "swimmingMultiplier", 1D, 0, 1000) );
-
-                this.fishingMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Fishing (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.fishingMultiplier" )
-                        .defineInRange( "fishingMultiplier", 1D, 0, 1000) );
-
-                this.craftingMultiplier = subscriber.subscribe(builder
-                        .comment( "How much xp everyone gains in Crafting (1 = normal, 2 = twice as much)" )
-                        .translation( "pmmo.craftingMultiplier" )
-                        .defineInRange( "craftingMultiplier", 1D, 0, 1000) );
-
                 this.biomePenaltyMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp you get in biomes you do not meet the requirements for (1 = Full xp, 0.5 = Half xp)" )
                         .translation( "pmmo.biomePenaltyMultiplier" )
@@ -898,6 +817,11 @@ public class Config
 
             builder.push( "Excavation" );
             {
+                this.treasureEnabled = subscriber.subscribe(builder
+                        .comment( "Do players find Treasure inside of blocks?" )
+                        .translation( "pmmo.treasureEnabled" )
+                        .define( "treasureEnabled", true ) );
+
                 builder.pop();
             }
             builder.push( "Woodcutting" );
@@ -915,6 +839,16 @@ public class Config
                         .comment( "How much xp should be awarded in Farming for breeding two animals? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultBreedingXp" )
                         .defineInRange( "defaultBreedingXp", 10.0D, 0, 1000000) );
+
+                this.defaultSaplingGrowXp = subscriber.subscribe(builder
+                        .comment( "How much xp should be awarded in Farming for growing a sapling? (Json Overrides this) (Set to 0 to disable default xp)" )
+                        .translation( "pmmo.defaultBreedingXp" )
+                        .defineInRange( "defaultBreedingXp", 25.0D, 0, 1000000) );
+
+                this.defaultBreedingXp = subscriber.subscribe(builder
+                        .comment( "How much xp should be awarded in Farming for growing crops? (Json Overrides this) (Set to 0 to disable default xp)" )
+                        .translation( "pmmo.defaultBreedingXp" )
+                        .defineInRange( "defaultBreedingXp", 15.0D, 0, 1000000) );
 
                 builder.pop();
             }
@@ -1248,6 +1182,11 @@ public class Config
             return preferences;
         else
             return PmmoSavedData.get().getPreferencesMap( player.getUniqueID() );
+    }
+
+    public static Map<String, Double> getPreferencesMapOffline()
+    {
+        return preferences;
     }
 
     public static Map<String, Double> getAbilitiesMap( PlayerEntity player )

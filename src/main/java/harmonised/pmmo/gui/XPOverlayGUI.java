@@ -10,6 +10,7 @@ import harmonised.pmmo.network.MessageLevelUp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.proxy.ClientHandler;
+import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -24,7 +25,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -44,13 +44,13 @@ public class XPOverlayGUI extends AbstractGui
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String skillName = "none";
-	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, guiKey = false, veinKey = false, guiPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills, xpDropsShowXpBar;
+	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, barKey = false, listKey = false, veinKey = false, barPressed = false, listPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills, xpDropsShowXpBar;
 	private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft mc = Minecraft.getInstance();
 	private static PlayerEntity player = mc.player;
 	public static Map<Skill, ASkill> skills = new HashMap<>();
-//	private static ArrayList<String> skillsKeys = new ArrayList<String>();
+	//	private static ArrayList<String> skillsKeys = new ArrayList<String>();
 	private static ASkill aSkill;
 	private static Skill skill = Skill.INVALID_SKILL, tempSkill = Skill.INVALID_SKILL;
 	private static FontRenderer fontRenderer = mc.fontRenderer;
@@ -58,14 +58,14 @@ public class XPOverlayGUI extends AbstractGui
 	private static double maxXp;
 	private static XpDrop xpDrop;
 	private static long lastBonusUpdate = System.nanoTime(), lastVeinBlockUpdate = System.nanoTime();
-	private static double itemBoost, biomeBoost;
+	private static double itemBoost, biomeBoost, multiplier;
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
 	private static BlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	private static Item lastToolHeld = Items.AIR;
 	private static MatrixStack stack;
 	public static Set<String> screenshots = new HashSet<>();
-	public static boolean guiWasOn = false, guiOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
+	public static boolean listWasOn = false, barOn = false, listOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
 	MainWindow sr;
 	BlockPos blockPos, lastBlockPos;
 
@@ -103,22 +103,34 @@ public class XPOverlayGUI extends AbstractGui
 				timeDiff = (System.nanoTime() - lastTime);
 				lastTime = System.nanoTime();
 
-				guiKey = ClientHandler.SHOW_GUI.isKeyDown();
+				barKey = ClientHandler.SHOW_BAR.isKeyDown();
+				listKey = ClientHandler.SHOW_LIST.isKeyDown();
 				veinKey = ClientHandler.VEIN_KEY.isKeyDown();
 
-				if( guiKey || xpBarAlwaysOn )
+				if( barKey || xpBarAlwaysOn )
 					cooldown = 1;
 
-				if( guiKey )
+				if( barKey )
 				{
-					if( !guiPressed )
+					if( !barPressed )
 					{
-						guiOn = !guiOn;
-						guiPressed = true;
+						barOn = !barOn;
+						barPressed = true;
 					}
 				}
 				else
-					guiPressed = false;
+					barPressed = false;
+
+				if( listKey )
+				{
+					if( !listPressed )
+					{
+						listOn = !listOn;
+						listPressed = true;
+					}
+				}
+				else
+					listPressed = false;
 
 				if( !Minecraft.getInstance().isGamePaused() )
 				{
@@ -183,7 +195,7 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			if( cooldown <= 0 )
 				xpDropOffsetCap = -9;
-			else if ( guiKey || xpLeftDisplayAlwaysOn )
+			else if ( barKey || xpLeftDisplayAlwaysOn )
 			{
 				if( skills.get( skill ).xp >= maxXp )
 					xpDropOffsetCap = 25;
@@ -212,7 +224,7 @@ public class XPOverlayGUI extends AbstractGui
 				if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 				{
 					aSkill = skills.get( xpDrop.skill );
-					
+
 					if( !xpDrop.skip )
 						skill = xpDrop.skill;
 
@@ -338,7 +350,7 @@ public class XPOverlayGUI extends AbstractGui
 			else
 				drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
 
-			if( (guiKey || xpLeftDisplayAlwaysOn) && skills.get( skill ) != null )
+			if( (barKey || xpLeftDisplayAlwaysOn) && skills.get( skill ) != null )
 			{
 				if( skills.get( skill ).xp >= maxXp )
 					drawCenteredString( fontRenderer, new TranslationTextComponent( "pmmo.maxLevel" ).getString(), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
@@ -436,7 +448,7 @@ public class XPOverlayGUI extends AbstractGui
 
 	private void doSkillList()
 	{
-		if( guiOn && !mc.gameSettings.showDebugInfo )
+		if( listOn && !mc.gameSettings.showDebugInfo )
 		{
 			listIndex = 0;
 
@@ -448,6 +460,7 @@ public class XPOverlayGUI extends AbstractGui
 
 					itemBoost = XP.getItemBoost( player, tempSkill );
 					biomeBoost = XP.getBiomeBoost( player, tempSkill );
+//					multiplier = ( XP.getMultiplier(  player, tempSkill ) * 100 ) - 100;
 
 					if( itemBoost + biomeBoost >= -100 )
 						skills.get( tempSkill ).bonus = itemBoost + biomeBoost;
@@ -683,18 +696,72 @@ public class XPOverlayGUI extends AbstractGui
 //			matrixStackIn.pop();
 //		}
 //	}
-	
+
 	public static void sendLvlUp( int level, Skill skill )
 	{
 		player = Minecraft.getInstance().player;
-		player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() ).setStyle( XP.getSkillStyle( skill ) ), false);
+
+		Map<String, Double> configMap = Config.getConfigMap();
+		TranslationTextComponent msg;
+
+		switch( skill )
+		{
+			case BUILDING:
+				double levelsPerOneReach = configMap.get( "levelsPerOneReach" );
+				double maxExtraReachBoost = configMap.get( "maxExtraReachBoost" );
+				double reachBoost = level / levelsPerOneReach;
+				if( reachBoost > maxExtraReachBoost )
+					reachBoost = maxExtraReachBoost;
+				msg = new TranslationTextComponent( "pmmo.levelUpReachBoost", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dpSoft( reachBoost ) );
+				break;
+
+			case COMBAT:
+				double levelsPerDamage = configMap.get( "levelsPerDamage" );
+				double maxExtraDamageBoost = configMap.get( "maxExtraDamageBoost" );
+				double damageBoost = level / levelsPerDamage;
+				if( damageBoost > maxExtraDamageBoost )
+					damageBoost = maxExtraDamageBoost;
+				msg = new TranslationTextComponent( "pmmo.levelUpDamageBoost", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dpSoft( damageBoost ) );
+				break;
+
+			case ENDURANCE:
+				double endurancePerLevel = configMap.get( "endurancePerLevel" );
+				double maxEndurance = configMap.get( "maxEndurance" );
+				double enduranceBoost = level * endurancePerLevel;
+				if( enduranceBoost > maxEndurance )
+					enduranceBoost = maxEndurance;
+
+				double levelsPerHeart = configMap.get( "levelsPerHeart" );
+				double maxExtraHeartBoost = configMap.get( "maxExtraHeartBoost" );
+				int heartBoost = (int) Math.floor( level / levelsPerHeart );
+//				if( heartBoost > maxExtraHeartBoost )
+//					heartBoost = (int) maxExtraHeartBoost;
+				if( level % (int) levelsPerHeart == 0 && heartBoost <= (int) maxExtraHeartBoost )
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.gainedExtraHeart" ).setStyle( XP.getSkillStyle( skill ) ), false);
+
+				msg = new TranslationTextComponent( "pmmo.levelUpEnduranceBoost", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), enduranceBoost );
+				break;
+
+			case AGILITY:
+				msg = new TranslationTextComponent( "pmmo.levelUpSprintSpeedBonus", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dpSoft( Math.floor( AttributeHandler.getSpeedBoost( level, AttributeHandler.getBaseSpeed( player ) ) * 2000000D ) / 1000D ) + "%" );
+				break;
+
+			default:
+				msg = new TranslationTextComponent( "pmmo.levelUp", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString() );
+				break;
+		}
+
+		player.sendStatusMessage( msg.setStyle( XP.getSkillStyle( skill ) ), false);
+
+		checkUnlocks( level, skill, player );
+
 		if( skill == Skill.SWIMMING && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
 			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightvisionUnlocked" ).setStyle( XP.getSkillStyle( skill ) ), true );
 
-		guiWasOn = guiOn;
+		listWasOn = barOn;
 
 		if( lvlUpScreenshotShowSkills )
-			guiOn = true;
+			barOn = true;
 
 		if( lvlUpScreenshot )
 			screenshots.add( player.getDisplayName().getString() + " " + skill.name().toLowerCase() + " " + level );
@@ -703,7 +770,7 @@ public class XPOverlayGUI extends AbstractGui
 
 		NetworkHandler.sendToServer( new MessageLevelUp( skill.getValue(), level ) );
 	}
-	
+
 	public static void makeXpDrop( double xp, Skill skillIn, int cooldown, double gainedXp, boolean skip )
 	{
 		xpDropWasStacked = false;
@@ -713,9 +780,9 @@ public class XPOverlayGUI extends AbstractGui
 
 		if( skills.get( skillIn ) == null )				//Handle client xp tracker
 			skills.put( skillIn, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
-		
+
 		aSkill = skills.get( skillIn );
-		
+
 		if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
 		{
 			aSkill.pos = XP.levelAtXpDecimal( xp );
@@ -745,8 +812,8 @@ public class XPOverlayGUI extends AbstractGui
 				{
 					xpDrop.gainedXp += gainedXp;
 					xpDrop.startXp += gainedXp;
-					if( xpDrops.get( xpDrops.size() - 1).age > xpDropDecayAge - 25 )
-						xpDrops.get( xpDrops.size() - 1).age = xpDropDecayAge - 25;
+					if( xpDrops.get( xpDrops.size() - 1 ).age > xpDropDecayAge - 25 )
+						xpDrops.get( xpDrops.size() - 1 ).age = xpDropDecayAge - 25;
 
 					xpDropWasStacked = true;
 				}
@@ -755,8 +822,8 @@ public class XPOverlayGUI extends AbstractGui
 
 		if( !xpDropWasStacked && gainedXp != 0 )
 		{
-			if( xpDrops.size() > 0 && xpDrops.get( xpDrops.size() - 1 ).Y > 75 )
-				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 25, skillIn, xp, gainedXp, skip ) );
+			if( xpDrops.size() > 0 )
+				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 15, skillIn, xp, gainedXp, skip ) );
 			else
 				xpDrops.add( new XpDrop( 0, xpDropSpawnDistance, skillIn, xp, gainedXp, skip ) );
 		}
@@ -788,7 +855,7 @@ public class XPOverlayGUI extends AbstractGui
 				xpGap = fontRenderer.getStringWidth( DP.dprefix( skills.get( thisSkill ).goalXp ) );
 		});
 	}
-	
+
 	public static void clearXP()
 	{
 		skills = new HashMap<>();
@@ -799,5 +866,10 @@ public class XPOverlayGUI extends AbstractGui
 		levelGap = 0;
 		skillGap = 0;
 		xpGap = 0;
+	}
+
+	public static void checkUnlocks( int level, Skill skill, PlayerEntity player )
+	{
+		//TODO
 	}
 }

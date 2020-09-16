@@ -2,6 +2,7 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -187,7 +188,7 @@ public class PlayerTickHandler
                 {
                     ScreenshotHandler.takeScreenshot( key, "levelup" );
                     XPOverlayGUI.screenshots.remove( key );
-                    XPOverlayGUI.guiOn = XPOverlayGUI.guiWasOn;
+                    XPOverlayGUI.listOn = XPOverlayGUI.listWasOn;
                 }
             }
 

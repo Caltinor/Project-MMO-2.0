@@ -73,7 +73,7 @@ public class DeathHandler
 
                 if( totalLost > 0 )
                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).setStyle( XP.textStyle.get( "red" ) ), false );
-                
+
                 XP.syncPlayer( player );
             }
         }
@@ -104,10 +104,10 @@ public class DeathHandler
 
             if( JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )
             {
-                Map<String, Object> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
-                for( Map.Entry<String, Object> entry : killXp.entrySet() )
+                Map<String, Double> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
+                for( Map.Entry<String, Double> entry : killXp.entrySet() )
                 {
-                    XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), (double) entry.getValue() * scaleValue, false, false );
+                    XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false );
                 }
             }
             else if( target instanceof AnimalEntity)
@@ -117,13 +117,13 @@ public class DeathHandler
 
             if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getEntityString() ) )
             {
-                Map<String, Object> dropTable = JsonConfig.data.get( JType.MOB_RARE_DROP ).get( target.getEntityString() );
+                Map<String, Double> dropTable = JsonConfig.data.get( JType.MOB_RARE_DROP ).get( target.getEntityString() );
 
                 double chance;
 
-                for( Map.Entry<String, Object> entry : dropTable.entrySet() )
+                for( Map.Entry<String, Double> entry : dropTable.entrySet() )
                 {
-                    chance = (double) entry.getValue();
+                    chance = entry.getValue();
                     chance /= scaleValue;
 
                     if( Math.floor( Math.random() * chance ) == 0 )

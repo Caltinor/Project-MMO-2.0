@@ -48,7 +48,7 @@ public class BrewHandler
 
             Map<String, Double> award = XP.multiplyMap( XP.getXp( brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
 
-            XP.awardXpMapDouble( uuid, award, "Brewing", true, false );
+            XP.awardXpMap( uuid, award, "Brewing", true, false );
         }
     }
 }

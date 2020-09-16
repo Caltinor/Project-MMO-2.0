@@ -1,15 +1,7 @@
 {
-	"minecraft:bedrock":
+	"minecraft:spawner":
 	{
-		"mining": 999
-	},
-	"minecraft:command_block":
-	{
-		"mining": 999
-	},
-	"minecraft:barrier":
-	{
-		"mining": 999
+		"combat": 5
 	},
 	"info_oresandmetals:light_animica_ore":
 	{

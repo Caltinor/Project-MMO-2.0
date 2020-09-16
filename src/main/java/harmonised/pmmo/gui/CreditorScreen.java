@@ -61,7 +61,7 @@ public class CreditorScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditsScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.credits" ), JType.CREDITS ) );
         });
@@ -258,5 +258,11 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         creditorsInfo.put( "starche#7569", list );
+        //DAWNLESS#1153
+        list = new ArrayList<>();
+        list.add( "Dawnless#1153" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "22/08/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Dutch" ).getString() );
+        creditorsInfo.put( "Dawnless#1153", list );
     }
 }

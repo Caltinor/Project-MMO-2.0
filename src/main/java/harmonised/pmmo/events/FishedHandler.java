@@ -33,7 +33,7 @@ public class FishedHandler
             if( itemXp.containsKey( "fishing" ) )
                 award = itemXp.get( "fishing" );
         }
-        Map<String, Map<String, Object>> fishPool = JsonConfig.data.get( JType.FISH_POOL );
+        Map<String, Map<String, Double>> fishPool = JsonConfig.data.get( JType.FISH_POOL );
 
         if( fishPool != null )
         {
@@ -47,7 +47,7 @@ public class FishedHandler
             if( Math.random() * 10000 < fishPoolChance * 100 )
             {
                 String matchKey = null;
-                Map<String, Object> match = new HashMap<>();
+                Map<String, Double> match = new HashMap<>();
 
                 double totalWeight = 0;
                 double weight;
@@ -55,14 +55,14 @@ public class FishedHandler
                 double currentWeight = 0;
                 int count, minCount, maxCount;
 
-                for( Map.Entry<String, Map<String, Object>> entry : fishPool.entrySet() )
+                for( Map.Entry<String, Map<String, Double>> entry : fishPool.entrySet() )
                 {
                     totalWeight += XP.getWeight( startLevel, entry.getValue() );
                 }
 
                 result = Math.floor( Math.random() * (totalWeight + 1) );
 
-                for( Map.Entry<String, Map<String, Object>> entry : fishPool.entrySet() )
+                for( Map.Entry<String, Map<String, Double>> entry : fishPool.entrySet() )
                 {
                     weight = XP.getWeight( startLevel, entry.getValue() );
 
@@ -78,13 +78,10 @@ public class FishedHandler
 
                 Item item = XP.getItem( matchKey );
 
-                minCount = (int) Math.floor( (double) match.get( "minCount" ) );
-                maxCount = (int) Math.floor( (double) match.get( "maxCount" ) );
+                minCount = (int) Math.floor( match.get( "minCount" ) );
+                maxCount = (int) Math.floor( match.get( "maxCount" ) );
 
-                if( maxCount == 1 )
-                    count = 1;
-                else
-                    count = (int) Math.floor( Math.random() * ( maxCount - minCount ) + minCount + 1 );
+                count = (int) Math.floor( (Math.random() * maxCount) + minCount );
 
                 ItemStack itemStack = new ItemStack( item, count );
 
@@ -93,30 +90,30 @@ public class FishedHandler
 
                 if( itemStack.isEnchantable() )
                 {
-                    Map<String, Map<String, Object>> enchantMap = JsonConfig.data.get( JType.FISH_ENCHANT_POOL );
+                    Map<String, Map<String, Double>> enchantMap = JsonConfig.data.get( JType.FISH_ENCHANT_POOL );
                     Map<Enchantment, Integer> outEnchants = new HashMap<>();
 
-                    for( Map.Entry<String, Map<String, Object>> entry : enchantMap.entrySet() )
+                    for( Map.Entry<String, Map<String, Double>> entry : enchantMap.entrySet() )
                     {
                         Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( entry.getKey() ) );
-                        Map<String, Object> enchantInfo = entry.getValue();
+                        Map<String, Double> enchantInfo = entry.getValue();
 
                         if( enchant.canApply( itemStack ) )
                         {
-                            int enchantLevelReq = (int) Math.floor( (double) enchantInfo.get( "levelReq" ) );
-                            int itemLevelReq = (int) Math.floor( (double) match.get( "enchantLevelReq" ) );
+                            int enchantLevelReq = (int) Math.floor( enchantInfo.get( "levelReq" ) );
+                            int itemLevelReq = (int) Math.floor( match.get( "enchantLevelReq" ) );
                             int totalLevelReq = enchantLevelReq + itemLevelReq;
                             if( startLevel >= totalLevelReq )
                             {
                                 level = startLevel - totalLevelReq;
-                                double chancePerLevel = (double) enchantInfo.get( "chancePerLevel" );
-                                double maxChance = (double) enchantInfo.get( "maxChance" );
+                                double chancePerLevel = enchantInfo.get( "chancePerLevel" );
+                                double maxChance = enchantInfo.get( "maxChance" );
                                 double enchantChance = (chancePerLevel * level );
                                 if( enchantChance > maxChance )
                                     enchantChance = maxChance;
 
-                                double levelPerLevel = (double) enchantInfo.get( "levelPerLevel" );
-                                double maxEnchantLevel = (double) enchantInfo.get( "maxLevel" );
+                                double levelPerLevel = enchantInfo.get( "levelPerLevel" );
+                                double maxEnchantLevel = enchantInfo.get( "maxLevel" );
                                 int potentialEnchantLevel;
 
                                 if( levelPerLevel > 0 )
@@ -153,7 +150,7 @@ public class FishedHandler
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
 
-                award += (double) match.get( "xp" ) * count;
+                award += match.get( "xp" ) * count;
             }
 
             XP.awardXp( player, Skill.FISHING, "catching " + items, award, false, false );

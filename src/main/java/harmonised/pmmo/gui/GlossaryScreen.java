@@ -2,10 +2,12 @@ package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
@@ -25,23 +27,99 @@ public class GlossaryScreen extends Screen
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    Minecraft minecraft = Minecraft.getInstance();
+    MainWindow sr = minecraft.getMainWindow();
+    FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
     private int y;
-    private ListScrollPanel myList;
-    private List<TileButton> tileButtons;
+    public static List<TileButton> defaultTileButtons;
+    public static List<TileButton> currentTileButtons;
     private String creativeText;
     private UUID uuid;
     public static List<Character> history = new ArrayList<>();
     private static String[] weaster = { "1523", "3251", "911" };
     private static Random rand = new Random();
+    private static String transKey;
+    private boolean loadDefaultButtons;
 
-    public GlossaryScreen( UUID uuid, ITextComponent titleIn )
+    public GlossaryScreen( UUID uuid, ITextComponent titleIn, boolean loadDefaultButtons )
     {
         super(titleIn);
         this.uuid = uuid;
+        this.loadDefaultButtons = loadDefaultButtons;
+    }
+
+    public static void initButtons()
+    {
+        defaultTileButtons = new ArrayList<>();
+
+        TileButton wearButton = new TileButton(0, 0, 3, 9, "pmmo.wearTitle", JType.REQ_WEAR, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton toolButton = new TileButton( 0, 0, 3, 10, "pmmo.toolTitle", JType.REQ_TOOL, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton weaponButton = new TileButton( 0, 0, 3, 11, "pmmo.weaponTitle", JType.REQ_WEAPON, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton useButton = new TileButton( 0, 0, 3, 12, "pmmo.useTitle", JType.REQ_USE, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton placeButton = new TileButton( 0, 0, 3, 13, "pmmo.placeTitle", JType.REQ_PLACE, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton breakButton = new TileButton( 0, 0, 3, 14, "pmmo.breakTitle", JType.REQ_BREAK, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton craftButton = new TileButton( 0, 0, 3, 29, "pmmo.craftTitle", JType.REQ_CRAFT, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton biomeButton = new TileButton( 0, 0, 3, 8, "pmmo.biomeTitle", JType.REQ_BIOME, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton oreButton = new TileButton( 0, 0, 3, 15, "pmmo.oreTitle", JType.INFO_ORE, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton logButton = new TileButton( 0, 0, 3, 16, "pmmo.logTitle", JType.INFO_LOG, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton plantButton = new TileButton( 0, 0, 3, 17, "pmmo.plantTitle", JType.INFO_PLANT, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton smeltButton = new TileButton( 0, 0, 3, 30, "pmmo.smeltTitle", JType.INFO_SMELT, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton cookButton = new TileButton( 0, 0, 3, 32, "pmmo.cookTitle", JType.INFO_COOK, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton brewButton = new TileButton( 0, 0, 3, 36, "pmmo.brewTitle", JType.INFO_BREW, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton heldXpButton = new TileButton( 0, 0, 3, 19, "pmmo.heldTitle", JType.XP_BONUS_HELD, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton wornXpButton = new TileButton( 0, 0, 3, 18, "pmmo.wornTitle", JType.XP_BONUS_WORN, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton breedXpButton = new TileButton( 0, 0, 3, 20, "pmmo.breedXpTitle", JType.XP_VALUE_BREED, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton tameXpButton = new TileButton( 0, 0, 3, 21, "pmmo.tameXpTitle", JType.XP_VALUE_TAME, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton craftXpButton = new TileButton( 0, 0, 3, 22, "pmmo.craftXpTitle", JType.XP_VALUE_CRAFT, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton breakXpButton = new TileButton( 0, 0, 3, 23, "pmmo.breakXpTitle",JType.XP_VALUE_BREAK, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton smeltXpButton = new TileButton( 0, 0, 3, 31, "pmmo.smeltXpTitle",JType.XP_VALUE_SMELT, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton cookXpButton = new TileButton( 0, 0, 3, 33, "pmmo.cookXpTitle",JType.XP_VALUE_COOK, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton brewXpButton = new TileButton( 0, 0, 3, 37, "pmmo.brewXpTitle",JType.XP_VALUE_BREW, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton growXpButton = new TileButton( 0, 0, 3, 35, "pmmo.growXpTitle",JType.XP_VALUE_GROW, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton dimensionButton = new TileButton( 0, 0, 3, 8, "pmmo.dimensionTitle",JType.DIMENSION, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton fishPoolButton = new TileButton( 0, 0, 3, 24, "pmmo.fishPoolTitle",JType.FISH_POOL, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton mobButton = new TileButton( 0, 0, 3, 26, "pmmo.mobTitle" ,JType.XP_VALUE_KILL, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton fishEnchantButton = new TileButton( 0, 0, 3, 25, "pmmo.fishEnchantTitle", JType.FISH_ENCHANT_POOL, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton salvageToButton = new TileButton( 0, 0, 3, 27, "pmmo.salvagesToTitle", JType.SALVAGE, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton salvageFromButton = new TileButton( 0, 0, 3, 28, "pmmo.salvagesFromTitle", JType.SALVAGE_FROM, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton treasureToButton = new TileButton( 0, 0, 3, 38, "pmmo.treasureToTitle", JType.TREASURE, button -> onGlossaryButtonPress( (TileButton) button ) );
+        TileButton treasureFromButton = new TileButton( 0, 0, 3, 39, "pmmo.treasureFromTitle", JType.TREASURE_FROM, button -> onGlossaryButtonPress( (TileButton) button ) );
+
+        defaultTileButtons.add( wearButton );
+        defaultTileButtons.add( toolButton );
+        defaultTileButtons.add( weaponButton );
+        defaultTileButtons.add( useButton );
+        defaultTileButtons.add( placeButton );
+        defaultTileButtons.add( breakButton );
+        defaultTileButtons.add( craftButton );
+        defaultTileButtons.add( oreButton );
+        defaultTileButtons.add( logButton );
+        defaultTileButtons.add( plantButton );
+        defaultTileButtons.add( smeltButton );
+        defaultTileButtons.add( cookButton );
+        defaultTileButtons.add( brewButton );
+        defaultTileButtons.add( heldXpButton );
+        defaultTileButtons.add( wornXpButton );
+        defaultTileButtons.add( breedXpButton );
+        defaultTileButtons.add( tameXpButton );
+        defaultTileButtons.add( craftXpButton );
+        defaultTileButtons.add( breakXpButton );
+        defaultTileButtons.add( smeltXpButton );
+        defaultTileButtons.add( cookXpButton );
+        defaultTileButtons.add( brewXpButton );
+        defaultTileButtons.add( growXpButton );
+        defaultTileButtons.add( dimensionButton );
+        defaultTileButtons.add( biomeButton );
+        defaultTileButtons.add( mobButton );
+        defaultTileButtons.add( fishPoolButton );
+        defaultTileButtons.add( fishEnchantButton );
+        defaultTileButtons.add( salvageToButton );
+        defaultTileButtons.add( salvageFromButton );
+        defaultTileButtons.add( treasureToButton );
+        defaultTileButtons.add( treasureFromButton );
     }
 
 //    @Override
@@ -53,205 +131,26 @@ public class GlossaryScreen extends Screen
     @Override
     protected void init()
     {
-        tileButtons = new ArrayList<>();
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
         creativeText = new TranslationTextComponent( "pmmo.creativeWarning" ).getString();
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", "", button ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.NONE, button ->
         {
             history = new ArrayList<>();
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
         });
-        TileButton wearButton = new TileButton(0, 0, 3, 9, "pmmo.wearTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_WEAR, Minecraft.getInstance().player) );
-        });
-        TileButton toolButton = new TileButton( 0, 0, 3, 10, "pmmo.toolTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_TOOL, Minecraft.getInstance().player ) );
-        });
-        TileButton weaponButton = new TileButton( 0, 0, 3, 11, "pmmo.weaponTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_WEAPON, Minecraft.getInstance().player ) );
-        });
-        TileButton useButton = new TileButton( 0, 0, 3, 12, "pmmo.useTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_USE, Minecraft.getInstance().player ) );
-        });
-        TileButton placeButton = new TileButton( 0, 0, 3, 13, "pmmo.placeTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_PLACE, Minecraft.getInstance().player ) );
-        });
-        TileButton breakButton = new TileButton( 0, 0, 3, 14, "pmmo.breakTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_BREAK, Minecraft.getInstance().player ) );
-        });
-        TileButton craftButton = new TileButton( 0, 0, 3, 29, "pmmo.craftTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_CRAFT, Minecraft.getInstance().player ) );
-        });
-        TileButton biomeButton = new TileButton( 0, 0, 3, 8, "pmmo.biomeTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_BIOME, Minecraft.getInstance().player ) );
-        });
-        TileButton oreButton = new TileButton( 0, 0, 3, 15, "pmmo.oreTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_ORE, Minecraft.getInstance().player ) );
-        });
-        TileButton logButton = new TileButton( 0, 0, 3, 16, "pmmo.logTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_LOG, Minecraft.getInstance().player ) );
-        });
-        TileButton plantButton = new TileButton( 0, 0, 3, 17, "pmmo.plantTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_PLANT, Minecraft.getInstance().player ) );
-        });
-        TileButton smeltButton = new TileButton( 0, 0, 3, 30, "pmmo.smeltTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_SMELT, Minecraft.getInstance().player ) );
-        });
-        TileButton cookButton = new TileButton( 0, 0, 3, 32, "pmmo.cookTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_COOK, Minecraft.getInstance().player ) );
-        });
-        TileButton brewButton = new TileButton( 0, 0, 3, 34, "pmmo.brewTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.INFO_BREW, Minecraft.getInstance().player ) );
-        });
-        TileButton heldXpButton = new TileButton( 0, 0, 3, 19, "pmmo.heldTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_BONUS_HELD, Minecraft.getInstance().player ) );
-        });
-        TileButton wornXpButton = new TileButton( 0, 0, 3, 18, "pmmo.wornTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.REQ_WEAR, Minecraft.getInstance().player ) );
-        });
-        TileButton breedXpButton = new TileButton( 0, 0, 3, 20, "pmmo.breedXpTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_BREED, Minecraft.getInstance().player ) );
-        });
-        TileButton tameXpButton = new TileButton( 0, 0, 3, 21, "pmmo.tameXpTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_TAME, Minecraft.getInstance().player ) );
-        });
-        TileButton craftXpButton = new TileButton( 0, 0, 3, 22, "pmmo.craftXpTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_CRAFT, Minecraft.getInstance().player ) );
-        });
-        TileButton breakXpButton = new TileButton( 0, 0, 3, 23, "pmmo.breakXpTitle","", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_BREAK, Minecraft.getInstance().player ) );
-        });
-        TileButton smeltXpButton = new TileButton( 0, 0, 3, 31, "pmmo.smeltXpTitle","", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_SMELT, Minecraft.getInstance().player ) );
-        });
-        TileButton cookXpButton = new TileButton( 0, 0, 3, 33, "pmmo.cookXpTitle","", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_COOK, Minecraft.getInstance().player ) );
-        });
-        TileButton brewXpButton = new TileButton( 0, 0, 3, 35, "pmmo.brewXpTitle","", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_BREW, Minecraft.getInstance().player ) );
-        });
-        TileButton growXpButton = new TileButton( 0, 0, 3, 35, "pmmo.growXpTitle","", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_GROW, Minecraft.getInstance().player ) );
-        });
-        TileButton dimensionButton = new TileButton( 0, 0, 3, 8, "pmmo.dimensionTitle","", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.DIMENSION, Minecraft.getInstance().player ) );
-        });
-        TileButton fishPoolButton = new TileButton( 0, 0, 3, 24, "pmmo.fishPoolTitle","", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.FISH_POOL, Minecraft.getInstance().player ) );
-        });
-        TileButton mobButton = new TileButton( 0, 0, 3, 26, "pmmo.mobTitle" ,"", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.XP_VALUE_KILL, Minecraft.getInstance().player ) );
-        });
-        TileButton fishEnchantButton = new TileButton( 0, 0, 3, 25, "pmmo.fishEnchantTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.FISH_ENCHANT_POOL, Minecraft.getInstance().player ) );
-        });
-        TileButton salvageToButton = new TileButton( 0, 0, 3, 27, "pmmo.salvagesToTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.SALVAGE_TO, Minecraft.getInstance().player ) );
-        });
-        TileButton salvageFromButton = new TileButton( 0, 0, 3, 28, "pmmo.salvagesFromTitle", "", button ->
-        {
-            updateHistory( ( (TileButton) button ).index );
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.SALVAGE_FROM, Minecraft.getInstance().player ) );
-        });
+
+        if( loadDefaultButtons )
+            setButtonsToDefault();
 
         addButton(exitButton);
-
-        tileButtons.add(wearButton);
-        tileButtons.add( toolButton );
-        tileButtons.add( weaponButton );
-        tileButtons.add( useButton );
-        tileButtons.add( placeButton );
-        tileButtons.add( breakButton );
-        tileButtons.add( craftButton );
-        tileButtons.add( oreButton );
-        tileButtons.add( logButton );
-        tileButtons.add( plantButton );
-        tileButtons.add( smeltButton );
-        tileButtons.add( cookButton );
-        tileButtons.add( brewButton );
-        tileButtons.add( heldXpButton );
-        tileButtons.add( wornXpButton );
-        tileButtons.add( breedXpButton );
-        tileButtons.add( tameXpButton );
-        tileButtons.add( craftXpButton );
-        tileButtons.add( breakXpButton );
-        tileButtons.add( smeltXpButton );
-        tileButtons.add( cookXpButton );
-        tileButtons.add( brewXpButton );
-        tileButtons.add( growXpButton );
-        tileButtons.add( dimensionButton );
-        tileButtons.add( biomeButton );
-        tileButtons.add( mobButton );
-        tileButtons.add( fishPoolButton );
-        tileButtons.add( fishEnchantButton );
-        tileButtons.add( salvageToButton );
-        tileButtons.add( salvageFromButton );
 
         int col = 0;
         int row = 0;
 
-        for( TileButton button : tileButtons )
+        for( TileButton button : currentTileButtons )
         {
             button.index = row * 6 + col;
             button.x = x + 22 + col * 36;
@@ -264,8 +163,14 @@ public class GlossaryScreen extends Screen
             }
         }
     }
-    
-    public void updateHistory( int index )
+
+    public static void onGlossaryButtonPress( TileButton button )
+    {
+        updateHistory( button.index );
+        Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( button.transKey ), button.jType, Minecraft.getInstance().player ) );
+    }
+
+    public static void updateHistory( int index )
     {
         if( index >= 10 )
         {
@@ -285,7 +190,7 @@ public class GlossaryScreen extends Screen
             Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
     }
 
-    public boolean updateHistory( char index )
+    public static boolean updateHistory( char index )
     {
         history.add( index );
         int historyLength = history.size();
@@ -330,7 +235,7 @@ public class GlossaryScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        for( TileButton button : tileButtons )
+        for( TileButton button : currentTileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
                 renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
@@ -339,10 +244,18 @@ public class GlossaryScreen extends Screen
         if( Minecraft.getInstance().player.isCreative() )
         {
             if( font.getStringWidth( creativeText ) > 220 )
-                drawCenteredString(Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 10, 0xffff00 );
+            {
+                drawCenteredString( Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 18, 0xffffff );
+                drawCenteredString( Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 10, 0xffff00 );
+            }
             else
-                drawCenteredString(Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 5, 0xffff00 );
+            {
+                drawCenteredString( Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 13, 0xffffff );
+                drawCenteredString( Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 5, 0xffff00 );
+            }
         }
+        else
+            drawCenteredString( Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 5, 0xffffff );
     }
 
     @Override
@@ -391,4 +304,28 @@ public class GlossaryScreen extends Screen
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
+    public static void setButtonsToDefault()
+    {
+        currentTileButtons = defaultTileButtons;
+        GlossaryScreen.transKey = new TranslationTextComponent( "pmmo.glossary" ).getString();
+    }
+
+    public static void setButtonsToKey( String regKey )
+    {
+        currentTileButtons = new ArrayList<>();
+
+        for( TileButton button : defaultTileButtons )
+        {
+            if( ( JsonConfig.data.containsKey( button.jType ) && JsonConfig.data.get( button.jType ).containsKey( regKey ) ) || ( JsonConfig.data2.containsKey( button.jType ) && JsonConfig.data2.get( button.jType ).containsKey( regKey ) ) )
+                currentTileButtons.add( button );
+        }
+
+        if( currentTileButtons.size() == 0 )
+        {
+            setButtonsToDefault();
+            GlossaryScreen.transKey = new TranslationTextComponent( "pmmo.glossary" ).getString();
+        }
+        else
+            GlossaryScreen.transKey = new TranslationTextComponent( XP.getItem( regKey ).getTranslationKey() ).getString();
+    }
 }

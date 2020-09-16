@@ -64,7 +64,7 @@ public class PrefsScreen extends Screen
         scrollY = y + 10;
         buttonX = scrollX + 4;
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", "", (button) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.STATS, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
         });
@@ -142,7 +142,8 @@ public class PrefsScreen extends Screen
             prefEntry.slider.setResponder( slider ->
             {
                 slider.precision = 4;
-                prefsMap.put( slider.preference, slider.getValue() );
+                if( Math.floor( slider.getValue() * 10000D ) != Math.floor( prefEntry.defaultVal * 10000D ) )
+                    prefsMap.put( slider.preference, slider.getValue() );
                 if( prefEntry.removeIfMax && slider.getValue() == slider.maxValue )
                     prefsMap.remove( slider.preference );
                 XPOverlayGUI.doInit();
@@ -262,9 +263,8 @@ public class PrefsScreen extends Screen
         return super.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
     }
 
-    public static TranslationTextComponent getTransComp( String translationKey, Object... args )
+    public static TranslationTextComponent getTransComp( String translationKey, Double... args )
     {
         return new TranslationTextComponent( translationKey, args );
     }
-
 }

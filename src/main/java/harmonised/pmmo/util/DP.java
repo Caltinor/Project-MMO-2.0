@@ -8,7 +8,7 @@ public class DP
 	{
 		return dprefix( input.doubleValue() );
 	}
-	
+
 	public static String dprefix( Double input )
 	{
 		char prefix = ' ';
@@ -27,18 +27,18 @@ public class DP
 			input /= 1000000000;
 			prefix = 'b';
 		}
-		
+
 		if( prefix == ' ' )
 			return String.format( Locale.ENGLISH , "%.2f", input );
 		else
 			return String.format( Locale.ENGLISH , "%.3f", input ) + prefix;
 	}
-	
+
 	public static String dp( Float input )
 	{
 		return dp( input.doubleValue() );
 	}
-	
+
 	public static String dp( Double input )
 	{
 		return String.format( Locale.ENGLISH , "%.2f", input );
@@ -59,7 +59,7 @@ public class DP
 			return String.format( Locale.ENGLISH , "%.2f", input );
 	}
 
-	public static double map( double input, double inLow, double inHigh, double outLow, double outHigh )
+	public static double mapCapped(double input, double inLow, double inHigh, double outLow, double outHigh )
 	{
 		if( input < inLow )
 			input = inLow;

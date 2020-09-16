@@ -1,6 +1,6 @@
 {
 	"minecraft:silverfish":
 	{
-		"slayer": 10
+		"combat": 10
 	}
 }

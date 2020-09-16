@@ -54,7 +54,6 @@ public class XP
 	public static Map<UUID, String> playerNames = new HashMap<>();
 	public static Map<UUID, Map<Skill, Double>> offlineXp = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
-	private static double globalMultiplier = Config.forgeConfig.globalMultiplier.get();
 	private static int debugInt = 0;
 	private static boolean alwaysDropWornItems = Config.forgeConfig.alwaysDropWornItems.get();
 
@@ -238,7 +237,7 @@ public class XP
 
 		if( JsonConfig.data.get( jType ).containsKey( registryName.toString() ) )
 		{
-			for( Map.Entry<String, Object> entry : JsonConfig.data.get( jType ).get( registryName.toString() ).entrySet() )
+			for( Map.Entry<String, Double> entry : JsonConfig.data.get( jType ).get( registryName.toString() ).entrySet() )
 			{
 				if( entry.getValue() instanceof Double )
 					theMap.put( entry.getKey(), (double) entry.getValue() );
@@ -548,9 +547,11 @@ public class XP
 
 	public static void syncPlayerConfig( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdateClientData( JsonConfig.localData, 0 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.data3ToNbt( JsonConfig.localData ), 4 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.data4ToNbt( JsonConfig.localData2 ), 5 ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
 	}
+
 
 	public static void syncPlayer( PlayerEntity player )
 	{
@@ -604,14 +605,14 @@ public class XP
 
 	public static Map<String, Double> getReqMap( String registryName, JType type )
 	{
-		Map<String, Map<String, Object>> fullMap = JsonConfig.data.get( type );
+		Map<String, Map<String, Double>> fullMap = JsonConfig.data.get( type );
 		Map<String, Double> map = null;
 
 		if( fullMap != null && fullMap.containsKey( registryName ) )
 		{
 			map = new HashMap<>();
 
-			for( Map.Entry<String, Object> entry : fullMap.get( registryName ).entrySet() )
+			for( Map.Entry<String, Double> entry : fullMap.get( registryName ).entrySet() )
 			{
 				if( entry.getValue() instanceof Double )
 					map.put( entry.getKey(), (double) entry.getValue() );
@@ -679,19 +680,18 @@ public class XP
 	{
 		ResourceLocation resLoc = getResLoc( regKey );
 
-		if( resLoc != null )
-		{
-			Item item = ForgeRegistries.ITEMS.getValue( resLoc );
-			Item item2 = ForgeRegistries.BLOCKS.getValue( resLoc ).asItem();
-			if( item != null && !item.equals( Items.AIR ) )
-				return item;
-			else if( item2 != null && !item2.equals( Items.AIR ) )
-				return item2;
-			else
-				return Items.AIR;
-		}
+		Item item = ForgeRegistries.ITEMS.getValue( resLoc );
+
+		if( item != null && !item.equals( Items.AIR ) )
+			return item;
 		else
-			return Items.AIR;
+		{
+			Block block = ForgeRegistries.BLOCKS.getValue( resLoc );
+			if( block != null )
+				return block.asItem();
+		}
+
+		return Items.AIR;
 	}
 
 	public static Item getItem( ResourceLocation resLoc )
@@ -792,7 +792,7 @@ public class XP
 		if( !item.equals( Items.AIR ) )
 		{
 			String regName = item.getRegistryName().toString();
-			Map<String, Object> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );
+			Map<String, Double> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );
 
 			if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
 			{
@@ -806,73 +806,15 @@ public class XP
 		return boost;
 	}
 
-	public static double getSkillMultiplier( Skill skill )
+	public static double getGlobalMultiplier( Skill skill )
 	{
-		double skillMultiplier = 1;
+		return JsonConfig.data.get( JType.MULTIPLIERS ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill.toString(), 1D );
+	}
 
-		switch( skill )
-		{
-			case MINING:
-				skillMultiplier = Config.forgeConfig.miningMultiplier.get();
-				break;
-
-			case BUILDING:
-				skillMultiplier = Config.forgeConfig.buildingMultiplier.get();
-				break;
-
-			case EXCAVATION:
-				skillMultiplier = Config.forgeConfig.excavationMultiplier.get();
-				break;
-
-			case WOODCUTTING:
-				skillMultiplier = Config.forgeConfig.woodcuttingMultiplier.get();
-				break;
-
-			case FARMING:
-				skillMultiplier = Config.forgeConfig.farmingMultiplier.get();
-				break;
-
-			case AGILITY:
-				skillMultiplier = Config.forgeConfig.agilityMultiplier.get();
-				break;
-
-			case ENDURANCE:
-				skillMultiplier = Config.forgeConfig.enduranceMultiplier.get();
-				break;
-
-			case COMBAT:
-				skillMultiplier = Config.forgeConfig.combatMultiplier.get();
-				break;
-
-			case ARCHERY:
-				skillMultiplier = Config.forgeConfig.archeryMultiplier.get();
-				break;
-
-			case SMITHING:
-				skillMultiplier = Config.forgeConfig.smithingMultiplier.get();
-				break;
-
-			case FLYING:
-				skillMultiplier = Config.forgeConfig.flyingMultiplier.get();
-				break;
-
-			case SWIMMING:
-				skillMultiplier = Config.forgeConfig.swimmingMultiplier.get();
-				break;
-
-			case FISHING:
-				skillMultiplier = Config.forgeConfig.fishingMultiplier.get();
-				break;
-
-			case CRAFTING:
-				skillMultiplier = Config.forgeConfig.craftingMultiplier.get();
-				break;
-
-			default:
-				break;
-		}
-
-		return skillMultiplier;
+	public static double getDimensionMultiplier(Skill skill, PlayerEntity player )
+	{
+		String dimensionKey = player.world.getDimension().getType().getRegistryName().toString();
+		return JsonConfig.data.get( JType.MULTIPLIERS ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 1D );
 	}
 
 	public static double getDifficultyMultiplier( PlayerEntity player, Skill skill )
@@ -916,7 +858,7 @@ public class XP
 
 		String skillName = skill.toString().toLowerCase();
 		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
-		Map<String, Object> heldMap = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
+		Map<String, Double> heldMap = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
 		PlayerInventory inv = player.inventory;
 
 		if( heldMap != null )
@@ -971,7 +913,7 @@ public class XP
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = resLoc.toString();
-		Map<String, Object> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
+		Map<String, Double> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
 
 		if( biomeMap != null && biomeMap.containsKey( skillName ) )
 			theBiomeBoost = (double) biomeMap.get( skillName );
@@ -986,19 +928,26 @@ public class XP
 
 	public static double getMultiplier( PlayerEntity player, Skill skill )
 	{
-		double multiplier = 1;
+		double multiplier = Config.forgeConfig.globalMultiplier.get();
 
-		double skillMultiplier = getSkillMultiplier( skill );
+		double globalMultiplier = getGlobalMultiplier( skill );
+		double dimensionMultiplier = getDimensionMultiplier( skill, player );
 		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
 		double itemBoost = getItemBoost( player, skill );
 		double biomeBoost = getBiomeBoost( player, skill );
 		double additiveMultiplier = 1 + (itemBoost + biomeBoost) / 100;
 
-		multiplier *= skillMultiplier;
+		multiplier *= globalMultiplier;
+		multiplier *= dimensionMultiplier;
 		multiplier *= difficultyMultiplier;
 		multiplier *= additiveMultiplier;
 
 		return multiplier;
+	}
+
+	public static double getHorizontalDistance( Vec3d p1, Vec3d p2 )
+	{
+		return Math.sqrt( Math.pow( ( p1.getX() - p2.getX() ), 2 ) + Math.pow( ( p1.getZ() - p2.getZ() ), 2 ) );
 	}
 
 	public static int getMaxVein( PlayerEntity player, Skill skill )
@@ -1095,9 +1044,9 @@ public class XP
 
 			if( JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() ) != null )
 			{
-				Map<String, Object> commandMap = JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() );
+				Map<String, Double> commandMap = JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() );
 
-				for( Map.Entry<String, Object> entry : commandMap.entrySet() )
+				for( Map.Entry<String, Double> entry : commandMap.entrySet() )
 				{
 					int commandLevel = (int) Math.floor( (double) entry.getValue() );
 					if( startLevel < commandLevel && currLevel >= commandLevel )
@@ -1137,9 +1086,9 @@ public class XP
 			LogHandler.LOGGER.error( "TRIGGER XP AWARD \"" + triggerKey + "\" DOES NOT HAVE ANY VALUES, CANNOT AWARD" );
 	}
 
-	public static void awardXpMap( UUID uuid, Map<String, Object> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
+	public static void awardXpMap( UUID uuid, Map<String, Double> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
 	{
-		for( Map.Entry<String, Object> entry : map.entrySet() )
+		for( Map.Entry<String, Double> entry : map.entrySet() )
 		{
 			Skill.getSkill( entry.getKey() ).addXp( uuid, (double) entry.getValue(), sourceName, skip, ignoreBonuses );
 		}
@@ -1210,6 +1159,11 @@ public class XP
 		return new Vec3d( pos.getX(), pos.getY(), pos.getZ() );
 	}
 
+	public static Vec3d blockToMiddleVec( BlockPos pos )
+	{
+		return new Vec3d( pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D );
+	}
+
 	public static void spawnRocket( World world, BlockPos pos, Skill skill )
 	{
 		spawnRocket( world, new Vec3d( pos.getX(), pos.getY(), pos.getZ() ), skill );
@@ -1278,9 +1232,9 @@ public class XP
 		ResourceLocation resLoc = biome.getRegistryName();
 		String biomeKey = biome.getRegistryName().toString();
 		UUID playerUUID = player.getUniqueID();
-		Map<String, Object> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
-		Map<String, Map<String, Object>> negativeEffects = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE );
-		Map<String, Map<String, Object>> positiveEffects = JsonConfig.data.get( JType.BIOME_EFFECT_POSITIVE );
+		Map<String, Double> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
+		Map<String, Map<String, Double>> negativeEffects = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE );
+		Map<String, Map<String, Double>> positiveEffects = JsonConfig.data.get( JType.BIOME_EFFECT_POSITIVE );
 
 		if( !lastBiome.containsKey( playerUUID ) )
 			lastBiome.put( playerUUID, "none" );
@@ -1289,10 +1243,10 @@ public class XP
 		{
 			if( positiveEffects != null )
 			{
-				Map<String, Object> positiveEffect = positiveEffects.get( biomeKey );
+				Map<String, Double> positiveEffect = positiveEffects.get( biomeKey );
 				if( positiveEffect != null )
 				{
-					for( Map.Entry<String, Object> entry : positiveEffect.entrySet() )
+					for( Map.Entry<String, Double> entry : positiveEffect.entrySet() )
 					{
 						Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
@@ -1304,10 +1258,10 @@ public class XP
 		}
 		else if( negativeEffects != null )
 		{
-			Map<String, Object> negativeEffect = negativeEffects.get( biomeKey );
+			Map<String, Double> negativeEffect = negativeEffects.get( biomeKey );
 			if( negativeEffect != null )
 			{
-				for( Map.Entry<String, Object> entry : negativeEffect.entrySet() )
+				for( Map.Entry<String, Double> entry : negativeEffect.entrySet() )
 				{
 					Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
@@ -1320,7 +1274,7 @@ public class XP
 					{
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getRegistryName().toString() ) ).setStyle( textStyle.get( "red" ) ), true );
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getRegistryName().toString() ) ).setStyle( textStyle.get( "red" ) ), false );
-						for( Map.Entry<String, Object> entry : biomeReq.entrySet() )
+						for( Map.Entry<String, Double> entry : biomeReq.entrySet() )
 						{
 							int startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
@@ -1337,9 +1291,9 @@ public class XP
 		lastBiome.put( playerUUID, biomeKey );
 	}
 
-	public static double getWeight( int startLevel, Map<String, Object> fishItem )
+	public static double getWeight( int startLevel, Map<String, Double> fishItem )
 	{
-		return DP.map( startLevel, (double) fishItem.get( "startLevel" ), (double) fishItem.get( "endLevel" ), (double) fishItem.get( "startWeight" ), (double) fishItem.get( "endWeight" ) );
+		return DP.mapCapped( startLevel, fishItem.get( "startLevel" ), fishItem.get( "endLevel" ), fishItem.get( "startWeight" ), fishItem.get( "endWeight" ) );
 	}
 
 	public static Map<Skill, Double> getOfflineXpMap(UUID uuid)

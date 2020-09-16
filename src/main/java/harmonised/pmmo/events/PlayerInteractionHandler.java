@@ -3,10 +3,8 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageTripleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -22,13 +20,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public class PlayerInteractionHandler
 {
@@ -36,84 +34,82 @@ public class PlayerInteractionHandler
     {
         try
         {
-        if( event instanceof PlayerInteractEvent.RightClickBlock || event instanceof PlayerInteractEvent.RightClickItem)
-        {
-            PlayerEntity player = event.getPlayer();
-            ItemStack itemStack = event.getItemStack();
-            Item item = itemStack.getItem();
-            Block goldBlock 	= 	Blocks.GOLD_BLOCK;
-            Block smithBlock    =   Blocks.SMITHING_TABLE;
-
-            if( item.getRegistryName() == null )
-                return;
-
-            String regKey = item.getRegistryName().toString();
-            int startLevel;
-            boolean isRemote = player.world.isRemote();
-            boolean matched;
-
-            if( event instanceof PlayerInteractEvent.RightClickItem)
+            if( event instanceof PlayerInteractEvent.RightClickBlock || event instanceof PlayerInteractEvent.RightClickItem)
             {
-                if( XP.isPlayerSurvival( player ) )
-                {
-                    if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
-                    {
-                        matched = XP.scanBlock( smithBlock, 1, player );
-                        if( !matched )
-                            matched = XP.scanBlock( goldBlock, 1, player );
+                PlayerEntity player = event.getPlayer();
+                ItemStack itemStack = event.getItemStack();
+                Item item = itemStack.getItem();
+                Block goldBlock 	= 	Blocks.GOLD_BLOCK;
+                Block smithBlock    =   Blocks.SMITHING_TABLE;
 
-                        if( matched )
+                if( item.getRegistryName() == null )
+                    return;
+
+                String regKey = item.getRegistryName().toString();
+                int startLevel;
+                boolean isRemote = player.world.isRemote();
+                boolean matched;
+
+                if( event instanceof PlayerInteractEvent.RightClickItem)
+                {
+                    if( XP.isPlayerSurvival( player ) )
+                    {
+                        if( JsonConfig.data2.get( JType.SALVAGE ).containsKey( regKey ) )
                         {
-                            event.setCanceled( true );
+                            matched = XP.scanBlock( smithBlock, 1, player );
+                            if( !matched )
+                                matched = XP.scanBlock( goldBlock, 1, player );
+
+                            if( matched )
+                            {
+                                event.setCanceled( true );
 
 //							if( isRemote )
 //								player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotUseProximity", new TranslationTextComponent( matchedBlock.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                            }
                         }
                     }
                 }
-            }
 
-            if( item instanceof BlockItem )
-            {
-                if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_PLACE ) )
+                if( item instanceof BlockItem )
+                {
+                    if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_PLACE ) )
+                    {
+                        event.setCanceled( true );
+
+                        if( isRemote )
+                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToPlaceDown", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                    }
+                }
+                else if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_USE ) )
                 {
                     event.setCanceled( true );
 
                     if( isRemote )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToPlaceDown", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                 }
-            }
-            else if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_USE ) )
-            {
-               event.setCanceled( true );
 
-               if( isRemote )
-                   player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-            }
-
-            if( event instanceof PlayerInteractEvent.RightClickBlock)
-            {
-                Block block = player.world.getBlockState( event.getPos() ).getBlock();
-
-                if( !XP.checkReq( player, block.getRegistryName(), JType.REQ_USE ) )
+                if( event instanceof PlayerInteractEvent.RightClickBlock)
                 {
-                    if( XP.isPlayerSurvival( player ) )
+                    Block block = player.world.getBlockState( event.getPos() ).getBlock();
+
+                    if( !XP.checkReq( player, block.getRegistryName(), JType.REQ_USE ) )
                     {
-                        event.setCanceled( true );
-                        if( isRemote && event.getHand().equals( Hand.MAIN_HAND ) )
+                        if( XP.isPlayerSurvival( player ) )
                         {
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                            event.setCanceled( true );
+                            if( isRemote && event.getHand().equals( Hand.MAIN_HAND ) )
+                            {
+                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUse", new TranslationTextComponent( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
 //                            if( JsonConfig.data.get( JType.REQ_USE ).containsKey( block.getRegistryName().toString() ) )
 //                            {
-                                for( Map.Entry<String, Object> entry : JsonConfig.data.get( JType.REQ_USE ).get( block.getRegistryName().toString() ).entrySet() )
+                                for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_USE ).get( block.getRegistryName().toString() ).entrySet() )
                                 {
                                     startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
-                                    double entryValue = 1;
-                                    if( entry.getValue() instanceof Double )
-                                        entryValue = (double) entry.getValue();
+                                    double entryValue = entry.getValue();
 
                                     if( startLevel < entryValue )
                                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + DP.dpSoft( entryValue ) ).setStyle( XP.textStyle.get( "red" ) ), false );
@@ -121,232 +117,187 @@ public class PlayerInteractionHandler
                                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + DP.dpSoft( entryValue ) ).setStyle( XP.textStyle.get( "green" ) ), false );
                                 }
 //                            }
+                            }
                         }
                     }
-                }
-                else
-                {
-                    event.setCanceled( false );
-
-                    Block anvil 		=	Blocks.ANVIL;
-                    Block ironBlock		= 	Blocks.IRON_BLOCK;
-                    Block diamondBlock 	= 	Blocks.DIAMOND_BLOCK;
-
-                    int smithingLevel = Skill.SMITHING.getLevel( player );
-                    int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
-                    int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
-                    int maxPlayerBypass = (int) Math.floor( (double) smithingLevel / (double) levelsPerOneEnchantBypass );
-                    if( maxPlayerBypass > maxEnchantmentBypass )
-                        maxPlayerBypass = maxEnchantmentBypass;
-
-                    if( player.isCrouching() )
+                    else
                     {
-                        if( block.equals( ironBlock ) || block.equals( anvil ) )
+                        event.setCanceled( false );
+
+                        int startSmithingLevel = Skill.SMITHING.getLevel( player );
+                        int smithingLevel;
+                        Integer lowestReqLevel = null;
+
+                        if( player.isCrouching() )
                         {
-                            if( event.getHand() == Hand.MAIN_HAND )
+                            if( ( block.equals( goldBlock ) || block.equals( smithBlock ) ) )
                             {
-                                //Outdated, Replaced by Tooltip
-                            }
-                            else
-                                return;
-                        }
+                                if( item.equals( Items.AIR ) )
+                                    return;
 
-                        if( ( block.equals( goldBlock ) || block.equals( smithBlock ) ) )
-                        {
-                            if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
-                                event.setCanceled( true );
+                                if( isRemote )
+                                    return;
 
-                            if( isRemote )
-                                return;
+                                if( !event.getHand().equals( Hand.OFF_HAND ) )
+                                    return;
 
-                            if( event.getHand().equals( Hand.OFF_HAND ) )
-                            {
                                 itemStack = player.getHeldItemOffhand();
                                 item = itemStack.getItem();
 
-                                if( !item.equals( Items.AIR ) )
+                                if( JsonConfig.data2.get( JType.SALVAGE ).containsKey( item.getRegistryName().toString() ) )
+                                    event.setCanceled( true );
+                                else
                                 {
-                                    if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( regKey ) )
+                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                    return;
+                                }
+
+                                if( !( XP.getHorizontalDistance( player.getPositionVec(), XP.blockToMiddleVec( event.getPos() ) ) < 2 ) )
+                                {
+                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooFarAwayToSalvage" ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                    return;
+                                }
+
+//                            if( event.getHand() != Hand.OFF_HAND )
+//                            {
+//                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.offhandToDiss" ), false );
+//                                XP.sendMessage( "_________________________________", false, player );
+//                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
+//                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
+//                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
+//                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
+//                                return;
+//                            }
+
+                                if( !XP.isPlayerSurvival( player ) )
+                                {
+                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.survivalOnlyWarning" ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                    return;
+                                }
+
+                                //SALVAGE IS AVAILABLE
+                                Map<String, Map<String, Double>> salvageFromItemMap = JsonConfig.data2.get( JType.SALVAGE ).get( regKey );
+                                Map<String, Double> salvageToItemMap;
+                                boolean ableToSalvageAny = false;
+                                double award = 0;
+
+                                for( Map.Entry<String, Map<String, Double>> salvageToItemEntry : salvageFromItemMap.entrySet() )
+                                {
+                                    smithingLevel = startSmithingLevel;
+                                    Item salvageToItem = XP.getItem( salvageToItemEntry.getKey() );
+                                    salvageToItemMap = salvageToItemEntry.getValue();
+
+                                    double baseChance = salvageToItemMap.get( "baseChance" );
+                                    double chancePerLevel = salvageToItemMap.get( "chancePerLevel" );
+                                    double maxSalvageMaterialChance = salvageToItemMap.get( "maxChance" );
+                                    int reqLevel = (int) Math.floor( salvageToItemMap.get( "levelReq" ) );
+                                    int salvageMax = (int) Math.floor( salvageToItemMap.get( "salvageMax" ) );
+                                    smithingLevel -= reqLevel;
+
+                                    if( lowestReqLevel == null || lowestReqLevel > reqLevel )
+                                        lowestReqLevel = reqLevel;
+                                    if( smithingLevel >= 0 )
                                     {
-                                        if( player.getPositionVec().squareDistanceTo( XP.blockToVec( event.getPos() ) ) < 2 )
+                                        ableToSalvageAny = true;
+                                        double chance = baseChance + ( chancePerLevel * smithingLevel );
+
+                                        if( chance > maxSalvageMaterialChance )
+                                            chance = maxSalvageMaterialChance;
+
+                                        double startDmg = itemStack.getDamage();
+                                        double maxDmg = itemStack.getMaxDamage();
+                                        double displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
+                                        double durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
+
+                                        if( Double.isNaN( durabilityPercent ) )
+                                            durabilityPercent = 1;
+
+                                        int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
+
+                                        int returnAmount = 0;
+
+                                        for( int i = 0; i < potentialReturnAmount; i++ )
                                         {
-                                            Map<String, Object> theMap = JsonConfig.data.get( JType.SALVAGE_TO ).get( regKey );
-                                            Item salvageItem = XP.getItem( (String) theMap.get( "salvageItem" ) );
-                                            if( !salvageItem.equals( Items.AIR ) )
-                                            {
-                                                Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
-                                                double baseChance = (double) theMap.get( "baseChance" );
-                                                double chancePerLevel = (double) theMap.get( "chancePerLevel" );
-                                                double maxSalvageMaterialChance = (double) theMap.get( "maxChance" );
-                                                int reqLevel = (int) Math.floor( (double) theMap.get( "levelReq" ) );
-                                                int salvageMax = (int) Math.floor( (double) theMap.get( "salvageMax" ) );
-                                                smithingLevel -= reqLevel;
-                                                if( smithingLevel >= 0 )
-                                                {
-                                                    double chance = baseChance + ( chancePerLevel * smithingLevel );
-                                                    double maxSalvageEnchantChance = Config.forgeConfig.maxSalvageEnchantChance.get();
-                                                    double enchantSaveChancePerLevel = Config.forgeConfig.enchantSaveChancePerLevel.get();
-
-                                                    if( chance > maxSalvageMaterialChance )
-                                                        chance = maxSalvageMaterialChance;
-
-                                                    double enchantChance = smithingLevel * enchantSaveChancePerLevel;
-                                                    if( enchantChance > maxSalvageEnchantChance )
-                                                        enchantChance = maxSalvageEnchantChance;
-
-                                                    double startDmg = itemStack.getDamage();
-                                                    double maxDmg = itemStack.getMaxDamage();
-                                                    double award = 0;
-                                                    double displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
-                                                    double durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
-
-                                                    if( Double.isNaN( durabilityPercent ) )
-                                                        durabilityPercent = 1;
-
-                                                    int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
-
-                                                    if( event.getHand() == Hand.OFF_HAND )
-                                                    {
-                                                        if( XP.isPlayerSurvival( player ) )
-                                                        {
-                                                            int returnAmount = 0;
-
-                                                            for( int i = 0; i < potentialReturnAmount; i++ )
-                                                            {
-                                                                if( Math.ceil( Math.random() * 10000 ) <= chance * 100 )
-                                                                    returnAmount++;
-                                                            }
-                                                            award += (double) theMap.get( "xpPerItem" ) * returnAmount;
-
-                                                            if( returnAmount > 0 )
-                                                                XP.dropItems( returnAmount, salvageItem, event.getWorld(), event.getPos() );
-
-                                                            if( award > 0 )
-                                                                XP.awardXp( player, Skill.SMITHING, "salvaging " + returnAmount + "/" + salvageMax + " from an item", award, false, false  );
-
-                                                            if( returnAmount == potentialReturnAmount )
-                                                                NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
-                                                            else if( returnAmount > 0 )
-                                                                NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 3 ), (ServerPlayerEntity) player );
-                                                            else
-                                                                NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
-
-                                                            if( enchants.size() > 0 )
-                                                            {
-                                                                ItemStack salvagedBook = new ItemStack( Items.ENCHANTED_BOOK );
-                                                                Set<Enchantment> enchantKeys = enchants.keySet();
-                                                                Map<Enchantment, Integer> newEnchantMap = new HashMap<>();
-                                                                int enchantLevel;
-                                                                boolean fullEnchants = true;
-
-                                                                for( Enchantment enchant : enchantKeys )
-                                                                {
-                                                                    enchantLevel = 0;
-                                                                    for( int i = 1; i <= enchants.get( enchant ); i++ )
-                                                                    {
-                                                                        if( Math.floor( Math.random() * 100 ) < enchantChance )
-                                                                            enchantLevel = i;
-                                                                        else
-                                                                        {
-                                                                            fullEnchants = false;
-//				    													i = enchants.get( enchant ) + 1;
-                                                                        }
-                                                                    }
-                                                                    if( enchantLevel > 0 )
-                                                                        newEnchantMap.put( enchant, enchantLevel );
-                                                                }
-                                                                if( newEnchantMap.size() > 0 )
-                                                                {
-                                                                    EnchantmentHelper.setEnchantments( newEnchantMap, salvagedBook );
-                                                                    block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
-                                                                    if( fullEnchants )
-                                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedAllEnchants" ).setStyle( XP.textStyle.get( "green" ) ), false );
-                                                                    else
-                                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedSomeEnchants" ).setStyle( XP.textStyle.get( "yellow" ) ), false );
-                                                                }
-                                                            }
-                                                            player.getHeldItemOffhand().shrink( 1 );
-//				    									player.inventory.offHandInventory.set( 0, new ItemStack( Items.AIR, 0 ) );
-                                                            player.sendBreakAnimation(Hand.OFF_HAND );
-                                                        }
-                                                        else
-                                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.survivalOnlyWarning" ).setStyle( XP.textStyle.get( "red" ) ), true );
-                                                    }
-                                                    else
-                                                    {
-                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.offhandToDiss" ), false );
-                                                        XP.sendMessage( "_________________________________", false, player );
-                                                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
-                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
-                                                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
-                                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
-                                                    }
-                                                }
-                                                else
-                                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvageLackLevelLonger", reqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                                            }
-                                            else
-                                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSalvageItem", theMap.get( "salvageItem" ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                            if( Math.ceil( Math.random() * 10000 ) <= chance * 100 )
+                                                returnAmount++;
                                         }
+                                        award += salvageToItemMap.get( "xpPerItem" ) * returnAmount;
+
+                                        if( returnAmount > 0 )
+                                            XP.dropItems( returnAmount, salvageToItem, event.getWorld(), event.getPos() );
+
+                                        if( returnAmount == potentialReturnAmount )
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), false, 1 ), (ServerPlayerEntity) player );
+                                        else if( returnAmount > 0 )
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), false, 3 ), (ServerPlayerEntity) player );
                                         else
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
+                                    }
+                                }
+
+                                if( ableToSalvageAny )
+                                {
+                                    //ENCHANTS
+                                    Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
+//                                int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
+//                                int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
+                                    double maxSalvageEnchantChance = Config.forgeConfig.maxSalvageEnchantChance.get();
+                                    double enchantSaveChancePerLevel = Config.forgeConfig.enchantSaveChancePerLevel.get();
+//                                int maxPlayerBypass = (int) Math.floor( (double) startSmithingLevel / (double) levelsPerOneEnchantBypass );
+//                                if( maxPlayerBypass > maxEnchantmentBypass )
+//                                    maxPlayerBypass = maxEnchantmentBypass;
+                                    double enchantChance = (startSmithingLevel - lowestReqLevel) * enchantSaveChancePerLevel;
+                                    if( enchantChance > maxSalvageEnchantChance )
+                                        enchantChance = maxSalvageEnchantChance;
+
+                                    if( enchants.size() > 0 )
+                                    {
+                                        ItemStack salvagedBook = new ItemStack( Items.ENCHANTED_BOOK );
+                                        Set<Enchantment> enchantKeys = enchants.keySet();
+                                        Map<Enchantment, Integer> newEnchantMap = new HashMap<>();
+                                        int enchantLevel;
+                                        boolean fullEnchants = true;
+
+                                        for( Enchantment enchant : enchantKeys )
                                         {
-                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooFarAwayToSalvage" ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                            enchantLevel = 0;
+                                            for( int i = 1; i <= enchants.get( enchant ); i++ )
+                                            {
+                                                if( Math.floor( Math.random() * 100 ) < enchantChance )
+                                                    enchantLevel = i;
+                                                else
+                                                {
+                                                    fullEnchants = false;
+//				    						i = enchants.get( enchant ) + 1;
+                                                }
+                                            }
+                                            if( enchantLevel > 0 )
+                                                newEnchantMap.put( enchant, enchantLevel );
+                                        }
+                                        if( newEnchantMap.size() > 0 )
+                                        {
+                                            EnchantmentHelper.setEnchantments( newEnchantMap, salvagedBook );
+                                            Block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
+                                            if( fullEnchants )
+                                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedAllEnchants" ).setStyle( XP.textStyle.get( "green" ) ), false );
+                                            else
+                                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedSomeEnchants" ).setStyle( XP.textStyle.get( "yellow" ) ), false );
                                         }
                                     }
-                                    else
-                                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+
+                                    if( award > 0 )
+                                        XP.awardXp( player, Skill.SMITHING, item.getRegistryName().toString(), award, false, false  );
+
+                                    player.getHeldItemOffhand().shrink( 1 );
+                                    player.sendBreakAnimation(Hand.OFF_HAND );
                                 }
+                                else
+                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvageLackLevelLonger", lowestReqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             }
-                        }
-
-                        if( block.equals( diamondBlock ) && event.getHand() == Hand.MAIN_HAND && !player.world.isRemote() )
-                        {
-                            UUID uuid = player.getUniqueID();
-                            int agilityLevel = Skill.AGILITY.getLevel( uuid );
-                            int enduranceLevel = Skill.ENDURANCE.getLevel( uuid );
-                            int combatLevel = Skill.COMBAT.getLevel( uuid );
-                            int swimLevel = Skill.SMITHING.getLevel( uuid );
-                            int nightvisionUnlockLevel = (int) Math.floor( Config.getConfig( "nightvisionUnlockLevel" ) );	//Swimming
-
-                            double maxFallSaveChance = Config.getConfig( "maxFallSaveChance" );			//Agility
-                            double saveChancePerLevel = Config.getConfig( "saveChancePerLevel" ) / 100;
-
-                            double levelsPerDamage = Config.getConfig( "levelsPerDamage" );				//Combat
-                            double endurancePerLevel = Config.getConfig( "endurancePerLevel" );			//Endurance
-                            double maxEndurance = Config.getConfig( "maxEndurance" );
-                            double endurePercent = (enduranceLevel * endurancePerLevel);
-                            if( endurePercent > maxEndurance )
-                                endurePercent = maxEndurance;
-
-                            double reach = AttributeHandler.getReach( player );
-                            double agilityChance = agilityLevel * saveChancePerLevel;
-
-                            if( agilityChance > maxFallSaveChance )
-                                agilityChance = maxFallSaveChance;
-
-                            double extraDamage = Math.floor( (double) combatLevel / levelsPerDamage );
-                            double speedBonus = ( AttributeHandler.getSpeedBoost( player ) / AttributeHandler.getBaseSpeed( player ) ) * 100D;
-
-                            System.out.println( AttributeHandler.getBaseSpeed( player ) );
-                            System.out.println( AttributeHandler.getSpeedBoost( player ) );
-
-                            XP.sendMessage( "_________________________________" , false, player );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.buildingInfo", DP.dp( reach ) ), false );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.fallInfo", DP.dp( agilityChance ) ), false );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.enduranceInfo", DP.dp( endurePercent ) ), false );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.combatInfo", DP.dp( extraDamage ) ), false );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.sprintInfo", DP.dp( speedBonus ) ), false );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantmentBypassInfo", maxPlayerBypass ), false );
-
-                            if( swimLevel >= nightvisionUnlockLevel )
-                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.underwaterNightVisionUnLocked", nightvisionUnlockLevel ), false );
-                            else
-                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.underwaterNightVisionLocked", nightvisionUnlockLevel ), false );
                         }
                     }
                 }
             }
-        }
         }
         catch( Exception e )
         {

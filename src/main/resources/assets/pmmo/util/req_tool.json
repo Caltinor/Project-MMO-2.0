@@ -241,6 +241,22 @@
 	{
 		"mining": 30
 	},
+	"appliedenergistics2:nether_quartz_axe":
+	{
+		"woodcutting": 17
+	},
+	"appliedenergistics2:nether_quartz_shovel":
+	{
+		"excavation": 17
+	},
+	"appliedenergistics2:nether_quartz_hoe":
+	{
+		"farming": 17
+	},
+	"appliedenergistics2:nether_quartz_pickaxe":
+	{
+		"mining": 17
+	},
 	"create:deforester":
 	{
 		"woodcutting": 100

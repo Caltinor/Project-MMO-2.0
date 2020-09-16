@@ -34,7 +34,6 @@ public class DamageHandler
             if( target instanceof PlayerEntity)		//player hurt
             {
                 PlayerEntity player = (PlayerEntity) target;
-                Map<Skill, Double> xpMap = Config.getXpMap( player );
                 double agilityXp = 0;
                 double enduranceXp = 0;
                 boolean hideEndurance = false;
@@ -135,14 +134,14 @@ public class DamageHandler
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
-                            for( Map.Entry<String, Object> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ).entrySet() )
+                            for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ).entrySet() )
                             {
                                 int level = Skill.getSkill( entry.getKey() ).getLevel( player );
 
-                                if( level < (double) entry.getValue() )
-                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                                if( level < entry.getValue() )
+                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
                                 else
-                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
                             }
                         }
                     }

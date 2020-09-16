@@ -51,27 +51,27 @@ public class MainScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", "", (something) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getInstance().player.closeScreen();
         });
 
-        TileButton glossaryButton = new TileButton(x + 24 + 36, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", "", (button) ->
+        TileButton glossaryButton = new TileButton(x + 24 + 36, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ) ) );
+            Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), true ) );
         });
 
-        TileButton creditsButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", "", (button) ->
+        TileButton creditsButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.CREDITS ) );
         });
 
-        TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", "", (button) ->
+        TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( ((TileButton) button).transKey ) ) );
         });
 
-        TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", "", (button) ->
+        TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), JType.STATS, Minecraft.getInstance().player ) );
         });

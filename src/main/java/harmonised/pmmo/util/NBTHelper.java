@@ -1,5 +1,6 @@
 package harmonised.pmmo.util;
 
+import harmonised.pmmo.config.JType;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -137,5 +138,98 @@ public class NBTHelper
         }
 
         return outData;
+    }
+
+    public static Map<JType, Map<String, Map<String, Double>>> nbtToData3( CompoundNBT input )
+    {
+        Map<JType, Map<String, Map<String, Double>>> output = new HashMap<>();
+        JType jType;
+        for( String jTypeKey : input.keySet() )
+        {
+            jType = JType.getJType(  jTypeKey );
+            output.put( jType, new HashMap<>() );
+            for( String topKey : input.getCompound( jTypeKey ).keySet() )
+            {
+                output.get( jType ).put( topKey, new HashMap<>() );
+                for( String botKey : input.getCompound( jTypeKey ).getCompound( topKey ).keySet() )
+                {
+                    output.get( jType ).get( topKey ).put( botKey, input.getCompound( jTypeKey ).getCompound( topKey ).getDouble( botKey ) );
+                }
+            }
+        }
+
+        return output;
+    }
+
+    public static CompoundNBT data3ToNbt( Map<JType, Map<String, Map<String, Double>>> input )
+    {
+        CompoundNBT output = new CompoundNBT();
+
+        for( JType jType : input.keySet() )
+        {
+            output.put( jType.toString(), new CompoundNBT() );
+            for( String topKey : input.get( jType ).keySet() )
+            {
+                output.getCompound( jType.toString() ).put( topKey, new CompoundNBT() );
+                for( String botKey : input.get( jType ).get( topKey ).keySet() )
+                {
+                    Double value = input.get( jType ).get( topKey ).get( botKey );
+
+                    output.getCompound( jType.toString() ).getCompound( topKey ).putDouble( botKey, value );
+                }
+            }
+        }
+
+        return output;
+    }
+
+    public static Map<JType, Map<String, Map<String, Map<String, Double>>>> nbtToData4( CompoundNBT input )
+    {
+        Map<JType, Map<String, Map<String, Map<String, Double>>>> output = new HashMap<>();
+        JType jType;
+        for( String jTypeKey : input.keySet() )
+        {
+            jType = JType.getJType( jTypeKey );
+            output.put( jType, new HashMap<>() );
+            for( String topKey : input.getCompound( jTypeKey ).keySet() )
+            {
+                output.get( jType ).put( topKey, new HashMap<>() );
+                for( String midKey : input.getCompound( jTypeKey ).getCompound( topKey ).keySet() )
+                {
+                    output.get( jType ).get( topKey ).put( midKey, new HashMap<>() );
+                    for( String botKey : input.getCompound( jTypeKey ).getCompound( topKey ).getCompound( midKey ).keySet() )
+                    {
+                        output.get( jType ).get( topKey ).get( midKey ).put( botKey, input.getCompound( jTypeKey ).getCompound( topKey ).getCompound( midKey ).getDouble( botKey ) );
+                    }
+                }
+            }
+        }
+
+        return output;
+    }
+
+    public static CompoundNBT data4ToNbt( Map<JType, Map<String, Map<String, Map<String, Double>>>> input )
+    {
+        CompoundNBT output = new CompoundNBT();
+
+        for( JType jType : input.keySet() )
+        {
+            output.put( jType.toString(), new CompoundNBT() );
+            for( String topKey : input.get( jType ).keySet() )
+            {
+                output.getCompound( jType.toString() ).put( topKey, new CompoundNBT() );
+                for( String midKey : input.get( jType ).get( topKey ).keySet() )
+                {
+                    output.getCompound( jType.toString() ).getCompound( topKey ).put( midKey, new CompoundNBT() );
+                    for( String botKey : input.get( jType ).get( topKey ).get( midKey ).keySet() )
+                    {
+                        Double value = input.get( jType ).get( topKey ).get( midKey ).get( botKey );
+                        output.getCompound( jType.toString() ).getCompound( topKey ).getCompound( midKey ).putDouble( botKey, value );
+                    }
+                }
+            }
+        }
+
+        return output;
     }
 }

@@ -40,7 +40,6 @@ public enum JType
     XP_BONUS_BIOME(30),
     XP_BONUS_HELD(31),
     XP_BONUS_WORN(32),
-    SALVAGE_TO(33),
     FISH_POOL(34),
     FISH_ENCHANT_POOL(35),
     MOB_RARE_DROP(36),
@@ -48,17 +47,22 @@ public enum JType
     PLAYER_SPECIFIC(38),
     BLOCK_SPECIFIC(39),
     VEIN_BLACKLIST(40),
-    THREE_LAYER_DATA( 100 ),
-    SALVAGE_FROM(101),
-    STATS(102),
-    DIMENSION(103),
-    CREDITS(104),
-    SETTINGS(105),
-    GUI_SETTINGS(106);
 
-    public static final Map< JType, Integer > jTypeMap = new HashMap<>();
-    public static final Map< Integer, JType > intMap = new HashMap<>();
-    public static final Map< String, JType > stringMap = new HashMap<>();
+    TREASURE(100),
+    SALVAGE(101),
+
+    SALVAGE_FROM(201),
+    TREASURE_FROM(202),
+    STATS(203),
+    DIMENSION(204),
+    CREDITS(205),
+    SETTINGS(206),
+    GUI_SETTINGS(207),
+    MULTIPLIERS(208);
+
+    public static final Map<JType, Integer> jTypeMap = new HashMap<>();
+    public static final Map<Integer, JType> intMap = new HashMap<>();
+    public static final Map<String, JType> stringMap = new HashMap<>();
     private final int value;
 
     JType( int value )

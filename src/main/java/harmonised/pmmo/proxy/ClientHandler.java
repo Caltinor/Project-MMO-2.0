@@ -27,7 +27,8 @@ import java.util.UUID;
 
 public class ClientHandler
 {
-    public static final KeyBinding SHOW_GUI = new KeyBinding( "key.pmmo.showGui", GLFW.GLFW_KEY_TAB, "category.pmmo" );
+    public static final KeyBinding SHOW_BAR = new KeyBinding( "key.pmmo.showBar", GLFW.GLFW_KEY_TAB, "category.pmmo" );
+    public static final KeyBinding SHOW_LIST = new KeyBinding( "key.pmmo.showList", GLFW.GLFW_KEY_LEFT_ALT, "category.pmmo" );
     public static final KeyBinding TOGGLE_TOOLTIP = new KeyBinding( "key.pmmo.toggleTooltip", GLFW.GLFW_KEY_F6, "category.pmmo" );
     public static final KeyBinding VEIN_KEY = new KeyBinding( "key.pmmo.vein", GLFW.GLFW_KEY_GRAVE_ACCENT, "category.pmmo" );
     public static final KeyBinding OPEN_MENU = new KeyBinding( "key.pmmo.openMenu", GLFW.GLFW_KEY_P, "category.pmmo" );
@@ -38,7 +39,8 @@ public class ClientHandler
     public static void init()
     {
         MinecraftForge.EVENT_BUS.register( new XPOverlayGUI() );
-        ClientRegistry.registerKeyBinding( SHOW_GUI );
+        ClientRegistry.registerKeyBinding( SHOW_BAR );
+        ClientRegistry.registerKeyBinding( SHOW_LIST );
         ClientRegistry.registerKeyBinding( TOGGLE_TOOLTIP );
         ClientRegistry.registerKeyBinding( VEIN_KEY );
         ClientRegistry.registerKeyBinding( OPEN_MENU );
