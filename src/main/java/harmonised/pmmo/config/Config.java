@@ -790,7 +790,7 @@ public class Config
                 this.blockHardnessLimitForBreaking = subscriber.subscribe(builder
                         .comment( "Hardest considered block (1 hardness = 1 remove xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
                         .translation( "pmmo.blockHardnessLimitForBreaking" )
-                        .defineInRange( "blockHardnessLimitForBreaking", 250D, 0, 1000000) );
+                        .defineInRange( "blockHardnessLimitForBreaking", 20D, 0, 1000000) );
 
                 builder.pop();
             }
@@ -810,7 +810,7 @@ public class Config
                 this.blockHardnessLimitForPlacing = subscriber.subscribe(builder
                         .comment( "Hardest considered block (1 hardness = 1 build xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
                         .translation( "pmmo.blockHardnessLimitForPlacing" )
-                        .defineInRange( "blockHardnessLimitForPlacing", 250D, 0, 1000000) );
+                        .defineInRange( "blockHardnessLimitForPlacing", 20D, 0, 1000000) );
 
                 builder.pop();
             }
