@@ -808,13 +808,13 @@ public class XP
 
 	public static double getGlobalMultiplier( Skill skill )
 	{
-		return JsonConfig.data.get( JType.MULTIPLIERS ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill.toString(), 1D );
+		return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill.toString(), 1D );
 	}
 
 	public static double getDimensionMultiplier(Skill skill, PlayerEntity player )
 	{
 		String dimensionKey = player.world.getDimension().getType().getRegistryName().toString();
-		return JsonConfig.data.get( JType.MULTIPLIERS ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 1D );
+		return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 1D );
 	}
 
 	public static double getDifficultyMultiplier( PlayerEntity player, Skill skill )
@@ -895,6 +895,17 @@ public class XP
 		return itemBoost;
 	}
 
+	public static double getDimensionBoost( PlayerEntity player, Skill skill )
+	{
+		String dimensionKey = player.world.getDimension().getType().getRegistryName().toString();
+		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 0D );
+	}
+
+	public static double getGlobalBoost( Skill skill )
+	{
+		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill.toString(), 0D );
+	}
+
 	public static CompoundNBT writeUniqueId( UUID uuid )
 	{
 		CompoundNBT compoundnbt = new CompoundNBT();
@@ -933,9 +944,11 @@ public class XP
 		double globalMultiplier = getGlobalMultiplier( skill );
 		double dimensionMultiplier = getDimensionMultiplier( skill, player );
 		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
+		double globalBoost = getGlobalBoost( skill );
 		double itemBoost = getItemBoost( player, skill );
 		double biomeBoost = getBiomeBoost( player, skill );
-		double additiveMultiplier = 1 + (itemBoost + biomeBoost) / 100;
+		double dimensionBoost = getDimensionBoost( player, skill );
+		double additiveMultiplier = 1 + (itemBoost + biomeBoost + dimensionBoost + globalBoost) / 100;
 
 		multiplier *= globalMultiplier;
 		multiplier *= dimensionMultiplier;

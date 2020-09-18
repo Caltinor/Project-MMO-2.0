@@ -526,12 +526,12 @@
 	"biomesoplenty:fir_sapling":
 	{
 		"farming": 35,
-		"woodcutting": 60
+		"woodcutting": 35
 	},
 	"biomesoplenty:redwood_sapling":
 	{
 		"farming": 30,
-		"woodcutting": 55
+		"woodcutting": 60
 	},
 	"biomesoplenty:white_cherry_sapling":
 	{
@@ -610,18 +610,22 @@
 	},
 	"autumnity:red_maple_sapling":
 	{
-		"farming": 30
+		"farming": 30,
+		"woodcutting": 50
 	},
 	"autumnity:orange_maple_sapling":
 	{
-		"farming": 35
+		"farming": 35,
+		"woodcutting": 45
 	},
 	"autumnity:yellow_maple_sapling":
 	{
-		"farming": 30
+		"farming": 30,
+		"woodcutting": 40
 	},
 	"autumnity:maple_sapling":
 	{
-		"farming": 25
+		"farming": 25,
+		"woodcutting": 35
 	}
 }

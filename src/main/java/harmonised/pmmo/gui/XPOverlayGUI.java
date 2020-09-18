@@ -58,7 +58,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static double maxXp;
 	private static XpDrop xpDrop;
 	private static long lastBonusUpdate = System.nanoTime(), lastVeinBlockUpdate = System.nanoTime();
-	private static double itemBoost, biomeBoost, multiplier;
+	private static double itemBoost, biomeBoost, dimensionBoost, dimensionMultiplier, multiplier;
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
 	private static BlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
@@ -460,10 +460,11 @@ public class XPOverlayGUI extends AbstractGui
 
 					itemBoost = XP.getItemBoost( player, tempSkill );
 					biomeBoost = XP.getBiomeBoost( player, tempSkill );
+					dimensionBoost = XP.getDimensionBoost( player, tempSkill );
 //					multiplier = ( XP.getMultiplier(  player, tempSkill ) * 100 ) - 100;
 
 					if( itemBoost + biomeBoost >= -100 )
-						skills.get( tempSkill ).bonus = itemBoost + biomeBoost;
+						skills.get( tempSkill ).bonus = itemBoost + biomeBoost + dimensionBoost;
 					else
 						skills.get( tempSkill ).bonus = -100;
 				}

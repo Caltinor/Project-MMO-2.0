@@ -6,6 +6,7 @@ import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.gui.GlossaryScreen;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.proxy.ServerHandler;
+import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
@@ -66,6 +67,7 @@ public class MessageUpdatePlayerNBT
                     {
                         Config.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
                         WorldTickHandler.refreshVein();
+                        AttributeHandler.init();
                     }
                     else
                         LogHandler.LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
