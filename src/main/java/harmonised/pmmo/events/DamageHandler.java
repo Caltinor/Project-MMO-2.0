@@ -83,7 +83,7 @@ public class DamageHandler
                     if( saved != 0 && player.getHealth() > damage )
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedFall", saved ), true );
 
-                    award = saved * 25;
+                    award = saved * 5;
 
                     agilityXp = award;
                 }
