@@ -40,6 +40,7 @@ public enum JType
     XP_BONUS_BIOME(30),
     XP_BONUS_HELD(31),
     XP_BONUS_WORN(32),
+    XP_BONUS_DIMENSION( 33 ),
     FISH_POOL(34),
     FISH_ENCHANT_POOL(35),
     MOB_RARE_DROP(36),
@@ -58,7 +59,7 @@ public enum JType
     CREDITS(205),
     SETTINGS(206),
     GUI_SETTINGS(207),
-    MULTIPLIERS(208);
+    XP_MULTIPLIER_DIMENSION(208);
 
     public static final Map<JType, Integer> jTypeMap = new HashMap<>();
     public static final Map<Integer, JType> intMap = new HashMap<>();

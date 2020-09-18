@@ -673,6 +673,10 @@
 	{
 		"mining": 14
 	},
+	"biomesoplenty:white_sand":
+	{
+		"excavation": 1.3
+	},
 	"biomesoplenty:fir_wood":
 	{
 		"woodcutting": 8

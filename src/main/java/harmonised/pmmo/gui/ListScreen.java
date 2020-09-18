@@ -337,6 +337,34 @@ public class ListScreen extends Screen
 
             switch (jType)   //Individual Button Handling
             {
+                case DIMENSION:
+                {
+                    Map<String, Map<String, Double>> veinBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST );
+                    Map<String, Double> dimensionBonusMap = JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).get(button.regKey);
+
+                    if( veinBlacklist != null )
+                    {
+                        button.text.add( new StringTextComponent( "" ) );
+                        button.text.add( getTransComp( "pmmo.veinBlacklist" ).setStyle( XP.textStyle.get( "red" ) ) );
+                        for ( Map.Entry<String, Double> entry : veinBlacklist.get( button.regKey ).entrySet() )
+                        {
+                            button.text.add( new StringTextComponent( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
+                        }
+                    }
+
+                    if ( dimensionBonusMap != null )
+                    {
+                        for (Map.Entry<String, Double> entry : dimensionBonusMap.entrySet())
+                        {
+                            if ( entry.getValue() > 0 )
+                                skillText.add( new StringTextComponent( " " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), "+" + entry.getValue() + "%").getString() ).setStyle(XP.getSkillStyle(Skill.getSkill(entry.getKey()))));
+                            if ( entry.getValue() < 0 )
+                                skillText.add( new StringTextComponent( " " + getTransComp("pmmo.levelDisplay", getTransComp("pmmo." + entry.getKey()), entry.getValue() + "%").getString() ).setStyle(XP.getSkillStyle(Skill.getSkill(entry.getKey()))));
+                        }
+                    }
+                }
+                break;
+
                 case REQ_BIOME:
                 {
                     button.text.add( new StringTextComponent( "" ) );
@@ -474,7 +502,6 @@ public class ListScreen extends Screen
                 case XP_VALUE_SMELT:
                 case XP_VALUE_COOK:
                 case XP_VALUE_BREW:
-                case XP_VALUE_GROW:
                 {
                     addXpToButton( button, reqMap.get( button.regKey ) );
                 }
@@ -489,6 +516,12 @@ public class ListScreen extends Screen
                 case XP_VALUE_CRAFT:
                 {
                     addXpToButton( button, reqMap.get( button.regKey ), JType.REQ_CRAFT, player );
+                }
+                    break;
+
+                case XP_VALUE_GROW:
+                {
+                    addXpToButton( button, reqMap.get( button.regKey ), JType.REQ_PLACE, player );
                 }
                     break;
 
@@ -569,21 +602,6 @@ public class ListScreen extends Screen
                         for( Map.Entry<String, Double> entry : rareDropMap.entrySet() )
                         {
                             button.text.add( new StringTextComponent(  new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ) + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ) ).getString() ).setStyle( color ) );
-                        }
-                    }
-                }
-                    break;
-
-                case DIMENSION:
-                {
-                    Map<String, Map<String, Double>> veinBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST );
-                    if( veinBlacklist != null )
-                    {
-                        button.text.add( new StringTextComponent( "" ) );
-                        button.text.add( getTransComp( "pmmo.veinBlacklist" ).setStyle( XP.textStyle.get( "red" ) ) );
-                        for ( Map.Entry<String, Double> entry : veinBlacklist.get( button.regKey ).entrySet() )
-                        {
-                            button.text.add( new StringTextComponent( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
                         }
                     }
                 }
@@ -864,7 +882,6 @@ public class ListScreen extends Screen
                 case INFO_LOG:
                 case INFO_PLANT:
                 case XP_VALUE_BREAK:
-                case XP_VALUE_CRAFT:
                         button.unlocked = XP.checkReq( player, button.regKey, JType.REQ_BREAK );
                     break;
 
@@ -885,6 +902,14 @@ public class ListScreen extends Screen
                 case REQ_PLACE:
                 case REQ_BIOME:
                     button.unlocked = XP.checkReq( player, button.regKey, jType );
+                    break;
+
+                case XP_VALUE_CRAFT:
+                    button.unlocked = XP.checkReq( player, button.regKey, JType.REQ_CRAFT );
+                    break;
+
+                case XP_VALUE_GROW:
+                    button.unlocked = XP.checkReq( player, button.regKey, JType.REQ_PLACE );
                     break;
 
                 default:

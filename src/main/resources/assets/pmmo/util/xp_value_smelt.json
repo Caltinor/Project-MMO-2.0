@@ -317,6 +317,10 @@
 	{
 		"smithing": 14
 	},
+	"biomesoplenty:white_sand":
+	{
+		"smithing": 1
+	},
 	"biomesoplenty:mud_ball":
 	{
 		"smithing": 1.2

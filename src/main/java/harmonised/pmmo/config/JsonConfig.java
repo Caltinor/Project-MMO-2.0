@@ -11,18 +11,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.function.BiConsumer;
 
 public class JsonConfig
 {
@@ -215,7 +211,8 @@ public class JsonConfig
         jTypes.add( JType.PLAYER_SPECIFIC );
         jTypes.add( JType.VEIN_BLACKLIST );
         jTypes.add( JType.XP_VALUE_TRIGGER );
-        jTypes.add( JType.MULTIPLIERS );
+        jTypes.add( JType.XP_BONUS_DIMENSION );
+        jTypes.add( JType.XP_MULTIPLIER_DIMENSION );
     }
 
     private static void initData()
@@ -391,8 +388,11 @@ public class JsonConfig
         if( jTypes.contains( JType.VEIN_BLACKLIST ) )
             updateDataVein( rawData.get( JType.VEIN_BLACKLIST ), localData.get( JType.VEIN_BLACKLIST ) );
 
-        if( jTypes.contains( JType.MULTIPLIERS ) )
-            updateDataSkills( JType.MULTIPLIERS );
+        if( jTypes.contains(  JType.XP_BONUS_DIMENSION ) )
+            updateDataSkills( JType.XP_BONUS_DIMENSION );
+
+        if( jTypes.contains(  JType.XP_MULTIPLIER_DIMENSION ) )
+            updateDataSkills( JType.XP_MULTIPLIER_DIMENSION );
     }
 
     private static void createData( File dataFile, String fileName )

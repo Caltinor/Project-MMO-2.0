@@ -315,11 +315,19 @@
 	{
 		"crafting": 1000
 	},
+	"minecraft:iron_nugget":
+	{
+		"crafting": 0
+	},
 	"minecraft:iron_ingot":
 	{
 		"crafting": 0
 	},
 	"minecraft:iron_block":
+	{
+		"crafting": 0
+	},
+	"minecraft:gold_nugget":
 	{
 		"crafting": 0
 	},
@@ -347,6 +355,14 @@
 	{
 		"crafting": 0
 	},
+	"minecraft:coal":
+	{
+		"crafting": 0
+	},
+	"minecraft:coal_block":
+	{
+		"crafting": 0
+	},
 	"minecraft:redstone":
 	{
 		"crafting": 0
@@ -368,6 +384,423 @@
 		"crafting": 0
 	},
 	"minecraft:hay_block":
+	{
+		"crafting": 0
+	},
+	"minecraft:bread":
+	{
+		"cooking": 3.5
+	},
+	"minecraft:beetroot_soup":
+	{
+		"cooking": 22.5
+	},
+	"minecraft:mushroom_stew":
+	{
+		"cooking": 15
+	},
+	"minecraft:rabbit_stew":
+	{
+		"cooking": 35
+	},
+	"minecraft:cake":
+	{
+		"cooking": 45
+	},
+	"minecraft:cookie":
+	{
+		"cooking": 0.75
+	},
+	"minecraft:pumpkin_pie":
+	{
+		"cooking": 27.5
+	},
+	"appliedenergistics2:controller":
+	{
+		"crafting": 120,
+		"smithing": 30
+	},
+	"appliedenergistics2:drive":
+	{
+		"crafting": 90,
+		"smithing": 35
+	},
+	"appliedenergistics2:io_port":
+	{
+		"crafting": 60,
+		"smithing": 20
+	},
+	"appliedenergistics2:terminal":
+	{
+		"crafting": 45,
+		"smithing": 15
+	},
+	"appliedenergistics2:pattern_terminal":
+	{
+		"crafting": 45,
+		"smithing": 15
+	},
+	"appliedenergistics2:crafting_terminal":
+	{
+		"crafting": 45,
+		"smithing": 15
+	},
+	"appliedenergistics2:interface_terminal":
+	{
+		"crafting": 45,
+		"smithing": 15
+	},
+	"appliedenergistics2:fluid_terminal":
+	{
+		"crafting": 45,
+		"smithing": 15
+	},
+	"appliedenergistics2:annihilation_plane":
+	{
+		"crafting": 50,
+		"smithing": 42
+	},
+	"appliedenergistics2:formation_plane":
+	{
+		"crafting": 45,
+		"smithing": 40
+	},
+	"appliedenergistics2:fluid_annihilation_plane":
+	{
+		"crafting": 40,
+		"smithing": 35
+	},
+	"appliedenergistics2:fluid_formation_plane":
+	{
+		"crafting": 40,
+		"smithing": 32
+	},
+	"appliedenergistics2:interface":
+	{
+		"crafting": 50,
+		"smithing": 40
+	},
+	"appliedenergistics2:fluid_interface":
+	{
+		"crafting": 40,
+		"smithing": 30
+	},
+	"appliedenergistics2:quartz_growth_accelerator":
+	{
+		"crafting": 50,
+		"smithing": 30
+	},
+	"appliedenergistics2:crafting_accelerator":
+	{
+		"crafting": 30,
+		"smithing": 25
+	},
+	"appliedenergistics2:1k_crafting_storage":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"appliedenergistics2:4k_crafting_storage":
+	{
+		"crafting": 30,
+		"smithing": 15
+	},
+	"appliedenergistics2:16k_crafting_storage":
+	{
+		"crafting": 40,
+		"smithing": 20
+	},
+	"appliedenergistics2:64k_crafting_storage":
+	{
+		"crafting": 50,
+		"smithing": 25
+	},
+	"appliedenergistics2:vibration_chamber":
+	{
+		"crafting": 10,
+		"smithing": 10
+	},
+	"appliedenergistics2:molecular_assembler":
+	{
+		"crafting": 40,
+		"smithing": 15
+	},
+	"appliedenergistics2:1k_cell_component":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"appliedenergistics2:4k_cell_component":
+	{
+		"crafting": 30,
+		"smithing": 15
+	},
+	"appliedenergistics2:16k_cell_component":
+	{
+		"crafting": 40,
+		"smithing": 25
+	},
+	"appliedenergistics2:64k_cell_component":
+	{
+		"crafting": 50,
+		"smithing": 35
+	},
+	"appliedenergistics2:1k_fluid_cell_component":
+	{
+		"crafting": 15,
+		"smithing": 5
+	},
+	"appliedenergistics2:4k_fluid_cell_component":
+	{
+		"crafting": 25,
+		"smithing": 10
+	},
+	"appliedenergistics2:16k_fluid_cell_component":
+	{
+		"crafting": 35,
+		"smithing": 15
+	},
+	"appliedenergistics2:64k_fluid_cell_component":
+	{
+		"crafting": 45,
+		"smithing": 25
+	},
+	"appliedenergistics2:wireless_terminal":
+	{
+		"crafting": 250,
+		"smithing": 80
+	},
+	"appliedenergistics2:wireless_booster":
+	{
+		"crafting": 35,
+		"smithing": 25
+	},
+	"appliedenergistics2:wireless_access_point":
+	{
+		"crafting": 25
+	},
+	"appliedenergistics2:wireless_receiver":
+	{
+		"crafting": 25
+	},
+	"appliedenergistics2:basic_card":
+	{
+		"crafting": 30
+	},
+	"appliedenergistics2:advanced_card":
+	{
+		"crafting": 45
+	},
+	"appliedenergistics2:inscriber":
+	{
+		"crafting": 140,
+		"smithing": 50
+	},
+	"appliedenergistics2:charger":
+	{
+		"crafting": 60,
+		"smithing": 25
+	},
+	"appliedenergistics2:security_station":
+	{
+		"crafting": 250,
+		"smithing": 40
+	},
+	"appliedenergistics2:chest":
+	{
+		"crafting": 60,
+		"smithing": 20
+	},
+	"appliedenergistics2:condenser":
+	{
+		"crafting": 25
+	},
+	"appliedenergistics2:storage_bus":
+	{
+		"crafting": 25
+	},
+	"appliedenergistics2:fluid_storage_bus":
+	{
+		"crafting": 20
+	},
+	"appliedenergistics2:import_bus":
+	{
+		"crafting": 35
+	},
+	"appliedenergistics2:fluid_import_bus":
+	{
+		"crafting": 30
+	},
+	"appliedenergistics2:export_bus":
+	{
+		"crafting": 35
+	},
+	"appliedenergistics2:fluid_export_bus":
+	{
+		"crafting": 30
+	},
+	"appliedenergistics2:certus_quartz_sword":
+	{
+		"crafting": 60,
+		"smithing": 12
+	},
+	"appliedenergistics2:certus_quartz_axe":
+	{
+		"crafting": 90,
+		"smithing": 18
+	},
+	"appliedenergistics2:certus_quartz_shovel":
+	{
+		"crafting": 30,
+		"smithing": 6
+	},
+	"appliedenergistics2:certus_quartz_hoe":
+	{
+		"crafting": 60,
+		"smithing": 12
+	},
+	"appliedenergistics2:certus_quartz_pickaxe":
+	{
+		"crafting": 90,
+		"smithing": 18
+	},
+	"appliedenergistics2:nether_quartz_sword":
+	{
+		"crafting": 20,
+		"smithing": 4
+	},
+	"appliedenergistics2:nether_quartz_axe":
+	{
+		"crafting": 30,
+		"smithing": 6
+	},
+	"appliedenergistics2:nether_quartz_shovel":
+	{
+		"crafting": 10,
+		"smithing": 2
+	},
+	"appliedenergistics2:nether_quartz_hoe":
+	{
+		"crafting": 20,
+		"smithing": 4
+	},
+	"appliedenergistics2:nether_quartz_pickaxe":
+	{
+		"crafting": 30,
+		"smithing": 6
+	},
+	"ironchest:iron_to_gold_chest_upgrade":
+	{
+		"crafting": 30
+	},
+	"ironchest:gold_to_diamond_chest_upgrade":
+	{
+		"crafting": 40
+	},
+	"ironchest:copper_to_silver_chest_upgrade":
+	{
+		"crafting": 20
+	},
+	"ironchest:silver_to_gold_chest_upgrade":
+	{
+		"crafting": 30
+	},
+	"ironchest:copper_to_iron_chest_upgrade":
+	{
+		"crafting": 20
+	},
+	"ironchest:diamond_to_crystal_chest_upgrade":
+	{
+		"crafting": 50
+	},
+	"ironchest:wood_to_iron_chest_upgrade":
+	{
+		"crafting": 20
+	},
+	"ironchest:wood_to_copper_chest_upgrade":
+	{
+		"crafting": 10
+	},
+	"ironchest:diamond_to_obsidian_chest_upgrade":
+	{
+		"crafting": 50
+	},
+	"ironchest:iron_chest":
+	{
+		"crafting": 20
+	},
+	"ironchest:gold_chest":
+	{
+		"crafting": 30
+	},
+	"ironchest:diamond_chest":
+	{
+		"crafting": 40
+	},
+	"ironchest:copper_chest":
+	{
+		"crafting": 10
+	},
+	"ironchest:silver_chest":
+	{
+		"crafting": 20
+	},
+	"ironchest:crystal_chest":
+	{
+		"crafting": 50
+	},
+	"ironchest:obsidian_chest":
+	{
+		"crafting": 50
+	},
+	"enderstorage:ender_chest":
+	{
+		"crafting": 50,
+		"magic": 10
+	},
+	"enderstorage:ender_tank":
+	{
+		"crafting": 40,
+		"magic": 5
+	},
+	"enderstorage:ender_pouch":
+	{
+		"crafting": 70,
+		"magic": 15
+	},
+	"create:zinc_nugget":
+	{
+		"crafting": 0
+	},
+	"create:zinc_ingot":
+	{
+		"crafting": 0
+	},
+	"create:zinc_block":
+	{
+		"crafting": 0
+	},
+	"create:brass_nugget":
+	{
+		"crafting": 0
+	},
+	"create:brass_ingot":
+	{
+		"crafting": 0
+	},
+	"create:brass_block":
+	{
+		"crafting": 0
+	},
+	"create:copper_nugget":
+	{
+		"crafting": 0
+	},
+	"create:copper_ingot":
+	{
+		"crafting": 0
+	},
+	"create:copper_block":
 	{
 		"crafting": 0
 	},
@@ -687,99 +1120,128 @@
 	{
 		"crafting": 120
 	},
-	"minecraft:wolfarium_helmet":
+	"endreborn:wolframium_nugget":
+	{
+		"crafting": 0
+	},
+	"endreborn:wolframium_ingot":
+	{
+		"crafting": 0
+	},
+	"endreborn:wolframium_block":
+	{
+		"crafting": 0
+	},
+	"endreborn:endorium_nugget":
+	{
+		"crafting": 0
+	},
+	"endreborn:endorium_ingot":
+	{
+		"crafting": 0
+	},
+	"endreborn:endorium_block":
+	{
+		"crafting": 0
+	},
+	"endreborn:wolframium_sword":
 	{
 		"crafting": 100,
 		"smithing": 20
 	},
-	"minecraft:wolfarium_chestplate":
+	"endreborn:wolframium_axe":
 	{
-		"crafting": 160,
-		"smithing": 32
+		"crafting": 150,
+		"smithing": 30
 	},
-	"minecraft:wolfarium_leggings":
+	"endreborn:wolframium_shovel":
 	{
-		"crafting": 140,
-		"smithing": 28
+		"crafting": 50,
+		"smithing": 10
 	},
-	"minecraft:wolfarium_boots":
+	"endreborn:wolframium_hoe":
 	{
-		"crafting": 80,
-		"smithing": 16
+		"crafting": 100,
+		"smithing": 20
 	},
-	"minecraft:wolframium_sword":
+	"endreborn:wolframium_pickaxe":
 	{
-		"crafting": 40,
-		"smithing": 8
+		"crafting": 150,
+		"smithing": 30
 	},
-	"minecraft:wolframium_axe":
-	{
-		"crafting": 60,
-		"smithing": 12
-	},
-	"minecraft:wolframium_shovel":
+	"endreborn:endorium_sword":
 	{
 		"crafting": 20,
 		"smithing": 4
 	},
-	"minecraft:wolframium_hoe":
-	{
-		"crafting": 40,
-		"smithing": 8
-	},
-	"minecraft:wolfarium_pickaxe":
-	{
-		"crafting": 60,
-		"smithing": 12
-	},
-	"minecraft:endorium_sword":
-	{
-		"crafting": 400,
-		"smithing": 80
-	},
-	"minecraft:endorium_axe":
-	{
-		"crafting": 600,
-		"smithing": 120
-	},
-	"minecraft:endorium_shovel":
-	{
-		"crafting": 200,
-		"smithing": 40
-	},
-	"minecraft:endorium_hoe":
-	{
-		"crafting": 400,
-		"smithing": 80
-	},
-	"minecraft:endorium_pickaxe":
-	{
-		"crafting": 600,
-		"smithing": 120
-	},
-	"minecraft:end_stone_sword":
-	{
-		"crafting": 20,
-		"smithing": 4
-	},
-	"minecraft:end_stone_axe":
+	"endreborn:endorium_axe":
 	{
 		"crafting": 30,
 		"smithing": 6
 	},
-	"minecraft:end_stone_shovel":
+	"endreborn:endorium_shovel":
 	{
 		"crafting": 10,
 		"smithing": 2
 	},
-	"minecraft:end_stone_hoe":
+	"endreborn:endorium_hoe":
 	{
 		"crafting": 20,
 		"smithing": 4
 	},
-	"minecraft:end_stone_pickaxe":
+	"endreborn:endorium_pickaxe":
 	{
 		"crafting": 30,
 		"smithing": 6
+	},
+	"endreborn:end_stone_sword":
+	{
+		"crafting": 10,
+		"smithing": 2
+	},
+	"endreborn:end_stone_axe":
+	{
+		"crafting": 15,
+		"smithing": 3
+	},
+	"endreborn:end_stone_shovel":
+	{
+		"crafting": 5,
+		"smithing": 1
+	},
+	"endreborn:end_stone_hoe":
+	{
+		"crafting": 10,
+		"smithing": 2
+	},
+	"endreborn:end_stone_pickaxe":
+	{
+		"crafting": 15,
+		"smithing": 3
+	},
+	"endreborn:ender_boots":
+	{
+		"crafting": 100,
+		"smithing": 20
+	},
+	"endreborn:wolframium_helmet":
+	{
+		"crafting": 100,
+		"smithing": 20
+	},
+	"endreborn:wolframium_chestplate":
+	{
+		"crafting": 160,
+		"smithing": 32
+	},
+	"endreborn:wolframium_leggings":
+	{
+		"crafting": 140,
+		"smithing": 28
+	},
+	"endreborn:wolframium_boots":
+	{
+		"crafting": 80,
+		"smithing": 16
 	}
 }

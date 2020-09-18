@@ -43,7 +43,7 @@
 	},
 	"minecraft:sea_pickle":
 	{
-		"cooking": 10,
+		"cooking": 12.5,
 		"crafting": 3
 	},
 	"minecraft:chorus_fruit":
@@ -53,7 +53,7 @@
 	},
 	"minecraft:kelp":
 	{
-		"cooking": 10,
+		"cooking": 6,
 		"crafting": 5
 	}
 }

@@ -18,7 +18,7 @@ public class Config
 
     //Client only, too lazy to put it somewhere better
     private static final Map<String, Double> abilities = new HashMap<>();
-    private static final Map<String, Double> preferences = new HashMap<>();
+    private static Map<String, Double> preferences = new HashMap<>();
 
     public static ConfigImplementation forgeConfig;
 
@@ -1199,6 +1199,6 @@ public class Config
 
     public static void setPreferencesMap( Map<String, Double> newPreferencesMap )
     {
-        config = newPreferencesMap;
+        preferences = newPreferencesMap;
     }
 }
