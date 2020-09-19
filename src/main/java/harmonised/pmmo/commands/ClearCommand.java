@@ -41,7 +41,7 @@ public class ClearCommand
                 AttributeHandler.updateAll( player );
                 XP.updateRecipes( player );
 
-                Map<Skill, Double> xpMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
+                Map<Skill, Double> xpMap = PmmoSavedData.get( player ).getXpMap( player.getUniqueID() );
                 for( Skill skill : new HashSet<>( xpMap.keySet() ) )
                 {
                     xpMap.remove( skill );

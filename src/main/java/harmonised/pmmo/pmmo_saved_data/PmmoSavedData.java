@@ -5,7 +5,9 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.storage.WorldSavedData;
@@ -19,6 +21,7 @@ import java.util.UUID;
 
 public class PmmoSavedData extends WorldSavedData
 {
+    public static MinecraftServer server;
     private static String NAME = "pmmo";
     private Map<UUID, Map<Skill, Double>> xp = new HashMap<>();
     private Map<UUID, Map<Skill, Double>> scheduledXp = new HashMap<>();
@@ -214,9 +217,16 @@ public class PmmoSavedData extends WorldSavedData
         return name.getOrDefault( uuid, "Nameless Warning" );
     }
 
-    @Nonnull
     public static PmmoSavedData get()
     {
-        return ServerLifecycleHooks.getCurrentServer().getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+        return server.getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+    }
+
+    public static PmmoSavedData get( PlayerEntity player )
+    {
+        if( player.getServer() == null )
+            LogHandler.LOGGER.error( "FATAL PMMO ERROR: SERVER IS NULL. Could not get PmmoSavedData" );
+
+        return player.getServer().getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
     }
 }

@@ -141,7 +141,7 @@ public enum Skill
         if( player.world.isRemote() )
             return XP.levelAtXp( XP.getOfflineXp( this, player.getUniqueID() ) );
         else
-            return getLevel( player.getUniqueID() );
+            return PmmoSavedData.get( player ).getLevel( this, player.getUniqueID() );
     }
 
     public int getLevel( UUID uuid )
@@ -154,7 +154,7 @@ public enum Skill
         if( player.world.isRemote() )
             return XP.levelAtXpDecimal( XP.getOfflineXp( this, player.getUniqueID() ) );
         else
-            return getLevelDecimal( player.getUniqueID() );
+            return PmmoSavedData.get( player ).getLevelDecimal( this, player.getUniqueID() );
     }
 
     public double getLevelDecimal( UUID uuid )
@@ -167,7 +167,7 @@ public enum Skill
         if( player.world.isRemote() )
             return XP.getOfflineXp( this, player.getUniqueID() );
         else
-            return getXp( player.getUniqueID() );
+            return PmmoSavedData.get( player ).getXp( this, player.getUniqueID() );
     }
 
     public double getXp( UUID uuid )
@@ -182,7 +182,7 @@ public enum Skill
 
     public void setXp( UUID uuid, double amount )
     {
-        ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID( uuid );
+        ServerPlayerEntity player = PmmoSavedData.server.getPlayerList().getPlayerByUUID( uuid );
 
         if( player == null )
             PmmoSavedData.get().setXp( this, uuid, amount );
@@ -192,7 +192,7 @@ public enum Skill
 
     public void setXp( ServerPlayerEntity player, double amount )
     {
-        if( PmmoSavedData.get().setXp( this, player.getUniqueID(), amount ) )
+        if( PmmoSavedData.get( player ).setXp( this, player.getUniqueID(), amount ) )
         {
             AttributeHandler.updateAll( player );
             XP.updateRecipes( player );
@@ -217,7 +217,7 @@ public enum Skill
 
     public void addXp( UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID( uuid );
+        ServerPlayerEntity player = PmmoSavedData.server.getPlayerList().getPlayerByUUID( uuid );
 
         if( player == null )
             PmmoSavedData.get().scheduleXp( this, uuid, amount, sourceName );
