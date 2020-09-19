@@ -1158,12 +1158,12 @@ public class Config
         }
     }
 
-    public static Map<Skill, Double> getXpMap(PlayerEntity player )
+    public static Map<Skill, Double> getXpMap( PlayerEntity player )
     {
         if( player.world.isRemote() )
             return XP.getOfflineXpMap( player.getUniqueID() );
         else
-            return PmmoSavedData.get().getXpMap( player.getUniqueID() );
+            return PmmoSavedData.get( player ).getXpMap( player.getUniqueID() );
     }
 
     public static Map<String, Double> getConfigMap()
@@ -1181,7 +1181,7 @@ public class Config
         if( player.world.isRemote() )
             return preferences;
         else
-            return PmmoSavedData.get().getPreferencesMap( player.getUniqueID() );
+            return PmmoSavedData.get( player ).getPreferencesMap( player.getUniqueID() );
     }
 
     public static Map<String, Double> getPreferencesMapOffline()
@@ -1194,7 +1194,7 @@ public class Config
         if( player.world.isRemote() )
             return abilities;
         else
-            return PmmoSavedData.get().getAbilitiesMap( player.getUniqueID() );
+            return PmmoSavedData.get( player ).getAbilitiesMap( player.getUniqueID() );
     }
 
     public static void setPreferencesMap( Map<String, Double> newPreferencesMap )

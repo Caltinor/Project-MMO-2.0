@@ -70,6 +70,7 @@ public class ProjectMMOMod
 
     private void serverAboutToStart( FMLServerAboutToStartEvent event )
     {
+        PmmoSavedData.server = event.getServer();
         ChunkDataHandler.init();
     }
 

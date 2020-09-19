@@ -14,7 +14,7 @@ import java.util.*;
 
 public class ChunkDataHandler
 {
-    private static Map<ResourceLocation, Map<ChunkPos, Map<BlockPos, UUID>>> placedMap;
+    private static Map<ResourceLocation, Map<ChunkPos, Map<BlockPos, UUID>>> placedMap = new HashMap<>();
 
     public static void init()
     {

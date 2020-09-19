@@ -33,7 +33,7 @@ public class ServerHandler
                     prefsMap.put( tag, newPackage.getDouble( tag ) );
                 }
                 AttributeHandler.updateAll( player );
-                PmmoSavedData.get().setDirty( true );
+                PmmoSavedData.get( player ).setDirty( true );
                 break;
 
             default:

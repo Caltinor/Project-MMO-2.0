@@ -32,7 +32,7 @@ public class PlayerConnectedHandler
             boolean showWelcome = Config.forgeConfig.showWelcome.get();
             boolean showPatreonWelcome = Config.forgeConfig.showPatreonWelcome.get();
 
-            PmmoSavedData.get().setName( player.getDisplayName().getString(), uuid );
+            PmmoSavedData.get( player ).setName( player.getDisplayName().getString(), uuid );
             migratePlayerDataToWorldSavedData( player );
             XP.syncPlayer( player );
             awardScheduledXp( uuid );
@@ -105,7 +105,7 @@ public class PlayerConnectedHandler
 
             player.getPersistentData().remove( "pmmo" );
             LogHandler.LOGGER.info( "Migrated Player " + player.getDisplayName().getString() + " Done" );
-            PmmoSavedData.get().setDirty( true );
+            PmmoSavedData.get( player ).setDirty( true );
         }
     }
 

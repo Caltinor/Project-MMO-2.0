@@ -1002,7 +1002,7 @@ public class XP
 			amount = 2000000000 - startXp;
 		}
 
-		PmmoSavedData.get().addXp( skill, uuid, amount );
+		PmmoSavedData.get( player ).addXp( skill, uuid, amount );
 
 		int currLevel = skill.getLevel( uuid );
 
