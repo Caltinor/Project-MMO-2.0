@@ -572,7 +572,7 @@ public class ListScreen extends Screen
                 case REQ_KILL:
                 {
                     Map<String, Double> killXpMap = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( button.regKey );
-                    Map<String, Double> rareDropMap = JsonConfig.data.get( JType.MOB_RARE_DROP ).get(button.regKey);
+                    Map<String, Double> rareDropMap = JsonConfig.data.get( JType.MOB_RARE_DROP ).get(button.regKey );
                     button.unlocked = XP.checkReq( player, button.regKey, jType );
                     Style color = XP.textStyle.get( button.unlocked ? "green" : "red" );
 

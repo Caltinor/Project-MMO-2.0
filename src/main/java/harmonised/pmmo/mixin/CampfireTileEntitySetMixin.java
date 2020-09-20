@@ -23,6 +23,6 @@ public class CampfireTileEntitySetMixin extends TileEntity
     @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/inventory/InventoryHelper;spawnItemStack(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V" ), method = "cookAndDrop", locals = LocalCapture.CAPTURE_FAILEXCEPTION )
     private void projectmmo$$handleCampfireSpawnItem(CallbackInfo info, int i, ItemStack itemstack, int j, IInventory iInventory, ItemStack itemstack1 )
     {
-        FurnaceHandler.handleSmelted( itemstack, itemstack1, this.getPos(), 1 );
+        FurnaceHandler.handleSmelted( itemstack, itemstack1, this.getWorld(), this.getPos(), 1 );
     }
 }

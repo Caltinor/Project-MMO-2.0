@@ -128,25 +128,28 @@ public class PlayerTickHandler
                 if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
                     player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 300, 0, false, false ) );
 
-                if( !player.world.isRemote() && player.isSprinting() )
+                if( !player.world.isRemote() )
                 {
+                    if( player.isSprinting() )
+                    {
+                        if( player.isInWater() && ( waterAbove || waterBelow ) )
+                            XP.awardXp( player, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true, false );
+                        else
+                            XP.awardXp( player, Skill.AGILITY, "running", runAward, true, false );
+                    }
+
                     if( player.isInWater() && ( waterAbove || waterBelow ) )
-                        XP.awardXp( player, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true, false );
-                    else
-                        XP.awardXp( player, Skill.AGILITY, "running", runAward, true, false );
-                }
+                    {
+                        if( !player.isSprinting() )
+                            XP.awardXp( player, Skill.SWIMMING, "swimming", swimAward, true, false );
+                    }
+                    else if( player.isElytraFlying() )
+                        XP.awardXp( player, Skill.FLYING, "flying", flyAward, true, false );
 
-                if( player.isInWater() && ( waterAbove || waterBelow ) )
-                {
-                    if( !player.isSprinting() )
-                        XP.awardXp( player, Skill.SWIMMING, "swimming", swimAward, true, false );
+                    if( (player.getRidingEntity() instanceof BoatEntity) && player.isInWater() )
+                        XP.awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true, false );
                 }
-                else if( player.isElytraFlying() )
-                    XP.awardXp( player, Skill.FLYING, "flying", flyAward, true, false );
-
-                if( (player.getRidingEntity() instanceof BoatEntity) && player.isInWater() )
-                    XP.awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true, false );
-////////////////////////////////////////////ABILITIES//////////////////////////////////////////
+                ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
 //				if( !player.world.isRemote() )
 //				{
 //					Map<String, Double> abilitiesMap = getabilitiesMap( player );

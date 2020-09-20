@@ -6,6 +6,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -22,19 +23,26 @@ public class CraftedHandler
         {
             double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
             double durabilityMultiplier = 1;
-            Map<String, Double> award = new HashMap<>();
-            award.put( "crafting", defaultCraftingXp );
+
             ItemStack itemStack = event.getCrafting();
             ResourceLocation resLoc = itemStack.getItem().getRegistryName();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_CRAFT );
 
-            if( xpValue.size() > 0 )
+            Map<String, Double> award = new HashMap<>();
+            if( xpValue.size() == 0 )
+            {
+                if( itemStack.getItem() instanceof BlockItem )
+                    award.put( "crafting", (double) ((BlockItem) itemStack.getItem()).getBlock().getDefaultState().getBlockHardness( null, null ) );
+                else
+                    award.put( "crafting", defaultCraftingXp );
+            }
+            else
                 XP.addMaps( award, xpValue );
 
             if( itemStack.isDamageable() )
                 durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamage() ) / (double) itemStack.getMaxDamage();
 
-            XP.multiplyMap( award, itemStack.getCount() );
+//            XP.multiplyMap( award, itemStack.getCount() );
             XP.multiplyMap( award, durabilityMultiplier );
 
             for( Map.Entry<String, Double> entry : award.entrySet() )

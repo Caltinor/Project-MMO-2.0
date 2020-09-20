@@ -120,7 +120,7 @@ public class BlockBrokenHandler
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
 
-        if( player.isCreative() || isRemote )
+        if( !XP.isPlayerSurvival( player ) || isRemote )
             return;
 
         Material material = event.getState().getMaterial();
@@ -171,8 +171,6 @@ public class BlockBrokenHandler
                 break;
         }
         awardMsg += " " + block.getRegistryName();
-        Map<String, Double> award = new HashMap<>();
-        award.put( skillName, hardness );
 
         Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( player.getHeldItemMainhand() );
         int fortune = 0;
@@ -197,6 +195,11 @@ public class BlockBrokenHandler
         }
         else
             drops = new ArrayList<>();
+
+        Map<String, Double> award = new HashMap<>();
+        award.put( skillName, hardness );
+        if( !wasPlaced )
+            award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), Math.max( drops.size(), 1 ) ) );
 
         ItemStack theDropItem = drops.size() > 0 ? drops.get( 0 ) : ItemStack.EMPTY;
 
@@ -254,7 +257,8 @@ public class BlockBrokenHandler
 
             awardMsg = "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra " + block.getRegistryName();
         }
-        else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) || material.equals( Material.TALL_PLANTS ) ) && drops.size() > 0 ) //IS PLANT
+
+        if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) || material.equals( Material.TALL_PLANTS ) ) && drops.size() > 0 ) //IS PLANT
         {
             int theDropCount = 0;
 
@@ -265,9 +269,6 @@ public class BlockBrokenHandler
 
             int age = -1;
             int maxAge = -1;
-
-            if( !wasPlaced )
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
 
             if( state.contains( BlockStateProperties.AGE_0_1 ) )
             {
@@ -312,11 +313,11 @@ public class BlockBrokenHandler
                     return;
             }
 
+            if( !wasPlaced )
+                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
+
             if( age == maxAge && age >= 0 || block instanceof SeaPickleBlock )
             {
-                award = new HashMap<>();
-                award.put( skillName, hardness );
-
                 double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
 
                 int guaranteedDrop = (int) extraChance;
@@ -337,18 +338,22 @@ public class BlockBrokenHandler
 
                 int totalDrops = theDropCount + totalExtraDrops;
 
+                award = new HashMap<>();
+                award.put( skillName, hardness );
                 award = XP.multiplyMap( XP.addMaps( award, XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ) ), Math.max( totalDrops, 1 ) );
                 awardMsg = "harvesting " + ( theDropCount) + " + " + totalExtraDrops + " " + block.getRegistryName();
             }
             else if( !wasPlaced )
                 awardMsg = "Breaking " + block.getRegistryName();
         }
-        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) > 0 )		//IS ORE
+
+        if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) > 0 )		//IS ORE
         {
             boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
-            boolean noDropOre = false;
-            if( drops.size() > 0 )
-                noDropOre = block.asItem().equals( drops.get(0).getItem() );
+            boolean noDropOre = block.asItem().equals( theDropItem.getItem() );
+
+            award = new HashMap<>();
+            award.put( skillName, hardness );
 
             if( !wasPlaced && !isSilk )
                 award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
@@ -370,6 +375,8 @@ public class BlockBrokenHandler
                 if( !noDropOre && wasPlaced )
                     award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( theDropItem.getCount() ) ) );
 
+                awardMsg = "mining a block";
+
                 if( totalExtraDrops > 0 )
                 {
                     XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
@@ -381,7 +388,8 @@ public class BlockBrokenHandler
 
             awardMsg = "Mining " + block.getRegistryName();
         }
-        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
+
+        if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
         {
             if( !wasPlaced )			//EXTRA DROPS
             {
@@ -403,13 +411,11 @@ public class BlockBrokenHandler
                     NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( theDropItem.getCount() + totalExtraDrops ) ) );
+                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), totalExtraDrops ) );
             }
 
             awardMsg = "Chopping " + block.getRegistryName().toString();
         }
-        else if( !wasPlaced )
-            award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), Math.max( drops.size(), 1 ) ) );
 
         if( JsonConfig.data2.get( JType.TREASURE ).containsKey( block.getRegistryName().toString() ) )
         {
@@ -433,7 +439,6 @@ public class BlockBrokenHandler
                         int minCount = (int) Math.floor( treasureItemMap.get( "minCount" ) );
                         int maxCount = (int) Math.floor( treasureItemMap.get( "maxCount" ) );
                         int count;
-
                         count = (int) Math.floor( (Math.random() * maxCount) + minCount );
 
                         award.put( Skill.EXCAVATION.toString(), award.getOrDefault( Skill.EXCAVATION.toString(), 0D ) + treasureItemMap.get( "xpPerItem" ) * count );
@@ -457,15 +462,13 @@ public class BlockBrokenHandler
         if( gap > 0 )
             player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 
-        if( XP.isPlayerSurvival( player ) )
-        {
-            Skill awardSkill;
 
-            for( String awardSkillName : award.keySet() )
-            {
-                awardSkill = Skill.getSkill( awardSkillName );
-                XP.awardXp( player, awardSkill, awardMsg, award.get( skillName ) / (gap + 1), !skill.equals( awardSkill ), false );
-            }
+        Skill awardSkill;
+
+        for( String awardSkillName : award.keySet() )
+        {
+            awardSkill = Skill.getSkill( awardSkillName );
+            XP.awardXp( player, awardSkill, awardMsg, award.get( awardSkillName ) / (gap + 1), !skill.equals( awardSkill ), false );
         }
     }
 
