@@ -864,7 +864,7 @@ public class XP
 		if( heldMap != null )
 		{
 			if( heldMap.containsKey( skillName ) )
-				itemBoost += (double) heldMap.get( skillName );
+				heldMap.get( skillName );
 		}
 
 //		if( Curios.isLoaded() )
@@ -948,7 +948,7 @@ public class XP
 		double itemBoost = getItemBoost( player, skill );
 		double biomeBoost = getBiomeBoost( player, skill );
 		double dimensionBoost = getDimensionBoost( player, skill );
-		double additiveMultiplier = 1 + (itemBoost + biomeBoost + dimensionBoost + globalBoost) / 100;
+		double additiveMultiplier = 1 + (itemBoost + biomeBoost + dimensionBoost + globalBoost ) / 100;
 
 		multiplier *= globalMultiplier;
 		multiplier *= dimensionMultiplier;

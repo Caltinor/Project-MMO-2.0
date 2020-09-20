@@ -5,13 +5,14 @@ import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.XP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.Map;
 import java.util.UUID;
 
 public class FurnaceHandler
 {
-    public static void handleSmelted(ItemStack input, ItemStack output, BlockPos pos, int type )
+    public static void handleSmelted(ItemStack input, ItemStack output, World world, BlockPos pos, int type )
     {
         JType infoType, xpType;
         String source;
@@ -36,7 +37,7 @@ public class FurnaceHandler
         }
 
         source += " " + input.getItem().getRegistryName();
-        source += ", at " + pos;
+        source += " [" + world.getDimension().getType().getRegistryName().toString() + "|x" + pos.getX() + "|y" + pos.getY() + "|z" + pos.getZ() + "]";
 
         if( input.getTag() != null && input.getTag().hasUniqueId( "lastOwner" ) )
         {
