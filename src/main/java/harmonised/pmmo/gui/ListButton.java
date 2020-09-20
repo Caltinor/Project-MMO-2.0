@@ -66,7 +66,7 @@ public class ListButton extends Button
 
             case XP_VALUE_BREED:
             case XP_VALUE_TAME:
-            case XP_VALUE_KILL:
+            case REQ_KILL:
                 this.title = new TranslationTextComponent( ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
                 break;
 

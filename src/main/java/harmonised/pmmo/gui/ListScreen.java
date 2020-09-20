@@ -193,7 +193,7 @@ public class ListScreen extends Screen
 
             case REQ_KILL:
             {
-                Map<String, Map<String, Double>> killXpMap = JsonConfig.data.get( JType.XP_VALUE_KILL );
+                Map<String, Map<String, Double>> killXpMap = JsonConfig.data.get( JType.REQ_KILL );
                 Map<String, Map<String, Double>> rareDropMap = JsonConfig.data.get( JType.MOB_RARE_DROP );
                 ArrayList<String> mobsToAdd = new ArrayList<>();
 
@@ -550,7 +550,7 @@ public class ListScreen extends Screen
 
                 case REQ_KILL:
                 {
-                    Map<String, Double> killXpMap = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( button.regKey );
+                    Map<String, Double> killXpMap = JsonConfig.data.get( JType.REQ_KILL ).get( button.regKey );
                     Map<String, Double> rareDropMap = JsonConfig.data.get( JType.MOB_RARE_DROP ).get(button.regKey);
                     button.unlocked = XP.checkReq( player, button.regKey, jType );
                     Style color = XP.textStyle.get( button.unlocked ? "green" : "red" );
@@ -885,7 +885,7 @@ public class ListScreen extends Screen
             }
             break;
 
-            case XP_VALUE_KILL:
+            case REQ_KILL:
             {
                 ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", button -> ((ListButton) button).clickAction() );
                 otherAggresiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).setStyle( greenColor ).getFormattedText() );
@@ -1032,7 +1032,7 @@ public class ListScreen extends Screen
 
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.XP_VALUE_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.STATS ) || button.regKey.equals( "pmmo.otherCrafts" ) )
+                if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.REQ_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.STATS ) || button.regKey.equals( "pmmo.otherCrafts" ) )
                     renderTooltip( button.title, mouseX, mouseY );
                 else if( button.itemStack != null )
                     renderTooltip( button.itemStack, mouseX, mouseY );
