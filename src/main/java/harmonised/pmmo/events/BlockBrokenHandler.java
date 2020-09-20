@@ -112,6 +112,7 @@ public class BlockBrokenHandler
         Block block = state.getBlock();
         String regKey = block.getRegistryName().toString();
         World world = (World) event.getWorld();
+        boolean isRemote = world.isRemote();
         PlayerEntity player = event.getPlayer();
         Map<String, Double> configMap = Config.getConfigMap();
         boolean veiningAllowed = configMap.containsKey("veiningAllowed") && configMap.get("veiningAllowed") != 0;
@@ -119,7 +120,7 @@ public class BlockBrokenHandler
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
 
-        if( player.isCreative() )
+        if( player.isCreative() || isRemote )
             return;
 
         Material material = event.getState().getMaterial();
@@ -147,6 +148,29 @@ public class BlockBrokenHandler
 //        }
 
         String awardMsg = "";
+        switch( XP.getSkill( material ) )
+        {
+            case MINING:
+                awardMsg = "Mining";
+                break;
+
+            case WOODCUTTING:
+                awardMsg = "Chopping";
+                break;
+
+            case EXCAVATION:
+                awardMsg = "Digging";
+                break;
+
+            case FARMING:
+                awardMsg = "Harvesting";
+                break;
+
+            default:
+                awardMsg = "Breaking";
+                break;
+        }
+        awardMsg += " " + block.getRegistryName();
         Map<String, Double> award = new HashMap<>();
         award.put( skillName, hardness );
 
@@ -173,6 +197,8 @@ public class BlockBrokenHandler
         }
         else
             drops = new ArrayList<>();
+
+        ItemStack theDropItem = drops.size() > 0 ? drops.get( 0 ) : ItemStack.EMPTY;
 
         if( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) //Handle Upwards Growing Plants
         {
@@ -220,7 +246,7 @@ public class BlockBrokenHandler
             if( dropsLeft > 0 )
             {
                 XP.dropItems( dropsLeft, block.asItem(), world, event.getPos() );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + dropsLeft, drops.get( 0 ).getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + dropsLeft, theDropItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
             }
 
             totalDrops = rewardable + dropsLeft;
@@ -230,7 +256,6 @@ public class BlockBrokenHandler
         }
         else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) || material.equals( Material.TALL_PLANTS ) ) && drops.size() > 0 ) //IS PLANT
         {
-            ItemStack theDropItem = drops.get( 0 );
             int theDropCount = 0;
 
             for( ItemStack drop : drops )
@@ -306,8 +331,8 @@ public class BlockBrokenHandler
 
                 if( totalExtraDrops > 0 )
                 {
-                    XP.dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
                 int totalDrops = theDropCount + totalExtraDrops;
@@ -326,7 +351,7 @@ public class BlockBrokenHandler
                 noDropOre = block.asItem().equals( drops.get(0).getItem() );
 
             if( !wasPlaced && !isSilk )
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), drops.get( 0 ).getCount() ) );
+                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
 
             if( noDropOre && !wasPlaced || !noDropOre && !isSilk )			//EXTRA DROPS
             {
@@ -343,12 +368,12 @@ public class BlockBrokenHandler
                 int totalExtraDrops = guaranteedDrop + extraDrop;
 
                 if( !noDropOre && wasPlaced )
-                    award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( drops.get( 0 ).getCount() ) ) );
+                    award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( theDropItem.getCount() ) ) );
 
                 if( totalExtraDrops > 0 )
                 {
-                    XP.dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
                 award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), totalExtraDrops ) );
@@ -374,16 +399,19 @@ public class BlockBrokenHandler
 
                 if( totalExtraDrops > 0 )
                 {
-                    XP.dropItems( guaranteedDrop + extraDrop, drops.get( 0 ).getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, drops.get( 0 ).getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( drops.get( 0 ).getCount() + totalExtraDrops ) ) );
+                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( theDropItem.getCount() + totalExtraDrops ) ) );
             }
 
             awardMsg = "Chopping " + block.getRegistryName().toString();
         }
-        else if( JsonConfig.data2.get( JType.TREASURE ).containsKey( block.getRegistryName().toString() ) )
+        else if( !wasPlaced )
+            award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), Math.max( drops.size(), 1 ) ) );
+
+        if( JsonConfig.data2.get( JType.TREASURE ).containsKey( block.getRegistryName().toString() ) )
         {
             if( !wasPlaced )
             {
@@ -422,36 +450,6 @@ public class BlockBrokenHandler
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.youFoundTreasure" ).setStyle( XP.textStyle.get( "green" ) ), true );
                 }
             }
-        }
-        else
-        {
-            if( !wasPlaced )
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), Math.max( drops.size(), 1 ) ) );
-
-            switch( XP.getSkill( material ) )
-            {
-                case MINING:
-                    awardMsg = "Mining";
-                    break;
-
-                case WOODCUTTING:
-                    awardMsg = "Chopping";
-                    break;
-
-                case EXCAVATION:
-                    awardMsg = "Digging";
-                    break;
-
-                case FARMING:
-                    awardMsg = "Harvesting";
-                    break;
-
-                default:
-                    awardMsg = "Breaking";
-                    break;
-            }
-
-            awardMsg += " " + block.getRegistryName();
         }
 
         int gap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL );
