@@ -585,6 +585,7 @@ public class ListScreen extends Screen
 
                     button.text.add( new StringTextComponent( "" ) );
                     button.text.add( getTransComp( "pmmo.xpValue" ).setStyle( color ) );
+
                     if ( killXpMap != null )
                         addXpToButton( button, killXpMap, jType, player );
                     else
@@ -601,7 +602,7 @@ public class ListScreen extends Screen
                         button.text.add( getTransComp( "pmmo.rareDrops" ).setStyle( color ) );
                         for( Map.Entry<String, Double> entry : rareDropMap.entrySet() )
                         {
-                            button.text.add( new StringTextComponent(  new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ) + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ) ).getString() ).setStyle( color ) );
+                            button.text.add( new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getString() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ).getString() ).setStyle( color ) );
                         }
                     }
                 }
@@ -963,7 +964,7 @@ public class ListScreen extends Screen
             }
                 break;
 
-            case XP_VALUE_KILL:
+            case REQ_KILL:
             {
                 ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", button -> ((ListButton) button).clickAction() );
                 otherAggresiveMobsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).getString() ).setStyle( greenColor ) );
@@ -1110,7 +1111,7 @@ public class ListScreen extends Screen
 
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.XP_VALUE_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.STATS ) || button.regKey.equals( "pmmo.otherCrafts" ) )
+                if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.REQ_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.STATS ) || button.regKey.equals( "pmmo.otherCrafts" ) )
                     renderTooltip( stack, new TranslationTextComponent( button.title ), mouseX, mouseY );
                 else if( button.itemStack != null )
                     renderTooltip( stack, button.itemStack, mouseX, mouseY );
