@@ -392,6 +392,7 @@ public class XP
 		return (int) Math.floor( (double) object );
 	}
 
+
 	public static double getExtraChance( UUID uuid, String resLoc, JType jType, boolean offline )
 	{
 		return getExtraChance( uuid, XP.getResLoc( resLoc ), jType, offline );
@@ -442,8 +443,7 @@ public class XP
 		startLevel = offline ? XP.getOfflineLevel( skill, uuid ) : skill.getLevel( uuid );
 
 		if( JsonConfig.data.get( jType ).containsKey( regKey ) && JsonConfig.data.get( jType ).get( regKey ).containsKey( "extraChance" ) )
-			if( JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" ) instanceof Double )
-				extraChancePerLevel = (double) JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" );
+			extraChancePerLevel = JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" );
 
 		extraChance = (startLevel - highestReq) * extraChancePerLevel;
 		if( extraChance < 0 )

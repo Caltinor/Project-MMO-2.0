@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.15.2-3.23.3'
+version = '1.15.2-3.23.5'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO'
 
@@ -106,6 +106,8 @@ dependencies
 //    runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
     runtimeOnly fg.deobf("curse.maven:curio-of-undying:2880784")
     runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
+//    runtimeOnly fg.deobf("curse.maven:silent-gear:3029638")
+//    runtimeOnly fg.deobf("curse.maven:silent-lib:3003984")
 //    runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
     runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.15.2:6.0.0.9")
     compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.15.2:6.0.0.9")
