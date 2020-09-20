@@ -53,43 +53,43 @@
 	},
 	"minecraft:wheat":
 	{
-		"farming": 20
+		"farming": 9
 	},
 	"minecraft:wheat_seeds":
 	{
-		"farming": 20
+		"farming": 9
 	},
 	"minecraft:beetroot":
 	{
-		"farming": 30
+		"farming": 12
 	},
 	"minecraft:beetroots":
 	{
-		"farming": 30
+		"farming": 12
 	},
 	"minecraft:carrot":
 	{
-		"farming": 17.5
+		"farming": 8
 	},
 	"minecraft:carrots":
 	{
-		"farming": 17.5
+		"farming": 8
 	},
 	"minecraft:potato":
 	{
-		"farming": 15
+		"farming": 6.6
 	},
 	"minecraft:potatoes":
 	{
-		"farming": 15
+		"farming": 6.6
 	},
 	"minecraft:cocoa":
 	{
-		"farming": 30
+		"farming": 17
 	},
 	"minecraft:nether_wart":
 	{
-		"farming": 10
+		"farming": 11
 	},
 	"biomesoplenty:origin_sapling":
 	{
