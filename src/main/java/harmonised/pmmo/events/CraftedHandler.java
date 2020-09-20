@@ -27,12 +27,13 @@ public class CraftedHandler
             ItemStack itemStack = event.getCrafting();
             ResourceLocation resLoc = itemStack.getItem().getRegistryName();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_CRAFT );
+            double hardness = ((BlockItem) itemStack.getItem()).getBlock().getDefaultState().getBlockHardness( null, null );
 
             Map<String, Double> award = new HashMap<>();
             if( xpValue.size() == 0 )
             {
                 if( itemStack.getItem() instanceof BlockItem )
-                    award.put( "crafting", (double) ((BlockItem) itemStack.getItem()).getBlock().getDefaultState().getBlockHardness( null, null ) );
+                    award.put( "crafting", hardness );
                 else
                     award.put( "crafting", defaultCraftingXp );
             }

@@ -255,6 +255,7 @@ public class Config
 
         //Swimming
         public ConfigHelper.ConfigValueListener<Integer> nightvisionUnlockLevel;
+        public ConfigHelper.ConfigValueListener<Integer> respirationCap;
 
         //Fishing
         public ConfigHelper.ConfigValueListener<Double> fishPoolBaseChance;
@@ -1063,6 +1064,11 @@ public class Config
                         .comment( "Underwater Nightvision Unlock Level" )
                         .translation( "pmmo.nightvisionUnlockLevel" )
                         .defineInRange( "nightvisionUnlockLevel", 25, 0, 1000000) );
+
+                this.respirationCap = subscriber.subscribe(builder
+                        .comment( "How high can Respiration go? (Enchantment + combination of Swimming and Endurance levels)" )
+                        .translation( "pmmo.respirationCap" )
+                        .defineInRange( "respirationCap", 5, 0, 100 ) );
 
                 builder.pop();
             }

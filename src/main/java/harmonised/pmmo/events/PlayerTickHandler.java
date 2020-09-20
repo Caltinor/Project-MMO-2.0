@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.TickEvent;
@@ -138,7 +139,7 @@ public class PlayerTickHandler
                             XP.awardXp( player, Skill.AGILITY, "running", runAward, true, false );
                     }
 
-                    if( player.isInWater() && ( waterAbove || waterBelow ) )
+                    if( player.isInWater() && player.areEyesInFluid( FluidTags.WATER ) && ( waterAbove || waterBelow ) )
                     {
                         if( !player.isSprinting() )
                             XP.awardXp( player, Skill.SWIMMING, "swimming", swimAward, true, false );
