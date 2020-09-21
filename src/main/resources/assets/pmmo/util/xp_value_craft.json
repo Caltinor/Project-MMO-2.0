@@ -691,76 +691,76 @@
 	},
 	"ironchest:iron_to_gold_chest_upgrade":
 	{
-		"crafting": 30
+		"smithing": 30
 	},
 	"ironchest:gold_to_diamond_chest_upgrade":
 	{
-		"crafting": 40
+		"smithing": 40
 	},
 	"ironchest:copper_to_silver_chest_upgrade":
 	{
-		"crafting": 20
+		"smithing": 20
 	},
 	"ironchest:silver_to_gold_chest_upgrade":
 	{
-		"crafting": 30
+		"smithing": 30
 	},
 	"ironchest:copper_to_iron_chest_upgrade":
 	{
-		"crafting": 20
+		"smithing": 20
 	},
 	"ironchest:diamond_to_crystal_chest_upgrade":
 	{
-		"crafting": 50
+		"smithing": 50
 	},
 	"ironchest:wood_to_iron_chest_upgrade":
 	{
-		"crafting": 20
+		"smithing": 20
 	},
 	"ironchest:wood_to_copper_chest_upgrade":
 	{
-		"crafting": 10
+		"smithing": 10
 	},
 	"ironchest:diamond_to_obsidian_chest_upgrade":
 	{
-		"crafting": 50
+		"smithing": 50
 	},
 	"ironchest:iron_chest":
 	{
-		"crafting": 20
+		"smithing": 20
 	},
 	"ironchest:gold_chest":
 	{
-		"crafting": 30
+		"smithing": 30
 	},
 	"ironchest:diamond_chest":
 	{
-		"crafting": 40
+		"smithing": 40
 	},
 	"ironchest:copper_chest":
 	{
-		"crafting": 10
+		"smithing": 10
 	},
 	"ironchest:silver_chest":
 	{
-		"crafting": 20
+		"smithing": 20
 	},
 	"ironchest:crystal_chest":
 	{
-		"crafting": 50
+		"smithing": 50
 	},
 	"ironchest:obsidian_chest":
 	{
-		"crafting": 50
+		"smithing": 50
 	},
 	"enderstorage:ender_chest":
 	{
-		"crafting": 50,
+		"smithing": 50,
 		"magic": 10
 	},
 	"enderstorage:ender_tank":
 	{
-		"crafting": 40,
+		"smithing": 40,
 		"magic": 5
 	},
 	"enderstorage:ender_pouch":

@@ -324,5 +324,58 @@
 	"biomesoplenty:mud_ball":
 	{
 		"smithing": 1.2
+	},
+	"biomesoplenty:fir_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:redwood_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:cherry_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:mahogany_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:jacaranda_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:palm_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:willow_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:dead_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:magic_log":
+	{
+		"smithing": 0.15,
+		"magic": 0.05
+	},
+	"biomesoplenty:umbran_log":
+	{
+		"smithing": 0.25
+	},
+	"biomesoplenty:hellbark_log":
+	{
+		"smithing": 0.25
+	},
+	"autumnity:sappy_maple_log":
+	{
+		"smithing": 0.25
+	},
+	"autumnity:maple_log":
+	{
+		"smithing": 0.25
 	}
 }
