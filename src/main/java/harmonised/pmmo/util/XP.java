@@ -868,8 +868,16 @@ public class XP
 
 	public static double getDimensionBoost( PlayerEntity player, Skill skill )
 	{
-		String dimensionKey = XP.getDimensionResLoc( player.world ).toString();
-		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 0D );
+		try
+		{
+			String dimensionKey = XP.getDimensionResLoc( player.world ).toString();
+			return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 0D );
+		}
+		catch( NullPointerException e )
+		{
+			LogHandler.LOGGER.error( "NullPointer at PMMO getDimensionBoost", e );
+			return 0;
+		}
 	}
 
 	public static double getGlobalBoost( Skill skill )
@@ -887,25 +895,33 @@ public class XP
 
 	public static double getBiomeBoost( PlayerEntity player, Skill skill )
 	{
-		double biomeBoost = 0;
-		double theBiomeBoost = 0;
-		double biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
-		String skillName = skill.toString().toLowerCase();
+		try
+		{
+			double biomeBoost = 0;
+			double theBiomeBoost = 0;
+			double biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
+			String skillName = skill.toString().toLowerCase();
 
-		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
-		ResourceLocation resLoc = getBiomeResLoc( player.world, biome );
-		String biomeKey = resLoc.toString();
-		Map<String, Double> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
+			Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
+			ResourceLocation resLoc = getBiomeResLoc( player.world, biome );
+			String biomeKey = resLoc.toString();
+			Map<String, Double> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
 
-		if( biomeMap != null && biomeMap.containsKey( skillName ) )
-			theBiomeBoost = biomeMap.get( skillName );
+			if( biomeMap != null && biomeMap.containsKey( skillName ) )
+				theBiomeBoost = biomeMap.get( skillName );
 
-		if( checkReq( player, resLoc, JType.REQ_BIOME ) )
-			biomeBoost = theBiomeBoost;
-		else
-			biomeBoost = Math.min( theBiomeBoost, -biomePenaltyMultiplier * 100 );
+			if( checkReq( player, resLoc, JType.REQ_BIOME ) )
+				biomeBoost = theBiomeBoost;
+			else
+				biomeBoost = Math.min( theBiomeBoost, -biomePenaltyMultiplier * 100 );
 
-		return biomeBoost;
+			return biomeBoost;
+		}
+		catch( NullPointerException e )
+		{
+			LogHandler.LOGGER.error( "NullPointer at PMMO getBiomeBoost", e );
+			return 0;
+		}
 	}
 
 	public static double getMultiplier( PlayerEntity player, Skill skill )
