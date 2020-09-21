@@ -29,10 +29,23 @@ public class Config
 
     public static void initServer()
     {
-        //Info that will also be sent to Client so it's accessible
+        //Info that will also be sent to Client so it's accessible remotely
+        if( Config.forgeConfig.veiningAllowed.get() )
+            localConfig.put( "veiningAllowed", 1D );
+        else
+            localConfig.put( "veiningAllowed", 0D );
+
+        if( Config.forgeConfig.useExponentialFormula.get() )
+            localConfig.put( "useExponentialFormula", 1D );
+        else
+            localConfig.put( "useExponentialFormula", 0D );
+
+        localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
         localConfig.put( "baseXp", (double) forgeConfig.baseXp.get() );
         localConfig.put( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
-        localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
+        localConfig.put( "exponentialBaseXp", forgeConfig.exponentialBaseXp.get() );
+        localConfig.put( "exponentialBase", forgeConfig.exponentialBase.get() );
+        localConfig.put( "exponentialRate", forgeConfig.exponentialRate.get() );
         localConfig.put( "maxXp", XP.xpAtLevel( forgeConfig.maxLevel.get() ) );
         localConfig.put( "biomePenaltyMultiplier", forgeConfig.biomePenaltyMultiplier.get() );
         localConfig.put( "nightvisionUnlockLevel", (double) forgeConfig.nightvisionUnlockLevel.get() );
@@ -61,11 +74,6 @@ public class Config
         localConfig.put( "minVeinHardness", forgeConfig.minVeinHardness.get() );
         localConfig.put( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
         localConfig.put( "veinMaxBlocks", (double) forgeConfig.veinMaxBlocks.get() );
-
-        if( Config.forgeConfig.veiningAllowed.get() )
-            localConfig.put( "veiningAllowed", 1D );
-        else
-            localConfig.put( "veiningAllowed", 0D );
 
         config = localConfig;
     }
@@ -141,6 +149,11 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
         public ConfigHelper.ConfigValueListener<Boolean> levelUpFirework;
         public ConfigHelper.ConfigValueListener<Boolean> milestoneLevelUpFirework;
+
+        public ConfigHelper.ConfigValueListener<Boolean> useExponentialFormula;
+        public ConfigHelper.ConfigValueListener<Double> exponentialBaseXp;
+        public ConfigHelper.ConfigValueListener<Double> exponentialBase;
+        public ConfigHelper.ConfigValueListener<Double> exponentialRate;
 
         //Multipliers
         public ConfigHelper.ConfigValueListener<Double> globalMultiplier;
@@ -600,6 +613,26 @@ public class Config
                         .comment( "Should fireworks appear on Milestone level up, to other players?" )
                         .translation( "pmmo.milestoneLevelUpFirework" )
                         .define( "milestoneLevelUpFirework", true ) );
+
+                this.useExponentialFormula = subscriber.subscribe(builder
+                        .comment( "Should levels be determined using an Exponential formula? (false = the original way)" )
+                        .translation( "pmmo.useExponentialFormula" )
+                        .define( "useExponentialFormula", false ) );
+
+                this.exponentialBaseXp = subscriber.subscribe(builder
+                        .comment( "What is the x in: x * ( exponentialBase^( exponentialRate * level ) )" )
+                        .translation( "pmmo.exponentialBaseXp" )
+                        .defineInRange( "exponentialBaseXp", 83D, 1, 1000000 ) );
+
+                this.exponentialBase = subscriber.subscribe(builder
+                        .comment( "What is the x in: exponentialBaseXp * ( x^( exponentialRate * level ) )" )
+                        .translation( "pmmo.exponentialBase" )
+                        .defineInRange( "exponentialBase", 1.104088404342588D, 0, 1000000) );
+
+                this.exponentialRate = subscriber.subscribe(builder
+                        .comment( "What is the x in: exponentialBaseXp * ( exponentialBase^( x * level ) )" )
+                        .translation( "pmmo.exponentialRate" )
+                        .defineInRange( "exponentialRate", 1D, 0, 1000000) );
 
                 builder.pop();
             }

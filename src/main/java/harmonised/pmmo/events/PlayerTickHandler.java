@@ -136,7 +136,7 @@ public class PlayerTickHandler
                             XP.awardXp( player, Skill.AGILITY, "running", runAward, true, false );
                     }
 
-                    if( player.isInWater() && player.areEyesInFluid( FluidTags.WATER ) && ( waterAbove || waterBelow ) )
+                    if( player.isInWater() && ( waterAbove || waterBelow || player.areEyesInFluid( FluidTags.WATER ) ) )
                     {
                         if( !player.isSprinting() )
                             XP.awardXp( player, Skill.SWIMMING, "swimming", swimAward, true, false );

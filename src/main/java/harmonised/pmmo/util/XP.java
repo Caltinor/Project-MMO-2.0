@@ -1342,15 +1342,25 @@ public class XP
 		return offlineXp.getOrDefault( uuid, new HashMap<>() ).getOrDefault( skill, 0D );
 	}
 
+	public static double logBase( double base, double goal )
+	{
+		return Math.log( goal ) / Math.log( base );
+	}
+
 	public static int levelAtXp( float xp )
 	{
 		return levelAtXp( (double) xp );
 	}
 	public static int levelAtXp( double xp )
 	{
+		boolean useExponentialFormula = Config.getConfig("useExponentialFormula") != 0;
 		double baseXp = Config.getConfig( "baseXp" );
-		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
+		double exponentialBaseXp = Config.getConfig( "exponentialBaseXp" );
+		double exponentialBase = Config.getConfig( "exponentialBase" );
+		double exponentialRate = Config.getConfig( "exponentialRate" );
 		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+
+		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
 
 		int theXp = 0;
 
@@ -1360,7 +1370,11 @@ public class XP
 			{
 				return startLevel;
 			}
-			theXp += baseXp + startLevel * xpIncreasePerLevel;
+
+			if( useExponentialFormula )
+				theXp += exponentialBaseXp * Math.pow( exponentialBase, exponentialRate * ( startLevel ) );
+			else
+				theXp += baseXp + startLevel * xpIncreasePerLevel;
 		}
 	}
 
@@ -1384,31 +1398,41 @@ public class XP
 			return startLevel + ( (xp - startXp) / (goalXp - startXp) );
 	}
 
+	public static double xpAtLevel( int givenLevel )
+	{
+		return xpAtLevel( (double) givenLevel );
+	}
 	public static double xpAtLevel( float givenLevel )
 	{
 		return xpAtLevel( (double) givenLevel );
 	}
 	public static double xpAtLevel( double givenLevel )
 	{
-		double baseXp = Config.getConfig( "baseXp" );
-		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
-		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+		boolean useExponentialFormula = Config.getConfig("useExponentialFormula") != 0;
 
-		double theXp = 0;
+		double baseXp = Config.getConfig( "baseXp" );
+		double exponentialBaseXp = Config.getConfig( "exponentialBaseXp" );
+		double exponentialBase = Config.getConfig( "exponentialBase" );
+		double exponentialRate = Config.getConfig( "exponentialRate" );
+
+		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
 		if( givenLevel > maxLevel )
 			givenLevel = maxLevel;
+		double theXp = 0;
+
+		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
 
 		for( int startLevel = 1; startLevel < givenLevel; startLevel++ )
 		{
-			theXp += baseXp + (startLevel - 1) * xpIncreasePerLevel;
+			if( useExponentialFormula )
+				theXp += exponentialBaseXp * Math.pow( exponentialBase, exponentialRate * ( startLevel - 1 ) );
+			else
+				theXp += baseXp + ( startLevel - 1 ) * xpIncreasePerLevel;
 		}
+
 		return theXp;
 	}
 
-	public static float xpAtLevelDecimal( float givenLevel )
-	{
-		return (float) xpAtLevelDecimal( (double) givenLevel );
-	}
 	public static double xpAtLevelDecimal( double givenLevel )
 	{
 		double startXp = xpAtLevel( Math.floor( givenLevel ) );
