@@ -142,8 +142,7 @@ public class PrefsScreen extends Screen
             prefEntry.slider.setResponder( slider ->
             {
                 slider.precision = 4;
-                if( Math.floor( slider.getValue() * 10000D ) != Math.floor( prefEntry.defaultVal * 10000D ) )
-                    prefsMap.put( slider.preference, slider.getValue() );
+                prefsMap.put( slider.preference, slider.getValue() );
                 if( prefEntry.removeIfMax && slider.getValue() == slider.maxValue )
                     prefsMap.remove( slider.preference );
                 XPOverlayGUI.doInit();
