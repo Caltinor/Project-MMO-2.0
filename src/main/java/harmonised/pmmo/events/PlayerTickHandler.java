@@ -215,7 +215,7 @@ public class PlayerTickHandler
                 if( tag == null )
                     itemStack.setTag( new CompoundNBT() );
 
-                itemStack.getTag().putUniqueId( "lastOwner", uuid );
+                itemStack.getTag().putString( "lastOwner", uuid.toString() );
             }
             else if( tag != null && tag.contains( "lastOwner" ) )
                 tag.remove( "lastOwner" );

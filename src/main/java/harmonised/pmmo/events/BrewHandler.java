@@ -19,9 +19,9 @@ public class BrewHandler
     {
         ItemStack ingredient = brewingItemStacks.get(3);
 
-        if( ingredient.getTag() != null && ingredient.getTag().hasUniqueId( "lastOwner" ) )
+        if( ingredient.getTag() != null && ingredient.getTag().contains( "lastOwner" ) )
         {
-            UUID uuid = ingredient.getTag().getUniqueId( "lastOwner" );
+            UUID uuid = UUID.fromString( ingredient.getTag().getString( "lastOwner" ) );
 
             double extraChance = XP.getExtraChance( uuid, brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.INFO_BREW, false ) / 100D;
 
