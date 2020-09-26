@@ -19,13 +19,6 @@ public class PmmoCommand
     private static final Logger LOGGER = LogManager.getLogger();
     public static String[] suggestSkill;
     public static String[] levelOrXp = { "level", "xp" };
-    public static String[] suggestPref = { "maxExtraReachBoost",
-                                           "maxSpeedBoost",
-                                           "maxSprintJumpBoost",
-                                           "maxCrouchJumpBoost",
-                                           "maxExtraHeartBoost",
-                                           "maxExtraDamageBoost",
-                                           "wipeAllSkillsUponDeathPermanently" };
     public static String[] suggestSearchRegistry = { "item",
 //                                                     "biome",
                                                      "enchant",
@@ -52,7 +45,7 @@ public class PmmoCommand
 
         dispatcher.register( Commands.literal( "pmmo" )
                   .then( Commands.literal( "admin" )
-                  .requires( player -> { return player.hasPermissionLevel( 2 ); })
+                  .requires( player -> player.hasPermissionLevel( 2 ) )
                   .then( Commands.argument( "target", EntityArgument.players() )
                   .then( Commands.literal( "set" )
                   .then( Commands.argument( "Skill", StringArgumentType.word() )
@@ -98,26 +91,6 @@ public class PmmoCommand
                   .then(  Commands.argument( "goal level", DoubleArgumentType.doubleArg() )
                   .executes( XpFromToCommand::execute )
                   ))))
-//                  .then( Commands.literal( "prefs" )
-//                  .then( Commands.argument( "option", StringArgumentType.word() )
-//                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestPref, theBuilder ) )
-//                  .executes( PrefCommand::execute )
-//                  .then( Commands.argument( "new value", DoubleArgumentType.doubleArg() )
-//                  .executes( PrefCommand::execute )
-//                  )))
-//                  .then( Commands.literal( "gui" )
-//                  .then( Commands.argument( "option", StringArgumentType.word() )
-//                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestGui, theBuilder ) )
-//                  .executes( PrefCommand::execute )
-//                  .then( Commands.argument( "new value", DoubleArgumentType.doubleArg() )
-//                  .executes( PrefCommand::execute )
-//                  )))
-//                  .then( Commands.literal( "checkstat" )
-//                  .then( Commands.argument( "player name", EntityArgument.player() )
-//                  .then( Commands.argument( "skill name", StringArgumentType.word() )
-//                  .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
-//                  .executes( CheckStatCommand::execute )
-//                  )))
                   .then( Commands.literal( "checkstats" )
                   .then( Commands.argument( "player name", EntityArgument.player() )
                   .executes( CheckStatsCommand::execute )

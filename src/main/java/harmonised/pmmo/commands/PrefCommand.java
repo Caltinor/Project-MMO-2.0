@@ -37,14 +37,14 @@ public class PrefCommand
         boolean matched = false;
         String match = "ERROR";
 
-        for( String element : PmmoCommand.suggestPref )
-        {
-            if( args[2].toLowerCase().equals( element.toLowerCase() ) )
-            {
-                match = element;
-                matched = true;
-            }
-        }
+//        for( String element : PmmoCommand.suggestPref )
+//        {
+//            if( args[2].toLowerCase().equals( element.toLowerCase() ) )
+//            {
+//                match = element;
+//                matched = true;
+//            }
+//        }
 
         if( matched )
         {
