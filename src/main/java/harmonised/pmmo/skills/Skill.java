@@ -55,7 +55,6 @@ public enum Skill
     PRAYER( 37 ),
     COOKING( 38 ),
     FIREMAKING( 39 ),
-    AFKING( 40 ),
     TRADING( 41 ),
     SAILING( 42 ),
     ALCHEMY( 43 ),

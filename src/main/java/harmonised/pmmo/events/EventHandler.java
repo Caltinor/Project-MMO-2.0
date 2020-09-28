@@ -94,9 +94,9 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void itemUsed( PlayerInteractEvent event )
+	public static void playerInteract( PlayerInteractEvent event )
 	{
-		PlayerInteractionHandler.handleItemUse( event );
+		PlayerInteractionHandler.handlePlayerInteract( event );
 	}
 
 	@SubscribeEvent

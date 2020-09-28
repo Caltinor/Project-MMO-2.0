@@ -30,7 +30,7 @@ import java.util.Set;
 
 public class PlayerInteractionHandler
 {
-    public static void handleItemUse( PlayerInteractEvent event )
+    public static void handlePlayerInteract( PlayerInteractEvent event )
     {
         try
         {

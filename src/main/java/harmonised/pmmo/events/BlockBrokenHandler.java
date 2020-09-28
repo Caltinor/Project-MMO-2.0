@@ -21,7 +21,9 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -46,6 +48,11 @@ public class BlockBrokenHandler
     private static void processReq( BlockEvent.BreakEvent event )
     {
         PlayerEntity player = event.getPlayer();
+
+//        ResourceLocation statResLoc = new ResourceLocation( "pmmo.test" );
+//        player.addStat( new ResourceLocation( "pmmo.test" ), 5 );
+//        player.takeStat( Stats.CUSTOM.get( statResLoc ) );
+
         BlockState blockState = event.getState();
         Block block = blockState.getBlock();
         World world = (World) event.getWorld();

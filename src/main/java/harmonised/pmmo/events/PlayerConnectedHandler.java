@@ -7,6 +7,7 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
