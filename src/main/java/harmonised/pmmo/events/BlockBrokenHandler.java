@@ -8,6 +8,7 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.LogHandler;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -48,10 +49,6 @@ public class BlockBrokenHandler
     private static void processReq( BlockEvent.BreakEvent event )
     {
         PlayerEntity player = event.getPlayer();
-
-//        ResourceLocation statResLoc = new ResourceLocation( "pmmo.test" );
-//        player.addStat( new ResourceLocation( "pmmo.test" ), 5 );
-//        player.takeStat( Stats.CUSTOM.get( statResLoc ) );
 
         BlockState blockState = event.getState();
         Block block = blockState.getBlock();
@@ -441,6 +438,8 @@ public class BlockBrokenHandler
 
                     if( Math.ceil( Math.random() * 10000 ) <= chance * 100 )
                     {
+                        player.addStat( new ResourceLocation( Reference.MOD_ID, "treasure_excavated" ) );
+
                         Item item = XP.getItem( treasureItem.getKey() );
 
                         int minCount = (int) Math.floor( treasureItemMap.get( "minCount" ) );

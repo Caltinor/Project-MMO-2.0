@@ -1,6 +1,6 @@
 [
 {
-  "modid": "pmmo",
+  "modid": "${modid}",
   "name": "Project MMO",
   "description": "This mod is Whack, yo",
   "version": "${version}",

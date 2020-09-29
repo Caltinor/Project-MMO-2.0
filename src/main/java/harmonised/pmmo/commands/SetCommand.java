@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -69,6 +70,7 @@ public class SetCommand
                         if( sender != null )
                             sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
+
                     LogHandler.LOGGER.info( "PMMO Command Set: " + playerName + " " + args[4] + " has been set to " + args[5] + " " + args[6] );
                 }
             }

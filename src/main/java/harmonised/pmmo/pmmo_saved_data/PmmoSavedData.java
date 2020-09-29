@@ -1,9 +1,11 @@
 package harmonised.pmmo.pmmo_saved_data;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -22,7 +24,7 @@ import java.util.UUID;
 public class PmmoSavedData extends WorldSavedData
 {
     public static MinecraftServer server;
-    private static String NAME = "pmmo";
+    private static String NAME = Reference.MOD_ID;
     private Map<UUID, Map<Skill, Double>> xp = new HashMap<>();
     private Map<UUID, Map<Skill, Double>> scheduledXp = new HashMap<>();
     private Map<UUID, Map<String, Double>> abilities = new HashMap<>();

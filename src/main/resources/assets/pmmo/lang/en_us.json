@@ -292,5 +292,8 @@
   "pmmo.sailing": "Sailing",
   "pmmo.alchemy": "Alchemy",
   "pmmo.construction": "Construction",
-  "pmmo.leatherworking": "Leatherworking"
+  "pmmo.leatherworking": "Leatherworking",
+  "ftbquests.task.pmmo.skill": "Skill",
+  "ftbquests.task.pmmo.skill.skill": "Skill",
+  "ftbquests.task.pmmo.skill.requiredLevel": "Required Level"
 }

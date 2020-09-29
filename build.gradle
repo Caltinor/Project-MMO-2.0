@@ -109,6 +109,13 @@ dependencies
 //    runtimeOnly fg.deobf("curse.maven:silent-gear:3029638")
 //    runtimeOnly fg.deobf("curse.maven:silent-lib:3003984")
 //    runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
+    compileOnly fg.deobf("curse.maven:ftb-quests:3067216")
+    runtimeOnly fg.deobf("curse.maven:ftb-quests:3067216")
+    compileOnly fg.deobf("curse.maven:ftb-gui-library:3043999")
+    runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3043999")
+    compileOnly fg.deobf("curse.maven:item-filters:3005432")
+    runtimeOnly fg.deobf("curse.maven:item-filters:3005432")
+
     runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.15.2:6.0.0.9")
     compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.15.2:6.0.0.9")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios:FORGE-1.15.2-2.0.2.2")

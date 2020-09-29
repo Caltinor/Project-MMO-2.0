@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -43,7 +44,7 @@ public class PmmoCommand
 //            suggestBiome[i++] = biome.getRegistryName().toString();
 //        }
 
-        dispatcher.register( Commands.literal( "pmmo" )
+        dispatcher.register( Commands.literal( Reference.MOD_ID )
                   .then( Commands.literal( "admin" )
                   .requires( player -> player.hasPermissionLevel( 2 ) )
                   .then( Commands.argument( "target", EntityArgument.players() )

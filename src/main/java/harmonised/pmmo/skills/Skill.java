@@ -1,12 +1,15 @@
 package harmonised.pmmo.skills;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
@@ -61,20 +64,26 @@ public enum Skill
     CONSTRUCTION( 44 ),
     LEATHERWORKING( 45 );
 
-    public static final Map<Skill, Integer > skillMap = new HashMap<>();
-    public static final Map< Integer, Skill > intMap = new HashMap<>();
-    public static final Map< String, Skill > stringMap = new HashMap<>();
+    public static final Map<Skill, Integer> skillMap = new HashMap<>();
+//    public static final Map<Integer, Skill> intMap = new HashMap<>();
+    public static final Map<String, Skill> stringMap = new HashMap<>();
+    public static final Skill[] valuesArray = new Skill[ Skill.values().length - 1 ];
     //    Skill[] VALUES = values();
 
     private final int value;
 
     static
     {
+        int i = 0;
         for( Skill skill : Skill.values() )
         {
-            skillMap.put( skill, skill.value );
-            intMap.put( skill.value, skill );
-            stringMap.put( skill.toString(), skill );
+            if( !skill.equals( Skill.INVALID_SKILL ) )
+            {
+                skillMap.put( skill, skill.value );
+//                intMap.put( skill.value, skill );
+                stringMap.put( skill.toString(), skill );
+                valuesArray[ i++ ] = skill;
+            }
         }
     }
 
@@ -133,6 +142,11 @@ public enum Skill
     public int getValue()
     {
         return this.value;
+    }
+
+    public ResourceLocation getResLoc()
+    {
+        return new ResourceLocation( Reference.MOD_ID, this.toString() );
     }
 
     public int getLevel( PlayerEntity player )
