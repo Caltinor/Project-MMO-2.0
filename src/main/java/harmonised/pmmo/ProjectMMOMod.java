@@ -6,6 +6,7 @@ import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
+import harmonised.pmmo.events.RegisterHandler;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.ftb_quests.SkillTask;
 import harmonised.pmmo.network.NetworkHandler;
@@ -20,6 +21,7 @@ import net.minecraft.world.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -45,7 +47,8 @@ public class ProjectMMOMod
     {
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::modsLoading );
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::clientLoading );
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, this::registerTasks );
+        if( ModList.get().isLoaded( "ftbquests" ) )
+            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistry );
         MinecraftForge.EVENT_BUS.addListener( this::serverAboutToStart );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
 
@@ -85,10 +88,5 @@ public class ProjectMMOMod
         AttributeHandler.init();
         if( Config.forgeConfig.craftReqEnabled.get() )
             event.getServer().getGameRules().get( GameRules.DO_LIMITED_CRAFTING ).set(true, event.getServer() );
-    }
-
-    public void registerTasks( RegistryEvent.Register<TaskType> event )
-    {
-        event.getRegistry().register( SkillTask.SKILL = new TaskType( SkillTask::new ).setRegistryName( "skill" ).setIcon( Icon.getIcon("minecraft:item/wooden_pickaxe") ) );
     }
 }

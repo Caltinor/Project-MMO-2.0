@@ -231,6 +231,11 @@ public class XP
 		}
 	}
 
+	public static Map<String, Double> getXp( String registryName, JType jType )
+	{
+		return getXp( new ResourceLocation( registryName ), jType );
+	}
+
 	public static Map<String, Double> getXp( ResourceLocation registryName, JType jType )
 	{
 		Map<String, Double> theMap = new HashMap<>();
