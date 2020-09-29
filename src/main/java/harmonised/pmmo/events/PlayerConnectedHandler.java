@@ -4,6 +4,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.LogHandler;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -59,9 +60,9 @@ public class PlayerConnectedHandler
 
     private static void migratePlayerDataToWorldSavedData( PlayerEntity player )
     {
-        if( player.getPersistentData().contains( "pmmo" ) )
+        if( player.getPersistentData().contains( Reference.MOD_ID ) )
         {
-            CompoundNBT pmmoTag = player.getPersistentData().getCompound( "pmmo" );
+            CompoundNBT pmmoTag = player.getPersistentData().getCompound( Reference.MOD_ID );
             CompoundNBT tag;
             Skill skill;
             UUID uuid = player.getUniqueID();
@@ -103,7 +104,7 @@ public class PlayerConnectedHandler
                 }
             }
 
-            player.getPersistentData().remove( "pmmo" );
+            player.getPersistentData().remove( Reference.MOD_ID );
             LogHandler.LOGGER.info( "Migrated Player " + player.getDisplayName().getString() + " Done" );
             PmmoSavedData.get( player ).setDirty( true );
         }

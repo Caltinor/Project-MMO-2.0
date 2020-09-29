@@ -702,14 +702,14 @@ public class XP
 //			CompoundNBT persistTag = player.getPersistentData();
 //			CompoundNBT pmmoTag = null;
 //
-//			if( !persistTag.contains( "pmmo" ) )			//if Player doesn't have pmmo tag, make it
+//			if( !persistTag.contains( Reference.MOD_ID ) )			//if Player doesn't have pmmo tag, make it
 //			{
 //				pmmoTag = new CompoundNBT();
-//				persistTag.put( "pmmo", pmmoTag );
+//				persistTag.put( Reference.MOD_ID, pmmoTag );
 //			}
 //			else
 //			{
-//				pmmoTag = persistTag.getCompound( "pmmo" );	//if Player has pmmo tag, use it
+//				pmmoTag = persistTag.getCompound( Reference.MOD_ID );	//if Player has pmmo tag, use it
 //			}
 //
 //			return pmmoTag;
@@ -1096,20 +1096,23 @@ public class XP
 
 	public static void updateRecipes( ServerPlayerEntity player )
 	{
-		Collection<IRecipe<?>> allRecipes = player.getServer().getRecipeManager().getRecipes();
-		Collection<IRecipe<?>> removeRecipes = new HashSet<>();
-		Collection<IRecipe<?>> newRecipes = new HashSet<>();
-
-		for( IRecipe<?> recipe : allRecipes )
+		if( Config.forgeConfig.craftReqEnabled.get() )
 		{
-			if( XP.checkReq( player, recipe.getRecipeOutput().getItem().getRegistryName(), JType.REQ_CRAFT ) )
-				newRecipes.add( recipe );
-			else
-				removeRecipes.add( recipe );
-		}
+			Collection<IRecipe<?>> allRecipes = player.getServer().getRecipeManager().getRecipes();
+			Collection<IRecipe<?>> removeRecipes = new HashSet<>();
+			Collection<IRecipe<?>> newRecipes = new HashSet<>();
 
-		player.getRecipeBook().remove( removeRecipes, player );
-		player.getRecipeBook().add( newRecipes, player );
+			for( IRecipe<?> recipe : allRecipes )
+			{
+				if( XP.checkReq( player, recipe.getRecipeOutput().getItem().getRegistryName(), JType.REQ_CRAFT ) )
+					newRecipes.add( recipe );
+				else
+					removeRecipes.add( recipe );
+			}
+
+			player.getRecipeBook().remove( removeRecipes, player );
+			player.getRecipeBook().add( newRecipes, player );
+		}
 	}
 
 	public static void scanUnlocks( int level, Skill skill )
