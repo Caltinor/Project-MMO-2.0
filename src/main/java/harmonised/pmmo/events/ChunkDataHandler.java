@@ -120,6 +120,11 @@ public class ChunkDataHandler
         blockMap.remove( blockPos );
     }
 
+    public static UUID checkPos( World world, BlockPos pos )
+    {
+        return checkPos( XP.getDimensionResLoc( world ), pos );
+    }
+
     public static UUID checkPos( ResourceLocation dimResLoc, BlockPos blockPos )
     {
         ChunkPos chunkPos = new ChunkPos( blockPos );

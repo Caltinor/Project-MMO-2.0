@@ -47,7 +47,7 @@ public class GrowHandler
         BlockState state = world.getBlockState( pos );
         Block block = state.getBlock();
 
-        UUID uuid = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), pos );
+        UUID uuid = ChunkDataHandler.checkPos( world, pos );
 
         if( uuid == null && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( resLoc.toString() ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( resLoc.toString() ).containsKey( "growsUpwards" ) )
         {
@@ -56,7 +56,7 @@ public class GrowHandler
             while( world.getBlockState( tempPos.down() ).getBlock().equals( block ) && uuid == null )
             {
                 tempPos = tempPos.down();
-                uuid = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), tempPos );
+                uuid = ChunkDataHandler.checkPos( world, tempPos );
             }
         }
 

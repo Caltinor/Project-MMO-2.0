@@ -101,7 +101,7 @@ public class WorldTickHandler
                     correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
                     correctHeldItem = player.getHeldItemMainhand().getItem().equals( startItem );
                     fullyGrown = true;
-                    blockUUID = ChunkDataHandler.checkPos( XP.getDimensionResLoc( world ), veinPos );
+                    blockUUID = ChunkDataHandler.checkPos( world, veinPos );
                     isOwner = blockUUID == null || blockUUID.equals( playerUUID );
                     skill = XP.getSkill( veinState );
 
