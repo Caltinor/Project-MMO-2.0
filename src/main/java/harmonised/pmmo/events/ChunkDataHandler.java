@@ -1,10 +1,12 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.util.XP;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.world.ChunkDataEvent;
 
 import java.util.*;
@@ -119,6 +121,11 @@ public class ChunkDataHandler
 
 //        System.out.println( chunkMap.size() );
 //        System.out.println( blockMap.size() );
+    }
+
+    public static UUID checkPos(World world, BlockPos pos )
+    {
+        return checkPos( world.getWorld().getDimension().getType().getRegistryName(), pos );
     }
 
     public static UUID checkPos( ResourceLocation dimResLoc, BlockPos blockPos )

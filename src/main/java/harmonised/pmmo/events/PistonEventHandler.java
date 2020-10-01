@@ -27,7 +27,7 @@ public class PistonEventHandler
             UUID uuid;
             if( event.getPistonMoveType().equals( PistonEvent.PistonMoveType.EXTEND ) )
             {
-                uuid = ChunkDataHandler.checkPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction ) );
+                uuid = ChunkDataHandler.checkPos( world, pistonPos.offset( direction ) );
                 if( uuid != null )
                 {
                     ChunkDataHandler.addPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction, 2 ), uuid );
