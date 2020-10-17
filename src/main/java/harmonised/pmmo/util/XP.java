@@ -88,12 +88,13 @@ public class XP
 			skillStyle.put( entry.getKey(), Style.EMPTY.withColor(Color.fromRgb( entry.getValue() ) ) );
 		}
 ////////////////////////////////////Style//////////////////////////////////////////////
-		textStyle.put( "red", 		Style.EMPTY.withFormatting( TextFormatting.RED ) );
-		textStyle.put( "green", 	Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
-		textStyle.put( "yellow", 	Style.EMPTY.withFormatting( TextFormatting.YELLOW ) );
-		textStyle.put( "grey", 		Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
-		textStyle.put( "blue", 		Style.EMPTY.withFormatting( TextFormatting.BLUE ) );
-////////////////////////////////////PATREONS//////////////////////////////////////////////
+		textStyle.put( "red", 			Style.EMPTY.withFormatting( TextFormatting.RED ) );
+		textStyle.put( "green", 		Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
+		textStyle.put( "yellow", 		Style.EMPTY.withFormatting( TextFormatting.YELLOW ) );
+		textStyle.put( "grey", 			Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
+		textStyle.put( "blue", 			Style.EMPTY.withFormatting( TextFormatting.BLUE ) );
+		textStyle.put( "dark_green", 	Style.EMPTY.withFormatting( TextFormatting.DARK_GREEN ) );
+		////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
 		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );		//DIDIS

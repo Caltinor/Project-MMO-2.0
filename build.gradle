@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.2-3.26.2'
+version = '1.16.3-3.27'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO'
 
@@ -104,7 +104,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.16.2-33.0.58'
+            minecraft 'net.minecraftforge:forge:1.16.3-34.1.23'
             implementation 'com.google.code.gson:gson:2.8.6'
 
 //            compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
@@ -119,6 +119,13 @@ dependencies
 
 //            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
 //            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
+            compileOnly fg.deobf("curse.maven:ftb-quests:3078812")
+            runtimeOnly fg.deobf("curse.maven:ftb-quests:3078812")
+            compileOnly fg.deobf("curse.maven:ftb-gui-library:3077866")
+            runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3077866")
+            compileOnly fg.deobf("curse.maven:item-filters:3066686")
+            runtimeOnly fg.deobf("curse.maven:item-filters:3066686")
+
             runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.2-4.0.0.0")
             compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.2-4.0.0.0:api")        }
 
