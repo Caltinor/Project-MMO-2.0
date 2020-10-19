@@ -910,6 +910,8 @@ public class XP
 
 			Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
 			ResourceLocation resLoc = getBiomeResLoc( player.world, biome );
+			if( resLoc == null )
+				return 0;
 			String biomeKey = resLoc.toString();
 			Map<String, Double> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
 
@@ -1227,11 +1229,13 @@ public class XP
 		}
 	}
 
-	public static void checkBiomeLevelReq(PlayerEntity player)
+	public static void checkBiomeLevelReq( PlayerEntity player )
 	{
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
-		ResourceLocation resLoc = biome.getRegistryName();
-		String biomeKey = XP.getBiomeResLoc( player.world, biome ).toString();
+		ResourceLocation resLoc = XP.getBiomeResLoc( player.world, biome );
+		if( resLoc == null )
+			return;
+		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
 		Map<String, Double> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
 		Map<String, Map<String, Double>> negativeEffects = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE );

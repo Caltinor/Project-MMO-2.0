@@ -253,15 +253,17 @@ public class AttributeHandler
 	private static double getBiomeMobMultiplier( MobEntity mob, String type )
 	{
 		Biome biome = mob.world.getBiome( new BlockPos( mob.getPositionVec() ) );
-		String biomeKey = XP.getBiomeResLoc( mob.world, biome ).toString();
-		Map<String, Double> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
+		ResourceLocation biomeResLoc = XP.getBiomeResLoc( mob.world, biome );
 		double multiplier = 1;
 
-		if( theMap != null && theMap.containsKey( type ) )
-			multiplier = (double) theMap.get( type );
+		if( biomeResLoc != null )
+		{
+			String biomeKey = biomeResLoc.toString();
+			Map<String, Double> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 
-//		if( multiplier != 1 )
-//			System.out.println( type + " " + multiplier );
+			if( theMap != null && theMap.containsKey( type ) )
+				multiplier = theMap.get( type );
+		}
 
 		return multiplier;
 	}
