@@ -165,7 +165,7 @@ public class GlossaryScreen extends Screen
     public static void onGlossaryButtonPress( TileButton button )
     {
         updateHistory( button.index );
-        Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( button.transKey ), button.jType, Minecraft.getInstance().player ) );
+        Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( button.transKey ), "", button.jType, Minecraft.getInstance().player ) );
     }
     
     public static void updateHistory( int index )

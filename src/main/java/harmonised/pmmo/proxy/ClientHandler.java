@@ -83,7 +83,7 @@ public class ClientHandler
 
     public static void openStats( UUID uuid )
     {
-        Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), JType.STATS, Minecraft.getInstance().player ) );
+        Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), "", JType.STATS, Minecraft.getInstance().player ) );
     }
 
     public static void syncPrefsToServer()

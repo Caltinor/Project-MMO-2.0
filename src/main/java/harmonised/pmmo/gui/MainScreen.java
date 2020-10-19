@@ -77,7 +77,7 @@ public class MainScreen extends Screen
 
         TileButton statsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), JType.STATS, Minecraft.getInstance().player ) );
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.STATS, Minecraft.getInstance().player ) );
         });
 
         addButton(exitButton);

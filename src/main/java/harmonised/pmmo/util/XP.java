@@ -1,11 +1,13 @@
 package harmonised.pmmo.util;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
@@ -39,6 +41,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import javax.annotation.Nullable;
 
@@ -98,6 +101,7 @@ public class XP
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
 		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );		//DIDIS
+		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );		//STRESSINDICATOR
 		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );		//STRESSINDICATOR
 ////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
 		materialHarvestTool.put( Material.ANVIL, "pickaxe" );		//PICKAXE
@@ -844,19 +848,18 @@ public class XP
 				itemBoost += heldMap.get( skillName );
 		}
 
-//		if( Curios.isLoaded() )
-//		{
-//			Collection<ICurioStacksHandler> curiosItems = Curios.getCurios(player).collect(Collectors.toSet());
-//
-//			for( ICurioStacksHandler value : curiosItems )
-//			{
-//				for (int i = 0; i < value.getSlots(); i++)
-//				{
-//					itemBoost += getWornXpBoost( player, value.getStacks().getStackInSlot(i).getItem(), skillName );
-//				}
-//			};
-//		}
-		//COUT
+		if( Curios.isLoaded() )
+		{
+			Collection<ICurioStacksHandler> curiosItems = Curios.getCurios(player).collect( Collectors.toSet() );
+
+			for( ICurioStacksHandler value : curiosItems )
+			{
+				for (int i = 0; i < value.getSlots(); i++)
+				{
+					itemBoost += getWornXpBoost( player, value.getStacks().getStackInSlot(i).getItem(), skillName );
+				}
+			};
+		}
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
 			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );

@@ -6,7 +6,6 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.BlockBrokenHandler;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -53,14 +52,16 @@ public class ListScreen extends Screen
     private ArrayList<ListButton> listButtons = new ArrayList<>();
     private UUID uuid;
     private ITextComponent title;
+    private String type;
 
-    public ListScreen(UUID uuid, ITextComponent titleIn, JType jType, PlayerEntity player )
+    public ListScreen(UUID uuid, ITextComponent titleIn, String type, JType jType, PlayerEntity player )
     {
         super(titleIn);
         this.title = titleIn;
         this.player = player;
         this.jType = jType;
         this.uuid = uuid;
+        this.type = type;
     }
 
 //    @Override
@@ -150,7 +151,7 @@ public class ListScreen extends Screen
                 {
                     if ( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ) != null )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 8, regKey, jType, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 8, regKey, jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                     }
                 }
             }
@@ -164,23 +165,23 @@ public class ListScreen extends Screen
 
                 if( veinBlacklist.containsKey( "all_dimensions" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 8, "all_dimensions", jType, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 8, "all_dimensions", jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                 }
 
 
                 if( veinBlacklist.containsKey( "minecraft:overworld" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:overworld", jType, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:overworld", jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                 }
 
                 if( veinBlacklist.containsKey( "minecraft:the_nether" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_nether", jType, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_nether", jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                 }
 
                 if( veinBlacklist.containsKey( "minecraft:the_end" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_end", jType, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_end", jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                 }
 
 //                for( Map.Entry<String, Map<String, Double>> entry : veinBlacklist.entrySet() )
@@ -231,7 +232,7 @@ public class ListScreen extends Screen
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 0, regKey, jType, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 0, regKey, jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                     }
                 }
             }
@@ -247,7 +248,7 @@ public class ListScreen extends Screen
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 0, entry.getKey(), jType, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 0, entry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                     }
                 }
             }
@@ -262,7 +263,7 @@ public class ListScreen extends Screen
                 {
                     if( ForgeRegistries.ENCHANTMENTS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 25, entry.getKey(), jType, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 25, entry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                     }
                 }
                 break;
@@ -274,10 +275,20 @@ public class ListScreen extends Screen
 
                 for( Skill skill : skills )
                 {
-                    listButtons.add( new ListButton( 0, 0, 3, 6, skill.toString(), jType, "", button -> ((ListButton) button).clickAction() ) );
+                    listButtons.add( new ListButton( 0, 0, 3, 6, skill.toString(), jType, "", button -> ((ListButton) button).clickActionSkills() ) );
                 }
             }
-                break;
+            break;
+
+            case HISCORE:
+            {
+                Skill theSkill = Skill.getSkill( type );
+                if( !theSkill.equals( Skill.INVALID_SKILL ) )
+                {
+                    System.out.println( "Yegurl" );
+                }
+            }
+            break;
 
             case SALVAGE:
             case SALVAGE_FROM:
@@ -288,7 +299,7 @@ public class ListScreen extends Screen
                     break;
                 for( Map.Entry<String, Map<String, Map<String, Double>>> salvageFromItemEntry : reqMap2.entrySet() )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 0, salvageFromItemEntry.getKey(), jType, "", button -> ((ListButton) button).clickAction() ) );
+                    tempList.add( new ListButton( 0, 0, 3, 0, salvageFromItemEntry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                 }
             }
                 break;
@@ -303,7 +314,7 @@ public class ListScreen extends Screen
                 {
                     if( XP.getItem( entry.getKey() ) != Items.AIR )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 0, entry.getKey(), jType, "", button -> ((ListButton) button).clickAction() ) );
+                        tempList.add( new ListButton( 0, 0, 3, 0, entry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
                     }
                 }
             }
@@ -951,14 +962,14 @@ public class ListScreen extends Screen
         switch( jType ) //default buttons
         {
             case XP_VALUE_BREED:
-                ListButton otherAnimalsBreedButton = new ListButton( 0, 0, 3, 20, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickAction() );
+                ListButton otherAnimalsBreedButton = new ListButton( 0, 0, 3, 20, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickActionGlossary() );
                 otherAnimalsBreedButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( defaultBreedingXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherAnimalsBreedButton );
                 break;
 
             case XP_VALUE_TAME:
             {
-                ListButton otherAnimalsTameButton = new ListButton( 0, 0, 3, 21, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickAction() );
+                ListButton otherAnimalsTameButton = new ListButton( 0, 0, 3, 21, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickActionGlossary() );
                 otherAnimalsTameButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( defaultTamingXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherAnimalsTameButton );
             }
@@ -966,11 +977,11 @@ public class ListScreen extends Screen
 
             case REQ_KILL:
             {
-                ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", button -> ((ListButton) button).clickAction() );
+                ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", button -> ((ListButton) button).clickActionGlossary() );
                 otherAggresiveMobsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherAggresiveMobsButton );
 
-                ListButton otherPassiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherPassiveMobs", jType, "", button -> ((ListButton) button).clickAction() );
+                ListButton otherPassiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherPassiveMobs", jType, "", button -> ((ListButton) button).clickActionGlossary() );
                 otherPassiveMobsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherPassiveMobsButton );
             }
@@ -978,7 +989,7 @@ public class ListScreen extends Screen
 
             case XP_VALUE_CRAFT:
             {
-                ListButton otherCraftsButton = new ListButton( 0, 0, 3, 22, "pmmo.otherCrafts", jType, "", button -> ((ListButton) button).clickAction() );
+                ListButton otherCraftsButton = new ListButton( 0, 0, 3, 22, "pmmo.otherCrafts", jType, "", button -> ((ListButton) button).clickActionGlossary() );
                 otherCraftsButton.text.add( new StringTextComponent( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( defaultCraftingXp ) ).getString() ).setStyle( greenColor ) );
                 listButtons.add( otherCraftsButton );
             }

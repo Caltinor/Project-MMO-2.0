@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.3-3.27.3'
+version = '1.16.3-3.28'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO'
 
@@ -126,8 +126,9 @@ dependencies
             compileOnly fg.deobf("curse.maven:item-filters:3066686")
             runtimeOnly fg.deobf("curse.maven:item-filters:3066686")
 
-            runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.2-4.0.0.0")
-            compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.2-4.0.0.0:api")        }
+            runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0")
+            compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0:api")
+        }
 
 jar {
     manifest {
