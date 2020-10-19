@@ -138,6 +138,19 @@ public class ListButton extends Button
             return 32;
     }
 
+    public void clickActionGlossary()
+    {
+//        LogHandler.LOGGER.debug( "Clicked " + this.title + " Button" );
+        GlossaryScreen.setButtonsToKey( regKey );
+        Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.glossary" ), false ) );
+    }
+
+    public void clickActionSkills()
+    {
+        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) )
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "" ), regKey, JType.HISCORE, Minecraft.getInstance().player ) );
+    }
+
     @Override
     public void renderButton(int x, int y, float partialTicks)
     {
@@ -170,13 +183,6 @@ public class ListButton extends Button
         this.renderBg(minecraft, x, y);
         int j = getFGColor();
         this.drawCenteredString(fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
-    }
-
-    public void clickAction()
-    {
-//        LogHandler.LOGGER.debug( "Clicked " + this.title + " Button" );
-        GlossaryScreen.setButtonsToKey( regKey );
-        Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.glossary" ), false ) );
     }
 
     public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)

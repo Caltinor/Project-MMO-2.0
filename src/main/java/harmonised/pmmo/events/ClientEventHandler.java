@@ -66,7 +66,7 @@ public class ClientEventHandler
                     }
                     else if( ClientHandler.OPEN_SKILLS.isKeyDown() )
                     {
-                        Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), JType.STATS, Minecraft.getInstance().player ) );
+                        Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( "pmmo.stats" ), "", JType.STATS, Minecraft.getInstance().player ) );
                         wasOpenSkills = ClientHandler.OPEN_SKILLS.isKeyDown();
                     }
                     else if( ClientHandler.OPEN_GLOSSARY.isKeyDown() )

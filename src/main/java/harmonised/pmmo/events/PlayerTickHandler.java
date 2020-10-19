@@ -2,6 +2,7 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -72,17 +73,16 @@ public class PlayerTickHandler
 
                 if( !player.world.isRemote() )
                 {
-//                    if( Curios.isLoaded() )
-//                    {
-//                        Curios.getCurios(player).forEach(value ->
-//                        {
-//                            for (int i = 0; i < value.getSlots(); i++)
-//                            {
-//                                XP.applyWornPenalty( player, value.getStacks().getStackInSlot(i) );
-//                            }
-//                        });
-//                    }
-                    //COUT
+                    if( Curios.isLoaded() )
+                    {
+                        Curios.getCurios(player).forEach(value ->
+                        {
+                            for (int i = 0; i < value.getSlots(); i++)
+                            {
+                                XP.applyWornPenalty( player, value.getStackInSlot(i) );
+                            }
+                        });
+                    }
 
                     if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
                         XP.applyWornPenalty( player, player.inventory.getStackInSlot( 39 ) );

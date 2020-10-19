@@ -59,7 +59,8 @@ public enum JType
     CREDITS(205),
     SETTINGS(206),
     GUI_SETTINGS(207),
-    XP_MULTIPLIER_DIMENSION(208);
+    XP_MULTIPLIER_DIMENSION(208),
+    HISCORE(209);
 
     public static final Map<JType, Integer> jTypeMap = new HashMap<>();
     public static final Map<Integer, JType> intMap = new HashMap<>();

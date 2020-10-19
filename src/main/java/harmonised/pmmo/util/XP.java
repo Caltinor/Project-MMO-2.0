@@ -928,11 +928,13 @@ public class XP
 
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
 		ResourceLocation resLoc = biome.getRegistryName();
+		if( resLoc == null )
+			return 0;
 		String biomeKey = resLoc.toString();
 		Map<String, Double> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
 
 		if( biomeMap != null && biomeMap.containsKey( skillName ) )
-			theBiomeBoost = (double) biomeMap.get( skillName );
+			theBiomeBoost = biomeMap.get( skillName );
 
 		if( checkReq( player, resLoc, JType.REQ_BIOME ) )
 			biomeBoost = theBiomeBoost;
@@ -1252,7 +1254,9 @@ public class XP
 	{
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
 		ResourceLocation resLoc = biome.getRegistryName();
-		String biomeKey = biome.getRegistryName().toString();
+		if( resLoc == null )
+			return;
+		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
 		Map<String, Double> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
 		Map<String, Map<String, Double>> negativeEffects = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE );

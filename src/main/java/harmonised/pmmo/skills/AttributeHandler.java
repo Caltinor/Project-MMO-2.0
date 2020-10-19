@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
@@ -248,15 +249,18 @@ public class AttributeHandler
 	private static double getBiomeMobMultiplier( MobEntity mob, String type )
 	{
 		Biome biome = mob.world.getBiome( new BlockPos( mob.getPositionVec() ) );
-		String biomeKey = biome.getRegistryName().toString();
-		Map<String, Double> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
+		ResourceLocation biomeResLoc = biome.getRegistryName();
 		double multiplier = 1;
 
-		if( theMap != null && theMap.containsKey( type ) )
-			multiplier = (double) theMap.get( type );
+		if( biomeResLoc != null )
+		{
+			String biomeKey = biome.getRegistryName().toString();
+			Map<String, Double> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
 
-//		if( multiplier != 1 )
-//			System.out.println( type + " " + multiplier );
+
+			if( theMap != null && theMap.containsKey( type ) )
+				multiplier = theMap.get( type );
+		}
 
 		return multiplier;
 	}
