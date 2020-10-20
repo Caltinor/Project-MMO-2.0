@@ -168,11 +168,7 @@ public class CreditorScreen extends Screen
         uuidName.put( "8eb0578d-c113-49d3-abf6-a6d36f6d1116", "Tyrius#0842" );
         uuidName.put( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa", "didis54#5815" );
         uuidName.put( "0bc51f06-9906-41ea-9fb4-7e9be169c980", "stressindicator#8819" );
-//        uuidName.put( "3066eaa7-6387-489d-b04b-cce7b505ee87", "neothiamin#1798" );
-//        uuidName.put( "1951c4ee-52e1-421c-927b-43fb941add98", "BusanDaek#3970" );
-//        uuidName.put( "d3167127-daa9-485b-ab14-c842c888e087", "deezer911#5693" );
-//        uuidName.put( "bfacfe26-94d7-4c6a-a337-fee6aad555bb", "TorukM4kt00#0246" );
-
+        uuidName.put( "5bfdb948-7b66-476a-aefe-d45e4778fb2d", "Daddy_P1G#0432" );
         List<String> list;
 
         /////////LAPIS//////////////
@@ -219,6 +215,11 @@ public class CreditorScreen extends Screen
         list = creditorsInfo.get( "stressindicator#8819" );
         list.add( "stressindicator#8819" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/08/2020" ).getString() );
+
+        //DADDY_P1G
+        list = creditorsInfo.get( "Daddy_P1G#0432" );
+        list.add( "Daddy_P1G#0432" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "29/06/2020" ).getString() );
 
         //NEOTHIAMIN
         list = new ArrayList<>();

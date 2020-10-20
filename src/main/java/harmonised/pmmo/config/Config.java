@@ -433,7 +433,7 @@ public class Config
                         .defineInRange( "mobSpeedBoostPerPowerLevel", 1D, 0, 10) );
 
                 this.biomeMobMultiplierEnabled = subscriber.subscribe(builder
-                        .comment( "Should mob xp multipliers inside of biomes be enabled? False means no multipliers" )
+                        .comment( "Should mob xp multipliers inside of biomes be enabled? false means no multipliers" )
                         .translation( "pmmo.biomeMobMultiplierEnabled" )
                         .define( "biomeMobMultiplierEnabled", true ) );
 
@@ -444,68 +444,68 @@ public class Config
             builder.push( "Requirements" );
             {
                 this.wearReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should wear requirements be enabled? False means no requirements" )
+                        .comment( "Should wear requirements be enabled? false means no requirements" )
                         .translation( "pmmo.wearReqEnabled" )
                         .define( "wearReqEnabled", true ) );
 
                 this.toolReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should tool requirements be enabled? False means no requirements" )
+                        .comment( "Should tool requirements be enabled? false means no requirements" )
                         .translation( "pmmo.toolReqEnabled" )
                         .define( "toolReqEnabled", true ) );
 
                 this.weaponReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should weapon requirements be enabled? False means no requirements" )
+                        .comment( "Should weapon requirements be enabled? false means no requirements" )
                         .translation( "pmmo.weaponReqEnabled" )
                         .define( "weaponReqEnabled", true ) );
 
                 this.killReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should mob kill req be enabled? False means no requirements" )
+                        .comment( "Should mob kill req be enabled? false means no requirements" )
                         .translation( "pmmo.killReqEnabled" )
                         .define( "killReqEnabled", true ) );
 
                 this.killXpEnabled = subscriber.subscribe(builder
-                        .comment( "Should mob kill xp be enabled? False means no requirements" )
+                        .comment( "Should mob kill xp be enabled? false means no requirements" )
                         .translation( "pmmo.killXpEnabled" )
                         .define( "killXpEnabled", true ) );
 
                 this.mobRareDropEnabled = subscriber.subscribe(builder
-                        .comment( "Should mob rare drops be enabled? False means no requirements" )
+                        .comment( "Should mob rare drops be enabled? false means no requirements" )
                         .translation( "pmmo.mobRareDropEnabled" )
                         .define( "mobRareDropEnabled", true ) );
 
 
                 this.useReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should use requirements be enabled? False means no requirements" )
+                        .comment( "Should use requirements be enabled? false means no requirements" )
                         .translation( "pmmo.useReqEnabled" )
                         .define( "useReqEnabled", true ) );
 
                 this.placeReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should place requirements be enabled? False means no requirements" )
+                        .comment( "Should place requirements be enabled? false means no requirements" )
                         .translation( "pmmo.placeReqEnabled" )
                         .define( "placeReqEnabled", true ) );
 
                 this.breakReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should break requirements be enabled? False means no requirements" )
+                        .comment( "Should break requirements be enabled? false means no requirements" )
                         .translation( "pmmo.breakReqEnabled" )
                         .define( "breakReqEnabled", true ) );
 
                 this.biomeReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should biome requirements be enabled? False means no requirements" )
+                        .comment( "Should biome requirements be enabled? false means no requirements" )
                         .translation( "pmmo.biomeReqEnabled" )
                         .define( "biomeReqEnabled", true ) );
 
                 this.negativeBiomeEffectEnabled = subscriber.subscribe(builder
-                        .comment( "Should biome negative effects be enabled? False means no negative effects" )
+                        .comment( "Should biome negative effects be enabled? false means no negative effects" )
                         .translation( "pmmo.negativeBiomeEffectEnabled" )
                         .define( "negativeBiomeEffectEnabled", true ) );
 
                 this.positiveBiomeEffectEnabled = subscriber.subscribe(builder
-                        .comment( "Should biome positive effects be enabled? False means no positive effects" )
+                        .comment( "Should biome positive effects be enabled? false means no positive effects" )
                         .translation( "pmmo.positiveBiomeEffectEnabled" )
                         .define( "positiveBiomeEffectEnabled", true ) );
 
                 this.biomeXpBonusEnabled = subscriber.subscribe(builder
-                        .comment( "Should xp multipliers be enabled? False means no multipliers" )
+                        .comment( "Should xp multipliers be enabled? false means no multipliers" )
                         .translation( "pmmo.biomeXpBonusEnabled" )
                         .define( "biomeXpBonusEnabled", true ) );
 
@@ -515,57 +515,57 @@ public class Config
                         .define( "xpValueGeneralEnabled", true ) );
 
                 this.xpValueBreakingEnabled = subscriber.subscribe(builder
-                        .comment( "Should xp values for breaking things first time be enabled? False means only Hardness xp is awarded for breaking" )
+                        .comment( "Should xp values for breaking things first time be enabled? false means only Hardness xp is awarded for breaking" )
                         .translation( "pmmo.xpValueBreakingEnabled" )
                         .define( "xpValueBreakingEnabled", true ) );
 
                 this.oreEnabled = subscriber.subscribe(builder
-                        .comment( "Should ores be enabled? False means no extra chance" )
+                        .comment( "Should ores be enabled? false means no extra chance" )
                         .translation( "pmmo.oreEnabled" )
                         .define( "oreEnabled", true ) );
 
                 this.logEnabled = subscriber.subscribe(builder
-                        .comment( "Should logs be enabled? False means no extra chance" )
+                        .comment( "Should logs be enabled? false means no extra chance" )
                         .translation( "pmmo.logEnabled" )
                         .define( "logEnabled", true ) );
 
                 this.plantEnabled = subscriber.subscribe(builder
-                        .comment( "Should plants be enabled? False means no extra chance" )
+                        .comment( "Should plants be enabled? false means no extra chance" )
                         .translation( "pmmo.plantEnabled" )
                         .define( "plantEnabled", true ) );
 
                 this.salvageEnabled = subscriber.subscribe(builder
-                        .comment( "Is Salvaging items using the Repairing skill enabled? False = off" )
+                        .comment( "Is Salvaging items using the Repairing skill enabled? false = off" )
                         .translation( "pmmo.salvageEnabled" )
                         .define( "salvageEnabled", true ) );
 
                 this.fishPoolEnabled = subscriber.subscribe(builder
-                        .comment( "Is catching items from Fish Pool while Fishing enabled? False = off" )
+                        .comment( "Is catching items from Fish Pool while Fishing enabled? false = off" )
                         .translation( "pmmo.fishPoolEnabled" )
                         .define( "fishPoolEnabled", true ) );
 
                 this.fishEnchantPoolEnabled = subscriber.subscribe(builder
-                        .comment( "Should fished items have a chance at being Enchanted? enabled? False = off" )
+                        .comment( "Should fished items have a chance at being Enchanted? enabled? false = off" )
                         .translation( "pmmo.fishEnchantPoolEnabled" )
                         .define( "fishEnchantPoolEnabled", true ) );
 
                 this.levelUpCommandEnabled = subscriber.subscribe(builder
-                        .comment( "Commands being fired on specific level ups enabled? False = off" )
+                        .comment( "Commands being fired on specific level ups enabled? false = off" )
                         .translation( "pmmo.levelUpCommandEnabled" )
                         .define( "levelUpCommandEnabled", true ) );
 
                 this.heldItemXpBoostEnabled = subscriber.subscribe(builder
-                        .comment( "Main held items xp multiplier enabled? False = off" )
+                        .comment( "Main held items xp multiplier enabled? false = off" )
                         .translation( "pmmo.heldItemXpBoostEnabled" )
                         .define( "heldItemXpBoostEnabled", true ) );
 
                 this.wornItemXpBoostEnabled = subscriber.subscribe(builder
-                        .comment( "worn items xp boost enabled? False = off" )
+                        .comment( "worn items xp boost enabled? false = off" )
                         .translation( "pmmo.wornItemXpBoostEnabled" )
                         .define( "wornItemXpBoostEnabled", true ) );
 
                 this.loadDefaultConfig = subscriber.subscribe(builder
-                        .comment( "Should config from default_data.json be loaded? False means only data.json is loaded" )
+                        .comment( "Should config from default_data.json be loaded? false means only data.json is loaded" )
                         .translation( "pmmo.loadDefaultConfig" )
                         .define( "loadDefaultConfig", true ) );
 
@@ -1124,7 +1124,7 @@ public class Config
             builder.push( "Crafting" );
             {
                 this.xpValueCraftingEnabled = subscriber.subscribe(builder
-                        .comment( "Should xp values for crafting be enabled? False means the default value is used" )
+                        .comment( "Should xp values for crafting be enabled? false means the default value is used" )
                         .translation( "pmmo.xpValueCraftingEnabled" )
                         .define( "xpValueCraftingEnabled", true ) );
 
