@@ -103,6 +103,7 @@ public class XP
 		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );		//DIDIS
 		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );		//STRESSINDICATOR
 		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );		//STRESSINDICATOR
+		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "5bfdb948-7b66-476a-aefe-d45e4778fb2d" ) );		//DADDY_P1G
 ////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
 		materialHarvestTool.put( Material.ANVIL, "pickaxe" );		//PICKAXE
 		materialHarvestTool.put( Material.GLASS, "pickaxe" );
