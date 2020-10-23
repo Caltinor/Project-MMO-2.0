@@ -8,6 +8,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.network.*;
+import harmonised.pmmo.party.Party;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.PMMOFireworkEntity;
@@ -27,6 +28,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -41,11 +43,15 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
 public class XP
 {
+	public static final Logger LOGGER = LogManager.getLogger();
+
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
 	private static Map<Skill, Integer> skillColors = new HashMap<>();
 	public static Set<UUID> isVeining = new HashSet<>();
@@ -127,9 +133,13 @@ public class XP
 ////////////////////////////////////Style//////////////////////////////////////////////
 		textStyle.put( "red", new Style().setColor( TextFormatting.RED ) );
 		textStyle.put( "green", new Style().setColor( TextFormatting.GREEN ) );
+		textStyle.put( "dark_green", new Style().setColor( TextFormatting.DARK_GREEN ) );
 		textStyle.put( "yellow", new Style().setColor( TextFormatting.YELLOW ) );
 		textStyle.put( "grey", new Style().setColor( TextFormatting.GRAY ) );
 		textStyle.put( "blue", new Style().setColor( TextFormatting.BLUE ) );
+		textStyle.put( "dark_blue", new Style().setColor( TextFormatting.DARK_BLUE ) );
+		textStyle.put( "pink", new Style().setColor( TextFormatting.LIGHT_PURPLE ) );
+		textStyle.put( "dark_purple", new Style().setColor( TextFormatting.DARK_PURPLE ) );
 ////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
@@ -442,7 +452,7 @@ public class XP
 				break;
 
 			default:
-				LogHandler.LOGGER.error( "WRONG getExtraChance CHANCE TYPE! PLEASE REPORT!" );
+				LOGGER.error( "WRONG getExtraChance CHANCE TYPE! PLEASE REPORT!" );
 				return 0;
 		}
 
@@ -551,6 +561,47 @@ public class XP
 		return ( enduranceLevel + (maxOffensive * 1.5f) ) / 50;
 	}
 
+	public static ServerPlayerEntity getPlayerByUUID( UUID uuid )
+	{
+		return getPlayerByUUID( uuid, PmmoSavedData.server );
+	}
+
+	public static ServerPlayerEntity getPlayerByUUID( UUID uuid, MinecraftServer server )
+	{
+		ServerPlayerEntity matchedPlayer = null;
+
+		for( ServerPlayerEntity player : server.getPlayerList().getPlayers() )
+		{
+			if( player.getUniqueID().equals( uuid ) )
+			{
+				matchedPlayer = player;
+				break;
+			}
+		}
+
+		return matchedPlayer;
+	}
+
+	public static double getDistance( Vec3d a, Vec3d b )
+	{
+		return Math.sqrt( Math.pow( a.getX() - b.getX(), 2 ) + Math.pow( a.getY() - b.getY(), 2 ) + Math.pow( a.getZ() - b.getZ(), 2 ) );
+	}
+
+	public static <T extends Entity> Set<T> getEntitiesInRange( Vec3d origin, Set<T> entities, double range )
+	{
+		Set<T> withinRange = new HashSet<>();
+		Vec3d pos;
+		for( T entity : entities )
+		{
+			pos = entity.getPositionVec();
+			double distance = getDistance( origin, pos );
+			if( distance <= range )
+				withinRange.add( entity );
+		}
+
+		return withinRange;
+	}
+
 	public static void syncPlayerConfig( PlayerEntity player )
 	{
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.data3ToNbt( JsonConfig.localData ), 4 ), (ServerPlayerEntity) player );
@@ -589,7 +640,7 @@ public class XP
 	{
 		try
 		{
-			return new ResourceLocation( regKey );
+			return new ResourceLocation( regKey.replaceAll( " ", "" ).trim() );
 		}
 		catch( Exception e )
 		{
@@ -998,32 +1049,52 @@ public class XP
 		return maxVein;
 	}
 
-	public static void awardXp(PlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses )
+	public static void awardXp( ServerPlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
 	{
-		if( !(player instanceof ServerPlayerEntity) )
-		{
-			LogHandler.LOGGER.error( "NOT ServerPlayerEntity PLAYER XP AWARD ATTEMPTED! THIS SHOULD NOT HAPPEN! SOURCE: " + sourceName + ", SKILL: " + skill.name() + ", AMOUNT: " + amount + ", CLASS: " + player.getClass().getName().toString() );
-			return;
-		}
+//		if( !(player instanceof ServerPlayerEntity) )
+//		{
+//			LOGGER.error( "NOT ServerPlayerEntity PLAYER XP AWARD ATTEMPTED! THIS SHOULD NOT HAPPEN! SOURCE: " + sourceName + ", SKILL: " + skill.name() + ", AMOUNT: " + amount + ", CLASS: " + player.getClass().getName().toString() );
+//			return;
+//		}
 
 		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
 			return;
 
 		if( skill.getValue() == 0 )
 		{
-			LogHandler.LOGGER.error( "INVALID SKILL AT AWARD XP! SOURCE: " + sourceName + ", AMOUNT: " + amount );
+			LOGGER.error( "INVALID SKILL AT AWARD XP! SOURCE: " + sourceName + ", AMOUNT: " + amount );
 			return;
 		}
 
+		PmmoSavedData pmmoSavedData = PmmoSavedData.get( player );
 		String skillName = skill.name().toLowerCase();
+		UUID uuid = player.getUniqueID();
 
 		if( !ignoreBonuses )
+		{
 			amount *= getMultiplier( player, skill );
+			if( !causedByParty )
+			{
+				Party party = pmmoSavedData.getParty( uuid );
+				if( party != null )
+				{
+					Set<ServerPlayerEntity> membersInRange = party.getOnlineMembersInRange( player );
+					int membersInRangeSize = membersInRange.size() + 1;
+					double partyMultiplier = party.getMultiplier( membersInRangeSize );
+					amount *= partyMultiplier;
+					party.submitXpGained( uuid, amount );
+					amount /= membersInRangeSize;
+					for( ServerPlayerEntity partyMember : membersInRange )
+					{
+						awardXp( partyMember, skill, sourceName, amount, skip, ignoreBonuses, true );
+					}
+				}
+			}
+		}
 
 		if( amount == 0 )
 			return;
 
-		UUID uuid = player.getUniqueID();
 		String playerName = player.getDisplayName().getString();
 		int startLevel = skill.getLevel( uuid );
 		double startXp = skill.getXp( uuid );
@@ -1035,18 +1106,18 @@ public class XP
 		if( startXp + amount >= 2000000000 )
 		{
 			sendMessage( skillName + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-			LogHandler.LOGGER.info( player.getDisplayName().getString() + " " + skillName + " 2b cap reached" );
+			LOGGER.info( player.getDisplayName().getString() + " " + skillName + " 2b cap reached" );
 			amount = 2000000000 - startXp;
 		}
 
-		PmmoSavedData.get( player ).addXp( skill, uuid, amount );
+		pmmoSavedData.addXp( skill, uuid, amount );
 
 		int currLevel = skill.getLevel( uuid );
 
 		if( startLevel != currLevel ) //Level Up! Or Down?
 		{
 			AttributeHandler.updateAll( player );
-			updateRecipes( (ServerPlayerEntity) player );
+			updateRecipes( player );
 
 			if( ModList.get().isLoaded( "compatskills" ) )
 			{
@@ -1059,7 +1130,7 @@ public class XP
 				}
 				catch( CommandSyntaxException e )
 				{
-					LogHandler.LOGGER.error( "PMMO Level Up - compatskills command went wrong! args: " + commandArgs, e );
+					LOGGER.error( "PMMO Level Up - compatskills command went wrong! args: " + commandArgs, e );
 				}
 			}
 
@@ -1076,11 +1147,11 @@ public class XP
 						try
 						{
 							player.getServer().getCommandManager().getDispatcher().execute( command, player.getServer().getCommandSource() );
-							LogHandler.LOGGER.info( "Executing command \"" + command + "\"\nTrigger: " + playerName + " level up from " + startLevel + " to " + currLevel + " in " + skill.name() + ", trigger level " + commandLevel );
+							LOGGER.info( "Executing command \"" + command + "\"\nTrigger: " + playerName + " level up from " + startLevel + " to " + currLevel + " in " + skill.name() + ", trigger level " + commandLevel );
 						}
 						catch( CommandSyntaxException e )
 						{
-							LogHandler.LOGGER.error( "Invalid level up command \"" + command + "\"", e );
+							LOGGER.error( "Invalid level up command \"" + command + "\"", e );
 						}
 					}
 				}
@@ -1089,12 +1160,12 @@ public class XP
 
 		NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
 		if( !skip )
-			LogHandler.LOGGER.debug( playerName + " +" + amount + "xp in: "  + skillName + " for: " + sourceName + " total xp: " + skill.getXp( uuid ) );
+			LOGGER.debug( playerName + " +" + amount + "xp in: "  + skillName + " for: " + sourceName + " total xp: " + skill.getXp( uuid ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
 			sendMessage( skillName + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-			LogHandler.LOGGER.info( playerName + " " + skillName + " max startLevel reached" );
+			LOGGER.info( playerName + " " + skillName + " max startLevel reached" );
 		}
 	}
 
@@ -1105,7 +1176,7 @@ public class XP
 			awardXpMap( uuid, JsonConfig.data.get( JType.XP_VALUE_TRIGGER ).get( triggerKey ), sourceName, skip, ignoreBonuses );
 		}
 		else
-			LogHandler.LOGGER.error( "TRIGGER XP AWARD \"" + triggerKey + "\" DOES NOT HAVE ANY VALUES, CANNOT AWARD" );
+			LOGGER.error( "TRIGGER XP AWARD \"" + triggerKey + "\" DOES NOT HAVE ANY VALUES, CANNOT AWARD" );
 	}
 
 	public static void awardXpMap( UUID uuid, Map<String, Double> map, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
@@ -1349,7 +1420,7 @@ public class XP
 	{
 		if( skill.equals( Skill.INVALID_SKILL ) )
 		{
-			LogHandler.LOGGER.error( "Invalid Skill at getOfflineXp" );
+			LOGGER.error( "Invalid Skill at getOfflineXp" );
 			return -1;
 		}
 

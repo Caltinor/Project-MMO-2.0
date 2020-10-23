@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -15,6 +14,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -22,6 +23,8 @@ import java.util.*;
 
 public class JsonConfig
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static Gson gson = new Gson();
     public static final Type mapType = new TypeToken<Map<String, Map<String, Double>>>(){}.getType();
     public static final Type mapType2 = new TypeToken<Map<String, Map<String, Map<String, Double>>>>(){}.getType();
@@ -254,7 +257,7 @@ public class JsonConfig
             }
             catch (Exception e)
             {
-                LogHandler.LOGGER.error( "ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + dataPath + fileName, e );
+                LOGGER.error( "ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + dataPath + fileName, e );
                 if( jTypes2.contains( jType ) )
                     rawData2.put( jType, new HashMap<>() );
                 else
@@ -404,18 +407,18 @@ public class JsonConfig
         }
         catch( IOException e )
         {
-            LogHandler.LOGGER.error( "Could not create template json config!", dataFile.getPath(), e );
+            LOGGER.error( "Could not create template json config!", dataFile.getPath(), e );
         }
 
         try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( hardDataPath + fileName );
              FileOutputStream outputStream = new FileOutputStream( dataFile ); )
         {
-            LogHandler.LOGGER.debug( "Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath() );
+            LOGGER.debug( "Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath() );
             IOUtils.copy( inputStream, outputStream );
         }
         catch( IOException e )
         {
-            LogHandler.LOGGER.error( "Error copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath(), e );
+            LOGGER.error( "Error copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath(), e );
         }
     }
 
@@ -428,7 +431,7 @@ public class JsonConfig
             if( Skill.getInt( key ) != 0 )
                 anyValidSkills = true;
             else
-                LogHandler.LOGGER.info( "Invalid skill " + key + " level " + theMap.get( key ) );
+                LOGGER.info( "Invalid skill " + key + " level " + theMap.get( key ) );
         }
 
         return anyValidSkills;
@@ -444,7 +447,7 @@ public class JsonConfig
             if( !effect.equals( invalidEffect ) )
                 anyValidEffects = true;
             else
-                LogHandler.LOGGER.info( "Invalid effect " + key );
+                LOGGER.info( "Invalid effect " + key );
         }
 
         return anyValidEffects;
@@ -455,7 +458,7 @@ public class JsonConfig
         Map<String, Map<String, Double>> input = rawData.get( jType );
         Map<String, Map<String, Double>> output = localData.get( jType );
 
-        LogHandler.LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );
+        LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( checkValidSkills( element.getValue() ) )
@@ -468,11 +471,11 @@ public class JsonConfig
                     if( Skill.getInt( entry.getKey() ) != 0 )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LogHandler.LOGGER.error( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
+                        LOGGER.error( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
                 }
             }
             else
-                LogHandler.LOGGER.error( "No valid skills, cannot add " + element.getKey() );
+                LOGGER.error( "No valid skills, cannot add " + element.getKey() );
         };
     }
 
@@ -492,11 +495,11 @@ public class JsonConfig
                     if( !potion.equals( invalidEffect ) && entry.getValue() >= 0 && entry.getValue() < 255 )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LogHandler.LOGGER.error( entry.getKey() + " is either not a effect skill, or below 0, or above 255!" );
+                        LOGGER.error( entry.getKey() + " is either not a effect skill, or below 0, or above 255!" );
                 }
             }
             else
-                LogHandler.LOGGER.error( "No valid effects, cannot add " + element.getKey() );
+                LOGGER.error( "No valid effects, cannot add " + element.getKey() );
         };
     }
 
@@ -514,11 +517,11 @@ public class JsonConfig
                     if( entry.getKey().equals( "extraChance" ) && entry.getValue() > 0 )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LogHandler.LOGGER.error( element.getKey() + " is either not \"extraChance\", or not above 0!" );
+                        LOGGER.error( element.getKey() + " is either not \"extraChance\", or not above 0!" );
                 }
             }
             else
-                LogHandler.LOGGER.info( "Could not load inexistant item " + element.getKey() );
+                LOGGER.info( "Could not load inexistant item " + element.getKey() );
         };
     }
 
@@ -534,7 +537,7 @@ public class JsonConfig
             for( Map.Entry<String, Double> entry : inMap.entrySet() )
             {
                 if( XP.getItem( entry.getKey() ).equals( Items.AIR ) )
-                    LogHandler.LOGGER.info( "Could not load inexistant item " + entry.getKey() + " into Vein Blacklist" );
+                    LOGGER.info( "Could not load inexistant item " + entry.getKey() + " into Vein Blacklist" );
                 else
                     output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
             }
@@ -551,7 +554,7 @@ public class JsonConfig
                 if( !XP.getItem( entry.getKey() ).equals( Items.AIR ) )
                     output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                 else
-                    LogHandler.LOGGER.info( "Could not load inexistant item " + element.getKey() );
+                    LOGGER.info( "Could not load inexistant item " + element.getKey() );
             }
         };
     }
@@ -567,59 +570,59 @@ public class JsonConfig
 
                 if( !( inMap.containsKey( "startWeight" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"startWeight\" is invalid, loading default value 1" );
+                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"startWeight\" is invalid, loading default value 1" );
                     inMap.put( "startWeight", 1D );
                 }
 
                 if( !( inMap.containsKey( "startLevel" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"startLevel\" is invalid, loading default value level 1" );
+                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"startLevel\" is invalid, loading default value level 1" );
                     inMap.put( "startLevel", 1D );
                 }
 
                 if( !( inMap.containsKey( "endWeight" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"endWeight\" is invalid, loading default value 1" );
+                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"endWeight\" is invalid, loading default value 1" );
                     inMap.put( "endWeight", 1D );
                 }
 
                 if( !( inMap.containsKey( "endLevel" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"endLevel\" is invalid, loading default value level 1" );
+                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"endLevel\" is invalid, loading default value level 1" );
                     inMap.put( "endLevel", 1D );
                 }
 
                 if( !( inMap.containsKey( "minCount" ) ) )
                 {
-//                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is invalid, loading default value 1 item" );
+//                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is invalid, loading default value 1 item" );
                     inMap.put( "minCount", 1D );
                 }
                 else if( inMap.get( "minCount" ) > item.getMaxStackSize() )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is above Max Stack Size, loading default value 1 item" );
+                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is above Max Stack Size, loading default value 1 item" );
                     inMap.put( "minCount", (double) item.getMaxStackSize() );
                 }
 
                 if( !( inMap.containsKey( "maxCount" ) ) )
                 {
-//                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is invalid, loading default value 1" );
+//                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is invalid, loading default value 1" );
                     inMap.put( "maxCount", 1D );
                 }
                 else if( inMap.get( "maxCount" ) > item.getMaxStackSize() )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is above Max Stack Size, loading default value 1 item" );
+                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is above Max Stack Size, loading default value 1 item" );
                     inMap.put( "maxCount", (double) item.getMaxStackSize() );
                 }
 
                 if( !( inMap.containsKey( "enchantLevelReq" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"enchantLevelReq\" is invalid, loading default value level 1" );
+                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"enchantLevelReq\" is invalid, loading default value level 1" );
                     inMap.put( "enchantLevelReq", 1D );
                 }
 
                 if( !( inMap.containsKey( "xp" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"xp\" is invalid, loading default value 1xp" );
+                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"xp\" is invalid, loading default value 1xp" );
                     inMap.put( "xp", 1D );
                 }
 
@@ -686,7 +689,7 @@ public class JsonConfig
                     outMap.put( "xp", xp );
             }
             else
-                LogHandler.LOGGER.info( "Could not load inexistant item " + element.getKey() );
+                LOGGER.info( "Could not load inexistant item " + element.getKey() );
         };
     }
 
@@ -701,31 +704,31 @@ public class JsonConfig
 
                 if( !( inMap.containsKey( "levelReq" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelReq\" is invalid, loading default value 1" );
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelReq\" is invalid, loading default value 1" );
                     inMap.put( "levelReq", 1D );
                 }
 
                 if( !( inMap.containsKey( "levelPerLevel" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelPerLevel\" is invalid, loading default value 0" );
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelPerLevel\" is invalid, loading default value 0" );
                     inMap.put( "levelPerLevel", 0D );
                 }
 
                 if( !( inMap.containsKey( "chancePerLevel" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"chancePerLevel\" is invalid, loading default value 0" );
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"chancePerLevel\" is invalid, loading default value 0" );
                     inMap.put( "chancePerLevel", 0D );
                 }
 
                 if( !( inMap.containsKey( "maxChance" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
                     inMap.put( "maxChance", 80D );
                 }
 
                 if( !( inMap.containsKey( "maxLevel" ) ) )
                 {
-                    LogHandler.LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxLevel\" is invalid, loading default value " + enchant.getMaxLevel() );
+                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxLevel\" is invalid, loading default value " + enchant.getMaxLevel() );
                     inMap.put( "maxLevel", (double) enchant.getMaxLevel() );
                 }
 
@@ -767,7 +770,7 @@ public class JsonConfig
                     outMap.put( "maxLevel", maxLevel );
             }
             else
-                LogHandler.LOGGER.info( "Could not load inexistant enchant " + element.getKey() );
+                LOGGER.info( "Could not load inexistant enchant " + element.getKey() );
         };
     }
 
@@ -785,11 +788,11 @@ public class JsonConfig
                     if( validAttributes.contains( entry.getKey() ) )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LogHandler.LOGGER.error( "Invalid attribute " + entry.getKey() );
+                        LOGGER.error( "Invalid attribute " + entry.getKey() );
                 }
             }
             else
-                LogHandler.LOGGER.error( "No valid attributes, cannot add " + element.getKey() );
+                LOGGER.error( "No valid attributes, cannot add " + element.getKey() );
 
         };
     }
@@ -812,7 +815,7 @@ public class JsonConfig
                 }
             }
             else
-                LogHandler.LOGGER.error( "Invalid skill \"" + element.getKey() + "\" in Level Up Command" );
+                LOGGER.error( "Invalid skill \"" + element.getKey() + "\" in Level Up Command" );
         };
     }
 
@@ -839,7 +842,7 @@ public class JsonConfig
             if( validAttributes.contains( key ) )
                 anyValidAttributes = true;
             else
-                LogHandler.LOGGER.info( "Invalid attribute " + key );
+                LOGGER.info( "Invalid attribute " + key );
         }
 
         return anyValidAttributes;
@@ -871,37 +874,37 @@ public class JsonConfig
 
                         if( !( inputItemMap.containsKey( "startChance" ) ) )
                         {
-                            LogHandler.LOGGER.debug( "Invalid or Missing startChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 0.1" );
+                            LOGGER.debug( "Invalid or Missing startChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 0.1" );
                             inputItemMap.put( "startChance", 0.1D );
                         }
                         if( !( inputItemMap.containsKey( "endChance" ) ) )
                         {
-                            LogHandler.LOGGER.debug( "Invalid or Missing endChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing endChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "endChance", 1D );
                         }
                         if( !( inputItemMap.containsKey( "startLevel" ) ) )
                         {
-                            LogHandler.LOGGER.debug( "Invalid or Missing startLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing startLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "startLevel", 1D );
                         }
                         if( !( inputItemMap.containsKey( "endLevel" ) ) )
                         {
-                            LogHandler.LOGGER.debug( "Invalid or Missing endLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 100" );
+                            LOGGER.debug( "Invalid or Missing endLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 100" );
                             inputItemMap.put( "endLevel", 100D );
                         }
                         if( !( inputItemMap.containsKey( "minCount" ) ) )
                         {
-                            LogHandler.LOGGER.debug( "Invalid or Missing minCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing minCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "minCount", 1D );
                         }
                         if( !( inputItemMap.containsKey( "maxCount" ) ) )
                         {
-                            LogHandler.LOGGER.debug( "Invalid or Missing maxCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing maxCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "maxCount", 1D );
                         }
                         if( !( inputItemMap.containsKey( "xpPerItem" ) ) )
                         {
-                            LogHandler.LOGGER.debug( "Invalid or Missing xpPerItem Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing xpPerItem Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "xpPerItem", 1D );
                         }
 
@@ -931,11 +934,11 @@ public class JsonConfig
                         localSalvagesFrom.get( itemResLoc ).put( blockResLoc.toString(), outputItemMap );
                     }
                     else
-                        LogHandler.LOGGER.debug( "Inexistant Item " + itemEntry.getKey() + " in Treasure" );
+                        LOGGER.debug( "Inexistant Item " + itemEntry.getKey() + " in Treasure" );
                 }
             }
             else
-                LogHandler.LOGGER.debug( "Inexistant Block " + blockEntry.getKey() + " in Treasure" );
+                LOGGER.debug( "Inexistant Block " + blockEntry.getKey() + " in Treasure" );
         }
     }
 
@@ -964,37 +967,37 @@ public class JsonConfig
 
                         if( !( salvageToItemMap.containsKey( "salvageMax" ) ) )
                         {
-                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"salvageMax\" is invalid, loading default value 1 item" );
+                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"salvageMax\" is invalid, loading default value 1 item" );
                             salvageToItemMap.put( "salvageMax", 1D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "baseChance" ) ) )
                         {
-                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"baseChance\" is invalid, loading default value 50%" );
+                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"baseChance\" is invalid, loading default value 50%" );
                             salvageToItemMap.put( "baseChance", 50D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "chancePerLevel" ) ) )
                         {
-                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"chancePerLevel\" is invalid, loading default value 0%" );
+                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"chancePerLevel\" is invalid, loading default value 0%" );
                             salvageToItemMap.put( "chancePerLevel", 0D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "maxChance" ) ) )
                         {
-                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
+                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
                             salvageToItemMap.put( "maxChance", 80D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "xpPerItem" ) ) )
                         {
-                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"xpPerItem\" is invalid, loading default value 0xp" );
+                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"xpPerItem\" is invalid, loading default value 0xp" );
                             salvageToItemMap.put( "xpPerItem", 0D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "levelReq" ) ) )
                         {
-                            LogHandler.LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"levelReq\" is invalid, loading default value 1 level" );
+                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"levelReq\" is invalid, loading default value 1 level" );
                             salvageToItemMap.put( "levelReq", 1D );
                         }
 
@@ -1051,11 +1054,11 @@ public class JsonConfig
                         localSalvagesFrom.get( salvageToItemResLoc ).put(  salvageFromItemResLoc.toString(), outMap );
                     }
                     else
-                        LogHandler.LOGGER.debug( "Inexistant To Item " + inputSalvageToItemEntry.getKey() + " in Salvage" );
+                        LOGGER.debug( "Inexistant To Item " + inputSalvageToItemEntry.getKey() + " in Salvage" );
                 }
             }
             else
-                LogHandler.LOGGER.debug( "Inexistant From Item " + inputSalvageFromItemEntry.getKey() + " in Salvage" );
+                LOGGER.debug( "Inexistant From Item " + inputSalvageFromItemEntry.getKey() + " in Salvage" );
         }
     }
 }

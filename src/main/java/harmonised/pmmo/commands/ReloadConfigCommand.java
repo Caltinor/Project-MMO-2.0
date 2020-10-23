@@ -10,7 +10,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class ReloadConfigCommand
 {
-    public static int execute(CommandContext<CommandSource> context) throws CommandException
+    public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         JsonConfig.init();    //load up locally
 

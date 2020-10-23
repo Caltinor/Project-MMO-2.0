@@ -1,34 +1,33 @@
 package harmonised.pmmo.pmmo_saved_data;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.events.PlayerConnectedHandler;
+import harmonised.pmmo.party.Party;
+import harmonised.pmmo.party.PartyMemberInfo;
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PmmoSavedData extends WorldSavedData
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static MinecraftServer server;
     private static String NAME = Reference.MOD_ID;
     private Map<UUID, Map<Skill, Double>> xp = new HashMap<>();
     private Map<UUID, Map<Skill, Double>> scheduledXp = new HashMap<>();
     private Map<UUID, Map<String, Double>> abilities = new HashMap<>();
     private Map<UUID, Map<String, Double>> preferences = new HashMap<>();
+    private Set<Party> parties = new HashSet<>();
     private Map<UUID, String> name = new HashMap<>();
     public PmmoSavedData()
     {
@@ -59,7 +58,7 @@ public class PmmoSavedData extends WorldSavedData
                             if( tag.toLowerCase().equals( "repairing" ) )
                                 xpTag.put( "smithing", xpTag.get(tag) );
 
-                            LogHandler.LOGGER.info( "REMOVING INVALID SKILL " + tag + " FROM PLAYER " + playerUuidKey );
+                            LOGGER.info( "REMOVING INVALID SKILL " + tag + " FROM PLAYER " + playerUuidKey );
                             xpTag.remove( tag );
                         }
                     }
@@ -74,16 +73,41 @@ public class PmmoSavedData extends WorldSavedData
                 preferences = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "preferences" ) );
             }
         }
+
+        if( inData.contains( "parties" ) )
+        {
+            CompoundNBT partiesTag = inData.getCompound( "parties" );
+            CompoundNBT partyTag, membersTag, memberInfoTag;
+            Set<PartyMemberInfo> membersInfo;
+            PartyMemberInfo memberInfo;
+
+            for( String key : partiesTag.keySet() )
+            {
+                partyTag = partiesTag.getCompound( key );
+                membersTag = partyTag.getCompound( "members" );
+                membersInfo = new HashSet<>();
+
+                for( String id : membersTag.keySet() )
+                {
+                    memberInfoTag = membersTag.getCompound( id );
+                    memberInfo = new PartyMemberInfo( UUID.fromString( memberInfoTag.getString( "uuid" ) ), memberInfoTag.getLong( "joinDate" ), memberInfoTag.getDouble( "xpGained" ) );
+                    membersInfo.add( memberInfo );
+                }
+
+                parties.add( new Party( partyTag.getLong( "creationDate" ), membersInfo ) );
+            }
+        }
     }
 
     @Override
     public CompoundNBT write( CompoundNBT outData )
     {
-        CompoundNBT playersTag = new CompoundNBT();
+        CompoundNBT playersTag = new CompoundNBT(), partiesTag = new CompoundNBT(), partyTag, membersTag, memberInfoTag;
+        Map<String, CompoundNBT> playerMap;
 
         for( Map.Entry<UUID, Map<Skill, Double>> entry : xp.entrySet() )
         {
-            Map<String, CompoundNBT> playerMap = new HashMap<>();
+            playerMap = new HashMap<>();
 
             playerMap.put( "xp", NBTHelper.mapSkillToNbt( xp.get( entry.getKey() ) ) );
             playerMap.put( "scheduledXp", NBTHelper.mapSkillToNbt( scheduledXp.get( entry.getKey() ) ) );
@@ -96,6 +120,32 @@ public class PmmoSavedData extends WorldSavedData
             playersTag.put( entry.getKey().toString(), playerTag );
         }
         outData.put( "players", playersTag );
+
+        int i = 0, j;
+        for( Party party : parties )
+        {
+            partyTag = new CompoundNBT();
+            membersTag = new CompoundNBT();
+
+            j = 0;
+            for( PartyMemberInfo memberInfo : party.getAllMembersInfo() )
+            {
+                memberInfoTag = new CompoundNBT();
+
+                memberInfoTag.putString( "uuid", memberInfo.uuid.toString() );
+                memberInfoTag.putLong( "joinDate", memberInfo.joinDate );
+                memberInfoTag.putDouble( "xpGained", memberInfo.xpGained );
+
+                membersTag.put( "" + j++, memberInfoTag );
+            }
+            partyTag.putLong( "creationDate", party.getCreationDate() );
+            partyTag.put( "members", membersTag );
+
+            partiesTag.put( "" + i, partyTag );
+
+            i++;
+        }
+        outData.put( "parties", partiesTag );
 
         return outData;
     }
@@ -125,13 +175,14 @@ public class PmmoSavedData extends WorldSavedData
     {
         if( !preferences.containsKey( uuid ) )
             preferences.put( uuid, new HashMap<>() );
-        return preferences.get( uuid );    }
+        return preferences.get( uuid );
+    }
 
     public double getXp( Skill skill, UUID uuid )
     {
         if( skill.equals( Skill.INVALID_SKILL ) )
         {
-            LogHandler.LOGGER.error( "Invalid Skill at getXp" );
+            LOGGER.error( "Invalid Skill at getXp" );
             return -1;
         }
 
@@ -168,7 +219,7 @@ public class PmmoSavedData extends WorldSavedData
         }
         else
         {
-            LogHandler.LOGGER.error( "Invalid Skill at method setXp, amount: " + amount );
+            LOGGER.error( "Invalid Skill at method setXp, amount: " + amount );
             return false;
         }
     }
@@ -183,7 +234,7 @@ public class PmmoSavedData extends WorldSavedData
         }
         else
         {
-            LogHandler.LOGGER.error( "Invalid Skill at method addXp, amount: " + amount );
+            LOGGER.error( "Invalid Skill at method addXp, amount: " + amount );
             return false;
         }
     }
@@ -197,11 +248,11 @@ public class PmmoSavedData extends WorldSavedData
                 scheduledXpMap.put( skill, amount );
             else
                 scheduledXpMap.put( skill, amount + scheduledXpMap.get( skill ) );
-            LogHandler.LOGGER.debug( "Scheduled " + amount + "xp for: " + sourceName + ", to: " + getName( uuid ) );
+            LOGGER.debug( "Scheduled " + amount + "xp for: " + sourceName + ", to: " + getName( uuid ) );
             setDirty( true );
         }
         else
-            LogHandler.LOGGER.error( "Invalid Skill at method addXp, amount: " + amount );
+            LOGGER.error( "Invalid Skill at method addXp, amount: " + amount );
     }
 
     public void removeScheduledXpUuid( UUID uuid )
@@ -219,6 +270,67 @@ public class PmmoSavedData extends WorldSavedData
         return name.getOrDefault( uuid, "Nameless Warning" );
     }
 
+    public Party getParty( UUID uuid )
+    {
+        Party party = null;
+        for( Party thisParty : parties )
+        {
+            if( thisParty.getMemberInfo( uuid ) != null )
+                party = thisParty;
+        }
+        return party;
+    }
+
+    public boolean makeParty( UUID uuid )
+    {
+        if( getParty( uuid ) == null )
+        {
+            Party party = new Party( System.currentTimeMillis(), new HashSet<>() );
+            party.addMember( uuid );
+            parties.add( party );
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public int addToParty( UUID ownerUuid, UUID newMemberUuid )
+    {
+        Party ownerParty = getParty( ownerUuid );
+        Party newMemberParty = getParty( newMemberUuid );
+        if( ownerParty == null )
+            return -1;  //-1 = owner does not have a party
+        else if( newMemberParty != null )
+            return -2;  //-2 = new member is already in a party
+        else if( ownerParty.getMembersCount() + 1 > Party.getMaxPartyMembers() )
+            return -4;  //-4 = the party is full
+        else
+        {
+            ownerParty.addMember( newMemberUuid );
+            this.markDirty();
+            return 0;   //0 = member has been added
+        }
+    }
+
+    public int removeFromParty( UUID uuid )
+    {
+        Party party = getParty( uuid );
+        if( party == null )
+            return -1;  //-1 = not in a party
+        else
+        {
+            party.removeMember( uuid );
+            if( party.getPartySize() == 0 )
+            {
+                parties.remove( party );
+                this.markDirty();
+                return 1;   //1 = The party became empty, and got deleted
+            }
+            else
+                return 0;   //0 = the member was removed
+        }
+    }
+
     public static PmmoSavedData get()
     {
         return server.getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
@@ -227,7 +339,7 @@ public class PmmoSavedData extends WorldSavedData
     public static PmmoSavedData get( PlayerEntity player )
     {
         if( player.getServer() == null )
-            LogHandler.LOGGER.error( "FATAL PMMO ERROR: SERVER IS NULL. Could not get PmmoSavedData" );
+            LOGGER.error( "FATAL PMMO ERROR: SERVER IS NULL. Could not get PmmoSavedData" );
 
         return player.getServer().getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
     }

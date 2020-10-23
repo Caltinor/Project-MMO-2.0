@@ -6,7 +6,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -140,7 +139,7 @@ public class ListButton extends Button
 
     public void clickActionGlossary()
     {
-//        LogHandler.LOGGER.debug( "Clicked " + this.title + " Button" );
+//        LOGGER.debug( "Clicked " + this.title + " Button" );
         GlossaryScreen.setButtonsToKey( regKey );
         Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.glossary" ), false ) );
     }

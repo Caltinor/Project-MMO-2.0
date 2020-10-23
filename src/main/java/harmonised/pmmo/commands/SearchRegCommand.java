@@ -2,7 +2,6 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.enchantment.Enchantment;
@@ -11,9 +10,13 @@ import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SearchRegCommand
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static void append( String input, StringBuilder listOut, StringBuilder listOutExtra, StringBuilder listOutForBuilder )
     {
         listOut.append(input).append("\n");
@@ -87,9 +90,9 @@ public class SearchRegCommand
                 break;
         }
 
-        LogHandler.LOGGER.info( listOut.toString() );
-        LogHandler.LOGGER.info( listOutExtra.toString() );
-        LogHandler.LOGGER.info( listOutForBuilder.toString() );
+        LOGGER.info( listOut.toString() );
+        LOGGER.info( listOutExtra.toString() );
+        LOGGER.info( listOutForBuilder.toString() );
 
         return 1;
     }

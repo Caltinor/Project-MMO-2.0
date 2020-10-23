@@ -29,9 +29,9 @@ public class BlockPlacedHandler
 
     public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
     {
-        if( event.getEntity() instanceof PlayerEntity && !(event.getEntity() instanceof FakePlayer) )
+        if( event.getEntity() instanceof ServerPlayerEntity && !(event.getEntity() instanceof FakePlayer ) )
         {
-            PlayerEntity player = (PlayerEntity) event.getEntity();
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
 
             if ( XP.isPlayerSurvival( player ) )
             {
@@ -39,7 +39,7 @@ public class BlockPlacedHandler
 
                 if( block.equals( Blocks.WATER ) )
                 {
-                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", 0.075, true, false );
+                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", 0.075, true, false, false );
                     return;
                 }
 
@@ -56,12 +56,12 @@ public class BlockPlacedHandler
                     if (!lastPosPlaced.containsKey(playerUUID) || !lastPosPlaced.get(playerUUID).equals(blockPos))
                     {
                         if (block.equals(Blocks.FARMLAND))
-                            XP.awardXp( player, Skill.FARMING, "tilting dirt", blockHardness, false, false );
+                            XP.awardXp( player, Skill.FARMING, "tilting dirt", blockHardness, false, false, false );
                         else
                         {
 //								for( int i = 0; i < 1000; i++ )
 //							{
-                            XP.awardXp( player, Skill.BUILDING, "placing a block", blockHardness, false, false );
+                            XP.awardXp( player, Skill.BUILDING, "placing a block", blockHardness, false, false, false );
 //							}
                         }
                     }

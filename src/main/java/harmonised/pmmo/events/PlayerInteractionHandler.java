@@ -8,7 +8,6 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -20,9 +19,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +30,8 @@ import java.util.Set;
 
 public class PlayerInteractionHandler
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static void handlePlayerInteract( PlayerInteractEvent event )
     {
         try
@@ -286,7 +288,7 @@ public class PlayerInteractionHandler
                                     }
 
                                     if( award > 0 )
-                                        XP.awardXp( player, Skill.SMITHING, item.getRegistryName().toString(), award, false, false  );
+                                        XP.awardXp( (ServerPlayerEntity) player, Skill.SMITHING, item.getRegistryName().toString(), award, false, false, false );
 
                                     player.getHeldItemOffhand().shrink( 1 );
                                     player.sendBreakAnimation(Hand.OFF_HAND );
@@ -301,7 +303,7 @@ public class PlayerInteractionHandler
         }
         catch( Exception e )
         {
-            LogHandler.LOGGER.error( e );
+            LOGGER.error( e );
         }
     }
 }

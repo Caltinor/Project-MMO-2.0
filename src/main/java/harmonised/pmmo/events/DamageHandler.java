@@ -31,9 +31,9 @@ public class DamageHandler
             float damage = event.getAmount();
             float startDmg = damage;
             LivingEntity target = event.getEntityLiving();
-            if( target instanceof PlayerEntity)		//player hurt
+            if( target instanceof ServerPlayerEntity )		//player hurt
             {
-                PlayerEntity player = (PlayerEntity) target;
+                ServerPlayerEntity player = (ServerPlayerEntity) target;
                 double agilityXp = 0;
                 double enduranceXp = 0;
                 boolean hideEndurance = false;
@@ -96,24 +96,24 @@ public class DamageHandler
                         hideEndurance = true;
 
                     if( event.getSource().getTrueSource() != null )
-                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getString(), enduranceXp, hideEndurance, false );
+                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getString(), enduranceXp, hideEndurance, false, false );
                     else
-                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getDamageType(), enduranceXp, hideEndurance, false );
+                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
 
                     if( agilityXp > 0 )
-                        XP.awardXp( player, Skill.AGILITY, "surviving " + startDmg + " fall damage", agilityXp, false, false );
+                        XP.awardXp( player, Skill.AGILITY, "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
                 }
             }
 
 ///////////////////////////////////////Attacking////////////////////////////////////////////////////////////
 
-            if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof PlayerEntity )
+            if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof ServerPlayerEntity )
             {
 //				IAttributeInstance test = target.getAttribute( Attributes.GENERIC_MOVEMENT_SPEED );
 //				if( !(target instanceof AnimalEntity) )
 //					System.out.println( test.getValue() + " " + test.getBaseValue() );
 
-                PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
+                ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
 
                 if( player.getHeldItemMainhand().getItem().equals( Items.DEBUG_STICK ) )
                     player.sendStatusMessage( new StringTextComponent( target.getEntityString() ), false );
@@ -188,12 +188,12 @@ public class DamageHandler
                         amount += ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
                         amount *= lowHpBonus;
 
-                        XP.awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false );
+                        XP.awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
                     }
                     else
                     {
                         amount *= lowHpBonus;
-                        XP.awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false );
+                        XP.awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
                     }
 
                     if( weaponGap > 0 )

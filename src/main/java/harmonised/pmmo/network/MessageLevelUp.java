@@ -4,19 +4,21 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class MessageLevelUp
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     private static final boolean broadcastMilestone = Config.forgeConfig.broadcastMilestone.get();
     private static final boolean levelUpFirework = Config.forgeConfig.levelUpFirework.get();
     private static final boolean milestoneLevelUpFirework = Config.forgeConfig.milestoneLevelUpFirework.get();
@@ -65,7 +67,7 @@ public class MessageLevelUp
                 if( levelUpFirework && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
                     XP.spawnRocket( player.world, player.getPosition(), skill );
 
-                LogHandler.LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
+                LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
 
                 if( packet.level % levelsPerMilestone == 0 && broadcastMilestone )
                 {

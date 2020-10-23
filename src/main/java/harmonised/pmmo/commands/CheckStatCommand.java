@@ -18,7 +18,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class CheckStatCommand
 {
-    public static int execute(CommandContext<CommandSource> context) throws CommandException
+    public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");

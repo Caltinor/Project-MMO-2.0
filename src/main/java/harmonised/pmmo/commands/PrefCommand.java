@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class PrefCommand
 {
-    public static int execute(CommandContext<CommandSource> context) throws CommandException
+    public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");

@@ -15,6 +15,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
@@ -127,24 +128,25 @@ public class PlayerTickHandler
 
                 if( !player.world.isRemote() )
                 {
+                    ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
                     if( player.isSprinting() )
                     {
                         if( player.isInWater() && ( waterAbove || waterBelow ) )
-                            XP.awardXp( player, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true, false );
+                            XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true, false, false );
                         else
-                            XP.awardXp( player, Skill.AGILITY, "running", runAward, true, false );
+                            XP.awardXp( serverPlayer, Skill.AGILITY, "running", runAward, true, false, false );
                     }
 
                     if( player.isInWater() && ( waterAbove || waterBelow || player.areEyesInFluid( FluidTags.WATER ) ) )
                     {
                         if( !player.isSprinting() )
-                            XP.awardXp( player, Skill.SWIMMING, "swimming", swimAward, true, false );
+                            XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming", swimAward, true, false, false );
                     }
                     else if( player.isElytraFlying() )
-                        XP.awardXp( player, Skill.FLYING, "flying", flyAward, true, false );
+                        XP.awardXp( serverPlayer, Skill.FLYING, "flying", flyAward, true, false, false );
 
                     if( (player.getRidingEntity() instanceof BoatEntity) && player.isInWater() )
-                        XP.awardXp( player, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true, false );
+                        XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true, false, false );
                 }
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
 //				if( !player.world.isRemote() )

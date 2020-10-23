@@ -6,6 +6,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -20,9 +21,9 @@ public class CraftedHandler
 
     public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
     {
-        PlayerEntity player = event.getPlayer();
-        if( !player.world.isRemote() )
+        if( event.getPlayer() instanceof ServerPlayerEntity )
         {
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
             double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
             double durabilityMultiplier = 1;
 
@@ -49,7 +50,7 @@ public class CraftedHandler
 
             for( Map.Entry<String, Double> entry : award.entrySet() )
             {
-                XP.awardXp( player, Skill.getSkill( entry.getKey() ), "crafting", entry.getValue(), false, false );
+                XP.awardXp( player, Skill.getSkill( entry.getKey() ), "crafting", entry.getValue(), false, false, false );
             }
         }
     }

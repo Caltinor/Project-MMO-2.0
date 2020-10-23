@@ -3,10 +3,7 @@ package harmonised.pmmo.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import harmonised.pmmo.config.JType;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,8 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -29,6 +27,8 @@ import java.util.List;
 
 public class ListButtonBig extends Button
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big.png" );
 //    private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
     //    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
@@ -116,7 +116,7 @@ public class ListButtonBig extends Button
 
     public void clickAction()
     {
-        LogHandler.LOGGER.debug( "Clicked " + this.title + " Button" );
+        LOGGER.debug( "Clicked " + this.title + " Button" );
     }
 
     public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)

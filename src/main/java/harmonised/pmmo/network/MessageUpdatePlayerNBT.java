@@ -8,18 +8,21 @@ import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.proxy.ServerHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessageUpdatePlayerNBT
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public CompoundNBT reqPackage = new CompoundNBT();
     public int type;
 
@@ -70,7 +73,7 @@ public class MessageUpdatePlayerNBT
                         AttributeHandler.init();
                     }
                     else
-                        LogHandler.LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
+                        LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
                     break;
 
                 case 3: //stats
@@ -89,7 +92,7 @@ public class MessageUpdatePlayerNBT
                         ClientHandler.openStats( uuid );
                     }
                     else
-                        LogHandler.LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
+                        LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
                     break;
 
                 case 4: //data
@@ -103,7 +106,7 @@ public class MessageUpdatePlayerNBT
                     break;
 
                 default:
-                    LogHandler.LOGGER.error( "WRONG SYNC ID AT NBT UPDATE PACKET", packet );
+                    LOGGER.error( "WRONG SYNC ID AT NBT UPDATE PACKET", packet );
                     break;
             }
         });

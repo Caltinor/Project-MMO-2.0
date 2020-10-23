@@ -7,7 +7,6 @@ import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.DP;
-import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +19,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -32,11 +30,15 @@ import net.minecraft.world.storage.loot.LootParameters;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
 public class BlockBrokenHandler
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static void handleBroken( BlockEvent.BreakEvent event )
     {
         PlayerEntity player = event.getPlayer();
@@ -485,7 +487,7 @@ public class BlockBrokenHandler
                         foundTreasure = true;
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.youFoundTreasureItem", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                        LogHandler.LOGGER.debug( player.getDisplayName().getString() + " found Treasure! " + count + " " + treasureItem.getKey() + " " + event.getPos() );
+                        LOGGER.debug( player.getDisplayName().getString() + " found Treasure! " + count + " " + treasureItem.getKey() + " " + event.getPos() );
                     }
 
                     if( foundTreasure )
@@ -505,7 +507,7 @@ public class BlockBrokenHandler
         for( String awardSkillName : award.keySet() )
         {
             awardSkill = Skill.getSkill( awardSkillName );
-            XP.awardXp( player, awardSkill, awardMsg, award.get( awardSkillName ) / (gap + 1), !skill.equals( awardSkill ), false );
+            XP.awardXp( (ServerPlayerEntity) player, awardSkill, awardMsg, award.get( awardSkillName ) / (gap + 1), !skill.equals( awardSkill ), false, false );
         }
     }
 

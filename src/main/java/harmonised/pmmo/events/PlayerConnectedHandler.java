@@ -2,20 +2,17 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.util.LogHandler;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -24,6 +21,8 @@ import java.util.UUID;
 
 public class PlayerConnectedHandler
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static Set<UUID> lapisPatreons = new HashSet<>();
     public static Set<UUID> dandelionPatreons = new HashSet<>();
     public static Set<UUID> ironPatreons = new HashSet<>();
@@ -72,7 +71,7 @@ public class PlayerConnectedHandler
             UUID uuid = player.getUniqueID();
             Map<String, Double> map;
 
-            LogHandler.LOGGER.info( "Migrating Player " + player.getDisplayName().getString() + " Pmmo Data from PlayerData to WorldSavedData" );
+            LOGGER.info( "Migrating Player " + player.getDisplayName().getString() + " Pmmo Data from PlayerData to WorldSavedData" );
 
             if( pmmoTag.contains( "skills" ) )
             {
@@ -83,7 +82,7 @@ public class PlayerConnectedHandler
                     if( skill != Skill.INVALID_SKILL )
                     {
                         skill.setXp( uuid, skill.getXp( uuid ) + tag.getDouble( key ) );
-                        LogHandler.LOGGER.info( "Adding " + tag.getDouble( key ) + " xp in " + skill.toString() );
+                        LOGGER.info( "Adding " + tag.getDouble( key ) + " xp in " + skill.toString() );
                     }
                 }
             }
@@ -109,7 +108,7 @@ public class PlayerConnectedHandler
             }
 
             player.getPersistentData().remove( Reference.MOD_ID );
-            LogHandler.LOGGER.info( "Migrated Player " + player.getDisplayName().getString() + " Done" );
+            LOGGER.info( "Migrated Player " + player.getDisplayName().getString() + " Done" );
             PmmoSavedData.get( player ).setDirty( true );
         }
     }
@@ -119,12 +118,12 @@ public class PlayerConnectedHandler
         Map<Skill, Double> scheduledXp = PmmoSavedData.get().getScheduledXpMap( uuid );
 
         if( scheduledXp.size() > 0 )
-            LogHandler.LOGGER.info( "Awarding Scheduled Xp for: " + PmmoSavedData.get().getName( uuid ) );
+            LOGGER.info( "Awarding Scheduled Xp for: " + PmmoSavedData.get().getName( uuid ) );
 
         for( Map.Entry<Skill, Double> entry : scheduledXp.entrySet() )
         {
             entry.getKey().addXp( uuid, entry.getValue(), "scheduledXp", false, false );
-            LogHandler.LOGGER.info( "+" + entry.getValue() + " in " + entry.getKey().toString() );
+            LOGGER.info( "+" + entry.getValue() + " in " + entry.getKey().toString() );
         }
         PmmoSavedData.get().removeScheduledXpUuid( uuid );
     }

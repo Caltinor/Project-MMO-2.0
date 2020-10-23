@@ -4,10 +4,10 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
-import harmonised.pmmo.util.LogHandler;
-import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +15,8 @@ import java.util.Set;
 
 public class ServerHandler
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static void updateNBTTag(MessageUpdatePlayerNBT packet, PlayerEntity player )
     {
         CompoundNBT newPackage = packet.reqPackage;
@@ -37,7 +39,7 @@ public class ServerHandler
                 break;
 
             default:
-                LogHandler.LOGGER.error( "ERROR MessageUpdateNBT WRONG TYPE", packet );
+                LOGGER.error( "ERROR MessageUpdateNBT WRONG TYPE", packet );
                 break;
         }
     }

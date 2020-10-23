@@ -6,11 +6,8 @@ import harmonised.pmmo.gui.ListScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.NBTHelper;
-import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +15,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.HashSet;
@@ -27,6 +26,8 @@ import java.util.UUID;
 
 public class ClientHandler
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static final KeyBinding SHOW_BAR = new KeyBinding( "key.pmmo.showBar", GLFW.GLFW_KEY_TAB, "category.pmmo" );
     public static final KeyBinding SHOW_LIST = new KeyBinding( "key.pmmo.showList", GLFW.GLFW_KEY_LEFT_ALT, "category.pmmo" );
     public static final KeyBinding TOGGLE_TOOLTIP = new KeyBinding( "key.pmmo.toggleTooltip", GLFW.GLFW_KEY_F6, "category.pmmo" );
@@ -76,7 +77,7 @@ public class ClientHandler
                 break;
 
             default:
-                LogHandler.LOGGER.error( "ERROR MessageUpdateNBT WRONG TYPE" );
+                LOGGER.error( "ERROR MessageUpdateNBT WRONG TYPE" );
                 break;
         }
     }

@@ -18,6 +18,7 @@ public class PmmoCommand
     private static final Logger LOGGER = LogManager.getLogger();
     public static String[] suggestSkill;
     public static String[] levelOrXp = { "level", "xp" };
+    public static String[] acceptOrDecline = { "accept", "decline" };
 
     public static String[] suggestSearchRegistry = { "item",
                                                      "biome",
@@ -67,9 +68,22 @@ public class PmmoCommand
                   .executes( AddCommand::execute ) )
                   ))))
                   .then( Commands.literal( "clear" )
-                  .executes( ClearCommand::execute ) )))
+                  .executes( ClearCommand::execute ) ) ) )
+                  .then( Commands.literal( "party" )
+                  .executes( PartyCommand::execute )
+                  .then( Commands.literal( "accept" )
+                  .executes( AcceptPartyCommand::execute ) )
+                  .then( Commands.literal( "decline" )
+                  .executes( DeclinePartyCommand::execute ) )
+                  .then( Commands.literal( "invite" )
+                  .then( Commands.argument("target", EntityArgument.player() )
+                  .executes( InvitePartyCommand::execute ) ) )
+                  .then( Commands.literal( "create" )
+                  .executes( CreatePartyCommand::execute ) )
+                  .then( Commands.literal( "leave" )
+                  .executes( LeavePartyCommand::execute ) ) )
                   .then( Commands.literal( "reload" )
-                  .requires( player -> { return player.hasPermissionLevel( 2 ); } )
+                  .requires( player ->  player.hasPermissionLevel( 2 ) )
                   .executes( ReloadConfigCommand::execute )
                   )
                   .then( Commands.literal( "resync" )
