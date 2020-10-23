@@ -3,16 +3,19 @@ package harmonised.pmmo.config;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Config
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static Map<String, Double> localConfig = new HashMap<>();
     private static Map<String, Double> config = new HashMap<>();
 
@@ -85,6 +88,12 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> craftReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> alwaysDropWornItems;
+
+        //Party
+        public ConfigHelper.ConfigValueListener<Double> partyRange;
+        public ConfigHelper.ConfigValueListener<Integer> partyMaxMembers;
+        public ConfigHelper.ConfigValueListener<Double> partyXpIncreasePerPlayer;
+        public ConfigHelper.ConfigValueListener<Double> maxPartyXpBonus;
 
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
@@ -311,6 +320,31 @@ public class Config
                         .comment( "When a Wear requirement is not met, should the item be dropped?" )
                         .translation( "pmmo.alwaysDropWornItems" )
                         .define( "alwaysDropWornItems", false ) );
+
+                builder.pop();
+            }
+
+            builder.push( "Party" );
+            {
+                this.partyRange = subscriber.subscribe(builder
+                        .comment( "In what range do Party members have to be to benefit from the other members?" )
+                        .translation( "pmmo.partyRange" )
+                        .defineInRange( "partyRange", 50D, 1, 1000000000) );
+
+                this.partyMaxMembers = subscriber.subscribe(builder
+                        .comment( "How many Members can a party have?" )
+                        .translation( "pmmo.partyMaxMembers" )
+                        .defineInRange( "partyMaxMembers", 10, 1, 1000000000) );
+
+                this.partyXpIncreasePerPlayer = subscriber.subscribe(builder
+                        .comment( "How much bonus xp a Party gains extra, per player? (5 = 1 player -> 5% xp bonus, 2 players -> 10% xp bonus" )
+                        .translation( "pmmo.partyXpIncreasePerPlayer" )
+                        .defineInRange( "partyXpIncreasePerPlayer", 5D, 0, 1000000000) );
+
+                this.maxPartyXpBonus = subscriber.subscribe(builder
+                        .comment( "How much bonus xp is the maximum that a Party can receive? (50 = 50% increase max. If partyXpIncreasePerPlayer is 5, and there are 20 members, the xp bonus caps at 50%, at 10 members)" )
+                        .translation( "pmmo.maxPartyXpBonus" )
+                        .defineInRange( "maxPartyXpBonus", 50D, 0, 1000000000) );
 
                 builder.pop();
             }
@@ -1186,7 +1220,7 @@ public class Config
             return Config.localConfig.get( key );
         else
         {
-            LogHandler.LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
+            LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
             return -1;
         }
     }

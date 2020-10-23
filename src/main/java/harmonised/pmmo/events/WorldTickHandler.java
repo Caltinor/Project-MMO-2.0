@@ -6,12 +6,10 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateBoolean;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -21,7 +19,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
@@ -31,11 +28,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
 public class WorldTickHandler
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static Map<PlayerEntity, VeinInfo> activeVein;
     public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
     private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, levelsPerHardnessCrafting, veinMaxBlocks, maxVeinCharge, exhaustionPerBlock;
@@ -376,7 +377,7 @@ public class WorldTickHandler
 
             default:
                 if( !state.getBlock().equals( Blocks.AIR ) && !skill.equals( Skill.INVALID_SKILL ) )
-                    LogHandler.LOGGER.error( "WRONG SKILL AT VEIN COST: " + state.getBlock().getRegistryName() + " " + skill.name() );
+                    LOGGER.error( "WRONG SKILL AT VEIN COST: " + state.getBlock().getRegistryName() + " " + skill.name() );
                 return hardness;
         }
 

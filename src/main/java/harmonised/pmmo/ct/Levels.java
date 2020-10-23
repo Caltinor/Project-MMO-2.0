@@ -27,7 +27,7 @@
 //        {
 //            skill = Skill.getSkill( key );
 //            if( skill.equals( Skill.INVALID_SKILL ) )
-//                LogHandler.LOGGER.error( "ZenScript -> PMMO -> checkLevels -> Invalid Skill Provided! \"" + key + "\"" );
+//                LOGGER.error( "ZenScript -> PMMO -> checkLevels -> Invalid Skill Provided! \"" + key + "\"" );
 //            if( reqLevels.getDouble( key ) > skill.getLevelDecimal( player ) )
 //                return false;
 //        }
@@ -46,15 +46,15 @@
 //            {
 //                skill = Skill.getSkill( key );
 //                if( skill.equals( Skill.INVALID_SKILL ) )
-//                    LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardXp -> Invalid Skill Provided! \"" + key + "\"" );
+//                    LOGGER.error( "ZenScript -> PMMO -> awardXp -> Invalid Skill Provided! \"" + key + "\"" );
 //                else
 //                    skill.addXp( (ServerPlayerEntity) player, xpAwards.getDouble( key ), ignoreBonuses );
 //            }
 //        }
 //        else if( player instanceof ClientPlayerEntity )
-//            LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardXp -> Called from Client!" );
+//            LOGGER.error( "ZenScript -> PMMO -> awardXp -> Called from Client!" );
 //        else
-//            LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardXp -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
+//            LOGGER.error( "ZenScript -> PMMO -> awardXp -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
 //    }
 //
 //    @ZenCodeType.Method("awardLevels")
@@ -69,15 +69,15 @@
 //            {
 //                skill = Skill.getSkill( key );
 //                if( skill.equals( Skill.INVALID_SKILL ) )
-//                    LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Invalid Skill Provided! \"" + key + "\"" );
+//                    LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Invalid Skill Provided! \"" + key + "\"" );
 //                else
 //                    skill.addLevel( (ServerPlayerEntity) player, xpAwards.getDouble( key ), true );
 //            }
 //        }
 //        else if( player instanceof ClientPlayerEntity )
-//            LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Called from Client!" );
+//            LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Called from Client!" );
 //        else
-//            LogHandler.LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
+//            LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
 //    }
 //
 //    @ZenCodeType.Method("setXp")
@@ -92,15 +92,15 @@
 //            {
 //                skill = Skill.getSkill( key );
 //                if( skill.equals( Skill.INVALID_SKILL ) )
-//                    LogHandler.LOGGER.error( "ZenScript -> PMMO -> setXp -> Invalid Skill Provided! \"" + key + "\"" );
+//                    LOGGER.error( "ZenScript -> PMMO -> setXp -> Invalid Skill Provided! \"" + key + "\"" );
 //                else
 //                    skill.setXp( (ServerPlayerEntity) player, xpAwards.getDouble( key ) );
 //            }
 //        }
 //        else if( player instanceof ClientPlayerEntity )
-//            LogHandler.LOGGER.error( "ZenScript -> PMMO -> setXp -> Called from Client!" );
+//            LOGGER.error( "ZenScript -> PMMO -> setXp -> Called from Client!" );
 //        else
-//            LogHandler.LOGGER.error( "ZenScript -> PMMO -> setXp -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
+//            LOGGER.error( "ZenScript -> PMMO -> setXp -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
 //    }
 //
 //    @ZenCodeType.Method("setLevels")
@@ -115,14 +115,14 @@
 //            {
 //                skill = Skill.getSkill( key );
 //                if( skill.equals( Skill.INVALID_SKILL ) )
-//                    LogHandler.LOGGER.error( "ZenScript -> PMMO -> setLevels -> Invalid Skill Provided! \"" + key + "\"" );
+//                    LOGGER.error( "ZenScript -> PMMO -> setLevels -> Invalid Skill Provided! \"" + key + "\"" );
 //                else
 //                    skill.setLevel( (ServerPlayerEntity) player, xpAwards.getDouble( key ) );
 //            }
 //        }
 //        else if( player instanceof ClientPlayerEntity )
-//            LogHandler.LOGGER.error( "ZenScript -> PMMO -> setLevels -> Called from Client!" );
+//            LOGGER.error( "ZenScript -> PMMO -> setLevels -> Called from Client!" );
 //        else
-//            LogHandler.LOGGER.error( "ZenScript -> PMMO -> setLevels -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
+//            LOGGER.error( "ZenScript -> PMMO -> setLevels -> Invalid Player Class! \"" + player.getClass().getName() + "\"" );
 //    }
 //}

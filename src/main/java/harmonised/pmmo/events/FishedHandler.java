@@ -8,6 +8,7 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -22,7 +23,9 @@ public class FishedHandler
 {
     public static void handleFished( ItemFishedEvent event )
     {
-        PlayerEntity player = event.getPlayer();
+        if( !( event.getPlayer() instanceof ServerPlayerEntity ) )
+            return;
+        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
         int startLevel = Skill.FISHING.getLevel( player );
         int level;
         NonNullList<ItemStack> items = event.getDrops();
@@ -153,7 +156,7 @@ public class FishedHandler
                 award += match.get( "xp" ) * count;
             }
 
-            XP.awardXp( player, Skill.FISHING, "catching " + items, award, false, false );
+            XP.awardXp( player, Skill.FISHING, "catching " + items, award, false, false, false );
         }
     }
 }

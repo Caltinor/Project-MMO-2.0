@@ -11,7 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class LevelAtXpCommand
 {
-    public static int execute(CommandContext<CommandSource> context) throws CommandException
+    public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
@@ -28,5 +28,4 @@ public class LevelAtXpCommand
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelAtXp", DP.dp( xp ), XP.levelAtXpDecimal( xp ) ), false );
         return 1;
     }
-
 }

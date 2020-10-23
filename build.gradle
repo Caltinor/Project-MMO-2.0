@@ -18,14 +18,14 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.3-3.28'
+version = '1.16.3-3.29'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project MMO'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200820-mixed-1.16.2'
+    mappings channel: 'snapshot', version: '20201012-mixed-1.16.3'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
         client {
@@ -104,7 +104,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.16.3-34.1.23'
+            minecraft 'net.minecraftforge:forge:1.16.3-34.1.25'
             implementation 'com.google.code.gson:gson:2.8.6'
 
 //            compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")

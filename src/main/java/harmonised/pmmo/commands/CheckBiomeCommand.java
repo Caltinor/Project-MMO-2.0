@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class CheckBiomeCommand
 {
-    public static int execute(CommandContext<CommandSource> context) throws CommandException
+    public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         Biome biome = sender.world.getBiome( new BlockPos( sender.getPositionVec() ) );

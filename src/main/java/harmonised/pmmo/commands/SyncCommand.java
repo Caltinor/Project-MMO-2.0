@@ -3,7 +3,6 @@ package harmonised.pmmo.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,7 +38,7 @@ public class SyncCommand
             }
             catch( CommandSyntaxException e )
             {
-                LogHandler.LOGGER.error( "Sync command fired not from player " + context.getInput(), e );
+                LOGGER.error( "Sync command fired not from player " + context.getInput(), e );
             }
         }
 

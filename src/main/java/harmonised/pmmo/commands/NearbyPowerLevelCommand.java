@@ -3,7 +3,6 @@ package harmonised.pmmo.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.arguments.EntityArgument;
@@ -17,7 +16,7 @@ public class NearbyPowerLevelCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute(CommandContext<CommandSource> context) throws CommandException
+    public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         String[] args = context.getInput().split( " " );
         PlayerEntity sender = null;
@@ -45,7 +44,7 @@ public class NearbyPowerLevelCommand
         }
 
         if( sender == null && target == null )
-            LogHandler.LOGGER.error( "PMMO NearbyPowerLevel Command: Sender not player, and target is invalid!" );
+            LOGGER.error( "PMMO NearbyPowerLevel Command: Sender not player, and target is invalid!" );
         else
         {
             if( target == null )
@@ -58,7 +57,7 @@ public class NearbyPowerLevelCommand
                 totalPowerLevel += XP.getPowerLevel( player.getUniqueID() );
             }
 
-            LogHandler.LOGGER.info( "PMMO NearbyPowerLevel Command Output: " + totalPowerLevel );
+            LOGGER.info( "PMMO NearbyPowerLevel Command Output: " + totalPowerLevel );
 
             if( sender != null )
                 sender.sendStatusMessage( new StringTextComponent( totalPowerLevel + " " + new TranslationTextComponent( "pmmo.power" ).getString() ), false );

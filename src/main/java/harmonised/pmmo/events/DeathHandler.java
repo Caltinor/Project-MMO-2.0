@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -33,9 +34,9 @@ public class DeathHandler
         double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
         double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
 
-        if( target instanceof PlayerEntity && !( target instanceof FakePlayer) )
+        if( target instanceof ServerPlayerEntity && !( target instanceof FakePlayer ) )
         {
-            PlayerEntity player = (PlayerEntity) event.getEntity();
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
             if( !player.world.isRemote() )
             {
                 Map<Skill, Double> xpMap = Config.getXpMap( player );
@@ -73,13 +74,13 @@ public class DeathHandler
 
                 if( totalLost > 0 )
                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).setStyle( XP.textStyle.get( "red" ) ), false );
-                
+
                 XP.syncPlayer( player );
             }
         }
-        else if( source instanceof PlayerEntity && !( source instanceof FakePlayer ) )
+        else if( source instanceof ServerPlayerEntity && !( source instanceof FakePlayer ) )
         {
-            PlayerEntity player = (PlayerEntity) source;
+            ServerPlayerEntity player = (ServerPlayerEntity) source;
             Collection<PlayerEntity> nearbyPlayers = XP.getNearbyPlayers( target );
             double scaleValue = 0;
 
@@ -107,13 +108,13 @@ public class DeathHandler
                 Map<String, Double> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
                 for( Map.Entry<String, Double> entry : killXp.entrySet() )
                 {
-                    XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false );
+                    XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false, false );
                 }
             }
             else if( target instanceof AnimalEntity)
-                XP.awardXp( player, Skill.HUNTER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleValue, false, false );
+                XP.awardXp( player, Skill.HUNTER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleValue, false, false, false );
             else if( target instanceof MobEntity)
-                XP.awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false, false );
+                XP.awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false, false, false );
 
             if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getEntityString() ) )
             {

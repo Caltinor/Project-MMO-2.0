@@ -1,14 +1,11 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.JType;
-import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageTripleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.LogHandler;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,14 +23,17 @@ import java.util.Set;
 
 public class AnvilRepairHandler
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static void handleAnvilRepair( AnvilRepairEvent event )
     {
         if( Config.forgeConfig.anvilHandlingEnabled.get() )
         try
         {
-            PlayerEntity player = event.getPlayer();
-            if( !player.world.isRemote )
+
+            if( !event.getPlayer().world.isRemote )
             {
+                ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
                 boolean bypassEnchantLimit = Config.forgeConfig.bypassEnchantLimit.get();
                 int currLevel = Skill.SMITHING.getLevel( player );
                 ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
@@ -71,7 +71,7 @@ public class AnvilRepairHandler
                     if( award > 0 )
                     {
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
-                        XP.awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false, false );
+                        XP.awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false, false, false );
                     }
                 }
 
@@ -88,7 +88,7 @@ public class AnvilRepairHandler
         }
         catch( Exception e )
         {
-            LogHandler.LOGGER.error( "ANVIL FAILED, PLEASE REPORT", e );
+            LOGGER.error( "ANVIL FAILED, PLEASE REPORT", e );
         }
     }
 

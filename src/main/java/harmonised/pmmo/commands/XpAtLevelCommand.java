@@ -11,7 +11,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class XpAtLevelCommand
 {
-    public static int execute(CommandContext<CommandSource> context) throws CommandException
+    public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         double maxLevel = Config.getConfig( "maxLevel" );
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
