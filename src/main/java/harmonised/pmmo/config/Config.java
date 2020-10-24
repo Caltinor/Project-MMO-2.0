@@ -86,7 +86,6 @@ public class Config
         //Miscellaneous
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
-        public ConfigHelper.ConfigValueListener<Boolean> craftReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> alwaysDropWornItems;
 
         //Party
@@ -133,6 +132,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> craftReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> negativeBiomeEffectEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> positiveBiomeEffectEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeXpBonusEnabled;
@@ -311,11 +311,6 @@ public class Config
                         .translation( "pmmo.showPatreonWelcome" )
                         .define( "showPatreonWelcome", true ) );
 
-                this.craftReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should certain items be restricted from being crafted, without the level requirement?" )
-                        .translation( "pmmo.craftReqEnabled" )
-                        .define( "craftReqEnabled", true ) );
-
                 this.alwaysDropWornItems = subscriber.subscribe(builder
                         .comment( "When a Wear requirement is not met, should the item be dropped?" )
                         .translation( "pmmo.alwaysDropWornItems" )
@@ -329,7 +324,7 @@ public class Config
                 this.partyRange = subscriber.subscribe(builder
                         .comment( "In what range do Party members have to be to benefit from the other members?" )
                         .translation( "pmmo.partyRange" )
-                        .defineInRange( "partyRange", 50D, 1, 1000000000) );
+                        .defineInRange( "partyRange", 64D, 1, 1000000000) );
 
                 this.partyMaxMembers = subscriber.subscribe(builder
                         .comment( "How many Members can a party have?" )
@@ -527,6 +522,11 @@ public class Config
                         .comment( "Should biome requirements be enabled? false means no requirements" )
                         .translation( "pmmo.biomeReqEnabled" )
                         .define( "biomeReqEnabled", true ) );
+
+                this.craftReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should certain items be restricted from being crafted, without the level requirement?" )
+                        .translation( "pmmo.craftReqEnabled" )
+                        .define( "craftReqEnabled", true ) );
 
                 this.negativeBiomeEffectEnabled = subscriber.subscribe(builder
                         .comment( "Should biome negative effects be enabled? false means no negative effects" )

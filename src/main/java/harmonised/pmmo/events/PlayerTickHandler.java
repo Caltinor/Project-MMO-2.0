@@ -33,7 +33,6 @@ public class PlayerTickHandler
 {
     private static Map<UUID, Long> lastAward = new HashMap<>();
     private static Map<UUID, Long> lastVeinAward = new HashMap<>();
-    private static Map<UUID, Long> lastInvCheck = new HashMap<>();
     public static boolean syncPrefs = false;
 
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
@@ -53,12 +52,9 @@ public class PlayerTickHandler
                 lastAward.put( uuid, System.nanoTime() );
             if( !lastVeinAward.containsKey( uuid ) )
                 lastVeinAward.put( uuid, System.nanoTime() );
-            if( !lastInvCheck.containsKey( uuid ) )
-                lastInvCheck.put( uuid, System.nanoTime() );
 
             double gap = ( (System.nanoTime() - lastAward.get( uuid) ) / 1000000000D );
             double veinGap = ( (System.nanoTime() - lastVeinAward.get( uuid) ) / 1000000000D );
-            double invGap = ( (System.nanoTime() - lastInvCheck.get( uuid) ) / 1000000000D );
 
             if( gap > 0.5 )
             {
@@ -149,16 +145,6 @@ public class PlayerTickHandler
                         XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true, false, false );
                 }
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
-//				if( !player.world.isRemote() )
-//				{
-//					Map<String, Double> abilitiesMap = getabilitiesMap( player );
-//					if( !abilitiesMap.contains( "excavate" ) )
-//						abilitiesMap.putDouble( "excavate", 0 );
-//
-//					abilitiesMap.putDouble( "excavate", abilitiesMap.getDouble( "excavate" ) + 1 );
-//
-//					System.out.println( abilitiesMap.getDouble( "excavate" ) );
-//				}
             }
 
             if( !player.world.isRemote() )
@@ -167,20 +153,6 @@ public class PlayerTickHandler
                 {
                     WorldTickHandler.updateVein( player, veinGap );
                     lastVeinAward.put( uuid, System.nanoTime() );
-                }
-
-                if( invGap > 1 )
-                {
-
-                    for( ItemStack itemStack : player.inventory.mainInventory )
-                    {
-                        tagOwnership( itemStack, uuid );
-                    }
-                    for( ItemStack itemStack : player.inventory.offHandInventory )
-                    {
-                        tagOwnership( itemStack, uuid );
-                    }
-                    lastInvCheck.put( uuid, System.nanoTime() );
                 }
             }
         }
@@ -205,21 +177,21 @@ public class PlayerTickHandler
         }
     }
 
-    public static void tagOwnership( ItemStack itemStack, UUID uuid )
-    {
-        if( !itemStack.isEmpty() )
-        {
-            CompoundNBT tag = itemStack.getTag();
-            String regKey = itemStack.getItem().getRegistryName().toString();
-            if( XP.hasElement( regKey, JType.INFO_SMELT ) || XP.hasElement( regKey, JType.XP_VALUE_SMELT ) || XP.hasElement( regKey, JType.INFO_COOK ) || XP.hasElement( regKey, JType.XP_VALUE_COOK ) || XP.hasElement( regKey, JType.INFO_BREW ) || XP.hasElement( regKey, JType.XP_VALUE_BREW ) )
-            {
-                if( tag == null )
-                    itemStack.setTag( new CompoundNBT() );
-
-                itemStack.getTag().putString( "lastOwner", uuid.toString() );
-            }
-            else if( tag != null && tag.contains( "lastOwner" ) )
-                tag.remove( "lastOwner" );
-        }
-    }
+//    public static void tagOwnership( ItemStack itemStack, UUID uuid )
+//    {
+//        if( !itemStack.isEmpty() )
+//        {
+//            CompoundNBT tag = itemStack.getTag();
+//            String regKey = itemStack.getItem().getRegistryName().toString();
+//            if( Config.forgeConfig.tagItemsNBT.get() && ( XP.hasElement( regKey, JType.INFO_SMELT ) || XP.hasElement( regKey, JType.XP_VALUE_SMELT ) || XP.hasElement( regKey, JType.INFO_COOK ) || XP.hasElement( regKey, JType.XP_VALUE_COOK ) || XP.hasElement( regKey, JType.INFO_BREW ) || XP.hasElement( regKey, JType.XP_VALUE_BREW ) ) )
+//            {
+//                if( tag == null )
+//                    itemStack.setTag( new CompoundNBT() );
+//
+//                itemStack.getTag().putString( "lastOwner", uuid.toString() );
+//            }
+//            else if( tag != null && tag.contains( "lastOwner" ) )
+//                tag.remove( "lastOwner" );
+//        }
+//    }
 }

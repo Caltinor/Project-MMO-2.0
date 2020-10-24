@@ -1,5 +1,9 @@
 package harmonised.pmmo.events;
 
+import com.feed_the_beast.ftbquests.quest.task.TaskType;
+import com.feed_the_beast.mods.ftbguilibrary.icon.Icon;
+import harmonised.pmmo.ftb_quests.SkillTask;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -15,17 +19,17 @@ import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 public class EventHandler
 {
 	@SubscribeEvent
-    public static void blockBroken( BreakEvent event )
-    {
+	public static void blockBroken( BreakEvent event )
+	{
 		BlockBrokenHandler.handleBroken( event );
-    }
+	}
 
 	@SubscribeEvent
 	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
 	{
 		BlockPlacedHandler.handlePlaced( event );
 	}
-	
+
 	@SubscribeEvent
 	public static void livingHurt( LivingDamageEvent event )
 	{
@@ -43,26 +47,26 @@ public class EventHandler
 	{
 		PlayerTickHandler.handlePlayerTick( event );
 	}
-	
+
 	@SubscribeEvent
 	public static void playerRespawn( PlayerEvent.PlayerRespawnEvent event )
 	{
 		PlayerRespawnHandler.handlePlayerRespawn( event );
 	}
-	
+
 	@SubscribeEvent
 	public static void livingJump( LivingJumpEvent event )
 	{
 		JumpHandler.handleJump( event );
 	}
-	
+
 	@SubscribeEvent
 	public static void PlayerLogin( PlayerEvent.PlayerLoggedInEvent event)
 	{
 		PlayerConnectedHandler.handlePlayerConnected( event );
 	}
 
-    @SubscribeEvent
+	@SubscribeEvent
 	public static void playerClone( PlayerEvent.Clone event )
 	{
 		PlayerCloneHandler.handleClone( event );
@@ -73,14 +77,14 @@ public class EventHandler
 	{
 		AnvilRepairHandler.handleAnvilRepair( event );
 	}
-	
+
 	@SubscribeEvent
 	public static void onItemFished( ItemFishedEvent event )
 	{
 		FishedHandler.handleFished( event );
 	}
 
-	
+
 	@SubscribeEvent
 	public static void itemCrafted( PlayerEvent.ItemCraftedEvent event )
 	{
@@ -94,7 +98,7 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void itemUsed( PlayerInteractEvent event )
+	public static void playerInteract( PlayerInteractEvent event )
 	{
 		PlayerInteractionHandler.handlePlayerInteract( event );
 	}
@@ -138,7 +142,7 @@ public class EventHandler
 //	@SubscribeEvent
 //	public static void furnace( PlayerEvent.ItemSmeltedEvent )
 
-	@SubscribeEvent	//Recharge Vein
+	@SubscribeEvent
 	public static void sleepDone( SleepFinishedTimeEvent event )
 	{
 		SleepHandler.handleSleepFinished( event );
@@ -156,17 +160,17 @@ public class EventHandler
 		ChunkDataHandler.handleChunkDataSave( event );
 	}
 
-	@SubscribeEvent	//De-Cheese
+	@SubscribeEvent
 	public static void pistonPush( PistonEvent event )
 	{
 		PistonEventHandler.handlePistonPush( event );
 	}
 
-	@SubscribeEvent	//Tag lastOwner
-	public static void pickUpEntity( EntityItemPickupEvent event )
-	{
-		ItemHandler.handleItemEntityPickup( event );
-	}
+//	@SubscribeEvent
+//	public static void pickUpEntity( EntityItemPickupEvent event )
+//	{
+//		ItemHandler.handleItemEntityPickup( event );
+//	}
 
 	@SubscribeEvent
 	public static void saplingGrow( SaplingGrowTreeEvent event )
@@ -179,4 +183,10 @@ public class EventHandler
 	{
 		GrowHandler.handleCropGrow( event );
 	}
+
+//	@SubscribeEvent
+//	public static void registerTasks( RegistryEvent.Register<TaskType> event )
+//	{
+//		event.getRegistry().register( SkillTask.SKILL = new TaskType( SkillTask::new ).setRegistryName( "skill" ).setIcon( Icon.getIcon("minecraft:item/dragon_egg") ) );
+//	}
 }

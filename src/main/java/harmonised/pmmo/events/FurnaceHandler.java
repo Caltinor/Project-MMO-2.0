@@ -43,10 +43,10 @@ public class FurnaceHandler
 
             source += " " + input.getItem().getRegistryName();
             source += " [" + XP.getDimensionResLoc( world ).toString() + "|x" + pos.getX() + "|y" + pos.getY() + "|z" + pos.getZ() + "]";
+            UUID uuid = ChunkDataHandler.checkPos( world, pos );
 
-            if( input.getTag() != null && input.getTag().contains( "lastOwner" ) && input.getTag().getString( "lastOwner" ).length() == 36 )
+            if( uuid != null )
             {
-                UUID uuid = UUID.fromString( input.getTag().getString( "lastOwner" ) );
                 double extraChance = XP.getExtraChance( uuid, input.getItem().getRegistryName(), infoType, false ) / 100D;
 
                 int guaranteedDrop = (int) extraChance;
