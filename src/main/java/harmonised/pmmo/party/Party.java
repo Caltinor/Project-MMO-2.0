@@ -111,9 +111,9 @@ public class Party
         return totalXpGained;
     }
 
-    public double getMultiplier( int membersInRange )
+    public double getMultiplier( int membersInRange )   //membersInRange SHOULD ONLY INCLUDE OTHER PLAYERS
     {
-        return Math.min( 1 + (membersInRange - 1) * Config.forgeConfig.partyXpIncreasePerPlayer.get() / 100D, Config.forgeConfig.maxPartyXpBonus.get() / 100D );
+        return 1 + Math.min( membersInRange * Config.forgeConfig.partyXpIncreasePerPlayer.get() / 100D, Config.forgeConfig.maxPartyXpBonus.get() / 100D );
     }
 
     public void submitXpGained( UUID uuid, double xpGained )

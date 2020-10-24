@@ -1079,11 +1079,11 @@ public class XP
 				if( party != null )
 				{
 					Set<ServerPlayerEntity> membersInRange = party.getOnlineMembersInRange( player );
-					int membersInRangeSize = membersInRange.size() + 1;
+					int membersInRangeSize = membersInRange.size();
 					double partyMultiplier = party.getMultiplier( membersInRangeSize );
 					amount *= partyMultiplier;
 					party.submitXpGained( uuid, amount );
-					amount /= membersInRangeSize;
+					amount /= membersInRangeSize + 1;
 					for( ServerPlayerEntity partyMember : membersInRange )
 					{
 						awardXp( partyMember, skill, sourceName, amount, skip, ignoreBonuses, true );

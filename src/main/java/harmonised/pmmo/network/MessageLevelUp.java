@@ -18,11 +18,6 @@ import java.util.function.Supplier;
 public class MessageLevelUp
 {
     public static final Logger LOGGER = LogManager.getLogger();
-
-    private static final boolean broadcastMilestone = Config.forgeConfig.broadcastMilestone.get();
-    private static final boolean levelUpFirework = Config.forgeConfig.levelUpFirework.get();
-    private static final boolean milestoneLevelUpFirework = Config.forgeConfig.milestoneLevelUpFirework.get();
-    private static final int levelsPerMilestone = Config.forgeConfig.levelsPerMilestone.get();
     private int skill, level;
 
     public MessageLevelUp( int skill, int level )
@@ -64,12 +59,12 @@ public class MessageLevelUp
                 String skillName = skill.name().toLowerCase();
                 Vec3d playerPos = player.getPositionVec();
 
-                if( levelUpFirework && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
+                if( Config.forgeConfig.levelUpFirework.get() && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
                     XP.spawnRocket( player.world, player.getPosition(), skill );
 
                 LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
 
-                if( packet.level % levelsPerMilestone == 0 && broadcastMilestone )
+                if( packet.level % Config.forgeConfig.levelsPerMilestone.get() == 0 && Config.forgeConfig.broadcastMilestone.get() )
                 {
                     player.server.getPlayerList().getPlayers().forEach( otherPlayer ->
                     {
@@ -77,7 +72,7 @@ public class MessageLevelUp
                         {
                             Map<String, Double> otherprefsMap = Config.getPreferencesMap( otherPlayer );
                             otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).setStyle( XP.getSkillStyle( skill ) ), false );
-                            if( milestoneLevelUpFirework )
+                            if( Config.forgeConfig.milestoneLevelUpFirework.get() )
                             {
                                 if( !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
                                     XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );

@@ -10,6 +10,6 @@ public class ItemHandler
 {
     public static void handleItemEntityPickup( EntityItemPickupEvent event )
     {
-        PlayerTickHandler.tagOwnership( event.getItem().getItem(), event.getPlayer().getUniqueID() );
+
     }
 }

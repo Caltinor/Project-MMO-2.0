@@ -29,6 +29,6 @@ public class BrewingStandTileEntityShrinkMixin extends TileEntity
     @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "brewPotions" )
     private void projectmmo$$handleSmeltingShrink( CallbackInfo info )
     {
-        BrewHandler.handlePotionBrew( brewingItemStacks, this.getWorld() );
+        BrewHandler.handlePotionBrew( brewingItemStacks, this.getWorld(), this.getPos() );
     }
 }

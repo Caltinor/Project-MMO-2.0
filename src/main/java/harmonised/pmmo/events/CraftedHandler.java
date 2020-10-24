@@ -17,8 +17,6 @@ import java.util.Map;
 
 public class CraftedHandler
 {
-    private static final double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
-
     public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
     {
         if( event.getPlayer() instanceof ServerPlayerEntity )

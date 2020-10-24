@@ -166,11 +166,11 @@ public class EventHandler
 		PistonEventHandler.handlePistonPush( event );
 	}
 
-	@SubscribeEvent
-	public static void pickUpEntity( EntityItemPickupEvent event )
-	{
-		ItemHandler.handleItemEntityPickup( event );
-	}
+//	@SubscribeEvent
+//	public static void pickUpEntity( EntityItemPickupEvent event )
+//	{
+//		ItemHandler.handleItemEntityPickup( event );
+//	}
 
 	@SubscribeEvent
 	public static void saplingGrow( SaplingGrowTreeEvent event )

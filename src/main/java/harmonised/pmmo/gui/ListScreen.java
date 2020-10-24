@@ -30,13 +30,8 @@ import java.util.*;
 
 public class ListScreen extends Screen
 {
-    private static double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
-    private static double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
-    private static final double defaultBreedingXp = Config.forgeConfig.defaultBreedingXp.get();
-    private static final double defaultTamingXp = Config.forgeConfig.defaultTamingXp.get();
-    private static final double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
     private static final Style greenColor = XP.textStyle.get( "green" );
     private static Button exitButton;
 
@@ -581,9 +576,9 @@ public class ListScreen extends Screen
                     else
                     {
                         if( button.entity instanceof AnimalEntity )
-                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).setStyle( color ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( Config.forgeConfig.passiveMobHunterXp.get() ) ).setStyle( color ).getFormattedText() );
                         else if( button.entity instanceof MobEntity)
-                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).setStyle( color ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( Config.forgeConfig.aggresiveMobSlayerXp.get() ) ).setStyle( color ).getFormattedText() );
                     }
 
                     if ( rareDropMap != null )
@@ -592,7 +587,7 @@ public class ListScreen extends Screen
                         button.text.add( getTransComp( "pmmo.rareDrops" ).setStyle( color ).getFormattedText() );
                         for( Map.Entry<String, Double> entry : rareDropMap.entrySet() )
                         {
-                            button.text.add( " " + new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getFormattedText() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( (double) entry.getValue() ) ).getFormattedText() ).setStyle( color ).getFormattedText() );
+                            button.text.add( " " + new StringTextComponent( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getFormattedText() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ).getFormattedText() ).setStyle( color ).getFormattedText() );
                         }
                     }
                 }
@@ -885,14 +880,14 @@ public class ListScreen extends Screen
         {
             case XP_VALUE_BREED:
                 ListButton otherAnimalsBreedButton = new ListButton( 0, 0, 3, 20, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherAnimalsBreedButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( defaultBreedingXp ) ).setStyle( greenColor ).getFormattedText() );
+                otherAnimalsBreedButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( Config.forgeConfig.defaultBreedingXp.get() ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherAnimalsBreedButton );
                 break;
 
             case XP_VALUE_TAME:
             {
                 ListButton otherAnimalsTameButton = new ListButton( 0, 0, 3, 21, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherAnimalsTameButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( defaultTamingXp ) ).setStyle( greenColor ).getFormattedText() );
+                otherAnimalsTameButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( Config.forgeConfig.defaultTamingXp.get() ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherAnimalsTameButton );
             }
             break;
@@ -900,11 +895,11 @@ public class ListScreen extends Screen
             case REQ_KILL:
             {
                 ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherAggresiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( aggresiveMobSlayerXp ) ).setStyle( greenColor ).getFormattedText() );
+                otherAggresiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( Config.forgeConfig.aggresiveMobSlayerXp.get() ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherAggresiveMobsButton );
 
                 ListButton otherPassiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherPassiveMobs", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherPassiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( passiveMobHunterXp ) ).setStyle( greenColor ).getFormattedText() );
+                otherPassiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( Config.forgeConfig.passiveMobHunterXp.get() ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherPassiveMobsButton );
             }
             break;
@@ -912,7 +907,7 @@ public class ListScreen extends Screen
             case XP_VALUE_CRAFT:
             {
                 ListButton otherCraftsButton = new ListButton( 0, 0, 3, 22, "pmmo.otherCrafts", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherCraftsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( defaultCraftingXp ) ).setStyle( greenColor ).getFormattedText() );
+                otherCraftsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( Config.forgeConfig.defaultCraftingXp.get() ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherCraftsButton );
             }
             break;

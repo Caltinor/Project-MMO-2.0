@@ -4,6 +4,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,16 +16,14 @@ public class BrewHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void handlePotionBrew( NonNullList<ItemStack> brewingItemStacks, World world )
+    public static void handlePotionBrew( NonNullList<ItemStack> brewingItemStacks, World world, BlockPos pos )
     {
         try
         {
             ItemStack ingredient = brewingItemStacks.get(3);
-
-            if( ingredient.getTag() != null && ingredient.getTag().contains( "lastOwner" ) )
+            UUID uuid = ChunkDataHandler.checkPos( world, pos );
+            if( uuid != null )
             {
-                UUID uuid = UUID.fromString( ingredient.getTag().getString( "lastOwner" ) );
-
                 double extraChance = XP.getExtraChance( uuid, brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.INFO_BREW, false ) / 100D;
 
                 int guaranteedDrop = (int) extraChance;
