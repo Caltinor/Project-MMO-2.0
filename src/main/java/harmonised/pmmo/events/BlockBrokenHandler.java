@@ -190,7 +190,7 @@ public class BlockBrokenHandler
         {
             LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
                     .withRandom(world.rand)
-                    .withParameter( LootParameters.ORIGIN, player.getPositionVec() )
+                    .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
                     .withParameter( LootParameters.TOOL, toolUsed )
                     .withParameter( LootParameters.THIS_ENTITY, player )
                     .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
@@ -207,7 +207,7 @@ public class BlockBrokenHandler
 
                 builder = new LootContext.Builder((ServerWorld) world)
                         .withRandom(world.rand)
-                        .withParameter( LootParameters.ORIGIN, player.getPositionVec() )
+                        .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
                         .withParameter( LootParameters.TOOL, noEnchantTool )
                         .withParameter( LootParameters.THIS_ENTITY, player )
                         .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
@@ -309,42 +309,42 @@ public class BlockBrokenHandler
             int maxAge = -1;
 
             {   //age stuff
-                if( state.contains( BlockStateProperties.AGE_0_1 ) )
+                if( state.hasProperty( BlockStateProperties.AGE_0_1 ) )
                 {
                     age = state.get( BlockStateProperties.AGE_0_1 );
                     maxAge = 1;
                 }
-                else if( state.contains( BlockStateProperties.AGE_0_2 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_0_2 ) )
                 {
                     age = state.get( BlockStateProperties.AGE_0_2 );
                     maxAge = 2;
                 }
-                else if( state.contains( BlockStateProperties.AGE_0_3 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_0_3 ) )
                 {
                     age = state.get( BlockStateProperties.AGE_0_3 );
                     maxAge = 3;
                 }
-                else if( state.contains( BlockStateProperties.AGE_0_5 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_0_5 ) )
                 {
                     age = state.get( BlockStateProperties.AGE_0_5 );
                     maxAge = 5;
                 }
-                else if( state.contains( BlockStateProperties.AGE_0_7 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_0_7 ) )
                 {
                     age = state.get( BlockStateProperties.AGE_0_7 );
                     maxAge = 7;
                 }
-                else if( state.contains( BlockStateProperties.AGE_0_15 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_0_15 ) )
                 {
                     age = state.get( BlockStateProperties.AGE_0_15 );
                     maxAge = 15;
                 }
-                else if( state.contains( BlockStateProperties.AGE_0_25 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_0_25 ) )
                 {
                     age = state.get( BlockStateProperties.AGE_0_25 );
                     maxAge = 25;
                 }
-                else if( state.contains( BlockStateProperties.PICKLES_1_4 ) )
+                else if( state.hasProperty( BlockStateProperties.PICKLES_1_4 ) )
                 {
                     age = state.get( BlockStateProperties.PICKLES_1_4 );
                     maxAge = 4;

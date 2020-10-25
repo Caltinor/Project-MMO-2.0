@@ -25,7 +25,7 @@ public class StatsScreen extends Screen
     private static TileButton exitButton;
 
     Minecraft minecraft = Minecraft.getInstance();
-    MainWindow sr = minecraft.getWindow();
+    MainWindow sr = minecraft.getMainWindow();
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
@@ -102,7 +102,7 @@ public class StatsScreen extends Screen
 
 //        RenderSystem.enableBlend();
 
-        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

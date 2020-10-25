@@ -108,42 +108,42 @@ public class WorldTickHandler
 
                     if( skill.equals( Skill.FARMING ) && !( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) )
                     {
-                        if( veinState.contains( BlockStateProperties.AGE_0_1 ) )
+                        if( veinState.hasProperty( BlockStateProperties.AGE_0_1 ) )
                         {
                             age = veinState.get( BlockStateProperties.AGE_0_1 );
                             maxAge = 1;
                         }
-                        else if( veinState.contains( BlockStateProperties.AGE_0_2 ) )
+                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_2 ) )
                         {
                             age = veinState.get( BlockStateProperties.AGE_0_2 );
                             maxAge = 2;
                         }
-                        else if( veinState.contains( BlockStateProperties.AGE_0_3 ) )
+                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_3 ) )
                         {
                             age = veinState.get( BlockStateProperties.AGE_0_3 );
                             maxAge = 3;
                         }
-                        else if( veinState.contains( BlockStateProperties.AGE_0_5 ) )
+                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_5 ) )
                         {
                             age = veinState.get( BlockStateProperties.AGE_0_5 );
                             maxAge = 5;
                         }
-                        else if( veinState.contains( BlockStateProperties.AGE_0_7 ) )
+                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_7 ) )
                         {
                             age = veinState.get( BlockStateProperties.AGE_0_7 );
                             maxAge = 7;
                         }
-                        else if( veinState.contains( BlockStateProperties.AGE_0_15 ) )
+                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_15 ) )
                         {
                             age = veinState.get( BlockStateProperties.AGE_0_15 );
                             maxAge = 15;
                         }
-                        else if( veinState.contains( BlockStateProperties.AGE_0_25 ) )
+                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_25 ) )
                         {
                             age = veinState.get( BlockStateProperties.AGE_0_25 );
                             maxAge = 25;
                         }
-                        else if( veinState.contains( BlockStateProperties.PICKLES_1_4 ) )
+                        else if( veinState.hasProperty( BlockStateProperties.PICKLES_1_4 ) )
                         {
                             age = veinState.get( BlockStateProperties.PICKLES_1_4 );
                             maxAge = 4;

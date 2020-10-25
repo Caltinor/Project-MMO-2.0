@@ -26,7 +26,7 @@ public class MainScreen extends Screen
     public static Map<JType, Integer> scrollAmounts = new HashMap<>();
 
     Minecraft minecraft = Minecraft.getInstance();
-    MainWindow sr = minecraft.getWindow();
+    MainWindow sr = minecraft.getMainWindow();
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
@@ -111,7 +111,7 @@ public class MainScreen extends Screen
 
         RenderSystem.enableBlend();
         Minecraft.getInstance().getTextureManager().bindTexture( logo );
-        this.drawTexture( stack,  sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
+        this.blit( stack,  sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override
@@ -130,7 +130,7 @@ public class MainScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
-        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

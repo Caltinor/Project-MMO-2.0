@@ -34,7 +34,7 @@ public class PrefsScreen extends Screen
     private static Button exitButton;
 
     Minecraft minecraft = Minecraft.getInstance();
-    MainWindow sr = minecraft.getWindow();
+    MainWindow sr = minecraft.getMainWindow();
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
@@ -186,7 +186,7 @@ public class PrefsScreen extends Screen
 
         for( PrefsEntry prefEntry : prefsEntries )
         {
-            if( mouseX >= prefEntry.button.x && mouseX < prefEntry.button.x + prefEntry.button.getWidth() && mouseY >= prefEntry.button.y && mouseY < prefEntry.button.y + prefEntry.button.unusedGetHeight() )
+            if( mouseX >= prefEntry.button.x && mouseX < prefEntry.button.x + prefEntry.button.getWidth() && mouseY >= prefEntry.button.y && mouseY < prefEntry.button.y + prefEntry.button.getHeightRealms() )
                 renderTooltip( stack, new TranslationTextComponent( prefEntry.isSwitch ? ( prefEntry.defaultVal == 1 ? "ON" : "OFF" ) : prefEntry.removeIfMax && prefEntry.defaultVal == prefEntry.slider.maxValue ? "MAX" : DP.dpSoft( prefEntry.defaultVal ) ), mouseX, mouseY );
         }
 
@@ -207,7 +207,7 @@ public class PrefsScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
 
-        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override
@@ -233,7 +233,7 @@ public class PrefsScreen extends Screen
             {
                 prefEntry.mouseClicked( mouseX, mouseY, button );
                 if ( !prefEntry.isSwitch && prefEntry.textField.mouseClicked( mouseX, mouseY, button ) )
-                    this.setFocused( prefEntry.textField );
+                    this.setFocusedDefault( prefEntry.textField );
             }
         }
 

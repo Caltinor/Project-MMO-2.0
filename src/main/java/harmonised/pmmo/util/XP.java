@@ -64,6 +64,11 @@ public class XP
 	private static int debugInt = 0;
 	private static boolean alwaysDropWornItems = Config.forgeConfig.alwaysDropWornItems.get();
 
+	public static Style getColorStyle( int color )
+	{
+		return Style.EMPTY.setColor( Color.fromInt( color ) );
+	}
+
 	public static void initValues()
 	{
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
@@ -94,16 +99,20 @@ public class XP
 
 		for( Map.Entry<Skill, Integer> entry : skillColors.entrySet() )
 		{
-			skillStyle.put( entry.getKey(), Style.EMPTY.withColor(Color.fromRgb( entry.getValue() ) ) );
+			skillStyle.put( entry.getKey(), Style.EMPTY.setColor(Color.fromInt( entry.getValue() ) ) );
 		}
 ////////////////////////////////////Style//////////////////////////////////////////////
-		textStyle.put( "red", 			Style.EMPTY.withFormatting( TextFormatting.RED ) );
-		textStyle.put( "green", 		Style.EMPTY.withFormatting( TextFormatting.GREEN ) );
-		textStyle.put( "yellow", 		Style.EMPTY.withFormatting( TextFormatting.YELLOW ) );
-		textStyle.put( "grey", 			Style.EMPTY.withFormatting( TextFormatting.GRAY ) );
-		textStyle.put( "blue", 			Style.EMPTY.withFormatting( TextFormatting.BLUE ) );
-		textStyle.put( "dark_green", 	Style.EMPTY.withFormatting( TextFormatting.DARK_GREEN ) );
-		////////////////////////////////////PATREONS//////////////////////////////////////////////
+		textStyle.put( "red", 			Style.EMPTY.applyFormatting( TextFormatting.RED ) );
+		textStyle.put( "green", 		Style.EMPTY.applyFormatting( TextFormatting.GREEN ) );
+		textStyle.put( "dark_green", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_GREEN ) );
+		textStyle.put( "yellow", 		Style.EMPTY.applyFormatting( TextFormatting.YELLOW ) );
+		textStyle.put( "grey", 			Style.EMPTY.applyFormatting( TextFormatting.GRAY ) );
+		textStyle.put( "cyan", 			Style.EMPTY.applyFormatting( TextFormatting.AQUA ) );
+		textStyle.put( "blue", 			Style.EMPTY.applyFormatting( TextFormatting.BLUE ) );
+		textStyle.put( "dark_blue", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_BLUE ) );
+		textStyle.put( "pink", 			Style.EMPTY.applyFormatting( TextFormatting.LIGHT_PURPLE ) );
+		textStyle.put( "dark_purple", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_PURPLE ) );
+////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
 		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );		//DIDIS
@@ -233,12 +242,17 @@ public class XP
 
 	public static ResourceLocation getBiomeResLoc( World world, Biome biome )
 	{
-		return world.getRegistryManager().get( Registry.BIOME_KEY ).getKey( biome );
+		return world.func_241828_r().func_230521_a_( Registry.BIOME_KEY ).get().getKey( biome );
+	}
+
+	public static ResourceLocation getBiomeResLoc( World world, BlockPos pos )
+	{
+		return world.func_242406_i( pos ).get().getRegistryName();
 	}
 
 	public static ResourceLocation getDimensionResLoc( World world )
 	{
-		return world.getRegistryManager().get( Registry.DIMENSION_TYPE_KEY ).getKey( world.getDimension() );
+		return world.func_241828_r().func_230520_a_().getKey( world.getDimensionType() );
 	}
 
 	public static String correctHarvestTool(Material material)
@@ -349,7 +363,7 @@ public class XP
 
 	public static void sendMessage( String msg, boolean bar, PlayerEntity player, TextFormatting format )
 	{
-		player.sendStatusMessage( new StringTextComponent( msg ).setStyle( Style.EMPTY.withFormatting( format ) ), bar );
+		player.sendStatusMessage( new StringTextComponent( msg ).setStyle( Style.EMPTY.applyFormatting( format ) ), bar );
 	}
 
 	public static Map<String, Double> multiplyMap( Map<String, Double> mapOne, double multiplier )

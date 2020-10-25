@@ -89,7 +89,7 @@ public class XPOverlayGUI extends AbstractGui
 
 				RenderSystem.pushMatrix();
 				RenderSystem.enableBlend();
-				sr = mc.getWindow();
+				sr = mc.getMainWindow();
 				stack = event.getMatrixStack();
 
 //				drawCenteredString( stack,  fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
@@ -331,10 +331,10 @@ public class XPOverlayGUI extends AbstractGui
 
 			aSkill = skills.get( skill );
 
-			drawTexture( stack,  barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
+			blit( stack,  barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
 			if( theme == 1 )
 			{
-				drawTexture( stack,  barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
+				blit( stack,  barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
 			}
 			else
 			{
@@ -346,8 +346,8 @@ public class XPOverlayGUI extends AbstractGui
 				if( aSkill.pos >= maxLevel )
 					tempInt = 100;
 
-				drawTexture( stack,  barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
-				drawTexture( stack,  barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
+				blit( stack,  barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
+				blit( stack,  barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
 			}
 			if( aSkill.pos >= maxLevel )
 				drawCenteredString( stack,  fontRenderer, new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
@@ -414,8 +414,8 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			Minecraft.getInstance().getTextureManager().bindTexture( bar );
 
-			drawTexture( stack,  veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
-			drawTexture( stack,  veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
+			blit( stack,  veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
+			blit( stack,  veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
 //						System.out.println( veinPos * maxVeinCharge );
 			drawCenteredString( stack,  fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
@@ -487,9 +487,9 @@ public class XPOverlayGUI extends AbstractGui
 				color = XP.getSkillColor( keySkill );
 				if( level >= maxLevel )
 					tempString = "" + maxLevel;
-				drawStringWithShadow( stack, fontRenderer, tempString, levelGap + 4 - fontRenderer.getStringWidth( tempString ), 3 + listIndex, color );
-				drawStringWithShadow( stack, fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
-				drawStringWithShadow( stack, fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
+				drawString( stack, fontRenderer, tempString, levelGap + 4 - fontRenderer.getStringWidth( tempString ), 3 + listIndex, color );
+				drawString( stack, fontRenderer, " | " + new TranslationTextComponent( "pmmo." + skillName ).getString(), levelGap + 4, 3 + listIndex, color );
+				drawString( stack, fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
 
 				if( aSkill.bonus != 0 )
 				{
@@ -502,7 +502,7 @@ public class XPOverlayGUI extends AbstractGui
 					else
 						tempString = "";
 
-					drawStringWithShadow( stack,  fontRenderer, tempString, levelGap + skillGap + xpGap + 32, 3 + listIndex, color );
+					drawString( stack,  fontRenderer, tempString, levelGap + skillGap + xpGap + 32, 3 + listIndex, color );
 				}
 
 				listIndex += 9;

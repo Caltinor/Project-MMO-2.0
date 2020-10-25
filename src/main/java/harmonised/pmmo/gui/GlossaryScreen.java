@@ -26,7 +26,7 @@ public class GlossaryScreen extends Screen
     private static TileButton exitButton;
 
     Minecraft minecraft = Minecraft.getInstance();
-    MainWindow sr = minecraft.getWindow();
+    MainWindow sr = minecraft.getMainWindow();
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
@@ -185,7 +185,7 @@ public class GlossaryScreen extends Screen
         }
 
         if( combo )
-            Minecraft.getInstance().player.func_213823_a( SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
+            Minecraft.getInstance().player.playSound( SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
     }
 
     public static boolean updateHistory( char index )
@@ -216,7 +216,7 @@ public class GlossaryScreen extends Screen
 
                 if( passed )
                 {
-                    Minecraft.getInstance().player.func_213823_a(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
+                    Minecraft.getInstance().player.playSound(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
                     return true;
                 }
             }
@@ -269,7 +269,7 @@ public class GlossaryScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
 
-        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

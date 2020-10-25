@@ -1,5 +1,5 @@
 {
-  "required": true,
+  "required": false,
   "package": "harmonised.pmmo.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "pmmo.refmap.json",

@@ -35,7 +35,7 @@ public class CheckStatCommand
                 if( args[3].toLowerCase().equals( "power" ) )
                 {
                     level = XP.getPowerLevel( target.getUniqueID() );
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).setStyle( Style.EMPTY.withFormatting( TextFormatting.AQUA ) ) ), false );
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).setStyle( XP.textStyle.get( "cyan" ) ) ), false );
                 }
                 else
                 {

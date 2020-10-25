@@ -35,7 +35,7 @@ public class ListScreen extends Screen
     private static Button exitButton;
 
     Minecraft minecraft = Minecraft.getInstance();
-    MainWindow sr = minecraft.getWindow();
+    MainWindow sr = minecraft.getMainWindow();
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
@@ -1123,7 +1123,7 @@ public class ListScreen extends Screen
                     renderTooltip( stack, button.itemStack, mouseX, mouseY );
             }
 
-            accumulativeHeight += button.unusedGetHeight();
+            accumulativeHeight += button.getHeightRealms();
         }
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
@@ -1157,7 +1157,7 @@ public class ListScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
 
-        this.drawTexture( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override
@@ -1166,7 +1166,7 @@ public class ListScreen extends Screen
         accumulativeHeight = 0;
         for( ListButton listButton : listButtons )
         {
-            accumulativeHeight += listButton.unusedGetHeight();
+            accumulativeHeight += listButton.getHeightRealms();
             if( accumulativeHeight > scrollPanel.getBottom() - scrollPanel.getTop() )
             {
                 scrollPanel.mouseScrolled( mouseX, mouseY, scroll );

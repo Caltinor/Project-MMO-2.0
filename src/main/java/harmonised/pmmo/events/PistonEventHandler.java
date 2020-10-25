@@ -38,7 +38,7 @@ public class PistonEventHandler
             else
             {
                 BlockState state = world.getBlockState( pistonPos );
-                if( state.contains( MovingPistonBlock.TYPE ) && state.get( MovingPistonBlock.TYPE ).equals( PistonType.STICKY ) )
+                if( state.hasProperty( MovingPistonBlock.TYPE ) && state.get( MovingPistonBlock.TYPE ).equals( PistonType.STICKY ) )
                 {
                     uuid = UUID.fromString( "80008135-1337-3251-1523-852369874125" );
                     ChunkDataHandler.addPos( XP.getDimensionResLoc( world ), pistonPos.offset( direction ), uuid );

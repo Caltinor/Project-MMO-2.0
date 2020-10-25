@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class PrefsScrollPanel extends ScrollPanel
 {
-    MainWindow sr = Minecraft.getInstance().getWindow();
+    MainWindow sr = Minecraft.getInstance().getMainWindow();
     private final int boxWidth = 256;
     private final int boxHeight = 256;
     private final ArrayList<PrefsEntry> prefsEntries;
@@ -69,16 +69,16 @@ public class PrefsScrollPanel extends ScrollPanel
                 if( prefEntry.isSwitch )
                 {
                     if( slider.getValue() == 1 )
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.unusedGetHeight() + 2, 0x22444444, 0x33222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0x22444444, 0x33222222);
                     else
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.unusedGetHeight() + 2, 0xaa444444, 0xaa222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0xaa444444, 0xaa222222);
                 }
                 else
                 {
                     if( (float) prefEntry.defaultVal == (float) slider.getValue() )
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.unusedGetHeight() + 2, 0xaa444444, 0xaa222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0xaa444444, 0xaa222222);
                     else
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.unusedGetHeight() + 2, 0x22444444, 0x33222222);
+                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0x22444444, 0x33222222);
                 }
 
                 drawCenteredString( stack,  font, prefEntry.preference, prefEntry.getX() + slider.getWidth() / 2, prefEntry.getY() - 9, 0xffffff );
@@ -135,9 +135,9 @@ public class PrefsScrollPanel extends ScrollPanel
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder worldr = tess.getBuffer();
 
-        double scale = client.getWindow().getGuiScaleFactor();
+        double scale = client.getMainWindow().getGuiScaleFactor();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((int)(left  * scale), (int)(client.getWindow().getFramebufferHeight() - (bottom * scale)),
+        GL11.glScissor((int)(left  * scale), (int)(client.getMainWindow().getFramebufferHeight() - (bottom * scale)),
                 (int)(width * scale), (int)(height * scale));
 
 //        if (this.client.world != null)
@@ -152,10 +152,10 @@ public class PrefsScrollPanel extends ScrollPanel
 //            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 //            final float texScale = 32.0F;
 //            worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-//            worldr.vertex(this.left,  this.bottom, 0.0D).texture(this.left  / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-//            worldr.vertex(this.right, this.bottom, 0.0D).texture(this.right / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-//            worldr.vertex(this.right, this.top,    0.0D).texture(this.right / texScale, (this.top    + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-//            worldr.vertex(this.left,  this.top,    0.0D).texture(this.left  / texScale, (this.top    + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
+//            worldr.pos(this.left,  this.bottom, 0.0D).tex(this.left  / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
+//            worldr.pos(this.right, this.bottom, 0.0D).tex(this.right / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
+//            worldr.pos(this.right, this.top,    0.0D).tex(this.right / texScale, (this.top    + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
+//            worldr.pos(this.left,  this.top,    0.0D).tex(this.left  / texScale, (this.top    + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
 //            tess.draw();
 //        }
 
@@ -177,22 +177,22 @@ public class PrefsScrollPanel extends ScrollPanel
 
             RenderSystem.disableTexture();
             worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            worldr.vertex(barLeft,            this.bottom, 0.0D).texture(0.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
-            worldr.vertex(barLeft + barWidth, this.bottom, 0.0D).texture(1.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
-            worldr.vertex(barLeft + barWidth, this.top,    0.0D).texture(1.0F, 0.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
-            worldr.vertex(barLeft,            this.top,    0.0D).texture(0.0F, 0.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
+            worldr.pos(barLeft,            this.bottom, 0.0D).tex(0.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
+            worldr.pos(barLeft + barWidth, this.bottom, 0.0D).tex(1.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
+            worldr.pos(barLeft + barWidth, this.top,    0.0D).tex(1.0F, 0.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
+            worldr.pos(barLeft,            this.top,    0.0D).tex(0.0F, 0.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
             tess.draw();
             worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            worldr.vertex(barLeft,            barTop + barHeight, 0.0D).texture(0.0F, 1.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
-            worldr.vertex(barLeft + barWidth, barTop + barHeight, 0.0D).texture(1.0F, 1.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
-            worldr.vertex(barLeft + barWidth, barTop,             0.0D).texture(1.0F, 0.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
-            worldr.vertex(barLeft,            barTop,             0.0D).texture(0.0F, 0.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            worldr.pos(barLeft,            barTop + barHeight, 0.0D).tex(0.0F, 1.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            worldr.pos(barLeft + barWidth, barTop + barHeight, 0.0D).tex(1.0F, 1.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            worldr.pos(barLeft + barWidth, barTop,             0.0D).tex(1.0F, 0.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            worldr.pos(barLeft,            barTop,             0.0D).tex(0.0F, 0.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
             tess.draw();
             worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            worldr.vertex(barLeft,                barTop + barHeight - 1, 0.0D).texture(0.0F, 1.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
-            worldr.vertex(barLeft + barWidth - 1, barTop + barHeight - 1, 0.0D).texture(1.0F, 1.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
-            worldr.vertex(barLeft + barWidth - 1, barTop,                 0.0D).texture(1.0F, 0.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
-            worldr.vertex(barLeft,                barTop,                 0.0D).texture(0.0F, 0.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.pos(barLeft,                barTop + barHeight - 1, 0.0D).tex(0.0F, 1.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.pos(barLeft + barWidth - 1, barTop + barHeight - 1, 0.0D).tex(1.0F, 1.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.pos(barLeft + barWidth - 1, barTop,                 0.0D).tex(1.0F, 0.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.pos(barLeft,                barTop,                 0.0D).tex(0.0F, 0.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
             tess.draw();
         }
 

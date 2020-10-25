@@ -73,9 +73,9 @@ public class TileButton extends Button
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         minecraft.getTextureManager().bindTexture( buttons );
-        this.drawTexture( stack, this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height );
+        this.blit( stack, this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height );
         minecraft.getTextureManager().bindTexture( page == 0 ? items : items2 );
-        this.drawTexture( stack, this.x, this.y, this.offsetTwo + ( this.isHovered() ? 32 : 0 ), this.elementTwo, this.width, this.height );
+        this.blit( stack, this.x, this.y, this.offsetTwo + ( this.isHovered() ? 32 : 0 ), this.elementTwo, this.width, this.height );
         this.renderBg( stack, minecraft, p_renderButton_1_, p_renderButton_2_);
 //        int j = getFGColor();
 //        drawCenteredString( stack, fontrenderer, new TranslationTextComponent( transKey ).getString(), this.x + this.width / 2, this.y + (this.height - 8) / 2, 0xffffff );
