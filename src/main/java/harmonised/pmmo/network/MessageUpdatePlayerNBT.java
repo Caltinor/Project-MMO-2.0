@@ -16,6 +16,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -26,17 +27,17 @@ public class MessageUpdatePlayerNBT
     public CompoundNBT reqPackage = new CompoundNBT();
     public int type;
 
-    public MessageUpdatePlayerNBT(CompoundNBT theNBT, int type )
+    public MessageUpdatePlayerNBT( CompoundNBT theNBT, int type )
     {
+        this.reqPackage = theNBT;
         this.type = type;
-        reqPackage = theNBT;
     }
 
     MessageUpdatePlayerNBT()
     {
     }
 
-    public static MessageUpdatePlayerNBT decode(PacketBuffer buf )
+    public static MessageUpdatePlayerNBT decode( PacketBuffer buf )
     {
         MessageUpdatePlayerNBT packet = new MessageUpdatePlayerNBT();
         packet.reqPackage = buf.readCompoundTag();
@@ -45,7 +46,7 @@ public class MessageUpdatePlayerNBT
         return packet;
     }
 
-    public static void encode(MessageUpdatePlayerNBT packet, PacketBuffer buf )
+    public static void encode( MessageUpdatePlayerNBT packet, PacketBuffer buf )
     {
         buf.writeCompoundTag( packet.reqPackage );
         buf.writeInt( packet.type );
@@ -96,13 +97,23 @@ public class MessageUpdatePlayerNBT
                     break;
 
                 case 4: //data
-                    JsonConfig.data = NBTHelper.nbtToData3( packet.reqPackage );
-                    GlossaryScreen.initButtons();
+                    if( packet.reqPackage.contains( "wipe" ) )
+                    {
+                        JsonConfig.data = new HashMap<>();
+                        JsonConfig.initMap( JsonConfig.data );
+                    }
+                    else
+                        NBTHelper.addData3( JsonConfig.data, NBTHelper.nbtToData3( packet.reqPackage ) );
                     break;
 
                 case 5: //data2
-                    JsonConfig.data2 = NBTHelper.nbtToData4( packet.reqPackage );
-                    GlossaryScreen.initButtons();
+                    if( packet.reqPackage.contains( "wipe" ) )
+                    {
+                        JsonConfig.data2 = new HashMap<>();
+                        JsonConfig.initMap2( JsonConfig.data2 );
+                    }
+                    else
+                        NBTHelper.addData4( JsonConfig.data2, NBTHelper.nbtToData4( packet.reqPackage ) );
                     break;
 
                 default:

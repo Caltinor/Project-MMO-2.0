@@ -78,7 +78,7 @@ public class JsonConfig
         initMap2( data2 );
     }
 
-    private static void initMap( Map<JType, Map<String, Map<String, Double>>> map )
+    public static void initMap( Map<JType, Map<String, Map<String, Double>>> map )
     {
         for( Map.Entry<JType, Integer> entry : JType.jTypeMap.entrySet() )
         {
@@ -87,7 +87,7 @@ public class JsonConfig
         }
     }
 
-    private static void initMap2( Map<JType, Map<String, Map<String, Map<String, Double>>>> map )
+    public static void initMap2( Map<JType, Map<String, Map<String, Map<String, Double>>>> map )
     {
         for( JType jType2 : jTypes2 )
         {
@@ -461,6 +461,8 @@ public class JsonConfig
         LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
+            if( XP.getItem( element.getKey() ).equals( Items.AIR ) )
+                continue;   //skip items that don't exist in current modlist
             if( checkValidSkills( element.getValue() ) )
             {
                 if(  !output.containsKey( element.getKey() ) )

@@ -54,7 +54,7 @@ public class ClientHandler
     {
         PlayerEntity player = Minecraft.getInstance().player;
         CompoundNBT newPackage = packet.reqPackage;
-        Set<String> keySet = new HashSet<>( newPackage.keySet() );
+        Set<String> keySet = newPackage.keySet();
 
         switch( packet.type )
         {
