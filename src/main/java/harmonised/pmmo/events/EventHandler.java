@@ -18,7 +18,8 @@ import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 @Mod.EventBusSubscriber
 public class EventHandler
 {
-	@SubscribeEvent
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void blockBroken( BreakEvent event )
 	{
 		BlockBrokenHandler.handleBroken( event );
@@ -30,13 +31,13 @@ public class EventHandler
 		BlockPlacedHandler.handlePlaced( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingHurt( LivingDamageEvent event )
 	{
 		DamageHandler.handleDamage( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingDeath( LivingDeathEvent event )
 	{
 		DeathHandler.handleDeath( event );
@@ -54,7 +55,7 @@ public class EventHandler
 		PlayerRespawnHandler.handlePlayerRespawn( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingJump( LivingJumpEvent event )
 	{
 		JumpHandler.handleJump( event );
@@ -72,7 +73,8 @@ public class EventHandler
 		PlayerCloneHandler.handleClone( event );
 	}
 
-	@SubscribeEvent
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onAnvilRepair( AnvilRepairEvent event )
 	{
 		AnvilRepairHandler.handleAnvilRepair( event );
@@ -97,19 +99,19 @@ public class EventHandler
 		BreakSpeedHandler.handleBreakSpeed( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void playerInteract( PlayerInteractEvent event )
 	{
 		PlayerInteractionHandler.handlePlayerInteract( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingSpawn( LivingSpawnEvent.EnteringChunk event )
 	{
 		SpawnHandler.handleSpawn( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void babySpawn( BabyEntitySpawnEvent event )
 	{
 		BreedHandler.handleBreedEvent( event );
@@ -142,7 +144,7 @@ public class EventHandler
 //	@SubscribeEvent
 //	public static void furnace( PlayerEvent.ItemSmeltedEvent )
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void sleepDone( SleepFinishedTimeEvent event )
 	{
 		SleepHandler.handleSleepFinished( event );

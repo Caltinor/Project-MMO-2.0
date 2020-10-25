@@ -62,7 +62,6 @@ public class XP
 	public static Map<UUID, Map<Skill, Double>> offlineXp = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static int debugInt = 0;
-	private static boolean alwaysDropWornItems = Config.forgeConfig.alwaysDropWornItems.get();
 
 	public static Style getColorStyle( int color )
 	{
@@ -1374,7 +1373,7 @@ public class XP
 			player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
 
-			if( alwaysDropWornItems || EnchantmentHelper.hasBindingCurse( itemStack ) )
+			if( Config.forgeConfig.strictReqWear.get() || EnchantmentHelper.hasBindingCurse( itemStack ) )
 			{
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );

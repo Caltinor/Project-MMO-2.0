@@ -43,6 +43,11 @@ public class Config
         else
             localConfig.put( "useExponentialFormula", 0D );
 
+        if( Config.forgeConfig.strictReqTool.get() )
+            localConfig.put( "strictReqTool", 1D );
+        else
+            localConfig.put( "strictReqTool", 0D );
+
         localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
         localConfig.put( "baseXp", (double) forgeConfig.baseXp.get() );
         localConfig.put( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
@@ -86,7 +91,6 @@ public class Config
         //Miscellaneous
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
-        public ConfigHelper.ConfigValueListener<Boolean> alwaysDropWornItems;
 
         //Party
         public ConfigHelper.ConfigValueListener<Double> partyRange;
@@ -149,6 +153,11 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> wornItemXpBoostEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> loadDefaultConfig;
 
+        public ConfigHelper.ConfigValueListener<Boolean> strictReqTool;
+        public ConfigHelper.ConfigValueListener<Boolean> strictReqKill;
+        public ConfigHelper.ConfigValueListener<Boolean> strictReqWeapon;
+        public ConfigHelper.ConfigValueListener<Boolean> strictReqWear;
+        
         //Levels
         public ConfigHelper.ConfigValueListener<Integer> maxLevel;
         public ConfigHelper.ConfigValueListener<Integer> baseXp;
@@ -310,12 +319,7 @@ public class Config
                         .comment( "Should your personal Donator Welcome message come up?" )
                         .translation( "pmmo.showPatreonWelcome" )
                         .define( "showPatreonWelcome", true ) );
-
-                this.alwaysDropWornItems = subscriber.subscribe(builder
-                        .comment( "When a Wear requirement is not met, should the item be dropped?" )
-                        .translation( "pmmo.alwaysDropWornItems" )
-                        .define( "alwaysDropWornItems", false ) );
-
+                
                 builder.pop();
             }
 
@@ -603,6 +607,26 @@ public class Config
                         .translation( "pmmo.loadDefaultConfig" )
                         .define( "loadDefaultConfig", true ) );
 
+                this.strictReqTool = subscriber.subscribe(builder
+                        .comment( "When a Tool requirement is not met, should the player be stopped from breaking with it completely?" )
+                        .translation( "pmmo.strictReqTool" )
+                        .define( "strictReqTool", false ) );
+
+                this.strictReqKill = subscriber.subscribe(builder
+                        .comment( "When a Kill requirement is not met, should the player be stopped from dealing any damage?" )
+                        .translation( "pmmo.strictReqKill" )
+                        .define( "strictReqKill", false ) );
+
+                this.strictReqWeapon = subscriber.subscribe(builder
+                        .comment( "When a Weapon requirement is not met, should the player be stopped from dealing any damage?" )
+                        .translation( "pmmo.strictReqWeapon" )
+                        .define( "strictReqWeapon", false ) );
+
+                this.strictReqWear = subscriber.subscribe(builder
+                        .comment( "When a Wear requirement is not met, should the item be dropped?" )
+                        .translation( "pmmo.strictReqWear" )
+                        .define( "strictReqWear", false ) );
+                
                 builder.pop();
             }
 
