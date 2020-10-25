@@ -23,7 +23,7 @@ public class PartyCommand
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         UUID uuid = player.getUniqueID();
-        PmmoSavedData pmmoSavedData = PmmoSavedData.get( player );
+        PmmoSavedData pmmoSavedData = PmmoSavedData.get();
         Party party = pmmoSavedData.getParty( uuid );
 
         if( party == null )

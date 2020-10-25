@@ -17,7 +17,7 @@ public class CreatePartyCommand
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         UUID uuid = player.getUniqueID();
-        PmmoSavedData pmmoSavedData = PmmoSavedData.get( player );
+        PmmoSavedData pmmoSavedData = PmmoSavedData.get();
         boolean result = pmmoSavedData.makeParty( uuid );
 
         if( result )

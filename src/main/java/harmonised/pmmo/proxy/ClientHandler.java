@@ -7,6 +7,7 @@ import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -73,6 +74,15 @@ public class ClientHandler
                 for( String tag : keySet )
                 {
                     abilitiesMap.put( tag, newPackage.getDouble( tag ) );
+                }
+                break;
+
+            case 6:
+                Map<Skill, Double> xpBoostMap = Config.getXpBoostMap( player );
+                for( String tag : keySet )
+                {
+                    if( !Skill.getSkill( tag ).equals( Skill.INVALID_SKILL ) )
+                        xpBoostMap.put( Skill.getSkill( tag ), newPackage.getDouble( tag ) );
                 }
                 break;
 

@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class CampfireTileEntitySetMixin
 {
     @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/inventory/InventoryHelper;spawnItemStack(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V" ), method = "cookAndDrop", locals = LocalCapture.CAPTURE_FAILEXCEPTION )
-    private void projectmmo$$handleSmeltingSet(CallbackInfo info, int i, ItemStack itemstack, int j, IInventory iInventory, ItemStack itemstack1 )
+    private void projectmmo$$handleSmeltingSet(CallbackInfo info, int i, ItemStack itemstack, IInventory iInventory, ItemStack itemstack1 )
     {
         World world = ((CampfireTileEntity)(Object)this).getWorld();
         BlockPos pos = ((CampfireTileEntity)(Object)this).getPos();

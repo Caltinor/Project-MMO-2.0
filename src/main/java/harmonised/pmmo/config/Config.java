@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Config
 {
@@ -22,6 +23,7 @@ public class Config
     //Client only, too lazy to put it somewhere better
     private static final Map<String, Double> abilities = new HashMap<>();
     private static Map<String, Double> preferences = new HashMap<>();
+    private static Map<Skill, Double> xpBoost = new HashMap<>();
 
     public static ConfigImplementation forgeConfig;
 
@@ -97,6 +99,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> partyMaxMembers;
         public ConfigHelper.ConfigValueListener<Double> partyXpIncreasePerPlayer;
         public ConfigHelper.ConfigValueListener<Double> maxPartyXpBonus;
+        public ConfigHelper.ConfigValueListener<Double> partyFriendlyFireAmount;
 
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
@@ -344,6 +347,11 @@ public class Config
                         .comment( "How much bonus xp is the maximum that a Party can receive? (50 = 50% increase max. If partyXpIncreasePerPlayer is 5, and there are 20 members, the xp bonus caps at 50%, at 10 members)" )
                         .translation( "pmmo.maxPartyXpBonus" )
                         .defineInRange( "maxPartyXpBonus", 50D, 0, 1000000000) );
+
+                this.partyFriendlyFireAmount = subscriber.subscribe(builder
+                        .comment( "How much damage you can deal to people in the same Party (0 = no damage, 100 = full damage)" )
+                        .translation( "pmmo.partyFriendlyFireAmount" )
+                        .defineInRange( "partyFriendlyFireAmount", 100/3D, 0, 100) );
 
                 builder.pop();
             }
@@ -979,7 +987,7 @@ public class Config
                 this.speedBoostPerLevel = subscriber.subscribe(builder
                         .comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )
                         .translation( "pmmo.speedBoostPerLevel" )
-                        .defineInRange( "speedBoostPerLevel", 0.0005D, 0, 10) );
+                        .defineInRange( "speedBoostPerLevel", 0.00025D, 0, 10) );
 
                 builder.pop();
             }
@@ -1254,7 +1262,7 @@ public class Config
         if( player.world.isRemote() )
             return XP.getOfflineXpMap( player.getUniqueID() );
         else
-            return PmmoSavedData.get( player ).getXpMap( player.getUniqueID() );
+            return PmmoSavedData.get().getXpMap( player.getUniqueID() );
     }
 
     public static Map<String, Double> getConfigMap()
@@ -1272,7 +1280,7 @@ public class Config
         if( player.world.isRemote() )
             return preferences;
         else
-            return PmmoSavedData.get( player ).getPreferencesMap( player.getUniqueID() );
+            return PmmoSavedData.get().getPreferencesMap( player.getUniqueID() );
     }
 
     public static Map<String, Double> getPreferencesMapOffline()
@@ -1285,7 +1293,25 @@ public class Config
         if( player.world.isRemote() )
             return abilities;
         else
-            return PmmoSavedData.get( player ).getAbilitiesMap( player.getUniqueID() );
+            return PmmoSavedData.get().getAbilitiesMap( player.getUniqueID() );
+    }
+
+    public static double getPlayerXpBoost( PlayerEntity player, Skill skill )
+    {
+        return getXpBoostMap( player ).getOrDefault( skill, 0D );
+    }
+
+    public static Map<Skill, Double> getXpBoostMap( PlayerEntity player )
+    {
+        if( player.world.isRemote() )
+            return xpBoost;
+        else
+            return PmmoSavedData.get().getXpBoostMap( player.getUniqueID() );
+    }
+
+    public static void setPlayerXpBoost( UUID uuid, Map<Skill, Double> newXpBoosts )
+    {
+        PmmoSavedData.get().setPlayerXpBoost( uuid, newXpBoosts );
     }
 
     public static void setPreferencesMap( Map<String, Double> newPreferencesMap )

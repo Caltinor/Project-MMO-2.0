@@ -20,7 +20,7 @@ public class AcceptPartyCommand
         ServerPlayerEntity player = (ServerPlayerEntity) context.getSource().getEntity();
         UUID uuid = player.getUniqueID();
         UUID partyOwnerUUID = PartyPendingSystem.getOwnerUUID( uuid );
-        PmmoSavedData pmmoSavedData = PmmoSavedData.get( player );
+        PmmoSavedData pmmoSavedData = PmmoSavedData.get();
         if( partyOwnerUUID == null )
         {
             //Invitation doesn't exist
