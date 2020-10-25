@@ -131,15 +131,16 @@ public class XP
 //		skillStyle.put( Skill.FLETCHING, TextFormatting.DARK_GREEN );
 //		skillStyle.put( Skill.TAMING, TextFormatting.WHITE );
 ////////////////////////////////////Style//////////////////////////////////////////////
-		textStyle.put( "red", new Style().setColor( TextFormatting.RED ) );
-		textStyle.put( "green", new Style().setColor( TextFormatting.GREEN ) );
-		textStyle.put( "dark_green", new Style().setColor( TextFormatting.DARK_GREEN ) );
-		textStyle.put( "yellow", new Style().setColor( TextFormatting.YELLOW ) );
-		textStyle.put( "grey", new Style().setColor( TextFormatting.GRAY ) );
-		textStyle.put( "blue", new Style().setColor( TextFormatting.BLUE ) );
-		textStyle.put( "dark_blue", new Style().setColor( TextFormatting.DARK_BLUE ) );
-		textStyle.put( "pink", new Style().setColor( TextFormatting.LIGHT_PURPLE ) );
-		textStyle.put( "dark_purple", new Style().setColor( TextFormatting.DARK_PURPLE ) );
+		textStyle.put( "red", 			new Style().setColor( TextFormatting.RED ) );
+		textStyle.put( "green", 		new Style().setColor( TextFormatting.GREEN ) );
+		textStyle.put( "dark_green", 	new Style().setColor( TextFormatting.DARK_GREEN ) );
+		textStyle.put( "yellow", 		new Style().setColor( TextFormatting.YELLOW ) );
+		textStyle.put( "grey", 			new Style().setColor( TextFormatting.GRAY ) );
+		textStyle.put( "cyan", 			new Style().setColor( TextFormatting.AQUA ) );
+		textStyle.put( "blue", 			new Style().setColor( TextFormatting.BLUE ) );
+		textStyle.put( "dark_blue", 	new Style().setColor( TextFormatting.DARK_BLUE ) );
+		textStyle.put( "pink", 			new Style().setColor( TextFormatting.LIGHT_PURPLE ) );
+		textStyle.put( "dark_purple", 	new Style().setColor( TextFormatting.DARK_PURPLE ) );
 ////////////////////////////////////PATREONS//////////////////////////////////////////////
 		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
 		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
