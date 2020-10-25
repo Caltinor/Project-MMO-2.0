@@ -146,7 +146,7 @@ public class NBTHelper
         JType jType;
         for( String jTypeKey : input.keySet() )
         {
-            jType = JType.getJType(  jTypeKey );
+            jType = JType.getJType( jTypeKey );
             output.put( jType, new HashMap<>() );
             for( String topKey : input.getCompound( jTypeKey ).keySet() )
             {
@@ -181,6 +181,27 @@ public class NBTHelper
         }
         
         return output;
+    }
+
+    public static void addData3( Map<JType, Map<String, Map<String, Double>>> input1, Map<JType, Map<String, Map<String, Double>>> input2 )
+    {
+        for( Map.Entry<JType, Map<String, Map<String, Double>>> entry3 : input2.entrySet() )
+        {
+            if( !input1.containsKey( entry3.getKey() ) )
+                input1.put( entry3.getKey(), new HashMap<>() );
+
+            for( Map.Entry<String, Map<String, Double>> entry2 : entry3.getValue().entrySet() )
+            {
+                if( !input1.get( entry3.getKey() ).containsKey( entry2.getKey() ) )
+                    input1.get( entry3.getKey() ).put( entry2.getKey(), new HashMap<>() );
+
+                for( Map.Entry<String, Double> entry1 : entry2.getValue().entrySet() )
+                {
+                    if( !input1.get( entry3.getKey() ).get( entry2.getKey() ).containsKey( entry1.getKey() ) )
+                        input1.get( entry3.getKey() ).get( entry2.getKey() ).put( entry1.getKey(), entry1.getValue() );
+                }
+            }
+        }
     }
 
     public static Map<JType, Map<String, Map<String, Map<String, Double>>>> nbtToData4( CompoundNBT input )
@@ -231,5 +252,26 @@ public class NBTHelper
         }
 
         return output;
+    }
+
+    public static void addData4( Map<JType, Map<String, Map<String, Map<String, Double>>>> input1, Map<JType, Map<String, Map<String, Map<String, Double>>>> input2 )
+    {
+        for( Map.Entry<JType, Map<String, Map<String, Map<String, Double>>>> entry4 : input2.entrySet() )
+        {
+            if( !input1.containsKey( entry4.getKey() ) )
+                input1.put( entry4.getKey(), new HashMap<>() );
+
+            for( Map.Entry<String, Map<String, Map<String, Double>>> entry3 : entry4.getValue().entrySet() )
+            {
+                if( !input1.get( entry4.getKey() ).containsKey( entry3.getKey() ) )
+                    input1.get( entry4.getKey() ).put( entry3.getKey(), new HashMap<>() );
+
+                for( Map.Entry<String, Map<String, Double>> entry2 : entry3.getValue().entrySet() )
+                {
+                    if( !input1.get( entry4.getKey() ).get( entry3.getKey() ).containsKey( entry2.getKey() ) )
+                        input1.get( entry4.getKey() ).get( entry3.getKey() ).put( entry2.getKey(), entry2.getValue() );
+                }
+            }
+        }
     }
 }

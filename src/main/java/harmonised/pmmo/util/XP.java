@@ -589,11 +589,83 @@ public class XP
 		return withinRange;
 	}
 
-	public static void syncPlayerConfig( PlayerEntity player )
+	public static void syncPlayerDataAndConfig( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.data3ToNbt( JsonConfig.localData ), 4 ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.data4ToNbt( JsonConfig.localData2 ), 5 ), (ServerPlayerEntity) player );
+		syncPlayerData3( player );
+		syncPlayerData4( player );
+		NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 1 ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
+	}
+
+	public static void syncPlayerData3( PlayerEntity player )
+	{
+		CompoundNBT fullData = NBTHelper.data3ToNbt( JsonConfig.localData );
+		CompoundNBT dataChunk = new CompoundNBT();
+		dataChunk.putBoolean( "wipe", true );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayerEntity) player );
+		dataChunk = new CompoundNBT();
+
+		int i = 0;
+		for( String key3 : fullData.keySet() )
+		{
+			if( !dataChunk.contains( key3 ) )
+				dataChunk.put( key3, new CompoundNBT() );
+
+			for( String key2 : fullData.getCompound( key3 ).keySet() )
+			{
+				if( i >= 1000 )	//if any single JType reaches 1000 Elements, send chunk reset count
+				{
+					i = 0;
+					NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayerEntity) player );
+					dataChunk = new CompoundNBT();
+					dataChunk.put( key3, new CompoundNBT() );
+				}
+
+				dataChunk.getCompound( key3 ).put( key2, fullData.getCompound( key3 ).getCompound( key2 ) );
+				i++;
+			}
+		}
+
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayerEntity) player );
+	}
+
+	public static void syncPlayerData4( PlayerEntity player )
+	{
+		CompoundNBT fullData = NBTHelper.data4ToNbt( JsonConfig.localData2 );
+		CompoundNBT dataChunk = new CompoundNBT();
+		dataChunk.putBoolean( "wipe", true );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayerEntity) player );
+		dataChunk = new CompoundNBT();
+
+		int i = 0;
+		for( String key4 : fullData.keySet() )
+		{
+			if( !dataChunk.contains( key4 ) )
+				dataChunk.put( key4, new CompoundNBT() );
+
+			for( String key3 : fullData.getCompound( key4 ).keySet() )
+			{
+				if( !dataChunk.getCompound( key4 ).contains( key3 ) )
+					dataChunk.getCompound( key4 ).put( key3, new CompoundNBT() );
+
+				for( String key2 : fullData.getCompound( key4 ).getCompound( key3 ).keySet() )
+				{
+					if( i >= 1000 )	//if any single JType reaches 1000 Elements, send chunk reset count
+					{
+						i = 0;
+						NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayerEntity) player );
+						dataChunk = new CompoundNBT();
+						dataChunk.put( key4, new CompoundNBT() );
+						dataChunk.getCompound( key4 ).put( key3, new CompoundNBT() );
+					}
+
+					dataChunk.getCompound( key4 ).getCompound( key3 ).put( key2, fullData.getCompound( key4 ).getCompound( key3 ).getCompound( key2 ) );
+					i++;
+				}
+			}
+		}
+
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayer( PlayerEntity player )
@@ -603,7 +675,7 @@ public class XP
         CompoundNBT prefsTag 	 = NBTHelper.mapStringToNbt( Config.getPreferencesMap( player ) );
 		CompoundNBT abilitiesTag = NBTHelper.mapStringToNbt( Config.getAbilitiesMap( player ) );
 
-		syncPlayerConfig( player );
+		syncPlayerDataAndConfig( player );
 		updateRecipes( (ServerPlayerEntity) player );
 
         NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );

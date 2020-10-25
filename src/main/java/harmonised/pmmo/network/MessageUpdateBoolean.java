@@ -1,8 +1,10 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.gui.GlossaryScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -42,11 +44,22 @@ public class MessageUpdateBoolean
     {
         ctx.get().enqueueWork(() ->
         {
-            if( Minecraft.getInstance().player != null )
+            switch( packet.type )
             {
-                if( packet.type == 0 )
-                    XPOverlayGUI.isVeining = packet.value;
+                case 0: //vein stuff
+                if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
+                {
+                    if( Minecraft.getInstance().player != null )
+                        XPOverlayGUI.isVeining = packet.value;
+                }
+                    break;
+
+                case 1: //update Glossary
+                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
+                        GlossaryScreen.initButtons();
+                    break;
             }
+
         });
         ctx.get().setPacketHandled(true);
     }
