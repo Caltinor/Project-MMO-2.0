@@ -317,6 +317,7 @@
 	"pmmo.disbandedParty": "After you left, the party was removed due to no longer having any members",
 	"pmmo.partyMemberListEntry": "%1$s %2$s %3$s%%",
 	"pmmo.partyTotalXpGained": "Party Total Xp Gained: %1$s",
+	"pmmo.partyXpBonus": "Party Xp Bonus: %1$s%%",
 	"pmmo.thePartyIsFull": "The party is full",
 	"pmmo.yourPartyIsFull": "Your party is full"
 }

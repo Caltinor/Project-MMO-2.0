@@ -6,6 +6,7 @@ import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
@@ -46,8 +47,6 @@ public class JsonConfig
     private static final Effect invalidEffect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
     private static final Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
     public static final Set<JType> jTypes2 = new HashSet<>();
-
-//    private static Entity invalidEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
 
     public static void init()
     {
@@ -269,64 +268,64 @@ public class JsonConfig
     private static void processRawData()
     {
         if( jTypes.contains( JType.REQ_WEAR ) )
-            updateDataSkills( JType.REQ_WEAR  );
+            updateDataSkills( JType.REQ_WEAR, false );
 
         if( jTypes.contains( JType.REQ_TOOL ) )
-            updateDataSkills( JType.REQ_TOOL );
+            updateDataSkills( JType.REQ_TOOL, false );
 
         if( jTypes.contains( JType.REQ_WEAPON ) )
-            updateDataSkills( JType.REQ_WEAPON );
+            updateDataSkills( JType.REQ_WEAPON, false );
 
         if( jTypes.contains( JType.REQ_USE ) )
-            updateDataSkills( JType.REQ_USE );
+            updateDataSkills( JType.REQ_USE, false );
 
         if( jTypes.contains( JType.REQ_PLACE ) )
-            updateDataSkills( JType.REQ_PLACE );
+            updateDataSkills( JType.REQ_PLACE, false );
 
         if( jTypes.contains( JType.REQ_BREAK ) )
-            updateDataSkills( JType.REQ_BREAK );
+            updateDataSkills( JType.REQ_BREAK, false );
 
         if( jTypes.contains( JType.REQ_BIOME ) )
-            updateDataSkills( JType.REQ_BIOME );
+            updateDataSkills( JType.REQ_BIOME, false );
 
         if( jTypes.contains( JType.REQ_KILL ) )
-            updateDataSkills( JType.REQ_KILL );
+            updateDataSkills( JType.REQ_KILL, false );
 
         if( jTypes.contains( JType.REQ_CRAFT ) )
-            updateDataSkills( JType.REQ_CRAFT );
+            updateDataSkills( JType.REQ_CRAFT, false );
 
         if( jTypes.contains( JType.XP_VALUE_GENERAL ) )
-            updateDataSkills( JType.XP_VALUE_GENERAL );
+            updateDataSkills( JType.XP_VALUE_GENERAL, false );
 
         if( jTypes.contains( JType.XP_VALUE_BREAK ) )
-            updateDataSkills( JType.XP_VALUE_BREAK );
+            updateDataSkills( JType.XP_VALUE_BREAK, false );
 
         if( jTypes.contains( JType.XP_VALUE_CRAFT ) )
-            updateDataSkills( JType.XP_VALUE_CRAFT );
+            updateDataSkills( JType.XP_VALUE_CRAFT, false );
 
         if( jTypes.contains( JType.XP_VALUE_BREED ) )
-            updateDataSkills( JType.XP_VALUE_BREED );
+            updateDataSkills( JType.XP_VALUE_BREED, false );
 
         if( jTypes.contains( JType.XP_VALUE_TAME ) )
-            updateDataSkills( JType.XP_VALUE_TAME );
+            updateDataSkills( JType.XP_VALUE_TAME, false );
 
         if( jTypes.contains( JType.XP_VALUE_SMELT ) )
-            updateDataSkills( JType.XP_VALUE_SMELT );
+            updateDataSkills( JType.XP_VALUE_SMELT, false );
 
         if( jTypes.contains( JType.XP_VALUE_COOK ) )
-            updateDataSkills( JType.XP_VALUE_COOK );
+            updateDataSkills( JType.XP_VALUE_COOK, false );
 
         if( jTypes.contains( JType.XP_VALUE_KILL ) )
-            updateDataSkills( JType.XP_VALUE_KILL );
+            updateDataSkills( JType.XP_VALUE_KILL, false );
 
         if( jTypes.contains( JType.XP_VALUE_BREW ) )
-            updateDataSkills( JType.XP_VALUE_BREW );
+            updateDataSkills( JType.XP_VALUE_BREW, false );
 
         if( jTypes.contains( JType.XP_VALUE_GROW ) )
-            updateDataSkills( JType.XP_VALUE_GROW );
+            updateDataSkills( JType.XP_VALUE_GROW, false );
 
         if( jTypes.contains( JType.XP_VALUE_TRIGGER ) )
-            updateDataSkills( JType.XP_VALUE_TRIGGER );
+            updateDataSkills( JType.XP_VALUE_TRIGGER, true );
 
         if( jTypes.contains( JType.INFO_ORE ) )
             updateDataExtra( rawData.get( JType.INFO_ORE ), localData.get( JType.INFO_ORE ) );
@@ -356,13 +355,13 @@ public class JsonConfig
             updateDataAttributes( rawData.get( JType.BIOME_MOB_MULTIPLIER ), localData.get( JType.BIOME_MOB_MULTIPLIER ) );
 
         if( jTypes.contains( JType.XP_BONUS_BIOME ) )
-            updateDataSkills( JType.XP_BONUS_BIOME );
+            updateDataSkills( JType.XP_BONUS_BIOME, false );
 
         if( jTypes.contains( JType.XP_BONUS_HELD ) )
-            updateDataSkills( JType.XP_BONUS_HELD );
+            updateDataSkills( JType.XP_BONUS_HELD, false );
 
         if( jTypes.contains( JType.XP_BONUS_WORN ) )
-            updateDataSkills( JType.XP_BONUS_WORN );
+            updateDataSkills( JType.XP_BONUS_WORN, false );
 
         if( jTypes.contains( JType.SALVAGE ) )
             updateDataSalvage( rawData2.get( JType.SALVAGE ), localData2.get( JType.SALVAGE ) );
@@ -392,10 +391,10 @@ public class JsonConfig
             updateDataVein( rawData.get( JType.VEIN_BLACKLIST ), localData.get( JType.VEIN_BLACKLIST ) );
 
         if( jTypes.contains(  JType.XP_BONUS_DIMENSION ) )
-            updateDataSkills( JType.XP_BONUS_DIMENSION );
+            updateDataSkills( JType.XP_BONUS_DIMENSION, true );
 
         if( jTypes.contains(  JType.XP_MULTIPLIER_DIMENSION ) )
-            updateDataSkills( JType.XP_MULTIPLIER_DIMENSION );
+            updateDataSkills( JType.XP_MULTIPLIER_DIMENSION, true );
     }
 
     private static void createData( File dataFile, String fileName )
@@ -453,7 +452,7 @@ public class JsonConfig
         return anyValidEffects;
     }
 
-    private static void updateDataSkills( JType jType )
+    private static void updateDataSkills( JType jType, boolean ignoreValidCheck )
     {
         Map<String, Map<String, Double>> input = rawData.get( jType );
         Map<String, Map<String, Double>> output = localData.get( jType );
@@ -461,23 +460,26 @@ public class JsonConfig
         LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
-            if( XP.getItem( element.getKey() ).equals( Items.AIR ) )
-                continue;   //skip items that don't exist in current modlist
-            if( checkValidSkills( element.getValue() ) )
+            if( ignoreValidCheck || !XP.getItem( element.getKey() ).equals( Items.AIR ) || validEntity( element.getKey() ) || validBiome( element.getKey() ) ) //skip items that don't exist in current modlist
             {
-                if(  !output.containsKey( element.getKey() ) )
-                    output.put( element.getKey(), new HashMap<>() );
-
-                for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
+                if( checkValidSkills( element.getValue() ) )
                 {
-                    if( Skill.getInt( entry.getKey() ) != 0 )
-                        output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
-                    else
-                        LOGGER.error( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
+                    if(  !output.containsKey( element.getKey() ) )
+                        output.put( element.getKey(), new HashMap<>() );
+
+                    for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
+                    {
+                        if( Skill.getInt( entry.getKey() ) != 0 )
+                            output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
+                        else
+                            LOGGER.error( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
+                    }
                 }
+                else
+                    LOGGER.error( "No valid skills, cannot add " + element.getKey() );
             }
             else
-                LOGGER.error( "No valid skills, cannot add " + element.getKey() );
+                LOGGER.error( "Inexistant key, cannot add " + element.getKey() );
         };
     }
 
@@ -1062,5 +1064,15 @@ public class JsonConfig
             else
                 LOGGER.debug( "Inexistant From Item " + inputSalvageFromItemEntry.getKey() + " in Salvage" );
         }
+    }
+
+    public static boolean validEntity( String regKey )
+    {
+        return ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) );
+    }
+
+    public static boolean validBiome( String regKey )
+    {
+        return ForgeRegistries.BIOMES.containsKey( XP.getResLoc( regKey ) );
     }
 }

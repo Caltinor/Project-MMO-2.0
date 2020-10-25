@@ -15,15 +15,25 @@ public class BreakSpeedHandler
         PlayerEntity player = event.getPlayer();
 
         String skill = XP.getSkill( event.getState().getMaterial() ).name().toLowerCase();
-        double speedBonus = 0;
-
+        double speedBonus;
         int toolGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL );
+        boolean reqMet = XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK );
 
-
-        if( !XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK ) )
+        if( !reqMet )
+        {
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( event.getState().getBlock().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+            event.setCanceled( true );
+            return;
+        }
         else if( toolGap > 0 )
+        {
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+            if( Config.getConfig( "strictReqTool" ) == 1 )
+            {
+                event.setCanceled( true );
+                return;
+            }
+        }
 
         int startLevel = Skill.getSkill( skill ).getLevel( player );
 

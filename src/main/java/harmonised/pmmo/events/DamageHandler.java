@@ -122,14 +122,21 @@ public class DamageHandler
                 {
                     int weaponGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_WEAPON );
                     if( weaponGap > 0 )
+                    {
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                        if( Config.forgeConfig.strictReqWeapon.get() )
+                        {
+                            event.setCanceled( true );
+                            return;
+                        }
+                    }
 
-                    int slayerGap = 0;
+                    int killGap = 0;
 
                     if( target.getEntityString() != null )
                     {
-                        slayerGap = XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), JType.REQ_KILL );
-                        if( slayerGap > 0 )
+                        killGap = XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), JType.REQ_KILL );
+                        if( killGap > 0 )
                         {
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
@@ -144,9 +151,14 @@ public class DamageHandler
                                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
                             }
                         }
+                        if( Config.forgeConfig.strictReqKill.get() )
+                        {
+                            event.setCanceled( true );
+                            return;
+                        }
                     }
 
-                    event.setAmount( event.getAmount() / (weaponGap + 1) / (slayerGap + 1) );
+                    event.setAmount( event.getAmount() / (weaponGap + 1) / (killGap + 1) );
                     damage = event.getAmount();
 
                     float amount = 0;
