@@ -61,7 +61,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static double maxXp;
 	private static XpDrop xpDrop;
 	private static long lastBonusUpdate = System.nanoTime(), lastVeinBlockUpdate = System.nanoTime();
-	private static double itemBoost, biomeBoost, dimensionBoost, dimensionMultiplier, multiplier;
+	private static double itemBoost, biomeBoost, dimensionBoost, playerXpBoost, dimensionMultiplier, multiplier;
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
 	private static BlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
@@ -228,7 +228,7 @@ public class XPOverlayGUI extends AbstractGui
 				if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
 				{
 					aSkill = skills.get( xpDrop.skill );
-					
+
 					if( !xpDrop.skip )
 						skill = xpDrop.skill;
 
@@ -465,11 +465,12 @@ public class XPOverlayGUI extends AbstractGui
 					itemBoost = XP.getItemBoost( player, tempSkill );
 					biomeBoost = XP.getBiomeBoost( player, tempSkill );
 					dimensionBoost = XP.getDimensionBoost( player, tempSkill );
+					playerXpBoost = Config.getPlayerXpBoost( player, tempSkill );
+
 //					multiplier = ( XP.getMultiplier(  player, tempSkill ) * 100 ) - 100;
 
-					if( itemBoost + biomeBoost >= -100 )
-						skills.get( tempSkill ).bonus = itemBoost + biomeBoost + dimensionBoost;
-					else
+					skills.get( tempSkill ).bonus = itemBoost + biomeBoost + dimensionBoost + playerXpBoost;
+					if( skills.get( tempSkill ).bonus <= -100 )
 						skills.get( tempSkill ).bonus = -100;
 				}
 				lastBonusUpdate = System.nanoTime();
@@ -701,7 +702,7 @@ public class XPOverlayGUI extends AbstractGui
 //			matrixStackIn.pop();
 //		}
 //	}
-	
+
 	public static void sendLvlUp( int level, Skill skill )
 	{
 		player = Minecraft.getInstance().player;
@@ -775,7 +776,7 @@ public class XPOverlayGUI extends AbstractGui
 
 		NetworkHandler.sendToServer( new MessageLevelUp( skill.getValue(), level ) );
 	}
-	
+
 	public static void makeXpDrop( double xp, Skill skillIn, int cooldown, double gainedXp, boolean skip )
 	{
 		xpDropWasStacked = false;
@@ -785,9 +786,9 @@ public class XPOverlayGUI extends AbstractGui
 
 		if( skills.get( skillIn ) == null )				//Handle client xp tracker
 			skills.put( skillIn, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
-		
+
 		aSkill = skills.get( skillIn );
-		
+
 		if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
 		{
 			aSkill.pos = XP.levelAtXpDecimal( xp );
@@ -860,7 +861,7 @@ public class XPOverlayGUI extends AbstractGui
 				xpGap = fontRenderer.getStringWidth( DP.dprefix( skills.get( thisSkill ).goalXp ) );
 		});
 	}
-	
+
 	public static void clearXP()
 	{
 		skills = new HashMap<>();

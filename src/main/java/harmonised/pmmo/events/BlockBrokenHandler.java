@@ -5,6 +5,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.XP;
@@ -54,6 +55,10 @@ public class BlockBrokenHandler
         Block block = blockState.getBlock();
         World world = (World) event.getWorld();
         Material material = event.getState().getMaterial();
+
+        Map<Skill, Double> test = new HashMap<>();
+        test.put( Skill.WOODCUTTING, -1000D );
+        PmmoSavedData.get().setPlayerXpBoost( player.getUniqueID(), test );
 
         Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
         boolean passedBreakReq = true;

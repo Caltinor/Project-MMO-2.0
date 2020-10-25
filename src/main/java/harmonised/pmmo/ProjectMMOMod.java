@@ -75,7 +75,6 @@ public class ProjectMMOMod
 
     private void serverAboutToStart( FMLServerAboutToStartEvent event )
     {
-        PmmoSavedData.server = event.getServer();
         ChunkDataHandler.init();
     }
 
@@ -86,6 +85,7 @@ public class ProjectMMOMod
 
     private void serverStart( FMLServerStartingEvent event )
     {
+        PmmoSavedData.init( event.getServer() );
         Config.initServer();
         WorldTickHandler.refreshVein();
         AttributeHandler.init();

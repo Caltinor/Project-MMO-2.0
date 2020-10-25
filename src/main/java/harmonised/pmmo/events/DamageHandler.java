@@ -5,9 +5,12 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.party.Party;
+import harmonised.pmmo.party.PartyMemberInfo;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,18 +29,32 @@ public class DamageHandler
 {
     public static void handleDamage( LivingDamageEvent event )
     {
-        if( !(event.getEntityLiving() instanceof FakePlayer || event.getEntity() instanceof FakePlayer) )
+        if( !(event.getEntity() instanceof FakePlayer) )
         {
             float damage = event.getAmount();
             float startDmg = damage;
             LivingEntity target = event.getEntityLiving();
+            Entity source = event.getSource().getTrueSource();
             if( target instanceof ServerPlayerEntity )		//player hurt
             {
                 ServerPlayerEntity player = (ServerPlayerEntity) target;
                 double agilityXp = 0;
-                double enduranceXp = 0;
+                double enduranceXp;
                 boolean hideEndurance = false;
+///////////////////////////////////////////////////////////////////////PARTY//////////////////////////////////////////////////////////////////////////////////////////
+                if( source instanceof ServerPlayerEntity && !(source instanceof FakePlayer) )
+                {
+                    ServerPlayerEntity sourcePlayer = (ServerPlayerEntity) source;
+                    Party party = PmmoSavedData.get().getParty( player.getUniqueID() );
+                    if( party != null )
+                    {
+                        PartyMemberInfo sourceMemberInfo = party.getMemberInfo( sourcePlayer.getUniqueID() );
+                        double friendlyFireMultiplier = Config.forgeConfig.partyFriendlyFireAmount.get() / 100D;
 
+                        if( sourceMemberInfo != null )
+                            damage *= friendlyFireMultiplier;
+                    }
+                }
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
                 int enduranceLevel = Skill.ENDURANCE.getLevel( player );
                 double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
@@ -57,7 +74,7 @@ public class DamageHandler
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
                 if( event.getSource().getDamageType().equals( "fall" ) )
                 {
-                    double award = startDmg;
+                    double award;
 //					float savedExtra = 0;
                     int agilityLevel = Skill.AGILITY.getLevel( player );
                     int saved = 0;

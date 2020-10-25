@@ -36,7 +36,7 @@ public class PlayerConnectedHandler
             boolean showWelcome = Config.forgeConfig.showWelcome.get();
             boolean showPatreonWelcome = Config.forgeConfig.showPatreonWelcome.get();
 
-            PmmoSavedData.get( player ).setName( player.getDisplayName().getString(), uuid );
+            PmmoSavedData.get().setName( player.getDisplayName().getString(), uuid );
             migratePlayerDataToWorldSavedData( player );
             XP.syncPlayer( player );
             awardScheduledXp( uuid );
@@ -45,7 +45,7 @@ public class PlayerConnectedHandler
             {
                 player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
                 {
-                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).setStyle( XP.textStyle.get( "blue" ) ), false );
+                    thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).setStyle( XP.textStyle.get( "cyan" ) ), false );
                 });
             }
             else if( showPatreonWelcome )
@@ -109,7 +109,7 @@ public class PlayerConnectedHandler
 
             player.getPersistentData().remove( Reference.MOD_ID );
             LOGGER.info( "Migrated Player " + player.getDisplayName().getString() + " Done" );
-            PmmoSavedData.get( player ).setDirty( true );
+            PmmoSavedData.get().setDirty( true );
         }
     }
 

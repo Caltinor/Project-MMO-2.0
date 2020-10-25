@@ -7,7 +7,7 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -21,12 +21,14 @@ public class PmmoSavedData extends WorldSavedData
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static MinecraftServer server;
+    private static PmmoSavedData pmmoSavedData;
+    private static MinecraftServer server;
     private static String NAME = Reference.MOD_ID;
     private Map<UUID, Map<Skill, Double>> xp = new HashMap<>();
     private Map<UUID, Map<Skill, Double>> scheduledXp = new HashMap<>();
     private Map<UUID, Map<String, Double>> abilities = new HashMap<>();
     private Map<UUID, Map<String, Double>> preferences = new HashMap<>();
+    private Map<UUID, Map<Skill, Double>> xpBoost = new HashMap<>();
     private Set<Party> parties = new HashSet<>();
     private Map<UUID, String> name = new HashMap<>();
     public PmmoSavedData()
@@ -71,6 +73,7 @@ public class PmmoSavedData extends WorldSavedData
                 scheduledXp = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "scheduledXp" ) );
                 abilities = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "abilities" ) );
                 preferences = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "preferences" ) );
+                xpBoost = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xpBoost" ) );
             }
         }
 
@@ -113,6 +116,7 @@ public class PmmoSavedData extends WorldSavedData
             playerMap.put( "scheduledXp", NBTHelper.mapSkillToNbt( scheduledXp.get( entry.getKey() ) ) );
             playerMap.put( "abilities", NBTHelper.mapStringToNbt( abilities.get( entry.getKey() ) ) );
             playerMap.put( "preferences", NBTHelper.mapStringToNbt( preferences.get( entry.getKey() ) ) );
+            playerMap.put( "xpBoost", NBTHelper.mapSkillToNbt( xpBoost.get( entry.getKey() ) ) );
 
             CompoundNBT playerTag = NBTHelper.mapStringNbtToNbt( playerMap );
             playerTag.putString( "name", name.get( entry.getKey() ) );
@@ -176,6 +180,13 @@ public class PmmoSavedData extends WorldSavedData
         if( !preferences.containsKey( uuid ) )
             preferences.put( uuid, new HashMap<>() );
         return preferences.get( uuid );
+    }
+
+    public Map<Skill, Double> getXpBoostMap( UUID uuid )
+    {
+        if( !xpBoost.containsKey( uuid ) )
+            xpBoost.put( uuid, new HashMap<>() );
+        return xpBoost.get( uuid );
     }
 
     public double getXp( Skill skill, UUID uuid )
@@ -295,22 +306,22 @@ public class PmmoSavedData extends WorldSavedData
     }
 
     public int addToParty( UUID ownerUuid, UUID newMemberUuid )
-{
-    Party ownerParty = getParty( ownerUuid );
-    Party newMemberParty = getParty( newMemberUuid );
-    if( ownerParty == null )
-        return -1;  //-1 = owner does not have a party
-    else if( newMemberParty != null )
-        return -2;  //-2 = new member is already in a party
-    else if( ownerParty.getMembersCount() + 1 > Party.getMaxPartyMembers() )
-        return -4;  //-4 = the party is full
-    else
     {
-        ownerParty.addMember( newMemberUuid );
-        this.markDirty();
-        return 0;   //0 = member has been added
+        Party ownerParty = getParty( ownerUuid );
+        Party newMemberParty = getParty( newMemberUuid );
+        if( ownerParty == null )
+            return -1;  //-1 = owner does not have a party
+        else if( newMemberParty != null )
+            return -2;  //-2 = new member is already in a party
+        else if( ownerParty.getMembersCount() + 1 > Party.getMaxPartyMembers() )
+            return -4;  //-4 = the party is full
+        else
+        {
+            ownerParty.addMember( newMemberUuid );
+            this.markDirty();
+            return 0;   //0 = member has been added
+        }
     }
-}
 
     public int removeFromParty( UUID uuid )
     {
@@ -331,16 +342,57 @@ public class PmmoSavedData extends WorldSavedData
         }
     }
 
-    public static PmmoSavedData get()
+//    public static PmmoSavedData get()
+//    {
+//        return server.getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+//    }
+//
+//    public static PmmoSavedData get( PlayerEntity player )
+//    {
+//        if( player.getServer() == null )
+//            LOGGER.error( "FATAL PMMO ERROR: SERVER IS NULL. Could not get PmmoSavedData" );
+//
+//        return player.getServer().getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+//    }
+
+    public static void init( MinecraftServer server )
     {
-        return server.getWorld( World.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+        PmmoSavedData.server = server;
+        PmmoSavedData.pmmoSavedData = server.getWorld( World.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
     }
 
-    public static PmmoSavedData get( PlayerEntity player )
+    public static PmmoSavedData get()
     {
-        if( player.getServer() == null )
-            LOGGER.error( "FATAL PMMO ERROR: SERVER IS NULL. Could not get PmmoSavedData" );
+        return PmmoSavedData.pmmoSavedData;
+    }
 
-        return player.getServer().getWorld( World.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+    public static MinecraftServer getServer()
+    {
+        return PmmoSavedData.server;
+    }
+
+    public double getPlayerXpBoost( UUID uuid, Skill skill )
+    {
+        if( !this.xpBoost.containsKey( uuid ) )
+            this.xpBoost.put( uuid, new HashMap<>() );
+        return xpBoost.get( uuid ).getOrDefault( skill, 0D );
+    }
+
+    public void setPlayerXpBoost( UUID uuid, Map<Skill, Double> newXpBoosts )
+    {
+        for( Map.Entry<Skill, Double> entry : newXpBoosts.entrySet() )
+        {
+            setPlayerXpBoost( uuid, entry.getKey(), entry.getValue() );
+        }
+        ServerPlayerEntity player = XP.getPlayerByUUID( uuid, server );
+        if( player != null )
+            XP.syncPlayerXpBoost( player );
+    }
+
+    private void setPlayerXpBoost(UUID uuid, Skill skill, Double xpBoost )
+    {
+        if( !this.xpBoost.containsKey( uuid ) )
+            this.xpBoost.put( uuid, new HashMap<>() );
+        this.xpBoost.get( uuid ).put( skill, xpBoost );
     }
 }

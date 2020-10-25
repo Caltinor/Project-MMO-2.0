@@ -116,6 +116,13 @@ public class MessageUpdatePlayerNBT
                         NBTHelper.addData4( JsonConfig.data2, NBTHelper.nbtToData4( packet.reqPackage ) );
                     break;
 
+                case 6:
+                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
+                        ClientHandler.updateNBTTag( packet );
+                    else
+                        LOGGER.error( "XP BOOST PACKET SENT TO SERVER" );
+                    break;
+
                 default:
                     LOGGER.error( "WRONG SYNC ID AT NBT UPDATE PACKET", packet );
                     break;

@@ -549,7 +549,7 @@ public class XP
 
 	public static ServerPlayerEntity getPlayerByUUID( UUID uuid )
 	{
-		return getPlayerByUUID( uuid, PmmoSavedData.server );
+		return getPlayerByUUID( uuid, PmmoSavedData.getServer() );
 	}
 
 	public static ServerPlayerEntity getPlayerByUUID( UUID uuid, MinecraftServer server )
@@ -594,6 +594,11 @@ public class XP
 		syncPlayerData4( player );
 		NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 1 ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
+	}
+
+	public static void syncPlayerXpBoost( PlayerEntity player )
+	{
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapSkillToNbt( Config.getXpBoostMap( player ) ), 6 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayerData3( PlayerEntity player )
@@ -1079,14 +1084,15 @@ public class XP
 		double itemBoost = getItemBoost( player, skill );
 		double biomeBoost = getBiomeBoost( player, skill );
 		double dimensionBoost = getDimensionBoost( player, skill );
-		double additiveMultiplier = 1 + (itemBoost + biomeBoost + dimensionBoost + globalBoost) / 100;
+		double playerBoost = PmmoSavedData.get().getPlayerXpBoost( player.getUniqueID(), skill );
+		double additiveMultiplier = 1 + (itemBoost + biomeBoost + dimensionBoost + globalBoost + playerBoost ) / 100;
 
 		multiplier *= globalMultiplier;
 		multiplier *= dimensionMultiplier;
 		multiplier *= difficultyMultiplier;
 		multiplier *= additiveMultiplier;
 
-		return multiplier;
+		return Math.max( 0, multiplier );
 	}
 
 	public static double getHorizontalDistance( Vector3d p1, Vector3d p2 )
@@ -1138,7 +1144,7 @@ public class XP
 			return;
 		}
 
-		PmmoSavedData pmmoSavedData = PmmoSavedData.get( player );
+		PmmoSavedData pmmoSavedData = PmmoSavedData.get();
 		String skillName = skill.name().toLowerCase();
 		UUID uuid = player.getUniqueID();
 
@@ -1164,7 +1170,7 @@ public class XP
 			}
 		}
 
-		if( amount == 0 )
+		if( amount <= 0 )
 			return;
 
 		String playerName = player.getDisplayName().getString();

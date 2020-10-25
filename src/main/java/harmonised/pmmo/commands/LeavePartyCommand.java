@@ -19,7 +19,7 @@ public class LeavePartyCommand
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         UUID uuid = player.getUniqueID();
-        PmmoSavedData pmmoSavedData = PmmoSavedData.get( player );
+        PmmoSavedData pmmoSavedData = PmmoSavedData.get();
         Party party = pmmoSavedData.getParty( uuid );
         int result = pmmoSavedData.removeFromParty( uuid );
         switch( result )

@@ -23,7 +23,7 @@ public class PartyPendingSystem
 
     public static int createInvitation( ServerPlayerEntity invitee, UUID ownerUUID )
     {
-        PmmoSavedData pmmoSavedData = PmmoSavedData.get( invitee );
+        PmmoSavedData pmmoSavedData = PmmoSavedData.get();
         Party ownerParty = pmmoSavedData.getParty( ownerUUID );
         UUID inviteeUUID = invitee.getUniqueID();
         if( pendingInvitations.containsKey( inviteeUUID ) && pendingInvitations.get( inviteeUUID ).equals( ownerUUID ) )
@@ -52,7 +52,7 @@ public class PartyPendingSystem
             invitationDates.remove( inviteeUUID );
             if( System.currentTimeMillis() - createdAgo <= expirationTime )
             {
-                PmmoSavedData pmmoSavedData = PmmoSavedData.get( invitee );
+                PmmoSavedData pmmoSavedData = PmmoSavedData.get();
                 result = pmmoSavedData.addToParty( ownerUUID, inviteeUUID );
             }
         }
