@@ -4,6 +4,7 @@ import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
@@ -1329,22 +1330,22 @@ public class Config
         return xpBoost;
     }
 
-    public static void setPlayerXpBoost( PlayerEntity player, String xpBoostKey, Map<Skill, Double> newXpBoosts )
+    public static void setPlayerXpBoost( ServerPlayerEntity player, String xpBoostKey, Map<Skill, Double> newXpBoosts )
     {
         PmmoSavedData.get().setPlayerXpBoost( player.getUniqueID(), xpBoostKey, newXpBoosts );
     }
 
-    public void removePlayerXpBoost( UUID playerUUID, String xpBoostKey )
+    public void removePlayerXpBoost( ServerPlayerEntity player, String xpBoostKey )
     {
-        PmmoSavedData.get().removePlayerXpBoost( playerUUID, xpBoostKey );
+        PmmoSavedData.get().removePlayerXpBoost( player.getUniqueID(), xpBoostKey );
     }
 
-    public void removeAllPlayerXpBoosts( UUID playerUUID )  //WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
+    public void removeAllPlayerXpBoosts( ServerPlayerEntity player )  //WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
     {
-        PmmoSavedData.get().removeAllPlayerXpBoosts( playerUUID );
+        PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUniqueID() );
     }
 
-    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<Skill, Double>> newBoosts )
+    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<Skill, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
     {   //SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
         if( player.world.isRemote() )
             xpBoosts = newBoosts;
