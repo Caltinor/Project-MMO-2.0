@@ -733,8 +733,7 @@ public class XP
 
 			for( Map.Entry<String, Double> entry : fullMap.get( registryName ).entrySet() )
 			{
-				if( entry.getValue() instanceof Double )
-					map.put( entry.getKey(), entry.getValue() );
+				map.put( entry.getKey(), entry.getValue() );
 			}
 		}
 
