@@ -54,7 +54,6 @@ public class BlockBrokenHandler
         Block block = blockState.getBlock();
         World world = (World) event.getWorld();
         Material material = event.getState().getMaterial();
-
         Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
         boolean passedBreakReq = true;
 

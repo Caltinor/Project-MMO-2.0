@@ -20,10 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class ClientHandler
 {
@@ -78,12 +75,7 @@ public class ClientHandler
                 break;
 
             case 6:
-                Map<Skill, Double> xpBoostMap = Config.getXpBoostMap( player );
-                for( String tag : keySet )
-                {
-                    if( !Skill.getSkill( tag ).equals( Skill.INVALID_SKILL ) )
-                        xpBoostMap.put( Skill.getSkill( tag ), newPackage.getDouble( tag ) );
-                }
+                Config.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringSkill( newPackage ) );
                 break;
 
             default:

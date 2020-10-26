@@ -23,7 +23,7 @@ public class Config
     //Client only, too lazy to put it somewhere better
     private static final Map<String, Double> abilities = new HashMap<>();
     private static Map<String, Double> preferences = new HashMap<>();
-    private static Map<Skill, Double> xpBoost = new HashMap<>();
+    private static Map<String, Map<Skill, Double>> xpBoosts = new HashMap<>();
 
     public static ConfigImplementation forgeConfig;
 
@@ -1296,26 +1296,59 @@ public class Config
             return PmmoSavedData.get().getAbilitiesMap( player.getUniqueID() );
     }
 
-    public static double getPlayerXpBoost( PlayerEntity player, Skill skill )
-    {
-        return getXpBoostMap( player ).getOrDefault( skill, 0D );
-    }
-
-    public static Map<Skill, Double> getXpBoostMap( PlayerEntity player )
-    {
-        if( player.world.isRemote() )
-            return xpBoost;
-        else
-            return PmmoSavedData.get().getXpBoostMap( player.getUniqueID() );
-    }
-
-    public static void setPlayerXpBoost( UUID uuid, Map<Skill, Double> newXpBoosts )
-    {
-        PmmoSavedData.get().setPlayerXpBoost( uuid, newXpBoosts );
-    }
-
     public static void setPreferencesMap( Map<String, Double> newPreferencesMap )
     {
         preferences = newPreferencesMap;
+    }
+
+    public static Map<String, Map<Skill, Double>> getXpBoostsMap( PlayerEntity player )
+    {
+        if( player.world.isRemote() )
+            return xpBoosts;
+        else
+            return PmmoSavedData.get().getPlayerXpBoostsMap( player.getUniqueID() );
+    }
+
+    public static Map<Skill, Double> getXpBoostMap( PlayerEntity player, UUID xpBoostUUID )
+    {
+        if( player.world.isRemote() )
+            return xpBoosts.getOrDefault( xpBoostUUID, new HashMap<>() );
+        else
+            return PmmoSavedData.get().getPlayerXpBoostMap( player.getUniqueID(), xpBoostUUID );
+    }
+
+    public static double getPlayerXpBoost( PlayerEntity player, Skill skill )
+    {
+        double xpBoost = 0;
+
+        for( Map.Entry<String, Map<Skill, Double>> entry : getXpBoostsMap( player ).entrySet() )
+        {
+            xpBoost += entry.getValue().getOrDefault( skill, 0D );
+        }
+
+        return xpBoost;
+    }
+
+    public static void setPlayerXpBoost( PlayerEntity player, String xpBoostKey, Map<Skill, Double> newXpBoosts )
+    {
+        PmmoSavedData.get().setPlayerXpBoost( player.getUniqueID(), xpBoostKey, newXpBoosts );
+    }
+
+    public void removePlayerXpBoost( UUID playerUUID, String xpBoostKey )
+    {
+        PmmoSavedData.get().removePlayerXpBoost( playerUUID, xpBoostKey );
+    }
+
+    public void removeAllPlayerXpBoosts( UUID playerUUID )  //WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
+    {
+        PmmoSavedData.get().removeAllPlayerXpBoosts( playerUUID );
+    }
+
+    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<Skill, Double>> newBoosts )
+    {   //SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
+        if( player.world.isRemote() )
+            xpBoosts = newBoosts;
+        else
+            PmmoSavedData.get().setPlayerXpBoostsMaps( player.getUniqueID(), newBoosts );
     }
 }
