@@ -598,7 +598,7 @@ public class XP
 
 	public static void syncPlayerXpBoost( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapSkillToNbt( Config.getXpBoostMap( player ) ), 6 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapSkillToNbt( Config.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayerData3( PlayerEntity player )

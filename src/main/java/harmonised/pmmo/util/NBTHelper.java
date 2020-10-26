@@ -50,11 +50,20 @@ public class NBTHelper
         return nbt;
     }
 
-    public static CompoundNBT mapSkillToNbt(Map<Skill, Double> map )
+    public static CompoundNBT mapStringMapSkillToNbt(Map<String, Map<Skill, Double>> map )
     {
-        if( map == null )
-            return new CompoundNBT();
+        CompoundNBT nbt = new CompoundNBT();
 
+        for( Map.Entry<String, Map<Skill, Double>> entry : map.entrySet() )
+        {
+            nbt.put( entry.getKey(), mapSkillToNbt( entry.getValue() ) );
+        }
+
+        return nbt;
+    }
+
+    public static CompoundNBT mapSkillToNbt( Map<Skill, Double> map )
+    {
         CompoundNBT nbt = new CompoundNBT();
 
         for( Map.Entry<Skill, Double> entry : map.entrySet() )
@@ -113,6 +122,36 @@ public class NBTHelper
         return outMap;
     }
 
+    public static Map<String, Map<Skill, Double>> nbtToMapStringSkill( CompoundNBT inData )
+    {
+        Map<String, Map<Skill, Double>> outMap = new HashMap<>();
+
+        for( String key : inData.keySet() )
+        {
+            outMap.put( key, nbtToMapSkill( inData.getCompound( key ) ) );
+        }
+
+        return outMap;
+    }
+
+    public static Map<UUID, Map<String, Map<Skill, Double>>> nbtToMapStringMapUuidSkill(CompoundNBT inData )
+    {
+        Map<UUID, Map<String, Map<Skill, Double>>> outMap = new HashMap<>();
+
+        for( String playerUUIDKey : inData.keySet() )
+        {
+            UUID playerUUID = UUID.fromString( playerUUIDKey );
+            outMap.put( playerUUID, new HashMap<>() );
+
+            for( String xpBoostKey : inData.getCompound( playerUUIDKey ).keySet() )
+            {
+                outMap.get( playerUUID ).put( xpBoostKey, nbtToMapSkill( inData.getCompound( playerUUIDKey ).getCompound( xpBoostKey ) ) );
+            }
+        }
+
+        return outMap;
+    }
+
     public static CompoundNBT mapStringNbtToNbt( Map<String, CompoundNBT> inMap )
     {
         CompoundNBT outNbt = new CompoundNBT();
@@ -139,7 +178,7 @@ public class NBTHelper
 
         return outData;
     }
-    
+
     public static Map<JType, Map<String, Map<String, Double>>> nbtToData3( CompoundNBT input )
     {
         Map<JType, Map<String, Map<String, Double>>> output = new HashMap<>();
@@ -157,14 +196,14 @@ public class NBTHelper
                 }
             }
         }
-        
+
         return output;
     }
 
     public static CompoundNBT data3ToNbt( Map<JType, Map<String, Map<String, Double>>> input )
     {
         CompoundNBT output = new CompoundNBT();
-        
+
         for( JType jType : input.keySet() )
         {
             output.put( jType.toString(), new CompoundNBT() );
@@ -179,7 +218,7 @@ public class NBTHelper
                 }
             }
         }
-        
+
         return output;
     }
 

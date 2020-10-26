@@ -28,7 +28,7 @@ public class PmmoSavedData extends WorldSavedData
     private Map<UUID, Map<Skill, Double>> scheduledXp = new HashMap<>();
     private Map<UUID, Map<String, Double>> abilities = new HashMap<>();
     private Map<UUID, Map<String, Double>> preferences = new HashMap<>();
-    private Map<UUID, Map<Skill, Double>> xpBoost = new HashMap<>();
+    private Map<UUID, Map<String, Map<Skill, Double>>> xpBoosts = new HashMap<>();    //playerUUID -> boostUUID -> boostMap
     private Set<Party> parties = new HashSet<>();
     private Map<UUID, String> name = new HashMap<>();
     public PmmoSavedData()
@@ -73,7 +73,7 @@ public class PmmoSavedData extends WorldSavedData
                 scheduledXp = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "scheduledXp" ) );
                 abilities = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "abilities" ) );
                 preferences = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "preferences" ) );
-                xpBoost = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xpBoost" ) );
+                xpBoosts = NBTHelper.nbtToMapStringMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xpBoost" ) );
             }
         }
 
@@ -116,7 +116,7 @@ public class PmmoSavedData extends WorldSavedData
             playerMap.put( "scheduledXp", NBTHelper.mapSkillToNbt( scheduledXp.get( entry.getKey() ) ) );
             playerMap.put( "abilities", NBTHelper.mapStringToNbt( abilities.get( entry.getKey() ) ) );
             playerMap.put( "preferences", NBTHelper.mapStringToNbt( preferences.get( entry.getKey() ) ) );
-            playerMap.put( "xpBoost", NBTHelper.mapSkillToNbt( xpBoost.get( entry.getKey() ) ) );
+            playerMap.put( "xpBoosts", NBTHelper.mapStringMapSkillToNbt( xpBoosts.get( entry.getKey() ) ) );
 
             CompoundNBT playerTag = NBTHelper.mapStringNbtToNbt( playerMap );
             playerTag.putString( "name", name.get( entry.getKey() ) );
@@ -180,13 +180,6 @@ public class PmmoSavedData extends WorldSavedData
         if( !preferences.containsKey( uuid ) )
             preferences.put( uuid, new HashMap<>() );
         return preferences.get( uuid );
-    }
-
-    public Map<Skill, Double> getXpBoostMap( UUID uuid )
-    {
-        if( !xpBoost.containsKey( uuid ) )
-            xpBoost.put( uuid, new HashMap<>() );
-        return xpBoost.get( uuid );
     }
 
     public double getXp( Skill skill, UUID uuid )
@@ -361,7 +354,7 @@ public class PmmoSavedData extends WorldSavedData
         PmmoSavedData.pmmoSavedData = server.getWorld( World.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
     }
 
-    public static PmmoSavedData get()
+    public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.
     {
         return PmmoSavedData.pmmoSavedData;
     }
@@ -371,28 +364,62 @@ public class PmmoSavedData extends WorldSavedData
         return PmmoSavedData.server;
     }
 
-    public double getPlayerXpBoost( UUID uuid, Skill skill )
+    public Map<String, Map<Skill, Double>> getPlayerXpBoostsMap( UUID playerUUID )
     {
-        if( !this.xpBoost.containsKey( uuid ) )
-            this.xpBoost.put( uuid, new HashMap<>() );
-        return xpBoost.get( uuid ).getOrDefault( skill, 0D );
+        return xpBoosts.getOrDefault( playerUUID, new HashMap<>() );
     }
 
-    public void setPlayerXpBoost( UUID uuid, Map<Skill, Double> newXpBoosts )
+    public Map<Skill, Double> getPlayerXpBoostMap( UUID playerUUID, UUID xpBoostUUID )
+    {
+        return getPlayerXpBoostsMap( playerUUID ).getOrDefault( xpBoostUUID, new HashMap<>() );
+    }
+
+    public double getPlayerXpBoost( UUID playerUUID, Skill skill )
+    {
+        double xpBoost = 0;
+
+        for( Map.Entry<String , Map<Skill, Double>> entry : getPlayerXpBoostsMap( playerUUID ).entrySet() )
+        {
+            xpBoost += entry.getValue().getOrDefault( skill, 0D );
+        }
+
+        return xpBoost;
+    }
+
+    public void setPlayerXpBoostsMaps( UUID playerUUID, Map<String, Map<Skill, Double>> newBoosts )
+    {
+        xpBoosts.put( playerUUID, newBoosts );
+    }
+
+
+    public void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Map<Skill, Double> newXpBoosts )
     {
         for( Map.Entry<Skill, Double> entry : newXpBoosts.entrySet() )
         {
-            setPlayerXpBoost( uuid, entry.getKey(), entry.getValue() );
+            setPlayerXpBoost( playerUUID, xpBoostKey, entry.getKey(), entry.getValue() );
         }
-        ServerPlayerEntity player = XP.getPlayerByUUID( uuid, server );
+        ServerPlayerEntity player = XP.getPlayerByUUID( playerUUID, server );
         if( player != null )
             XP.syncPlayerXpBoost( player );
     }
 
-    private void setPlayerXpBoost(UUID uuid, Skill skill, Double xpBoost )
+    public void removePlayerXpBoost( UUID playerUUID, String xpBoostKey )
     {
-        if( !this.xpBoost.containsKey( uuid ) )
-            this.xpBoost.put( uuid, new HashMap<>() );
-        this.xpBoost.get( uuid ).put( skill, xpBoost );
+        getPlayerXpBoostsMap( playerUUID ).remove( xpBoostKey );
+    }
+
+    public void removeAllPlayerXpBoosts( UUID playerUUID )
+    {
+        xpBoosts.remove( playerUUID );
+    }
+
+    private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Skill skill, Double xpBoost )
+    {
+        if( !this.xpBoosts.containsKey( playerUUID ) )
+            this.xpBoosts.put( playerUUID, new HashMap<>() );
+        if( !this.xpBoosts.get( playerUUID ).containsKey( xpBoostKey ) )
+            this.xpBoosts.get( playerUUID ).put( xpBoostKey, new HashMap<>() );
+
+        this.xpBoosts.get( playerUUID ).get( xpBoostKey ).put( skill, xpBoost );
     }
 }
