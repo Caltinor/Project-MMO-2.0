@@ -1345,7 +1345,7 @@ public class Config
         PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUniqueID() );
     }
 
-    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<Skill, Double>> newBoosts )
+    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<Skill, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
     {   //SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
         if( player.world.isRemote() )
             xpBoosts = newBoosts;
