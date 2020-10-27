@@ -517,5 +517,212 @@
 		"xp": 666,
 		"minCount": 1,
 		"maxCount": 1
+	},
+	"aquaculture:iron_fishing_rod":
+	{
+		"startWeight": 20,
+		"startLevel": 1,
+		"endWeight": 110,
+		"endLevel": 110,
+		"xp": 45,
+		"enchantLevelReq": 10
+	},
+	"aquaculture:gold_fishing_rod":
+	{
+		"startWeight": 10,
+		"startLevel": 1,
+		"endWeight": 120,
+		"endLevel": 120,
+		"xp": 55,
+		"enchantLevelReq": 10
+	},
+	"aquaculture:diamond_fishing_rod":
+	{
+		"startWeight": 5,
+		"startLevel": 1,
+		"endWeight": 130,
+		"endLevel": 130,
+		"xp": 65,
+		"enchantLevelReq": 10
+	},
+	"aquaculture:neptunium_fishing_rod":
+	{
+		"startWeight": 0,
+		"startLevel": 1,
+		"endWeight": 140,
+		"endLevel": 140,
+		"xp": 75,
+		"enchantLevelReq": 10
+	},
+	"aquaculture:neptunium_shovel":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"aquaculture:neptunium_pickaxe":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"aquaculture:neptunium_axe":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"aquaculture:neptunium_hoe":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"aquaculture:neptunium_helmet":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"aquaculture:neptunium_chestplate":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"aquaculture:neptunium_leggings":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"aquaculture:neptunium_boots":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"aquaculture:neptunium_bow":
+	{
+		"startWeight": 50,
+		"startLevel": 1,
+		"endWeight": 25,
+		"endLevel": 100,
+		"xp": 35,
+		"enchantLevelReq": 10
+	},
+	"aquaculture:neptunium_sword":
+	{
+		"startWeight": 0,
+		"startLevel": 90,
+		"endWeight": 4,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_helmet":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_chestplate":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_leggings":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_boots":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_shovel":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_pickaxe":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_axe":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_sword":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
+	},
+	"extendednether:netherite_hoe":
+	{
+		"startWeight": 0,
+		"startLevel": 100,
+		"endWeight": 3,
+		"endLevel": 400,
+		"xp": 350,
+		"enchantLevelReq": 120
 	}
 }

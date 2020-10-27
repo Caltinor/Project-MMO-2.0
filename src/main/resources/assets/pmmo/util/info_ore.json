@@ -58,5 +58,17 @@
 	"endreborn:end_wolframium_ore":
 	{
 		"extraChance": 1.2
+	},
+	"charm:pig_iron_ore":
+	{
+		"extraChance": 0.75
+	},
+	"scalinghealth:heart_crystal_ore":
+	{
+		"extraChance": 0.25
+	},
+	"scalinghealth:power_crystal_ore":
+	{
+		"extraChance": 0.25
 	}
 }

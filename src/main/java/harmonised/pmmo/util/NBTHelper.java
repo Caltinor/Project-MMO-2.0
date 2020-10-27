@@ -50,7 +50,7 @@ public class NBTHelper
         return nbt;
     }
 
-    public static CompoundNBT mapStringMapSkillToNbt(Map<String, Map<Skill, Double>> map )
+    public static CompoundNBT mapStringMapSkillToNbt( Map<String, Map<Skill, Double>> map )
     {
         CompoundNBT nbt = new CompoundNBT();
 

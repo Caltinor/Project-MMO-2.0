@@ -310,5 +310,17 @@
 	"biomesoplenty:mud_ball":
 	{
 		"extraChance": 1.2
+	},
+	"aquaculture:tin_can":
+	{
+		"extraChance": 15
+	},
+	"charm:nether_gold_deposit":
+	{
+		"extraChance": 0.75
+	},
+	"charm:pig_iron_ore":
+	{
+		"extraChance": 0.75
 	}
 }

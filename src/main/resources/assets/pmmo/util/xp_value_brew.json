@@ -66,5 +66,13 @@
 	"minecraft:phantom_membrane":
 	{
 		"alchemy": 17
+	},
+	"aquaculture:jellyfish":
+	{
+		"alchemy": 6
+	},
+	"aquaculture:leech":
+	{
+		"alchemy": 6
 	}
 }

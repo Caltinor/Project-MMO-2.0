@@ -1243,5 +1243,866 @@
 	{
 		"crafting": 80,
 		"smithing": 16
+	},
+	"aquaculture:fishing_line":
+	{
+		"fishing": 10
+	},
+	"aquaculture:bobber":
+	{
+		"fishing": 20
+	},
+	"aquaculture:neptunium_pickaxe":
+	{
+		"crafting": 600,
+		"smithing": 120
+	},
+	"aquaculture:neptunium_shovel":
+	{
+		"crafting": 200,
+		"smithing": 40
+	},
+	"aquaculture:neptunium_hoe":
+	{
+		"crafting": 400,
+		"smithing": 80
+	},
+	"aquaculture:neptunium_axe":
+	{
+		"crafting": 600,
+		"smithing": 120
+	},
+	"aquaculture:neptunium_helmet":
+	{
+		"crafting": 800,
+		"smithing": 200
+	},
+	"aquaculture:neptunium_chestplate":
+	{
+		"crafting": 1400,
+		"smithing": 320
+	},
+	"aquaculture:neptunium_leggings":
+	{
+		"crafting": 1200,
+		"smithing": 280
+	},
+	"aquaculture:neptunium_boots":
+	{
+		"crafting": 600,
+		"smithing": 160
+	},
+	"aquaculture:neptunium_sword":
+	{
+		"crafting": 500,
+		"smithing": 90
+	},
+	"aquaculture:wooden_fillet_knife":
+	{
+		"crafting": 1
+	},
+	"aquaculture:stone_fillet_knife":
+	{
+		"crafting": 5
+	},
+	"aquaculture:iron_fillet_knife":
+	{
+		"crafting": 10,
+		"smithing": 10
+	},
+	"aquaculture:gold_fillet_knife":
+	{
+		"crafting": 15,
+		"smithing": 10
+	},
+	"aquaculture:diamond_fillet_knife":
+	{
+		"crafting": 20
+	},
+	"aquaculture:neptunium_fillet_knife":
+	{
+		"crafting": 30,
+		"smithing": 10
+	},
+	"aquaculture:turtle_soup":
+	{
+		"cooking": 35
+	},
+	"aquaculture:sushi":
+	{
+		"cooking": 15
+	},
+	"aquaculture:iron_hook":
+	{
+		"fishing": 5
+	},
+	"aquaculture:gold_hook":
+	{
+		"fishing": 5
+	},
+	"aquaculture:diamond_hook":
+	{
+		"fishing": 10
+	},
+	"aquaculture:light_hook":
+	{
+		"fishing": 15
+	},
+	"aquaculture:heavy_hook":
+	{
+		"fishing": 15
+	},
+	"aquaculture:double_hook":
+	{
+		"fishing": 15
+	},
+	"aquaculture:redstone_hook":
+	{
+		"fishing": 15
+	},
+	"aquaculture:note_hook":
+	{
+		"fishing": 15
+	},
+	"aquaculture:nether_star_hook":
+	{
+		"fishing": 20
+	},
+	"bountifulbaubles:disintegration_tablet":
+	{
+		"crafting": 20,
+		"magic": 10
+	},
+	"bountifulbaubles:spectral_silt":
+	{
+		"crafting": 5,
+		"magic": 5
+	},
+	"extendednether:netherite_helmet":
+	{
+		"crafting": 1000,
+		"smithing": 200
+	},
+	"extendednether:netherite_chestplate":
+	{
+		"crafting": 1600,
+		"smithing": 320
+	},
+	"extendednether:netherite_leggings":
+	{
+		"crafting": 1400,
+		"smithing": 280
+	},
+	"extendednether:netherite_boots":
+	{
+		"crafting": 800,
+		"smithing": 160
+	},
+	"extendednether:netherite_pickaxe":
+	{
+		"crafting": 600,
+		"smithing": 120
+	},
+	"extendednether:netherite_shovel":
+	{
+		"crafting": 200,
+		"smithing": 40
+	},
+	"extendednether:netherite_hoe":
+	{
+		"crafting": 400,
+		"smithing": 80
+	},
+	"extendednether:netherite_axe":
+	{
+		"crafting": 600,
+		"smithing": 120
+	},
+	"extendednether:netherite_sword":
+	{
+		"crafting": 400,
+		"smithing": 80
+	},
+	"extraanvils:stone_anvil":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"extraanvils:diamond_anvil":
+	{
+		"crafting": 930,
+		"smithing": 186
+	},
+	"extraanvils:gold_anvil":
+	{
+		"crafting": 500,
+		"smithing": 100
+	},
+	"foodexpansion:jelly":
+	{
+		"cooking": 15
+	},
+	"foodexpansion:bacon_and_egg":
+	{
+		"cooking": 15
+	},
+	"foodexpansion:carrot_seed_soup":
+	{
+		"cooking": 35
+	},
+	"foodexpansion:compressed_flesh":
+	{
+		"cooking": 5
+	},
+	"foodexpansion:chocolate_bar":
+	{
+		"cooking": 20
+	},
+	"foodexpansion:spider_soup":
+	{
+		"cooking": 35
+	},
+	"foodexpansion:nether_wart_soup":
+	{
+		"cooking": 35
+	},
+	"foodexpansion:cactus_fruit":
+	{
+		"cooking": 10
+	},
+	"foodexpansion:carrot_pie":
+	{
+		"cooking": 20
+	},
+	"foodexpansion:melon_salad":
+	{
+		"cooking": 35
+	},
+	"foodexpansion:dough":
+	{
+		"cooking": 10
+	},
+	"foodexpansion:lollipop":
+	{
+		"cooking": 5
+	},
+	"foodexpansion:beetroot_noodles":
+	{
+		"cooking": 35
+	},
+	"foodexpansion:blaze_cream":
+	{
+		"cooking": 35
+	},
+	"lycanitesmobs:equipmentpart_ironpaxel":
+	{
+		"smithing": 60
+	},
+	"lycanitesmobs:whirlwindcharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:lightballcharge":
+	{
+		"combat": 100
+	},
+	"lycanitesmobs:immunizer":
+	{
+		"combat": 90,
+		"crafting": 90
+	},
+	"lycanitesmobs:cleansingcrystal":
+	{
+		"combat": 90,
+		"crafting": 90
+	},
+	"lycanitesmobs:bloodsummoningstaff":
+	{
+		"magic": 100,
+		"blood_magic": 100,
+		"crafting": 100
+	},
+	"lycanitesmobs:crystalshardcharge":
+	{
+		"crafting": 100
+	},
+	"lycanitesmobs:frostboltcharge":
+	{
+		"magic": 100,
+		"elemental": 100
+	},
+	"lycanitesmobs:tundracharge":
+	{
+		"magic": 100,
+		"elemental": 100
+	},
+	"lycanitesmobs:spectralboltcharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:soulstone":
+	{
+		"taming": 100,
+		"crafting": 100,
+		"magic": 100
+	},
+	"lycanitesmobs:summoningstaff":
+	{
+		"magic": 100,
+		"crafting": 100
+	},
+	"lycanitesmobs:equipmentpart_ironhilt":
+	{
+		"smithing": 60,
+		"crafting": 60
+	},
+	"lycanitesmobs:venomshotcharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:planttreat":
+	{
+		"farming": 100,
+		"magic": 100
+	},
+	"lycanitesmobs:equipmentpart_ironrod":
+	{
+		"smithing": 60,
+		"crafting": 60
+	},
+	"lycanitesmobs:dragontreat":
+	{
+		"crafting": 100
+	},
+	"lycanitesmobs:boulderblastcharge":
+	{
+		"smithing": 100
+	},
+	"lycanitesmobs:hellfireballcharge":
+	{
+		"taming": 100,
+		"magic": 100
+	},
+	"lycanitesmobs:wormtreat":
+	{
+		"farming": 100,
+		"cooking": 100
+	},
+	"lycanitesmobs:equipmentpart_goldscepterhead":
+	{
+		"crafting": 20
+	},
+	"lycanitesmobs:beasttreat":
+	{
+		"cooking": 100
+	},
+	"lycanitesmobs:throwingscythecharge":
+	{
+		"fletching": 100
+	},
+	"lycanitesmobs:demonicblastcharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:bloodleechcharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:acidsplashcharge":
+	{
+		"magic": 100,
+		"taming": 100
+	},
+	"lycanitesmobs:savagesummoningstaff":
+	{
+		"magic": 100,
+		"fletching": 100
+	},
+	"lycanitesmobs:lobdarklingscharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:undeadtreat":
+	{
+		"fletching": 100
+	},
+	"lycanitesmobs:soulkeydiamond":
+	{
+		"crafting": 100
+	},
+	"lycanitesmobs:chaosorbcharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:equipmentpart_woodenrod":
+	{
+		"fletching": 60
+	},
+	"lycanitesmobs:stablesummoningstaff":
+	{
+		"crafting": 100
+	},
+	"lycanitesmobs:aquatictreat":
+	{
+		"fletching": 100
+	},
+	"lycanitesmobs:embercharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:demontreat":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:equipmentpart_ironaxehead":
+	{
+		"smithing": 60
+	},
+	"lycanitesmobs:soulgazer":
+	{
+		"crafting": 100
+	},
+	"lycanitesmobs:soulkeyemerald":
+	{
+		"crafting": 150
+	},
+	"lycanitesmobs:equipmentpart_woodenhilt":
+	{
+		"fletching": 60
+	},
+	"lycanitesmobs:imptreat":
+	{
+		"cooking": 100
+	},
+	"lycanitesmobs:lifedraincharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:devilstarcharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:equipmentpart_woodenpaxel":
+	{
+		"crafting": 60
+	},
+	"lycanitesmobs:equipmentpart_ironpikejoint":
+	{
+		"smithing": 60
+	},
+	"lycanitesmobs:aberrationtreat":
+	{
+		"fletching": 100
+	},
+	"lycanitesmobs:arthropodtreat":
+	{
+		"cooking": 100,
+		"fletching": 100
+	},
+	"lycanitesmobs:arcanelaserstormcharge":
+	{
+		"magic": 100
+	},
+	"lycanitesmobs:sturdysummoningstaff":
+	{
+		"smithing": 100,
+		"magic": 100
+	},
+	"lycanitesmobs:aetherwavecharge":
+	{
+		"astral_magic": 100
+	},
+	"lycanitesmobs:soulkey":
+	{
+		"crafting": 200
+	},
+	"lycanitesmobs:aviantreat":
+	{
+		"cooking": 100,
+		"fletching": 100
+	},
+	"lycanitesmobs:shadowstonebrick_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonebrick_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonebrick_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstone_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonetile_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonebrick_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonetile_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonebrick_fence":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonebrick_wall":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonepillar":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demoncrystal":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonetile_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowcrystal":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonebrick_fence":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonebrick_fence":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonepolished":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstone_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:summoningpedestal":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonechiseled":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonetile":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonepolished":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonechiseled":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstone":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonetile_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstone_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonechiseled":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstone_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonebrick_wall":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstone_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonetile":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonepillar":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushcrystal":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstone_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertcrystal":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonebrick_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantcrystal":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstone_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonebrick_fence":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonebrick_fence":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:propolis":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonepillar":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonechiseled":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:soulcubeaberrant":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonebrick_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:soulcubedemonic":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonebrick":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonepolished":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonebrick_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:soulcubeundead":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonetile_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstone":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonebrick_wall":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonebrick_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonebrick_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstone_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstone":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonepolished":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonebrick":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonetile":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonebrick_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstone":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonepillar":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonepillar":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonebrick":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonebrick_wall":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonetile":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:desertstonebrick":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonetile_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstone_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonetile_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonetile":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonetile_slab":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstone_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:shadowstonebrick_wall":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonebrick":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:veswax":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonepolished":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstonetile_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:lushstonetile_stairs":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:demonstone":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:aberrantstonechiseled":
+	{
+		"building": 100
+	},
+	"lycanitesmobs:pale_soup":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:explorers_risotto":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:searing_taco":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:paleo_salad":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:tropical_curry":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:devil_lasagna":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:battle_burrito":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:blood_chili":
+	{
+		"crafting": 50
+	},
+	"lycanitesmobs:bulwark_burger":
+	{
+		"crafting": 50
+	},
+	"lycanitesmobs:seashell_maki":
+	{
+		"crafting": 50
+	},
+	"lycanitesmobs:amber_cake":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:lapis_fish_and_chips":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:caecilian_ramen":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:moss_pie":
+	{
+		"cooking": 50
+	},
+	"lycanitesmobs:peaks_kebab":
+	{
+		"cooking": 50
 	}
 }

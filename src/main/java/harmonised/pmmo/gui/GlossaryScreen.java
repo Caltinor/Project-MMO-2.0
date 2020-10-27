@@ -34,8 +34,8 @@ public class GlossaryScreen extends Screen
     private int boxHeight = 256;
     private int x;
     private int y;
-    public static List<TileButton> defaultTileButtons;
-    public static List<TileButton> currentTileButtons;
+    public static List<TileButton> defaultTileButtons = new ArrayList<>();
+    public static List<TileButton> currentTileButtons = new ArrayList<>();
     private String creativeText;
     private UUID uuid;
     public static List<Character> history = new ArrayList<>();

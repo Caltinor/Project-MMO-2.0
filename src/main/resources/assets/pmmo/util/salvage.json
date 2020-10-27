@@ -2035,5 +2035,191 @@
 			"xpPerItem": 0.1,
 			"levelReq": 1
 		}
+	},
+	"aquaculture:iron_fishing_rod":
+	{
+		"minecraft:string":
+		{
+			"salvageMax": 2,
+			"baseChance": 45,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 7,
+			"levelReq": 1
+		}
+	},
+	"aquaculture:gold_fishing_rod":
+	{
+		"minecraft:string":
+		{
+			"salvageMax": 2,
+			"baseChance": 45,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 7,
+			"levelReq": 1
+		}
+	},
+	"aquaculture:diamond_fishing_rod":
+	{
+		"minecraft:string":
+		{
+			"salvageMax": 2,
+			"baseChance": 45,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 7,
+			"levelReq": 1
+		}
+	},
+	"aquaculture:neptunium_fishing_rod":
+	{
+		"minecraft:string":
+		{
+			"salvageMax": 2,
+			"baseChance": 45,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 7,
+			"levelReq": 1
+		}
+	},
+	"aquaculture:tin_can":
+	{
+		"minecraft:iron_nugget":
+		{
+			"salvageMax": 12,
+			"baseChance": 35,
+			"chancePerLevel": 1.25,
+			"maxChance": 90,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"extraanvils:diamond_anvil":
+	{
+		"minecraft:diamond":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 30
+		},
+		"minecraft:diamond_block":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 30
+		}
+	},
+	"extraanvils:chipped_diamond_anvil":
+	{
+		"minecraft:diamond":
+		{
+			"salvageMax": 2,
+			"baseChance": 10,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 20
+		},
+		"minecraft:diamond_block":
+		{
+			"salvageMax": 2,
+			"baseChance": 10,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 20
+		}
+	},
+	"extraanvils:damaged_diamond_anvil":
+	{
+		"minecraft:diamond":
+		{
+			"salvageMax": 1,
+			"baseChance": 5,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 10
+		},
+		"minecraft:diamond_block":
+		{
+			"salvageMax": 1,
+			"baseChance": 5,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"extraanvils:gold_anvil":
+	{
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 30
+		},
+		"minecraft:gold_block":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 30
+		}
+	},
+	"extraanvils:chipped_gold_anvil":
+	{
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 10,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 20
+		},
+		"minecraft:gold_block":
+		{
+			"salvageMax": 2,
+			"baseChance": 10,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 20
+		}
+	},
+	"extraanvils:damaged_gold_anvil":
+	{
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 5,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 10
+		},
+		"minecraft:gold_block":
+		{
+			"salvageMax": 1,
+			"baseChance": 5,
+			"chancePerLevel": 1,
+			"maxChance": 75,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
 	}
 }

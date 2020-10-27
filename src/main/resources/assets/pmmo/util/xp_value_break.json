@@ -541,51 +541,51 @@
 	{
 		"farming": 1.25
 	},
-	"info_oresandmetals:light_animica_ore":
+	"oresandmetals:light_animica_ore":
 	{
 		"mining": 85
 	},
-	"info_oresandmetals:dark_animica_ore":
+	"oresandmetals:dark_animica_ore":
 	{
 		"mining": 85
 	},
-	"info_oresandmetals:banite_ore":
+	"oresandmetals:banite_ore":
 	{
 		"mining": 75
 	},
-	"info_oresandmetals:necrite_ore":
+	"oresandmetals:necrite_ore":
 	{
 		"mining": 65
 	},
-	"info_oresandmetals:phasmatite_ore":
+	"oresandmetals:phasmatite_ore":
 	{
 		"mining": 65
 	},
-	"info_oresandmetals:orichalcite_ore":
+	"oresandmetals:orichalcite_ore":
 	{
 		"mining": 55
 	},
-	"info_oresandmetals:drakolith_ore":
+	"oresandmetals:drakolith_ore":
 	{
 		"mining": 55
 	},
-	"info_oresandmetals:runite_ore":
+	"oresandmetals:runite_ore":
 	{
 		"mining": 45
 	},
-	"info_oresandmetals:adamantite_ore":
+	"oresandmetals:adamantite_ore":
 	{
 		"mining": 30
 	},
-	"info_oresandmetals:mithril_ore":
+	"oresandmetals:mithril_ore":
 	{
 		"mining": 20
 	},
-	"info_oresandmetals:tin_ore":
+	"oresandmetals:tin_ore":
 	{
 		"mining": 7
 	},
-	"info_oresandmetals:copper_ore":
+	"oresandmetals:copper_ore":
 	{
 		"mining": 4
 	},
@@ -672,10 +672,6 @@
 	"endreborn:end_wolframium_ore":
 	{
 		"mining": 14
-	},
-	"biomesoplenty:white_sand":
-	{
-		"excavation": 1.3
 	},
 	"biomesoplenty:fir_wood":
 	{
@@ -767,6 +763,10 @@
 	{
 		"woodcutting": 10
 	},
+	"biomesoplenty:white_sand":
+	{
+		"excavation": 1.3
+	},
 	"traverse:fir_wood":
 	{
 		"woodcutting": 7
@@ -790,5 +790,13 @@
 	"autumnity:maple_log":
 	{
 		"woodcutting": 13
+	},
+	"charm:nether_gold_deposit":
+	{
+		"mining": 2
+	},
+	"charm:pig_iron_ore":
+	{
+		"mining": 12
 	}
 }
