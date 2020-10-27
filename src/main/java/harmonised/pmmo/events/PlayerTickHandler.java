@@ -176,22 +176,4 @@ public class PlayerTickHandler
             }
         }
     }
-
-//    public static void tagOwnership( ItemStack itemStack, UUID uuid )
-//    {
-//        if( !itemStack.isEmpty() )
-//        {
-//            CompoundNBT tag = itemStack.getTag();
-//            String regKey = itemStack.getItem().getRegistryName().toString();
-//            if( Config.forgeConfig.tagItemsNBT.get() && ( XP.hasElement( regKey, JType.INFO_SMELT ) || XP.hasElement( regKey, JType.XP_VALUE_SMELT ) || XP.hasElement( regKey, JType.INFO_COOK ) || XP.hasElement( regKey, JType.XP_VALUE_COOK ) || XP.hasElement( regKey, JType.INFO_BREW ) || XP.hasElement( regKey, JType.XP_VALUE_BREW ) ) )
-//            {
-//                if( tag == null )
-//                    itemStack.setTag( new CompoundNBT() );
-//
-//                itemStack.getTag().putString( "lastOwner", uuid.toString() );
-//            }
-//            else if( tag != null && tag.contains( "lastOwner" ) )
-//                tag.remove( "lastOwner" );
-//        }
-//    }
 }

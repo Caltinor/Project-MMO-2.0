@@ -44,8 +44,6 @@ public class JsonConfig
     private static final ArrayList<String> validFishEnchantInfo = new ArrayList<>();
     private static final String dataPath = "pmmo/";
     private static final String hardDataPath = "/assets/pmmo/util/";
-    private static final Effect invalidEffect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
-    private static final Enchantment invalidEnchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( "inexistantmodthatwillneverexist:potatochan" ) );
     public static final Set<JType> jTypes2 = new HashSet<>();
 
     public static void init()
@@ -246,7 +244,7 @@ public class JsonConfig
             try
                     (
                             InputStream input = new FileInputStream( file.getPath() );
-                            Reader reader = new BufferedReader( new InputStreamReader( input ) );
+                            Reader reader = new BufferedReader( new InputStreamReader( input ) )
                     )
             {
                 if( jTypes2.contains( jType ) )
@@ -443,7 +441,7 @@ public class JsonConfig
         for( String key : theMap.keySet() )
         {
             Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( key ) );
-            if( !effect.equals( invalidEffect ) )
+            if( effect != null )
                 anyValidEffects = true;
             else
                 LOGGER.info( "Invalid effect " + key );
@@ -479,8 +477,8 @@ public class JsonConfig
                     LOGGER.error( "No valid skills, cannot add " + element.getKey() );
             }
             else
-            LOGGER.error( "Inexistant key, cannot add " + element.getKey() );
-        };
+                LOGGER.error( "Inexistant key, cannot add " + element.getKey() );
+        }
     }
 
     private static void updateDataEffects( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
@@ -495,8 +493,7 @@ public class JsonConfig
                 for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
                     Potion potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
-
-                    if( !potion.equals( invalidEffect ) && entry.getValue() >= 0 && entry.getValue() < 255 )
+                    if( potion != null && entry.getValue() >= 0 && entry.getValue() < 255 )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
                         LOGGER.error( entry.getKey() + " is either not a effect skill, or below 0, or above 255!" );
@@ -504,7 +501,7 @@ public class JsonConfig
             }
             else
                 LOGGER.error( "No valid effects, cannot add " + element.getKey() );
-        };
+        }
     }
 
     private static void updateDataExtra( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
@@ -526,7 +523,7 @@ public class JsonConfig
             }
             else
                 LOGGER.info( "Could not load inexistant item " + element.getKey() );
-        };
+        }
     }
 
     private static void updateDataVein( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
@@ -560,7 +557,7 @@ public class JsonConfig
                 else
                     LOGGER.info( "Could not load inexistant item " + element.getKey() );
             }
-        };
+        }
     }
 
     private static void updateDataFishPool( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
@@ -694,7 +691,7 @@ public class JsonConfig
             }
             else
                 LOGGER.info( "Could not load inexistant item " + element.getKey() );
-        };
+        }
     }
 
     private static void updateDataFishEnchantPool( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
@@ -702,7 +699,7 @@ public class JsonConfig
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( element.getKey() ) );
-            if( !enchant.equals( invalidEnchant ) )
+            if( enchant != null )
             {
                 Map<String, Double> inMap = element.getValue();
 
@@ -775,7 +772,7 @@ public class JsonConfig
             }
             else
                 LOGGER.info( "Could not load inexistant enchant " + element.getKey() );
-        };
+        }
     }
 
     private static void updateDataAttributes( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
@@ -798,7 +795,7 @@ public class JsonConfig
             else
                 LOGGER.error( "No valid attributes, cannot add " + element.getKey() );
 
-        };
+        }
     }
 
     private static void updateDataCommand( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
@@ -820,7 +817,7 @@ public class JsonConfig
             }
             else
                 LOGGER.error( "Invalid skill \"" + element.getKey() + "\" in Level Up Command" );
-        };
+        }
     }
 
     private static void updateDataSpecific( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
@@ -834,7 +831,7 @@ public class JsonConfig
             {
                 output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
             }
-        };
+        }
     }
 
     private static boolean checkValidAttributes( Map<String, Double> theMap )
