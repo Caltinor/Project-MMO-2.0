@@ -627,5 +627,9 @@
 	{
 		"farming": 25,
 		"woodcutting": 35
+	},
+	"bountifulbaubles:water_candle":
+	{
+		"magic": 10
 	}
 }

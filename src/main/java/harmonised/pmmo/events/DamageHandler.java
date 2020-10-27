@@ -53,6 +53,11 @@ public class DamageHandler
 
                         if( sourceMemberInfo != null )
                             damage *= friendlyFireMultiplier;
+                        if( damage == 0 )
+                        {
+                            event.setCanceled( true );
+                            return;
+                        }
                     }
                 }
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////

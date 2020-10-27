@@ -66,5 +66,13 @@
 	"minecraft:phantom_membrane":
 	{
 		"extraChance": 0.7
+	},
+	"aquaculture:jellyfish":
+	{
+		"extraChance": 0.25
+	},
+	"aquaculture:leech":
+	{
+		"extraChance": 0.25
 	}
 }

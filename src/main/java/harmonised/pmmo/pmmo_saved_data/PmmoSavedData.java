@@ -112,11 +112,11 @@ public class PmmoSavedData extends WorldSavedData
         {
             playerMap = new HashMap<>();
 
-            playerMap.put( "xp", NBTHelper.mapSkillToNbt( xp.get( entry.getKey() ) ) );
-            playerMap.put( "scheduledXp", NBTHelper.mapSkillToNbt( scheduledXp.get( entry.getKey() ) ) );
-            playerMap.put( "abilities", NBTHelper.mapStringToNbt( abilities.get( entry.getKey() ) ) );
-            playerMap.put( "preferences", NBTHelper.mapStringToNbt( preferences.get( entry.getKey() ) ) );
-            playerMap.put( "xpBoosts", NBTHelper.mapStringMapSkillToNbt( xpBoosts.get( entry.getKey() ) ) );
+            playerMap.put( "xp", NBTHelper.mapSkillToNbt(                   xp.getOrDefault(            entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "scheduledXp", NBTHelper.mapSkillToNbt(          scheduledXp.getOrDefault(   entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "abilities", NBTHelper.mapStringToNbt(           abilities.getOrDefault(     entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "preferences", NBTHelper.mapStringToNbt(         preferences.getOrDefault(   entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "xpBoosts", NBTHelper.mapStringMapSkillToNbt(    xpBoosts.getOrDefault(      entry.getKey(), new HashMap<>() ) ) );
 
             CompoundNBT playerTag = NBTHelper.mapStringNbtToNbt( playerMap );
             playerTag.putString( "name", name.get( entry.getKey() ) );

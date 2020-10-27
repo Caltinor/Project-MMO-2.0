@@ -99,147 +99,147 @@
 	{
 		"combat": 1
 	},
-	"info_oresandmetals:elder_rune_pickaxe":
+	"oresandmetals:elder_rune_pickaxe":
 	{
 		"combat": 90
 	},
-	"info_oresandmetals:elder_rune_shovel":
+	"oresandmetals:elder_rune_shovel":
 	{
 		"combat": 90
 	},
-	"info_oresandmetals:elder_rune_axe":
+	"oresandmetals:elder_rune_axe":
 	{
 		"combat": 90
 	},
-	"info_oresandmetals:elder_rune_sword":
+	"oresandmetals:elder_rune_sword":
 	{
 		"combat": 90
 	},
-	"info_oresandmetals:banite_pickaxe":
+	"oresandmetals:banite_pickaxe":
 	{
 		"combat": 80
 	},
-	"info_oresandmetals:banite_shovel":
+	"oresandmetals:banite_shovel":
 	{
 		"combat": 80
 	},
-	"info_oresandmetals:banite_axe":
+	"oresandmetals:banite_axe":
 	{
 		"combat": 80
 	},
-	"info_oresandmetals:banite_sword":
+	"oresandmetals:banite_sword":
 	{
 		"combat": 80
 	},
-	"info_oresandmetals:necronium_pickaxe":
+	"oresandmetals:necronium_pickaxe":
 	{
 		"combat": 70
 	},
-	"info_oresandmetals:necronium_shovel":
+	"oresandmetals:necronium_shovel":
 	{
 		"combat": 70
 	},
-	"info_oresandmetals:necronium_axe":
+	"oresandmetals:necronium_axe":
 	{
 		"combat": 70
 	},
-	"info_oresandmetals:necronium_sword":
+	"oresandmetals:necronium_sword":
 	{
 		"combat": 70
 	},
-	"info_oresandmetals:orikalkum_pickaxe":
+	"oresandmetals:orikalkum_pickaxe":
 	{
 		"combat": 60
 	},
-	"info_oresandmetals:orikalkum_shovel":
+	"oresandmetals:orikalkum_shovel":
 	{
 		"combat": 60
 	},
-	"info_oresandmetals:orikalkum_axe":
+	"oresandmetals:orikalkum_axe":
 	{
 		"combat": 60
 	},
-	"info_oresandmetals:orikalkum_sword":
+	"oresandmetals:orikalkum_sword":
 	{
 		"combat": 60
 	},
-	"info_oresandmetals:rune_pickaxe":
+	"oresandmetals:rune_pickaxe":
 	{
 		"combat": 50
 	},
-	"info_oresandmetals:rune_shovel":
+	"oresandmetals:rune_shovel":
 	{
 		"combat": 50
 	},
-	"info_oresandmetals:rune_axe":
+	"oresandmetals:rune_axe":
 	{
 		"combat": 50
 	},
-	"info_oresandmetals:rune_sword":
+	"oresandmetals:rune_sword":
 	{
 		"combat": 50
 	},
-	"info_oresandmetals:adamant_pickaxe":
+	"oresandmetals:adamant_pickaxe":
 	{
 		"combat": 35
 	},
-	"info_oresandmetals:adamant_shovel":
+	"oresandmetals:adamant_shovel":
 	{
 		"combat": 35
 	},
-	"info_oresandmetals:adamant_axe":
+	"oresandmetals:adamant_axe":
 	{
 		"combat": 35
 	},
-	"info_oresandmetals:adamant_sword":
+	"oresandmetals:adamant_sword":
 	{
 		"combat": 35
 	},
-	"info_oresandmetals:mithril_pickaxe":
+	"oresandmetals:mithril_pickaxe":
 	{
 		"combat": 25
 	},
-	"info_oresandmetals:mithril_shovel":
+	"oresandmetals:mithril_shovel":
 	{
 		"combat": 25
 	},
-	"info_oresandmetals:mithril_axe":
+	"oresandmetals:mithril_axe":
 	{
 		"combat": 25
 	},
-	"info_oresandmetals:mithril_sword":
+	"oresandmetals:mithril_sword":
 	{
 		"combat": 25
 	},
-	"info_oresandmetals:steel_pickaxe":
+	"oresandmetals:steel_pickaxe":
 	{
 		"combat": 15
 	},
-	"info_oresandmetals:steel_shovel":
+	"oresandmetals:steel_shovel":
 	{
 		"combat": 15
 	},
-	"info_oresandmetals:steel_axe":
+	"oresandmetals:steel_axe":
 	{
 		"combat": 15
 	},
-	"info_oresandmetals:steel_sword":
+	"oresandmetals:steel_sword":
 	{
 		"combat": 15
 	},
-	"info_oresandmetals:bronze_pickaxe":
+	"oresandmetals:bronze_pickaxe":
 	{
 		"combat": 5
 	},
-	"info_oresandmetals:bronze_shovel":
+	"oresandmetals:bronze_shovel":
 	{
 		"combat": 5
 	},
-	"info_oresandmetals:bronze_axe":
+	"oresandmetals:bronze_axe":
 	{
 		"combat": 5
 	},
-	"info_oresandmetals:bronze_sword":
+	"oresandmetals:bronze_sword":
 	{
 		"combat": 5
 	},
@@ -420,5 +420,541 @@
 	"endreborn:end_stone_pickaxe":
 	{
 		"combat": 20
+	},
+	"dungeons_gear:dagger":
+	{
+		"combat": 5
+	},
+	"dungeons_gear:fang_of_frost":
+	{
+		"combat": 20
+	},
+	"dungeons_gear:moon_dagger":
+	{
+		"combat": 25
+	},
+	"dungeons_gear:sickle":
+	{
+		"combat": 10
+	},
+	"dungeons_gear:nightmares_bite":
+	{
+		"combat": 25
+	},
+	"dungeons_gear:the_last_laugh":
+	{
+		"combat": 25
+	},
+	"dungeons_gear:gauntlet":
+	{
+		"combat": 10
+	},
+	"dungeons_gear:fighters_binding":
+	{
+		"combat": 15
+	},
+	"dungeons_gear:mauler":
+	{
+		"combat": 25
+	},
+	"dungeons_gear:soul_fist":
+	{
+		"combat": 25
+	},
+	"dungeons_gear:soul_scythe":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:frost_scythe":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:jailors_scythe":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:cutless":
+	{
+		"combat": 10
+	},
+	"dungeons_gear:dancers_sword":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:nameless_blade":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:hawkbrand":
+	{
+		"combat": 25
+	},
+	"dungeons_gear:battlestaff":
+	{
+		"combat": 10
+	},
+	"dungeons_gear:battlestaff_of_terror":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:growing_staff":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:firebrand":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:highland_axe":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:double_axe":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:cursed_axe":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:whirlwind":
+	{
+		"combat": 55
+	},
+	"dungeons_gear:mace":
+	{
+		"combat": 15
+	},
+	"dungeons_gear:flail":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:suns_grace":
+	{
+		"combat": 50
+	},
+	"dungeons_gear:great_hammer":
+	{
+		"combat": 15
+	},
+	"dungeons_gear:hammer_of_gravity":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:stormlander":
+	{
+		"combat": 50
+	},
+	"dungeons_gear:katana":
+	{
+		"combat": 15
+	},
+	"dungeons_gear:soul_knife":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:dark_katana":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:masters_katana":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:eternal_knife":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:truthseeker":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:claymore":
+	{
+		"combat": 20
+	},
+	"dungeons_gear:broadsword":
+	{
+		"combat": 20
+	},
+	"dungeons_gear:heartstealer":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:spear":
+	{
+		"combat": 15
+	},
+	"dungeons_gear:fortune_spear":
+	{
+		"combat": 25
+	},
+	"dungeons_gear:glaive":
+	{
+		"combat": 15
+	},
+	"dungeons_gear:glaive_bane":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:venom_glaive":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:whip":
+	{
+		"combat": 15
+	},
+	"dungeons_gear:vine_whip":
+	{
+		"combat": 35
+	},
+	"dungeons_gear:rapid_crossbow":
+	{
+		"archery": 15
+	},
+	"dungeons_gear:betterfly_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:auto_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:azure_seeker":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:the_slicer":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:heavy_crossbow":
+	{
+		"archery": 15
+	},
+	"dungeons_gear:doom_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:slayer_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:soul_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:feral_soul_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:voidcaller":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:scatter_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:harp_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:lightning_harp_crossbow":
+	{
+		"archery": 35
+	},
+	"dungeons_gear:exploding_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:firebolt_thrower":
+	{
+		"archery": 35
+	},
+	"dungeons_gear:dual_crossbow":
+	{
+		"archery": 15
+	},
+	"dungeons_gear:baby_crossbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:bonebow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:twin_bow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:bow_of_lost_souls":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:nocturnal_bow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:power_bow":
+	{
+		"archery": 15
+	},
+	"dungeons_gear:elite_power_bow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:sabrewing":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:longbow":
+	{
+		"archery": 10
+	},
+	"dungeons_gear:guardian_bow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:red_snake":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:hunter_bow":
+	{
+		"archery": 10
+	},
+	"dungeons_gear:hunters_promise":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:masters_bow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:master_bow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:shortbow":
+	{
+		"archery": 10
+	},
+	"dungeons_gear:mechanical_shortbow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:purple_storm":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:trickbow":
+	{
+		"archery": 15
+	},
+	"dungeons_gear:the_green_menace":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:the_pink_scoundrel":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:snow_bow":
+	{
+		"archery": 25
+	},
+	"dungeons_gear:winters_touch":
+	{
+		"archery": 25
+	},
+	"aquaculture:neptunium_axe":
+	{
+		"combat": 75
+	},
+	"aquaculture:neptunium_sword":
+	{
+		"combat": 70
+	},
+	"aquaculture:neptunium_fillet_knife":
+	{
+		"combat": 5
+	},
+	"combustivefishing:searing_sword":
+	{
+		"combat": 60
+	},
+	"extendednether:netherite_pickaxe":
+	{
+		"combat": 60
+	},
+	"extendednether:netherite_shovel":
+	{
+		"combat": 60
+	},
+	"extendednether:netherite_axe":
+	{
+		"combat": 65
+	},
+	"extendednether:netherite_sword":
+	{
+		"combat": 60
+	},
+	"harcorebattletowers:double_headed_evil_axe":
+	{
+		"combat": 110
+	},
+	"harcorebattletowers:evil_dagger":
+	{
+		"combat": 90
+	},
+	"iceandfire:silver_sword":
+	{
+		"combat": 20
+	},
+	"iceandfire:silver_shovel":
+	{
+		"combat": 20
+	},
+	"iceandfire:silver_axe":
+	{
+		"combat": 25
+	},
+	"iceandfire:silver_pickaxe":
+	{
+		"combat": 20
+	},
+	"iceandfire:copper_sword":
+	{
+		"combat": 15
+	},
+	"iceandfire:copper_shovel":
+	{
+		"combat": 15
+	},
+	"iceandfire:copper_axe":
+	{
+		"combat": 15
+	},
+	"iceandfire:copper_pickaxe":
+	{
+		"combat": 15
+	},
+	"iceandfire:dragonbone_sword":
+	{
+		"combat": 35
+	},
+	"iceandfire:dragonbone_shovel":
+	{
+		"combat": 35
+	},
+	"iceandfire:dragonbone_axe":
+	{
+		"combat": 35
+	},
+	"iceandfire:dragonbone_pickaxe":
+	{
+		"combat": 35
+	},
+	"iceandfire:dragonbone_sword_fire":
+	{
+		"combat": 50
+	},
+	"iceandfire:dragonbone_sword_ice":
+	{
+		"combat": 50
+	},
+	"iceandfire:dragonbone_sword_lightning":
+	{
+		"combat": 50
+	},
+	"iceandfire:hippogryph_sword":
+	{
+		"combat": 25
+	},
+	"iceandfire:myrmex_desert_sword":
+	{
+		"combat": 20
+	},
+	"iceandfire:myrmex_desert_sword_venom":
+	{
+		"combat": 20
+	},
+	"iceandfire:myrmex_jungle_sword":
+	{
+		"combat": 20
+	},
+	"iceandfire:myrmex_jungle_sword_venom":
+	{
+		"combat": 20
+	},
+	"iceandfire:tide_trident":
+	{
+		"combat": 50
+	},
+	"iceandfire:dragonsteel_fire_sword":
+	{
+		"combat": 60
+	},
+	"iceandfire:dragonsteel_ice_sword":
+	{
+		"combat": 60
+	},
+	"iceandfire:dragonsteel_lightning_sword":
+	{
+		"combat": 60
+	},
+	"iceandfire:dragonsteel_fire_axe":
+	{
+		"combat": 60
+	},
+	"iceandfire:dragonsteel_ice_axe":
+	{
+		"combat": 60
+	},
+	"iceandfire:dragonsteel_lightning_axe":
+	{
+		"combat": 60
+	},
+	"iceandfire:dread_sword":
+	{
+		"combat": 20
+	},
+	"iceandfire:dread_knight_sword":
+	{
+		"combat": 50
+	},
+	"iceandfire:dread_queen_sword":
+	{
+		"combat": 50
+	},
+	"iceandfire:troll_weapon_axe":
+	{
+		"combat": 30
+	},
+	"iceandfire:troll_weapon_column":
+	{
+		"combat": 30
+	},
+	"iceandfire:troll_weapon_column_forest":
+	{
+		"combat": 30
+	},
+	"iceandfire:troll_weapon_column_frost":
+	{
+		"combat": 30
+	},
+	"iceandfire:troll_weapon_hammer":
+	{
+		"combat": 30
+	},
+	"iceandfire:troll_weapon_trunk":
+	{
+		"combat": 30
+	},
+	"iceandfire:troll_weapon_trunk_frost":
+	{
+		"combat": 30
 	}
 }

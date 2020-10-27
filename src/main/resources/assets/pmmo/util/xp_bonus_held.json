@@ -51,5 +51,68 @@
 	"endreborn:end_stone_hoe":
 	{
 		"farming": 5
+	},
+	"dungeons_gear:soul_fist":
+	{
+		"agility": 20
+	},
+	"dungeons_gear:soul_scythe":
+	{
+		"hunter": 10
+	},
+	"dungeons_gear:frost_scythe":
+	{
+		"magic": 20
+	},
+	"dungeons_gear:jailors_scythe":
+	{
+		"hunter": 20
+	},
+	"dungeons_gear:soul_knife":
+	{
+		"hunter": 20
+	},
+	"dungeons_gear:eternal_knife":
+	{
+		"hunter": 40
+	},
+	"dungeons_gear:truthseeker":
+	{
+		"hunter": 20
+	},
+	"dungeons_gear:lightning_rod":
+	{
+		"hunter": 10
+	},
+	"dungeons_gear:harvester":
+	{
+		"hunter": 10,
+		"magic": 10
+	},
+	"dungeons_gear:soul_healer":
+	{
+		"magic": 10,
+		"hunter": 10
+	},
+	"aquaculture:neptunium_pickaxe":
+	{
+		"swimming": 2.5
+	},
+	"aquaculture:neptunium_shovel":
+	{
+		"swimming": 2.5
+	},
+	"aquaculture:neptunium_axe":
+	{
+		"swimming": 2.5
+	},
+	"aquaculture:neptunium_hoe":
+	{
+		"farming": 20,
+		"swimming": 2.5
+	},
+	"extendednether:netherite_hoe":
+	{
+		"farming": 15
 	}
 }
