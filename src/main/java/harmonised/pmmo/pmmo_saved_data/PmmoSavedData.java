@@ -73,7 +73,7 @@ public class PmmoSavedData extends WorldSavedData
                 scheduledXp = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "scheduledXp" ) );
                 abilities = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "abilities" ) );
                 preferences = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "preferences" ) );
-                xpBoosts = NBTHelper.nbtToMapStringMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xpBoost" ) );
+                xpBoosts = NBTHelper.nbtToMapStringMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xpBoosts" ) );
             }
         }
 
@@ -389,6 +389,7 @@ public class PmmoSavedData extends WorldSavedData
     public void setPlayerXpBoostsMaps( UUID playerUUID, Map<String, Map<Skill, Double>> newBoosts )
     {
         xpBoosts.put( playerUUID, newBoosts );
+        setDirty( true );
     }
 
 
@@ -401,16 +402,20 @@ public class PmmoSavedData extends WorldSavedData
         ServerPlayerEntity player = XP.getPlayerByUUID( playerUUID, server );
         if( player != null )
             XP.syncPlayerXpBoost( player );
+        setDirty( true );
+
     }
 
     public void removePlayerXpBoost( UUID playerUUID, String xpBoostKey )
     {
         getPlayerXpBoostsMap( playerUUID ).remove( xpBoostKey );
+        setDirty( true );
     }
 
     public void removeAllPlayerXpBoosts( UUID playerUUID )
     {
         xpBoosts.remove( playerUUID );
+        setDirty( true );
     }
 
     private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Skill skill, Double xpBoost )
@@ -421,5 +426,6 @@ public class PmmoSavedData extends WorldSavedData
             this.xpBoosts.get( playerUUID ).put( xpBoostKey, new HashMap<>() );
 
         this.xpBoosts.get( playerUUID ).get( xpBoostKey ).put( skill, xpBoost );
+        setDirty( true );
     }
 }
