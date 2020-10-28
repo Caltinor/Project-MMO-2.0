@@ -17,18 +17,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin( AbstractFurnaceTileEntity.class )
-public class AbstractFurnaceTileEntityShrinkMixin extends TileEntity
+public class AbstractFurnaceTileEntityShrinkMixin
 {
     @Shadow
     protected NonNullList<ItemStack> items;
 
-    public AbstractFurnaceTileEntityShrinkMixin(TileEntityType<?> p_i48289_1_)
-    {
-        super(p_i48289_1_);
-    }
-
     @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "smelt" )
-    private void projectmmo$$handleSmeltingShrink( IRecipe<?> p_214007_1_, CallbackInfo info )
+    public void projectmmo$$handleSmeltingShrink( IRecipe<?> p_214007_1_, CallbackInfo info )
     {
         World world = ((AbstractFurnaceTileEntity)(Object)this).getWorld();
         BlockPos pos = ((AbstractFurnaceTileEntity)(Object)this).getPos();

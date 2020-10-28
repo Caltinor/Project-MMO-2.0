@@ -79,9 +79,9 @@ public class CreditorScreen extends Screen
     }
 
     @Override
-    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
+    public void render( MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( stack,  1 );
+        renderBackground( stack, 1 );
         super.render( stack, mouseX, mouseY, partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
@@ -92,28 +92,14 @@ public class CreditorScreen extends Screen
         if( colors.containsKey( playerName ) )
             color = colors.get( playerName );
 
-//        if( font.getStringWidth( title.getString() ) > 220 )
-//            drawCenteredString( stack,  font, title.getString(), sr.getScaledWidth() / 2, y - 10, color );
-//        else
-//            drawCenteredString( stack,  font, title.getString(), sr.getScaledWidth() / 2, y - 5, color );
+        drawCenteredString( stack, font, "§l" + playerName, sr.getScaledWidth() / 2, y - ( font.getStringWidth( playerName ) > 220 ? 10 : 5), color );
 
         List<String> list = creditorsInfo.get( playerName );
 
         for( int i = 0; i < list.size(); i++ )
         {
-            if( list.get(i).contains( "§l" ) )
-                drawCenteredString( stack, font, list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
-            else
-                drawCenteredString( stack, font, "§l" + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
+            drawCenteredString( stack, font, ( list.get(i).contains( "§l" ) ? "" : "§l" ) + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
         }
-
-//        fillGradient( stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
-
-//        for( TileButton button : tileButtons )
-//        {
-//            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-//                renderTooltip( stack,  new TranslationTextComponent( button.transKey ).getString(), mouseX, mouseY );
-//        }
 
         RenderSystem.enableBlend();
     }
@@ -134,7 +120,7 @@ public class CreditorScreen extends Screen
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
-        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( stack, x, y, 0, 0, boxWidth, boxHeight );
     }
 
     @Override
@@ -183,7 +169,6 @@ public class CreditorScreen extends Screen
         });
         //LUCIFER
         list = creditorsInfo.get( "Lucifer#0666" );
-        list.add( "Lucifer#0666" );
         list.add( "First Lapis Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "28/04/2020" ).getString() );
 
@@ -195,7 +180,6 @@ public class CreditorScreen extends Screen
             creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
         });
         list = creditorsInfo.get( "Tyrius#0842" );
-        list.add( "Tyrius#0842" );
         list.add( "First Dandelion Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "19/03/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString() );
@@ -209,7 +193,6 @@ public class CreditorScreen extends Screen
         } );
         //DIDIS54
         list = creditorsInfo.get( "didis54#5815" );
-        list.add( "didis54#5815" );
         list.add( "First Iron Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString() );
@@ -217,51 +200,50 @@ public class CreditorScreen extends Screen
 
         //STRESSINDICATOR
         list = creditorsInfo.get( "stressindicator#8819" );
-        list.add( "stressindicator#8819" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/08/2020" ).getString() );
 
         //DADDY_P1G
         list = creditorsInfo.get( "Daddy_P1G#0432" );
-        list.add( "Daddy_P1G#0432" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "29/06/2020" ).getString() );
 
         //NEOTHIAMIN
         list = new ArrayList<>();
-        list.add( "neothiamin#1798" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString() );
         creditorsInfo.put( "neothiamin#1798", list );
         //DARTH_REVAN#7341
         list = new ArrayList<>();
-        list.add( "Darth Revan#7341" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Zombie Textiles" ).getString() );
         creditorsInfo.put( "Darth Revan#7341", list );
 
         /////////TRANSLATOR/////////
-        //BUSANDAEK
+        //BusanDaek#3970
         list = new ArrayList<>();
-        list.add( "BusanDaek#3970" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "31/03/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Korean" ).getString() );
         creditorsInfo.put( "BusanDaek#3970", list );
-        //MAREOFTHESTARS
+        //deezer911#5693
         list = new ArrayList<>();
-        list.add( "deezer911#5693" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/03/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.helpedTranslating", "French" ).getString() );
         creditorsInfo.put( "deezer911#5693", list );
-        //TORUKM4KT00#0246
+        //TorukM4kt00#0246
         list = new ArrayList<>();
-        list.add( "TorukM4kt00#0246" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         creditorsInfo.put( "TorukM4kt00#0246", list );
-        //STARCHE#0246
+        //starche#7569
         list = new ArrayList<>();
-        list.add( "starche#7569" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         creditorsInfo.put( "starche#7569", list );
+
+        //Lyla#2639
+        list = new ArrayList<>();
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "28/10/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Chinese Traditional" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString() );
+        creditorsInfo.put( "Lyla#2639", list );
     }
 }

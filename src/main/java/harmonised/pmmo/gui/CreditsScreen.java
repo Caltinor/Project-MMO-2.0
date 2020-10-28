@@ -14,6 +14,7 @@ import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.*;
@@ -97,26 +98,6 @@ public class CreditsScreen extends Screen
             }));
         });
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Tyrius#0842", new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString(), button ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
-        }));
-
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "didis54#5815", new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString(), button ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
-        }));
-
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "neothiamin#1798", new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString(), button ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
-        }));
-
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Darth Revan#7341", new TranslationTextComponent( "pmmo.creatorOfModpack", "Zombie Textiles" ).getString(), button ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
-        }));
-
         listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ko_kr", "BusanDaek#3970", new TranslationTextComponent( "pmmo.translated", "Korean" ).getString(), button ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
@@ -147,17 +128,39 @@ public class CreditsScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "zh_tw", "Lyla#2639", new TranslationTextComponent( "pmmo.translated", "Chinese Traditional" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "zh_cn", "Lyla#2639", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Tyrius#0842", new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "didis54#5815", new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "neothiamin#1798", new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Darth Revan#7341", new TranslationTextComponent( "pmmo.creatorOfModpack", "Zombie Textiles" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
         addButton(exitButton);
 
-//        for( int i = 0; i < 25; i++ )
-//        {
-//            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "Lucifer#0666","", button ->
-//            {
-//                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( uuid, new TranslationTextComponent( ((ListButtonBig) button).transKey ), scrollPanel.getScroll() ) );
-//            }));
-//        }
-
-        listButtons.sort( Comparator.comparingInt( a -> ((ListButtonBig) a).elementTwo ) );
+//        listButtons.sort( Comparator.comparingInt( a -> ((ListButtonBig) a).elementTwo ) );
 
         scrollPanel = new CreditsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, JType.CREDITS, listButtons );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
@@ -176,20 +179,19 @@ public class CreditsScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        for( ListButtonBig button : listButtons )
-//        {
-//            if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
-//            {
-//                renderTooltip( stack, button.tooltipText, mouseX, mouseY );
-//                break;
-//            }
-//        }
-        //COUT
+        for( ListButtonBig button : listButtons )
+        {
+            if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
+            {
+                renderTooltip( stack, new StringTextComponent( button.playerName ), mouseX, mouseY );
+                break;
+            }
+        }
 
         if( font.getStringWidth( title.getString() ) > 220 )
-            drawCenteredString( stack,  font, title.toString(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+            drawCenteredString( stack, font, title.getString(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
-            drawCenteredString( stack,  font, title.toString(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( stack, font, title.getString(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
     }
