@@ -605,6 +605,7 @@ public class XP
 	{
 		syncPlayerData3( player );
 		syncPlayerData4( player );
+		syncPlayerXpBoost( player );
 		NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 1 ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
 	}
