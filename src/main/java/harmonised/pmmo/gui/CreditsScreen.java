@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.PlayerConnectedHandler;
@@ -8,10 +9,12 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.*;
@@ -24,7 +27,9 @@ public class CreditsScreen extends Screen
     private static boolean firstTime = true;
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    Minecraft minecraft = Minecraft.getInstance();
+    MainWindow sr = minecraft.getMainWindow();
+    FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -71,7 +76,7 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lapisPatreon" ).setStyle( XP.textStyle.get( "blue" ) ).getFormattedText(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lapisPatreon" ).setStyle( XP.textStyle.get( "blue" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -79,7 +84,7 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.dandelionPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.dandelionPatreon" ).setStyle( XP.textStyle.get( "yellow" ) ).getFormattedText(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.dandelionPatreon" ).setStyle( XP.textStyle.get( "yellow" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -87,31 +92,11 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.ironPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.ironPatreon" ).setStyle( XP.textStyle.get( "grey" ) ).getFormattedText(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.ironPatreon" ).setStyle( XP.textStyle.get( "grey" ) ).getString(), button ->
             {
                 Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
         });
-
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Tyrius#0842", new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString(), button ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
-        }));
-
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "didis54#5815", new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString(), button ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
-        }));
-
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "neothiamin#1798", new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString(), button ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
-        }));
-
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Darth Revan#7341", new TranslationTextComponent( "pmmo.creatorOfModpack", "Zombie Textiles" ).getString(), button ->
-        {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
-        }));
 
         listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ko_kr", "BusanDaek#3970", new TranslationTextComponent( "pmmo.translated", "Korean" ).getString(), button ->
         {
@@ -143,17 +128,39 @@ public class CreditsScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "zh_tw", "Lyla#2639", new TranslationTextComponent( "pmmo.translated", "Chinese Traditional" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "zh_cn", "Lyla#2639", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Tyrius#0842", new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "didis54#5815", new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "neothiamin#1798", new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Darth Revan#7341", new TranslationTextComponent( "pmmo.creatorOfModpack", "Zombie Textiles" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
         addButton(exitButton);
 
-//        for( int i = 0; i < 25; i++ )
-//        {
-//            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "Lucifer#0666","", button ->
-//            {
-//                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( uuid, new TranslationTextComponent( ((ListButtonBig) button).transKey ), scrollPanel.getScroll() ) );
-//            }));
-//        }
-
-        listButtons.sort( Comparator.comparingInt( a -> ((ListButtonBig) a).elementTwo ) );
+//        listButtons.sort( Comparator.comparingInt( a -> ((ListButtonBig) a).elementTwo ) );
 
         scrollPanel = new CreditsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, JType.CREDITS, listButtons );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
@@ -163,44 +170,42 @@ public class CreditsScreen extends Screen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render( int mouseX, int mouseY, float partialTicks)
     {
         renderBackground( 1 );
-        super.render(mouseX, mouseY, partialTicks);
+        super.render( mouseX, mouseY, partialTicks );
         scrollPanel.render( mouseX,mouseY,partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
-
         for( ListButtonBig button : listButtons )
         {
             if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
             {
-                renderTooltip( button.tooltipText, mouseX, mouseY );
+                renderTooltip( new StringTextComponent( button.playerName ).getString(), mouseX, mouseY );
                 break;
             }
         }
 
         if( font.getStringWidth( title.getString() ) > 220 )
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+            drawCenteredString( font, title.getString(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( font, title.getString(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void renderBackground( int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
+            this.fillGradient( 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this ));
         }
         else
-            this.renderDirtBackground(p_renderBackground_1_);
+            this.renderBackground( p_renderBackground_1_ );
 
 
         boxHeight = 256;

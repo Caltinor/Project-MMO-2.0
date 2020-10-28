@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.PlayerConnectedHandler;
@@ -8,6 +9,7 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
@@ -26,13 +28,15 @@ public class CreditorScreen extends Screen
     public static Map<String, Integer> colors = new HashMap<>();
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();;
+    Minecraft minecraft = Minecraft.getInstance();
+    MainWindow sr = minecraft.getMainWindow();
+    FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
     private int y;
     private List<TileButton> tileButtons;
-//    private UUID uuid;
+    //    private UUID uuid;
     public String playerName;
     private int lastScroll;
     private int color;
@@ -75,10 +79,10 @@ public class CreditorScreen extends Screen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render( int mouseX, int mouseY, float partialTicks)
     {
         renderBackground( 1 );
-        super.render(mouseX, mouseY, partialTicks);
+        super.render( mouseX, mouseY, partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -88,49 +92,35 @@ public class CreditorScreen extends Screen
         if( colors.containsKey( playerName ) )
             color = colors.get( playerName );
 
-//        if( font.getStringWidth( title.getString() ) > 220 )
-//            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, color );
-//        else
-//            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, color );
+        drawCenteredString( font, "§l" + playerName, sr.getScaledWidth() / 2, y - ( font.getStringWidth( playerName ) > 220 ? 10 : 5), color );
 
         List<String> list = creditorsInfo.get( playerName );
 
         for( int i = 0; i < list.size(); i++ )
         {
-            if( list.get(i).contains( "§l" ) )
-                drawCenteredString(font, list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
-            else
-                drawCenteredString(font, "§l" + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
+            drawCenteredString( font, ( list.get(i).contains( "§l" ) ? "" : "§l" ) + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
         }
-
-//        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
-
-//        for( TileButton button : tileButtons )
-//        {
-//            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-//                renderTooltip( new TranslationTextComponent( button.transKey ).getFormattedText(), mouseX, mouseY );
-//        }
 
         RenderSystem.enableBlend();
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void renderBackground( int p_renderBackground_1_ )
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
+            this.fillGradient( 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this ));
         }
         else
-            this.renderDirtBackground(p_renderBackground_1_);
+            this.renderBackground( p_renderBackground_1_ );
 
 
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getInstance().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit( x, y, 0, 0, boxWidth, boxHeight );
     }
 
     @Override
@@ -179,7 +169,6 @@ public class CreditorScreen extends Screen
         });
         //LUCIFER
         list = creditorsInfo.get( "Lucifer#0666" );
-        list.add( "Lucifer#0666" );
         list.add( "First Lapis Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "28/04/2020" ).getString() );
 
@@ -191,7 +180,6 @@ public class CreditorScreen extends Screen
             creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
         });
         list = creditorsInfo.get( "Tyrius#0842" );
-        list.add( "Tyrius#0842" );
         list.add( "First Dandelion Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "19/03/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString() );
@@ -205,7 +193,6 @@ public class CreditorScreen extends Screen
         } );
         //DIDIS54
         list = creditorsInfo.get( "didis54#5815" );
-        list.add( "didis54#5815" );
         list.add( "First Iron Tier Patreon" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getString() );
@@ -213,57 +200,50 @@ public class CreditorScreen extends Screen
 
         //STRESSINDICATOR
         list = creditorsInfo.get( "stressindicator#8819" );
-        list.add( "stressindicator#8819" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/08/2020" ).getString() );
 
         //DADDY_P1G
         list = creditorsInfo.get( "Daddy_P1G#0432" );
-        list.add( "Daddy_P1G#0432" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "29/06/2020" ).getString() );
 
         //NEOTHIAMIN
         list = new ArrayList<>();
-        list.add( "neothiamin#1798" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Skillful Survival" ).getString() );
         creditorsInfo.put( "neothiamin#1798", list );
         //DARTH_REVAN#7341
         list = new ArrayList<>();
-        list.add( "Darth Revan#7341" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "17/04/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "Zombie Textiles" ).getString() );
         creditorsInfo.put( "Darth Revan#7341", list );
 
         /////////TRANSLATOR/////////
-        //BUSANDAEK
+        //BusanDaek#3970
         list = new ArrayList<>();
-        list.add( "BusanDaek#3970" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "31/03/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Korean" ).getString() );
         creditorsInfo.put( "BusanDaek#3970", list );
-        //MAREOFTHESTARS
+        //deezer911#5693
         list = new ArrayList<>();
-        list.add( "deezer911#5693" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "11/03/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.helpedTranslating", "French" ).getString() );
         creditorsInfo.put( "deezer911#5693", list );
-        //TORUKM4KT00#0246
+        //TorukM4kt00#0246
         list = new ArrayList<>();
-        list.add( "TorukM4kt00#0246" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         creditorsInfo.put( "TorukM4kt00#0246", list );
-        //STARCHE#0246
+        //starche#7569
         list = new ArrayList<>();
-        list.add( "starche#7569" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         creditorsInfo.put( "starche#7569", list );
-        //DAWNLESS#1153
+
+        //Lyla#2639
         list = new ArrayList<>();
-        list.add( "Dawnless#1153" );
-        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "22/08/2020" ).getString() );
-        list.add( new TranslationTextComponent( "pmmo.translated", "Dutch" ).getString() );
-        creditorsInfo.put( "Dawnless#1153", list );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "28/10/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Chinese Traditional" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString() );
+        creditorsInfo.put( "Lyla#2639", list );
     }
 }

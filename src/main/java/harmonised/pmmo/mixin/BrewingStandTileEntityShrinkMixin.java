@@ -24,7 +24,7 @@ public class BrewingStandTileEntityShrinkMixin
     private NonNullList<ItemStack> brewingItemStacks;
 
     @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "brewPotions" )
-    private void projectmmo$$handleSmeltingShrink( CallbackInfo info )
+    public void projectmmo$$handleSmeltingShrink( CallbackInfo info )
     {
         World world = ((BrewingStandTileEntity)(Object)this).getWorld();
         BlockPos pos = ((BrewingStandTileEntity)(Object)this).getPos();

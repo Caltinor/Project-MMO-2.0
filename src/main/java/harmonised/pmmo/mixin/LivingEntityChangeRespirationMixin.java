@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class LivingEntityChangeRespirationMixin
 {
     @Redirect( at = @At( value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getRespirationModifier(Lnet/minecraft/entity/LivingEntity;)I" ), method = "decreaseAirSupply" )
-    private int projectmmo$$changeLivingEntityRespiration(LivingEntity entity )
+    public int projectmmo$$changeLivingEntityRespiration(LivingEntity entity )
     {
         return AirSupplyDecreaseHandler.returnPmmoAffectedRespiration( entity );
     }

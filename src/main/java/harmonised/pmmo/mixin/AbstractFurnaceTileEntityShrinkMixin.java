@@ -22,7 +22,7 @@ public class AbstractFurnaceTileEntityShrinkMixin
     protected NonNullList<ItemStack> items;
 
     @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "smelt" )
-    private void projectmmo$$handleSmeltingShrink( IRecipe<?> p_214007_1_, CallbackInfo info )
+    public void projectmmo$$handleSmeltingShrink( IRecipe<?> p_214007_1_, CallbackInfo info )
     {
         World world = ((AbstractFurnaceTileEntity)(Object)this).getWorld();
         BlockPos pos = ((AbstractFurnaceTileEntity)(Object)this).getPos();
