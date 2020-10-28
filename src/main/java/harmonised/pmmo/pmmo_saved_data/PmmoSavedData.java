@@ -11,6 +11,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.storage.WorldSavedData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -351,7 +352,7 @@ public class PmmoSavedData extends WorldSavedData
     public static void init( MinecraftServer server )
     {
         PmmoSavedData.server = server;
-        PmmoSavedData.pmmoSavedData = server.getWorld( World.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+        PmmoSavedData.pmmoSavedData = server.getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
     }
 
     public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.
