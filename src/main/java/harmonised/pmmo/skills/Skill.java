@@ -62,7 +62,8 @@ public enum Skill
     SAILING( 42 ),
     ALCHEMY( 43 ),
     CONSTRUCTION( 44 ),
-    LEATHERWORKING( 45 );
+    LEATHERWORKING( 45 ),
+    EXPLORATION( 46 );
 
     public static final Map<Skill, Integer> skillMap = new HashMap<>();
 //    public static final Map<Integer, Skill> intMap = new HashMap<>();

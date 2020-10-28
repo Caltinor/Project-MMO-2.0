@@ -130,18 +130,6 @@ public class ChunkDataHandler
 
     public static UUID checkPos( ResourceLocation dimResLoc, BlockPos blockPos )
     {
-        ChunkPos chunkPos = new ChunkPos( blockPos );
-
-        if( !placedMap.containsKey( dimResLoc ) )
-            placedMap.put( dimResLoc, new HashMap<>() );
-
-        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
-
-        if( !chunkMap.containsKey( chunkPos ) )
-            chunkMap.put( chunkPos, new HashMap<>() );
-
-        Map<BlockPos, UUID> blockMap = chunkMap.get( chunkPos );
-
-        return blockMap.get( blockPos );
+        return placedMap.getOrDefault( dimResLoc, new HashMap<>() ).getOrDefault( new ChunkPos( blockPos ), new HashMap<>() ).get( blockPos );
     }
 }
