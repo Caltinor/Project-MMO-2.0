@@ -56,11 +56,6 @@ public class BlockBrokenHandler
         Material material = event.getState().getMaterial();
         Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
         boolean passedBreakReq = true;
-        
-        Map<Skill, Double> boost = new HashMap<>();
-        boost.put( Skill.FARMING, 20D );
-        
-        Config.setPlayerXpBoost( (ServerPlayerEntity) player, "Farmer", boost );
 
         if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
             passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), JType.REQ_BREAK );

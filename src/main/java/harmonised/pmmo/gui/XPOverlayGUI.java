@@ -708,7 +708,11 @@ public class XPOverlayGUI extends AbstractGui
 		player = Minecraft.getInstance().player;
 
 		Map<String, Double> configMap = Config.getConfigMap();
-		IFormattableTextComponent msg;
+
+		if( level < 1 || ( configMap.containsKey( "maxLevel" ) && level > configMap.get( "maxLevel" ) ) )
+			return;
+
+		TranslationTextComponent msg;
 
 		switch( skill )
 		{

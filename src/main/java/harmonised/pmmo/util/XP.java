@@ -743,35 +743,43 @@ public class XP
 
 	public static boolean checkReq( PlayerEntity player, ResourceLocation res, JType jType )
 	{
-		if( res == null )
-			return true;
-
-		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
-			return true;
-
-		if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).containsKey( player.getUniqueID().toString() ) )
-		{
-			if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).get( player.getUniqueID().toString() ).containsKey( "ignoreReq" ) )
-				return true;
-		}
-
-		String registryName = res.toString();
-		Map<String, Double> reqMap = getReqMap( registryName, jType );
-		double startLevel;
 		boolean failedReq = false;
+
+		try
+		{
+			if( res == null )
+				return true;
+
+			if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
+				return true;
+
+			if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).containsKey( player.getUniqueID().toString() ) )
+			{
+				if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).get( player.getUniqueID().toString() ).containsKey( "ignoreReq" ) )
+					return true;
+			}
+
+			String registryName = res.toString();
+			Map<String, Double> reqMap = getReqMap( registryName, jType );
+			double startLevel;
 
 //		if( reqMap == null )
 //			failedReq = true;
 
-		if( reqMap != null )
-		{
-			for( Map.Entry<String, Double> entry : reqMap.entrySet() )
+			if( reqMap != null )
 			{
-				startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
+				for( Map.Entry<String, Double> entry : reqMap.entrySet() )
+				{
+					startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
 
-				if( startLevel < entry.getValue() )
-					failedReq = true;
+					if( startLevel < entry.getValue() )
+						failedReq = true;
+				}
 			}
+		}
+		catch( Exception e )
+		{
+			LOGGER.error( e );
 		}
 
 		return !failedReq;
