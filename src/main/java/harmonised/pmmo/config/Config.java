@@ -382,7 +382,7 @@ public class Config
                 this.veinMaxDistance = subscriber.subscribe(builder
                         .comment( "What is the maximum distance a player's vein can reach?" )
                         .translation( "pmmo.veinMaxDistance" )
-                        .defineInRange( "veinMaxDistance", 1000D, 1, 1000) );
+                        .defineInRange( "veinMaxDistance", 1000D, 1, 1000000000) );
 
                 this.veinMaxBlocks = subscriber.subscribe(builder
                         .comment( "How many blocks max can be veined?" )
@@ -447,7 +447,7 @@ public class Config
                 this.maxMobDamageBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum amount an aggressive mob's damage will be boosted?" )
                         .translation( "pmmo.maxMobDamageBoost" )
-                        .defineInRange( "maxMobDamageBoost", 100D, 0, 1000) );
+                        .defineInRange( "maxMobDamageBoost", 100D, 0, 1000000000) );
 
                 this.mobDamageBoostPerPowerLevel = subscriber.subscribe(builder
                         .comment( "How much an aggresive mob's damage will increase per one Power Level?" )
@@ -900,12 +900,12 @@ public class Config
                 this.levelsPerOneReach = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of reach" )
                         .translation( "pmmo.levelsPerOneReach" )
-                        .defineInRange( "levelsPerOneReach", 25D, 0, 1000) );
+                        .defineInRange( "levelsPerOneReach", 25D, 0, 1000000000) );
 
                 this.maxExtraReachBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum reach a player can have" )
                         .translation( "pmmo.maxExtraReachBoost" )
-                        .defineInRange( "maxExtraReachBoost", 20D, 0, 1000) );
+                        .defineInRange( "maxExtraReachBoost", 20D, 0, 1000000000) );
 
                 this.blockHardnessLimitForPlacing = subscriber.subscribe(builder
                         .comment( "Hardest considered block (1 hardness = 1 build xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
@@ -973,17 +973,17 @@ public class Config
                 this.levelsPerCrouchJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Crouching" )
                         .translation( "pmmo.levelsPerCrouchJumpBoost" )
-                        .defineInRange( "levelsPerCrouchJumpBoost", 33D, 0, 1000) );
+                        .defineInRange( "levelsPerCrouchJumpBoost", 33D, 0, 1000000000) );
 
                 this.levelsPerSprintJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Sprinting" )
                         .translation( "pmmo.levelsPerSprintJumpBoost" )
-                        .defineInRange( "levelsPerSprintJumpBoost", 50D, 0, 1000) );
+                        .defineInRange( "levelsPerSprintJumpBoost", 50D, 0, 1000000000) );
 
                 this.maxSpeedBoost = subscriber.subscribe(builder
                         .comment( "How much speed boost you can get from Agility (100 = 100% vanilla + 100% = twice as fast max)" )
                         .translation( "pmmo.maxSpeedBoost" )
-                        .defineInRange( "maxSpeedBoost", 100D, 0, 1000) );
+                        .defineInRange( "maxSpeedBoost", 100D, 0, 1000000000) );
 
                 this.speedBoostPerLevel = subscriber.subscribe(builder
                         .comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )
@@ -1008,12 +1008,12 @@ public class Config
                 this.levelsPerHeart = subscriber.subscribe(builder
                         .comment( "Per how many levels you gain 1 Max Heart" )
                         .translation( "pmmo.levelsPerHeart" )
-                        .defineInRange( "levelsPerHeart", 10D, 0, 1000) );
+                        .defineInRange( "levelsPerHeart", 10D, 0, 1000000000) );
 
                 this.maxExtraHeartBoost = subscriber.subscribe(builder
                         .comment( "How many Max Hearts you can have (20 means 10 vanilla + 20 boosted)" )
                         .translation( "pmmo.maxExtraHeartBoost" )
-                        .defineInRange( "maxExtraHeartBoost", 100, 0, 1000) );
+                        .defineInRange( "maxExtraHeartBoost", 100, 0, 1000000000) );
 
                 builder.pop();
             }
@@ -1023,12 +1023,12 @@ public class Config
                 this.levelsPerDamage = subscriber.subscribe(builder
                         .comment( "Per how many levels you gain 1 Extra Damage" )
                         .translation( "pmmo.levelsPerDamage" )
-                        .defineInRange( "levelsPerDamage", 20D, 0, 1000) );
+                        .defineInRange( "levelsPerDamage", 20D, 0, 1000000000) );
 
                 this.maxExtraDamageBoost = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
                         .translation( "pmmo.maxExtraDamageBoost" )
-                        .defineInRange( "maxExtraDamageBoost", 100D, 0, 1000) );
+                        .defineInRange( "maxExtraDamageBoost", 100D, 0, 1000000000) );
 
                 builder.pop();
             }
@@ -1082,12 +1082,12 @@ public class Config
                 this.levelsPerOneEnchantBypass = subscriber.subscribe(builder
                         .comment( "How many levels per each Enchantment Level Bypass above max level enchantment can support in vanilla" )
                         .translation( "pmmo.levelsPerOneEnchantBypass" )
-                        .defineInRange( "levelsPerOneEnchantBypass", 50, 0, 1000) );
+                        .defineInRange( "levelsPerOneEnchantBypass", 50, 0, 1000000000) );
 
                 this.maxEnchantmentBypass = subscriber.subscribe(builder
                         .comment( "Max amount of levels enchants are able to go above max vanilla level" )
                         .translation( "pmmo.maxEnchantmentBypass" )
-                        .defineInRange( "maxEnchantmentBypass", 10, 0, 1000) );
+                        .defineInRange( "maxEnchantmentBypass", 10, 0, 1000000000) );
 
                 this.maxEnchantLevel = subscriber.subscribe(builder
                         .comment( "Anvil combination limits enchantments to this level" )
