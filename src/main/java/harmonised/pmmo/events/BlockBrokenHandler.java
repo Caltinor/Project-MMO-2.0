@@ -228,7 +228,11 @@ public class BlockBrokenHandler
         int dropItemCount = 0;
 
         if( drops.size() > 0 )
+        {
             dropItemCount = drops.get(0).getCount();
+            if( drops.get(0).getItem().equals( block.asItem() ) )
+                dropsItself = true;
+        }
 
         if( !wasPlaced )
             award = XP.addMaps( award, XP.multiplyMap( xpMap, Math.max( dropItemCount, 1 ) ) );
@@ -393,7 +397,7 @@ public class BlockBrokenHandler
             if( !wasPlaced && !isSilk )
                 award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
 
-            if( dropsItself && !wasPlaced || !dropsItself && !isSilk )			//EXTRA DROPS
+            if( ( dropsItself && !wasPlaced ) || ( !dropsItself && !isSilk ) )			//EXTRA DROPS
             {
                 double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) / 100;
 
