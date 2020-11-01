@@ -228,7 +228,11 @@ public class BlockBrokenHandler
         int dropItemCount = 0;
 
         if( drops.size() > 0 )
+        {
             dropItemCount = drops.get(0).getCount();
+            if( drops.get(0).getItem().equals( block.asItem() ) )
+                dropsItself = true;
+        }
 
         if( !wasPlaced )
             award = XP.addMaps( award, XP.multiplyMap( xpMap, Math.max( dropItemCount, 1 ) ) );
