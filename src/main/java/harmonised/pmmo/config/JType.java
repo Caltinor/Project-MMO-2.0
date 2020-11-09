@@ -54,13 +54,14 @@ public enum JType
 
     SALVAGE_FROM(201),
     TREASURE_FROM(202),
-    STATS(203),
-    DIMENSION(204),
-    CREDITS(205),
-    SETTINGS(206),
-    GUI_SETTINGS(207),
-    XP_MULTIPLIER_DIMENSION(208),
-    HISCORE(209);
+    SKILLS(203),
+    STATS(204),
+    DIMENSION(205),
+    CREDITS(206),
+    SETTINGS(207),
+    GUI_SETTINGS(208),
+    XP_MULTIPLIER_DIMENSION(209),
+    HISCORE(210);
 
     public static final Map<JType, Integer> jTypeMap = new HashMap<>();
     public static final Map<Integer, JType> intMap = new HashMap<>();

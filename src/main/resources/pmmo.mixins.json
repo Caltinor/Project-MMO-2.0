@@ -8,10 +8,9 @@
     "BrewingStandTileEntityShrinkMixin",
     "LivingEntityChangeRespirationMixin"
   ],
-  "server":[
+  "server": [
   ],
-  "client":[
-
+  "client": [
   ],
   "injectors": {
     "defaultRequire": 1

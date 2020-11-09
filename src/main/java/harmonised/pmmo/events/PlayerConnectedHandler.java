@@ -14,18 +14,15 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerConnectedHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static Set<UUID> lapisPatreons = new HashSet<>();
-    public static Set<UUID> dandelionPatreons = new HashSet<>();
-    public static Set<UUID> ironPatreons = new HashSet<>();
+    public static List<UUID> lapisPatreons      = new ArrayList<>();
+    public static List<UUID> dandelionPatreons  = new ArrayList<>();
+    public static List<UUID> ironPatreons       = new ArrayList<>();
 
     public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
     {

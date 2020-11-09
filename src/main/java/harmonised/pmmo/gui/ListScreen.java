@@ -1092,7 +1092,7 @@ public class ListScreen extends Screen
     {
         renderBackground( stack,  1 );
 
-        if( jType.equals( JType.STATS ) )
+        if( jType.equals( JType.SKILLS ) )
             title = getTransComp( "pmmo.playerStats", XP.playerNames.get( uuid ) );
 
         if( font.getStringWidth( title.getString() ) > 220 )
@@ -1117,7 +1117,7 @@ public class ListScreen extends Screen
 
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.REQ_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.STATS ) || button.regKey.equals( "pmmo.otherCrafts" ) )
+                if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.REQ_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.SKILLS ) || button.regKey.equals( "pmmo.otherCrafts" ) )
                     renderTooltip( stack, new TranslationTextComponent( button.title ), mouseX, mouseY );
                 else if( button.itemStack != null )
                     renderTooltip( stack, button.itemStack, mouseX, mouseY );

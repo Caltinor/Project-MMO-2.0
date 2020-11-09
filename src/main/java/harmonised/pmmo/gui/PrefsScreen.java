@@ -69,7 +69,7 @@ public class PrefsScreen extends Screen
         scrollY = y + 10;
         buttonX = scrollX + 4;
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.STATS, (button) ->
+        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.SKILLS, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( "pmmo.stats" ) ) );
         });

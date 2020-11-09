@@ -468,5 +468,21 @@
 	"iceandfire:dragonsteel_lightning_hoe":
 	{
 		"farming": 35
+	},
+	"treemendous:iron_lumber_axe":
+	{
+		"woodcutting": 25
+	},
+	"treemendous:golden_lumber_axe":
+	{
+		"woodcutting": 25
+	},
+	"treemendous:diamond_lumber_axe":
+	{
+		"woodcutting": 25
+	},
+	"treemendous:netherite_lumber_axe":
+	{
+		"woodcutting": 25
 	}
 }

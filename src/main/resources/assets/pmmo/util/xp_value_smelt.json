@@ -301,6 +301,26 @@
 	{
 		"smithing": 16
 	},
+	"create:crushed_iron_ore":
+	{
+		"smithing": 11
+	},
+	"create:crushed_gold_ore":
+	{
+		"smithing": 17
+	},
+	"create:crushed_copper_ore":
+	{
+		"smithing": 6.5
+	},
+	"create:crushed_zinc_ore":
+	{
+		"smithing": 15
+	},
+	"create:crushed_brass_ore":
+	{
+		"smithing": 23.5
+	},
 	"endreborn:wolframium_horse_armor":
 	{
 		"smithing": 20
@@ -389,5 +409,97 @@
 	"charm:pig_iron_ore":
 	{
 		"smithing": 22
+	},
+	"treemendous:douglas_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:pine_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:larch_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:fir_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:maple_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:japanese_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:beech_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:cherry_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:alder_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:chestnut_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:plane_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:ash_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:linden_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:robinia_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:willow_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:pomegranate_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:magnolia_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:walnut_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:cedar_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:poplar_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:elm_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:rainbow_eucalyptus_log":
+	{
+		"smithing": 0.25
+	},
+	"treemendous:juniper_log":
+	{
+		"smithing": 0.25
 	}
 }
