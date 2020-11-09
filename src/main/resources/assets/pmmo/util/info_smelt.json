@@ -299,6 +299,26 @@
 	{
 		"extraChance": 0.7
 	},
+	"create:crushed_iron_ore":
+	{
+		"extraChance": 1.1
+	},
+	"create:crushed_gold_ore":
+	{
+		"extraChance": 0.6
+	},
+	"create:crushed_copper_ore":
+	{
+		"extraChance": 0.95
+	},
+	"create:crushed_zinc_ore":
+	{
+		"extraChance": 0.8
+	},
+	"create:crushed_brass_ore":
+	{
+		"extraChance": 0.4
+	},
 	"endreborn:wolframium_horse_armor":
 	{
 		"extraChance": 50
@@ -322,5 +342,97 @@
 	"charm:pig_iron_ore":
 	{
 		"extraChance": 0.75
+	},
+	"treemendous:douglas_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:pine_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:larch_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:fir_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:maple_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:japanese_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:beech_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:cherry_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:alder_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:chestnut_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:plane_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:ash_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:linden_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:robinia_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:willow_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:pomegranate_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:magnolia_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:walnut_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:cedar_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:poplar_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:elm_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:rainbow_eucalyptus_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:juniper_log":
+	{
+		"extraChance": 1
 	}
 }

@@ -798,5 +798,473 @@
 	"charm:pig_iron_ore":
 	{
 		"mining": 12
+	},
+	"treemendous:douglas_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:douglas_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:douglas_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:douglas_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:douglas_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:pine_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:pine_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:pine_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:pine_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:pine_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:larch_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:larch_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:larch_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:larch_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:larch_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:fir_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:fir_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:fir_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:fir_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:fir_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:maple_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:maple_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:maple_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:maple_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:maple_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:red_maple_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:brown_maple_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:japanese_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:japanese_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:japanese_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:japanese_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:japanese_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:beech_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:beech_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:beech_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:beech_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:beech_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:cherry_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:cherry_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:cherry_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:cherry_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:cherry_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:alder_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:alder_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:alder_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:alder_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:alder_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:chestnut_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:chestnut_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:chestnut_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:chestnut_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:chestnut_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:plane_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:plane_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:plane_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:plane_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:plane_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:ash_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:ash_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:ash_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:ash_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:ash_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:linden_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:linden_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:linden_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:linden_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:linden_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:robinia_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:robinia_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:robinia_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:robinia_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:robinia_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:willow_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:willow_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:willow_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:willow_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:willow_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:pomegranate_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:pomegranate_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:pomegranate_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:pomegranate_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:pomegranate_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:magnolia_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:magnolia_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:magnolia_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:magnolia_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:magnolia_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:walnut_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:walnut_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:walnut_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:walnut_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:walnut_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:cedar_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:cedar_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:cedar_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:cedar_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:cedar_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:poplar_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:poplar_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:poplar_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:poplar_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:poplar_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:elm_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:elm_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:elm_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:elm_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:elm_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:rainbow_eucalyptus_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:rainbow_eucalyptus_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:rainbow_eucalyptus_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:rainbow_eucalyptus_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:rainbow_eucalyptus_leaves":
+	{
+		"woodcutting": 1.5
+	},
+	"treemendous:juniper_sapling":
+	{
+		"woodcutting": 10
+	},
+	"treemendous:juniper_log":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:juniper_wood":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:juniper_planks":
+	{
+		"woodcutting": 5
+	},
+	"treemendous:juniper_leaves":
+	{
+		"woodcutting": 1.5
 	}
 }

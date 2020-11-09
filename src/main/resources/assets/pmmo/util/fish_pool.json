@@ -466,7 +466,7 @@
 		"endLevel": 125,
 		"xp": 0.25,
 		"minCount": 5,
-		"maxCount": 64
+		"maxCount": 24
 	},
 	"minecraft:lily_pad":
 	{
@@ -486,7 +486,7 @@
 		"endLevel": 150,
 		"xp": 0.35,
 		"minCount": 5,
-		"maxCount": 32
+		"maxCount": 16
 	},
 	"minecraft:heart_of_the_sea":
 	{

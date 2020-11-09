@@ -140,11 +140,12 @@ public class XP
 		textStyle.put( "pink", 			new Style().setColor( TextFormatting.LIGHT_PURPLE ) );
 		textStyle.put( "dark_purple", 	new Style().setColor( TextFormatting.DARK_PURPLE ) );
 ////////////////////////////////////PATREONS//////////////////////////////////////////////
-		PlayerConnectedHandler.lapisPatreons.add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );		//LUCIFER
-		PlayerConnectedHandler.dandelionPatreons.add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
-		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );		//DIDIS
-		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );		//STRESSINDICATOR
-		PlayerConnectedHandler.ironPatreons.add( UUID.fromString( "5bfdb948-7b66-476a-aefe-d45e4778fb2d" ) );		//DADDY_P1G
+		PlayerConnectedHandler.lapisPatreons.add( 		UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );	//LUCIFER
+		PlayerConnectedHandler.dandelionPatreons.add( 	UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
+		PlayerConnectedHandler.dandelionPatreons.add( 	UUID.fromString( "554b53b8-d0fa-409e-ab87-2a34bf83e506" ) );	//JOERKIG
+		PlayerConnectedHandler.ironPatreons.add( 		UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );	//DIDIS
+		PlayerConnectedHandler.ironPatreons.add( 		UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );	//STRESSINDICATOR
+		PlayerConnectedHandler.ironPatreons.add( 		UUID.fromString( "5bfdb948-7b66-476a-aefe-d45e4778fb2d" ) );	//DADDY_P1G
 ////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
 		materialHarvestTool.put( Material.ANVIL, "pickaxe" );		//PICKAXE
 		materialHarvestTool.put( Material.GLASS, "pickaxe" );

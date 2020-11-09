@@ -96,9 +96,14 @@ public class CreditorScreen extends Screen
 
         List<String> list = creditorsInfo.get( playerName );
 
-        for( int i = 0; i < list.size(); i++ )
+        if( list == null )
+            drawCenteredString( font, "§lError! Please Report me! \"" + playerName + "\"", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2, color );
+        else
         {
-            drawCenteredString( font, ( list.get(i).contains( "§l" ) ? "" : "§l" ) + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
+            for( int i = 0; i < list.size(); i++ )
+            {
+                drawCenteredString( font, ( list.get(i).contains( "§l" ) ? "" : "§l" ) + list.get(i), sr.getScaledWidth() / 2, ( sr.getScaledHeight() / 2 - ( list.size() * 20 ) / 2 ) + i * 20, color );
+            }
         }
 
         RenderSystem.enableBlend();
@@ -159,6 +164,7 @@ public class CreditorScreen extends Screen
         uuidName.put( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa", "didis54#5815" );
         uuidName.put( "0bc51f06-9906-41ea-9fb4-7e9be169c980", "stressindicator#8819" );
         uuidName.put( "5bfdb948-7b66-476a-aefe-d45e4778fb2d", "Daddy_P1G#0432" );
+        uuidName.put( "554b53b8-d0fa-409e-ab87-2a34bf83e506", "joerkig#1337" );
         List<String> list;
 
         /////////LAPIS//////////////
@@ -184,6 +190,9 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "19/03/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.helpedFillingInModValues", "Botania" ).getString() );
+
+        list = creditorsInfo.get( "joerkig#1337" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "3/11/2020" ).getString() );
 
         /////////IRON///////////////
         PlayerConnectedHandler.ironPatreons.forEach( a ->
@@ -233,12 +242,21 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
         creditorsInfo.put( "TorukM4kt00#0246", list );
+        //Dawnless#1153
+        list = new ArrayList<>();
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "22/08/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Dutch - Netherlands" ).getString() );
+        creditorsInfo.put( "Dawnless#1153", list );
+        //TorukM4kt00#0246
+        list = new ArrayList<>();
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "13/05/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Portuguese - Brazil" ).getString() );
+        creditorsInfo.put( "TorukM4kt00#0246", list );
         //starche#7569
         list = new ArrayList<>();
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "24/07/2020" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Russian" ).getString() );
         creditorsInfo.put( "starche#7569", list );
-
         //Lyla#2639
         list = new ArrayList<>();
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "28/10/2020" ).getString() );

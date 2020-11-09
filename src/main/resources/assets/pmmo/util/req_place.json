@@ -631,5 +631,130 @@
 	"bountifulbaubles:water_candle":
 	{
 		"magic": 10
+	},
+	"treemendous:douglas_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:pine_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:larch_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:fir_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:maple_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:red_maple_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:brown_maple_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:japanese_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:beech_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:cherry_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:alder_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:chestnut_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:plane_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:ash_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:linden_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:robinia_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:willow_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:pomegranate_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:magnolia_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:walnut_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:cedar_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:poplar_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:elm_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:rainbow_eucalyptus_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"treemendous:juniper_sapling":
+	{
+		"farming": 15,
+		"woodcutting": 30
 	}
 }

@@ -123,7 +123,10 @@
 	{
 		"extraChance": 1.5
 	},
-	"lycanitesmobs:raw_arisaur_meat": 40,
+	"lycanitesmobs:raw_arisaur_meat":
+	{
+		"extraChance": 0.7
+	},
 	"lycanitesmobs:raw_silex_meat":
 	{
 		"extraChance": 0.7
@@ -132,8 +135,14 @@
 	{
 		"extraChance": 0.7
 	},
-	"lycanitesmobs:raw_pinky_meat": 40,
-	"lycanitesmobs:raw_ika_meat": 40,
+	"lycanitesmobs:raw_pinky_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_ika_meat":
+	{
+		"extraChance": 0.7
+	},
 	"lycanitesmobs:raw_chupacabra_meat":
 	{
 		"extraChance": 0.7
@@ -142,9 +151,18 @@
 	{
 		"extraChance": 0.7
 	},
-	"lycanitesmobs:raw_maka_meat": 40,
-	"lycanitesmobs:raw_yeti_meat": 40,
-	"lycanitesmobs:raw_concapede_meat": 40,
+	"lycanitesmobs:raw_maka_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_yeti_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_concapede_meat":
+	{
+		"extraChance": 0.7
+	},
 	"lycanitesmobs:raw_joust_meat":
 	{
 		"extraChance": 0.7

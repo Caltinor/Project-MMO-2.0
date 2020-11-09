@@ -199,5 +199,105 @@
 	"autumnity:maple_sapling":
 	{
 		"farming": 25
+	},
+	"treemendous:douglas_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:pine_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:larch_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:fir_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:maple_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:red_maple_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:brown_maple_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:japanese_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:beech_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:cherry_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:alder_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:chestnut_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:plane_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:ash_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:linden_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:robinia_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:willow_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:pomegranate_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:magnolia_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:walnut_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:cedar_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:poplar_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:elm_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:rainbow_eucalyptus_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:juniper_sapling":
+	{
+		"farming": 15
 	}
 }
