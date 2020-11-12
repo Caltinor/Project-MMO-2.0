@@ -74,7 +74,7 @@ public class JsonConfig
         initMap2( localData2 );
         initMap2( data2 );
     }
-
+S
     public static void initMap( Map<JType, Map<String, Map<String, Double>>> map )
     {
         for( Map.Entry<JType, Integer> entry : JType.jTypeMap.entrySet() )

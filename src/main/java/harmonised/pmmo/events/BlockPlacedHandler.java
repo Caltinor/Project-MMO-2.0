@@ -25,7 +25,7 @@ import java.util.UUID;
 
 public class BlockPlacedHandler
 {
-    private static Map<UUID, BlockPos> lastPosPlaced = new HashMap<>();
+    private static final Map<UUID, BlockPos> lastPosPlaced = new HashMap<>();
 
     public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
     {
@@ -39,7 +39,7 @@ public class BlockPlacedHandler
 
                 if( block.equals( Blocks.WATER ) )
                 {
-                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", 0.075, true, false, false );
+                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", Config.forgeConfig.jesusXp.get(), true, false, false );
                     return;
                 }
 
