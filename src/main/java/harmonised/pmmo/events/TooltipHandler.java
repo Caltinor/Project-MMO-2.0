@@ -328,7 +328,7 @@ public class TooltipHandler
                         lastKey = regKey;
                     }
 
-                    if( salvageInfo != null )
+                    if( salvageInfo != null && salvageInfo.size() > 0 )
                     {
                         try
                         {
@@ -396,7 +396,7 @@ public class TooltipHandler
                         }
                     }
 
-                    if( treasureInfo != null )
+                    if( treasureInfo != null && treasureInfo.size() > 0 )
                     {
                         try
                         {
