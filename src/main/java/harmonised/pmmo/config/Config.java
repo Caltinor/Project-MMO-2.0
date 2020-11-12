@@ -310,6 +310,9 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> breedingXpEnabled;
         public ConfigHelper.ConfigValueListener<Double> defaultTamingXp;
 
+        //Easter Eggs
+        public ConfigHelper.ConfigValueListener<Double> jesusXp;
+
         public ConfigImplementation(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber)
         {
             builder.push( "Miscellaneous" );
@@ -1239,6 +1242,16 @@ public class Config
                         .comment( "How much xp should be awarded in Taming for Taming an animal? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultTamingXp" )
                         .defineInRange( "defaultTamingXp", 0D, 0, 1000000) );
+
+                builder.pop();
+            }
+
+            builder.push( "Easter Eggs" );
+            {
+                this.jesusXp = subscriber.subscribe(builder
+                        .comment( "How much xp do you get for impersonating Jesus?" )
+                        .translation( "pmmo.jesusXp" )
+                        .defineInRange( "jesusXp", 0.075D, 0, 1000000) );
 
                 builder.pop();
             }

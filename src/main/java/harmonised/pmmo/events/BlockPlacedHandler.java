@@ -41,7 +41,7 @@ public class BlockPlacedHandler
 
                 if( block.equals( Blocks.WATER ) )
                 {
-                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", 0.075, true, false, false );
+                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", Config.forgeConfig.jesusXp.get(), true, false, false );
                     return;
                 }
 
