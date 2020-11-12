@@ -75,6 +75,8 @@ public class ProjectMMOMod
 
     private void serverAboutToStart( FMLServerAboutToStartEvent event )
     {
+        if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
+            JsonConfig.setAutoValues();
         ChunkDataHandler.init();
     }
 

@@ -1,6 +1,7 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
@@ -11,7 +12,9 @@ public class ReloadConfigCommand
 {
     public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
-        JsonConfig.init();    //load up locally
+        JsonConfig.init();  //Load Up Locally
+        if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
+            JsonConfig.setAutoValues(); //Set Auto Values
 
         context.getSource().getServer().getPlayerList().getPlayers().forEach( player ->
         {
