@@ -1124,6 +1124,7 @@ public class JsonConfig
                     ItemStack itemStack = new ItemStack( item );
                     String resLoc = item.getRegistryName().toString();
                     Set<ToolType> toolTypes = itemStack.getToolTypes();
+//                    Set<ResourceLocation> tags = item.getTags();
 
                     //Wear and Weapon Req
                     Multimap<Attribute, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
@@ -1239,19 +1240,20 @@ public class JsonConfig
                         JType jType = JType.NONE;
                         Map<String, Double> infoMap = new HashMap<>();
                         double chance = 0;
+                        Set<ResourceLocation> tags = block.getTags();
 
                         //Ore/Log/Plant Extra Chance
-                        if( block instanceof OreBlock )
+                        if( block instanceof OreBlock || tags.contains( new ResourceLocation( "forge:ores" ) ) )
                         {
                             jType = JType.INFO_ORE;
                             chance = Config.forgeConfig.defaultExtraChanceOre.get();
                         }
-                        else if( block instanceof CropsBlock )
+                        else if( block instanceof CropsBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
                         {
                             jType = JType.INFO_PLANT;
                             chance = Config.forgeConfig.defaultExtraChancePlant.get();
                         }
-                        else if( skill.equals( Skill.WOODCUTTING ) )
+                        else if( tags.contains( new ResourceLocation( "minecraft:logs" ) ) )
                         {
                             jType = JType.INFO_LOG;
                             chance = Config.forgeConfig.defaultExtraChanceLog.get();
