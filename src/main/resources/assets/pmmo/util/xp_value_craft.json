@@ -363,6 +363,14 @@
 	{
 		"crafting": 0
 	},
+	"minecraft:bone":
+	{
+		"crafting": 0
+	},
+	"minecraft:bone_block":
+	{
+		"crafting": 0
+	},
 	"minecraft:redstone":
 	{
 		"crafting": 0
