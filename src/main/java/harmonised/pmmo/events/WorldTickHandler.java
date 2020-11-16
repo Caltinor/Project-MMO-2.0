@@ -74,7 +74,7 @@ public class WorldTickHandler
         String regKey;
         Skill skill;
         double cost;
-        boolean correctBlock, correctItem, correctHeldItem, fullyGrown, isOwner;
+        boolean correctBlock, correctItem, correctHeldItem, isOwner;
         UUID blockUUID, playerUUID;
         int age = -1, maxAge = -2;
 
@@ -101,7 +101,6 @@ public class WorldTickHandler
                     correctBlock = world.getBlockState( veinPos ).getBlock().equals( veinInfo.state.getBlock() );
                     correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
                     correctHeldItem = player.getHeldItemMainhand().getItem().equals( startItem );
-                    fullyGrown = true;
                     blockUUID = ChunkDataHandler.checkPos( world, veinPos );
                     isOwner = blockUUID == null || blockUUID.equals( playerUUID );
                     skill = XP.getSkill( veinState );
@@ -149,8 +148,11 @@ public class WorldTickHandler
                             maxAge = 4;
                         }
 
-                        if( age != maxAge && age >= 0 )
+                        if( age >= 0 && age != maxAge )
+                        {
+                            veinSet.get( player ).remove( 0 );
                             return;
+                        }
                     }
 
                     if( ( abilitiesMap.get( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
