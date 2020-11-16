@@ -70,7 +70,7 @@ public class BlockBrokenHandler
             if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
             {
                 processBroken( event );
-                ChunkDataHandler.delPos( world.getDimension().getType().getRegistryName(), event.getPos() );
+                ChunkDataHandler.delPos( world.dimension.getType().getRegistryName(), event.getPos() );
             }
         }
         else
@@ -224,7 +224,7 @@ public class BlockBrokenHandler
 
         Map<String, Double> award = new HashMap<>();
         award.put( skillName, hardness );
-        
+
         int dropItemCount = 0;
 
         if( drops.size() > 0 )
@@ -300,7 +300,7 @@ public class BlockBrokenHandler
         {
             award = new HashMap<>();
             award.put( skillName, hardness );
-            
+
             int totalExtraDrops;
 
 //            for( ItemStack drop : drops )
@@ -397,7 +397,7 @@ public class BlockBrokenHandler
             if( !wasPlaced && !isSilk )
                 award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
 
-            if( ( dropsItself && !wasPlaced ) || ( !dropsItself && !isSilk ) )			//EXTRA DROPS
+            if( dropsItself && !wasPlaced || !dropsItself && !isSilk )			//EXTRA DROPS
             {
                 double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) / 100;
 
