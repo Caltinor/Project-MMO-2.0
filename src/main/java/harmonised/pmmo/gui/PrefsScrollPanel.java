@@ -14,12 +14,12 @@ import java.util.ArrayList;
 
 public class PrefsScrollPanel extends ScrollPanel
 {
-    MainWindow sr = Minecraft.getInstance().getMainWindow();
+    MainWindow sr = Minecraft.getMinecraft().getMainWindow();
     private final int boxWidth = 256;
     private final int boxHeight = 256;
     private final ArrayList<PrefsEntry> prefsEntries;
     private PrefsEntry prefEntry;
-    private FontRenderer font = Minecraft.getInstance().fontRenderer;
+    private FontRenderer font = Minecraft.getMinecraft().fontRenderer;
     private PrefsSlider slider;
 
     private final Minecraft client;
@@ -125,13 +125,13 @@ public class PrefsScrollPanel extends ScrollPanel
     {
 //        this.drawBackground();
 
-//        if (Minecraft.getInstance().world != null)
+//        if (Minecraft.getMinecraft().world != null)
 //        {
 //            this.fillGradient(0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
 //            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super ) );
 //        }
 
-        Tessellator tess = Tessellator.getInstance();
+        Tessellator tess = Tessellator.getMinecraft();
         BufferBuilder worldr = tess.getBuffer();
 
         double scale = client.getMainWindow().getGuiScaleFactor();

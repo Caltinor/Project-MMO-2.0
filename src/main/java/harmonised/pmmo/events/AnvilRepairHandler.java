@@ -13,13 +13,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class AnvilRepairHandler
 {
@@ -30,9 +30,9 @@ public class AnvilRepairHandler
         if( Config.forgeConfig.anvilHandlingEnabled.get() )
             try
             {
-                if( !event.getPlayer().world.isRemote )
+                if( !event.getEntityPlayer().world.isRemote )
                 {
-                    EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
+                    EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
                     boolean bypassEnchantLimit = Config.forgeConfig.bypassEnchantLimit.get();
                     int currLevel = Skill.SMITHING.getLevel( player );
                     ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
@@ -56,11 +56,11 @@ public class AnvilRepairHandler
                         if( oItem.getRepairCost() > maxCost )
                             oItem.setRepairCost( maxCost );
 
-                        float repaired = oItem.getDamage() - lItem.getDamage();
+                        float repaired = oItem.getItemDamage() - lItem.getItemDamage();
                         if( repaired < 0 )
                             repaired = -repaired;
 
-                        oItem.setDamage( (int) Math.floor( oItem.getDamage() - repaired * bonusRepair ) );
+                        oItem.setItemDamage( (int) Math.floor( oItem.getItemDamage() - repaired * bonusRepair ) );
 
                         double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
 //                        if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( oItem.getItem().getRegistryName().toString() ) )
@@ -87,7 +87,7 @@ public class AnvilRepairHandler
             }
             catch( Exception e )
             {
-                LOGGER.info( "ANVIL FAILED, PLEASE REPORT", e );
+                LOGGER.info( "ANVIL FAILED, PLEASE REPORT " + e.toString() );
             }
     }
 
@@ -110,7 +110,7 @@ public class AnvilRepairHandler
                     newEnchants.replace( enchant, startLevel );
             }
             else
-                newEnchants.setTag( enchant, startLevel );
+                newEnchants.put( enchant, startLevel );
         });
 
 
@@ -122,10 +122,10 @@ public class AnvilRepairHandler
                     newEnchants.replace( enchant, startLevel );
             }
             else
-                newEnchants.setTag( enchant, startLevel );
+                newEnchants.put( enchant, startLevel );
         });
 
-        Set<Enchantment> keys = new HashSet<>( newEnchants.getKeySet() );
+        Set<Enchantment> keys = new HashSet<>( newEnchants.keySet() );
 
         keys.forEach( ( enchant ) ->
         {
@@ -141,7 +141,7 @@ public class AnvilRepairHandler
                     newEnchants.replace( enchant, maxEnchantLevel );
                 else
                     newEnchants.remove( enchant );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getDisplayName( 1 ).getUnformattedText().replace( " I", "" ), "" + maxEnchantLevel, false, 2 ), (EntityPlayerMP) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getTranslatedName( 1 ).replace( " I", "" ), "" + maxEnchantLevel, false, 2 ), (EntityPlayerMP) player );
             }
             else if( enchant.getMaxLevel() + maxPlayerBypass < startLevel && !creative )
             {
@@ -149,7 +149,7 @@ public class AnvilRepairHandler
                     newEnchants.replace( enchant, enchant.getMaxLevel() + maxPlayerBypass );
                 else
                     newEnchants.remove( enchant );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantmentDegradedWarning", enchant.getDisplayName( 1 ).getUnformattedText().replace( " I", "" ), "" + (enchant.getMaxLevel() + maxPlayerBypass), false, 2 ), (EntityPlayerMP) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantmentDegradedWarning", enchant.getTranslatedName( 1 ).replace( " I", "" ), "" + (enchant.getMaxLevel() + maxPlayerBypass), false, 2 ), (EntityPlayerMP) player );
             }
             else if( lEnchants.get( enchant ) != null && rEnchants.get( enchant ) != null )
             {
@@ -157,11 +157,11 @@ public class AnvilRepairHandler
                 {
                     if( startLevel + 1 > maxEnchantLevel && !creative )
                     {
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getDisplayName( 1 ).getUnformattedText().replace( " I", "" ), "" + maxEnchantLevel, false, 2 ), (EntityPlayerMP) player );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.maxEnchantLevelWarning", enchant.getTranslatedName( 1 ).replace( " I", "" ), "" + maxEnchantLevel, false, 2 ), (EntityPlayerMP) player );
                     }
                     else if( startLevel + 1 > enchant.getMaxLevel() + maxPlayerBypass && !creative )
                     {
-                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.enchantLackOfLevelWarning", enchant.getDisplayName( 1 ).getUnformattedText().replace( " I", "" ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.enchantLackOfLevelWarning", enchant.getTranslatedName( 1 ).replace( " I", "" ) ).setStyle( XP.textStyle.get( "red" ) ), false );
                     }
                     else
                     {
@@ -170,7 +170,7 @@ public class AnvilRepairHandler
                             if( Math.ceil( Math.random() * 100 ) <= bypassChance ) //success
                             {
                                 newEnchants.replace( enchant, startLevel + 1 );
-                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getDisplayName( 1 ).getUnformattedText().replace( " I", "" ), "" + (startLevel + 1), false, 1 ), (EntityPlayerMP) player );
+                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getTranslatedName( 1 ).replace( " I", "" ), "" + (startLevel + 1), false, 1 ), (EntityPlayerMP) player );
                             }
                             else if( Math.ceil( Math.random() * 100 ) <= failedBypassPenaltyChance ) //fucked up twice
                             {
@@ -178,18 +178,18 @@ public class AnvilRepairHandler
                                     newEnchants.replace( enchant, startLevel - 1 );
                                 else
                                     newEnchants.remove( enchant );
-                                NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.enchantUpgradeAndSaveFail", enchant.getDisplayName( 1 ).getUnformattedText().replace( " I", "" ), "" + bypassChance, "" + failedBypassPenaltyChance, false, 2 ), (EntityPlayerMP) player );
+                                NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.enchantUpgradeAndSaveFail", enchant.getTranslatedName( 1 ).replace( " I", "" ), "" + bypassChance, "" + failedBypassPenaltyChance, false, 2 ), (EntityPlayerMP) player );
                             }
                             else	//only fucked up once
                             {
                                 newEnchants.replace( enchant, startLevel );
-                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeFail", enchant.getDisplayName( 1 ).getUnformattedText().replace( " I", "" ), "" + bypassChance, false, 3 ), (EntityPlayerMP) player );
+                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeFail", enchant.getTranslatedName( 1 ).replace( " I", "" ), "" + bypassChance, false, 3 ), (EntityPlayerMP) player );
                             }
                         }
                         else
                         {
                             newEnchants.replace( enchant, startLevel + 1 );
-                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getDisplayName( 1 ).getUnformattedText().replace( " I", "" ), "" + (startLevel + 1), false, 1 ), (EntityPlayerMP) player );
+                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.enchantUpgradeSuccess", enchant.getTranslatedName( 1 ).replace( " I", "" ), "" + (startLevel + 1), false, 1 ), (EntityPlayerMP) player );
                         }
                     }
                 }

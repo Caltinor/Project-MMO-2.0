@@ -19,7 +19,7 @@ public class BreedHandler
         {
             EntityPlayerMP causedByPlayer = (EntityPlayerMP) event.getCausedByPlayer();
             double defaultBreedingXp = Config.forgeConfig.defaultBreedingXp.get();
-            String regKey = event.getChild().getEntityString();
+            String regKey = event.getChild().getName();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_BREED );
 
             if( xpValue.size() > 0 )

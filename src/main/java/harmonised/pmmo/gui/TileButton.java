@@ -64,7 +64,7 @@ public class TileButton extends Button
     @Override
     public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_)
     {
-        Minecraft minecraft = Minecraft.getInstance();
+        Minecraft minecraft = Minecraft.getMinecraft();
 //        FontRenderer fontrenderer = minecraft.fontRenderer;
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
 //        int i = this.getYImage(this.isHovered());

@@ -11,10 +11,10 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.Pose;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -42,8 +42,8 @@ public class ListButtonBig extends Button
     public List<String> tooltipText = new ArrayList<>();
     String playerName;
     Entity testEntity = null;
-    LivingEntity entity = null;
-    ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+    EntityLiving entity = null;
+    ItemRenderer itemRenderer = Minecraft.getMinecraft().getItemRenderer();
 
     public ListButtonBig(int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, IPressable onPress )
     {
@@ -59,9 +59,9 @@ public class ListButtonBig extends Button
             this.tooltipText.add( tooltip );
 
         if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
-            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().world );
-        if( testEntity instanceof LivingEntity )
-            entity = (LivingEntity) testEntity;
+            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getMinecraft().world );
+        if( testEntity instanceof EntityLiving )
+            entity = (EntityLiving) testEntity;
 
         if( elementOne > 3 )
             offsetOne = 128;
@@ -84,7 +84,7 @@ public class ListButtonBig extends Button
     public void renderButton(int mouseX, int mouseY, float partialTicks)
     {
         isHovered = mouseX > this.x + 3 && mouseY > this.y && mouseX < this.x + 60 && mouseY < this.y + 64;
-        Minecraft minecraft = Minecraft.getInstance();
+        Minecraft minecraft = Minecraft.getMinecraft();
         FontRenderer fontrenderer = minecraft.fontRenderer;
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
         int i = this.getYImage(this.isHovered());
@@ -119,7 +119,7 @@ public class ListButtonBig extends Button
         LOGGER.info( "Clicked " + this.title + " Button" );
     }
 
-    public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)
+    public static void drawEntityOnScreen(int posX, int posY, int scale, EntityLiving p_228187_5_)
     {
         float f = (float) ( (System.currentTimeMillis() / 25D ) % 360);
         float f1 = 0;
@@ -143,11 +143,11 @@ public class ListButtonBig extends Button
         p_228187_5_.rotationPitch = -f1 * 20.0F;
         p_228187_5_.rotationYawHead = f;
         p_228187_5_.prevRotationYawHead = 0;
-        EntityRendererManager entityrenderermanager = Minecraft.getInstance().getRenderManager();
+        EntityRendererManager entityrenderermanager = Minecraft.getMinecraft().getRenderManager();
         quaternion1.conjugate();
         entityrenderermanager.setCameraOrientation(quaternion1);
         entityrenderermanager.setRenderShadow(false);
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getMinecraft().getRenderTypeBuffers().getBufferSource();
         entityrenderermanager.renderEntityStatic(p_228187_5_, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
         irendertypebuffer$impl.finish();
         entityrenderermanager.setRenderShadow(true);

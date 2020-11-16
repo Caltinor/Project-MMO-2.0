@@ -9,10 +9,9 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.BlockItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.IPlantable;
@@ -69,22 +68,22 @@ public class BlockPlacedHandler
                     if (lastPosPlaced.containsKey(playerName))
                         lastPosPlaced.replace(playerUUID, event.getPos());
                     else
-                        lastPosPlaced.setTag(playerUUID, blockPos);
+                        lastPosPlaced.put(playerUUID, blockPos);
                 }
                 else
                 {
                     ItemStack mainItemStack = player.getHeldItemMainhand();
                     ItemStack offItemStack = player.getHeldItemOffhand();
 
-                    if( mainItemStack.getItem() instanceof BlockItem)
+                    if( mainItemStack.getItem() instanceof ItemBlock )
                         NetworkHandler.sendToPlayer( new MessageGrow( 0, mainItemStack.getCount() ), (EntityPlayerMP) player );
-                    if( offItemStack.getItem() instanceof BlockItem )
+                    if( offItemStack.getItem() instanceof ItemBlock )
                         NetworkHandler.sendToPlayer( new MessageGrow( 1, offItemStack.getCount() ), (EntityPlayerMP) player );
 
                     if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( block.getRegistryName().toString() ) || block instanceof IPlantable)
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlant", block.getTranslationKey(), "", true, 2 ), (EntityPlayerMP) player );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlant", block.getUnlocalizedName(), "", true, 2 ), (EntityPlayerMP) player );
                     else
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlaceDown", block.getTranslationKey(), "", true, 2 ), (EntityPlayerMP) player );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlaceDown", block.getUnlocalizedName(), "", true, 2 ), (EntityPlayerMP) player );
 
                     event.setCanceled( true );
                 }

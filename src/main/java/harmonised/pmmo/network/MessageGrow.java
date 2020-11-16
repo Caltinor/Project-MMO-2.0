@@ -40,12 +40,12 @@ public class MessageGrow
     {
         ctx.get().enqueueWork(() ->
         {
-            if( Minecraft.getInstance().player != null )
+            if( Minecraft.getMinecraft().player != null )
             {
                 if( packet.slot == 0 )
-                    Minecraft.getInstance().player.getHeldItemMainhand().setCount( packet.amount );
+                    Minecraft.getMinecraft().player.getHeldItemMainhand().setCount( packet.amount );
                 else if( packet.slot == 1 )
-                    Minecraft.getInstance().player.getHeldItemOffhand().setCount( packet.amount );
+                    Minecraft.getMinecraft().player.getHeldItemOffhand().setCount( packet.amount );
             }
         });
         ctx.get().setPacketHandled(true);

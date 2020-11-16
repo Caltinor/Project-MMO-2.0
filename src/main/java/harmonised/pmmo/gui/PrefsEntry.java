@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class PrefsEntry
 {
-    public static FontRenderer font = Minecraft.getInstance().fontRenderer;
+    public static FontRenderer font = Minecraft.getMinecraft().fontRenderer;
     public PrefsSlider slider;
     public Button button;
     public TextFieldWidget textField;

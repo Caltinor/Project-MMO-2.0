@@ -44,7 +44,7 @@ public class NBTHelper
 
         for( Map.Entry<String, Double> entry : map.entrySet() )
         {
-            nbt.setTagDouble( entry.getKey(), entry.getValue() );
+            nbt.setDouble( entry.getKey(), entry.getValue() );
         }
 
         return nbt;
@@ -68,7 +68,7 @@ public class NBTHelper
 
         for( Map.Entry<Skill, Double> entry : map.entrySet() )
         {
-            nbt.setTagDouble( entry.getKey().toString(), entry.getValue() );
+            nbt.setDouble( entry.getKey().toString(), entry.getValue() );
         }
 
         return nbt;
@@ -145,7 +145,7 @@ public class NBTHelper
 
             for( String xpBoostKey : inData.getCompoundTag( playerUUIDKey ).getKeySet() )
             {
-                outMap.get( playerUUID ).setTag( xpBoostKey, nbtToMapSkill( inData.getCompoundTag( playerUUIDKey ).getCompoundTag( xpBoostKey ) ) );
+                outMap.get( playerUUID ).put( xpBoostKey, nbtToMapSkill( inData.getCompoundTag( playerUUIDKey ).getCompoundTag( xpBoostKey ) ) );
             }
         }
 
@@ -172,7 +172,7 @@ public class NBTHelper
         for( String uuidKey : playersTag.getKeySet() )
         {
             playerTag = playersTag.getCompoundTag( uuidKey );
-            if( playerTag.contains( element ) )
+            if( playerTag.hasKey( element ) )
                 outData.setTag( uuidKey, playerTag.getCompoundTag( element ) );
         }
 
@@ -186,13 +186,13 @@ public class NBTHelper
         for( String jTypeKey : input.getKeySet() )
         {
             jType = JType.getJType( jTypeKey );
-            output.setTag( jType, new HashMap<>() );
+            output.put( jType, new HashMap<>() );
             for( String topKey : input.getCompoundTag( jTypeKey ).getKeySet() )
             {
-                output.get( jType ).setTag( topKey, new HashMap<>() );
+                output.get( jType ).put( topKey, new HashMap<>() );
                 for( String botKey : input.getCompoundTag( jTypeKey ).getCompoundTag( topKey ).getKeySet() )
                 {
-                    output.get( jType ).get( topKey ).setTag( botKey, input.getCompoundTag( jTypeKey ).getCompoundTag( topKey ).getDouble( botKey ) );
+                    output.get( jType ).get( topKey ).put( botKey, input.getCompoundTag( jTypeKey ).getCompoundTag( topKey ).getDouble( botKey ) );
                 }
             }
         }
@@ -204,17 +204,17 @@ public class NBTHelper
     {
         NBTTagCompound output = new NBTTagCompound();
 
-        for( JType jType : input.getKeySet() )
+        for( JType jType : input.keySet() )
         {
             output.setTag( jType.toString(), new NBTTagCompound() );
-            for( String topKey : input.get( jType ).getKeySet() )
+            for( String topKey : input.get( jType ).keySet() )
             {
                 output.getCompoundTag( jType.toString() ).setTag( topKey, new NBTTagCompound() );
-                for( String botKey : input.get( jType ).get( topKey ).getKeySet() )
+                for( String botKey : input.get( jType ).get( topKey ).keySet() )
                 {
                     Double value = input.get( jType ).get( topKey ).get( botKey );
 
-                    output.getCompoundTag( jType.toString() ).getCompoundTag( topKey ).setTagDouble( botKey, value );
+                    output.getCompoundTag( jType.toString() ).getCompoundTag( topKey ).setDouble( botKey, value );
                 }
             }
         }
@@ -227,17 +227,17 @@ public class NBTHelper
         for( Map.Entry<JType, Map<String, Map<String, Double>>> entry3 : input2.entrySet() )
         {
             if( !input1.containsKey( entry3.getKey() ) )
-                input1.setTag( entry3.getKey(), new HashMap<>() );
+                input1.put( entry3.getKey(), new HashMap<>() );
 
             for( Map.Entry<String, Map<String, Double>> entry2 : entry3.getValue().entrySet() )
             {
                 if( !input1.get( entry3.getKey() ).containsKey( entry2.getKey() ) )
-                    input1.get( entry3.getKey() ).setTag( entry2.getKey(), new HashMap<>() );
+                    input1.get( entry3.getKey() ).put( entry2.getKey(), new HashMap<>() );
 
                 for( Map.Entry<String, Double> entry1 : entry2.getValue().entrySet() )
                 {
                     if( !input1.get( entry3.getKey() ).get( entry2.getKey() ).containsKey( entry1.getKey() ) )
-                        input1.get( entry3.getKey() ).get( entry2.getKey() ).setTag( entry1.getKey(), entry1.getValue() );
+                        input1.get( entry3.getKey() ).get( entry2.getKey() ).put( entry1.getKey(), entry1.getValue() );
                 }
             }
         }
@@ -250,16 +250,16 @@ public class NBTHelper
         for( String jTypeKey : input.getKeySet() )
         {
             jType = JType.getJType( jTypeKey );
-            output.setTag( jType, new HashMap<>() );
+            output.put( jType, new HashMap<>() );
             for( String topKey : input.getCompoundTag( jTypeKey ).getKeySet() )
             {
-                output.get( jType ).setTag( topKey, new HashMap<>() );
+                output.get( jType ).put( topKey, new HashMap<>() );
                 for( String midKey : input.getCompoundTag( jTypeKey ).getCompoundTag( topKey ).getKeySet() )
                 {
-                    output.get( jType ).get( topKey ).setTag( midKey, new HashMap<>() );
+                    output.get( jType ).get( topKey ).put( midKey, new HashMap<>() );
                     for( String botKey : input.getCompoundTag( jTypeKey ).getCompoundTag( topKey ).getCompoundTag( midKey ).getKeySet() )
                     {
-                        output.get( jType ).get( topKey ).get( midKey ).setTag( botKey, input.getCompoundTag( jTypeKey ).getCompoundTag( topKey ).getCompoundTag( midKey ).getDouble( botKey ) );
+                        output.get( jType ).get( topKey ).get( midKey ).put( botKey, input.getCompoundTag( jTypeKey ).getCompoundTag( topKey ).getCompoundTag( midKey ).getDouble( botKey ) );
                     }
                 }
             }
@@ -272,19 +272,19 @@ public class NBTHelper
     {
         NBTTagCompound output = new NBTTagCompound();
 
-        for( JType jType : input.getKeySet() )
+        for( JType jType : input.keySet() )
         {
             output.setTag( jType.toString(), new NBTTagCompound() );
-            for( String topKey : input.get( jType ).getKeySet() )
+            for( String topKey : input.get( jType ).keySet() )
             {
                 output.getCompoundTag( jType.toString() ).setTag( topKey, new NBTTagCompound() );
-                for( String midKey : input.get( jType ).get( topKey ).getKeySet() )
+                for( String midKey : input.get( jType ).get( topKey ).keySet() )
                 {
                     output.getCompoundTag( jType.toString() ).getCompoundTag( topKey ).setTag( midKey, new NBTTagCompound() );
-                    for( String botKey : input.get( jType ).get( topKey ).get( midKey ).getKeySet() )
+                    for( String botKey : input.get( jType ).get( topKey ).get( midKey ).keySet() )
                     {
                         Double value = input.get( jType ).get( topKey ).get( midKey ).get( botKey );
-                        output.getCompoundTag( jType.toString() ).getCompoundTag( topKey ).getCompoundTag( midKey ).setTagDouble( botKey, value );
+                        output.getCompoundTag( jType.toString() ).getCompoundTag( topKey ).getCompoundTag( midKey ).setDouble( botKey, value );
                     }
                 }
             }
@@ -298,17 +298,17 @@ public class NBTHelper
         for( Map.Entry<JType, Map<String, Map<String, Map<String, Double>>>> entry4 : input2.entrySet() )
         {
             if( !input1.containsKey( entry4.getKey() ) )
-                input1.setTag( entry4.getKey(), new HashMap<>() );
+                input1.put( entry4.getKey(), new HashMap<>() );
 
             for( Map.Entry<String, Map<String, Map<String, Double>>> entry3 : entry4.getValue().entrySet() )
             {
                 if( !input1.get( entry4.getKey() ).containsKey( entry3.getKey() ) )
-                    input1.get( entry4.getKey() ).setTag( entry3.getKey(), new HashMap<>() );
+                    input1.get( entry4.getKey() ).put( entry3.getKey(), new HashMap<>() );
 
                 for( Map.Entry<String, Map<String, Double>> entry2 : entry3.getValue().entrySet() )
                 {
                     if( !input1.get( entry4.getKey() ).get( entry3.getKey() ).containsKey( entry2.getKey() ) )
-                        input1.get( entry4.getKey() ).get( entry3.getKey() ).setTag( entry2.getKey(), entry2.getValue() );
+                        input1.get( entry4.getKey() ).get( entry3.getKey() ).put( entry2.getKey(), entry2.getValue() );
                 }
             }
         }

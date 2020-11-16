@@ -19,12 +19,9 @@ public class PlacedBlocks
 		
 		Long posKey = pos.toLong();
 	    HashSet<Long> dimBlockSet = placedBlockMap.get( dimension );
-	    
-		if( dimBlockSet.contains( posKey ) )
-		{
-	    	dimBlockSet.remove( posKey );
-//			System.out.println( "ORE REMOVED" );
-		}
+
+	    dimBlockSet.remove( posKey );
+//		System.out.println( "ORE REMOVED" );
 	}
 	
 	public static boolean isPlayerPlaced(World world, BlockPos pos)

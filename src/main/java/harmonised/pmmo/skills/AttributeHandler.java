@@ -7,11 +7,11 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -56,7 +56,7 @@ public class AttributeHandler
 
 	public static double getReach( EntityPlayer player )
 	{
-		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
+		IAttributeInstance reachAttribute = player.getAttributeMap().getAttributeInstance( player.REACH_DISTANCE );
 
 		if( reachAttribute.getModifier( reachModifierID ) == null )
 			return ( reachAttribute.getBaseValue() );
@@ -66,7 +66,7 @@ public class AttributeHandler
 
 	public static void updateReach( EntityPlayer player )
 	{
-		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
+		IAttributeInstance reachAttribute = player.getAttributeMap().getAttributeInstance( player.REACH_DISTANCE );
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 		double buildLevel = Skill.BUILDING.getLevel( player );
 		double reach = -0.91 + ( buildLevel / levelsPerOneReach );
@@ -88,7 +88,7 @@ public class AttributeHandler
 
 	public static double getBaseSpeed( EntityPlayer player )
 	{
-		return player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED ).getBaseValue();
+		return player.getAttributeMap().getAttributeInstance( SharedMonsterAttributes.MOVEMENT_SPEED ).getBaseValue();
 	}
 
 	public static double getSpeedBoost( EntityPlayer player )
@@ -116,7 +116,7 @@ public class AttributeHandler
 
 	public static void updateSpeed( EntityPlayer player )
 	{
-		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		IAttributeInstance speedAttribute = player.getAttributeMap().getAttributeInstance( SharedMonsterAttributes.MOVEMENT_SPEED );
 		double speedBoost = getSpeedBoost( player );
 
 		if( speedBoost > 0 )
@@ -134,13 +134,13 @@ public class AttributeHandler
 
 	public static void resetSpeed( EntityPlayer player )
 	{
-		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		IAttributeInstance speedAttribute = player.getAttributeMap().getAttributeInstance( SharedMonsterAttributes.MOVEMENT_SPEED );
 		speedAttribute.removeModifier( speedModifierID );
 	}
 
 	public static void updateHP( EntityPlayer player )
 	{
-		IAttributeInstance hpAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		IAttributeInstance hpAttribute = player.getAttributeMap().getAttributeInstance( SharedMonsterAttributes.MAX_HEALTH );
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 		double enduranceLevel = Skill.ENDURANCE.getLevel( player );
 		int heartBoost = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
@@ -159,7 +159,7 @@ public class AttributeHandler
 
 	public static void updateDamage( EntityPlayer player )
 	{
-		IAttributeInstance damageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		IAttributeInstance damageAttribute = player.getAttributeMap().getAttributeInstance( SharedMonsterAttributes.ATTACK_DAMAGE );
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 		Double maxDamagePref = null;
 		if( prefsMap.containsKey( "maxExtraDamageBoost" ) )
@@ -176,7 +176,7 @@ public class AttributeHandler
 		damageAttribute.applyModifier( damageModifier );
 	}
 
-	public static void updateHP( MobEntity mob, float bonus )
+	public static void updateHP( EntityMob mob, float bonus )
 	{
 		IAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		if( hpAttribute != null )
@@ -184,7 +184,7 @@ public class AttributeHandler
 			boolean wasMaxHealth = mob.getHealth() == mob.getMaxHealth();
 			double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
 			double mobHPBoostPerPowerLevel = Config.forgeConfig.mobHPBoostPerPowerLevel.get();
-			if( !(mob instanceof AnimalEntity) )
+			if( !(mob instanceof EntityAnimal) )
 				bonus *= mobHPBoostPerPowerLevel;
 
 			bonus *= getBiomeMobMultiplier( mob, "hpBonus" );
@@ -228,7 +228,7 @@ public class AttributeHandler
 		IAttributeInstance speedAttribute = mob.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		if( speedAttribute != null )
 		{
-			if( !(mob instanceof  AnimalEntity) )
+			if( !(mob instanceof  EntityAnimal) )
 			{
 				double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
 				double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();

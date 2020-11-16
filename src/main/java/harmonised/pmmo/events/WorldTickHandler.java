@@ -11,25 +11,20 @@ import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.*;
 
@@ -69,7 +64,7 @@ public class WorldTickHandler
         ItemStack startItemStack;
         Item startItem;
         BlockPos veinPos;
-        BlockState veinState;
+        IBlockState state;
         Map<String, Double> abilitiesMap;
         String regKey;
         Skill skill;
@@ -81,7 +76,7 @@ public class WorldTickHandler
         if( event.world.getServer() == null )
             return;
 
-        for( EntityPlayer player : event.world.getServer().getPlayerList().getPlayers() )
+        for( EntityPlayer player : event.getServer().getPlayerList().getPlayers() )
         {
             playerUUID = player.getUniqueID();
 
@@ -205,15 +200,15 @@ public class WorldTickHandler
 
     public static void destroyBlock( World world, BlockPos pos, EntityPlayer player, ItemStack toolUsed )
     {
-        BlockState blockstate = world.getBlockState(pos);
+        IBlockState state = world.getBlockState(pos);
         IFluidState ifluidstate = world.getFluidState(pos);
-        world.playEvent(2001, pos, Block.getStateId(blockstate) );
+        world.playEvent(2001, pos, Block.getStateId(state) );
 
-        TileEntity tileentity = blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
-        Block.spawnDrops(blockstate, world, pos, tileentity, player, toolUsed );
+        TileEntity tileentity = state.hasTileEntity() ? world.getTileEntity(pos) : null;
+        Block.spawnDrops( state, world, pos, tileentity, player, toolUsed );
 
         if( world.setBlockState(pos, ifluidstate.getBlockState(), 3) && toolUsed.isDamageable() && !player.isCreative() )
-            toolUsed.damageItem( 1, player, (a) -> a.sendBreakAnimation( Hand.MAIN_HAND ) );
+            toolUsed.damageItem( 1, player, (a) -> a.sendBreakAnimation( EnumHand.MAIN_HAND ) );
     }
 
     public static void scheduleVein(EntityPlayer player, VeinInfo veinInfo )
@@ -230,8 +225,8 @@ public class WorldTickHandler
 
         if( blockPosArrayList.size() > 0 )
         {
-            activeVein.setTag( player, veinInfo );
-            veinSet.setTag( player, blockPosArrayList );
+            activeVein.put( player, veinInfo );
+            veinSet.put( player, blockPosArrayList );
             NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 0 ), (EntityPlayerMP) player );
         }
     }
@@ -338,7 +333,7 @@ public class WorldTickHandler
         return outVein;
     }
 
-    public static double getVeinCost( BlockState state, BlockPos pos, EntityPlayer player )
+    public static double getVeinCost( IBlockState state, BlockPos pos, EntityPlayer player )
     {
         Material material = state.getMaterial();
         Skill skill = XP.getSkill( material );

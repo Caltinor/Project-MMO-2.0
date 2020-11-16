@@ -17,14 +17,14 @@ import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -47,7 +47,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, barKey = false, listKey = false, veinKey = false, barPressed = false, listPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills, xpDropsShowXpBar;
 	private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
-	private static Minecraft mc = Minecraft.getInstance();
+	private static Minecraft mc = Minecraft.getMinecraft();
 	private static EntityPlayer player = mc.player;
 	public static Map<Skill, ASkill> skills = new HashMap<>();
 	//	private static ArrayList<String> skillsKeys = new ArrayList<String>();
@@ -60,7 +60,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static long lastBonusUpdate = System.nanoTime(), lastVeinBlockUpdate = System.nanoTime();
 	private static double itemBoost, biomeBoost, dimensionBoost, playerXpBoost, dimensionMultiplier, multiplier;
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
-	private static BlockState blockState, lastBlockState;
+	private static IBlockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	private static Item lastToolHeld = Items.AIR;
 	private static MatrixStack stack;
@@ -77,7 +77,7 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
 			{
-				player = Minecraft.getInstance().player;
+				player = Minecraft.getMinecraft().player;
 				if( !init )
 				{
 					doInit();
@@ -132,7 +132,7 @@ public class XPOverlayGUI extends AbstractGui
 				else
 					listPressed = false;
 
-				if( !Minecraft.getInstance().isGamePaused() )
+				if( !Minecraft.getMinecraft().isGamePaused() )
 				{
 					doRayTrace();
 					doCrosshair();
@@ -164,7 +164,7 @@ public class XPOverlayGUI extends AbstractGui
 			blockPos = ((BlockRayTraceResult) mc.objectMouseOver).getPos();
 			blockState = mc.world.getBlockState( blockPos );
 
-			if( lastBlockState == null )
+			if( lastIBlockState== null )
 				updateLastBlock();
 
 			if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
@@ -181,7 +181,7 @@ public class XPOverlayGUI extends AbstractGui
 
 	private void updateLastBlock()
 	{
-		lastBlockState = blockState;
+		lastIBlockState= blockState;
 		lastBlockPos = blockPos;
 		if( lastBlockState.getBlock().getRegistryName() != null )
 			lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
@@ -322,7 +322,7 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			RenderSystem.pushMatrix();
 			RenderSystem.enableBlend();
-			Minecraft.getInstance().getTextureManager().bindTexture( bar );
+			Minecraft.getMinecraft().getTextureManager().bindTexture( bar );
 			RenderSystem.color3f( 255, 255, 255 );
 
 			aSkill = skills.get( skill );
@@ -408,7 +408,7 @@ public class XPOverlayGUI extends AbstractGui
 
 		if( veinKey && XP.isPlayerSurvival( player ) )
 		{
-			Minecraft.getInstance().getTextureManager().bindTexture( bar );
+			Minecraft.getMinecraft().getTextureManager().bindTexture( bar );
 
 			blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
 			blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
@@ -429,7 +429,7 @@ public class XPOverlayGUI extends AbstractGui
 				return;
 			}
 
-			if( lastBlockState != null && canBreak && ( lookingAtBlock || isVeining ) )
+			if( lastIBlockState!= null && canBreak && ( lookingAtBlock || isVeining ) )
 			{
 				if( canVein )
 				{
@@ -513,7 +513,7 @@ public class XPOverlayGUI extends AbstractGui
 
 	public static void doInit()
 	{
-		player = Minecraft.getInstance().player;
+		player = Minecraft.getMinecraft().player;
 
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 
@@ -686,7 +686,7 @@ public class XPOverlayGUI extends AbstractGui
 //			matrixStack.multiply(this.renderManager.getCameraOrientation());
 //			matrixStack.scale(-0.025F, -0.025F, 0.025F);
 //			Matrix4f matrix4f = matrixStackIn.getLast().getPositionMatrix();
-//			float f1 = Minecraft.getInstance().gameSettings.getTextBackgroundOpacity(0.25F);
+//			float f1 = Minecraft.getMinecraft().gameSettings.getTextBackgroundOpacity(0.25F);
 //			int j = (int)(f1 * 255.0F) << 24;
 //			FontRenderer fontrenderer = this.getFontRendererFromRenderManager();
 //			float f2 = (float)(-fontrenderer.getStringWidth(theText) / 2);
@@ -701,7 +701,7 @@ public class XPOverlayGUI extends AbstractGui
 
 	public static void sendLvlUp( int level, Skill skill )
 	{
-		player = Minecraft.getInstance().player;
+		player = Minecraft.getMinecraft().player;
 
 		Map<String, Double> configMap = Config.getConfigMap();
 

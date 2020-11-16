@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class ListScrollPanel extends ScrollPanel
 {
-    MainWindow sr = Minecraft.getInstance().getMainWindow();
+    MainWindow sr = Minecraft.getMinecraft().getMainWindow();
     EntityPlayer player;
     String regKey;
     JType jType;
@@ -76,12 +76,12 @@ public class ListScrollPanel extends ScrollPanel
 
                 button.render( mouseX, mouseY, 0 );
 
-                drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, button.unlocked ? 0x54fc54 : 0xfc5454 );
+                drawString( Minecraft.getMinecraft().fontRenderer, button.title, this.left + 6, button.y + 2, button.unlocked ? 0x54fc54 : 0xfc5454 );
 
                 int i = 0;
                 for( String line : button.text )
                 {
-                    drawString( Minecraft.getInstance().fontRenderer, line, this.left + 6, button.y + 11 + (i++ * 9), 0xffffff );
+                    drawString( Minecraft.getMinecraft().fontRenderer, line, this.left + 6, button.y + 11 + (i++ * 9), 0xffffff );
                 }
             }
             accumulativeHeight += button.getHeight() + 4;
@@ -129,13 +129,13 @@ public class ListScrollPanel extends ScrollPanel
     {
 //        this.drawBackground();
 
-//        if (Minecraft.getInstance().world != null)
+//        if (Minecraft.getMinecraft().world != null)
 //        {
 //            this.fillGradient(0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
 //            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super ) );
 //        }
 
-        Tessellator tess = Tessellator.getInstance();
+        Tessellator tess = Tessellator.getMinecraft();
         BufferBuilder worldr = tess.getBuffer();
 
         double scale = client.getMainWindow().getGuiScaleFactor();

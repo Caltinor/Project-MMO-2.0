@@ -1,7 +1,5 @@
 package harmonised.pmmo.skills;
 
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.Reference;
@@ -10,7 +8,6 @@ import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
 import java.util.Map;

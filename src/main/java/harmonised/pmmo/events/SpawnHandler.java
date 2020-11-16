@@ -2,8 +2,8 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -14,7 +14,7 @@ public class SpawnHandler
 {
     public static void handleSpawn( LivingSpawnEvent.EnteringChunk event )
     {
-        if( event.getEntity() instanceof MobEntity && !(event.getEntity() instanceof AnimalEntity) )
+        if( event.getEntity() instanceof MobEntity && !(event.getEntity() instanceof EntityAnimal) )
         {
             MobEntity mob = (MobEntity) event.getEntity();
             MinecraftServer server = mob.getServer();

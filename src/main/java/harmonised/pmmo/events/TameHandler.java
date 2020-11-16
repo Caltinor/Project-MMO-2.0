@@ -16,7 +16,7 @@ public class TameHandler
         if( event.getTamer() instanceof EntityPlayerMP )
         {
             EntityPlayerMP tamer = (EntityPlayerMP) event.getTamer();
-            String regKey = event.getAnimal().getEntityString();
+            String regKey = event.getAnimal().getName();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_TAME );
 
             if( xpValue.size() > 0 )

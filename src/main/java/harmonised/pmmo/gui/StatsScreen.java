@@ -22,7 +22,7 @@ public class StatsScreen extends Screen
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();
+    MainWindow sr = Minecraft.getMinecraft().getMainWindow();
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -52,7 +52,7 @@ public class StatsScreen extends Screen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.stats" ) ) );
+            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.stats" ) ) );
         });
 
         addButton(exitButton);
@@ -94,7 +94,7 @@ public class StatsScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
 //        RenderSystem.enableBlend();
 

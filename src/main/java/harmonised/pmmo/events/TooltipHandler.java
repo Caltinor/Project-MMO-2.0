@@ -10,19 +10,13 @@ import harmonised.pmmo.util.DP;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import sun.rmi.log.LogHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,13 +40,13 @@ public class TooltipHandler
             if( !tooltipOn )
                 return;
 
-            EntityPlayer player = event.getPlayer();
+            EntityPlayer player = event.getEntityPlayer();
 
             if( player != null )
             {
                 ItemStack itemStack = event.getItemStack();
                 Item item = itemStack.getItem();
-                List<ITextComponent> tooltip = event.getToolTip();
+                List<String> tooltip = event.getToolTip();
                 int level;
 
                 if( item.getRegistryName() == null )
@@ -66,7 +60,7 @@ public class TooltipHandler
                 if( ClientHandler.OPEN_MENU.isKeyDown() )
                 {
                     GlossaryScreen.setButtonsToKey( regKey );
-                    Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( Minecraft.getInstance().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
+                    Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
                     return;
                 }
 
@@ -91,12 +85,12 @@ public class TooltipHandler
                 Map<String, Double> heldItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
                 Map<String, Double> wornItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regKey );
 
-                if( item instanceof BlockItem)
+                if( item instanceof ItemBlock)
                 {
-                    material = ( (BlockItem) item).getBlock().getDefaultState().getMaterial();
-                    hardness = ( (BlockItem) item).getBlock().getDefaultState().getBlockHardness( null, null );
+                    material = ( (ItemBlock) item).getBlock().getDefaultState().getMaterial();
+                    hardness = ( (ItemBlock) item).getBlock().getDefaultState().getBlockHardness( null, null );
                     if( hardness > 0 )
-                        tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo.hardness", DP.dp( hardness ) ).getUnformattedText() ) );
+                        tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo.hardness", DP.dp( hardness ) ).getUnformattedText() ).getFormattedText() );
 //                    tooltip.add( new TextComponentString( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
                 }
 
@@ -104,78 +98,78 @@ public class TooltipHandler
                 {
                     if( xpValueGeneral != null && xpValueGeneral.size() > 0 )      //XP GENERAL
                     {
-                        tooltip.add( new TextComponentTranslation( "pmmo.xpValue" ) );
+                        tooltip.add( new TextComponentTranslation( "pmmo.xpValue" ).getFormattedText() );
 
-                        for( String key : xpValueGeneral.getKeySet() )
+                        for( String key : xpValueGeneral.keySet() )
                         {
                             dValue = xpValueGeneral.get( key );
-                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ).getFormattedText() );
                         }
                     }
 
                     if( xpValueBreaking != null && xpValueBreaking.size() > 0 )      //XP BREAK
                     {
-                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueBreak" ) );
+                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueBreak" ).getFormattedText() );
 
-                        for( String key : xpValueBreaking.getKeySet() )
+                        for( String key : xpValueBreaking.keySet() )
                         {
                             dValue = xpValueBreaking.get( key );
-                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ).getFormattedText() );
                         }
                     }
 
                     if( xpValueCrafting != null && xpValueCrafting.size() > 0 )      //XP CRAFT
                     {
-                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueCraft" ) );
+                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueCraft" ).getFormattedText() );
 
-                        for( String key : xpValueCrafting.getKeySet() )
+                        for( String key : xpValueCrafting.keySet() )
                         {
                             dValue = xpValueCrafting.get( key );
-                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ).getFormattedText() );
                         }
                     }
 
                     if( xpValueSmelting != null && xpValueSmelting.size() > 0 )      //XP SMELT
                     {
-                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueSmelt" ) );
+                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueSmelt" ).getFormattedText() );
 
-                        for( String key : xpValueSmelting.getKeySet() )
+                        for( String key : xpValueSmelting.keySet() )
                         {
                             dValue = xpValueSmelting.get( key );
-                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ).getFormattedText() );
                         }
                     }
 
                     if( xpValueCooking != null && xpValueCooking.size() > 0 )      //XP COOK
                     {
-                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueCook" ) );
+                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueCook" ).getFormattedText() );
 
-                        for( String key : xpValueCooking.getKeySet() )
+                        for( String key : xpValueCooking.keySet() )
                         {
                             dValue = xpValueCooking.get( key );
-                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ).getFormattedText() );
                         }
                     }
 
                     if( xpValueBrewing != null && xpValueBrewing.size() > 0 )      //XP BREW
                     {
-                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueBrew" ) );
+                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueBrew" ).getFormattedText() );
 
-                        for( String key : xpValueBrewing.getKeySet() )
+                        for( String key : xpValueBrewing.keySet() )
                         {
                             dValue = xpValueBrewing.get( key );
-                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ).getFormattedText() );
                         }
                     }
 
                     if( xpValueGrowing != null && xpValueGrowing.size() > 0 )      //XP GROW
                     {
-                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueGrow" ) );
+                        tooltip.add( new TextComponentTranslation( "pmmo.xpValueGrow" ).getFormattedText() );
 
-                        for( String key : xpValueGrowing.getKeySet() )
+                        for( String key : xpValueGrowing.keySet() )
                         {
                             dValue = xpValueGrowing.get( key );
-                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ).getFormattedText() );
                         }
                     }
                 }
@@ -227,54 +221,54 @@ public class TooltipHandler
                     {
                         dValue = XP.getExtraChance( player.getUniqueID(), item.getRegistryName(), JType.INFO_ORE, true );
                         if( dValue > 0 )  //ORE EXTRA CHANCE
-                            tooltip.add( new TextComponentTranslation( "pmmo.oreExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.oreExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                         else
-                            tooltip.add( new TextComponentTranslation( "pmmo.oreExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.oreExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                     }
 
                     if( JsonConfig.data.get( JType.INFO_LOG ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_LOG ).get( regKey ).containsKey( "extraChance" ) )
                     {
                         dValue = XP.getExtraChance( player.getUniqueID(), item.getRegistryName(), JType.INFO_LOG, true );
                         if( dValue > 0 )  //LOg EXTRA CHANCE
-                            tooltip.add( new TextComponentTranslation( "pmmo.logExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.logExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                         else
-                            tooltip.add( new TextComponentTranslation( "pmmo.logExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.logExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                     }
 
                     if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_PLANT ).get( regKey ).containsKey( "extraChance" ) )
                     {
                         dValue = XP.getExtraChance( player.getUniqueID(), item.getRegistryName(), JType.INFO_PLANT, true );
                         if( dValue > 0 )  //PLANT EXTRA CHANCE
-                            tooltip.add( new TextComponentTranslation( "pmmo.plantExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.plantExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                         else
-                            tooltip.add( new TextComponentTranslation( "pmmo.plantExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.plantExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                     }
 
                     if( JsonConfig.data.get( JType.INFO_SMELT ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_SMELT ).get( regKey ).containsKey( "extraChance" ) )
                     {
                         dValue = XP.getExtraChance( player.getUniqueID(), item.getRegistryName(), JType.INFO_SMELT, true );
                         if( dValue > 0 )  //SMELT EXTRA CHANCE
-                            tooltip.add( new TextComponentTranslation( "pmmo.smeltExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.smeltExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                         else
-                            tooltip.add( new TextComponentTranslation( "pmmo.smeltExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.smeltExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                     }
 
                     if( JsonConfig.data.get( JType.INFO_COOK ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_COOK ).get( regKey ).containsKey( "extraChance" ) )
                     {
                         dValue = XP.getExtraChance( player.getUniqueID(), item.getRegistryName(), JType.INFO_COOK, true );
                         if( dValue > 0 )  //COOK EXTRA CHANCE
-                            tooltip.add( new TextComponentTranslation( "pmmo.cookExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.cookExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                         else
-                            tooltip.add( new TextComponentTranslation( "pmmo.cookExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.cookExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                     }
 
                     if( JsonConfig.data.get( JType.INFO_BREW ).containsKey( regKey ) && JsonConfig.data.get( JType.INFO_BREW ).get( regKey ).containsKey( "extraChance" ) )
                     {
                         dValue = XP.getExtraChance( player.getUniqueID(), item.getRegistryName(), JType.INFO_BREW, true );
                         if( dValue > 0 )  //BREW EXTRA CHANCE
-                            tooltip.add( new TextComponentTranslation( "pmmo.brewExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.brewExtraDrop", DP.dp( dValue / 100 ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                         else
-                            tooltip.add( new TextComponentTranslation( "pmmo.brewExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.brewExtraDrop", 0 ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                     }
 
                     if( System.nanoTime() - lastTime > 900000000 )
@@ -302,25 +296,25 @@ public class TooltipHandler
                     {
                         if( salvageInfo != null )
                         {
-                            salvageToArray = salvageInfo.getKeySet().toArray();
+                            salvageToArray = salvageInfo.keySet().toArray();
                             salvageToArrayLength = salvageToArray.length;
                             salvageToArrayPos = 0;
                         }
                         if( salvageFrom != null )
                         {
-                            salvageFromArray = salvageFrom.getKeySet().toArray();
+                            salvageFromArray = salvageFrom.keySet().toArray();
                             salvageFromArrayLength = salvageFromArray.length;
                             salvageFromArrayPos = 0;
                         }
                         if( treasureInfo != null )
                         {
-                            treasureToArray = treasureInfo.getKeySet().toArray();
+                            treasureToArray = treasureInfo.keySet().toArray();
                             treasureToArrayLength = treasureToArray.length;
                             treasureToArrayPos = 0;
                         }
                         if( treasureFromInfo != null )
                         {
-                            treasureFromArray = treasureFromInfo.getKeySet().toArray();
+                            treasureFromArray = treasureFromInfo.keySet().toArray();
                             treasureFromArrayLength = treasureFromArray.length;
                             treasureFromArrayPos = 0;
                         }
@@ -352,7 +346,7 @@ public class TooltipHandler
                                 chance = maxSalvageMaterialChance;
 
                             salvageMax = (int) Math.floor( salvageToItemMap.get( "salvageMax" ) );
-                            durabilityPercent = ( 1.00D - ( (double) itemStack.getDamage() / (double) itemStack.getMaxDamage() ) );
+                            durabilityPercent = ( 1.00D - ( (double) itemStack.getItemDamage() / (double) itemStack.getMaxDamage() ) );
 
                             if( Double.isNaN( durabilityPercent ) )
                                 durabilityPercent = 1;
@@ -362,12 +356,12 @@ public class TooltipHandler
 
                             if( finalLevel < 0 )
                             {
-                                tooltip.add( new TextComponentTranslation( "pmmo.cannotSalvageLackLevel", reqLevel ).setStyle( XP.textStyle.get( "red" ) ) );
+                                tooltip.add( new TextComponentTranslation( "pmmo.cannotSalvageLackLevel", reqLevel ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                             }
                             else
                             {
-                                tooltip.add( new TextComponentTranslation( "pmmo.salvagesIntoCountItem", potentialReturnAmount, new TextComponentTranslation( salvageItem.getTranslationKey() ) ).setStyle( XP.textStyle.get( potentialReturnAmount > 0 ? "green" : "red" ) ) );
-                                tooltip.add( new TextComponentTranslation( "pmmo.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ) );
+                                tooltip.add( new TextComponentTranslation( "pmmo.salvagesIntoCountItem", potentialReturnAmount, new TextComponentTranslation( salvageItem.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( potentialReturnAmount > 0 ? "green" : "red" ) ).getFormattedText() );
+                                tooltip.add( new TextComponentTranslation( "pmmo.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
                             }
                         }
                         catch( Exception e )
@@ -380,15 +374,15 @@ public class TooltipHandler
                     {
                         try
                         {
-                            tooltip.add( new TextComponentTranslation( "pmmo.canBeSalvagedFrom" ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.canBeSalvagedFrom" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                             level = Skill.SMITHING.getLevel( player );
 
                             String key = (String) salvageFromArray[ salvageFromArrayPos ];
-                            String displayName = new TextComponentTranslation( XP.getItem( key ).getTranslationKey() ).getUnformattedText();
+                            String displayName = new TextComponentTranslation( XP.getItem( key ).getUnlocalizedName() ).getUnformattedText();
 
                             Map<String, Double> salvageFromMap = salvageFrom.get( key );
 
-                            tooltip.add( new TextComponentTranslation( "pmmo.valueFromValue", " " + (int) (double) salvageFromMap.get( "salvageMax" ), displayName ).setStyle( XP.textStyle.get( salvageFromMap.get( "levelReq" ) > level ? "red" : "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.valueFromValue", " " + (int) (double) salvageFromMap.get( "salvageMax" ), displayName ).setStyle( XP.textStyle.get( salvageFromMap.get( "levelReq" ) > level ? "red" : "green" ) ).getFormattedText() );
                         }
                         catch( Exception e )
                         {
@@ -409,7 +403,7 @@ public class TooltipHandler
                             salvageToItemMap = treasureInfo.get( key );
                             chance = DP.mapCapped( level, salvageToItemMap.get( "startLevel" ), salvageToItemMap.get( "endLevel" ), salvageToItemMap.get( "startChance" ), salvageToItemMap.get( "endChance" ) );
                             xpPerItem = salvageToItemMap.get( "xpPerItem" );
-                            String itemName = new TextComponentTranslation( XP.getItem( key ).getTranslationKey() ).getUnformattedText();
+                            String itemName = new TextComponentTranslation( XP.getItem( key ).getUnlocalizedName() ).getUnformattedText();
                             minCount = (int) (double) salvageToItemMap.get( "minCount" );
                             maxCount = (int) (double) salvageToItemMap.get( "maxCount" );
 
@@ -418,8 +412,8 @@ public class TooltipHandler
                             if( chance <= 0 )
                                 chance = 0;
 
-                            tooltip.add( new TextComponentTranslation( "pmmo.containsCountItemTreasure", ( minCount == maxCount ? minCount : minCount + "-" + maxCount ), itemName ).setStyle( XP.textStyle.get( "green" ) ) );
-                            tooltip.add( new TextComponentTranslation( "pmmo.xpEachChance", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.containsCountItemTreasure", ( minCount == maxCount ? minCount : minCount + "-" + maxCount ), itemName ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText());
+                            tooltip.add( new TextComponentTranslation( "pmmo.xpEachChance", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
                         }
                         catch( Exception e )
                         {
@@ -431,11 +425,11 @@ public class TooltipHandler
                     {
                         try
                         {
-                            tooltip.add( new TextComponentTranslation( "pmmo.treasureFrom" ).setStyle( XP.textStyle.get( "green" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.treasureFrom" ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText());
                             level = Skill.EXCAVATION.getLevel( player );
 
                             String key = (String) treasureFromArray[ treasureFromArrayPos ];
-                            String displayName = new TextComponentTranslation( XP.getItem( key ).getTranslationKey() ).getUnformattedText();
+                            String displayName = new TextComponentTranslation( XP.getItem( key ).getUnlocalizedName() ).getUnformattedText();
 
                             Map<String, Double> treasureFromMap = treasureFromInfo.get( key );
                             Map<String, Double> treasureToMap = JsonConfig.data2.get( JType.TREASURE ).get( key ).get( regKey );
@@ -443,7 +437,7 @@ public class TooltipHandler
                             int maxCount = (int) (double) treasureFromMap.get( "maxCount" );
                             double chance = DP.mapCapped( level, treasureToMap.get( "startLevel" ), treasureToMap.get( "endLevel" ), treasureToMap.get( "startChance" ), treasureToMap.get( "endChance" ) );
 
-                            tooltip.add( new TextComponentTranslation( "pmmo.valueFromValue", " " + ( minCount == maxCount ? minCount : minCount + "-" + maxCount ), displayName ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ) );
+                            tooltip.add( new TextComponentTranslation( "pmmo.valueFromValue", " " + ( minCount == maxCount ? minCount : minCount + "-" + maxCount ), displayName ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
                         }
                         catch( Exception e )
                         {
@@ -457,41 +451,41 @@ public class TooltipHandler
 
     private static void addTooltipTextSkill( String tKey, JType jType, Map<String, Double> theMap, ItemTooltipEvent event )
     {
-        EntityPlayer player = event.getPlayer();
-        List<ITextComponent> tooltip = event.getToolTip();
+        EntityPlayer player = event.getEntityPlayer();
+        List<String> tooltip = event.getToolTip();
         Item item = event.getItemStack().getItem();
         double level, value;
 
         if( theMap.size() > 0 )
         {
-            tooltip.add( new TextComponentTranslation( tKey ).setStyle( XP.textStyle.get( XP.checkReq( player, item.getRegistryName(), jType ) ? "green" : "red" ) ) );
+            tooltip.add( new TextComponentTranslation( tKey ).setStyle( XP.textStyle.get( XP.checkReq( player, item.getRegistryName(), jType ) ? "green" : "red" ) ).getFormattedText() );
 
-            for( String key : theMap.getKeySet() )
+            for( String key : theMap.keySet() )
             {
                 level = Skill.getSkill( key ).getLevel( player );
 
                 value = theMap.get( key );
-                tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dpSoft( value ) ).setStyle( XP.textStyle.get( level < value ? "red" : "green" ) ) );
+                tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dpSoft( value ) ).setStyle( XP.textStyle.get( level < value ? "red" : "green" ) ).getFormattedText() );
             }
         }
     }
 
     private static void addTooltipTextSkillPercentage( String tKey, Map<String, Double> theMap, ItemTooltipEvent event )
     {
-        List<ITextComponent> tooltip = event.getToolTip();
+        List<String> tooltip = event.getToolTip();
         double value;
 
         if( theMap.size() > 0 )
         {
-            tooltip.add( new TextComponentTranslation( tKey ).setStyle( XP.textStyle.get( "green" ) ) );
+            tooltip.add( new TextComponentTranslation( tKey ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
 
-            for( String key : theMap.getKeySet() )
+            for( String key : theMap.keySet() )
             {
                 value = theMap.get( key );
                 if( value < 0 )
-                    tooltip.add( new TextComponentTranslation( "pmmo.levelDisplayPercentage", " " + DP.dp( value ), new TextComponentTranslation( "pmmo." + key ).getUnformattedText() ).setStyle( XP.textStyle.get( "red" ) ) );
+                    tooltip.add( new TextComponentTranslation( "pmmo.levelDisplayPercentage", " " + DP.dp( value ), new TextComponentTranslation( "pmmo." + key ).getUnformattedText() ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                 else
-                    tooltip.add( new TextComponentTranslation( "pmmo.levelDisplayPercentage", " +" + DP.dp( value ), new TextComponentTranslation( "pmmo." + key ).getUnformattedText() ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ) );
+                    tooltip.add( new TextComponentTranslation( "pmmo.levelDisplayPercentage", " +" + DP.dp( value ), new TextComponentTranslation( "pmmo." + key ).getUnformattedText() ).setStyle( XP.getSkillStyle( Skill.getSkill( key ) ) ).getFormattedText() );
             }
         }
     }

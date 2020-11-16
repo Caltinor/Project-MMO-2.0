@@ -8,7 +8,7 @@ public class PlayerRespawnHandler
 {
     public static void handlePlayerRespawn( PlayerEvent.PlayerRespawnEvent event )
     {
-        EntityPlayer player = event.getPlayer();
+        EntityPlayer player = event.getEntityPlayer();
 
         AttributeHandler.updateAll( player );
         player.setHealth( player.getMaxHealth() );

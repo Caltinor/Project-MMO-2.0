@@ -21,7 +21,7 @@ public class PrefsChoiceScreen extends Screen
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private static TileButton exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();
+    MainWindow sr = Minecraft.getMinecraft().getMainWindow();
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -43,17 +43,17 @@ public class PrefsChoiceScreen extends Screen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new MainScreen( Minecraft.getInstance().player.getUniqueID(), new TextComponentTranslation( "pmmo.potato" ) ) );
+            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.potato" ) ) );
         });
 
         TileButton settingsButton = new TileButton( (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.SETTINGS ) );
+            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.SETTINGS ) );
         });
 
         TileButton guiSettingsButton = new TileButton( (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
+            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
         });
 
         addButton( exitButton );
@@ -98,7 +98,7 @@ public class PrefsChoiceScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getMinecraft().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }

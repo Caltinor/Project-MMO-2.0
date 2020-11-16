@@ -2,7 +2,8 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +12,7 @@ public class AirSupplyDecreaseHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int returnPmmoAffectedRespiration(LivingEntity entity )
+    public static int returnPmmoAffectedRespiration( EntityLiving entity )
     {
         int respiration = EnchantmentHelper.getRespirationModifier( entity );
 

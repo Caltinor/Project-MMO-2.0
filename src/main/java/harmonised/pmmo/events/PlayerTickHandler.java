@@ -1,7 +1,6 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.JType;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
@@ -10,19 +9,16 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.item.BoatEntity;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.Effects;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,7 +35,7 @@ public class PlayerTickHandler
     {
         EntityPlayer player = event.player;
 
-        if( XP.isPlayerSurvival( player ) && player.isAlive() )
+        if( XP.isPlayerSurvival( player ) && player.isEntityAlive() )
         {
             UUID uuid = player.getUniqueID();
 
@@ -49,9 +45,9 @@ public class PlayerTickHandler
                 AttributeHandler.resetSpeed( player );
 
             if( !lastAward.containsKey( uuid ) )
-                lastAward.setTag( uuid, System.nanoTime() );
+                lastAward.put( uuid, System.nanoTime() );
             if( !lastVeinAward.containsKey( uuid ) )
-                lastVeinAward.setTag( uuid, System.nanoTime() );
+                lastVeinAward.put( uuid, System.nanoTime() );
 
             double gap = ( (System.nanoTime() - lastAward.get( uuid) ) / 1000000000D );
             double veinGap = ( (System.nanoTime() - lastVeinAward.get( uuid) ) / 1000000000D );
@@ -64,7 +60,7 @@ public class PlayerTickHandler
                 int nightvisionUnlockLevel = Config.forgeConfig.nightvisionUnlockLevel.get();
                 float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
                 float speedAmp = 0;
-                PlayerInventory inv = player.inventory;
+                InventoryPlayer inv = player.inventory;
 
                 XP.checkBiomeLevelReq( player );
 
@@ -92,8 +88,8 @@ public class PlayerTickHandler
                 }
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
-                if( player.isPotionActive( Effects.SPEED ) )
-                    speedAmp = player.getActivePotionEffect( Effects.SPEED ).getAmplifier() + 1;
+                if( player.isPotionActive( MobEffects.SPEED ) )
+                    speedAmp = player.getActivePotionEffect( MobEffects.SPEED ).getAmplifier() + 1;
 
                 double swimAward = ( 3D + swimLevel    / 10.00D ) * gap * ( 1D + swimAmp / 4D );
                 double flyAward  = ( 1D + flyLevel     / 30.77D ) * gap ;
@@ -101,8 +97,6 @@ public class PlayerTickHandler
 
                 lastAward.replace( uuid, System.nanoTime() );
                 Block waterBlock = Blocks.WATER;
-                Block tallSeagrassBlock = Blocks.TALL_SEAGRASS;
-                Block kelpBlock = Blocks.KELP_PLANT;
                 BlockPos playerPos = XP.vecToBlock( player.getPositionVector() );
                 Block currBlock;
                 boolean waterBelow = true;
@@ -112,7 +106,7 @@ public class PlayerTickHandler
                     for( int j = -1; j <= 1; j++ )
                     {
                         currBlock = player.getEntityWorld().getBlockState( playerPos.down().east( i ).north( j ) ).getBlock();
-                        if( !( currBlock.equals( waterBlock ) || currBlock.equals( tallSeagrassBlock ) || currBlock.equals( kelpBlock ) ) )
+                        if( !( currBlock.equals( waterBlock ) ) )
                             waterBelow = false;
                     }
                 }
@@ -120,7 +114,7 @@ public class PlayerTickHandler
                 boolean waterAbove = player.getEntityWorld().getBlockState( playerPos.up()   ).getBlock().equals( waterBlock );
 
                 if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
-                    player.addPotionEffect( new PotionEffect( Effects.NIGHT_VISION, 300, 0, false, false ) );
+                    player.addPotionEffect( new PotionEffect( MobEffects.NIGHT_VISION, 300, 0, false, false ) );
 
                 if( !player.world.isRemote )
                 {
@@ -133,7 +127,7 @@ public class PlayerTickHandler
                             XP.awardXp( serverPlayer, Skill.AGILITY, "running", runAward, true, false, false );
                     }
 
-                    if( player.isInWater() && ( waterAbove || waterBelow || player.areEyesInFluid( FluidTags.WATER ) ) )
+                    if( player.isInWater() && ( waterAbove || waterBelow ) )
                     {
                         if( !player.isSprinting() )
                             XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming", swimAward, true, false, false );
@@ -141,7 +135,7 @@ public class PlayerTickHandler
                     else if( player.isElytraFlying() )
                         XP.awardXp( serverPlayer, Skill.FLYING, "flying", flyAward, true, false, false );
 
-                    if( (player.getRidingEntity() instanceof BoatEntity) && player.isInWater() )
+                    if( ( player.getRidingEntity() instanceof EntityBoat ) && player.isInWater() )
                         XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true, false, false );
                 }
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
@@ -152,7 +146,7 @@ public class PlayerTickHandler
                 if( veinGap > 0.25 )
                 {
                     WorldTickHandler.updateVein( player, veinGap );
-                    lastVeinAward.setTag( uuid, System.nanoTime() );
+                    lastVeinAward.put( uuid, System.nanoTime() );
                 }
             }
         }

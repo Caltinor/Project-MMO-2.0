@@ -7,6 +7,6 @@ public class PlayerCloneHandler
 {
     public static void handleClone( PlayerEvent.Clone event )
     {
-        event.getPlayer().getPersistentData().setTag( Reference.MOD_ID, event.getOriginal().getPersistentData().getCompoundTag( Reference.MOD_ID ) );
+        event.getEntityPlayer().getEntityData().getCompoundTag().setTag( Reference.MOD_ID, event.getOriginal().getEntityData().getCompoundTag( Reference.MOD_ID ) );
     }
 }

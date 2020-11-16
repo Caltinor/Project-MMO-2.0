@@ -16,8 +16,8 @@ public class packetHandler
     {
         ctx.get().enqueueWork(() ->
         {
-            UUID uuid = Minecraft.getInstance().player.getUniqueID();
-            String name = Minecraft.getInstance().player.getName().getUnformattedText();
+            UUID uuid = Minecraft.getMinecraft().player.getUniqueID();
+            String name = Minecraft.getMinecraft().player.getName().getUnformattedText();
 
             if( packet.skill == 42069 )
             {
@@ -29,7 +29,7 @@ public class packetHandler
                 if(  !XP.playerNames.containsKey( uuid ) )
                     XP.playerNames.setTag( uuid, name );
 
-                if( Config.getXpMap( Minecraft.getInstance().player ).size() == 0 )
+                if( Config.getXpMap( Minecraft.getMinecraft().player ).size() == 0 )
                     XPOverlayGUI.listOn = true;
 
                 XP.getOfflineXpMap( uuid ).setTag( Skill.getSkill( packet.skill ), packet.xp + packet.gainedXp );

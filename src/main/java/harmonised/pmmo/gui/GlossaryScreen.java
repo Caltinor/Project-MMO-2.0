@@ -27,7 +27,7 @@ public class GlossaryScreen extends Screen
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static TileButton exitButton;
 
-    Minecraft minecraft = Minecraft.getInstance();
+    Minecraft minecraft = Minecraft.getMinecraft();
     MainWindow sr = minecraft.getMainWindow();
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
@@ -139,7 +139,7 @@ public class GlossaryScreen extends Screen
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.NONE, button ->
         {
             history = new ArrayList<>();
-            Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.potato" ) ) );
+            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.potato" ) ) );
         });
 
         if( loadDefaultButtons )
@@ -167,7 +167,7 @@ public class GlossaryScreen extends Screen
     public static void onGlossaryButtonPress( TileButton button )
     {
         updateHistory( button.index );
-        Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TextComponentTranslation( button.transKey ), "", button.jType, Minecraft.getInstance().player ) );
+        Minecraft.getMinecraft().displayGuiScreen( new ListScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( button.transKey ), "", button.jType, Minecraft.getMinecraft().player ) );
     }
 
     public static void updateHistory( int index )
@@ -187,7 +187,7 @@ public class GlossaryScreen extends Screen
         }
 
         if( combo )
-            Minecraft.getInstance().player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
+            Minecraft.getMinecraft().player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
     }
 
     public static boolean updateHistory( char index )
@@ -218,7 +218,7 @@ public class GlossaryScreen extends Screen
 
                 if( passed )
                 {
-                    Minecraft.getInstance().player.playSound(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
+                    Minecraft.getMinecraft().player.playSound(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
                     return true;
                 }
             }
@@ -241,21 +241,21 @@ public class GlossaryScreen extends Screen
                 renderTooltip( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
 
-        if( Minecraft.getInstance().player.isCreative() )
+        if( Minecraft.getMinecraft().player.isCreative() )
         {
             if( font.getStringWidth( creativeText ) > 220 )
             {
-                drawCenteredString( Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 18, 0xffffff );
-                drawCenteredString( Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 10, 0xffff00 );
+                drawCenteredString( Minecraft.getMinecraft().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 18, 0xffffff );
+                drawCenteredString( Minecraft.getMinecraft().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 10, 0xffff00 );
             }
             else
             {
-                drawCenteredString( Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 13, 0xffffff );
-                drawCenteredString( Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 5, 0xffff00 );
+                drawCenteredString( Minecraft.getMinecraft().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 13, 0xffffff );
+                drawCenteredString( Minecraft.getMinecraft().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 5, 0xffff00 );
             }
         }
         else
-            drawCenteredString( Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( Minecraft.getMinecraft().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 5, 0xffffff );
     }
 
     @Override
@@ -269,7 +269,7 @@ public class GlossaryScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }

@@ -12,7 +12,7 @@ public class BreakSpeedHandler
 {
     public static void handleBreakSpeed( PlayerEvent.BreakSpeed event )
     {
-        EntityPlayer player = event.getPlayer();
+        EntityPlayer player = event.getEntityPlayer();
 
         String skill = XP.getSkill( event.getState().getMaterial() ).name().toLowerCase();
         double speedBonus;
@@ -21,13 +21,13 @@ public class BreakSpeedHandler
 
         if( !reqMet )
         {
-            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToBreak", new TextComponentTranslation( event.getState().getBlock().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToBreak", new TextComponentTranslation( event.getState().getBlock().getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
             event.setCanceled( true );
             return;
         }
         else if( toolGap > 0 )
         {
-            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
             if( Config.getConfig( "strictReqTool" ) == 1 )
             {
                 event.setCanceled( true );
@@ -40,7 +40,7 @@ public class BreakSpeedHandler
         switch ( XP.correctHarvestTool( event.getState().getMaterial() ) )
         {
             case "pickaxe":
-                float height = event.getPos().y;
+                float height = event.getPos().getY();
                 if (height < 0)
                     height = -height;
 

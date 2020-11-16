@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
@@ -23,9 +24,9 @@ public class FishedHandler
 {
     public static void handleFished( ItemFishedEvent event )
     {
-        if( !( event.getPlayer() instanceof EntityPlayerMP ) )
+        if( !( event.getEntityPlayer() instanceof EntityPlayerMP ) )
             return;
-        EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
+        EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
         int startLevel = Skill.FISHING.getLevel( player );
         int level;
         NonNullList<ItemStack> items = event.getDrops();
@@ -88,10 +89,10 @@ public class FishedHandler
 
                 ItemStack itemStack = new ItemStack( item, count );
 
-                if( itemStack.isDamageable() )
-                    itemStack.setDamage( (int) Math.floor( Math.random() * itemStack.getMaxDamage() ) );
+                if( itemStack.isItemStackDamageable() )
+                    itemStack.setItemDamage( (int) Math.floor( Math.random() * itemStack.getMaxDamage() ) );
 
-                if( itemStack.isEnchantable() )
+                if( itemStack.isItemEnchantable() )
                 {
                     Map<String, Map<String, Double>> enchantMap = JsonConfig.data.get( JType.FISH_ENCHANT_POOL );
                     Map<Enchantment, Integer> outEnchants = new HashMap<>();
@@ -140,7 +141,7 @@ public class FishedHandler
                                 }
 
                                 if( enchantLevel > 0 )
-                                    outEnchants.setTag( enchant, enchantLevel );
+                                    outEnchants.put( enchant, enchantLevel );
                             }
                         }
                     }
@@ -150,8 +151,8 @@ public class FishedHandler
                 }
 
                 XP.dropItemStack( itemStack, player.world, player.getPositionVector() );
-                player.sendStatusMessage( new TextComponentTranslation( "pmmo.extraFished", count, new TextComponentTranslation( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
-                player.sendStatusMessage( new TextComponentTranslation( "pmmo.extraFished", count, new TextComponentTranslation( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                player.sendStatusMessage( new TextComponentTranslation( "pmmo.extraFished", count, new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
+                player.sendStatusMessage( new TextComponentTranslation( "pmmo.extraFished", count, new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
 
                 award += match.get( "xp" ) * count;
             }

@@ -551,7 +551,7 @@ public class XP
 	
 	public static void handlePlaced( PlaceEvent event )
 	{
-		EntityPlayer player = event.getPlayer();
+		EntityPlayer player = event.getEntityPlayer();
 		if( !player.isCreative() )
 		{
 			Block block = event.getPlacedBlock().getBlock();
@@ -643,7 +643,7 @@ public class XP
 							awardXp( player, "farming", "harvesting " + theDrop.getDisplayName(), award, false );
 						return;
 					}
-					IBlockState state = event.getState();
+					IIBlockState = event.getState();
 					int age = -1;
 					int maxAge = -1;
 					int matches = 0;
@@ -785,9 +785,9 @@ public class XP
 	
 	public static void handleBroken( BreakEvent event )
 	{
-		if( event.getPlayer() instanceof EntityPlayer )
+		if( event.getEntityPlayer() instanceof EntityPlayer )
 		{
-			EntityPlayer player = event.getPlayer();
+			EntityPlayer player = event.getEntityPlayer();
 			if( !player.isCreative() )
 			{
 				NBTTagCompound persistTag = getPersistTag( player );
@@ -1108,7 +1108,7 @@ public class XP
 			{
 				if( block.equals( ironBlock ) || block.equals( anvil ) )
 				{
-					if( event.getHand() == EnumHand.MAIN_HAND )
+					if( event.getHand() == EnumEnumHand.MAIN_HAND )
 					{
 						int currLevel;
 						float baseChance = 0;
@@ -1166,7 +1166,7 @@ public class XP
 							float durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
 							int potentialReturnAmount = (int) Math.floor( itemPotential * durabilityPercent );
 							
-							if( event.getHand() == EnumHand.OFF_HAND )
+							if( event.getHand() == EnumEnumHand.OFF_HAND )
 							{
 								if( !player.isCreative() )
 								{
@@ -1236,7 +1236,7 @@ public class XP
 					}
 				}
 				
-				if( block.equals( diamondBlock ) && event.getHand() == EnumHand.MAIN_HAND )
+				if( block.equals( diamondBlock ) && event.getHand() == EnumEnumHand.MAIN_HAND )
 				{					
 					int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
 					int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );

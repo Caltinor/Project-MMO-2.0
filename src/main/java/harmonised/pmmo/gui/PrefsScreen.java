@@ -30,7 +30,7 @@ public class PrefsScreen extends Screen
     private double value;
     private static Button exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();
+    MainWindow sr = Minecraft.getMinecraft().getMainWindow();
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x, y, scrollX, scrollY, buttonX;
@@ -38,7 +38,7 @@ public class PrefsScreen extends Screen
     private final JType jType;
     private ArrayList<PrefsEntry> prefsEntries;
     private ITextComponent title;
-    private EntityPlayer player = Minecraft.getInstance().player;
+    private EntityPlayer player = Minecraft.getMinecraft().player;
 
     public PrefsScreen( ITextComponent titleIn, JType jType )
     {
@@ -66,7 +66,7 @@ public class PrefsScreen extends Screen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.STATS, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( "pmmo.stats" ) ) );
+            Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( "pmmo.stats" ) ) );
         });
         prefsEntries = new ArrayList<>();
 
@@ -156,7 +156,7 @@ public class PrefsScreen extends Screen
 //        new Slider()
 //        new TextFieldWidget()
 
-        scrollPanel = new PrefsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefsEntries );
+        scrollPanel = new PrefsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefsEntries );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.setTag( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
@@ -200,7 +200,7 @@ public class PrefsScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }

@@ -5,6 +5,7 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -37,7 +38,7 @@ public class JumpHandler
 
                 agilityLevel = Skill.AGILITY.getLevel( player );
 
-                if (player.isCrouching())
+                if ( player.isSneaking() )
                 {
                     if( prefsMap.containsKey( "maxCrouchJumpBoost" ) )
                         maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxCrouchJumpBoost" ) / 100);
@@ -59,14 +60,14 @@ public class JumpHandler
                 if (player.world.isRemote)
                 {
                     if( jumpBoost > 0 )
-                        player.setMotion( player.getMotion().x, player.getMotion().y + jumpBoost, player.getMotion().z );
+                        player.setVelocity( player.getMotion().x, player.getMotion().y + jumpBoost, player.getMotion().z );
                 }
                 else if (!player.isInWater())
                 {
                     float jumpAmp = 0;
 
-                    if( player.isPotionActive( Effects.JUMP_BOOST ) )
-                        jumpAmp = player.getActivePotionEffect( Effects.JUMP_BOOST ).getAmplifier() + 1;
+                    if( player.isPotionActive( MobEffects.JUMP_BOOST ) )
+                        jumpAmp = player.getActivePotionEffect( MobEffects.JUMP_BOOST ).getAmplifier() + 1;
 
                     XP.awardXp( (EntityPlayerMP) player, Skill.AGILITY, "jumping", Math.max( (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), 1 ), true, false, false );
                 }

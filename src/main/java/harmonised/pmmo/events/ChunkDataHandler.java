@@ -26,7 +26,7 @@ public class ChunkDataHandler
 
         if( levelNBT != null )
         {
-            if( levelNBT.contains( "placedPos" ) )
+            if( levelNBT.hasKey( "placedPos" ) )
             {
                 ResourceLocation dimResLoc = event.getWorld().getDimension().getType().getRegistryName();
                 ChunkPos chunkPos = event.getChunk().getPos();
@@ -34,7 +34,7 @@ public class ChunkDataHandler
                 if( !placedMap.containsKey( dimResLoc ) )
                     placedMap.put( dimResLoc, new HashMap<>() );
 
-                NBTTagCompound placedPosNBT = ( (NBTTagCompound) levelNBT.get( "placedPos" ) );
+                NBTTagCompound placedPosNBT = ( levelNBT.getCompoundTag( "placedPos" ) );
                 if( placedPosNBT == null )
                     return;
                 Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
@@ -44,7 +44,7 @@ public class ChunkDataHandler
                 keySet.forEach( key ->
                 {
                     NBTTagCompound entry = placedPosNBT.getCompoundTag( key );
-                    blockMap.put( NBTUtil.readBlockPos( entry.getCompoundTag( "pos" ) ), NBTUtil.readUniqueId( entry.getCompoundTag( "UUID" ) ) );
+                    blockMap.put( NBTUtil.getPosFromTag( entry.getCompoundTag( "pos" ) ), NBTUtil.getUUIDFromTag( entry.getCompoundTag( "UUID" ) ) );
                 });
 
                 chunkMap.remove( chunkPos );
@@ -73,8 +73,8 @@ public class ChunkDataHandler
                 for( Map.Entry<BlockPos, UUID> entry : placedMap.get( dimResLoc ).get( chunkPos ).entrySet() )
                 {
                     insidesNBT = new NBTTagCompound();
-                    insidesNBT.setTag( "pos", NBTUtil.writeBlockPos( entry.getKey() ) );
-                    insidesNBT.setTag( "UUID", NBTUtil.writeUniqueId( entry.getValue() ) );
+                    insidesNBT.setTag( "pos", NBTUtil.createPosTag( entry.getKey() ) );
+                    insidesNBT.setTag( "UUID", NBTUtil.createUUIDTag( entry.getValue() ) );
                     newPlacedNBT.setTag( i++ + "", insidesNBT );
                 }
 

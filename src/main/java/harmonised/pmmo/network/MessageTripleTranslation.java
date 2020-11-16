@@ -72,19 +72,19 @@ public class MessageTripleTranslation
             switch( packet.color )
             {
                 case 0: //white
-                    Minecraft.getInstance().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ), packet.bar );
+                    Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ), packet.bar );
                     break;
 
                 case 1: //green
-                    Minecraft.getInstance().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                    Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
                     break;
 
                 case 2: //red
-                    Minecraft.getInstance().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "red" ) ), packet.bar );
+                    Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "red" ) ), packet.bar );
                     break;
 
                 case 3: //yellow
-                    Minecraft.getInstance().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "yellow" ) ), packet.bar );
+                    Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "yellow" ) ), packet.bar );
                     break;
             }
         });

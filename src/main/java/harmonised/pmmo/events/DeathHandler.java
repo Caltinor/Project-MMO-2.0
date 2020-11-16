@@ -3,32 +3,29 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class DeathHandler
 {
     public static void handleDeath( LivingDeathEvent event )
     {
-        LivingEntity target = event.getEntityLiving();
+        EntityLiving target = event.getEntityLiving();
         Entity source = event.getSource().getTrueSource();
         double deathXpPenaltyMultiplier = Config.forgeConfig.deathXpPenaltyMultiplier.get();
         double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
@@ -103,22 +100,22 @@ public class DeathHandler
 //            double normalMaxHp = target.getAttribute( Attributes.GENERIC_MAX_HEALTH ).getBaseValue();
 //            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
 
-            if( JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )
+            if( JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getName() ) )
             {
-                Map<String, Double> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
+                Map<String, Double> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getName() );
                 for( Map.Entry<String, Double> entry : killXp.entrySet() )
                 {
                     XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false, false );
                 }
             }
-            else if( target instanceof AnimalEntity)
+            else if( target instanceof EntityAnimal)
                 XP.awardXp( player, Skill.HUNTER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleValue, false, false, false );
-            else if( target instanceof MobEntity)
+            else if( target instanceof EntityMob )
                 XP.awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false, false, false );
 
-            if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getEntityString() ) )
+            if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getName() ) )
             {
-                Map<String, Double> dropTable = JsonConfig.data.get( JType.MOB_RARE_DROP ).get( target.getEntityString() );
+                Map<String, Double> dropTable = JsonConfig.data.get( JType.MOB_RARE_DROP ).get( target.getName() );
 
                 double chance;
 
@@ -132,8 +129,8 @@ public class DeathHandler
                         ItemStack itemStack = new ItemStack( XP.getItem( entry.getKey() ) );
                         XP.dropItemStack( itemStack, player.world, target.getPositionVector() );
 
-                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.rareDrop", new TextComponentTranslation( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.rareDrop", new TextComponentTranslation( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.rareDrop", new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.rareDrop", new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
                     }
                 }
             }

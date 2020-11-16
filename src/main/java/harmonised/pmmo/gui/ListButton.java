@@ -13,10 +13,10 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.Pose;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -39,8 +39,8 @@ public class ListButton extends Button
     public List<String> text = new ArrayList<>();
     public List<String> tooltipText = new ArrayList<>();
     Entity testEntity = null;
-    LivingEntity entity = null;
-    ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+    EntityLiving entity = null;
+    ItemRenderer itemRenderer = Minecraft.getMinecraft().getItemRenderer();
 
     public ListButton( int posX, int posY, int elementOne, int elementTwo, String regKey, JType jType, String buttonText, IPressable onPress )
     {
@@ -52,10 +52,10 @@ public class ListButton extends Button
         this.elementTwo = elementTwo * 32;
 
         if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
-            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().world );
+            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getMinecraft().world );
 
-        if( testEntity instanceof LivingEntity )
-            entity = (LivingEntity) testEntity;
+        if( testEntity instanceof EntityLiving )
+            entity = (EntityLiving) testEntity;
 
         switch( jType )
         {
@@ -141,19 +141,19 @@ public class ListButton extends Button
     {
 //        LOGGER.info( "Clicked " + this.title + " Button" );
         GlossaryScreen.setButtonsToKey( regKey );
-        Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( Minecraft.getInstance().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
+        Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
     }
 
     public void clickActionSkills()
     {
         if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) )
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TextComponentTranslation( "" ), regKey, JType.HISCORE, Minecraft.getInstance().player ) );
+            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "" ), regKey, JType.HISCORE, Minecraft.getMinecraft().player ) );
     }
 
     @Override
     public void renderButton(int x, int y, float partialTicks)
     {
-        Minecraft minecraft = Minecraft.getInstance();
+        Minecraft minecraft = Minecraft.getMinecraft();
         FontRenderer fontrenderer = minecraft.fontRenderer;
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
         int i = this.getYImage(this.isHovered());
@@ -184,7 +184,7 @@ public class ListButton extends Button
         this.drawCenteredString(fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
     }
 
-    public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)
+    public static void drawEntityOnScreen(int posX, int posY, int scale, EntityLiving p_228187_5_)
     {
         float f = (float) ( (System.currentTimeMillis() / 25D ) % 360);
         float f1 = 0;
@@ -208,11 +208,11 @@ public class ListButton extends Button
         p_228187_5_.rotationPitch = -f1 * 20.0F;
         p_228187_5_.rotationYawHead = f;
         p_228187_5_.prevRotationYawHead = 0;
-        EntityRendererManager entityrenderermanager = Minecraft.getInstance().getRenderManager();
+        EntityRendererManager entityrenderermanager = Minecraft.getMinecraft().getRenderManager();
         quaternion1.conjugate();
         entityrenderermanager.setCameraOrientation(quaternion1);
         entityrenderermanager.setRenderShadow(false);
-        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getMinecraft().getRenderTypeBuffers().getBufferSource();
         entityrenderermanager.renderEntityStatic(p_228187_5_, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
         irendertypebuffer$impl.finish();
         entityrenderermanager.setRenderShadow(true);

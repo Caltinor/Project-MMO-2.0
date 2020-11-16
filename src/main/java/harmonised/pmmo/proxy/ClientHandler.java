@@ -50,7 +50,7 @@ public class ClientHandler
 
     public static void updateNBTTag( MessageUpdatePlayerNBT packet )
     {
-        EntityPlayer player = Minecraft.getInstance().player;
+        EntityPlayer player = Minecraft.getMinecraft().player;
         NBTTagCompound newPackage = packet.reqPackage;
         Set<String> keySet = newPackage.getKeySet();
 
@@ -86,11 +86,11 @@ public class ClientHandler
 
     public static void openStats( UUID uuid )
     {
-        Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( "pmmo.stats" ), "", JType.STATS, Minecraft.getInstance().player ) );
+        Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( "pmmo.stats" ), "", JType.STATS, Minecraft.getMinecraft().player ) );
     }
 
     public static void syncPrefsToServer()
     {
-        NetworkHandler.sendToServer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.getPreferencesMap( Minecraft.getInstance().player ) ), 0 ) );
+        NetworkHandler.sendToServer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.getPreferencesMap( Minecraft.getMinecraft().player ) ), 0 ) );
     }
 }

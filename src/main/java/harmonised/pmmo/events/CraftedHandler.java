@@ -7,7 +7,7 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -19,9 +19,9 @@ public class CraftedHandler
 {
     public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
     {
-        if( event.getPlayer() instanceof EntityPlayerMP )
+        if( event.getEntityPlayer() instanceof EntityPlayerMP )
         {
-            EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
+            EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
             double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
             double durabilityMultiplier = 1;
 
@@ -32,8 +32,8 @@ public class CraftedHandler
             Map<String, Double> award = new HashMap<>();
             if( xpValue.size() == 0 )
             {
-                if( itemStack.getItem() instanceof BlockItem)
-                    award.setTag( "crafting", (double) ((BlockItem) itemStack.getItem()).getBlock().blockHardness );
+                if( itemStack.getItem() instanceof ItemBlock)
+                    award.setTag( "crafting", (double) ((ItemBlock) itemStack.getItem()).getBlock().blockHardness );
                 else
                     award.setTag( "crafting", defaultCraftingXp );
             }

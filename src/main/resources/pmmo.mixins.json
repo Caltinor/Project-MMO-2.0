@@ -6,7 +6,7 @@
   "mixins": [
     "AbstractFurnaceTileEntityShrinkMixin",
     "BrewingStandTileEntityShrinkMixin",
-    "LivingEntityChangeRespirationMixin"
+    "EntityLivingChangeRespirationMixin"
   ],
   "server":[
   ],

@@ -1,20 +1,13 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.*;
@@ -28,7 +21,7 @@ public class CreditorScreen extends Screen
     public static Map<String, Integer> colors = new HashMap<>();
     private static TileButton exitButton;
 
-    Minecraft minecraft = Minecraft.getInstance();
+    Minecraft minecraft = Minecraft.getMinecraft();
     MainWindow sr = minecraft.getMainWindow();
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
@@ -67,7 +60,7 @@ public class CreditorScreen extends Screen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( Minecraft.getInstance().player.getUniqueID(), new TextComponentTranslation( "pmmo.credits" ), JType.CREDITS ) );
+            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.credits" ), JType.CREDITS ) );
         });
 
         addButton(exitButton);
@@ -123,7 +116,7 @@ public class CreditorScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getMinecraft().getTextureManager().bindTexture( box );
         RenderSystem.disableBlend();
         this.blit( x, y, 0, 0, boxWidth, boxHeight );
     }

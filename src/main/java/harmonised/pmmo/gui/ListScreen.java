@@ -14,10 +14,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Items;
+import net.minecraft.init.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -35,7 +35,7 @@ public class ListScreen extends Screen
     private static final Style greenColor = XP.textStyle.get( "green" );
     private static Button exitButton;
 
-    MainWindow sr = Minecraft.getInstance().getMainWindow();
+    MainWindow sr = Minecraft.getMinecraft().getMainWindow();
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x, y, scrollX, scrollY, buttonX, buttonY, accumulativeHeight, buttonsSize, buttonsLoaded, futureHeight, minCount, maxCount;
@@ -89,11 +89,11 @@ public class ListScreen extends Screen
             switch( jType )
             {
                 case STATS:
-                    Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
+                    Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
                     break;
 
                 default:
-                    Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ), false ) );
+                    Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ), false ) );
                     break;
             }
         });
@@ -575,7 +575,7 @@ public class ListScreen extends Screen
                         addXpToButton( button, killXpMap, jType, player );
                     else
                     {
-                        if( button.entity instanceof AnimalEntity )
+                        if( button.entity instanceof EntityAnimal )
                             button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( Config.forgeConfig.passiveMobHunterXp.get() ) ).setStyle( color ).getFormattedText() );
                         else if( button.entity instanceof MobEntity)
                             button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( Config.forgeConfig.aggresiveMobSlayerXp.get() ) ).setStyle( color ).getFormattedText() );
@@ -912,7 +912,7 @@ public class ListScreen extends Screen
             }
             break;
         }
-        scrollPanel = new ListScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, jType, player, listButtons );
+        scrollPanel = new ListScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, jType, player, listButtons );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.setTag( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
@@ -1077,7 +1077,7 @@ public class ListScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }

@@ -6,13 +6,12 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -41,10 +40,10 @@ public class GrowHandler
 
     public static void handleCropGrow( BlockEvent.CropGrowEvent.Post event )
     {
-        World world = (World) event.getWorld();
+        World world = event.getWorld();
         BlockPos pos = event.getPos();
         ResourceLocation resLoc = event.getWorld().getBlockState( pos ).getBlock().getRegistryName();
-        BlockState state = world.getBlockState( pos );
+        IBlockState state = world.getBlockState( pos );
         Block block = state.getBlock();
 
         UUID uuid = ChunkDataHandler.checkPos( world.dimension.getType().getRegistryName(), pos );
@@ -99,11 +98,6 @@ public class GrowHandler
             {
                 age = state.get( BlockStateProperties.AGE_0_25 );
                 maxAge = 25;
-            }
-            else if( state.has( BlockStateProperties.PICKLES_1_4 ) )
-            {
-                age = state.get( BlockStateProperties.PICKLES_1_4 );
-                maxAge = 4;
             }
 
             if( age != -1 && age == maxAge )

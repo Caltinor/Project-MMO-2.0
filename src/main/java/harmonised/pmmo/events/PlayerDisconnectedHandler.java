@@ -9,6 +9,6 @@ public class PlayerDisconnectedHandler
     public static void handlerPlayerDisconnected( PlayerEvent.PlayerLoggedOutEvent event )
     {
         if( Config.forgeConfig.autoLeavePartyOnDisconnect.get() )
-            PmmoSavedData.get().removeFromParty( event.getPlayer().getUniqueID() );
+            PmmoSavedData.get().removeFromParty( event.getEntityPlayer().getUniqueID() );
     }
 }

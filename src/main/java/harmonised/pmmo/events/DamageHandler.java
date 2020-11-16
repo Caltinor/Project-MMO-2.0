@@ -11,11 +11,13 @@ import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Items;
+import net.minecraft.init.Items;
+import net.minecraft.init.Items;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.TextComponentString;
@@ -33,7 +35,7 @@ public class DamageHandler
         {
             float damage = event.getAmount();
             float startDmg = damage;
-            LivingEntity target = event.getEntityLiving();
+            EntityLiving target = event.getEntityLiving();
             Entity source = event.getSource().getTrueSource();
             if( target instanceof EntityPlayerMP )		//player hurt
             {
@@ -129,23 +131,23 @@ public class DamageHandler
 
 ///////////////////////////////////////Attacking////////////////////////////////////////////////////////////
 
-            if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof EntityPlayerMP )
+            if ( target instanceof EntityLiving && event.getSource().getTrueSource() instanceof EntityPlayerMP )
             {
 //				IAttributeInstance test = target.getAttribute( Attributes.GENERIC_MOVEMENT_SPEED );
-//				if( !(target instanceof AnimalEntity) )
+//				if( !(target instanceof EntityAnimal) )
 //					System.out.println( test.getValue() + " " + test.getBaseValue() );
 
                 EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
 
-                if( player.getHeldItemMainhand().getItem().equals( Items.DEBUG_STICK ) )
-                    player.sendStatusMessage( new TextComponentString( target.getEntityString() ), false );
+                if( player.getHeldItemMainhand().getItem().equals( Items.CARROT_ON_A_STICK ) )
+                    player.sendStatusMessage( new TextComponentString( target.getName() ), false );
 
                 if( XP.isPlayerSurvival( player ) )
                 {
                     int weaponGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_WEAPON );
                     if( weaponGap > 0 )
                     {
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (EntityPlayerMP) player );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getDisplayName(), "", true, 2 ), (EntityPlayerMP) player );
                         if( Config.forgeConfig.strictReqWeapon.get() )
                         {
                             event.setCanceled( true );
@@ -155,15 +157,15 @@ public class DamageHandler
 
                     int killGap = 0;
 
-                    if( target.getEntityString() != null )
+                    if( target.getName() != null )
                     {
-                        killGap = XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), JType.REQ_KILL );
+                        killGap = XP.getSkillReqGap( player, XP.getResLoc( target.getName() ), JType.REQ_KILL );
                         if( killGap > 0 )
                         {
-                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToDamage", new TextComponentTranslation( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToDamage", new TextComponentTranslation( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToDamage", new TextComponentTranslation( target.getName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToDamage", new TextComponentTranslation( target.getName() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
-                            for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ).entrySet() )
+                            for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getName() ).entrySet() )
                             {
                                 int level = Skill.getSkill( entry.getKey() ).getLevel( player );
 
@@ -202,7 +204,7 @@ public class DamageHandler
 
 //					player.setHealth( 1f );
 
-                    if( target instanceof AnimalEntity)		//reduce xp if passive mob
+                    if( target instanceof EntityAnimal )		//reduce xp if passive mob
                         amount /= 2;
                     else if( playerHealth <= 10 )				//if aggresive mob and low hp
                     {
@@ -231,7 +233,7 @@ public class DamageHandler
                     }
 
                     if( weaponGap > 0 )
-                        player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
+                        player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> (EntityPlayer) a.sendBreakAnimation(EnumHand.MAIN_HAND ) );
                 }
             }
         }

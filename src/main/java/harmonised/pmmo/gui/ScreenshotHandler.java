@@ -24,7 +24,7 @@ public class ScreenshotHandler
         {
             File screenshotDir = new File( pmmoDir, folderName );
             screenshotDir.mkdirs();
-            Minecraft mc = Minecraft.getInstance();
+            Minecraft mc = Minecraft.getMinecraft();
             NativeImage nativeImage = ScreenShotHelper.createScreenshot(mc.getFramebuffer().framebufferWidth, mc.getFramebuffer().framebufferHeight, mc.getFramebuffer());
             String screenshotDate = DATE_FORMAT.format( new Date() );
             File screenshotFile = new File( screenshotDir, screenshotName + " " + screenshotDate + ".png" );

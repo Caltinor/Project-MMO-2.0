@@ -26,7 +26,7 @@ public class PlayerConnectedHandler
 
     public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
     {
-        EntityPlayer player = event.getPlayer();
+        EntityPlayer player = event.getEntityPlayer();
         if( !player.world.isRemote )
         {
             UUID uuid = player.getUniqueID();

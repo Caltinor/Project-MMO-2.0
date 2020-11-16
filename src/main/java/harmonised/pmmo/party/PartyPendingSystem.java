@@ -36,8 +36,8 @@ public class PartyPendingSystem
             return -4;  //Party is full
         else    //if invitee has no party, and owner does have a party, create an invitation
         {
-            pendingInvitations.setTag( inviteeUUID, ownerUUID );
-            invitationDates.setTag( inviteeUUID, System.currentTimeMillis() );
+            pendingInvitations.put( inviteeUUID, ownerUUID );
+            invitationDates.put( inviteeUUID, System.currentTimeMillis() );
             return 0;
         }
     }

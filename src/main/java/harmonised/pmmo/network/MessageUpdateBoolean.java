@@ -49,7 +49,7 @@ public class MessageUpdateBoolean
                 case 0: //vein stuff
                     if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
                     {
-                        if( Minecraft.getInstance().player != null )
+                        if( Minecraft.getMinecraft().player != null )
                             XPOverlayGUI.isVeining = packet.value;
                     }
                     break;

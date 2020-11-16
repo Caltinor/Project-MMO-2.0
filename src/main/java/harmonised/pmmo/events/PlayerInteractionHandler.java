@@ -9,20 +9,18 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.BlockItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,11 +36,10 @@ public class PlayerInteractionHandler
         {
             if( event instanceof PlayerInteractEvent.RightClickBlock || event instanceof PlayerInteractEvent.RightClickItem)
             {
-                EntityPlayer player = event.getPlayer();
+                EntityPlayer player = event.getEntityPlayer();
                 ItemStack itemStack = event.getItemStack();
                 Item item = itemStack.getItem();
                 Block goldBlock 	= 	Blocks.GOLD_BLOCK;
-                Block smithBlock    =   Blocks.SMITHING_TABLE;
 
                 if( item.getRegistryName() == null )
                     return;
@@ -58,29 +55,27 @@ public class PlayerInteractionHandler
                     {
                         if( JsonConfig.data2.get( JType.SALVAGE ).containsKey( regKey ) )
                         {
-                            matched = XP.scanBlock( smithBlock, 1, player );
-                            if( !matched )
-                                matched = XP.scanBlock( goldBlock, 1, player );
+                            matched = XP.scanBlock( goldBlock, 1, player );
 
                             if( matched )
                             {
                                 event.setCanceled( true );
 
 //							if( isRemote )
-//								player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotUseProximity", new TextComponentTranslation( matchedBlock.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+//								player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotUseProximity", new TextComponentTranslation( matchedBlock.getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             }
                         }
                     }
                 }
 
-                if( item instanceof BlockItem )
+                if( item instanceof ItemBlock )
                 {
                     if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_PLACE ) )
                     {
                         event.setCanceled( true );
 
                         if( isRemote )
-                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToPlaceDown", new TextComponentTranslation( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToPlaceDown", new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                     }
                 }
                 else if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_USE ) )
@@ -88,7 +83,7 @@ public class PlayerInteractionHandler
                     event.setCanceled( true );
 
                     if( isRemote )
-                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                 }
 
                 if( event instanceof PlayerInteractEvent.RightClickBlock)
@@ -100,10 +95,10 @@ public class PlayerInteractionHandler
                         if( XP.isPlayerSurvival( player ) )
                         {
                             event.setCanceled( true );
-                            if( isRemote && event.getHand().equals( Hand.MAIN_HAND ) )
+                            if( isRemote && event.getHand().equals( EnumHand.MAIN_HAND ) )
                             {
-                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( block.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( block.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( block.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
 //                            if( JsonConfig.data.get( JType.REQ_USE ).containsKey( block.getRegistryName().toString() ) )
 //                            {
@@ -130,9 +125,9 @@ public class PlayerInteractionHandler
                         int smithingLevel;
                         Integer lowestReqLevel = null;
 
-                        if( player.isCrouching() )
+                        if( player.isSneaking() )
                         {
-                            if( ( block.equals( goldBlock ) || block.equals( smithBlock ) ) )
+                            if( ( block.equals( goldBlock ) ) )
                             {
                                 if( item.equals( Items.AIR ) )
                                     return;
@@ -140,7 +135,7 @@ public class PlayerInteractionHandler
                                 if( isRemote )
                                     return;
 
-                                if( !event.getHand().equals( Hand.OFF_HAND ) )
+                                if( !event.getHand().equals( EnumHand.OFF_HAND ) )
                                     return;
 
                                 itemStack = player.getHeldItemOffhand();
@@ -150,7 +145,7 @@ public class PlayerInteractionHandler
                                     event.setCanceled( true );
                                 else
                                 {
-                                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvage", new TextComponentTranslation( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvage", new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                                     return;
                                 }
 
@@ -160,11 +155,11 @@ public class PlayerInteractionHandler
                                     return;
                                 }
 
-//                            if( event.getHand() != Hand.OFF_HAND )
+//                            if( event.getHand() != EnumHand.OFF_HAND )
 //                            {
 //                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.offhandToDiss" ), false );
 //                                XP.sendMessage( "_________________________________", false, player );
-//                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (EntityPlayerMP) player );
+//                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.durabilityInfo", item.getDisplayName(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (EntityPlayerMP) player );
 //                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
 //                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (EntityPlayerMP) player );
 //                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
@@ -206,7 +201,7 @@ public class PlayerInteractionHandler
                                         if( chance > maxSalvageMaterialChance )
                                             chance = maxSalvageMaterialChance;
 
-                                        double startDmg = itemStack.getDamage();
+                                        double startDmg = itemStack.getItemDamage();
                                         double maxDmg = itemStack.getMaxDamage();
                                         double displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
                                         double durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
@@ -229,11 +224,11 @@ public class PlayerInteractionHandler
                                             XP.dropItems( returnAmount, salvageToItem, event.getWorld(), event.getPos() );
 
                                         if( returnAmount == potentialReturnAmount )
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), false, 1 ), (EntityPlayerMP) player );
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getUnlocalizedName(), false, 1 ), (EntityPlayerMP) player );
                                         else if( returnAmount > 0 )
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), false, 3 ), (EntityPlayerMP) player );
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getUnlocalizedName(), false, 3 ), (EntityPlayerMP) player );
                                         else
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), true, 2 ), (EntityPlayerMP) player );
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getUnlocalizedName(), true, 2 ), (EntityPlayerMP) player );
                                     }
                                 }
 
@@ -255,7 +250,7 @@ public class PlayerInteractionHandler
                                     if( enchants.size() > 0 )
                                     {
                                         ItemStack salvagedBook = new ItemStack( Items.ENCHANTED_BOOK );
-                                        Set<Enchantment> enchantKeys = enchants.getKeySet();
+                                        Set<Enchantment> enchantKeys = enchants.keySet();
                                         Map<Enchantment, Integer> newEnchantMap = new HashMap<>();
                                         int enchantLevel;
                                         boolean fullEnchants = true;
@@ -291,10 +286,10 @@ public class PlayerInteractionHandler
                                         XP.awardXp( (EntityPlayerMP) player, Skill.SMITHING, item.getRegistryName().toString(), award, false, false, false );
 
                                     player.getHeldItemOffhand().shrink( 1 );
-                                    player.sendBreakAnimation(Hand.OFF_HAND );
+                                    player.sendBreakAnimation(EnumHand.OFF_HAND );
                                 }
                                 else
-                                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvageLackLevelLonger", lowestReqLevel, new TextComponentTranslation( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvageLackLevelLonger", lowestReqLevel, new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             }
                         }
                     }
