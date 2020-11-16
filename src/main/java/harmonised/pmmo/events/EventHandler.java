@@ -65,6 +65,12 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
+	public static void playerLogout( PlayerEvent.PlayerLoggedOutEvent event )
+	{
+		PlayerDisconnectedHandler.handlerPlayerDisconnected( event );
+	}
+
+	@SubscribeEvent
 	public static void playerClone( PlayerEvent.Clone event )
 	{
 		PlayerCloneHandler.handleClone( event );

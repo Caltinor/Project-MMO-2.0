@@ -150,7 +150,7 @@ public class WorldTickHandler
                         }
 
                         if( age != maxAge && age >= 0 )
-                            fullyGrown = false;
+                            return;
                     }
 
                     if( ( abilitiesMap.get( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
@@ -170,12 +170,9 @@ public class WorldTickHandler
                                 {
                                     if( Config.forgeConfig.veiningOtherPlayerBlocksAllowed.get() || isOwner )
                                     {
-                                        if( fullyGrown )
-                                        {
-                                            abilitiesMap.put("veinLeft", abilitiesMap.get("veinLeft") - cost);
-                                            destroyBlock( world, veinPos, player, startItemStack );
-                                            player.addExhaustion( (float) exhaustionPerBlock );
-                                        }
+                                        abilitiesMap.put("veinLeft", abilitiesMap.get("veinLeft") - cost);
+                                        destroyBlock( world, veinPos, player, startItemStack );
+                                        player.addExhaustion( (float) exhaustionPerBlock );
                                     }
                                 }
                                 else
