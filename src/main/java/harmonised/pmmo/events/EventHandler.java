@@ -1,130 +1,200 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.skills.AttributeHandler;
-import harmonised.pmmo.skills.XP;
-
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import com.feed_the_beast.ftbquests.quest.task.TaskType;
+import com.feed_the_beast.mods.ftbguilibrary.icon.Icon;
+import harmonised.pmmo.ftb_quests.SkillTask;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.event.entity.player.AnvilRepairEvent;
-import net.minecraftforge.event.entity.player.ItemFishedEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
+import net.minecraftforge.event.entity.player.*;
+import net.minecraftforge.event.world.*;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
+@Mod.EventBusSubscriber
 public class EventHandler
 {
-	@SubscribeEvent
-    public static void blockBroken( BreakEvent event )
-    {
-		XP.handleBroken( event );
-    }
-	
-	@SubscribeEvent
-	public static void blockHarvested( HarvestDropsEvent event )
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void blockBroken( BreakEvent event )
 	{
-		XP.handleHarvested(event);
+		BlockBrokenHandler.handleBroken( event );
 	}
-	
+
 	@SubscribeEvent
-	public static void blockPlaced( PlaceEvent event )
+	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
 	{
-		XP.handlePlaced( event );
+		BlockPlacedHandler.handlePlaced( event );
 	}
-	
-	@SubscribeEvent
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingHurt( LivingDamageEvent event )
 	{
-		XP.handleDamage( event );
+		DamageHandler.handleDamage( event );
 	}
-	
-	@SubscribeEvent
-	public static void playerTick( PlayerTickEvent event )
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void livingDeath( LivingDeathEvent event )
 	{
-		XP.handlePlayerTick( event );
+		DeathHandler.handleDeath( event );
 	}
-	
+
 	@SubscribeEvent
-	public static void playerRespawn( PlayerRespawnEvent event )
+	public static void playerTick( TickEvent.PlayerTickEvent event )
 	{
-		XP.handlePlayerRespawn( event );
+		PlayerTickHandler.handlePlayerTick( event );
 	}
-	
+
 	@SubscribeEvent
+	public static void playerRespawn( PlayerEvent.PlayerRespawnEvent event )
+	{
+		PlayerRespawnHandler.handlePlayerRespawn( event );
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingJump( LivingJumpEvent event )
 	{
-		XP.handleLivingJump( event );
+		JumpHandler.handleJump( event );
 	}
-	
+
 	@SubscribeEvent
-	public static void onPlayerLogin( PlayerLoggedInEvent event)
+	public static void PlayerLogin( PlayerEvent.PlayerLoggedInEvent event)
 	{
-		AttributeHandler.updateReach( event.player );
-		
-		XP.handlePlayerConnected( event );
+		PlayerConnectedHandler.handlePlayerConnected( event );
 	}
-	
+
 	@SubscribeEvent
-	public static void onRightClickBlock( RightClickBlock event )
+	public static void playerLogout( PlayerEvent.PlayerLoggedOutEvent event )
 	{
-		XP.handleRightClickBlock( event );
+		PlayerDisconnectedHandler.handlerPlayerDisconnected( event );
 	}
-	
+
 	@SubscribeEvent
+	public static void playerClone( PlayerEvent.Clone event )
+	{
+		PlayerCloneHandler.handleClone( event );
+	}
+
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onAnvilRepair( AnvilRepairEvent event )
 	{
-		XP.handleAnvilRepair( event );
+		AnvilRepairHandler.handleAnvilRepair( event );
 	}
-	
+
 	@SubscribeEvent
 	public static void onItemFished( ItemFishedEvent event )
 	{
-		XP.handleFished( event );
+		FishedHandler.handleFished( event );
+	}
+
+
+	@SubscribeEvent
+	public static void itemCrafted( PlayerEvent.ItemCraftedEvent event )
+	{
+		CraftedHandler.handleCrafted( event );
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void breakSpeed( PlayerEvent.BreakSpeed event )
+	{
+		BreakSpeedHandler.handleBreakSpeed( event );
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void playerInteract( PlayerInteractEvent event )
+	{
+		PlayerInteractionHandler.handlePlayerInteract( event );
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void livingSpawn( LivingSpawnEvent.EnteringChunk event )
+	{
+		SpawnHandler.handleSpawn( event );
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void babySpawn( BabyEntitySpawnEvent event )
+	{
+		BreedHandler.handleBreedEvent( event );
 	}
 
 	@SubscribeEvent
-	public static void breakSpeed( PlayerEvent.BreakSpeed event )
+	public static void animalTaming( AnimalTameEvent event )
 	{
-		XP.handleBreakSpeed( event );
+		TameHandler.handleAnimalTaming( event );
 	}
-	
-//	@SubscribeEvent
-//	public static void onRightClickItem( RightClickItem event )
-//	{
-//		XP.handleRightClickItem( event );
-//	}
-	
-//	@SubscribeEvent
-//	public static void itemSmelted( ItemSmeltedEvent event )
-//	{
-//		XP.handleSmelt( event );
-//	}
-	
-//	@SubscribeEvent
-//	public static void livingDeath( LivingDeathEvent event )
-//	{
-//		
-//	}
-	
+
 	@SubscribeEvent
-	public static void itemCrafted( ItemCraftedEvent event )
+	public static void worldTick( TickEvent.WorldTickEvent event )
 	{
-		XP.handleCrafted( event );
+		WorldTickHandler.handleWorldTick( event );
 	}
-	
+
+	@SubscribeEvent
+	public static void serverStopping( FMLServerStoppingEvent event )
+	{
+		ServerStoppingHandler.handleServerStop( event );
+	}
+
 //	@SubscribeEvent
-//	public void playerData( PlayerEvent.PlayerLoggedInEvent event )
+//	public static void itemThrown( EntityItemPickupEvent event )
 //	{
+//		PickupHandler.handlePickup( event );
+//	}
+
+//	@SubscribeEvent
+//	public static void furnace( PlayerEvent.ItemSmeltedEvent )
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void sleepDone( SleepFinishedTimeEvent event )
+	{
+		SleepHandler.handleSleepFinished( event );
+	}
+
+	@SubscribeEvent
+	public static void chunkDataLoad( ChunkDataEvent.Load event )
+	{
+		ChunkDataHandler.handleChunkDataLoad( event );
+	}
+
+	@SubscribeEvent
+	public static void chunkDataSave( ChunkDataEvent.Save event )
+	{
+		ChunkDataHandler.handleChunkDataSave( event );
+	}
+
+	@SubscribeEvent
+	public static void pistonPush( PistonEvent event )
+	{
+		PistonEventHandler.handlePistonPush( event );
+	}
+
+//	@SubscribeEvent
+//	public static void pickUpEntity( EntityItemPickupEvent event )
+//	{
+//		ItemHandler.handleItemEntityPickup( event );
+//	}
+
+	@SubscribeEvent
+	public static void saplingGrow( SaplingGrowTreeEvent event )
+	{
+		GrowHandler.handleSaplingGrow( event );
+	}
+
+	@SubscribeEvent
+	public static void cropGrow( BlockEvent.CropGrowEvent.Post event )
+	{
+		GrowHandler.handleCropGrow( event );
+	}
+
+//	@SubscribeEvent
+//	public static void registerTasks( RegistryEvent.Register<TaskType> event )
+//	{
+//		event.getRegistry().register( SkillTask.SKILL = new TaskType( SkillTask::new ).setRegistryName( "skill" ).setIcon( Icon.getIcon("minecraft:item/dragon_egg") ) );
 //	}
 }

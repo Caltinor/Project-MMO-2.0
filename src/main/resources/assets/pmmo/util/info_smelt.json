@@ -1,0 +1,438 @@
+{
+	"minecraft:cobblestone":
+	{
+		"extraChance": 1
+	},
+	"minecraft:stone":
+	{
+		"extraChance": 1
+	},
+	"minecraft:stone_bricks":
+	{
+		"extraChance": 1
+	},
+	"minecraft:netherrack":
+	{
+		"extraChance": 1
+	},
+	"minecraft:nether_bricks":
+	{
+		"extraChance": 1
+	},
+	"minecraft:polished_blackstone_bricks":
+	{
+		"extraChance": 1
+	},
+	"minecraft:sand":
+	{
+		"extraChance": 1
+	},
+	"minecraft:red_sand":
+	{
+		"extraChance": 0.9
+	},
+	"minecraft:sandstone":
+	{
+		"extraChance": 1
+	},
+	"minecraft:red_sandstone":
+	{
+		"extraChance": 0.9
+	},
+	"minecraft:coal_ore":
+	{
+		"extraChance": 1
+	},
+	"minecraft:iron_ore":
+	{
+		"extraChance": 1
+	},
+	"minecraft:gold_ore":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:nether_gold_ore":
+	{
+		"extraChance": 0.75
+	},
+	"minecraft:nether_quartz_ore":
+	{
+		"extraChance": 1
+	},
+	"minecraft:diamond_ore":
+	{
+		"extraChance": 0.25
+	},
+	"minecraft:redstone_ore":
+	{
+		"extraChance": 2
+	},
+	"minecraft:lapis_ore":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:emerald_ore":
+	{
+		"extraChance": 0.2
+	},
+	"minecraft:ancient_debris":
+	{
+		"extraChance": 0.33
+	},
+	"minecraft:clay_ball":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:clay":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:chainmail_helmet":
+	{
+		"extraChance": 15
+	},
+	"minecraft:chainmail_chestplate":
+	{
+		"extraChance": 15
+	},
+	"minecraft:chainmail_leggings":
+	{
+		"extraChance": 15
+	},
+	"minecraft:chainmail_boots":
+	{
+		"extraChance": 15
+	},
+	"minecraft:iron_helmet":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_chestplate":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_leggings":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_boots":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_pickaxe":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_shovel":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_axe":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_hoe":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_sword":
+	{
+		"extraChance": 5
+	},
+	"minecraft:iron_horse_armor":
+	{
+		"extraChance": 50
+	},
+	"minecraft:golden_helmet":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_chestplate":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_leggings":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_boots":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_pickaxe":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_shovel":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_axe":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_hoe":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_sword":
+	{
+		"extraChance": 2.5
+	},
+	"minecraft:golden_horse_armor":
+	{
+		"extraChance": 50
+	},
+	"minecraft:oak_log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:birch_log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:spruce_log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:jungle_log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:dark_oak_log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:acacia_log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:white_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:orange_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:magenta_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:light_blue_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:yellow_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:lime_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:pink_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:gray_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:light_gray_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:cyan_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:purple_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:blue_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:brown_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:green_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:red_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:black_terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:terracotta":
+	{
+		"extraChance": 1.5
+	},
+	"appliedenergistics2:gold_dust":
+	{
+		"extraChance": 0.5
+	},
+	"appliedenergistics2:iron_dust":
+	{
+		"extraChance": 1
+	},
+	"appliedenergistics2:nether_quartz_dust":
+	{
+		"extraChance": 1
+	},
+	"appliedenergistics2:certus_quartz_dust":
+	{
+		"extraChance": 1.2
+	},
+	"create:copper_ore":
+	{
+		"extraChance": 0.85
+	},
+	"create:zinc_ore":
+	{
+		"extraChance": 0.7
+	},
+	"create:crushed_iron_ore":
+	{
+		"extraChance": 1.1
+	},
+	"create:crushed_gold_ore":
+	{
+		"extraChance": 0.6
+	},
+	"create:crushed_copper_ore":
+	{
+		"extraChance": 0.95
+	},
+	"create:crushed_zinc_ore":
+	{
+		"extraChance": 0.8
+	},
+	"create:crushed_brass_ore":
+	{
+		"extraChance": 0.4
+	},
+	"endreborn:wolframium_horse_armor":
+	{
+		"extraChance": 50
+	},
+	"endreborn:end_wolframium_ore":
+	{
+		"extraChance": 1.2
+	},
+	"biomesoplenty:mud_ball":
+	{
+		"extraChance": 1.2
+	},
+	"aquaculture:tin_can":
+	{
+		"extraChance": 15
+	},
+	"charm:nether_gold_deposit":
+	{
+		"extraChance": 0.75
+	},
+	"charm:pig_iron_ore":
+	{
+		"extraChance": 0.75
+	},
+	"treemendous:douglas_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:pine_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:larch_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:fir_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:maple_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:japanese_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:beech_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:cherry_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:alder_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:chestnut_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:plane_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:ash_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:linden_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:robinia_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:willow_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:pomegranate_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:magnolia_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:walnut_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:cedar_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:poplar_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:elm_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:rainbow_eucalyptus_log":
+	{
+		"extraChance": 1
+	},
+	"treemendous:juniper_log":
+	{
+		"extraChance": 1
+	}
+}

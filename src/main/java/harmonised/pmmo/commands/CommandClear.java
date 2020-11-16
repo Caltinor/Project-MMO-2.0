@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nullable;
-
+import com.sun.istack.internal.Nullable;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.XP;

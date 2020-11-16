@@ -1,0 +1,20 @@
+{
+  "required": false,
+  "package": "harmonised.pmmo.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "pmmo.refmap.json",
+  "mixins": [
+    "AbstractFurnaceTileEntityShrinkMixin",
+    "BrewingStandTileEntityShrinkMixin",
+    "LivingEntityChangeRespirationMixin"
+  ],
+  "server":[
+  ],
+  "client":[
+
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

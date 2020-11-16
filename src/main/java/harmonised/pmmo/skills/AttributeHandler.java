@@ -1,89 +1,267 @@
 package harmonised.pmmo.skills;
 
+import java.util.Map;
 import java.util.UUID;
 
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.JType;
+import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.events.WorldTickHandler;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
 
 public class AttributeHandler
 {
 	private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");
-	private static final UUID HPModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
-	private static final UUID DamageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
-	 
+	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
+	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
+	private static double levelsPerOneReach;
+	private static double levelsPerHeart;
+	private static double levelsPerDamage;
+	private static double maxSpeedBoost;
+	private static double speedBoostPerLevel;
+	private static int maxExtraHeartBoost;
+	private static double maxExtraReachBoost;
+	private static double maxExtraDamageBoost;
+
+	public static void init()
+	{
+		levelsPerOneReach = Config.getConfig( "levelsPerOneReach" );
+		levelsPerHeart = Config.getConfig( "levelsPerHeart" );
+		levelsPerDamage = Config.getConfig( "levelsPerDamage" );
+		maxSpeedBoost = Config.getConfig( "maxSpeedBoost" );
+		speedBoostPerLevel = Config.getConfig( "speedBoostPerLevel" );
+		maxExtraHeartBoost = (int) Config.getConfig( "maxExtraHeartBoost" );
+		maxExtraReachBoost = Config.getConfig( "maxExtraReachBoost" );
+		maxExtraDamageBoost = Config.getConfig( "maxExtraDamageBoost" );
+	}
+
+	public static void updateAll( EntityPlayer player )
+	{
+		if( !player.world.isRemote )
+			WorldTickHandler.updateVein( player, 0 );
+
+		updateReach( player );
+		updateHP( player );
+		updateDamage( player );
+	}
+
 	public static double getReach( EntityPlayer player )
 	{
-		IAttributeInstance reachAttribute = player.getEntityAttribute( player.REACH_DISTANCE );		
-		
+		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
+
 		if( reachAttribute.getModifier( reachModifierID ) == null )
 			return ( reachAttribute.getBaseValue() );
 		else
 			return ( reachAttribute.getBaseValue() + reachAttribute.getModifier( reachModifierID ).getAmount() );
 	}
-	
+
 	public static void updateReach( EntityPlayer player )
 	{
-		IAttributeInstance reachAttribute = player.getEntityAttribute( player.REACH_DISTANCE );
-		float buildLevel = XP.levelAtXp( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).getCompoundTag( "skills" ).getFloat( "building" ) );
-		if( buildLevel == 1 )
-			return;
+		IAttributeInstance reachAttribute = player.getAttribute( player.REACH_DISTANCE );
+		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		double buildLevel = Skill.BUILDING.getLevel( player );
+		double reach = -0.91 + ( buildLevel / levelsPerOneReach );
+		Double maxReachPref = null;
+		if( prefsMap.containsKey( "maxExtraReachBoost" ) )
+			maxReachPref = prefsMap.get( "maxExtraReachBoost" );
+		if( reach > maxExtraReachBoost )
+			reach = maxExtraReachBoost;
+		if( maxReachPref != null && reach > maxReachPref )
+			reach = maxReachPref;
 
-		double reach = -0.91 + ( buildLevel / 25 );
-		
-//		if( reach > 0 && player.getHeldItemMainhand().getItem().isDamageable() )
-//			reach /= 2;
-		
-		if( reachAttribute.getModifier( reachModifierID ) == null || reachAttribute.getModifier( reachModifierID).getAmount() != reach )
+		if( reachAttribute.getModifier( reachModifierID ) == null || reachAttribute.getModifier( reachModifierID ).getAmount() != reach )
 		{
-			AttributeModifier reachModifier = new AttributeModifier( reachModifierID, "Reach bonus thanks to Build Level", reach, 0 );
+			AttributeModifier reachModifier = new AttributeModifier( reachModifierID, "Reach bonus thanks to Build Level", reach, AttributeModifier.Operation.ADDITION );
 			reachAttribute.removeModifier( reachModifierID );
 			reachAttribute.applyModifier( reachModifier );
 		}
 	}
-	
+
+	public static double getBaseSpeed( EntityPlayer player )
+	{
+		return player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED ).getBaseValue();
+	}
+
+	public static double getSpeedBoost( EntityPlayer player )
+	{
+		int agilityLevel = Skill.AGILITY.getLevel( player );
+		return getSpeedBoost( agilityLevel, getBaseSpeed( player ) );
+	}
+
+	public static double getSpeedBoost( int agilityLevel, double baseSpeed )
+	{
+		Map<String, Double> prefsMap = Config.getPreferencesMapOffline();
+		Double maxSpeedBoostPref = null;
+		if( prefsMap.containsKey( "maxSpeedBoost" ) )
+			maxSpeedBoostPref = prefsMap.get( "maxSpeedBoost" );
+		double speedBoost = agilityLevel * speedBoostPerLevel;
+		double maxSpeed = baseSpeed * (maxSpeedBoost / 100);
+		if( maxSpeedBoostPref != null && maxSpeed > baseSpeed * (maxSpeedBoostPref / 100) )
+			maxSpeed = baseSpeed * (maxSpeedBoostPref / 100);
+
+		if( speedBoost > maxSpeed )
+			speedBoost = maxSpeed;
+
+		return speedBoost;
+	}
+
 	public static void updateSpeed( EntityPlayer player )
 	{
-		IAttributeInstance speedAttribute = player.getEntityAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
-		float agilityLevel = XP.levelAtXp( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).getCompoundTag( "skills" ).getFloat( "agility" ) );
-		double speedBoost = agilityLevel / 2000;
-		if( speedBoost > 0.1 )
-			speedBoost = 0.1;
-		if( speedAttribute.getModifier( speedModifierID ) == null || speedAttribute.getModifier( speedModifierID ).getAmount() != speedBoost )
+		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		double speedBoost = getSpeedBoost( player );
+
+		if( speedBoost > 0 )
 		{
-			AttributeModifier speedModifier = new AttributeModifier( speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, 0 );
-			speedAttribute.removeModifier( speedModifierID );
-			speedAttribute.applyModifier( speedModifier );
+			if( speedAttribute.getModifier( speedModifierID ) == null || speedAttribute.getModifier( speedModifierID ).getAmount() != speedBoost )
+			{
+				AttributeModifier speedModifier = new AttributeModifier( speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, AttributeModifier.Operation.ADDITION );
+				speedAttribute.removeModifier( speedModifierID );
+				speedAttribute.applyModifier( speedModifier );
+
+//				System.out.println( speedModifier.getAmount() );
+			}
 		}
 	}
-	
+
 	public static void resetSpeed( EntityPlayer player )
 	{
-		IAttributeInstance speedAttribute = player.getEntityAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		IAttributeInstance speedAttribute = player.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		speedAttribute.removeModifier( speedModifierID );
 	}
-	
+
 	public static void updateHP( EntityPlayer player )
 	{
-		IAttributeInstance HPAttribute = player.getEntityAttribute( SharedMonsterAttributes.MAX_HEALTH );
-		float enduranceLevel = XP.levelAtXp( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).getCompoundTag( "skills" ).getFloat( "endurance" ) );
-		int maxHP = (int) Math.floor( enduranceLevel / 10) * 2;
-		AttributeModifier HPModifier = new AttributeModifier( HPModifierID, "Max HP Bonus thanks to Endurance Level", maxHP, 0 );
-		HPAttribute.removeModifier( HPModifierID );
-		HPAttribute.applyModifier( HPModifier );
+		IAttributeInstance hpAttribute = player.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		double enduranceLevel = Skill.ENDURANCE.getLevel( player );
+		int heartBoost = (int) Math.floor( enduranceLevel / levelsPerHeart ) * 2;
+		Integer maxHPPref = null;
+		if( prefsMap.containsKey( "maxExtraHeartBoost" ) )
+			maxHPPref = (int) Math.floor( prefsMap.get( "maxExtraHeartBoost" ) * 2);
+		if( heartBoost > maxExtraHeartBoost * 2 )
+			heartBoost = maxExtraHeartBoost * 2;
+		if( maxHPPref != null && heartBoost > maxHPPref )
+			heartBoost = maxHPPref;
+
+		AttributeModifier hpModifier = new AttributeModifier( hpModifierID, "Max HP Bonus thanks to Endurance Level", heartBoost, AttributeModifier.Operation.ADDITION );
+		hpAttribute.removeModifier( hpModifierID );
+		hpAttribute.applyModifier( hpModifier );
 	}
-	
+
 	public static void updateDamage( EntityPlayer player )
 	{
-		IAttributeInstance DamageAttribute = player.getEntityAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
-		float combatLevel = XP.levelAtXp( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).getCompoundTag( "skills" ).getFloat( "combat" ) );
-		int damageBoost = (int) Math.floor( combatLevel / 20 );
-		AttributeModifier damageModifier = new AttributeModifier( DamageModifierID, "Damage Boost thanks to Combat Level", damageBoost, 0 );
-		DamageAttribute.removeModifier( DamageModifierID );
-		DamageAttribute.applyModifier( damageModifier );
+		IAttributeInstance damageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		Double maxDamagePref = null;
+		if( prefsMap.containsKey( "maxExtraDamageBoost" ) )
+			maxDamagePref = prefsMap.get( "maxExtraDamageBoost" );
+		double combatLevel = Skill.COMBAT.getLevel( player );
+		double damageBoost = combatLevel / levelsPerDamage;
+		if( damageBoost > maxExtraDamageBoost )
+			damageBoost = maxExtraDamageBoost;
+		if( maxDamagePref != null && damageBoost > maxDamagePref )
+			damageBoost = maxDamagePref;
+
+		AttributeModifier damageModifier = new AttributeModifier( damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );
+		damageAttribute.removeModifier( damageModifierID );
+		damageAttribute.applyModifier( damageModifier );
+	}
+
+	public static void updateHP( MobEntity mob, float bonus )
+	{
+		IAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
+		if( hpAttribute != null )
+		{
+			boolean wasMaxHealth = mob.getHealth() == mob.getMaxHealth();
+			double maxMobHPBoost = Config.forgeConfig.maxMobHPBoost.get();
+			double mobHPBoostPerPowerLevel = Config.forgeConfig.mobHPBoostPerPowerLevel.get();
+			if( !(mob instanceof AnimalEntity) )
+				bonus *= mobHPBoostPerPowerLevel;
+
+			bonus *= getBiomeMobMultiplier( mob, "hpBonus" );
+
+			if( bonus > maxMobHPBoost )
+				bonus = (float) maxMobHPBoost;
+
+			AttributeModifier hpModifier = new AttributeModifier(hpModifierID, "Max HP Bonus thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
+
+			hpAttribute.removeModifier(hpModifierID);
+			hpAttribute.applyModifier(hpModifier);
+
+			if( wasMaxHealth )
+				mob.setHealth( mob.getMaxHealth() );
+		}
+	}
+
+	public static void updateDamage( MobEntity mob, float bonus )
+	{
+		IAttributeInstance damageAttribute = mob.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
+		if( damageAttribute != null )
+		{
+			double maxMobDamageBoost = Config.forgeConfig.maxMobDamageBoost.get();
+			double mobDamageBoostPerPowerLevel = Config.forgeConfig.mobDamageBoostPerPowerLevel.get();
+			bonus *= mobDamageBoostPerPowerLevel;
+			bonus *= getBiomeMobMultiplier( mob, "damageBonus" );
+
+			if( bonus > maxMobDamageBoost )
+				bonus = (float) maxMobDamageBoost;
+
+			AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
+			damageAttribute.removeModifier(damageModifierID);
+			damageAttribute.applyModifier(damageModifier);
+		}
+//		else
+//			System.out.println( mob.getDisplayName().getUnformattedText() );
+	}
+
+	public static void updateSpeed( MobEntity mob, float bonus )
+	{
+		IAttributeInstance speedAttribute = mob.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
+		if( speedAttribute != null )
+		{
+			if( !(mob instanceof  AnimalEntity) )
+			{
+				double maxMobSpeedBoost = Config.forgeConfig.maxMobSpeedBoost.get();
+				double mobSpeedBoostPerPowerLevel = Config.forgeConfig.mobSpeedBoostPerPowerLevel.get();
+				bonus *= mobSpeedBoostPerPowerLevel;
+
+				bonus *= getBiomeMobMultiplier( mob, "speedBonus" );
+
+				if( bonus > maxMobSpeedBoost )
+					bonus = (float) maxMobSpeedBoost;
+
+				AttributeModifier speedModifier = new AttributeModifier(speedModifierID, "Movement Speed Boost thanks to Nearby Player Power Level", bonus / 100, AttributeModifier.Operation.ADDITION);
+				speedAttribute.removeModifier(speedModifierID);
+				speedAttribute.applyModifier(speedModifier);
+			}
+		}
+	}
+
+	private static double getBiomeMobMultiplier( MobEntity mob, String type )
+	{
+		Biome biome = mob.world.getBiome( new BlockPos( mob.getPositionVector() ) );
+		ResourceLocation biomeResLoc = biome.getRegistryName();
+		double multiplier = 1;
+
+		if( biomeResLoc != null )
+		{
+			String biomeKey = biome.getRegistryName().toString();
+			Map<String, Double> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );
+
+
+			if( theMap != null && theMap.containsKey( type ) )
+				multiplier = theMap.get( type );
+		}
+
+		return multiplier;
 	}
 }

@@ -1,0 +1,555 @@
+{
+	"minecraft:magma_block":
+	{
+		"minecraft:magma_cream":
+		{
+			"startChance": 0.1,
+			"startLevel": 25,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 2
+		}
+	},
+	"minecraft:netherrack":
+	{
+		"minecraft:gold_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 25,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 7.5,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"minecraft:soul_sand":
+	{
+		"minecraft:nether_wart":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:wither_skeleton_skull":
+		{
+			"startChance": 0.1,
+			"startLevel": 25,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 50,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:ghast_tear":
+		{
+			"startChance": 0.1,
+			"startLevel": 25,
+			"endChance": 1,
+			"endLevel": 125,
+			"xpPerItem": 15,
+			"minCount": 1,
+			"maxCount": 2
+		}
+	},
+	"minecraft:podzol":
+	{
+		"minecraft:wheat_seeds":
+		{
+			"startChance": 0.1,
+			"startLevel": 10,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:pumpkin_seeds":
+		{
+			"startChance": 0.1,
+			"startLevel": 15,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:melon_seeds":
+		{
+			"startChance": 0.1,
+			"startLevel": 25,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:beetroot_seeds":
+		{
+			"startChance": 0.1,
+			"startLevel": 20,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:potato":
+		{
+			"startChance": 0.1,
+			"startLevel": 30,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:poisonous_potato":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:carrot":
+		{
+			"startChance": 0.1,
+			"startLevel": 30,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:sweet_berries":
+		{
+			"startChance": 0.1,
+			"startLevel": 15,
+			"endChance": 1,
+			"endLevel": 150,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"minecraft:coal_ore":
+	{
+		"minecraft:diamond":
+		{
+			"startChance": 0.01,
+			"startLevel": 1,
+			"endChance": 0.1,
+			"endLevel": 200,
+			"xpPerItem": 100,
+			"minCount": 1,
+			"maxCount": 1
+		}
+	},
+	"minecraft:stone":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"minecraft:granite":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 3,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 2,
+			"maxCount": 3
+		}
+	},
+	"minecraft:diorite":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 3,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"minecraft:andesite":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 3,
+			"endLevel": 100,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"minecraft:gravel":
+	{
+		"minecraft:diamond":
+		{
+			"startChance": 0.01,
+			"startLevel": 50,
+			"endChance": 0.1,
+			"endLevel": 200,
+			"xpPerItem": 100,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:bone":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 1,
+			"endLevel": 100,
+			"xpPerItem": 8,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:gunpowder":
+		{
+			"startChance": 0.2,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 125,
+			"xpPerItem": 4,
+			"minCount": 1,
+			"maxCount": 4
+		}
+	},
+	"minecraft:sand":
+	{
+		"minecraft:clay":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 1,
+			"endLevel": 200,
+			"xpPerItem": 2,
+			"minCount": 1,
+			"maxCount": 4
+		},
+		"biomesoplenty:white_sand":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 1,
+			"endLevel": 180,
+			"xpPerItem": 2,
+			"minCount": 1,
+			"maxCount": 4
+		}
+	},
+	"minecraft:grass_block":
+	{
+		"minecraft:wheat":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.5,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 2
+		},
+		"minecraft:wheat_seeds":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 1,
+			"endLevel": 75,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 3
+		},
+		"minecraft:tall_grass":
+		{
+			"startChance": 0.08,
+			"startLevel": 1,
+			"endChance": 0.8,
+			"endLevel": 100,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:grass":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 1,
+			"endLevel": 100,
+			"xpPerItem": 3,
+			"minCount": 1,
+			"maxCount": 1
+		}
+	},
+	"minecraft:dirt":
+	{
+		"minecraft:cake":
+		{
+			"startChance": 0.01,
+			"startLevel": 1,
+			"endChance": 0.05,
+			"endLevel": 999,
+			"xpPerItem": 1000,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:bone":
+		{
+			"startChance": 0.1,
+			"startLevel": 25,
+			"endChance": 1,
+			"endLevel": 125,
+			"xpPerItem": 8,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"minecraft:bookshelf":
+	{
+		"minecraft:music_disc_13":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_cat":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_blocks":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_chirp":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_far":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_mall":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_mellohi":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_stal":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_strad":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_ward":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_11":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_wait":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		},
+		"minecraft:music_disc_pigstep":
+		{
+			"startChance": 0.05,
+			"startLevel": 1,
+			"endChance": 0.2,
+			"endLevel": 100,
+			"xpPerItem": 12.5,
+			"minCount": 1,
+			"maxCount": 1
+		}
+	},
+	"create:dolomite":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"create:gabbro":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"create:limestone":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 2
+		}
+	},
+	"create:weathered_limestone":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 1
+		}
+	},
+	"create:scoria":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 1,
+			"maxCount": 3
+		}
+	},
+	"create:dark_scoria":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 1,
+			"endChance": 2,
+			"endLevel": 150,
+			"xpPerItem": 5,
+			"minCount": 2,
+			"maxCount": 2
+		}
+	},
+	"create:natural_scoria":
+	{
+		"minecraft:iron_nugget":
+		{
+			"startChance": 0.1,
+			"startLevel": 25,
+			"endChance": 2,
+			"endLevel": 200,
+			"xpPerItem": 5,
+			"minCount": 2,
+			"maxCount": 4
+		}
+	}
+}

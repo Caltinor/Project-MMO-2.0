@@ -1,0 +1,750 @@
+{
+	"minecraft:silverfish":
+	{
+		"combat": 35
+	},
+	"minecraft:zombie":
+	{
+		"combat": 15
+	},
+	"minecraft:creeper":
+	{
+		"combat": 25
+	},
+	"minecraft:spider":
+	{
+		"combat": 20
+	},
+	"minecraft:skeleton":
+	{
+		"combat": 25
+	},
+	"minecraft:enderman":
+	{
+		"combat": 35
+	},
+	"minecraft:wither_skeleton":
+	{
+		"combat": 40
+	},
+	"minecraft:slime":
+	{
+		"combat": 5
+	},
+	"minecraft:blaze":
+	{
+		"combat": 30
+	},
+	"minecraft:drowned":
+	{
+		"combat": 25
+	},
+	"minecraft:evoker":
+	{
+		"combat": 40
+	},
+	"minecraft:ravager":
+	{
+		"combat": 50
+	},
+	"minecraft:vindicator":
+	{
+		"combat": 35
+	},
+	"minecraft:cave_spider":
+	{
+		"combat": 25
+	},
+	"minecraft:guardian":
+	{
+		"combat": 25
+	},
+	"minecraft:elder_guardian":
+	{
+		"combat": 100
+	},
+	"minecraft:husk":
+	{
+		"combat": 45
+	},
+	"minecraft:magma_cube":
+	{
+		"combat": 7.5
+	},
+	"minecraft:zombie_pigman":
+	{
+		"combat": 25
+	},
+	"minecraft:zombie_villager":
+	{
+		"combat": 15
+	},
+	"minecraft:ender_dragon":
+	{
+		"combat": 2500
+	},
+	"minecraft:wither":
+	{
+		"combat": 1000
+	},
+	"betteranimalsplus:coyote":
+	{
+		"slayer": 10
+	},
+	"betteranimalsplus:feralwolf":
+	{
+		"slayer": 10
+	},
+	"betteranimalsplus:boar":
+	{
+		"slayer": 10
+	},
+	"betteranimalsplus:tarantula":
+	{
+		"slayer": 20
+	},
+	"betteranimalsplus:zotzpyre":
+	{
+		"slayer": 12
+	},
+	"betteranimalsplus:shark":
+	{
+		"slayer": 30
+	},
+	"betteranimalsplus:whale":
+	{
+		"slayer": 30
+	},
+	"betteranimalsplus:hirschgeist":
+	{
+		"slayer": 100
+	},
+	"betteranimalsplus:brownbear":
+	{
+		"slayer": 30
+	},
+	"betteranimalsplus:blackbear":
+	{
+		"slayer": 30
+	},
+	"betteranimalsplus:deer":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:lammergeier":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:goat":
+	{
+		"slayer": 10
+	},
+	"betteranimalsplus:jellyfish":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:pheasant":
+	{
+		"slayer": 3
+	},
+	"betteranimalsplus:reindeer":
+	{
+		"slayer": 10
+	},
+	"betteranimalsplus:squirrel":
+	{
+		"slayer": 2
+	},
+	"betteranimalsplus:songbird":
+	{
+		"slayer": 2
+	},
+	"betteranimalsplus:badger":
+	{
+		"slayer": 30
+	},
+	"betteranimalsplus:lamprey":
+	{
+		"slayer": 10
+	},
+	"betteranimalsplus:nautilus":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:crab":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:horseshoecrab":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:moose":
+	{
+		"slayer": 10
+	},
+	"betteranimalsplus:turkey":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:bobbit_worm":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:goose":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:eel_freshwater":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:eel_saltwater":
+	{
+		"slayer": 5
+	},
+	"betteranimalsplus:walrus":
+	{
+		"slayer": 30
+	},
+	"iceandfire:myrmex_worker":
+	{
+		"combat": 35
+	},
+	"iceandfire:lightning_dragon":
+	{
+		"combat": 1000
+	},
+	"iceandfire:cockatrice":
+	{
+		"combat": 35
+	},
+	"iceandfire:dread_beast":
+	{
+		"combat": 35
+	},
+	"iceandfire:cyclops":
+	{
+		"combat": 100
+	},
+	"iceandfire:hippogryph":
+	{
+		"combat": 35
+	},
+	"iceandfire:gorgon":
+	{
+		"combat": 40
+	},
+	"iceandfire:fire_dragon":
+	{
+		"combat": 1000
+	},
+	"iceandfire:dread_thrall":
+	{
+		"combat": 35
+	},
+	"iceandfire:myrmex_swarmer":
+	{
+		"combat": 35
+	},
+	"iceandfire:ice_dragon":
+	{
+		"combat": 1000
+	},
+	"iceandfire:deathworm":
+	{
+		"combat": 35
+	},
+	"iceandfire:dread_horse":
+	{
+		"combat": 35
+	},
+	"iceandfire:siren":
+	{
+		"combat": 40
+	},
+	"iceandfire:dread_lich_skull":
+	{
+		"combat": 50
+	},
+	"iceandfire:dread_lich":
+	{
+		"combat": 50
+	},
+	"iceandfire:sea_serpent":
+	{
+		"combat": 1000
+	},
+	"iceandfire:myrmex_royal":
+	{
+		"combat": 100
+	},
+	"iceandfire:dread_knight":
+	{
+		"combat": 35
+	},
+	"iceandfire:hydra":
+	{
+		"combat": 100
+	},
+	"iceandfire:pixie":
+	{
+		"combat": 35
+	},
+	"iceandfire:myrmex_queen":
+	{
+		"combat": 100
+	},
+	"iceandfire:troll":
+	{
+		"combat": 50
+	},
+	"iceandfire:myrmex_sentinel":
+	{
+		"combat": 45
+	},
+	"iceandfire:dread_scuttler":
+	{
+		"combat": 60
+	},
+	"iceandfire:amphithere":
+	{
+		"combat": 35
+	},
+	"iceandfire:dread_ghoul":
+	{
+		"combat": 35
+	},
+	"iceandfire:stymphalian_bird":
+	{
+		"combat": 35
+	},
+	"iceandfire:hippocampus":
+	{
+		"combat": 25
+	},
+	"iceandfire:myrmex_soldier":
+	{
+		"combat": 45
+	},
+	"lycanitesmobs:gorgomite":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:aglebemu":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:aspid":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:krake":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:afrit":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:arix":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:darkling":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:pixen":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:remobra":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:spriggan":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:calpod":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:chupacabra":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:clink":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:conba":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:dawon":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:eechetik":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:ent":
+	{
+		"woodcutting": 20
+	},
+	"lycanitesmobs:epion":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:eyewig":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:frostweaver":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:gnekk":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:jabberwock":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:lurker":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:reiver":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:tarantula":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:geist":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:ghoul":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:grue":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:barghest":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:erepede":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:feradon":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:geken":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:joustalpha":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:kobold":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:maug":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:quillbeast":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:ventoraptor":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:warg":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:geonach":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:sutiramu":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:wisp":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:banshee":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:cryptkeeper":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:herma":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:shambler":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:uvaraptor":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:vapula":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:volcan":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:wildkin":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:spectre":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:makaalpha":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:beholder":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:crusk":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:serpix":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:strider":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:sylph":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:triffid":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:troll":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:ettin":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:cockatrice":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:manticore":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:reaper":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:shade":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:cinder":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:djinn":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:tremor":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:xaphan":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:zephyr":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:argus":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:wendigo":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:vespid":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:vespidqueen":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:treant":
+	{
+		"combat": 10
+	},
+	"lycanitesmobs:abaia":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:abtu":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:raiko":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:roc":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:jengu":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:lacedon":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:ioray":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:roa":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:skylus":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:dweller":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:quetzodracl":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:thresher":
+	{
+		"combat": 30
+	},
+	"lycanitesmobs:zoataur":
+	{
+		"combat": 100
+	},
+	"lycanitesmobs:trite":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:cacodemon":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:lobber":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:archvile":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:wraith":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:salamander":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:belph":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:gorger":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:pinky":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:khalk":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:astaroth":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:behemoth":
+	{
+		"combat": 200
+	},
+	"lycanitesmobs:wraamon":
+	{
+		"combat": 250
+	},
+	"lycanitesmobs:morock":
+	{
+		"combat": 250
+	},
+	"lycanitesmobs:ignibus":
+	{
+		"combat": 500
+	},
+	"lycanitesmobs:amalgalich":
+	{
+		"combat": 900
+	},
+	"lycanitesmobs:asmodeus":
+	{
+		"combat": 900
+	},
+	"lycanitesmobs:rahovart":
+	{
+		"combat": 900
+	},
+	"lycanitesmobs:arisaur":
+	{
+		"farming": 20
+	}
+}
