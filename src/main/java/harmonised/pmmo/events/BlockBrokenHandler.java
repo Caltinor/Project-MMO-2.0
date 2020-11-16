@@ -292,7 +292,7 @@ public class BlockBrokenHandler
             totalDrops = rewardable + dropsLeft;
             award.put( skillName, hardness );
             award = XP.addMaps( award, xpMap );
-            award = XP.multiplyMap( award, totalDrops );
+            XP.multiplyMap( award, totalDrops );
 
             awardMsg = "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra " + block.getRegistryName();
         }
@@ -377,12 +377,12 @@ public class BlockBrokenHandler
                 }
 
                 awardMsg = "harvesting " + ( dropItemCount ) + " + " + totalExtraDrops + " " + block.getRegistryName();
-                award = XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount + totalExtraDrops );
+                XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount + totalExtraDrops );
             }
             else if( !wasPlaced )
             {
                 awardMsg = "Breaking " + block.getRegistryName();
-                award = XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount );
+                XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount );
             }
         }
 
@@ -452,7 +452,7 @@ public class BlockBrokenHandler
                     NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
-                award = XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount + totalExtraDrops );
+                XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount + totalExtraDrops );
             }
 
             awardMsg = "Chopping " + block.getRegistryName().toString();
