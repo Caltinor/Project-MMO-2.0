@@ -2,7 +2,6 @@ package harmonised.pmmo.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class MessageXp extends MessageBase<MessageXp>
 {
@@ -25,7 +24,7 @@ public class MessageXp extends MessageBase<MessageXp>
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf)
+	public void fromBytes( ByteBuf buf )
 	{
 		xp = buf.readFloat();
 		gainedXp = buf.readFloat();
@@ -34,22 +33,22 @@ public class MessageXp extends MessageBase<MessageXp>
 	}
 
 	@Override
-	public void toBytes( ByteBuf buf)
+	public void toBytes( ByteBuf buf )
 	{
-		buf.writeFloat( xp );
-		buf.writeFloat( gainedXp );
+		buf.writeDouble( xp );
+		buf.writeDouble( gainedXp );
 		buf.writeInt( skill );
 		buf.writeBoolean( skip );
 	}
 
 	@Override
-	public void handleClientSide( MessageXp message, EntityPlayer onlinePlayer )
+	public void handleClientSide( MessageXp packet, EntityPlayer onlinePlayer )
 	{
-		packetHandler.handleXpPacket( message, onlinePlayer );
+		packetHandler.handleXpPacket( packet, onlinePlayer );
 	}
 
 	@Override
-	public void handleServerSide( MessageXp message, EntityPlayer player )
+	public void handleServerSide( MessageXp packet, EntityPlayer player )
 	{
 //		player.sendStatusMessage( new TextComponentString( "SERVER" ), false );
 //		System.out.println( "SERVER RECEIVED PACKET" );

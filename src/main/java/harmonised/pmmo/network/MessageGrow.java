@@ -1,14 +1,15 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.util.XP;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-import java.util.function.Supplier;
-
-public class MessageGrow
+public class MessageGrow extends MessageBase<MessageGrow>
 {
-    int slot, amount;
+    private int slot, amount;
 
     public MessageGrow( int slot, int amount )
     {
@@ -20,34 +21,33 @@ public class MessageGrow
     {
     }
 
-    public static MessageGrow decode( PacketBuffer buf )
+    @Override
+    public void fromBytes( ByteBuf buf )
     {
-        MessageGrow packet = new MessageGrow();
-
-        packet.slot = buf.readInt();
-        packet.amount = buf.readInt();
-
-        return packet;
+        slot = buf.readInt();
+        amount = buf.readInt();
     }
 
-    public static void encode( MessageGrow packet, PacketBuffer buf )
+    @Override
+    public void toBytes( ByteBuf buf )
     {
-        buf.writeInt( packet.slot );
-        buf.writeInt( packet.amount );
+        buf.writeInt( this.slot );
+        buf.writeInt( this.amount );
     }
 
-    public static void handlePacket( MessageGrow packet, Supplier<NetworkEvent.Context> ctx )
+
+    @Override
+    public void handleClientSide( MessageGrow packet, EntityPlayer onlinePlayer )
     {
-        ctx.get().enqueueWork(() ->
-        {
-            if( Minecraft.getMinecraft().player != null )
-            {
-                if( packet.slot == 0 )
-                    Minecraft.getMinecraft().player.getHeldItemMainhand().setCount( packet.amount );
-                else if( packet.slot == 1 )
-                    Minecraft.getMinecraft().player.getHeldItemOffhand().setCount( packet.amount );
-            }
-        });
-        ctx.get().setPacketHandled(true);
+        if( packet.slot == 0 )
+            Minecraft.getMinecraft().player.getHeldItemMainhand().setCount( packet.amount );
+        else if( packet.slot == 1 )
+            Minecraft.getMinecraft().player.getHeldItemOffhand().setCount( packet.amount );
+    }
+
+    @Override
+    public void handleServerSide( MessageGrow message, EntityPlayer player )
+    {
+
     }
 }

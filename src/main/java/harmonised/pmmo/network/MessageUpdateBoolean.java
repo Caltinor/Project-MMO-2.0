@@ -2,14 +2,11 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.gui.GlossaryScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.entity.player.EntityPlayer;
 
-import java.util.function.Supplier;
-
-public class MessageUpdateBoolean
+public class MessageUpdateBoolean extends MessageBase<MessageUpdateBoolean>
 {
     boolean value;
     int type;
@@ -24,43 +21,40 @@ public class MessageUpdateBoolean
     {
     }
 
-    public static MessageUpdateBoolean decode( PacketBuffer buf )
+    @Override
+    public void fromBytes( ByteBuf buf )
     {
-        MessageUpdateBoolean packet = new MessageUpdateBoolean();
-
-        packet.value = buf.readBoolean();
-        packet.type = buf.readInt();
-
-        return packet;
+        value = buf.readBoolean();
+        type = buf.readInt();
     }
 
-    public static void encode( MessageUpdateBoolean packet, PacketBuffer buf )
+    @Override
+    public void toBytes( ByteBuf buf )
     {
-        buf.writeBoolean( packet.value );
-        buf.writeInt( packet.type );
+        buf.writeBoolean( value );
+        buf.writeInt( type );
     }
 
-    public static void handlePacket( MessageUpdateBoolean packet, Supplier<NetworkEvent.Context> ctx )
+
+    @Override
+    public void handleClientSide( MessageUpdateBoolean packet, EntityPlayer onlinePlayer )
     {
-        ctx.get().enqueueWork(() ->
+        switch( packet.type )
         {
-            switch( packet.type )
-            {
-                case 0: //vein stuff
-                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
-                    {
-                        if( Minecraft.getMinecraft().player != null )
-                            XPOverlayGUI.isVeining = packet.value;
-                    }
-                    break;
+            case 0: //vein stuff
+                if( Minecraft.getMinecraft().player != null )
+                        XPOverlayGUI.isVeining = packet.value;
+                break;
 
-                case 1: //update Glossary
-                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
-                        GlossaryScreen.initButtons();
-                    break;
-            }
+            case 1: //update Glossary
+                GlossaryScreen.initButtons();
+                break;
+        }
+    }
 
-        });
-        ctx.get().setPacketHandled(true);
+    @Override
+    public void handleServerSide( MessageUpdateBoolean message, EntityPlayer player )
+    {
+
     }
 }

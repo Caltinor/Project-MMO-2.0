@@ -7,7 +7,6 @@ import java.util.Set;
 import com.sun.istack.internal.Nullable;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.skills.XP;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

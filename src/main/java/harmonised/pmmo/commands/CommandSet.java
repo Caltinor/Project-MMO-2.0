@@ -6,16 +6,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import harmonised.pmmo.network.MessageXp;
-import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.skills.XP;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;

@@ -1,16 +1,15 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.util.XP;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
-public class MessageKeypress
+public class MessageKeypress extends MessageBase<MessageKeypress>
 {
-    int key;
-    boolean keyState;
+    private int key;
+    private boolean keyState;
 
     public MessageKeypress( boolean keyState, int key )
     {
@@ -22,35 +21,38 @@ public class MessageKeypress
     {
     }
 
-    public static MessageKeypress decode(PacketBuffer buf )
+    @Override
+    public void fromBytes( ByteBuf buf )
     {
-        MessageKeypress packet = new MessageKeypress();
-        packet.keyState = buf.readBoolean();
-        packet.key = buf.readInt();
-
-        return packet;
+        keyState = buf.readBoolean();
+        key = buf.readInt();
     }
 
-    public static void encode(MessageKeypress packet, PacketBuffer buf )
+    @Override
+    public void toBytes( ByteBuf buf )
     {
-        buf.writeBoolean( packet.keyState );
-        buf.writeInt( packet.key );
+        buf.writeBoolean( this.keyState );
+        buf.writeInt( this.key );
     }
 
-    public static void handlePacket(MessageKeypress packet, Supplier<NetworkEvent.Context> ctx )
+
+    @Override
+    public void handleClientSide( MessageKeypress packet, EntityPlayer onlinePlayer )
     {
-        ctx.get().enqueueWork(() ->
+
+    }
+
+    @Override
+    public void handleServerSide( MessageKeypress packet, EntityPlayer player )
+    {
+        UUID playerUUID = player.getUniqueID();
+
+        if( packet.key == 1 )
         {
-            UUID playerUUID = ctx.get().getSender().getUniqueID();
-
-            if( packet.key == 1 )
-            {
-                if( packet.keyState )
-                    XP.isVeining.add( playerUUID );
-                else
-                    XP.isVeining.remove( playerUUID );
-            }
-        });
-        ctx.get().setPacketHandled(true);
+            if( packet.keyState )
+                XP.isVeining.add( playerUUID );
+            else
+                XP.isVeining.remove( playerUUID );
+        }
     }
 }

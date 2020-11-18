@@ -1,15 +1,13 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.util.XP;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-import java.util.function.Supplier;
-
-public class MessageTripleTranslation
+public class MessageTripleTranslation extends MessageBase<MessageTripleTranslation>
 {
     private String tKey;
     private String fKey;
@@ -28,66 +26,59 @@ public class MessageTripleTranslation
         this.color = color;
     }
 
-    public MessageTripleTranslation(ResourceLocation tKey, ResourceLocation fKey, ResourceLocation sKey, ResourceLocation rdKey, boolean bar, int color )
-    {
-        this.tKey = tKey.toString();
-        this.fKey = fKey.toString();
-        this.sKey = sKey.toString();
-        this.rdKey = rdKey.toString();
-        this.bar = bar;
-        this.color = color;
-    }
-
     MessageTripleTranslation()
     {
     }
 
-    public static MessageTripleTranslation decode( PacketBuffer buf )
-    {
-        MessageTripleTranslation packet = new MessageTripleTranslation();
-        packet.tKey = buf.readString();
-        packet.fKey = buf.readString();
-        packet.sKey = buf.readString();
-        packet.rdKey = buf.readString();
-        packet.bar = buf.readBoolean();
-        packet.color = buf.readInt();
 
-        return packet;
+    @Override
+    public void fromBytes( ByteBuf buf )
+    {
+        tKey = ByteBufUtils.readUTF8String( buf );
+        fKey = ByteBufUtils.readUTF8String( buf );
+        sKey = ByteBufUtils.readUTF8String( buf );
+        rdKey = ByteBufUtils.readUTF8String( buf );
+        bar = buf.readBoolean();
+        color = buf.readInt();
     }
 
-    public static void encode( MessageTripleTranslation packet, PacketBuffer buf )
+    @Override
+    public void toBytes( ByteBuf buf )
     {
-        buf.writeString( packet.tKey );
-        buf.writeString( packet.fKey );
-        buf.writeString( packet.sKey );
-        buf.writeString( packet.rdKey );
-        buf.writeBoolean( packet.bar );
-        buf.writeInt( packet.color );
+        ByteBufUtils.writeUTF8String( buf, this.tKey );
+        ByteBufUtils.writeUTF8String( buf, this.fKey );
+        ByteBufUtils.writeUTF8String( buf, this.sKey );
+        ByteBufUtils.writeUTF8String( buf, this.rdKey );
+        buf.writeBoolean( this.bar );
+        buf.writeInt( this.color );
     }
 
-    public static void handlePacket( MessageTripleTranslation packet, Supplier<NetworkEvent.Context> ctx )
+    @Override
+    public void handleClientSide( MessageTripleTranslation packet, EntityPlayer onlinePlayer )
     {
-        ctx.get().enqueueWork(() ->
+        switch( packet.color )
         {
-            switch( packet.color )
-            {
-                case 0: //white
-                    Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ), packet.bar );
-                    break;
+            case 0: //white
+                Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ), packet.bar );
+                break;
 
-                case 1: //green
-                    Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
-                    break;
+            case 1: //green
+                Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                break;
 
-                case 2: //red
-                    Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "red" ) ), packet.bar );
-                    break;
+            case 2: //red
+                Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "red" ) ), packet.bar );
+                break;
 
-                case 3: //yellow
-                    Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "yellow" ) ), packet.bar );
-                    break;
-            }
-        });
-        ctx.get().setPacketHandled(true);
+            case 3: //yellow
+                Minecraft.getMinecraft().player.sendStatusMessage( new TextComponentTranslation( packet.tKey, new TextComponentTranslation( packet.fKey ), new TextComponentTranslation( packet.sKey ), new TextComponentTranslation( packet.rdKey ) ).setStyle( XP.textStyle.get( "yellow" ) ), packet.bar );
+                break;
+        }
+    }
+
+    @Override
+    public void handleServerSide( MessageTripleTranslation message, EntityPlayer player )
+    {
+
     }
 }

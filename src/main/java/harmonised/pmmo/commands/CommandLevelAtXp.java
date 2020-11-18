@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import harmonised.pmmo.skills.XP;
 import harmonised.pmmo.util.DP;
 
 import net.minecraft.command.CommandBase;
