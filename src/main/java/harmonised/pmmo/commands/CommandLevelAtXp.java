@@ -78,7 +78,7 @@ public class CommandLevelAtXp extends CommandBase
 	{
 		EntityPlayer player = CommandBase.getCommandSenderAsPlayer(sender);
 		
-		float xp;
+		double xp;
 		if( args.length > 0 )
 		{
 			try

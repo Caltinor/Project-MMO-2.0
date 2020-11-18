@@ -79,8 +79,8 @@ public class CommandXpAtLevel extends CommandBase
 	{
 		EntityPlayer player = CommandBase.getCommandSenderAsPlayer(sender);
 		
-		float startLevel = -1;
-		float goalLevel = -1;
+		double startLevel = -1;
+		double goalLevel = -1;
 		if( args.length > 0 )
 		{
 			try
@@ -107,7 +107,7 @@ public class CommandXpAtLevel extends CommandBase
 				
 				if( startLevel > goalLevel )
 				{
-					float temp = startLevel;
+					double temp = startLevel;
 					startLevel = goalLevel;
 					goalLevel = temp;
 				}

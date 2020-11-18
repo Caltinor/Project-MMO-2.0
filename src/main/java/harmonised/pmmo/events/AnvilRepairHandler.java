@@ -51,12 +51,12 @@ public class AnvilRepairHandler
                         if( maxCost < anvilFinalItemMaxCostToAnvil )
                             maxCost = anvilFinalItemMaxCostToAnvil;
 
-                        event.setBreakChance( event.getBreakChance() / ( 1f + (float) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
+                        event.setBreakChance( event.getBreakChance() / ( 1f + (double) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
 
                         if( oItem.getRepairCost() > maxCost )
                             oItem.setRepairCost( maxCost );
 
-                        float repaired = oItem.getItemDamage() - lItem.getItemDamage();
+                        double repaired = oItem.getItemDamage() - lItem.getItemDamage();
                         if( repaired < 0 )
                             repaired = -repaired;
 

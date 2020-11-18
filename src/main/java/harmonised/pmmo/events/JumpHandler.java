@@ -64,7 +64,7 @@ public class JumpHandler
                 }
                 else if (!player.isInWater())
                 {
-                    float jumpAmp = 0;
+                    double jumpAmp = 0;
 
                     if( player.isPotionActive( MobEffects.JUMP_BOOST ) )
                         jumpAmp = player.getActivePotionEffect( MobEffects.JUMP_BOOST ).getAmplifier() + 1;

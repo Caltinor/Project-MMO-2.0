@@ -679,20 +679,20 @@ public class XPOverlayGUI extends AbstractGui
 //		double d0 = this.renderManager.squareDistanceTo(entityIn);
 //		if (!(d0 > 4096.0D)) {
 //			boolean flag = !entityIn.isDiscrete();
-//			float f = entityIn.getHeight() + 0.5F;
+//			double f = entityIn.getHeight() + 0.5F;
 //			int i = "deadmau5".equals(displayNameIn) ? -10 : 0;
 //			matrixStack.push();
 //			matrixStack.translate(0.0D, (double)f, 0.0D);
 //			matrixStack.multiply(this.renderManager.getCameraOrientation());
 //			matrixStack.scale(-0.025F, -0.025F, 0.025F);
 //			Matrix4f matrix4f = matrixStackIn.getLast().getPositionMatrix();
-//			float f1 = Minecraft.getMinecraft().gameSettings.getTextBackgroundOpacity(0.25F);
+//			double f1 = Minecraft.getMinecraft().gameSettings.getTextBackgroundOpacity(0.25F);
 //			int j = (int)(f1 * 255.0F) << 24;
 //			FontRenderer fontrenderer = this.getFontRendererFromRenderManager();
-//			float f2 = (float)(-fontrenderer.getStringWidth(theText) / 2);
-//			fontrenderer.renderString(theText, f2, (float)i, 553648127, false, matrix4f, bufferIn, flag, j, packedLightIn);
+//			double f2 = (double)(-fontrenderer.getStringWidth(theText) / 2);
+//			fontrenderer.renderString(theText, f2, (double)i, 553648127, false, matrix4f, bufferIn, flag, j, packedLightIn);
 //			if (flag) {
-//				fontrenderer.renderString(theText, f2, (float)i, -1, false, matrix4f, bufferIn, false, 0, packedLightIn);
+//				fontrenderer.renderString(theText, f2, (double)i, -1, false, matrix4f, bufferIn, false, 0, packedLightIn);
 //			}
 //
 //			matrixStackIn.pop();

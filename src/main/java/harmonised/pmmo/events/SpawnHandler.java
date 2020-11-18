@@ -20,7 +20,7 @@ public class SpawnHandler
             MinecraftServer server = mob.getServer();
             if( server != null )
             {
-                float powerLevel = 0;
+                double powerLevel = 0;
                 Collection<EntityPlayer> allPlayers = XP.getNearbyPlayers( mob );
 
                 for( EntityPlayer player : allPlayers )

@@ -62,7 +62,7 @@ public class TileButton extends Button
     }
 
     @Override
-    public void renderButton(int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_)
+    public void renderButton(int p_renderButton_1_, int p_renderButton_2_, double p_renderButton_3_)
     {
         Minecraft minecraft = Minecraft.getMinecraft();
 //        FontRenderer fontrenderer = minecraft.fontRenderer;

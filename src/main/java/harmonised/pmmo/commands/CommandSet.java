@@ -65,7 +65,7 @@ public class CommandSet extends CommandBase
 				if( args.length > 1 )
 				{
 					boolean setLevel = false;
-					float newXp = -1;
+					double newXp = -1;
 					try
 					{
 						if( args[1].charAt( args[1].length() - 1 ) == 'l' )

@@ -1,23 +1,16 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.gui.XPOverlayGUI;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.util.XP;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
-
-import java.util.UUID;
-import java.util.function.Supplier;
-
-public class MessageXp
+public class MessageXp extends MessageBase<MessageXp>
 {
-	public double xp, gainedXp;
+	public double xp;
 	public int skill;
+	public double gainedXp;
 	public boolean skip;
-	
+
 	public MessageXp( double xp, int skill, double gainedXp, boolean skip )
 	{
 		this.xp = xp;
@@ -25,33 +18,41 @@ public class MessageXp
 		this.skill = skill;
 		this.skip = skip;
 	}
-	
+
 	public MessageXp()
 	{
-		
+
 	}
 
-	public static MessageXp decode( PacketBuffer buf )
+	@Override
+	public void fromBytes(ByteBuf buf)
 	{
-		MessageXp packet = new MessageXp();
-		packet.xp = buf.readDouble();
-		packet.gainedXp = buf.readDouble();
-		packet.skill = buf.readInt();
-		packet.skip = buf.readBoolean();
-
-		return packet;
+		xp = buf.readFloat();
+		gainedXp = buf.readFloat();
+		skill = buf.readInt();
+		skip = buf.readBoolean();
 	}
 
-	public static void encode( MessageXp packet, PacketBuffer buf )
+	@Override
+	public void toBytes( ByteBuf buf)
 	{
-		buf.writeDouble( packet.xp );
-		buf.writeDouble( packet.gainedXp );
-		buf.writeInt( packet.skill );
-		buf.writeBoolean( packet.skip );
+		buf.writeFloat( xp );
+		buf.writeFloat( gainedXp );
+		buf.writeInt( skill );
+		buf.writeBoolean( skip );
 	}
 
-	public static void handlePacket( MessageXp packet, Supplier<NetworkEvent.Context> ctx )
+	@Override
+	public void handleClientSide( MessageXp message, EntityPlayer onlinePlayer )
 	{
-		packetHandler.handleXpPacket( packet, ctx );
+		packetHandler.handleXpPacket( message, onlinePlayer );
+	}
+
+	@Override
+	public void handleServerSide( MessageXp message, EntityPlayer player )
+	{
+//		player.sendStatusMessage( new TextComponentString( "SERVER" ), false );
+//		System.out.println( "SERVER RECEIVED PACKET" );
+//		NetworkHandler.sendToPlayer( new MessageXp( 500.0f, "mining" ), player);
 	}
 }

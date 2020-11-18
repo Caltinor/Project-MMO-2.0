@@ -40,7 +40,7 @@ public class BreakSpeedHandler
         switch ( XP.correctHarvestTool( event.getState().getMaterial() ) )
         {
             case "pickaxe":
-                float height = event.getPos().getY();
+                double height = event.getPos().getY();
                 if (height < 0)
                     height = -height;
 
@@ -51,22 +51,22 @@ public class BreakSpeedHandler
                     heightMultiplier = Config.forgeConfig.minBreakSpeed.get();
 
                 speedBonus = Config.forgeConfig.miningBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) * ( (float) heightMultiplier ) );
+                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (double) speedBonus ) * ( (double) heightMultiplier ) );
                 break;
 
             case "axe":
                 speedBonus = Config.forgeConfig.woodcuttingBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
+                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (double) speedBonus ) );
                 break;
 
             case "shovel":
                 speedBonus = Config.forgeConfig.excavationBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
+                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (double) speedBonus ) );
                 break;
 
             case "hoe":
                 speedBonus = Config.forgeConfig.farmingBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
+                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (double) speedBonus ) );
                 break;
 
             default:

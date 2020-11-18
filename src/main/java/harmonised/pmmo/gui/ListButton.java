@@ -151,7 +151,7 @@ public class ListButton extends Button
     }
 
     @Override
-    public void renderButton(int x, int y, float partialTicks)
+    public void renderButton(int x, int y, double partialTicks)
     {
         Minecraft minecraft = Minecraft.getMinecraft();
         FontRenderer fontrenderer = minecraft.fontRenderer;
@@ -186,23 +186,23 @@ public class ListButton extends Button
 
     public static void drawEntityOnScreen(int posX, int posY, int scale, EntityLiving p_228187_5_)
     {
-        float f = (float) ( (System.currentTimeMillis() / 25D ) % 360);
-        float f1 = 0;
+        double f = (double) ( (System.currentTimeMillis() / 25D ) % 360);
+        double f1 = 0;
         RenderSystem.pushMatrix();
-        RenderSystem.translatef((float)posX, (float)posY, 1050.0F);
+        RenderSystem.translatef((double)posX, (double)posY, 1050.0F);
         RenderSystem.scalef(1.0F, 1.0F, -1.0F);
         MatrixStack matrixstack = new MatrixStack();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
-        matrixstack.scale((float)scale, (float)scale, (float)scale);
+        matrixstack.scale((double)scale, (double)scale, (double)scale);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
         quaternion.multiply(quaternion1);
         matrixstack.rotate(quaternion);
-        float f2 = p_228187_5_.renderYawOffset;
-        float f3 = p_228187_5_.rotationYaw;
-        float f4 = p_228187_5_.rotationPitch;
-        float f5 = p_228187_5_.prevRotationYawHead;
-        float f6 = p_228187_5_.rotationYawHead;
+        double f2 = p_228187_5_.renderYawOffset;
+        double f3 = p_228187_5_.rotationYaw;
+        double f4 = p_228187_5_.rotationPitch;
+        double f5 = p_228187_5_.prevRotationYawHead;
+        double f6 = p_228187_5_.rotationYawHead;
         p_228187_5_.renderYawOffset = f;
         p_228187_5_.rotationYaw = f;
         p_228187_5_.rotationPitch = -f1 * 20.0F;

@@ -169,7 +169,7 @@ public class WorldTickHandler
                                     {
                                         abilitiesMap.put("veinLeft", abilitiesMap.get("veinLeft") - cost);
                                         destroyBlock( world, veinPos, player, startItemStack );
-                                        player.addExhaustion( (float) exhaustionPerBlock );
+                                        player.addExhaustion( (double) exhaustionPerBlock );
                                     }
                                 }
                                 else

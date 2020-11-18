@@ -33,8 +33,8 @@ public class DamageHandler
     {
         if( !(event.getEntity() instanceof FakePlayer) )
         {
-            float damage = event.getAmount();
-            float startDmg = damage;
+            double damage = event.getAmount();
+            double startDmg = damage;
             EntityLiving target = event.getEntityLiving();
             Entity source = event.getSource().getTrueSource();
             if( target instanceof EntityPlayerMP )		//player hurt
@@ -82,7 +82,7 @@ public class DamageHandler
                 if( event.getSource().getDamageType().equals( "fall" ) )
                 {
                     double award;
-//					float savedExtra = 0;
+//					double savedExtra = 0;
                     int agilityLevel = Skill.AGILITY.getLevel( player );
                     int saved = 0;
 
@@ -185,11 +185,11 @@ public class DamageHandler
                     event.setAmount( event.getAmount() / (weaponGap + 1) / (killGap + 1) );
                     damage = event.getAmount();
 
-                    float amount = 0;
-                    float playerHealth = player.getHealth();
-                    float targetHealth = target.getHealth();
-                    float targetMaxHealth = target.getMaxHealth();
-                    float lowHpBonus = 1.0f;
+                    double amount = 0;
+                    double playerHealth = player.getHealth();
+                    double targetHealth = target.getHealth();
+                    double targetMaxHealth = target.getMaxHealth();
+                    double lowHpBonus = 1.0f;
 
                     if( damage > targetHealth )		//no overkill xp
                         damage = targetHealth;

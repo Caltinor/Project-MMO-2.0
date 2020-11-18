@@ -58,8 +58,8 @@ public class PlayerTickHandler
                 int flyLevel = Skill.FLYING.getLevel( player );
                 int agilityLevel = Skill.AGILITY.getLevel( player );
                 int nightvisionUnlockLevel = Config.forgeConfig.nightvisionUnlockLevel.get();
-                float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
-                float speedAmp = 0;
+                double swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
+                double speedAmp = 0;
                 InventoryPlayer inv = player.inventory;
 
                 XP.checkBiomeLevelReq( player );

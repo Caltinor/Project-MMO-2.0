@@ -518,7 +518,7 @@ public class XP
 		Collection<EntityPlayer> nearbyPlayers = new ArrayList<>();
 
 		Float closestDistance = null;
-		float tempDistance;
+		double tempDistance;
 
 		for( EntityPlayer player : allPlayers )
 		{
@@ -529,7 +529,7 @@ public class XP
 
 		if( closestDistance != null )
 		{
-			float searchRange = closestDistance + 30;
+			double searchRange = closestDistance + 30;
 
 			for( EntityPlayer player : allPlayers )
 			{
@@ -541,7 +541,7 @@ public class XP
 		return nearbyPlayers;
 	}
 
-	public static float getPowerLevel( UUID uuid )
+	public static double getPowerLevel( UUID uuid )
 	{
 		int enduranceLevel = Skill.ENDURANCE.getLevel( uuid );
 
@@ -1513,7 +1513,7 @@ public class XP
 		return Math.log( goal ) / Math.log( base );
 	}
 
-	public static int levelAtXp( float xp )
+	public static int levelAtXp( double xp )
 	{
 		return levelAtXp( (double) xp );
 	}
@@ -1544,9 +1544,9 @@ public class XP
 		}
 	}
 
-	public static float levelAtXpDecimal( float xp )
+	public static double levelAtXpDecimal( double xp )
 	{
-		return (float) levelAtXpDecimal( (double) xp );
+		return (double) levelAtXpDecimal( (double) xp );
 	}
 	public static double levelAtXpDecimal( double xp )
 	{
@@ -1568,7 +1568,7 @@ public class XP
 	{
 		return xpAtLevel( (double) givenLevel );
 	}
-	public static double xpAtLevel( float givenLevel )
+	public static double xpAtLevel( double givenLevel )
 	{
 		return xpAtLevel( (double) givenLevel );
 	}

@@ -53,7 +53,7 @@ public class TooltipHandler
                     return;
 
                 String regKey = item.getRegistryName().toString();
-                float hardness;
+                double hardness;
                 double dValue;
                 Material material = null;
 

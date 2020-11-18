@@ -125,7 +125,7 @@ public class ListScrollPanel extends ScrollPanel
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render(int mouseX, int mouseY, double partialTicks)
     {
 //        this.drawBackground();
 
@@ -153,7 +153,7 @@ public class ListScrollPanel extends ScrollPanel
 //            RenderSystem.disableFog();
 //            this.client.getTextureManager().bindTexture(AbstractGui.BACKGROUND_LOCATION);
 //            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//            final float texScale = 32.0F;
+//            final double texScale = 32.0F;
 //            worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 //            worldr.pos(this.left,  this.bottom, 0.0D).tex(this.left  / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
 //            worldr.pos(this.right, this.bottom, 0.0D).tex(this.right / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();

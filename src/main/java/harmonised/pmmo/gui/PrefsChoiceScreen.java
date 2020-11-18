@@ -67,7 +67,7 @@ public class PrefsChoiceScreen extends Screen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render(int mouseX, int mouseY, double partialTicks)
     {
         renderBackground( 1 );
         super.render(mouseX, mouseY, partialTicks);

@@ -176,7 +176,7 @@ public class AttributeHandler
 		damageAttribute.applyModifier( damageModifier );
 	}
 
-	public static void updateHP( EntityMob mob, float bonus )
+	public static void updateHP( EntityMob mob, double bonus )
 	{
 		IAttributeInstance hpAttribute = mob.getAttribute( SharedMonsterAttributes.MAX_HEALTH );
 		if( hpAttribute != null )
@@ -190,7 +190,7 @@ public class AttributeHandler
 			bonus *= getBiomeMobMultiplier( mob, "hpBonus" );
 
 			if( bonus > maxMobHPBoost )
-				bonus = (float) maxMobHPBoost;
+				bonus = (double) maxMobHPBoost;
 
 			AttributeModifier hpModifier = new AttributeModifier(hpModifierID, "Max HP Bonus thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
 
@@ -202,7 +202,7 @@ public class AttributeHandler
 		}
 	}
 
-	public static void updateDamage( MobEntity mob, float bonus )
+	public static void updateDamage( MobEntity mob, double bonus )
 	{
 		IAttributeInstance damageAttribute = mob.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
 		if( damageAttribute != null )
@@ -213,7 +213,7 @@ public class AttributeHandler
 			bonus *= getBiomeMobMultiplier( mob, "damageBonus" );
 
 			if( bonus > maxMobDamageBoost )
-				bonus = (float) maxMobDamageBoost;
+				bonus = (double) maxMobDamageBoost;
 
 			AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
 			damageAttribute.removeModifier(damageModifierID);
@@ -223,7 +223,7 @@ public class AttributeHandler
 //			System.out.println( mob.getDisplayName().getUnformattedText() );
 	}
 
-	public static void updateSpeed( MobEntity mob, float bonus )
+	public static void updateSpeed( MobEntity mob, double bonus )
 	{
 		IAttributeInstance speedAttribute = mob.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		if( speedAttribute != null )
@@ -237,7 +237,7 @@ public class AttributeHandler
 				bonus *= getBiomeMobMultiplier( mob, "speedBonus" );
 
 				if( bonus > maxMobSpeedBoost )
-					bonus = (float) maxMobSpeedBoost;
+					bonus = (double) maxMobSpeedBoost;
 
 				AttributeModifier speedModifier = new AttributeModifier(speedModifierID, "Movement Speed Boost thanks to Nearby Player Power Level", bonus / 100, AttributeModifier.Operation.ADDITION);
 				speedAttribute.removeModifier(speedModifierID);

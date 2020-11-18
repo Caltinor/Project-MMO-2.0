@@ -89,8 +89,8 @@ public class XP
 	private static Map<String, Long> lastAward = new HashMap<>();
 	private static Map<String, BlockPos> lastPosPlaced = new HashMap<>();
 	public static List<String> validSkills = new ArrayList<String>();
-	public static float globalMultiplier = 1;
-	public static float maxXp = xpAtLevel( 999 );
+	public static double globalMultiplier = 1;
+	public static double maxXp = xpAtLevel( 999 );
 	public static Set<String> lapisDonators = new HashSet<>();
 	public static Set<String> dandelionDonators = new HashSet<>();
 	public static Set<String> ironDonators = new HashSet<>();
@@ -445,7 +445,7 @@ public class XP
 		}
 	}
 
-	private static float getXp( ResourceLocation registryName )
+	private static double getXp( ResourceLocation registryName )
 	{
 		if( xpValues.get( registryName ) != null )
 			return xpValues.get( registryName );
@@ -453,7 +453,7 @@ public class XP
 			return 0.0f;
 	}
 	
-	private static float getOreDoubleChance( ResourceLocation registryName )
+	private static double getOreDoubleChance( ResourceLocation registryName )
 	{
 		if( oreDoubleValues.get( registryName ) != null )
 			return oreDoubleValues.get( registryName );
@@ -461,7 +461,7 @@ public class XP
 			return 0.0f;
 	}
 	
-	private static float getPlantDoubleChance( ResourceLocation registryName )
+	private static double getPlantDoubleChance( ResourceLocation registryName )
 	{
 		if( plantDoubleValues.get( registryName ) != null )
 			return plantDoubleValues.get( registryName );
@@ -509,7 +509,7 @@ public class XP
 			return 0;
 	}
 	
-	private static float getSalvageBaseValue( ResourceLocation registryName )
+	private static double getSalvageBaseValue( ResourceLocation registryName )
 	{
 		if( salvageBaseValue.get( registryName ) != null )
 			return salvageBaseValue.get( registryName );
@@ -517,7 +517,7 @@ public class XP
 			return 0.0f;
 	}
 	
-	private static float getSalvageValuePerLevel( ResourceLocation registryName )
+	private static double getSalvageValuePerLevel( ResourceLocation registryName )
 	{
 		if( salvageValuePerLevel.get( registryName ) != null )
 			return salvageValuePerLevel.get( registryName );
@@ -525,7 +525,7 @@ public class XP
 			return 0.0f;
 	}
 	
-	private static float getRepairXp( ResourceLocation registryName )
+	private static double getRepairXp( ResourceLocation registryName )
 	{
 		if( repairXp.get( registryName ) != null )
 			return repairXp.get( registryName );
@@ -533,7 +533,7 @@ public class XP
 			return 0.0f;
 	}
 	
-	private static float getSalvageXp( ResourceLocation registryName )
+	private static double getSalvageXp( ResourceLocation registryName )
 	{
 		if( salvageXp.get( registryName ) != null )
 			return salvageXp.get( registryName );
@@ -557,7 +557,7 @@ public class XP
 			Block block = event.getPlacedBlock().getBlock();
 			NBTTagCompound persistTag = getPersistTag( player );
 			NBTTagCompound skillsTag = getSkillsTag( persistTag );
-			float blockHardness;
+			double blockHardness;
 
 			try
 			{
@@ -617,7 +617,7 @@ public class XP
 				ResourceLocation blockRegistry = block.getRegistryName();
 				Material material = block.getMaterial( block.getDefaultState() );
 				boolean wasPlaced = PlacedBlocks.isPlayerPlaced( event.getWorld(), event.getPos() );
-				float blockHardness;
+				double blockHardness;
 				try
 				{
 					blockHardness = block.getBlockHardness( block.getDefaultState(), event.getWorld(), event.getPos());
@@ -628,7 +628,7 @@ public class XP
 				{
 					blockHardness = 1;
 				}
-				float award = blockHardness;
+				double award = blockHardness;
 				List<ItemStack> drops = event.getDrops();		
 				if( material.equals( Material.PLANTS ) && drops.size() > 0 ) //IS PLANT
 				{
@@ -688,14 +688,14 @@ public class XP
 					if( age == maxAge && age >= 0 )
 					{
 						int currLevel = levelAtXp( skillsTag.getFloat( "farming" ) );
-						float extraChance = getPlantDoubleChance( theDropItem.getRegistryName() ) * currLevel;
+						double extraChance = getPlantDoubleChance( theDropItem.getRegistryName() ) * currLevel;
 						int guaranteedDrop = 0;
 						int extraDrop = 0;
 						
 						if( ( extraChance / 100 ) > 1 )
 						{
 							guaranteedDrop = (int)Math.floor( extraChance / 100 );
-							extraChance = (float)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
+							extraChance = (double)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
 						}
 						
 						if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
@@ -732,8 +732,8 @@ public class XP
 					if( noDropOre && !wasPlaced || !noDropOre && !isSilk )			//EXTRA DROPS
 					{
 						int currLevel = levelAtXp( skillsTag.getFloat( "mining" ) );
-						float extraChance = getOreDoubleChance( block.getRegistryName() ) * currLevel;
-	//					float extraChance = 180.0f;
+						double extraChance = getOreDoubleChance( block.getRegistryName() ) * currLevel;
+	//					double extraChance = 180.0f;
 						
 						int guaranteedDrop = 0;
 						int extraDrop = 0;
@@ -741,7 +741,7 @@ public class XP
 						if( ( extraChance / 100 ) > 1 )
 						{
 							guaranteedDrop = (int)Math.floor( extraChance / 100 );
-							extraChance = (float)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
+							extraChance = (double)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
 						}
 						
 						if( Math.ceil( Math.random() * 1000 ) <= extraChance * 10 )
@@ -803,7 +803,7 @@ public class XP
 					World world = event.getWorld();
 					Block baseBlock = event.getState().getBlock();
 					BlockPos baseBlockPos = event.getPos();
-					float hardness;
+					double hardness;
 					try
 					{
 						hardness = baseBlock.getBlockHardness( baseBlock.getDefaultState(), event.getWorld(), event.getPos());
@@ -814,16 +814,16 @@ public class XP
 					{
 						hardness = 1;
 					}
-					float award = 0;
-					float rewardable = 0;
-					float extraChance = getPlantDoubleChance( baseBlock.getRegistryName() ) * currLevel;
+					double award = 0;
+					double rewardable = 0;
+					double extraChance = getPlantDoubleChance( baseBlock.getRegistryName() ) * currLevel;
 					int guaranteedDrop = 0;
 					int extraDrop = 0;
 					
 					if( ( extraChance / 100 ) > 1 )
 					{
 						guaranteedDrop = (int)Math.floor( extraChance / 100 );
-						extraChance = (float)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
+						extraChance = (double)( ( extraChance / 100 ) - Math.floor( extraChance / 100 ) ) * 100;
 					}
 					if( !wasPlaced )
 						rewardable++;
@@ -881,22 +881,22 @@ public class XP
 	
 	public static void handleDamage( LivingDamageEvent event )
 	{
-		float damage = event.getAmount();
-		float startDmg = damage;
+		double damage = event.getAmount();
+		double startDmg = damage;
 		EntityLivingBase target = event.getEntityLiving();
 		if( target instanceof EntityPlayer )
 		{
 			EntityPlayer player = (EntityPlayer) target;
 			NBTTagCompound persistTag = getPersistTag( player );
 			NBTTagCompound skillsTag = getSkillsTag( persistTag );
-			float agilityXp = 0;
-			float enduranceXp = 0;
+			double agilityXp = 0;
+			double enduranceXp = 0;
 			boolean hideEndurance = false;
 			
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
 			int enduranceLevel = levelAtXp( skillsTag.getFloat( "endurance" ) );
-			float endured = 0;
-			float endurePercent = enduranceLevel * 0.25f;
+			double endured = 0;
+			double endurePercent = enduranceLevel * 0.25f;
 			if( endurePercent > 50 )
 				endurePercent = 50;
 			endured = damage * ( endurePercent / 100 );
@@ -909,11 +909,11 @@ public class XP
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
 			if( event.getSource().getDamageType().equals( "fall" ) )
 			{
-				float award = startDmg;
-//				float savedExtra = 0;
+				double award = startDmg;
+//				double savedExtra = 0;
 				int agilityLevel = levelAtXp( skillsTag.getFloat( "agility" ) );
 				int saved = 0;
-				float chance = agilityLevel * 0.50f;
+				double chance = agilityLevel * 0.50f;
 				if( chance > 64 )
 					chance = 64;
 				for( int i = 0; i < damage; i++ )
@@ -955,11 +955,11 @@ public class XP
 			EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 			if( !player.isCreative() )
 			{
-				float amount = 0;
-				float playerHealth = player.getHealth();
-				float targetHealth = target.getHealth();
-				float targetMaxHealth = target.getMaxHealth();
-				float lowHpBonus = 1.0f;
+				double amount = 0;
+				double playerHealth = player.getHealth();
+				double targetHealth = target.getHealth();
+				double targetMaxHealth = target.getMaxHealth();
+				double lowHpBonus = 1.0f;
 				
 				if( damage > targetHealth )		//no overkill xp
 					damage = targetHealth;
@@ -992,7 +992,7 @@ public class XP
 					else
 						distance = 0;
 					
-					amount += (float) ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
+					amount += (double) ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( startDmg >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
 
 					amount *= lowHpBonus;
 					awardXp( player, "archery", player.getHeldItemMainhand().getDisplayName(), amount, false );
@@ -1045,7 +1045,7 @@ public class XP
 					event.getEntityLiving().motionY += jumpBoost;
 			}
 			else if( !player.isInWater() )
-				awardXp( player, "agility", "jumping", (float) ( jumpBoost * 10 + 1 ), true );
+				awardXp( player, "agility", "jumping", (double) ( jumpBoost * 10 + 1 ), true );
 		}
 	}
 	
@@ -1111,8 +1111,8 @@ public class XP
 					if( event.getHand() == EnumEnumHand.MAIN_HAND )
 					{
 						int currLevel;
-						float baseChance = 0;
-						float extraChance = 0;
+						double baseChance = 0;
+						double extraChance = 0;
 						
 						if( getPlantDoubleChance( item.getRegistryName() ) != 0 && itemStack.getMetadata() != 4 )
 						{
@@ -1147,23 +1147,23 @@ public class XP
 							ItemStack salvageItemStack = getToolItem( item.getRegistryName() );
 							Item salvageItem = salvageItemStack.getItem();
 							int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
-							float baseValue = getSalvageBaseValue( salvageItem.getRegistryName() );
-							float valuePerLevel = getSalvageValuePerLevel( salvageItem.getRegistryName() );
-							float chance = baseValue + ( valuePerLevel * currLevel );
+							double baseValue = getSalvageBaseValue( salvageItem.getRegistryName() );
+							double valuePerLevel = getSalvageValuePerLevel( salvageItem.getRegistryName() );
+							double chance = baseValue + ( valuePerLevel * currLevel );
 							if( chance > 80 )
 								chance = 80;
 							
-							float enchantChance = currLevel * 0.9f;
+							double enchantChance = currLevel * 0.9f;
 							if( enchantChance > 90 )
 								enchantChance = 90;
 							
 							int itemPotential = getToolItemAmount( item.getRegistryName() );
 							
-							float startDmg = itemStack.getItemDamage();
-							float maxDmg = itemStack.getMaxDamage();
-							float award = 0;
-							float displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
-							float durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
+							double startDmg = itemStack.getItemDamage();
+							double maxDmg = itemStack.getMaxDamage();
+							double award = 0;
+							double displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
+							double durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
 							int potentialReturnAmount = (int) Math.floor( itemPotential * durabilityPercent );
 							
 							if( event.getHand() == EnumEnumHand.OFF_HAND )
@@ -1248,7 +1248,7 @@ public class XP
 					double damageReduction = enduranceLevel * 0.25f;
 					double extraDamage = Math.floor( combatLevel / 20 );
 					
-					float speedPercent = agilityLevel / 2000f;
+					double speedPercent = agilityLevel / 2000f;
 					
 					if( agilityChance > 64 )
 						agilityChance = 64;
@@ -1287,7 +1287,7 @@ public class XP
 				NBTTagCompound skillsTag = getSkillsTag( persistTag );
 
 				int currLevel = levelAtXp( skillsTag.getFloat( "repairing" ) );
-				float bonusRepair = 0.0025f * currLevel / ( 1f + 0.01f * currLevel );
+				double bonusRepair = 0.0025f * currLevel / ( 1f + 0.01f * currLevel );
 				int maxCost = (int) Math.floor( 50 - ( currLevel / 4 ) );
 				if( maxCost < 20 )
 					maxCost = 20;
@@ -1301,13 +1301,13 @@ public class XP
 				if( oItem.getRepairCost() > maxCost )
 					oItem.setRepairCost( maxCost );
 
-				float repaired = oItem.getItemDamage() - lItem.getItemDamage();
+				double repaired = oItem.getItemDamage() - lItem.getItemDamage();
 				if( repaired < 0 )
 					repaired = -repaired;
 
 				oItem.setItemDamage( (int) Math.floor( oItem.getItemDamage() - repaired * bonusRepair ) );
 
-				float award = (float) ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
+				double award = (double) ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
 				award *= getRepairXp( getToolItem( lItem.getItem().getRegistryName() ).getItem().getRegistryName() );
 
 				if( award > 0 )
@@ -1362,7 +1362,7 @@ public class XP
 		return skillsTag;
 	}
 	
-	public static void awardXp( EntityPlayer player, String skill, String sourceName, float amount, boolean skip )
+	public static void awardXp( EntityPlayer player, String skill, String sourceName, double amount, boolean skip )
 	{
 		if( player instanceof FakePlayer )
 			return;
@@ -1409,7 +1409,7 @@ public class XP
 		String playerName = player.getName();
 		int startLevel;
 		int currLevel;
-		float startXp = 0;
+		double startXp = 0;
 		
 		NBTTagCompound persistTag = getPersistTag( player );		
 		NBTTagCompound skillsTag = getSkillsTag( persistTag );
@@ -1486,7 +1486,7 @@ public class XP
 		}
 	}
 	
-	public static void setXp( EntityPlayer player, String skill, float newXp )
+	public static void setXp( EntityPlayer player, String skill, double newXp )
 	{		
 		NBTTagCompound persistTag = getPersistTag( player );		
 		NBTTagCompound skillsTag = getSkillsTag( persistTag );
@@ -1544,9 +1544,9 @@ public class XP
 					if( agilityLevel > 200 )
 						agilityLevel = 200;
 					
-					float swimAward = (float) ( 3 + swimLevel    / 10.00f ) * ( gap / 1000 );
-					float flyAward  = (float) ( 1 + flyLevel     / 30.77f ) * ( gap / 1000 );
-					float runAward  = (float) ( 1 + agilityLevel / 30.77f ) * ( gap / 1000 );
+					double swimAward = (double) ( 3 + swimLevel    / 10.00f ) * ( gap / 1000 );
+					double flyAward  = (double) ( 1 + flyLevel     / 30.77f ) * ( gap / 1000 );
+					double runAward  = (double) ( 1 + agilityLevel / 30.77f ) * ( gap / 1000 );
 					
 					lastAward.replace( name, System.currentTimeMillis() );
 					Block waterBlock = Blocks.WATER;
@@ -1599,7 +1599,7 @@ public class XP
 	{
 		EntityPlayer player = event.getEntityPlayer();
 		NonNullList<ItemStack> items = event.getDrops();
-		float award = getXp( items.get( 0 ).getItem().getRegistryName() );
+		double award = getXp( items.get( 0 ).getItem().getRegistryName() );
 		if( award == 0 )
 			award = 10.0f;
 		awardXp( player, "fishing", "catching " + items, award, false );
@@ -1633,11 +1633,11 @@ public class XP
 		switch( correctHarvestTool( event.getState().getMaterial() ) )
 		{
 			case "pickaxe":
-				float height = event.getPos().y;
+				double height = event.getPos().y;
 				if( height < 0 )
 					height = -height;
 
-				float heightMultiplier = 1 - ( height / 1000) ;
+				double heightMultiplier = 1 - ( height / 1000) ;
 
 				if( heightMultiplier < 0.5f )
 					heightMultiplier = 0.5f;
@@ -1659,7 +1659,7 @@ public class XP
 		}
 	}
 	
-	public static int levelAtXp( float xp )
+	public static int levelAtXp( double xp )
 	{
 		int theXp = 0;
 		
@@ -1674,7 +1674,7 @@ public class XP
 		}
 	}
 	
-	public static float levelAtXpDecimal( float xp )
+	public static double levelAtXpDecimal( double xp )
 	{
 		if( levelAtXp( xp ) == 999 )
 			xp = xpAtLevel( 999 );
@@ -1688,7 +1688,7 @@ public class XP
 			return startLevel + ( (xp - startXp) / (goalXp - startXp) );
 	}
 	
-	public static int xpAtLevel( float givenLevel )
+	public static int xpAtLevel( double givenLevel )
 	{
 		int theXp = 0;
 		if( givenLevel > 999 )
@@ -1701,11 +1701,11 @@ public class XP
 		return theXp;
 	}
 	
-	public static float xpAtLevelDecimal( float givenLevel )
+	public static double xpAtLevelDecimal( double givenLevel )
 	{
-		float startXp = xpAtLevel( (float) Math.floor( givenLevel ) );
-		float endXp   = xpAtLevel( (float) Math.floor( givenLevel + 1 ) );
-		float pos = givenLevel - (float) Math.floor( givenLevel );
+		double startXp = xpAtLevel( (double) Math.floor( givenLevel ) );
+		double endXp   = xpAtLevel( (double) Math.floor( givenLevel + 1 ) );
+		double pos = givenLevel - (double) Math.floor( givenLevel );
 		
 		return startXp + ( ( endXp - startXp ) * pos );
 	}
