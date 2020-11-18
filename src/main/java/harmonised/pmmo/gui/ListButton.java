@@ -2,7 +2,7 @@ package harmonised.pmmo.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.GlStateManager;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -155,11 +155,11 @@ public class ListButton extends Button
     {
         Minecraft minecraft = Minecraft.getMinecraft();
         FontRenderer fontrenderer = minecraft.fontRenderer;
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
         int i = this.getYImage(this.isHovered());
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlend();
+        GlStateManager.defaultBlendFunc();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         minecraft.getTextureManager().bindTexture( buttons );
         this.blit(this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height);
         minecraft.getTextureManager().bindTexture( items );
@@ -188,9 +188,9 @@ public class ListButton extends Button
     {
         double f = (double) ( (System.currentTimeMillis() / 25D ) % 360);
         double f1 = 0;
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef((double)posX, (double)posY, 1050.0F);
-        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translatef((double)posX, (double)posY, 1050.0F);
+        GlStateManager.scalef(1.0F, 1.0F, -1.0F);
         MatrixStack matrixstack = new MatrixStack();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
         matrixstack.scale((double)scale, (double)scale, (double)scale);
@@ -221,6 +221,6 @@ public class ListButton extends Button
         p_228187_5_.rotationPitch = f4;
         p_228187_5_.prevRotationYawHead = f5;
         p_228187_5_.rotationYawHead = f6;
-        RenderSystem.popMatrix();
+        GlStateManager.popMatrix();
     }
 }

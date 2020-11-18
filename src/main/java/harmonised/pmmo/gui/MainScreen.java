@@ -1,7 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.GlStateManager;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
@@ -15,7 +15,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.*;
 
-public class MainScreen extends Screen
+public class MainScreen extends GuiScreen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
@@ -105,7 +105,7 @@ public class MainScreen extends Screen
                 renderTooltip( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
 
-        RenderSystem.enableBlend();
+        GlStateManager.enableBlend();
         Minecraft.getMinecraft().getTextureManager().bindTexture( logo );
         this.blit( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
@@ -125,7 +125,7 @@ public class MainScreen extends Screen
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
-        RenderSystem.disableBlend();
+        GlStateManager.disableBlend();
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }
 

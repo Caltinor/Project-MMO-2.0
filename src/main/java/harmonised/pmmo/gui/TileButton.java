@@ -1,18 +1,20 @@
 package harmonised.pmmo.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.GlStateManager;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 
-public class TileButton extends Button
+public class TileButton extends GuiButton
 {
     private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
     private final ResourceLocation items2 = XP.getResLoc( Reference.MOD_ID, "textures/gui/items2.png" );
@@ -66,11 +68,11 @@ public class TileButton extends Button
     {
         Minecraft minecraft = Minecraft.getMinecraft();
 //        FontRenderer fontrenderer = minecraft.fontRenderer;
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
 //        int i = this.getYImage(this.isHovered());
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlend();
+        GlStateManager.defaultBlendFunc();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         minecraft.getTextureManager().bindTexture( buttons );
         this.blit(this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height );
         minecraft.getTextureManager().bindTexture( page == 0 ? items : items2 );

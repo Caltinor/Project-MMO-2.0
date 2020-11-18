@@ -1,9 +1,7 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.util.XP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -13,7 +11,7 @@ import java.util.*;
 
 public class ChunkDataHandler
 {
-    private static Map<ResourceLocation, Map<ChunkPos, Map<BlockPos, UUID>>> placedMap = new HashMap<>();
+    private static Map<Integer, Map<ChunkPos, Map<BlockPos, UUID>>> placedMap = new HashMap<>();
 
     public static void init()
     {
@@ -28,16 +26,14 @@ public class ChunkDataHandler
         {
             if( levelNBT.hasKey( "placedPos" ) )
             {
-                ResourceLocation dimResLoc = event.getWorld().getDimension().getType().getRegistryName();
+                int dimid = event.getWorld().getWorldType().getId();
                 ChunkPos chunkPos = event.getChunk().getPos();
 
-                if( !placedMap.containsKey( dimResLoc ) )
-                    placedMap.put( dimResLoc, new HashMap<>() );
+                if( !placedMap.containsKey( dimid ) )
+                    placedMap.put( dimid, new HashMap<>() );
 
                 NBTTagCompound placedPosNBT = ( levelNBT.getCompoundTag( "placedPos" ) );
-                if( placedPosNBT == null )
-                    return;
-                Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
+                Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimid );
                 Map<BlockPos, UUID> blockMap = new HashMap<>();
                 Set<String> keySet = placedPosNBT.getKeySet();
 
@@ -55,22 +51,19 @@ public class ChunkDataHandler
 
     public static void handleChunkDataSave( ChunkDataEvent.Save event )
     {
-        ResourceLocation dimResLoc = event.getWorld().getDimension().getType().getRegistryName();
-        if( placedMap.containsKey( dimResLoc ) )
+        int dimid = event.getWorld().getWorldType().getId();
+        if( placedMap.containsKey( dimid ) )
         {
             ChunkPos chunkPos = event.getChunk().getPos();
-            if( placedMap.get( dimResLoc ).containsKey( chunkPos ) )
+            if( placedMap.get( dimid ).containsKey( chunkPos ) )
             {
-                NBTTagCompound levelNBT = (NBTTagCompound) event.getData().get( "Level" );
-                if( levelNBT == null )
-                    return;
-
+                NBTTagCompound levelNBT = event.getData().getCompoundTag( "Level" );
                 NBTTagCompound newPlacedNBT = new NBTTagCompound();
                 NBTTagCompound insidesNBT;
 
                 int i = 0;
 
-                for( Map.Entry<BlockPos, UUID> entry : placedMap.get( dimResLoc ).get( chunkPos ).entrySet() )
+                for( Map.Entry<BlockPos, UUID> entry : placedMap.get( dimid ).get( chunkPos ).entrySet() )
                 {
                     insidesNBT = new NBTTagCompound();
                     insidesNBT.setTag( "pos", NBTUtil.createPosTag( entry.getKey() ) );
@@ -83,14 +76,14 @@ public class ChunkDataHandler
         }
     }
 
-    public static void addPos( ResourceLocation dimResLoc, BlockPos blockPos, UUID uuid )
+    public static void addPos( int dimid, BlockPos blockPos, UUID uuid )
     {
         ChunkPos chunkPos = new ChunkPos( blockPos );
 
-        if( !placedMap.containsKey( dimResLoc ) )
-            placedMap.put( dimResLoc, new HashMap<>() );
+        if( !placedMap.containsKey( dimid ) )
+            placedMap.put( dimid, new HashMap<>() );
 
-        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
+        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimid );
 
         if( !chunkMap.containsKey( chunkPos ) )
             chunkMap.put( chunkPos, new HashMap<>() );
@@ -103,14 +96,14 @@ public class ChunkDataHandler
 //        System.out.println( blockMap.size() );
     }
 
-    public static void delPos( ResourceLocation dimResLoc, BlockPos blockPos )
+    public static void delPos( int dimid, BlockPos blockPos )
     {
         ChunkPos chunkPos = new ChunkPos( blockPos );
 
-        if( !placedMap.containsKey( dimResLoc ) )
-            placedMap.put( dimResLoc, new HashMap<>() );
+        if( !placedMap.containsKey( dimid ) )
+            placedMap.put( dimid, new HashMap<>() );
 
-        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
+        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimid );
 
         if( !chunkMap.containsKey( chunkPos ) )
             chunkMap.put( chunkPos, new HashMap<>() );
@@ -123,13 +116,13 @@ public class ChunkDataHandler
 //        System.out.println( blockMap.size() );
     }
 
-    public static UUID checkPos(World world, BlockPos pos )
+    public static UUID checkPos( World world, BlockPos pos )
     {
-        return checkPos( world.getWorld().getDimension().getType().getRegistryName(), pos );
+        return checkPos( world.getWorldType().getId(), pos );
     }
 
-    public static UUID checkPos( ResourceLocation dimResLoc, BlockPos blockPos )
+    public static UUID checkPos( int dimid, BlockPos blockPos )
     {
-        return placedMap.getOrDefault( dimResLoc, new HashMap<>() ).getOrDefault( new ChunkPos( blockPos ), new HashMap<>() ).get( blockPos );
+        return placedMap.getOrDefault( dimid, new HashMap<>() ).getOrDefault( new ChunkPos( blockPos ), new HashMap<>() ).get( blockPos );
     }
 }

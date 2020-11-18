@@ -2,7 +2,7 @@ package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.GlStateManager;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.util.XP;
@@ -11,6 +11,7 @@ import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -19,7 +20,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.*;
 
-public class CreditsScreen extends Screen
+public class CreditsScreen extends GuiScreen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
@@ -28,7 +29,7 @@ public class CreditsScreen extends Screen
     private static TileButton exitButton;
 
     Minecraft minecraft = Minecraft.getMinecraft();
-    MainWindow sr = minecraft.getMainWindow();
+    ScaledResolution sr = new ScaledResolution( minecraft );
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
@@ -211,7 +212,7 @@ public class CreditsScreen extends Screen
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
-        RenderSystem.disableBlend();
+        GlStateManager.disableBlend();
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }
 

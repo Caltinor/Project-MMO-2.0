@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class PlayerConnectedHandler
 
     public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
     {
-        EntityPlayer player = event.getEntityPlayer();
+        EntityPlayer player = event.player;
         if( !player.world.isRemote )
         {
             UUID uuid = player.getUniqueID();
@@ -60,9 +60,9 @@ public class PlayerConnectedHandler
 
     private static void migratePlayerDataToWorldSavedData( EntityPlayer player )
     {
-        if( player.getPersistentData().contains( Reference.MOD_ID ) )
+        if( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).hasKey( Reference.MOD_ID ) )
         {
-            NBTTagCompound pmmoTag = player.getPersistentData().getCompoundTag( Reference.MOD_ID );
+            NBTTagCompound pmmoTag = player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).getCompoundTag( Reference.MOD_ID );
             NBTTagCompound tag;
             Skill skill;
             UUID uuid = player.getUniqueID();
@@ -70,7 +70,7 @@ public class PlayerConnectedHandler
 
             LOGGER.info( "Migrating Player " + player.getDisplayName().getUnformattedText() + " Pmmo Data from PlayerData to WorldSavedData" );
 
-            if( pmmoTag.contains( "skills" ) )
+            if( pmmoTag.hasKey( "skills" ) )
             {
                 tag = pmmoTag.getCompoundTag( "skills" );
                 for( String key : tag.getKeySet() )
@@ -84,7 +84,7 @@ public class PlayerConnectedHandler
                 }
             }
 
-            if( pmmoTag.contains( "preferences" ) )
+            if( pmmoTag.hasKey( "preferences" ) )
             {
                 tag = pmmoTag.getCompoundTag( "preferences" );
                 map = Config.getPreferencesMap( player );
@@ -94,7 +94,7 @@ public class PlayerConnectedHandler
                 }
             }
 
-            if( pmmoTag.contains( "abilities" ) )
+            if( pmmoTag.hasKey( "abilities" ) )
             {
                 tag = pmmoTag.getCompoundTag( "abilities" );
                 map = Config.getAbilitiesMap( player );
@@ -104,7 +104,7 @@ public class PlayerConnectedHandler
                 }
             }
 
-            player.getPersistentData().remove( Reference.MOD_ID );
+            player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).removeTag( Reference.MOD_ID );
             LOGGER.info( "Migrated Player " + player.getDisplayName().getUnformattedText() + " Done" );
             PmmoSavedData.get().setDirty( true );
         }

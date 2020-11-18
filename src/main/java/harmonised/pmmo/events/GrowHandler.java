@@ -46,7 +46,7 @@ public class GrowHandler
         IBlockState state = world.getBlockState( pos );
         Block block = state.getBlock();
 
-        UUID uuid = ChunkDataHandler.checkPos( world.dimension.getType().getRegistryName(), pos );
+        UUID uuid = ChunkDataHandler.checkPos( world.getWorldType().getId(), pos );
 
         if( uuid == null && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( resLoc.toString() ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( resLoc.toString() ).containsKey( "growsUpwards" ) )
         {
@@ -55,7 +55,7 @@ public class GrowHandler
             while( world.getBlockState( tempPos.down() ).getBlock().equals( block ) && uuid == null )
             {
                 tempPos = tempPos.down();
-                uuid = ChunkDataHandler.checkPos( world.dimension.getType().getRegistryName(), tempPos );
+                uuid = ChunkDataHandler.checkPos( world.getWorldType().getId(), tempPos );
             }
         }
 
@@ -64,9 +64,9 @@ public class GrowHandler
             int age = -1;
             int maxAge = -1;
 
-            if( state.has( BlockStateProperties.AGE_0_1 ) )
+            if( state.getProperties().containsKey( BlockStateProperties.AGE_0_1 ) )
             {
-                age = state.get( BlockStateProperties.AGE_0_1 );
+                age = state.getProperties().get( BlockStateProperties.AGE_0_1 );
                 maxAge = 1;
             }
             else if( state.has( BlockStateProperties.AGE_0_2 ) )

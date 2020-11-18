@@ -21,7 +21,7 @@ public class JumpHandler
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
 //			if( !player.world.isRemote )
-//				System.out.println( player.getPersistentData() );
+//				System.out.println( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ) );
 
             if( XP.isPlayerSurvival( player ) )
             {

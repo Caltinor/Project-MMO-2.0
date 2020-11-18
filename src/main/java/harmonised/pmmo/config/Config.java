@@ -5,8 +5,6 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,54 +35,54 @@ public class Config
     {
         //Info that will also be sent to Client so it's accessible remotely
         if( Config.forgeConfig.veiningAllowed.get() )
-            localConfig.setTag( "veiningAllowed", 1D );
+            localConfig.put( "veiningAllowed", 1D );
         else
-            localConfig.setTag( "veiningAllowed", 0D );
+            localConfig.put( "veiningAllowed", 0D );
 
         if( Config.forgeConfig.useExponentialFormula.get() )
-            localConfig.setTag( "useExponentialFormula", 1D );
+            localConfig.put( "useExponentialFormula", 1D );
         else
-            localConfig.setTag( "useExponentialFormula", 0D );
+            localConfig.put( "useExponentialFormula", 0D );
 
         if( Config.forgeConfig.strictReqTool.get() )
-            localConfig.setTag( "strictReqTool", 1D );
+            localConfig.put( "strictReqTool", 1D );
         else
-            localConfig.setTag( "strictReqTool", 0D );
+            localConfig.put( "strictReqTool", 0D );
 
-        localConfig.setTag( "maxLevel", (double) forgeConfig.maxLevel.get() );
-        localConfig.setTag( "baseXp", (double) forgeConfig.baseXp.get() );
-        localConfig.setTag( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
-        localConfig.setTag( "exponentialBaseXp", forgeConfig.exponentialBaseXp.get() );
-        localConfig.setTag( "exponentialBase", forgeConfig.exponentialBase.get() );
-        localConfig.setTag( "exponentialRate", forgeConfig.exponentialRate.get() );
-        localConfig.setTag( "maxXp", XP.xpAtLevel( forgeConfig.maxLevel.get() ) );
-        localConfig.setTag( "biomePenaltyMultiplier", forgeConfig.biomePenaltyMultiplier.get() );
-        localConfig.setTag( "nightvisionUnlockLevel", (double) forgeConfig.nightvisionUnlockLevel.get() );
-        localConfig.setTag( "speedBoostPerLevel", forgeConfig.speedBoostPerLevel.get() );
-        localConfig.setTag( "maxSpeedBoost", forgeConfig.maxSpeedBoost.get() );
-        localConfig.setTag( "maxJumpBoost", forgeConfig.maxJumpBoost.get() );
-        localConfig.setTag( "maxFallSaveChance", forgeConfig.maxFallSaveChance.get() );
-        localConfig.setTag( "saveChancePerLevel", forgeConfig.saveChancePerLevel.get() );
-        localConfig.setTag( "levelsPerCrouchJumpBoost", forgeConfig.levelsPerCrouchJumpBoost.get() );
-        localConfig.setTag( "levelsPerSprintJumpBoost", forgeConfig.levelsPerSprintJumpBoost.get() );
-        localConfig.setTag( "levelsPerDamage", forgeConfig.levelsPerDamage.get() );
-        localConfig.setTag( "levelsPerOneReach", forgeConfig.levelsPerOneReach.get() );
-        localConfig.setTag( "endurancePerLevel", forgeConfig.endurancePerLevel.get() );
-        localConfig.setTag( "maxEndurance", forgeConfig.maxEndurance.get() );
-        localConfig.setTag( "levelsPerHeart", forgeConfig.levelsPerHeart.get() );
-        localConfig.setTag( "maxExtraHeartBoost", (double) forgeConfig.maxExtraHeartBoost.get() );
-        localConfig.setTag( "maxExtraReachBoost", forgeConfig.maxExtraReachBoost.get() );
-        localConfig.setTag( "maxExtraDamageBoost", forgeConfig.maxExtraDamageBoost.get() );
+        localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
+        localConfig.put( "baseXp", (double) forgeConfig.baseXp.get() );
+        localConfig.put( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
+        localConfig.put( "exponentialBaseXp", forgeConfig.exponentialBaseXp.get() );
+        localConfig.put( "exponentialBase", forgeConfig.exponentialBase.get() );
+        localConfig.put( "exponentialRate", forgeConfig.exponentialRate.get() );
+        localConfig.put( "maxXp", XP.xpAtLevel( forgeConfig.maxLevel.get() ) );
+        localConfig.put( "biomePenaltyMultiplier", forgeConfig.biomePenaltyMultiplier.get() );
+        localConfig.put( "nightvisionUnlockLevel", (double) forgeConfig.nightvisionUnlockLevel.get() );
+        localConfig.put( "speedBoostPerLevel", forgeConfig.speedBoostPerLevel.get() );
+        localConfig.put( "maxSpeedBoost", forgeConfig.maxSpeedBoost.get() );
+        localConfig.put( "maxJumpBoost", forgeConfig.maxJumpBoost.get() );
+        localConfig.put( "maxFallSaveChance", forgeConfig.maxFallSaveChance.get() );
+        localConfig.put( "saveChancePerLevel", forgeConfig.saveChancePerLevel.get() );
+        localConfig.put( "levelsPerCrouchJumpBoost", forgeConfig.levelsPerCrouchJumpBoost.get() );
+        localConfig.put( "levelsPerSprintJumpBoost", forgeConfig.levelsPerSprintJumpBoost.get() );
+        localConfig.put( "levelsPerDamage", forgeConfig.levelsPerDamage.get() );
+        localConfig.put( "levelsPerOneReach", forgeConfig.levelsPerOneReach.get() );
+        localConfig.put( "endurancePerLevel", forgeConfig.endurancePerLevel.get() );
+        localConfig.put( "maxEndurance", forgeConfig.maxEndurance.get() );
+        localConfig.put( "levelsPerHeart", forgeConfig.levelsPerHeart.get() );
+        localConfig.put( "maxExtraHeartBoost", (double) forgeConfig.maxExtraHeartBoost.get() );
+        localConfig.put( "maxExtraReachBoost", forgeConfig.maxExtraReachBoost.get() );
+        localConfig.put( "maxExtraDamageBoost", forgeConfig.maxExtraDamageBoost.get() );
 
-        localConfig.setTag( "levelsPerHardnessMining", forgeConfig.levelsPerHardnessMining.get() );
-        localConfig.setTag( "levelsPerHardnessWoodcutting", forgeConfig.levelsPerHardnessWoodcutting.get() );
-        localConfig.setTag( "levelsPerHardnessExcavation", forgeConfig.levelsPerHardnessExcavation.get() );
-        localConfig.setTag( "levelsPerHardnessFarming", forgeConfig.levelsPerHardnessFarming.get() );
-        localConfig.setTag( "levelsPerHardnessCrafting", forgeConfig.levelsPerHardnessCrafting.get() );
-        localConfig.setTag( "minVeinCost", forgeConfig.minVeinCost.get() );
-        localConfig.setTag( "minVeinHardness", forgeConfig.minVeinHardness.get() );
-        localConfig.setTag( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
-        localConfig.setTag( "veinMaxBlocks", (double) forgeConfig.veinMaxBlocks.get() );
+        localConfig.put( "levelsPerHardnessMining", forgeConfig.levelsPerHardnessMining.get() );
+        localConfig.put( "levelsPerHardnessWoodcutting", forgeConfig.levelsPerHardnessWoodcutting.get() );
+        localConfig.put( "levelsPerHardnessExcavation", forgeConfig.levelsPerHardnessExcavation.get() );
+        localConfig.put( "levelsPerHardnessFarming", forgeConfig.levelsPerHardnessFarming.get() );
+        localConfig.put( "levelsPerHardnessCrafting", forgeConfig.levelsPerHardnessCrafting.get() );
+        localConfig.put( "minVeinCost", forgeConfig.minVeinCost.get() );
+        localConfig.put( "minVeinHardness", forgeConfig.minVeinHardness.get() );
+        localConfig.put( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
+        localConfig.put( "veinMaxBlocks", (double) forgeConfig.veinMaxBlocks.get() );
 
         config = localConfig;
     }

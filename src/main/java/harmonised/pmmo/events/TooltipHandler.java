@@ -13,14 +13,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class TooltipHandler
 {
@@ -90,7 +90,7 @@ public class TooltipHandler
                     material = ( (ItemBlock) item).getBlock().getDefaultState().getMaterial();
                     hardness = ( (ItemBlock) item).getBlock().getDefaultState().getBlockHardness( null, null );
                     if( hardness > 0 )
-                        tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo.hardness", DP.dp( hardness ) ).getUnformattedText() ).getFormattedText() );
+                        tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo.hardness", DP.dp( hardness ) ).getUnformattedText(), hardness ).getFormattedText() );
 //                    tooltip.add( new TextComponentString( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
                 }
 

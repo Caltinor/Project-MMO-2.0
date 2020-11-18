@@ -2,13 +2,11 @@ package harmonised.pmmo.gui;
 
 import java.util.*;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.MessageLevelUp;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
@@ -16,24 +14,23 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class XPOverlayGUI extends AbstractGui
+public class XPOverlayGUI extends Gui
 {
 	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, veinBarPosX, veinBarPosY, xpDropPosX, xpDropPosY;
 	private static int tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
@@ -60,13 +57,12 @@ public class XPOverlayGUI extends AbstractGui
 	private static long lastBonusUpdate = System.nanoTime(), lastVeinBlockUpdate = System.nanoTime();
 	private static double itemBoost, biomeBoost, dimensionBoost, playerXpBoost, dimensionMultiplier, multiplier;
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
-	private static IBlockState, lastBlockState;
+	private static IBlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	private static Item lastToolHeld = Items.AIR;
-	private static MatrixStack stack;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean listWasOn = false, barOn = false, listOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
-	MainWindow sr;
+	ScaledResolution sr;
 	BlockPos blockPos, lastBlockPos;
 
 
@@ -84,9 +80,9 @@ public class XPOverlayGUI extends AbstractGui
 					init = true;
 				}
 
-				RenderSystem.pushMatrix();
-				RenderSystem.enableBlend();
-				sr = mc.getMainWindow();
+				GlStateManager.pushMatrix();
+				GlStateManager.enableBlend();
+				sr = new ScaledResolution( mc );
 
 //				drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
@@ -139,7 +135,7 @@ public class XPOverlayGUI extends AbstractGui
 					doVein();
 					doSkills();
 				}
-				doXpDrops( stack );
+				doXpDrops();
 				doXpBar();
 
 				if( showSkillsListAtCorner )
@@ -148,23 +144,23 @@ public class XPOverlayGUI extends AbstractGui
 				if( cooldown > 0 )
 					cooldown -= timeDiff / 1000000D;
 
-				RenderSystem.disableBlend();
-				RenderSystem.color3f( 255, 255, 255 );
-				RenderSystem.popMatrix();
+				GlStateManager.disableBlend();
+				GlStateManager.color( 255, 255, 255 );
+				GlStateManager.popMatrix();
 			}
 		}
 	}
 
 	private void doRayTrace()
 	{
-		if( mc.objectMouseOver != null && mc.objectMouseOver.getType() == RayTraceResult.Type.BLOCK )
+		if( mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == RayTraceResult.Type.BLOCK )
 		{
 			lookingAtBlock = true;
 
-			blockPos = ((BlockRayTraceResult) mc.objectMouseOver).getPos();
+			blockPos = mc.objectMouseOver.getBlockPos();
 			blockState = mc.world.getBlockState( blockPos );
 
-			if( lastIBlockState== null )
+			if( lastBlockState== null )
 				updateLastBlock();
 
 			if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
@@ -181,15 +177,15 @@ public class XPOverlayGUI extends AbstractGui
 
 	private void updateLastBlock()
 	{
-		lastIBlockState= blockState;
+		lastBlockState= blockState;
 		lastBlockPos = blockPos;
 		if( lastBlockState.getBlock().getRegistryName() != null )
 			lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
 		canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
-		lastBlockTransKey = lastBlockState.getBlock().getTranslationKey();
+		lastBlockTransKey = lastBlockState.getBlock().getUnlocalizedName();
 	}
 
-	private void doXpDrops( MatrixStack stack )
+	private void doXpDrops()
 	{
 		if( xpDropsAttachedToBar )
 		{
@@ -320,17 +316,17 @@ public class XPOverlayGUI extends AbstractGui
 
 		if( cooldown > 0 )				//Xp Bar
 		{
-			RenderSystem.pushMatrix();
-			RenderSystem.enableBlend();
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
 			Minecraft.getMinecraft().getTextureManager().bindTexture( bar );
-			RenderSystem.color3f( 255, 255, 255 );
+			GlStateManager.color( 255, 255, 255 );
 
 			aSkill = skills.get( skill );
 
-			blit( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
+			drawTexturedModalRect( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
 			if( theme == 1 )
 			{
-				blit( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
+				drawTexturedModalRect( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
 			}
 			else
 			{
@@ -342,8 +338,8 @@ public class XPOverlayGUI extends AbstractGui
 				if( aSkill.pos >= maxLevel )
 					tempInt = 100;
 
-				blit( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
-				blit( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
+				drawTexturedModalRect( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
+				drawTexturedModalRect( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
 			}
 			if( aSkill.pos >= maxLevel )
 				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), maxLevel ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
@@ -365,8 +361,8 @@ public class XPOverlayGUI extends AbstractGui
 				}
 			}
 
-			RenderSystem.disableBlend();
-			RenderSystem.popMatrix();
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
 		}
 	}
 
@@ -410,8 +406,8 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			Minecraft.getMinecraft().getTextureManager().bindTexture( bar );
 
-			blit( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
-			blit( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
+			drawTexturedModalRect( veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
+			drawTexturedModalRect( veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
 //						System.out.println( veinPos * maxVeinCharge );
 			drawCenteredString( fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
@@ -419,7 +415,7 @@ public class XPOverlayGUI extends AbstractGui
 
 			if( !metToolReq )
 			{
-				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 				return;
 			}
 
@@ -429,7 +425,7 @@ public class XPOverlayGUI extends AbstractGui
 				return;
 			}
 
-			if( lastIBlockState!= null && canBreak && ( lookingAtBlock || isVeining ) )
+			if( lastBlockState != null && canBreak && ( lookingAtBlock || isVeining ) )
 			{
 				if( canVein )
 				{
@@ -472,7 +468,7 @@ public class XPOverlayGUI extends AbstractGui
 				lastBonusUpdate = System.nanoTime();
 			}
 
-			skillsKeys = new ArrayList<>( skills.getKeySet() );
+			skillsKeys = new ArrayList<>( skills.keySet() );
 			skillsKeys.sort( Comparator.comparingDouble( a -> XP.getOfflineXp( (Skill) a, player.getUniqueID() ) ).reversed() );
 
 			for( Skill keySkill : skillsKeys )
@@ -785,7 +781,7 @@ public class XPOverlayGUI extends AbstractGui
 			XPOverlayGUI.skill = skillIn;
 
 		if( skills.get( skillIn ) == null )				//Handle client xp tracker
-			skills.setTag( skillIn, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
+			skills.put( skillIn, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
 
 		aSkill = skills.get( skillIn );
 

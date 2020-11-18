@@ -28,7 +28,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
-public class ListScreen extends Screen
+public class ListScreen extends GuiScreen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
@@ -577,7 +577,7 @@ public class ListScreen extends Screen
                     {
                         if( button.entity instanceof EntityAnimal )
                             button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( Config.forgeConfig.passiveMobHunterXp.get() ) ).setStyle( color ).getFormattedText() );
-                        else if( button.entity instanceof MobEntity)
+                        else if( button.entity instanceof EntityMob)
                             button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( Config.forgeConfig.aggresiveMobSlayerXp.get() ) ).setStyle( color ).getFormattedText() );
                     }
 

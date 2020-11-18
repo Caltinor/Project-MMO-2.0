@@ -25,6 +25,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class PlayerInteractionHandler
 {

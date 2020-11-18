@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class StatsScreen extends Screen
+public class StatsScreen extends GuiScreen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
@@ -96,7 +96,7 @@ public class StatsScreen extends Screen
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
-//        RenderSystem.enableBlend();
+//        GlStateManager.enableBlend();
 
         this.blit( x, y, 0, 0,  boxWidth, boxHeight );
     }

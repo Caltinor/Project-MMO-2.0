@@ -8,7 +8,9 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.IGuiEventListener;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -21,14 +23,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public class GlossaryScreen extends Screen
+public class GlossaryScreen extends GuiScreen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static TileButton exitButton;
 
     Minecraft minecraft = Minecraft.getMinecraft();
-    MainWindow sr = minecraft.getMainWindow();
+    ScaledResolution sr = new ScaledResolution( mc );
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;

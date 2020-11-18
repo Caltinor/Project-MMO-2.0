@@ -21,7 +21,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.*;
 
-public class PrefsScreen extends Screen
+public class PrefsScreen extends GuiScreen
 {
     public static Map<String, Double> prefsMap;
     private final List<IGuiEventListener> children = Lists.newArrayList();

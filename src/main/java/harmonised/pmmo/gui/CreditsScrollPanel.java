@@ -1,6 +1,6 @@
 package harmonised.pmmo.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.systems.GlStateManager;
 import harmonised.pmmo.config.JType;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -141,10 +141,10 @@ public class CreditsScrollPanel extends ScrollPanel
 //        }
 //        else // Draw dark dirt background
 //        {
-//            RenderSystem.disableLighting();
-//            RenderSystem.disableFog();
+//            GlStateManager.disableLighting();
+//            GlStateManager.disableFog();
 //            this.client.getTextureManager().bindTexture(AbstractGui.BACKGROUND_LOCATION);
-//            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 //            final double texScale = 32.0F;
 //            worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 //            worldr.pos(this.left,  this.bottom, 0.0D).tex(this.left  / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
@@ -157,7 +157,7 @@ public class CreditsScrollPanel extends ScrollPanel
         int baseY = this.top + border - (int)this.scrollDistance;
         this.drawPanel(right, baseY, tess, mouseX, mouseY);
 
-        RenderSystem.disableDepthTest();
+        GlStateManager.disableDepthTest();
 
         int extraHeight = (this.getContentHeight() + border) - height;
         if (extraHeight > 0)
@@ -170,7 +170,7 @@ public class CreditsScrollPanel extends ScrollPanel
                 barTop = this.top;
             }
 
-            RenderSystem.disableTexture();
+            GlStateManager.disableTexture();
             worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             worldr.pos(barLeft,            this.bottom, 0.0D).tex(0.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
             worldr.pos(barLeft + barWidth, this.bottom, 0.0D).tex(1.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
@@ -191,10 +191,10 @@ public class CreditsScrollPanel extends ScrollPanel
             tess.draw();
         }
 
-        RenderSystem.enableTexture();
-        RenderSystem.shadeModel(GL11.GL_FLAT);
-        RenderSystem.enableAlphaTest();
-        RenderSystem.disableBlend();
+        GlStateManager.enableTexture();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.enableAlphaTest();
+        GlStateManager.disableBlend();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 

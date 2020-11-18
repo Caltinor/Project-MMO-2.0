@@ -12,7 +12,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.*;
 
-public class CreditorScreen extends Screen
+public class CreditorScreen extends GuiScreen
 {
     public static final HashMap<String, String> uuidName = new HashMap<>();
     private final List<IGuiEventListener> children = Lists.newArrayList();
@@ -22,7 +22,7 @@ public class CreditorScreen extends Screen
     private static TileButton exitButton;
 
     Minecraft minecraft = Minecraft.getMinecraft();
-    MainWindow sr = minecraft.getMainWindow();
+    ScaledResolution sr = new ScaledResolution( mc );
     FontRenderer font = minecraft.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
@@ -99,7 +99,7 @@ public class CreditorScreen extends Screen
             }
         }
 
-        RenderSystem.enableBlend();
+        GlStateManager.enableBlend();
     }
 
     @Override
@@ -117,7 +117,7 @@ public class CreditorScreen extends Screen
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
-        RenderSystem.disableBlend();
+        GlStateManager.disableBlend();
         this.blit( x, y, 0, 0, boxWidth, boxHeight );
     }
 

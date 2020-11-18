@@ -25,6 +25,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import java.util.*;
 
@@ -64,7 +66,7 @@ public class WorldTickHandler
         ItemStack startItemStack;
         Item startItem;
         BlockPos veinPos;
-        IBlockState state;
+        IBlockState veinState;
         Map<String, Double> abilitiesMap;
         String regKey;
         Skill skill;
@@ -73,10 +75,10 @@ public class WorldTickHandler
         UUID blockUUID, playerUUID;
         int age = -1, maxAge = -2;
 
-        if( event.world.getServer() == null )
+        if( event.world.getMinecraftServer() == null )
             return;
 
-        for( EntityPlayer player : event.getServer().getPlayerList().getPlayers() )
+        for( EntityPlayer player : event.world.getMinecraftServer().getPlayerList().getPlayers() )
         {
             playerUUID = player.getUniqueID();
 
@@ -94,9 +96,9 @@ public class WorldTickHandler
                     regKey = veinState.getBlock().getRegistryName().toString();
                     cost = getVeinCost( veinState, veinPos, player );
                     correctBlock = world.getBlockState( veinPos ).getBlock().equals( veinInfo.state.getBlock() );
-                    correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
+                    correctItem = !startItem.isDamageable() || ( startItemStack.getItemDamage() < startItemStack.getMaxDamage() );
                     correctHeldItem = player.getHeldItemMainhand().getItem().equals( startItem );
-                    blockUUID = ChunkDataHandler.checkPos( world.dimension.getType().getRegistryName(), veinPos );
+                    blockUUID = ChunkDataHandler.checkPos( world.getWorldType().getId(), veinPos );
                     isOwner = blockUUID == null || blockUUID.equals( playerUUID );
                     skill = XP.getSkill( veinState );
 
@@ -169,7 +171,7 @@ public class WorldTickHandler
                                     {
                                         abilitiesMap.put("veinLeft", abilitiesMap.get("veinLeft") - cost);
                                         destroyBlock( world, veinPos, player, startItemStack );
-                                        player.addExhaustion( (double) exhaustionPerBlock );
+                                        player.addExhaustion( (float) exhaustionPerBlock );
                                     }
                                 }
                                 else
@@ -307,7 +309,7 @@ public class WorldTickHandler
                                     outVein.add( curPos2 );
                                     nextLayer.add( curPos2 );
 
-                                    if( curPos2.y > highestPos.y )
+                                    if( curPos2.getY() > highestPos.getY() )
                                         highestPos = new BlockPos( curPos2 );
                                 }
                             }

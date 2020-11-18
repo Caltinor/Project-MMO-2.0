@@ -202,7 +202,7 @@ public class AttributeHandler
 		}
 	}
 
-	public static void updateDamage( MobEntity mob, double bonus )
+	public static void updateDamage( EntityMob mob, double bonus )
 	{
 		IAttributeInstance damageAttribute = mob.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
 		if( damageAttribute != null )
@@ -223,7 +223,7 @@ public class AttributeHandler
 //			System.out.println( mob.getDisplayName().getUnformattedText() );
 	}
 
-	public static void updateSpeed( MobEntity mob, double bonus )
+	public static void updateSpeed( EntityMob mob, double bonus )
 	{
 		IAttributeInstance speedAttribute = mob.getAttribute( SharedMonsterAttributes.MOVEMENT_SPEED );
 		if( speedAttribute != null )
@@ -246,7 +246,7 @@ public class AttributeHandler
 		}
 	}
 
-	private static double getBiomeMobMultiplier( MobEntity mob, String type )
+	private static double getBiomeMobMultiplier( EntityMob mob, String type )
 	{
 		Biome biome = mob.world.getBiome( new BlockPos( mob.getPositionVector() ) );
 		ResourceLocation biomeResLoc = biome.getRegistryName();

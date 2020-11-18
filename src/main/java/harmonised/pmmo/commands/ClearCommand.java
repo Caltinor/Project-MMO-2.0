@@ -1,34 +1,59 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.util.*;
+
+import javax.annotation.Nullable;
+
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
+
 import harmonised.pmmo.util.XP;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.EntityArgument;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-
-public class ClearCommand
+public class ClearCommand extends CommandBase
 {
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    @Override
+    public String getName()
     {
-        String[] args = context.getInput().split( " " );
+        return "clear";
+    }
 
+    @Override
+    public int getRequiredPermissionLevel()
+    {
+        return 0;
+    }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+        List<String> completions = new ArrayList<String>();
+        completions.add( "iagreetothetermsandconditions" );
+        return completions;
+    }
+
+    @Override
+    public String getUsage(ICommandSender sender)
+    {
+        return null;
+    }
+
+    @Override
+    public void execute( MinecraftServer server, ICommandSender sender, String[] args ) throws CommandException
+    {
         try
         {
             Collection<EntityPlayerMP> players = EntityArgument.getPlayers( context, "target" );
@@ -40,7 +65,7 @@ public class ClearCommand
                 XP.updateRecipes( player );
 
                 Map<Skill, Double> xpMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
-                for( Skill skill : new HashSet<>( xpMap.getKeySet() ) )
+                for( Skill skill : new HashSet<>( xpMap.keySet() ) )
                 {
                     xpMap.remove( skill );
                 }
@@ -50,11 +75,9 @@ public class ClearCommand
                 LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );
             }
         }
-        catch( CommandSyntaxException e )
+        catch( Exception e )
         {
             LOGGER.info( "Clear Command Failed to get Players [" + Arrays.toString(args) + "]", e );
         }
-
-        return 1;
     }
 }

@@ -867,7 +867,7 @@ public class XP
 //	{
 //		if( player != null )
 //		{
-//			NBTTagCompound persistTag = player.getPersistentData();
+//			NBTTagCompound persistTag = player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG );
 //			NBTTagCompound pmmoTag = null;
 //
 //			if( !persistTag.contains( Reference.MOD_ID ) )			//if Player doesn't have pmmo tag, make it
@@ -1274,8 +1274,8 @@ public class XP
 		}
 	}
 
-//	public static void updateRecipes( EntityPlayerMP player )
-//	{
+	public static void updateRecipes( EntityPlayerMP player )
+	{
 //		if( Config.forgeConfig.craftReqEnabled.get() )
 //		{
 //			Collection<IRecipe<?>> allRecipes = player.getServer().getRecipeManager().getRecipes();
@@ -1293,7 +1293,7 @@ public class XP
 //			player.getRecipeBook().remove( removeRecipes, player );
 //			player.getRecipeBook().add( newRecipes, player );
 //		}
-//	}
+	}
 	//COUT RECIPE LOCK
 
 	public static void scanUnlocks( int level, Skill skill )
@@ -1515,10 +1515,6 @@ public class XP
 
 	public static int levelAtXp( double xp )
 	{
-		return levelAtXp( (double) xp );
-	}
-	public static int levelAtXp( double xp )
-	{
 		boolean useExponentialFormula = Config.getConfig("useExponentialFormula") != 0;
 		double baseXp = Config.getConfig( "baseXp" );
 		double exponentialBaseXp = Config.getConfig( "exponentialBaseXp" );
@@ -1544,10 +1540,6 @@ public class XP
 		}
 	}
 
-	public static double levelAtXpDecimal( double xp )
-	{
-		return (double) levelAtXpDecimal( (double) xp );
-	}
 	public static double levelAtXpDecimal( double xp )
 	{
 		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );

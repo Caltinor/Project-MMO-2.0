@@ -14,9 +14,9 @@ public class SpawnHandler
 {
     public static void handleSpawn( LivingSpawnEvent.EnteringChunk event )
     {
-        if( event.getEntity() instanceof MobEntity && !(event.getEntity() instanceof EntityAnimal) )
+        if( event.getEntity() instanceof EntityMob && !(event.getEntity() instanceof EntityAnimal) )
         {
-            MobEntity mob = (MobEntity) event.getEntity();
+                EntityMob mob = (EntityMob) event.getEntity();
             MinecraftServer server = mob.getServer();
             if( server != null )
             {
