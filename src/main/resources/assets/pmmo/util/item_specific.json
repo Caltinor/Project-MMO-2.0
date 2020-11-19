@@ -1,0 +1,14 @@
+{
+	"somemod:gun":
+	{
+		"archeryWeapon": 1
+	},
+	"somemod:sword":
+	{
+		"meleeWeapon": 1
+	},
+	"somemod:staff":
+	{
+		"magicWeapon": 1
+	}
+}

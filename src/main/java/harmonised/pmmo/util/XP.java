@@ -938,10 +938,17 @@ public class XP
 		return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill.toString(), 1D );
 	}
 
-	public static double getDimensionMultiplier(Skill skill, PlayerEntity player )
+	public static double getDimensionMultiplier( Skill skill, PlayerEntity player )
 	{
-		String dimensionKey = XP.getDimensionResLoc( player.world ).toString();
-		return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 1D );
+		try
+		{
+			String dimensionKey = XP.getDimensionResLoc( player.world ).toString();
+			return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 1D );
+		}
+		catch( Exception e )
+		{
+			return 1D;
+		}
 	}
 
 	public static double getDifficultyMultiplier( PlayerEntity player, Skill skill )

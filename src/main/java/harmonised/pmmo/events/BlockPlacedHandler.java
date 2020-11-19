@@ -54,19 +54,26 @@ public class BlockPlacedHandler
                     String playerName = player.getName().toString();
                     BlockPos blockPos = event.getPos();
                     UUID playerUUID = player.getUniqueID();
+                    Map<String, Double> award = new HashMap<>();
+                    String sourceName = "Placing a Block";
 
                     if (!lastPosPlaced.containsKey(playerUUID) || !lastPosPlaced.get(playerUUID).equals(blockPos))
                     {
-                        if (block.equals(Blocks.FARMLAND))
-                            XP.awardXp( player, Skill.FARMING, "tilting dirt", blockHardness, false, false, false );
-                        else
+                        award = XP.getXp( block.getRegistryName(), JType.XP_VALUE_PLACE );
+
+                        if( award.size() == 0 )
                         {
-//								for( int i = 0; i < 1000; i++ )
-//							{
-                            XP.awardXp( player, Skill.BUILDING, "placing a block", blockHardness, false, false, false );
-//							}
+                            if (block.equals( Blocks.FARMLAND ) )
+                            {
+                                award.put( Skill.FARMING.toString(), blockHardness );
+                                sourceName = "Tilting Dirt";
+                            }
+                            else
+                                award.put( Skill.BUILDING.toString(), blockHardness );
                         }
                     }
+
+                    XP.awardXpMap( player.getUniqueID(), award, sourceName, false, false );
 
                     if (lastPosPlaced.containsKey(playerName))
                         lastPosPlaced.replace(playerUUID, event.getPos());
