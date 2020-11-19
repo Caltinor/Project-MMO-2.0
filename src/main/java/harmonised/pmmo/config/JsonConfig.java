@@ -124,6 +124,9 @@ public class JsonConfig
         if( Config.forgeConfig.xpValueCraftingEnabled.get() )
             jTypes.add( JType.XP_VALUE_CRAFT );
 
+        if( Config.forgeConfig.xpValuePlacingEnabled.get() )
+            jTypes.add( JType.XP_VALUE_PLACE );
+
         if( Config.forgeConfig.breedingXpEnabled.get() )
             jTypes.add( JType.XP_VALUE_BREED );
 
@@ -216,6 +219,7 @@ public class JsonConfig
 
         jTypes.add( JType.BLOCK_SPECIFIC );
         jTypes.add( JType.PLAYER_SPECIFIC );
+        jTypes.add( JType.ITEM_SPECIFIC );
         jTypes.add( JType.VEIN_BLACKLIST );
         jTypes.add( JType.XP_VALUE_TRIGGER );
         jTypes.add( JType.XP_BONUS_DIMENSION );
@@ -249,10 +253,10 @@ public class JsonConfig
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
 
             try
-            (
-                InputStream input = new FileInputStream( file.getPath() );
-                Reader reader = new BufferedReader( new InputStreamReader( input ) )
-            )
+                    (
+                            InputStream input = new FileInputStream( file.getPath() );
+                            Reader reader = new BufferedReader( new InputStreamReader( input ) )
+                    )
             {
                 if( jTypes2.contains( jType ) )
                     rawData2.put( jType, gson.fromJson( reader, mapType2 ) );
@@ -307,6 +311,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.XP_VALUE_CRAFT ) )
             updateDataSkills( JType.XP_VALUE_CRAFT, false );
+
+        if( jTypes.contains( JType.XP_VALUE_PLACE ) )
+            updateDataSkills( JType.XP_VALUE_PLACE, false );
 
         if( jTypes.contains( JType.XP_VALUE_BREED ) )
             updateDataSkills( JType.XP_VALUE_BREED, false );
@@ -391,6 +398,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.PLAYER_SPECIFIC ) )
             updateDataSpecific( rawData.get( JType.PLAYER_SPECIFIC ), localData.get( JType.PLAYER_SPECIFIC ) );
+
+        if( jTypes.contains( JType.ITEM_SPECIFIC ) )
+            updateDataSpecific( rawData.get( JType.ITEM_SPECIFIC ), localData.get( JType.ITEM_SPECIFIC ) );
 
         if( jTypes.contains( JType.VEIN_BLACKLIST ) )
             updateDataVein( rawData.get( JType.VEIN_BLACKLIST ), localData.get( JType.VEIN_BLACKLIST ) );

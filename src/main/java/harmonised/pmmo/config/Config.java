@@ -224,6 +224,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> levelsPerOneReach;
         public ConfigHelper.ConfigValueListener<Double> maxExtraReachBoost;
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
+        public ConfigHelper.ConfigValueListener<Boolean> xpValuePlacingEnabled;
 
         //Excavation
         public ConfigHelper.ConfigValueListener<Boolean> treasureEnabled;
@@ -944,6 +945,12 @@ public class Config
                         .comment( "Hardest considered block (1 hardness = 1 build xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
                         .translation( "pmmo.blockHardnessLimitForPlacing" )
                         .defineInRange( "blockHardnessLimitForPlacing", 20D, 0, 1000000) );
+
+                this.xpValuePlacingEnabled = subscriber.subscribe(builder
+                        .comment( "Should xp values for crafting be enabled? false means the hardness value is used" )
+                        .translation( "pmmo.xpValuePlacingEnabled" )
+                        .define( "xpValuePlacingEnabled", true ) );
+
 
                 builder.pop();
             }

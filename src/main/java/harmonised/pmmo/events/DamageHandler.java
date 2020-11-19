@@ -18,11 +18,13 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DamageHandler
@@ -142,7 +144,8 @@ public class DamageHandler
 
                 if( XP.isPlayerSurvival( player ) )
                 {
-                    int weaponGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_WEAPON );
+                    ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
+                    int weaponGap = XP.getSkillReqGap( player, resLoc, JType.REQ_WEAPON );
                     if( weaponGap > 0 )
                     {
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
@@ -188,6 +191,15 @@ public class DamageHandler
                     float targetHealth = target.getHealth();
                     float targetMaxHealth = target.getMaxHealth();
                     float lowHpBonus = 1.0f;
+                    Map<String, Double> itemSpecific = JsonConfig.data.get( JType.ITEM_SPECIFIC ).getOrDefault( resLoc.toString(), new HashMap<>() );
+                    Skill skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY : Skill.COMBAT;
+
+                    if( itemSpecific.getOrDefault( "meleeWeapon", 0D ) != 0 )
+                        skill = Skill.COMBAT;
+                    else if( itemSpecific.getOrDefault( "archeryWeapon", 0D ) != 0 )
+                        skill = Skill.ARCHERY;
+                    else if( itemSpecific.getOrDefault( "magicWeapon", 0D ) != 0 )
+                        skill = Skill.MAGIC;
 
                     if( damage > targetHealth )		//no overkill xp
                         damage = targetHealth;
@@ -211,7 +223,7 @@ public class DamageHandler
                             lowHpBonus += 1;
                     }
 
-                    if( event.getSource().damageType.equals( "arrow" ) )
+                    if( skill.equals( Skill.ARCHERY ) || skill.equals( Skill.MAGIC ) )
                     {
                         double distance = event.getEntity().getDistance( player );
                         if( distance > 16 )
@@ -222,12 +234,12 @@ public class DamageHandler
                         amount += ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
                         amount *= lowHpBonus;
 
-                        XP.awardXp( player, Skill.ARCHERY, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
+                        XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
                     }
                     else
                     {
                         amount *= lowHpBonus;
-                        XP.awardXp( player, Skill.COMBAT, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
+                        XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
                     }
 
                     if( weaponGap > 0 )
