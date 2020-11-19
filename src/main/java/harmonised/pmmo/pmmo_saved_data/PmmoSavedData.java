@@ -10,8 +10,7 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.storage.WorldSavedData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,17 +37,17 @@ public class PmmoSavedData extends WorldSavedData
     }
 
     @Override
-    public void read( NBTTagCompound inData )
+    public void readFromNBT( NBTTagCompound inData )
     {
         NBTTagCompound playersTag, playerTag;
 
-        if( inData.contains( "players" ) )
+        if( inData.hasKey( "players" ) )
         {
             playersTag = inData.getCompoundTag( "players" );
             for( String playerUuidKey : playersTag.getKeySet() )
             {
                 playerTag = playersTag.getCompoundTag( playerUuidKey );
-                if( playerTag.contains( "xp" ) )
+                if( playerTag.hasKey( "xp" ) )
                 {
                     NBTTagCompound xpTag = playerTag.getCompoundTag( "xp" );
                     for( String tag : new HashSet<>( xpTag.getKeySet() ) )
@@ -56,19 +55,19 @@ public class PmmoSavedData extends WorldSavedData
                         if( Skill.getInt( tag ) == 0 )
                         {
                             if( Skill.getInt( tag.toLowerCase() ) != 0 )
-                                xpTag.setTag( tag.toLowerCase(), xpTag.get(tag) );
+                                xpTag.setTag( tag.toLowerCase(), xpTag.getCompoundTag(tag) );
 
                             if( tag.toLowerCase().equals( "repairing" ) )
-                                xpTag.setTag( "smithing", xpTag.get(tag) );
+                                xpTag.setTag( "smithing", xpTag.getCompoundTag(tag) );
 
                             LOGGER.info( "REMOVING INVALID SKILL " + tag + " FROM PLAYER " + playerUuidKey );
-                            xpTag.remove( tag );
+                            xpTag.removeTag( tag );
                         }
                     }
                 }
 
-                if( playerTag.contains( "name" ) )
-                    name.setTag( UUID.fromString( playerUuidKey ), playerTag.getString( "name" ) );
+                if( playerTag.hasKey( "name" ) )
+                    name.put( UUID.fromString( playerUuidKey ), playerTag.getString( "name" ) );
 
                 xp = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xp" ) );
                 scheduledXp = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "scheduledXp" ) );
@@ -78,7 +77,7 @@ public class PmmoSavedData extends WorldSavedData
             }
         }
 
-        if( inData.contains( "parties" ) )
+        if( inData.hasKey( "parties" ) )
         {
             NBTTagCompound partiesTag = inData.getCompoundTag( "parties" );
             NBTTagCompound partyTag, membersTag, memberInfoTag;
@@ -104,7 +103,7 @@ public class PmmoSavedData extends WorldSavedData
     }
 
     @Override
-    public NBTTagCompound write( NBTTagCompound outData )
+    public NBTTagCompound writeToNBT( NBTTagCompound outData )
     {
         NBTTagCompound playersTag = new NBTTagCompound(), partiesTag = new NBTTagCompound(), partyTag, membersTag, memberInfoTag;
         Map<String, NBTTagCompound> playerMap;
@@ -120,7 +119,7 @@ public class PmmoSavedData extends WorldSavedData
             playerMap.put( "xpBoosts", NBTHelper.mapStringMapSkillToNbt(    xpBoosts.getOrDefault(      entry.getKey(), new HashMap<>() ) ) );
 
             NBTTagCompound playerTag = NBTHelper.mapStringNbtToNbt( playerMap );
-            playerTag.setTagString( "name", name.get( entry.getKey() ) );
+            playerTag.setString( "name", name.get( entry.getKey() ) );
 
             playersTag.setTag( entry.getKey().toString(), playerTag );
         }
@@ -137,9 +136,9 @@ public class PmmoSavedData extends WorldSavedData
             {
                 memberInfoTag = new NBTTagCompound();
 
-                memberInfoTag.setTagString( "uuid", memberInfo.uuid.toString() );
+                memberInfoTag.setString( "uuid", memberInfo.uuid.toString() );
                 memberInfoTag.setLong( "joinDate", memberInfo.joinDate );
-                memberInfoTag.setTagDouble( "xpGained", memberInfo.xpGained );
+                memberInfoTag.setDouble( "xpGained", memberInfo.xpGained );
 
                 membersTag.setTag( "" + j++, memberInfoTag );
             }
@@ -158,28 +157,28 @@ public class PmmoSavedData extends WorldSavedData
     public Map<Skill, Double> getXpMap( UUID uuid )
     {
         if( !xp.containsKey( uuid ) )
-            xp.setTag( uuid, new HashMap<>() );
+            xp.put( uuid, new HashMap<>() );
         return xp.get( uuid );
     }
 
     public Map<Skill, Double> getScheduledXpMap( UUID uuid )
     {
         if( !scheduledXp.containsKey( uuid ) )
-            scheduledXp.setTag( uuid, new HashMap<>() );
+            scheduledXp.put( uuid, new HashMap<>() );
         return scheduledXp.get( uuid );
     }
 
     public Map<String, Double> getAbilitiesMap( UUID uuid )
     {
         if( !abilities.containsKey( uuid ) )
-            abilities.setTag( uuid, new HashMap<>() );
+            abilities.put( uuid, new HashMap<>() );
         return abilities.get( uuid );
     }
 
     public Map<String, Double> getPreferencesMap( UUID uuid )
     {
         if( !preferences.containsKey( uuid ) )
-            preferences.setTag( uuid, new HashMap<>() );
+            preferences.put( uuid, new HashMap<>() );
         return preferences.get( uuid );
     }
 
@@ -217,8 +216,8 @@ public class PmmoSavedData extends WorldSavedData
                 amount = 0;
 
             if( !xp.containsKey( uuid ) )
-                xp.setTag( uuid, new HashMap<>() );
-            xp.get( uuid ).setTag( skill, amount );
+                xp.put( uuid, new HashMap<>() );
+            xp.get( uuid ).put( skill, amount );
             setDirty( true );
             return true;
         }
@@ -267,7 +266,7 @@ public class PmmoSavedData extends WorldSavedData
 
     public void setName( String name, UUID uuid )
     {
-        this.name.setTag( uuid, name );
+        this.name.put( uuid, name );
     }
 
     public String getName( UUID uuid )
@@ -352,7 +351,7 @@ public class PmmoSavedData extends WorldSavedData
     public static void init( MinecraftServer server )
     {
         PmmoSavedData.server = server;
-        PmmoSavedData.pmmoSavedData = server.getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+        PmmoSavedData.pmmoSavedData = server.getWorld( DimensionType.OVERWORLD.getId() ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
     }
 
     public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.
@@ -389,7 +388,7 @@ public class PmmoSavedData extends WorldSavedData
 
     public void setPlayerXpBoostsMaps( UUID playerUUID, Map<String, Map<Skill, Double>> newBoosts )
     {
-        xpBoosts.setTag( playerUUID, newBoosts );
+        xpBoosts.put( playerUUID, newBoosts );
         setDirty( true );
     }
 
@@ -422,11 +421,11 @@ public class PmmoSavedData extends WorldSavedData
     private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Skill skill, Double xpBoost )
     {
         if( !this.xpBoosts.containsKey( playerUUID ) )
-            this.xpBoosts.setTag( playerUUID, new HashMap<>() );
+            this.xpBoosts.put( playerUUID, new HashMap<>() );
         if( !this.xpBoosts.get( playerUUID ).containsKey( xpBoostKey ) )
-            this.xpBoosts.get( playerUUID ).setTag( xpBoostKey, new HashMap<>() );
+            this.xpBoosts.get( playerUUID ).put( xpBoostKey, new HashMap<>() );
 
-        this.xpBoosts.get( playerUUID ).get( xpBoostKey ).setTag( skill, xpBoost );
+        this.xpBoosts.get( playerUUID ).get( xpBoostKey ).put( skill, xpBoost );
         setDirty( true );
     }
 }

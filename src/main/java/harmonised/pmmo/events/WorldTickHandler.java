@@ -11,11 +11,14 @@ import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -25,8 +28,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -102,50 +105,11 @@ public class WorldTickHandler
                     isOwner = blockUUID == null || blockUUID.equals( playerUUID );
                     skill = XP.getSkill( veinState );
 
-                    if( skill.equals( Skill.FARMING ) && !( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) )
+                    if( veinState.getBlock() instanceof BlockCrops && skill.equals( Skill.FARMING ) && !( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) )
                     {
-                        if( veinState.has( BlockStateProperties.AGE_0_1 ) )
-                        {
-                            age = veinState.get( BlockStateProperties.AGE_0_1 );
-                            maxAge = 1;
-                        }
-                        else if( veinState.has( BlockStateProperties.AGE_0_2 ) )
-                        {
-                            age = veinState.get( BlockStateProperties.AGE_0_2 );
-                            maxAge = 2;
-                        }
-                        else if( veinState.has( BlockStateProperties.AGE_0_3 ) )
-                        {
-                            age = veinState.get( BlockStateProperties.AGE_0_3 );
-                            maxAge = 3;
-                        }
-                        else if( veinState.has( BlockStateProperties.AGE_0_5 ) )
-                        {
-                            age = veinState.get( BlockStateProperties.AGE_0_5 );
-                            maxAge = 5;
-                        }
-                        else if( veinState.has( BlockStateProperties.AGE_0_7 ) )
-                        {
-                            age = veinState.get( BlockStateProperties.AGE_0_7 );
-                            maxAge = 7;
-                        }
-                        else if( veinState.has( BlockStateProperties.AGE_0_15 ) )
-                        {
-                            age = veinState.get( BlockStateProperties.AGE_0_15 );
-                            maxAge = 15;
-                        }
-                        else if( veinState.has( BlockStateProperties.AGE_0_25 ) )
-                        {
-                            age = veinState.get( BlockStateProperties.AGE_0_25 );
-                            maxAge = 25;
-                        }
-                        else if( veinState.has( BlockStateProperties.PICKLES_1_4 ) )
-                        {
-                            age = veinState.get( BlockStateProperties.PICKLES_1_4 );
-                            maxAge = 4;
-                        }
+                        BlockCrops blockCrops = (BlockCrops) veinState.getBlock();
 
-                        if( age >= 0 && age != maxAge )
+                        if( blockCrops.isMaxAge( veinState ) )
                         {
                             veinSet.get( player ).remove( 0 );
                             return;
@@ -203,14 +167,16 @@ public class WorldTickHandler
     public static void destroyBlock( World world, BlockPos pos, EntityPlayer player, ItemStack toolUsed )
     {
         IBlockState state = world.getBlockState(pos);
-        IFluidState ifluidstate = world.getFluidState(pos);
         world.playEvent(2001, pos, Block.getStateId(state) );
 
-        TileEntity tileentity = state.hasTileEntity() ? world.getTileEntity(pos) : null;
-        Block.spawnDrops( state, world, pos, tileentity, player, toolUsed );
+        List<ItemStack> drops = state.getBlock().getDrops(world, pos, state, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, toolUsed ) );
+        for( ItemStack itemStack : drops )
+        {
+            Block.spawnAsEntity( world, pos, itemStack );
+        }
 
-        if( world.setBlockState(pos, ifluidstate.getBlockState(), 3) && toolUsed.isDamageable() && !player.isCreative() )
-            toolUsed.damageItem( 1, player, (a) -> a.sendBreakAnimation( EnumHand.MAIN_HAND ) );
+        if( world.setBlockState(pos, state, 3) && toolUsed.isItemStackDamageable() && !player.isCreative() )
+            toolUsed.damageItem( 1, player );
     }
 
     public static void scheduleVein(EntityPlayer player, VeinInfo veinInfo )
@@ -255,9 +221,7 @@ public class WorldTickHandler
         if( world == null )
             return true;
 
-        ResourceLocation dimensionKey = world.dimension.getType().getRegistryName();
-        if( dimensionKey == null )
-            return true;
+        String dimensionKey = Integer.toString( world.getWorldType().getId() );
 
         Map<String, Double> dimensionBlacklist = null;
 
@@ -294,7 +258,7 @@ public class WorldTickHandler
         {
             for( BlockPos curPos : curLayer )
             {
-                if( curPos.withinDistance( originPos, veinMaxDistance ) )
+                if( curPos.getDistance( originPos.getX(), originPos.getY(), originPos.getZ() ) <= veinMaxDistance )
                 {
                     for( int i = yLimit; i >= -yLimit; i-- )
                     {

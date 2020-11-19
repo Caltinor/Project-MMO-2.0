@@ -30,8 +30,8 @@
 //                uuid = ChunkDataHandler.checkPos( world, pistonPos.offset( direction ) );
 //                if( uuid != null )
 //                {
-//                    ChunkDataHandler.addPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction, 2 ), uuid );
-//                    ChunkDataHandler.delPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction ) );
+//                    ChunkDataHandler.addPos( world.getWorldType().getId(), pistonPos.offset( direction, 2 ), uuid );
+//                    ChunkDataHandler.delPos( world.getWorldType().getId(), pistonPos.offset( direction ) );
 //                }
 //            }
 //            else
@@ -40,8 +40,8 @@
 //                if( state.has( MovingPistonBlock.TYPE ) && state.get( MovingPistonBlock.TYPE ).equals( PistonType.STICKY ) )
 //                {
 //                    uuid = UUID.fromString( "80008135-1337-3251-1523-852369874125" );
-//                    ChunkDataHandler.addPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction ), uuid );
-//                    ChunkDataHandler.delPos( world.getDimension().getType().getRegistryName(), pistonPos.offset( direction, 2 ) );
+//                    ChunkDataHandler.addPos( world.getWorldType().getId(), pistonPos.offset( direction ), uuid );
+//                    ChunkDataHandler.delPos( world.getWorldType().getId(), pistonPos.offset( direction, 2 ) );
 //                }
 //            }
 //        }

@@ -3,15 +3,12 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
-import harmonised.pmmo.gui.GlossaryScreen;
-import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.proxy.ServerHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -80,7 +77,8 @@ public class MessageUpdatePlayerNBT extends MessageBase<MessageUpdatePlayerNBT>
                     XP.playerNames.put( uuid, name );
 
                 XP.setOfflineXpMap( uuid, NBTHelper.nbtToMapSkill( packet.reqPackage ) );
-                ClientHandler.openStats( uuid );
+//                ClientHandler.openStats( uuid );
+                //COUT GUI
                 break;
 
             case 4: //data

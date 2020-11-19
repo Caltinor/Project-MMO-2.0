@@ -2,7 +2,6 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.gui.GlossaryScreen;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -19,8 +18,8 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TooltipHandler
 {
@@ -57,12 +56,13 @@ public class TooltipHandler
                 double dValue;
                 Material material = null;
 
-                if( ClientHandler.OPEN_MENU.isKeyDown() )
-                {
-                    GlossaryScreen.setButtonsToKey( regKey );
-                    Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
-                    return;
-                }
+//                if( ClientHandler.OPEN_MENU.isKeyDown() )
+//                {
+//                    GlossaryScreen.setButtonsToKey( regKey );
+//                    Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
+//                    return;
+//                }
+                //COUT GUI
 
                 Map<String, Double> craftReq = JsonConfig.data.get( JType.REQ_CRAFT ).get( regKey );
                 Map<String, Double> wearReq = JsonConfig.data.get( JType.REQ_WEAR ).get( regKey );

@@ -11,22 +11,25 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber( value = Side.CLIENT, modid = Reference.MOD_ID )
 public class ClientEventHandler
 {
     private static boolean wasVeining = false, wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
 
-    public static void subscribeClientEvents( IEventBus eventBus )
-    {
-        eventBus.register( harmonised.pmmo.events.ClientEventHandler.class );
-    }
+//    public static void subscribeClientEvents( IEventBus eventBus )
+//    {
+//        eventBus.register( harmonised.pmmo.events.ClientEventHandler.class );
+//    }
 
     @SubscribeEvent
-    public static void keyPressEvent( net.minecraftforge.client.event.InputEvent.KeyInputEvent event )
+    public static void keyPressEvent( InputEvent.KeyInputEvent event )
     {
         if( Minecraft.getMinecraft().player != null )
         {
@@ -48,30 +51,30 @@ public class ClientEventHandler
                     XP.getOfflineXpMap( uuid ).put( skill, aSkill.goalXp );
                 });
 
-                if( Minecraft.getMinecraft().currentScreen == null )
-                {
-                    if( ClientHandler.OPEN_MENU.isKeyDown() )
-                    {
-                        Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.potato" ) ) );
-                        wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
-                    }
-                    else if( ClientHandler.OPEN_SETTINGS.isKeyDown() )
-                    {
-                        Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( "pmmo.preferences" ) ) );
-                        wasOpenSettings = ClientHandler.OPEN_SETTINGS.isKeyDown();
-                    }
-                    else if( ClientHandler.OPEN_SKILLS.isKeyDown() )
-                    {
-                        Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( "pmmo.stats" ), "", JType.STATS, Minecraft.getMinecraft().player ) );
-                        wasOpenSkills = ClientHandler.OPEN_SKILLS.isKeyDown();
-                    }
-                    else if( ClientHandler.OPEN_GLOSSARY.isKeyDown() )
-                    {
-                        Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, new TextComponentTranslation( "pmmo.glossary" ), true ) );
-                        wasOpenGlossary = ClientHandler.OPEN_GLOSSARY.isKeyDown();
-                    }
-                }
-
+//                if( Minecraft.getMinecraft().currentScreen == null )
+//                {
+//                    if( ClientHandler.OPEN_MENU.isKeyDown() )
+//                    {
+//                        Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "category.pmmo" ) ) );
+//                        wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
+//                    }
+//                    else if( ClientHandler.OPEN_SETTINGS.isKeyDown() )
+//                    {
+//                        Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( "pmmo.preferences" ) ) );
+//                        wasOpenSettings = ClientHandler.OPEN_SETTINGS.isKeyDown();
+//                    }
+//                    else if( ClientHandler.OPEN_SKILLS.isKeyDown() )
+//                    {
+//                        Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( "pmmo.stats" ), "", JType.STATS, Minecraft.getMinecraft().player ) );
+//                        wasOpenSkills = ClientHandler.OPEN_SKILLS.isKeyDown();
+//                    }
+//                    else if( ClientHandler.OPEN_GLOSSARY.isKeyDown() )
+//                    {
+//                        Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, new TextComponentTranslation( "pmmo.glossary" ), true ) );
+//                        wasOpenGlossary = ClientHandler.OPEN_GLOSSARY.isKeyDown();
+//                    }
+//                }
+                //COUT
             }
 
             if( !(Minecraft.getMinecraft().player == null) && ClientHandler.TOGGLE_TOOLTIP.isKeyDown() && !tooltipKeyWasPressed )

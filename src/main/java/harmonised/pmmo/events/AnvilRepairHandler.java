@@ -18,8 +18,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AnvilRepairHandler
 {
@@ -51,7 +51,7 @@ public class AnvilRepairHandler
                         if( maxCost < anvilFinalItemMaxCostToAnvil )
                             maxCost = anvilFinalItemMaxCostToAnvil;
 
-                        event.setBreakChance( event.getBreakChance() / ( 1f + (double) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
+                        event.setBreakChance( event.getBreakChance() / ( 1f + (float) extraChanceToNotBreakAnvilPerLevel * currLevel ) );
 
                         if( oItem.getRepairCost() > maxCost )
                             oItem.setRepairCost( maxCost );

@@ -6,7 +6,6 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.Effects;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
@@ -57,10 +56,10 @@ public class JumpHandler
                 if( jumpBoost > maxJumpBoostPref )
                     jumpBoost = maxJumpBoostPref;
 
-                if (player.world.isRemote)
+                if ( player.world.isRemote )
                 {
                     if( jumpBoost > 0 )
-                        player.setVelocity( player.getMotion().x, player.getMotion().y + jumpBoost, player.getMotion().z );
+                        player.addVelocity( 0, jumpBoost, 0 );
                 }
                 else if (!player.isInWater())
                 {

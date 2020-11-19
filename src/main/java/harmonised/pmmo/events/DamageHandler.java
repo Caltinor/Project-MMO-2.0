@@ -12,14 +12,10 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
-import net.minecraft.init.Items;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Hand;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.FakePlayer;
@@ -35,7 +31,7 @@ public class DamageHandler
         {
             double damage = event.getAmount();
             double startDmg = damage;
-            EntityLiving target = event.getEntityLiving();
+            EntityLivingBase target = event.getEntityLiving();
             Entity source = event.getSource().getTrueSource();
             if( target instanceof EntityPlayerMP )		//player hurt
             {
@@ -112,7 +108,7 @@ public class DamageHandler
                     agilityXp = award;
                 }
 
-                event.setAmount( damage );
+                event.setAmount( (float) damage );
 
                 if( player.getHealth() > damage )
                 {
@@ -233,7 +229,7 @@ public class DamageHandler
                     }
 
                     if( weaponGap > 0 )
-                        player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> (EntityPlayer) a.sendBreakAnimation(EnumHand.MAIN_HAND ) );
+                        player.getHeldItemMainhand().damageItem( weaponGap - 1, player );
                 }
             }
         }

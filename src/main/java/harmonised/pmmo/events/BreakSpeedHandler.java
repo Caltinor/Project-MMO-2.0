@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class BreakSpeedHandler
 {
-    public static void handleBreakSpeed( PlayerEvent.BreakSpeed event )
+    public static void handleBreakSpeed( net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed event )
     {
         EntityPlayer player = event.getEntityPlayer();
 
@@ -51,22 +51,22 @@ public class BreakSpeedHandler
                     heightMultiplier = Config.forgeConfig.minBreakSpeed.get();
 
                 speedBonus = Config.forgeConfig.miningBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (double) speedBonus ) * ( (double) heightMultiplier ) );
+                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) * ( (float) heightMultiplier ) );
                 break;
 
             case "axe":
                 speedBonus = Config.forgeConfig.woodcuttingBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (double) speedBonus ) );
+                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 
             case "shovel":
                 speedBonus = Config.forgeConfig.excavationBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (double) speedBonus ) );
+                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 
             case "hoe":
                 speedBonus = Config.forgeConfig.farmingBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (double) speedBonus ) );
+                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 
             default:

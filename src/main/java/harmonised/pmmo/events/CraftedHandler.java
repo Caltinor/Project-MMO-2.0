@@ -5,6 +5,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
@@ -19,29 +20,30 @@ public class CraftedHandler
 {
     public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
     {
-        if( event.getEntityPlayer() instanceof EntityPlayerMP )
+        if( event.player instanceof EntityPlayerMP )
         {
-            EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+            EntityPlayerMP player = (EntityPlayerMP) event.player;
             double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
             double durabilityMultiplier = 1;
 
-            ItemStack itemStack = event.getCrafting();
+            ItemStack itemStack = event.crafting;
             ResourceLocation resLoc = itemStack.getItem().getRegistryName();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_CRAFT );
+            Block block = ((ItemBlock) itemStack.getItem()).getBlock();
 
             Map<String, Double> award = new HashMap<>();
             if( xpValue.size() == 0 )
             {
                 if( itemStack.getItem() instanceof ItemBlock)
-                    award.setTag( "crafting", (double) ((ItemBlock) itemStack.getItem()).getBlock().blockHardness );
+                    award.put( "crafting", (double) block.getBlockHardness( block.getDefaultState(), player.world, player.getPosition() ) );
                 else
-                    award.setTag( "crafting", defaultCraftingXp );
+                    award.put( "crafting", defaultCraftingXp );
             }
             else
                 XP.addMaps( award, xpValue );
 
-            if( itemStack.isDamageable() )
-                durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamage() ) / (double) itemStack.getMaxDamage();
+            if( itemStack.isItemStackDamageable() )
+                durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getItemDamage() ) / (double) itemStack.getMaxDamage();
 
 //            XP.multiplyMap( award, itemStack.getCount() );
             XP.multiplyMap( award, durabilityMultiplier );

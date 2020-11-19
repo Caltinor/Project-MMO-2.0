@@ -29,5 +29,6 @@ public class ClientProxy extends CommonProxy
 		super.postInit( event );
 		MinecraftForge.EVENT_BUS.register( new XPOverlayGUI() );
 		ClientRegistry.registerKeyBinding( SHOW_GUI );
+		ClientHandler.init();
 	}
 }

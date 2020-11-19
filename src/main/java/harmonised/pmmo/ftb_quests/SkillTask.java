@@ -68,7 +68,7 @@
 //    }
 //
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
+//    @OnlyIn(Side.CLIENT)
 //    public void getConfig(ConfigGroup config)
 //    {
 //        super.getConfig(config);

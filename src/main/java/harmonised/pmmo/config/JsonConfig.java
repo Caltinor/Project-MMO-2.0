@@ -11,20 +11,23 @@ import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.init.Items;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 public class JsonConfig
 {
@@ -121,6 +124,9 @@ public class JsonConfig
         if( Config.forgeConfig.xpValueCraftingEnabled.get() )
             jTypes.add( JType.XP_VALUE_CRAFT );
 
+        if( Config.forgeConfig.xpValuePlacingEnabled.get() )
+            jTypes.add( JType.XP_VALUE_PLACE );
+
         if( Config.forgeConfig.breedingXpEnabled.get() )
             jTypes.add( JType.XP_VALUE_BREED );
 
@@ -213,6 +219,7 @@ public class JsonConfig
 
         jTypes.add( JType.BLOCK_SPECIFIC );
         jTypes.add( JType.PLAYER_SPECIFIC );
+        jTypes.add( JType.ITEM_SPECIFIC );
         jTypes.add( JType.VEIN_BLACKLIST );
         jTypes.add( JType.XP_VALUE_TRIGGER );
         jTypes.add( JType.XP_BONUS_DIMENSION );
@@ -246,10 +253,10 @@ public class JsonConfig
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
 
             try
-            (
-                InputStream input = new FileInputStream( file.getPath() );
-                Reader reader = new BufferedReader( new InputStreamReader( input ) )
-            )
+                    (
+                            InputStream input = new FileInputStream( file.getPath() );
+                            Reader reader = new BufferedReader( new InputStreamReader( input ) )
+                    )
             {
                 if( jTypes2.contains( jType ) )
                     rawData2.put( jType, gson.fromJson( reader, mapType2 ) );
@@ -258,7 +265,7 @@ public class JsonConfig
             }
             catch( Exception e )
             {
-                LOGGER.info( "ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + dataPath + fileName + " " + e.toString() );
+                LOGGER.error( "ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + dataPath + fileName, e );
                 if( jTypes2.contains( jType ) )
                     rawData2.put( jType, new HashMap<>() );
                 else
@@ -304,6 +311,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.XP_VALUE_CRAFT ) )
             updateDataSkills( JType.XP_VALUE_CRAFT, false );
+
+        if( jTypes.contains( JType.XP_VALUE_PLACE ) )
+            updateDataSkills( JType.XP_VALUE_PLACE, false );
 
         if( jTypes.contains( JType.XP_VALUE_BREED ) )
             updateDataSkills( JType.XP_VALUE_BREED, false );
@@ -389,6 +399,9 @@ public class JsonConfig
         if( jTypes.contains( JType.PLAYER_SPECIFIC ) )
             updateDataSpecific( rawData.get( JType.PLAYER_SPECIFIC ), localData.get( JType.PLAYER_SPECIFIC ) );
 
+        if( jTypes.contains( JType.ITEM_SPECIFIC ) )
+            updateDataSpecific( rawData.get( JType.ITEM_SPECIFIC ), localData.get( JType.ITEM_SPECIFIC ) );
+
         if( jTypes.contains( JType.VEIN_BLACKLIST ) )
             updateDataVein( rawData.get( JType.VEIN_BLACKLIST ), localData.get( JType.VEIN_BLACKLIST ) );
 
@@ -408,18 +421,18 @@ public class JsonConfig
         }
         catch( IOException e )
         {
-            LOGGER.info( "Could not create template json config! " + dataFile.getPath() + " " + e.toString() );
+            LOGGER.error( "Could not create template json config!", dataFile.getPath(), e );
         }
 
         try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( hardDataPath + fileName );
              FileOutputStream outputStream = new FileOutputStream( dataFile ); )
         {
-            LOGGER.info( "Copying over " + fileName + " json config to " + dataFile.getPath() + " " + dataFile.getPath() );
+            LOGGER.debug( "Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath() );
             IOUtils.copy( inputStream, outputStream );
         }
         catch( IOException e )
         {
-            LOGGER.info( "Error copying over " + fileName + " json config to " + dataFile.getPath() + " " + e.toString() );
+            LOGGER.error( "Error copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath(), e );
         }
     }
 
@@ -432,7 +445,7 @@ public class JsonConfig
             if( Skill.getInt( key ) != 0 )
                 anyValidSkills = true;
             else
-                LOGGER.info( "Invalid skill " + key + " level " + theMap.get( key ) );
+                LOGGER.debug( "Invalid skill " + key + " level " + theMap.get( key ) );
         }
 
         return anyValidSkills;
@@ -444,11 +457,11 @@ public class JsonConfig
 
         for( String key : theMap.keySet() )
         {
-            Potion effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( key ) );
+            Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( key ) );
             if( effect != null )
                 anyValidEffects = true;
             else
-                LOGGER.info( "Invalid effect " + key );
+                LOGGER.debug( "Invalid effect " + key );
         }
 
         return anyValidEffects;
@@ -459,7 +472,7 @@ public class JsonConfig
         Map<String, Map<String, Double>> input = rawData.get( jType );
         Map<String, Map<String, Double>> output = localData.get( jType );
 
-        LOGGER.info( "Processing PMMO Data: Skills, Type: " + jType );
+        LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( ignoreValidCheck || !XP.getItem( element.getKey() ).equals( Items.AIR ) || validEntity( element.getKey() ) || validBiome( element.getKey() ) ) //skip items that don't exist in current modlist
@@ -474,14 +487,14 @@ public class JsonConfig
                         if( Skill.getInt( entry.getKey() ) != 0 )
                             output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                         else
-                            LOGGER.info( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
+                            LOGGER.debug( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
                     }
                 }
                 else
-                    LOGGER.info( "No valid skills, cannot add " + element.getKey() );
+                    LOGGER.debug( "No valid skills, cannot add " + element.getKey() );
             }
             else
-                LOGGER.info( "Inexistant key, cannot add " + element.getKey() );
+                LOGGER.debug( "Inexistant key, cannot add " + element.getKey() );
         }
     }
 
@@ -496,15 +509,15 @@ public class JsonConfig
 
                 for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
-                    PotionType potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
+                    Potion potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
                     if( potion != null && entry.getValue() >= 0 && entry.getValue() < 255 )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LOGGER.info( entry.getKey() + " is either not a effect skill, or below 0, or above 255!" );
+                        LOGGER.debug( entry.getKey() + " is either not a effect skill, or below 0, or above 255!" );
                 }
             }
             else
-                LOGGER.info( "No valid effects, cannot add " + element.getKey() );
+                LOGGER.debug( "No valid effects, cannot add " + element.getKey() );
         }
     }
 
@@ -522,11 +535,11 @@ public class JsonConfig
                     if( entry.getKey().equals( "extraChance" ) && entry.getValue() > 0 )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LOGGER.info( element.getKey() + " is either not \"extraChance\", or not above 0!" );
+                        LOGGER.debug( element.getKey() + " is either not \"extraChance\", or not above 0!" );
                 }
             }
             else
-                LOGGER.info( "Could not load inexistant item " + element.getKey() );
+                LOGGER.debug( "Could not load inexistant item " + element.getKey() );
         }
     }
 
@@ -542,7 +555,7 @@ public class JsonConfig
             for( Map.Entry<String, Double> entry : inMap.entrySet() )
             {
                 if( XP.getItem( entry.getKey() ).equals( Items.AIR ) )
-                    LOGGER.info( "Could not load inexistant item " + entry.getKey() + " into Vein Blacklist" );
+                    LOGGER.debug( "Could not load inexistant item " + entry.getKey() + " into Vein Blacklist" );
                 else
                     output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
             }
@@ -559,7 +572,7 @@ public class JsonConfig
                 if( !XP.getItem( entry.getKey() ).equals( Items.AIR ) )
                     output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                 else
-                    LOGGER.info( "Could not load inexistant item " + element.getKey() );
+                    LOGGER.debug( "Could not load inexistant item " + element.getKey() );
             }
         }
     }
@@ -575,59 +588,59 @@ public class JsonConfig
 
                 if( !( inMap.containsKey( "startWeight" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"startWeight\" is invalid, loading default value 1" );
+                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"startWeight\" is invalid, loading default value 1" );
                     inMap.put( "startWeight", 1D );
                 }
 
                 if( !( inMap.containsKey( "startLevel" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"startLevel\" is invalid, loading default value level 1" );
+                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"startLevel\" is invalid, loading default value level 1" );
                     inMap.put( "startLevel", 1D );
                 }
 
                 if( !( inMap.containsKey( "endWeight" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"endWeight\" is invalid, loading default value 1" );
+                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"endWeight\" is invalid, loading default value 1" );
                     inMap.put( "endWeight", 1D );
                 }
 
                 if( !( inMap.containsKey( "endLevel" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"endLevel\" is invalid, loading default value level 1" );
+                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"endLevel\" is invalid, loading default value level 1" );
                     inMap.put( "endLevel", 1D );
                 }
 
                 if( !( inMap.containsKey( "minCount" ) ) )
                 {
-//                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is invalid, loading default value 1 item" );
+//                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is invalid, loading default value 1 item" );
                     inMap.put( "minCount", 1D );
                 }
-                else if( inMap.get( "minCount" ) > item.getItemStackLimit() )
+                else if( inMap.get( "minCount" ) > item.getMaxStackSize() )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is above Max Stack Size, loading default value 1 item" );
-                    inMap.put( "minCount", (double) item.getItemStackLimit() );
+                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is above Max Stack Size, loading default value 1 item" );
+                    inMap.put( "minCount", (double) item.getMaxStackSize() );
                 }
 
                 if( !( inMap.containsKey( "maxCount" ) ) )
                 {
-//                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is invalid, loading default value 1" );
+//                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is invalid, loading default value 1" );
                     inMap.put( "maxCount", 1D );
                 }
-                else if( inMap.get( "maxCount" ) > item.getItemStackLimit() )
+                else if( inMap.get( "maxCount" ) > item.getMaxStackSize() )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is above Max Stack Size, loading default value 1 item" );
-                    inMap.put( "maxCount", (double) item.getItemStackLimit() );
+                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is above Max Stack Size, loading default value 1 item" );
+                    inMap.put( "maxCount", (double) item.getMaxStackSize() );
                 }
 
                 if( !( inMap.containsKey( "enchantLevelReq" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"enchantLevelReq\" is invalid, loading default value level 1" );
+                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"enchantLevelReq\" is invalid, loading default value level 1" );
                     inMap.put( "enchantLevelReq", 1D );
                 }
 
                 if( !( inMap.containsKey( "xp" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Pool Item " + element.getKey() + " \"xp\" is invalid, loading default value 1xp" );
+                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"xp\" is invalid, loading default value 1xp" );
                     inMap.put( "xp", 1D );
                 }
 
@@ -694,7 +707,7 @@ public class JsonConfig
                     outMap.put( "xp", xp );
             }
             else
-                LOGGER.info( "Could not load inexistant item " + element.getKey() );
+                LOGGER.debug( "Could not load inexistant item " + element.getKey() );
         }
     }
 
@@ -709,31 +722,31 @@ public class JsonConfig
 
                 if( !( inMap.containsKey( "levelReq" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelReq\" is invalid, loading default value 1" );
+                    LOGGER.debug( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelReq\" is invalid, loading default value 1" );
                     inMap.put( "levelReq", 1D );
                 }
 
                 if( !( inMap.containsKey( "levelPerLevel" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelPerLevel\" is invalid, loading default value 0" );
+                    LOGGER.debug( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"levelPerLevel\" is invalid, loading default value 0" );
                     inMap.put( "levelPerLevel", 0D );
                 }
 
                 if( !( inMap.containsKey( "chancePerLevel" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"chancePerLevel\" is invalid, loading default value 0" );
+                    LOGGER.debug( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"chancePerLevel\" is invalid, loading default value 0" );
                     inMap.put( "chancePerLevel", 0D );
                 }
 
                 if( !( inMap.containsKey( "maxChance" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
+                    LOGGER.debug( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
                     inMap.put( "maxChance", 80D );
                 }
 
                 if( !( inMap.containsKey( "maxLevel" ) ) )
                 {
-                    LOGGER.info( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxLevel\" is invalid, loading default value " + enchant.getMaxLevel() );
+                    LOGGER.debug( "Error loading Fish Enchant Pool Item " + element.getKey() + " \"maxLevel\" is invalid, loading default value " + enchant.getMaxLevel() );
                     inMap.put( "maxLevel", (double) enchant.getMaxLevel() );
                 }
 
@@ -775,7 +788,7 @@ public class JsonConfig
                     outMap.put( "maxLevel", maxLevel );
             }
             else
-                LOGGER.info( "Could not load inexistant enchant " + element.getKey() );
+                LOGGER.debug( "Could not load inexistant enchant " + element.getKey() );
         }
     }
 
@@ -793,11 +806,11 @@ public class JsonConfig
                     if( validAttributes.contains( entry.getKey() ) )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
-                        LOGGER.info( "Invalid attribute " + entry.getKey() );
+                        LOGGER.debug( "Invalid attribute " + entry.getKey() );
                 }
             }
             else
-                LOGGER.info( "No valid attributes, cannot add " + element.getKey() );
+                LOGGER.debug( "No valid attributes, cannot add " + element.getKey() );
 
         }
     }
@@ -820,7 +833,7 @@ public class JsonConfig
                 }
             }
             else
-                LOGGER.info( "Invalid skill \"" + element.getKey() + "\" in Level Up Command" );
+                LOGGER.debug( "Invalid skill \"" + element.getKey() + "\" in Level Up Command" );
         }
     }
 
@@ -847,7 +860,7 @@ public class JsonConfig
             if( validAttributes.contains( key ) )
                 anyValidAttributes = true;
             else
-                LOGGER.info( "Invalid attribute " + key );
+                LOGGER.debug( "Invalid attribute " + key );
         }
 
         return anyValidAttributes;
@@ -879,37 +892,37 @@ public class JsonConfig
 
                         if( !( inputItemMap.containsKey( "startChance" ) ) )
                         {
-                            LOGGER.info( "Invalid or Missing startChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 0.1" );
+                            LOGGER.debug( "Invalid or Missing startChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 0.1" );
                             inputItemMap.put( "startChance", 0.1D );
                         }
                         if( !( inputItemMap.containsKey( "endChance" ) ) )
                         {
-                            LOGGER.info( "Invalid or Missing endChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing endChance Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "endChance", 1D );
                         }
                         if( !( inputItemMap.containsKey( "startLevel" ) ) )
                         {
-                            LOGGER.info( "Invalid or Missing startLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing startLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "startLevel", 1D );
                         }
                         if( !( inputItemMap.containsKey( "endLevel" ) ) )
                         {
-                            LOGGER.info( "Invalid or Missing endLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 100" );
+                            LOGGER.debug( "Invalid or Missing endLevel Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 100" );
                             inputItemMap.put( "endLevel", 100D );
                         }
                         if( !( inputItemMap.containsKey( "minCount" ) ) )
                         {
-                            LOGGER.info( "Invalid or Missing minCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing minCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "minCount", 1D );
                         }
                         if( !( inputItemMap.containsKey( "maxCount" ) ) )
                         {
-                            LOGGER.info( "Invalid or Missing maxCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing maxCount Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "maxCount", 1D );
                         }
                         if( !( inputItemMap.containsKey( "xpPerItem" ) ) )
                         {
-                            LOGGER.info( "Invalid or Missing xpPerItem Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
+                            LOGGER.debug( "Invalid or Missing xpPerItem Block:" + blockEntry.getKey() + ", Item: " + itemEntry.getKey() + " in Treasure. Loading Default Value 1" );
                             inputItemMap.put( "xpPerItem", 1D );
                         }
 
@@ -939,11 +952,11 @@ public class JsonConfig
                         localSalvagesFrom.get( itemResLoc ).put( blockResLoc.toString(), outputItemMap );
                     }
                     else
-                        LOGGER.info( "Inexistant Item " + itemEntry.getKey() + " in Treasure" );
+                        LOGGER.debug( "Inexistant Item " + itemEntry.getKey() + " in Treasure" );
                 }
             }
             else
-                LOGGER.info( "Inexistant Block " + blockEntry.getKey() + " in Treasure" );
+                LOGGER.debug( "Inexistant Block " + blockEntry.getKey() + " in Treasure" );
         }
     }
 
@@ -972,37 +985,37 @@ public class JsonConfig
 
                         if( !( salvageToItemMap.containsKey( "salvageMax" ) ) )
                         {
-                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"salvageMax\" is invalid, loading default value 1 item" );
+                            LOGGER.debug( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"salvageMax\" is invalid, loading default value 1 item" );
                             salvageToItemMap.put( "salvageMax", 1D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "baseChance" ) ) )
                         {
-                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"baseChance\" is invalid, loading default value 50%" );
+                            LOGGER.debug( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"baseChance\" is invalid, loading default value 50%" );
                             salvageToItemMap.put( "baseChance", 50D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "chancePerLevel" ) ) )
                         {
-                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"chancePerLevel\" is invalid, loading default value 0%" );
+                            LOGGER.debug( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"chancePerLevel\" is invalid, loading default value 0%" );
                             salvageToItemMap.put( "chancePerLevel", 0D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "maxChance" ) ) )
                         {
-                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
+                            LOGGER.debug( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"maxChance\" is invalid, loading default value 80%" );
                             salvageToItemMap.put( "maxChance", 80D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "xpPerItem" ) ) )
                         {
-                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"xpPerItem\" is invalid, loading default value 0xp" );
+                            LOGGER.debug( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"xpPerItem\" is invalid, loading default value 0xp" );
                             salvageToItemMap.put( "xpPerItem", 0D );
                         }
 
                         if( !( salvageToItemMap.containsKey( "levelReq" ) ) )
                         {
-                            LOGGER.info( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"levelReq\" is invalid, loading default value 1 level" );
+                            LOGGER.debug( "Error loading Salvage Item " + inputSalvageToItemEntry.getKey() + " \"levelReq\" is invalid, loading default value 1 level" );
                             salvageToItemMap.put( "levelReq", 1D );
                         }
 
@@ -1059,11 +1072,11 @@ public class JsonConfig
                         localSalvagesFrom.get( salvageToItemResLoc ).put(  salvageFromItemResLoc.toString(), outMap );
                     }
                     else
-                        LOGGER.info( "Inexistant To Item " + inputSalvageToItemEntry.getKey() + " in Salvage" );
+                        LOGGER.debug( "Inexistant To Item " + inputSalvageToItemEntry.getKey() + " in Salvage" );
                 }
             }
             else
-                LOGGER.info( "Inexistant From Item " + inputSalvageFromItemEntry.getKey() + " in Salvage" );
+                LOGGER.debug( "Inexistant From Item " + inputSalvageFromItemEntry.getKey() + " in Salvage" );
         }
     }
 
@@ -1110,162 +1123,161 @@ public class JsonConfig
 
     public static void setAutoValues()
     {
-//        if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
-//        {
-//            for( Item item : ForgeRegistries.ITEMS )
-//            {
-//                try
-//                {
-//                    ItemStack itemStack = new ItemStack( item );
-//                    String resLoc = item.getRegistryName().toString();
-//                    Set<ToolType> toolTypes = itemStack.getToolTypes();
-//
-//                    //Wear and Weapon Req
-//                    Multimap<String, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
-//                    Multimap<String, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.OFFHAND );
-//                    Multimap<String, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.HEAD );
-//                    Multimap<String, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.CHEST );
-//                    Multimap<String, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.LEGS );
-//                    Multimap<String, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.FEET );
-//
-//                    Map<String, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes, headHandAttributes, chestHandAttributes, legsHandAttributes, feetHandAttributes );
-//
-//                    AttributeModifier armorAttribute = attributes.get( "generic.armor" );
-//                    AttributeModifier armorToughnessAttribute = attributes.get( "generic.armorToughness" );
-//                    AttributeModifier attackSpeedAttribute = attributes.get( "generic.attackSpeed" );
-//                    AttributeModifier attackDamageAttribute = attributes.get( "generic.attackDamage" );
-//
-//                    double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
-//                    double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
-//                    double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
-//                    double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
-//                    double enduranceReq = 0;
-//                    double combatReq = 0;
-//                    double toolReq = 0, highestToolReq = 0;
-//
-//                    Map<String, Double> reqWear     = new HashMap<>();
-//                    Map<String, Double> reqWeapon   = new HashMap<>();
-//                    Map<String, Double> reqTool     = new HashMap<>();
-//
-//                    if( attributes.size() > 0 )
-//                    {
-//                        enduranceReq = Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() );
-//                        combatReq = Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) );
-//
-//                        reqWear.put( Skill.ENDURANCE.toString(), Math.max( 1, enduranceReq ) );
-//                        reqWeapon.put( Skill.COMBAT.toString(),  Math.max( 1, combatReq ) );
-//
-//                        if( Config.forgeConfig.wearReqEnabled.get() && Config.forgeConfig.autoGenerateWearReqEnabled.get() && reqWear.getOrDefault( Skill.ENDURANCE.toString(), 0D ) > 1 )
-//                            addJsonConfigValue( resLoc, JType.REQ_WEAR, reqWear, false );
-//                        if( Config.forgeConfig.weaponReqEnabled.get() && Config.forgeConfig.autoGenerateWeaponReqEnabled.get() && reqWeapon.getOrDefault( Skill.COMBAT.toString(), 0D ) > 1 )
-//                            addJsonConfigValue( resLoc, JType.REQ_WEAPON, reqWeapon, false );
-//                    }
-//
-//                    //Tool Req
-//                    double speed;
-//                    for( ToolType toolType : toolTypes )
-//                    {
-//                        if( toolType.equals( ToolType.AXE ) )
-//                        {
-//                            speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
-//                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleLog.get() );
-//                            if( highestToolReq < toolReq )
-//                                highestToolReq = toolReq;
-//                            reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
-//                        }
-//                        if( toolType.equals( ToolType.PICKAXE ) )
-//                        {
-//                            speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
-//                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleOre.get() );
-//                            if( highestToolReq < toolReq )
-//                                highestToolReq = toolReq;
-//                            reqTool.put( Skill.MINING.toString(), toolReq );
-//                        }
-//                        if( toolType.equals( ToolType.SHOVEL ) )
-//                        {
-//                            speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
-//                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleDirt.get() );
-//                            if( highestToolReq < toolReq )
-//                                highestToolReq = toolReq;
-//                            reqTool.put( Skill.EXCAVATION.toString(), toolReq );
-//                        }
-//                    }
-//                    if( Config.forgeConfig.toolReqEnabled.get() && Config.forgeConfig.autoGenerateToolReqEnabled.get() )
-//                        addJsonConfigValue( resLoc, JType.REQ_TOOL, reqTool, true );
-//
-//                    //Crafting Xp Value
-//                    if( Config.forgeConfig.autoGenerateCraftingXpEnabled.get() )
-//                    {
-//                        double craftingXp = 0;
-//                        double smithingXp = 0;
-//
-//                        if( enduranceReq > 0 || combatReq > 0 || toolReq > 0 )
-//                        {
-//                            craftingXp = enduranceReq * 10D +                           Math.max( ( Math.max( combatReq - 10, 1 ) ) * 5D,  ( Math.max( toolReq - 10, 1 ) ) * 5D );
-//                            smithingXp = ( Math.max( enduranceReq - 10, 1 ) ) * 5D  +   Math.max( ( Math.max( combatReq - 10, 1 ) ) * 2D,  ( Math.max( toolReq - 10, 1 ) ) * 2D );
-//
-//                            craftingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierCrafting.get();
-//                            smithingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierSmithing.get();
-//                        }
-//
-//                        Map<String, Double> xpValueMap = new HashMap<>();
-//                        if( craftingXp > 0 )
-//                            xpValueMap.put( Skill.CRAFTING.toString(), craftingXp );
-//                        if( smithingXp > 0 )
-//                            xpValueMap.put( Skill.SMITHING.toString(), smithingXp );
-//                        addJsonConfigValue( resLoc, JType.XP_VALUE_CRAFT, xpValueMap, true );
-//                    }
-//                }
-//                catch( Exception e )
-//                {
-//                    LOGGER.info( e.toString() );
-//                }
-//            }
-//            if( Config.forgeConfig.autoGenerateExtraChanceEnabled.get() )
-//            {
-//                for( Block block : ForgeRegistries.BLOCKS )
-//                {
-//                    try
-//                    {
-////                ItemStack itemStack = new ItemStack( block );
-//                        String resLoc = block.getRegistryName().toString();
-//                        Material material = block.getDefaultState().getMaterial();
-//                        Skill skill = XP.getSkill( material );
-//                        JType jType = JType.NONE;
-//                        Map<String, Double> infoMap = new HashMap<>();
-//                        double chance = 0;
-//                        Set<ResourceLocation> tags = block.getTags();
-//
-//                        //Ore/Log/Plant Extra Chance
-//                        if( block instanceof OreBlock || tags.contains( new ResourceLocation( "forge:ores" ) ) )
-//                        {
-//                            jType = JType.INFO_ORE;
-//                            chance = Config.forgeConfig.defaultExtraChanceOre.get();
-//                        }
-//                        else if( block instanceof CropsBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
-//                        {
-//                            jType = JType.INFO_PLANT;
-//                            chance = Config.forgeConfig.defaultExtraChancePlant.get();
-//                        }
-//                        else if( block instanceof  LogBlock || tags.contains( new ResourceLocation( "minecraft:logs" ) ) )
-//                        {
-//                            jType = JType.INFO_LOG;
-//                            chance = Config.forgeConfig.defaultExtraChanceLog.get();
-//                        }
-//                        if( !jType.equals( JType.NONE ) )
-//                            infoMap.put( "extraChance", chance );
-//
-//                        if( infoMap.size() > 0 && infoMap.getOrDefault( "extraChance", 0D ) > 0 )
-//                            addJsonConfigValue( resLoc, jType, infoMap, false );
-//                    }
-//                    catch( Exception e )
-//                    {
-//                        LOGGER.info( e.toString() );
-//                    }
-//                }
-//            }
-//            data = localData;
-//        }
-        //COUT AUTO GEN VALUES
+        if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
+        {
+            for( Item item : ForgeRegistries.ITEMS )
+            {
+                try
+                {
+                    ItemStack itemStack = new ItemStack( item );
+                    String resLoc = item.getRegistryName().toString();
+                    Set<ToolType> toolTypes = itemStack.getToolTypes();
+
+                    //Wear and Weapon Req
+                    Multimap<String, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
+                    Multimap<String, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.OFFHAND );
+                    Multimap<String, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.HEAD );
+                    Multimap<String, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.CHEST );
+                    Multimap<String, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.LEGS );
+                    Multimap<String, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.FEET );
+
+                    Map<String, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes, headHandAttributes, chestHandAttributes, legsHandAttributes, feetHandAttributes );
+
+                    AttributeModifier armorAttribute = attributes.get( "generic.armor" );
+                    AttributeModifier armorToughnessAttribute = attributes.get( "generic.armorToughness" );
+                    AttributeModifier attackSpeedAttribute = attributes.get( "generic.attackSpeed" );
+                    AttributeModifier attackDamageAttribute = attributes.get( "generic.attackDamage" );
+
+                    double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
+                    double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
+                    double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
+                    double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
+                    double enduranceReq = 0;
+                    double combatReq = 0;
+                    double toolReq = 0, highestToolReq = 0;
+
+                    Map<String, Double> reqWear     = new HashMap<>();
+                    Map<String, Double> reqWeapon   = new HashMap<>();
+                    Map<String, Double> reqTool     = new HashMap<>();
+
+                    if( attributes.size() > 0 )
+                    {
+                        enduranceReq = Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() );
+                        combatReq = Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) );
+
+                        reqWear.put( Skill.ENDURANCE.toString(), Math.max( 1, enduranceReq ) );
+                        reqWeapon.put( Skill.COMBAT.toString(),  Math.max( 1, combatReq ) );
+
+                        if( Config.forgeConfig.wearReqEnabled.get() && Config.forgeConfig.autoGenerateWearReqEnabled.get() && reqWear.getOrDefault( Skill.ENDURANCE.toString(), 0D ) > 1 )
+                            addJsonConfigValue( resLoc, JType.REQ_WEAR, reqWear, false );
+                        if( Config.forgeConfig.weaponReqEnabled.get() && Config.forgeConfig.autoGenerateWeaponReqEnabled.get() && reqWeapon.getOrDefault( Skill.COMBAT.toString(), 0D ) > 1 )
+                            addJsonConfigValue( resLoc, JType.REQ_WEAPON, reqWeapon, false );
+                    }
+
+                    //Tool Req
+                    double speed;
+                    for( ToolType toolType : toolTypes )
+                    {
+                        if( toolType.equals( ToolType.AXE ) )
+                        {
+                            speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
+                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleLog.get() );
+                            if( highestToolReq < toolReq )
+                                highestToolReq = toolReq;
+                            reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
+                        }
+                        if( toolType.equals( ToolType.PICKAXE ) )
+                        {
+                            speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
+                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleOre.get() );
+                            if( highestToolReq < toolReq )
+                                highestToolReq = toolReq;
+                            reqTool.put( Skill.MINING.toString(), toolReq );
+                        }
+                        if( toolType.equals( ToolType.SHOVEL ) )
+                        {
+                            speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
+                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleDirt.get() );
+                            if( highestToolReq < toolReq )
+                                highestToolReq = toolReq;
+                            reqTool.put( Skill.EXCAVATION.toString(), toolReq );
+                        }
+                    }
+                    if( Config.forgeConfig.toolReqEnabled.get() && Config.forgeConfig.autoGenerateToolReqEnabled.get() )
+                        addJsonConfigValue( resLoc, JType.REQ_TOOL, reqTool, true );
+
+                    //Crafting Xp Value
+                    if( Config.forgeConfig.autoGenerateCraftingXpEnabled.get() )
+                    {
+                        double craftingXp = 0;
+                        double smithingXp = 0;
+
+                        if( enduranceReq > 0 || combatReq > 0 || toolReq > 0 )
+                        {
+                            craftingXp = enduranceReq * 10D +                           Math.max( ( Math.max( combatReq - 10, 1 ) ) * 5D,  ( Math.max( toolReq - 10, 1 ) ) * 5D );
+                            smithingXp = ( Math.max( enduranceReq - 10, 1 ) ) * 5D  +   Math.max( ( Math.max( combatReq - 10, 1 ) ) * 2D,  ( Math.max( toolReq - 10, 1 ) ) * 2D );
+
+                            craftingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierCrafting.get();
+                            smithingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierSmithing.get();
+                        }
+
+                        Map<String, Double> xpValueMap = new HashMap<>();
+                        if( craftingXp > 0 )
+                            xpValueMap.put( Skill.CRAFTING.toString(), craftingXp );
+                        if( smithingXp > 0 )
+                            xpValueMap.put( Skill.SMITHING.toString(), smithingXp );
+                        addJsonConfigValue( resLoc, JType.XP_VALUE_CRAFT, xpValueMap, true );
+                    }
+                }
+                catch( Exception e )
+                {
+                    LOGGER.debug( e );
+                }
+            }
+            if( Config.forgeConfig.autoGenerateExtraChanceEnabled.get() )
+            {
+                for( Block block : ForgeRegistries.BLOCKS )
+                {
+                    try
+                    {
+//                ItemStack itemStack = new ItemStack( block );
+                        String resLoc = block.getRegistryName().toString();
+                        Material material = block.getDefaultState().getMaterial();
+                        Skill skill = XP.getSkill( material );
+                        JType jType = JType.NONE;
+                        Map<String, Double> infoMap = new HashMap<>();
+                        double chance = 0;
+                        Set<ResourceLocation> tags = block.getTags();
+
+                        //Ore/Log/Plant Extra Chance
+                        if( block instanceof OreBlock || tags.contains( new ResourceLocation( "forge:ores" ) ) )
+                        {
+                            jType = JType.INFO_ORE;
+                            chance = Config.forgeConfig.defaultExtraChanceOre.get();
+                        }
+                        else if( block instanceof CropsBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
+                        {
+                            jType = JType.INFO_PLANT;
+                            chance = Config.forgeConfig.defaultExtraChancePlant.get();
+                        }
+                        else if( block instanceof  LogBlock || tags.contains( new ResourceLocation( "minecraft:logs" ) ) )
+                        {
+                            jType = JType.INFO_LOG;
+                            chance = Config.forgeConfig.defaultExtraChanceLog.get();
+                        }
+                        if( !jType.equals( JType.NONE ) )
+                            infoMap.put( "extraChance", chance );
+
+                        if( infoMap.size() > 0 && infoMap.getOrDefault( "extraChance", 0D ) > 0 )
+                            addJsonConfigValue( resLoc, jType, infoMap, false );
+                    }
+                    catch( Exception e )
+                    {
+                        LOGGER.error( e );
+                    }
+                }
+            }
+            data = localData;
+        }
     }
 }

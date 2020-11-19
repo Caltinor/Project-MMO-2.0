@@ -1,7 +1,6 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
@@ -153,15 +152,16 @@ public class PlayerTickHandler
 
         if( player.world.isRemote )
         {
-            if( XPOverlayGUI.screenshots.size() > 0 )
-            {
-                for( String key : new HashSet<>( XPOverlayGUI.screenshots ) )
-                {
-                    ScreenshotHandler.takeScreenshot( key, "levelup" );
-                    XPOverlayGUI.screenshots.remove( key );
-                    XPOverlayGUI.listOn = XPOverlayGUI.listWasOn;
-                }
-            }
+//            if( XPOverlayGUI.screenshots.size() > 0 )
+//            {
+//                for( String key : new HashSet<>( XPOverlayGUI.screenshots ) )
+//                {
+//                    ScreenshotHandler.takeScreenshot( key, "levelup" );
+//                    XPOverlayGUI.screenshots.remove( key );
+//                    XPOverlayGUI.listOn = XPOverlayGUI.listWasOn;
+//                }
+//            }
+            //COUT SCREENSHOT
 
             if( syncPrefs )
             {

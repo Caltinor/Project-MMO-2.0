@@ -6,6 +6,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -22,9 +23,9 @@ public class GrowHandler
     {
         World world = (World) event.getWorld();
         BlockPos pos = event.getPos();
-        ResourceLocation dimResLoc = world.dimension.getType().getRegistryName();
-        UUID uuid = ChunkDataHandler.checkPos( dimResLoc, pos );
-        ChunkDataHandler.delPos( dimResLoc, pos );
+        int dimId = world.getWorldType().getId();
+        UUID uuid = ChunkDataHandler.checkPos( dimId, pos );
+        ChunkDataHandler.delPos( dimId, pos );
 
         if( uuid != null )
         {
@@ -59,48 +60,11 @@ public class GrowHandler
             }
         }
 
-        if( uuid != null )
+        if( uuid != null && block instanceof BlockCrops )
         {
-            int age = -1;
-            int maxAge = -1;
+            BlockCrops blockCrops = (BlockCrops) block;
 
-            if( state.getProperties().containsKey( BlockStateProperties.AGE_0_1 ) )
-            {
-                age = state.getProperties().get( BlockStateProperties.AGE_0_1 );
-                maxAge = 1;
-            }
-            else if( state.has( BlockStateProperties.AGE_0_2 ) )
-            {
-                age = state.get( BlockStateProperties.AGE_0_2 );
-                maxAge = 2;
-            }
-            else if( state.has( BlockStateProperties.AGE_0_3 ) )
-            {
-                age = state.get( BlockStateProperties.AGE_0_3 );
-                maxAge = 3;
-            }
-            else if( state.has( BlockStateProperties.AGE_0_5 ) )
-            {
-                age = state.get( BlockStateProperties.AGE_0_5 );
-                maxAge = 5;
-            }
-            else if( state.has( BlockStateProperties.AGE_0_7 ) )
-            {
-                age = state.get( BlockStateProperties.AGE_0_7 );
-                maxAge = 7;
-            }
-            else if( state.has( BlockStateProperties.AGE_0_15 ) )
-            {
-                age = state.get( BlockStateProperties.AGE_0_15 );
-                maxAge = 15;
-            }
-            else if( state.has( BlockStateProperties.AGE_0_25 ) )
-            {
-                age = state.get( BlockStateProperties.AGE_0_25 );
-                maxAge = 25;
-            }
-
-            if( age != -1 && age == maxAge )
+            if( blockCrops.isMaxAge( state ) )
             {
                 Map<String, Double> award = XP.getXp( resLoc, JType.XP_VALUE_GROW );
 

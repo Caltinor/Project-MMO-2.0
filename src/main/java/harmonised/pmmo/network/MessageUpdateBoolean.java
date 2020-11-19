@@ -1,6 +1,5 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.gui.GlossaryScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -46,9 +45,10 @@ public class MessageUpdateBoolean extends MessageBase<MessageUpdateBoolean>
                         XPOverlayGUI.isVeining = packet.value;
                 break;
 
-            case 1: //update Glossary
-                GlossaryScreen.initButtons();
-                break;
+//            case 1: //update Glossary
+//                GlossaryScreen.initButtons();
+//                break;
+            //COUT GUI
         }
     }
 

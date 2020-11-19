@@ -222,6 +222,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> levelsPerOneReach;
         public ConfigHelper.ConfigValueListener<Double> maxExtraReachBoost;
         public ConfigHelper.ConfigValueListener<Double> blockHardnessLimitForPlacing;
+        public ConfigHelper.ConfigValueListener<Boolean> xpValuePlacingEnabled;
 
         //Excavation
         public ConfigHelper.ConfigValueListener<Boolean> treasureEnabled;
@@ -943,6 +944,12 @@ public class Config
                         .translation( "pmmo.blockHardnessLimitForPlacing" )
                         .defineInRange( "blockHardnessLimitForPlacing", 20D, 0, 1000000) );
 
+                this.xpValuePlacingEnabled = subscriber.subscribe(builder
+                        .comment( "Should xp values for crafting be enabled? false means the hardness value is used" )
+                        .translation( "pmmo.xpValuePlacingEnabled" )
+                        .define( "xpValuePlacingEnabled", true ) );
+
+
                 builder.pop();
             }
 
@@ -1409,14 +1416,14 @@ public class Config
             return Config.localConfig.get( key );
         else
         {
-            LOGGER.info( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
+            LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
             return -1;
         }
     }
 
     public static Map<Skill, Double> getXpMap( EntityPlayer player )
     {
-        if( player.world.isRemote )
+        if( player.world.isRemote() )
             return XP.getOfflineXpMap( player.getUniqueID() );
         else
             return PmmoSavedData.get().getXpMap( player.getUniqueID() );
@@ -1434,7 +1441,7 @@ public class Config
 
     public static Map<String, Double> getPreferencesMap( EntityPlayer player )
     {
-        if( player.world.isRemote )
+        if( player.world.isRemote() )
             return preferences;
         else
             return PmmoSavedData.get().getPreferencesMap( player.getUniqueID() );
@@ -1447,7 +1454,7 @@ public class Config
 
     public static Map<String, Double> getAbilitiesMap( EntityPlayer player )
     {
-        if( player.world.isRemote )
+        if( player.world.isRemote() )
             return abilities;
         else
             return PmmoSavedData.get().getAbilitiesMap( player.getUniqueID() );
@@ -1460,7 +1467,7 @@ public class Config
 
     public static Map<String, Map<Skill, Double>> getXpBoostsMap( EntityPlayer player )
     {
-        if( player.world.isRemote )
+        if( player.world.isRemote() )
             return xpBoosts;
         else
             return PmmoSavedData.get().getPlayerXpBoostsMap( player.getUniqueID() );
@@ -1468,7 +1475,7 @@ public class Config
 
     public static Map<Skill, Double> getXpBoostMap( EntityPlayer player, UUID xpBoostUUID )
     {
-        if( player.world.isRemote )
+        if( player.world.isRemote() )
             return xpBoosts.getOrDefault( xpBoostUUID, new HashMap<>() );
         else
             return PmmoSavedData.get().getPlayerXpBoostMap( player.getUniqueID(), xpBoostUUID );
@@ -1486,7 +1493,7 @@ public class Config
         return xpBoost;
     }
 
-    public static void setPlayerXpBoost( EntityPlayerMP player, String xpBoostKey, Map<Skill, Double> newXpBoosts )
+    public static void setPlayerXpBoost(EntityPlayerMP player, String xpBoostKey, Map<Skill, Double> newXpBoosts )
     {
         PmmoSavedData.get().setPlayerXpBoost( player.getUniqueID(), xpBoostKey, newXpBoosts );
     }
@@ -1503,7 +1510,7 @@ public class Config
 
     public static void setPlayerXpBoostsMaps( EntityPlayer player, Map<String, Map<Skill, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
     {   //SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
-        if( player.world.isRemote )
+        if( player.world.isRemote() )
             xpBoosts = newBoosts;
         else
             PmmoSavedData.get().setPlayerXpBoostsMaps( player.getUniqueID(), newBoosts );

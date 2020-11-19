@@ -1,8 +1,8 @@
 package harmonised.pmmo.util;
 
 import java.util.*;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.sun.istack.internal.Nullable;
 import harmonised.pmmo.config.Config;
@@ -17,10 +17,12 @@ import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.*;
@@ -186,6 +188,12 @@ public class XP
 		materialHarvestTool.put( Material.SPONGE, "shears" );
 	}
 
+	public static Item getBlockAsItem( Block block )
+	{
+		Item item = ForgeRegistries.ITEMS.getValue( block.getRegistryName() );
+		return item == null ? Items.AIR : item;
+	}
+
 	public static Style getSkillStyle( Skill skill )
 	{
 		return skillStyle.getOrDefault( skill, new Style() );
@@ -196,7 +204,7 @@ public class XP
 		return getSkillFromTool( XP.correctHarvestTool( material ) );
 	}
 
-	public static Skill getSkill( StateBlock state )
+	public static Skill getSkill( IBlockState state )
 	{
 		return getSkill( state.getMaterial() );
 	}
@@ -378,7 +386,7 @@ public class XP
 
 	public static Map<String, Double> multiplyMap( Map<String, Double> mapOne, double multiplier )
 	{
-		for( String key : mapOne.getKeySet() )
+		for( String key : mapOne.keySet() )
 		{
 			mapOne.replace( key, mapOne.get( key ) * multiplier );
 		}
@@ -388,12 +396,12 @@ public class XP
 
 	public static Map<String, Double> addMaps( Map<String, Double> mapOne, Map<String, Double> mapTwo )
 	{
-		for( String key : mapTwo.getKeySet() )
+		for( String key : mapTwo.keySet() )
 		{
 			if( mapOne.containsKey( key ) )
 				mapOne.replace( key, mapOne.get( key ) + mapTwo.get( key ) );
 			else
-				mapOne.setTag( key, mapTwo.get( key ) );
+				mapOne.put( key, mapTwo.get( key ) );
 
 		}
 
@@ -517,7 +525,7 @@ public class XP
 		List<? extends EntityPlayer> allPlayers = world.getPlayers();
 		Collection<EntityPlayer> nearbyPlayers = new ArrayList<>();
 
-		Float closestDistance = null;
+		Double closestDistance = null;
 		double tempDistance;
 
 		for( EntityPlayer player : allPlayers )
@@ -821,14 +829,8 @@ public class XP
 
 		Item item = ForgeRegistries.ITEMS.getValue( resLoc );
 
-		if( item != null && !item.equals( Items.AIR ) )
+		if( item != null )
 			return item;
-		else
-		{
-			Block block = ForgeRegistries.BLOCKS.getValue( resLoc );
-			if( block != null )
-				return block.asItem();
-		}
 
 		return Items.AIR;
 	}
@@ -850,7 +852,7 @@ public class XP
 			{
 				for( int z = -radius; z <= radius; z++ )
 				{
-					currBlock = player.world.getBlockState( new BlockPos( playerPos.x + x, playerPos.y + y, playerPos.z + z ) ).getBlock();
+					currBlock = player.world.getBlockState( new BlockPos( playerPos.getX() + x, playerPos.getY() + y, playerPos.getZ() + z ) ).getBlock();
 					if( currBlock.equals( block ) )
 					{
 						matched = true;
@@ -952,8 +954,15 @@ public class XP
 
 	public static double getDimensionMultiplier(Skill skill, EntityPlayer player )
 	{
-		String dimensionKey = player.world.getDimension().getType().getRegistryName().toString();
-		return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 1D );
+		try
+		{
+			String dimensionId = Integer.toString( player.world.getWorldType().getId() );
+			return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( dimensionId, new HashMap<>() ).getOrDefault( skill.toString(), 1D );
+		}
+		catch( Exception e )
+		{
+			return 1D;
+		}
 	}
 
 	public static double getDifficultyMultiplier( EntityPlayer player, Skill skill )
@@ -998,7 +1007,7 @@ public class XP
 		String skillName = skill.toString().toLowerCase();
 		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
 		Map<String, Double> heldMap = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
-		PlayerInventory inv = player.inventory;
+		InventoryPlayer inv = player.inventory;
 
 		if( heldMap != null )
 		{
@@ -1036,8 +1045,8 @@ public class XP
 
 	public static double getDimensionBoost( EntityPlayer player, Skill skill )
 	{
-		String dimensionKey = player.world.getDimension().getType().getRegistryName().toString();
-		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 0D );
+		String dimensionId = Integer.toString( player.world.getWorldType().getId() );
+		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimensionId, new HashMap<>() ).getOrDefault( skill.toString(), 0D );
 	}
 
 	public static double getGlobalBoost( Skill skill )
@@ -1395,11 +1404,11 @@ public class XP
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );
 				itemStack.setCount( 0 );
-				player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToWearDropped", new TextComponentTranslation( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-				player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToWearDropped", new TextComponentTranslation( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+				player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToWearDropped", new TextComponentTranslation( droppedItemStack.getItem().getUnlocalizedName() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToWearDropped", new TextComponentTranslation( droppedItemStack.getItem().getUnlocalizedName() ) ).setStyle( textStyle.get( "red" ) ), false );
 			}
 			else
-				player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToWear", new TextComponentTranslation( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToWear", new TextComponentTranslation( itemStack.getItem().getUnlocalizedName() ) ).setStyle( textStyle.get( "red" ) ), true );
 		}
 	}
 
@@ -1557,10 +1566,6 @@ public class XP
 	}
 
 	public static double xpAtLevel( int givenLevel )
-	{
-		return xpAtLevel( (double) givenLevel );
-	}
-	public static double xpAtLevel( double givenLevel )
 	{
 		return xpAtLevel( (double) givenLevel );
 	}
