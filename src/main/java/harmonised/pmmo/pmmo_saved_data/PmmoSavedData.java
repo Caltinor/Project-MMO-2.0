@@ -11,6 +11,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +25,7 @@ public class PmmoSavedData extends WorldSavedData
 
     private static PmmoSavedData pmmoSavedData;
     private static MinecraftServer server;
-    private static String NAME = Reference.MOD_ID;
+    private static String ID = Reference.MOD_ID;
     private Map<UUID, Map<Skill, Double>> xp = new HashMap<>();
     private Map<UUID, Map<Skill, Double>> scheduledXp = new HashMap<>();
     private Map<UUID, Map<String, Double>> abilities = new HashMap<>();
@@ -33,7 +35,7 @@ public class PmmoSavedData extends WorldSavedData
     private Map<UUID, String> name = new HashMap<>();
     public PmmoSavedData()
     {
-        super( NAME );
+        super(ID);
     }
 
     @Override
@@ -351,7 +353,15 @@ public class PmmoSavedData extends WorldSavedData
     public static void init( MinecraftServer server )
     {
         PmmoSavedData.server = server;
-        PmmoSavedData.pmmoSavedData = server.getWorld( DimensionType.OVERWORLD.getId() ).loadData( PmmoSavedData::new, NAME );
+        World world = server.getWorld( DimensionType.OVERWORLD.getId() );
+        MapStorage storage = world.getMapStorage();
+        PmmoSavedData instance = (PmmoSavedData) storage.getOrLoadData(PmmoSavedData.class, ID);
+        if (instance == null)
+        {
+            instance = new PmmoSavedData();
+            storage.setData( ID, instance );
+        }
+        PmmoSavedData.pmmoSavedData = instance;
     }
 
     public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.

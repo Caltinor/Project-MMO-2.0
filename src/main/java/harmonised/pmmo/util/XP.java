@@ -13,7 +13,6 @@ import harmonised.pmmo.network.*;
 import harmonised.pmmo.party.Party;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
-import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -519,7 +518,7 @@ public class XP
 	public static Collection<EntityPlayer> getNearbyPlayers( Entity mob )
 	{
 		World world = mob.getEntityWorld();
-		List<? extends EntityPlayer> allPlayers = world.getPlayers();
+		List<? extends EntityPlayer> allPlayers = world.getMinecraftServer().getPlayerList().getPlayers();
 		Collection<EntityPlayer> nearbyPlayers = new ArrayList<>();
 
 		Double closestDistance = null;
@@ -971,19 +970,19 @@ public class XP
 			switch( player.world.getDifficulty() )
 			{
 				case PEACEFUL:
-					difficultyMultiplier = FConfig.peacefulMultiplier.get();
+					difficultyMultiplier = FConfig.peacefulMultiplier;
 					break;
 
 				case EASY:
-					difficultyMultiplier = FConfig.easyMultiplier.get();
+					difficultyMultiplier = FConfig.easyMultiplier;
 					break;
 
 				case NORMAL:
-					difficultyMultiplier = FConfig.normalMultiplier.get();
+					difficultyMultiplier = FConfig.normalMultiplier;
 					break;
 
 				case HARD:
-					difficultyMultiplier = FConfig.hardMultiplier.get();
+					difficultyMultiplier = FConfig.hardMultiplier;
 					break;
 
 				default:
@@ -1086,7 +1085,7 @@ public class XP
 
 	public static double getMultiplier( EntityPlayer player, Skill skill )
 	{
-		double multiplier = FConfig.globalMultiplier.get();
+		double multiplier = FConfig.globalMultiplier;
 
 		double globalMultiplier = getGlobalMultiplier( skill );
 		double dimensionMultiplier = getDimensionMultiplier( skill, player );
@@ -1396,7 +1395,7 @@ public class XP
 			player.addPotionEffect( new PotionEffect( MobEffects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new PotionEffect( MobEffects.SLOWNESS, 75, gap, false, true ) );
 
-			if( FConfig.strictReqWear.get() || EnchantmentHelper.hasBindingCurse( itemStack ) )
+			if( FConfig.strictReqWear || EnchantmentHelper.hasBindingCurse( itemStack ) )
 			{
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );

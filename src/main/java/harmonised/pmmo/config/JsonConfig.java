@@ -23,12 +23,14 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.Path;
 import java.util.*;
 
 public class JsonConfig
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
+    public static File configFile;
     public static Gson gson = new Gson();
     public static final Type mapType = new TypeToken<Map<String, Map<String, Double>>>(){}.getType();
     public static final Type mapType2 = new TypeToken<Map<String, Map<String, Map<String, Double>>>>(){}.getType();
@@ -225,14 +227,16 @@ public class JsonConfig
     private static void initData()
     {
         String fileName;
+        File file;
 
         for( JType jType : jTypes )
         {
+            System.out.println( configFile.getPath() );
             fileName = jType.name().toLowerCase() + ".json";
-            File dataFile = FMLPaths.CONFIGDIR.resolve( dataPath + fileName ).toFile();
+            file = new File( configFile.getPath() + "/pmmo/" + dataPath + fileName );
 
-            if ( !dataFile.exists() )   //If no data file, create one
-                createData( dataFile, fileName );
+            if ( !file.exists() )   //If no data file, create one
+                createData( file, fileName );
         }
     }
 
@@ -245,8 +249,9 @@ public class JsonConfig
 
         for( JType jType : jTypes )
         {
+            System.out.println( configFile.getPath() );
             fileName = jType.name().toLowerCase() + ".json";
-            file = FMLPaths.CONFIGDIR.resolve( dataPath + fileName ).toFile();
+            file = new File( configFile.getPath() + "/pmmo/" + dataPath + fileName );
 
             try
             (

@@ -45,7 +45,8 @@ public class ProjectMMOMod
     @Mod.EventHandler
     public static void preInit( FMLPreInitializationEvent event )
     {
-        FConfig.forgeConfig = new Configuration( event.getSuggestedConfigurationFile(), Reference.VERSION );
+        JsonConfig.configFile = event.getSuggestedConfigurationFile();
+        FConfig.forgeConfig = new Configuration( JsonConfig.configFile, Reference.VERSION );
         NetworkHandler.init();
     }
 
@@ -71,8 +72,9 @@ public class ProjectMMOMod
     @Mod.EventHandler
     public static void serverStart( FMLServerStartingEvent event )
     {
-        if( FConfig.autoGenerateValuesEnabled )
-            JsonConfig.setAutoValues();
+//        if( FConfig.autoGenerateValuesEnabled )
+//            JsonConfig.setAutoValues();
+        //COUT AUTO VALUES
         ChunkDataHandler.init();
 
         PmmoSavedData.init( event.getServer() );

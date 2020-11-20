@@ -41,7 +41,8 @@ public class EventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingDeath( LivingDeathEvent event )
 	{
-		DeathHandler.handleDeath( event );
+//		DeathHandler.handleDeath( event );
+		//COUT DEATH HANDLER
 	}
 
 	@SubscribeEvent
