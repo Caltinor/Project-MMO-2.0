@@ -1,6 +1,6 @@
 package harmonised.pmmo.proxy;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
@@ -25,7 +25,7 @@ public class ServerHandler
         switch( packet.type )
         {
             case 0:
-                Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+                Map<String, Double> prefsMap = FConfig.getPreferencesMap( player );
                 for( String tag : keySet )
                 {
                     prefsMap.remove( tag );

@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateBoolean;
@@ -21,8 +21,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,22 +46,22 @@ public class WorldTickHandler
         activeVein = new HashMap<>();
         veinSet = new HashMap<>();
 
-        minVeinCost = Config.getConfig( "minVeinCost" );
-        minVeinHardness = Config.getConfig( "minVeinHardness" );
-        levelsPerHardnessMining = Config.getConfig( "levelsPerHardnessMining" );
-        levelsPerHardnessWoodcutting = Config.getConfig( "levelsPerHardnessWoodcutting" );
-        levelsPerHardnessExcavation = Config.getConfig( "levelsPerHardnessExcavation" );
-        levelsPerHardnessFarming = Config.getConfig( "levelsPerHardnessFarming" );
-        levelsPerHardnessCrafting = Config.getConfig( "levelsPerHardnessCrafting" );
-        veinMaxDistance = (int) Math.floor( Config.forgeConfig.veinMaxDistance.get() );
-        exhaustionPerBlock = Config.forgeConfig.exhaustionPerBlock.get();
-        veinMaxBlocks = Config.forgeConfig.veinMaxBlocks.get();
-        maxVeinCharge = Config.forgeConfig.maxVeinCharge.get();
+        minVeinCost = FConfig.getConfig( "minVeinCost" );
+        minVeinHardness = FConfig.getConfig( "minVeinHardness" );
+        levelsPerHardnessMining = FConfig.getConfig( "levelsPerHardnessMining" );
+        levelsPerHardnessWoodcutting = FConfig.getConfig( "levelsPerHardnessWoodcutting" );
+        levelsPerHardnessExcavation = FConfig.getConfig( "levelsPerHardnessExcavation" );
+        levelsPerHardnessFarming = FConfig.getConfig( "levelsPerHardnessFarming" );
+        levelsPerHardnessCrafting = FConfig.getConfig( "levelsPerHardnessCrafting" );
+        veinMaxDistance = (int) Math.floor( FConfig.veinMaxDistance );
+        exhaustionPerBlock = FConfig.exhaustionPerBlock;
+        veinMaxBlocks = FConfig.veinMaxBlocks;
+        maxVeinCharge = FConfig.maxVeinCharge;
     }
 
     public static void handleWorldTick( TickEvent.WorldTickEvent event )
     {
-        int veinSpeed = (int) Math.floor( Config.forgeConfig.veinSpeed.get() );
+        int veinSpeed = (int) Math.floor( FConfig.veinSpeed );
         VeinInfo veinInfo;
         World world;
         ItemStack startItemStack;
@@ -95,7 +93,7 @@ public class WorldTickHandler
                     startItem = veinInfo.startItem;
                     veinPos = veinSet.get( player ).get( 0 );
                     veinState = world.getBlockState( veinPos );
-                    abilitiesMap = Config.getAbilitiesMap( player );
+                    abilitiesMap = FConfig.getAbilitiesMap( player );
                     regKey = veinState.getBlock().getRegistryName().toString();
                     cost = getVeinCost( veinState, veinPos, player );
                     correctBlock = world.getBlockState( veinPos ).getBlock().equals( veinInfo.state.getBlock() );
@@ -131,7 +129,7 @@ public class WorldTickHandler
                                     world.destroyBlock(veinPos, false );
                                 else if( correctItem && correctHeldItem && player.getFoodStats().getFoodLevel() > 0 )
                                 {
-                                    if( Config.forgeConfig.veiningOtherPlayerBlocksAllowed.get() || isOwner )
+                                    if( FConfig.veiningOtherPlayerBlocksAllowed || isOwner )
                                     {
                                         abilitiesMap.put("veinLeft", abilitiesMap.get("veinLeft") - cost);
                                         destroyBlock( world, veinPos, player, startItemStack );
@@ -181,7 +179,7 @@ public class WorldTickHandler
 
     public static void scheduleVein(EntityPlayer player, VeinInfo veinInfo )
     {
-        double veinLeft = Config.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
+        double veinLeft = FConfig.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
         double veinCost = getVeinCost( veinInfo.state, veinInfo.pos, player );
         String blockKey = veinInfo.state.getBlock().getRegistryName().toString();
         ArrayList<BlockPos> blockPosArrayList;
@@ -254,7 +252,7 @@ public class WorldTickHandler
                 yLimit = 0;
         }
 
-        while( ( isCreative || veinLeft * 10 > veinCost * vein.size() || ( Config.forgeConfig.veinWoodTopToBottom.get() && !isLooped && skill.equals( Skill.WOODCUTTING  ) ) ) && vein.size() <= veinMaxBlocks )
+        while( ( isCreative || veinLeft * 10 > veinCost * vein.size() || ( FConfig.veinWoodTopToBottom && !isLooped && skill.equals( Skill.WOODCUTTING  ) ) ) && vein.size() <= veinMaxBlocks )
         {
             for( BlockPos curPos : curLayer )
             {
@@ -291,7 +289,7 @@ public class WorldTickHandler
 
         if( !isLooped )
         {
-            if( ( Config.forgeConfig.veinWoodTopToBottom.get() && material.equals( Material.WOOD ) ) /* || block.equals( Blocks.SAND ) || block.equals( Blocks.GRAVEL ) */ )
+            if( ( FConfig.veinWoodTopToBottom && material.equals( Material.WOOD ) ) /* || block.equals( Blocks.SAND ) || block.equals( Blocks.GRAVEL ) */ )
                 veinInfo.pos = highestPos;
             return getVeinShape( veinInfo, veinLeft, veinCost, isCreative, true );
         }
@@ -349,7 +347,7 @@ public class WorldTickHandler
 
     public static void updateVein( EntityPlayer player, double gap )
     {
-        Map<String, Double> abilitiesMap = Config.getAbilitiesMap( player );
+        Map<String, Double> abilitiesMap = FConfig.getAbilitiesMap( player );
 
         if( !abilitiesMap.containsKey( "veinLeft" ) )
             abilitiesMap.put( "veinLeft", maxVeinCharge );

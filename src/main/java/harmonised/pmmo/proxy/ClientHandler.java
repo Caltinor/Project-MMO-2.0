@@ -1,6 +1,6 @@
 package harmonised.pmmo.proxy;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
@@ -53,7 +53,7 @@ public class ClientHandler
         switch( packet.type )
         {
             case 0:
-                Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+                Map<String, Double> prefsMap = FConfig.getPreferencesMap( player );
                 for( String tag : keySet )
                 {
                     prefsMap.put( tag, newPackage.getDouble( tag ) );
@@ -63,7 +63,7 @@ public class ClientHandler
                 break;
 
             case 1:
-                Map<String, Double> abilitiesMap = Config.getAbilitiesMap( player );
+                Map<String, Double> abilitiesMap = FConfig.getAbilitiesMap( player );
                 for( String tag : keySet )
                 {
                     abilitiesMap.put( tag, newPackage.getDouble( tag ) );
@@ -71,7 +71,7 @@ public class ClientHandler
                 break;
 
             case 6:
-                Config.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringSkill( newPackage ) );
+                FConfig.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringSkill( newPackage ) );
                 break;
 
             default:
@@ -88,6 +88,6 @@ public class ClientHandler
 
     public static void syncPrefsToServer()
     {
-        NetworkHandler.sendToServer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.getPreferencesMap( Minecraft.getMinecraft().player ) ), 0 ) );
+        NetworkHandler.sendToServer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( FConfig.getPreferencesMap( Minecraft.getMinecraft().player ) ), 0 ) );
     }
 }

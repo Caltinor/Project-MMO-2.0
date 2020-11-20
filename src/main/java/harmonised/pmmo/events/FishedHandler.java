@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
@@ -39,9 +39,9 @@ public class FishedHandler
 
         if( fishPool != null )
         {
-            double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
-            double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
-            double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
+            double fishPoolBaseChance = FConfig.fishPoolBaseChance;
+            double fishPoolChancePerLevel = FConfig.fishPoolChancePerLevel;
+            double fishPoolMaxChance = FConfig.fishPoolMaxChance;
             double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * startLevel;
             if( fishPoolChance > fishPoolMaxChance )
                 fishPoolChance = fishPoolMaxChance;

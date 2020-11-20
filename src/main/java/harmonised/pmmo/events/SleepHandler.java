@@ -10,11 +10,11 @@
 //{
 //    public static void handleSleepFinished( SleepFinishedTimeEvent event )
 //    {
-//        if( Config.forgeConfig.sleepRechargesAllPlayersVeinCharge.get() )
+//        if( FConfig.sleepRechargesAllPlayersVeinCharge )
 //        {
 //            ( (World) event.getWorld() ).getServer().getPlayerList().getPlayers().forEach(player ->
 //            {
-//                Config.getAbilitiesMap( player ).setTag( "veinLeft", Config.forgeConfig.maxVeinCharge.get() );
+//                Config.getAbilitiesMap( player ).setTag( "veinLeft", FConfig.maxVeinCharge );
 //            });
 //        }
 //    }

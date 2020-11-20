@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
@@ -38,13 +38,13 @@ public class BlockPlacedHandler
 
                 if( block.equals( Blocks.WATER ) )
                 {
-                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", Config.forgeConfig.jesusXp.get(), true, false, false );
+                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", FConfig.jesusXp, true, false, false );
                     return;
                 }
 
                 if( XP.checkReq( player, block.getRegistryName(), JType.REQ_PLACE ) )
                 {
-                    double blockHardnessLimitForPlacing = Config.forgeConfig.blockHardnessLimitForPlacing.get();
+                    double blockHardnessLimitForPlacing = FConfig.blockHardnessLimitForPlacing;
                     double blockHardness = event.getPlacedBlock().getBlockHardness( event.getWorld(), event.getPos() );
                     if ( blockHardness > blockHardnessLimitForPlacing )
                         blockHardness = blockHardnessLimitForPlacing;

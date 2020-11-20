@@ -1,12 +1,10 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -23,7 +21,7 @@ public class CraftedHandler
         if( event.player instanceof EntityPlayerMP )
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-            double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
+            double defaultCraftingXp = FConfig.defaultCraftingXp;
             double durabilityMultiplier = 1;
 
             ItemStack itemStack = event.crafting;

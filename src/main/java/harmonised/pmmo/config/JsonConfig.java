@@ -9,18 +9,14 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -103,118 +99,118 @@ public class JsonConfig
     {
         jTypes = new HashSet<>();
 
-        if( Config.forgeConfig.wearReqEnabled.get() )
+        if( FConfig.wearReqEnabled )
             jTypes.add( JType.REQ_WEAR );
 
-        if( Config.forgeConfig.toolReqEnabled.get() )
+        if( FConfig.toolReqEnabled )
             jTypes.add( JType.REQ_TOOL );
 
-        if( Config.forgeConfig.weaponReqEnabled.get() )
+        if( FConfig.weaponReqEnabled )
             jTypes.add( JType.REQ_WEAPON );
 
-        if( Config.forgeConfig.useReqEnabled.get() )
+        if( FConfig.useReqEnabled )
             jTypes.add( JType.REQ_USE );
 
-        if( Config.forgeConfig.xpValueGeneralEnabled.get() )
+        if( FConfig.xpValueGeneralEnabled )
             jTypes.add( JType.XP_VALUE_GENERAL );
 
-        if( Config.forgeConfig.xpValueBreakingEnabled.get() )
+        if( FConfig.xpValueBreakingEnabled )
             jTypes.add( JType.XP_VALUE_BREAK );
 
-        if( Config.forgeConfig.xpValueCraftingEnabled.get() )
+        if( FConfig.xpValueCraftingEnabled )
             jTypes.add( JType.XP_VALUE_CRAFT );
 
-        if( Config.forgeConfig.xpValuePlacingEnabled.get() )
+        if( FConfig.xpValuePlacingEnabled )
             jTypes.add( JType.XP_VALUE_PLACE );
 
-        if( Config.forgeConfig.breedingXpEnabled.get() )
+        if( FConfig.breedingXpEnabled )
             jTypes.add( JType.XP_VALUE_BREED );
 
-        if( Config.forgeConfig.tamingXpEnabled.get() )
+        if( FConfig.tamingXpEnabled )
             jTypes.add( JType.XP_VALUE_TAME );
 
-        if( Config.forgeConfig.smeltingXpEnabled.get() )
+        if( FConfig.smeltingXpEnabled )
             jTypes.add( JType.XP_VALUE_SMELT );
 
-        if( Config.forgeConfig.cookingXpEnabled.get() )
+        if( FConfig.cookingXpEnabled )
             jTypes.add( JType.XP_VALUE_COOK );
 
-        if( Config.forgeConfig.brewingXpEnabled.get() )
+        if( FConfig.brewingXpEnabled )
             jTypes.add( JType.XP_VALUE_BREW );
 
-        if( Config.forgeConfig.growingXpEnabled.get() )
+        if( FConfig.growingXpEnabled )
             jTypes.add( JType.XP_VALUE_GROW );
 
-        if( Config.forgeConfig.placeReqEnabled.get() )
+        if( FConfig.placeReqEnabled )
             jTypes.add( JType.REQ_PLACE );
 
-        if( Config.forgeConfig.breakReqEnabled.get() )
+        if( FConfig.breakReqEnabled )
             jTypes.add( JType.REQ_BREAK );
 
-        if( Config.forgeConfig.biomeReqEnabled.get() )
+        if( FConfig.biomeReqEnabled )
             jTypes.add( JType.REQ_BIOME );
 
-        if( Config.forgeConfig.negativeBiomeEffectEnabled.get() )
+        if( FConfig.negativeBiomeEffectEnabled )
             jTypes.add( JType.BIOME_EFFECT_NEGATIVE );
 
-        if( Config.forgeConfig.positiveBiomeEffectEnabled.get() )
+        if( FConfig.positiveBiomeEffectEnabled )
             jTypes.add( JType.BIOME_EFFECT_POSITIVE );
 
-        if( Config.forgeConfig.biomeXpBonusEnabled.get() )
+        if( FConfig.biomeXpBonusEnabled )
             jTypes.add( JType.XP_BONUS_BIOME );
 
-        if( Config.forgeConfig.biomeMobMultiplierEnabled.get() )
+        if( FConfig.biomeMobMultiplierEnabled )
             jTypes.add( JType.BIOME_MOB_MULTIPLIER );
 
-        if( Config.forgeConfig.oreEnabled.get() )
+        if( FConfig.oreEnabled )
             jTypes.add( JType.INFO_ORE );
 
-        if( Config.forgeConfig.logEnabled.get() )
+        if( FConfig.logEnabled )
             jTypes.add( JType.INFO_LOG );
 
-        if( Config.forgeConfig.plantEnabled.get() )
+        if( FConfig.plantEnabled )
             jTypes.add( JType.INFO_PLANT );
 
-        if( Config.forgeConfig.smeltingEnabled.get() )
+        if( FConfig.smeltingEnabled )
             jTypes.add( JType.INFO_SMELT );
 
-        if( Config.forgeConfig.cookingEnabled.get() )
+        if( FConfig.cookingEnabled )
             jTypes.add( JType.INFO_COOK );
 
-        if( Config.forgeConfig.brewingEnabled.get() )
+        if( FConfig.brewingEnabled )
             jTypes.add( JType.INFO_BREW );
 
-        if( Config.forgeConfig.salvageEnabled.get() )
+        if( FConfig.salvageEnabled )
             jTypes.add( JType.SALVAGE );
 
-        if( Config.forgeConfig.fishPoolEnabled.get() )
+        if( FConfig.fishPoolEnabled )
             jTypes.add( JType.FISH_POOL );
 
-        if( Config.forgeConfig.fishEnchantPoolEnabled.get() )
+        if( FConfig.fishEnchantPoolEnabled )
             jTypes.add( JType.FISH_ENCHANT_POOL );
 
-        if( Config.forgeConfig.killReqEnabled.get() )
+        if( FConfig.killReqEnabled )
             jTypes.add( JType.REQ_KILL );
 
-        if( Config.forgeConfig.killXpEnabled.get() )
+        if( FConfig.killXpEnabled )
             jTypes.add( JType.XP_VALUE_KILL );
 
-        if( Config.forgeConfig.mobRareDropEnabled.get() )
+        if( FConfig.mobRareDropEnabled )
             jTypes.add( JType.MOB_RARE_DROP );
 
-        if( Config.forgeConfig.levelUpCommandEnabled.get() )
+        if( FConfig.levelUpCommandEnabled )
             jTypes.add( JType.LEVEL_UP_COMMAND );
 
-        if( Config.forgeConfig.heldItemXpBoostEnabled.get() )
+        if( FConfig.heldItemXpBoostEnabled )
             jTypes.add( JType.XP_BONUS_HELD );
 
-        if( Config.forgeConfig.wornItemXpBoostEnabled.get() )
+        if( FConfig.wornItemXpBoostEnabled )
             jTypes.add( JType.XP_BONUS_WORN );
 
-        if( Config.forgeConfig.craftReqEnabled.get() )
+        if( FConfig.craftReqEnabled )
             jTypes.add( JType.REQ_CRAFT );
 
-        if( Config.forgeConfig.treasureEnabled.get() )
+        if( FConfig.treasureEnabled )
             jTypes.add( JType.TREASURE );
 
         jTypes.add( JType.BLOCK_SPECIFIC );
@@ -233,7 +229,7 @@ public class JsonConfig
         for( JType jType : jTypes )
         {
             fileName = jType.name().toLowerCase() + ".json";
-            File dataFile = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
+            File dataFile = FMLPaths.CONFIGDIR.resolve( dataPath + fileName ).toFile();
 
             if ( !dataFile.exists() )   //If no data file, create one
                 createData( dataFile, fileName );
@@ -250,13 +246,13 @@ public class JsonConfig
         for( JType jType : jTypes )
         {
             fileName = jType.name().toLowerCase() + ".json";
-            file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
+            file = FMLPaths.CONFIGDIR.resolve( dataPath + fileName ).toFile();
 
             try
-                    (
-                            InputStream input = new FileInputStream( file.getPath() );
-                            Reader reader = new BufferedReader( new InputStreamReader( input ) )
-                    )
+            (
+                InputStream input = new FileInputStream( file.getPath() );
+                Reader reader = new BufferedReader( new InputStreamReader( input ) )
+            )
             {
                 if( jTypes2.contains( jType ) )
                     rawData2.put( jType, gson.fromJson( reader, mapType2 ) );
@@ -457,7 +453,7 @@ public class JsonConfig
 
         for( String key : theMap.keySet() )
         {
-            Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( key ) );
+            Potion effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( key ) );
             if( effect != null )
                 anyValidEffects = true;
             else
@@ -509,7 +505,7 @@ public class JsonConfig
 
                 for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
-                    Potion potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
+                    PotionType potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
                     if( potion != null && entry.getValue() >= 0 && entry.getValue() < 255 )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else
@@ -615,10 +611,10 @@ public class JsonConfig
 //                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is invalid, loading default value 1 item" );
                     inMap.put( "minCount", 1D );
                 }
-                else if( inMap.get( "minCount" ) > item.getMaxStackSize() )
+                else if( inMap.get( "minCount" ) > item.getItemStackLimit() )
                 {
                     LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"minCount\" is above Max Stack Size, loading default value 1 item" );
-                    inMap.put( "minCount", (double) item.getMaxStackSize() );
+                    inMap.put( "minCount", (double) item.getItemStackLimit() );
                 }
 
                 if( !( inMap.containsKey( "maxCount" ) ) )
@@ -626,10 +622,10 @@ public class JsonConfig
 //                    LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is invalid, loading default value 1" );
                     inMap.put( "maxCount", 1D );
                 }
-                else if( inMap.get( "maxCount" ) > item.getMaxStackSize() )
+                else if( inMap.get( "maxCount" ) > item.getItemStackLimit() )
                 {
                     LOGGER.debug( "Error loading Fish Pool Item " + element.getKey() + " \"maxCount\" is above Max Stack Size, loading default value 1 item" );
-                    inMap.put( "maxCount", (double) item.getMaxStackSize() );
+                    inMap.put( "maxCount", (double) item.getItemStackLimit() );
                 }
 
                 if( !( inMap.containsKey( "enchantLevelReq" ) ) )
@@ -1121,163 +1117,164 @@ public class JsonConfig
         }
     }
 
-    public static void setAutoValues()
-    {
-        if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
-        {
-            for( Item item : ForgeRegistries.ITEMS )
-            {
-                try
-                {
-                    ItemStack itemStack = new ItemStack( item );
-                    String resLoc = item.getRegistryName().toString();
-                    Set<ToolType> toolTypes = itemStack.getToolTypes();
-
-                    //Wear and Weapon Req
-                    Multimap<String, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
-                    Multimap<String, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.OFFHAND );
-                    Multimap<String, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.HEAD );
-                    Multimap<String, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.CHEST );
-                    Multimap<String, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.LEGS );
-                    Multimap<String, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.FEET );
-
-                    Map<String, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes, headHandAttributes, chestHandAttributes, legsHandAttributes, feetHandAttributes );
-
-                    AttributeModifier armorAttribute = attributes.get( "generic.armor" );
-                    AttributeModifier armorToughnessAttribute = attributes.get( "generic.armorToughness" );
-                    AttributeModifier attackSpeedAttribute = attributes.get( "generic.attackSpeed" );
-                    AttributeModifier attackDamageAttribute = attributes.get( "generic.attackDamage" );
-
-                    double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
-                    double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
-                    double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
-                    double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
-                    double enduranceReq = 0;
-                    double combatReq = 0;
-                    double toolReq = 0, highestToolReq = 0;
-
-                    Map<String, Double> reqWear     = new HashMap<>();
-                    Map<String, Double> reqWeapon   = new HashMap<>();
-                    Map<String, Double> reqTool     = new HashMap<>();
-
-                    if( attributes.size() > 0 )
-                    {
-                        enduranceReq = Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() );
-                        combatReq = Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) );
-
-                        reqWear.put( Skill.ENDURANCE.toString(), Math.max( 1, enduranceReq ) );
-                        reqWeapon.put( Skill.COMBAT.toString(),  Math.max( 1, combatReq ) );
-
-                        if( Config.forgeConfig.wearReqEnabled.get() && Config.forgeConfig.autoGenerateWearReqEnabled.get() && reqWear.getOrDefault( Skill.ENDURANCE.toString(), 0D ) > 1 )
-                            addJsonConfigValue( resLoc, JType.REQ_WEAR, reqWear, false );
-                        if( Config.forgeConfig.weaponReqEnabled.get() && Config.forgeConfig.autoGenerateWeaponReqEnabled.get() && reqWeapon.getOrDefault( Skill.COMBAT.toString(), 0D ) > 1 )
-                            addJsonConfigValue( resLoc, JType.REQ_WEAPON, reqWeapon, false );
-                    }
-
-                    //Tool Req
-                    double speed;
-                    for( ToolType toolType : toolTypes )
-                    {
-                        if( toolType.equals( ToolType.AXE ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleLog.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
-                        }
-                        if( toolType.equals( ToolType.PICKAXE ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleOre.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.MINING.toString(), toolReq );
-                        }
-                        if( toolType.equals( ToolType.SHOVEL ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleDirt.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.EXCAVATION.toString(), toolReq );
-                        }
-                    }
-                    if( Config.forgeConfig.toolReqEnabled.get() && Config.forgeConfig.autoGenerateToolReqEnabled.get() )
-                        addJsonConfigValue( resLoc, JType.REQ_TOOL, reqTool, true );
-
-                    //Crafting Xp Value
-                    if( Config.forgeConfig.autoGenerateCraftingXpEnabled.get() )
-                    {
-                        double craftingXp = 0;
-                        double smithingXp = 0;
-
-                        if( enduranceReq > 0 || combatReq > 0 || toolReq > 0 )
-                        {
-                            craftingXp = enduranceReq * 10D +                           Math.max( ( Math.max( combatReq - 10, 1 ) ) * 5D,  ( Math.max( toolReq - 10, 1 ) ) * 5D );
-                            smithingXp = ( Math.max( enduranceReq - 10, 1 ) ) * 5D  +   Math.max( ( Math.max( combatReq - 10, 1 ) ) * 2D,  ( Math.max( toolReq - 10, 1 ) ) * 2D );
-
-                            craftingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierCrafting.get();
-                            smithingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierSmithing.get();
-                        }
-
-                        Map<String, Double> xpValueMap = new HashMap<>();
-                        if( craftingXp > 0 )
-                            xpValueMap.put( Skill.CRAFTING.toString(), craftingXp );
-                        if( smithingXp > 0 )
-                            xpValueMap.put( Skill.SMITHING.toString(), smithingXp );
-                        addJsonConfigValue( resLoc, JType.XP_VALUE_CRAFT, xpValueMap, true );
-                    }
-                }
-                catch( Exception e )
-                {
-                    LOGGER.debug( e );
-                }
-            }
-            if( Config.forgeConfig.autoGenerateExtraChanceEnabled.get() )
-            {
-                for( Block block : ForgeRegistries.BLOCKS )
-                {
-                    try
-                    {
-//                ItemStack itemStack = new ItemStack( block );
-                        String resLoc = block.getRegistryName().toString();
-                        Material material = block.getDefaultState().getMaterial();
-                        Skill skill = XP.getSkill( material );
-                        JType jType = JType.NONE;
-                        Map<String, Double> infoMap = new HashMap<>();
-                        double chance = 0;
-                        Set<ResourceLocation> tags = block.getTags();
-
-                        //Ore/Log/Plant Extra Chance
-                        if( block instanceof OreBlock || tags.contains( new ResourceLocation( "forge:ores" ) ) )
-                        {
-                            jType = JType.INFO_ORE;
-                            chance = Config.forgeConfig.defaultExtraChanceOre.get();
-                        }
-                        else if( block instanceof CropsBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
-                        {
-                            jType = JType.INFO_PLANT;
-                            chance = Config.forgeConfig.defaultExtraChancePlant.get();
-                        }
-                        else if( block instanceof  LogBlock || tags.contains( new ResourceLocation( "minecraft:logs" ) ) )
-                        {
-                            jType = JType.INFO_LOG;
-                            chance = Config.forgeConfig.defaultExtraChanceLog.get();
-                        }
-                        if( !jType.equals( JType.NONE ) )
-                            infoMap.put( "extraChance", chance );
-
-                        if( infoMap.size() > 0 && infoMap.getOrDefault( "extraChance", 0D ) > 0 )
-                            addJsonConfigValue( resLoc, jType, infoMap, false );
-                    }
-                    catch( Exception e )
-                    {
-                        LOGGER.error( e );
-                    }
-                }
-            }
-            data = localData;
-        }
-    }
+//    public static void setAutoValues()
+//    {
+//        if( FConfig.autoGenerateValuesEnabled )
+//        {
+//            for( Item item : ForgeRegistries.ITEMS )
+//            {
+//                try
+//                {
+//                    ItemStack itemStack = new ItemStack( item );
+//                    String resLoc = item.getRegistryName().toString();
+//                    Set<ToolType> toolTypes = itemStack.getToolTypes();
+//
+//                    //Wear and Weapon Req
+//                    Multimap<String, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
+//                    Multimap<String, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.OFFHAND );
+//                    Multimap<String, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.HEAD );
+//                    Multimap<String, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.CHEST );
+//                    Multimap<String, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.LEGS );
+//                    Multimap<String, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.FEET );
+//
+//                    Map<String, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes, headHandAttributes, chestHandAttributes, legsHandAttributes, feetHandAttributes );
+//
+//                    AttributeModifier armorAttribute = attributes.get( "generic.armor" );
+//                    AttributeModifier armorToughnessAttribute = attributes.get( "generic.armorToughness" );
+//                    AttributeModifier attackSpeedAttribute = attributes.get( "generic.attackSpeed" );
+//                    AttributeModifier attackDamageAttribute = attributes.get( "generic.attackDamage" );
+//
+//                    double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
+//                    double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
+//                    double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
+//                    double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
+//                    double enduranceReq = 0;
+//                    double combatReq = 0;
+//                    double toolReq = 0, highestToolReq = 0;
+//
+//                    Map<String, Double> reqWear     = new HashMap<>();
+//                    Map<String, Double> reqWeapon   = new HashMap<>();
+//                    Map<String, Double> reqTool     = new HashMap<>();
+//
+//                    if( attributes.size() > 0 )
+//                    {
+//                        enduranceReq = Math.ceil( armor * FConfig.armorReqScale + armorToughness * FConfig.armorToughnessReqScale );
+//                        combatReq = Math.ceil( (attackDamage) * FConfig.attackDamageReqScale * (4+attackSpeed) );
+//
+//                        reqWear.put( Skill.ENDURANCE.toString(), Math.max( 1, enduranceReq ) );
+//                        reqWeapon.put( Skill.COMBAT.toString(),  Math.max( 1, combatReq ) );
+//
+//                        if( FConfig.wearReqEnabled && FConfig.autoGenerateWearReqEnabled && reqWear.getOrDefault( Skill.ENDURANCE.toString(), 0D ) > 1 )
+//                            addJsonConfigValue( resLoc, JType.REQ_WEAR, reqWear, false );
+//                        if( FConfig.weaponReqEnabled && FConfig.autoGenerateWeaponReqEnabled && reqWeapon.getOrDefault( Skill.COMBAT.toString(), 0D ) > 1 )
+//                            addJsonConfigValue( resLoc, JType.REQ_WEAPON, reqWeapon, false );
+//                    }
+//
+//                    //Tool Req
+//                    double speed;
+//                    for( ToolType toolType : toolTypes )
+//                    {
+//                        if( toolType.equals( ToolType.AXE ) )
+//                        {
+//                            speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
+//                            toolReq = Math.max( 1, speed * FConfig.toolReqScaleLog );
+//                            if( highestToolReq < toolReq )
+//                                highestToolReq = toolReq;
+//                            reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
+//                        }
+//                        if( toolType.equals( ToolType.PICKAXE ) )
+//                        {
+//                            speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
+//                            toolReq = Math.max( 1, speed * FConfig.toolReqScaleOre );
+//                            if( highestToolReq < toolReq )
+//                                highestToolReq = toolReq;
+//                            reqTool.put( Skill.MINING.toString(), toolReq );
+//                        }
+//                        if( toolType.equals( ToolType.SHOVEL ) )
+//                        {
+//                            speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
+//                            toolReq = Math.max( 1, speed * FConfig.toolReqScaleDirt );
+//                            if( highestToolReq < toolReq )
+//                                highestToolReq = toolReq;
+//                            reqTool.put( Skill.EXCAVATION.toString(), toolReq );
+//                        }
+//                    }
+//                    if( FConfig.toolReqEnabled && FConfig.autoGenerateToolReqEnabled )
+//                        addJsonConfigValue( resLoc, JType.REQ_TOOL, reqTool, true );
+//
+//                    //Crafting Xp Value
+//                    if( FConfig.autoGenerateCraftingXpEnabled )
+//                    {
+//                        double craftingXp = 0;
+//                        double smithingXp = 0;
+//
+//                        if( enduranceReq > 0 || combatReq > 0 || toolReq > 0 )
+//                        {
+//                            craftingXp = enduranceReq * 10D +                           Math.max( ( Math.max( combatReq - 10, 1 ) ) * 5D,  ( Math.max( toolReq - 10, 1 ) ) * 5D );
+//                            smithingXp = ( Math.max( enduranceReq - 10, 1 ) ) * 5D  +   Math.max( ( Math.max( combatReq - 10, 1 ) ) * 2D,  ( Math.max( toolReq - 10, 1 ) ) * 2D );
+//
+//                            craftingXp *= FConfig.autoGeneratedCraftingXpValueMultiplierCrafting;
+//                            smithingXp *= FConfig.autoGeneratedCraftingXpValueMultiplierSmithing;
+//                        }
+//
+//                        Map<String, Double> xpValueMap = new HashMap<>();
+//                        if( craftingXp > 0 )
+//                            xpValueMap.put( Skill.CRAFTING.toString(), craftingXp );
+//                        if( smithingXp > 0 )
+//                            xpValueMap.put( Skill.SMITHING.toString(), smithingXp );
+//                        addJsonConfigValue( resLoc, JType.XP_VALUE_CRAFT, xpValueMap, true );
+//                    }
+//                }
+//                catch( Exception e )
+//                {
+//                    LOGGER.debug( e );
+//                }
+//            }
+//            if( FConfig.autoGenerateExtraChanceEnabled )
+//            {
+//                for( Block block : ForgeRegistries.BLOCKS )
+//                {
+//                    try
+//                    {
+////                ItemStack itemStack = new ItemStack( block );
+//                        String resLoc = block.getRegistryName().toString();
+//                        Material material = block.getDefaultState().getMaterial();
+//                        Skill skill = XP.getSkill( material );
+//                        JType jType = JType.NONE;
+//                        Map<String, Double> infoMap = new HashMap<>();
+//                        double chance = 0;
+//                        Set<ResourceLocation> tags = block.getTags();
+//
+//                        //Ore/Log/Plant Extra Chance
+//                        if( block instanceof OreBlock || tags.contains( new ResourceLocation( "forge:ores" ) ) )
+//                        {
+//                            jType = JType.INFO_ORE;
+//                            chance = FConfig.defaultExtraChanceOre;
+//                        }
+//                        else if( block instanceof CropsBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
+//                        {
+//                            jType = JType.INFO_PLANT;
+//                            chance = FConfig.defaultExtraChancePlant;
+//                        }
+//                        else if( block instanceof  LogBlock || tags.contains( new ResourceLocation( "minecraft:logs" ) ) )
+//                        {
+//                            jType = JType.INFO_LOG;
+//                            chance = FConfig.defaultExtraChanceLog;
+//                        }
+//                        if( !jType.equals( JType.NONE ) )
+//                            infoMap.put( "extraChance", chance );
+//
+//                        if( infoMap.size() > 0 && infoMap.getOrDefault( "extraChance", 0D ) > 0 )
+//                            addJsonConfigValue( resLoc, jType, infoMap, false );
+//                    }
+//                    catch( Exception e )
+//                    {
+//                        LOGGER.error( e );
+//                    }
+//                }
+//            }
+//            data = localData;
+//        }
+//    }
+    //COUT AUTO VALUES
 }

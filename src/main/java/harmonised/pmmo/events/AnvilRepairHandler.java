@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageTripleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
@@ -27,13 +27,13 @@ public class AnvilRepairHandler
 
     public static void handleAnvilRepair( AnvilRepairEvent event )
     {
-        if( Config.forgeConfig.anvilHandlingEnabled.get() )
+        if( FConfig.anvilHandlingEnabled )
             try
             {
                 if( !event.getEntityPlayer().world.isRemote )
                 {
                     EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
-                    boolean bypassEnchantLimit = Config.forgeConfig.bypassEnchantLimit.get();
+                    boolean bypassEnchantLimit = FConfig.bypassEnchantLimit;
                     int currLevel = Skill.SMITHING.getLevel( player );
                     ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
                     ItemStack lItem = event.getItemInput();
@@ -41,10 +41,10 @@ public class AnvilRepairHandler
 
                     if( event.getItemInput().getItem().isDamageable() )
                     {
-                        double anvilCostReductionPerLevel = Config.forgeConfig.anvilCostReductionPerLevel.get();
-                        double extraChanceToNotBreakAnvilPerLevel = Config.forgeConfig.extraChanceToNotBreakAnvilPerLevel.get() / 100;
-                        double anvilFinalItemBonusRepaired = Config.forgeConfig.anvilFinalItemBonusRepaired.get() / 100;
-                        int anvilFinalItemMaxCostToAnvil = Config.forgeConfig.anvilFinalItemMaxCostToAnvil.get();
+                        double anvilCostReductionPerLevel = FConfig.anvilCostReductionPerLevel;
+                        double extraChanceToNotBreakAnvilPerLevel = FConfig.extraChanceToNotBreakAnvilPerLevel / 100;
+                        double anvilFinalItemBonusRepaired = FConfig.anvilFinalItemBonusRepaired / 100;
+                        int anvilFinalItemMaxCostToAnvil = FConfig.anvilFinalItemMaxCostToAnvil;
 
                         double bonusRepair = anvilFinalItemBonusRepaired * currLevel;
                         int maxCost = (int) Math.floor( 50 - ( currLevel * anvilCostReductionPerLevel ) );
@@ -94,12 +94,12 @@ public class AnvilRepairHandler
     public static Map<Enchantment, Integer> mergeEnchants( Map<Enchantment, Integer> lEnchants, Map<Enchantment, Integer> rEnchants, EntityPlayer player, int currLevel )
     {
         Map<Enchantment, Integer> newEnchants = new HashMap<>();
-        double bypassChance = Config.forgeConfig.upgradeChance.get();
-        double failedBypassPenaltyChance = Config.forgeConfig.failedUpgradeKeepLevelChance.get();
-        int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
-        int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
-        int maxEnchantLevel = Config.forgeConfig.maxEnchantLevel.get();
-        boolean alwaysUseUpgradeChance = Config.forgeConfig.alwaysUseUpgradeChance.get();
+        double bypassChance = FConfig.upgradeChance;
+        double failedBypassPenaltyChance = FConfig.failedUpgradeKeepLevelChance;
+        int levelsPerOneEnchantBypass = FConfig.levelsPerOneEnchantBypass;
+        int maxEnchantmentBypass = FConfig.maxEnchantmentBypass;
+        int maxEnchantLevel = FConfig.maxEnchantLevel;
+        boolean alwaysUseUpgradeChance = FConfig.alwaysUseUpgradeChance;
         boolean creative = !XP.isPlayerSurvival( player );
 
         lEnchants.forEach( ( enchant, startLevel ) ->

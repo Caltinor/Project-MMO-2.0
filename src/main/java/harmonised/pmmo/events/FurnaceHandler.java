@@ -42,7 +42,7 @@ public class FurnaceHandler
             }
 
             source += " " + input.getItem().getRegistryName();
-            source += " [" + world.getWorldType().getId() + "|x" + pos.x + "|y" + pos.y + "|z" + pos.z + "]";
+            source += " [" + world.getWorldType().getId() + "|x" + pos.getX() + "|y" + pos.getY() + "|z" + pos.getZ() + "]";
             UUID uuid = ChunkDataHandler.checkPos( world, pos );
 
             if( uuid != null )

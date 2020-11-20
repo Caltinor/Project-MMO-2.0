@@ -1,6 +1,5 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
@@ -11,19 +10,9 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Enchantments;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
@@ -126,7 +115,7 @@ public class BlockBrokenHandler
 //            return;
 //
 //        Material material = event.getState().getMaterial();
-//        double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
+//        double blockHardnessLimitForBreaking = FConfig.blockHardnessLimitForBreaking;
 //        boolean wasPlaced = ChunkDataHandler.checkPos( world, event.getPos() ) != null;
 //        ItemStack toolUsed = player.getHeldItemMainhand();
 //        Skill skill = XP.getSkill( material );

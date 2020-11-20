@@ -1,12 +1,11 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class BreakSpeedHandler
 {
@@ -28,7 +27,7 @@ public class BreakSpeedHandler
         else if( toolGap > 0 )
         {
             player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-            if( Config.getConfig( "strictReqTool" ) == 1 )
+            if( FConfig.getConfig( "strictReqTool" ) == 1 )
             {
                 event.setCanceled( true );
                 return;
@@ -44,28 +43,28 @@ public class BreakSpeedHandler
                 if (height < 0)
                     height = -height;
 
-                double blocksToUnbreakableY = Config.forgeConfig.blocksToUnbreakableY.get();
+                double blocksToUnbreakableY = FConfig.blocksToUnbreakableY;
                 double heightMultiplier = 1 - ( height / blocksToUnbreakableY );
 
-                if ( heightMultiplier < Config.forgeConfig.minBreakSpeed.get() )
-                    heightMultiplier = Config.forgeConfig.minBreakSpeed.get();
+                if ( heightMultiplier < FConfig.minBreakSpeed )
+                    heightMultiplier = FConfig.minBreakSpeed;
 
-                speedBonus = Config.forgeConfig.miningBonusSpeed.get() / 100;
+                speedBonus = FConfig.miningBonusSpeed / 100;
                 event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) * ( (float) heightMultiplier ) );
                 break;
 
             case "axe":
-                speedBonus = Config.forgeConfig.woodcuttingBonusSpeed.get() / 100;
+                speedBonus = FConfig.woodcuttingBonusSpeed / 100;
                 event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 
             case "shovel":
-                speedBonus = Config.forgeConfig.excavationBonusSpeed.get() / 100;
+                speedBonus = FConfig.excavationBonusSpeed / 100;
                 event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 
             case "hoe":
-                speedBonus = Config.forgeConfig.farmingBonusSpeed.get() / 100;
+                speedBonus = FConfig.farmingBonusSpeed / 100;
                 event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
                 break;
 

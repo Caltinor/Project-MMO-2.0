@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,14 +26,14 @@ public class JumpHandler
             {
                 Map<String, Double> prefsMap;
 
-                prefsMap = Config.getPreferencesMap( player );
+                prefsMap = FConfig.getPreferencesMap( player );
 
                 double agilityLevel = 1;
                 double jumpBoost = 0;
-                double maxJumpBoost = Config.getConfig( "maxJumpBoost" );
+                double maxJumpBoost = FConfig.getConfig( "maxJumpBoost" );
                 double maxJumpBoostPref = maxJumpBoost;
-                int levelsPerCrouchJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerCrouchJumpBoost" ) );
-                int levelsPerSprintJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerSprintJumpBoost" ) );
+                int levelsPerCrouchJumpBoost = (int) Math.floor( FConfig.getConfig( "levelsPerCrouchJumpBoost" ) );
+                int levelsPerSprintJumpBoost = (int) Math.floor( FConfig.getConfig( "levelsPerSprintJumpBoost" ) );
 
                 agilityLevel = Skill.AGILITY.getLevel( player );
 

@@ -2,6 +2,7 @@ package harmonised.pmmo.proxy;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class CommonProxy
 {
@@ -9,9 +10,4 @@ public class CommonProxy
 //	{
 //		
 //	}
-	
-	public void postInit( FMLPostInitializationEvent event )
-	{
-		
-    }
 }

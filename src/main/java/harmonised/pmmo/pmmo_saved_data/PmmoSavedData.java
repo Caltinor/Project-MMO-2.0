@@ -1,6 +1,6 @@
 package harmonised.pmmo.pmmo_saved_data;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.party.Party;
 import harmonised.pmmo.party.PartyMemberInfo;
 import harmonised.pmmo.skills.Skill;
@@ -207,7 +207,7 @@ public class PmmoSavedData extends WorldSavedData
     {
         if( !skill.equals( Skill.INVALID_SKILL ) )
         {
-            double maxXp = Config.getConfig( "maxXp" );
+            double maxXp = FConfig.getConfig( "maxXp" );
 
             if( amount > maxXp )
                 amount = maxXp;
@@ -351,7 +351,7 @@ public class PmmoSavedData extends WorldSavedData
     public static void init( MinecraftServer server )
     {
         PmmoSavedData.server = server;
-        PmmoSavedData.pmmoSavedData = server.getWorld( DimensionType.OVERWORLD.getId() ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+        PmmoSavedData.pmmoSavedData = server.getWorld( DimensionType.OVERWORLD.getId() ).loadData( PmmoSavedData::new, NAME );
     }
 
     public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.

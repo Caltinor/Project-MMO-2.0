@@ -1,6 +1,6 @@
 package harmonised.pmmo.party;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -79,7 +79,7 @@ public class Party
 
     public Set<EntityPlayerMP> getOnlineMembersInRange( EntityPlayerMP originPlayer )
     {
-        Set<EntityPlayerMP> membersInRange = XP.getEntitiesInRange( originPlayer.getPositionVector(), getOnlineMembers( originPlayer.getServer() ), Config.forgeConfig.partyRange.get() );
+        Set<EntityPlayerMP> membersInRange = XP.getEntitiesInRange( originPlayer.getPositionVector(), getOnlineMembers( originPlayer.getServer() ), FConfig.partyRange );
         membersInRange.remove( originPlayer );
         return membersInRange;
     }
@@ -113,7 +113,7 @@ public class Party
 
     public double getMultiplier( int membersInRange )   //membersInRange SHOULD ONLY INCLUDE OTHER PLAYERS
     {
-        return 1 + Math.min( membersInRange * Config.forgeConfig.partyXpIncreasePerPlayer.get() / 100D, Config.forgeConfig.maxPartyXpBonus.get() / 100D );
+        return 1 + Math.min( membersInRange * FConfig.partyXpIncreasePerPlayer / 100D, FConfig.maxPartyXpBonus / 100D );
     }
 
     public void submitXpGained( UUID uuid, double xpGained )
@@ -125,6 +125,6 @@ public class Party
 
     public static int getMaxPartyMembers()
     {
-        return Config.forgeConfig.partyMaxMembers.get();
+        return FConfig.partyMaxMembers;
     }
 }

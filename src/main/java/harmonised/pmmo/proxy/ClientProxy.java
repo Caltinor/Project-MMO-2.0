@@ -18,15 +18,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ClientProxy extends CommonProxy
 {	
 	public static final KeyBinding SHOW_GUI = new KeyBinding( "key.showgui", Keyboard.KEY_TAB, "category.pmmo" );
-	
-//	public void registerItemRenderer(Item item, int meta, String id)
-//	{
-//		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id ) );
-//	}
 
-	public void postInit( FMLPostInitializationEvent event )
+	public static void postInit( FMLPostInitializationEvent event )
 	{
-		super.postInit( event );
 		MinecraftForge.EVENT_BUS.register( new XPOverlayGUI() );
 		ClientRegistry.registerKeyBinding( SHOW_GUI );
 		ClientHandler.init();

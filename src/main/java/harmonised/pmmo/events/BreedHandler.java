@@ -1,8 +1,7 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,7 +17,7 @@ public class BreedHandler
         if( event.getChild() != null && event.getCausedByPlayer() != null && event.getCausedByPlayer() instanceof EntityPlayerMP && !(event.getCausedByPlayer() instanceof FakePlayer) )
         {
             EntityPlayerMP causedByPlayer = (EntityPlayerMP) event.getCausedByPlayer();
-            double defaultBreedingXp = Config.forgeConfig.defaultBreedingXp.get();
+            double defaultBreedingXp = FConfig.defaultBreedingXp;
             String regKey = event.getChild().getName();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_BREED );
 

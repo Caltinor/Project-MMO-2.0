@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
@@ -35,7 +35,7 @@ public class GrowHandler
             if( award.size() > 0 )
                 XP.awardXpMap( uuid, award, "Growing " + resLoc + " at " + pos, true, false );
             else
-                Skill.FARMING.addXp( uuid, Config.forgeConfig.defaultSaplingGrowXp.get(), "Growing " + resLoc + " at " + pos, true, false );
+                Skill.FARMING.addXp( uuid, FConfig.defaultSaplingGrowXp, "Growing " + resLoc + " at " + pos, true, false );
         }
     }
 
@@ -71,7 +71,7 @@ public class GrowHandler
                 if( award.size() > 0 )
                     XP.awardXpMap( uuid, award, "Growing " + block.getRegistryName() + " at " + pos, true, false );
                 else
-                    Skill.FARMING.addXp( uuid, Config.forgeConfig.defaultCropGrowXp.get(), "Growing " + block.getRegistryName() + " at " + pos, true, false );
+                    Skill.FARMING.addXp( uuid, FConfig.defaultCropGrowXp, "Growing " + block.getRegistryName() + " at " + pos, true, false );
             }
         }
     }

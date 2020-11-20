@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -22,7 +22,7 @@ public class TameHandler
             if( xpValue.size() > 0 )
                 XP.awardXpMap( tamer.getUniqueID(), xpValue, "taming", false, false );
             else
-                XP.awardXp( tamer, Skill.TAMING, "taming", Config.forgeConfig.defaultTamingXp.get(), false, false, false );
+                XP.awardXp( tamer, Skill.TAMING, "taming", FConfig.defaultTamingXp, false, false, false );
         }
     }
 }

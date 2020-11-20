@@ -1,6 +1,6 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -61,7 +61,7 @@ public class MessageUpdatePlayerNBT extends MessageBase<MessageUpdatePlayerNBT>
                 break;
 
             case 2: //config
-                Config.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
+                FConfig.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
                 WorldTickHandler.refreshVein();
                 AttributeHandler.init();
                 break;

@@ -1,24 +1,20 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.AttributeHandler;
-import net.minecraft.world.GameRules;
+import harmonised.pmmo.util.Reference;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.event.world.*;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber
 public class EventHandler
@@ -196,4 +192,11 @@ public class EventHandler
 //	{
 //		event.getRegistry().register( SkillTask.SKILL = new TaskType( SkillTask::new ).setRegistryName( "skill" ).setIcon( Icon.getIcon("minecraft:item/dragon_egg") ) );
 //	}
+
+	@SubscribeEvent
+	public static void onConfigChanged( final ConfigChangedEvent.OnConfigChangedEvent event )
+	{
+		if ( event.getModID().equals( Reference.MOD_ID ) )
+			ConfigManager.sync( Reference.MOD_ID, Config.Type.INSTANCE );
+	}
 }

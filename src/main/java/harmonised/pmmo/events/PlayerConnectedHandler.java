@@ -1,14 +1,12 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
@@ -30,8 +28,8 @@ public class PlayerConnectedHandler
         if( !player.world.isRemote )
         {
             UUID uuid = player.getUniqueID();
-            boolean showWelcome = Config.forgeConfig.showWelcome.get();
-            boolean showPatreonWelcome = Config.forgeConfig.showPatreonWelcome.get();
+            boolean showWelcome = FConfig.showWelcome;
+            boolean showPatreonWelcome = FConfig.showPatreonWelcome;
 
             PmmoSavedData.get().setName( player.getDisplayName().getUnformattedText(), uuid );
             migratePlayerDataToWorldSavedData( player );
@@ -87,7 +85,7 @@ public class PlayerConnectedHandler
             if( pmmoTag.hasKey( "preferences" ) )
             {
                 tag = pmmoTag.getCompoundTag( "preferences" );
-                map = Config.getPreferencesMap( player );
+                map = FConfig.getPreferencesMap( player );
                 for( String key : tag.getKeySet() )
                 {
                     map.put( key, tag.getDouble( key ) );
@@ -97,7 +95,7 @@ public class PlayerConnectedHandler
             if( pmmoTag.hasKey( "abilities" ) )
             {
                 tag = pmmoTag.getCompoundTag( "abilities" );
-                map = Config.getAbilitiesMap( player );
+                map = FConfig.getAbilitiesMap( player );
                 for( String key : tag.getKeySet() )
                 {
                     map.put( key, tag.getDouble( key ) );

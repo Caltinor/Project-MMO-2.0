@@ -9,7 +9,7 @@
 //
 //public class Curios
 //{
-//    private static final boolean isCuriosLoaded = ModList.get().isLoaded("curios");
+//    private static final boolean isCuriosLoaded = ModList.isLoaded("curios");
 //
 //    public static boolean isLoaded()
 //    {

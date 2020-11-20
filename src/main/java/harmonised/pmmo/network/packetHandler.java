@@ -1,6 +1,6 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -26,7 +26,7 @@ public class packetHandler
             if(  !XP.playerNames.containsKey( uuid ) )
                 XP.playerNames.put( uuid, name );
 
-            if( Config.getXpMap( Minecraft.getMinecraft().player ).size() == 0 )
+            if( FConfig.getXpMap( Minecraft.getMinecraft().player ).size() == 0 )
                 XPOverlayGUI.listOn = true;
 
             XP.getOfflineXpMap( uuid ).put( Skill.getSkill( packet.skill ), packet.xp + packet.gainedXp );

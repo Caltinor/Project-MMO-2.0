@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
@@ -47,7 +47,7 @@ public class DamageHandler
                     if( party != null )
                     {
                         PartyMemberInfo sourceMemberInfo = party.getMemberInfo( sourcePlayer.getUniqueID() );
-                        double friendlyFireMultiplier = Config.forgeConfig.partyFriendlyFireAmount.get() / 100D;
+                        double friendlyFireMultiplier = FConfig.partyFriendlyFireAmount / 100D;
 
                         if( sourceMemberInfo != null )
                             damage *= friendlyFireMultiplier;
@@ -60,8 +60,8 @@ public class DamageHandler
                 }
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
                 int enduranceLevel = Skill.ENDURANCE.getLevel( player );
-                double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
-                double maxEndurance = Config.forgeConfig.maxEndurance.get();
+                double endurancePerLevel = FConfig.endurancePerLevel;
+                double maxEndurance = FConfig.maxEndurance;
                 double endurePercent = (enduranceLevel * endurancePerLevel);
                 if( endurePercent > maxEndurance )
                     endurePercent = maxEndurance;
@@ -82,8 +82,8 @@ public class DamageHandler
                     int agilityLevel = Skill.AGILITY.getLevel( player );
                     int saved = 0;
 
-                    double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
-                    double saveChancePerLevel = Config.forgeConfig.saveChancePerLevel.get() / 100;
+                    double maxFallSaveChance = FConfig.maxFallSaveChance;
+                    double saveChancePerLevel = FConfig.saveChancePerLevel / 100;
 
                     double chance = agilityLevel * saveChancePerLevel;
                     if( chance > maxFallSaveChance )
@@ -129,7 +129,7 @@ public class DamageHandler
 
             if ( target instanceof EntityLiving && event.getSource().getTrueSource() instanceof EntityPlayerMP )
             {
-//				IAttributeInstance test = target.getAttribute( Attributes.GENERIC_MOVEMENT_SPEED );
+//				IAttributeInstance test = target.getAttributeMap().getAttribute( Attributes.GENERIC_MOVEMENT_SPEED );
 //				if( !(target instanceof EntityAnimal) )
 //					System.out.println( test.getValue() + " " + test.getBaseValue() );
 
@@ -144,7 +144,7 @@ public class DamageHandler
                     if( weaponGap > 0 )
                     {
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getDisplayName(), "", true, 2 ), (EntityPlayerMP) player );
-                        if( Config.forgeConfig.strictReqWeapon.get() )
+                        if( FConfig.strictReqWeapon )
                         {
                             event.setCanceled( true );
                             return;
@@ -171,7 +171,7 @@ public class DamageHandler
                                     player.sendStatusMessage( new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
                             }
                         }
-                        if( Config.forgeConfig.strictReqKill.get() )
+                        if( FConfig.strictReqKill )
                         {
                             event.setCanceled( true );
                             return;

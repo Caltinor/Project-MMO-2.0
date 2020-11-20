@@ -1,7 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.gui.XPOverlayGUI;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
@@ -19,7 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -55,7 +53,7 @@ public class PlayerTickHandler
                 int swimLevel = Skill.SWIMMING.getLevel( player );
                 int flyLevel = Skill.FLYING.getLevel( player );
                 int agilityLevel = Skill.AGILITY.getLevel( player );
-                int nightvisionUnlockLevel = Config.forgeConfig.nightvisionUnlockLevel.get();
+                int nightvisionUnlockLevel = FConfig.nightvisionUnlockLevel;
                 double swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
                 double speedAmp = 0;
                 InventoryPlayer inv = player.inventory;

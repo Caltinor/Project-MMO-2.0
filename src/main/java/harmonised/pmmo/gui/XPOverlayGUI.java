@@ -2,7 +2,7 @@ package harmonised.pmmo.gui;
 
 import java.util.*;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.MessageLevelUp;
@@ -368,7 +368,7 @@ public class XPOverlayGUI extends Gui
 
 	private void doVein()
 	{   // VEIN STUFF
-		veinLeft = Config.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
+		veinLeft = FConfig.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
 		veinPosGoal = veinLeft / maxVeinCharge;
 		addAmount = (veinPosGoal - veinPos) * (timeDiff / 200000000D);
 		if( addAmount < 0.00003 )
@@ -457,7 +457,7 @@ public class XPOverlayGUI extends Gui
 					itemBoost = XP.getItemBoost( player, tempSkill );
 					biomeBoost = XP.getBiomeBoost( player, tempSkill );
 					dimensionBoost = XP.getDimensionBoost( player, tempSkill );
-					playerXpBoost = Config.getPlayerXpBoost( player, tempSkill );
+					playerXpBoost = FConfig.getPlayerXpBoost( player, tempSkill );
 
 //					multiplier = ( XP.getMultiplier(  player, tempSkill ) * 100 ) - 100;
 
@@ -511,117 +511,117 @@ public class XPOverlayGUI extends Gui
 	{
 		player = Minecraft.getMinecraft().player;
 
-		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		Map<String, Double> prefsMap = FConfig.getPreferencesMap( player );
 
 		if( prefsMap.containsKey( "barOffsetX" ) )
 			barOffsetX = prefsMap.get( "barOffsetX" );
 		else
-			barOffsetX = Config.forgeConfig.barOffsetX.get();
+			barOffsetX = FConfig.barOffsetX;
 
 		if( prefsMap.containsKey( "barOffsetY" ) )
 			barOffsetY = prefsMap.get( "barOffsetY" );
 		else
-			barOffsetY = Config.forgeConfig.barOffsetY.get();
+			barOffsetY = FConfig.barOffsetY;
 
 		if( prefsMap.containsKey( "veinBarOffsetX" ) )
 			veinBarOffsetX = prefsMap.get( "veinBarOffsetX" );
 		else
-			veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
+			veinBarOffsetX = FConfig.veinBarOffsetX;
 
 		if( prefsMap.containsKey( "veinBarOffsetY" ) )
 			veinBarOffsetY = prefsMap.get( "veinBarOffsetY" );
 		else
-			veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
+			veinBarOffsetY = FConfig.veinBarOffsetY;
 
 		if( prefsMap.containsKey( "xpDropOffsetX" ) )
 			xpDropOffsetX = prefsMap.get( "xpDropOffsetX" );
 		else
-			xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
+			xpDropOffsetX = FConfig.xpDropOffsetX;
 
 		if( prefsMap.containsKey( "xpDropOffsetY" ) )
 			xpDropOffsetY = prefsMap.get( "xpDropOffsetY" );
 		else
-			xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
+			xpDropOffsetY = FConfig.xpDropOffsetY;
 
 		if( prefsMap.containsKey( "xpDropSpawnDistance" ) )
 			xpDropSpawnDistance = prefsMap.get( "xpDropSpawnDistance" );
 		else
-			xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
+			xpDropSpawnDistance = FConfig.xpDropSpawnDistance;
 
 		if( prefsMap.containsKey( "xpDropOpacityPerTime" ) )
 			xpDropOpacityPerTime = prefsMap.get( "xpDropOpacityPerTime" );
 		else
-			xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
+			xpDropOpacityPerTime = FConfig.xpDropOpacityPerTime;
 
 		if( prefsMap.containsKey( "xpDropMaxOpacity" ) )
 			xpDropMaxOpacity = prefsMap.get( "xpDropMaxOpacity" );
 		else
-			xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
+			xpDropMaxOpacity = FConfig.xpDropMaxOpacity;
 
 		if( prefsMap.containsKey( "minXpGrow" ) )
 			minXpGrow = prefsMap.get( "minXpGrow" );
 		else
-			minXpGrow = Config.forgeConfig.minXpGrow.get();
+			minXpGrow = FConfig.minXpGrow;
 
 		if( prefsMap.containsKey( "xpDropDecayAge" ) )
 			xpDropDecayAge = (int) Math.floor( prefsMap.get( "xpDropDecayAge" ) );
 		else
-			xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
+			xpDropDecayAge = (int) Math.floor( FConfig.xpDropDecayAge );
 
 		if( prefsMap.containsKey( "maxLevel" ) )
-			maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+			maxLevel = (int) Math.floor( FConfig.getConfig( "maxLevel" ) );
 		else
-			maxLevel = (int) Math.floor( Config.forgeConfig.maxLevel.get() );
+			maxLevel = (int) Math.floor( FConfig.maxLevel );
 
 		if( prefsMap.containsKey( "maxXp" ) )
-			maxXp = (int) Math.floor( Config.getConfig( "maxXp" ) );
+			maxXp = (int) Math.floor( FConfig.getConfig( "maxXp" ) );
 		else
 			maxXp = XP.xpAtLevel( maxLevel );
 
 		if( prefsMap.containsKey( "xpDropsAttachedToBar" ) )
 			xpDropsAttachedToBar = prefsMap.get("xpDropsAttachedToBar") != 0;
 		else
-			xpDropsAttachedToBar = Config.forgeConfig.xpDropsAttachedToBar.get();
+			xpDropsAttachedToBar = FConfig.xpDropsAttachedToBar;
 
 		if( prefsMap.containsKey( "xpBarAlwaysOn" ) )
 			xpBarAlwaysOn = prefsMap.get("xpBarAlwaysOn") != 0;
 		else
-			xpBarAlwaysOn = Config.forgeConfig.xpBarAlwaysOn.get();
+			xpBarAlwaysOn = FConfig.xpBarAlwaysOn;
 
 		if( prefsMap.containsKey( "xpLeftDisplayAlwaysOn" ) )
 			xpLeftDisplayAlwaysOn = prefsMap.get("xpLeftDisplayAlwaysOn") != 0;
 		else
-			xpLeftDisplayAlwaysOn = Config.forgeConfig.xpLeftDisplayAlwaysOn.get();
+			xpLeftDisplayAlwaysOn = FConfig.xpLeftDisplayAlwaysOn;
 
 		if( prefsMap.containsKey( "showSkillsListAtCorner" ) )
 			showSkillsListAtCorner = prefsMap.get("showSkillsListAtCorner") != 0;
 		else
-			showSkillsListAtCorner = Config.forgeConfig.showSkillsListAtCorner.get();
+			showSkillsListAtCorner = FConfig.showSkillsListAtCorner;
 
 		if( prefsMap.containsKey( "showXpDrops" ) )
 			showXpDrops = prefsMap.get("showXpDrops") != 0;
 		else
-			showXpDrops = Config.forgeConfig.showXpDrops.get();
+			showXpDrops = FConfig.showXpDrops;
 
 		if( prefsMap.containsKey( "stackXpDrops" ) )
 			stackXpDrops = prefsMap.get("stackXpDrops") != 0;
 		else
-			stackXpDrops = Config.forgeConfig.stackXpDrops.get();
+			stackXpDrops = FConfig.stackXpDrops;
 
 		if( prefsMap.containsKey( "lvlUpScreenshot" ) )
 			lvlUpScreenshot = prefsMap.get("lvlUpScreenshot") != 0;
 		else
-			lvlUpScreenshot = Config.forgeConfig.lvlUpScreenshot.get();
+			lvlUpScreenshot = FConfig.lvlUpScreenshot;
 
 		if( prefsMap.containsKey( "lvlUpScreenshotShowSkills" ) )
 			lvlUpScreenshotShowSkills = prefsMap.get("lvlUpScreenshotShowSkills") != 0;
 		else
-			lvlUpScreenshotShowSkills = Config.forgeConfig.lvlUpScreenshotShowSkills.get();
+			lvlUpScreenshotShowSkills = FConfig.lvlUpScreenshotShowSkills;
 
 		if( prefsMap.containsKey( "xpDropsShowXpBar" ) )
 			xpDropsShowXpBar = prefsMap.get("xpDropsShowXpBar" ) != 0;
 		else
-			xpDropsShowXpBar = Config.forgeConfig.xpDropsShowXpBar.get();
+			xpDropsShowXpBar = FConfig.xpDropsShowXpBar;
 
 		if( !xpDropsAttachedToBar )
 			xpDropYLimit = 999999999;
@@ -629,41 +629,41 @@ public class XPOverlayGUI extends Gui
 			xpDropYLimit = 0;
 
 		if( barOffsetX < 0 || barOffsetX > 1 )
-			barOffsetX = Config.forgeConfig.barOffsetX.get();
+			barOffsetX = FConfig.barOffsetX;
 
 		if( barOffsetY < 0 || barOffsetY > 1 )
-			barOffsetY = Config.forgeConfig.barOffsetY.get();
+			barOffsetY = FConfig.barOffsetY;
 
 		if( xpDropOffsetX < 0 || xpDropOffsetX > 1 )
-			xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
+			xpDropOffsetX = FConfig.xpDropOffsetX;
 
 		if( xpDropOffsetY < 0 || xpDropOffsetY > 1 )
-			xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
+			xpDropOffsetY = FConfig.xpDropOffsetY;
 
 		if( veinBarOffsetX < 0 || veinBarOffsetX > 1 )
-			veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
+			veinBarOffsetX = FConfig.veinBarOffsetX;
 
 		if( veinBarOffsetY < 0 || veinBarOffsetY > 1 )
-			veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
+			veinBarOffsetY = FConfig.veinBarOffsetY;
 
 		if( xpDropSpawnDistance < 0 || xpDropSpawnDistance > 1000 )
-			xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
+			xpDropSpawnDistance = FConfig.xpDropSpawnDistance;
 
 		if( xpDropOpacityPerTime < 0 || xpDropOpacityPerTime > 255 )
-			xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
+			xpDropOpacityPerTime = FConfig.xpDropOpacityPerTime;
 
 		if( xpDropMaxOpacity < 0 || xpDropMaxOpacity > 255 )
-			xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
+			xpDropMaxOpacity = FConfig.xpDropMaxOpacity;
 
 		if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
-			xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
+			xpDropDecayAge = (int) Math.floor( FConfig.xpDropDecayAge );
 
 		if( minXpGrow < 0.01 || minXpGrow > 100 )
-			minXpGrow = Config.getConfig( "minXpGrow" );
+			minXpGrow = FConfig.getConfig( "minXpGrow" );
 
-		biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
-		maxVeinCharge = Config.getConfig( "maxVeinCharge" );
-		veinMaxBlocks = (int) Config.getConfig( "veinMaxBlocks" );
+		biomePenaltyMultiplier = FConfig.getConfig( "biomePenaltyMultiplier" );
+		maxVeinCharge = FConfig.getConfig( "maxVeinCharge" );
+		veinMaxBlocks = (int) FConfig.getConfig( "veinMaxBlocks" );
 	}
 
 //	@SubscribeEvent
@@ -699,7 +699,7 @@ public class XPOverlayGUI extends Gui
 	{
 		player = Minecraft.getMinecraft().player;
 
-		Map<String, Double> configMap = Config.getConfigMap();
+		Map<String, Double> configMap = FConfig.getConfigMap();
 
 		if( level < 1 || ( configMap.containsKey( "maxLevel" ) && level > configMap.get( "maxLevel" ) ) )
 			return;
@@ -757,7 +757,7 @@ public class XPOverlayGUI extends Gui
 
 		checkUnlocks( level, skill, player );
 
-		if( skill == Skill.SWIMMING && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
+		if( skill == Skill.SWIMMING && level - 1 < FConfig.nightvisionUnlockLevel && level >= FConfig.nightvisionUnlockLevel )
 			player.sendStatusMessage( new TextComponentTranslation( "pmmo.nightvisionUnlocked" ).setStyle( XP.getSkillStyle( skill ) ), true );
 
 		listWasOn = barOn;

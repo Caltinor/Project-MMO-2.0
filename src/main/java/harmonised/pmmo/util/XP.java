@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.sun.istack.internal.Nullable;
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.PlayerConnectedHandler;
@@ -26,10 +26,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.*;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
@@ -613,12 +610,12 @@ public class XP
 		syncPlayerData4( player );
 		syncPlayerXpBoost( player );
 		NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 1 ), (EntityPlayerMP) player );
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (EntityPlayerMP) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( FConfig.localConfig ), 2 ), (EntityPlayerMP) player );
 	}
 
 	public static void syncPlayerXpBoost( EntityPlayer player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapSkillToNbt( Config.getXpBoostsMap( player ) ), 6 ), (EntityPlayerMP) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapSkillToNbt( FConfig.getXpBoostsMap( player ) ), 6 ), (EntityPlayerMP) player );
 	}
 
 	public static void syncPlayerData3( EntityPlayer player )
@@ -696,8 +693,8 @@ public class XP
 	{
 //    	UUID uuid = player.getUniqueID();
 //        NBTTagCompound xpTag 		 = NBTHelper.mapSkillToNbt ( Config.getXpMap( player ) );
-		NBTTagCompound prefsTag = NBTHelper.mapStringToNbt( Config.getPreferencesMap( player ) );
-		NBTTagCompound abilitiesTag = NBTHelper.mapStringToNbt( Config.getAbilitiesMap( player ) );
+		NBTTagCompound prefsTag = NBTHelper.mapStringToNbt( FConfig.getPreferencesMap( player ) );
+		NBTTagCompound abilitiesTag = NBTHelper.mapStringToNbt( FConfig.getAbilitiesMap( player ) );
 
 		syncPlayerDataAndConfig( player );
 		syncPlayerXpBoost( player );
@@ -708,7 +705,7 @@ public class XP
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( abilitiesTag, 1 ), (EntityPlayerMP) player );
 		AttributeHandler.updateAll( player );
 
-		for( Map.Entry<Skill, Double> entry : Config.getXpMap( player ).entrySet() )
+		for( Map.Entry<Skill, Double> entry : FConfig.getXpMap( player ).entrySet() )
 		{
 			NetworkHandler.sendToPlayer( new MessageXp( entry.getValue(), entry.getKey().getValue(), 0, true ), (EntityPlayerMP) player );
 		}
@@ -974,19 +971,19 @@ public class XP
 			switch( player.world.getDifficulty() )
 			{
 				case PEACEFUL:
-					difficultyMultiplier = Config.forgeConfig.peacefulMultiplier.get();
+					difficultyMultiplier = FConfig.peacefulMultiplier.get();
 					break;
 
 				case EASY:
-					difficultyMultiplier = Config.forgeConfig.easyMultiplier.get();
+					difficultyMultiplier = FConfig.easyMultiplier.get();
 					break;
 
 				case NORMAL:
-					difficultyMultiplier = Config.forgeConfig.normalMultiplier.get();
+					difficultyMultiplier = FConfig.normalMultiplier.get();
 					break;
 
 				case HARD:
-					difficultyMultiplier = Config.forgeConfig.hardMultiplier.get();
+					difficultyMultiplier = FConfig.hardMultiplier.get();
 					break;
 
 				default:
@@ -1066,7 +1063,7 @@ public class XP
 	{
 		double biomeBoost = 0;
 		double theBiomeBoost = 0;
-		double biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
+		double biomePenaltyMultiplier = FConfig.getConfig( "biomePenaltyMultiplier" );
 		String skillName = skill.toString().toLowerCase();
 
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVector() ) );
@@ -1089,7 +1086,7 @@ public class XP
 
 	public static double getMultiplier( EntityPlayer player, Skill skill )
 	{
-		double multiplier = Config.forgeConfig.globalMultiplier.get();
+		double multiplier = FConfig.globalMultiplier.get();
 
 		double globalMultiplier = getGlobalMultiplier( skill );
 		double dimensionMultiplier = getDimensionMultiplier( skill, player );
@@ -1190,7 +1187,7 @@ public class XP
 		String playerName = player.getDisplayName().getUnformattedText();
 		int startLevel = skill.getLevel( uuid );
 		double startXp = skill.getXp( uuid );
-		double maxXp = Config.getConfig( "maxXp" );
+		double maxXp = FConfig.getConfig( "maxXp" );
 
 		if( startXp >= 2000000000 )
 			return;
@@ -1285,7 +1282,7 @@ public class XP
 
 	public static void updateRecipes( EntityPlayerMP player )
 	{
-//		if( Config.forgeConfig.craftReqEnabled.get() )
+//		if( FConfig.craftReqEnabled.get() )
 //		{
 //			Collection<IRecipe<?>> allRecipes = player.getServer().getRecipeManager().getRecipes();
 //			Collection<IRecipe<?>> removeRecipes = new HashSet<>();
@@ -1399,7 +1396,7 @@ public class XP
 			player.addPotionEffect( new PotionEffect( MobEffects.WEAKNESS, 75, gap, false, true ) );
 			player.addPotionEffect( new PotionEffect( MobEffects.SLOWNESS, 75, gap, false, true ) );
 
-			if( Config.forgeConfig.strictReqWear.get() || EnchantmentHelper.hasBindingCurse( itemStack ) )
+			if( FConfig.strictReqWear.get() || EnchantmentHelper.hasBindingCurse( itemStack ) )
 			{
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );
@@ -1524,14 +1521,14 @@ public class XP
 
 	public static int levelAtXp( double xp )
 	{
-		boolean useExponentialFormula = Config.getConfig("useExponentialFormula") != 0;
-		double baseXp = Config.getConfig( "baseXp" );
-		double exponentialBaseXp = Config.getConfig( "exponentialBaseXp" );
-		double exponentialBase = Config.getConfig( "exponentialBase" );
-		double exponentialRate = Config.getConfig( "exponentialRate" );
-		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+		boolean useExponentialFormula = FConfig.getConfig("useExponentialFormula") != 0;
+		double baseXp = FConfig.getConfig( "baseXp" );
+		double exponentialBaseXp = FConfig.getConfig( "exponentialBaseXp" );
+		double exponentialBase = FConfig.getConfig( "exponentialBase" );
+		double exponentialRate = FConfig.getConfig( "exponentialRate" );
+		int maxLevel = (int) Math.floor( FConfig.getConfig( "maxLevel" ) );
 
-		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
+		double xpIncreasePerLevel = FConfig.getConfig( "xpIncreasePerLevel" );
 
 		int theXp = 0;
 
@@ -1551,7 +1548,7 @@ public class XP
 
 	public static double levelAtXpDecimal( double xp )
 	{
-		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+		int maxLevel = (int) Math.floor( FConfig.getConfig( "maxLevel" ) );
 
 		if( levelAtXp( xp ) == maxLevel )
 			xp = xpAtLevel( maxLevel );
@@ -1571,19 +1568,19 @@ public class XP
 	}
 	public static double xpAtLevel( double givenLevel )
 	{
-		boolean useExponentialFormula = Config.getConfig("useExponentialFormula") != 0;
+		boolean useExponentialFormula = FConfig.getConfig("useExponentialFormula") != 0;
 
-		double baseXp = Config.getConfig( "baseXp" );
-		double exponentialBaseXp = Config.getConfig( "exponentialBaseXp" );
-		double exponentialBase = Config.getConfig( "exponentialBase" );
-		double exponentialRate = Config.getConfig( "exponentialRate" );
+		double baseXp = FConfig.getConfig( "baseXp" );
+		double exponentialBaseXp = FConfig.getConfig( "exponentialBaseXp" );
+		double exponentialBase = FConfig.getConfig( "exponentialBase" );
+		double exponentialRate = FConfig.getConfig( "exponentialRate" );
 
-		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+		int maxLevel = (int) Math.floor( FConfig.getConfig( "maxLevel" ) );
 		if( givenLevel > maxLevel )
 			givenLevel = maxLevel;
 		double theXp = 0;
 
-		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
+		double xpIncreasePerLevel = FConfig.getConfig( "xpIncreasePerLevel" );
 
 		for( int startLevel = 1; startLevel < givenLevel; startLevel++ )
 		{

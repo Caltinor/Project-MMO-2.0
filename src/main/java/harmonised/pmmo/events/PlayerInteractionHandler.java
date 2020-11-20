@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageTripleTranslation;
@@ -238,10 +238,10 @@ public class PlayerInteractionHandler
                                 {
                                     //ENCHANTS
                                     Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
-//                                int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
-//                                int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
-                                    double maxSalvageEnchantChance = Config.forgeConfig.maxSalvageEnchantChance.get();
-                                    double enchantSaveChancePerLevel = Config.forgeConfig.enchantSaveChancePerLevel.get();
+//                                int maxEnchantmentBypass = FConfig.maxEnchantmentBypass;
+//                                int levelsPerOneEnchantBypass = FConfig.levelsPerOneEnchantBypass;
+                                    double maxSalvageEnchantChance = FConfig.maxSalvageEnchantChance;
+                                    double enchantSaveChancePerLevel = FConfig.enchantSaveChancePerLevel;
 //                                int maxPlayerBypass = (int) Math.floor( (double) startSmithingLevel / (double) levelsPerOneEnchantBypass );
 //                                if( maxPlayerBypass > maxEnchantmentBypass )
 //                                    maxPlayerBypass = maxEnchantmentBypass;
@@ -288,7 +288,8 @@ public class PlayerInteractionHandler
                                         XP.awardXp( (EntityPlayerMP) player, Skill.SMITHING, item.getRegistryName().toString(), award, false, false, false );
 
                                     player.getHeldItemOffhand().shrink( 1 );
-                                    player.sendBreakAnimation(EnumHand.OFF_HAND );
+//                                    player.sendBreakAnimation(EnumHand.OFF_HAND );
+                                    //COUT BREAK ANIMATION
                                 }
                                 else
                                     player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvageLackLevelLonger", lowestReqLevel, new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
