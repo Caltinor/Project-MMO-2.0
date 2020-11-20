@@ -20,7 +20,7 @@ import java.util.UUID;
 @Config.LangKey( "pmmo.config" )
 public class FConfig
 {
-    public static final Logger LOGGER = LogManager.getLogger();
+//    public static final Logger LOGGER = LogManager.getLogger();
 
     public static Configuration forgeConfig;
 
@@ -843,7 +843,7 @@ public class FConfig
             return FConfig.localConfig.get( key );
         else
         {
-            LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
+            System.out.println( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
             return -1;
         }
     }
