@@ -926,7 +926,7 @@ public class XP
 	{
 		double boost = 0;
 
-		if( !item.equals( Items.AIR ) )
+		if( item != null )
 		{
 			String regName = item.getRegistryName().toString();
 			Map<String, Double> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );

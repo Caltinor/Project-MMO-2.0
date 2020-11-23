@@ -131,7 +131,7 @@ public class PlayerInteractionHandler
                         {
                             if( ( block.equals( goldBlock ) ) )
                             {
-                                if( item.equals( Items.AIR ) )
+                                if( item == null )
                                     return;
 
                                 if( isRemote )

@@ -231,9 +231,8 @@ public class JsonConfig
 
         for( JType jType : jTypes )
         {
-            System.out.println( configFile.getPath() );
             fileName = jType.name().toLowerCase() + ".json";
-            file = new File( configFile.getPath() + "/pmmo/" + dataPath + fileName );
+            file = new File( configFile.toPath().getParent() + "\\" + dataPath + fileName );
 
             if ( !file.exists() )   //If no data file, create one
                 createData( file, fileName );
@@ -249,10 +248,8 @@ public class JsonConfig
 
         for( JType jType : jTypes )
         {
-            System.out.println( configFile.getPath() );
             fileName = jType.name().toLowerCase() + ".json";
-            file = new File( configFile.getPath() + "/pmmo/" + dataPath + fileName );
-
+            file = new File( configFile.toPath().getParent() + "\\" + dataPath + fileName );
             try
             (
                 InputStream input = new FileInputStream( file.getPath() );
@@ -417,7 +414,7 @@ public class JsonConfig
     {
         try     //create template data file
         {
-            dataFile.getParentFile().mkdir();
+            dataFile.getParentFile().mkdirs();
             dataFile.createNewFile();
         }
         catch( IOException e )
@@ -583,7 +580,7 @@ public class JsonConfig
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             Item item = XP.getItem( element.getKey() );
-            if( !item.equals( Items.AIR ) )
+            if( item != null )
             {
                 Map<String, Double> inMap = element.getValue();
 
@@ -886,7 +883,7 @@ public class JsonConfig
                 for( Map.Entry<String, Map<String, Double>> itemEntry : blockEntry.getValue().entrySet() )
                 {
                     item = XP.getItem( itemEntry.getKey() );
-                    if( !item.equals( Items.AIR ) )
+                    if( item != null )
                     {
                         itemResLoc = item.getRegistryName().toString();
                         inputItemMap = itemEntry.getValue();
@@ -972,7 +969,8 @@ public class JsonConfig
         for( Map.Entry<String, Map<String, Map<String, Double>>> inputSalvageFromItemEntry : input.entrySet() )
         {
             salvageFromItemResLoc = XP.getResLoc( inputSalvageFromItemEntry.getKey() );
-            if( !XP.getItem( salvageFromItemResLoc ).equals( Items.AIR ) )
+            item = XP.getItem( salvageFromItemResLoc );
+            if( item != null )
             {
                 output.put( salvageFromItemResLoc.toString(), new HashMap<>() );
                 outputSalvageFromItemMap = output.get( salvageFromItemResLoc.toString() );
@@ -980,7 +978,7 @@ public class JsonConfig
                 {
                     item = XP.getItem( inputSalvageToItemEntry.getKey() );
                     salvageToItemResLoc = item.getRegistryName().toString();
-                    if( !item.equals( Items.AIR ) )
+                    if( item != null )
                     {
                         salvageToItemMap = inputSalvageToItemEntry.getValue();
 

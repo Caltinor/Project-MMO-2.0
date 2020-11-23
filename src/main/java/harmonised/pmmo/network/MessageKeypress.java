@@ -17,7 +17,7 @@ public class MessageKeypress extends MessageBase<MessageKeypress>
         this.key = key;
     }
 
-    MessageKeypress()
+    public MessageKeypress()
     {
     }
 
@@ -37,7 +37,7 @@ public class MessageKeypress extends MessageBase<MessageKeypress>
 
 
     @Override
-    public void handleClientSide( MessageKeypress packet, EntityPlayer onlinePlayer )
+    public void handleClientSide( MessageKeypress packet, EntityPlayer player )
     {
 
     }

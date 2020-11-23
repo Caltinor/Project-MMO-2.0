@@ -31,7 +31,7 @@ public class MessageUpdatePlayerNBT extends MessageBase<MessageUpdatePlayerNBT>
         this.type = type;
     }
 
-    MessageUpdatePlayerNBT()
+    public MessageUpdatePlayerNBT()
     {
     }
 

@@ -26,7 +26,7 @@ public class MessageTripleTranslation extends MessageBase<MessageTripleTranslati
         this.color = color;
     }
 
-    MessageTripleTranslation()
+    public MessageTripleTranslation()
     {
     }
 

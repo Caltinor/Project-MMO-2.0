@@ -20,18 +20,13 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod( modid = Reference.MOD_ID )
+@Mod( modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION )
 public class ProjectMMOMod
 {
     public ProjectMMOMod()
     {
-//        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::modsLoading );
-//        FMLJavaModLoadingContext.get().getModEventBus().addListener( this::clientLoading );
 //        if( ModList.get().isLoaded( "ftbquests" ) )
 //            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistry );
-//        MinecraftForge.EVENT_BUS.addListener( this::serverAboutToStart );
-//        MinecraftForge.EVENT_BUS.addListener( this::serverStart );
-
 //        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
 
 //        PmmoCommand.init();
@@ -46,8 +41,6 @@ public class ProjectMMOMod
     public static void preInit( FMLPreInitializationEvent event )
     {
         JsonConfig.configFile = event.getSuggestedConfigurationFile();
-        FConfig.forgeConfig = new Configuration( JsonConfig.configFile, Reference.VERSION );
-        NetworkHandler.init();
     }
 
     @Mod.EventHandler

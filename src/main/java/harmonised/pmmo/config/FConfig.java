@@ -22,7 +22,7 @@ public class FConfig
 {
 //    public static final Logger LOGGER = LogManager.getLogger();
 
-    public static Configuration forgeConfig;
+//    public static Configuration forgeConfig;
 
     public static Map<String, Double> localConfig = new HashMap<>();
     private static Map<String, Double> config = new HashMap<>();

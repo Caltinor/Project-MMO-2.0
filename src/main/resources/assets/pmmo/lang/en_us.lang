@@ -9,6 +9,7 @@ key.pmmo.openMenu=Open Menu
 key.pmmo.openSettings=Open Settings
 key.pmmo.openSkills=Open Skills List
 key.pmmo.openGlossary=Open Glossary
+pmmo.config=Config
 pmmo.xpLeft=%1$s left
 pmmo.lostXp=You lost a total of %1$sxp!
 pmmo.maxLevel=MAX LEVEL
