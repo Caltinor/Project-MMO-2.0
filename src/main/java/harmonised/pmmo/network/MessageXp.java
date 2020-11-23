@@ -6,8 +6,8 @@ import net.minecraft.entity.player.EntityPlayer;
 public class MessageXp extends MessageBase<MessageXp>
 {
 	public double xp;
-	public int skill;
 	public double gainedXp;
+	public int skill;
 	public boolean skip;
 
 	public MessageXp( double xp, int skill, double gainedXp, boolean skip )
@@ -26,8 +26,8 @@ public class MessageXp extends MessageBase<MessageXp>
 	@Override
 	public void fromBytes( ByteBuf buf )
 	{
-		xp = buf.readFloat();
-		gainedXp = buf.readFloat();
+		xp = buf.readDouble();
+		gainedXp = buf.readDouble();
 		skill = buf.readInt();
 		skip = buf.readBoolean();
 	}

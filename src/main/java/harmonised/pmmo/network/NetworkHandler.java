@@ -16,15 +16,24 @@ public class NetworkHandler
 	{
 		int discriminator = 0;
 		INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel( Reference.MOD_ID );
+
 		INSTANCE.registerMessage( MessageXp.class, MessageXp.class, discriminator, Side.SERVER );
 		INSTANCE.registerMessage( MessageXp.class, MessageXp.class, discriminator, Side.CLIENT );
+		discriminator++;
+		INSTANCE.registerMessage( MessageKeypress.class, MessageKeypress.class, discriminator, Side.SERVER );
 		INSTANCE.registerMessage( MessageKeypress.class, MessageKeypress.class, discriminator, Side.CLIENT );
+		discriminator++;
 		INSTANCE.registerMessage( MessageDoubleTranslation.class, MessageDoubleTranslation.class, discriminator, Side.SERVER );
+		discriminator++;
 		INSTANCE.registerMessage( MessageTripleTranslation.class, MessageTripleTranslation.class, discriminator, Side.SERVER );
+		discriminator++;
 		INSTANCE.registerMessage( MessageUpdatePlayerNBT.class, MessageUpdatePlayerNBT.class, discriminator, Side.SERVER );
 		INSTANCE.registerMessage( MessageUpdatePlayerNBT.class, MessageUpdatePlayerNBT.class, discriminator, Side.CLIENT );
+		discriminator++;
 		INSTANCE.registerMessage( MessageGrow.class, MessageGrow.class, discriminator, Side.SERVER );
+		discriminator++;
 		INSTANCE.registerMessage( MessageLevelUp.class, MessageLevelUp.class, discriminator, Side.CLIENT );
+		discriminator++;
 		INSTANCE.registerMessage( MessageUpdateBoolean.class, MessageUpdateBoolean.class, discriminator, Side.CLIENT );
 	}
 

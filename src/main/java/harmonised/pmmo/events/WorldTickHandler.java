@@ -173,7 +173,7 @@ public class WorldTickHandler
             Block.spawnAsEntity( world, pos, itemStack );
         }
 
-        if( world.setBlockState(pos, state, 3) && toolUsed.isItemStackDamageable() && !player.isCreative() )
+        if( world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3) && toolUsed.isItemStackDamageable() && !player.isCreative() )
             toolUsed.damageItem( 1, player );
     }
 

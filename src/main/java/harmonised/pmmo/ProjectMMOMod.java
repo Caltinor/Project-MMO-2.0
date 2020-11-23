@@ -1,5 +1,6 @@
 package harmonised.pmmo;
 
+import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
@@ -28,8 +29,6 @@ public class ProjectMMOMod
 //        if( ModList.get().isLoaded( "ftbquests" ) )
 //            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistry );
 //        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
-
-//        PmmoCommand.init();
         //COUT
         FConfig.init();
     }
@@ -65,6 +64,8 @@ public class ProjectMMOMod
     @Mod.EventHandler
     public static void serverStart( FMLServerStartingEvent event )
     {
+        PmmoCommand.registerCommands( event );
+
 //        if( FConfig.autoGenerateValuesEnabled )
 //            JsonConfig.setAutoValues();
         //COUT AUTO VALUES
@@ -72,7 +73,6 @@ public class ProjectMMOMod
 
         PmmoSavedData.init( event.getServer() );
         FConfig.initServer();
-//        PmmoCommand.register( event.getCommandDispatcher() );
         WorldTickHandler.refreshVein();
         AttributeHandler.init();
 //        if( FConfig.craftReqEnabled.get() )

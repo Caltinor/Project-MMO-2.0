@@ -163,6 +163,9 @@ public class XP
 //		materialHarvestTool.put( Material.EARTH, "shovel" );
 		materialHarvestTool.put( Material.SAND, "shovel" );
 		materialHarvestTool.put( Material.SNOW, "shovel" );
+		materialHarvestTool.put( Material.GRASS, "shovel" );
+		materialHarvestTool.put( Material.GROUND, "shovel" );
+		materialHarvestTool.put( Material.CRAFTED_SNOW, "shovel" );
 //		materialHarvestTool.put( Material.SEA_GRASS, "shovel" );
 //		materialHarvestTool.put( Material.SNOW_BLOCK, "shovel" );
 
@@ -170,6 +173,7 @@ public class XP
 //		materialHarvestTool.put( Material.OCEAN_PLANT, "hoe" );
 		materialHarvestTool.put( Material.CACTUS, "hoe" );
 		materialHarvestTool.put( Material.CORAL, "hoe" );
+		materialHarvestTool.put( Material.VINE, "hoe" );
 //		materialHarvestTool.put( Material.TALL_PLANTS, "hoe" );
 //		materialHarvestTool.put( Material.BAMBOO, "hoe" );
 //		materialHarvestTool.put( Material.BAMBOO_SAPLING, "hoe" );
