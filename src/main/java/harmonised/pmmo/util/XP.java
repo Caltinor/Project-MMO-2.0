@@ -15,6 +15,7 @@ import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -379,19 +380,9 @@ public class XP
 		player.sendStatusMessage( new StringTextComponent( msg ).setStyle( new Style().setColor( format ) ), bar );
 	}
 
-	public static Map<String, Double> multiplyMap( Map<String, Double> mapOne, double multiplier )
+	public static <T> Map<T, Double> addMapsAnyDouble(Map<T, Double> mapOne, Map<T, Double> mapTwo )
 	{
-		for( String key : mapOne.keySet() )
-		{
-			mapOne.replace( key, mapOne.get( key ) * multiplier );
-		}
-
-		return mapOne;
-	}
-
-	public static Map<String, Double> addMaps( Map<String, Double> mapOne, Map<String, Double> mapTwo )
-	{
-		for( String key : mapTwo.keySet() )
+		for( T key : mapTwo.keySet() )
 		{
 			if( mapOne.containsKey( key ) )
 				mapOne.replace( key, mapOne.get( key ) + mapTwo.get( key ) );
@@ -709,11 +700,6 @@ public class XP
 		}
 	}
 
-	public static boolean checkReq( PlayerEntity player, String res, JType jType )
-	{
-		return checkReq( player, XP.getResLoc( res ), jType );
-	}
-
 	public static ResourceLocation getResLoc( String regKey )
 	{
 		try
@@ -741,41 +727,39 @@ public class XP
 	public static Map<String, Double> getReqMap( String registryName, JType type )
 	{
 		Map<String, Map<String, Double>> fullMap = JsonConfig.data.get( type );
-		Map<String, Double> map = null;
+		if( fullMap != null )
+			return fullMap.get( registryName );
+		else
+			return new HashMap<>();
+	}
 
-		if( fullMap != null && fullMap.containsKey( registryName ) )
-		{
-			map = new HashMap<>();
-
-			for( Map.Entry<String, Double> entry : fullMap.get( registryName ).entrySet() )
-			{
-				map.put( entry.getKey(), entry.getValue() );
-			}
-		}
-
-		return map;
+	public static boolean checkReq( PlayerEntity player, String res, JType jType )
+	{
+		return checkReq( player, XP.getResLoc( res ), jType );
 	}
 
 	public static boolean checkReq( PlayerEntity player, ResourceLocation res, JType jType )
+	{
+		if( res == null )
+			return true;
+
+		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
+			return true;
+
+		return checkReq( player, getReqMap( res.toString(), jType ) );
+	}
+
+	public static boolean checkReq( PlayerEntity player, Map<String, Double> reqMap )
 	{
 		boolean failedReq = false;
 
 		try
 		{
-			if( res == null )
-				return true;
-
-			if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
-				return true;
-
 			if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).containsKey( player.getUniqueID().toString() ) )
 			{
 				if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).get( player.getUniqueID().toString() ).containsKey( "ignoreReq" ) )
 					return true;
 			}
-
-			String registryName = res.toString();
-			Map<String, Double> reqMap = getReqMap( registryName, jType );
 			double startLevel;
 
 //		if( reqMap == null )
@@ -1321,12 +1305,15 @@ public class XP
 
 	public static int getSkillReqGap(PlayerEntity player, ResourceLocation res, JType jType )
 	{
+		return getSkillReqGap( player, getReqMap( res.toString(), jType ) );
+	}
+
+	public static int getSkillReqGap(PlayerEntity player, Map<String, Double> reqs )
+	{
 		int gap = 0;
 
-		if( !checkReq( player, res, jType ) )
+		if( !checkReq( player, reqs ) )
 		{
-			Map<String, Double> reqs = getReqMap( res.toString(), jType );
-
 			if( reqs != null )
 			{
 				gap = (int) Math.floor( reqs.entrySet().stream()
@@ -1387,6 +1374,87 @@ public class XP
 		world.addEntity( fireworkRocketEntity );
 	}
 
+	public static <T> Map<T, Double> multiplyMapAnyDouble( Map<T, Double> input, double multiplier )
+	{
+		for( Map.Entry<T, Double> entry : input.entrySet() )
+		{
+			input.put( entry.getKey(), entry.getValue() * multiplier );
+		}
+
+		return input;
+	}
+
+	public static <T> Map<T, Double> mergeMapHighestValue( Map<T, Double> map1, Map<T, Double> map2 )
+	{
+		for( Map.Entry<T, Double> entry : map2.entrySet() )
+		{
+			if( !map1.containsKey( entry.getKey() ) )
+				map1.put( entry.getKey(), entry.getValue() );
+			else if( map1.get( entry.getKey() ) < entry.getValue() )
+				map1.put( entry.getKey(), entry.getValue() );
+		}
+
+		return map1;
+	}
+
+	public static Map<String, Double> getEnchantUseReq( ResourceLocation resLoc, int enchantLevel )
+	{
+		Map<String, Double> reqs = new HashMap<>();
+		String skillName;
+		int highestSpecifiedLevel = 0;
+
+		if( JsonConfig.data2.getOrDefault( JType.REQ_USE_ENCHANTMENT, new HashMap<>() ).containsKey( resLoc.toString() ) )
+		{
+			Map<String, Map<String, Double>> levelMaps = JsonConfig.data2.get( JType.REQ_USE_ENCHANTMENT ).get( resLoc.toString() );
+			List<Integer> levels = new ArrayList<>();
+
+			for( String levelKey : levelMaps.keySet() )
+			{
+				levels.add( Integer.parseInt( levelKey ) );
+			}
+
+			levels.sort( Comparator.comparingInt( ( a -> a ) ) );
+
+			for( int level : levels )
+			{
+				if( level > enchantLevel )
+					break;
+				highestSpecifiedLevel = level;
+
+				Map<String, Double> skillMap = levelMaps.get( String.valueOf( level ) );
+				for( Map.Entry<String, Double> skillElement : skillMap.entrySet() )
+				{
+					skillName = Skill.getSkill( skillElement.getKey() ).toString();
+					if( !skillName.equals( Skill.INVALID_SKILL.toString() ) )
+					{
+						if( !reqs.containsKey( skillName ) )
+							reqs.put( skillName, skillElement.getValue() );
+						else if( reqs.get( skillName ) < skillElement.getValue() )
+							reqs.put( skillName, skillElement.getValue() );
+					}
+				}
+			}
+		}
+
+		if( Config.forgeConfig.enchantUseReqAutoScaleEnabled.get() && enchantLevel > highestSpecifiedLevel )
+			multiplyMapAnyDouble( reqs, enchantLevel / (double) highestSpecifiedLevel );
+
+		return reqs;
+	}
+
+	public static Map<String, Double> getEnchantsUseReq( ItemStack itemStack )
+	{
+		Map<String, Double> reqs = new HashMap<>();
+		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments( itemStack );
+
+		for( Map.Entry<Enchantment, Integer> entry : enchantments.entrySet() )
+		{
+			mergeMapHighestValue( reqs, getEnchantUseReq( entry.getKey().getRegistryName(), entry.getValue() ) );
+		}
+
+		return reqs;
+	}
+
 	public static void applyWornPenalty( PlayerEntity player, ItemStack itemStack )
 	{
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
@@ -1407,11 +1475,46 @@ public class XP
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );
 				itemStack.setCount( 0 );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWearDropped", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.gotTooHotDroppedItem", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.gotTooHotDroppedItem", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
 			}
 			else
 				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWear", new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+		}
+
+		applyEnchantmentUsePenalty( player, itemStack );
+	}
+
+	public static void applyEnchantmentUsePenalty( PlayerEntity player, ItemStack itemStack )
+	{
+		ResourceLocation resLoc = itemStack.getItem().getRegistryName(), enchantResLoc;
+		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments( itemStack );
+
+		for( Map.Entry<Enchantment, Integer> entry : enchantments.entrySet() )
+		{
+			enchantResLoc = entry.getKey().getRegistryName();
+			if( !checkReq( player, getEnchantUseReq( enchantResLoc, entry.getValue() ) ) )
+			{
+				int gap = getSkillReqGap( player, resLoc, JType.REQ_USE_ENCHANTMENT );
+
+				if( gap > 9 )
+					gap = 9;
+
+				player.addPotionEffect( new EffectInstance( Effects.MINING_FATIGUE, 75, gap, false, true ) );
+				player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
+				player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
+
+				if( Config.forgeConfig.strictReqUseEnchantment.get() || EnchantmentHelper.hasBindingCurse( itemStack ) )
+				{
+					ItemStack droppedItemStack = itemStack.copy();
+					player.dropItem( droppedItemStack, false, false );
+					itemStack.setCount( 0 );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.gotTooHotDroppedItem", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.gotTooHotDroppedItem", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+				}
+				else
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseEnchantment", new TranslationTextComponent( entry.getKey().getName() ), new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+			}
 		}
 	}
 

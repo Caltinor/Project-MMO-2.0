@@ -146,9 +146,12 @@ public class DamageHandler
                 {
                     ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
                     int weaponGap = XP.getSkillReqGap( player, resLoc, JType.REQ_WEAPON );
-                    if( weaponGap > 0 )
+                    int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
+                    int gap = Math.max( weaponGap, enchantGap );
+                    if( gap > 0 )
                     {
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                        if( enchantGap < gap )
+                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
                         if( Config.forgeConfig.strictReqWeapon.get() )
                         {
                             event.setCanceled( true );

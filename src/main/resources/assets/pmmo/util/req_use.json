@@ -66,13 +66,13 @@
 	},
 	"appliedenergistics2:inscriber":
 	{
-		"crafting": 110,
+		"crafting": 45,
 		"smithing": 50
 	},
 	"appliedenergistics2:charger":
 	{
-		"crafting": 105,
-		"smithing": 50
+		"crafting": 50,
+		"smithing": 40
 	},
 	"appliedenergistics2:security_station":
 	{
@@ -81,7 +81,7 @@
 	},
 	"appliedenergistics2:condenser":
 	{
-		"crafting": 75
+		"crafting": 55
 	},
 	"appliedenergistics2:biometric_card":
 	{

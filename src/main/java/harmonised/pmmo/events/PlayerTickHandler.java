@@ -89,6 +89,10 @@ public class PlayerTickHandler
                         XP.applyWornPenalty( player, player.inventory.getStackInSlot( 37 ) );
                     if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
                         XP.applyWornPenalty( player, player.inventory.getStackInSlot( 36 ) );
+                    if( !player.getHeldItemMainhand().isEmpty() )
+                        XP.applyEnchantmentUsePenalty( player, player.getHeldItemMainhand() );
+                    if( !player.getHeldItemOffhand().isEmpty() )
+                        XP.applyEnchantmentUsePenalty( player, player.getHeldItemOffhand() );
                 }
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 

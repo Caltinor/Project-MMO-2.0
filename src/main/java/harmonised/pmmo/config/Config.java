@@ -132,6 +132,8 @@ public class Config
 
         //Requirements
         public ConfigHelper.ConfigValueListener<Boolean> wearReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> enchantUseReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> enchantUseReqAutoScaleEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> toolReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> weaponReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> killReqEnabled;
@@ -162,6 +164,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> strictReqKill;
         public ConfigHelper.ConfigValueListener<Boolean> strictReqWeapon;
         public ConfigHelper.ConfigValueListener<Boolean> strictReqWear;
+        public ConfigHelper.ConfigValueListener<Boolean> strictReqUseEnchantment;
 
         //Levels
         public ConfigHelper.ConfigValueListener<Integer> maxLevel;
@@ -194,6 +197,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> veinBarOffsetY;
         public ConfigHelper.ConfigValueListener<Double> xpDropOffsetX;
         public ConfigHelper.ConfigValueListener<Double> xpDropOffsetY;
+        public ConfigHelper.ConfigValueListener<Double> skillListOffsetX;
+        public ConfigHelper.ConfigValueListener<Double> skillListOffsetY;
         public ConfigHelper.ConfigValueListener<Double> xpDropSpawnDistance;
         public ConfigHelper.ConfigValueListener<Double> xpDropOpacityPerTime;
         public ConfigHelper.ConfigValueListener<Double> xpDropMaxOpacity;
@@ -524,6 +529,16 @@ public class Config
                         .translation( "pmmo.wearReqEnabled" )
                         .define( "wearReqEnabled", true ) );
 
+                this.enchantUseReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should Enchantment Use requirements be enabled? false means no requirements" )
+                        .translation( "pmmo.enchantUseReqEnabled" )
+                        .define( "enchantUseReqEnabled", true ) );
+
+                this.enchantUseReqAutoScaleEnabled = subscriber.subscribe(builder
+                        .comment( "Should Enchantment Use requirements automatically scale according to previous values, provided they exist? example: level1Req = 5 agility, level2Req = 10 farming - Level 4 enchantment would require level 10 agility, and level 20 farming (highestSpecifiedLevelReqs / highestSpecifiedLevel * enchantLevel)" )
+                        .translation( "pmmo.enchantUseReqAutoScaleEnabled" )
+                        .define( "enchantUseReqAutoScaleEnabled", true ) );
+
                 this.toolReqEnabled = subscriber.subscribe(builder
                         .comment( "Should tool requirements be enabled? false means no requirements" )
                         .translation( "pmmo.toolReqEnabled" )
@@ -670,6 +685,11 @@ public class Config
                         .translation( "pmmo.strictReqWear" )
                         .define( "strictReqWear", false ) );
 
+                this.strictReqUseEnchantment = subscriber.subscribe(builder
+                        .comment( "When a Use Enchantment requirement is not met, should the item be dropped?" )
+                        .translation( "pmmo.strictReqUseEnchantment" )
+                        .define( "strictReqUseEnchantment", false ) );
+
                 builder.pop();
             }
 
@@ -783,33 +803,43 @@ public class Config
                 this.barOffsetX = subscriber.subscribe(builder
                         .comment( "GUI bar position X (Width)" )
                         .translation( "pmmo.barOffsetX" )
-                        .defineInRange( "barOffsetX", 0.5D, 0, 100) );
+                        .defineInRange( "barOffsetX", 0.5D, 0, 1) );
 
                 this.barOffsetY = subscriber.subscribe(builder
                         .comment( "GUI bar position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
                         .translation( "pmmo.barOffsetY" )
-                        .defineInRange( "barOffsetY", 0D, 0, 100) );
+                        .defineInRange( "barOffsetY", 0D, 0, 1) );
 
                 this.veinBarOffsetX = subscriber.subscribe(builder
                         .comment( "GUI bar position X (Width)" )
                         .translation( "pmmo.veinBarOffsetX" )
-                        .defineInRange( "veinBarOffsetX", 0.5D, 0, 100) );
+                        .defineInRange( "veinBarOffsetX", 0.5D, 0, 1) );
 
                 this.veinBarOffsetY = subscriber.subscribe(builder
                         .comment( "GUI bar position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
                         .translation( "pmmo.veinBarOffsetY" )
-                        .defineInRange( "veinBarOffsetY", 0.65D, 0, 100) );
+                        .defineInRange( "veinBarOffsetY", 0.65D, 0, 1) );
 
 
                 this.xpDropOffsetX = subscriber.subscribe(builder
                         .comment( "GUI Xp drops position X (Width)" )
                         .translation( "pmmo.xpDropOffsetX" )
-                        .defineInRange( "xpDropOffsetX", 0.5D, 0, 100) );
+                        .defineInRange( "xpDropOffsetX", 0.5D, 0, 1) );
 
                 this.xpDropOffsetY = subscriber.subscribe(builder
                         .comment( "GUI Xp drops position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
                         .translation( "pmmo.xpDropOffsetY" )
                         .defineInRange( "xpDropOffsetY", 0D, 0, 1) );
+
+                this.skillListOffsetX = subscriber.subscribe(builder
+                        .comment( "GUI Skills List position X (Width)" )
+                        .translation( "pmmo.skillListOffsetX" )
+                        .defineInRange( "skillListOffsetX", 0D, 0, 1) );
+
+                this.skillListOffsetY = subscriber.subscribe(builder
+                        .comment( "GUI Skills List position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
+                        .translation( "pmmo.skillListOffsetY" )
+                        .defineInRange( "skillListOffsetY", 0D, 0, 1) );
 
                 this.xpDropSpawnDistance = subscriber.subscribe(builder
                         .comment( "How far away does the Xp Drop spawn" )
@@ -889,7 +919,7 @@ public class Config
                 this.minBreakSpeed = subscriber.subscribe(builder
                         .comment( "Minimum Breaking Speed (1 is Original speed, 0.5 is half)" )
                         .translation( "pmmo.minBreakSpeed" )
-                        .defineInRange( "minBreakSpeed", 0.5, 0, 100) );
+                        .defineInRange( "minBreakSpeed", 0.5D, 0, 100) );
 
                 this.blocksToUnbreakableY = subscriber.subscribe(builder
                         .comment( "How many blocks it takes to reach 0 Break Speed (will get capped by Minimum Breaking Speed)" )

@@ -97,6 +97,8 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("veinBarOffsetY", "", "", 0, 1, prefsMap.getOrDefault( "veinBarOffsetY", 0.65D ), 0.65D, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("xpDropOffsetX", "", "", 0, 1, prefsMap.getOrDefault( "xpDropOffsetX", 0.5D ), 0.5D, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("xpDropOffsetY", "", "", 0, 1, prefsMap.getOrDefault( "xpDropOffsetY", 0D ), 0D, true, true, false, false ) );
+                prefsEntries.add( new PrefsEntry("skillListOffsetX", "", "", 0, 1, prefsMap.getOrDefault( "skillListOffsetX", 0D ), 0D, true, true, false, false ) );
+                prefsEntries.add( new PrefsEntry("skillListOffsetY", "", "", 0, 1, prefsMap.getOrDefault( "skillListOffsetY", 0D ), 0D, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("xpDropSpawnDistance", "", "", 0, 1000, prefsMap.getOrDefault( "xpDropSpawnDistance", 50D ), 50D, false, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("xpDropOpacityPerTime", "", "", 0, 255, prefsMap.getOrDefault( "xpDropOpacityPerTime", 5D ), 5D, false, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("xpDropMaxOpacity", "", "", 0, 255, prefsMap.getOrDefault( "xpDropMaxOpacity", 200D ), 200D, false, true, false, false ) );

@@ -146,8 +146,8 @@ public class ListButton extends Button
 
     public void clickActionSkills()
     {
-        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) )
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "" ), regKey, JType.HISCORE, Minecraft.getInstance().player ) );
+//        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) )
+//            Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "" ), regKey, JType.HISCORE, Minecraft.getInstance().player ) );
     }
 
     @Override
