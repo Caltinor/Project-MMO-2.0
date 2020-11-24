@@ -61,7 +61,7 @@ public class FurnaceHandler
 
                 output.grow( totalExtraDrops );
 
-                Map<String, Double> award = XP.multiplyMap( XP.getXp( input.getItem().getRegistryName(), xpType ), 1 + totalExtraDrops );
+                Map<String, Double> award = XP.multiplyMapAnyDouble( XP.getXp( input.getItem().getRegistryName(), xpType ), 1 + totalExtraDrops );
 
                 XP.awardXpMap( uuid, award, source, true, false );
             }

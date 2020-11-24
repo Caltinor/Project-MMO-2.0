@@ -2,10 +2,8 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -38,13 +36,13 @@ public class CraftedHandler
                     award.put( "crafting", defaultCraftingXp );
             }
             else
-                XP.addMaps( award, xpValue );
+                XP.addMapsAnyDouble( award, xpValue );
 
             if( itemStack.isDamageable() )
                 durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamage() ) / (double) itemStack.getMaxDamage();
 
 //            XP.multiplyMap( award, itemStack.getCount() );
-            XP.multiplyMap( award, durabilityMultiplier );
+            XP.multiplyMapAnyDouble( award, durabilityMultiplier );
 
             for( Map.Entry<String, Double> entry : award.entrySet() )
             {

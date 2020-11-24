@@ -89,6 +89,7 @@ public class ListScreen extends Screen
         {
             switch( jType )
             {
+                case SKILLS:
                 case STATS:
                     Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
                     break;
@@ -264,7 +265,7 @@ public class ListScreen extends Screen
                 break;
             }
 
-            case STATS:
+            case SKILLS:
             {
                 Set<Skill> skills = XP.getOfflineXpMap( uuid ).keySet();
 
@@ -823,7 +824,7 @@ public class ListScreen extends Screen
                 }
                 break;
 
-                case STATS:
+                case SKILLS:
                 {
                     Skill skill = Skill.getSkill( button.regKey );
 
@@ -945,6 +946,7 @@ public class ListScreen extends Screen
                 listButtons.sort( Comparator.comparingDouble( b -> (double) getLowestSalvageReq( reqMap2.get( b.regKey ) ) ) );
                 break;
 
+            case SKILLS:
             case STATS:
                 listButtons.sort( Comparator.comparingDouble( b -> XP.getOfflineXp( Skill.getSkill( ((ListButton) b).regKey ), uuid ) ).reversed() );
                 break;

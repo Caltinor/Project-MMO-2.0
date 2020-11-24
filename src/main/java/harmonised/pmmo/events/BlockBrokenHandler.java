@@ -235,7 +235,7 @@ public class BlockBrokenHandler
         }
 
         if( !wasPlaced )
-            award = XP.addMaps( award, XP.multiplyMap( xpMap, Math.max( dropItemCount, 1 ) ) );
+            XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( xpMap, Math.max( dropItemCount, 1 ) ) );
 
         ItemStack theDropItem = drops.size() > 0 ? drops.get( 0 ) : ItemStack.EMPTY;
 
@@ -291,8 +291,8 @@ public class BlockBrokenHandler
 
             totalDrops = rewardable + dropsLeft;
             award.put( skillName, hardness );
-            award = XP.addMaps( award, xpMap );
-            XP.multiplyMap( award, totalDrops );
+            XP.addMapsAnyDouble( award, xpMap );
+            XP.multiplyMapAnyDouble( award, totalDrops );
 
             awardMsg = "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra " + block.getRegistryName();
         }
@@ -377,12 +377,12 @@ public class BlockBrokenHandler
                 }
 
                 awardMsg = "harvesting " + ( dropItemCount ) + " + " + totalExtraDrops + " " + block.getRegistryName();
-                XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount + totalExtraDrops );
+                XP.multiplyMapAnyDouble( XP.addMapsAnyDouble( award, xpMap ), dropItemCount + totalExtraDrops );
             }
             else if( !wasPlaced )
             {
                 awardMsg = "Breaking " + block.getRegistryName();
-                XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount );
+                XP.multiplyMapAnyDouble( XP.addMapsAnyDouble( award, xpMap ), dropItemCount );
             }
         }
 
@@ -395,7 +395,7 @@ public class BlockBrokenHandler
             boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
 
             if( !wasPlaced && !isSilk )
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
+                XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
 
             if( dropsItself && !wasPlaced || !dropsItself && !isSilk )			//EXTRA DROPS
             {
@@ -412,7 +412,7 @@ public class BlockBrokenHandler
                 int totalExtraDrops = guaranteedDrop + extraDrop;
 
                 if( !dropsItself && wasPlaced )
-                    award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( theDropItem.getCount() ) ) );
+                    XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( theDropItem.getCount() ) ) );
 
                 if( totalExtraDrops > 0 )
                 {
@@ -420,7 +420,7 @@ public class BlockBrokenHandler
                     NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
-                award = XP.addMaps( award, XP.multiplyMap( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), totalExtraDrops ) );
+                XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), totalExtraDrops ) );
             }
 
             awardMsg = "Mining " + block.getRegistryName();
@@ -452,7 +452,7 @@ public class BlockBrokenHandler
                     NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
-                XP.multiplyMap( XP.addMaps( award, xpMap ), dropItemCount + totalExtraDrops );
+                XP.multiplyMapAnyDouble( XP.addMapsAnyDouble( award, xpMap ), dropItemCount + totalExtraDrops );
             }
 
             awardMsg = "Chopping " + block.getRegistryName().toString();
