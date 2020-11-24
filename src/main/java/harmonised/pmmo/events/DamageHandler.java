@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.FakePlayer;
@@ -140,10 +141,14 @@ public class DamageHandler
 
                 if( XP.isPlayerSurvival( player ) )
                 {
-                    int weaponGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_WEAPON );
-                    if( weaponGap > 0 )
+                    ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
+                    int weaponGap = XP.getSkillReqGap( player, resLoc, JType.REQ_WEAPON );
+                    int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
+                    int gap = Math.max( weaponGap, enchantGap );
+                    if( gap > 0 )
                     {
-                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getDisplayName(), "", true, 2 ), (EntityPlayerMP) player );
+                        if( enchantGap < gap )
+                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getUnlocalizedName(), "", true, 2 ), (EntityPlayerMP) player );
                         if( FConfig.strictReqWeapon )
                         {
                             event.setCanceled( true );

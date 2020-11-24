@@ -57,6 +57,7 @@ public class JsonConfig
         jTypes2.add( JType.SALVAGE_FROM );
         jTypes2.add( JType.TREASURE );
         jTypes2.add( JType.TREASURE_FROM );
+        jTypes2.add( JType.REQ_USE_ENCHANTMENT );
 
         validAttributes.add( "speedBonus" );
         validAttributes.add( "hpBonus" );
@@ -103,6 +104,9 @@ public class JsonConfig
 
         if( FConfig.wearReqEnabled )
             jTypes.add( JType.REQ_WEAR );
+
+        if( FConfig.enchantUseReqEnabled )
+            jTypes.add( JType.REQ_USE_ENCHANTMENT );
 
         if( FConfig.toolReqEnabled )
             jTypes.add( JType.REQ_TOOL );
@@ -276,6 +280,9 @@ public class JsonConfig
     {
         if( jTypes.contains( JType.REQ_WEAR ) )
             updateDataSkills( JType.REQ_WEAR, false );
+
+        if( jTypes.contains( JType.REQ_USE_ENCHANTMENT ) )
+            updateDataEnchantmentLevel( rawData2.get( JType.REQ_USE_ENCHANTMENT ), localData2.get( JType.REQ_USE_ENCHANTMENT ) );
 
         if( jTypes.contains( JType.REQ_TOOL ) )
             updateDataSkills( JType.REQ_TOOL, false );
@@ -1076,6 +1083,51 @@ public class JsonConfig
             }
             else
                 LOGGER.debug( "Inexistant From Item " + inputSalvageFromItemEntry.getKey() + " in Salvage" );
+        }
+    }
+
+    private static void updateDataEnchantmentLevel( Map<String, Map<String, Map<String, Double>>> input, Map<String, Map< String, Map<String, Double>>> output )
+    {
+        int level;
+
+        for( Map.Entry<String, Map<String, Map<String, Double>>> enchantElement : input.entrySet() )
+        {
+            Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( enchantElement.getKey() ) );
+            if( enchant != null )
+            {
+                output.put( enchantElement.getKey(), new HashMap<>() );
+                for( Map.Entry<String, Map<String, Double>> levelElement : enchantElement.getValue().entrySet() )
+                {
+                    try
+                    {
+                        level = Integer.parseInt( levelElement.getKey() );
+                    }
+                    catch( Exception e )
+                    {
+                        LOGGER.debug( "Could not load parse " + levelElement.getKey() + " as a number in " + enchantElement.getKey() );
+                        continue;
+                    }
+
+                    if( level > 0 )
+                    {
+                        output.get( enchantElement.getKey() ).put( levelElement.getKey(), new HashMap<>() );
+                        if( checkValidSkills( levelElement.getValue() ) )
+                        {
+                            for( Map.Entry<String, Double> skillElement : levelElement.getValue().entrySet() )
+                            {
+                                if( !Skill.getSkill( skillElement.getKey() ).equals( Skill.INVALID_SKILL ) && skillElement.getValue() > 1 )
+                                    output.get( enchantElement.getKey() ).get( levelElement.getKey() ).put( skillElement.getKey(), skillElement.getValue() );
+                            }
+                        }
+                        else
+                            LOGGER.debug( "level " + levelElement.getKey() + " of " + enchantElement.getKey() + " could not be added to req_use_enchant, because there are no valid skills supplied" );
+                    }
+                    else
+                        LOGGER.debug( levelElement.getKey() + " is not 1 or above in " + enchantElement.getKey() );
+                }
+            }
+            else
+                LOGGER.debug( "Could not load inexistant enchant " + enchantElement.getKey() );
         }
     }
 

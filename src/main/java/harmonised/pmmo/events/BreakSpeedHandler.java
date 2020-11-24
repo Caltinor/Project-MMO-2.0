@@ -19,6 +19,8 @@ public class BreakSpeedHandler
         String skillName = skill.toString();
         double speedBonus;
         int toolGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL );
+        int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
+        int gap = Math.max( toolGap, enchantGap );
         boolean reqMet = XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK );
 
         if( !reqMet )
@@ -27,9 +29,10 @@ public class BreakSpeedHandler
             event.setCanceled( true );
             return;
         }
-        else if( toolGap > 0 )
+        else if( gap > 0 )
         {
-            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+            if( enchantGap < gap )
+                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
             if( FConfig.getConfig( "strictReqTool" ) == 1 )
             {
                 event.setCanceled( true );

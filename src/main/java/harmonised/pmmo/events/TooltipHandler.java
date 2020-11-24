@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -69,6 +70,7 @@ public class TooltipHandler
                 Map<String, Double> toolReq = JsonConfig.data.get( JType.REQ_TOOL ).get( regKey );
                 Map<String, Double> weaponReq = JsonConfig.data.get( JType.REQ_WEAPON ).get( regKey );
                 Map<String, Double> useReq = JsonConfig.data.get( JType.REQ_USE ).get( regKey );
+                Map<String, Double> useEnchantmentReq = XP.getEnchantsUseReq( itemStack );
                 Map<String, Double> placeReq = JsonConfig.data.get( JType.REQ_PLACE ).get( regKey );
                 Map<String, Double> breakReq = JsonConfig.data.get( JType.REQ_BREAK ).get( regKey );
                 Map<String, Double> xpValueGeneral = JsonConfig.data.get( JType.XP_VALUE_GENERAL ).get( regKey );
@@ -177,41 +179,44 @@ public class TooltipHandler
                 //REQ
                 {
                     if( craftReq != null && craftReq.size() > 0 )
-                        addTooltipTextSkill( "pmmo.toCraft", JType.REQ_CRAFT, craftReq, event );
+                        addTooltipTextSkill( "pmmo.toCraft", craftReq, event );
 
                     if( wearReq != null && wearReq.size() > 0 )
-                        addTooltipTextSkill( "pmmo.toWear", JType.REQ_WEAR, wearReq, event );
+                        addTooltipTextSkill( "pmmo.toWear", wearReq, event );
 
                     if( wornItemXpBoost != null && wornItemXpBoost.size() > 0 )
                         addTooltipTextSkillPercentage( "pmmo.itemXpBoostWorn", wornItemXpBoost, event );
 
                     if( toolReq != null && toolReq.size() > 0 )
-                        addTooltipTextSkill( "pmmo.tool", JType.REQ_TOOL, toolReq, event );
+                        addTooltipTextSkill( "pmmo.tool", toolReq, event );
                     if( weaponReq != null && weaponReq.size() > 0 )
-                        addTooltipTextSkill( "pmmo.weapon", JType.REQ_WEAPON, weaponReq, event );
+                        addTooltipTextSkill( "pmmo.weapon", weaponReq, event );
 
                     if( heldItemXpBoost != null && heldItemXpBoost.size() > 0 )
                         addTooltipTextSkillPercentage( "pmmo.itemXpBoostHeld", heldItemXpBoost, event );
 
                     if( useReq != null && useReq.size() > 0 )
-                        addTooltipTextSkill( "pmmo.use", JType.REQ_USE, useReq, event );
+                        addTooltipTextSkill( "pmmo.use", useReq, event );
+
+                    if( useEnchantmentReq.size() > 0 )
+                        addTooltipTextSkill( "pmmo.enchantReq", useEnchantmentReq, event );
 
                     if( placeReq != null && placeReq.size() > 0 )
                     {
                         if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable)
-                            addTooltipTextSkill( "pmmo.plant", JType.REQ_PLACE, placeReq, event );
+                            addTooltipTextSkill( "pmmo.plant", placeReq, event );
                         else
-                            addTooltipTextSkill( "pmmo.place", JType.REQ_PLACE, placeReq, event );
+                            addTooltipTextSkill( "pmmo.place", placeReq, event );
                     }
 
                     if( breakReq != null && breakReq.size() > 0 )
                     {
                         if( XP.correctHarvestTool( material ).equals( "axe" ) )
-                            addTooltipTextSkill( "pmmo.chop", JType.REQ_BREAK, breakReq, event );
+                            addTooltipTextSkill( "pmmo.chop", breakReq, event );
                         else if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable )
-                            addTooltipTextSkill( "pmmo.harvest", JType.REQ_BREAK, breakReq, event );
+                            addTooltipTextSkill( "pmmo.harvest", breakReq, event );
                         else
-                            addTooltipTextSkill( "pmmo.break", JType.REQ_BREAK, breakReq, event );
+                            addTooltipTextSkill( "pmmo.break", breakReq, event );
                     }
                 }
 
@@ -449,16 +454,15 @@ public class TooltipHandler
         }
     }
 
-    private static void addTooltipTextSkill( String tKey, JType jType, Map<String, Double> theMap, ItemTooltipEvent event )
+    private static void addTooltipTextSkill( String tKey, Map<String, Double> theMap, ItemTooltipEvent event )
     {
         EntityPlayer player = event.getEntityPlayer();
         List<String> tooltip = event.getToolTip();
-        Item item = event.getItemStack().getItem();
         double level, value;
 
         if( theMap.size() > 0 )
         {
-            tooltip.add( new TextComponentTranslation( tKey ).setStyle( XP.textStyle.get( XP.checkReq( player, item.getRegistryName(), jType ) ? "green" : "red" ) ).getFormattedText() );
+            tooltip.add( new TextComponentTranslation( tKey ).setStyle( XP.textStyle.get( XP.checkReq( player, theMap ) ? "green" : "red" ) ).getFormattedText() );
 
             for( String key : theMap.keySet() )
             {

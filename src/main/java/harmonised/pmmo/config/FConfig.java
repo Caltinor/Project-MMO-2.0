@@ -165,6 +165,14 @@ public class FConfig
     @Config.Name( "wearReqEnabled" )
     public static boolean wearReqEnabled = true;
 
+    @Config.Comment( "Should Enchantment Use requirements be enabled? false means no requirements" )
+    @Config.Name( "enchantUseReqEnabled" )
+    public static boolean enchantUseReqEnabled = true;
+
+    @Config.Comment( "Should Enchantment Use requirements automatically scale according to previous values, provided they exist? example: level1Req = 5 agility, level2Req = 10 farming - Level 4 enchantment would require level 10 agility, and level 20 farming (highestSpecifiedLevelReqs / highestSpecifiedLevel * enchantLevel)" )
+    @Config.Name( "enchantUseReqAutoScaleEnabled" )
+    public static boolean enchantUseReqAutoScaleEnabled = true;
+
     @Config.Comment( "Should tool requirements be enabled? false means no requirements" )
     @Config.Name( "toolReqEnabled" )
     public static boolean toolReqEnabled = true;
@@ -281,6 +289,10 @@ public class FConfig
     @Config.Name( "strictReqWear" )
     public static boolean strictReqWear = false;
 
+    @Config.Comment( "When a Use Enchantment requirement is not met, should the item be dropped?" )
+    @Config.Name( "strictReqUseEnchantment" )
+    public static boolean strictReqUseEnchantment = false;
+
     //Levels
     @Config.Comment( "What is the global max level" )
     @Config.Name( "maxLevel" )
@@ -383,6 +395,14 @@ public class FConfig
     @Config.Comment( "GUI Xp drops position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
     @Config.Name( "xpDropOffsetY" )
     public static double xpDropOffsetY = 0D;
+
+    @Config.Comment( "GUI Skills List position X (Width)" )
+    @Config.Name( "skillListOffsetX" )
+    public static double skillListOffsetX = 0D;
+
+    @Config.Comment( "GUI Skills List position Y (Height, 0 is top, 1 is bottom (1 is probably invisible due to clipping) )" )
+    @Config.Name( "skillListOffsetY" )
+    public static double skillListOffsetY = 0D;
 
     @Config.Comment( "How far away does the Xp Drop spawn" )
     @Config.Name( "xpDropSpawnDistance" )

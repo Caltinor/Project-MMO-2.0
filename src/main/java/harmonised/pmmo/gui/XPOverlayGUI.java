@@ -32,12 +32,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class XPOverlayGUI extends Gui
 {
-	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, veinBarPosX, veinBarPosY, xpDropPosX, xpDropPosY;
+	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, veinBarPosX, veinBarPosY, xpDropPosX, xpDropPosY, skillListX, skillListY;
 	private static int tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
 	private static ArrayList<Skill> skillsKeys;
 	private static double xp, goalXp, cooldown;
 	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0, minXpGrow = 0.2;
-	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0, maxVeinCharge = 64D;
+	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, skillListOffsetX = 0, skillListOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0, maxVeinCharge = 64D;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static String skillName = "none";
@@ -93,6 +93,8 @@ public class XPOverlayGUI extends Gui
 				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
 				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
 				xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
+				skillListX = (int) ( sr.getScaledWidth() * skillListOffsetX );
+				skillListY = (int) ( sr.getScaledHeight() * skillListOffsetY );
 
 				aSkill = skills.get( skill );
 
@@ -480,9 +482,9 @@ public class XPOverlayGUI extends Gui
 				color = XP.getSkillColor( keySkill );
 				if( level >= maxLevel )
 					tempString = "" + maxLevel;
-				drawString( fontRenderer, tempString, levelGap + 4 - fontRenderer.getStringWidth( tempString ), 3 + listIndex, color );
-				drawString( fontRenderer, " | " + new TextComponentTranslation( "pmmo." + skillName ).getUnformattedText(), levelGap + 4, 3 + listIndex, color );
-				drawString( fontRenderer, " | " + DP.dprefix( aSkill.xp ), levelGap + skillGap + 13, 3 + listIndex, color );
+				drawString( fontRenderer, tempString, skillListX + levelGap + 4 - fontRenderer.getStringWidth( tempString ), skillListY + 3 + listIndex, color );
+				drawString( fontRenderer, " | " + new TextComponentTranslation( "pmmo." + skillName ).getUnformattedText(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color );
+				drawString( fontRenderer, " | " + DP.dprefix( aSkill.xp ), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color );
 
 				if( aSkill.bonus != 0 )
 				{
@@ -495,7 +497,7 @@ public class XPOverlayGUI extends Gui
 					else
 						tempString = "";
 
-					drawString( fontRenderer, tempString, levelGap + skillGap + xpGap + 32, 3 + listIndex, color );
+					drawString( fontRenderer, tempString, skillListX + levelGap + skillGap + xpGap + 32, skillListY + 3 + listIndex, color );
 				}
 
 				listIndex += 9;
@@ -542,6 +544,16 @@ public class XPOverlayGUI extends Gui
 			xpDropOffsetY = prefsMap.get( "xpDropOffsetY" );
 		else
 			xpDropOffsetY = FConfig.xpDropOffsetY;
+
+		if( prefsMap.containsKey( "skillListOffsetX" ) )
+			skillListOffsetX = prefsMap.get( "skillListOffsetX" );
+		else
+			skillListOffsetX = FConfig.skillListOffsetX;
+
+		if( prefsMap.containsKey( "skillListOffsetY" ) )
+			skillListOffsetY = prefsMap.get( "skillListOffsetY" );
+		else
+			skillListOffsetY = FConfig.skillListOffsetY;
 
 		if( prefsMap.containsKey( "xpDropSpawnDistance" ) )
 			xpDropSpawnDistance = prefsMap.get( "xpDropSpawnDistance" );
@@ -639,6 +651,12 @@ public class XPOverlayGUI extends Gui
 
 		if( xpDropOffsetY < 0 || xpDropOffsetY > 1 )
 			xpDropOffsetY = FConfig.xpDropOffsetY;
+
+		if( skillListOffsetX < 0 || skillListOffsetX > 1 )
+			skillListOffsetX = FConfig.skillListOffsetX;
+
+		if( skillListOffsetY < 0 || skillListOffsetY > 1 )
+			skillListOffsetY = FConfig.skillListOffsetY;
 
 		if( veinBarOffsetX < 0 || veinBarOffsetX > 1 )
 			veinBarOffsetX = FConfig.veinBarOffsetX;
