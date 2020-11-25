@@ -21,6 +21,7 @@ public class PlayerConnectedHandler
     public static List<UUID> lapisPatreons      = new ArrayList<>();
     public static List<UUID> dandelionPatreons  = new ArrayList<>();
     public static List<UUID> ironPatreons       = new ArrayList<>();
+    public static Set<UUID> muteList           = new HashSet<>();
 
     public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
     {
@@ -36,23 +37,26 @@ public class PlayerConnectedHandler
             XP.syncPlayer( player );
             awardScheduledXp( uuid );
 
-            if( lapisPatreons.contains( uuid ) )
+            if( !muteList.contains( uuid ) )
             {
-                player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
+                if( lapisPatreons.contains( uuid ) )
                 {
-                    thePlayer.sendStatusMessage( new TextComponentTranslation( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getUnformattedText() ).setStyle( XP.textStyle.get( "cyan" ) ), false );
-                });
-            }
-            else if( showPatreonWelcome )
-            {
-                if( dandelionPatreons.contains( uuid ) )
-                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.dandelionPatreonWelcome", player.getDisplayName().getUnformattedText() ).setStyle( XP.textStyle.get( "yellow" ) ), false );
-                else if( ironPatreons.contains( uuid ) )
-                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.ironPatreonWelcome", player.getDisplayName().getUnformattedText() ).setStyle( XP.textStyle.get( "grey" ) ), false );
-            }
+                    player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
+                    {
+                        thePlayer.sendStatusMessage( new TextComponentTranslation( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getUnformattedText() ).setStyle( XP.textStyle.get( "cyan" ) ), false );
+                    });
+                }
+                else if( showPatreonWelcome )
+                {
+                    if( dandelionPatreons.contains( uuid ) )
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.dandelionPatreonWelcome", player.getDisplayName().getUnformattedText() ).setStyle( XP.textStyle.get( "yellow" ) ), false );
+                    else if( ironPatreons.contains( uuid ) )
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.ironPatreonWelcome", player.getDisplayName().getUnformattedText() ).setStyle( XP.textStyle.get( "grey" ) ), false );
+                }
 
-            if( showWelcome )
-                player.sendStatusMessage( new TextComponentTranslation( "pmmo.welcome" ), false );
+                if( showWelcome )
+                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.welcome" ), false );
+            }
         }
     }
 
