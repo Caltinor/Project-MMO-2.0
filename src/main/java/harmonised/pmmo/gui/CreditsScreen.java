@@ -98,6 +98,8 @@ public class CreditsScreen extends Screen
             }));
         });
 
+        //TRANSLATION
+
         listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ko_kr", "BusanDaek#3970", new TranslationTextComponent( "pmmo.translated", "Korean" ).getString(), button ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
@@ -137,6 +139,18 @@ public class CreditsScreen extends Screen
         {
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "de_de", "Matterfall#1952", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "es_ar", "N1co#9248", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+        }));
+
+        //MODPACK
 
         listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Tyrius#0842", new TranslationTextComponent( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getString(), button ->
         {
