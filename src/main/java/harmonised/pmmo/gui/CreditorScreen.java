@@ -267,5 +267,15 @@ public class CreditorScreen extends Screen
         list.add( new TranslationTextComponent( "pmmo.translated", "Chinese Traditional" ).getString() );
         list.add( new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString() );
         creditorsInfo.put( "Lyla#2639", list );
+        //Matterfall#1952
+        list = new ArrayList<>();
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "22/11/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "German" ).getString() );
+        creditorsInfo.put( "Matterfall#1952", list );
+        //N1co#9248
+        list = new ArrayList<>();
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "25/11/2020" ).getString() );
+        list.add( new TranslationTextComponent( "pmmo.translated", "Spanish" ).getString() );
+        creditorsInfo.put( "N1co#9248", list );
     }
 }
