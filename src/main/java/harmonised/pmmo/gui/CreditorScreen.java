@@ -165,6 +165,7 @@ public class CreditorScreen extends Screen
         uuidName.put( "0bc51f06-9906-41ea-9fb4-7e9be169c980", "stressindicator#8819" );
         uuidName.put( "5bfdb948-7b66-476a-aefe-d45e4778fb2d", "Daddy_P1G#0432" );
         uuidName.put( "554b53b8-d0fa-409e-ab87-2a34bf83e506", "joerkig#1337" );
+        uuidName.put( "21bb554a-f339-48ef-80f7-9a5083172892", "Judicius#1036" );
         List<String> list;
 
         /////////LAPIS//////////////
@@ -193,6 +194,9 @@ public class CreditorScreen extends Screen
 
         list = creditorsInfo.get( "joerkig#1337" );
         list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "3/11/2020" ).getString() );
+
+        list = creditorsInfo.get( "Judicius#1036" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "22/11/2020" ).getString() );
 
         /////////IRON///////////////
         PlayerConnectedHandler.ironPatreons.forEach( a ->
