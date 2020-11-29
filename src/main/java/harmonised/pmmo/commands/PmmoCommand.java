@@ -20,6 +20,8 @@ public class PmmoCommand extends CommandTreeBase
         super.addSubcommand( new PartyCommand() );
         super.addSubcommand( new AdminCommand() );
         super.addSubcommand( new DebugCommand() );
+        super.addSubcommand( new ReloadConfigCommand() );
+        super.addSubcommand( new SyncCommand() );
     }
 
     @Override
