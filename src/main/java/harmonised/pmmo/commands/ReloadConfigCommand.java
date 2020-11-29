@@ -23,6 +23,8 @@ public class ReloadConfigCommand
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.jsonConfigReload" ).setStyle( XP.textStyle.get( "green" ) ), false );
         });
 
+        System.out.println( "PMMO Config Reloaded" );
+
         return 1;
     }
 }
