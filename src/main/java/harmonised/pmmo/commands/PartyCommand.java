@@ -208,7 +208,7 @@ public class PartyCommand extends CommandBase
 
                     }
                     else
-                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingArgument" ).setStyle( XP.skillStyle.get( "red" ) ), false );
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ), false );
                 }
                     return;
 

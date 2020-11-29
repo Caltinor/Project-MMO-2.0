@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.server.command.CommandTreeBase;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class PmmoCommand extends CommandTreeBase
@@ -17,9 +16,10 @@ public class PmmoCommand extends CommandTreeBase
 
     public PmmoCommand()
     {
-        super.addSubcommand( new XpAtLevelCommand() );
+        super.addSubcommand( new ToolsCommand() );
         super.addSubcommand( new PartyCommand() );
         super.addSubcommand( new AdminCommand() );
+        super.addSubcommand( new DebugCommand() );
     }
 
     @Override

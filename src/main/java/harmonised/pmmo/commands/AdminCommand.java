@@ -165,17 +165,17 @@ public class AdminCommand extends CommandBase
                                                     PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.notANumber", args[4] ).setStyle( XP.skillStyle.get( "red" ) ) );
                                             }
                                             else
-                                                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                                                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
                                         }
                                     }
                                     else
-                                        PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                                        PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
                                 }
                                 else
                                     PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.invalidSkill", args[1] ).setStyle( XP.skillStyle.get( "red" ) ) );
                             }
                             else
-                                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
                         }
                         return;
 
@@ -201,12 +201,12 @@ public class AdminCommand extends CommandBase
                     }
                 }
                 else
-                    PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                    PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
             }
             else
                 PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.invalidPlayer", args[0] ).setStyle( XP.skillStyle.get( "red" ) ) );
         }
         else
-            PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingArgument" ).setStyle( XP.textStyle.get( "red" ) ) );
+            PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.textStyle.get( "red" ) ) );
     }
 }
