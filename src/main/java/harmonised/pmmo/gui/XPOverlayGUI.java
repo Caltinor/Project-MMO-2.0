@@ -319,6 +319,8 @@ public class XPOverlayGUI extends AbstractGui
 
 	private void doXpBar()
 	{
+		if( aSkill == null )
+			return;
 		themePos += ( 2.5 + 7.5 * ( aSkill.pos % Math.floor( aSkill.pos ) ) ) * (timeDiff / 1000000);
 
 		if( themePos > 10000 )
@@ -806,7 +808,12 @@ public class XPOverlayGUI extends AbstractGui
 		if( XPOverlayGUI.skill.equals( Skill.INVALID_SKILL ) )
 			XPOverlayGUI.skill = skillIn;
 
-		if( skills.get( skillIn ) == null )				//Handle client xp tracker
+		if( xp + gainedXp <= 0 )
+		{
+			skills.remove( skillIn );
+			return;
+		}
+		else if( skills.get( skillIn ) == null )				//Handle client xp tracker
 			skills.put( skillIn, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
 
 		aSkill = skills.get( skillIn );
