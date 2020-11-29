@@ -1,10 +1,10 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
+
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
@@ -16,7 +16,7 @@ public class NearbyPowerLevelCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(  ) throws CommandException
     {
         String[] args = context.getInput().split( " " );
         EntityPlayer sender = null;

@@ -1,16 +1,16 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
+
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class ReloadConfigCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(  ) throws CommandException
     {
         JsonConfig.init();  //Load Up Locally
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )

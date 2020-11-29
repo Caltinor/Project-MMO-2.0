@@ -1,20 +1,20 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class XpFromToCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(  ) throws CommandException
     {
         double maxLevel = Config.getConfig( "maxLevel" );
-        EntityPlayer player = (EntityPlayer) context.getSource().getEntity();
+        EntityPlayer player = (EntityPlayer) ;
         String[] args = context.getInput().split(" ");
 
         double level = Double.parseDouble( args[3] );

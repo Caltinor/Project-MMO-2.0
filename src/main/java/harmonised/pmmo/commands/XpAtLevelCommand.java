@@ -1,9 +1,6 @@
 package harmonised.pmmo.commands;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
@@ -24,7 +21,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class XpAtLevelCommand extends CommandBase
 {
-
     @Override
     public String getName()
     {
@@ -47,7 +43,7 @@ public class XpAtLevelCommand extends CommandBase
         }
         catch (PlayerNotFoundException e)
         {
-            return Collections.<String>emptyList();
+            return PmmoCommand.skillCompletions;
         }
 
         Map<Skill, Double> skillsMap = FConfig.getXpMap( player );

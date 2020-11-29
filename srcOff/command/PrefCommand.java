@@ -1,6 +1,6 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
@@ -9,7 +9,7 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,9 +20,9 @@ import java.util.Map;
 
 public class PrefCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(  ) throws CommandException
     {
-        EntityPlayer player = (EntityPlayer) context.getSource().getEntity();
+        EntityPlayer player = (EntityPlayer) ;
         String[] args = context.getInput().split(" ");
         Map<String, Double> prefsMap = Config.getPreferencesMap( player );
         Double value = null;

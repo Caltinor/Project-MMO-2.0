@@ -1,6 +1,6 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
@@ -8,7 +8,7 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
+
 import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,9 +21,9 @@ public class CheckStatsCommand
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(  ) throws CommandException
     {
-        EntityPlayer sender = (EntityPlayer) context.getSource().getEntity();
+        EntityPlayer sender = (EntityPlayer) ;
         String[] args = context.getInput().split(" ");
 
         if( sender == null )

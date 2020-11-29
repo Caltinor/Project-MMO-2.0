@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class packetHandler
 {
-    public static void handleXpPacket( MessageXp packet, EntityPlayer player )
+    public static void handleXpPacket( MessageXp packet )
     {
         UUID uuid = Minecraft.getMinecraft().player.getUniqueID();
         String name = Minecraft.getMinecraft().player.getName();
@@ -23,14 +23,16 @@ public class packetHandler
         }
         else
         {
-            if(  !XP.playerNames.containsKey( uuid ) )
+            if( !XP.playerNames.containsKey( uuid ) )
                 XP.playerNames.put( uuid, name );
 
             if( FConfig.getXpMap( Minecraft.getMinecraft().player ).size() == 0 )
                 XPOverlayGUI.listOn = true;
 
-            XP.getOfflineXpMap( uuid ).put( Skill.getSkill( packet.skill ), packet.xp + packet.gainedXp );
-
+            if( packet.xp == 0 && packet.gainedXp == 0 )
+                XP.getOfflineXpMap( uuid ).remove( Skill.getSkill( packet.skill ) );
+            else
+                XP.getOfflineXpMap( uuid ).put( Skill.getSkill( packet.skill ), packet.xp + packet.gainedXp );
             XPOverlayGUI.makeXpDrop( packet.xp, Skill.getSkill( packet.skill ), 10000, packet.gainedXp, packet.skip );
         }
     }

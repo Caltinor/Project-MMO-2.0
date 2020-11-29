@@ -1487,11 +1487,11 @@ public class XP
 				ItemStack droppedItemStack = itemStack.copy();
 				player.dropItem( droppedItemStack, false, false );
 				itemStack.setCount( 0 );
-				player.sendStatusMessage( new TextComponentTranslation( "pmmo.gotTooHotDroppedItem", new TextComponentTranslation( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-				player.sendStatusMessage( new TextComponentTranslation( "pmmo.gotTooHotDroppedItem", new TextComponentTranslation( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+				player.sendStatusMessage( new TextComponentTranslation( "pmmo.gotTooHotDroppedItem", new TextComponentTranslation( droppedItemStack.getDisplayName() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TextComponentTranslation( "pmmo.gotTooHotDroppedItem", new TextComponentTranslation( droppedItemStack.getDisplayName() ) ).setStyle( textStyle.get( "red" ) ), false );
 			}
 			else
-				player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToWear", new TextComponentTranslation( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToWear", new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( textStyle.get( "red" ) ), true );
 		}
 
 		applyEnchantmentUsePenalty( player, itemStack );
@@ -1512,20 +1512,20 @@ public class XP
 				if( gap > 9 )
 					gap = 9;
 
-				player.addPotionEffect( new EffectInstance( Effects.MINING_FATIGUE, 75, gap, false, true ) );
-				player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
-				player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
+				player.addPotionEffect( new PotionEffect( MobEffects.MINING_FATIGUE, 75, gap, false, true ) );
+				player.addPotionEffect( new PotionEffect( MobEffects.WEAKNESS, 75, gap, false, true ) );
+				player.addPotionEffect( new PotionEffect( MobEffects.SLOWNESS, 75, gap, false, true ) );
 
-				if( Config.forgeConfig.strictReqUseEnchantment.get() || EnchantmentHelper.hasBindingCurse( itemStack ) )
+				if( FConfig.strictReqUseEnchantment || EnchantmentHelper.hasBindingCurse( itemStack ) )
 				{
 					ItemStack droppedItemStack = itemStack.copy();
 					player.dropItem( droppedItemStack, false, false );
 					itemStack.setCount( 0 );
-					player.sendStatusMessage( new TextComponentTranslation( "pmmo.gotTooHotDroppedItem", new TextComponentTranslation( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-					player.sendStatusMessage( new TextComponentTranslation( "pmmo.gotTooHotDroppedItem", new TextComponentTranslation( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+					player.sendStatusMessage( new TextComponentTranslation( "pmmo.gotTooHotDroppedItem", new TextComponentTranslation( droppedItemStack.getDisplayName() ) ).setStyle( textStyle.get( "red" ) ), true );
+					player.sendStatusMessage( new TextComponentTranslation( "pmmo.gotTooHotDroppedItem", new TextComponentTranslation( droppedItemStack.getDisplayName() ) ).setStyle( textStyle.get( "red" ) ), false );
 				}
 				else
-					player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUseEnchantment", new TextComponentTranslation( entry.getKey().getName() ), new TextComponentTranslation( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+					player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUseEnchantment", new TextComponentTranslation( entry.getKey().getName() ), new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( textStyle.get( "red" ) ), true );
 			}
 		}
 	}

@@ -311,6 +311,8 @@ public class XPOverlayGUI extends Gui
 
 	private void doXpBar()
 	{
+		if( aSkill == null )
+			return;
 		themePos += ( 2.5 + 7.5 * ( aSkill.pos % Math.floor( aSkill.pos ) ) ) * (timeDiff / 1000000);
 
 		if( themePos > 10000 )
@@ -776,7 +778,7 @@ public class XPOverlayGUI extends Gui
 		checkUnlocks( level, skill, player );
 
 		if( skill == Skill.SWIMMING && level - 1 < FConfig.nightvisionUnlockLevel && level >= FConfig.nightvisionUnlockLevel )
-			player.sendStatusMessage( new TextComponentTranslation( "pmmo.nightvisionUnlocked" ).setStyle( XP.getSkillStyle( skill ) ), true );
+			player.sendStatusMessage( new TextComponentTranslation( "pmmo.underwaterNightVisionUnLocked", level ).setStyle( XP.getSkillStyle( skill ) ), true );
 
 		listWasOn = barOn;
 
@@ -798,7 +800,12 @@ public class XPOverlayGUI extends Gui
 		if( XPOverlayGUI.skill.equals( Skill.INVALID_SKILL ) )
 			XPOverlayGUI.skill = skillIn;
 
-		if( skills.get( skillIn ) == null )				//Handle client xp tracker
+		if( xp + gainedXp <= 0 )
+		{
+			skills.remove( skillIn );
+			return;
+		}
+		else if( skills.get( skillIn ) == null )				//Handle client xp tracker
 			skills.put( skillIn, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
 
 		aSkill = skills.get( skillIn );

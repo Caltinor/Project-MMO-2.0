@@ -44,7 +44,7 @@ public class MessageXp extends MessageBase<MessageXp>
 	@Override
 	public void handleClientSide( MessageXp packet, EntityPlayer onlinePlayer )
 	{
-		packetHandler.handleXpPacket( packet, onlinePlayer );
+		packetHandler.handleXpPacket( packet );
 	}
 
 	@Override

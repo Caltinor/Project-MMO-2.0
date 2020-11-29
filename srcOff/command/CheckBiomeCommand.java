@@ -1,12 +1,12 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -14,9 +14,9 @@ import java.util.Map;
 
 public class CheckBiomeCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(  ) throws CommandException
     {
-        EntityPlayer sender = (EntityPlayer) context.getSource().getEntity();
+        EntityPlayer sender = (EntityPlayer) ;
         String biomeKey = sender.world.getBiome( sender.getPosition() ).getRegistryName().toString();
         String transKey = sender.world.getBiome( sender.getPosition() ).getTranslationKey();
         Map<String, Double> theMap = JsonConfig.data.get( JType.BIOME_MOB_MULTIPLIER ).get( biomeKey );

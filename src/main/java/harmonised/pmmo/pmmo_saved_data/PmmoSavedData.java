@@ -219,7 +219,10 @@ public class PmmoSavedData extends WorldSavedData
 
             if( !xp.containsKey( uuid ) )
                 xp.put( uuid, new HashMap<>() );
-            xp.get( uuid ).put( skill, amount );
+            if( amount > 0 )
+                xp.get( uuid ).put( skill, amount );
+            else
+                xp.get( uuid ).remove( skill );
             setDirty( true );
             return true;
         }

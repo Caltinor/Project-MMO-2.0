@@ -1,10 +1,10 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -18,7 +18,7 @@ public class SyncCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute(CommandContext<CommandSource> context, @Nullable Collection<EntityPlayerMP> players ) throws CommandException
+    public static int execute(, @Nullable Collection<EntityPlayerMP> players ) throws CommandException
     {
         if( players != null )
         {
