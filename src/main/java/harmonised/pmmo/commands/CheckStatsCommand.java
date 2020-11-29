@@ -44,6 +44,9 @@ public class CheckStatsCommand extends CommandBase
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
+        if( args.length == 1 )
+            return getListOfStringsMatchingLastWord( args, server.getOnlinePlayerNames() );
+
         return new ArrayList<>();
     }
 
@@ -88,12 +91,13 @@ public class CheckStatsCommand extends CommandBase
             }
             catch( PlayerNotFoundException e )
             {
-                LOGGER.info( "Error: Invalid Player requested at CheckStats Command \"" + args[2] + "\"", e );
-
-                player.sendStatusMessage(  new TextComponentTranslation( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+                LOGGER.info( "Error: Invalid Player requested at CheckStats Command \"" + args[0] + "\"", e );
+                player.sendStatusMessage( new TextComponentTranslation( "pmmo.invalidPlayer", args[0] ).setStyle( XP.textStyle.get( "red" ) ), false );
                 return;
             }
         }
+        else
+            player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ), false );
 
         return;
     }

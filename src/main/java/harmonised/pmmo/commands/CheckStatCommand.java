@@ -1,71 +1,137 @@
-//package harmonised.pmmo.commands;
-//
-//
-//import com.mojang.brigadier.exceptions.CommandSyntaxException;
-//import harmonised.pmmo.config.Config;
-//import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-//import harmonised.pmmo.skills.Skill;
-//import harmonised.pmmo.util.XP;
-//import harmonised.pmmo.util.DP;
-//import net.minecraft.command.CommandException;
-//
-//import net.minecraft.command.arguments.EntityArgument;
-//import net.minecraft.entity.player.EntityPlayer;
-//import net.minecraft.entity.player.EntityPlayerMP;
-//import net.minecraft.util.text.Style;
-//import net.minecraft.util.text.TextFormatting;
-//import net.minecraft.util.text.TextComponentTranslation;
-//
-//public class CheckStatCommand
-//{
-//    public static int execute(  ) throws CommandException
-//    {
-//        EntityPlayer sender = (EntityPlayer) ;
-//        String[] args = context.getInput().split(" ");
-//        Skill skill = Skill.getSkill( args[3] );
-//        String skillName = skill.name().toLowerCase();
-//
-//        if( skill.getValue() != 0 || args[3].toLowerCase().equals( "power" ) )
-//        {
-//            try
-//            {
-//                double level = 1;
-//
-//                EntityPlayerMP target = EntityArgument.getPlayer( context, "player name" );
-//                if( args[3].toLowerCase().equals( "power" ) )
-//                {
-//                    level = XP.getPowerLevel( target.getUniqueID() );
-//                    sender.sendStatusMessage( new TextComponentTranslation( "pmmo.playerLevelDisplay", target.getDisplayName().getUnformattedText(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TextComponentTranslation( "pmmo.power" ).setStyle( new Style().setColor( TextFormatting.AQUA ) ) ), false );
-//                }
-//                else
-//                {
-//                    level = skill.getLevelDecimal( target.getUniqueID() );
-//                    sender.sendStatusMessage( new TextComponentTranslation( "pmmo.playerLevelDisplay", target.getDisplayName().getUnformattedText(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TextComponentTranslation( "pmmo." + skillName ).setStyle( XP.getSkillStyle( skill ) ) ), false );
-//                }
-//
-//                //EXTRA INFO
-//                switch( skillName )
-//                {
-//                    case "fishing":
-//                        double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
-//                        double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
-//                        double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
-//                        double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
-//                        if( fishPoolChance > fishPoolMaxChance )
-//                            fishPoolChance = fishPoolMaxChance;
-//
-//                        sender.sendStatusMessage( new TextComponentTranslation( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( XP.getSkillStyle( skill ) ), false );
-//                        break;
-//                }
-//            }
-//            catch( CommandSyntaxException e )
-//            {
-//                sender.sendStatusMessage(  new TextComponentTranslation( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
-//            }
-//        }
-//        else
-//            sender.sendStatusMessage( new TextComponentTranslation( "pmmo.invalidSkill", args[3] ).setStyle( XP.textStyle.get( "red" ) ), false );
-//
-//        return 1;
-//    }
-//}
+package harmonised.pmmo.commands;
+
+import java.util.*;
+
+import javax.annotation.Nullable;
+
+import harmonised.pmmo.config.FConfig;
+import harmonised.pmmo.config.JType;
+import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.network.MessageUpdatePlayerNBT;
+import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.DP;
+
+import harmonised.pmmo.util.NBTHelper;
+import harmonised.pmmo.util.XP;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class CheckStatCommand extends CommandBase
+{
+    public static final Logger LOGGER = LogManager.getLogger();
+
+    @Override
+    public String getName()
+    {
+        return "checkStat";
+    }
+
+    @Override
+    public int getRequiredPermissionLevel()
+    {
+        return 0;
+    }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+        if( args.length == 1 )
+            return getListOfStringsMatchingLastWord( args, server.getOnlinePlayerNames() );
+        else if( args.length == 2 )
+            return PmmoCommand.skillCompletions;
+
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getAliases()
+    {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getUsage(ICommandSender sender)
+    {
+        return null;
+    }
+
+    @Override
+    public void execute( MinecraftServer server, ICommandSender sender, String[] args ) throws CommandException
+    {
+        EntityPlayerMP player = null;
+        try
+        {
+            player = CommandBase.getCommandSenderAsPlayer( sender );
+        }
+        catch( PlayerNotFoundException e )
+        {
+            //Not player, it's fine
+        }
+
+        if( args.length > 0 )
+        {
+            EntityPlayerMP target = null;
+            try
+            {
+                target = getPlayer( server, sender, args[0] );
+            }
+            catch( PlayerNotFoundException e )
+            {
+                PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.invalidPlayer", args[0] ).setStyle( XP.textStyle.get( "red" ) ) );
+                return;
+            }
+
+            if( args.length > 1 )
+            {
+                Skill skill = Skill.getSkill( args[1] );
+                String skillName = skill.name().toLowerCase();
+                if( !skill.equals( Skill.INVALID_SKILL ) || args[1].toLowerCase().equals( "power" ) )
+                {
+                    double level = 1;
+
+                    if( args[1].toLowerCase().equals( "power" ) )
+                    {
+                        level = XP.getPowerLevel( target.getUniqueID() );
+                        PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.playerLevelDisplay", target.getDisplayName().getUnformattedText(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TextComponentTranslation( "pmmo.power" ).setStyle( XP.textStyle.get( "cyan" ) ) ) );
+                    }
+                    else
+                    {
+                        level = skill.getLevelDecimal( target.getUniqueID() );
+                        PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.playerLevelDisplay", target.getDisplayName().getUnformattedText(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TextComponentTranslation( "pmmo." + skillName ).setStyle( XP.getSkillStyle( skill ) ) ) );
+                    }
+
+                    //EXTRA INFO
+                    switch( skillName )
+                    {
+                        case "fishing":
+                            double fishPoolBaseChance = FConfig.fishPoolBaseChance;
+                            double fishPoolChancePerLevel = FConfig.fishPoolChancePerLevel;
+                            double fishPoolMaxChance = FConfig.fishPoolMaxChance;
+                            double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
+                            if( fishPoolChance > fishPoolMaxChance )
+                                fishPoolChance = fishPoolMaxChance;
+
+                            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( XP.getSkillStyle( skill ) ) );
+                            break;
+                    }
+                }
+            }
+            else
+                PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.textStyle.get( "red" ) ) );
+        }
+        else
+            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+
+        return;
+    }
+}

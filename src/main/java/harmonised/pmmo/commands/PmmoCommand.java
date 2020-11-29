@@ -23,6 +23,8 @@ public class PmmoCommand extends CommandTreeBase
         super.addSubcommand( new ReloadConfigCommand() );
         super.addSubcommand( new SyncCommand() );
         super.addSubcommand( new CheckBiomeCommand() );
+        super.addSubcommand( new CheckStatCommand() );
+        super.addSubcommand( new CheckStatsCommand() );
     }
 
     @Override
