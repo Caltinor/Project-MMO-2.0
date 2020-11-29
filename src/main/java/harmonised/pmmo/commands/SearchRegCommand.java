@@ -32,7 +32,7 @@ public class SearchRegCommand
         StringBuilder listOutExtra = new StringBuilder("PMMO DEBUG SEARCH RESULTS:\n");
         StringBuilder listOutForBuilder = new StringBuilder();
 
-        switch( type )
+        switch( type.toLowerCase() )
         {
             case "item":
                 for( Item item : ForgeRegistries.ITEMS )
@@ -67,7 +67,7 @@ public class SearchRegCommand
                 }
                 break;
 
-            case "potionEffect":
+            case "potioneffect":
                 for( Effect item : ForgeRegistries.POTIONS )
                 {
                     String regName = item.getRegistryName().toString();
