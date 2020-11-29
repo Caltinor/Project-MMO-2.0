@@ -1,22 +1,18 @@
 package harmonised.pmmo.commands;
 
-import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.party.Party;
 import harmonised.pmmo.party.PartyMemberInfo;
 import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nullable;
