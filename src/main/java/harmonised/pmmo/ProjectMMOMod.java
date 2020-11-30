@@ -76,7 +76,6 @@ public class ProjectMMOMod
         AttributeHandler.init();
 //        if( FConfig.craftReqEnabled.get() )
 //            event.getServer().getGameRules().get( GameRules.DO_LIMITED_CRAFTING ).set(true, event.getServer() );
-
     }
 
     @Mod.EventHandler

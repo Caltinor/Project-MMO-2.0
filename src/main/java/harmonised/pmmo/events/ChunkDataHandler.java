@@ -20,7 +20,7 @@ public class ChunkDataHandler
 
     public static void handleChunkDataLoad( ChunkDataEvent.Load event )
     {
-        NBTTagCompound levelNBT = event.getData();
+        NBTTagCompound levelNBT = event.getData().getCompoundTag( "Level" );
 
         if( levelNBT != null )
         {
@@ -32,7 +32,7 @@ public class ChunkDataHandler
                 if( !placedMap.containsKey( dimid ) )
                     placedMap.put( dimid, new HashMap<>() );
 
-                NBTTagCompound placedPosNBT = ( levelNBT.getCompoundTag( "placedPos" ) );
+                NBTTagCompound placedPosNBT = levelNBT.getCompoundTag( "placedPos" );
                 Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimid );
                 Map<BlockPos, UUID> blockMap = new HashMap<>();
                 Set<String> keySet = placedPosNBT.getKeySet();

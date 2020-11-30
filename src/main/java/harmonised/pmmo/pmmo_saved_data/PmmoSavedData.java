@@ -33,9 +33,15 @@ public class PmmoSavedData extends WorldSavedData
     private Map<UUID, Map<String, Map<Skill, Double>>> xpBoosts = new HashMap<>();    //playerUUID -> boostUUID -> boostMap
     private Set<Party> parties = new HashSet<>();
     private Map<UUID, String> name = new HashMap<>();
+
     public PmmoSavedData()
     {
         super(ID);
+    }
+
+    public PmmoSavedData( String name )
+    {
+        super( name );
     }
 
     @Override
@@ -358,7 +364,7 @@ public class PmmoSavedData extends WorldSavedData
         PmmoSavedData.server = server;
         World world = server.getWorld( DimensionType.OVERWORLD.getId() );
         MapStorage storage = world.getMapStorage();
-        PmmoSavedData instance = (PmmoSavedData) storage.getOrLoadData(PmmoSavedData.class, ID);
+        PmmoSavedData instance = (PmmoSavedData) storage.getOrLoadData( PmmoSavedData.class, ID );
         if (instance == null)
         {
             instance = new PmmoSavedData();

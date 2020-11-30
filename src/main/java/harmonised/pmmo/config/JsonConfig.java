@@ -20,6 +20,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -1292,50 +1293,55 @@ public class JsonConfig
                     LOGGER.debug( e );
                 }
             }
-//            if( FConfig.autoGenerateExtraChanceEnabled )
-//            {
-//                for( Block block : ForgeRegistries.BLOCKS )
-//                {
-//                    try
-//                    {
-////                ItemStack itemStack = new ItemStack( block );
-//                        String resLoc = block.getRegistryName().toString();
-//                        Material material = block.getDefaultState().getMaterial();
-//                        Skill skill = XP.getSkill( material );
-//                        JType jType = JType.NONE;
-//                        Map<String, Double> infoMap = new HashMap<>();
-//                        double chance = 0;
-//                        Set<ResourceLocation> tags = block.getTags();
-//
-//                        //Ore/Log/Plant Extra Chance
-//                        if( block instanceof OreBlock || tags.contains( new ResourceLocation( "forge:ores" ) ) )
-//                        {
-//                            jType = JType.INFO_ORE;
-//                            chance = FConfig.defaultExtraChanceOre;
-//                        }
-//                        else if( block instanceof CropsBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
-//                        {
-//                            jType = JType.INFO_PLANT;
-//                            chance = FConfig.defaultExtraChancePlant;
-//                        }
-//                        else if( block instanceof  LogBlock || tags.contains( new ResourceLocation( "minecraft:logs" ) ) )
-//                        {
-//                            jType = JType.INFO_LOG;
-//                            chance = FConfig.defaultExtraChanceLog;
-//                        }
-//                        if( !jType.equals( JType.NONE ) )
-//                            infoMap.put( "extraChance", chance );
-//
-//                        if( infoMap.size() > 0 && infoMap.getOrDefault( "extraChance", 0D ) > 0 )
-//                            addJsonConfigValue( resLoc, jType, infoMap, false );
-//                    }
-//                    catch( Exception e )
-//                    {
-//                        LOGGER.error( e );
-//                    }
-//                }
-//            }
-            //COUT AUTO VALUES FROM TAGS
+            if( FConfig.autoGenerateExtraChanceEnabled )
+            {
+                String[] oreNames = OreDictionary.getOreNames();
+
+                for( Block block : ForgeRegistries.BLOCKS )
+                {
+                    try
+                    {
+//                ItemStack itemStack = new ItemStack( block );
+                        String resLoc = block.getRegistryName().toString();
+                        Material material = block.getDefaultState().getMaterial();
+                        Skill skill = XP.getSkill( material );
+                        JType jType = JType.NONE;
+                        Map<String, Double> infoMap = new HashMap<>();
+                        double chance = 0;
+                        int[] oreIDs = OreDictionary.getOreIDs( new ItemStack( block ) );
+
+                        //Ore/Log/Plant Extra Chance
+                        for( int id : oreIDs )
+                        {
+                            String tagName = oreNames[ id ];
+                            if( tagName.startsWith( "ore" ) )
+                            {
+                                jType = JType.INFO_ORE;
+                                chance = FConfig.defaultExtraChanceOre;
+                            }
+                            else if( tagName.startsWith( "log" ) )
+                            {
+                                jType = JType.INFO_PLANT;
+                                chance = FConfig.defaultExtraChancePlant;
+                            }
+                            else if( tagName.startsWith( "crop" ) )
+                            {
+                                jType = JType.INFO_LOG;
+                                chance = FConfig.defaultExtraChanceLog;
+                            }
+                        }
+                        if( !jType.equals( JType.NONE ) )
+                            infoMap.put( "extraChance", chance );
+
+                        if( infoMap.size() > 0 && infoMap.getOrDefault( "extraChance", 0D ) > 0 )
+                            addJsonConfigValue( resLoc, jType, infoMap, false );
+                    }
+                    catch( Exception e )
+                    {
+                        LOGGER.error( e );
+                    }
+                }
+            }
             data = localData;
         }
     }
