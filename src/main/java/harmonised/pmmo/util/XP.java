@@ -1026,7 +1026,7 @@ public class XP
 //				}
 //			};
 //		}
-		//COUT
+		//COUT CURIOS
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
 			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
