@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -58,14 +59,13 @@ public class XPOverlayGUI extends Gui
 	private static double itemBoost, biomeBoost, dimensionBoost, playerXpBoost, dimensionMultiplier, multiplier;
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
 	private static IBlockState blockState, lastBlockState;
-	private static String lastBlockRegKey = "", lastBlockTransKey = "";
+	private static String lastBlockRegKey = "", lastBlockDisplayName = "";
 	private static Item lastToolHeld = Items.AIR;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean listWasOn = false, barOn = false, listOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
 	ScaledResolution sr;
 	BlockPos blockPos, lastBlockPos;
-
-
+	
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
 	{
@@ -184,7 +184,7 @@ public class XPOverlayGUI extends Gui
 		if( lastBlockState.getBlock().getRegistryName() != null )
 			lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
 		canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
-		lastBlockTransKey = lastBlockState.getBlock().getUnlocalizedName();
+		lastBlockDisplayName = new ItemStack( lastBlockState.getBlock() ).getDisplayName();
 	}
 
 	private void doXpDrops()
@@ -425,7 +425,7 @@ public class XPOverlayGUI extends Gui
 
 			if( lookingAtBlock && !canBreak )
 			{
-				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.notSkilledEnoughToBreak", new TextComponentTranslation( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.notSkilledEnoughToBreak", lastBlockDisplayName ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
 				return;
 			}
 
@@ -436,12 +436,12 @@ public class XPOverlayGUI extends Gui
 					breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
 					if( breakAmount > veinMaxBlocks )
 						breakAmount = veinMaxBlocks;
-					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.canVein", breakAmount, new TextComponentTranslation( lastBlockTransKey ) ).getUnformattedText(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
+					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.canVein", breakAmount, lastBlockDisplayName ).getUnformattedText(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
 				}
 				else if( WorldTickHandler.canVeinDimension( lastBlockRegKey, player ) )
-					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.cannotVein", new TextComponentTranslation( lastBlockTransKey ).getUnformattedText() ).getUnformattedText(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.cannotVein", lastBlockDisplayName ).getUnformattedText(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
 				else
-					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.cannotVeinDimension", new TextComponentTranslation( lastBlockTransKey ).getUnformattedText() ).getUnformattedText(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.cannotVeinDimension", lastBlockDisplayName ).getUnformattedText(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
 			}
 		}
 	}

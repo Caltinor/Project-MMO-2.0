@@ -92,7 +92,7 @@ public class TooltipHandler
                     material = ( (ItemBlock) item).getBlock().getDefaultState().getMaterial();
                     hardness = ( (ItemBlock) item).getBlock().getDefaultState().getBlockHardness( null, null );
                     if( hardness > 0 )
-                        tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo.hardness", DP.dp( hardness ) ).getUnformattedText(), hardness ).getFormattedText() );
+                        tooltip.add( new TextComponentTranslation( "pmmo.hardness", hardness ).getUnformattedText() );
 //                    tooltip.add( new TextComponentString( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
                 }
 
@@ -408,7 +408,7 @@ public class TooltipHandler
                             salvageToItemMap = treasureInfo.get( key );
                             chance = DP.mapCapped( level, salvageToItemMap.get( "startLevel" ), salvageToItemMap.get( "endLevel" ), salvageToItemMap.get( "startChance" ), salvageToItemMap.get( "endChance" ) );
                             xpPerItem = salvageToItemMap.get( "xpPerItem" );
-                            String itemName = new TextComponentTranslation( XP.getItem( key ).getUnlocalizedName() ).getUnformattedText();
+                            String itemName = new ItemStack( XP.getItem( key ) ).getDisplayName();
                             minCount = (int) (double) salvageToItemMap.get( "minCount" );
                             maxCount = (int) (double) salvageToItemMap.get( "maxCount" );
 

@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.annotation.Nullable;
 
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JsonConfig;
 
 import harmonised.pmmo.util.XP;
@@ -54,9 +55,8 @@ public class ReloadConfigCommand extends CommandBase
     public void execute( MinecraftServer server, ICommandSender sender, String[] args ) throws CommandException
     {
         JsonConfig.init();  //Load Up Locally
-//        if( FConfig.autoGenerateValuesEnabled )
-//            JsonConfig.setAutoValues(); //Set Auto Values
-        //COUT AUTO VALUES
+        if( FConfig.autoGenerateValuesEnabled )
+            JsonConfig.setAutoValues(); //Set Auto Values
 
         server.getPlayerList().getPlayers().forEach( player ->
         {

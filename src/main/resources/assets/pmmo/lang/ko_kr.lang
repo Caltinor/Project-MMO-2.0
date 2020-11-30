@@ -323,3 +323,5 @@ pmmo.partyTotalXpGained=파티의 총 XP 획득량: %1$s
 pmmo.partyXpBonus=파티 XP 보너스: %1$s%%
 pmmo.thePartyIsFull=파티의 정원이 가득 찼습니다
 pmmo.yourPartyIsFull=당신의 파티가 정원이 가득 찼습니다
+pmmo.missingNextArgument=Missing next argument!
+pmmo.notANumber=%1$s is not a number!

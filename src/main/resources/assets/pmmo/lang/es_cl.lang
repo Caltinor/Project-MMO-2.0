@@ -323,3 +323,5 @@ pmmo.partyTotalXpGained=Exp Total de Grupo acumulada: %1$s
 pmmo.partyXpBonus=Bonus Exp de Grupo: %1$s%%
 pmmo.thePartyIsFull=El grupo está lleno
 pmmo.yourPartyIsFull=Tu grupo esta lleno
+pmmo.missingNextArgument=Missing next argument!
+pmmo.notANumber=%1$s is not a number!

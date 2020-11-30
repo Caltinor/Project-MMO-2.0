@@ -323,3 +323,5 @@ pmmo.partyTotalXpGained=隊伍總獲取經驗值: %1$s
 pmmo.partyXpBonus=隊伍經驗值加成: %1$s%%
 pmmo.thePartyIsFull=此隊伍人數已達上限
 pmmo.yourPartyIsFull=你的隊伍人數已達上限
+pmmo.missingNextArgument=Missing next argument!
+pmmo.notANumber=%1$s is not a number!

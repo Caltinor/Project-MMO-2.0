@@ -66,9 +66,8 @@ public class ProjectMMOMod
     {
         PmmoCommand.registerCommands( event );
 
-//        if( FConfig.autoGenerateValuesEnabled )
-//            JsonConfig.setAutoValues();
-        //COUT AUTO VALUES
+        if( FConfig.autoGenerateValuesEnabled )
+            JsonConfig.setAutoValues();
         ChunkDataHandler.init();
 
         PmmoSavedData.init( event.getServer() );
