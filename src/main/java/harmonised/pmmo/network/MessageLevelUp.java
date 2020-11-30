@@ -51,6 +51,8 @@ public class MessageLevelUp
         ctx.get().enqueueWork(() ->
         {
             ServerPlayerEntity player = ctx.get().getSender();
+            if( player == null )
+                return;
             Skill skill = Skill.getSkill( packet.skill );
 
             if( packet.level <= skill.getLevel( player ) )
