@@ -323,5 +323,7 @@
 	"pmmo.partyTotalXpGained": "Totales XP in the Party verdient: %1$s",
 	"pmmo.partyXpBonus": "Party Xp Bonus: %1$s%%",
 	"pmmo.thePartyIsFull": "Die Party ist voll",
-	"pmmo.yourPartyIsFull": "Ihre Party ist voll"
+	"pmmo.yourPartyIsFull": "Ihre Party ist voll",
+	"pmmo.missingNextArgument": "Missing next argument!",
+	"pmmo.notANumber": "%1$s is not a number!"
 }
