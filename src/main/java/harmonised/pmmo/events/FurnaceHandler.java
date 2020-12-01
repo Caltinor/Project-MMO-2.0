@@ -68,7 +68,7 @@ public class FurnaceHandler
         }
         catch( Exception e )
         {
-            LOGGER.error( e );
+//            LOGGER.debug( e );
         }
     }
 }
