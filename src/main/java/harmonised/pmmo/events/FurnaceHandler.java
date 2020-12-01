@@ -68,7 +68,7 @@ public class FurnaceHandler
         }
         catch( Exception e )
         {
-            LOGGER.info( e.toString() );
+//            LOGGER.debug( e );
         }
     }
 }
