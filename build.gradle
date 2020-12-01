@@ -1,13 +1,58 @@
-buildscript {
-    repositories {
+buildscript
+{
+    repositories
+    {
+        mavenCentral()
+        maven
+        {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven { url = "http://dvs1.progwml6.com/files/maven" }
+        maven { url = "http://minecraft.curseforge.com/api/maven/" }
+        maven { url = 'https://plugins.gradle.org/m2/' }
+    }
+    repositories
+    {
         jcenter()
         maven { url = "https://files.minecraftforge.net/maven" }
     }
-    dependencies {
+    dependencies
+    {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "com.wynprice.cursemaven:CurseMaven:2.1.1"
     }
 }
+
+repositories
+{
+    jcenter()
+    maven { url = "http://dvs1.progwml6.com/files/maven" }
+    maven { url = "http://minecraft.curseforge.com/api/maven/" }
+    maven
+    {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven
+    {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven { url = "http://dvs1.progwml6.com/files/maven/" }
+    maven { url = "https://maven.theillusivec4.top/" }
+
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: "com.wynprice.cursemaven"
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
@@ -35,27 +80,8 @@ minecraft {
 
 dependencies
 {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+//    deobfCompile "curse.maven:baubles:2518667"
+//    deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
 }
 
 processResources {

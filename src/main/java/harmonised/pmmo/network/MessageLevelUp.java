@@ -53,38 +53,44 @@ public class MessageLevelUp extends MessageBase<MessageLevelUp>
     @Override
     public void handleServerSide( MessageLevelUp packet, EntityPlayer player )
     {
-        Skill skill = Skill.getSkill( packet.skill );
-
-        if( packet.level <= skill.getLevel( player ) )
+        try
         {
-            Map<String, Double> prefsMap = FConfig.getPreferencesMap( player );
-            String skillName = skill.name().toLowerCase();
-            Vec3d playerPos = player.getPositionVector();
-
-            if( FConfig.levelUpFirework && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
-                XP.spawnRocket( player.world, player.getPosition(), skill );
-
-            LOGGER.info( player.getDisplayName().getUnformattedText() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension + "|x:" + DP.dp( playerPos.x ) + "|y:" + DP.dp( playerPos.y ) + "|z:" + DP.dp( playerPos.z ) + "]" );
-
-            if( packet.level % FConfig.levelsPerMilestone == 0 && FConfig.broadcastMilestone )
+            Skill skill = Skill.getSkill( packet.skill );
+            if( packet.level <= skill.getLevel( player ) )
             {
-                player.getServer().getPlayerList().getPlayers().forEach( otherPlayer ->
+                Map<String, Double> prefsMap = FConfig.getPreferencesMap( player );
+                String skillName = skill.name().toLowerCase();
+                Vec3d playerPos = player.getPositionVector();
+
+                if( FConfig.levelUpFirework && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
+                    XP.spawnRocket( player.world, player.getPosition(), skill );
+
+                LOGGER.info( player.getDisplayName().getUnformattedText() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension + "|x:" + DP.dp( playerPos.x ) + "|y:" + DP.dp( playerPos.y ) + "|z:" + DP.dp( playerPos.z ) + "]" );
+
+                if( packet.level % FConfig.levelsPerMilestone == 0 && FConfig.broadcastMilestone )
                 {
-                    if( otherPlayer.getUniqueID() != player.getUniqueID() )
+                    player.getServer().getPlayerList().getPlayers().forEach( otherPlayer ->
                     {
-                        Map<String, Double> otherprefsMap = FConfig.getPreferencesMap( otherPlayer );
-                        otherPlayer.sendStatusMessage( new TextComponentTranslation( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TextComponentTranslation( "pmmo." + skillName ) ).setStyle( XP.getSkillStyle( skill ) ), false );
-                        if( FConfig.milestoneLevelUpFirework )
+                        if( otherPlayer.getUniqueID() != player.getUniqueID() )
                         {
-                            if( !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
-                                XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );
+                            Map<String, Double> otherprefsMap = FConfig.getPreferencesMap( otherPlayer );
+                            otherPlayer.sendStatusMessage( new TextComponentTranslation( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TextComponentTranslation( "pmmo." + skillName ) ).setStyle( XP.getSkillStyle( skill ) ), false );
+                            if( FConfig.milestoneLevelUpFirework )
+                            {
+                                if( !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
+                                    XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
+            else
+                NetworkHandler.sendToPlayer( new MessageXp( skill.getXp( player ), skill.getValue(), 0, true ), (EntityPlayerMP) player );
         }
-        else
-            NetworkHandler.sendToPlayer( new MessageXp( skill.getXp( player ), skill.getValue(), 0, true ), (EntityPlayerMP) player );
+        catch( Exception e )
+        {
+            LOGGER.debug( e );
+        }
 
     }
 }
