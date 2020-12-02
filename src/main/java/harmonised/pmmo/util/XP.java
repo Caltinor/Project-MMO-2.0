@@ -7,7 +7,6 @@ import net.minecraft.enchantment.Enchantment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.sun.istack.internal.Nullable;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -45,6 +44,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import javax.annotation.Nullable;
 
 public class XP
 {
@@ -1140,7 +1141,7 @@ public class XP
 		return maxVein;
 	}
 
-	public static void awardXp( EntityPlayerMP player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
+	public static void awardXp(EntityPlayerMP player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
 	{
 //		if( !(player instanceof EntityPlayerMP) )
 //		{

@@ -1,6 +1,8 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.FConfig;
+import harmonised.pmmo.config.JType;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageTripleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
@@ -63,9 +65,9 @@ public class AnvilRepairHandler
                         oItem.setItemDamage( (int) Math.floor( oItem.getItemDamage() - repaired * bonusRepair ) );
 
                         double award = ( ( ( repaired + repaired * bonusRepair * 2.5 ) / 100 ) * ( 1 + lItem.getRepairCost() * 0.025 ) );
-//                        if( JsonConfig.data.get( JType.SALVAGE_TO ).containsKey( oItem.getItem().getRegistryName().toString() ) )
-//                            award *= (double) JsonConfig.data.get( JType.SALVAGE_TO ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
-                        //COUT
+//                        if( JsonConfig.data.get( JType.SALVAGE ).containsKey( oItem.getItem().getRegistryName().toString() ) )
+//                            award *= JsonConfig.data.get( JType.SALVAGE ).get( oItem.getItem().getRegistryName().toString() ).get( "xpPerItem" );
+                        //COUT bad feature? can't remember
 
                         if( award > 0 )
                         {

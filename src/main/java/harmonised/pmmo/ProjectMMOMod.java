@@ -29,7 +29,7 @@ public class ProjectMMOMod
 //        if( ModList.get().isLoaded( "ftbquests" ) )
 //            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistry );
 //        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
-        //COUT
+        //COUT FTBQ
         FConfig.init();
     }
 

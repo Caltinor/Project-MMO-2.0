@@ -92,7 +92,7 @@ public class TooltipHandler
                     material = ( (ItemBlock) item).getBlock().getDefaultState().getMaterial();
                     hardness = ( (ItemBlock) item).getBlock().getDefaultState().getBlockHardness( null, null );
                     if( hardness > 0 )
-                        tooltip.add( new TextComponentTranslation( "pmmo.hardness", hardness ).getUnformattedText() );
+                        tooltip.add( new TextComponentTranslation( "pmmo.hardness", DP.dpSoft( hardness ) ).getUnformattedText() );
 //                    tooltip.add( new TextComponentString( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
                 }
 

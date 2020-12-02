@@ -74,7 +74,7 @@ public class ClientEventHandler
 //                        wasOpenGlossary = ClientHandler.OPEN_GLOSSARY.isKeyDown();
 //                    }
 //                }
-                //COUT
+                //COUT GUI
             }
 
             if( !(Minecraft.getMinecraft().player == null) && ClientHandler.TOGGLE_TOOLTIP.isKeyDown() && !tooltipKeyWasPressed )

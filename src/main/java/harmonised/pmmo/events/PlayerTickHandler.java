@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.baubles.BaublesHandler;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -62,17 +64,13 @@ public class PlayerTickHandler
 
                 if( !player.world.isRemote )
                 {
-//                    if( Curios.isLoaded() )
-//                    {
-//                        Curios.getCurios(player).forEach(value ->
-//                        {
-//                            for (int i = 0; i < value.getSlots(); i++)
-//                            {
-//                                XP.applyWornPenalty( player, value.getStackInSlot(i) );
-//                            }
-//                        });
-//                    }
-                    //COUT CURIOS
+                    if( BaublesHandler.isLoaded() )
+                    {
+                        for( ItemStack stack : BaublesHandler.getBaublesItems( player ) )
+                        {
+                            XP.applyWornPenalty( player, stack );
+                        }
+                    }
 
                     if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
                         XP.applyWornPenalty( player, player.inventory.getStackInSlot( 39 ) );
