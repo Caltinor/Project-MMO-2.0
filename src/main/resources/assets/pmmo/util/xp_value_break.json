@@ -113,11 +113,11 @@
 	},
 	"minecraft:infested_stone":
 	{
-		"mining": 200
+		"mining": 50
 	},
 	"minecraft:infested_cobblestone":
 	{
-		"mining": 200
+		"mining": 50
 	},
 	"minecraft:infested_stone_bricks":
 	{

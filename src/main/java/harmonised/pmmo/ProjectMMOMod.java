@@ -52,8 +52,6 @@ public class ProjectMMOMod
         MinecraftForge.EVENT_BUS.addListener( this::serverAboutToStart );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
 
-//        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
-
         PmmoCommand.init();
         Config.init();
     }

@@ -1565,7 +1565,7 @@
 			"chancePerLevel": 0.1,
 			"maxChance": 25,
 			"xpPerItem": 10,
-			"levelReq": 60
+			"levelReq": 50
 		}
 	},
 	"minecraft:bedrock":
@@ -1577,7 +1577,7 @@
 			"chancePerLevel": 0,
 			"maxChance": 0.01,
 			"xpPerItem": 200,
-			"levelReq": 999
+			"levelReq": 99
 		}
 	},
 	"minecraft:emerald_ore":

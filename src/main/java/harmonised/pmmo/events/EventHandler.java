@@ -1,9 +1,5 @@
 package harmonised.pmmo.events;
 
-import com.feed_the_beast.ftbquests.quest.task.TaskType;
-import com.feed_the_beast.mods.ftbguilibrary.icon.Icon;
-import harmonised.pmmo.ftb_quests.SkillTask;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -191,10 +187,4 @@ public class EventHandler
 	{
 		GrowHandler.handleCropGrow( event );
 	}
-
-//	@SubscribeEvent
-//	public static void registerTasks( RegistryEvent.Register<TaskType> event )
-//	{
-//		event.getRegistry().register( SkillTask.SKILL = new TaskType( SkillTask::new ).setRegistryName( "skill" ).setIcon( Icon.getIcon("minecraft:item/dragon_egg") ) );
-//	}
 }
