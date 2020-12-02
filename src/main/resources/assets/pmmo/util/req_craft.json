@@ -150,7 +150,7 @@
 	},
 	"appliedenergistics2:wireless_terminal":
 	{
-		"crafting": 90,
+		"crafting": 80,
 		"smithing": 50
 	},
 	"appliedenergistics2:wireless_booster":

@@ -251,452 +251,452 @@
 	},
 	"doomweapon:astro_doom_helmet":
 	{
-		"endurance": 90,
-		"combat": 90,
-		"agility": 90
+		"endurance": 80,
+		"combat": 70,
+		"agility": 60
 	},
 	"doomweapon:astro_doom_chestplate":
 	{
-		"endurance": 90,
-		"combat": 90,
-		"agility": 90
+		"endurance": 80,
+		"combat": 70,
+		"agility": 60
 	},
 	"doomweapon:astro_doom_leggings":
 	{
-		"endurance": 90,
-		"combat": 90,
-		"agility": 90
+		"endurance": 80,
+		"combat": 70,
+		"agility": 60
 	},
 	"doomweapon:astro_doom_boots":
 	{
-		"endurance": 90,
-		"combat": 90,
-		"agility": 90
+		"endurance": 80,
+		"combat": 70,
+		"agility": 60
 	},
 	"doomweapon:classic_doom_helmet":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 70,
+		"agility": 70
 	},
 	"doomweapon:classic_doom_chestplate":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 70,
+		"agility": 70
 	},
 	"doomweapon:classic_doom_leggings":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 70,
+		"agility": 70
 	},
 	"doomweapon:classic_doom_boots":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 70,
+		"agility": 70
 	},
 	"doomweapon:classic_red_chestplate":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 70,
+		"agility": 70
 	},
 	"doomweapon:classic_red_leggings":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 73,
+		"agility": 70
 	},
 	"doomweapon:classic_black_chestplate":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 73,
+		"agility": 70
 	},
 	"doomweapon:classic_bronze_chestplate":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 73,
+		"agility": 70
 	},
 	"doomweapon:classic_bronze_leggings":
 	{
-		"endurance": 100,
-		"combat": 100,
-		"agility": 90
+		"endurance": 83,
+		"combat": 73,
+		"agility": 70
 	},
 	"doomweapon:crimson_doom_helmet":
 	{
-		"endurance": 110,
-		"combat": 110,
-		"agility": 90
+		"endurance": 84,
+		"combat": 74,
+		"agility": 70
 	},
 	"doomweapon:crimson_doom_chestplate":
 	{
-		"endurance": 110,
-		"combat": 110,
-		"agility": 90
+		"endurance": 84,
+		"combat": 74,
+		"agility": 70
 	},
 	"doomweapon:crimson_doom_leggings":
 	{
-		"endurance": 110,
-		"combat": 110,
-		"agility": 90
+		"endurance": 84,
+		"combat": 74,
+		"agility": 70
 	},
 	"doomweapon:crimson_doom_boots":
 	{
-		"endurance": 110,
-		"combat": 110,
-		"agility": 90
+		"endurance": 84,
+		"combat": 74,
+		"agility": 70
 	},
 	"doomweapon:cultist_doom_helmet":
 	{
-		"endurance": 110,
-		"combat": 110,
-		"agility": 90
+		"endurance": 84,
+		"combat": 74,
+		"agility": 70
 	},
 	"doomweapon:cultist_doom_chestplate":
 	{
-		"endurance": 120,
-		"combat": 120,
-		"agility": 90
+		"endurance": 85,
+		"combat": 75,
+		"agility": 70
 	},
 	"doomweapon:cultist_doom_leggings":
 	{
-		"endurance": 120,
-		"combat": 120,
-		"agility": 90
+		"endurance": 85,
+		"combat": 75,
+		"agility": 70
 	},
 	"doomweapon:cultist_doom_boots":
 	{
-		"endurance": 120,
-		"combat": 120,
-		"agility": 90
+		"endurance": 85,
+		"combat": 75,
+		"agility": 70
 	},
 	"doomweapon:demonic_doom_helmet":
 	{
-		"endurance": 130,
-		"combat": 130,
-		"agility": 90
+		"endurance": 86,
+		"combat": 76,
+		"agility": 70
 	},
 	"doomweapon:demonic_doom_chestplate":
 	{
-		"endurance": 130,
-		"combat": 130,
-		"agility": 90
+		"endurance": 86,
+		"combat": 76,
+		"agility": 70
 	},
 	"doomweapon:demonic_doom_leggings":
 	{
-		"endurance": 130,
-		"combat": 130,
-		"agility": 90
+		"endurance": 86,
+		"combat": 76,
+		"agility": 70
 	},
 	"doomweapon:demonic_doom_boots":
 	{
-		"endurance": 130,
-		"combat": 130,
-		"agility": 90
+		"endurance": 86,
+		"combat": 76,
+		"agility": 70
 	},
 	"doomweapon:doomicorn_doom_helmet":
 	{
-		"endurance": 140,
-		"combat": 140,
-		"agility": 90
+		"endurance": 87,
+		"combat": 77,
+		"agility": 70
 	},
 	"doomweapon:doomicorn_doom_chestplate":
 	{
-		"endurance": 140,
-		"combat": 140,
-		"agility": 90
+		"endurance": 87,
+		"combat": 77,
+		"agility": 70
 	},
 	"doomweapon:doomicorn_doom_leggings":
 	{
-		"endurance": 140,
-		"combat": 140,
-		"agility": 90
+		"endurance": 87,
+		"combat": 77,
+		"agility": 70
 	},
 	"doomweapon:doomicorn_doom_boots":
 	{
-		"endurance": 140,
-		"combat": 140,
-		"agility": 90
+		"endurance": 87,
+		"combat": 77,
+		"agility": 70
 	},
 	"doomweapon:ember_doom_helmet":
 	{
-		"endurance": 150,
-		"combat": 150,
-		"agility": 90
+		"endurance": 88,
+		"combat": 78,
+		"agility": 70
 	},
 	"doomweapon:ember_doom_chestplate":
 	{
-		"endurance": 150,
-		"combat": 150,
-		"agility": 90
+		"endurance": 88,
+		"combat": 78,
+		"agility": 70
 	},
 	"doomweapon:ember_doom_leggings":
 	{
-		"endurance": 150,
-		"combat": 150,
-		"agility": 90
+		"endurance": 88,
+		"combat": 78,
+		"agility": 70
 	},
 	"doomweapon:ember_doom_boots":
 	{
-		"endurance": 150,
-		"combat": 150,
-		"agility": 90
+		"endurance": 88,
+		"combat": 78,
+		"agility": 70
 	},
 	"doomweapon:gold_doom_helmet":
 	{
-		"endurance": 160,
-		"combat": 160,
-		"agility": 90
+		"endurance": 89,
+		"combat": 79,
+		"agility": 70
 	},
 	"doomweapon:gold_doom_chestplate":
 	{
-		"endurance": 160,
-		"combat": 160,
-		"agility": 90
+		"endurance": 89,
+		"combat": 79,
+		"agility": 70
 	},
 	"doomweapon:gold_doom_leggings":
 	{
-		"endurance": 160,
-		"combat": 160,
-		"agility": 90
+		"endurance": 89,
+		"combat": 79,
+		"agility": 70
 	},
 	"doomweapon:gold_doom_boots":
 	{
-		"endurance": 160,
-		"combat": 160,
-		"agility": 90
+		"endurance": 89,
+		"combat": 79,
+		"agility": 70
 	},
 	"doomweapon:maykr_doom_helmet":
 	{
-		"endurance": 170,
-		"combat": 170,
-		"agility": 90
+		"endurance": 90,
+		"combat": 80,
+		"agility": 80
 	},
 	"doomweapon:maykr_doom_chestplate":
 	{
-		"endurance": 170,
-		"combat": 170,
-		"agility": 90
+		"endurance": 90,
+		"combat": 80,
+		"agility": 80
 	},
 	"doomweapon:maykr_doom_leggings":
 	{
-		"endurance": 170,
-		"combat": 170,
-		"agility": 90
+		"endurance": 90,
+		"combat": 80,
+		"agility": 80
 	},
 	"doomweapon:maykr_doom_boots":
 	{
-		"endurance": 170,
-		"combat": 170,
-		"agility": 90
+		"endurance": 90,
+		"combat": 80,
+		"agility": 80
 	},
 	"doomweapon:midnight_doom_helmet":
 	{
-		"endurance": 180,
-		"combat": 180,
-		"agility": 90
+		"endurance": 91,
+		"combat": 81,
+		"agility": 80
 	},
 	"doomweapon:midnight_doom_chestplate":
 	{
-		"endurance": 180,
-		"combat": 180,
-		"agility": 90
+		"endurance": 91,
+		"combat": 81,
+		"agility": 80
 	},
 	"doomweapon:midnight_doom_leggings":
 	{
-		"endurance": 180,
-		"combat": 180,
-		"agility": 90
+		"endurance": 91,
+		"combat": 81,
+		"agility": 80
 	},
 	"doomweapon:midnight_doom_boots":
 	{
-		"endurance": 180,
-		"combat": 180,
-		"agility": 90
+		"endurance": 91,
+		"combat": 81,
+		"agility": 80
 	},
 	"doomweapon:redneck_doom_leggings":
 	{
-		"endurance": 190,
-		"combat": 190,
-		"agility": 90
+		"endurance": 92,
+		"combat": 82,
+		"agility": 80
 	},
 	"doomweapon:redneck_doom_boots":
 	{
-		"endurance": 190,
-		"combat": 190,
-		"agility": 90
+		"endurance": 92,
+		"combat": 82,
+		"agility": 80
 	},
 	"doomweapon:nightmare_doom_helmet":
 	{
-		"endurance": 200,
-		"combat": 200,
-		"agility": 90
+		"endurance": 93,
+		"combat": 83,
+		"agility": 80
 	},
 	"doomweapon:nightmare_doom_chestplate":
 	{
-		"endurance": 200,
-		"combat": 200,
-		"agility": 90
+		"endurance": 93,
+		"combat": 83,
+		"agility": 80
 	},
 	"doomweapon:nightmare_doom_leggings":
 	{
-		"endurance": 200,
-		"combat": 200,
-		"agility": 90
+		"endurance": 93,
+		"combat": 83,
+		"agility": 80
 	},
 	"doomweapon:nightmare_doom_boots":
 	{
-		"endurance": 200,
-		"combat": 200,
-		"agility": 90
+		"endurance": 93,
+		"combat": 83,
+		"agility": 80
 	},
 	"doomweapon:painter_doom_helmet":
 	{
-		"endurance": 210,
-		"combat": 210,
-		"agility": 90
+		"endurance": 94,
+		"combat": 84,
+		"agility": 80
 	},
 	"doomweapon:painter_doom_chestplate":
 	{
-		"endurance": 210,
-		"combat": 210,
-		"agility": 90
+		"endurance": 94,
+		"combat": 84,
+		"agility": 80
 	},
 	"doomweapon:painter_doom_leggings":
 	{
-		"endurance": 210,
-		"combat": 210,
-		"agility": 90
+		"endurance": 94,
+		"combat": 84,
+		"agility": 80
 	},
 	"doomweapon:painter_doom_boots":
 	{
-		"endurance": 210,
-		"combat": 210,
-		"agility": 90
+		"endurance": 94,
+		"combat": 84,
+		"agility": 80
 	},
 	"doomweapon:phobos_doom_helmet":
 	{
-		"endurance": 220,
-		"combat": 220,
-		"agility": 90
+		"endurance": 95,
+		"combat": 85,
+		"agility": 80
 	},
 	"doomweapon:phobos_doom_chestplate":
 	{
-		"endurance": 220,
-		"combat": 220,
-		"agility": 90
+		"endurance": 95,
+		"combat": 85,
+		"agility": 80
 	},
 	"doomweapon:phobos_doom_leggings":
 	{
-		"endurance": 220,
-		"combat": 220,
-		"agility": 90
+		"endurance": 95,
+		"combat": 85,
+		"agility": 80
 	},
 	"doomweapon:phobos_doom_boots":
 	{
-		"endurance": 220,
-		"combat": 220,
-		"agility": 90
+		"endurance": 95,
+		"combat": 85,
+		"agility": 80
 	},
 	"doomweapon:praetor_doom_helmet":
 	{
-		"endurance": 230,
-		"combat": 230,
-		"agility": 90
+		"endurance": 96,
+		"combat": 86,
+		"agility": 80
 	},
 	"doomweapon:praetor_doom_chestplate":
 	{
-		"endurance": 230,
-		"combat": 230,
-		"agility": 90
+		"endurance": 96,
+		"combat": 86,
+		"agility": 80
 	},
 	"doomweapon:praetor_doom_leggings":
 	{
-		"endurance": 230,
-		"combat": 230,
-		"agility": 90
+		"endurance": 96,
+		"combat": 86,
+		"agility": 80
 	},
 	"doomweapon:praetor_doom_boots":
 	{
-		"endurance": 230,
-		"combat": 230,
-		"agility": 90
+		"endurance": 96,
+		"combat": 86,
+		"agility": 80
 	},
 	"doomweapon:purplepony_doom_helmet":
 	{
-		"endurance": 240,
-		"combat": 240,
-		"agility": 90
+		"endurance": 97,
+		"combat": 87,
+		"agility": 80
 	},
 	"doomweapon:purplepony_doom_chestplate":
 	{
-		"endurance": 240,
-		"combat": 240,
-		"agility": 90
+		"endurance": 97,
+		"combat": 87,
+		"agility": 80
 	},
 	"doomweapon:purplepony_doom_leggings":
 	{
-		"endurance": 240,
-		"combat": 240,
-		"agility": 90
+		"endurance": 97,
+		"combat": 87,
+		"agility": 80
 	},
 	"doomweapon:purplepony_doom_boots":
 	{
-		"endurance": 240,
-		"combat": 240,
-		"agility": 90
+		"endurance": 97,
+		"combat": 87,
+		"agility": 80
 	},
 	"doomweapon:sentinel_doom_helmet":
 	{
-		"endurance": 250,
-		"combat": 250,
-		"agility": 90
+		"endurance": 98,
+		"combat": 88,
+		"agility": 80
 	},
 	"doomweapon:sentinel_doom_chestplate":
 	{
-		"endurance": 250,
-		"combat": 250,
-		"agility": 90
+		"endurance": 98,
+		"combat": 88,
+		"agility": 80
 	},
 	"doomweapon:sentinel_doom_leggings":
 	{
-		"endurance": 250,
-		"combat": 250,
-		"agility": 90
+		"endurance": 98,
+		"combat": 88,
+		"agility": 80
 	},
 	"doomweapon:sentinel_doom_boots":
 	{
-		"endurance": 250,
-		"combat": 250,
-		"agility": 90
+		"endurance": 98,
+		"combat": 88,
+		"agility": 80
 	},
 	"doomweapon:zombie_doom_helmet":
 	{
-		"endurance": 300,
-		"combat": 300,
+		"endurance": 99,
+		"combat": 89,
 		"agility": 90
 	},
 	"doomweapon:zombie_doom_chestplate":
 	{
-		"endurance": 300,
-		"combat": 300,
+		"endurance": 99,
+		"combat": 89,
 		"agility": 90
 	},
 	"doomweapon:zombie_doom_leggings":
 	{
-		"endurance": 300,
-		"combat": 300,
+		"endurance": 99,
+		"combat": 89,
 		"agility": 90
 	},
 	"doomweapon:zombie_doom_boots":
 	{
-		"endurance": 300,
-		"combat": 300,
+		"endurance": 99,
+		"combat": 89,
 		"agility": 90
 	},
 	"minecolonies:pirate_hat":
@@ -1173,19 +1173,19 @@
 	},
 	"harcorebattletowers:evil_armorhelmet":
 	{
-		"endurance": 150
+		"endurance": 85
 	},
 	"harcorebattletowers:evil_armorbody":
 	{
-		"endurance": 150
+		"endurance": 85
 	},
 	"harcorebattletowers:evil_armorlegs":
 	{
-		"endurance": 150
+		"endurance": 85
 	},
 	"harcorebattletowers:evil_armorboots":
 	{
-		"endurance": 150
+		"endurance": 85
 	},
 	"iceandfire:armor_silver_metal_helmet":
 	{

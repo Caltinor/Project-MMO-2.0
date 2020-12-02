@@ -686,7 +686,7 @@ public class Config
                 this.strictReqTool = subscriber.subscribe(builder
                         .comment( "When a Tool requirement is not met, should the player be stopped from breaking with it completely?" )
                         .translation( "pmmo.strictReqTool" )
-                        .define( "strictReqTool", false ) );
+                        .define( "strictReqTool", true ) );
 
                 this.strictReqKill = subscriber.subscribe(builder
                         .comment( "When a Kill requirement is not met, should the player be stopped from dealing any damage?" )
@@ -756,7 +756,7 @@ public class Config
                 this.useExponentialFormula = subscriber.subscribe(builder
                         .comment( "Should levels be determined using an Exponential formula? (false = the original way)" )
                         .translation( "pmmo.useExponentialFormula" )
-                        .define( "useExponentialFormula", false ) );
+                        .define( "useExponentialFormula", true ) );
 
                 this.exponentialBaseXp = subscriber.subscribe(builder
                         .comment( "What is the x in: x * ( exponentialBase^( exponentialRate * level ) )" )

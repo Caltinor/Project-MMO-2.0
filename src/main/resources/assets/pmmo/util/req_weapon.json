@@ -245,8 +245,8 @@
 	},
 	"doomweapon:cruciblesword":
 	{
-		"combat": 100,
-		"endurance": 100,
+		"combat": 80,
+		"endurance": 80,
 		"agility": 90
 	},
 	"doomweapon:argent_sword":
@@ -263,26 +263,26 @@
 	},
 	"doomweapon:cruciblesword_closed":
 	{
-		"combat": 100,
-		"endurance": 100,
+		"combat": 80,
+		"endurance": 80,
 		"agility": 90
 	},
 	"doomweapon:axe_marauder_open":
 	{
-		"combat": 100,
-		"endurance": 100,
+		"combat": 80,
+		"endurance": 80,
 		"agility": 90
 	},
 	"doomweapon:axe_marauder_closed":
 	{
-		"combat": 100,
-		"endurance": 100,
+		"combat": 80,
+		"endurance": 80,
 		"agility": 90
 	},
 	"doomweapon:supershotgun":
 	{
-		"combat": 100,
-		"archery": 100
+		"combat": 80,
+		"archery": 80
 	},
 	"doomweapon:shotgun":
 	{
@@ -291,33 +291,33 @@
 	},
 	"doomweapon:bfg9000":
 	{
-		"combat": 300,
-		"archery": 200,
-		"endurance": 300
+		"combat": 120,
+		"archery": 99,
+		"endurance": 99
 	},
 	"doomweapon:plasmagun":
 	{
-		"combat": 200,
-		"archery": 100,
-		"endurance": 200
+		"combat": 90,
+		"archery": 90,
+		"endurance": 80
 	},
 	"doomweapon:rocketlauncher":
 	{
-		"combat": 100,
-		"archery": 100,
-		"endurance": 100
+		"combat": 80,
+		"archery": 80,
+		"endurance": 80
 	},
 	"doomweapon:ballista":
 	{
-		"combat": 100,
-		"archery": 100,
-		"endurance": 100
+		"combat": 80,
+		"archery": 80,
+		"endurance": 80
 	},
 	"doomweapon:chaingun":
 	{
-		"combat": 100,
-		"archery": 100,
-		"endurance": 100
+		"combat": 80,
+		"archery": 80,
+		"endurance": 80
 	},
 	"doomweapon:pistol":
 	{
@@ -803,11 +803,11 @@
 	},
 	"harcorebattletowers:double_headed_evil_axe":
 	{
-		"combat": 110
+		"combat": 85
 	},
 	"harcorebattletowers:evil_dagger":
 	{
-		"combat": 90
+		"combat": 80
 	},
 	"iceandfire:silver_sword":
 	{
