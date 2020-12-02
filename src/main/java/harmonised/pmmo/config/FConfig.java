@@ -41,6 +41,10 @@ public class FConfig
     @Config.Name( "showPatreonWelcome" )
     public static boolean showPatreonWelcome = true;
 
+    @Config.Comment( "Should Xp Boosts be scaled by the item Durability? (Max boost at Max durability, 50% at half Durability)" )
+    @Config.Name( "scaleXpBoostByDurability" )
+    public static boolean scaleXpBoostByDurability = true;
+
     //Party
     @Config.Comment( "In what range do Party members have to be to benefit from the other members?" )
     @Config.Name( "partyRange" )
