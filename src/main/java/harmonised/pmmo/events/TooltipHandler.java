@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import sun.rmi.log.LogHandler;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -189,16 +190,24 @@ public class TooltipHandler
                     if( wearReq != null && wearReq.size() > 0 )
                         addTooltipTextSkill( "pmmo.toWear", wearReq, event );
 
+                    if( heldItemXpBoost != null && heldItemXpBoost.size() > 0 )
+                    {
+                        heldItemXpBoost = new HashMap<>( heldItemXpBoost );
+                        XP.multiplyMapAnyDouble( heldItemXpBoost, XP.getXpBoostDurabilityMultiplier( itemStack ) );
+                        addTooltipTextSkillPercentage( "pmmo.itemXpBoostHeld", heldItemXpBoost, event );
+                    }
+
                     if( wornItemXpBoost != null && wornItemXpBoost.size() > 0 )
+                    {
+                        wornItemXpBoost = new HashMap<>( wornItemXpBoost );
+                        XP.multiplyMapAnyDouble( wornItemXpBoost, XP.getXpBoostDurabilityMultiplier( itemStack ) );
                         addTooltipTextSkillPercentage( "pmmo.itemXpBoostWorn", wornItemXpBoost, event );
+                    }
 
                     if( toolReq != null && toolReq.size() > 0 )
                         addTooltipTextSkill( "pmmo.tool", toolReq, event );
                     if( weaponReq != null && weaponReq.size() > 0 )
                         addTooltipTextSkill( "pmmo.weapon", weaponReq, event );
-
-                    if( heldItemXpBoost != null && heldItemXpBoost.size() > 0 )
-                        addTooltipTextSkillPercentage( "pmmo.itemXpBoostHeld", heldItemXpBoost, event );
 
                     if( useReq != null && useReq.size() > 0 )
                         addTooltipTextSkill( "pmmo.use", useReq, event );
