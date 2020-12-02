@@ -2,7 +2,6 @@ package harmonised.pmmo.util;
 
 import java.util.*;
 
-import akka.japi.Effect;
 import harmonised.pmmo.baubles.BaublesHandler;
 import net.minecraft.enchantment.Enchantment;
 import org.apache.logging.log4j.LogManager;
@@ -927,7 +926,7 @@ public class XP
 //		return getPmmoTagElement( player, "abilities" );
 //	}
 
-	public static double getWornXpBoost( EntityPlayer player, ItemStack itemStack, String skillName )
+	public static double getStackXpBoost( EntityPlayer player, ItemStack itemStack, String skillName, boolean type /*false = worn, true = held*/ )
 	{
 		if( itemStack == null )
 			return 0;
@@ -936,7 +935,7 @@ public class XP
 		double boost = 0;
 
 		String regName = item.getRegistryName().toString();
-		Map<String, Double> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );
+		Map<String, Double> itemXpMap = JsonConfig.data.get( type ? JType.XP_BONUS_HELD : JType.XP_BONUS_WORN ).get( regName );
 
 		if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
 		{
@@ -1009,34 +1008,28 @@ public class XP
 		double itemBoost = 0;
 
 		String skillName = skill.toString().toLowerCase();
-		String regKey = player.getHeldItemMainhand().getItem().getRegistryName().toString();
-		Map<String, Double> heldMap = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
 		InventoryPlayer inv = player.inventory;
-
-		if( heldMap != null )
-		{
-			if( heldMap.containsKey( skillName ) )
-				heldMap.get( skillName );
-		}
 
 		if( BaublesHandler.isLoaded() )
 		{
 			for( ItemStack stack : BaublesHandler.getBaublesItems( player ) )
 			{
-				itemBoost += getWornXpBoost( player, stack, skillName );
+				itemBoost += getStackXpBoost( player, stack, skillName, false );
 			}
 		}
 
+		itemBoost += getStackXpBoost( player, player.getHeldItemMainhand(), skillName, true );
+
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ), skillName );
+			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 39 ), skillName, false );
 		if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 38 ), skillName );
+			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 38 ), skillName, false );
 		if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 37 ), skillName );
+			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 37 ), skillName, false );
 		if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 36 ), skillName );
+			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 36 ), skillName, false );
 		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 40 ), skillName );
+			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 40 ), skillName, false );
 
 		return itemBoost;
 	}
