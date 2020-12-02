@@ -312,7 +312,7 @@ public class FConfig
 
     @Config.Comment( "When a Tool requirement is not met, should the player be stopped from breaking with it completely?" )
     @Config.Name( "strictReqTool" )
-    public static boolean strictReqTool = false;
+    public static boolean strictReqTool = true;
 
     @Config.Comment( "When a Kill requirement is not met, should the player be stopped from dealing any damage?" )
     @Config.Name( "strictReqKill" )
@@ -369,7 +369,7 @@ public class FConfig
 
     @Config.Comment( "Should levels be determined using an Exponential formula? (false = the original way)" )
     @Config.Name( "useExponentialFormula" )
-    public static boolean useExponentialFormula = false;
+    public static boolean useExponentialFormula = true;
 
     @Config.Comment( "What is the x in: x * ( exponentialBase^( exponentialRate * level ) )" )
     @Config.Name( "exponentialBaseXp" )

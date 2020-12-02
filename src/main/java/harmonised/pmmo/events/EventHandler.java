@@ -1,8 +1,14 @@
 package harmonised.pmmo.events;
 
+import com.feed_the_beast.ftblib.lib.icon.Icon;
+import com.feed_the_beast.ftbquests.quest.reward.ItemReward;
+import com.feed_the_beast.ftbquests.quest.reward.RewardType;
+import com.feed_the_beast.ftbquests.quest.task.TaskType;
+import harmonised.pmmo.ftb_quests.SkillTask;
 import harmonised.pmmo.util.Reference;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.*;
@@ -79,7 +85,6 @@ public class EventHandler
 	{
 		PlayerCloneHandler.handleClone( event );
 	}
-
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onAnvilRepair( AnvilRepairEvent event )
@@ -187,11 +192,11 @@ public class EventHandler
 		GrowHandler.handleCropGrow( event );
 	}
 
-//	@SubscribeEvent
-//	public static void registerTasks( RegistryEvent.Register<TaskType> event )
-//	{
-//		event.getRegistry().register( SkillTask.SKILL = new TaskType( SkillTask::new ).setRegistryName( "skill" ).setIcon( Icon.getIcon("minecraft:item/dragon_egg") ) );
-//	}
+	@SubscribeEvent
+	public static void registerTasks( RegistryEvent.Register<TaskType> event )
+	{
+		event.getRegistry().register( SkillTask.SKILL = new TaskType( SkillTask::new ).setRegistryName( "skill" ).setIcon( Icon.getIcon( "minecraft:item/diamond" ) ) );
+	}
 
 	@SubscribeEvent
 	public static void onConfigChanged( final ConfigChangedEvent.OnConfigChangedEvent event )

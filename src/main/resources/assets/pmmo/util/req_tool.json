@@ -205,25 +205,25 @@
 	},
 	"doomweapon:argent_axe":
 	{
-		"woodcutting": 100
+		"woodcutting": 80
 	},
 	"doomweapon:argent_hoe":
 	{
-		"farming": 100
+		"farming": 80
 	},
 	"doomweapon:argent_paxel":
 	{
-		"woodcutting": 100,
-		"excavation": 100,
-		"mining": 100
+		"woodcutting": 80,
+		"excavation": 80,
+		"mining": 80
 	},
 	"doomweapon:argent_pickaxe":
 	{
-		"mining": 100
+		"mining": 80
 	},
 	"doomweapon:argent_shovel":
 	{
-		"excavation": 100
+		"excavation": 80
 	},
 	"appliedenergistics2:certus_quartz_axe":
 	{
@@ -259,7 +259,7 @@
 	},
 	"create:deforester":
 	{
-		"woodcutting": 100
+		"woodcutting": 92
 	},
 	"endreborn:wolframium_axe":
 	{

@@ -61,7 +61,7 @@
 	},
 	"appliedenergistics2:wireless_terminal":
 	{
-		"crafting": 90,
+		"crafting": 80,
 		"smithing": 50
 	},
 	"appliedenergistics2:inscriber":
@@ -465,8 +465,8 @@
 	},
 	"lycanitesmobs:soulkey":
 	{
-		"crafting": 100,
-		"combat": 100
+		"crafting": 80,
+		"combat": 80
 	},
 	"lycanitesmobs:aviantreat":
 	{

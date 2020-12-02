@@ -1,9 +1,11 @@
 package harmonised.pmmo;
 
+import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
+import harmonised.pmmo.events.RegisterHandler;
 import harmonised.pmmo.events.ServerStoppingHandler;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.NetworkHandler;
@@ -16,6 +18,7 @@ import harmonised.pmmo.util.Reference;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -26,10 +29,7 @@ public class ProjectMMOMod
 {
     public ProjectMMOMod()
     {
-//        if( ModList.get().isLoaded( "ftbquests" ) )
-//            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistry );
 //        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
-        //COUT FTBQ
         FConfig.init();
     }
 
