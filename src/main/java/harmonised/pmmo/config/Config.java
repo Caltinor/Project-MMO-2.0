@@ -95,6 +95,8 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> scaleXpBoostByDurability;
+        public ConfigHelper.ConfigValueListener<Double> scaleXpBoostByDurabilityStart;
+        public ConfigHelper.ConfigValueListener<Double> scaleXpBoostByDurabilityEnd;
 
         //Party
         public ConfigHelper.ConfigValueListener<Double> partyRange;
@@ -363,6 +365,16 @@ public class Config
                         .comment( "Should Xp Boosts be scaled by the item Durability? (Max boost at Max durability, 50% at half Durability)" )
                         .translation( "pmmo.scaleXpBoostByDurability" )
                         .define( "scaleXpBoostByDurability", true ) );
+
+                this.scaleXpBoostByDurabilityStart = subscriber.subscribe(builder
+                        .comment( "At what durability percentage should the xp bonus go away fully at and below? (25 means at 25% or below durability, there is no longer any xp boost)" )
+                        .translation( "pmmo.scaleXpBoostByDurabilityStart" )
+                        .defineInRange( "scaleXpBoostByDurabilityStart", 0D, 0D, 100D ) );
+
+                this.scaleXpBoostByDurabilityEnd = subscriber.subscribe(builder
+                        .comment( "At what durability percentage should the xp bonus start going down from? (75 means that at 75% durability or above, the xp bonus will be max, and at 37.5%, the xp boost will be half" )
+                        .translation( "pmmo.scaleXpBoostByDurabilityEnd" )
+                        .defineInRange( "scaleXpBoostByDurabilityEnd", 75D, 0D, 100D ) );
 
                 builder.pop();
             }
