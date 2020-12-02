@@ -94,6 +94,7 @@ public class Config
         //Miscellaneous
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
+        public ConfigHelper.ConfigValueListener<Boolean> scaleXpBoostByDurability;
 
         //Party
         public ConfigHelper.ConfigValueListener<Double> partyRange;
@@ -357,6 +358,11 @@ public class Config
                         .comment( "Should your personal Donator Welcome message come up?" )
                         .translation( "pmmo.showPatreonWelcome" )
                         .define( "showPatreonWelcome", true ) );
+
+                this.scaleXpBoostByDurability = subscriber.subscribe(builder
+                        .comment( "Should Xp Boosts be scaled by the item Durability? (Max boost at Max durability, 50% at half Durability)" )
+                        .translation( "pmmo.scaleXpBoostByDurability" )
+                        .define( "scaleXpBoostByDurability", true ) );
 
                 builder.pop();
             }

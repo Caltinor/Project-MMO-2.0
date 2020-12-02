@@ -915,21 +915,24 @@ public class XP
 //		return getPmmoTagElement( player, "abilities" );
 //	}
 
-	public static double getWornXpBoost( PlayerEntity player, Item item, String skillName )
+	public static double getWornXpBoost( PlayerEntity player, ItemStack itemStack, String skillName )
 	{
+		if( itemStack == null )
+			return 0;
+
+		Item item = itemStack.getItem();
 		double boost = 0;
 
-		if( !item.equals( Items.AIR ) )
-		{
-			String regName = item.getRegistryName().toString();
-			Map<String, Double> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );
+		String regName = item.getRegistryName().toString();
+		Map<String, Double> itemXpMap = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regName );
 
-			if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
+		if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
+		{
+			if( checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
 			{
-				if( checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
-				{
-					boost = itemXpMap.get( skillName );
-				}
+				boost = itemXpMap.get( skillName );
+				if( Config.forgeConfig.scaleXpBoostByDurability.get() && itemStack.isDamageable() )
+					boost *= 1 - itemStack.getDamage() / (float) itemStack.getMaxDamage();
 			}
 		}
 
@@ -1019,15 +1022,15 @@ public class XP
 		//COUT
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 39 ), skillName );
 		if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 38 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 38 ), skillName );
 		if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 37 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 37 ), skillName );
 		if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 36 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 36 ), skillName );
 		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand
-			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 40 ).getItem(), skillName );
+			itemBoost += getWornXpBoost( player, player.inventory.getStackInSlot( 40 ), skillName );
 
 		return itemBoost;
 	}
