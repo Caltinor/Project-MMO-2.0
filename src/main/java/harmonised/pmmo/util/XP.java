@@ -926,24 +926,35 @@ public class XP
 //		return getPmmoTagElement( player, "abilities" );
 //	}
 
+	public static double getXpBoostDurabilityMultiplier( ItemStack itemStack )
+	{
+		double durabilityPercentage = 1 - itemStack.getItemDamage() / (double) itemStack.getMaxDamage();
+		double scaleStart = FConfig.scaleXpBoostByDurabilityStart / 100D;
+		double scaleEnd = Math.max( scaleStart, FConfig.scaleXpBoostByDurabilityEnd / 100D );
+		double scale = DP.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
+
+		return scale;
+	}
+
 	public static double getStackXpBoost( EntityPlayer player, ItemStack itemStack, String skillName, boolean type /*false = worn, true = held*/ )
 	{
 		if( itemStack == null )
 			return 0;
 
 		Item item = itemStack.getItem();
+		JType jType = type ? JType.XP_BONUS_HELD : JType.XP_BONUS_WORN;
 		double boost = 0;
 
 		String regName = item.getRegistryName().toString();
-		Map<String, Double> itemXpMap = JsonConfig.data.get( type ? JType.XP_BONUS_HELD : JType.XP_BONUS_WORN ).get( regName );
+		Map<String, Double> itemXpMap = JsonConfig.data.get( jType ).get( regName );
 
 		if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
 		{
-			if( checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
+			if( checkReq( player, item.getRegistryName(), jType ) )
 			{
 				boost = itemXpMap.get( skillName );
 				if( FConfig.scaleXpBoostByDurability && itemStack.isItemStackDamageable() )
-					boost *= 1 - itemStack.getItemDamage() / (float) itemStack.getMaxDamage();
+					boost *= getXpBoostDurabilityMultiplier( itemStack );
 			}
 		}
 

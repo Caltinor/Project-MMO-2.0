@@ -27,7 +27,9 @@ public class CraftedHandler
             ItemStack itemStack = event.crafting;
             ResourceLocation resLoc = itemStack.getItem().getRegistryName();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_CRAFT );
-            Block block = ((ItemBlock) itemStack.getItem()).getBlock();
+            Block block = null;
+            if( itemStack.getItem() instanceof ItemBlock )
+                block = ((ItemBlock) itemStack.getItem()).getBlock();
 
             Map<String, Double> award = new HashMap<>();
             if( xpValue.size() == 0 )
