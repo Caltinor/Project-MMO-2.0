@@ -1156,9 +1156,6 @@ public class XP
 		String skillName = skill.name().toLowerCase();
 		UUID uuid = player.getUniqueID();
 
-		if( !ignoreBonuses )
-			amount *= getMultiplier( player, skill );
-
 		if( !causedByParty )
 		{
 			Party party = pmmoSavedData.getParty( uuid );
@@ -1176,6 +1173,9 @@ public class XP
 				}
 			}
 		}
+
+		if( !ignoreBonuses )
+			amount *= getMultiplier( player, skill );
 
 		if( amount <= 0 )
 			return;
