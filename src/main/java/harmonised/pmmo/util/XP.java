@@ -1165,23 +1165,22 @@ public class XP
 		UUID uuid = player.getUniqueID();
 
 		if( !ignoreBonuses )
-		{
 			amount *= getMultiplier( player, skill );
-			if( !causedByParty )
+
+		if( !causedByParty )
+		{
+			Party party = pmmoSavedData.getParty( uuid );
+			if( party != null )
 			{
-				Party party = pmmoSavedData.getParty( uuid );
-				if( party != null )
+				Set<EntityPlayerMP> membersInRange = party.getOnlineMembersInRange( player );
+				int membersInRangeSize = membersInRange.size();
+				double partyMultiplier = party.getMultiplier( membersInRangeSize );
+				amount *= partyMultiplier;
+				party.submitXpGained( uuid, amount );
+				amount /= membersInRangeSize + 1D;
+				for( EntityPlayerMP partyMember : membersInRange )
 				{
-					Set<EntityPlayerMP> membersInRange = party.getOnlineMembersInRange( player );
-					int membersInRangeSize = membersInRange.size();
-					double partyMultiplier = party.getMultiplier( membersInRangeSize );
-					amount *= partyMultiplier;
-					party.submitXpGained( uuid, amount );
-					amount /= membersInRangeSize + 1;
-					for( EntityPlayerMP partyMember : membersInRange )
-					{
-						awardXp( partyMember, skill, sourceName, amount, skip, ignoreBonuses, true );
-					}
+					awardXp( partyMember, skill, sourceName, amount, skip, ignoreBonuses, true );
 				}
 			}
 		}
