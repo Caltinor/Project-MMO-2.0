@@ -29,6 +29,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Loader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,6 +38,7 @@ import java.util.*;
 public class BlockBrokenHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
+    public static boolean dynamicTreesLoaded = Loader.isModLoaded( "dynamictrees" );
 
     public static void handleBroken( BlockEvent.BreakEvent event )
     {
@@ -451,7 +453,7 @@ public class BlockBrokenHandler
         Skill awardSkill;
 
         //DYNAMIC TREES :o
-        if( block instanceof BlockBranch )
+        if( dynamicTreesLoaded && block instanceof BlockBranch )
         {
             BlockBranch branchBlock = (BlockBranch) block;
             MapSignal signal = branchBlock.analyse( state, world, event.getPos(), null, new MapSignal());

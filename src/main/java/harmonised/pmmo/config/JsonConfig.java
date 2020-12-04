@@ -240,7 +240,7 @@ public class JsonConfig
         for( JType jType : jTypes )
         {
             fileName = jType.name().toLowerCase() + ".json";
-            file = new File( configFile.toPath().getParent() + "\\" + dataPath + fileName );
+            file = new File( configFile.toPath().getParent() + "/" + dataPath + fileName );
 
             if ( !file.exists() )   //If no data file, create one
                 createData( file, fileName );
@@ -257,7 +257,7 @@ public class JsonConfig
         for( JType jType : jTypes )
         {
             fileName = jType.name().toLowerCase() + ".json";
-            file = new File( configFile.toPath().getParent() + "\\" + dataPath + fileName );
+            file = new File( configFile.toPath().getParent() + "/" + dataPath + fileName );
             try
             (
                 InputStream input = new FileInputStream( file.getPath() );

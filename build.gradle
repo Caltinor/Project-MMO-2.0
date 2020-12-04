@@ -56,9 +56,9 @@ apply plugin: "com.wynprice.cursemaven"
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.12-3.34.5"
+version = "1.12-3.34.6"
 group = "harmonised.pmmo" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Project MMO-1.12"
+archivesBaseName = "Project MMO"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
