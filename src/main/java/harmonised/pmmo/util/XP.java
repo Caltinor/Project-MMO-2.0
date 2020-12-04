@@ -1182,9 +1182,6 @@ public class XP
 		if( !ignoreBonuses )
 			amount *= getMultiplier( player, skill );
 
-		if( amount <= 0 )
-			return;
-
 		String playerName = player.getDisplayName().getString();
 		int startLevel = skill.getLevel( uuid );
 		double startXp = skill.getXp( uuid );
@@ -1199,6 +1196,9 @@ public class XP
 			LOGGER.info( player.getDisplayName().getString() + " " + skillName + " 2b cap reached" );
 			amount = 2000000000 - startXp;
 		}
+
+		if( amount <= 0 )
+			return;
 
 		pmmoSavedData.addXp( skill, uuid, amount );
 
