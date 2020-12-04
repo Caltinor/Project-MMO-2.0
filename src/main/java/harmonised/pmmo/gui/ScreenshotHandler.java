@@ -1,11 +1,11 @@
 package harmonised.pmmo.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.util.ScreenShotHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.DateFormat;
@@ -30,20 +30,7 @@ public class ScreenshotHandler
             String screenshotDate = DATE_FORMAT.format( new Date() );
             File screenshotFile = new File( screenshotDir, screenshotName + " " + screenshotDate + ".png" );
 
-            bufferedImage.( screenshotFile );
-
-//            int i = 1;
-//
-//            while(true)
-//            {
-//                File file1 = new File(gameDirectory, s + (i == 1 ? "" : "_" + i) + ".png");
-//                if (!file1.exists())
-//                {
-//                    return file1;
-//                }
-//
-//                ++i;
-//            }
+            ImageIO.write( bufferedImage, "png", screenshotFile );
         }
         catch ( Exception err )
         {

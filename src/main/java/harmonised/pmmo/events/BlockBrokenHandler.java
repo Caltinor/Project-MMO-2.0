@@ -1,5 +1,8 @@
 package harmonised.pmmo.events;
 
+import com.ferreusveritas.dynamictrees.api.network.MapSignal;
+import com.ferreusveritas.dynamictrees.blocks.BlockBranch;
+import com.ferreusveritas.dynamictrees.systems.nodemappers.NodeNetVolume;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -23,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
@@ -446,8 +448,22 @@ public class BlockBrokenHandler
         if( gap > 0 )
             player.getHeldItemMainhand().damageItem( gap - 1, player );
 
-
         Skill awardSkill;
+
+        //DYNAMIC TREES :o
+        if( block instanceof BlockBranch )
+        {
+            BlockBranch branchBlock = (BlockBranch) block;
+            MapSignal signal = branchBlock.analyse( state, world, event.getPos(), null, new MapSignal());
+            NodeNetVolume volumeNet = new NodeNetVolume();
+            branchBlock.analyse( state, world, event.getPos(), signal.localRootDir, new MapSignal(volumeNet));
+            double volume = volumeNet.getVolume();
+
+            System.out.println( volume );
+
+            XP.multiplyMapAnyDouble( award, volume );
+        }
+        //////////////////
 
         for( String awardSkillName : award.keySet() )
         {

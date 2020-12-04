@@ -24,16 +24,21 @@ public class NetworkHandler
 		INSTANCE.registerMessage( MessageKeypress.class, MessageKeypress.class, discriminator, Side.CLIENT );
 		discriminator++;
 		INSTANCE.registerMessage( MessageDoubleTranslation.class, MessageDoubleTranslation.class, discriminator, Side.SERVER );
+		INSTANCE.registerMessage( MessageDoubleTranslation.class, MessageDoubleTranslation.class, discriminator, Side.CLIENT );
 		discriminator++;
 		INSTANCE.registerMessage( MessageTripleTranslation.class, MessageTripleTranslation.class, discriminator, Side.SERVER );
+		INSTANCE.registerMessage( MessageTripleTranslation.class, MessageTripleTranslation.class, discriminator, Side.CLIENT );
 		discriminator++;
 		INSTANCE.registerMessage( MessageUpdatePlayerNBT.class, MessageUpdatePlayerNBT.class, discriminator, Side.SERVER );
 		INSTANCE.registerMessage( MessageUpdatePlayerNBT.class, MessageUpdatePlayerNBT.class, discriminator, Side.CLIENT );
 		discriminator++;
 		INSTANCE.registerMessage( MessageGrow.class, MessageGrow.class, discriminator, Side.SERVER );
+		INSTANCE.registerMessage( MessageGrow.class, MessageGrow.class, discriminator, Side.CLIENT );
 		discriminator++;
+		INSTANCE.registerMessage( MessageLevelUp.class, MessageLevelUp.class, discriminator, Side.SERVER );
 		INSTANCE.registerMessage( MessageLevelUp.class, MessageLevelUp.class, discriminator, Side.CLIENT );
 		discriminator++;
+		INSTANCE.registerMessage( MessageUpdateBoolean.class, MessageUpdateBoolean.class, discriminator, Side.SERVER );
 		INSTANCE.registerMessage( MessageUpdateBoolean.class, MessageUpdateBoolean.class, discriminator, Side.CLIENT );
 	}
 

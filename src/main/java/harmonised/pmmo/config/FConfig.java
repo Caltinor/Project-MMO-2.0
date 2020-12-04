@@ -338,13 +338,13 @@ public class FConfig
 
     @Config.Comment( "What is the baseXp to reach level 2 ( baseXp + level * xpPerLevel )" )
     @Config.Name( "baseXp" )
-    @Config.RangeInt( min = 1, max = 1000000 )
-    public static int baseXp = 250;
+    @Config.RangeDouble( min = 1, max = 1000000 )
+    public static double baseXp = 250D;
 
     @Config.Comment( "What is the xp increase per level ( baseXp + level * xpPerLevel )" )
     @Config.Name( "xpIncreasePerLevel" )
-    @Config.RangeInt( min = 1, max = 1000000 )
-    public static int xpIncreasePerLevel = 50;
+    @Config.RangeDouble( min = 1, max = 1000000 )
+    public static double xpIncreasePerLevel = 50D;
 
     @Config.Comment( "Every how many levels should a level up broadcast be sent to all players? (10 = every 10 levels)" )
     @Config.Name( "levelsPerMilestone" )
@@ -564,17 +564,17 @@ public class FConfig
     //Building
     @Config.Comment( "Every how many levels you gain an extra block of reach" )
     @Config.Name( "levelsPerOneReach" )
-    @Config.RangeDouble( min = 0, max = 1000000000 )
-    public static double levelsPerOneReach = 25D;
+    @Config.RangeDouble( min = 1, max = 1000000000 )
+    public static double levelsPerOneReach = 20D;
 
     @Config.Comment( "What is the maximum reach a player can have" )
     @Config.Name( "maxExtraReachBoost" )
-    @Config.RangeDouble( min = 0, max = 1000000000 )
+    @Config.RangeDouble( min = 1, max = 1000000000 )
     public static double maxExtraReachBoost = 20D;
 
     @Config.Comment( "Hardest considered block (1 hardness = 1 build xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
     @Config.Name( "blockHardnessLimitForPlacing" )
-    @Config.RangeDouble( min = 0, max = 1000000000 )
+    @Config.RangeDouble( min = 1, max = 1000000000 )
     public static double blockHardnessLimitForPlacing = 20D;
 
     @Config.Comment( "Should xp values for crafting be enabled? false means the hardness value is used" )
@@ -667,12 +667,12 @@ public class FConfig
     //Combat
     @Config.Comment( "Per how many levels you gain 1 Extra Damage" )
     @Config.Name( "levelsPerDamage" )
-    @Config.RangeDouble( min = 0, max = 1000000000 )
+    @Config.RangeDouble( min = 1, max = 1000000000 )
     public static double levelsPerDamage = 20D;
 
     @Config.Comment( "How much extra damage can you get from the Combat skill max?" )
     @Config.Name( "maxExtraDamageBoost" )
-    @Config.RangeDouble( min = 0, max = 1000000000 )
+    @Config.RangeDouble( min = 1, max = 1000000000 )
     public static double maxExtraDamageBoost = 100D;
 
     //Archery

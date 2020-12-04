@@ -2,6 +2,8 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.baubles.BaublesHandler;
 import harmonised.pmmo.config.FConfig;
+import harmonised.pmmo.gui.ScreenshotHandler;
+import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
@@ -20,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -152,16 +155,15 @@ public class PlayerTickHandler
 
         if( player.world.isRemote )
         {
-//            if( XPOverlayGUI.screenshots.size() > 0 )
-//            {
-//                for( String key : new HashSet<>( XPOverlayGUI.screenshots ) )
-//                {
-//                    ScreenshotHandler.takeScreenshot( key, "levelup" );
-//                    XPOverlayGUI.screenshots.remove( key );
-//                    XPOverlayGUI.listOn = XPOverlayGUI.listWasOn;
-//                }
-//            }
-            //COUT SCREENSHOT
+            if( XPOverlayGUI.screenshots.size() > 0 )
+            {
+                for( String key : new HashSet<>( XPOverlayGUI.screenshots ) )
+                {
+                    ScreenshotHandler.takeScreenshot( key, "levelup" );
+                    XPOverlayGUI.screenshots.remove( key );
+                    XPOverlayGUI.listOn = XPOverlayGUI.listWasOn;
+                }
+            }
 
             if( syncPrefs )
             {

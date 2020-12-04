@@ -56,7 +56,7 @@ apply plugin: "com.wynprice.cursemaven"
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.12-3.34.4"
+version = "1.12-3.34.5"
 group = "harmonised.pmmo" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Project MMO-1.12"
 
@@ -85,6 +85,8 @@ dependencies
     compile files( "FTBLib-5.4.7.2.jar" )
     compile files( "ItemFilters-1.0.4.2.jar" )
     compile files( "jei_1.12.2-4.16.1.301.jar" )
+    compile files( "CraftTweaker2-1.12-4.1.20.586.jar" )
+    compile files( "DynamicTrees-1.12.2-0.9.21.jar" )
 }
 
 processResources {

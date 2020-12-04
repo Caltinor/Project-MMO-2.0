@@ -3,7 +3,11 @@ package harmonised.pmmo.util;
 import java.util.*;
 
 import harmonised.pmmo.baubles.BaublesHandler;
+import harmonised.pmmo.skills.PMMOFireworkEntity;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.item.EntityFireworkRocket;
+import net.minecraft.nbt.NBTTagIntArray;
+import net.minecraft.nbt.NBTTagList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -511,10 +515,7 @@ public class XP
 
 	public static boolean isPlayerSurvival( EntityPlayer player )
 	{
-		if( player.isCreative() || player.isSpectator() )
-			return false;
-		else
-			return true;
+		return !player.isCreative() && !player.isSpectator();
 	}
 
 	public static Collection<EntityPlayer> getNearbyPlayers( Entity mob )
@@ -1355,38 +1356,35 @@ public class XP
 
 	public static void spawnRocket( World world, BlockPos pos, Skill skill )
 	{
-		spawnRocket( world, new BlockPos( pos.getX(), pos.getY(), pos.getZ() ), skill );
+		spawnRocket( world, new Vec3d( pos.getX(), pos.getY(), pos.getZ() ), skill );
 	}
 
-//	public static void spawnRocket( World world, Vec3d pos, Skill skill )
-//	{
-//		NBTTagCompound nbt = new NBTTagCompound();
-//		NBTTagCompound fw = new NBTTagCompound();
-//		NBTTagList explosion = new NBTTagList();
-//		NBTTagCompound l = new NBTTagCompound();
-//
-//		int[] colors = new int[1];
-//		colors[0] = getSkillColor( skill );
-////		int[] fadeColors = {0xff0000, 0x00ff00, 0x0000ff};
-//
-//		l.setInteger( "Flicker", 1 );
-//		l.setInteger( "Trail", 0 );
-//		l.setInteger( "Type", 1 );
-//		l.setTag( "Colors", new NBTTagIntArray( colors ) );
-////		l.setTag( "FadeColors", new IntArrayNBT( fadeColors ) );
-//		explosion.add(l);
-//
-//		fw.setTag( "Explosions", explosion );
-//		fw.setInteger( "Flight", 0 );
-//		nbt.setTag( "Fireworks", fw );
-//
-//		ItemStack itemStack = new ItemStack( Items.FIREWORKS );
-//		itemStack.setTagCompound( nbt );
-//
-//		PMMOFireworkEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.x + 0.5D, pos.y + 0.5D, pos.z + 0.5D, itemStack );
-//		world.entity( fireworkRocketEntity );
-//	}
-	//COUT FIREWORKS
+	public static void spawnRocket( World world, Vec3d pos, Skill skill )
+	{
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setTag( "Fireworks", new NBTTagCompound() );
+		NBTTagCompound fwTag = tag.getCompoundTag( "Fireworks" );
+		NBTTagList expList = new NBTTagList();
+		fwTag.setTag( "Explosions", expList );
+
+		NBTTagCompound expTag = fwTag.getCompoundTag( "Explosions" );
+
+		int[] colors = new int[1];
+		colors[0] = getSkillColor( skill );
+
+		fwTag.setInteger( "Flicker", 1 );
+		fwTag.setInteger( "Trail", 1 );
+		fwTag.setInteger( "Type", 1 );
+		expTag.setTag( "Colors", new NBTTagIntArray( colors ) );
+
+		expList.appendTag( expTag );
+
+		ItemStack itemStack = new ItemStack( Items.FIREWORKS );
+		itemStack.setTagCompound( tag );
+
+		EntityFireworkRocket fireworkRocketEntity = new EntityFireworkRocket( world, pos.x + 0.5D, pos.y + 0.5D, pos.z + 0.5D, itemStack );
+		world.spawnEntity( fireworkRocketEntity );
+	}
 
 	public static <T> Map<T, Double> multiplyMapAnyDouble( Map<T, Double> input, double multiplier )
 	{
