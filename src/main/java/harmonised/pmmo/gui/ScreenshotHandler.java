@@ -30,19 +30,6 @@ public class ScreenshotHandler
             File screenshotFile = new File( screenshotDir, screenshotName + " " + screenshotDate + ".png" );
 
             nativeImage.write( screenshotFile );
-
-//            int i = 1;
-//
-//            while(true)
-//            {
-//                File file1 = new File(gameDirectory, s + (i == 1 ? "" : "_" + i) + ".png");
-//                if (!file1.exists())
-//                {
-//                    return file1;
-//                }
-//
-//                ++i;
-//            }
         }
         catch ( Exception err )
         {

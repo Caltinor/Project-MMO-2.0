@@ -52,8 +52,8 @@ public class Config
             localConfig.put( "strictReqTool", 0D );
 
         localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
-        localConfig.put( "baseXp", (double) forgeConfig.baseXp.get() );
-        localConfig.put( "xpIncreasePerLevel", (double) forgeConfig.xpIncreasePerLevel.get() );
+        localConfig.put( "baseXp", forgeConfig.baseXp.get() );
+        localConfig.put( "xpIncreasePerLevel", forgeConfig.xpIncreasePerLevel.get() );
         localConfig.put( "exponentialBaseXp", forgeConfig.exponentialBaseXp.get() );
         localConfig.put( "exponentialBase", forgeConfig.exponentialBase.get() );
         localConfig.put( "exponentialRate", forgeConfig.exponentialRate.get() );
@@ -171,8 +171,8 @@ public class Config
 
         //Levels
         public ConfigHelper.ConfigValueListener<Integer> maxLevel;
-        public ConfigHelper.ConfigValueListener<Integer> baseXp;
-        public ConfigHelper.ConfigValueListener<Integer> xpIncreasePerLevel;
+        public ConfigHelper.ConfigValueListener<Double> baseXp;
+        public ConfigHelper.ConfigValueListener<Double> xpIncreasePerLevel;
         public ConfigHelper.ConfigValueListener<Integer> levelsPerMilestone;
         public ConfigHelper.ConfigValueListener<Boolean> wipeAllSkillsUponDeathPermanently;
         public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
@@ -721,12 +721,12 @@ public class Config
                 this.baseXp = subscriber.subscribe(builder
                         .comment( "What is the baseXp to reach level 2 ( baseXp + level * xpPerLevel )" )
                         .translation( "pmmo.baseXp" )
-                        .defineInRange( "baseXp", 250, 1, 1000000 ) );
+                        .defineInRange( "baseXp", 250D, 1, 1000000 ) );
 
                 this.xpIncreasePerLevel = subscriber.subscribe(builder
                         .comment( "What is the xp increase per level ( baseXp + level * xpPerLevel )" )
                         .translation( "pmmo.xpIncreasePerLevel" )
-                        .defineInRange( "xpIncreasePerLevel", 50, 1, 1000000 ) );
+                        .defineInRange( "xpIncreasePerLevel", 50D, 1, 1000000 ) );
 
                 this.levelsPerMilestone = subscriber.subscribe(builder
                         .comment( "Every how many levels should a level up broadcast be sent to all players? (10 = every 10 levels)" )
@@ -982,7 +982,7 @@ public class Config
                 this.levelsPerOneReach = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of reach" )
                         .translation( "pmmo.levelsPerOneReach" )
-                        .defineInRange( "levelsPerOneReach", 25D, 0, 1000000000) );
+                        .defineInRange( "levelsPerOneReach", 20D, 1, 1000000000) );
 
                 this.maxExtraReachBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum reach a player can have" )
@@ -1061,12 +1061,12 @@ public class Config
                 this.levelsPerCrouchJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Crouching" )
                         .translation( "pmmo.levelsPerCrouchJumpBoost" )
-                        .defineInRange( "levelsPerCrouchJumpBoost", 33D, 0, 1000000000) );
+                        .defineInRange( "levelsPerCrouchJumpBoost", 33D, 1, 1000000000) );
 
                 this.levelsPerSprintJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Sprinting" )
                         .translation( "pmmo.levelsPerSprintJumpBoost" )
-                        .defineInRange( "levelsPerSprintJumpBoost", 50D, 0, 1000000000) );
+                        .defineInRange( "levelsPerSprintJumpBoost", 50D, 1, 1000000000) );
 
                 this.maxSpeedBoost = subscriber.subscribe(builder
                         .comment( "How much speed boost you can get from Agility (100 = 100% vanilla + 100% = twice as fast max)" )
@@ -1096,7 +1096,7 @@ public class Config
                 this.levelsPerHeart = subscriber.subscribe(builder
                         .comment( "Per how many levels you gain 1 Max Heart" )
                         .translation( "pmmo.levelsPerHeart" )
-                        .defineInRange( "levelsPerHeart", 10D, 0, 1000000000) );
+                        .defineInRange( "levelsPerHeart", 10D, 1, 1000000000) );
 
                 this.maxExtraHeartBoost = subscriber.subscribe(builder
                         .comment( "How many Max Hearts you can have (20 means 10 vanilla + 20 boosted)" )
@@ -1111,7 +1111,7 @@ public class Config
                 this.levelsPerDamage = subscriber.subscribe(builder
                         .comment( "Per how many levels you gain 1 Extra Damage" )
                         .translation( "pmmo.levelsPerDamage" )
-                        .defineInRange( "levelsPerDamage", 20D, 0, 1000000000) );
+                        .defineInRange( "levelsPerDamage", 20D, 1, 1000000000) );
 
                 this.maxExtraDamageBoost = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
@@ -1170,7 +1170,7 @@ public class Config
                 this.levelsPerOneEnchantBypass = subscriber.subscribe(builder
                         .comment( "How many levels per each Enchantment Level Bypass above max level enchantment can support in vanilla" )
                         .translation( "pmmo.levelsPerOneEnchantBypass" )
-                        .defineInRange( "levelsPerOneEnchantBypass", 50, 0, 1000000000) );
+                        .defineInRange( "levelsPerOneEnchantBypass", 50, 1, 1000000000) );
 
                 this.maxEnchantmentBypass = subscriber.subscribe(builder
                         .comment( "Max amount of levels enchants are able to go above max vanilla level" )
