@@ -1186,9 +1186,6 @@ public class XP
 		if( !ignoreBonuses )
 			amount *= getMultiplier( player, skill );
 
-		if( amount <= 0 )
-			return;
-
 		String playerName = player.getDisplayName().getUnformattedText();
 		int startLevel = skill.getLevel( uuid );
 		double startXp = skill.getXp( uuid );
@@ -1204,11 +1201,14 @@ public class XP
 			amount = 2000000000 - startXp;
 		}
 
+		if( amount <= 0 )
+			return;
+
 		pmmoSavedData.addXp( skill, uuid, amount );
 
 		int currLevel = skill.getLevel( uuid );
 
-		if( startLevel != currLevel ) //Level Up! Or Down?
+		if( startLevel != currLevel ) //Level Up!
 		{
 			AttributeHandler.updateAll( player );
 			updateRecipes( player );
