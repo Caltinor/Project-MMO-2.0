@@ -4,15 +4,15 @@ import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
+
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PrefsEntry
 {
     public static FontRenderer font = Minecraft.getMinecraft().fontRenderer;
     public PrefsSlider slider;
-    public Button button;
+    public GuiButton button;
     public TextFieldWidget textField;
     public String preference, prefix, suffix;
     public double defaultVal;

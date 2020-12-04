@@ -1,16 +1,12 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.GlStateManager;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -109,7 +105,7 @@ public class MainScreen extends GuiScreen
 
         GlStateManager.enableBlend();
         Minecraft.getMinecraft().getTextureManager().bindTexture( logo );
-        this.blit( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
+        this.drawTexturedModalRect( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override
@@ -128,7 +124,7 @@ public class MainScreen extends GuiScreen
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
         GlStateManager.disableBlend();
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

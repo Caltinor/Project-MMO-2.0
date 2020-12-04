@@ -1,35 +1,34 @@
 package harmonised.pmmo.gui;
 
-import com.mojang.blaze3d.systems.GlStateManager;
-import net.minecraft.client.MainWindow;
+import harmonised.pmmo.config.JType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraftforge.client.gui.ScrollPanel;
+import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class PrefsScrollPanel extends ScrollPanel
+public class CreditsScrollPanel extends ScrollPanel
 {
     ScaledResolution sr = new ScaledResolution( Minecraft.getMinecraft() );
+    JType jType;
     private final int boxWidth = 256;
     private final int boxHeight = 256;
-    private final ArrayList<PrefsEntry> prefsEntries;
-    private PrefsEntry prefEntry;
-    private FontRenderer font = Minecraft.getMinecraft().fontRenderer;
-    private PrefsSlider slider;
+    private final List<ListButtonBig> buttons;
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
 
-    public PrefsScrollPanel(Minecraft client, int width, int height, int top, int left, ArrayList<PrefsEntry> prefsEntries )
+    public CreditsScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, List<ListButtonBig> buttons )
     {
         super(client, width, height, top, left);
-        this.prefsEntries = prefsEntries;
+        this.jType = jType;
+        this.buttons = buttons;
 
         this.client = client;
         this.width = width;
@@ -44,11 +43,11 @@ public class PrefsScrollPanel extends ScrollPanel
     @Override
     protected int getContentHeight()
     {
-        int height = -4;
+        int height = 48;
 
-        for( PrefsEntry a : prefsEntries )
+        for( int i = 0; i < buttons.size(); i += 3 )
         {
-            height += a.getHeight() + 2;
+            height += 92;
         }
 
         return height;
@@ -57,36 +56,31 @@ public class PrefsScrollPanel extends ScrollPanel
     @Override
     protected void drawPanel(int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
-        for( int i = 0; i < prefsEntries.size(); i++ )
+        ListButtonBig button;
+
+        int accumulativeHeight = 0;
+
+        for( int i = 0; i < buttons.size(); i++ )
         {
-            prefEntry = prefsEntries.get( i );
-            prefEntry.setX( this.left + 6 );
-            prefEntry.setY( 7 + relativeY + ( prefEntry.getHeight() + 2) * i );
-            slider = prefEntry.slider;
+            button = buttons.get( i );
 
-            if( prefEntry.y + prefEntry.getHeight() > this.top && prefEntry.y - prefEntry.getHeight() < this.bottom )
+            if( (i + 1) % 3 == 1 )
             {
-                if( prefEntry.isSwitch )
-                {
-                    if( slider.getValue() == 1 )
-                        fillGradient(this.left + 4, prefEntry.y - 11, this.right - 2, prefEntry.y + slider.getHeight() + 2, 0x22444444, 0x33222222);
-                    else
-                        fillGradient(this.left + 4, prefEntry.y - 11, this.right - 2, prefEntry.y + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
-                }
-                else
-                {
-                    if( (double) prefEntry.defaultVal == (double) slider.getValue() )
-                        fillGradient(this.left + 4, prefEntry.y - 11, this.right - 2, prefEntry.y + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
-                    else
-                        fillGradient(this.left + 4, prefEntry.y - 11, this.right - 2, prefEntry.y + slider.getHeight() + 2, 0x22444444, 0x33222222);
-                }
-
-                drawCenteredString( font, prefEntry.preference, prefEntry.x + slider.getWidth() / 2, prefEntry.y - 9, 0xffffff );
-                slider.render(mouseX, mouseY, 0);
-                prefEntry.button.render(mouseX, mouseY, 0);
-                if( !prefEntry.isSwitch )
-                    prefEntry.textField.render(mouseX, mouseY, 0);
+                button.x = sr.getScaledWidth() / 2 - 32;
+                button.y = relativeY + 12 + ( i / 3) * 92;
             }
+            else
+            {
+                button.x = sr.getScaledWidth() / 2 - 32 + ( (i + 1) % 3 == 2 ? -28 : +28 );
+                button.y = relativeY + 12 + 46 + ( i / 3) * 92;
+            }
+
+            if( accumulativeHeight + buttons.get( i ).getHeight() > scrollDistance && accumulativeHeight - height - 32 <= scrollDistance )
+            {
+                button.render( mouseX, mouseY, 0 );
+            }
+            if( i % 3 == 0 )
+                accumulativeHeight += 92;
         }
     }
 
@@ -162,7 +156,7 @@ public class PrefsScrollPanel extends ScrollPanel
         int baseY = this.top + border - (int)this.scrollDistance;
         this.drawPanel(right, baseY, tess, mouseX, mouseY);
 
-        GlStateManager.disableDepthTest();
+        GlStateManager.disableDepth();
 
         int extraHeight = (this.getContentHeight() + border) - height;
         if (extraHeight > 0)
@@ -175,7 +169,7 @@ public class PrefsScrollPanel extends ScrollPanel
                 barTop = this.top;
             }
 
-            GlStateManager.disableTexture();
+            GlStateManager.disableTexture2D();
             worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             worldr.pos(barLeft,            this.bottom, 0.0D).tex(0.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
             worldr.pos(barLeft + barWidth, this.bottom, 0.0D).tex(1.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
@@ -196,9 +190,9 @@ public class PrefsScrollPanel extends ScrollPanel
             tess.draw();
         }
 
-        GlStateManager.enableTexture();
+        GlStateManager.enableTexture2D();
         GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.enableAlphaTest();
+        GlStateManager.enableAlpha();
         GlStateManager.disableBlend();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }

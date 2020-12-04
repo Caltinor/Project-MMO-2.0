@@ -5,16 +5,12 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -273,7 +269,7 @@ public class GlossaryScreen extends GuiScreen
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

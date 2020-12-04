@@ -1,7 +1,6 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -10,24 +9,21 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
+
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.registries.ForgeRegistries;
+
 
 import java.util.*;
 
@@ -36,7 +32,7 @@ public class ListScreen extends GuiScreen
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private static final Style greenColor = XP.textStyle.get( "green" );
-    private static Button exitButton;
+    private static GuiButton exitButton;
 
     ScaledResolution sr = new ScaledResolution( Minecraft.getMinecraft() );
     private int boxWidth = 256;
@@ -1084,7 +1080,7 @@ public class ListScreen extends GuiScreen
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

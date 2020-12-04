@@ -4,21 +4,16 @@ import com.google.common.collect.Lists;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-public class StatsScreen extends GuiScreen
+public class PrefsChoiceScreen extends GuiScreen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
@@ -30,19 +25,11 @@ public class StatsScreen extends GuiScreen
     private int x;
     private int y;
     private List<TileButton> tileButtons;
-    private UUID uuid;
 
-    public StatsScreen( UUID uuid, ITextComponent titleIn )
+    public PrefsChoiceScreen( ITextComponent titleIn )
     {
-        super( titleIn );
-        this.uuid = uuid;
+        super(titleIn);
     }
-
-//    @Override
-//    public boolean isPauseScreen()
-//    {
-//        return false;
-//    }
 
     @Override
     protected void init()
@@ -54,15 +41,27 @@ public class StatsScreen extends GuiScreen
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.stats" ) ) );
+            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.potato" ) ) );
         });
 
-        addButton(exitButton);
+        TileButton settingsButton = new TileButton( (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
+        {
+            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.SETTINGS ) );
+        });
 
-//        for( TileButton button : tileButtons )
-//        {
-//            addButton( button );
-//        }
+        TileButton guiSettingsButton = new TileButton( (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
+        {
+            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
+        });
+
+        addButton( exitButton );
+        tileButtons.add( settingsButton );
+        tileButtons.add( guiSettingsButton );
+
+        for( TileButton button : tileButtons )
+        {
+            addButton( button );
+        }
     }
 
     @Override
@@ -74,7 +73,7 @@ public class StatsScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        fillGradient(x + 20, y + 16, x + 232, y + 200, 0x22444444, 0x33222222);
+//        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
         for( TileButton button : tileButtons )
         {
@@ -94,13 +93,12 @@ public class StatsScreen extends GuiScreen
         else
             this.renderDirtBackground(p_renderBackground_1_);
 
+
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
-
-//        GlStateManager.enableBlend();
-
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        GlStateManager.disableBlend();
+        this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override
@@ -117,7 +115,6 @@ public class StatsScreen extends GuiScreen
             exitButton.onPress();
             return true;
         }
-
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

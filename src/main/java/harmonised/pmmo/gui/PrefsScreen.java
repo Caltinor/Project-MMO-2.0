@@ -1,20 +1,17 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.PlayerTickHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +27,7 @@ public class PrefsScreen extends GuiScreen
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private int i;
     private double value;
-    private static Button exitButton;
+    private static GuiButton exitButton;
 
     ScaledResolution sr = new ScaledResolution( Minecraft.getMinecraft() );
     private int boxWidth = 256;
@@ -206,7 +203,7 @@ public class PrefsScreen extends GuiScreen
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
-        this.blit( x, y, 0, 0,  boxWidth, boxHeight );
+        this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

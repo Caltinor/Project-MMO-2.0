@@ -1,18 +1,13 @@
 package harmonised.pmmo.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.GlStateManager;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.widget.button.Button;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentTranslation;
 
 public class TileButton extends GuiButton
 {
@@ -69,14 +64,14 @@ public class TileButton extends GuiButton
         Minecraft minecraft = Minecraft.getMinecraft();
 //        FontRenderer fontrenderer = minecraft.fontRenderer;
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-//        int i = this.getYImage(this.isHovered());
+//        int i = this.getYImage(this.hovered);
         GlStateManager.enableBlend();
         GlStateManager.defaultBlendFunc();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         minecraft.getTextureManager().bindTexture( buttons );
-        this.blit(this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height );
+        this.drawTexturedModalRect(this.x, this.y, this.offsetOne + ( this.hovered ? 32 : 0 ), this.elementOne, this.width, this.height );
         minecraft.getTextureManager().bindTexture( page == 0 ? items : items2 );
-        this.blit(this.x, this.y, this.offsetTwo + ( this.isHovered() ? 32 : 0 ), this.elementTwo, this.width, this.height );
+        this.drawTexturedModalRect(this.x, this.y, this.offsetTwo + ( this.hovered ? 32 : 0 ), this.elementTwo, this.width, this.height );
         this.renderBg(minecraft, p_renderButton_1_, p_renderButton_2_);
 //        int j = getFGColor();
 //        this.drawCenteredString(fontrenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);

@@ -1,35 +1,34 @@
 package harmonised.pmmo.gui;
-
-import com.mojang.blaze3d.systems.GlStateManager;
 import harmonised.pmmo.config.JType;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.client.gui.ScrollPanel;
+import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class CreditsScrollPanel extends ScrollPanel
+public class ListScrollPanel extends ScrollPanel
 {
     ScaledResolution sr = new ScaledResolution( Minecraft.getMinecraft() );
+    EntityPlayer player;
+    String regKey;
     JType jType;
     private final int boxWidth = 256;
     private final int boxHeight = 256;
-    private final List<ListButtonBig> buttons;
+    private final ArrayList<ListButton> buttons;
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
+    int accumulativeHeight;
 
-    public CreditsScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, List<ListButtonBig> buttons )
+    public ListScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, EntityPlayer player, ArrayList<ListButton> buttons )
     {
         super(client, width, height, top, left);
+        this.player = player;
         this.jType = jType;
         this.buttons = buttons;
 
@@ -46,11 +45,11 @@ public class CreditsScrollPanel extends ScrollPanel
     @Override
     protected int getContentHeight()
     {
-        int height = 48;
+        int height = 0;
 
-        for( int i = 0; i < buttons.size(); i += 3 )
+        for( ListButton a : buttons )
         {
-            height += 92;
+            height += a.getHeight() + 4;
         }
 
         return height;
@@ -59,31 +58,30 @@ public class CreditsScrollPanel extends ScrollPanel
     @Override
     protected void drawPanel(int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
-        ListButtonBig button;
-
-        int accumulativeHeight = 0;
-
-        for( int i = 0; i < buttons.size(); i++ )
+        accumulativeHeight = 0;
+        for( ListButton button : buttons )
         {
-            button = buttons.get( i );
+            button.x = this.right - button.getWidth() - 8;
+            button.y = relativeY + accumulativeHeight;
 
-            if( (i + 1) % 3 == 1 )
+            if( button.y + button.getHeight() + 2 > this.top && button.y - 2 < this.bottom )
             {
-                button.x = sr.getScaledWidth() / 2 - 32;
-                button.y = relativeY + 12 + ( i / 3) * 92;
-            }
-            else
-            {
-                button.x = sr.getScaledWidth() / 2 - 32 + ( (i + 1) % 3 == 2 ? -28 : +28 );
-                button.y = relativeY + 12 + 46 + ( i / 3) * 92;
-            }
+                if( button.unlocked )
+                    fillGradient(this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0x22444444, 0x33222222);
+                else
+                    fillGradient(this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0xaa444444, 0xaa222222);
 
-            if( accumulativeHeight + buttons.get( i ).getHeight() > scrollDistance && accumulativeHeight - height - 32 <= scrollDistance )
-            {
                 button.render( mouseX, mouseY, 0 );
+
+                drawString( Minecraft.getMinecraft().fontRenderer, button.title, this.left + 6, button.y + 2, button.unlocked ? 0x54fc54 : 0xfc5454 );
+
+                int i = 0;
+                for( String line : button.text )
+                {
+                    drawString( Minecraft.getMinecraft().fontRenderer, line, this.left + 6, button.y + 11 + (i++ * 9), 0xffffff );
+                }
             }
-            if( i % 3 == 0 )
-                accumulativeHeight += 92;
+            accumulativeHeight += button.getHeight() + 4;
         }
     }
 
@@ -116,6 +114,11 @@ public class CreditsScrollPanel extends ScrollPanel
     public int getRelativeY()
     {
         return this.top + this.border - (int) this.scrollDistance;
+    }
+
+    private int getMaxScroll()
+    {
+        return this.getContentHeight() - (this.height - this.border);
     }
 
     @Override
@@ -159,7 +162,7 @@ public class CreditsScrollPanel extends ScrollPanel
         int baseY = this.top + border - (int)this.scrollDistance;
         this.drawPanel(right, baseY, tess, mouseX, mouseY);
 
-        GlStateManager.disableDepth();
+        GlStateManager.disableDepthTest();
 
         int extraHeight = (this.getContentHeight() + border) - height;
         if (extraHeight > 0)
@@ -172,7 +175,7 @@ public class CreditsScrollPanel extends ScrollPanel
                 barTop = this.top;
             }
 
-            GlStateManager.disableTexture2D();
+            GlStateManager.disableTexture();
             worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
             worldr.pos(barLeft,            this.bottom, 0.0D).tex(0.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
             worldr.pos(barLeft + barWidth, this.bottom, 0.0D).tex(1.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
@@ -193,9 +196,9 @@ public class CreditsScrollPanel extends ScrollPanel
             tess.draw();
         }
 
-        GlStateManager.enableTexture2D();
+        GlStateManager.enableTexture();
         GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         GlStateManager.disableBlend();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }

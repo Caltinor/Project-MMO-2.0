@@ -121,7 +121,7 @@ public class CreditorScreen extends GuiScreen
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
         GlStateManager.disableBlend();
-        this.blit( x, y, 0, 0, boxWidth, boxHeight );
+        this.drawTexturedModalRect( x, y, 0, 0, boxWidth, boxHeight );
     }
 
     @Override

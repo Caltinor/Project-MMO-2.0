@@ -1,40 +1,31 @@
 package harmonised.pmmo.gui;
-
-import com.mojang.blaze3d.systems.GlStateManager;
-import harmonised.pmmo.config.JType;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.client.gui.ScrollPanel;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
-public class ListScrollPanel extends ScrollPanel
+public class PrefsScrollPanel extends ScrollPanel
 {
     ScaledResolution sr = new ScaledResolution( Minecraft.getMinecraft() );
-    EntityPlayer player;
-    String regKey;
-    JType jType;
     private final int boxWidth = 256;
     private final int boxHeight = 256;
-    private final ArrayList<ListButton> buttons;
+    private final ArrayList<PrefsEntry> prefsEntries;
+    private PrefsEntry prefEntry;
+    private FontRenderer font = Minecraft.getMinecraft().fontRenderer;
+    private PrefsSlider slider;
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
-    int accumulativeHeight;
 
-    public ListScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, EntityPlayer player, ArrayList<ListButton> buttons )
+    public PrefsScrollPanel(Minecraft client, int width, int height, int top, int left, ArrayList<PrefsEntry> prefsEntries )
     {
         super(client, width, height, top, left);
-        this.player = player;
-        this.jType = jType;
-        this.buttons = buttons;
+        this.prefsEntries = prefsEntries;
 
         this.client = client;
         this.width = width;
@@ -49,11 +40,11 @@ public class ListScrollPanel extends ScrollPanel
     @Override
     protected int getContentHeight()
     {
-        int height = 0;
+        int height = -4;
 
-        for( ListButton a : buttons )
+        for( PrefsEntry a : prefsEntries )
         {
-            height += a.getHeight() + 4;
+            height += a.getHeight() + 2;
         }
 
         return height;
@@ -62,30 +53,36 @@ public class ListScrollPanel extends ScrollPanel
     @Override
     protected void drawPanel(int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
-        accumulativeHeight = 0;
-        for( ListButton button : buttons )
+        for( int i = 0; i < prefsEntries.size(); i++ )
         {
-            button.x = this.right - button.getWidth() - 8;
-            button.y = relativeY + accumulativeHeight;
+            prefEntry = prefsEntries.get( i );
+            prefEntry.setX( this.left + 6 );
+            prefEntry.setY( 7 + relativeY + ( prefEntry.getHeight() + 2) * i );
+            slider = prefEntry.slider;
 
-            if( button.y + button.getHeight() + 2 > this.top && button.y - 2 < this.bottom )
+            if( prefEntry.y + prefEntry.getHeight() > this.top && prefEntry.y - prefEntry.getHeight() < this.bottom )
             {
-                if( button.unlocked )
-                    fillGradient(this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0x22444444, 0x33222222);
-                else
-                    fillGradient(this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0xaa444444, 0xaa222222);
-
-                button.render( mouseX, mouseY, 0 );
-
-                drawString( Minecraft.getMinecraft().fontRenderer, button.title, this.left + 6, button.y + 2, button.unlocked ? 0x54fc54 : 0xfc5454 );
-
-                int i = 0;
-                for( String line : button.text )
+                if( prefEntry.isSwitch )
                 {
-                    drawString( Minecraft.getMinecraft().fontRenderer, line, this.left + 6, button.y + 11 + (i++ * 9), 0xffffff );
+                    if( slider.getValue() == 1 )
+                        fillGradient(this.left + 4, prefEntry.y - 11, this.right - 2, prefEntry.y + slider.getHeight() + 2, 0x22444444, 0x33222222);
+                    else
+                        fillGradient(this.left + 4, prefEntry.y - 11, this.right - 2, prefEntry.y + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
                 }
+                else
+                {
+                    if( (double) prefEntry.defaultVal == (double) slider.getValue() )
+                        fillGradient(this.left + 4, prefEntry.y - 11, this.right - 2, prefEntry.y + slider.getHeight() + 2, 0xaa444444, 0xaa222222);
+                    else
+                        fillGradient(this.left + 4, prefEntry.y - 11, this.right - 2, prefEntry.y + slider.getHeight() + 2, 0x22444444, 0x33222222);
+                }
+
+                drawCenteredString( font, prefEntry.preference, prefEntry.x + slider.getWidth() / 2, prefEntry.y - 9, 0xffffff );
+                slider.render(mouseX, mouseY, 0);
+                prefEntry.button.render(mouseX, mouseY, 0);
+                if( !prefEntry.isSwitch )
+                    prefEntry.textField.render(mouseX, mouseY, 0);
             }
-            accumulativeHeight += button.getHeight() + 4;
         }
     }
 
@@ -118,11 +115,6 @@ public class ListScrollPanel extends ScrollPanel
     public int getRelativeY()
     {
         return this.top + this.border - (int) this.scrollDistance;
-    }
-
-    private int getMaxScroll()
-    {
-        return this.getContentHeight() - (this.height - this.border);
     }
 
     @Override
