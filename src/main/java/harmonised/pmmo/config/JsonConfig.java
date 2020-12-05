@@ -222,8 +222,8 @@ public class JsonConfig
         if( Config.forgeConfig.wornItemXpBoostEnabled.get() )
             jTypes.add( JType.XP_BONUS_WORN );
 
-        if( Config.forgeConfig.craftReqEnabled.get() )
-            jTypes.add( JType.REQ_CRAFT );
+//        if( Config.forgeConfig.craftReqEnabled.get() )
+//            jTypes.add( JType.REQ_CRAFT );
 
         if( Config.forgeConfig.treasureEnabled.get() )
             jTypes.add( JType.TREASURE );

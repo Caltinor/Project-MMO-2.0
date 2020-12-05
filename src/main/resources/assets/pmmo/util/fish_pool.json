@@ -4,7 +4,7 @@
 		"startWeight": 100,
 		"startLevel": 5,
 		"endWeight": 10,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 1
 	},
@@ -13,7 +13,7 @@
 		"startWeight": 100,
 		"startLevel": 5,
 		"endWeight": 10,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 1
 	},
@@ -22,7 +22,7 @@
 		"startWeight": 100,
 		"startLevel": 5,
 		"endWeight": 10,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 1
 	},
@@ -31,7 +31,7 @@
 		"startWeight": 100,
 		"startLevel": 5,
 		"endWeight": 10,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 1
 	},
@@ -40,7 +40,7 @@
 		"startWeight": 100,
 		"startLevel": 1,
 		"endWeight": 5,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 15,
 		"enchantLevelReq": 1
 	},
@@ -49,7 +49,7 @@
 		"startWeight": 100,
 		"startLevel": 1,
 		"endWeight": 5,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 15,
 		"enchantLevelReq": 1
 	},
@@ -58,7 +58,7 @@
 		"startWeight": 100,
 		"startLevel": 1,
 		"endWeight": 5,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 15,
 		"enchantLevelReq": 1
 	},
@@ -67,7 +67,7 @@
 		"startWeight": 100,
 		"startLevel": 1,
 		"endWeight": 5,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 15,
 		"enchantLevelReq": 1
 	},
@@ -76,7 +76,7 @@
 		"startWeight": 100,
 		"startLevel": 1,
 		"endWeight": 10,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 15,
 		"enchantLevelReq": 1
 	},
@@ -85,7 +85,7 @@
 		"startWeight": 100,
 		"startLevel": 1,
 		"endWeight": 25,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 10
 	},
@@ -94,7 +94,7 @@
 		"startWeight": 40,
 		"startLevel": 1,
 		"endWeight": 100,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 10
 	},
@@ -103,7 +103,7 @@
 		"startWeight": 50,
 		"startLevel": 15,
 		"endWeight": 15,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 10
 	},
@@ -112,7 +112,7 @@
 		"startWeight": 50,
 		"startLevel": 15,
 		"endWeight": 15,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 10
 	},
@@ -121,7 +121,7 @@
 		"startWeight": 50,
 		"startLevel": 15,
 		"endWeight": 15,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 10
 	},
@@ -130,7 +130,7 @@
 		"startWeight": 50,
 		"startLevel": 15,
 		"endWeight": 15,
-		"endLevel": 100,
+		"endLevel": 80,
 		"xp": 35,
 		"enchantLevelReq": 10
 	},
@@ -139,7 +139,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -148,7 +148,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -157,7 +157,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -166,7 +166,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -175,7 +175,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -184,7 +184,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -193,7 +193,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -202,7 +202,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -211,7 +211,7 @@
 		"startWeight": 75,
 		"startLevel": 20,
 		"endWeight": 20,
-		"endLevel": 120,
+		"endLevel": 85,
 		"xp": 45,
 		"enchantLevelReq": 20
 	},
@@ -220,7 +220,7 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
@@ -229,7 +229,7 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
@@ -238,7 +238,7 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
@@ -247,7 +247,7 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
@@ -256,7 +256,7 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
@@ -265,7 +265,7 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
@@ -274,7 +274,7 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
@@ -283,7 +283,7 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
@@ -292,169 +292,169 @@
 		"startWeight": 5,
 		"startLevel": 35,
 		"endWeight": 35,
-		"endLevel": 200,
+		"endLevel": 90,
 		"xp": 55,
 		"enchantLevelReq": 45
 	},
 	"minecraft:diamond_helmet":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:diamond_chestplate":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:diamond_leggings":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:diamond_boots":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:diamond_shovel":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:diamond_pickaxe":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:diamond_axe":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:diamond_sword":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:diamond_hoe":
 	{
 		"startWeight": 0,
-		"startLevel": 50,
+		"startLevel": 60,
 		"endWeight": 25,
-		"endLevel": 300,
+		"endLevel": 95,
 		"xp": 150,
 		"enchantLevelReq": 60
 	},
 	"minecraft:netherite_helmet":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
 	"minecraft:netherite_chestplate":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
 	"minecraft:netherite_leggings":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
 	"minecraft:netherite_boots":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
 	"minecraft:netherite_shovel":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
 	"minecraft:netherite_pickaxe":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
 	"minecraft:netherite_axe":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
 	"minecraft:netherite_sword":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
 	"minecraft:netherite_hoe":
 	{
 		"startWeight": 0,
-		"startLevel": 100,
+		"startLevel": 80,
 		"endWeight": 3,
-		"endLevel": 400,
+		"endLevel": 100,
 		"xp": 350,
 		"enchantLevelReq": 120
 	},
@@ -463,7 +463,7 @@
 		"startWeight": 500,
 		"startLevel": 1,
 		"endWeight": 25,
-		"endLevel": 125,
+		"endLevel": 75,
 		"xp": 0.25,
 		"minCount": 5,
 		"maxCount": 24
@@ -473,7 +473,7 @@
 		"startWeight": 500,
 		"startLevel": 1,
 		"endWeight": 25,
-		"endLevel": 125,
+		"endLevel": 75,
 		"xp": 0.25,
 		"minCount": 5,
 		"maxCount": 24
@@ -483,7 +483,7 @@
 		"startWeight": 200,
 		"startLevel": 1,
 		"endWeight": 15,
-		"endLevel": 150,
+		"endLevel": 80,
 		"xp": 0.35,
 		"minCount": 5,
 		"maxCount": 16
@@ -511,9 +511,9 @@
 	"minecraft:nether_star":
 	{
 		"startWeight": 0,
-		"startLevel": 200,
+		"startLevel": 95,
 		"endWeight": 1,
-		"endLevel": 300,
+		"endLevel": 150,
 		"xp": 666,
 		"minCount": 1,
 		"maxCount": 1
