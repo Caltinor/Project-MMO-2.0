@@ -1265,7 +1265,7 @@ public class Config
                 this.fishPoolChancePerLevel = subscriber.subscribe(builder
                         .comment( "What is the increase per level to access the fish_pool" )
                         .translation( "pmmo.fishPoolChancePerLevel" )
-                        .defineInRange( "fishPoolChancePerLevel", 0.25D, 0, 100) );
+                        .defineInRange( "fishPoolChancePerLevel", 0.5D, 0, 100) );
 
                 this.fishPoolMaxChance = subscriber.subscribe(builder
                         .comment( "What is the max chance to access the fish_pool" )

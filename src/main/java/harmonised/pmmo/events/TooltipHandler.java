@@ -43,6 +43,7 @@ public class TooltipHandler
 
     public static void handleTooltip( ItemTooltipEvent event )
     {
+        try
         {
             if( !tooltipOn )
                 return;
@@ -96,7 +97,7 @@ public class TooltipHandler
                 if( item instanceof BlockItem)
                 {
                     material = ( (BlockItem) item).getBlock().getDefaultState().getMaterial();
-                    hardness = ( (BlockItem) item).getBlock().getDefaultState().getBlockHardness( null, null );
+                    hardness = ( (BlockItem) item).getBlock().getDefaultState().getBlockHardness( null, new BlockPos( 0, 0, 0 ) );
                     if( hardness > 0 )
                         tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo.hardness", DP.dp( hardness ) ).getString() ) );
 //                    tooltip.add( new StringTextComponent( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
@@ -465,6 +466,10 @@ public class TooltipHandler
                     }
                 }
             }
+        }
+        catch( Exception e )
+        {
+            LOGGER.error( e );
         }
     }
 
