@@ -165,6 +165,8 @@ public class AdminCommand extends CommandBase
                                             else
                                                 PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
                                         }
+                                        else
+                                            PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.invalidChoice", args[3] ).setStyle( XP.textStyle.get( "red" ) ) );
                                     }
                                     else
                                         PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
