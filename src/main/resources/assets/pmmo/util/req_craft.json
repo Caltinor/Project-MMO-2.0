@@ -330,7 +330,7 @@
 	},
 	"enderstorage:ender_pouch":
 	{
-		"crafting": 75,
+		"crafting": 50,
 		"magic": 5
 	},
 	"create:redstone_link":

@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.IPlantable;
@@ -37,6 +38,7 @@ public class TooltipHandler
 
     public static void handleTooltip( ItemTooltipEvent event )
     {
+        try
         {
             if( !tooltipOn )
                 return;
@@ -91,7 +93,7 @@ public class TooltipHandler
                 if( item instanceof ItemBlock)
                 {
                     material = ( (ItemBlock) item).getBlock().getDefaultState().getMaterial();
-                    hardness = ( (ItemBlock) item).getBlock().getDefaultState().getBlockHardness( null, null );
+                    hardness = ( (ItemBlock) item).getBlock().getDefaultState().getBlockHardness( null, new BlockPos( 0, 0, 0 ) );
                     if( hardness > 0 )
                         tooltip.add( new TextComponentTranslation( "pmmo.hardness", DP.dpSoft( hardness ) ).getUnformattedText() );
 //                    tooltip.add( new TextComponentString( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
@@ -460,6 +462,10 @@ public class TooltipHandler
                     }
                 }
             }
+        }
+        catch( Exception e )
+        {
+            LOGGER.error( e );
         }
     }
 

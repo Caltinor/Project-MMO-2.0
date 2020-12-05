@@ -786,7 +786,7 @@ public class FConfig
     @Config.Comment( "What is the increase per level to access the fish_pool" )
     @Config.Name( "fishPoolChancePerLevel" )
     @Config.RangeDouble( min = 0, max = 100 )
-    public static double fishPoolChancePerLevel = 0.25D;
+    public static double fishPoolChancePerLevel = 0.5D;
 
     @Config.Comment( "What is the max chance to access the fish_pool" )
     @Config.Name( "fishPoolMaxChance" )

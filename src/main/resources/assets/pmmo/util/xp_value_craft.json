@@ -773,7 +773,7 @@
 	},
 	"enderstorage:ender_pouch":
 	{
-		"crafting": 70,
+		"crafting": 90,
 		"magic": 15
 	},
 	"create:zinc_nugget":
