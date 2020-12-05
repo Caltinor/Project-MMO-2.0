@@ -921,10 +921,15 @@ public class XP
 
 	public static double getXpBoostDurabilityMultiplier( ItemStack itemStack )
 	{
-		double durabilityPercentage = 1 - itemStack.getDamage() / (double) itemStack.getMaxDamage();
-		double scaleStart = Config.forgeConfig.scaleXpBoostByDurabilityStart.get() / 100D;
-		double scaleEnd = Math.max( scaleStart, Config.forgeConfig.scaleXpBoostByDurabilityEnd.get() / 100D );
-		return DP.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
+		double scale = 1;
+		if( itemStack.isDamageable() )
+		{
+			double durabilityPercentage = 1 - itemStack.getDamage() / (double) itemStack.getMaxDamage();
+			double scaleStart = Config.forgeConfig.scaleXpBoostByDurabilityStart.get() / 100D;
+			double scaleEnd = Math.max( scaleStart, Config.forgeConfig.scaleXpBoostByDurabilityEnd.get() / 100D );
+			scale = DP.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
+		}
+		return scale;
 	}
 
 	public static double getStackXpBoost(PlayerEntity player, ItemStack itemStack, String skillName, boolean type /*false = worn, true = held*/ )
