@@ -1174,7 +1174,7 @@ public class XP
 				amount /= membersInRangeSize + 1D;
 				for( ServerPlayerEntity partyMember : membersInRange )
 				{
-					awardXp( partyMember, skill, sourceName, amount, skip, ignoreBonuses, true );
+					awardXp( partyMember, skill, sourceName, amount, true, ignoreBonuses, true );
 				}
 			}
 		}
