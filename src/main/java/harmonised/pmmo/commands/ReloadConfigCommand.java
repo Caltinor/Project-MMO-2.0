@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.annotation.Nullable;
 
+import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JsonConfig;
 
@@ -56,7 +57,7 @@ public class ReloadConfigCommand extends CommandBase
     {
         JsonConfig.init();  //Load Up Locally
         if( FConfig.autoGenerateValuesEnabled )
-            JsonConfig.setAutoValues(); //Set Auto Values
+            AutoValues.setAutoValues(); //Set Auto Values
 
         server.getPlayerList().getPlayers().forEach( player ->
         {

@@ -2,6 +2,7 @@ package harmonised.pmmo;
 
 import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.commands.PmmoCommand;
+import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
@@ -67,7 +68,7 @@ public class ProjectMMOMod
         PmmoCommand.registerCommands( event );
 
         if( FConfig.autoGenerateValuesEnabled )
-            JsonConfig.setAutoValues();
+            AutoValues.setAutoValues();
         ChunkDataHandler.init();
 
         PmmoSavedData.init( event.getServer() );

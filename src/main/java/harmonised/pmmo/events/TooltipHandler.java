@@ -49,6 +49,7 @@ public class TooltipHandler
             {
                 ItemStack itemStack = event.getItemStack();
                 Item item = itemStack.getItem();
+                String displayName = itemStack.getDisplayName();
                 List<String> tooltip = event.getToolTip();
                 int level;
 
@@ -376,7 +377,7 @@ public class TooltipHandler
                             }
                             else
                             {
-                                tooltip.add( new TextComponentTranslation( "pmmo.salvagesIntoCountItem", potentialReturnAmount, new TextComponentTranslation( salvageItem.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( potentialReturnAmount > 0 ? "green" : "red" ) ).getFormattedText() );
+                                tooltip.add( new TextComponentTranslation( "pmmo.salvagesIntoCountItem", potentialReturnAmount, displayName ).setStyle( XP.textStyle.get( potentialReturnAmount > 0 ? "green" : "red" ) ).getFormattedText() );
                                 tooltip.add( new TextComponentTranslation( "pmmo.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
                             }
                         }
@@ -394,7 +395,6 @@ public class TooltipHandler
                             level = Skill.SMITHING.getLevel( player );
 
                             String key = (String) salvageFromArray[ salvageFromArrayPos ];
-                            String displayName = new TextComponentTranslation( XP.getItem( key ).getUnlocalizedName() ).getUnformattedText();
 
                             Map<String, Double> salvageFromMap = salvageFrom.get( key );
 
@@ -445,7 +445,6 @@ public class TooltipHandler
                             level = Skill.EXCAVATION.getLevel( player );
 
                             String key = (String) treasureFromArray[ treasureFromArrayPos ];
-                            String displayName = new TextComponentTranslation( XP.getItem( key ).getUnlocalizedName() ).getUnformattedText();
 
                             Map<String, Double> treasureFromMap = treasureFromInfo.get( key );
                             Map<String, Double> treasureToMap = JsonConfig.data2.get( JType.TREASURE ).get( key ).get( regKey );

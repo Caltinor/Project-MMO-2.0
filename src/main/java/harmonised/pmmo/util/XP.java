@@ -929,11 +929,14 @@ public class XP
 
 	public static double getXpBoostDurabilityMultiplier( ItemStack itemStack )
 	{
-		double durabilityPercentage = 1 - itemStack.getItemDamage() / (double) itemStack.getMaxDamage();
-		double scaleStart = FConfig.scaleXpBoostByDurabilityStart / 100D;
-		double scaleEnd = Math.max( scaleStart, FConfig.scaleXpBoostByDurabilityEnd / 100D );
-		double scale = DP.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
-
+		double scale = 1;
+		if( itemStack.isItemStackDamageable() )
+		{
+			double durabilityPercentage = 1 - itemStack.getItemDamage() / (double) itemStack.getMaxDamage();
+			double scaleStart = FConfig.scaleXpBoostByDurabilityStart / 100D;
+			double scaleEnd = Math.max( scaleStart, FConfig.scaleXpBoostByDurabilityEnd / 100D );
+			scale = DP.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
+		}
 		return scale;
 	}
 
