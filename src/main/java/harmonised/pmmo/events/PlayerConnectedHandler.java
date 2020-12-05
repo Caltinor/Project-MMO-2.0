@@ -62,9 +62,9 @@ public class PlayerConnectedHandler
 
     private static void migratePlayerDataToWorldSavedData( EntityPlayer player )
     {
-        if( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).hasKey( Reference.MOD_ID ) )
+        if( player.getEntityData().hasKey( player.PERSISTED_NBT_TAG ) )
         {
-            NBTTagCompound pmmoTag = player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).getCompoundTag( Reference.MOD_ID );
+            NBTTagCompound pmmoTag = player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG );
             NBTTagCompound tag;
             Skill skill;
             UUID uuid = player.getUniqueID();
@@ -86,27 +86,6 @@ public class PlayerConnectedHandler
                 }
             }
 
-            if( pmmoTag.hasKey( "preferences" ) )
-            {
-                tag = pmmoTag.getCompoundTag( "preferences" );
-                map = FConfig.getPreferencesMap( player );
-                for( String key : tag.getKeySet() )
-                {
-                    map.put( key, tag.getDouble( key ) );
-                }
-            }
-
-            if( pmmoTag.hasKey( "abilities" ) )
-            {
-                tag = pmmoTag.getCompoundTag( "abilities" );
-                map = FConfig.getAbilitiesMap( player );
-                for( String key : tag.getKeySet() )
-                {
-                    map.put( key, tag.getDouble( key ) );
-                }
-            }
-
-            player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ).removeTag( Reference.MOD_ID );
             LOGGER.info( "Migrated Player " + player.getDisplayName().getUnformattedText() + " Done" );
             PmmoSavedData.get().setDirty( true );
         }
