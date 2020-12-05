@@ -1,6 +1,7 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
+import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.XP;
@@ -14,7 +15,7 @@ public class ReloadConfigCommand
     {
         JsonConfig.init();  //Load Up Locally
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
-            JsonConfig.setAutoValues(); //Set Auto Values
+            AutoValues.setAutoValues(); //Set Auto Values
 
         context.getSource().getServer().getPlayerList().getPlayers().forEach( player ->
         {

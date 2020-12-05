@@ -2,6 +2,7 @@ package harmonised.pmmo;
 
 import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.commands.PmmoCommand;
+import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
@@ -76,7 +77,7 @@ public class ProjectMMOMod
     private void serverAboutToStart( FMLServerAboutToStartEvent event )
     {
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
-            JsonConfig.setAutoValues();
+            AutoValues.setAutoValues();
         ChunkDataHandler.init();
     }
 

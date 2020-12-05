@@ -1,26 +1,16 @@
 package harmonised.pmmo.config;
 
-import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -54,14 +44,29 @@ public class JsonConfig
     private static final String dataPath = "pmmo/";
     private static final String hardDataPath = "/assets/pmmo/util/";
     public static final Set<JType> jTypes2 = new HashSet<>();
+    public static final Set<JType> levelJTypes = new HashSet<>();
+    public static int maxLevel;
 
     public static void init()
     {
+        maxLevel = Config.forgeConfig.maxLevel.get();
+
         jTypes2.add( JType.SALVAGE );
         jTypes2.add( JType.SALVAGE_FROM );
         jTypes2.add( JType.TREASURE );
         jTypes2.add( JType.TREASURE_FROM );
         jTypes2.add( JType.REQ_USE_ENCHANTMENT );
+
+        levelJTypes.add( JType.REQ_WEAR );
+        levelJTypes.add( JType.REQ_USE_ENCHANTMENT );
+        levelJTypes.add( JType.REQ_TOOL );
+        levelJTypes.add( JType.REQ_WEAPON );
+        levelJTypes.add( JType.REQ_USE );
+        levelJTypes.add( JType.REQ_PLACE );
+        levelJTypes.add( JType.REQ_BREAK );
+        levelJTypes.add( JType.REQ_BIOME );
+        levelJTypes.add( JType.REQ_KILL );
+        levelJTypes.add( JType.REQ_CRAFT );
 
         validAttributes.add( "speedBonus" );
         validAttributes.add( "hpBonus" );
@@ -451,10 +456,10 @@ public class JsonConfig
 
         for( String key : theMap.keySet() )
         {
-            if( Skill.getInt( key ) != 0 )
+            if( Skill.getInt( key ) != 0 && theMap.get( key ) >= 0 )
                 anyValidSkills = true;
             else
-                LOGGER.debug( "Invalid skill " + key + " level " + theMap.get( key ) );
+                LOGGER.debug( "Invalid skill or value below 0 " + key + " level " + theMap.get( key ) );
         }
 
         return anyValidSkills;
@@ -480,6 +485,7 @@ public class JsonConfig
     {
         Map<String, Map<String, Double>> input = rawData.get( jType );
         Map<String, Map<String, Double>> output = localData.get( jType );
+        double value;
 
         LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
@@ -494,7 +500,12 @@ public class JsonConfig
                     for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                     {
                         if( Skill.getInt( entry.getKey() ) != 0 )
-                            output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
+                        {
+                            value = entry.getValue();
+                            if( levelJTypes.contains( jType ) && entry.getValue() > maxLevel )
+                                value = maxLevel;
+                            output.get( element.getKey() ).put( entry.getKey(), value );
+                        }
                         else
                             LOGGER.debug( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
                     }
@@ -657,63 +668,35 @@ public class JsonConfig
                     output.put( element.getKey(), new HashMap<>() );
 
                 Map<String, Double> outMap = output.get( element.getKey() );
-                double startWeight = inMap.get( "startWeight" );
+                double startWeight = Math.max( 0, inMap.get( "startWeight" ) );
                 double startLevel = inMap.get( "startLevel" );
-                double endWeight = inMap.get( "endWeight" );
+                double endWeight = Math.max( 0, inMap.get( "endWeight" ) );
                 double endLevel = inMap.get( "endLevel" );
-                double minCount = inMap.get( "minCount" );
-                double maxCount = inMap.get( "maxCount" );
-                double enchantLevelReq = inMap.get( "enchantLevelReq" );
-                double xp = inMap.get( "xp" );
+                double minCount = Math.max( 1, inMap.get( "minCount" ) );
+                double maxCount = Math.max( 1, inMap.get( "maxCount" ) );
+                double enchantLevelReq = Math.max( 1, inMap.get( "enchantLevelReq" ) );;
+                double xp = Math.max( 0, inMap.get( "xp" ) );
 
-                if( endWeight < 0 )
-                    outMap.put( "endWeight", 0D );
-                else
-                    outMap.put( "endWeight", endWeight );
+                outMap.put( "endWeight", endWeight );
 
                 if( startWeight > endWeight )
                     startWeight = endWeight;
 
-                if( startWeight < 0 )
-                    outMap.put( "startWeight", 0D );
-                else
-                    outMap.put( "startWeight", startWeight );
-
-                if( endLevel < 1 )
-                    outMap.put( "endLevel", 1D );
-                else
-                    outMap.put( "endLevel", endLevel );
+                outMap.put( "startWeight", startWeight );
+                outMap.put( "endLevel", endLevel );
 
                 if( startLevel > endLevel )
                     startLevel = endLevel;
 
-                if( startLevel < 1 )
-                    outMap.put( "startLevel", 1D );
-                else
-                    outMap.put( "startLevel", startLevel );
-
-                if( maxCount < 1 )
-                    outMap.put( "maxCount", 1D );
-                else
-                    outMap.put( "maxCount", maxCount );
+                outMap.put( "startLevel", startLevel );
+                outMap.put( "maxCount", maxCount );
 
                 if( minCount > maxCount )
                     minCount = maxCount;
 
-                if( minCount < 1 )
-                    outMap.put( "minCount", 1D );
-                else
-                    outMap.put( "minCount", minCount );
-
-                if( enchantLevelReq < 1 )
-                    outMap.put( "enchantLevelReq", 1D );
-                else
-                    outMap.put( "enchantLevelReq", enchantLevelReq );
-
-                if( xp < 0 )
-                    outMap.put( "xp", 0D );
-                else
-                    outMap.put( "xp", xp );
+                outMap.put( "minCount", minCount );
+                outMap.put( "enchantLevelReq", enchantLevelReq );
+                outMap.put( "xp", xp );
             }
             else
                 LOGGER.debug( "Could not load inexistant item " + element.getKey() );
@@ -763,38 +746,17 @@ public class JsonConfig
                 if( !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
                 Map<String, Double> outMap = output.get( element.getKey() );
-                double levelReq = inMap.get( "levelReq" );
-                double levelPerLevel = inMap.get( "levelPerLevel" );
-                double chancePerLevel = inMap.get( "chancePerLevel" );
-                double maxChance = inMap.get( "maxChance" );
-                double maxLevel = inMap.get( "maxLevel" );
+                double levelReq = Math.min( maxLevel, Math.max( 1, inMap.get( "levelReq" ) ) );
+                double levelPerLevel = Math.max( 0, inMap.get( "levelPerLevel" ) );
+                double chancePerLevel = Math.max( 0, inMap.get( "chancePerLevel" ) );
+                double maxChance = Math.min( 100, Math.max( 0, inMap.get( "maxChance" ) ) );
+                double maxLevel = Math.max( 1, inMap.get( "maxLevel" ) );
 
-                if( levelReq < 1 )
-                    outMap.put( "levelReq", 1D );
-                else
-                    outMap.put( "levelReq", levelReq );
-
-                if( levelPerLevel < 0 )
-                    outMap.put( "levelPerLevel", 0D );
-                else
-                    outMap.put( "levelPerLevel", levelPerLevel );
-
-                if( chancePerLevel < 0 )
-                    outMap.put( "chancePerLevel", 0D );
-                else
-                    outMap.put( "chancePerLevel", chancePerLevel );
-
-                if( maxChance < 0 )
-                    outMap.put( "maxChance", 0D );
-                else if( maxChance > 100 )
-                    outMap.put( "maxChance", 100D );
-                else
-                    outMap.put( "maxChance", maxChance );
-
-                if( maxLevel < 1 )
-                    outMap.put( "maxLevel", (double) enchant.getMaxLevel() );
-                else
-                    outMap.put( "maxLevel", maxLevel );
+                outMap.put( "levelReq", levelReq );
+                outMap.put( "levelPerLevel", levelPerLevel );
+                outMap.put( "chancePerLevel", chancePerLevel );
+                outMap.put( "maxChance", maxChance );
+                outMap.put( "maxLevel", maxLevel );
             }
             else
                 LOGGER.debug( "Could not load inexistant enchant " + element.getKey() );
@@ -835,10 +797,7 @@ public class JsonConfig
 
                 for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
-                    if( entry.getValue() >= 1 )
-                        output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
-                    else
-                        output.get( element.getKey() ).put( entry.getKey(), 1D );
+                    output.get( element.getKey() ).put( entry.getKey(), Math.max( 1D, entry.getValue() ) );
                 }
             }
             else
@@ -950,7 +909,7 @@ public class JsonConfig
                         outputItemMap.put( "endLevel", endLevel );
                         outputItemMap.put( "minCount", (double) minCount );
                         outputItemMap.put( "maxCount", (double) maxCount );
-                        outputItemMap.put( "xpPerItem", xpPerItem );
+                        outputItemMap.put( "xpPerItem", Math.max( 0, xpPerItem  ) );
 
                         outputBlockMap.put( itemEntry.getKey(), outputItemMap );
 
@@ -1142,197 +1101,5 @@ public class JsonConfig
     public static boolean validBiome( String regKey )
     {
         return ForgeRegistries.BIOMES.containsKey( XP.getResLoc( regKey ) );
-    }
-
-    private static Map<Attribute, AttributeModifier> mergeMultimaps( Multimap<Attribute, AttributeModifier> ... maps )
-    {
-        Map<Attribute, AttributeModifier> output = new HashMap<>();
-
-        for( Multimap<Attribute, AttributeModifier> map : maps )
-        {
-            for( Map.Entry<Attribute, AttributeModifier> entry : map.entries() )
-            {
-                output.put( entry.getKey(), entry.getValue() );
-            }
-        }
-
-        return output;
-    }
-
-    private static void addJsonConfigValue( String resLoc, JType jType, Map<String, Double> values, boolean fillIfExists )
-    {
-        boolean hadEntry = localData.get( jType ).containsKey( resLoc );
-        if( !hadEntry )
-            localData.get( jType ).put( resLoc, new HashMap<>() );
-
-        if( !hadEntry || fillIfExists )
-        {
-            for( Map.Entry<String, Double> entry : values.entrySet() )
-            {
-                if( !localData.get( jType ).get( resLoc ).containsKey( entry.getKey() ) )
-                    localData.get( jType ).get( resLoc ).put( entry.getKey(), entry.getValue() );
-            }
-        }
-    }
-
-    public static void setAutoValues()
-    {
-        if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
-        {
-            for( Item item : ForgeRegistries.ITEMS )
-            {
-                try
-                {
-                    ItemStack itemStack = new ItemStack( item );
-                    String resLoc = item.getRegistryName().toString();
-                    Set<ToolType> toolTypes = itemStack.getToolTypes();
-//                    Set<ResourceLocation> tags = item.getTags();
-
-                    //Wear and Weapon Req
-                    Multimap<Attribute, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
-                    Multimap<Attribute, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.OFFHAND );
-                    Multimap<Attribute, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.HEAD );
-                    Multimap<Attribute, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.CHEST );
-                    Multimap<Attribute, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.LEGS );
-                    Multimap<Attribute, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.FEET );
-
-                    Map<Attribute, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes, headHandAttributes, chestHandAttributes, legsHandAttributes, feetHandAttributes );
-
-                    AttributeModifier armorAttribute = attributes.get( Attributes.ARMOR );
-                    AttributeModifier armorToughnessAttribute = attributes.get( Attributes.ARMOR_TOUGHNESS );
-                    AttributeModifier attackSpeedAttribute = attributes.get( Attributes.ATTACK_SPEED );
-                    AttributeModifier attackDamageAttribute = attributes.get( Attributes.ATTACK_DAMAGE );
-
-                    double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
-                    double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
-                    double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
-                    double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
-                    double enduranceReq = 0;
-                    double combatReq = 0;
-                    double toolReq = 0, highestToolReq = 0;
-
-                    Map<String, Double> reqWear     = new HashMap<>();
-                    Map<String, Double> reqWeapon   = new HashMap<>();
-                    Map<String, Double> reqTool     = new HashMap<>();
-
-                    if( attributes.size() > 0 )
-                    {
-                        enduranceReq = Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() );
-                        combatReq = Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) );
-
-                        reqWear.put( Skill.ENDURANCE.toString(), Math.max( 1, enduranceReq ) );
-                        reqWeapon.put( Skill.COMBAT.toString(),  Math.max( 1, combatReq ) );
-
-                        if( Config.forgeConfig.wearReqEnabled.get() && Config.forgeConfig.autoGenerateWearReqEnabled.get() && reqWear.getOrDefault( Skill.ENDURANCE.toString(), 0D ) > 1 )
-                            addJsonConfigValue( resLoc, JType.REQ_WEAR, reqWear, false );
-                        if( Config.forgeConfig.weaponReqEnabled.get() && Config.forgeConfig.autoGenerateWeaponReqEnabled.get() && reqWeapon.getOrDefault( Skill.COMBAT.toString(), 0D ) > 1 )
-                            addJsonConfigValue( resLoc, JType.REQ_WEAPON, reqWeapon, false );
-                    }
-
-                    //Tool Req
-                    double speed;
-                    for( ToolType toolType : toolTypes )
-                    {
-                        if( toolType.equals( ToolType.AXE ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleLog.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
-                        }
-                        if( toolType.equals( ToolType.PICKAXE ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleOre.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.MINING.toString(), toolReq );
-                        }
-                        if( toolType.equals( ToolType.SHOVEL ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleDirt.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.EXCAVATION.toString(), toolReq );
-                        }
-                    }
-                    if( Config.forgeConfig.toolReqEnabled.get() && Config.forgeConfig.autoGenerateToolReqEnabled.get() )
-                        addJsonConfigValue( resLoc, JType.REQ_TOOL, reqTool, true );
-
-                    //Crafting Xp Value
-                    if( Config.forgeConfig.autoGenerateCraftingXpEnabled.get() )
-                    {
-                        double craftingXp = 0;
-                        double smithingXp = 0;
-
-                        if( enduranceReq > 0 || combatReq > 0 || toolReq > 0 )
-                        {
-                            craftingXp = enduranceReq * 10D +                           Math.max( ( Math.max( combatReq - 10, 1 ) ) * 5D,  ( Math.max( toolReq - 10, 1 ) ) * 5D );
-                            smithingXp = ( Math.max( enduranceReq - 10, 1 ) ) * 5D  +   Math.max( ( Math.max( combatReq - 10, 1 ) ) * 2D,  ( Math.max( toolReq - 10, 1 ) ) * 2D );
-
-                            craftingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierCrafting.get();
-                            smithingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierSmithing.get();
-                        }
-
-                        Map<String, Double> xpValueMap = new HashMap<>();
-                        if( craftingXp > 0 )
-                            xpValueMap.put( Skill.CRAFTING.toString(), craftingXp );
-                        if( smithingXp > 0 )
-                            xpValueMap.put( Skill.SMITHING.toString(), smithingXp );
-                        addJsonConfigValue( resLoc, JType.XP_VALUE_CRAFT, xpValueMap, true );
-                    }
-                }
-                catch( Exception e )
-                {
-                    LOGGER.error( e );
-                }
-            }
-            if( Config.forgeConfig.autoGenerateExtraChanceEnabled.get() )
-            {
-                for( Block block : ForgeRegistries.BLOCKS )
-                {
-                    try
-                    {
-//                ItemStack itemStack = new ItemStack( block );
-                        String resLoc = block.getRegistryName().toString();
-                        Material material = block.getDefaultState().getMaterial();
-                        Skill skill = XP.getSkill( material );
-                        JType jType = JType.NONE;
-                        Map<String, Double> infoMap = new HashMap<>();
-                        double chance = 0;
-                        Set<ResourceLocation> tags = block.getTags();
-
-                        //Ore/Log/Plant Extra Chance
-                        if( block instanceof OreBlock || tags.contains( new ResourceLocation( "forge:ores" ) ) )
-                        {
-                            jType = JType.INFO_ORE;
-                            chance = Config.forgeConfig.defaultExtraChanceOre.get();
-                        }
-                        else if( block instanceof CropsBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
-                        {
-                            jType = JType.INFO_PLANT;
-                            chance = Config.forgeConfig.defaultExtraChancePlant.get();
-                        }
-                        else if( tags.contains( new ResourceLocation( "minecraft:logs" ) ) )
-                        {
-                            jType = JType.INFO_LOG;
-                            chance = Config.forgeConfig.defaultExtraChanceLog.get();
-                        }
-                        if( !jType.equals( JType.NONE ) )
-                            infoMap.put( "extraChance", chance );
-
-                        if( infoMap.size() > 0 && infoMap.getOrDefault( "extraChance", 0D ) > 0 )
-                            addJsonConfigValue( resLoc, jType, infoMap, false );
-                    }
-                    catch( Exception e )
-                    {
-                        LOGGER.error( e );
-                    }
-                }
-            }
-            data = localData;
-        }
     }
 }
