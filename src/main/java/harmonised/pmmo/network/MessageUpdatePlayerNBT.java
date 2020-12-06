@@ -80,17 +80,20 @@ public class MessageUpdatePlayerNBT
                 case 3: //stats
                     if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
                     {
-                        UUID uuid = UUID.fromString( packet.reqPackage.getString( "UUID" ) );
-                        packet.reqPackage.remove( "UUID" );
+                        for( String uuidKey : packet.reqPackage.keySet() )
+                        {
+                            UUID uuid = UUID.fromString( uuidKey );
+                            String name = packet.reqPackage.getCompound( uuidKey ).getString( "name" );
+                            packet.reqPackage.getCompound( uuidKey ).remove( "name" );
 
-                        String name = packet.reqPackage.getString( "name" );
-                        packet.reqPackage.remove( "name" );
+                            if( !XP.playerNames.containsKey( uuid ) )
+                            {
+                                XP.playerNames.put( uuid, name );
+                                XP.playerUUIDs.put( name, uuid );
+                            }
+                        }
 
-                        if( !XP.playerNames.containsKey( uuid ) )
-                            XP.playerNames.put( uuid, name );
-
-                        XP.setOfflineXpMap( uuid, NBTHelper.nbtToMapSkill( packet.reqPackage ) );
-                        ClientHandler.openStats( uuid );
+                        XP.setOfflineXpMaps( NBTHelper.nbtToXpMaps( packet.reqPackage ) );
                     }
                     else
                         LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );

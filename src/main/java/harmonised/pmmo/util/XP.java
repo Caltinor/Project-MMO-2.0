@@ -62,6 +62,7 @@ public class XP
 	public static Map<Skill, Style> skillStyle = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
 	public static Map<UUID, String> playerNames = new HashMap<>();
+	public static Map<String, UUID> playerUUIDs = new HashMap<>();
 	public static Map<UUID, Map<Skill, Double>> offlineXp = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static int debugInt = 0;
@@ -69,6 +70,7 @@ public class XP
 	public static void initValues()
 	{
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
+		skillColors.put( Skill.INVALID_SKILL, 0xffffff );
 		skillColors.put( Skill.MINING, 0x00ffff );
 		skillColors.put( Skill.BUILDING, 0x00ffff );
 		skillColors.put( Skill.EXCAVATION, 0xe69900 );
@@ -264,8 +266,7 @@ public class XP
 		{
 			for( Map.Entry<String, Double> entry : JsonConfig.data.get( jType ).get( registryName.toString() ).entrySet() )
 			{
-				if( entry.getValue() instanceof Double )
-					theMap.put( entry.getKey(), (double) entry.getValue() );
+				theMap.put( entry.getKey(), entry.getValue() );
 			}
 		}
 
@@ -606,8 +607,14 @@ public class XP
 		syncPlayerData3( player );
 		syncPlayerData4( player );
 		syncPlayerXpBoost( player );
+		syncPlayersSkills( player );
 		NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 1 ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
+	}
+
+	public static void syncPlayersSkills( PlayerEntity player )
+	{
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.xpMapsToNbt( PmmoSavedData.get().getAllXpMaps() ), 3 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayerXpBoost( PlayerEntity player )
@@ -1627,11 +1634,28 @@ public class XP
 		return DP.mapCapped( startLevel, fishItem.get( "startLevel" ), fishItem.get( "endLevel" ), fishItem.get( "startWeight" ), fishItem.get( "endWeight" ) );
 	}
 
-	public static Map<Skill, Double> getOfflineXpMap(UUID uuid)
+	public static <T> int getTotalLevelFromMap( Map<T, Double> input )
+	{
+		int sum = 0;
+
+		for( double xp : input.values() )
+		{
+			sum += levelAtXp( xp );
+		}
+
+		return sum;
+	}
+
+	public static Map<Skill, Double> getOfflineXpMap( UUID uuid )
 	{
 		if( !offlineXp.containsKey( uuid ) )
 			offlineXp.put( uuid, new HashMap<>() );
 		return offlineXp.get( uuid );
+	}
+
+	public static void setOfflineXpMaps( Map<UUID, Map<Skill, Double>> newOfflineXp )
+	{
+		offlineXp = new HashMap<>( newOfflineXp );
 	}
 
 	public static void setOfflineXpMap( UUID uuid, Map<Skill, Double> newOfflineXp )

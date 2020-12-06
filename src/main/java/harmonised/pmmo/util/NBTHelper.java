@@ -1,6 +1,7 @@
 package harmonised.pmmo.util;
 
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -177,6 +178,43 @@ public class NBTHelper
         }
 
         return outData;
+    }
+
+    public static Map<UUID, Map<Skill, Double>> nbtToXpMaps( CompoundNBT input )
+    {
+        Map<UUID, Map<Skill, Double>> output = new HashMap<>();
+        UUID uuid;
+        for( String key1 : input.keySet() )
+        {
+            uuid = UUID.fromString( key1 );
+            output.put( uuid, new HashMap<>() );
+            for( String key2 : input.getCompound( key1 ).keySet() )
+            {
+                output.get( uuid ).put( Skill.getSkill( key2 ), input.getCompound( key1 ).getDouble( key2 ) );
+            }
+        }
+
+        return output;
+    }
+
+    public static CompoundNBT xpMapsToNbt( Map<UUID, Map<Skill, Double>> input )
+    {
+        CompoundNBT output = new CompoundNBT();
+        String key2;
+
+        for( UUID key1 : input.keySet() )
+        {
+            output.put( key1.toString(), new CompoundNBT() );
+            output.getCompound( key1.toString() ).putString( "name", PmmoSavedData.get().getName( key1 ) );
+            for( Skill skill : input.get( key1 ).keySet() )
+            {
+                key2 = skill.toString();
+                Double value = input.get( key1 ).get( skill );
+                output.getCompound( key1.toString() ).putDouble( key2, value );
+            }
+        }
+
+        return output;
     }
 
     public static Map<JType, Map<String, Map<String, Double>>> nbtToData3( CompoundNBT input )

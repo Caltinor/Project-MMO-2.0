@@ -422,6 +422,11 @@ public class PmmoSavedData extends WorldSavedData
         setDirty( true );
     }
 
+    public Map<UUID, Map<Skill, Double>> getAllXpMaps()
+    {
+        return xp;
+    }
+
     private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Skill skill, Double xpBoost )
     {
         if( !this.xpBoosts.containsKey( playerUUID ) )

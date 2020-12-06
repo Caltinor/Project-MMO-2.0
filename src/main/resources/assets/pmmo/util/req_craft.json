@@ -32,11 +32,11 @@
 	},
 	"appliedenergistics2:pattern_terminal":
 	{
-		"crafting": 45
+		"crafting": 30
 	},
 	"appliedenergistics2:crafting_terminal":
 	{
-		"crafting": 40
+		"crafting": 35
 	},
 	"appliedenergistics2:interface_terminal":
 	{
@@ -155,7 +155,7 @@
 	},
 	"appliedenergistics2:wireless_booster":
 	{
-		"crafting": 60,
+		"crafting": 35,
 		"smithing": 30
 	},
 	"appliedenergistics2:wireless_access_point":
@@ -227,7 +227,7 @@
 	},
 	"appliedenergistics2:spatial_io_port":
 	{
-		"crafting": 60,
+		"crafting": 40,
 		"smithing": 30
 	},
 	"appliedenergistics2:2_cubed_spatial_storage_cell":
@@ -240,19 +240,19 @@
 	},
 	"appliedenergistics2:16_cubed_spatial_storage_cell":
 	{
-		"crafting": 70
+		"crafting": 65
 	},
 	"appliedenergistics2:16_cubed_spatial_cell_component":
 	{
-		"crafting": 70
+		"crafting": 65
 	},
 	"appliedenergistics2:128_cubed_spatial_storage_cell":
 	{
-		"crafting": 85
+		"crafting": 70
 	},
 	"appliedenergistics2:128_cubed_spatial_cell_component":
 	{
-		"crafting": 85
+		"crafting": 70
 	},
 	"ironchest:iron_to_gold_chest_upgrade":
 	{
@@ -320,7 +320,7 @@
 	},
 	"enderstorage:ender_chest":
 	{
-		"smithing": 50,
+		"smithing": 40,
 		"magic": 4
 	},
 	"enderstorage:ender_tank":
