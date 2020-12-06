@@ -460,7 +460,7 @@ public class ListScreen extends Screen
                 {
                     button.text.add( new StringTextComponent( "" ) );
                     Map<String, Double> breakMap = JsonConfig.data.get( JType.REQ_BREAK ).get( button.regKey );
-                    Map<String, Double> infoMap = XP.getReqMap( button.regKey, jType );
+                    Map<String, Double> infoMap = XP.getJsonMap( button.regKey, jType );
                     List<ITextComponent> infoText = new ArrayList<>();
                     String transKey = "pmmo." + jType.toString().replace( "info_", "" ) + "ExtraDrop";
                     double extraDroppedPerLevel = infoMap.get( "extraChance" ) / 100;
@@ -1081,7 +1081,7 @@ public class ListScreen extends Screen
 
     private static int getReqCount( String regKey, JType jType )
     {
-        Map<String, Double> map = XP.getReqMap( regKey, jType );
+        Map<String, Double> map = XP.getJsonMap( regKey, jType );
 
         if( map == null )
             return 0;

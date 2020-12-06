@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -15,6 +16,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
@@ -144,8 +146,12 @@ public class DamageHandler
 
                 if( XP.isPlayerSurvival( player ) )
                 {
+                    ItemStack itemStack = player.getHeldItemMainhand();
                     ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
-                    int weaponGap = XP.getSkillReqGap( player, resLoc, JType.REQ_WEAPON );
+                    Map<String, Double> weaponReq = XP.getJsonMap( resLoc, JType.REQ_WEAPON );
+                    if( Config.forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() )
+                        weaponReq.put( Skill.COMBAT.toString(), Math.max( weaponReq.getOrDefault( Skill.COMBAT.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
+                    int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
                     int gap = Math.max( weaponGap, enchantGap );
                     if( gap > 0 )

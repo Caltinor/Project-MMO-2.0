@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -713,13 +714,14 @@ public class XP
 		}
 	}
 
-	public static Map<String, Double> getReqMap( String registryName, JType type )
+	public static Map<String, Double> getJsonMap( ResourceLocation registryName, JType type )
 	{
-		Map<String, Map<String, Double>> fullMap = JsonConfig.data.get( type );
-		if( fullMap != null )
-			return fullMap.get( registryName );
-		else
-			return new HashMap<>();
+		return getJsonMap( registryName.toString(), type );
+	}
+
+	public static Map<String, Double> getJsonMap( String registryName, JType type )
+	{
+		return JsonConfig.data.getOrDefault( type, new HashMap<>() ).getOrDefault( registryName, new HashMap<>() );
 	}
 
 	public static boolean checkReq( PlayerEntity player, String res, JType jType )
@@ -735,7 +737,7 @@ public class XP
 		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
 			return true;
 
-		return checkReq( player, getReqMap( res.toString(), jType ) );
+		return checkReq( player, getJsonMap( res.toString(), jType ) );
 	}
 
 	public static boolean checkReq( PlayerEntity player, Map<String, Double> reqMap )
@@ -777,7 +779,7 @@ public class XP
 	{
 		int highestReq = 1;
 
-		Map<String, Double> map = XP.getReqMap( regKey, jType );
+		Map<String, Double> map = XP.getJsonMap( regKey, jType );
 
 		if( map != null )
 		{
@@ -1308,9 +1310,14 @@ public class XP
 		return a - b;
 	}
 
-	public static int getSkillReqGap(PlayerEntity player, ResourceLocation res, JType jType )
+	public static int getSkillReqGap( PlayerEntity player, ResourceLocation res, JType jType )
 	{
-		return getSkillReqGap( player, getReqMap( res.toString(), jType ) );
+		Map<String, Double> reqs = getJsonMap( res.toString(), jType );
+
+		if( reqs == null )
+			return 0;
+
+		return getSkillReqGap( player, reqs );
 	}
 
 	public static int getSkillReqGap(PlayerEntity player, Map<String, Double> reqs )
@@ -1377,6 +1384,16 @@ public class XP
 
 		FireworkRocketEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
 		world.addEntity( fireworkRocketEntity );
+	}
+
+	public static <T> Map<T, Double> ceilMapAnyDouble( Map<T, Double> input )
+	{
+		for( Map.Entry<T, Double> entry : input.entrySet() )
+		{
+			input.replace( entry.getKey(), Math.ceil( entry.getValue() ) );
+		}
+
+		return input;
 	}
 
 	public static <T> Map<T, Double> multiplyMapAnyDouble( Map<T, Double> input, double multiplier )
@@ -1463,8 +1480,11 @@ public class XP
 	public static void applyWornPenalty( PlayerEntity player, ItemStack itemStack )
 	{
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+		Map<String, Double> wearReq = XP.getJsonMap( resLoc, JType.REQ_WEAR );
+		if( Config.forgeConfig.autoGenerateWearReqDynamicallyEnabled.get() )
+			wearReq.put( Skill.COMBAT.toString(), Math.max( wearReq.getOrDefault( Skill.COMBAT.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
 
-		if( !checkReq( player, resLoc, JType.REQ_WEAR ) )
+		if( !checkReq( player, wearReq ) )
 		{
 			int gap = getSkillReqGap( player, resLoc, JType.REQ_WEAR );
 
