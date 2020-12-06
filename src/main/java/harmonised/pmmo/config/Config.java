@@ -59,7 +59,9 @@ public class Config
         localConfig.put( "saveChancePerLevel", forgeConfig.saveChancePerLevel.get() );
         localConfig.put( "levelsPerCrouchJumpBoost", forgeConfig.levelsPerCrouchJumpBoost.get() );
         localConfig.put( "levelsPerSprintJumpBoost", forgeConfig.levelsPerSprintJumpBoost.get() );
-        localConfig.put( "levelsPerDamage", forgeConfig.levelsPerDamage.get() );
+        localConfig.put( "levelsPerDamageMelee", forgeConfig.levelsPerDamageMelee.get() );
+        localConfig.put( "levelsPerDamageArchery", forgeConfig.levelsPerDamageArchery.get() );
+        localConfig.put( "levelsPerDamageMagic", forgeConfig.levelsPerDamageMagic.get() );
         localConfig.put( "levelsPerOneReach", forgeConfig.levelsPerOneReach.get() );
         localConfig.put( "endurancePerLevel", forgeConfig.endurancePerLevel.get() );
         localConfig.put( "maxEndurance", forgeConfig.maxEndurance.get() );
@@ -254,10 +256,11 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> maxExtraHeartBoost;
 
         //Combat
-        public ConfigHelper.ConfigValueListener<Double> levelsPerDamage;
+        public ConfigHelper.ConfigValueListener<Double> levelsPerDamageMelee;
         public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoost;
 
         //Archery
+        public ConfigHelper.ConfigValueListener<Double> levelsPerDamageArchery;
 
         //Smithing
         public ConfigHelper.ConfigValueListener<Boolean> anvilHandlingEnabled;
@@ -303,6 +306,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> defaultCraftingXp;
 
         //Magic
+        public ConfigHelper.ConfigValueListener<Double> levelsPerDamageMagic;
 
         //Slayer
         public ConfigHelper.ConfigValueListener<Double> passiveMobHunterXp;
@@ -1104,10 +1108,10 @@ public class Config
 
             builder.push( "Combat" );
             {
-                this.levelsPerDamage = subscriber.subscribe(builder
-                        .comment( "Per how many levels you gain 1 Extra Damage" )
-                        .translation( "pmmo.levelsPerDamage" )
-                        .defineInRange( "levelsPerDamage", 20D, 1, 1000000000) );
+                this.levelsPerDamageMelee = subscriber.subscribe(builder
+                        .comment( "Per how many levels you gain 1 Extra Damage from Combat" )
+                        .translation( "pmmo.levelsPerDamageMelee" )
+                        .defineInRange( "levelsPerDamageMelee", 20D, 1, 1000000000) );
 
                 this.maxExtraDamageBoost = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
@@ -1119,8 +1123,14 @@ public class Config
 
             builder.push( "Archery" );
             {
+                this.levelsPerDamageArchery = subscriber.subscribe(builder
+                        .comment( "Per how many levels you gain 1 Extra Damage from Archery" )
+                        .translation( "pmmo.levelsPerDamageArchery" )
+                        .defineInRange( "levelsPerDamageArchery", 20D, 1, 1000000000) );
+
                 builder.pop();
             }
+
             builder.push( "Smithing" );
             {
                 this.anvilHandlingEnabled = subscriber.subscribe(builder
@@ -1283,6 +1293,16 @@ public class Config
                         .comment( "How much xp should be awarded in Crafting for each item crafted? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultCraftingXp" )
                         .defineInRange( "defaultCraftingXp", 1D, 0, 1000000) );
+
+                builder.pop();
+            }
+
+            builder.push( "Magic" );
+            {
+                this.levelsPerDamageMagic = subscriber.subscribe(builder
+                        .comment( "Per how many levels you gain 1 Extra Damage from Magic" )
+                        .translation( "pmmo.levelsPerDamageMagic" )
+                        .defineInRange( "levelsPerDamageMagic", 20D, 1, 1000000000) );
 
                 builder.pop();
             }

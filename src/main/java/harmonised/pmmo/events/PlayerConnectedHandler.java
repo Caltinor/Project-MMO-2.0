@@ -2,6 +2,7 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
+import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
@@ -60,6 +61,8 @@ public class PlayerConnectedHandler
                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.welcome" ), false );
             }
         }
+        else
+            ClientHandler.hiscoreMap = new HashMap<>();
     }
 
     private static void migratePlayerDataToWorldSavedData( PlayerEntity player )

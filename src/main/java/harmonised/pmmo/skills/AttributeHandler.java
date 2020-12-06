@@ -29,7 +29,7 @@ public class AttributeHandler
 	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
 	private static double levelsPerOneReach;
 	private static double levelsPerHeart;
-	private static double levelsPerDamage;
+	private static double levelsPerDamageMelee;
 	private static double maxSpeedBoost;
 	private static double speedBoostPerLevel;
 	private static int maxExtraHeartBoost;
@@ -40,7 +40,7 @@ public class AttributeHandler
 	{
 		levelsPerOneReach = Config.getConfig( "levelsPerOneReach" );
 		levelsPerHeart = Config.getConfig( "levelsPerHeart" );
-		levelsPerDamage = Config.getConfig( "levelsPerDamage" );
+		levelsPerDamageMelee = Config.getConfig( "levelsPerDamageMelee" );
 		maxSpeedBoost = Config.getConfig( "maxSpeedBoost" );
 		speedBoostPerLevel = Config.getConfig( "speedBoostPerLevel" );
 		maxExtraHeartBoost = (int) Config.getConfig( "maxExtraHeartBoost" );
@@ -169,7 +169,7 @@ public class AttributeHandler
 		if( prefsMap.containsKey( "maxExtraDamageBoost" ) )
 			maxDamagePref = prefsMap.get( "maxExtraDamageBoost" );
 		double combatLevel = Skill.COMBAT.getLevel( player );
-		double damageBoost = combatLevel / levelsPerDamage;
+		double damageBoost = combatLevel / levelsPerDamageMelee;
 		if( damageBoost > maxExtraDamageBoost )
 			damageBoost = maxExtraDamageBoost;
 		if( maxDamagePref != null && damageBoost > maxDamagePref )

@@ -123,6 +123,14 @@ public class MessageUpdatePlayerNBT
                         LOGGER.error( "XP BOOST PACKET SENT TO SERVER" );
                     break;
 
+//                case 7:
+//                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
+//                        NBTHelper;
+//                    else
+//                        LOGGER.error( "HISCORE PACKET SENT TO SERVER" );
+//                    break;
+                //COUT HISCORE
+
                 default:
                     LOGGER.error( "WRONG SYNC ID AT NBT UPDATE PACKET", packet );
                     break;

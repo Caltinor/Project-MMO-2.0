@@ -179,6 +179,47 @@ public class NBTHelper
         return outData;
     }
 
+    public static Map<String, Map<String, Map<String, Double>>> nbtToMap3xStringDouble( CompoundNBT input )
+    {
+        Map<String, Map<String, Map<String, Double>>> output = new HashMap<>();
+        for( String key1 : input.keySet() )
+        {
+            output.put( key1, new HashMap<>() );
+            for( String key2 : input.getCompound( key1 ).keySet() )
+            {
+                output.get( key1 ).put( key2, new HashMap<>() );
+                for( String key3 : input.getCompound( key1 ).getCompound( key2 ).keySet() )
+                {
+                    output.get( key1 ).get( key2 ).put( key3, input.getCompound( key1 ).getCompound( key2 ).getDouble( key3 ) );
+                }
+            }
+        }
+
+        return output;
+    }
+
+    public static CompoundNBT map3xStringDoubleToNbt( Map<String, Map<String, Map<String, Double>>> input )
+    {
+        CompoundNBT output = new CompoundNBT();
+
+        for( String key1 : input.keySet() )
+        {
+            output.put( key1, new CompoundNBT() );
+            for( String key2 : input.get( key1 ).keySet() )
+            {
+                output.getCompound( key1 ).put( key2, new CompoundNBT() );
+                for( String key3 : input.get( key1 ).get( key2 ).keySet() )
+                {
+                    Double value = input.get( key1 ).get( key2 ).get( key3 );
+
+                    output.getCompound( key1 ).getCompound( key2 ).putDouble( key3, value );
+                }
+            }
+        }
+
+        return output;
+    }
+
     public static Map<JType, Map<String, Map<String, Double>>> nbtToData3( CompoundNBT input )
     {
         Map<JType, Map<String, Map<String, Double>>> output = new HashMap<>();

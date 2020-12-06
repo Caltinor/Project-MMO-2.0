@@ -746,9 +746,9 @@ public class XPOverlayGUI extends AbstractGui
 				break;
 
 			case COMBAT:
-				double levelsPerDamage = configMap.get( "levelsPerDamage" );
+				double levelsPerDamageMelee = configMap.get( "levelsPerDamageMelee" );
 				double maxExtraDamageBoost = configMap.get( "maxExtraDamageBoost" );
-				double damageBoost = level / levelsPerDamage;
+				double damageBoost = level / levelsPerDamageMelee;
 				if( damageBoost > maxExtraDamageBoost )
 					damageBoost = maxExtraDamageBoost;
 				msg = new TranslationTextComponent( "pmmo.levelUpDamageBoost", level, new TranslationTextComponent( "pmmo." + skill.name().toLowerCase() ).getString(), DP.dpSoft( damageBoost ) );
