@@ -15,6 +15,10 @@
 	"pmmo.maxLevel": "MAX LEVEL",
 	"pmmo.levelDisplay": "%1$s %2$s",
 	"pmmo.xpDisplay": "%1$s %2$sxp",
+	"pmmo.levelX": "Level %1$s",
+	"pmmo.xpX": "%1$sxp",
+	"pmmo.totalLevel": "Total Level",
+	"pmmo.skillHiscores": "%1$s Hiscores",
 	"pmmo.levelDisplayPercentage": "%1$s%% in %2$s",
 	"pmmo.playerLevelDisplay": "%1$s has level %2$s in %3$s",
 	"pmmo.welcome": "Welcome to Project MMO! Default Menu Key: P, most features can be tweaked in config!",
@@ -325,5 +329,6 @@
 	"pmmo.thePartyIsFull": "The party is full",
 	"pmmo.yourPartyIsFull": "Your party is full",
 	"pmmo.missingNextArgument": "Missing next argument!",
-	"pmmo.notANumber": "%1$s is not a number!"
+	"pmmo.notANumber": "%1$s is not a number!",
+	"ftbquests.task.pmmo.skill.requiredlevel": "Required Level"
 }

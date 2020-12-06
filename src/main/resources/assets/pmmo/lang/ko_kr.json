@@ -325,5 +325,10 @@
 	"pmmo.thePartyIsFull": "파티의 정원이 가득 찼습니다",
 	"pmmo.yourPartyIsFull": "당신의 파티가 정원이 가득 찼습니다",
 	"pmmo.missingNextArgument": "Missing next argument!",
-	"pmmo.notANumber": "%1$s is not a number!"
+	"pmmo.notANumber": "%1$s is not a number!",
+	"ftbquests.task.pmmo.skill.requiredlevel": "요구 레벨",
+	"pmmo.levelX": "Level %1$s",
+	"pmmo.xpX": "%1$sxp",
+	"pmmo.totalLevel": "Total Level",
+	"pmmo.skillHiscores": "%1$s Hiscores"
 }
