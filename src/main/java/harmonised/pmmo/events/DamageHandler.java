@@ -191,10 +191,7 @@ public class DamageHandler
                             return;
                         }
                     }
-
-                    event.setAmount( event.getAmount() / (weaponGap + 1) / (killGap + 1) );
                     damage = event.getAmount();
-
                     float amount = 0;
                     float playerHealth = player.getHealth();
                     float targetHealth = target.getHealth();
@@ -212,6 +209,14 @@ public class DamageHandler
 
                     if( damage > targetHealth )		//no overkill xp
                         damage = targetHealth;
+
+                    if( skill.equals( Skill.ARCHERY ) )
+                        damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageArchery.get();
+                    else if( skill.equals( Skill.MAGIC ) )
+                        damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageMagic.get();
+
+                    damage /= (weaponGap + 1) / (double) (killGap + 1);
+                    event.setAmount( damage );
 
                     amount += damage * 3;
 
