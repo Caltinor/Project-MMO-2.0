@@ -665,10 +665,10 @@ public class FConfig
     public static int maxExtraHeartBoost = 100;
 
     //Combat
-    @Config.Comment( "Per how many levels you gain 1 Extra Damage" )
-    @Config.Name( "levelsPerDamage" )
+    @Config.Comment( "Per how many levels you gain 1 Extra Damage from Combat" )
+    @Config.Name( "levelsPerDamageMelee" )
     @Config.RangeDouble( min = 1, max = 1000000000 )
-    public static double levelsPerDamage = 20D;
+    public static double levelsPerDamageMelee = 20D;
 
     @Config.Comment( "How much extra damage can you get from the Combat skill max?" )
     @Config.Name( "maxExtraDamageBoost" )
@@ -676,7 +676,12 @@ public class FConfig
     public static double maxExtraDamageBoost = 100D;
 
     //Archery
-//Smithing
+    @Config.Comment( "Per how many levels you gain 1 Extra Damage from Archery" )
+    @Config.Name( "levelsPerDamageArchery" )
+    @Config.RangeDouble( min = 1, max = 1000000000 )
+    public static double levelsPerDamageArchery = 20D;
+
+    //Smithing
     @Config.Comment( "Should PMMO anvil handling be enabled? (xp rewards for repair, and also Enchantment handling) (some mod items break, if you experience lost enchantments, set this to false)" )
     @Config.Name( "anvilHandlingEnabled" )
     public static boolean anvilHandlingEnabled = true;
@@ -802,6 +807,12 @@ public class FConfig
     @Config.Name( "defaultCraftingXp" )
     @Config.RangeDouble( min = 0, max = 1000000 )
     public static double defaultCraftingXp = 1D;
+
+    //Magic
+    @Config.Comment( "Per how many levels you gain 1 Extra Damage from Magic" )
+    @Config.Name( "levelsPerDamageMagic" )
+    @Config.RangeDouble( min = 1, max = 1000000000 )
+    public static double levelsPerDamageMagic = 20D;
 
     //Slayer
     @Config.Comment( "How much slayer xp is awarded upon killing an aggresive mob by default" )
@@ -962,7 +973,9 @@ public class FConfig
         localConfig.put( "saveChancePerLevel", saveChancePerLevel );
         localConfig.put( "levelsPerCrouchJumpBoost", levelsPerCrouchJumpBoost );
         localConfig.put( "levelsPerSprintJumpBoost", levelsPerSprintJumpBoost );
-        localConfig.put( "levelsPerDamage", levelsPerDamage );
+        localConfig.put( "levelsPerDamageMelee", levelsPerDamageMelee );
+        localConfig.put( "levelsPerDamageArchery", levelsPerDamageArchery );
+        localConfig.put( "levelsPerDamageMagic", levelsPerDamageMagic );
         localConfig.put( "levelsPerOneReach", levelsPerOneReach );
         localConfig.put( "endurancePerLevel", endurancePerLevel );
         localConfig.put( "maxEndurance", maxEndurance );
