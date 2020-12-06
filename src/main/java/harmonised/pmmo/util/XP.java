@@ -3,7 +3,7 @@ package harmonised.pmmo.util;
 import java.util.*;
 
 import harmonised.pmmo.baubles.BaublesHandler;
-import harmonised.pmmo.skills.PMMOFireworkEntity;
+import harmonised.pmmo.config.AutoValues;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.nbt.NBTTagIntArray;
@@ -726,7 +726,7 @@ public class XP
 		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
 			return true;
 
-		return checkReq( player, getReqMap( res.toString(), jType ) );
+		return checkReq( player, getJsonMap( res.toString(), jType ) );
 	}
 
 	public static boolean checkReq( EntityPlayer player, Map<String, Double> reqMap )
@@ -788,37 +788,26 @@ public class XP
 		}
 	}
 
-	public static Map<String, Double> getReqMap( String registryName, JType type )
+	public static Map<String, Double> getJsonMap( ResourceLocation registryName, JType type )
 	{
-		Map<String, Map<String, Double>> fullMap = JsonConfig.data.get( type );
-		Map<String, Double> map = null;
+		return getJsonMap( registryName.toString(), type );
+	}
 
-		if( fullMap != null && fullMap.containsKey( registryName ) )
-		{
-			map = new HashMap<>();
-
-			for( Map.Entry<String, Double> entry : fullMap.get( registryName ).entrySet() )
-			{
-				map.put( entry.getKey(), entry.getValue() );
-			}
-		}
-
-		return map;
+	public static Map<String, Double> getJsonMap( String registryName, JType type )
+	{
+		return JsonConfig.data.getOrDefault( type, new HashMap<>() ).getOrDefault( registryName, new HashMap<>() );
 	}
 
 	public static int getHighestReq( String regKey, JType jType )
 	{
 		int highestReq = 1;
 
-		Map<String, Double> map = XP.getReqMap( regKey, jType );
+		Map<String, Double> map = XP.getJsonMap( regKey, jType );
 
-		if( map != null )
+		for( Map.Entry<String, Double> entry : map.entrySet() )
 		{
-			for( Map.Entry<String, Double> entry : map.entrySet() )
-			{
-				if( highestReq < entry.getValue() )
-					highestReq = (int) (double) entry.getValue();
-			}
+			if( highestReq < entry.getValue() )
+				highestReq = (int) (double) entry.getValue();
 		}
 
 		return highestReq;
@@ -1322,7 +1311,12 @@ public class XP
 
 	public static int getSkillReqGap( EntityPlayer player, ResourceLocation res, JType jType )
 	{
-		return getSkillReqGap( player, getReqMap( res.toString(), jType ) );
+		Map<String, Double> reqs = getJsonMap( res.toString(), jType );
+
+		if( reqs == null )
+			return 0;
+
+		return getSkillReqGap( player, reqs );
 	}
 
 	public static int getSkillReqGap( EntityPlayer player, Map<String, Double> reqs )
@@ -1387,6 +1381,16 @@ public class XP
 
 		EntityFireworkRocket fireworkRocketEntity = new EntityFireworkRocket( world, pos.x + 0.5D, pos.y + 0.5D, pos.z + 0.5D, itemStack );
 		world.spawnEntity( fireworkRocketEntity );
+	}
+
+	public static <T> Map<T, Double> ceilMapAnyDouble( Map<T, Double> input )
+	{
+		for( Map.Entry<T, Double> entry : input.entrySet() )
+		{
+			input.replace( entry.getKey(), Math.ceil( entry.getValue() ) );
+		}
+
+		return input;
 	}
 
 	public static <T> Map<T, Double> multiplyMapAnyDouble( Map<T, Double> input, double multiplier )
@@ -1473,8 +1477,11 @@ public class XP
 	public static void applyWornPenalty( EntityPlayer player, ItemStack itemStack )
 	{
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+		Map<String, Double> wearReq = XP.getJsonMap( resLoc, JType.REQ_WEAR );
+		if( FConfig.autoGenerateWearReqDynamicallyEnabled )
+			wearReq.put( Skill.COMBAT.toString(), Math.max( wearReq.getOrDefault( Skill.COMBAT.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
 
-		if( !checkReq( player, resLoc, JType.REQ_WEAR ) )
+		if( !checkReq( player, wearReq ) )
 		{
 			int gap = getSkillReqGap( player, resLoc, JType.REQ_WEAR );
 

@@ -1,5 +1,7 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.AutoValues;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -91,7 +93,58 @@ public class TooltipHandler
                 Map<String, Double> heldItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
                 Map<String, Double> wornItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regKey );
 
-                if( item instanceof ItemBlock)
+                //Dynamic Reqs
+                {
+                    //Wear
+                    if( FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
+                    {
+                        double dynReq = AutoValues.getWearReqFromStack( itemStack );
+                        if( dynReq > 0 )
+                        {
+                            if( wearReq == null )
+                                wearReq = new HashMap<>();
+
+                            if( wearReq.getOrDefault( Skill.ENDURANCE.toString(), 0D ) < dynReq )
+                                wearReq.put( Skill.ENDURANCE.toString(), dynReq );
+                        }
+                    }
+
+                    //Weapon
+                    if( FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
+                    {
+                        double dynReq = AutoValues.getWeaponReqFromStack( itemStack );
+                        if( dynReq > 0 )
+                        {
+                            if( weaponReq == null )
+                                weaponReq = new HashMap<>();
+
+                            if( weaponReq.getOrDefault( Skill.COMBAT.toString(), 0D ) < dynReq )
+                                weaponReq.put( Skill.COMBAT.toString(), dynReq );
+                        }
+                    }
+
+                    //Tool
+                    if( FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
+                    {
+                        Map<String, Double> dynToolReqMap = AutoValues.getToolReqFromStack( itemStack );
+
+                        for( Map.Entry<String, Double> entry : dynToolReqMap.entrySet() )
+                        {
+                            double dynReq = entry.getValue();
+                            if( dynReq > 0 )
+                            {
+                                if( toolReq == null )
+                                    toolReq = new HashMap<>();
+
+                                if( toolReq.getOrDefault( entry.getKey(), 0D ) < dynReq )
+                                    toolReq.put( entry.getKey(), dynReq );
+                            }
+                        }
+                    }
+                }
+                //////////////
+
+                if( item instanceof ItemBlock )
                 {
                     material = ( (ItemBlock) item).getBlock().getDefaultState().getMaterial();
                     hardness = ( (ItemBlock) item).getBlock().getDefaultState().getBlockHardness( null, new BlockPos( 0, 0, 0 ) );

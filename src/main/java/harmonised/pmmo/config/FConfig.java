@@ -840,6 +840,10 @@ public class FConfig
     @Config.Name( "autoGenerateValuesEnabled" )
     public static boolean autoGenerateValuesEnabled = true;
 
+    @Config.Comment( "If this is off, Decimal point level requirements will be assigned during Auto Value generation" )
+    @Config.Name( "autoGenerateRoundedValuesOnly" )
+    public static boolean autoGenerateRoundedValuesOnly = true;
+
     @Config.Comment( "Automatically assign values for Extra Chance? (Works for Ores/Logs/Plants)" )
     @Config.Name( "autoGenerateExtraChanceEnabled" )
     public static boolean autoGenerateExtraChanceEnabled = true;
@@ -863,13 +867,25 @@ public class FConfig
     @Config.Name( "autoGenerateWearReqEnabled" )
     public static boolean autoGenerateWearReqEnabled = true;
 
+    @Config.Comment( "Automatically assign values for Wear Requirement Dynamically? (This enables Live Scaling, for mods like Tinker's, or Draconic Evolution)" )
+    @Config.Name( "autoGenerateWearReqDynamicallyEnabled" )
+    public static boolean autoGenerateWearReqDynamicallyEnabled = true;
+
     @Config.Comment( "Automatically assign values for Weapon Requirement?" )
     @Config.Name( "autoGenerateWeaponReqEnabled" )
     public static boolean autoGenerateWeaponReqEnabled = true;
 
+    @Config.Comment( "Automatically assign values for Weapon Requirement Dynamically? (This enables Live Scaling, for mods like Tinker's, or Draconic Evolution)" )
+    @Config.Name( "autoGenerateWeaponReqDynamicallyEnabled" )
+    public static boolean autoGenerateWeaponReqDynamicallyEnabled = true;
+
     @Config.Comment( "Automatically assign values for Tool Requirement?" )
     @Config.Name( "autoGenerateToolReqEnabled" )
     public static boolean autoGenerateToolReqEnabled = true;
+
+    @Config.Comment( "Automatically assign values for Tool Requirement Dynamically? (This enables Live Scaling, for mods like Tinker's, or Draconic Evolution)" )
+    @Config.Name( "autoGenerateToolReqDynamicallyEnabled" )
+    public static boolean autoGenerateToolReqDynamicallyEnabled = true;
 
     @Config.Comment( "Automatically assign values for Crafting Experience? (Works for Armor/Tools/Weapons)" )
     @Config.Name( "autoGenerateCraftingXpEnabled" )
@@ -923,20 +939,12 @@ public class FConfig
     public static void initServer()
     {
         //Info that will also be sent to Client so it's accessible remotely
-        if( FConfig.veiningAllowed )
-            localConfig.put( "veiningAllowed", 1D );
-        else
-            localConfig.put( "veiningAllowed", 0D );
-
-        if( FConfig.useExponentialFormula )
-            localConfig.put( "useExponentialFormula", 1D );
-        else
-            localConfig.put( "useExponentialFormula", 0D );
-
-        if( FConfig.strictReqTool )
-            localConfig.put( "strictReqTool", 1D );
-        else
-            localConfig.put( "strictReqTool", 0D );
+        localConfig.put( "veiningAllowed", FConfig.veiningAllowed ? 1D : 0D );
+        localConfig.put( "useExponentialFormula", FConfig.useExponentialFormula ? 1D : 0D );
+        localConfig.put( "strictReqTool", FConfig.strictReqTool ? 1D : 0D );
+        localConfig.put( "autoGenerateWearReqDynamicallyEnabled", FConfig.autoGenerateWearReqDynamicallyEnabled ? 1D : 0D );
+        localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", FConfig.autoGenerateWeaponReqDynamicallyEnabled ? 1D : 0D );
+        localConfig.put( "autoGenerateToolReqDynamicallyEnabled", FConfig.autoGenerateToolReqDynamicallyEnabled ? 1D : 0D );
 
         localConfig.put( "maxLevel", (double) maxLevel );
         localConfig.put( "baseXp", (double) baseXp );
