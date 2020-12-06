@@ -5,8 +5,10 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -28,28 +30,28 @@ public class PrefsChoiceScreen extends GuiScreen
 
     public PrefsChoiceScreen( ITextComponent titleIn )
     {
-        super(titleIn);
+        super();
     }
 
     @Override
-    protected void init()
+    public void initGui()
     {
         tileButtons = new ArrayList<>();
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
+        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new MainScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.potato" ) ) );
         });
 
-        TileButton settingsButton = new TileButton( (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
+        TileButton settingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.SETTINGS ) );
         });
 
-        TileButton guiSettingsButton = new TileButton( (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
+        TileButton guiSettingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
         });
@@ -65,9 +67,9 @@ public class PrefsChoiceScreen extends GuiScreen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, double partialTicks)
+    public void render(int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( 1 );
+        drawBackground( 1 );
         super.render(mouseX, mouseY, partialTicks);
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
@@ -83,15 +85,15 @@ public class PrefsChoiceScreen extends GuiScreen
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void drawBackground(int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            this.drawGradientRect(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
         else
-            this.renderDirtBackground(p_renderBackground_1_);
+            this.drawBackground(p_renderBackground_1_);
 
 
         boxHeight = 256;
@@ -102,13 +104,13 @@ public class PrefsChoiceScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
     {
         return super.mouseScrolled(mouseX, mouseY, scroll);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public void mouseClicked(int mouseX, int mouseY, int button)
     {
         if( button == 1 )
         {
@@ -119,13 +121,13 @@ public class PrefsChoiceScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    public boolean mouseReleased(int mouseX, int mouseY, int button)
     {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
+    public boolean mouseDragged(int mouseX, int mouseY, int button, float deltaX, float deltaY)
     {
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }

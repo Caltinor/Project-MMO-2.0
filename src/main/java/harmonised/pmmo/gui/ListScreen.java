@@ -49,7 +49,7 @@ public class ListScreen extends GuiScreen
 
     public ListScreen(UUID uuid, ITextComponent titleIn, String type, JType jType, EntityPlayer player )
     {
-        super(titleIn);
+        super();
         this.title = titleIn;
         this.player = player;
         this.jType = jType;
@@ -64,7 +64,7 @@ public class ListScreen extends GuiScreen
 //    }
 
     @Override
-    public void init()
+    public void initGui()
     {
         ArrayList<String> keyWords = new ArrayList<>();
         keyWords.add( "helmet" );
@@ -84,7 +84,7 @@ public class ListScreen extends GuiScreen
         buttonX = scrollX + 4;
         Skill skill;
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.NONE, (button) ->
+        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "", JType.NONE, (button) ->
         {
             switch( jType )
             {
@@ -680,7 +680,7 @@ public class ListScreen extends GuiScreen
                         }
                     }
                     else if( type.equals( "totalLevel" ) )
-                        button.text.add( new StringTextComponent( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( playerUUID ) ) ).getString() );
+                        button.text.add( new TextComponentString( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( playerUUID ) ) ).getString() );
                     break;
 
                 case SALVAGE:
@@ -797,7 +797,7 @@ public class ListScreen extends GuiScreen
                     if( button.regKey.equals( "totalLevel" ) )
                     {
                         button.title = getTransComp( "pmmo.totalLevel" ).getString();
-                        button.text.add( new StringTextComponent( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) ) ).getString() );
+                        button.text.add( new TextComponentString( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) ) ).getString() );
                     }
                     else
                     {
@@ -808,11 +808,11 @@ public class ListScreen extends GuiScreen
 
                         button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( XP.getSkillStyle( Skill.getSkill( button.regKey ) ) ).getString();
 
-                        button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ) ).getString() );
+                        button.text.add( new TextComponentString( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ) ).getString() );
                         if( skill.getLevel( player ) != Config.getConfig( "maxLevel" ) )
                         {
-                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ) ).getString() );
-                            button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ) ).getString() );
+                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ) ).getString() );
+                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ) ).getString() );
                         }
                     }
                 }
@@ -955,7 +955,7 @@ public class ListScreen extends GuiScreen
         }
         scrollPanel = new ListScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, jType, player, listButtons );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
-            MainScreen.scrollAmounts.setTag( jType, 0 );
+            MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
         addButton( exitButton );
@@ -1061,9 +1061,9 @@ public class ListScreen extends GuiScreen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, double partialTicks)
+    public void render(int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( 1 );
+        drawBackground( 1 );
 
         if( jType.equals( JType.SKILLS ) )
             title = getTransComp( "pmmo.playerStats", XP.playerNames.get( uuid ) );
@@ -1120,11 +1120,11 @@ public class ListScreen extends GuiScreen
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void drawBackground(int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            this.drawGradientRect(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
 
@@ -1136,7 +1136,7 @@ public class ListScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseScrolled( double mouseX, double mouseY, double scroll )
+    public boolean mouseScrolled( int mouseX, int mouseY, double scroll )
     {
         accumulativeHeight = 0;
         for( ListButton listButton : listButtons )
@@ -1152,7 +1152,7 @@ public class ListScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public void mouseClicked(int mouseX, int mouseY, int button)
     {
         if( button == 1 )
         {
@@ -1175,14 +1175,14 @@ public class ListScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    public boolean mouseReleased(int mouseX, int mouseY, int button)
     {
         scrollPanel.mouseReleased( mouseX, mouseY, button );
         return super.mouseReleased( mouseX, mouseY, button );
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
+    public boolean mouseDragged(int mouseX, int mouseY, int button, float deltaX, float deltaY)
     {
         scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);

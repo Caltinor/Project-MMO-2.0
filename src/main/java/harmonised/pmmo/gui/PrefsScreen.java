@@ -1,6 +1,8 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import harmonised.pmmo.FConfig.JType;
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.PlayerTickHandler;
 import harmonised.pmmo.skills.Skill;
@@ -41,7 +43,7 @@ public class PrefsScreen extends GuiScreen
 
     public PrefsScreen( ITextComponent titleIn, JType jType )
     {
-        super(titleIn);
+        super();
         this.title = titleIn;
         this.jType = jType;
     }
@@ -53,9 +55,9 @@ public class PrefsScreen extends GuiScreen
 //    }
 
     @Override
-    protected void init()
+    public void initGui()
     {
-        prefsMap = Config.getPreferencesMap( player );
+        prefsMap = FConfig.getPreferencesMap( player );
 
         x = (sr.getScaledWidth() / 2) - (boxWidth / 2);
         y = (sr.getScaledHeight() / 2) - (boxHeight / 2);
@@ -63,7 +65,7 @@ public class PrefsScreen extends GuiScreen
         scrollY = y + 10;
         buttonX = scrollX + 4;
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.STATS, (button) ->
+        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "", JType.STATS, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( "pmmo.stats" ) ) );
         });
@@ -72,17 +74,17 @@ public class PrefsScreen extends GuiScreen
         switch( jType )
         {
             case SETTINGS:
-                value = Math.min( Skill.BUILDING.getLevel( player ) / Config.getConfig( "levelsPerOneReach" ), Config.getConfig( "maxExtraReachBoost" ) );
+                value = Math.min( Skill.BUILDING.getLevel( player ) / FConfig.getConfig( "levelsPerOneReach" ), FConfig.getConfig( "maxExtraReachBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraReachBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraReachBoost", value ), value, true, true, true, false ) );
-                value = Math.min( Skill.ENDURANCE.getLevel( player ) / Config.getConfig( "levelsPerHeart" ), Config.getConfig( "maxExtraHeartBoost" ) );
+                value = Math.min( Skill.ENDURANCE.getLevel( player ) / FConfig.getConfig( "levelsPerHeart" ), FConfig.getConfig( "maxExtraHeartBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraHeartBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraHeartBoost", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.COMBAT.getLevel( player ) / Config.getConfig( "levelsPerDamageMelee" ), Config.getConfig( "maxExtraDamageBoost" ) );
+                value = Math.min( Skill.COMBAT.getLevel( player ) / FConfig.getConfig( "levelsPerDamageMelee" ), FConfig.getConfig( "maxExtraDamageBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraDamageBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoost", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "speedBoostPerLevel" ), Config.getConfig( "maxSpeedBoost" ) );
+                value = Math.min( Skill.AGILITY.getLevel( player ) * FConfig.getConfig( "speedBoostPerLevel" ), FConfig.getConfig( "maxSpeedBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxSpeedBoost", "", "", 0, value, prefsMap.getOrDefault( "maxSpeedBoost", value ), value, true, true, true, false ) );
-                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "levelsPerSprintJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
+                value = Math.min( Skill.AGILITY.getLevel( player ) * FConfig.getConfig( "levelsPerSprintJumpBoost" ), FConfig.getConfig( "maxJumpBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxSprintJumpBoost", "", "", 0, value, prefsMap.getOrDefault( "maxSprintJumpBoost", value ), value, true, true, true, false ) );
-                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "levelsPerCrouchJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
+                value = Math.min( Skill.AGILITY.getLevel( player ) * FConfig.getConfig( "levelsPerCrouchJumpBoost" ), FConfig.getConfig( "maxJumpBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxCrouchJumpBoost", "", "", 0, value, prefsMap.getOrDefault( "maxCrouchJumpBoost", value ), value, true, true, true, false ) );
                 prefsEntries.add( new PrefsEntry("wipeAllSkillsUponDeathPermanently", "", "", 0, 1, prefsMap.getOrDefault( "wipeAllSkillsUponDeathPermanently", 0D ), 0, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("spawnFireworksCausedByMe", "", "", 0, 1, prefsMap.getOrDefault( "spawnFireworksCausedByMe", 1D ), 1, false, true, false, true ) );
@@ -159,21 +161,21 @@ public class PrefsScreen extends GuiScreen
 
         scrollPanel = new PrefsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefsEntries );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
-            MainScreen.scrollAmounts.setTag( jType, 0 );
+            MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
         addButton(exitButton);
     }
 
     @Override
-    public void render(int mouseX, int mouseY, double partialTicks)
+    public void render(int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( 1 );
+        drawBackground( 1 );
 
-        if( font.getStringWidth( title.getUnformattedText() ) > 220 )
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+        if( fontRenderer.getStringWidth( title.getUnformattedText() ) > 220 )
+            drawCenteredString( fontRenderer, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
-            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( fontRenderer, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -191,11 +193,11 @@ public class PrefsScreen extends GuiScreen
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void drawBackground(int p_renderBackground_1_)
     {
-        if (this.minecraft != null)
+        if (this.mc != null)
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            this.drawGradientRect(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
 
@@ -207,7 +209,7 @@ public class PrefsScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
     {
         if( prefsEntries.size() >= 9 )
             scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
@@ -215,7 +217,7 @@ public class PrefsScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public void mouseClicked(int mouseX, int mouseY, int button)
     {
         if( button == 1 )
         {
@@ -238,7 +240,7 @@ public class PrefsScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    public boolean mouseReleased(int mouseX, int mouseY, int button)
     {
         for( PrefsEntry prefEntry : prefsEntries )
         {
@@ -251,7 +253,7 @@ public class PrefsScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseDragged( double mouseX, double mouseY, int button, double deltaX, double deltaY )
+    public boolean mouseDragged( int mouseX, int mouseY, int button, float deltaX, float deltaY )
     {
         for( PrefsEntry prefEntry : prefsEntries )
         {

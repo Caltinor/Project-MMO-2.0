@@ -7,8 +7,10 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -27,6 +29,7 @@ public class CreditsScreen extends GuiScreen
     Minecraft minecraft = Minecraft.getMinecraft();
     ScaledResolution sr = new ScaledResolution( minecraft );
     FontRenderer font = minecraft.fontRenderer;
+    private ITextComponent title;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -39,7 +42,8 @@ public class CreditsScreen extends GuiScreen
 
     public CreditsScreen( UUID uuid, ITextComponent titleIn, JType jType )
     {
-        super(titleIn);
+        super();
+        this.title = titleIn;
         this.uuid = uuid;
         this.jType = jType;
     }
@@ -51,7 +55,7 @@ public class CreditsScreen extends GuiScreen
 //    }
 
     @Override
-    protected void init()
+    public void initGui()
     {
         listButtons = new ArrayList<>();
 
@@ -66,14 +70,14 @@ public class CreditsScreen extends GuiScreen
             firstTime = false;
         }
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
+        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.stats" ) ) );
         });
 
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TextComponentTranslation( "pmmo.lapisPatreon" ).setStyle( XP.textStyle.get( "blue" ) ).getUnformattedText(), button ->
+            listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TextComponentTranslation( "pmmo.lapisPatreon" ).setStyle( XP.textStyle.get( "blue" ) ).getFormattedText(), button ->
             {
                 Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -81,7 +85,7 @@ public class CreditsScreen extends GuiScreen
 
         PlayerConnectedHandler.dandelionPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TextComponentTranslation( "pmmo.dandelionPatreon" ).setStyle( XP.textStyle.get( "yellow" ) ).getUnformattedText(), button ->
+            listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 3, "", CreditorScreen.uuidName.get( a.toString() ), new TextComponentTranslation( "pmmo.dandelionPatreon" ).setStyle( XP.textStyle.get( "yellow" ) ).getFormattedText(), button ->
             {
                 Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -89,7 +93,7 @@ public class CreditsScreen extends GuiScreen
 
         PlayerConnectedHandler.ironPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TextComponentTranslation( "pmmo.ironPatreon" ).setStyle( XP.textStyle.get( "grey" ) ).getUnformattedText(), button ->
+            listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 4, "", CreditorScreen.uuidName.get( a.toString() ), new TextComponentTranslation( "pmmo.ironPatreon" ).setStyle( XP.textStyle.get( "grey" ) ).getFormattedText(), button ->
             {
                 Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
@@ -97,74 +101,74 @@ public class CreditsScreen extends GuiScreen
 
         //TRANSLATOR
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ko_kr", "BusanDaek#3970", new TextComponentTranslation( "pmmo.translated", "Korean" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "ko_kr", "BusanDaek#3970", new TextComponentTranslation( "pmmo.translated", "Korean" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "fr_fr", "deezer911#5693", new TextComponentTranslation( "pmmo.helpedTranslating", "French" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "fr_fr", "deezer911#5693", new TextComponentTranslation( "pmmo.helpedTranslating", "French" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "fr_fr", "didis54#5815", new TextComponentTranslation( "pmmo.helpedTranslating", "French" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "fr_fr", "didis54#5815", new TextComponentTranslation( "pmmo.helpedTranslating", "French" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "pt_br", "TorukM4kt00#0246", new TextComponentTranslation( "pmmo.translated", "Portuguese - Brazil" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "pt_br", "TorukM4kt00#0246", new TextComponentTranslation( "pmmo.translated", "Portuguese - Brazil" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "ru_ru", "starche#7569", new TextComponentTranslation( "pmmo.translated", "Portuguese - Brazil" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "ru_ru", "starche#7569", new TextComponentTranslation( "pmmo.translated", "Portuguese - Brazil" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "nl_nl", "Dawnless#1153", new TextComponentTranslation( "pmmo.translated", "Dutch" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "nl_nl", "Dawnless#1153", new TextComponentTranslation( "pmmo.translated", "Dutch" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "zh_tw", "Lyla#2639", new TextComponentTranslation( "pmmo.translated", "Chinese Traditional" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "zh_tw", "Lyla#2639", new TextComponentTranslation( "pmmo.translated", "Chinese Traditional" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "zh_cn", "Lyla#2639", new TextComponentTranslation( "pmmo.translated", "Chinese Simplified" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "zh_cn", "Lyla#2639", new TextComponentTranslation( "pmmo.translated", "Chinese Simplified" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "de_de", "Matterfall#1952", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "de_de", "Matterfall#1952", new TextComponentTranslation( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "es_ar", "N1co#9248", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 6, "es_ar", "N1co#9248", new TextComponentTranslation( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
         //MODPACK
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Tyrius#0842", new TextComponentTranslation( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 5, "", "Tyrius#0842", new TextComponentTranslation( "pmmo.creatorOfModpack", "The Cosmic Tree" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "didis54#5815", new TextComponentTranslation( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 5, "", "didis54#5815", new TextComponentTranslation( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "neothiamin#1798", new TextComponentTranslation( "pmmo.creatorOfModpack", "Skillful Survival" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 5, "", "neothiamin#1798", new TextComponentTranslation( "pmmo.creatorOfModpack", "Skillful Survival" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 5, "", "Darth Revan#7341", new TextComponentTranslation( "pmmo.creatorOfModpack", "Zombie Textiles" ).getUnformattedText(), button ->
+        listButtons.add( new ListButtonBig( 1337,  0, 0, 1, 5, "", "Darth Revan#7341", new TextComponentTranslation( "pmmo.creatorOfModpack", "Zombie Textiles" ).getFormattedText(), button ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
@@ -175,15 +179,15 @@ public class CreditsScreen extends GuiScreen
 
         scrollPanel = new CreditsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, JType.CREDITS, listButtons );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
-            MainScreen.scrollAmounts.setTag( jType, 0 );
+            MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
     }
 
     @Override
-    public void render( int mouseX, int mouseY, double partialTicks)
+    public void render( int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( 1 );
+        drawBackground( 1 );
         super.render( mouseX, mouseY, partialTicks );
         scrollPanel.render( mouseX,mouseY,partialTicks );
 
@@ -194,29 +198,29 @@ public class CreditsScreen extends GuiScreen
         {
             if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
             {
-                renderTooltip( new TextComponentString( button.playerName ).getUnformattedText(), mouseX, mouseY );
+                renderTooltip( new TextComponentString( button.playerName ).getFormattedText(), mouseX, mouseY );
                 break;
             }
         }
 
-        if( font.getStringWidth( title.getUnformattedText() ) > 220 )
-            drawCenteredString( font, title.getUnformattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+        if( font.getStringWidth( title.getFormattedText() ) > 220 )
+            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
-            drawCenteredString( font, title.getUnformattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
     }
 
     @Override
-    public void renderBackground( int p_renderBackground_1_)
+    public void drawBackground( int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
-            this.fillGradient( 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            this.drawGradientRect( 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this ));
         }
         else
-            this.renderBackground( p_renderBackground_1_ );
+            this.drawBackground( p_renderBackground_1_ );
 
 
         boxHeight = 256;
@@ -227,7 +231,7 @@ public class CreditsScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
     {
         if( listButtons.size() >= 7 )
             scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
@@ -235,7 +239,7 @@ public class CreditsScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public void mouseClicked(int mouseX, int mouseY, int button)
     {
         if( button == 1 )
         {
@@ -254,14 +258,14 @@ public class CreditsScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    public boolean mouseReleased(int mouseX, int mouseY, int button)
     {
         scrollPanel.mouseReleased( mouseX, mouseY, button );
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
+    public boolean mouseDragged(int mouseX, int mouseY, int button, float deltaX, float deltaY)
     {
         scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);

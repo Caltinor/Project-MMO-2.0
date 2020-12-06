@@ -45,7 +45,7 @@ public class PrefsEntry
 
         if( !isSwitch )
         {
-            textField = new TextFieldWidget( font, 0, 0, textFieldWidth, height, "" );
+            textField = new WidgetText( font, 0, 0, textFieldWidth, height, "" );
             textField.setMaxStringLength( 5 );
             textField.setText( slider.getMessage() );
         }
@@ -106,19 +106,19 @@ public class PrefsEntry
             textField.y = y;
     }
 
-    public void mouseClicked( double mouseX, double mouseY, int button )
+    public void mouseClicked( int mouseX, int mouseY, int button )
     {
         this.slider.mouseClicked( mouseX, mouseY, button );
         this.button.mouseClicked( mouseX, mouseY, button );
     }
 
-    public void mouseReleased( double mouseX, double mouseY, int button )
+    public void mouseReleased( int mouseX, int mouseY, int button )
     {
         this.slider.mouseReleased( mouseX, mouseY, button );
         this.button.mouseReleased( mouseX, mouseY, button );
     }
 
-    public void mouseDragged( double mouseX, double mouseY, int button, double deltaX, double deltaY )
+    public void mouseDragged( int mouseX, int mouseY, int button, float deltaX, float deltaY )
     {
         this.slider.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
         this.button.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );

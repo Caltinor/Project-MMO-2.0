@@ -87,7 +87,7 @@ public class PrefsScrollPanel extends ScrollPanel
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
     {
         return super.mouseScrolled(mouseX, mouseY, scroll);
     }
@@ -118,13 +118,13 @@ public class PrefsScrollPanel extends ScrollPanel
     }
 
     @Override
-    public void render(int mouseX, int mouseY, double partialTicks)
+    public void render(int mouseX, int mouseY, float partialTicks)
     {
 //        this.drawBackground();
 
 //        if (Minecraft.getMinecraft().world != null)
 //        {
-//            this.fillGradient(0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
+//            this.drawGradientRect(0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
 //            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super ) );
 //        }
 

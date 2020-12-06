@@ -5,8 +5,10 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -31,7 +33,7 @@ public class MainScreen extends GuiScreen
 
     public MainScreen( UUID uuid, ITextComponent titleIn )
     {
-        super(titleIn);
+        super();
         this.uuid = uuid;
     }
 
@@ -42,36 +44,36 @@ public class MainScreen extends GuiScreen
 //    }
 
     @Override
-    protected void init()
+    public void initGui()
     {
         tileButtons = new ArrayList<>();
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
+        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getMinecraft().player.closeScreen();
         });
 
-        TileButton glossaryButton = new TileButton(x + 24 + 36, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
+        TileButton glossaryButton = new TileButton( 1337, x + 24 + 36, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), true ) );
         });
 
-        TileButton creditsButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
+        TileButton creditsButton = new TileButton( 1337,  x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), JType.CREDITS ) );
         });
 
-        TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
+        TileButton prefsButton = new TileButton( 1337,  x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( ((TileButton) button).transKey ) ) );
         });
 
-        TileButton skillsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
+        TileButton skillsButton = new TileButton( 1337,  x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
         {
-            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
+            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
         });
 
         addButton(exitButton);
@@ -87,10 +89,10 @@ public class MainScreen extends GuiScreen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, double partialTicks)
+    public void drawScreen( int mouseX, int mouseY, float partialTicks )
     {
-        renderBackground( 1 );
-        super.render(mouseX, mouseY, partialTicks);
+        drawBackground( 1 );
+        super.drawScreen( mouseX, mouseY, partialTicks );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -109,15 +111,15 @@ public class MainScreen extends GuiScreen
     }
 
     @Override
-    public void renderBackground(int p_renderBackground_1_)
+    public void drawBackground(int p_drawBackground_1_)
     {
-        if (this.minecraft != null)
+        if ( this.mc != null )
         {
-            this.fillGradient(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
+            this.drawGradientRect(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
         else
-            this.renderDirtBackground(p_renderBackground_1_);
+            this.drawBackground(p_drawBackground_1_);
 
 
         boxHeight = 256;
@@ -128,32 +130,29 @@ public class MainScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
+    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
     {
         return super.mouseScrolled(mouseX, mouseY, scroll);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public void mouseClicked( int mouseX, int mouseY, int button)
     {
         if( button == 1 )
-        {
             exitButton.onPress();
-            return true;
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
+        super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    public void mouseReleased( int mouseX, int mouseY, int button)
     {
-        return super.mouseReleased(mouseX, mouseY, button);
+        super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
+    public void mouseDragged( int mouseX, int mouseY, int button, float deltaX, float deltaY)
     {
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
 }

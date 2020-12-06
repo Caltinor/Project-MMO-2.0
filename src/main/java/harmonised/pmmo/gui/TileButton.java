@@ -4,6 +4,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,6 +15,7 @@ public class TileButton extends GuiButton
     private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
     private final ResourceLocation items2 = XP.getResLoc( Reference.MOD_ID, "textures/gui/items2.png" );
     private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
+    public IPressable onPress;
     public int elementOne;
     public int offsetOne;
     public int elementTwo;
@@ -23,9 +25,9 @@ public class TileButton extends GuiButton
     public String transKey;
     public JType jType;
 
-    public TileButton(int posX, int posY, int elementOne, int elementTwo, String transKey, JType jType, IPressable onPress )
+    public TileButton( int id, int posX, int posY, int elementOne, int elementTwo, String transKey, JType jType, IPressable onPress )
     {
-        super(posX, posY, 32, 32, "", onPress);
+        super( id, posX, posY, 32, 32, "" );
 
         this.jType = jType;
 
@@ -59,21 +61,34 @@ public class TileButton extends GuiButton
     }
 
     @Override
-    public void renderButton(int p_renderButton_1_, int p_renderButton_2_, double p_renderButton_3_)
+    public void drawButton( Minecraft mc, int mouseX, int mouseY, float partialTicks )
     {
-        Minecraft minecraft = Minecraft.getMinecraft();
-//        FontRenderer fontrenderer = minecraft.fontRenderer;
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-//        int i = this.getYImage(this.hovered);
+        FontRenderer fontrenderer = mc.fontRenderer;
+        mc.getTextureManager().bindTexture( buttons );
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
-        GlStateManager.defaultBlendFunc();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        minecraft.getTextureManager().bindTexture( buttons );
+        mc.getTextureManager().bindTexture( buttons );
         this.drawTexturedModalRect(this.x, this.y, this.offsetOne + ( this.hovered ? 32 : 0 ), this.elementOne, this.width, this.height );
-        minecraft.getTextureManager().bindTexture( page == 0 ? items : items2 );
+        mc.getTextureManager().bindTexture( page == 0 ? items : items2 );
         this.drawTexturedModalRect(this.x, this.y, this.offsetTwo + ( this.hovered ? 32 : 0 ), this.elementTwo, this.width, this.height );
-        this.renderBg(minecraft, p_renderButton_1_, p_renderButton_2_);
-//        int j = getFGColor();
-//        this.drawCenteredString(fontrenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
+    }
+
+    public interface IPressable
+    {
+        void onPress( TileButton button );
+    }
+
+    @Override
+    public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
+    {
+        this.onPress.onPress( this );
+        return true;
+    }
+
+    public void onPress()
+    {
+        onPress.onPress( this );
     }
 }

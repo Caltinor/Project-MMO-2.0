@@ -18,6 +18,7 @@ import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +33,7 @@ public class ListButtonBig extends GuiButton
     private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big.png" );
 //    private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
     //    private final Screen screen = new SkillsScreen( new TextComponentTranslation( "pmmo.potato" ));
+    public IPressable onPress;
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
     public double mobWidth, mobHeight, mobScale;
@@ -45,9 +47,9 @@ public class ListButtonBig extends GuiButton
     EntityLiving entity = null;
     ItemRenderer itemRenderer = Minecraft.getMinecraft().getItemRenderer();
 
-    public ListButtonBig(int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, IPressable onPress )
+    public ListButtonBig( int id, int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, IPressable onPress )
     {
-        super(posX, posY, 64, 64, buttonText, onPress);
+        super( id, posX, posY, 64, 64, "" );
 //        this.regKey = regKey;
         this.buttonText = buttonText;
         this.itemStack = new ItemStack( XP.getItem( regKey ) );
@@ -59,7 +61,7 @@ public class ListButtonBig extends GuiButton
             this.tooltipText.add( tooltip );
 
         if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
-            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getMinecraft().world );
+            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).newInstance( Minecraft.getMinecraft().world );
         if( testEntity instanceof EntityLiving )
             entity = (EntityLiving) testEntity;
 
@@ -74,7 +76,6 @@ public class ListButtonBig extends GuiButton
             offsetTwo = 0;
     }
 
-    @Override
     public int getHeight()
     {
         return height;
@@ -86,10 +87,9 @@ public class ListButtonBig extends GuiButton
         hovered = mouseX > this.x + 3 && mouseY > this.y && mouseX < this.x + 60 && mouseY < this.y + 64;
         Minecraft minecraft = Minecraft.getMinecraft();
         FontRenderer fontrenderer = minecraft.fontRenderer;
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-        int i = this.getYImage(this.hovered);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
-        GlStateManager.defaultBlendFunc();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         minecraft.getTextureManager().bindTexture( items );
         this.drawTexturedModalRect(this.x, this.y, this.offsetOne + ( this.hovered ? 64 : 0 ), this.elementOne, this.width, this.height);
@@ -99,8 +99,8 @@ public class ListButtonBig extends GuiButton
 
         if( entity != null )
         {
-            mobHeight = entity.getSize( Pose.STANDING ).height;
-            mobWidth = entity.getSize( Pose.STANDING ).width;
+            mobHeight = entity.height;
+            mobWidth = entity.width;
             mobScale = 54;
 
             if( mobHeight > 0 )
@@ -109,13 +109,23 @@ public class ListButtonBig extends GuiButton
             GuiInventory.drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, mouseX, mouseY, entity );
         }
 
-        this.renderBg(minecraft, x, y);
-        int j = getFGColor();
-        this.drawCenteredString(fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
+        this.drawCenteredString(fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, 0xffffff );
     }
 
     public void clickAction()
     {
         LOGGER.info( "Clicked " + this.title + " Button" );
+    }
+
+    public interface IPressable
+    {
+        void onPress( ListButtonBig button );
+    }
+
+    @Override
+    public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
+    {
+        this.onPress.onPress( this );
+        return true;
     }
 }

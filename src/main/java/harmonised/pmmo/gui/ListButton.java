@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -50,7 +51,7 @@ public class ListButton extends GuiButton
         this.onPress = onPress;
 
         if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
-            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getMinecraft().world );
+            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).newInstance( Minecraft.getMinecraft().world );
 
         if( testEntity instanceof EntityLiving )
             entity = (EntityLiving) testEntity;
@@ -90,9 +91,9 @@ public class ListButton extends GuiButton
 
             case HISCORE:
                 if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) )
-                    this.title = new TextComponentTranslation( "pmmo." + regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
+                    this.title = new TextComponentTranslation( "pmmo." + regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getFormattedText();
                 else if( XP.playerNames.containsValue( regKey ) )
-                    this.title = new StringTextComponent( regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
+                    this.title = new TextComponentString( regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getFormattedText();
                 break;
 
             case REQ_BIOME:
@@ -134,7 +135,6 @@ public class ListButton extends GuiButton
             offsetTwo = 0;
     }
 
-    @Override
     public int getHeight()
     {
         int height = 11;
@@ -203,5 +203,6 @@ public class ListButton extends GuiButton
     public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
     {
         this.onPress.onPress( this );
+        return true;
     }
 }
