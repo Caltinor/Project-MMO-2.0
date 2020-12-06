@@ -36,17 +36,17 @@
 	},
 	"appliedenergistics2:pattern_terminal":
 	{
-		"crafting": 45,
+		"crafting": 30,
 		"smithing": 35
 	},
 	"appliedenergistics2:crafting_terminal":
 	{
-		"crafting": 40,
+		"crafting": 35,
 		"smithing": 30
 	},
 	"appliedenergistics2:interface_terminal":
 	{
-		"crafting": 50,
+		"crafting": 40,
 		"smithing": 40
 	},
 	"appliedenergistics2:fluid_terminal":
@@ -61,13 +61,13 @@
 	},
 	"appliedenergistics2:wireless_terminal":
 	{
-		"crafting": 80,
+		"crafting": 70,
 		"smithing": 50
 	},
 	"appliedenergistics2:inscriber":
 	{
 		"crafting": 45,
-		"smithing": 50
+		"smithing": 35
 	},
 	"appliedenergistics2:charger":
 	{
@@ -97,7 +97,7 @@
 	},
 	"appliedenergistics2:spatial_io_port":
 	{
-		"crafting": 60,
+		"crafting": 40,
 		"smithing": 30
 	},
 	"ironchest:iron_to_gold_chest_upgrade":
@@ -166,7 +166,7 @@
 	},
 	"enderstorage:ender_chest":
 	{
-		"building": 50,
+		"building": 30,
 		"magic": 4
 	},
 	"enderstorage:ender_tank":

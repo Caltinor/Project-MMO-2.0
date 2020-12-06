@@ -23,8 +23,11 @@ public class packetHandler
         }
         else
         {
-            if( !XP.playerNames.containsKey( uuid ) )
+            if(  !XP.playerNames.containsKey( uuid ) )
+            {
                 XP.playerNames.put( uuid, name );
+                XP.playerUUIDs.put( name, uuid );
+            }
 
             if( FConfig.getXpMap( Minecraft.getMinecraft().player ).size() == 0 )
                 XPOverlayGUI.listOn = true;

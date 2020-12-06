@@ -67,18 +67,21 @@ public class MessageUpdatePlayerNBT extends MessageBase<MessageUpdatePlayerNBT>
                 break;
 
             case 3: //stats
-                UUID uuid = UUID.fromString( packet.reqPackage.getString( "UUID" ) );
-                packet.reqPackage.removeTag( "UUID" );
 
-                String name = packet.reqPackage.getString( "name" );
-                packet.reqPackage.removeTag( "name" );
+                for( String uuidKey : packet.reqPackage.getKeySet() )
+                {
+                    UUID uuid = UUID.fromString( uuidKey );
+                    String name = packet.reqPackage.getCompoundTag( uuidKey ).getString( "name" );
+                    packet.reqPackage.getCompoundTag( uuidKey ).removeTag( "name" );
 
-                if( !XP.playerNames.containsKey( uuid ) )
-                    XP.playerNames.put( uuid, name );
+                    if( !XP.playerNames.containsKey( uuid ) )
+                    {
+                        XP.playerNames.put( uuid, name );
+                        XP.playerUUIDs.put( name, uuid );
+                    }
+                }
 
-                XP.setOfflineXpMap( uuid, NBTHelper.nbtToMapSkill( packet.reqPackage ) );
-//                ClientHandler.openStats( uuid );
-                //COUT GUI
+                XP.setOfflineXpMaps( NBTHelper.nbtToXpMaps( packet.reqPackage ) );
                 break;
 
             case 4: //data

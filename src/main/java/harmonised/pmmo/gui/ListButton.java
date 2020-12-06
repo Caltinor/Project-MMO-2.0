@@ -86,6 +86,13 @@ public class ListButton extends GuiButton
                 this.title = new TextComponentTranslation( "pmmo." + regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getFormattedText();
                 break;
 
+            case HISCORE:
+                if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) )
+                    this.title = new TranslationTextComponent( "pmmo." + regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
+                else if( XP.playerNames.containsValue( regKey ) )
+                    this.title = new StringTextComponent( regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
+                break;
+
             case REQ_BIOME:
 //                this.title = new TextComponentTranslation( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getUnformattedText();
                 this.title = new TextComponentTranslation( regKey ).getUnformattedText();
@@ -143,15 +150,16 @@ public class ListButton extends GuiButton
 
     public void clickActionGlossary()
     {
-//        LOGGER.info( "Clicked " + this.title + " Button" );
         GlossaryScreen.setButtonsToKey( regKey );
         Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
     }
 
     public void clickActionSkills()
     {
-        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) )
-            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "" ), regKey, JType.HISCORE, Minecraft.getMinecraft().player ) );
+        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) || regKey.equals( "totalLevel" ) )
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "" ), regKey, JType.HISCORE, Minecraft.getInstance().player ) );
+        else if( XP.playerNames.containsValue( regKey ) )
+            Minecraft.getInstance().displayGuiScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TranslationTextComponent( "" ), regKey, JType.SKILLS, Minecraft.getInstance().player ) );
     }
 
     @Override
