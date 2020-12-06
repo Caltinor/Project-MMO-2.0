@@ -29,7 +29,7 @@ import java.util.*;
 
 public class ListScreen extends GuiScreen
 {
-    private final List<IGuiEventListener> children = Lists.newArrayList();
+    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private static final Style greenColor = XP.textStyle.get( "green" );
     private static GuiButton exitButton;
@@ -91,11 +91,11 @@ public class ListScreen extends GuiScreen
                 case SKILLS:
                 case STATS:
                 case HISCORE:
-                    Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
+                    Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, getTransComp( "pmmo.potato" ) ) );
                     break;
 
                 default:
-                    Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ), false ) );
+                    Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, getTransComp( "pmmo.skills" ), false ) );
                     break;
             }
         });

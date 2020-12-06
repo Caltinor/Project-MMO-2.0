@@ -26,6 +26,7 @@ public class ListButton extends GuiButton
     private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
     private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
 //    private final Screen screen = new SkillsScreen( new TextComponentTranslation( "pmmo.potato" ));
+    public IPressable onPress;
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
     public double mobWidth, mobHeight, mobScale;
@@ -46,6 +47,7 @@ public class ListButton extends GuiButton
         this.itemStack = new ItemStack( XP.getItem( regKey ) );
         this.elementOne = elementOne * 32;
         this.elementTwo = elementTwo * 32;
+        this.onPress = onPress;
 
         if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
             testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getMinecraft().world );
@@ -88,7 +90,7 @@ public class ListButton extends GuiButton
 
             case HISCORE:
                 if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) )
-                    this.title = new TranslationTextComponent( "pmmo." + regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
+                    this.title = new TextComponentTranslation( "pmmo." + regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
                 else if( XP.playerNames.containsValue( regKey ) )
                     this.title = new StringTextComponent( regKey ).setStyle( XP.getSkillStyle(Skill.getSkill( regKey ) ) ).getString();
                 break;
@@ -157,24 +159,22 @@ public class ListButton extends GuiButton
     public void clickActionSkills()
     {
         if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) || regKey.equals( "totalLevel" ) )
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "" ), regKey, JType.HISCORE, Minecraft.getInstance().player ) );
+            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "" ), regKey, JType.HISCORE, Minecraft.getMinecraft().player ) );
         else if( XP.playerNames.containsValue( regKey ) )
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TranslationTextComponent( "" ), regKey, JType.SKILLS, Minecraft.getInstance().player ) );
+            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TextComponentTranslation( "" ), regKey, JType.SKILLS, Minecraft.getMinecraft().player ) );
     }
 
     @Override
     public void drawButton( Minecraft mc, int mouseX, int mouseY, float partialTicks )
     {
-        Minecraft minecraft = Minecraft.getMinecraft();
-        FontRenderer fontrenderer = minecraft.fontRenderer;
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-        int i = this.getYImage(this.hovered);
+        FontRenderer fontrenderer = mc.fontRenderer;
+        mc.getTextureManager().bindTexture( buttons );
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
-        GlStateManager.defaultBlendFunc();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        minecraft.getTextureManager().bindTexture( buttons );
         this.drawTexturedModalRect(this.x, this.y, this.offsetOne + ( this.hovered ? 32 : 0 ), this.elementOne, this.width, this.height);
-        minecraft.getTextureManager().bindTexture( items );
+        mc.getTextureManager().bindTexture( items );
         this.drawTexturedModalRect(this.x, this.y, this.offsetTwo + ( this.hovered ? 32 : 0 ), this.elementTwo, this.width, this.height);
         if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
             itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
@@ -191,8 +191,17 @@ public class ListButton extends GuiButton
             GuiInventory.drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, mouseX, mouseY, entity );
         }
 
-        this.renderBg(minecraft, x, y);
-        int j = getFGColor();
-        this.drawCenteredString(fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
+        this.drawCenteredString(fontrenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, 0xffffff );
+    }
+
+    public interface IPressable
+    {
+        void onPress( ListButton button );
+    }
+
+    @Override
+    public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
+    {
+        this.onPress.onPress( this );
     }
 }

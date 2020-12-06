@@ -15,7 +15,7 @@ import java.util.*;
 
 public class PrefsChoiceScreen extends GuiScreen
 {
-    private final List<IGuiEventListener> children = Lists.newArrayList();
+    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private static TileButton exitButton;
 

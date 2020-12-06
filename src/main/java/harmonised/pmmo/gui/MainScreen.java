@@ -15,7 +15,7 @@ import java.util.*;
 
 public class MainScreen extends GuiScreen
 {
-    private final List<IGuiEventListener> children = Lists.newArrayList();
+    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
     private static TileButton exitButton;
@@ -71,7 +71,7 @@ public class MainScreen extends GuiScreen
 
         TileButton skillsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getInstance().player ) );
+            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
         });
 
         addButton(exitButton);

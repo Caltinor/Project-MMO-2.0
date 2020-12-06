@@ -23,7 +23,7 @@ import java.util.*;
 public class PrefsScreen extends GuiScreen
 {
     public static Map<String, Double> prefsMap;
-    private final List<IGuiEventListener> children = Lists.newArrayList();
+    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private int i;
     private double value;

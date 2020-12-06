@@ -7,6 +7,7 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,7 +19,7 @@ import java.util.*;
 public class CreditorScreen extends GuiScreen
 {
     public static final HashMap<String, String> uuidName = new HashMap<>();
-    private final List<IGuiEventListener> children = Lists.newArrayList();
+    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     public static final Map<String, List<String>> creditorsInfo = new HashMap<>();
     public static Map<String, Integer> colors = new HashMap<>();

@@ -18,7 +18,7 @@ import java.util.*;
 
 public class CreditsScreen extends GuiScreen
 {
-    private final List<IGuiEventListener> children = Lists.newArrayList();
+    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
     private static boolean firstTime = true;
@@ -139,12 +139,12 @@ public class CreditsScreen extends GuiScreen
 
         listButtons.add( new ListButtonBig( 0, 0, 1, 6, "de_de", "Matterfall#1952", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+            Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
         listButtons.add( new ListButtonBig( 0, 0, 1, 6, "es_ar", "N1co#9248", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+            Minecraft.getMinecraft().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
         //MODPACK
