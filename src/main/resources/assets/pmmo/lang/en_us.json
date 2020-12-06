@@ -329,5 +329,6 @@
 	"pmmo.thePartyIsFull": "The party is full",
 	"pmmo.yourPartyIsFull": "Your party is full",
 	"pmmo.missingNextArgument": "Missing next argument!",
-	"pmmo.notANumber": "%1$s is not a number!"
+	"pmmo.notANumber": "%1$s is not a number!",
+	"ftbquests.task.pmmo.skill.requiredlevel": "Required Level"
 }

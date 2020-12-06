@@ -325,5 +325,10 @@
 	"pmmo.thePartyIsFull": "此队伍人数已达上限",
 	"pmmo.yourPartyIsFull": "你的队伍人数已达上限",
 	"pmmo.missingNextArgument": "Missing next argument!",
-	"pmmo.notANumber": "%1$s is not a number!"
+	"pmmo.notANumber": "%1$s is not a number!",
+	"ftbquests.task.pmmo.skill.requiredlevel": "需求等级",
+	"pmmo.levelX": "Level %1$s",
+	"pmmo.xpX": "%1$sxp",
+	"pmmo.totalLevel": "Total Level",
+	"pmmo.skillHiscores": "%1$s Hiscores"
 }

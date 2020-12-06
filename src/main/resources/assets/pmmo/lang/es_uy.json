@@ -325,5 +325,10 @@
 	"pmmo.thePartyIsFull": "El grupo está lleno",
 	"pmmo.yourPartyIsFull": "Tu grupo esta lleno",
 	"pmmo.missingNextArgument": "Missing next argument!",
-	"pmmo.notANumber": "%1$s is not a number!"
+	"pmmo.notANumber": "%1$s is not a number!",
+	"ftbquests.task.pmmo.skill.requiredlevel": "Nivel Requerido",
+	"pmmo.levelX": "Level %1$s",
+	"pmmo.xpX": "%1$sxp",
+	"pmmo.totalLevel": "Total Level",
+	"pmmo.skillHiscores": "%1$s Hiscores"
 }
