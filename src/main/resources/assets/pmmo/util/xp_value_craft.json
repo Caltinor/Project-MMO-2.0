@@ -440,7 +440,7 @@
 	},
 	"appliedenergistics2:terminal":
 	{
-		"crafting": 45,
+		"crafting": 35,
 		"smithing": 15
 	},
 	"appliedenergistics2:pattern_terminal":
@@ -763,7 +763,7 @@
 	},
 	"enderstorage:ender_chest":
 	{
-		"smithing": 50,
+		"smithing": 80,
 		"magic": 10
 	},
 	"enderstorage:ender_tank":

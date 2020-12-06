@@ -46,6 +46,7 @@ public class ClientEventHandler
                 String name = Minecraft.getInstance().player.getDisplayName().getString();
 
                 XP.playerNames.put( uuid, name );
+                XP.playerUUIDs.put( name, uuid );
 
                 XPOverlayGUI.skills.forEach( (skill, aSkill) ->
                 {

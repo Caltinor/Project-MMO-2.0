@@ -1,6 +1,7 @@
 package harmonised.pmmo.util;
 
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -179,41 +180,37 @@ public class NBTHelper
         return outData;
     }
 
-    public static Map<String, Map<String, Map<String, Double>>> nbtToMap3xStringDouble( CompoundNBT input )
+    public static Map<UUID, Map<Skill, Double>> nbtToXpMaps( CompoundNBT input )
     {
-        Map<String, Map<String, Map<String, Double>>> output = new HashMap<>();
+        Map<UUID, Map<Skill, Double>> output = new HashMap<>();
+        UUID uuid;
         for( String key1 : input.keySet() )
         {
-            output.put( key1, new HashMap<>() );
+            uuid = UUID.fromString( key1 );
+            output.put( uuid, new HashMap<>() );
             for( String key2 : input.getCompound( key1 ).keySet() )
             {
-                output.get( key1 ).put( key2, new HashMap<>() );
-                for( String key3 : input.getCompound( key1 ).getCompound( key2 ).keySet() )
-                {
-                    output.get( key1 ).get( key2 ).put( key3, input.getCompound( key1 ).getCompound( key2 ).getDouble( key3 ) );
-                }
+                output.get( uuid ).put( Skill.getSkill( key2 ), input.getCompound( key1 ).getDouble( key2 ) );
             }
         }
 
         return output;
     }
 
-    public static CompoundNBT map3xStringDoubleToNbt( Map<String, Map<String, Map<String, Double>>> input )
+    public static CompoundNBT xpMapsToNbt( Map<UUID, Map<Skill, Double>> input )
     {
         CompoundNBT output = new CompoundNBT();
+        String key2;
 
-        for( String key1 : input.keySet() )
+        for( UUID key1 : input.keySet() )
         {
-            output.put( key1, new CompoundNBT() );
-            for( String key2 : input.get( key1 ).keySet() )
+            output.put( key1.toString(), new CompoundNBT() );
+            output.getCompound( key1.toString() ).putString( "name", PmmoSavedData.get().getName( key1 ) );
+            for( Skill skill : input.get( key1 ).keySet() )
             {
-                output.getCompound( key1 ).put( key2, new CompoundNBT() );
-                for( String key3 : input.get( key1 ).get( key2 ).keySet() )
-                {
-                    Double value = input.get( key1 ).get( key2 ).get( key3 );
-
-                    output.getCompound( key1 ).getCompound( key2 ).putDouble( key3, value );
-                }
+                key2 = skill.toString();
+                Double value = input.get( key1 ).get( skill );
+                output.getCompound( key1.toString() ).putDouble( key2, value );
             }
         }
 

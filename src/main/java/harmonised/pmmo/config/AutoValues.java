@@ -86,7 +86,7 @@ public class AutoValues
         Map<Attribute, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes );
 
         AttributeModifier attackSpeedAttribute = attributes.get( Attributes.ATTACK_SPEED );
-        AttributeModifier attackDamageAttribute = attributes.get( Attributes.ATTACK_SPEED );
+        AttributeModifier attackDamageAttribute = attributes.get( Attributes.ATTACK_DAMAGE );
 
         double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
         double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();

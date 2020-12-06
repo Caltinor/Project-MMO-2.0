@@ -67,11 +67,11 @@
 	},
 	"appliedenergistics2:pattern_terminal":
 	{
-		"building": 35
+		"building": 30
 	},
 	"appliedenergistics2:crafting_terminal":
 	{
-		"building": 30
+		"building": 35
 	},
 	"appliedenergistics2:interface_terminal":
 	{
@@ -215,7 +215,7 @@
 	},
 	"enderstorage:ender_chest":
 	{
-		"building": 50
+		"building": 30
 	},
 	"enderstorage:ender_tank":
 	{
