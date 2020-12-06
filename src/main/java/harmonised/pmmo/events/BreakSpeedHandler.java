@@ -1,12 +1,17 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+
+import java.util.Map;
 
 public class BreakSpeedHandler
 {
@@ -16,7 +21,18 @@ public class BreakSpeedHandler
 
         String skill = XP.getSkill( event.getState().getMaterial() ).name().toLowerCase();
         double speedBonus;
-        int toolGap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL );
+        ItemStack itemStack = player.getHeldItemMainhand();
+        ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+        Map<String, Double> toolReq = XP.getJsonMap( resLoc, JType.REQ_TOOL );
+        Map<String, Double> dynToolReq = AutoValues.getToolReqFromStack( itemStack );
+        if( Config.forgeConfig.autoGenerateToolReqDynamicallyEnabled.get() )
+        {
+            for( Map.Entry<String, Double> entry : dynToolReq.entrySet() )
+            {
+                toolReq.put( entry.getKey(), Math.max( toolReq.getOrDefault( entry.getKey(), 0D ), entry.getValue() ) );
+            }
+        }
+        int toolGap = XP.getSkillReqGap( player, toolReq );
         int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
         int gap = Math.max( toolGap, enchantGap );
         boolean reqMet = XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK );

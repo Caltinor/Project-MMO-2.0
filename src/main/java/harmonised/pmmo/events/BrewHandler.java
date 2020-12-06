@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -9,6 +10,7 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,7 +49,8 @@ public class BrewHandler
                     }
                 }
 
-                Map<String, Double> award = XP.multiplyMapAnyDouble( XP.getXp( brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
+                Map<String, Double> award = new HashMap<>();
+                XP.multiplyMapAnyDouble( XP.getXp( brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
 
                 XP.awardXpMap( uuid, award, "Brewing", true, false );
             }

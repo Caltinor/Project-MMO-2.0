@@ -37,7 +37,7 @@ public class AutoValues
                 value = entry.getValue();
                 if( JsonConfig.levelJTypes.contains( jType ) && entry.getValue() > JsonConfig.maxLevel )
                     value = JsonConfig.maxLevel;
-                if( !JsonConfig.localData.get( jType ).get( resLoc ).containsKey( entry.getKey() ) )
+                 if( !JsonConfig.localData.get( jType ).get( resLoc ).containsKey( entry.getKey() ) )
                     JsonConfig.localData.get( jType ).get( resLoc ).put( entry.getKey(), value );
             }
         }
@@ -58,8 +58,75 @@ public class AutoValues
         return output;
     }
 
+    public static double getWearReqFromStack( ItemStack itemStack )
+    {
+        Multimap<String, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.HEAD );
+        Multimap<String, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.CHEST );
+        Multimap<String, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.LEGS );
+        Multimap<String, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.FEET );
+
+        Map<String, AttributeModifier> attributes = mergeMultimaps( headHandAttributes, chestHandAttributes, legsHandAttributes, feetHandAttributes );
+
+        AttributeModifier armorAttribute = attributes.get( "generic.armor" );
+        AttributeModifier armorToughnessAttribute = attributes.get( "generic.armorToughness" );
+
+        double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
+        double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
+
+        return Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() );
+    }
+
+    public static double getWeaponReqFromStack( ItemStack itemStack )
+    {
+        Multimap<String, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
+        Multimap<String, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.OFFHAND );
+
+        Map<String, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes );
+
+        AttributeModifier attackSpeedAttribute = attributes.get( "generic.attackSpeed" );
+        AttributeModifier attackDamageAttribute = attributes.get( "generic.attackDamage" );
+
+        double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
+        double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
+
+        return Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) );
+    }
+
+    public static Map<String, Double> getToolReqFromStack( ItemStack itemStack )
+    {
+        Map<String, Double> reqTool = new HashMap<>();
+        Set<ToolType> toolTypes = itemStack.getToolTypes();
+        double speed, toolReq;
+
+        for( ToolType toolType : toolTypes )
+        {
+            if( toolType.equals( ToolType.AXE ) )
+            {
+                speed = itemStack.getDestroySpeed( Blocks.OAK_LOG.getDefaultState() );
+                toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleLog.get() );
+                reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
+            }
+            if( toolType.equals( ToolType.PICKAXE ) )
+            {
+                speed = itemStack.getDestroySpeed( Blocks.STONE.getDefaultState() );
+                toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleOre.get() );
+                reqTool.put( Skill.MINING.toString(), toolReq );
+            }
+            if( toolType.equals( ToolType.SHOVEL ) )
+            {
+                speed = itemStack.getDestroySpeed( Blocks.DIRT.getDefaultState() );
+                toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleDirt.get() );
+                reqTool.put( Skill.EXCAVATION.toString(), toolReq );
+            }
+        }
+
+        return reqTool;
+    }
+
     public static void setAutoValues()
     {
+        JsonConfig.maxLevel = Config.forgeConfig.maxLevel.get();
+
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
         {
             for( Item item : ForgeRegistries.ITEMS )
@@ -68,91 +135,45 @@ public class AutoValues
                 {
                     ItemStack itemStack = new ItemStack( item );
                     String resLoc = item.getRegistryName().toString();
-                    Set<ToolType> toolTypes = itemStack.getToolTypes();
 
-                    //Wear and Weapon Req
-                    Multimap<String, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
-                    Multimap<String, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.OFFHAND );
-                    Multimap<String, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.HEAD );
-                    Multimap<String, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.CHEST );
-                    Multimap<String, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.LEGS );
-                    Multimap<String, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.FEET );
+                    double enduranceReq = getWearReqFromStack( itemStack );
+                    double combatReq = getWeaponReqFromStack( itemStack );
+                    Map<String, Double> reqTool = getToolReqFromStack( itemStack );
 
-                    Map<String, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes, headHandAttributes, chestHandAttributes, legsHandAttributes, feetHandAttributes );
-
-                    AttributeModifier armorAttribute = attributes.get( "generic.armor" );
-                    AttributeModifier armorToughnessAttribute = attributes.get( "generic.armorToughness" );
-                    AttributeModifier attackSpeedAttribute = attributes.get( "generic.attackSpeed" );
-                    AttributeModifier attackDamageAttribute = attributes.get( "generic.attackDamage" );
-
-                    double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
-                    double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
-                    double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
-                    double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
-                    double enduranceReq = 0;
-                    double combatReq = 0;
-                    double toolReq = 0, highestToolReq = 0;
-
-                    Map<String, Double> reqWear     = new HashMap<>();
-                    Map<String, Double> reqWeapon   = new HashMap<>();
-                    Map<String, Double> reqTool     = new HashMap<>();
-
-                    if( attributes.size() > 0 )
+                    //Wear Req
+                    if( enduranceReq > 1 && Config.forgeConfig.wearReqEnabled.get() && Config.forgeConfig.autoGenerateWearReqEnabled.get() )
                     {
-                        enduranceReq = Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() );
-                        combatReq = Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) );
-
+                        Map<String, Double> reqWear     = new HashMap<>();
                         reqWear.put( Skill.ENDURANCE.toString(), Math.max( 1, enduranceReq ) );
-                        reqWeapon.put( Skill.COMBAT.toString(),  Math.max( 1, combatReq ) );
+                        addJsonConfigValue( resLoc, JType.REQ_WEAR, reqWear, false );
+                    }
 
-                        if( Config.forgeConfig.wearReqEnabled.get() && Config.forgeConfig.autoGenerateWearReqEnabled.get() && reqWear.getOrDefault( Skill.ENDURANCE.toString(), 0D ) > 1 )
-                            addJsonConfigValue( resLoc, JType.REQ_WEAR, reqWear, false );
-                        if( Config.forgeConfig.weaponReqEnabled.get() && Config.forgeConfig.autoGenerateWeaponReqEnabled.get() && reqWeapon.getOrDefault( Skill.COMBAT.toString(), 0D ) > 1 )
-                            addJsonConfigValue( resLoc, JType.REQ_WEAPON, reqWeapon, false );
+                    //Weapon Req
+                    if( combatReq > 1 && Config.forgeConfig.weaponReqEnabled.get() && Config.forgeConfig.autoGenerateWeaponReqEnabled.get() )
+                    {
+                        Map<String, Double> reqWeapon   = new HashMap<>();
+                        reqWeapon.put( Skill.COMBAT.toString(),  Math.max( 1, combatReq ) );
+                        addJsonConfigValue( resLoc, JType.REQ_WEAPON, reqWeapon, false );
                     }
 
                     //Tool Req
-                    double speed;
-                    for( ToolType toolType : toolTypes )
+                    if( reqTool.size() > 0 && Config.forgeConfig.toolReqEnabled.get() && Config.forgeConfig.autoGenerateToolReqEnabled.get() )
                     {
-                        if( toolType.equals( ToolType.AXE ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleLog.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
-                        }
-                        if( toolType.equals( ToolType.PICKAXE ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleOre.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.MINING.toString(), toolReq );
-                        }
-                        if( toolType.equals( ToolType.SHOVEL ) )
-                        {
-                            speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
-                            toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleDirt.get() );
-                            if( highestToolReq < toolReq )
-                                highestToolReq = toolReq;
-                            reqTool.put( Skill.EXCAVATION.toString(), toolReq );
-                        }
-                    }
-                    if( Config.forgeConfig.toolReqEnabled.get() && Config.forgeConfig.autoGenerateToolReqEnabled.get() )
                         addJsonConfigValue( resLoc, JType.REQ_TOOL, reqTool, true );
+                    }
 
                     //Crafting Xp Value
                     if( Config.forgeConfig.autoGenerateCraftingXpEnabled.get() )
                     {
+                        double highestToolReq = reqTool.values().stream().reduce( Math::max ).orElse( 0D );
+
                         double craftingXp = 0;
                         double smithingXp = 0;
 
-                        if( enduranceReq > 0 || combatReq > 0 || toolReq > 0 )
+                        if( enduranceReq > 0 || combatReq > 0 || highestToolReq > 0 )
                         {
-                            craftingXp = enduranceReq * 10D +                           Math.max( ( Math.max( combatReq - 10, 1 ) ) * 5D,  ( Math.max( toolReq - 10, 1 ) ) * 5D );
-                            smithingXp = ( Math.max( enduranceReq - 10, 1 ) ) * 5D  +   Math.max( ( Math.max( combatReq - 10, 1 ) ) * 2D,  ( Math.max( toolReq - 10, 1 ) ) * 2D );
+                            craftingXp = enduranceReq * 10D +                           Math.max( ( Math.max( combatReq - 10, 1 ) ) * 5D,  ( Math.max( highestToolReq - 10, 1 ) ) * 5D );
+                            smithingXp = ( Math.max( enduranceReq - 10, 1 ) ) * 5D  +   Math.max( ( Math.max( combatReq - 10, 1 ) ) * 2D,  ( Math.max( highestToolReq - 10, 1 ) ) * 2D );
 
                             craftingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierCrafting.get();
                             smithingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierSmithing.get();
