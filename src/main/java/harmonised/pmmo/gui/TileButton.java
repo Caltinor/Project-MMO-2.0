@@ -34,6 +34,7 @@ public class TileButton extends GuiButton
         this.elementOne = elementOne * 32;
         this.elementTwo = elementTwo * 32;
         this.transKey = transKey;
+        this.onPress = onPress;
 
         if( elementOne > 23 )
             offsetOne = 192;

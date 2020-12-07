@@ -242,10 +242,7 @@ public class CreditsScreen extends GuiScreen
     public void mouseClicked(int mouseX, int mouseY, int button)
     {
         if( button == 1 )
-        {
             exitButton.onPress();
-            return true;
-        }
 
         for( ListButtonBig a : listButtons )
         {
@@ -254,7 +251,7 @@ public class CreditsScreen extends GuiScreen
         }
 
         scrollPanel.mouseClicked( mouseX, mouseY, button );
-        return super.mouseClicked(mouseX, mouseY, button);
+        super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override

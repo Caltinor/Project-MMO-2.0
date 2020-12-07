@@ -63,7 +63,7 @@ public class CreditorScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton( 1337, 0, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
+        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.credits" ), JType.CREDITS ) );
         });
@@ -126,7 +126,7 @@ public class CreditorScreen extends GuiScreen
         this.drawTexturedModalRect( x, y, 0, 0, boxWidth, boxHeight );
     }
 
-//    @Override
+////    @Override
 //    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
 //    {
 //        return super.mouseScrolled(mouseX, mouseY, scroll);
@@ -149,7 +149,7 @@ public class CreditorScreen extends GuiScreen
 
     @Override
     protected void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
-    {
+{
         super.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
     }
 

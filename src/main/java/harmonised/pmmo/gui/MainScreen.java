@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import java.io.IOException;
 import java.util.*;
 
 public class MainScreen extends GuiScreen
@@ -129,14 +130,14 @@ public class MainScreen extends GuiScreen
         this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
-    @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
-    {
-        return super.mouseScrolled(mouseX, mouseY, scroll);
-    }
+//    @Override
+//    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
+//    {
+//        return super.mouseScrolled(mouseX, mouseY, scroll);
+//    }
 
     @Override
-    public void mouseClicked( int mouseX, int mouseY, int button)
+    public void mouseClicked( int mouseX, int mouseY, int button) throws IOException
     {
         if( button == 1 )
             exitButton.onPress();
@@ -150,9 +151,8 @@ public class MainScreen extends GuiScreen
     }
 
     @Override
-    public void mouseDragged( int mouseX, int mouseY, int button, float deltaX, float deltaY)
+    protected void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
     {
-        super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        super.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
     }
-
 }

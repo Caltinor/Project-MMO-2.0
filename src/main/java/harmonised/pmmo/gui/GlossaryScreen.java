@@ -7,13 +7,19 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -137,7 +143,7 @@ public class GlossaryScreen extends GuiScreen
         exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "", JType.NONE, button ->
         {
             history = new ArrayList<>();
-            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.potato" ) ) );
+            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentString( "pmmo.potato" ) ) );
         });
 
         if( loadDefaultButtons )
@@ -185,7 +191,7 @@ public class GlossaryScreen extends GuiScreen
         }
 
         if( combo )
-            Minecraft.getMinecraft().player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
+            Minecraft.getMinecraft().player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
     }
 
     public static boolean updateHistory( char index )
@@ -216,7 +222,7 @@ public class GlossaryScreen extends GuiScreen
 
                 if( passed )
                 {
-                    Minecraft.getMinecraft().player.playSound(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
+                    Minecraft.getMinecraft().player.playSound( SoundEvents.ENTITY_ENDERDRAGON_DEATH, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
                     return true;
                 }
             }
@@ -225,10 +231,10 @@ public class GlossaryScreen extends GuiScreen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         drawBackground( 1 );
-        super.render(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -272,34 +278,31 @@ public class GlossaryScreen extends GuiScreen
         this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
-    @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
-    {
-        return super.mouseScrolled(mouseX, mouseY, scroll);
-    }
+//    @Override
+//    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
+//    {
+//        return super.mouseScrolled(mouseX, mouseY, scroll);
+//    }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int button)
+    public void mouseClicked( int mouseX, int mouseY, int mouseButton ) throws IOException
     {
-        if( button == 1 )
-        {
+        if( mouseButton == 1 )
             exitButton.onPress();
-            return true;
-        }
-
-        return super.mouseClicked(mouseX, mouseY, button);
+        else
+            super.mouseClicked( mouseX, mouseY, mouseButton );
     }
 
     @Override
-    public boolean mouseReleased(int mouseX, int mouseY, int button)
+    public void mouseReleased(int mouseX, int mouseY, int button)
     {
-        return super.mouseReleased(mouseX, mouseY, button);
+        super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseDragged(int mouseX, int mouseY, int button, float deltaX, float deltaY)
-    {
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    protected void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
+{
+        super.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
     }
 
     public static void setButtonsToDefault()
@@ -324,6 +327,9 @@ public class GlossaryScreen extends GuiScreen
             GlossaryScreen.transKey = new TextComponentTranslation( "pmmo.glossary" ).getUnformattedText();
         }
         else
-            GlossaryScreen.transKey = new TextComponentTranslation( XP.getItem( regKey ).getTranslationKey() ).getUnformattedText();
+        {
+            Item item = XP.getItem( regKey );
+            GlossaryScreen.transKey = new TextComponentTranslation( item.getItemStackDisplayName( new ItemStack( item ) ) ).getUnformattedText();
+        }
     }
 }

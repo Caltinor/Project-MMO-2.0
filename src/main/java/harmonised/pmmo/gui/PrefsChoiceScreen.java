@@ -11,8 +11,10 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import java.io.IOException;
 import java.util.*;
 
 public class PrefsChoiceScreen extends GuiScreen
@@ -43,7 +45,7 @@ public class PrefsChoiceScreen extends GuiScreen
 
         exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.potato" ) ) );
+            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentString( "pmmo.potato" ) ) );
         });
 
         TileButton settingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
@@ -67,10 +69,10 @@ public class PrefsChoiceScreen extends GuiScreen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         drawBackground( 1 );
-        super.render(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -87,7 +89,7 @@ public class PrefsChoiceScreen extends GuiScreen
     @Override
     public void drawBackground(int p_renderBackground_1_)
     {
-        if (this.minecraft != null)
+        if (this.mc != null)
         {
             this.drawGradientRect(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
@@ -103,33 +105,29 @@ public class PrefsChoiceScreen extends GuiScreen
         this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
-    @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
-    {
-        return super.mouseScrolled(mouseX, mouseY, scroll);
-    }
+//    @Override
+//    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
+//    {
+//        return super.mouseScrolled(mouseX, mouseY, scroll);
+//    }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int button)
+    public void mouseClicked(int mouseX, int mouseY, int button) throws IOException
     {
         if( button == 1 )
-        {
             exitButton.onPress();
-            return true;
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
+        super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
-    public boolean mouseReleased(int mouseX, int mouseY, int button)
+    public void mouseReleased(int mouseX, int mouseY, int button)
     {
-        return super.mouseReleased(mouseX, mouseY, button);
+        super.mouseReleased(mouseX, mouseY, button);
     }
-
     @Override
-    public boolean mouseDragged(int mouseX, int mouseY, int button, float deltaX, float deltaY)
-    {
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    protected void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
+{
+        super.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
     }
 
 }

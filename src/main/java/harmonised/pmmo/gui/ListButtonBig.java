@@ -56,6 +56,7 @@ public class ListButtonBig extends GuiButton
         this.elementOne = elementOne * 64;
         this.elementTwo = elementTwo * 64;
         this.playerName = playerName;
+        this.onPress = onPress;
         tooltipText.add( playerName );
         if( tooltip != null )
             this.tooltipText.add( tooltip );

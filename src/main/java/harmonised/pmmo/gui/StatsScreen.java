@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +33,7 @@ public class StatsScreen extends GuiScreen
 
     public StatsScreen( UUID uuid, ITextComponent titleIn )
     {
-        super( titleIn );
+        super();
         this.uuid = uuid;
     }
 
@@ -64,10 +65,10 @@ public class StatsScreen extends GuiScreen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         drawBackground( 1 );
-        super.render(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -101,34 +102,30 @@ public class StatsScreen extends GuiScreen
         this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
-    @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
-    {
-        return super.mouseScrolled(mouseX, mouseY, scroll);
-    }
+////    @Override
+//    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
+//    {
+//        return super.mouseScrolled(mouseX, mouseY, scroll);
+//    }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int button)
+    public void mouseClicked( int mouseX, int mouseY, int mouseButton ) throws IOException
     {
-        if( button == 1 )
-        {
+        if( mouseButton == 1 )
             exitButton.onPress();
-            return true;
-        }
-
-        return super.mouseClicked(mouseX, mouseY, button);
+        else
+            super.mouseClicked( mouseX, mouseY, mouseButton );
     }
 
     @Override
-    public boolean mouseReleased(int mouseX, int mouseY, int button)
+    public void mouseReleased(int mouseX, int mouseY, int button)
     {
-        return super.mouseReleased(mouseX, mouseY, button);
+        super.mouseReleased(mouseX, mouseY, button);
     }
-
     @Override
-    public boolean mouseDragged(int mouseX, int mouseY, int button, float deltaX, float deltaY)
-    {
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    protected void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
+{
+        super.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
     }
 
 }

@@ -1061,7 +1061,7 @@ public class ListScreen extends GuiScreen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         drawBackground( 1 );
 
@@ -1083,7 +1083,7 @@ public class ListScreen extends GuiScreen
         accumulativeHeight = 0;
         buttonsSize = listButtons.size();
 
-        super.render(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
 
         for( ListButton button : listButtons )
         {
@@ -1155,10 +1155,7 @@ public class ListScreen extends GuiScreen
     public void mouseClicked(int mouseX, int mouseY, int button)
     {
         if( button == 1 )
-        {
             exitButton.onPress();
-            return true;
-        }
 
         for( ListButton a : listButtons )
         {
@@ -1171,7 +1168,7 @@ public class ListScreen extends GuiScreen
             }
         }
         scrollPanel.mouseClicked( mouseX, mouseY, button );
-        return super.mouseClicked(mouseX, mouseY, button);
+        super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override

@@ -168,7 +168,7 @@ public class PrefsScreen extends GuiScreen
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         drawBackground( 1 );
 
@@ -189,7 +189,7 @@ public class PrefsScreen extends GuiScreen
         }
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
-        super.render(mouseX, mouseY, partialTicks);
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -220,10 +220,7 @@ public class PrefsScreen extends GuiScreen
     public void mouseClicked(int mouseX, int mouseY, int button)
     {
         if( button == 1 )
-        {
             exitButton.onPress();
-            return true;
-        }
 
         for( PrefsEntry prefEntry : prefsEntries )
         {
@@ -236,7 +233,7 @@ public class PrefsScreen extends GuiScreen
         }
 
         scrollPanel.mouseClicked( mouseX, mouseY, button );
-        return super.mouseClicked(mouseX, mouseY, button);
+        super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
