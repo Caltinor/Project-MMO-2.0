@@ -156,17 +156,19 @@ public class ListButton extends GuiButton
         Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
     }
 
-    public void clickActionSkills()
-    {
-        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) || regKey.equals( "totalLevel" ) )
-            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "" ), regKey, JType.HISCORE, Minecraft.getMinecraft().player ) );
-        else if( XP.playerNames.containsValue( regKey ) )
-            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TextComponentTranslation( "" ), regKey, JType.SKILLS, Minecraft.getMinecraft().player ) );
-    }
+//    public void clickActionSkills()
+//    {
+//        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) || regKey.equals( "totalLevel" ) )
+//            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "" ), regKey, JType.HISCORE, Minecraft.getMinecraft().player ) );
+//        else if( XP.playerNames.containsValue( regKey ) )
+//            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TextComponentTranslation( "" ), regKey, JType.SKILLS, Minecraft.getMinecraft().player ) );
+//    }
+    //COUT
 
     @Override
     public void drawButton( Minecraft mc, int mouseX, int mouseY, float partialTicks )
     {
+        hovered = mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
         FontRenderer fontrenderer = mc.fontRenderer;
         mc.getTextureManager().bindTexture( buttons );
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -176,8 +178,9 @@ public class ListButton extends GuiButton
         this.drawTexturedModalRect(this.x, this.y, this.offsetOne + ( this.hovered ? 32 : 0 ), this.elementOne, this.width, this.height);
         mc.getTextureManager().bindTexture( items );
         this.drawTexturedModalRect(this.x, this.y, this.offsetTwo + ( this.hovered ? 32 : 0 ), this.elementTwo, this.width, this.height);
-        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
-            itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
+//        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
+//            itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
+        //COUT
 
         if( entity != null )
         {
@@ -202,7 +205,12 @@ public class ListButton extends GuiButton
     @Override
     public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
     {
-        this.onPress.onPress( this );
-        return true;
+        if( hovered )
+        {
+            this.onPress.onPress( this );
+            return true;
+        }
+        else
+            return false;
     }
 }

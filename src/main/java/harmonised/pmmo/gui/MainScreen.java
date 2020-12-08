@@ -9,6 +9,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -62,26 +64,28 @@ public class MainScreen extends GuiScreen
             Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), true ) );
         });
 
-        TileButton creditsButton = new TileButton( 1337,  x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
-        {
-            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), JType.CREDITS ) );
-        });
+//        TileButton creditsButton = new TileButton( 1337,  x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
+//        {
+//            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), JType.CREDITS ) );
+//        });
 
         TileButton prefsButton = new TileButton( 1337,  x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( ((TileButton) button).transKey ) ) );
         });
 
-        TileButton skillsButton = new TileButton( 1337,  x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
-        {
-            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
-        });
+//        TileButton skillsButton = new TileButton( 1337,  x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
+//        {
+//            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
+//        });
+        //COUT
 
         addButton(exitButton);
         tileButtons.add(glossaryButton);
-        tileButtons.add(creditsButton);
+//        tileButtons.add(creditsButton);
         tileButtons.add(prefsButton);
-        tileButtons.add(skillsButton);
+//        tileButtons.add(skillsButton);
+        //COUT
 
         for( TileButton button : tileButtons )
         {
@@ -98,13 +102,15 @@ public class MainScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
+        drawGradientRect(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
+        GlStateManager.pushAttrib();
         for( TileButton button : tileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                renderTooltip( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
+                drawHoveringText( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
+        GlStateManager.popAttrib();
 
         GlStateManager.enableBlend();
         Minecraft.getMinecraft().getTextureManager().bindTexture( logo );

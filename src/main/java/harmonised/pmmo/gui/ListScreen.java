@@ -14,15 +14,19 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 
 import java.util.*;
@@ -147,7 +151,7 @@ public class ListScreen extends GuiScreen
                 {
                     if ( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ) != null )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 8, regKey, jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                        tempList.add( new ListButton( 1337, 0, 0, 3, 8, regKey, jType, "", ListButton::clickActionGlossary ) );
                     }
                 }
             }
@@ -161,32 +165,33 @@ public class ListScreen extends GuiScreen
 
                 if( veinBlacklist.containsKey( "all_dimensions" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 8, "all_dimensions", jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                    tempList.add( new ListButton( 1337, 0, 0, 3, 8, "all_dimensions", jType, "", ListButton::clickActionGlossary ) );
                 }
 
 
                 if( veinBlacklist.containsKey( "minecraft:overworld" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:overworld", jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                    tempList.add( new ListButton( 1337, 0, 0, 3, 8, "minecraft:overworld", jType, "", ListButton::clickActionGlossary ) );
                 }
 
                 if( veinBlacklist.containsKey( "minecraft:the_nether" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_nether", jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                    tempList.add( new ListButton( 1337, 0, 0, 3, 8, "minecraft:the_nether", jType, "", ListButton::clickActionGlossary ) );
                 }
 
                 if( veinBlacklist.containsKey( "minecraft:the_end" ) )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 8, "minecraft:the_end", jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                    tempList.add( new ListButton( 1337, 0, 0, 3, 8, "minecraft:the_end", jType, "", ListButton::clickActionGlossary ) );
                 }
 
-                for( Map.Entry<String, Map<String, Double>> entry : veinBlacklist.entrySet() )
-                {
-                    if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
-                    {
-                        tempList.add( new ListButton( 0, 0, 3, 8, entry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
-                    }
-                }
+//                for( Map.Entry<String, Map<String, Double>> entry : veinBlacklist.entrySet() )
+//                {
+//                    if ( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( entry.getKey() ) ) != null )
+//                    {
+//                        tempList.add( new ListButton( 1337, 0, 0, 3, 8, entry.getKey(), jType, "", ListButton::clickActionGlossary ) );
+//                    }
+//                }
+                //COUT Dimensions
             }
             break;
 
@@ -227,7 +232,7 @@ public class ListScreen extends GuiScreen
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 0, regKey, jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                        tempList.add( new ListButton( 1337, 0, 0, 3, 0, regKey, jType, "", ListButton::clickActionGlossary ) );
                     }
                 }
             }
@@ -243,7 +248,7 @@ public class ListScreen extends GuiScreen
                 {
                     if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 0, entry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                        tempList.add( new ListButton( 1337, 0, 0, 3, 0, entry.getKey(), jType, "", ListButton::clickActionGlossary ) );
                     }
                 }
             }
@@ -258,7 +263,7 @@ public class ListScreen extends GuiScreen
                 {
                     if( ForgeRegistries.ENCHANTMENTS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 25, entry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                        tempList.add( new ListButton( 1337, 0, 0, 3, 25, entry.getKey(), jType, "", ListButton::clickActionGlossary ) );
                     }
                 }
                 break;
@@ -268,10 +273,10 @@ public class ListScreen extends GuiScreen
             {
                 Set<Skill> skills = XP.getOfflineXpMap( uuid ).keySet();
                 List<ListButton> buttonsToAdd = new ArrayList<>();
-                listButtons.add( new ListButton( 0, 0, 3, 6, "totalLevel", jType, "", button -> ((ListButton) button).clickActionSkills() ) );
+                listButtons.add( new ListButton( 1337, 0, 0, 3, 6, "totalLevel", jType, "", ListButton::clickActionGlossary ) );
                 for( Skill theSkill : skills )
                 {
-                    buttonsToAdd.add( new ListButton( 0, 0, 3, 6, theSkill.toString(), jType, "", button -> ((ListButton) button).clickActionSkills() ) );
+                    buttonsToAdd.add( new ListButton( 1337, 0, 0, 3, 6, theSkill.toString(), jType, "", ListButton::clickActionGlossary ) );
                 }
                 buttonsToAdd.sort( Comparator.comparingDouble( b -> XP.getOfflineXp( Skill.getSkill( ((ListButton) b).regKey ), uuid ) ).reversed() );
                 listButtons.addAll( buttonsToAdd );
@@ -287,7 +292,7 @@ public class ListScreen extends GuiScreen
 
                     for( Map.Entry<UUID, String> entry : XP.playerNames.entrySet() )
                     {
-                        buttonsToAdd.add( new ListButton( 0, 0, 3, 6, entry.getValue(), jType, "", button -> ((ListButton) button).clickActionSkills() ) );
+                        buttonsToAdd.add( new ListButton( 1337, 0, 0, 3, 6, entry.getValue(), jType, "", ListButton::clickActionGlossary ) );
                     }
                     if( type.equals( "totalLevel" ) )
                         buttonsToAdd.sort( Comparator.comparingDouble( b -> XP.getTotalLevelFromMap( XP.getOfflineXpMap( XP.playerUUIDs.get( ((ListButton) b).regKey ) ) ) ).reversed() );
@@ -307,7 +312,7 @@ public class ListScreen extends GuiScreen
                     break;
                 for( Map.Entry<String, Map<String, Map<String, Double>>> salvageFromItemEntry : reqMap2.entrySet() )
                 {
-                    tempList.add( new ListButton( 0, 0, 3, 0, salvageFromItemEntry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                    tempList.add( new ListButton( 1337, 0, 0, 3, 0, salvageFromItemEntry.getKey(), jType, "", ListButton::clickActionGlossary ) );
                 }
             }
             break;
@@ -322,7 +327,7 @@ public class ListScreen extends GuiScreen
                 {
                     if( XP.getItem( entry.getKey() ) != Items.AIR )
                     {
-                        tempList.add( new ListButton( 0, 0, 3, 0, entry.getKey(), jType, "", button -> ((ListButton) button).clickActionGlossary() ) );
+                        tempList.add( new ListButton( 1337, 0, 0, 3, 0, entry.getKey(), jType, "", ListButton::clickActionGlossary ) );
                     }
                 }
             }
@@ -366,7 +371,7 @@ public class ListScreen extends GuiScreen
                         button.text.add( getTransComp( "pmmo.veinBlacklist" ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText() );
                         for ( Map.Entry<String, Double> entry : veinBlacklist.get( button.regKey ).entrySet() )
                         {
-                            button.text.add( new TextComponentString( " " + getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getUnformattedText() ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText() );
+                            button.text.add( new TextComponentString( " " + new ItemStack( XP.getItem( entry.getKey() ) ).getDisplayName() ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText() );
                         }
                     }
 
@@ -436,7 +441,7 @@ public class ListScreen extends GuiScreen
                         {
                             if ( ForgeRegistries.POTIONS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                             {
-                                Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
+                                Potion effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                                 if ( effect != null )
                                     effectText.add( " " + getTransComp( effect.getDisplayName().getFormattedText() + " " + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
                             }
@@ -454,7 +459,7 @@ public class ListScreen extends GuiScreen
                 {
                     button.text.add( "" );
                     Map<String, Double> breakMap = JsonConfig.data.get( JType.REQ_BREAK ).get( button.regKey );
-                    Map<String, Double> infoMap = XP.getReqMap( button.regKey, jType );
+                    Map<String, Double> infoMap = XP.getJsonMap( button.regKey, jType );
                     List<String> infoText = new ArrayList<>();
                     String transKey = "pmmo." + jType.toString().replace( "info_", "" ) + "ExtraDrop";
                     double extraDroppedPerLevel = infoMap.get( "extraChance" ) / 100;
@@ -591,9 +596,9 @@ public class ListScreen extends GuiScreen
                     else
                     {
                         if( button.entity instanceof EntityAnimal )
-                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( Config.forgeConfig.passiveMobHunterXp.get() ) ).setStyle( color ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( FConfig.passiveMobHunterXp ) ).setStyle( color ).getFormattedText() );
                         else if( button.entity instanceof EntityMob)
-                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( Config.forgeConfig.aggresiveMobSlayerXp.get() ) ).setStyle( color ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( FConfig.aggresiveMobSlayerXp ) ).setStyle( color ).getFormattedText() );
                     }
 
                     if ( rareDropMap != null )
@@ -602,7 +607,7 @@ public class ListScreen extends GuiScreen
                         button.text.add( getTransComp( "pmmo.rareDrops" ).setStyle( color ).getFormattedText() );
                         for( Map.Entry<String, Double> entry : rareDropMap.entrySet() )
                         {
-                            button.text.add( " " + new TextComponentString( getTransComp( XP.getItem( entry.getKey() ).getTranslationKey() ).getFormattedText() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ).getFormattedText() ).setStyle( color ).getFormattedText() );
+                            button.text.add( " " + new TextComponentString( new ItemStack( XP.getItem( entry.getKey() ) ).getDisplayName() ).getFormattedText() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ).getFormattedText() ).setStyle( color ).getFormattedText() );
                         }
                     }
                 }
@@ -630,7 +635,7 @@ public class ListScreen extends GuiScreen
 
                     button.text.add( " " + getTransComp( "pmmo.xpEach", DP.dpSoft( (double) fishPoolMap.get("xp") ) ).setStyle( color ).getFormattedText() );
 
-                    if ( button.itemStack.isEnchantable() )
+                    if ( button.itemStack.isItemEnchantable() )
                     {
                         if( (double) fishPoolMap.get( "enchantLevelReq" ) <= level && button.unlocked )
                             button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
@@ -675,12 +680,12 @@ public class ListScreen extends GuiScreen
                         if( skillsMap.containsKey( skill ) )
                         {
                             xp = skillsMap.get( skill );
-                            button.text.add( getTransComp( "pmmo.levelX", DP.dpSoft( XP.levelAtXpDecimal( xp ) ) ).setStyle( color ).getString() );
-                            button.text.add( getTransComp( "pmmo.xpX", DP.dpSoft( xp ) ).setStyle( color ).getString() );
+                            button.text.add( getTransComp( "pmmo.levelX", DP.dpSoft( XP.levelAtXpDecimal( xp ) ) ).setStyle( color ).getFormattedText() );
+                            button.text.add( getTransComp( "pmmo.xpX", DP.dpSoft( xp ) ).setStyle( color ).getFormattedText() );
                         }
                     }
                     else if( type.equals( "totalLevel" ) )
-                        button.text.add( new TextComponentString( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( playerUUID ) ) ).getString() );
+                        button.text.add( new TextComponentString( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( playerUUID ) ) ).getFormattedText() );
                     break;
 
                 case SALVAGE:
@@ -695,13 +700,13 @@ public class ListScreen extends GuiScreen
                     Style color;
                     button.unlocked = false;
                     int i = 0;
-                    List<String> toItemsList = new ArrayList<>( reqMap2.get( button.regKey ).getKeySet() );
+                    List<String> toItemsList = new ArrayList<>( reqMap2.get( button.regKey ).keySet() );
                     toItemsList.sort(Comparator.comparingInt( key -> (int) (double) reqMap2.get( button.regKey ).get( key ).get( "levelReq" ) ) );
 
                     for( String salvageToItemKey : toItemsList )
                     {
                         salvageToItemMap = reqMap2.get( button.regKey ).get( salvageToItemKey );
-                        outputName       = getTransComp( XP.getItem( salvageToItemKey ).getTranslationKey() ).getUnformattedText();
+                        outputName       = new ItemStack( XP.getItem( salvageToItemKey ) ).getDisplayName();
                         levelReq         = salvageToItemMap.get( "levelReq" );
                         salvageMax       = salvageToItemMap.get( "salvageMax" );
                         baseChance       = salvageToItemMap.get( "baseChance" );
@@ -751,13 +756,13 @@ public class ListScreen extends GuiScreen
                     Style color;
                     button.unlocked = false;
                     int i = 0;
-                    List<String> toItemsList = new ArrayList<>( reqMap2.get( button.regKey ).getKeySet() );
+                    List<String> toItemsList = new ArrayList<>( reqMap2.get( button.regKey ).keySet() );
                     toItemsList.sort(Comparator.comparingDouble( key -> BlockBrokenHandler.getTreasureItemChance( excavationLevel, reqMap2.get( button.regKey ).get( key ) ) ) );
 
                     for( String treasureToItemKey : toItemsList )
                     {
                         treasureToItemMap = reqMap2.get( button.regKey ).get( treasureToItemKey );
-                        outputName      = getTransComp( XP.getItem( treasureToItemKey ).getTranslationKey() ).getUnformattedText();
+                        outputName      = new ItemStack( XP.getItem( treasureToItemKey ) ).getDisplayName();
                         startLevel      = (int) (double) treasureToItemMap.get( "startLevel" );
                         endLevel        = (int) (double) treasureToItemMap.get( "endLevel" );
                         startChance     = treasureToItemMap.get( "startChance" );
@@ -796,8 +801,8 @@ public class ListScreen extends GuiScreen
                 {
                     if( button.regKey.equals( "totalLevel" ) )
                     {
-                        button.title = getTransComp( "pmmo.totalLevel" ).getString();
-                        button.text.add( new TextComponentString( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) ) ).getString() );
+                        button.title = getTransComp( "pmmo.totalLevel" ).getFormattedText();
+                        button.text.add( new TextComponentString( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) ) ).getFormattedText() );
                     }
                     else
                     {
@@ -806,13 +811,13 @@ public class ListScreen extends GuiScreen
                         double curXp = XP.getOfflineXp( skill, uuid );
                         double nextXp = XP.xpAtLevel( XP.levelAtXp( curXp ) + 1 );
 
-                        button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( XP.getSkillStyle( Skill.getSkill( button.regKey ) ) ).getString();
+                        button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( XP.getSkillStyle( Skill.getSkill( button.regKey ) ) ).getFormattedText();
 
-                        button.text.add( new TextComponentString( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ) ).getString() );
-                        if( skill.getLevel( player ) != Config.getConfig( "maxLevel" ) )
+                        button.text.add( new TextComponentString( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ) ).getFormattedText() );
+                        if( skill.getLevel( player ) != FConfig.getConfig( "maxLevel" ) )
                         {
-                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ) ).getString() );
-                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ) ).getString() );
+                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ) ).getFormattedText() );
+                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ) ).getFormattedText() );
                         }
                     }
                 }
@@ -920,35 +925,35 @@ public class ListScreen extends GuiScreen
         switch( jType ) //default buttons
         {
             case XP_VALUE_BREED:
-                ListButton otherAnimalsBreedButton = new ListButton( 0, 0, 3, 20, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherAnimalsBreedButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( Config.forgeConfig.defaultBreedingXp.get() ) ).setStyle( greenColor ).getFormattedText() );
+                ListButton otherAnimalsBreedButton = new ListButton( 1337, 0, 0, 3, 20, "pmmo.otherAnimals", jType, "", ListButton::clickActionGlossary );
+                otherAnimalsBreedButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.farming" ), DP.dpSoft( FConfig.defaultBreedingXp ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherAnimalsBreedButton );
                 break;
 
             case XP_VALUE_TAME:
             {
-                ListButton otherAnimalsTameButton = new ListButton( 0, 0, 3, 21, "pmmo.otherAnimals", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherAnimalsTameButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( Config.forgeConfig.defaultTamingXp.get() ) ).setStyle( greenColor ).getFormattedText() );
+                ListButton otherAnimalsTameButton = new ListButton( 1337, 0, 0, 3, 21, "pmmo.otherAnimals", jType, "", ListButton::clickActionGlossary );
+                otherAnimalsTameButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.taming" ), DP.dpSoft( FConfig.defaultTamingXp ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherAnimalsTameButton );
             }
             break;
 
             case REQ_KILL:
             {
-                ListButton otherAggresiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherAggresiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( Config.forgeConfig.aggresiveMobSlayerXp.get() ) ).setStyle( greenColor ).getFormattedText() );
+                ListButton otherAggresiveMobsButton = new ListButton( 1337, 0, 0, 3, 26, "pmmo.otherAggresiveMobs", jType, "", ListButton::clickActionGlossary );
+                otherAggresiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.slayer" ), DP.dpSoft( FConfig.aggresiveMobSlayerXp ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherAggresiveMobsButton );
 
-                ListButton otherPassiveMobsButton = new ListButton( 0, 0, 3, 26, "pmmo.otherPassiveMobs", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherPassiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( Config.forgeConfig.passiveMobHunterXp.get() ) ).setStyle( greenColor ).getFormattedText() );
+                ListButton otherPassiveMobsButton = new ListButton( 1337, 0, 0, 3, 26, "pmmo.otherPassiveMobs", jType, "", ListButton::clickActionGlossary );
+                otherPassiveMobsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.hunter" ), DP.dpSoft( FConfig.passiveMobHunterXp ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherPassiveMobsButton );
             }
             break;
 
             case XP_VALUE_CRAFT:
             {
-                ListButton otherCraftsButton = new ListButton( 0, 0, 3, 22, "pmmo.otherCrafts", jType, "", button -> ((ListButton) button).clickActionGlossary() );
-                otherCraftsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( Config.forgeConfig.defaultCraftingXp.get() ) ).setStyle( greenColor ).getFormattedText() );
+                ListButton otherCraftsButton = new ListButton( 1337, 0, 0, 3, 22, "pmmo.otherCrafts", jType, "", ListButton::clickActionGlossary );
+                otherCraftsButton.text.add( " " + getTransComp( "pmmo.xpDisplay", getTransComp( "pmmo.crafting" ), DP.dpSoft( FConfig.defaultCraftingXp ) ).setStyle( greenColor ).getFormattedText() );
                 listButtons.add( otherCraftsButton );
             }
             break;
@@ -1012,7 +1017,7 @@ public class ListScreen extends GuiScreen
 
         for( Map.Entry<String, Double> inEntry : map.entrySet() )
         {
-            double value = (double) inEntry.getValue();
+            double value = inEntry.getValue();
 
             if( metReq )
             {
@@ -1052,7 +1057,7 @@ public class ListScreen extends GuiScreen
 
     private static int getReqCount( String regKey, JType jType )
     {
-        Map<String, Double> map = XP.getReqMap( regKey, jType );
+        Map<String, Double> map = XP.getJsonMap( regKey, jType );
 
         if( map == null )
             return 0;
@@ -1069,11 +1074,11 @@ public class ListScreen extends GuiScreen
             title = getTransComp( "pmmo.playerStats", XP.playerNames.get( uuid ) );
         else if( jType.equals( JType.HISCORE ) )
             title = getTransComp( "pmmo.skillHiscores", getTransComp( "pmmo." + type ) ).setStyle( XP.skillStyle.get( Skill.getSkill( type ) ) );
-
-        if( font.getStringWidth( title.getString() ) > 220 )
-            drawCenteredString( font, title.getString(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+        
+        if( fontRenderer.getStringWidth( title.getFormattedText() ) > 220 )
+            drawCenteredString( fontRenderer, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
-            drawCenteredString( font, title.getString(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( fontRenderer, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -1090,13 +1095,15 @@ public class ListScreen extends GuiScreen
             buttonX = mouseX - button.x;
             buttonY = mouseY - button.y;
 
+            GlStateManager.pushAttrib();
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
                 if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.REQ_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.SKILLS ) || jType.equals( JType.HISCORE ) || button.regKey.equals( "pmmo.otherCrafts" ) )
-                    renderTooltip( button.title, mouseX, mouseY );
+                    drawHoveringText( button.title, mouseX, mouseY );
                 else if( button.itemStack != null )
-                    renderTooltip( button.itemStack, mouseX, mouseY );
+                    drawHoveringText( button.itemStack, mouseX, mouseY );
             }
+            GlStateManager.popAttrib();
 
             accumulativeHeight += button.getHeight();
         }
@@ -1122,7 +1129,7 @@ public class ListScreen extends GuiScreen
     @Override
     public void drawBackground(int p_renderBackground_1_)
     {
-        if (this.minecraft != null)
+        if (this.mc != null)
         {
             this.drawGradientRect(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
@@ -1135,21 +1142,21 @@ public class ListScreen extends GuiScreen
         this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
-    @Override
-    public boolean mouseScrolled( int mouseX, int mouseY, double scroll )
-    {
-        accumulativeHeight = 0;
-        for( ListButton listButton : listButtons )
-        {
-            accumulativeHeight += listButton.getHeight();
-            if( accumulativeHeight > scrollPanel.getBottom() - scrollPanel.getTop() )
-            {
-                scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
-                break;
-            }
-        }
-        return super.mouseScrolled(mouseX, mouseY, scroll);
-    }
+//    @Override
+//    public boolean mouseScrolled( int mouseX, int mouseY, double scroll )
+//    {
+//        accumulativeHeight = 0;
+//        for( ListButton listButton : listButtons )
+//        {
+//            accumulativeHeight += listButton.getHeight();
+//            if( accumulativeHeight > scrollPanel.getBottom() - scrollPanel.getTop() )
+//            {
+//                scrollPanel.mouseScrolled( mouseX, mouseY, scroll );
+//                break;
+//            }
+//        }
+//        return super.mouseScrolled(mouseX, mouseY, scroll);
+//    }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button)
@@ -1172,17 +1179,17 @@ public class ListScreen extends GuiScreen
     }
 
     @Override
-    public boolean mouseReleased(int mouseX, int mouseY, int button)
+    public void mouseReleased( int mouseX, int mouseY, int button)
     {
         scrollPanel.mouseReleased( mouseX, mouseY, button );
-        return super.mouseReleased( mouseX, mouseY, button );
+        super.mouseReleased( mouseX, mouseY, button );
     }
 
     @Override
-    public boolean mouseDragged(int mouseX, int mouseY, int button, float deltaX, float deltaY)
+    protected void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
     {
-        scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        scrollPanel.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
+        super.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
     }
 
     public static TextComponentTranslation getTransComp( String translationKey, Object... args )

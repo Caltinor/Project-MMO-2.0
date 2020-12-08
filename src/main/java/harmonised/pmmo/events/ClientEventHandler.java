@@ -52,13 +52,13 @@ public class ClientEventHandler
                     XP.getOfflineXpMap( uuid ).put( skill, aSkill.goalXp );
                 });
 
-//                if( Minecraft.getMinecraft().currentScreen == null )
-//                {
-//                    if( ClientHandler.OPEN_MENU.isKeyDown() )
-//                    {
-//                        Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "category.pmmo" ) ) );
-//                        wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
-//                    }
+                if( Minecraft.getMinecraft().currentScreen == null )
+                {
+                    if( ClientHandler.OPEN_MENU.isKeyDown() )
+                    {
+                        Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "category.pmmo" ) ) );
+                        wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
+                    }
 //                    else if( ClientHandler.OPEN_SETTINGS.isKeyDown() )
 //                    {
 //                        Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( "pmmo.preferences" ) ) );
@@ -74,7 +74,7 @@ public class ClientEventHandler
 //                        Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, new TextComponentTranslation( "pmmo.glossary" ), true ) );
 //                        wasOpenGlossary = ClientHandler.OPEN_GLOSSARY.isKeyDown();
 //                    }
-//                }
+                }
                 //COUT GUI
             }
 

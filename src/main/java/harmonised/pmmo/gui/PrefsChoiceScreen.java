@@ -48,19 +48,21 @@ public class PrefsChoiceScreen extends GuiScreen
             Minecraft.getMinecraft().displayGuiScreen( new MainScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentString( "pmmo.potato" ) ) );
         });
 
-        TileButton settingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
-        {
-            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.SETTINGS ) );
-        });
-
-        TileButton guiSettingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
-        {
-            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
-        });
+//        TileButton settingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
+//        {
+//            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.SETTINGS ) );
+//        });
+//
+//        TileButton guiSettingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
+//        {
+//            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
+//        });
+        //COUT
 
         addButton( exitButton );
-        tileButtons.add( settingsButton );
-        tileButtons.add( guiSettingsButton );
+//        tileButtons.add( settingsButton );
+//        tileButtons.add( guiSettingsButton );
+        //COUT
 
         for( TileButton button : tileButtons )
         {
@@ -79,11 +81,13 @@ public class PrefsChoiceScreen extends GuiScreen
 
 //        fillGradient(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
+        GlStateManager.pushAttrib();
         for( TileButton button : tileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                renderTooltip( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
+                drawHoveringText( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
+        GlStateManager.popAttrib();
     }
 
     @Override

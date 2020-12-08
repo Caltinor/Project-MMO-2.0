@@ -95,8 +95,9 @@ public class ListButtonBig extends GuiButton
         minecraft.getTextureManager().bindTexture( items );
         this.drawTexturedModalRect(this.x, this.y, this.offsetOne + ( this.hovered ? 64 : 0 ), this.elementOne, this.width, this.height);
         this.drawTexturedModalRect(this.x, this.y, this.offsetTwo + ( this.hovered ? 64 : 0 ), this.elementTwo, this.width, this.height);
-        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
-            itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
+//        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
+//            itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
+        //COUT
 
         if( entity != null )
         {
@@ -126,7 +127,12 @@ public class ListButtonBig extends GuiButton
     @Override
     public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
     {
-        this.onPress.onPress( this );
-        return true;
+        if( mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height )
+        {
+            this.onPress.onPress( this );
+            return true;
+        }
+        else
+            return false;
     }
 }

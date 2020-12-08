@@ -64,6 +64,7 @@ public class TileButton extends GuiButton
     @Override
     public void drawButton( Minecraft mc, int mouseX, int mouseY, float partialTicks )
     {
+        hovered = mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
         FontRenderer fontrenderer = mc.fontRenderer;
         mc.getTextureManager().bindTexture( buttons );
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -84,8 +85,13 @@ public class TileButton extends GuiButton
     @Override
     public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
     {
-        this.onPress.onPress( this );
-        return true;
+        if( mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height )
+        {
+            this.onPress.onPress( this );
+            return true;
+        }
+        else
+            return false;
     }
 
     public void onPress()

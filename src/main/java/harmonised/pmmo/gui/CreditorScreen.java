@@ -63,10 +63,11 @@ public class CreditorScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
-        {
-            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.credits" ), JType.CREDITS ) );
-        });
+//        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
+//        {
+//            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.credits" ), JType.CREDITS ) );
+//        });
+        //COUT
 
         addButton(exitButton);
 
@@ -74,6 +75,7 @@ public class CreditorScreen extends GuiScreen
 //        {
 //            addButton( button );
 //        }
+        //COUT
     }
 
     @Override

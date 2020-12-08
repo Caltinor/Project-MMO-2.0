@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -73,13 +74,15 @@ public class StatsScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        fillGradient(x + 20, y + 16, x + 232, y + 200, 0x22444444, 0x33222222);
+        drawGradientRect(x + 20, y + 16, x + 232, y + 200, 0x22444444, 0x33222222);
 
+        GlStateManager.pushAttrib();
         for( TileButton button : tileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                renderTooltip( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
+                drawHoveringText( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
+        GlStateManager.popAttrib();
     }
 
     @Override
