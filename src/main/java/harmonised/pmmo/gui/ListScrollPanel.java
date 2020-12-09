@@ -127,14 +127,6 @@ public class ListScrollPanel extends ScrollPanel
     @Override
     public void render(int mouseX, int mouseY, float partialTicks)
     {
-//        this.drawBackground();
-
-//        if (Minecraft.getInstance().world != null)
-//        {
-//            this.fillGradient(0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
-//            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super ) );
-//        }
-
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder worldr = tess.getBuffer();
 
@@ -142,25 +134,6 @@ public class ListScrollPanel extends ScrollPanel
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor((int)(left  * scale), (int)(client.getMainWindow().getFramebufferHeight() - (bottom * scale)),
                 (int)(width * scale), (int)(height * scale));
-
-//        if (this.client.world != null)
-//        {
-//            this.drawGradientRect(this.left, this.top, this.right, this.bottom, 0xC0101010, 0xD0101010);
-//        }
-//        else // Draw dark dirt background
-//        {
-//            RenderSystem.disableLighting();
-//            RenderSystem.disableFog();
-//            this.client.getTextureManager().bindTexture(AbstractGui.BACKGROUND_LOCATION);
-//            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//            final float texScale = 32.0F;
-//            worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-//            worldr.pos(this.left,  this.bottom, 0.0D).tex(this.left  / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-//            worldr.pos(this.right, this.bottom, 0.0D).tex(this.right / texScale, (this.bottom + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-//            worldr.pos(this.right, this.top,    0.0D).tex(this.right / texScale, (this.top    + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-//            worldr.pos(this.left,  this.top,    0.0D).tex(this.left  / texScale, (this.top    + (int)this.scrollDistance) / texScale).color(0x20, 0x20, 0x20, 0xFF).endVertex();
-//            tess.draw();
-//        }
 
         int baseY = this.top + border - (int)this.scrollDistance;
         this.drawPanel(right, baseY, tess, mouseX, mouseY);
