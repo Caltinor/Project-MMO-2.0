@@ -48,21 +48,19 @@ public class PrefsChoiceScreen extends GuiScreen
             Minecraft.getMinecraft().displayGuiScreen( new MainScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentString( "pmmo.potato" ) ) );
         });
 
-//        TileButton settingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
-//        {
-//            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.SETTINGS ) );
-//        });
-//
-//        TileButton guiSettingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
-//        {
-//            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
-//        });
-        //COUT
+        TileButton settingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
+        {
+            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.SETTINGS ) );
+        });
+
+        TileButton guiSettingsButton = new TileButton( 1337,  (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
+        {
+            Minecraft.getMinecraft().displayGuiScreen( new PrefsScreen( new TextComponentTranslation( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
+        });
 
         addButton( exitButton );
-//        tileButtons.add( settingsButton );
-//        tileButtons.add( guiSettingsButton );
-        //COUT
+        tileButtons.add( settingsButton );
+        tileButtons.add( guiSettingsButton );
 
         for( TileButton button : tileButtons )
         {

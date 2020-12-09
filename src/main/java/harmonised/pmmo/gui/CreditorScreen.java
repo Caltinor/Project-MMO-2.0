@@ -20,15 +20,14 @@ import java.util.*;
 public class CreditorScreen extends GuiScreen
 {
     public static final HashMap<String, String> uuidName = new HashMap<>();
-    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     public static final Map<String, List<String>> creditorsInfo = new HashMap<>();
     public static Map<String, Integer> colors = new HashMap<>();
     private static TileButton exitButton;
 
-    Minecraft minecraft = Minecraft.getMinecraft();
-    ScaledResolution sr = new ScaledResolution( mc );
-    FontRenderer font = minecraft.fontRenderer;
+    Minecraft mc;
+    ScaledResolution sr;
+    FontRenderer font;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -47,6 +46,9 @@ public class CreditorScreen extends GuiScreen
         this.playerName = playerName;
         this.lastScroll = lastScroll;
         this.transKey = transKey;
+        this.mc = Minecraft.getMinecraft();
+        this.sr = new ScaledResolution( mc );
+        this.font = mc.fontRenderer;
     }
 
 //    @Override
@@ -63,19 +65,12 @@ public class CreditorScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
-//        {
-//            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.credits" ), JType.CREDITS ) );
-//        });
-        //COUT
+        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
+        {
+            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.credits" ), JType.CREDITS ) );
+        });
 
         addButton(exitButton);
-
-//        for( TileButton button : tileButtons )
-//        {
-//            addButton( button );
-//        }
-        //COUT
     }
 
     @Override
@@ -112,7 +107,7 @@ public class CreditorScreen extends GuiScreen
     @Override
     public void drawBackground( int p_renderBackground_1_ )
     {
-        if (this.minecraft != null)
+        if (this.mc != null)
         {
             this.drawGradientRect( 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this ));

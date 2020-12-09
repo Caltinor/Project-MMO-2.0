@@ -1,44 +1,44 @@
-//package harmonised.pmmo.gui;
-//
-//import harmonised.pmmo.util.DP;
-//import harmonised.pmmo.util.XP;
-//import net.minecraft.client.Minecraft;
-//import net.minecraft.client.gui.FontRenderer;
-//
-//import net.minecraft.client.gui.GuiButton;
-//import net.minecraft.nbt.NBTTagCompound;
-//
-//public class PrefsEntry
-//{
-//    public static FontRenderer font = Minecraft.getMinecraft().fontRenderer;
+package harmonised.pmmo.gui;
+
+import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.XP;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.nbt.NBTTagCompound;
+
+public class PrefsEntry
+{
+    public static FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 //    public PrefsSlider slider;
-//    public GuiButton button;
+    public ResetButton button;
 //    public TextFieldWidget textField;
-//    public String preference, prefix, suffix;
-//    public double defaultVal;
-//    public final int sliderWidth = 150, height = 16;
-//    private final int textFieldWidth = 36;
-//    public final boolean isSwitch, removeIfMax;
-//
-//    public PrefsEntry(String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr, boolean removeIfMax, boolean isSwitch )
-//    {
-//        this.preference = preference;
-//        this.prefix = prefix;
-//        this.suffix = suffix;
-//        this.isSwitch = isSwitch;
-//        this.removeIfMax = removeIfMax;
-//
-//        if( defaultVal > maxVal )
-//            defaultVal = maxVal;
-//        if( defaultVal < minVal )
-//            defaultVal = minVal;
-//        if( curVal > maxVal )
-//            curVal = maxVal;
-//        if( curVal < minVal )
-//            curVal = minVal;
-//
-//        this.defaultVal = defaultVal;
-//
+    public String preference, prefix, suffix;
+    public double defaultVal;
+    public final int sliderWidth = 150, height = 16;
+    private final int textFieldWidth = 36;
+    public final boolean isSwitch, removeIfMax;
+
+    public PrefsEntry(String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr, boolean removeIfMax, boolean isSwitch )
+    {
+        this.preference = preference;
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.isSwitch = isSwitch;
+        this.removeIfMax = removeIfMax;
+
+        if( defaultVal > maxVal )
+            defaultVal = maxVal;
+        if( defaultVal < minVal )
+            defaultVal = minVal;
+        if( curVal > maxVal )
+            curVal = maxVal;
+        if( curVal < minVal )
+            curVal = minVal;
+
+        this.defaultVal = defaultVal;
+
 //        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, prefix, suffix, minVal, maxVal, curVal, showDec, showStr, isSwitch, button ->
 //        {
 //        });
@@ -49,78 +49,88 @@
 //            textField.setMaxStringLength( 5 );
 //            textField.setText( slider.getMessage() );
 //        }
-//        button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, isSwitch ? "RESET" : "R", button ->
-//        {
-//            resetValue();
-//        });
-//    }
-//
-//    public void resetValue()
-//    {
+        button = new ResetButton(0, 0, height + (isSwitch ? textFieldWidth : 0), height, height, isSwitch ? "RESET" : "R", button ->
+        {
+            resetValue();
+        });
+        //COU
+    }
+
+    public void resetValue()
+    {
 //        slider.setValue( defaultVal );
 //        slider.updateSlider();
 //        if( isSwitch )
 //            slider.setMessage( slider.getValue() == 1 ? "On" : "Off" );
 //        else
 //            textField.setText( slider.getMessage() );
-//    }
-//
-//    public int getWidth()
-//    {
-//        return sliderWidth + height + textFieldWidth;
-//    }
-//
-//    public int getHeight()
-//    {
-//        return height + 11;
-//    }
-//
-//    public int getX()
-//    {
+        //COUT
+    }
+
+    public int getWidth()
+    {
+        return sliderWidth + height + textFieldWidth;
+    }
+
+    public int getHeight()
+    {
+        return height + 11;
+    }
+
+    public int getX()
+    {
 //        return slider.x;
-//    }
-//
-//    public int getY()
-//    {
+        return 16;
+        //COUT
+    }
+
+    public int getY()
+    {
 //        return slider.y;
-//    }
-//
-//    public void setX( int x )
-//    {
+        return 16;
+        //COUT
+    }
+
+    public void setX( int x )
+    {
 //        slider.x = x;
 //
 //        if( isSwitch )
-//            button.x = x + sliderWidth;
+            button.x = x + sliderWidth;
 //        else
 //        {
 //            button.x = x + sliderWidth + textFieldWidth;
 //            textField.x = x + sliderWidth;
 //        }
-//    }
-//
-//    public void setY( int y )
-//    {
+        //COUT
+    }
+
+    public void setY( int y )
+    {
 //        slider.y = y;
-//        button.y = y;
+        button.y = y;
 //        if( !isSwitch )
 //            textField.y = y;
-//    }
-//
-//    public void mouseClicked( int mouseX, int mouseY, int button )
-//    {
+        //COUT
+    }
+
+    public void mouseClicked( int mouseX, int mouseY, int button )
+    {
 //        this.slider.mouseClicked( mouseX, mouseY, button );
-//        this.button.mouseClicked( mouseX, mouseY, button );
-//    }
-//
-//    public void mouseReleased( int mouseX, int mouseY, int button )
-//    {
+        this.button.mousePressed( Minecraft.getMinecraft(), mouseX, mouseY );
+        //COUT
+    }
+
+    public void mouseReleased( int mouseX, int mouseY, int button )
+    {
 //        this.slider.mouseReleased( mouseX, mouseY, button );
-//        this.button.mouseReleased( mouseX, mouseY, button );
-//    }
-//
-//    public void mouseDragged( int mouseX, int mouseY, int button, float deltaX, float deltaY )
-//    {
+        this.button.mouseReleased( mouseX, mouseY );
+        //COUT
+    }
+
+    public void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
+    {
 //        this.slider.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
 //        this.button.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
-//    }
-//}
+    }
+}

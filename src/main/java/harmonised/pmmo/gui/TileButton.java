@@ -85,9 +85,9 @@ public class TileButton extends GuiButton
     @Override
     public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
     {
-        if( mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height )
+        if( hovered )
         {
-            this.onPress.onPress( this );
+            onPress();
             return true;
         }
         else

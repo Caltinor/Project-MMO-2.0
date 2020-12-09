@@ -5,10 +5,12 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -64,10 +66,10 @@ public class MainScreen extends GuiScreen
             Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), true ) );
         });
 
-//        TileButton creditsButton = new TileButton( 1337,  x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
-//        {
-//            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), JType.CREDITS ) );
-//        });
+        TileButton creditsButton = new TileButton( 1337,  x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
+        {
+            Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), JType.CREDITS ) );
+        });
 
         TileButton prefsButton = new TileButton( 1337,  x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
         {
@@ -82,7 +84,7 @@ public class MainScreen extends GuiScreen
 
         addButton(exitButton);
         tileButtons.add(glossaryButton);
-//        tileButtons.add(creditsButton);
+        tileButtons.add(creditsButton);
         tileButtons.add(prefsButton);
 //        tileButtons.add(skillsButton);
         //COUT

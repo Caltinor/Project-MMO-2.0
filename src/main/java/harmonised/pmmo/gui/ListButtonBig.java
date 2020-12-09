@@ -129,10 +129,15 @@ public class ListButtonBig extends GuiButton
     {
         if( mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height )
         {
-            this.onPress.onPress( this );
+            onPress();
             return true;
         }
         else
             return false;
+    }
+
+    public void onPress()
+    {
+        onPress.onPress( this );
     }
 }

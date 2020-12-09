@@ -11,6 +11,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
@@ -152,18 +153,19 @@ public class ListButton extends GuiButton
 
     public void clickActionGlossary()
     {
+        this.playPressSound( Minecraft.getMinecraft().getSoundHandler() );
         GlossaryScreen.setButtonsToKey( regKey );
-        Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "pmmo.glossary" ), false ) );
+        Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentString( "pmmo.glossary" ), false ) );
     }
 
-//    public void clickActionSkills()
-//    {
-//        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) || regKey.equals( "totalLevel" ) )
-//            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentTranslation( "" ), regKey, JType.HISCORE, Minecraft.getMinecraft().player ) );
-//        else if( XP.playerNames.containsValue( regKey ) )
-//            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TextComponentTranslation( "" ), regKey, JType.SKILLS, Minecraft.getMinecraft().player ) );
-//    }
-    //COUT
+    public void clickActionSkills()
+    {
+        this.playPressSound( Minecraft.getMinecraft().getSoundHandler() );
+        if( !Skill.getSkill( regKey ).equals( Skill.INVALID_SKILL ) || regKey.equals( "totalLevel" ) )
+            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( Minecraft.getMinecraft().player.getUniqueID(), new TextComponentString( "" ), regKey, JType.HISCORE, Minecraft.getMinecraft().player ) );
+        else if( XP.playerNames.containsValue( regKey ) )
+            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TextComponentString( "" ), regKey, JType.SKILLS, Minecraft.getMinecraft().player ) );
+    }
 
     @Override
     public void drawButton( Minecraft mc, int mouseX, int mouseY, float partialTicks )
@@ -178,9 +180,8 @@ public class ListButton extends GuiButton
         this.drawTexturedModalRect(this.x, this.y, this.offsetOne + ( this.hovered ? 32 : 0 ), this.elementOne, this.width, this.height);
         mc.getTextureManager().bindTexture( items );
         this.drawTexturedModalRect(this.x, this.y, this.offsetTwo + ( this.hovered ? 32 : 0 ), this.elementTwo, this.width, this.height);
-//        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
-//            itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
-        //COUT
+        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
+            mc.getRenderItem().renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
 
         if( entity != null )
         {
@@ -202,12 +203,17 @@ public class ListButton extends GuiButton
         void onPress( ListButton button );
     }
 
+    public void onPress()
+    {
+        onPress.onPress( this );
+    }
+
     @Override
     public boolean mousePressed( Minecraft mc, int mouseX, int mouseY )
     {
         if( hovered )
         {
-            this.onPress.onPress( this );
+            onPress();
             return true;
         }
         else

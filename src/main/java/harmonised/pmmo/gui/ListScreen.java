@@ -27,16 +27,17 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.lwjgl.input.Mouse;
 
 
+import java.io.IOException;
 import java.util.*;
 
 public class ListScreen extends GuiScreen
 {
-    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private static final Style greenColor = XP.textStyle.get( "green" );
-    private static GuiButton exitButton;
+    private static TileButton exitButton;
 
     ScaledResolution sr = new ScaledResolution( Minecraft.getMinecraft() );
     private int boxWidth = 256;
@@ -443,7 +444,7 @@ public class ListScreen extends GuiScreen
                             {
                                 Potion effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                                 if ( effect != null )
-                                    effectText.add( " " + getTransComp( effect.getDisplayName().getFormattedText() + " " + (int) ( (double) entry.getValue() + 1) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
+                                    effectText.add( " " + getTransComp( effect.getName() + " " + (int) ( entry.getValue() + 1) ).setStyle( XP.textStyle.get("red") ).getFormattedText() );
                             }
                         }
                     }
@@ -607,7 +608,7 @@ public class ListScreen extends GuiScreen
                         button.text.add( getTransComp( "pmmo.rareDrops" ).setStyle( color ).getFormattedText() );
                         for( Map.Entry<String, Double> entry : rareDropMap.entrySet() )
                         {
-                            button.text.add( " " + new TextComponentString( new ItemStack( XP.getItem( entry.getKey() ) ).getDisplayName() ).getFormattedText() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ).getFormattedText() ).setStyle( color ).getFormattedText() );
+                            button.text.add( " " + new TextComponentString( new ItemStack( XP.getItem( entry.getKey() ) ).getDisplayName() ).getFormattedText() + ": " + getTransComp( "pmmo.dropChance", DP.dpSoft( entry.getValue() ) ).setStyle( color ).getFormattedText() );
                         }
                     }
                 }
@@ -962,7 +963,8 @@ public class ListScreen extends GuiScreen
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
-        children.add( scrollPanel );
+//        children.add( scrollPanel );
+        //COUT Children
         addButton( exitButton );
     }
 
@@ -1074,7 +1076,7 @@ public class ListScreen extends GuiScreen
             title = getTransComp( "pmmo.playerStats", XP.playerNames.get( uuid ) );
         else if( jType.equals( JType.HISCORE ) )
             title = getTransComp( "pmmo.skillHiscores", getTransComp( "pmmo." + type ) ).setStyle( XP.skillStyle.get( Skill.getSkill( type ) ) );
-        
+
         if( fontRenderer.getStringWidth( title.getFormattedText() ) > 220 )
             drawCenteredString( fontRenderer, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
         else
@@ -1083,7 +1085,7 @@ public class ListScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        scrollPanel.render( mouseX, mouseY, partialTicks );
+        scrollPanel.drawScreen( mouseX, mouseY, partialTicks );
 
         accumulativeHeight = 0;
         buttonsSize = listButtons.size();
@@ -1095,13 +1097,14 @@ public class ListScreen extends GuiScreen
             buttonX = mouseX - button.x;
             buttonY = mouseY - button.y;
 
+            GlStateManager.enableBlend();
             GlStateManager.pushAttrib();
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
                 if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.REQ_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.SKILLS ) || jType.equals( JType.HISCORE ) || button.regKey.equals( "pmmo.otherCrafts" ) )
                     drawHoveringText( button.title, mouseX, mouseY );
                 else if( button.itemStack != null )
-                    drawHoveringText( button.itemStack, mouseX, mouseY );
+                    renderToolTip( button.itemStack, mouseX, mouseY );
             }
             GlStateManager.popAttrib();
 
@@ -1159,19 +1162,27 @@ public class ListScreen extends GuiScreen
 //    }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int button)
+    public void handleMouseInput() throws IOException
+    {
+        super.handleMouseInput();
+
+        scrollPanel.scroll( Mouse.getEventDWheel() );
+    }
+
+    @Override
+    public void mouseClicked(int mouseX, int mouseY, int button) throws IOException
     {
         if( button == 1 )
             exitButton.onPress();
 
         for( ListButton a : listButtons )
         {
-            int buttonX = (int) mouseX - a.x;
-            int buttonY = (int) mouseY- a.y;
+            int buttonX = mouseX - a.x;
+            int buttonY = mouseY- a.y;
 
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
-                a.onClick( mouseX, mouseY );
+                a.onPress();
             }
         }
         scrollPanel.mouseClicked( mouseX, mouseY, button );
@@ -1196,5 +1207,4 @@ public class ListScreen extends GuiScreen
     {
         return new TextComponentTranslation( translationKey, args );
     }
-
 }
