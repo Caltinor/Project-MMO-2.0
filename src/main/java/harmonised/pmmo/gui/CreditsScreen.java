@@ -254,15 +254,17 @@ public class CreditsScreen extends GuiScreen
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
         if( button == 1 )
             exitButton.onPress();
-
-        for( ListButtonBig a : listButtons )
+        else
         {
-            if( mouseX > a.x + 3 && mouseY > a.y && mouseX < a.x + 60 && mouseY < a.y + 64 )
-                a.onPress();
-        }
+            for( ListButtonBig a : listButtons )
+            {
+                if( mouseX > a.x + 3 && mouseY > a.y && mouseX < a.x + 60 && mouseY < a.y + 64 )
+                    a.onPress();
+            }
 
-        scrollPanel.mouseClicked( mouseX, mouseY, button );
-        super.mouseClicked(mouseX, mouseY, button);
+            scrollPanel.mouseClicked( mouseX, mouseY, button );
+            super.mouseClicked(mouseX, mouseY, button);
+        }
     }
 
     @Override

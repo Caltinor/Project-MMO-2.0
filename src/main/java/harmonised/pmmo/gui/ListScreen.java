@@ -414,9 +414,9 @@ public class ListScreen extends GuiScreen
                         {
                             Style styleColor = new Style();
 
-                            if ( (double) entry.getValue() > 1 )
+                            if ( entry.getValue() > 1 )
                                 styleColor = XP.textStyle.get("red");
-                            else if ( (double) entry.getValue() < 1 )
+                            else if ( entry.getValue() < 1 )
                                 styleColor = XP.textStyle.get("green");
 
                             switch ( entry.getKey() )

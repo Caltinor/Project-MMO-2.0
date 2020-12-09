@@ -85,7 +85,7 @@ public class MainScreen extends GuiScreen
         addButton(exitButton);
         tileButtons.add(glossaryButton);
         tileButtons.add(creditsButton);
-        tileButtons.add(prefsButton);
+//        tileButtons.add(prefsButton);
 //        tileButtons.add(skillsButton);
         //COUT
 
