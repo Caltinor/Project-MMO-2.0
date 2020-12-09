@@ -159,6 +159,7 @@ public class CreditorScreen extends GuiScreen
         uuidName.put( "5bfdb948-7b66-476a-aefe-d45e4778fb2d", "Daddy_P1G#0432" );
         uuidName.put( "554b53b8-d0fa-409e-ab87-2a34bf83e506", "joerkig#1337" );
         uuidName.put( "21bb554a-f339-48ef-80f7-9a5083172892", "Judicius#1036" );
+        uuidName.put( "edafb5eb-9ccb-4121-bef7-e7ffded64ee3", "Lewdcina#0001" );
         List<String> list;
 
         /////////LAPIS//////////////
@@ -191,18 +192,19 @@ public class CreditorScreen extends GuiScreen
         list = creditorsInfo.get( "Judicius#1036" );
         list.add( new TextComponentTranslation( "pmmo.discordMemberSince", "22/11/2020" ).getFormattedText() );
 
-        /////////IRON///////////////
-        PlayerConnectedHandler.ironPatreons.forEach( a ->
-        {
-            colors.put( uuidName.get( a.toString() ), 0xeeeeee );
-            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
-        } );
         //DIDIS54
         list = creditorsInfo.get( "didis54#5815" );
         list.add( "First Iron Tier Patreon" );
         list.add( new TextComponentTranslation( "pmmo.discordMemberSince", "11/04/2020" ).getFormattedText() );
         list.add( new TextComponentTranslation( "pmmo.creatorOfModpack", "Anarkhe Revolution" ).getFormattedText() );
         list.add( new TextComponentTranslation( "pmmo.helpedTranslating", "French" ).getFormattedText() );
+
+        /////////IRON///////////////
+        PlayerConnectedHandler.ironPatreons.forEach( a ->
+        {
+            colors.put( uuidName.get( a.toString() ), 0xeeeeee );
+            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
+        } );
 
         //STRESSINDICATOR
         list = creditorsInfo.get( "stressindicator#8819" );
@@ -217,11 +219,16 @@ public class CreditorScreen extends GuiScreen
         list.add( new TextComponentTranslation( "pmmo.discordMemberSince", "17/04/2020" ).getFormattedText() );
         list.add( new TextComponentTranslation( "pmmo.creatorOfModpack", "Skillful Survival" ).getFormattedText() );
         creditorsInfo.put( "neothiamin#1798", list );
+
         //DARTH_REVAN#7341
         list = new ArrayList<>();
         list.add( new TextComponentTranslation( "pmmo.discordMemberSince", "17/04/2020" ).getFormattedText() );
         list.add( new TextComponentTranslation( "pmmo.creatorOfModpack", "Zombie Textiles" ).getFormattedText() );
         creditorsInfo.put( "Darth Revan#7341", list );
+
+        //LEWDCINA
+        list = creditorsInfo.get( "Lewdcina#0001" );
+        list.add( new TextComponentTranslation( "pmmo.discordMemberSince", "07/07/2020" ).getFormattedText() );
 
         /////////TRANSLATOR/////////
         //BusanDaek#3970
