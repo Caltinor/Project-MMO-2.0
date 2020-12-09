@@ -42,6 +42,8 @@ public class AutoValues
                 if( !JsonConfig.localData.get( jType ).get( resLoc ).containsKey( entry.getKey() ) )
                     JsonConfig.localData.get( jType ).get( resLoc ).put( entry.getKey(), value );
             }
+            if( JsonConfig.localData.get( jType ).get( resLoc ).size() == 0 )
+                JsonConfig.localData.get( jType ).remove( resLoc );
         }
     }
 
