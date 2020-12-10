@@ -83,6 +83,7 @@ public class StatsScreen extends GuiScreen
                 drawHoveringText( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
         GlStateManager.popAttrib();
+        GlStateManager.enableBlend();
     }
 
     @Override

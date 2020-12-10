@@ -76,17 +76,16 @@ public class MainScreen extends GuiScreen
             Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( ((TileButton) button).transKey ) ) );
         });
 
-//        TileButton skillsButton = new TileButton( 1337,  x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
-//        {
-//            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
-//        });
-        //COUT
+        TileButton skillsButton = new TileButton( 1337,  x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
+        {
+            Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
+        });
 
         addButton(exitButton);
         tileButtons.add(glossaryButton);
         tileButtons.add(creditsButton);
 //        tileButtons.add(prefsButton);
-//        tileButtons.add(skillsButton);
+        tileButtons.add(skillsButton);
         //COUT
 
         for( TileButton button : tileButtons )
@@ -113,8 +112,8 @@ public class MainScreen extends GuiScreen
                 drawHoveringText( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
         GlStateManager.popAttrib();
-
         GlStateManager.enableBlend();
+
         Minecraft.getMinecraft().getTextureManager().bindTexture( logo );
         this.drawTexturedModalRect( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }

@@ -206,6 +206,7 @@ public class CreditsScreen extends GuiScreen
             }
         }
         GlStateManager.popAttrib();
+        GlStateManager.enableBlend();
 
         if( font.getStringWidth( title.getFormattedText() ) > 220 )
             drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );

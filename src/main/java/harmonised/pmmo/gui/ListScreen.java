@@ -274,10 +274,10 @@ public class ListScreen extends GuiScreen
             {
                 Set<Skill> skills = XP.getOfflineXpMap( uuid ).keySet();
                 List<ListButton> buttonsToAdd = new ArrayList<>();
-                listButtons.add( new ListButton( 1337, 0, 0, 3, 6, "totalLevel", jType, "", ListButton::clickActionGlossary ) );
+                listButtons.add( new ListButton( 1337, 0, 0, 3, 6, "totalLevel", jType, "", ListButton::clickActionSkills ) );
                 for( Skill theSkill : skills )
                 {
-                    buttonsToAdd.add( new ListButton( 1337, 0, 0, 3, 6, theSkill.toString(), jType, "", ListButton::clickActionGlossary ) );
+                    buttonsToAdd.add( new ListButton( 1337, 0, 0, 3, 6, theSkill.toString(), jType, "", ListButton::clickActionSkills ) );
                 }
                 buttonsToAdd.sort( Comparator.comparingDouble( b -> XP.getOfflineXp( Skill.getSkill( ((ListButton) b).regKey ), uuid ) ).reversed() );
                 listButtons.addAll( buttonsToAdd );
@@ -293,7 +293,7 @@ public class ListScreen extends GuiScreen
 
                     for( Map.Entry<UUID, String> entry : XP.playerNames.entrySet() )
                     {
-                        buttonsToAdd.add( new ListButton( 1337, 0, 0, 3, 6, entry.getValue(), jType, "", ListButton::clickActionGlossary ) );
+                        buttonsToAdd.add( new ListButton( 1337, 0, 0, 3, 6, entry.getValue(), jType, "", ListButton::clickActionSkills ) );
                     }
                     if( type.equals( "totalLevel" ) )
                         buttonsToAdd.sort( Comparator.comparingDouble( b -> XP.getTotalLevelFromMap( XP.getOfflineXpMap( XP.playerUUIDs.get( ((ListButton) b).regKey ) ) ) ).reversed() );
@@ -814,11 +814,11 @@ public class ListScreen extends GuiScreen
 
                         button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( XP.getSkillStyle( Skill.getSkill( button.regKey ) ) ).getFormattedText();
 
-                        button.text.add( new TextComponentString( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ) ).getFormattedText() );
+                        button.text.add( new TextComponentString( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ).getFormattedText() ).getFormattedText() );
                         if( skill.getLevel( player ) != FConfig.getConfig( "maxLevel" ) )
                         {
-                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ) ).getFormattedText() );
-                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ) ).getFormattedText() );
+                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getFormattedText() ).getFormattedText() );
+                            button.text.add( new TextComponentString( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getFormattedText() ).getFormattedText() );
                         }
                     }
                 }
@@ -1092,13 +1092,12 @@ public class ListScreen extends GuiScreen
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        GlStateManager.pushAttrib();
         for( ListButton button : listButtons )
         {
             buttonX = mouseX - button.x;
             buttonY = mouseY - button.y;
 
-            GlStateManager.enableBlend();
-            GlStateManager.pushAttrib();
             if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() && buttonX >= 0 && buttonX < 32 && buttonY >= 0 && buttonY < 32 )
             {
                 if( jType.equals( JType.REQ_BIOME ) || jType.equals( JType.REQ_KILL ) || jType.equals( JType.XP_VALUE_BREED ) || jType.equals( JType.XP_VALUE_TAME ) || jType.equals( JType.DIMENSION ) || jType.equals( JType.FISH_ENCHANT_POOL ) || jType.equals( JType.SKILLS ) || jType.equals( JType.HISCORE ) || button.regKey.equals( "pmmo.otherCrafts" ) )
@@ -1106,10 +1105,11 @@ public class ListScreen extends GuiScreen
                 else if( button.itemStack != null )
                     renderToolTip( button.itemStack, mouseX, mouseY );
             }
-            GlStateManager.popAttrib();
 
             accumulativeHeight += button.getHeight();
         }
+        GlStateManager.popAttrib();
+        GlStateManager.enableBlend();
 
         MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
     }

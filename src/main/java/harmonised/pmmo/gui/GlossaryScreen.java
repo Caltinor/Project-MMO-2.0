@@ -240,7 +240,6 @@ public class GlossaryScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        GlStateManager.disableBlend();
         GlStateManager.pushAttrib();
         for( TileButton button : currentTileButtons )
         {
@@ -248,6 +247,7 @@ public class GlossaryScreen extends GuiScreen
                 drawHoveringText( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
         GlStateManager.popAttrib();
+        GlStateManager.enableBlend();
 
         if( Minecraft.getMinecraft().player.isCreative() )
         {

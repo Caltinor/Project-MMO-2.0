@@ -194,6 +194,7 @@ public class PrefsScreen extends GuiScreen
 //                drawHoveringText( prefEntry.isSwitch ? ( prefEntry.defaultVal == 1 ? "ON" : "OFF" ) : prefEntry.removeIfMax && prefEntry.defaultVal == prefEntry.slider.maxValue ? "MAX" : DP.dpSoft( prefEntry.defaultVal ), mouseX, mouseY );
 //        }
 //        GlStateManager.popAttrib();
+//        GlStateManager.enableBlend();
         //COUT
 
 //        MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );

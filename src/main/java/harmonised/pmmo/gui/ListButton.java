@@ -7,6 +7,7 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.*;
 import net.minecraft.entity.Entity;
@@ -40,6 +41,7 @@ public class ListButton extends GuiButton
     Entity testEntity = null;
     EntityLiving entity = null;
     ItemRenderer itemRenderer = Minecraft.getMinecraft().getItemRenderer();
+    ScaledResolution sr;
 
     public ListButton( int id, int posX, int posY, int elementOne, int elementTwo, String regKey, JType jType, String buttonText, IPressable onPress )
     {
@@ -56,6 +58,8 @@ public class ListButton extends GuiButton
 
         if( testEntity instanceof EntityLiving )
             entity = (EntityLiving) testEntity;
+
+        sr = new ScaledResolution( Minecraft.getMinecraft() );
 
         switch( jType )
         {
@@ -145,10 +149,7 @@ public class ListButton extends GuiButton
             height += 9;
         }
 
-        if( height > 32 )
-            return height;
-        else
-            return 32;
+        return Math.max( height, 32 );
     }
 
     public void clickActionGlossary()
@@ -192,7 +193,7 @@ public class ListButton extends GuiButton
             if( mobHeight > 0 )
                 mobScale /= Math.max(mobHeight, mobWidth);
 
-            GuiInventory.drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, mouseX, mouseY, entity );
+            GuiInventory.drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, -(mouseX - x - width/2F), -(mouseY - y - height/2F), entity );
         }
 
         this.drawCenteredString(fontrenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, 0xffffff );

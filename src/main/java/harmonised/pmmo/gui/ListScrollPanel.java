@@ -63,9 +63,9 @@ public class ListScrollPanel extends GuiScreen
     {
         int height = 48;
 
-        for( int i = 0; i < buttons.size(); i++ )
+        for ( ListButton button : buttons )
         {
-            height += buttons.get(i).getHeight() + 2;
+            height += button.getHeight() + 3;
         }
 
         return height;
@@ -79,7 +79,7 @@ public class ListScrollPanel extends GuiScreen
             button.x = this.right - button.width - 8;
             button.y = relativeY + accumulativeHeight;
 
-            if( button.y + button.height + 2 > this.top && button.y - 2 < this.bottom )
+            if( button.y + button.getHeight() + 2 > this.top && button.y - 2 < this.bottom )
             {
                 if( button.unlocked )
                     drawGradientRect(this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeight() + 2, 0x22444444, 0x33222222);
