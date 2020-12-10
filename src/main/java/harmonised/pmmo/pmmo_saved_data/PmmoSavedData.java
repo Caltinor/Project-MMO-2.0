@@ -186,7 +186,7 @@ public class PmmoSavedData extends WorldSavedData
     {
         if( skill.equals( Skill.INVALID_SKILL ) )
         {
-            LOGGER.error( "Invalid Skill at getXp" );
+            LOGGER.debug( "Invalid Skill at getXp" );
             return -1;
         }
 
