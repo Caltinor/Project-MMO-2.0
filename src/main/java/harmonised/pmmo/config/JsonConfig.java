@@ -502,8 +502,8 @@ public class JsonConfig
                         if( Skill.getInt( entry.getKey() ) != 0 )
                         {
                             value = entry.getValue();
-                            if( levelJTypes.contains( jType ) && entry.getValue() > maxLevel )
-                                value = maxLevel;
+                            if( levelJTypes.contains( jType ) )
+                                value = Math.min( 999, Math.max( 1, entry.getValue() ) );
                             output.get( element.getKey() ).put( entry.getKey(), value );
                         }
                         else
