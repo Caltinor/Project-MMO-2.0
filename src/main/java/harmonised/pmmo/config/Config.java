@@ -39,6 +39,7 @@ public class Config
         localConfig.put( "veiningAllowed", Config.forgeConfig.veiningAllowed.get() ? 1D : 0D );
         localConfig.put( "useExponentialFormula", Config.forgeConfig.useExponentialFormula.get() ? 1D : 0D );
         localConfig.put( "strictReqTool", Config.forgeConfig.strictReqTool.get() ? 1D : 0D );
+        localConfig.put( "autoGenerateValuesEnabled", Config.forgeConfig.autoGenerateValuesEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateWearReqDynamicallyEnabled", Config.forgeConfig.autoGenerateWearReqDynamicallyEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", Config.forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", Config.forgeConfig.autoGenerateToolReqDynamicallyEnabled.get() ? 1D : 0D );
