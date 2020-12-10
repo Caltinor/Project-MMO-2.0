@@ -26,6 +26,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class DamageHandler
 {
@@ -147,17 +148,10 @@ public class DamageHandler
                     ItemStack itemStack = player.getHeldItemMainhand();
                     ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
                     Map<String, Double> weaponReq = XP.getJsonMap( resLoc, JType.REQ_WEAPON );
-                    Map<String, Double> itemSpecific = JsonConfig.data.get( JType.ITEM_SPECIFIC ).getOrDefault( resLoc.toString(), new HashMap<>() );
                     Skill skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY : Skill.COMBAT;
-
-                    if( itemSpecific.getOrDefault( "meleeWeapon", 0D ) != 0 )
-                        skill = Skill.COMBAT;
-                    else if( itemSpecific.getOrDefault( "archeryWeapon", 0D ) != 0 )
-                        skill = Skill.ARCHERY;
-                    else if( itemSpecific.getOrDefault( "magicWeapon", 0D ) != 0 )
-                        skill = Skill.MAGIC;
+                    Skill itemSpecificSkill = AutoValues.getItemSpecificSkill( itemStack.getItem().getRegistryName().toString() );
                     if( FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
-                        weaponReq.put( skill.toString(), Math.max( weaponReq.getOrDefault( Skill.COMBAT.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
+                        weaponReq.put( itemSpecificSkill.toString(), Math.max( weaponReq.getOrDefault( Skill.COMBAT.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
                     int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
                     int gap = Math.max( weaponGap, enchantGap );

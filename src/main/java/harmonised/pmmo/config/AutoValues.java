@@ -136,6 +136,21 @@ public class AutoValues
         return reqTool;
     }
 
+    public static Skill getItemSpecificSkill( String resLoc )
+    {
+        Map<String, Double> itemSpecificMap = JsonConfig.data.get( JType.ITEM_SPECIFIC ).getOrDefault( resLoc.toString(), new HashMap<>() );
+        Skill skill = null;
+
+        if( itemSpecificMap.getOrDefault( "meleeWeapon", 0D ) != 0 )
+            skill = Skill.COMBAT;
+        else if( itemSpecificMap.getOrDefault( "archeryWeapon", 0D ) != 0 )
+            skill = Skill.ARCHERY;
+        else if( itemSpecificMap.getOrDefault( "magicWeapon", 0D ) != 0 )
+            skill = Skill.MAGIC;
+
+        return skill;
+    }
+
     public static void setAutoValues()
     {
         if( FConfig.autoGenerateValuesEnabled )
@@ -163,7 +178,7 @@ public class AutoValues
                     if( combatReq > 1 && FConfig.weaponReqEnabled && FConfig.autoGenerateWeaponReqEnabled )
                     {
                         Map<String, Double> reqWeapon   = new HashMap<>();
-                        reqWeapon.put( Skill.COMBAT.toString(),  Math.max( 1, combatReq ) );
+                        reqWeapon.put( getItemSpecificSkill( item.getRegistryName().toString() ).toString(),  Math.max( 1, combatReq ) );
                         addJsonConfigValue( resLoc, JType.REQ_WEAPON, reqWeapon, false );
                     }
 
