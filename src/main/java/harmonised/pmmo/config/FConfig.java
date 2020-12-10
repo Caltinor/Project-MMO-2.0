@@ -953,13 +953,14 @@ public class FConfig
         localConfig.put( "veiningAllowed", FConfig.veiningAllowed ? 1D : 0D );
         localConfig.put( "useExponentialFormula", FConfig.useExponentialFormula ? 1D : 0D );
         localConfig.put( "strictReqTool", FConfig.strictReqTool ? 1D : 0D );
+        localConfig.put( "autoGenerateValuesEnabled", FConfig.autoGenerateValuesEnabled ? 1D : 0D );
         localConfig.put( "autoGenerateWearReqDynamicallyEnabled", FConfig.autoGenerateWearReqDynamicallyEnabled ? 1D : 0D );
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", FConfig.autoGenerateWeaponReqDynamicallyEnabled ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", FConfig.autoGenerateToolReqDynamicallyEnabled ? 1D : 0D );
 
         localConfig.put( "maxLevel", (double) maxLevel );
-        localConfig.put( "baseXp", (double) baseXp );
-        localConfig.put( "xpIncreasePerLevel", (double) xpIncreasePerLevel );
+        localConfig.put( "baseXp", baseXp );
+        localConfig.put( "xpIncreasePerLevel", xpIncreasePerLevel );
         localConfig.put( "exponentialBaseXp", exponentialBaseXp );
         localConfig.put( "exponentialBase", exponentialBase );
         localConfig.put( "exponentialRate", exponentialRate );

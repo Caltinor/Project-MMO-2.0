@@ -27,7 +27,7 @@ public class BreakSpeedHandler
         ResourceLocation resLoc = itemStack.getItem().getRegistryName();
         Map<String, Double> toolReq = XP.getJsonMap( resLoc, JType.REQ_TOOL );
         Map<String, Double> dynToolReq = AutoValues.getToolReqFromStack( itemStack );
-        if( FConfig.autoGenerateToolReqDynamicallyEnabled )
+        if( FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
         {
             for( Map.Entry<String, Double> entry : dynToolReq.entrySet() )
             {
