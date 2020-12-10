@@ -149,7 +149,7 @@ public class DamageHandler
                     ItemStack itemStack = player.getHeldItemMainhand();
                     ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
                     Map<String, Double> weaponReq = XP.getJsonMap( resLoc, JType.REQ_WEAPON );
-                    if( Config.forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() )
+                    if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
                         weaponReq.put( Skill.COMBAT.toString(), Math.max( weaponReq.getOrDefault( Skill.COMBAT.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
                     int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
