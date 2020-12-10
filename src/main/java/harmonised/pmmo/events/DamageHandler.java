@@ -151,8 +151,10 @@ public class DamageHandler
                     Map<String, Double> weaponReq = XP.getJsonMap( resLoc, JType.REQ_WEAPON );
                     Skill skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY : Skill.COMBAT;
                     Skill itemSpecificSkill = AutoValues.getItemSpecificSkill( itemStack.getItem().getRegistryName().toString() );
+                    if( itemSpecificSkill != null )
+                        skill = itemSpecificSkill;
                     if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
-                        weaponReq.put( itemSpecificSkill.toString(), Math.max( weaponReq.getOrDefault( Skill.COMBAT.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
+                        weaponReq.put( skill.toString(), Math.max( weaponReq.getOrDefault( skill.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
                     int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
                     int gap = Math.max( weaponGap, enchantGap );
