@@ -22,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -30,6 +31,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,8 +56,9 @@ public class BlockBrokenHandler
         IBlockState state = event.getState();
         Block block = state.getBlock();
         World world = event.getWorld();
+        BlockPos pos = event.getPos();
         Material material = event.getState().getMaterial();
-        Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
+        Block blockAbove = world.getBlockState( pos.up() ).getBlock();
         boolean passedBreakReq = true;
 
         if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
@@ -71,7 +74,7 @@ public class BlockBrokenHandler
             if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
             {
                 processBroken( event );
-                ChunkDataHandler.delPos( world.getWorldType().getId(), event.getPos() );
+                ChunkDataHandler.delPos( world.getWorldType().getId(), pos );
             }
         }
         else
@@ -114,6 +117,7 @@ public class BlockBrokenHandler
     {
         IBlockState state = event.getState();
         Block block = state.getBlock();
+        BlockPos pos = event.getPos();
         String regKey = block.getRegistryName().toString();
         final Map<String, Double> xpMap = XP.getXp( regKey, JType.XP_VALUE_BREAK );
         World world = event.getWorld();
@@ -123,19 +127,19 @@ public class BlockBrokenHandler
         boolean veiningAllowed = configMap.containsKey("veiningAllowed") && configMap.get("veiningAllowed") != 0;
 
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
-            WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
+            WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, pos, player.getHeldItemMainhand() ) );
 
         if( !XP.isPlayerSurvival( player ) || isRemote )
             return;
 
         Material material = event.getState().getMaterial();
         double blockHardnessLimitForBreaking = FConfig.blockHardnessLimitForBreaking;
-        boolean wasPlaced = ChunkDataHandler.checkPos( world, event.getPos() ) != null;
+        boolean wasPlaced = ChunkDataHandler.checkPos( world, pos ) != null;
         ItemStack toolUsed = player.getHeldItemMainhand();
         Skill skill = XP.getSkill( state );
         String skillName = skill.toString();
 //			String regKey = block.getRegistryName().toString();
-        double hardness = state.getBlockHardness( event.getWorld(), event.getPos() );
+        double hardness = state.getBlockHardness( event.getWorld(), pos );
         if( hardness > blockHardnessLimitForBreaking )
             hardness = blockHardnessLimitForBreaking;
 
@@ -188,7 +192,7 @@ public class BlockBrokenHandler
 
         if( world instanceof WorldServer )
         {
-            drops = block.getDrops( world, event.getPos(), state, fortune );
+            drops = block.getDrops( world, pos, state, fortune );
 
 //            if( EnchantmentHelper.getEnchantments( toolUsed ).containsKey( Enchantments.SILK_TOUCH ) )
 //            {
@@ -200,7 +204,7 @@ public class BlockBrokenHandler
 //                        .withParameter( LootParameters.POSITION, player.getPosition() )
 //                        .withParameter( LootParameters.TOOL, noEnchantTool )
 //                        .withParameter( LootParameters.THIS_ENTITY, player )
-//                        .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
+//                        .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( pos ) );
 //                if (fortune > 0)
 //                {
 //                    builder.withLuck(fortune);
@@ -235,7 +239,7 @@ public class BlockBrokenHandler
         if( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) //Handle Upwards Growing Plants
         {
             Block baseBlock = event.getState().getBlock();
-            BlockPos baseBlockPos = event.getPos();
+            BlockPos baseBlockPos = pos;
 
             double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
             int rewardable, guaranteedDrop, extraDrop, totalDrops, guaranteedDropEach;
@@ -277,7 +281,7 @@ public class BlockBrokenHandler
 
             if( dropsLeft > 0 )
             {
-                XP.dropItems( dropsLeft, XP.getBlockAsItem( block ), world, event.getPos() );
+                XP.dropItems( dropsLeft, XP.getBlockAsItem( block ), world, pos );
                 NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + dropsLeft, theDropItem.getDisplayName(), true, 1 ), (EntityPlayerMP) player );
             }
 
@@ -318,8 +322,8 @@ public class BlockBrokenHandler
 
                 if( totalExtraDrops > 0 )
                 {
-                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getUnlocalizedName(), true, 1 ), (EntityPlayerMP) player );
+                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, pos );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getDisplayName(), true, 1 ), (EntityPlayerMP) player );
                 }
 
                 awardMsg = "harvesting " + ( dropItemCount ) + " + " + totalExtraDrops + " " + block.getRegistryName();
@@ -362,8 +366,8 @@ public class BlockBrokenHandler
 
                 if( totalExtraDrops > 0 )
                 {
-                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getUnlocalizedName(), true, 1 ), (EntityPlayerMP) player );
+                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, pos );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getDisplayName(), true, 1 ), (EntityPlayerMP) player );
                 }
 
                 XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), totalExtraDrops ) );
@@ -373,7 +377,57 @@ public class BlockBrokenHandler
         }
 
         //LOG
-        if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
+        //Dynamic Trees
+        if( dynamicTreesLoaded && block instanceof BlockBranch )
+        {
+            BlockBranch branchBlock = (BlockBranch) block;
+            MapSignal signal = branchBlock.analyse( state, world, pos, null, new MapSignal());
+            NodeNetVolume volumeNet = new NodeNetVolume();
+            branchBlock.analyse( state, world, pos, signal.localRootDir, new MapSignal(volumeNet));
+            double volume = volumeNet.getVolume();
+            drops = branchBlock.getLogDrops( world, pos, branchBlock.getFamily().getSpeciesForLocation( world, pos ), (float) volume );
+            String[] oreNames = OreDictionary.getOreNames();
+            award = new HashMap<>();
+
+            for( ItemStack itemStack : drops )
+            {
+                try
+                {
+                    int extraDrops;
+                    ResourceLocation resLoc = null;
+                    int[] oreIDs = OreDictionary.getOreIDs( itemStack );
+                    for( int id : oreIDs )
+                    {
+                        String tagName = oreNames[ id ];
+                        if( tagName.startsWith( "log" ) || tagName.startsWith( "stick" ) )
+                        {
+                            resLoc = itemStack.getItem().getRegistryName();
+                            break;
+                        }
+                    }
+
+                    if( resLoc != null )
+                    {
+                        double extraChance = XP.getExtraChance( player.getUniqueID(), resLoc, JType.INFO_LOG, false );
+                        extraDrops = (int) ( itemStack.getCount() * extraChance / 100D );
+                        XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXp( resLoc, JType.XP_VALUE_BREAK ), itemStack.getCount() + extraDrops ) );
+
+                        if( extraDrops > 0 )
+                        {
+                            ItemStack extraDropStack = itemStack.copy();
+                            extraDropStack.setCount( extraDrops );
+                            XP.dropItemStack( extraDropStack, world, pos );
+                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + extraDrops, extraDropStack.getDisplayName(), true, 1 ), (EntityPlayerMP) player );
+                        }
+                    }
+                }
+                catch( Exception e )
+                {
+                    LOGGER.error( e );
+                }
+            }
+        }
+        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
         {
             if( !wasPlaced )			//EXTRA DROPS
             {
@@ -394,8 +448,8 @@ public class BlockBrokenHandler
 
                 if( totalExtraDrops > 0 )
                 {
-                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getUnlocalizedName(), true, 1 ), (EntityPlayerMP) player );
+                    XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, pos );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getDisplayName(), true, 1 ), (EntityPlayerMP) player );
                 }
 
                 XP.multiplyMapAnyDouble( XP.addMapsAnyDouble( award, xpMap ), dropItemCount + totalExtraDrops );
@@ -432,11 +486,11 @@ public class BlockBrokenHandler
                         award.put( Skill.EXCAVATION.toString(), award.getOrDefault( Skill.EXCAVATION.toString(), 0D ) + treasureItemMap.get( "xpPerItem" ) * count );
 
                         ItemStack itemStack = new ItemStack( item, count );
-                        XP.dropItemStack( itemStack, world, event.getPos() );
+                        XP.dropItemStack( itemStack, world, pos );
                         foundTreasure = true;
 
                         player.sendStatusMessage( new TextComponentTranslation( "pmmo.youFoundTreasureItem", count, new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                        LOGGER.info( player.getDisplayName().getUnformattedText() + " found Treasure! " + count + " " + treasureItem.getKey() + " " + event.getPos() );
+                        LOGGER.info( player.getDisplayName().getUnformattedText() + " found Treasure! " + count + " " + treasureItem.getKey() + " " + pos );
                     }
 
                     if( foundTreasure )
@@ -451,21 +505,6 @@ public class BlockBrokenHandler
             player.getHeldItemMainhand().damageItem( gap - 1, player );
 
         Skill awardSkill;
-
-        //DYNAMIC TREES :o
-        if( dynamicTreesLoaded && block instanceof BlockBranch )
-        {
-            BlockBranch branchBlock = (BlockBranch) block;
-            MapSignal signal = branchBlock.analyse( state, world, event.getPos(), null, new MapSignal());
-            NodeNetVolume volumeNet = new NodeNetVolume();
-            branchBlock.analyse( state, world, event.getPos(), signal.localRootDir, new MapSignal(volumeNet));
-            double volume = volumeNet.getVolume();
-
-            System.out.println( volume );
-
-            XP.multiplyMapAnyDouble( award, volume );
-        }
-        //////////////////
 
         for( String awardSkillName : award.keySet() )
         {

@@ -183,6 +183,10 @@
 	{
 		"extraChance": 50
 	},
+	"minecraft:log":
+	{
+		"extraChance": 1
+	},
 	"minecraft:oak_log":
 	{
 		"extraChance": 1

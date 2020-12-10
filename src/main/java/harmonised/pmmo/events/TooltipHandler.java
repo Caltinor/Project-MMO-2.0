@@ -431,7 +431,7 @@ public class TooltipHandler
                             }
                             else
                             {
-                                tooltip.add( new TextComponentTranslation( "pmmo.salvagesIntoCountItem", potentialReturnAmount, displayName ).setStyle( XP.textStyle.get( potentialReturnAmount > 0 ? "green" : "red" ) ).getFormattedText() );
+                                tooltip.add( new TextComponentTranslation( "pmmo.salvagesIntoCountItem", potentialReturnAmount, new ItemStack( salvageItem ).getDisplayName() ).setStyle( XP.textStyle.get( potentialReturnAmount > 0 ? "green" : "red" ) ).getFormattedText() );
                                 tooltip.add( new TextComponentTranslation( "pmmo.xpEachChanceEach", " " + DP.dp( xpPerItem ), DP.dp( chance ) ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
                             }
                         }
@@ -449,10 +449,10 @@ public class TooltipHandler
                             level = Skill.SMITHING.getLevel( player );
 
                             String key = (String) salvageFromArray[ salvageFromArrayPos ];
-
                             Map<String, Double> salvageFromMap = salvageFrom.get( key );
+                            ItemStack salvageFromItemStack = new ItemStack( XP.getItem( key ) );
 
-                            tooltip.add( new TextComponentTranslation( "pmmo.valueFromValue", " " + (int) (double) salvageFromMap.get( "salvageMax" ), displayName ).setStyle( XP.textStyle.get( salvageFromMap.get( "levelReq" ) > level ? "red" : "green" ) ).getFormattedText() );
+                            tooltip.add( new TextComponentTranslation( "pmmo.valueFromValue", " " + (int) (double) salvageFromMap.get( "salvageMax" ), salvageFromItemStack.getDisplayName() ).setStyle( XP.textStyle.get( salvageFromMap.get( "levelReq" ) > level ? "red" : "green" ) ).getFormattedText() );
                         }
                         catch( Exception e )
                         {
@@ -505,8 +505,9 @@ public class TooltipHandler
                             int minCount = (int) (double) treasureFromMap.get( "minCount" );
                             int maxCount = (int) (double) treasureFromMap.get( "maxCount" );
                             double chance = DP.mapCapped( level, treasureToMap.get( "startLevel" ), treasureToMap.get( "endLevel" ), treasureToMap.get( "startChance" ), treasureToMap.get( "endChance" ) );
+                            ItemStack treasureFromItemStack = new ItemStack( XP.getItem( key ) );
 
-                            tooltip.add( new TextComponentTranslation( "pmmo.valueFromValue", " " + ( minCount == maxCount ? minCount : minCount + "-" + maxCount ), displayName ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
+                            tooltip.add( new TextComponentTranslation( "pmmo.valueFromValue", " " + ( minCount == maxCount ? minCount : minCount + "-" + maxCount ), treasureFromItemStack.getDisplayName() ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ).getFormattedText() );
                         }
                         catch( Exception e )
                         {
