@@ -97,6 +97,7 @@ public class TooltipHandler
                 Map<String, Double> wornItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regKey );
 
                 //Dynamic Reqs
+                if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 )
                 {
                     //Wear
                     if( Config.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
