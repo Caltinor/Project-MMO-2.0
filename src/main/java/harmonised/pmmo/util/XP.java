@@ -840,7 +840,7 @@ public class XP
 
 	public static Item getItem( ResourceLocation resLoc )
 	{
-		return ForgeRegistries.ITEMS.getValue( resLoc );
+		return getItem( resLoc.toString() );
 	}
 
 	public static boolean scanBlock( Block block, int radius, PlayerEntity player )
@@ -944,7 +944,7 @@ public class XP
 
 	public static double getStackXpBoost(PlayerEntity player, ItemStack itemStack, String skillName, boolean type /*false = worn, true = held*/ )
 	{
-		if( itemStack == null )
+		if( itemStack == null || itemStack.isEmpty() )
 			return 0;
 
 		Item item = itemStack.getItem();
@@ -956,7 +956,7 @@ public class XP
 
 		if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
 		{
-			if( checkReq( player, item.getRegistryName(), jType ) )
+			if( type || checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
 			{
 				boost = itemXpMap.get( skillName );
 				if( Config.forgeConfig.scaleXpBoostByDurability.get() && itemStack.isDamageable() )
