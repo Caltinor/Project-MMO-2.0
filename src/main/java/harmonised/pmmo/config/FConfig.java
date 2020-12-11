@@ -423,6 +423,10 @@ public class FConfig
     public static double deathXpPenaltyMultiplier = 0.5D;
 
     //GUI
+    @Config.Comment( "True is the animated rainbow, False is the old, plain grey box" )
+    @Config.Name( "xpBarTheme" )
+    public static boolean xpBarTheme = true;
+
     @Config.Comment( "GUI bar position X (Width)" )
     @Config.Name( "barOffsetX" )
     @Config.RangeDouble( min = 0, max = 1 )

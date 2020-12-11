@@ -61,25 +61,27 @@ public class MainScreen extends GuiScreen
             Minecraft.getMinecraft().player.closeScreen();
         });
 
-        TileButton glossaryButton = new TileButton( 1337, x + 24 + 36, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
+        TileButton glossaryButton = new TileButton( 1337, 0, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new GlossaryScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), true ) );
         });
 
-        TileButton creditsButton = new TileButton( 1337,  x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
+        TileButton creditsButton = new TileButton( 1337,  0, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new CreditsScreen( uuid, new TextComponentTranslation( ((TileButton) button).transKey ), JType.CREDITS ) );
         });
 
-        TileButton prefsButton = new TileButton( 1337,  x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
+        TileButton prefsButton = new TileButton( 1337,  0, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new PrefsChoiceScreen( new TextComponentTranslation( ((TileButton) button).transKey ) ) );
         });
 
-        TileButton skillsButton = new TileButton( 1337,  x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
+        TileButton skillsButton = new TileButton( 1337,  0, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
         {
             Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
         });
+
+
 
         addButton(exitButton);
         tileButtons.add(glossaryButton);
@@ -88,8 +90,10 @@ public class MainScreen extends GuiScreen
         tileButtons.add(skillsButton);
         //COUT
 
-        for( TileButton button : tileButtons )
+        for( int i = 0; i < tileButtons.size(); i++ )
         {
+            TileButton button = tileButtons.get( i );
+            button.x = sr.getScaledWidth()/2 + i*( button.getButtonWidth()+2 ) - tileButtons.size()*(button.getButtonWidth()+2)/2;
             addButton( button );
         }
     }
