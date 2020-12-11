@@ -334,7 +334,7 @@ public class FConfig
     @Config.Comment( "What is the global max level" )
     @Config.Name( "maxLevel" )
     @Config.RangeInt( min = 1, max = 1000000 )
-    public static int maxLevel = 150;
+    public static int maxLevel = 120;
 
     @Config.Comment( "What is the baseXp to reach level 2 ( baseXp + level * xpPerLevel )" )
     @Config.Name( "baseXp" )
