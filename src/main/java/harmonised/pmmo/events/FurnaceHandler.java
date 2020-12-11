@@ -15,7 +15,7 @@ public class FurnaceHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void handleSmelted(ItemStack input, ItemStack output, World world, BlockPos pos, int type )
+    public static void handleSmelted( ItemStack input, ItemStack output, World world, BlockPos pos, int type )
     {
         try
         {
