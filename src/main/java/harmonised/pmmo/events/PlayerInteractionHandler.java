@@ -36,6 +36,8 @@ public class PlayerInteractionHandler
     {
         try
         {
+            if( event.getItemStack().isEmpty() )
+                return;
             if( event instanceof PlayerInteractEvent.RightClickBlock || event instanceof PlayerInteractEvent.RightClickItem)
             {
                 EntityPlayer player = event.getEntityPlayer();
@@ -77,7 +79,7 @@ public class PlayerInteractionHandler
                         event.setCanceled( true );
 
                         if( isRemote )
-                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToPlaceDown", new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToPlaceDown", new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                     }
                 }
                 else if( !XP.checkReq( player, item.getRegistryName(), JType.REQ_USE ) )
@@ -85,7 +87,7 @@ public class PlayerInteractionHandler
                     event.setCanceled( true );
 
                     if( isRemote )
-                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                 }
 
                 if( event instanceof PlayerInteractEvent.RightClickBlock)
@@ -99,8 +101,8 @@ public class PlayerInteractionHandler
                             event.setCanceled( true );
                             if( isRemote && event.getHand().equals( EnumHand.MAIN_HAND ) )
                             {
-                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( block.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( block.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( new ItemStack( block ).getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.notSkilledEnoughToUse", new TextComponentTranslation( new ItemStack( block ).getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
 //                            if( JsonConfig.data.get( JType.REQ_USE ).containsKey( block.getRegistryName().toString() ) )
 //                            {
@@ -147,7 +149,7 @@ public class PlayerInteractionHandler
                                     event.setCanceled( true );
                                 else
                                 {
-                                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvage", new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvage", new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                                     return;
                                 }
 
@@ -221,16 +223,18 @@ public class PlayerInteractionHandler
                                                 returnAmount++;
                                         }
                                         award += salvageToItemMap.get( "xpPerItem" ) * returnAmount;
+                                        
+                                        ItemStack returnItemStack = new ItemStack( salvageToItem, returnAmount );
 
                                         if( returnAmount > 0 )
-                                            XP.dropItems( returnAmount, salvageToItem, event.getWorld(), event.getPos() );
+                                            XP.dropItemStack( returnItemStack, event.getWorld(), event.getPos() );
 
                                         if( returnAmount == potentialReturnAmount )
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getUnlocalizedName(), false, 1 ), (EntityPlayerMP) player );
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, returnItemStack.getDisplayName(), false, 1 ), (EntityPlayerMP) player );
                                         else if( returnAmount > 0 )
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getUnlocalizedName(), false, 3 ), (EntityPlayerMP) player );
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, returnItemStack.getDisplayName(), false, 3 ), (EntityPlayerMP) player );
                                         else
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getUnlocalizedName(), true, 2 ), (EntityPlayerMP) player );
+                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, returnItemStack.getDisplayName(), false, 2 ), (EntityPlayerMP) player );
                                     }
                                 }
 
@@ -292,7 +296,7 @@ public class PlayerInteractionHandler
                                     //COUT BREAK ANIMATION
                                 }
                                 else
-                                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvageLackLevelLonger", lowestReqLevel, new TextComponentTranslation( item.getUnlocalizedName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                    player.sendStatusMessage( new TextComponentTranslation( "pmmo.cannotSalvageLackLevelLonger", lowestReqLevel, new TextComponentTranslation( itemStack.getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             }
                         }
                     }

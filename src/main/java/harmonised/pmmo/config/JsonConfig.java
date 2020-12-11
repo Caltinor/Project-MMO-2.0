@@ -948,7 +948,7 @@ public class JsonConfig
         {
             salvageFromItemResLoc = XP.getResLoc( inputSalvageFromItemEntry.getKey() );
             item = XP.getItem( salvageFromItemResLoc );
-            if( item != null )
+            if( !item.equals( Items.AIR ) )
             {
                 output.put( salvageFromItemResLoc.toString(), new HashMap<>() );
                 outputSalvageFromItemMap = output.get( salvageFromItemResLoc.toString() );
@@ -956,7 +956,7 @@ public class JsonConfig
                 {
                     item = XP.getItem( inputSalvageToItemEntry.getKey() );
                     salvageToItemResLoc = item.getRegistryName().toString();
-                    if( item != null )
+                    if( !item.equals( Items.AIR ) )
                     {
                         salvageToItemMap = inputSalvageToItemEntry.getValue();
 
