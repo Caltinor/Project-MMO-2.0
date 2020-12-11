@@ -946,7 +946,8 @@ public class JsonConfig
         for( Map.Entry<String, Map<String, Map<String, Double>>> inputSalvageFromItemEntry : input.entrySet() )
         {
             salvageFromItemResLoc = XP.getResLoc( inputSalvageFromItemEntry.getKey() );
-            if( !XP.getItem( salvageFromItemResLoc ).equals( Items.AIR ) )
+            item = XP.getItem( salvageFromItemResLoc );
+            if( !item.equals( Items.AIR ) )
             {
                 output.put( salvageFromItemResLoc.toString(), new HashMap<>() );
                 outputSalvageFromItemMap = output.get( salvageFromItemResLoc.toString() );
