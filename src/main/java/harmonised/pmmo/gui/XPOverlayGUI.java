@@ -333,7 +333,7 @@ public class XPOverlayGUI extends AbstractGui
 			aSkill = skills.get( skill );
 
 			blit( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
-			if( theme == 1 )
+			if( !Config.forgeConfig.xpBarTheme.get() )
 			{
 				blit( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
 			}

@@ -189,6 +189,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> deathXpPenaltyMultiplier;
 
         //GUI
+        public ConfigHelper.ConfigValueListener<Boolean> xpBarTheme;
         public ConfigHelper.ConfigValueListener<Double> barOffsetX;
         public ConfigHelper.ConfigValueListener<Double> barOffsetY;
         public ConfigHelper.ConfigValueListener<Double> veinBarOffsetX;
@@ -819,6 +820,11 @@ public class Config
 
             builder.push( "GUI" );
             {
+                this.xpBarTheme = subscriber.subscribe(builder
+                        .comment( "True is the animated rainbow, False is the old, plain grey box" )
+                        .translation( "pmmo.xpBarTheme" )
+                        .define( "xpBarTheme", true ) );
+
                 this.barOffsetX = subscriber.subscribe(builder
                         .comment( "GUI bar position X (Width)" )
                         .translation( "pmmo.barOffsetX" )
