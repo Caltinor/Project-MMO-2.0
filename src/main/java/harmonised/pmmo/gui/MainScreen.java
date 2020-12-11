@@ -60,23 +60,23 @@ public class MainScreen extends Screen
             Minecraft.getInstance().player.closeScreen();
         });
 
-        TileButton glossaryButton = new TileButton(x + 24 + 36, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
+        TileButton glossaryButton = new TileButton(0, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), true ) );
         });
 
-        TileButton creditsButton = new TileButton( x + 24 + 36 * 2, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
+        TileButton creditsButton = new TileButton( 0, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.CREDITS ) );
         });
 
-        TileButton prefsButton = new TileButton( x + 24 + 36 * 3, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
+        TileButton prefsButton = new TileButton( 0, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( ((TileButton) button).transKey ) ) );
         });
 
 
-        TileButton skillsButton = new TileButton( x + 24 + 36 * 4, y + 24 + 36 * 4, 3, 6, "pmmo.stats", JType.NONE, (button) ->
+        TileButton skillsButton = new TileButton( 0, y + 24 + 36 * 4, 3, 6, "pmmo.stats", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getInstance().player ) );
         });
@@ -93,8 +93,10 @@ public class MainScreen extends Screen
         tileButtons.add(skillsButton);
 //        tileButtons.add(statsButton);
 
-        for( TileButton button : tileButtons )
+        for( int i = 0; i < tileButtons.size(); i++ )
         {
+            TileButton button = tileButtons.get( i );
+            button.x = sr.getScaledWidth()/2 + i*( button.getWidth()+2 ) - tileButtons.size()*(button.getWidth()+2)/2;
             addButton( button );
         }
     }
