@@ -81,7 +81,7 @@ public class MainScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getInstance().player ) );
         });
 
-//        TileButton statsButton = new TileButton( x + 24 + 36 * 5, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
+//        TileButton statsButton = new TileButton( 0, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
 //        {
 //            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.STATS, Minecraft.getInstance().player ) );
 //        });
@@ -96,7 +96,7 @@ public class MainScreen extends Screen
         for( int i = 0; i < tileButtons.size(); i++ )
         {
             TileButton button = tileButtons.get( i );
-            button.x = sr.getScaledWidth()/2 + i*( button.getWidth()+2 ) - tileButtons.size()*(button.getWidth()+2)/2;
+            button.x = sr.getScaledWidth()/2 + i*( button.getWidth()+2 ) - tileButtons.size()*(button.getWidth()+2)/2 - 1;
             addButton( button );
         }
     }
