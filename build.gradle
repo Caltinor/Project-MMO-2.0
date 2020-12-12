@@ -20,7 +20,7 @@ apply plugin: "com.wynprice.cursemaven"
 
 version = '1.16.4-3.35'
 group = 'harmonised.pmmo'
-archivesBaseName = 'Project MMO'
+archivesBaseName = 'Project_MMO'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 

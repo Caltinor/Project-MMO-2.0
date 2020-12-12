@@ -160,9 +160,6 @@ public class PrefsScreen extends Screen
             prefEntry.setY( y + 24 + 18 * i++ );
         }
 
-//        new Slider()
-//        new TextFieldWidget()
-
         scrollPanel = new PrefsScrollPanel( new MatrixStack(), Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefsEntries );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );
