@@ -13,6 +13,7 @@ import java.util.List;
 public class PmmoCommand extends CommandTreeBase
 {
     public static List<String> skillCompletions = new ArrayList( Skill.stringMap.keySet() );
+    public static List<String> suggestPref = new ArrayList<>();
 
     public PmmoCommand()
     {

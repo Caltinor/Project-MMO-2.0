@@ -38,7 +38,7 @@ public class PartyCommand extends CommandBase
     {
         List<String> completions = new ArrayList<>();
 
-        if( args.length == 0 )
+        if( args.length == 1 )
         {
             completions.add( "create" );
             completions.add( "invite" );
@@ -46,7 +46,7 @@ public class PartyCommand extends CommandBase
             completions.add( "decline" );
             completions.add( "leave" );
         }
-        else if( args.length == 1 && args[0].toLowerCase().equals( "invite" ) )
+        else if( args.length == 2 && args[0].toLowerCase().equals( "invite" ) )
             return getListOfStringsMatchingLastWord( args, server.getOnlinePlayerNames() );
         return completions;
     }
