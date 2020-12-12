@@ -58,7 +58,7 @@ apply plugin: "com.wynprice.cursemaven"
 
 version = "1.12-3.35.2"
 group = "harmonised.pmmo" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Project MMO"
+archivesBaseName = "Project_MMO"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {

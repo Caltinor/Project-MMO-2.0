@@ -119,4 +119,10 @@ public class ResetButton extends GuiButton
         else
             return false;
     }
+
+    @Override
+    public void mouseDragged( Minecraft mc, int mouseX, int mouseY )
+    {
+        super.mouseDragged( mc, mouseX, mouseY );
+    }
 }

@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.*;
@@ -143,26 +144,21 @@ public class PrefsScreen extends GuiScreen
 //                });
 //                prefEntry.textField.setValidator( text -> text.matches( "^[0-9]{0,3}[.]?[0-9]*$" ) && text.replace( ".", "" ).length() < 5 );
 //            }
-//            prefEntry.slider.setResponder( slider ->
-//            {
-//                slider.precision = 4;
-//                prefsMap.put( slider.preference, slider.getValue() );
-//                if( prefEntry.removeIfMax && slider.getValue() == slider.maxValue )
-//                    prefsMap.remove( slider.preference );
-//                XPOverlayGUI.doInit();
-//                PlayerTickHandler.syncPrefs = true;
-//            });
-//            prefEntry.slider.updateSlider();
             //COUT
+            prefEntry.slider.setResponder( slider ->
+            {
+                slider.precision = 4;
+                prefsMap.put( slider.preference, slider.getValue() );
+                if( prefEntry.removeIfMax && slider.getValue() == slider.maxValue )
+                    prefsMap.remove( slider.preference );
+                XPOverlayGUI.doInit();
+                PlayerTickHandler.syncPrefs = true;
+            });
+            prefEntry.slider.updateSlider();
             prefEntry.setX( x + 24 );
             prefEntry.setY( y + 24 + 18 * i++ );
         }
-
-//        new Slider()
-//        new TextFieldWidget()
-
-//        scrollPanel = new PrefsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefsEntries );
-        //COUT
+        scrollPanel = new PrefsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefsEntries );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );
 //        scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
@@ -184,21 +180,18 @@ public class PrefsScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-//        scrollPanel.render( mouseX, mouseY, partialTicks );
-        //COUT
+        scrollPanel.drawScreen( mouseX, mouseY, partialTicks );
 
-//        GlStateManager.pushAttrib();
-//        for( PrefsEntry prefEntry : prefsEntries )
-//        {
-//            if( mouseX >= prefEntry.button.x && mouseX < prefEntry.button.x + prefEntry.button.getWidth() && mouseY >= prefEntry.button.y && mouseY < prefEntry.button.y + prefEntry.button.getHeight() )
-//                drawHoveringText( prefEntry.isSwitch ? ( prefEntry.defaultVal == 1 ? "ON" : "OFF" ) : prefEntry.removeIfMax && prefEntry.defaultVal == prefEntry.slider.maxValue ? "MAX" : DP.dpSoft( prefEntry.defaultVal ), mouseX, mouseY );
-//        }
-//        GlStateManager.popAttrib();
-//        GlStateManager.enableBlend();
-        //COUT
+        GlStateManager.pushAttrib();
+        for( PrefsEntry prefEntry : prefsEntries )
+        {
+            if( mouseX >= prefEntry.button.x && mouseX < prefEntry.button.x + prefEntry.button.getButtonWidth() && mouseY >= prefEntry.button.y && mouseY < prefEntry.button.y + prefEntry.button.getHeight() )
+                drawHoveringText( prefEntry.isSwitch ? ( prefEntry.defaultVal == 1 ? "ON" : "OFF" ) : prefEntry.removeIfMax && prefEntry.defaultVal == prefEntry.slider.maxValue ? "MAX" : DP.dpSoft( prefEntry.defaultVal ), mouseX, mouseY );
+        }
+        GlStateManager.popAttrib();
+        GlStateManager.enableBlend();
 
-//        MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
-        //COUT
+        MainScreen.scrollAmounts.replace(jType, scrollPanel.getScroll() );
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -227,51 +220,56 @@ public class PrefsScreen extends GuiScreen
 //    }
 
     @Override
+    public void handleMouseInput() throws IOException
+    {
+        super.handleMouseInput();
+
+        scrollPanel.scroll( Mouse.getEventDWheel() );
+    }
+
+    @Override
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
         if( button == 1 )
             exitButton.onPress();
 
-//        for( PrefsEntry prefEntry : prefsEntries )
-//        {
-//            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
-//            {
-//                prefEntry.mouseClicked( mouseX, mouseY, button );
+        for( PrefsEntry prefEntry : prefsEntries )
+        {
+            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
+            {
+                prefEntry.mouseClicked( mouseX, mouseY );
 //                if ( !prefEntry.isSwitch && prefEntry.textField.mouseClicked( mouseX, mouseY, button ) )
 //                    this.setFocused( prefEntry.textField );
-//            }
-//        }
+            }
+        }
 
-//        scrollPanel.mouseClicked( mouseX, mouseY, button );
-        //COUT
+        scrollPanel.mouseClicked( mouseX, mouseY, button );
         super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int button)
     {
-//        for( PrefsEntry prefEntry : prefsEntries )
-//        {
-//            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
-//                prefEntry.mouseReleased( mouseX, mouseY, button );
-//        }
+        for( PrefsEntry prefEntry : prefsEntries )
+        {
+            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
+                prefEntry.mouseReleased( mouseX, mouseY );
+        }
 
-//        scrollPanel.mouseReleased( mouseX, mouseY, button );
-        //COUT
+        scrollPanel.mouseReleased( mouseX, mouseY, button );
         super.mouseReleased( mouseX, mouseY, button );
     }
 
     @Override
     public void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
     {
-//        for( PrefsEntry prefEntry : prefsEntries )
-//        {
-//            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
-//                prefEntry.mouseClickMove( mouseX, mouseY, button, deltaX, deltaY );
-//        }
-//
-//        scrollPanel.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
-//        return super.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
-        //COUT
+        for( PrefsEntry prefEntry : prefsEntries )
+        {
+            if( mouseY >= scrollPanel.getTop() && mouseY <= scrollPanel.getBottom() )
+                prefEntry.mouseClickMove( mouseX, mouseY );
+        }
+
+        scrollPanel.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
+        super.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
     }
 
     public static TextComponentTranslation getTransComp( String translationKey, Double... args )
