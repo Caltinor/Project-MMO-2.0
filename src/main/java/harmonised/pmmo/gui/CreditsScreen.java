@@ -59,6 +59,7 @@ public class CreditsScreen extends GuiScreen
     @Override
     public void initGui()
     {
+        sr = new ScaledResolution( mc );
         listButtons = new ArrayList<>();
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
@@ -183,7 +184,6 @@ public class CreditsScreen extends GuiScreen
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
-//        children.add( scrollPanel );
     }
 
     @Override

@@ -59,6 +59,7 @@ public class PrefsScreen extends GuiScreen
     @Override
     public void initGui()
     {
+        sr = new ScaledResolution( mc );
         prefsMap = FConfig.getPreferencesMap( player );
 
         x = (sr.getScaledWidth() / 2) - (boxWidth / 2);
@@ -161,9 +162,7 @@ public class PrefsScreen extends GuiScreen
         scrollPanel = new PrefsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, scrollY, scrollX,  prefsEntries );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );
-//        scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
-        //COUT
-//        children.add( scrollPanel );
+        scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         addButton(exitButton);
     }
 

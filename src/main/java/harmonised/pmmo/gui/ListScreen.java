@@ -71,6 +71,7 @@ public class ListScreen extends GuiScreen
     @Override
     public void initGui()
     {
+        sr = new ScaledResolution( mc );
         ArrayList<String> keyWords = new ArrayList<>();
         keyWords.add( "helmet" );
         keyWords.add( "chestplate" );
@@ -963,8 +964,6 @@ public class ListScreen extends GuiScreen
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
-//        children.add( scrollPanel );
-        //COUT Children
         addButton( exitButton );
     }
 

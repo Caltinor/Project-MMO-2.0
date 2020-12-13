@@ -1,17 +1,16 @@
 package harmonised.pmmo.gui;
 
-import com.google.common.collect.Lists;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,21 +19,25 @@ import java.util.UUID;
 
 public class StatsScreen extends GuiScreen
 {
-    private final List<GuiButton> buttons = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private static TileButton exitButton;
 
-    ScaledResolution sr = new ScaledResolution( Minecraft.getMinecraft() );
+    Minecraft mc = Minecraft.getMinecraft();
+    ScaledResolution sr = new ScaledResolution( mc );
+    FontRenderer font = mc.fontRenderer;
+    private ITextComponent title;
     private int boxWidth = 256;
     private int boxHeight = 256;
-    private int x;
-    private int y;
-    private List<TileButton> tileButtons;
+    private int x, y;
+    private StatsScrollPanel scrollPanel;
+    private List<StatsEntry> statsEntries;
     private UUID uuid;
+    private JType jType = JType.STATS;
 
     public StatsScreen( UUID uuid, ITextComponent titleIn )
     {
         super();
+        this.title = titleIn;
         this.uuid = uuid;
     }
 
@@ -47,43 +50,94 @@ public class StatsScreen extends GuiScreen
     @Override
     public void initGui()
     {
-        tileButtons = new ArrayList<>();
+        sr = new ScaledResolution( mc );
+        statsEntries = new ArrayList<>();
+        ArrayList<ITextComponent> text;
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        exitButton = new TileButton( 1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
+        exitButton = new TileButton(1337, x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.stats" ) ) );
+            Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.skills" ) ) );
         });
 
-        addButton(exitButton);
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
 
-//        for( TileButton button : tileButtons )
-//        {
-//            addButton( button );
-//        }
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        text = new ArrayList<>();
+        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
+        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+
+        if( !MainScreen.scrollAmounts.containsKey( jType ) )
+            MainScreen.scrollAmounts.put( jType, 0 );
+        scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
+        addButton(exitButton);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         drawBackground( 1 );
-        super.drawScreen(mouseX, mouseY, partialTicks);
+
+        if( font.getStringWidth( title.getFormattedText() ) > 220 )
+            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 10, 0xffffff );
+        else
+            drawCenteredString( font, title.getFormattedText(), sr.getScaledWidth() / 2, y - 5, 0xffffff );
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        drawGradientRect(x + 20, y + 16, x + 232, y + 200, 0x22444444, 0x33222222);
-
-        GlStateManager.pushAttrib();
-        for( TileButton button : tileButtons )
-        {
-            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                drawHoveringText( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
-        }
-        GlStateManager.popAttrib();
-        GlStateManager.enableBlend();
+        scrollPanel.drawScreen( mouseX, mouseY, partialTicks );
+        super.drawScreen( mouseX, mouseY, partialTicks );
     }
 
     @Override
@@ -94,41 +148,53 @@ public class StatsScreen extends GuiScreen
             this.drawGradientRect(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
         }
-        else
-            this.drawBackground(p_renderBackground_1_);
 
         boxHeight = 256;
         boxWidth = 256;
         Minecraft.getMinecraft().getTextureManager().bindTexture( box );
 
-//        GlStateManager.enableBlend();
-
         this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
-////    @Override
-//    public boolean mouseScrolled(int mouseX, int mouseY, double scroll)
+//    @Override
+//    public boolean mouseScrolled(double mouseX, double mouseY, double scroll)
 //    {
+//        scrollPanel.mouseScrolled(mouseX, mouseY, scroll);
 //        return super.mouseScrolled(mouseX, mouseY, scroll);
 //    }
 
     @Override
-    public void mouseClicked( int mouseX, int mouseY, int mouseButton ) throws IOException
+    public void handleMouseInput() throws IOException
     {
-        if( mouseButton == 1 )
-            exitButton.onPress();
-        else
-            super.mouseClicked( mouseX, mouseY, mouseButton );
+        super.handleMouseInput();
+
+        scrollPanel.scroll( Mouse.getEventDWheel() );
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int button)
+    public void mouseClicked( int mouseX, int mouseY, int button) throws IOException
     {
+        if( button == 1 )
+        {
+            exitButton.onPress();
+            return;
+        }
+
+        scrollPanel.mouseClicked(mouseX, mouseY, button);
+        super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void mouseReleased( int mouseX, int mouseY, int button)
+    {
+        scrollPanel.mouseReleased(mouseX, mouseY, button);
         super.mouseReleased(mouseX, mouseY, button);
     }
+
     @Override
     protected void mouseClickMove( int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick )
-{
+    {
+        scrollPanel.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
         super.mouseClickMove( mouseX, mouseY, clickedMouseButton, timeSinceLastClick );
     }
 

@@ -60,6 +60,7 @@ public class CreditorScreen extends GuiScreen
     @Override
     public void initGui()
     {
+        sr = new ScaledResolution( mc );
         tileButtons = new ArrayList<>();
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );

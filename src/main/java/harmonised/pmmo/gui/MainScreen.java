@@ -51,6 +51,7 @@ public class MainScreen extends GuiScreen
     @Override
     public void initGui()
     {
+        sr = new ScaledResolution( mc );
         tileButtons = new ArrayList<>();
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
@@ -81,13 +82,17 @@ public class MainScreen extends GuiScreen
             Minecraft.getMinecraft().displayGuiScreen( new ListScreen( uuid,  new TextComponentTranslation( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getMinecraft().player ) );
         });
 
-
+        TileButton statsButton = new TileButton( 1337, 0, y + 24 + 36 * 4, 3, 6, "pmmo.stats", JType.NONE, (button) ->
+        {
+            Minecraft.getMinecraft().displayGuiScreen( new StatsScreen( uuid,  new TextComponentTranslation( ((TileButton) button).transKey ) ) );
+        });
 
         addButton(exitButton);
         tileButtons.add(glossaryButton);
         tileButtons.add(creditsButton);
         tileButtons.add(prefsButton);
         tileButtons.add(skillsButton);
+        tileButtons.add(statsButton);
 
         for( int i = 0; i < tileButtons.size(); i++ )
         {

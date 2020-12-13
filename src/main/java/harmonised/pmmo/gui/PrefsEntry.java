@@ -46,7 +46,7 @@ public class PrefsEntry
 //            textField.setMaxStringLength( 5 );
 //            textField.setText( slider.getMessage() );
 //        }
-        button = new ResetButton(0, 0, height + (isSwitch ? textFieldWidth : 0), height, height, isSwitch ? "RESET" : "R", button ->
+        button = new ResetButton(0, 0, height + (isSwitch ? textFieldWidth : 0), height, height, "R", button ->
         {
             resetValue();
         });
