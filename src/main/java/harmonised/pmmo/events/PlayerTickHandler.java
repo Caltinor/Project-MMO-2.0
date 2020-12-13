@@ -51,6 +51,7 @@ public class PlayerTickHandler
 
             if( !player.world.isRemote && ticksSinceAttributeRefresh++ >= 200 )
             {
+                ticksSinceAttributeRefresh = 0;
                 for ( ServerPlayerEntity otherPlayer : player.world.getServer().getPlayerList().getPlayers() )
                 {
                     AttributeHandler.updateAll( otherPlayer );
