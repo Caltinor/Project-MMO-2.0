@@ -54,7 +54,6 @@ public class JsonConfig
     private static final String hardDataPath = "/assets/pmmo/util/";
     public static final Set<JType> jTypes2 = new HashSet<>();
     public static final Set<JType> levelJTypes = new HashSet<>();
-    public static int maxLevel;
 
     public static void init()
     {
@@ -753,7 +752,7 @@ public class JsonConfig
                 if( !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
                 Map<String, Double> outMap = output.get( element.getKey() );
-                double levelReq = Math.min( maxLevel, Math.max( 1, inMap.get( "levelReq" ) ) );
+                double levelReq = Math.min( Config.forgeConfig.maxLevel.get(), Math.max( 1, inMap.get( "levelReq" ) ) );
                 double levelPerLevel = Math.max( 0, inMap.get( "levelPerLevel" ) );
                 double chancePerLevel = Math.max( 0, inMap.get( "chancePerLevel" ) );
                 double maxChance = Math.min( 100, Math.max( 0, inMap.get( "maxChance" ) ) );

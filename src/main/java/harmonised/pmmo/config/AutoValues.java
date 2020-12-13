@@ -35,8 +35,8 @@ public class AutoValues
             for( Map.Entry<String, Double> entry : values.entrySet() )
             {
                 value = entry.getValue();
-                if( JsonConfig.levelJTypes.contains( jType ) && entry.getValue() > JsonConfig.maxLevel )
-                    value = JsonConfig.maxLevel;
+                if( JsonConfig.levelJTypes.contains( jType ) )
+                    value = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), value ) );
                  if( !JsonConfig.localData.get( jType ).get( resLoc ).containsKey( entry.getKey() ) )
                     JsonConfig.localData.get( jType ).get( resLoc ).put( entry.getKey(), value );
             }
@@ -75,7 +75,12 @@ public class AutoValues
         double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
         double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
 
-        return Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() );
+        double wearReq = Math.min( Config.forgeConfig.maxLevel.get(), Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() ) );
+
+        if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
+            wearReq = Math.ceil( wearReq );
+
+        return wearReq;
     }
 
     public static double getWeaponReqFromStack( ItemStack itemStack )
@@ -91,36 +96,40 @@ public class AutoValues
         double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
         double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
 
-        return Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) );
+        double weaponReq = Math.min( Config.forgeConfig.maxLevel.get(), Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) ) );
+
+        if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
+            weaponReq = Math.ceil( weaponReq );
+
+        return weaponReq;
     }
 
     public static Map<String, Double> getToolReqFromStack( ItemStack itemStack )
     {
         Map<String, Double> reqTool = new HashMap<>();
-        Set<ToolType> toolTypes = itemStack.getToolTypes();
+        Item item = itemStack.getItem();
         double speed, toolReq;
 
-        for( ToolType toolType : toolTypes )
-        {
-            if( toolType.equals( ToolType.AXE ) )
-            {
-                speed = itemStack.getDestroySpeed( Blocks.OAK_LOG.getDefaultState() );
-                toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleLog.get() );
-                reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
-            }
-            if( toolType.equals( ToolType.PICKAXE ) )
-            {
-                speed = itemStack.getDestroySpeed( Blocks.STONE.getDefaultState() );
-                toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleOre.get() );
-                reqTool.put( Skill.MINING.toString(), toolReq );
-            }
-            if( toolType.equals( ToolType.SHOVEL ) )
-            {
-                speed = itemStack.getDestroySpeed( Blocks.DIRT.getDefaultState() );
-                toolReq = Math.max( 1, speed * Config.forgeConfig.toolReqScaleDirt.get() );
-                reqTool.put( Skill.EXCAVATION.toString(), toolReq );
-            }
-        }
+        //Woodcutting
+        speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
+        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleLog.get() ) );
+        if( toolReq > 5 )
+            reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
+
+        //Mining
+        speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
+        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleOre.get() ) );
+        if( toolReq > 5 )
+            reqTool.put( Skill.MINING.toString(), toolReq );
+
+        //Excavation
+        speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
+        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleDirt.get() ) );
+        if( toolReq > 5 )
+            reqTool.put( Skill.EXCAVATION.toString(), toolReq );
+
+        if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
+            XP.ceilMapAnyDouble( reqTool );
 
         return reqTool;
     }
@@ -142,8 +151,6 @@ public class AutoValues
 
     public static void setAutoValues()
     {
-        JsonConfig.maxLevel = Config.forgeConfig.maxLevel.get();
-
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
         {
             for( Item item : ForgeRegistries.ITEMS )

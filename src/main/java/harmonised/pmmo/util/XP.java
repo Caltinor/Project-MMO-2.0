@@ -1503,7 +1503,7 @@ public class XP
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
 		Map<String, Double> wearReq = XP.getJsonMap( resLoc, JType.REQ_WEAR );
 		if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
-			wearReq.put( Skill.COMBAT.toString(), Math.max( wearReq.getOrDefault( Skill.COMBAT.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
+			wearReq.put( Skill.ENDURANCE.toString(), Math.max( wearReq.getOrDefault( Skill.ENDURANCE.toString(), 0D ), AutoValues.getWearReqFromStack( itemStack ) ) );
 
 		if( !checkReq( player, wearReq ) )
 		{
