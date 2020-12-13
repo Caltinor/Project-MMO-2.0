@@ -111,7 +111,7 @@ public class MainScreen extends GuiScreen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        drawGradientRect(x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
+        drawGradientRect(x + 20, y + 32, x + 232, y + 164, 0x22444444, 0x33222222);
 
         GlStateManager.pushAttrib();
         for( TileButton button : tileButtons )
@@ -123,7 +123,7 @@ public class MainScreen extends GuiScreen
         GlStateManager.enableBlend();
 
         Minecraft.getMinecraft().getTextureManager().bindTexture( logo );
-        this.drawTexturedModalRect( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
+        this.drawTexturedModalRect( sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 55, 0, 0,  200, 60 );
     }
 
     @Override

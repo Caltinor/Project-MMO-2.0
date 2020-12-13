@@ -6,6 +6,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateBoolean;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.NBTHelper;
@@ -23,6 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -72,9 +74,8 @@ public class WorldTickHandler
         String regKey;
         Skill skill;
         double cost;
-        boolean correctBlock, correctItem, correctHeldItem, fullyGrown, isOwner;
+        boolean correctBlock, correctItem, correctHeldItem, isOwner;
         UUID blockUUID, playerUUID;
-        int age = -1, maxAge = -2;
 
         if( event.world.getMinecraftServer() == null )
             return;

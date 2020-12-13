@@ -19,6 +19,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class PlayerTickHandler
     private static Map<UUID, Long> lastAward = new HashMap<>();
     private static Map<UUID, Long> lastVeinAward = new HashMap<>();
     public static boolean syncPrefs = false;
+    private static int ticksSinceAttributeRefresh = 0;
 
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
@@ -44,6 +46,15 @@ public class PlayerTickHandler
                 AttributeHandler.updateSpeed( player );
             else
                 AttributeHandler.resetSpeed( player );
+
+            if( !player.world.isRemote && ticksSinceAttributeRefresh++ >= 200 )
+            {
+                ticksSinceAttributeRefresh = 0;
+                for (EntityPlayerMP otherPlayer : player.world.getMinecraftServer().getPlayerList().getPlayers() )
+                {
+                    AttributeHandler.updateAll( otherPlayer );
+                }
+            }
 
             if( !lastAward.containsKey( uuid ) )
                 lastAward.put( uuid, System.nanoTime() );
