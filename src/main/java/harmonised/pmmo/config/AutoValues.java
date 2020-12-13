@@ -37,8 +37,8 @@ public class AutoValues
             for( Map.Entry<String, Double> entry : values.entrySet() )
             {
                 value = entry.getValue();
-                if( JsonConfig.levelJTypes.contains( jType ) && entry.getValue() > FConfig.maxLevel )
-                    value = JsonConfig.maxLevel;
+                if( JsonConfig.levelJTypes.contains( jType ) )
+                    value = Math.max( 1, Math.min( FConfig.maxLevel, value ) );
                 if( !JsonConfig.localData.get( jType ).get( resLoc ).containsKey( entry.getKey() ) )
                     JsonConfig.localData.get( jType ).get( resLoc ).put( entry.getKey(), value );
             }
@@ -77,7 +77,7 @@ public class AutoValues
         double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
         double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
 
-        double wearReq = Math.ceil( armor * FConfig.armorReqScale + armorToughness * FConfig.armorToughnessReqScale );
+        double wearReq = Math.min( FConfig.maxLevel, Math.ceil( armor * FConfig.armorReqScale + armorToughness * FConfig.armorToughnessReqScale ) );
 
         if( FConfig.autoGenerateRoundedValuesOnly )
             wearReq = Math.ceil( wearReq );
@@ -98,7 +98,7 @@ public class AutoValues
         double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
         double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
 
-        double weaponReq = Math.ceil( (attackDamage) * FConfig.attackDamageReqScale * (4+attackSpeed) );
+        double weaponReq = Math.min( FConfig.maxLevel, Math.ceil( (attackDamage) * FConfig.attackDamageReqScale * (4+attackSpeed) ) );
 
         if( FConfig.autoGenerateRoundedValuesOnly )
             weaponReq = Math.ceil( weaponReq );
@@ -114,19 +114,19 @@ public class AutoValues
 
         //Woodcutting
         speed = item.getDestroySpeed( itemStack, Blocks.LOG.getDefaultState() );
-        toolReq = Math.max( 1, speed * FConfig.toolReqScaleLog );
+        toolReq = Math.max( 1, Math.min( FConfig.maxLevel, speed * FConfig.toolReqScaleLog ) );
         if( toolReq > 5 )
             reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
 
         //Mining
         speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
-        toolReq = Math.max( 1, speed * FConfig.toolReqScaleOre );
+        toolReq = Math.max( 1, Math.min( FConfig.maxLevel, speed * FConfig.toolReqScaleOre ) );
         if( toolReq > 5 )
             reqTool.put( Skill.MINING.toString(), toolReq );
 
         //Excavation
         speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
-        toolReq = Math.max( 1, speed * FConfig.toolReqScaleDirt );
+        toolReq = Math.max( 1, Math.min( FConfig.maxLevel, speed * FConfig.toolReqScaleDirt ) );
         if( toolReq > 5 )
             reqTool.put( Skill.EXCAVATION.toString(), toolReq );
 

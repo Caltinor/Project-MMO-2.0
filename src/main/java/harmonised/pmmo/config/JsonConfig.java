@@ -55,7 +55,6 @@ public class JsonConfig
     private static final String hardDataPath = "/assets/pmmo/util/";
     public static final Set<JType> jTypes2 = new HashSet<>();
     public static final Set<JType> levelJTypes = new HashSet<>();
-    public static int maxLevel;
 
     public static void init()
     {
@@ -152,14 +151,16 @@ public class JsonConfig
         if( FConfig.tamingXpEnabled )
             jTypes.add( JType.XP_VALUE_TAME );
 
-        if( FConfig.smeltingXpEnabled )
-            jTypes.add( JType.XP_VALUE_SMELT );
+//        if( FConfig.smeltingXpEnabled )
+//            jTypes.add( JType.XP_VALUE_SMELT );
 
-        if( FConfig.cookingXpEnabled )
-            jTypes.add( JType.XP_VALUE_COOK );
+//        if( FConfig.cookingXpEnabled )
+//            jTypes.add( JType.XP_VALUE_COOK );
 
-        if( FConfig.brewingXpEnabled )
-            jTypes.add( JType.XP_VALUE_BREW );
+//        if( FConfig.brewingXpEnabled )
+//            jTypes.add( JType.XP_VALUE_BREW );
+
+        //COUT
 
         if( FConfig.growingXpEnabled )
             jTypes.add( JType.XP_VALUE_GROW );
@@ -754,7 +755,7 @@ public class JsonConfig
                 if( !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
                 Map<String, Double> outMap = output.get( element.getKey() );
-                double levelReq = Math.min( maxLevel, Math.max( 1, inMap.get( "levelReq" ) ) );
+                double levelReq = Math.min( FConfig.maxLevel, Math.max( 1, inMap.get( "levelReq" ) ) );
                 double levelPerLevel = Math.max( 0, inMap.get( "levelPerLevel" ) );
                 double chancePerLevel = Math.max( 0, inMap.get( "chancePerLevel" ) );
                 double maxChance = Math.min( 100, Math.max( 0, inMap.get( "maxChance" ) ) );

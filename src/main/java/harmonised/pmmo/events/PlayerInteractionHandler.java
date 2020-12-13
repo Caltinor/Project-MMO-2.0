@@ -223,11 +223,11 @@ public class PlayerInteractionHandler
                                                 returnAmount++;
                                         }
                                         award += salvageToItemMap.get( "xpPerItem" ) * returnAmount;
-                                        
-                                        ItemStack returnItemStack = new ItemStack( salvageToItem, returnAmount );
 
                                         if( returnAmount > 0 )
-                                            XP.dropItemStack( returnItemStack, event.getWorld(), event.getPos() );
+                                            XP.dropItemStack( new ItemStack( salvageToItem, returnAmount ), event.getWorld(), event.getPos() );
+
+                                        ItemStack returnItemStack = new ItemStack( salvageToItem );
 
                                         if( returnAmount == potentialReturnAmount )
                                             NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, returnItemStack.getDisplayName(), false, 1 ), (EntityPlayerMP) player );

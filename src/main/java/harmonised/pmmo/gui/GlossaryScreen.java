@@ -103,18 +103,18 @@ public class GlossaryScreen extends GuiScreen
         defaultTileButtons.add( oreButton );
         defaultTileButtons.add( logButton );
         defaultTileButtons.add( plantButton );
-        defaultTileButtons.add( smeltButton );
-        defaultTileButtons.add( cookButton );
-        defaultTileButtons.add( brewButton );
+//        defaultTileButtons.add( smeltButton );
+//        defaultTileButtons.add( cookButton );
+//        defaultTileButtons.add( brewButton );
         defaultTileButtons.add( heldXpButton );
         defaultTileButtons.add( wornXpButton );
         defaultTileButtons.add( breedXpButton );
         defaultTileButtons.add( tameXpButton );
         defaultTileButtons.add( craftXpButton );
         defaultTileButtons.add( breakXpButton );
-        defaultTileButtons.add( smeltXpButton );
-        defaultTileButtons.add( cookXpButton );
-        defaultTileButtons.add( brewXpButton );
+//        defaultTileButtons.add( smeltXpButton );
+//        defaultTileButtons.add( cookXpButton );
+//        defaultTileButtons.add( brewXpButton );
         defaultTileButtons.add( growXpButton );
         defaultTileButtons.add( dimensionButton );
         defaultTileButtons.add( biomeButton );
@@ -125,6 +125,7 @@ public class GlossaryScreen extends GuiScreen
         defaultTileButtons.add( salvageFromButton );
         defaultTileButtons.add( treasureToButton );
         defaultTileButtons.add( treasureFromButton );
+        //COUT
     }
 
 //    @Override
