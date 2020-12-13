@@ -34,6 +34,7 @@ public class PlayerTickHandler
     private static Map<UUID, Long> lastAward = new HashMap<>();
     private static Map<UUID, Long> lastVeinAward = new HashMap<>();
     public static boolean syncPrefs = false;
+    private static int ticksSinceAttributeRefresh = 0;
 
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
@@ -47,6 +48,14 @@ public class PlayerTickHandler
                 AttributeHandler.updateSpeed( player );
             else
                 AttributeHandler.resetSpeed( player );
+
+            if( !player.world.isRemote && ticksSinceAttributeRefresh++ >= 200 )
+            {
+                for ( ServerPlayerEntity otherPlayer : player.world.getServer().getPlayerList().getPlayers() )
+                {
+                    AttributeHandler.updateAll( otherPlayer );
+                }
+            }
 
             if( !lastAward.containsKey( uuid ) )
                 lastAward.put( uuid, System.nanoTime() );

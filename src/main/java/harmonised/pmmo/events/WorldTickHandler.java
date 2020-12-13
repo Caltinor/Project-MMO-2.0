@@ -6,6 +6,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateBoolean;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.NBTHelper;
@@ -13,6 +14,7 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CropsBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -24,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -41,6 +44,7 @@ public class WorldTickHandler
     public static Map<PlayerEntity, ArrayList<BlockPos>> veinSet;
     private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, levelsPerHardnessCrafting, veinMaxBlocks, maxVeinCharge, exhaustionPerBlock;
     private static int veinMaxDistance;
+    private static int ticksSinceAttributeRefresh = 0;
 //    public static long lastVeinUpdateTime = System.nanoTime();
 
     public static void refreshVein()
@@ -80,6 +84,14 @@ public class WorldTickHandler
 
         if( event.world.getServer() == null )
             return;
+
+        if( event.world.getDimensionType().equals( DimensionType.OVERWORLD ) && ticksSinceAttributeRefresh++ >= 200 )
+        {
+            for ( ServerPlayerEntity player : event.world.getServer().getPlayerList().getPlayers())
+            {
+                AttributeHandler.updateAll( player );
+            }
+        }
         
         for( PlayerEntity player : event.world.getServer().getPlayerList().getPlayers() )
         {
