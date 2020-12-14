@@ -205,7 +205,9 @@ public class DamageHandler
                     if( damage > targetHealth )		//no overkill xp
                         damage = targetHealth;
 
-                    if( skill.equals( Skill.ARCHERY ) )
+                    if( skill.equals( Skill.COMBAT ) )
+                        damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageMelee.get();
+                    else if( skill.equals( Skill.ARCHERY ) )
                         damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageArchery.get();
                     else if( skill.equals( Skill.MAGIC ) )
                         damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageMagic.get();
