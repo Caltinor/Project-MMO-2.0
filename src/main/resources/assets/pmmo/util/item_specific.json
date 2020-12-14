@@ -10,5 +10,13 @@
 	"some_mod:staff":
 	{
 		"magicWeapon": 1
+	},
+	"minecraft:wooden_pickaxe":
+	{
+		"autoValueOffsetTool": -10
+	},
+	"minecraft:stone_pickaxe":
+	{
+		"autoValueOffsetTool": -10
 	}
 }
