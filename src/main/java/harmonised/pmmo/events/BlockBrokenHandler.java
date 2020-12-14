@@ -118,8 +118,7 @@ public class BlockBrokenHandler
         World world = (World) event.getWorld();
         boolean isRemote = world.isRemote();
         PlayerEntity player = event.getPlayer();
-        Map<String, Double> configMap = Config.getConfigMap();
-        boolean veiningAllowed = configMap.containsKey("veiningAllowed") && configMap.get("veiningAllowed") != 0;
+        boolean veiningAllowed = Config.getConfig( "veiningAllowed" ) != 0;
 
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );

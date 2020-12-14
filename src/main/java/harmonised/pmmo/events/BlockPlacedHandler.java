@@ -16,6 +16,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 
@@ -27,7 +28,7 @@ public class BlockPlacedHandler
 {
     private static final Map<UUID, BlockPos> lastPosPlaced = new HashMap<>();
 
-    public static void handlePlaced( BlockEvent.EntityPlaceEvent event )
+    public static void handlePlaced( BlockEvent.EntityMultiPlaceEvent event )
     {
         if( event.getEntity() instanceof ServerPlayerEntity && !(event.getEntity() instanceof FakePlayer ) )
         {
@@ -96,7 +97,10 @@ public class BlockPlacedHandler
                     event.setCanceled( true );
                 }
 
-                ChunkDataHandler.addPos( event.getWorld().getDimension().getType().getRegistryName(), event.getPos(), player.getUniqueID() );
+                for( BlockSnapshot blockSnapshot : event.getReplacedBlockSnapshots() )
+                {
+                    ChunkDataHandler.addPos( event.getWorld().getDimension().getType().getRegistryName(), blockSnapshot.getPos(), player.getUniqueID() );
+                }
             }
         }
     }
