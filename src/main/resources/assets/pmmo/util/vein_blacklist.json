@@ -13,11 +13,11 @@
 	{
 		"minecraft:stone": 0
 	},
-	"1":
+	"-1":
 	{
 		"minecraft:netherrack": 0
 	},
-	"2":
+	"1":
 	{
 		"minecraft:end_stone": 0
 	}

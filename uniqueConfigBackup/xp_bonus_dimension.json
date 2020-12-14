@@ -1,13 +1,13 @@
 {
 	"all_dimensions": {},
-	"2":
+	"1":
 	{
 		"flying": 50,
 		"combat": 20,
 		"archery": 50,
 		"endurance": 20
 	},
-	"1":
+	"-1":
 	{
 		"combat": 25,
 		"archery": 25,
