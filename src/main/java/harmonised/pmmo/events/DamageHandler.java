@@ -202,6 +202,8 @@ public class DamageHandler
                     float targetMaxHealth = target.getMaxHealth();
                     float lowHpBonus = 1.0f;
 
+                    if( skill.equals( Skill.COMBAT ) )
+                        damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageMelee.get();
                     if( skill.equals( Skill.ARCHERY ) )
                         damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageArchery.get();
                     else if( skill.equals( Skill.MAGIC ) )
