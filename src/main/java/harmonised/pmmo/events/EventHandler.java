@@ -27,7 +27,7 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
+	public static void blockPlaced( BlockEvent.EntityMultiPlaceEvent event )
 	{
 		BlockPlacedHandler.handlePlaced( event );
 	}
