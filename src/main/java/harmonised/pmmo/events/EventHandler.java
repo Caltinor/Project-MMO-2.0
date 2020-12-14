@@ -33,7 +33,7 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
+	public static void blockPlaced( BlockEvent.MultiPlaceEvent event )
 	{
 		BlockPlacedHandler.handlePlaced( event );
 	}

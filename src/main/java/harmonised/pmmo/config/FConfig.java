@@ -1011,7 +1011,7 @@ public class FConfig
         else
         {
             System.out.println( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
-            return -1;
+            return 0;
         }
     }
 
