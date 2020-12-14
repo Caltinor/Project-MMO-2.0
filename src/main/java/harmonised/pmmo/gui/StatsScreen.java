@@ -1,12 +1,15 @@
 package harmonised.pmmo.gui;
 
+import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -52,6 +55,7 @@ public class StatsScreen extends GuiScreen
     {
         sr = new ScaledResolution( mc );
         statsEntries = new ArrayList<>();
+        ITextComponent title;
         ArrayList<ITextComponent> text;
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
@@ -62,61 +66,16 @@ public class StatsScreen extends GuiScreen
             Minecraft.getMinecraft().displayGuiScreen( new MainScreen( uuid, new TextComponentTranslation( "pmmo.skills" ) ) );
         });
 
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        EntityPlayer player = Minecraft.getMinecraft().player;
 
         text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
+        title = new TextComponentTranslation( "pmmo.damage" );
+        text.add( new TextComponentTranslation( "pmmo.damageBonusMelee", Skill.COMBAT.getLevel( player ) / FConfig.levelsPerDamageMelee ) );
+        text.add( new TextComponentTranslation( "pmmo.damageBonusArchery", Skill.ARCHERY.getLevel( player ) / FConfig.levelsPerDamageArchery ) );
+        text.add( new TextComponentTranslation( "pmmo.damageBonusMagic", Skill.MAGIC.getLevel( player ) / FConfig.levelsPerDamageMagic ) );
+        statsEntries.add( new StatsEntry( 0, 0, title, text ) );
+        
         scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
-        text = new ArrayList<>();
-        text.add( new TextComponentTranslation( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TextComponentTranslation( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getMinecraft(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
-
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );

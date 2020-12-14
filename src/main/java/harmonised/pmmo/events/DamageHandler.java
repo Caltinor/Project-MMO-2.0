@@ -201,7 +201,9 @@ public class DamageHandler
                     float targetMaxHealth = target.getMaxHealth();
                     float lowHpBonus = 1.0f;
 
-                    if( skill.equals( Skill.ARCHERY ) )
+                    if( skill.equals( Skill.COMBAT ) )
+                        damage += skill.getLevel( player ) / FConfig.levelsPerDamageMelee;
+                    else if( skill.equals( Skill.ARCHERY ) )
                         damage += skill.getLevel( player ) / FConfig.levelsPerDamageArchery;
                     else if( skill.equals( Skill.MAGIC ) )
                         damage += skill.getLevel( player ) / FConfig.levelsPerDamageMagic;
