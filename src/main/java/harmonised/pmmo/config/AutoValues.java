@@ -75,7 +75,9 @@ public class AutoValues
         double armor            = armorAttribute          == null ? 0D : armorAttribute.getAmount();
         double armorToughness   = armorToughnessAttribute == null ? 0D : armorToughnessAttribute.getAmount();
 
-        double wearReq = Math.min( Config.forgeConfig.maxLevel.get(), Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() ) );
+        ResourceLocation regKey = itemStack.getItem().getRegistryName();
+        double wearReqOffset = regKey == null ? 0D : XP.getJsonMap( regKey.toString(), JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWear", 0D );
+        double wearReq = Math.min( Config.forgeConfig.maxLevel.get(), Math.ceil( armor * Config.forgeConfig.armorReqScale.get() + armorToughness * Config.forgeConfig.armorToughnessReqScale.get() + wearReqOffset ) );
 
         if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
             wearReq = Math.ceil( wearReq );
@@ -96,7 +98,9 @@ public class AutoValues
         double attackSpeed      = attackSpeedAttribute    == null ? 0D : attackSpeedAttribute.getAmount();
         double attackDamage     = attackDamageAttribute   == null ? 0D : attackDamageAttribute.getAmount();
 
-        double weaponReq = Math.min( Config.forgeConfig.maxLevel.get(), Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) ) );
+        ResourceLocation regKey = itemStack.getItem().getRegistryName();
+        double weaponReqOffset = regKey == null ? 0D : XP.getJsonMap( regKey.toString(), JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
+        double weaponReq = Math.min( Config.forgeConfig.maxLevel.get(), Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) + weaponReqOffset ) );
 
         if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
             weaponReq = Math.ceil( weaponReq );
@@ -110,21 +114,24 @@ public class AutoValues
         Item item = itemStack.getItem();
         double speed, toolReq;
 
+        ResourceLocation regKey = itemStack.getItem().getRegistryName();
+        double toolReqOffset = regKey == null ? 0D : XP.getJsonMap( regKey.toString(), JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetTool", 0D );
+
         //Woodcutting
         speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
-        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleLog.get() ) );
+        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleLog.get() + toolReqOffset ) );
         if( toolReq > 5 )
             reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
 
         //Mining
         speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
-        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleOre.get() ) );
+        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleOre.get() + toolReqOffset  ) );
         if( toolReq > 5 )
             reqTool.put( Skill.MINING.toString(), toolReq );
 
         //Excavation
         speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
-        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleDirt.get() ) );
+        toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleDirt.get() + toolReqOffset  ) );
         if( toolReq > 5 )
             reqTool.put( Skill.EXCAVATION.toString(), toolReq );
 
@@ -160,8 +167,8 @@ public class AutoValues
                     ItemStack itemStack = new ItemStack( item );
                     String resLoc = item.getRegistryName().toString();
 
-                    double enduranceReq = getWearReqFromStack( itemStack );
-                    double combatReq = getWeaponReqFromStack( itemStack );
+                    double enduranceReq = getWearReqFromStack( itemStack ) + XP.getJsonMap( resLoc, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWear", 0D );
+                    double combatReq = getWeaponReqFromStack( itemStack ) + XP.getJsonMap( resLoc, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
                     Map<String, Double> reqTool = getToolReqFromStack( itemStack );
 
                     //Wear Req
