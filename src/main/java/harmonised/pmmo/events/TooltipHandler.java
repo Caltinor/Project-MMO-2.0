@@ -99,7 +99,7 @@ public class TooltipHandler
                     //Wear
                     if( FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
                     {
-                        double dynReq = AutoValues.getWearReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueWearOffset", 0D );
+                        double dynReq = AutoValues.getWearReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWear", 0D );
                         if( dynReq > 0 )
                         {
                             if( wearReq == null )
@@ -113,7 +113,7 @@ public class TooltipHandler
                     //Weapon
                     if( FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
                     {
-                        double dynReq = AutoValues.getWeaponReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueWeaponOffset", 0D );
+                        double dynReq = AutoValues.getWeaponReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
                         if( dynReq > 0 )
                         {
                             if( weaponReq == null )
@@ -131,7 +131,7 @@ public class TooltipHandler
 
                         for( Map.Entry<String, Double> entry : dynToolReqMap.entrySet() )
                         {
-                            double dynReq = entry.getValue() + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueToolOffset", 0D );
+                            double dynReq = entry.getValue() + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetTool", 0D );
                             if( dynReq > 0 )
                             {
                                 if( toolReq == null )
