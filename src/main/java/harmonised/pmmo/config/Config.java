@@ -36,13 +36,13 @@ public class Config
     public static void initServer()
     {
         //Info that will also be sent to Client so it's accessible remotely
-        localConfig.put( "veiningAllowed", Config.forgeConfig.veiningAllowed.get() ? 1D : 0D );
-        localConfig.put( "useExponentialFormula", Config.forgeConfig.useExponentialFormula.get() ? 1D : 0D );
-        localConfig.put( "strictReqTool", Config.forgeConfig.strictReqTool.get() ? 1D : 0D );
-        localConfig.put( "autoGenerateValuesEnabled", Config.forgeConfig.autoGenerateValuesEnabled.get() ? 1D : 0D );
-        localConfig.put( "autoGenerateWearReqDynamicallyEnabled", Config.forgeConfig.autoGenerateWearReqDynamicallyEnabled.get() ? 1D : 0D );
-        localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", Config.forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() ? 1D : 0D );
-        localConfig.put( "autoGenerateToolReqDynamicallyEnabled", Config.forgeConfig.autoGenerateToolReqDynamicallyEnabled.get() ? 1D : 0D );
+        localConfig.put( "veiningAllowed", forgeConfig.veiningAllowed.get() ? 1D : 0D );
+        localConfig.put( "useExponentialFormula", forgeConfig.useExponentialFormula.get() ? 1D : 0D );
+        localConfig.put( "strictReqTool", forgeConfig.strictReqTool.get() ? 1D : 0D );
+        localConfig.put( "autoGenerateValuesEnabled", forgeConfig.autoGenerateValuesEnabled.get() ? 1D : 0D );
+        localConfig.put( "autoGenerateWearReqDynamicallyEnabled", forgeConfig.autoGenerateWearReqDynamicallyEnabled.get() ? 1D : 0D );
+        localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() ? 1D : 0D );
+        localConfig.put( "autoGenerateToolReqDynamicallyEnabled", forgeConfig.autoGenerateToolReqDynamicallyEnabled.get() ? 1D : 0D );
 
         localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
         localConfig.put( "baseXp", forgeConfig.baseXp.get() );
@@ -60,16 +60,19 @@ public class Config
         localConfig.put( "saveChancePerLevel", forgeConfig.saveChancePerLevel.get() );
         localConfig.put( "levelsPerCrouchJumpBoost", forgeConfig.levelsPerCrouchJumpBoost.get() );
         localConfig.put( "levelsPerSprintJumpBoost", forgeConfig.levelsPerSprintJumpBoost.get() );
-        localConfig.put( "levelsPerDamageMelee", forgeConfig.levelsPerDamageMelee.get() );
-        localConfig.put( "levelsPerDamageArchery", forgeConfig.levelsPerDamageArchery.get() );
-        localConfig.put( "levelsPerDamageMagic", forgeConfig.levelsPerDamageMagic.get() );
         localConfig.put( "levelsPerOneReach", forgeConfig.levelsPerOneReach.get() );
         localConfig.put( "endurancePerLevel", forgeConfig.endurancePerLevel.get() );
         localConfig.put( "maxEndurance", forgeConfig.maxEndurance.get() );
         localConfig.put( "levelsPerHeart", forgeConfig.levelsPerHeart.get() );
         localConfig.put( "maxExtraHeartBoost", (double) forgeConfig.maxExtraHeartBoost.get() );
         localConfig.put( "maxExtraReachBoost", forgeConfig.maxExtraReachBoost.get() );
-        localConfig.put( "maxExtraDamageBoost", forgeConfig.maxExtraDamageBoost.get() );
+
+        localConfig.put( "levelsPerDamageMelee", forgeConfig.levelsPerDamageMelee.get() );
+        localConfig.put( "maxExtraDamageBoostMelee", forgeConfig.maxExtraDamageBoostMelee.get() );
+        localConfig.put( "levelsPerDamageArchery", forgeConfig.levelsPerDamageArchery.get() );
+        localConfig.put( "maxExtraDamageBoostArchery", forgeConfig.maxExtraDamageBoostArchery.get() );
+        localConfig.put( "levelsPerDamageMagic", forgeConfig.levelsPerDamageMagic.get() );
+        localConfig.put( "maxExtraDamageBoostMagic", forgeConfig.maxExtraDamageBoostMagic.get() );
 
         localConfig.put( "mobHPBoostPerPowerLevel", forgeConfig.mobHPBoostPerPowerLevel.get() );
         localConfig.put( "maxMobHPBoost", forgeConfig.maxMobHPBoost.get() );
@@ -266,7 +269,9 @@ public class Config
 
         //Combat
         public ConfigHelper.ConfigValueListener<Double> levelsPerDamageMelee;
-        public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoost;
+        public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoostMelee;
+        public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoostArchery;
+        public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoostMagic;
 
         //Archery
         public ConfigHelper.ConfigValueListener<Double> levelsPerDamageArchery;
@@ -1088,9 +1093,9 @@ public class Config
                         .defineInRange( "maxSpeedBoost", 100D, 0, 1000000000) );
 
                 this.speedBoostPerLevel = subscriber.subscribe(builder
-                        .comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )
+                        .comment( "How much speed boost you get from each level (1 = 1% speed boost per level)" )
                         .translation( "pmmo.speedBoostPerLevel" )
-                        .defineInRange( "speedBoostPerLevel", 0.0000625D, 0, 10) );
+                        .defineInRange( "speedBoostPerLevel", 0.005D, 0, 10) );
 
                 builder.pop();
             }
@@ -1127,10 +1132,10 @@ public class Config
                         .translation( "pmmo.levelsPerDamageMelee" )
                         .defineInRange( "levelsPerDamageMelee", 20D, 1, 1000000000) );
 
-                this.maxExtraDamageBoost = subscriber.subscribe(builder
+                this.maxExtraDamageBoostMelee = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
-                        .translation( "pmmo.maxExtraDamageBoost" )
-                        .defineInRange( "maxExtraDamageBoost", 100D, 0, 1000000000) );
+                        .translation( "pmmo.maxExtraDamageBoostMelee" )
+                        .defineInRange( "maxExtraDamageBoostMelee", 100D, 0, 1000000000) );
 
                 builder.pop();
             }
@@ -1141,6 +1146,11 @@ public class Config
                         .comment( "Per how many levels you gain 1 Extra Damage from Archery" )
                         .translation( "pmmo.levelsPerDamageArchery" )
                         .defineInRange( "levelsPerDamageArchery", 20D, 1, 1000000000) );
+
+                this.maxExtraDamageBoostArchery = subscriber.subscribe(builder
+                        .comment( "How much extra damage can you get from the Archery skill max?" )
+                        .translation( "pmmo.maxExtraDamageBoostArchery" )
+                        .defineInRange( "maxExtraDamageBoostArchery", 100D, 0, 1000000000) );
 
                 builder.pop();
             }
@@ -1317,6 +1327,11 @@ public class Config
                         .comment( "Per how many levels you gain 1 Extra Damage from Magic" )
                         .translation( "pmmo.levelsPerDamageMagic" )
                         .defineInRange( "levelsPerDamageMagic", 20D, 1, 1000000000) );
+
+                this.maxExtraDamageBoostMagic = subscriber.subscribe(builder
+                        .comment( "How much extra damage can you get from the Magic skill max?" )
+                        .translation( "pmmo.maxExtraDamageBoostMagic" )
+                        .defineInRange( "maxExtraDamageBoostMagic", 100D, 0, 1000000000) );
 
                 builder.pop();
             }
