@@ -23,13 +23,16 @@ public class BreakSpeedHandler
         double speedBonus;
         ItemStack itemStack = player.getHeldItemMainhand();
         ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+        if( resLoc == null )
+            return;
         Map<String, Double> toolReq = XP.getJsonMap( resLoc, JType.REQ_TOOL );
-        Map<String, Double> dynToolReq = AutoValues.getToolReqFromStack( itemStack );
         if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
         {
+            Map<String, Double> dynToolReq = AutoValues.getToolReqFromStack( itemStack );
             for( Map.Entry<String, Double> entry : dynToolReq.entrySet() )
             {
-                toolReq.put( entry.getKey(), Math.max( toolReq.getOrDefault( entry.getKey(), 0D ), entry.getValue() ) );
+                if( !toolReq.containsKey( entry.getKey() ) )
+                    toolReq.put( entry.getKey(), Math.max( 1, entry.getValue() ) );
             }
         }
         int toolGap = XP.getSkillReqGap( player, toolReq );
