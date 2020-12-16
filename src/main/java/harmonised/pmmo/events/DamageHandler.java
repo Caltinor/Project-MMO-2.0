@@ -31,6 +31,27 @@ import java.util.Map;
 
 public class DamageHandler
 {
+    public static double getEnduranceMultiplier( PlayerEntity player )
+    {
+        int enduranceLevel = Skill.ENDURANCE.getLevel( player );
+        double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
+        double maxEndurance = Config.forgeConfig.maxEndurance.get();
+        double endurePercent = (enduranceLevel * endurancePerLevel);
+        if( endurePercent > maxEndurance )
+            endurePercent = maxEndurance;
+        endurePercent /= 100;
+        return endurePercent;
+    }
+
+    public static double getFallSaveChance(PlayerEntity player )
+    {
+        int agilityLevel = Skill.AGILITY.getLevel( player );
+        double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
+        double saveChancePerLevel = Math.min( maxFallSaveChance, Config.forgeConfig.saveChancePerLevel.get() / 100 );
+
+        return agilityLevel * saveChancePerLevel;
+    }
+
     public static void handleDamage( LivingDamageEvent event )
     {
         if( !(event.getEntity() instanceof FakePlayer) )
@@ -65,17 +86,7 @@ public class DamageHandler
                     }
                 }
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
-                int enduranceLevel = Skill.ENDURANCE.getLevel( player );
-                double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
-                double maxEndurance = Config.forgeConfig.maxEndurance.get();
-                double endurePercent = (enduranceLevel * endurancePerLevel);
-                if( endurePercent > maxEndurance )
-                    endurePercent = maxEndurance;
-                endurePercent /= 100;
-
-                double endured = damage * endurePercent;
-                if( endured < 0 )
-                    endured = 0;
+                double endured = Math.max( 0, damage * getEnduranceMultiplier( player ) );
 
                 damage -= endured;
 
@@ -84,16 +95,8 @@ public class DamageHandler
                 if( event.getSource().getDamageType().equals( "fall" ) )
                 {
                     double award;
-//					float savedExtra = 0;
-                    int agilityLevel = Skill.AGILITY.getLevel( player );
                     int saved = 0;
-
-                    double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
-                    double saveChancePerLevel = Config.forgeConfig.saveChancePerLevel.get() / 100;
-
-                    double chance = agilityLevel * saveChancePerLevel;
-                    if( chance > maxFallSaveChance )
-                        chance = maxFallSaveChance;
+                    double chance = getFallSaveChance( player );
                     for( int i = 0; i < damage; i++ )
                     {
                         if( Math.ceil( Math.random() * 100 ) <= chance )

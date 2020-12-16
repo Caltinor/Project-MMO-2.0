@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.text.Color;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraftforge.client.gui.ScrollPanel;
 import org.lwjgl.opengl.GL11;
@@ -47,7 +48,7 @@ public class StatsScrollPanel extends ScrollPanel
     @Override
     protected int getContentHeight()
     {
-        int height = -4;
+        int height = 16;
 
         for( StatsEntry a : statsEntries )
         {
@@ -74,10 +75,10 @@ public class StatsScrollPanel extends ScrollPanel
             drawCenteredString( stack, font, statsEntry.title.getString(), sr.getScaledWidth()/2, statsEntry.getY(), hexColor );
             for( int j = 0; j < statsEntry.text.size(); j++ )
             {
-                TextComponent line = statsEntry.text.get( j );
+                IFormattableTextComponent line = statsEntry.text.get( j );
                 color = line.getStyle().getColor();
                 hexColor = color == null ? 0xffffff : color.getColor();
-                drawString( stack, font, line.getString(), statsEntry.getX(), statsEntry.getY() + (j+1)*11, hexColor );
+                drawString( stack, font, line.getString(), statsEntry.getX(), 2 + statsEntry.getY() + (j+1)*11, hexColor );
             }
 
             accumulativeHeight += statsEntry.getHeight() + 4;

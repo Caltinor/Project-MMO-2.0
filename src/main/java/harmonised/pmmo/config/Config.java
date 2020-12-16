@@ -71,6 +71,13 @@ public class Config
         localConfig.put( "maxExtraReachBoost", forgeConfig.maxExtraReachBoost.get() );
         localConfig.put( "maxExtraDamageBoost", forgeConfig.maxExtraDamageBoost.get() );
 
+        localConfig.put( "mobHPBoostPerPowerLevel", forgeConfig.mobHPBoostPerPowerLevel.get() );
+        localConfig.put( "maxMobHPBoost", forgeConfig.maxMobHPBoost.get() );
+        localConfig.put( "mobSpeedBoostPerPowerLevel", forgeConfig.mobSpeedBoostPerPowerLevel.get() );
+        localConfig.put( "maxMobSpeedBoost", forgeConfig.maxMobSpeedBoost.get() );
+        localConfig.put( "mobDamageBoostPerPowerLevel", forgeConfig.mobDamageBoostPerPowerLevel.get() );
+        localConfig.put( "maxMobDamageBoost", forgeConfig.maxMobDamageBoost.get() );
+
         localConfig.put( "levelsPerHardnessMining", forgeConfig.levelsPerHardnessMining.get() );
         localConfig.put( "levelsPerHardnessWoodcutting", forgeConfig.levelsPerHardnessWoodcutting.get() );
         localConfig.put( "levelsPerHardnessExcavation", forgeConfig.levelsPerHardnessExcavation.get() );
@@ -1083,7 +1090,7 @@ public class Config
                 this.speedBoostPerLevel = subscriber.subscribe(builder
                         .comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )
                         .translation( "pmmo.speedBoostPerLevel" )
-                        .defineInRange( "speedBoostPerLevel", 0.00025D, 0, 10) );
+                        .defineInRange( "speedBoostPerLevel", 0.0000625D, 0, 10) );
 
                 builder.pop();
             }

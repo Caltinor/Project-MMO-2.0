@@ -20,50 +20,24 @@ public class JumpHandler
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
 
 //			if( !player.world.isRemote )
-//				System.out.println( player.getPersistentData() );
+//				System.out.println( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ) );
 
             if( XP.isPlayerSurvival( player ) )
             {
-                Map<String, Double> prefsMap;
-
-                prefsMap = Config.getPreferencesMap( player );
-
-                double agilityLevel = 1;
                 double jumpBoost = 0;
-                double maxJumpBoost = Config.getConfig( "maxJumpBoost" );
-                double maxJumpBoostPref = maxJumpBoost;
-                int levelsPerCrouchJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerCrouchJumpBoost" ) );
-                int levelsPerSprintJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerSprintJumpBoost" ) );
+                if ( player.isSneaking() )
+                    jumpBoost = getCrouchJumpBoost( player );
+                else if (player.isSprinting())
+                    jumpBoost = getSprintJumpBoost( player );
 
-                agilityLevel = Skill.AGILITY.getLevel( player );
-
-                if (player.isCrouching())
-                {
-                    if( prefsMap.containsKey( "maxCrouchJumpBoost" ) )
-                        maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxCrouchJumpBoost" ) / 100);
-                    jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsPerCrouchJumpBoost );
-                }
-
-                if (player.isSprinting())
-                {
-                    if( prefsMap.containsKey( "maxSprintJumpBoost" ) )
-                        maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxSprintJumpBoost" ) / 100);
-                    jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsPerSprintJumpBoost );
-                }
-
-                if ( jumpBoost > maxJumpBoost )
-                    jumpBoost = maxJumpBoost;
-                if( jumpBoost > maxJumpBoostPref )
-                    jumpBoost = maxJumpBoostPref;
-
-                if (player.world.isRemote)
+                if ( player.world.isRemote )
                 {
                     if( jumpBoost > 0 )
-                        player.setMotion( player.getMotion().x, player.getMotion().y + jumpBoost, player.getMotion().z );
+                        player.addVelocity( 0, jumpBoost, 0 );
                 }
                 else if (!player.isInWater())
                 {
-                    float jumpAmp = 0;
+                    double jumpAmp = 0;
 
                     if( player.isPotionActive( Effects.JUMP_BOOST ) )
                         jumpAmp = player.getActivePotionEffect( Effects.JUMP_BOOST ).getAmplifier() + 1;
@@ -72,5 +46,37 @@ public class JumpHandler
                 }
             }
         }
+    }
+
+    public static double getCrouchJumpBoost( PlayerEntity player )
+    {
+        Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+        double agilityLevel;
+        double jumpBoost;
+        double maxJumpBoost = Config.getConfig( "maxJumpBoost" );
+        double maxJumpBoostPref = maxJumpBoost;
+        int levelsPerCrouchJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerCrouchJumpBoost" ) );
+        agilityLevel = Skill.AGILITY.getLevel( player );
+        if( prefsMap.containsKey( "maxCrouchJumpBoost" ) )
+            maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxCrouchJumpBoost" ) / 100);
+        jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsPerCrouchJumpBoost );
+        jumpBoost = Math.min( maxJumpBoostPref, Math.min( maxJumpBoost, jumpBoost ) );
+        return jumpBoost;
+    }
+
+    public static double getSprintJumpBoost( PlayerEntity player )
+    {
+        Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+        double agilityLevel;
+        double jumpBoost;
+        double maxJumpBoost = Config.getConfig( "maxJumpBoost" );
+        double maxJumpBoostPref = maxJumpBoost;
+        int levelsPerSprintJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerSprintJumpBoost" ) );
+        agilityLevel = Skill.AGILITY.getLevel( player );
+        if( prefsMap.containsKey( "maxSprintJumpBoost" ) )
+            maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxSprintJumpBoost" ) / 100);
+        jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsPerSprintJumpBoost );
+        jumpBoost = Math.min( maxJumpBoostPref, Math.min( maxJumpBoost, jumpBoost ) );
+        return jumpBoost;
     }
 }

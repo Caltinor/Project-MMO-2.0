@@ -2,6 +2,7 @@ package harmonised.pmmo.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextComponent;
 
 import java.util.List;
@@ -10,10 +11,10 @@ public class StatsEntry
 {
     public static FontRenderer font = Minecraft.getInstance().fontRenderer;
     public TextComponent title;
-    public List<TextComponent> text;
+    public List<IFormattableTextComponent> text;
     public int x, y;
 
-    public StatsEntry( int x, int y, TextComponent title, List<TextComponent> text )
+    public StatsEntry( int x, int y, TextComponent title, List<IFormattableTextComponent> text )
     {
         this.x = x;
         this.y = y;
@@ -23,7 +24,7 @@ public class StatsEntry
 
     public int getHeight()
     {
-        return (text.size()+1) * 11;
+        return text.size() * 11 + 15;
     }
 
     public int getX()

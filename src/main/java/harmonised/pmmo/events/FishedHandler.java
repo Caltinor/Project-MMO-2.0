@@ -21,6 +21,14 @@ import java.util.Map;
 
 public class FishedHandler
 {
+    public static double getFishPoolChance( PlayerEntity player )
+    {
+        double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
+        double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
+        double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
+        return Math.min( fishPoolMaxChance, fishPoolBaseChance + fishPoolChancePerLevel * Skill.FISHING.getLevelDecimal( player ) );
+    }
+
     public static void handleFished( ItemFishedEvent event )
     {
         if( !( event.getPlayer() instanceof ServerPlayerEntity ) )
@@ -40,12 +48,7 @@ public class FishedHandler
 
         if( fishPool != null )
         {
-            double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
-            double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
-            double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
-            double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * startLevel;
-            if( fishPoolChance > fishPoolMaxChance )
-                fishPoolChance = fishPoolMaxChance;
+            double fishPoolChance = getFishPoolChance( player );
 
             if( Math.random() * 10000 < fishPoolChance * 100 )
             {
