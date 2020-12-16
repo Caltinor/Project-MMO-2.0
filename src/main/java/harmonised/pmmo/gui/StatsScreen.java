@@ -2,7 +2,16 @@ package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.curios.Curios;
+import harmonised.pmmo.events.DamageHandler;
+import harmonised.pmmo.events.FishedHandler;
+import harmonised.pmmo.events.JumpHandler;
+import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.MainWindow;
@@ -10,14 +19,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
+import net.minecraftforge.items.IItemHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class StatsScreen extends Screen
 {
@@ -48,11 +58,26 @@ public class StatsScreen extends Screen
 //        return false;
 //    }
 
+    public static void addXpMapEntryAsText( List<ITextComponent> text, Map<String, Double> xpBoosts )
+    {
+        Skill skill;
+        String skillName;
+        Style color;
+        for( Map.Entry<String, Double> entry : xpBoosts.entrySet() )
+        {
+            skill = Skill.getSkill( entry.getKey() );
+            color = XP.getSkillStyle( skill );
+            skillName = new TranslationTextComponent( "pmmo." + skill.toString() ).getString();
+            text.add( new StringTextComponent( ( entry.getValue() < 0 ? " " : " +" ) + new TranslationTextComponent( "pmmo.levelDisplayPercentage", DP.dpSoft( entry.getValue() ), skillName ).getString() ).setStyle( color ) );
+        }
+    }
+
     @Override
     protected void init()
     {
         statsEntries = new ArrayList<>();
-        ArrayList<TextComponent> text;
+        ArrayList<ITextComponent> text;
+        Map<String, Double> map;
 
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
@@ -61,83 +86,172 @@ public class StatsScreen extends Screen
         {
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.skills" ) ) );
         });
+        
+        PlayerEntity player = Minecraft.getInstance().player;
+        TextComponent entryTitle;
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.damage" );
+        text.add( new TranslationTextComponent( "pmmo.damageBonusMelee", Skill.COMBAT.getLevel( player ) / Config.forgeConfig.levelsPerDamageMelee.get() ).setStyle( XP.skillStyle.get( Skill.COMBAT ) ) );
+        text.add( new TranslationTextComponent( "pmmo.damageBonusArchery", Skill.ARCHERY.getLevel( player ) / Config.forgeConfig.levelsPerDamageArchery.get() ).setStyle( XP.skillStyle.get( Skill.ARCHERY ) ) );
+        text.add( new TranslationTextComponent( "pmmo.damageBonusMagic", Skill.MAGIC.getLevel( player ) / Config.forgeConfig.levelsPerDamageMagic.get() ).setStyle( XP.skillStyle.get( Skill.MAGIC ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.speed" );
+        double baseSpeed = AttributeHandler.getBaseSpeed( player );
+        double boostedSpeed = baseSpeed + AttributeHandler.getSpeedBoost( player );
+        text.add( new TranslationTextComponent( "pmmo.sprintSpeedBonus", DP.dpSoft( boostedSpeed*100D / baseSpeed ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.jump" );
+        text.add( new TranslationTextComponent( "pmmo.jumpBonusSprint", DP.dpSoft( JumpHandler.getSprintJumpBoost( player ) / 0.14D ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        text.add( new TranslationTextComponent( "pmmo.jumpBonusCrouch", DP.dpSoft( JumpHandler.getCrouchJumpBoost( player ) / 0.14D ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.fallSaveChance" );
+        text.add( new TranslationTextComponent( "pmmo.fallSaveChancePercentage", DP.dpSoft( DamageHandler.getFallSaveChance( player ) ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.endurance" );
+        text.add( new TranslationTextComponent( "pmmo.damageReductionPercentage", DP.dpSoft( DamageHandler.getEnduranceMultiplier( player ) ) ).setStyle( XP.skillStyle.get( Skill.ENDURANCE ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.hearts" );
+        text.add( new TranslationTextComponent( "pmmo.heartBonus", AttributeHandler.getHeartBoost( player ) ).setStyle( XP.skillStyle.get( Skill.ENDURANCE ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.reach" );
+        text.add( new TranslationTextComponent( "pmmo.reachBonus", DP.dpSoft( AttributeHandler.getReachBoost( player ) ) ).setStyle( XP.skillStyle.get( Skill.BUILDING ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
+
+//        text = new ArrayList<>();
+//        entryTitle = new TranslationTextComponent( "pmmo.respiration" );
+//        text.add( new TranslationTextComponent( "pmmo.respirationBonus", getRespirationBonus( player ) ).setStyle( XP.skillStyle.get( Skill.SWIMMING ) ) );
+//        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.underwaterNightVision" );
+        text.add( new TranslationTextComponent( Skill.SWIMMING.getLevelDecimal( player ) >= Config.getConfig( "nightvisionUnlockLevel" ) ? "pmmo.unlocked" : "pmmo.locked" ).setStyle( XP.skillStyle.get( Skill.SWIMMING ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.rareFishPool" );
+        text.add( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dpSoft( FishedHandler.getFishPoolChance( player ) ) ).setStyle( XP.skillStyle.get( Skill.FISHING ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
+        ItemStack itemStack;
         text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        entryTitle = new TranslationTextComponent( "pmmo.xpBonuses" );
+        PlayerInventory inv = player.inventory;
 
-        text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        //Helm
+        itemStack = inv.getStackInSlot( 39 );
+        if( !itemStack.isEmpty() )
+        {
+            map = XP.getStackXpBoosts( itemStack, false );
+            if( map.size() > 0 )
+            {
+                text.add( new TranslationTextComponent( itemStack.getTranslationKey() ) );
+                addXpMapEntryAsText( text, map );
+            }
+        }
 
-        text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        //Chest
+        itemStack = inv.getStackInSlot( 38 );
+        if( !itemStack.isEmpty() )
+        {
+            map = XP.getStackXpBoosts( itemStack, false );
+            if( map.size() > 0 )
+            {
+                text.add( new TranslationTextComponent( itemStack.getTranslationKey() ) );
+                addXpMapEntryAsText( text, map );
+            }
+        }
 
-        text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        //Legs
+        itemStack = inv.getStackInSlot( 37 );
+        if( !itemStack.isEmpty() )
+        {
+            map = XP.getStackXpBoosts( itemStack, false );
+            if( map.size() > 0 )
+            {
+                text.add( new TranslationTextComponent( itemStack.getTranslationKey() ) );
+                addXpMapEntryAsText( text, map );
+            }
+        }
 
-        text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        //Boots
+        itemStack = inv.getStackInSlot( 36 );
+        if( !itemStack.isEmpty() )
+        {
+            map = XP.getStackXpBoosts( itemStack, false );
+            if( map.size() > 0 )
+            {
+                text.add( new TranslationTextComponent( itemStack.getTranslationKey() ) );
+                addXpMapEntryAsText( text, map );
+            }
+        }
 
-        text = new ArrayList<>();
-        text.add( new TranslationTextComponent( "pmmo.heartsSummary" ) );
-        statsEntries.add( new StatsEntry( 0, 0, new TranslationTextComponent( "pmmo.hearts" ), text ) );
-        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
+        itemStack = player.getHeldItemOffhand();
+        if( !itemStack.isEmpty() )
+        {
+            map = XP.getStackXpBoosts( itemStack, false );
+            if( map.size() > 0 )
+            {
+                text.add( new TranslationTextComponent( itemStack.getTranslationKey() ) );
+                addXpMapEntryAsText( text, map );
+            }
+        }
 
+        itemStack = player.getHeldItemMainhand();
+        if( !itemStack.isEmpty() )
+        {
+            map = XP.getStackXpBoosts( itemStack, true );
+            if( map.size() > 0 )
+            {
+                text.add( new TranslationTextComponent( itemStack.getTranslationKey() ) );
+                addXpMapEntryAsText( text, map );
+            }
+        }
+
+        if( Curios.isLoaded() )
+        {
+
+            Collection<IItemHandler> curiosItems = Curios.getCurios(player).collect(Collectors.toSet());
+
+            for( IItemHandler value : curiosItems )
+            {
+                for (int i = 0; i < value.getSlots(); i++)
+                {
+                    addXpMapEntryAsText( text, XP.getStackXpBoosts( value.getStackInSlot(i), true ) );
+                }
+            };
+        }
+
+        map = XP.getDimensionBoosts( "" + player.world.getWorldType().getId() );
+        if( map.size() > 0 )
+        {
+            text.add( new TranslationTextComponent( "pmmo.dimension" ) );
+            addXpMapEntryAsText( text, map );    //Dimension
+        }
+        map = XP.getBiomeBoosts( player );
+        if( map.size() > 0 )
+        {
+            text.add( new TranslationTextComponent( "pmmo.biome" ) );
+            addXpMapEntryAsText( text, map );    //Biome
+        }
+        for( Map.Entry<String, Map<Skill, Double>> outterEntry : Config.getXpBoostsMap( player ).entrySet() )
+        {
+            text.add( new TranslationTextComponent( outterEntry.getKey() ) );
+            addXpMapEntryAsText( text, NBTHelper.MapSkillKeyToString( outterEntry.getValue() ) );    //Biome
+        }
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
 
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );

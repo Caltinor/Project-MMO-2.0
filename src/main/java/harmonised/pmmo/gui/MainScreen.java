@@ -86,7 +86,7 @@ public class MainScreen extends Screen
         tileButtons.add(creditsButton);
         tileButtons.add(prefsButton);
         tileButtons.add(skillsButton);
-//        tileButtons.add(statsButton);
+        tileButtons.add(statsButton);
 
         for( int i = 0; i < tileButtons.size(); i++ )
         {

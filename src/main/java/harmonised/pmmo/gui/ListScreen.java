@@ -797,7 +797,7 @@ public class ListScreen extends Screen
                 {
                     if( button.regKey.equals( "totalLevel" ) )
                     {
-                        button.title = getTransComp( "pmmo.totalLevel" ).getString();
+                        button.title = " " + getTransComp( "pmmo.totalLevel" ).getString();
                         button.text.add( new StringTextComponent( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) ) ).getString() );
                     }
                     else
@@ -817,7 +817,7 @@ public class ListScreen extends Screen
                         }
                     }
                 }
-                break;
+                    break;
 
                 default:
                     break;

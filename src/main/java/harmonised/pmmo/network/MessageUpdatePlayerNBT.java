@@ -71,8 +71,7 @@ public class MessageUpdatePlayerNBT
                     {
                         Config.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
                         WorldTickHandler.refreshVein();
-                        AttributeHandler.init();
-                    }
+                        }
                     else
                         LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
                     break;

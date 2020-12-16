@@ -11,6 +11,18 @@ import java.util.UUID;
 
 public class NBTHelper
 {
+    public static <T> Map<String, T> MapSkillKeyToString( Map<Skill, T> inMap )
+    {
+        Map<String, T> outMap = new HashMap<>();
+
+        for( Map.Entry<Skill, T> entry : inMap.entrySet() )
+        {
+            outMap.put( entry.getKey().toString(), entry.getValue() );
+        }
+
+        return outMap;
+    }
+
     public static Map<String, Double> nbtToMapString( CompoundNBT nbt )
     {
         Map<String, Double> map = new HashMap<>();

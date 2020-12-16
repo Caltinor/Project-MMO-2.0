@@ -2,13 +2,11 @@ package harmonised.pmmo.gui;
 
 import java.util.*;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.MessageLevelUp;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
@@ -25,12 +23,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -65,6 +61,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static BlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	private static Item lastToolHeld = Items.AIR;
+	private static Map<String, Double> biomeBoosts;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean listWasOn = false, barOn = false, listOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
 	MainWindow sr;
@@ -459,18 +456,18 @@ public class XPOverlayGUI extends AbstractGui
 
 			if( System.nanoTime() - lastBonusUpdate > 250000000 )
 			{
+				biomeBoosts = XP.getBiomeBoosts( player );
 				for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
 				{
 					tempSkill = entry.getKey();
 
 					itemBoost = XP.getItemBoost( player, tempSkill );
-					biomeBoost = XP.getBiomeBoost( player, tempSkill );
 					dimensionBoost = XP.getDimensionBoost( player, tempSkill );
 					playerXpBoost = Config.getPlayerXpBoost( player, tempSkill );
 
 //					multiplier = ( XP.getMultiplier(  player, tempSkill ) * 100 ) - 100;
 
-					skills.get( tempSkill ).bonus = itemBoost + biomeBoost + dimensionBoost + playerXpBoost;
+					skills.get( tempSkill ).bonus = itemBoost + biomeBoosts.getOrDefault( tempSkill.toString(), 0D ) + dimensionBoost + playerXpBoost;
 					if( skills.get( tempSkill ).bonus <= -100 )
 						skills.get( tempSkill ).bonus = -100;
 				}
