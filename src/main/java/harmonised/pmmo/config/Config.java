@@ -1095,7 +1095,7 @@ public class Config
                 this.speedBoostPerLevel = subscriber.subscribe(builder
                         .comment( "How much speed boost you get from each level (1 = 1% speed boost per level)" )
                         .translation( "pmmo.speedBoostPerLevel" )
-                        .defineInRange( "speedBoostPerLevel", 0.005D, 0, 10) );
+                        .defineInRange( "speedBoostPerLevel", 0.5D, 0, 100) );
 
                 builder.pop();
             }
