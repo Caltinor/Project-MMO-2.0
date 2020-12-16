@@ -99,47 +99,38 @@ public class TooltipHandler
                     //Wear
                     if( FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
                     {
+                        if( wearReq == null )
+                            wearReq = new HashMap<>();
                         double dynReq = AutoValues.getWearReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWear", 0D );
-                        if( dynReq > 0 )
+                        if( dynReq > 0 && !wearReq.containsKey( Skill.ENDURANCE.toString() ) )
                         {
-                            if( wearReq == null )
-                                wearReq = new HashMap<>();
-
                             if( wearReq.getOrDefault( Skill.ENDURANCE.toString(), 0D ) < dynReq )
                                 wearReq.put( Skill.ENDURANCE.toString(), dynReq );
                         }
                     }
 
                     //Weapon
+                    Skill itemSpecificSkill = AutoValues.getItemSpecificSkill( regKey );
                     if( FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
                     {
+                        if( weaponReq == null )
+                            weaponReq = new HashMap<>();
                         double dynReq = AutoValues.getWeaponReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
-                        if( dynReq > 0 )
-                        {
-                            if( weaponReq == null )
-                                weaponReq = new HashMap<>();
-
-                            if( weaponReq.getOrDefault( Skill.COMBAT.toString(), 0D ) < dynReq )
-                                weaponReq.put( Skill.COMBAT.toString(), dynReq );
-                        }
+                        if( dynReq > 0 && !weaponReq.containsKey( itemSpecificSkill.toString() ) )
+                            weaponReq.put( itemSpecificSkill.toString(), dynReq );
                     }
 
                     //Tool
                     if( FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
                     {
+                        if( toolReq == null )
+                            toolReq = new HashMap<>();
                         Map<String, Double> dynToolReqMap = AutoValues.getToolReqFromStack( itemStack );
-
                         for( Map.Entry<String, Double> entry : dynToolReqMap.entrySet() )
                         {
                             double dynReq = entry.getValue() + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetTool", 0D );
-                            if( dynReq > 0 )
-                            {
-                                if( toolReq == null )
-                                    toolReq = new HashMap<>();
-
-                                if( toolReq.getOrDefault( entry.getKey(), 0D ) < dynReq )
-                                    toolReq.put( entry.getKey(), dynReq );
-                            }
+                            if( dynReq > 0 && !toolReq.containsKey( entry.getKey() ) )
+                                toolReq.put( entry.getKey(), dynReq );
                         }
                     }
                 }

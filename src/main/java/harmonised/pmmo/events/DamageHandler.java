@@ -156,7 +156,7 @@ public class DamageHandler
                     if( itemSpecificSkill != null )
                         skill = itemSpecificSkill;
                     if( FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
-                        weaponReq.put( skill.toString(), Math.max( weaponReq.getOrDefault( skill.toString(), 0D ), AutoValues.getWeaponReqFromStack( itemStack ) ) );
+                        weaponReq.put( skill.toString(), weaponReq.getOrDefault( skill.toString(), AutoValues.getWeaponReqFromStack( itemStack ) ) );
                     int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
                     int gap = Math.max( weaponGap, enchantGap );
