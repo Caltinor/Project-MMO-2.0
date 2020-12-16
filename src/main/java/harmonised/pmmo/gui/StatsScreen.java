@@ -101,9 +101,7 @@ public class StatsScreen extends Screen
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.speed" );
-        double baseSpeed = AttributeHandler.getBaseSpeed( player );
-        double boostedSpeed = baseSpeed + AttributeHandler.getSpeedBoost( player );
-        text.add( new TranslationTextComponent( "pmmo.sprintSpeedBonus", DP.dpSoft( boostedSpeed*100D / baseSpeed ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        text.add( new TranslationTextComponent( "pmmo.sprintSpeedBonus", DP.dpSoft( AttributeHandler.getSpeedBoostMultiplier( Skill.AGILITY.getLevel( player ) ) * 100D ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
