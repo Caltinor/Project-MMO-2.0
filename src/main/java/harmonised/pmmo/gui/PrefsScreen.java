@@ -81,8 +81,12 @@ public class PrefsScreen extends GuiScreen
                 prefsEntries.add( new PrefsEntry("maxExtraReachBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraReachBoost", value ), value, true, true, true, false ) );
                 value = Math.min( Skill.ENDURANCE.getLevel( player ) / FConfig.getConfig( "levelsPerHeart" ), FConfig.getConfig( "maxExtraHeartBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraHeartBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraHeartBoost", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.COMBAT.getLevel( player ) / FConfig.getConfig( "levelsPerDamageMelee" ), FConfig.getConfig( "maxExtraDamageBoost" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraDamageBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoost", value ), value, false, true, true, false ) );
+                value = Math.min( Skill.COMBAT.getLevel( player ) / FConfig.getConfig( "levelsPerDamageMelee" ), FConfig.getConfig( "maxExtraDamageBoostMelee" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraDamageBoostMelee", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostMelee", value ), value, false, true, true, false ) );
+                value = Math.min( Skill.ARCHERY.getLevel( player ) / FConfig.getConfig( "levelsPerDamageMelee" ), FConfig.getConfig( "maxExtraDamageBoostArchery" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraDamageBoostArchery", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostArchery", value ), value, false, true, true, false ) );
+                value = Math.min( Skill.MAGIC.getLevel( player ) / FConfig.getConfig( "levelsPerDamageMelee" ), FConfig.getConfig( "maxExtraDamageBoostMagic" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraDamageBoostMagic", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostMagic", value ), value, false, true, true, false ) );
                 value = Math.min( Skill.AGILITY.getLevel( player ) * FConfig.getConfig( "speedBoostPerLevel" ), FConfig.getConfig( "maxSpeedBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxSpeedBoost", "", "", 0, value, prefsMap.getOrDefault( "maxSpeedBoost", value ), value, true, true, true, false ) );
                 value = Math.min( Skill.AGILITY.getLevel( player ) * FConfig.getConfig( "levelsPerSprintJumpBoost" ), FConfig.getConfig( "maxJumpBoost" ) );

@@ -642,10 +642,10 @@ public class FConfig
     @Config.RangeDouble( min = 0, max = 100 )
     public static double maxSpeedBoost = 100D;
 
-    @Config.Comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )
+    @Config.Comment( "How much speed boost you get from each level (1 = 1% speed boost per level)" )
     @Config.Name( "speedBoostPerLevel" )
     @Config.RangeDouble( min = 0, max = 100 )
-    public static double speedBoostPerLevel = 0.0000625D;
+    public static double speedBoostPerLevel = 0.005D;
 
     //Endurance
     @Config.Comment( "How much endurance is max (100 = god mode)" )
@@ -675,15 +675,20 @@ public class FConfig
     public static double levelsPerDamageMelee = 20D;
 
     @Config.Comment( "How much extra damage can you get from the Combat skill max?" )
-    @Config.Name( "maxExtraDamageBoost" )
+    @Config.Name( "maxExtraDamageBoostMelee" )
     @Config.RangeDouble( min = 1, max = 1000000000 )
-    public static double maxExtraDamageBoost = 100D;
+    public static double maxExtraDamageBoostMelee = 100D;
 
     //Archery
     @Config.Comment( "Per how many levels you gain 1 Extra Damage from Archery" )
     @Config.Name( "levelsPerDamageArchery" )
     @Config.RangeDouble( min = 1, max = 1000000000 )
     public static double levelsPerDamageArchery = 20D;
+
+    @Config.Comment( "How much extra damage can you get from the Archery skill max?" )
+    @Config.Name( "maxExtraDamageBoostArchery" )
+    @Config.RangeDouble( min = 1, max = 1000000000 )
+    public static double maxExtraDamageBoostArchery = 100D;
 
     //Smithing
     @Config.Comment( "Should PMMO anvil handling be enabled? (xp rewards for repair, and also Enchantment handling) (some mod items break, if you experience lost enchantments, set this to false)" )
@@ -817,6 +822,11 @@ public class FConfig
     @Config.Name( "levelsPerDamageMagic" )
     @Config.RangeDouble( min = 1, max = 1000000000 )
     public static double levelsPerDamageMagic = 20D;
+
+    @Config.Comment( "How much extra damage can you get from the Magic skill max?" )
+    @Config.Name( "maxExtraDamageBoostMagic" )
+    @Config.RangeDouble( min = 1, max = 1000000000 )
+    public static double maxExtraDamageBoostMagic = 100D;
 
     //Slayer
     @Config.Comment( "How much slayer xp is awarded upon killing an aggresive mob by default" )
@@ -954,13 +964,13 @@ public class FConfig
     public static void initServer()
     {
         //Info that will also be sent to Client so it's accessible remotely
-        localConfig.put( "veiningAllowed", FConfig.veiningAllowed ? 1D : 0D );
-        localConfig.put( "useExponentialFormula", FConfig.useExponentialFormula ? 1D : 0D );
-        localConfig.put( "strictReqTool", FConfig.strictReqTool ? 1D : 0D );
-        localConfig.put( "autoGenerateValuesEnabled", FConfig.autoGenerateValuesEnabled ? 1D : 0D );
-        localConfig.put( "autoGenerateWearReqDynamicallyEnabled", FConfig.autoGenerateWearReqDynamicallyEnabled ? 1D : 0D );
-        localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", FConfig.autoGenerateWeaponReqDynamicallyEnabled ? 1D : 0D );
-        localConfig.put( "autoGenerateToolReqDynamicallyEnabled", FConfig.autoGenerateToolReqDynamicallyEnabled ? 1D : 0D );
+        localConfig.put( "veiningAllowed", veiningAllowed ? 1D : 0D );
+        localConfig.put( "useExponentialFormula", useExponentialFormula ? 1D : 0D );
+        localConfig.put( "strictReqTool", strictReqTool ? 1D : 0D );
+        localConfig.put( "autoGenerateValuesEnabled", autoGenerateValuesEnabled ? 1D : 0D );
+        localConfig.put( "autoGenerateWearReqDynamicallyEnabled", autoGenerateWearReqDynamicallyEnabled ? 1D : 0D );
+        localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", autoGenerateWeaponReqDynamicallyEnabled ? 1D : 0D );
+        localConfig.put( "autoGenerateToolReqDynamicallyEnabled", autoGenerateToolReqDynamicallyEnabled ? 1D : 0D );
 
         localConfig.put( "maxLevel", (double) maxLevel );
         localConfig.put( "baseXp", baseXp );
@@ -978,16 +988,19 @@ public class FConfig
         localConfig.put( "saveChancePerLevel", saveChancePerLevel );
         localConfig.put( "levelsPerCrouchJumpBoost", levelsPerCrouchJumpBoost );
         localConfig.put( "levelsPerSprintJumpBoost", levelsPerSprintJumpBoost );
-        localConfig.put( "levelsPerDamageMelee", levelsPerDamageMelee );
-        localConfig.put( "levelsPerDamageArchery", levelsPerDamageArchery );
-        localConfig.put( "levelsPerDamageMagic", levelsPerDamageMagic );
         localConfig.put( "levelsPerOneReach", levelsPerOneReach );
         localConfig.put( "endurancePerLevel", endurancePerLevel );
         localConfig.put( "maxEndurance", maxEndurance );
         localConfig.put( "levelsPerHeart", levelsPerHeart );
         localConfig.put( "maxExtraHeartBoost", (double) maxExtraHeartBoost );
         localConfig.put( "maxExtraReachBoost", maxExtraReachBoost );
-        localConfig.put( "maxExtraDamageBoost", maxExtraDamageBoost );
+
+        localConfig.put( "levelsPerDamageMelee", levelsPerDamageMelee );
+        localConfig.put( "maxExtraDamageBoostMelee", maxExtraDamageBoostMelee );
+        localConfig.put( "levelsPerDamageArchery", levelsPerDamageArchery );
+        localConfig.put( "maxExtraDamageBoostArchery", maxExtraDamageBoostArchery );
+        localConfig.put( "levelsPerDamageMagic", levelsPerDamageMagic );
+        localConfig.put( "maxExtraDamageBoostMagic", maxExtraDamageBoostMagic );
 
         localConfig.put( "mobHPBoostPerPowerLevel", mobHPBoostPerPowerLevel );
         localConfig.put( "maxMobHPBoost", maxMobHPBoost );
