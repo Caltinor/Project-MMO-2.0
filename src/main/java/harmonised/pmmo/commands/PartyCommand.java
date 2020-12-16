@@ -36,7 +36,7 @@ public class PartyCommand
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAreInAParty" ).setStyle( XP.textStyle.get( "green" ) ), false );
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.totalMembersOutOfMax", party.getPartySize(), Party.getMaxPartyMembers() ).setStyle( XP.textStyle.get( "green" ) ), false );
             player.sendStatusMessage( new TranslationTextComponent( "pmmo.partyTotalXpGained", DP.dpSoft( totalXpGained ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.partyXpBonus", DP.dpSoft( party.getMultiplier( membersInRangeUUID.size() ) ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.partyXpBonus", DP.dpSoft( ( party.getMultiplier( membersInRangeUUID.size() ) - 1 ) * 100 ) ).setStyle( XP.textStyle.get( "green" ) ), false );
             for( PartyMemberInfo memberInfo : membersInfo )
             {
                 String xpGainedPercentage = DP.dpSoft( ( memberInfo.xpGained / totalXpGained ) * 100 );
