@@ -24,7 +24,7 @@ public class StatsEntry
 
     public int getHeight()
     {
-        return (text.size()+1) * 11;
+        return text.size() * 11 + 15;
     }
 
     public int getX()

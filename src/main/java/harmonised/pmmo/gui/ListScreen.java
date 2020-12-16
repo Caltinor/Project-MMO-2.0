@@ -803,7 +803,7 @@ public class ListScreen extends GuiScreen
                 {
                     if( button.regKey.equals( "totalLevel" ) )
                     {
-                        button.title = getTransComp( "pmmo.totalLevel" ).getFormattedText();
+                        button.title = new TextComponentString( " " + getTransComp( "pmmo.totalLevel" ).getUnformattedText() ).getFormattedText();
                         button.text.add( new TextComponentString( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) ) ).getFormattedText() );
                     }
                     else
@@ -1172,7 +1172,10 @@ public class ListScreen extends GuiScreen
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException
     {
         if( button == 1 )
+        {
             exitButton.onPress();
+            return;
+        }
 
         for( ListButton a : listButtons )
         {

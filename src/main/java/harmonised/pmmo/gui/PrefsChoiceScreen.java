@@ -87,6 +87,7 @@ public class PrefsChoiceScreen extends GuiScreen
                 drawHoveringText( new TextComponentTranslation( button.transKey ).getFormattedText(), mouseX, mouseY );
         }
         GlStateManager.popAttrib();
+        GlStateManager.enableBlend();
     }
 
     @Override
@@ -118,7 +119,10 @@ public class PrefsChoiceScreen extends GuiScreen
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException
     {
         if( button == 1 )
+        {
             exitButton.onPress();
+            return;
+        }
         super.mouseClicked(mouseX, mouseY, button);
     }
 

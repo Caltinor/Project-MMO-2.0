@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -24,12 +25,31 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class DamageHandler
 {
+    public static double getEnduranceMultiplier( EntityPlayer player )
+    {
+        int enduranceLevel = Skill.ENDURANCE.getLevel( player );
+        double endurancePerLevel = FConfig.endurancePerLevel;
+        double maxEndurance = FConfig.maxEndurance;
+        double endurePercent = (enduranceLevel * endurancePerLevel);
+        if( endurePercent > maxEndurance )
+            endurePercent = maxEndurance;
+        endurePercent /= 100;
+        return endurePercent;
+    }
+
+    public static double getFallSaveChance(EntityPlayer player )
+    {
+        int agilityLevel = Skill.AGILITY.getLevel( player );
+        double maxFallSaveChance = FConfig.maxFallSaveChance;
+        double saveChancePerLevel = Math.min( maxFallSaveChance, FConfig.saveChancePerLevel / 100 );
+
+        return agilityLevel * saveChancePerLevel;
+    }
+
     public static void handleDamage( LivingDamageEvent event )
     {
         if( !(event.getEntity() instanceof FakePlayer) )
@@ -64,17 +84,7 @@ public class DamageHandler
                     }
                 }
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
-                int enduranceLevel = Skill.ENDURANCE.getLevel( player );
-                double endurancePerLevel = FConfig.endurancePerLevel;
-                double maxEndurance = FConfig.maxEndurance;
-                double endurePercent = (enduranceLevel * endurancePerLevel);
-                if( endurePercent > maxEndurance )
-                    endurePercent = maxEndurance;
-                endurePercent /= 100;
-
-                double endured = damage * endurePercent;
-                if( endured < 0 )
-                    endured = 0;
+                double endured = Math.max( 0, damage * getEnduranceMultiplier( player ) );
 
                 damage -= endured;
 
@@ -83,16 +93,9 @@ public class DamageHandler
                 if( event.getSource().getDamageType().equals( "fall" ) )
                 {
                     double award;
-//					double savedExtra = 0;
-                    int agilityLevel = Skill.AGILITY.getLevel( player );
                     int saved = 0;
 
-                    double maxFallSaveChance = FConfig.maxFallSaveChance;
-                    double saveChancePerLevel = FConfig.saveChancePerLevel / 100;
-
-                    double chance = agilityLevel * saveChancePerLevel;
-                    if( chance > maxFallSaveChance )
-                        chance = maxFallSaveChance;
+                    double chance = getFallSaveChance( player );
                     for( int i = 0; i < damage; i++ )
                     {
                         if( Math.ceil( Math.random() * 100 ) <= chance )

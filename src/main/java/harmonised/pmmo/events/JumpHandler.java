@@ -24,37 +24,11 @@ public class JumpHandler
 
             if( XP.isPlayerSurvival( player ) )
             {
-                Map<String, Double> prefsMap;
-
-                prefsMap = FConfig.getPreferencesMap( player );
-
-                double agilityLevel = 1;
                 double jumpBoost = 0;
-                double maxJumpBoost = FConfig.getConfig( "maxJumpBoost" );
-                double maxJumpBoostPref = maxJumpBoost;
-                int levelsPerCrouchJumpBoost = (int) Math.floor( FConfig.getConfig( "levelsPerCrouchJumpBoost" ) );
-                int levelsPerSprintJumpBoost = (int) Math.floor( FConfig.getConfig( "levelsPerSprintJumpBoost" ) );
-
-                agilityLevel = Skill.AGILITY.getLevel( player );
-
                 if ( player.isSneaking() )
-                {
-                    if( prefsMap.containsKey( "maxCrouchJumpBoost" ) )
-                        maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxCrouchJumpBoost" ) / 100);
-                    jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsPerCrouchJumpBoost );
-                }
-
-                if (player.isSprinting())
-                {
-                    if( prefsMap.containsKey( "maxSprintJumpBoost" ) )
-                        maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxSprintJumpBoost" ) / 100);
-                    jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsPerSprintJumpBoost );
-                }
-
-                if ( jumpBoost > maxJumpBoost )
-                    jumpBoost = maxJumpBoost;
-                if( jumpBoost > maxJumpBoostPref )
-                    jumpBoost = maxJumpBoostPref;
+                    jumpBoost = getCrouchJumpBoost( player );
+                else if (player.isSprinting())
+                    jumpBoost = getSprintJumpBoost( player );
 
                 if ( player.world.isRemote )
                 {
@@ -72,5 +46,37 @@ public class JumpHandler
                 }
             }
         }
+    }
+
+    public static double getCrouchJumpBoost( EntityPlayer player )
+    {
+        Map<String, Double> prefsMap = FConfig.getPreferencesMap( player );
+        double agilityLevel;
+        double jumpBoost;
+        double maxJumpBoost = FConfig.getConfig( "maxJumpBoost" );
+        double maxJumpBoostPref = maxJumpBoost;
+        int levelsPerCrouchJumpBoost = (int) Math.floor( FConfig.getConfig( "levelsPerCrouchJumpBoost" ) );
+        agilityLevel = Skill.AGILITY.getLevel( player );
+        if( prefsMap.containsKey( "maxCrouchJumpBoost" ) )
+            maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxCrouchJumpBoost" ) / 100);
+        jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsPerCrouchJumpBoost );
+        jumpBoost = Math.min( maxJumpBoostPref, Math.min( maxJumpBoost, jumpBoost ) );
+        return jumpBoost;
+    }
+
+    public static double getSprintJumpBoost( EntityPlayer player )
+    {
+        Map<String, Double> prefsMap = FConfig.getPreferencesMap( player );
+        double agilityLevel;
+        double jumpBoost;
+        double maxJumpBoost = FConfig.getConfig( "maxJumpBoost" );
+        double maxJumpBoostPref = maxJumpBoost;
+        int levelsPerSprintJumpBoost = (int) Math.floor( FConfig.getConfig( "levelsPerSprintJumpBoost" ) );
+        agilityLevel = Skill.AGILITY.getLevel( player );
+        if( prefsMap.containsKey( "maxSprintJumpBoost" ) )
+            maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxSprintJumpBoost" ) / 100);
+        jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsPerSprintJumpBoost );
+        jumpBoost = Math.min( maxJumpBoostPref, Math.min( maxJumpBoost, jumpBoost ) );
+        return jumpBoost;
     }
 }

@@ -645,7 +645,7 @@ public class FConfig
     @Config.Comment( "How much speed boost you get from each level (Incredibly sensitive, default 0.0005)" )
     @Config.Name( "speedBoostPerLevel" )
     @Config.RangeDouble( min = 0, max = 100 )
-    public static double speedBoostPerLevel = 0.00025D;
+    public static double speedBoostPerLevel = 0.0000625D;
 
     //Endurance
     @Config.Comment( "How much endurance is max (100 = god mode)" )
@@ -988,6 +988,13 @@ public class FConfig
         localConfig.put( "maxExtraHeartBoost", (double) maxExtraHeartBoost );
         localConfig.put( "maxExtraReachBoost", maxExtraReachBoost );
         localConfig.put( "maxExtraDamageBoost", maxExtraDamageBoost );
+
+        localConfig.put( "mobHPBoostPerPowerLevel", mobHPBoostPerPowerLevel );
+        localConfig.put( "maxMobHPBoost", maxMobHPBoost );
+        localConfig.put( "mobSpeedBoostPerPowerLevel", mobSpeedBoostPerPowerLevel );
+        localConfig.put( "maxMobSpeedBoost", maxMobSpeedBoost );
+        localConfig.put( "mobDamageBoostPerPowerLevel", mobDamageBoostPerPowerLevel );
+        localConfig.put( "maxMobDamageBoost", maxMobDamageBoost );
 
         localConfig.put( "levelsPerHardnessMining", levelsPerHardnessMining );
         localConfig.put( "levelsPerHardnessWoodcutting", levelsPerHardnessWoodcutting );

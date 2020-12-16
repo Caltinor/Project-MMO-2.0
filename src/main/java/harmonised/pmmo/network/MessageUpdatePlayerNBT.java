@@ -63,7 +63,6 @@ public class MessageUpdatePlayerNBT extends MessageBase<MessageUpdatePlayerNBT>
             case 2: //config
                 FConfig.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
                 WorldTickHandler.refreshVein();
-                AttributeHandler.init();
                 break;
 
             case 3: //stats

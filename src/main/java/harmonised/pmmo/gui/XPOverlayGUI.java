@@ -61,6 +61,7 @@ public class XPOverlayGUI extends Gui
 	private static IBlockState blockState, lastBlockState;
 	private static String lastBlockRegKey = "", lastBlockDisplayName = "";
 	private static Item lastToolHeld = Items.AIR;
+	private static Map<String, Double> biomeBoosts;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean listWasOn = false, barOn = false, listOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
 	ScaledResolution sr;
@@ -419,13 +420,13 @@ public class XPOverlayGUI extends Gui
 
 			if( !metToolReq )
 			{
-				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.notSkilledEnoughToUseAsTool", new TextComponentTranslation( player.getHeldItemMainhand().getDisplayName() ) ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xff0000 );
 				return;
 			}
 
 			if( lookingAtBlock && !canBreak )
 			{
-				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.notSkilledEnoughToBreak", lastBlockDisplayName ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.notSkilledEnoughToBreak", lastBlockDisplayName ).setStyle( XP.textStyle.get( "red" ) ).getUnformattedText(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xff0000 );
 				return;
 			}
 
@@ -454,18 +455,18 @@ public class XPOverlayGUI extends Gui
 
 			if( System.nanoTime() - lastBonusUpdate > 250000000 )
 			{
+				biomeBoosts = XP.getBiomeBoosts( player );
 				for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
 				{
 					tempSkill = entry.getKey();
 
 					itemBoost = XP.getItemBoost( player, tempSkill );
-					biomeBoost = XP.getBiomeBoost( player, tempSkill );
 					dimensionBoost = XP.getDimensionBoost( player, tempSkill );
 					playerXpBoost = FConfig.getPlayerXpBoost( player, tempSkill );
 
 //					multiplier = ( XP.getMultiplier(  player, tempSkill ) * 100 ) - 100;
 
-					skills.get( tempSkill ).bonus = itemBoost + biomeBoost + dimensionBoost + playerXpBoost;
+					skills.get( tempSkill ).bonus = itemBoost + biomeBoosts.getOrDefault( tempSkill.toString(), 0D ) + dimensionBoost + playerXpBoost;
 					if( skills.get( tempSkill ).bonus <= -100 )
 						skills.get( tempSkill ).bonus = -100;
 				}
@@ -473,15 +474,15 @@ public class XPOverlayGUI extends Gui
 			}
 
 			skillsKeys = new ArrayList<>( skills.keySet() );
-			skillsKeys.sort( Comparator.comparingDouble( a -> XP.getOfflineXp( (Skill) a, player.getUniqueID() ) ).reversed() );
+			skillsKeys.sort( Comparator.<Skill>comparingDouble( a -> skills.get( a ).xp ).reversed() );
 
-			for( Skill keySkill : skillsKeys )
+			for( Map.Entry<Skill, ASkill> entry : new HashSet<>( skills.entrySet() ) )
 			{
-				aSkill = skills.get( keySkill );
-				skillName = keySkill.name().toLowerCase();
+				aSkill = entry.getValue();
+				skillName = entry.getKey().toString();
 				level = XP.levelAtXpDecimal( aSkill.xp );
 				tempString = DP.dp( Math.floor( level * 100D ) / 100D );
-				color = XP.getSkillColor( keySkill );
+				color = XP.getSkillColor( entry.getKey() );
 				if( level >= maxLevel )
 					tempString = "" + maxLevel;
 				drawString( fontRenderer, tempString, skillListX + levelGap + 4 - fontRenderer.getStringWidth( tempString ), skillListY + 3 + listIndex, color );

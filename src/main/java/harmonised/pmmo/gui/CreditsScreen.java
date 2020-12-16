@@ -254,7 +254,10 @@ public class CreditsScreen extends GuiScreen
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
         if( button == 1 )
+        {
             exitButton.onPress();
+            return;
+        }
         else
         {
             for( ListButtonBig a : listButtons )

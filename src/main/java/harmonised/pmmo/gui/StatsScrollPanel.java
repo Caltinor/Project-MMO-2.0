@@ -51,7 +51,7 @@ public class StatsScrollPanel extends GuiScreen
 
     protected int getContentHeight()
     {
-        int height = -4;
+        int height = 16;
 
         for( StatsEntry a : statsEntries )
         {
@@ -80,7 +80,7 @@ public class StatsScrollPanel extends GuiScreen
                 ITextComponent line = statsEntry.text.get( j );
                 color = statsEntry.title.getStyle().getColor();
                 hexColor = color == null ? 0xffffff : color.getColorIndex();
-                drawString( font, line.getFormattedText(), statsEntry.getX(), statsEntry.getY() + (j+1)*11, hexColor );
+                drawString( font, line.getFormattedText(), statsEntry.getX(), 2 + statsEntry.getY() + (j+1)*11, hexColor );
             }
 
             accumulativeHeight += statsEntry.getHeight() + 4;

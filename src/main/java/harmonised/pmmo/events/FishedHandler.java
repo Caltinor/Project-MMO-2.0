@@ -7,6 +7,7 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,14 @@ import java.util.Map;
 
 public class FishedHandler
 {
+    public static double getFishPoolChance( EntityPlayer player )
+    {
+        double fishPoolBaseChance = FConfig.fishPoolBaseChance;
+        double fishPoolChancePerLevel = FConfig.fishPoolChancePerLevel;
+        double fishPoolMaxChance = FConfig.fishPoolMaxChance;
+        return Math.min( fishPoolMaxChance, fishPoolBaseChance + fishPoolChancePerLevel * Skill.FISHING.getLevelDecimal( player ) );
+    }
+
     public static void handleFished( ItemFishedEvent event )
     {
         if( !( event.getEntityPlayer() instanceof EntityPlayerMP ) )
@@ -39,12 +48,7 @@ public class FishedHandler
 
         if( fishPool != null )
         {
-            double fishPoolBaseChance = FConfig.fishPoolBaseChance;
-            double fishPoolChancePerLevel = FConfig.fishPoolChancePerLevel;
-            double fishPoolMaxChance = FConfig.fishPoolMaxChance;
-            double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * startLevel;
-            if( fishPoolChance > fishPoolMaxChance )
-                fishPoolChance = fishPoolMaxChance;
+            double fishPoolChance = getFishPoolChance( player );
 
             if( Math.random() * 10000 < fishPoolChance * 100 )
             {

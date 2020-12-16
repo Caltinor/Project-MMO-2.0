@@ -939,6 +939,16 @@ public class XP
 		return scale;
 	}
 
+	public static Map<String, Double> getStackXpBoosts( ItemStack itemStack, boolean type /*false = worn, true = held*/ )
+	{
+		Item item = itemStack.getItem();
+		JType jType = type ? JType.XP_BONUS_HELD : JType.XP_BONUS_WORN;
+		String regName = item.getRegistryName().toString();
+		Map<String, Double> itemXpMap = JsonConfig.data.get( jType ).getOrDefault( regName, new HashMap<>() );
+		multiplyMapAnyDouble( itemXpMap, getXpBoostDurabilityMultiplier( itemStack ) );
+		return itemXpMap;
+	}
+
 	public static double getStackXpBoost( EntityPlayer player, ItemStack itemStack, String skillName, boolean type /*false = worn, true = held*/ )
 	{
 		if( itemStack == null || itemStack.isEmpty() )
@@ -1035,17 +1045,22 @@ public class XP
 		itemBoost += getStackXpBoost( player, player.getHeldItemMainhand(), skillName, true );
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 39 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 39 ), skillName, false );
 		if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 38 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 38 ), skillName, false );
 		if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 37 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 37 ), skillName, false );
 		if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 36 ), skillName, false );
-		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand
-			itemBoost += getStackXpBoost( player, player.inventory.getStackInSlot( 40 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 36 ), skillName, false );
+		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand 40
+			itemBoost += getStackXpBoost( player, player.getHeldItemOffhand(), skillName, false );
 
 		return itemBoost;
+	}
+
+	public static Map<String, Double> getDimensionBoosts( String dimKey )
+	{
+		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimKey, new HashMap<>() );
 	}
 
 	public static double getDimensionBoost( EntityPlayer player, Skill skill )
@@ -1067,29 +1082,28 @@ public class XP
 		return NBTTagCompound;
 	}
 
-	public static double getBiomeBoost( EntityPlayer player, Skill skill )
+	public static Map<String, Double> getBiomeBoosts( EntityPlayer player )
 	{
-		double biomeBoost = 0;
-		double theBiomeBoost = 0;
+		Map<String, Double> biomeBoosts = new HashMap<>();
 		double biomePenaltyMultiplier = FConfig.getConfig( "biomePenaltyMultiplier" );
-		String skillName = skill.toString().toLowerCase();
 
 		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVector() ) );
 		ResourceLocation resLoc = biome.getRegistryName();
 		if( resLoc == null )
-			return 0;
+			return new HashMap<>();
 		String biomeKey = resLoc.toString();
-		Map<String, Double> biomeMap = JsonConfig.data.get( JType.XP_BONUS_BIOME ).get( biomeKey );
+		Map<String, Double> biomeMap = getJsonMap( biomeKey, JType.XP_BONUS_BIOME );
 
-		if( biomeMap != null && biomeMap.containsKey( skillName ) )
-			theBiomeBoost = biomeMap.get( skillName );
+		if( biomeMap != null )
+		{
+			boolean metReq = checkReq( player, resLoc, JType.REQ_BIOME );
+			for( Map.Entry<String, Double> entry : biomeMap.entrySet() )
+			{
+				biomeBoosts.put( entry.getKey(), metReq ? entry.getValue() : Math.min( entry.getValue(), -biomePenaltyMultiplier * 100 ) );
+			}
+		}
 
-		if( checkReq( player, resLoc, JType.REQ_BIOME ) )
-			biomeBoost = theBiomeBoost;
-		else
-			biomeBoost = Math.min( theBiomeBoost, -biomePenaltyMultiplier * 100 );
-
-		return biomeBoost;
+		return biomeBoosts;
 	}
 
 	public static double getMultiplier( EntityPlayer player, Skill skill )
@@ -1101,7 +1115,7 @@ public class XP
 		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
 		double globalBoost = getGlobalBoost( skill );
 		double itemBoost = getItemBoost( player, skill );
-		double biomeBoost = getBiomeBoost( player, skill );
+		double biomeBoost = getBiomeBoosts( player ).getOrDefault( skill.toString(), 0D );
 		double dimensionBoost = getDimensionBoost( player, skill );
 		double playerBoost = PmmoSavedData.get().getPlayerXpBoost( player.getUniqueID(), skill );
 		double additiveMultiplier = 1 + (itemBoost + biomeBoost + dimensionBoost + globalBoost + playerBoost ) / 100;

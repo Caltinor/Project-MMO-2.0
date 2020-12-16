@@ -74,7 +74,6 @@ public class ProjectMMOMod
         PmmoSavedData.init( event.getServer() );
         FConfig.initServer();
         WorldTickHandler.refreshVein();
-        AttributeHandler.init();
 //        if( FConfig.craftReqEnabled.get() )
 //            event.getServer().getGameRules().get( GameRules.DO_LIMITED_CRAFTING ).set(true, event.getServer() );
     }

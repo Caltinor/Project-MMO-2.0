@@ -92,7 +92,7 @@ public class MainScreen extends GuiScreen
         tileButtons.add(creditsButton);
         tileButtons.add(prefsButton);
         tileButtons.add(skillsButton);
-//        tileButtons.add(statsButton);
+        tileButtons.add(statsButton);
 
         for( int i = 0; i < tileButtons.size(); i++ )
         {
@@ -155,7 +155,10 @@ public class MainScreen extends GuiScreen
     public void mouseClicked( int mouseX, int mouseY, int button) throws IOException
     {
         if( button == 1 )
+        {
             exitButton.onPress();
+            return;
+        }
         super.mouseClicked(mouseX, mouseY, button);
     }
 
