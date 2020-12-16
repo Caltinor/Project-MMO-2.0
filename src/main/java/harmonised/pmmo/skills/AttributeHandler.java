@@ -11,7 +11,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -77,24 +76,18 @@ public class AttributeHandler
 	public static double getSpeedBoost( EntityPlayer player )
 	{
 		int agilityLevel = Skill.AGILITY.getLevel( player );
-		return getSpeedBoost( agilityLevel, getBaseSpeed( player ) );
+		return getBaseSpeed( player ) * getSpeedBoostMultiplier( agilityLevel );
 	}
 
-	public static double getSpeedBoost( int agilityLevel, double baseSpeed )
+	public static double getSpeedBoostMultiplier( int agilityLevel )
 	{
 		Map<String, Double> prefsMap = FConfig.getPreferencesMapOffline();
-		Double maxSpeedBoostPref = null;
+		double maxSpeedBoost = FConfig.getConfig( "maxSpeedBoost" ) / 100;
+		double maxSpeedBoostPref = maxSpeedBoost;
 		if( prefsMap.containsKey( "maxSpeedBoost" ) )
-			maxSpeedBoostPref = prefsMap.get( "maxSpeedBoost" );
-		double speedBoost = agilityLevel * FConfig.getConfig( "speedBoostPerLevel" );
-		double maxSpeed = baseSpeed * (FConfig.getConfig( "maxSpeedBoost" ) / 100);
-		if( maxSpeedBoostPref != null && maxSpeed > baseSpeed * (maxSpeedBoostPref / 100) )
-			maxSpeed = baseSpeed * (maxSpeedBoostPref / 100);
+			maxSpeedBoostPref = prefsMap.get( "maxSpeedBoost" ) / 100;
 
-		if( speedBoost > maxSpeed )
-			speedBoost = maxSpeed;
-
-		return speedBoost;
+		return Math.max( 0, Math.min( maxSpeedBoost, Math.min( maxSpeedBoostPref, ( agilityLevel * FConfig.getConfig( "speedBoostPerLevel" ) ) / 100 ) ) );
 	}
 
 	public static int getHeartBoost( EntityPlayer player )

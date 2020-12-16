@@ -645,7 +645,7 @@ public class FConfig
     @Config.Comment( "How much speed boost you get from each level (1 = 1% speed boost per level)" )
     @Config.Name( "speedBoostPerLevel" )
     @Config.RangeDouble( min = 0, max = 100 )
-    public static double speedBoostPerLevel = 0.005D;
+    public static double speedBoostPerLevel = 0.5D;
 
     //Endurance
     @Config.Comment( "How much endurance is max (100 = god mode)" )

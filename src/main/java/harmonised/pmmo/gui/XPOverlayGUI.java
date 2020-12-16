@@ -766,7 +766,7 @@ public class XPOverlayGUI extends Gui
 				break;
 
 			case AGILITY:
-				msg = new TextComponentTranslation( "pmmo.levelUpSprintSpeedBonus", level, new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), DP.dpSoft( Math.floor( AttributeHandler.getSpeedBoost( level, AttributeHandler.getBaseSpeed( player ) ) * 2000000D ) / 1000D ) + "%" );
+				msg = new TextComponentTranslation( "pmmo.levelUpSprintSpeedBonus", level, new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), DP.dpSoft( AttributeHandler.getSpeedBoostMultiplier( level ) * 100 ) + "%" );
 				break;
 
 			default:

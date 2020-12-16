@@ -22,12 +22,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.items.IItemHandler;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class StatsScreen extends GuiScreen
 {
@@ -101,9 +99,7 @@ public class StatsScreen extends GuiScreen
 
         text = new ArrayList<>();
         entryTitle = new TextComponentTranslation( "pmmo.speed" );
-        double baseSpeed = AttributeHandler.getBaseSpeed( player );
-        double boostedSpeed = baseSpeed + AttributeHandler.getSpeedBoost( player );
-        text.add( new TextComponentTranslation( "pmmo.sprintSpeedBonus", DP.dpSoft( boostedSpeed*100D / baseSpeed ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        text.add( new TextComponentTranslation( "pmmo.sprintSpeedBonus", DP.dpSoft( AttributeHandler.getSpeedBoostMultiplier( Skill.AGILITY.getLevel( player ) ) * 100D ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
