@@ -94,7 +94,7 @@ public class EventHandler
 		AnvilRepairHandler.handleAnvilRepair( event );
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onItemFished( ItemFishedEvent event )
 	{
 		FishedHandler.handleFished( event );
