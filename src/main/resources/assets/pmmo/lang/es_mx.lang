@@ -353,3 +353,6 @@ pmmo.dimension=Dimension
 pmmo.biome=Biome
 pmmo.locked=Locked
 pmmo.unlocked=Unlocked
+pmmo.levelUpDamageBoostMelee=%1$s %2$s level up! %3$s Damage Bonus in Melee!
+pmmo.levelUpDamageBoostArchery=%1$s %2$s level up! %3$s Damage Bonus in Archery!
+pmmo.levelUpDamageBoostMagic=%1$s %2$s level up! %3$s Damage Bonus in Magic!

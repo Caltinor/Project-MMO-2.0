@@ -724,6 +724,10 @@ public class XPOverlayGUI extends Gui
 		if( level < 1 || ( configMap.containsKey( "maxLevel" ) && level > configMap.get( "maxLevel" ) ) )
 			return;
 
+		double levelsPerDamage;
+		double maxExtraDamageBoost;
+		double damageBoost;
+
 		TextComponentTranslation msg;
 
 		switch( skill )
@@ -731,33 +735,38 @@ public class XPOverlayGUI extends Gui
 			case "building":
 				double levelsPerOneReach = configMap.get( "levelsPerOneReach" );
 				double maxExtraReachBoost = configMap.get( "maxExtraReachBoost" );
-				double reachBoost = level / levelsPerOneReach;
-				if( reachBoost > maxExtraReachBoost )
-					reachBoost = maxExtraReachBoost;
-				msg = new TextComponentTranslation( "pmmo.levelUpReachBoost", level, new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText(), DP.dpSoft( reachBoost ) );
+				double reachBoost = Math.min( maxExtraReachBoost, level / levelsPerOneReach );
+				msg = new TextComponentTranslation( "pmmo.levelUpReachBoost", level, new TextComponentTranslation( "pmmo." + skill ).getUnformattedText(), DP.dpSoft( reachBoost ) );
 				break;
 
 			case "combat":
-				double levelsPerDamageMelee = configMap.get( "levelsPerDamageMelee" );
-				double maxExtraDamageBoost = configMap.get( "maxExtraDamageBoost" );
-				double damageBoost = level / levelsPerDamageMelee;
-				if( damageBoost > maxExtraDamageBoost )
-					damageBoost = maxExtraDamageBoost;
-				msg = new TextComponentTranslation( "pmmo.levelUpDamageBoost", level, new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText(), DP.dpSoft( damageBoost ) );
+				levelsPerDamage= configMap.get( "levelsPerDamageMelee" );
+				maxExtraDamageBoost = configMap.get( "maxExtraDamageBoostMelee" );
+				damageBoost = Math.min( maxExtraDamageBoost, level / levelsPerDamage );
+				msg = new TextComponentTranslation( "pmmo.levelUpDamageBoostMelee", level, new TextComponentTranslation( "pmmo." + skill.toLowerCase() ), DP.dpSoft( damageBoost ) );
+				break;
+
+			case "archery":
+				levelsPerDamage = configMap.get( "levelsPerDamageArchery" );
+				maxExtraDamageBoost = configMap.get( "maxExtraDamageBoostArchery" );
+				damageBoost = Math.min( maxExtraDamageBoost, level / levelsPerDamage );
+				msg = new TextComponentTranslation( "pmmo.levelUpDamageBoostArchery", level, new TextComponentTranslation( "pmmo." + skill.toLowerCase() ), DP.dpSoft( damageBoost ) );
+				break;
+
+			case "magic":
+				levelsPerDamage = configMap.get( "levelsPerDamageMagic" );
+				maxExtraDamageBoost = configMap.get( "maxExtraDamageBoostMagic" );
+				damageBoost = Math.min( maxExtraDamageBoost, level / levelsPerDamage );
+				msg = new TextComponentTranslation( "pmmo.levelUpDamageBoostMagic", level, new TextComponentTranslation( "pmmo." + skill.toLowerCase() ), DP.dpSoft( damageBoost ) );
 				break;
 
 			case "endurance":
 				double endurancePerLevel = configMap.get( "endurancePerLevel" );
 				double maxEndurance = configMap.get( "maxEndurance" );
-				double enduranceBoost = level * endurancePerLevel;
-				if( enduranceBoost > maxEndurance )
-					enduranceBoost = maxEndurance;
-
+				double enduranceBoost = Math.min( maxEndurance, level * endurancePerLevel );
 				double levelsPerHeart = configMap.get( "levelsPerHeart" );
 				double maxExtraHeartBoost = configMap.get( "maxExtraHeartBoost" );
-				int heartBoost = (int) Math.floor( level / levelsPerHeart );
-//				if( heartBoost > maxExtraHeartBoost )
-//					heartBoost = (int) maxExtraHeartBoost;
+				int heartBoost = Math.min( (int) maxExtraHeartBoost, (int) Math.floor( level / levelsPerHeart ) );
 				if( level % (int) levelsPerHeart == 0 && heartBoost <= (int) maxExtraHeartBoost )
 					player.sendStatusMessage( new TextComponentTranslation( "pmmo.gainedExtraHeart" ).setStyle( Skill.getSkillStyle( skill ) ), false);
 
