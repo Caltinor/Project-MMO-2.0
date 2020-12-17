@@ -33,6 +33,8 @@ public class FishedHandler
     {
         if( !( event.getPlayer() instanceof ServerPlayerEntity ) )
             return;
+        if( Config.forgeConfig.disableNormalFishDrops.get() )
+            event.setCanceled( true );
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
         int startLevel = Skill.getLevel( Skill.FISHING.toString(), player );
         int level;

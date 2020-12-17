@@ -311,6 +311,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> nightvisionUnlockLevel;
 
         //Fishing
+        public ConfigHelper.ConfigValueListener<Boolean> disableNormalFishDrops;
         public ConfigHelper.ConfigValueListener<Double> fishPoolBaseChance;
         public ConfigHelper.ConfigValueListener<Double> fishPoolChancePerLevel;
         public ConfigHelper.ConfigValueListener<Double> fishPoolMaxChance;
@@ -1287,6 +1288,11 @@ public class Config
 
             builder.push( "Fishing" );
             {
+                this.disableNormalFishDrops = subscriber.subscribe(builder
+                        .comment( "Should normal drops from Fishing be disabled?" )
+                        .translation( "pmmo.disableNormalFishDrops" )
+                        .define( "disableNormalFishDrops", false ) );
+
                 this.fishPoolBaseChance = subscriber.subscribe(builder
                         .comment( "What is the chance on each successful fishing attempt to access the fish_pool" )
                         .translation( "pmmo.fishPoolBaseChance" )
