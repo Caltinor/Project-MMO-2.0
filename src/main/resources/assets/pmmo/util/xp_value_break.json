@@ -219,6 +219,10 @@
 	{
 		"woodcutting": 26
 	},
+	"minecraft:log":
+	{
+		"woodcutting": 8
+	},
 	"minecraft:oak_log":
 	{
 		"woodcutting": 8

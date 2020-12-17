@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import com.feed_the_beast.mods.ftbguilibrary.icon.Icon;
 import harmonised.pmmo.ftb_quests.SkillTask;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
@@ -29,7 +30,15 @@ public class EventHandler
 	@SubscribeEvent
 	public static void blockPlaced( BlockEvent.EntityMultiPlaceEvent event )
 	{
-		BlockPlacedHandler.handlePlaced( event );
+		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), (World) event.getWorld(), event.getPos() ) )
+			event.setCanceled( true );
+	}
+
+	@SubscribeEvent
+	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
+	{
+		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), (World) event.getWorld(), event.getPos() ) )
+			event.setCanceled( true );
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

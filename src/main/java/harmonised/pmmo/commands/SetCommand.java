@@ -25,9 +25,8 @@ public class SetCommand
     public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         String[] args = context.getInput().split( " " );
-        String skillName = StringArgumentType.getString( context, "Skill" ).toLowerCase();
+        String skill = StringArgumentType.getString( context, "Skill" ).toLowerCase();
         String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
-        Skill skill = Skill.getSkill( skillName );
         PlayerEntity sender = null;
 
         try
@@ -39,49 +38,39 @@ public class SetCommand
             //not player, it's fine
         }
 
-        if( skillName.equals( "power" ) )
+        if( skill.equals( "power" ) )
         {
-            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", skillName ), false );
+            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", skill ), false );
             return 1;
         }
 
-        if( skill != Skill.INVALID_SKILL )
+        try
         {
-            try
-            {
-                Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
+            Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
 
-                for( ServerPlayerEntity player : players )
+            for( ServerPlayerEntity player : players )
+            {
+                String playerName = player.getDisplayName().getString();
+                double newValue = DoubleArgumentType.getDouble( context, "New Value" );
+
+                if( type.equals( "level" ) )
+                    Skill.setLevel( skill, player, newValue );
+                else if( type.equals( "xp" ) )
+                    Skill.setXp( skill, player, newValue );
+                else
                 {
-                    String playerName = player.getDisplayName().getString();
-                    double newValue = DoubleArgumentType.getDouble( context, "New Value" );
+                    LOGGER.error( "PMMO Command Set: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
-                    if( type.equals( "level" ) )
-                        skill.setLevel( player, newValue );
-                    else if( type.equals( "xp" ) )
-                        skill.setXp( player, newValue );
-                    else
-                    {
-                        LOGGER.error( "PMMO Command Set: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
-
-                        if( sender != null )
-                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
-                    }
-
-                    LOGGER.info( "PMMO Command Set: " + playerName + " " + args[4] + " has been set to " + args[5] + " " + args[6] );
+                    if( sender != null )
+                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                 }
-            }
-            catch( CommandSyntaxException e )
-            {
-                LOGGER.error( "PMMO Command Set: Failed to get Players [" + Arrays.toString(args) + "]", e );
+
+                LOGGER.info( "PMMO Command Set: " + playerName + " " + args[4] + " has been set to " + args[5] + " " + args[6] );
             }
         }
-        else
+        catch( CommandSyntaxException e )
         {
-            LOGGER.error( "PMMO Command Set: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
-
-            if( sender != null )
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
+            LOGGER.error( "PMMO Command Set: Failed to get Players [" + Arrays.toString(args) + "]", e );
         }
 
         return 1;

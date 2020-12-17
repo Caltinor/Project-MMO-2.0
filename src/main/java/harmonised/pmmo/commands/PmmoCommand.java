@@ -13,6 +13,8 @@ import net.minecraft.command.arguments.EntityArgument;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Set;
+
 public class PmmoCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -28,11 +30,11 @@ public class PmmoCommand
 
     public static void init()
     {
-        suggestSkill = new String[ Skill.skillMap.size() ];
+        suggestSkill = new String[ Skill.getSkills().size() ];
         int i = 0;
-        for( Skill skill : Skill.skillMap.keySet() )
+        for( String skill : Skill.getSkills().keySet() )
         {
-            suggestSkill[ i++ ] = skill.toString().toLowerCase();
+            suggestSkill[ i++ ] = skill.toLowerCase();
         }
     }
 

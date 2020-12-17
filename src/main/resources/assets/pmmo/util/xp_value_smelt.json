@@ -185,6 +185,10 @@
 	{
 		"smithing": 100
 	},
+	"minecraft:log":
+	{
+		"smithing": 0.25
+	},
 	"minecraft:oak_log":
 	{
 		"smithing": 0.25

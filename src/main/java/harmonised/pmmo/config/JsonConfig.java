@@ -1,16 +1,25 @@
 package harmonised.pmmo.config;
 
+import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
+import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -77,6 +86,7 @@ public class JsonConfig
 
         JsonConfig.data = localData;
         JsonConfig.data2 = localData2;
+        Skill.updateSkills();   //Update potential new skills
     }
 
     private static void initMaps()
@@ -107,6 +117,9 @@ public class JsonConfig
     private static void initJTypes()
     {
         jTypes = new HashSet<>();
+
+        if( Config.forgeConfig.wearReqEnabled.get() )
+            jTypes.add( JType.SKILLS );
 
         if( Config.forgeConfig.wearReqEnabled.get() )
             jTypes.add( JType.REQ_WEAR );
@@ -219,8 +232,8 @@ public class JsonConfig
         if( Config.forgeConfig.wornItemXpBoostEnabled.get() )
             jTypes.add( JType.XP_BONUS_WORN );
 
-//        if( Config.forgeConfig.craftReqEnabled.get() )
-//            jTypes.add( JType.REQ_CRAFT );
+        if( Config.forgeConfig.craftReqEnabled.get() )
+            jTypes.add( JType.REQ_CRAFT );
 
         if( Config.forgeConfig.treasureEnabled.get() )
             jTypes.add( JType.TREASURE );
@@ -261,10 +274,10 @@ public class JsonConfig
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
 
             try
-            (
-                InputStream input = new FileInputStream( file.getPath() );
-                Reader reader = new BufferedReader( new InputStreamReader( input ) )
-            )
+                    (
+                            InputStream input = new FileInputStream( file.getPath() );
+                            Reader reader = new BufferedReader( new InputStreamReader( input ) )
+                    )
             {
                 if( jTypes2.contains( jType ) )
                     rawData2.put( jType, gson.fromJson( reader, mapType2 ) );
@@ -284,6 +297,9 @@ public class JsonConfig
 
     private static void processRawData()
     {
+        if( jTypes.contains( JType.SKILLS ) )
+            updateDataSkill( rawData.get( JType.SKILLS ), localData.get( JType.SKILLS ) );
+
         if( jTypes.contains( JType.REQ_WEAR ) )
             updateDataSkills( JType.REQ_WEAR, false );
 
@@ -447,21 +463,6 @@ public class JsonConfig
         }
     }
 
-    private static boolean checkValidSkills( Map<String, Double> theMap )
-    {
-        boolean anyValidSkills = false;
-
-        for( String key : theMap.keySet() )
-        {
-            if( Skill.getInt( key ) != 0 && theMap.get( key ) >= 0 )
-                anyValidSkills = true;
-            else
-                LOGGER.debug( "Invalid skill or value below 0 " + key + " level " + theMap.get( key ) );
-        }
-
-        return anyValidSkills;
-    }
-
     private static boolean checkValidEffects( Map<String, Double> theMap )
     {
         boolean anyValidEffects = false;
@@ -489,26 +490,16 @@ public class JsonConfig
         {
             if( ignoreValidCheck || !XP.getItem( element.getKey() ).equals( Items.AIR ) || validEntity( element.getKey() ) || validBiome( element.getKey() ) ) //skip items that don't exist in current modlist
             {
-                if( checkValidSkills( element.getValue() ) )
-                {
-                    if(  !output.containsKey( element.getKey() ) )
-                        output.put( element.getKey(), new HashMap<>() );
+                if(  !output.containsKey( element.getKey() ) )
+                    output.put( element.getKey(), new HashMap<>() );
 
-                    for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
-                    {
-                        if( Skill.getInt( entry.getKey() ) != 0 )
-                        {
-                            value = entry.getValue();
-                            if( levelJTypes.contains( jType ) )
-                                value = Math.min( 999, Math.max( 1, entry.getValue() ) );
-                            output.get( element.getKey() ).put( entry.getKey(), value );
-                        }
-                        else
-                            LOGGER.debug( entry.getKey() + " is either not a valid skill, or not 1 or above!" );
-                    }
+                for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
+                {
+                    value = entry.getValue();
+                    if( levelJTypes.contains( jType ) )
+                        value = Math.min( 999, Math.max( 1, entry.getValue() ) );
+                    output.get( element.getKey() ).put( entry.getKey(), value );
                 }
-                else
-                    LOGGER.debug( "No valid skills, cannot add " + element.getKey() );
             }
             else
                 LOGGER.debug( "Inexistant key, cannot add " + element.getKey() );
@@ -760,6 +751,25 @@ public class JsonConfig
         }
     }
 
+    private static void updateDataSkill( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
+    {
+        String innerKey;
+        for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
+        {
+            if( !output.containsKey( element.getKey() ) )
+                output.put( element.getKey(), new HashMap<>() );
+
+            for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
+            {
+                innerKey = entry.getKey().toLowerCase();
+                if( innerKey.equals( "color" ) )
+                    output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
+                else
+                    LOGGER.debug( "Invalid property of skill " + element.getKey() + ": " + innerKey );
+            }
+        }
+    }
+
     private static void updateDataAttributes( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
@@ -787,18 +797,13 @@ public class JsonConfig
     {
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
-            if( Skill.getInt( element.getKey() ) != 0 )
-            {
-                if( !output.containsKey( element.getKey() ) )
-                    output.put( element.getKey(), new HashMap<>() );
+            if( !output.containsKey( element.getKey() ) )
+                output.put( element.getKey(), new HashMap<>() );
 
-                for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
-                {
-                    output.get( element.getKey() ).put( entry.getKey(), Math.max( 1D, entry.getValue() ) );
-                }
+            for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
+            {
+                output.get( element.getKey() ).put( entry.getKey(), Math.max( 1D, entry.getValue() ) );
             }
-            else
-                LOGGER.debug( "Invalid skill \"" + element.getKey() + "\" in Level Up Command" );
         }
     }
 
@@ -1071,16 +1076,11 @@ public class JsonConfig
                     if( level > 0 )
                     {
                         output.get( enchantElement.getKey() ).put( levelElement.getKey(), new HashMap<>() );
-                        if( checkValidSkills( levelElement.getValue() ) )
+                        for( Map.Entry<String, Double> skillElement : levelElement.getValue().entrySet() )
                         {
-                            for( Map.Entry<String, Double> skillElement : levelElement.getValue().entrySet() )
-                            {
-                                if( !Skill.getSkill( skillElement.getKey() ).equals( Skill.INVALID_SKILL ) && skillElement.getValue() > 1 )
-                                    output.get( enchantElement.getKey() ).get( levelElement.getKey() ).put( skillElement.getKey(), skillElement.getValue() );
-                            }
+                            if( skillElement.getValue() > 1 )
+                                output.get( enchantElement.getKey() ).get( levelElement.getKey() ).put( skillElement.getKey(), skillElement.getValue() );
                         }
-                        else
-                            LOGGER.debug( "level " + levelElement.getKey() + " of " + enchantElement.getKey() + " could not be added to req_use_enchant, because there are no valid skills supplied" );
                     }
                     else
                         LOGGER.debug( levelElement.getKey() + " is not 1 or above in " + enchantElement.getKey() );

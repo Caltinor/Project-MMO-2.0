@@ -36,7 +36,7 @@ public class CheckStatsCommand
         {
             PlayerEntity target = EntityArgument.getPlayer( context, "player name" );
 
-            CompoundNBT packetxpMap = NBTHelper.mapSkillToNbt(Config.getXpMap( target ) );
+            CompoundNBT packetxpMap = NBTHelper.mapStringToNbt(Config.getXpMap( target ) );
 
             packetxpMap.putString( "UUID", target.getUniqueID().toString() );
             packetxpMap.putString( "name", target.getName().getString() );

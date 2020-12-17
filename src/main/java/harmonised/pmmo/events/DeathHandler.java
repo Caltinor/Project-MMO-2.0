@@ -39,7 +39,7 @@ public class DeathHandler
             ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
             if( !player.world.isRemote() )
             {
-                Map<Skill, Double> xpMap = Config.getXpMap( player );
+                Map<String, Double> xpMap = Config.getXpMap( player );
                 Map<String, Double> prefsMap = Config.getPreferencesMap( player );
                 double totalLost = 0;
                 boolean wipeAllSkills = Config.forgeConfig.wipeAllSkillsUponDeathPermanently.get();
@@ -48,7 +48,7 @@ public class DeathHandler
 
                 if( wipeAllSkills )
                 {
-                    for( Map.Entry<Skill, Double> entry : new HashMap<>( xpMap ).entrySet() )
+                    for( Map.Entry<String, Double> entry : new HashMap<>( xpMap ).entrySet() )
                     {
                         totalLost += entry.getValue();
                         xpMap.remove( entry.getKey() );
@@ -56,7 +56,7 @@ public class DeathHandler
                 }
                 else
                 {
-                    for( Map.Entry<Skill, Double> entry : new HashMap<>( xpMap ).entrySet() )
+                    for( Map.Entry<String, Double> entry : new HashMap<>( xpMap ).entrySet() )
                     {
                         double startXp = entry.getValue();
                         double floorXp = XP.xpAtLevelDecimal( Math.floor( XP.levelAtXpDecimal( startXp ) ) );
@@ -108,13 +108,13 @@ public class DeathHandler
                 Map<String, Double> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
                 for( Map.Entry<String, Double> entry : killXp.entrySet() )
                 {
-                    XP.awardXp( player, Skill.getSkill( entry.getKey() ), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false, false );
+                    XP.awardXp( player, entry.getKey(), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false, false );
                 }
             }
             else if( target instanceof AnimalEntity)
-                XP.awardXp( player, Skill.HUNTER, player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleValue, false, false, false );
+                XP.awardXp( player, Skill.HUNTER.toString(), player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleValue, false, false, false );
             else if( target instanceof MobEntity)
-                XP.awardXp( player, Skill.SLAYER, player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false, false, false );
+                XP.awardXp( player, Skill.SLAYER.toString(), player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false, false, false );
 
             if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getEntityString() ) )
             {

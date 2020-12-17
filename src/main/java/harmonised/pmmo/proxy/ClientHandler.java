@@ -34,8 +34,8 @@ public class ClientHandler
     public static final KeyBinding OPEN_SETTINGS = new KeyBinding( "key.pmmo.openSettings", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo" );
     public static final KeyBinding OPEN_SKILLS = new KeyBinding( "key.pmmo.openSkills", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo" );
     public static final KeyBinding OPEN_GLOSSARY = new KeyBinding( "key.pmmo.openGlossary", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo" );
-    //Map<Skill, Map<playerName, Map<Skill, Double>>>
-    public static Map<Skill, Map<String, Map<Skill, Double>>> hiscoreMap = new HashMap<>();
+    //Map<String, Map<playerName, Map<String, Double>>>
+    public static Map<String, Map<String, Map<String, Double>>> hiscoreMap = new HashMap<>();
 
     public static void init()
     {
@@ -77,7 +77,7 @@ public class ClientHandler
                 break;
 
             case 6:
-                Config.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringSkill( newPackage ) );
+                Config.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringString( newPackage ) );
                 break;
 
             case 7:

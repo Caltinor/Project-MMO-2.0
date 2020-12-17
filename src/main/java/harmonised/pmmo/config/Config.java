@@ -24,7 +24,7 @@ public class Config
     //Client only, too lazy to put it somewhere better
     private static final Map<String, Double> abilities = new HashMap<>();
     private static Map<String, Double> preferences = new HashMap<>();
-    private static Map<String, Map<Skill, Double>> xpBoosts = new HashMap<>();
+    private static Map<String, Map<String, Double>> xpBoosts = new HashMap<>();
 
     public static ConfigImplementation forgeConfig;
 
@@ -1536,7 +1536,7 @@ public class Config
         }
     }
 
-    public static Map<Skill, Double> getXpMap( PlayerEntity player )
+    public static Map<String, Double> getXpMap( PlayerEntity player )
     {
         if( player.world.isRemote() )
             return XP.getOfflineXpMap( player.getUniqueID() );
@@ -1580,7 +1580,7 @@ public class Config
         preferences = newPreferencesMap;
     }
 
-    public static Map<String, Map<Skill, Double>> getXpBoostsMap( PlayerEntity player )
+    public static Map<String, Map<String, Double>> getXpBoostsMap( PlayerEntity player )
     {
         if( player.world.isRemote() )
             return xpBoosts;
@@ -1588,7 +1588,7 @@ public class Config
             return PmmoSavedData.get().getPlayerXpBoostsMap( player.getUniqueID() );
     }
 
-    public static Map<Skill, Double> getXpBoostMap( PlayerEntity player, UUID xpBoostUUID )
+    public static Map<String, Double> getXpBoostMap( PlayerEntity player, UUID xpBoostUUID )
     {
         if( player.world.isRemote() )
             return xpBoosts.getOrDefault( xpBoostUUID, new HashMap<>() );
@@ -1596,11 +1596,11 @@ public class Config
             return PmmoSavedData.get().getPlayerXpBoostMap( player.getUniqueID(), xpBoostUUID );
     }
 
-    public static double getPlayerXpBoost( PlayerEntity player, Skill skill )
+    public static double getPlayerXpBoost( PlayerEntity player, String skill )
     {
         double xpBoost = 0;
 
-        for( Map.Entry<String, Map<Skill, Double>> entry : getXpBoostsMap( player ).entrySet() )
+        for( Map.Entry<String, Map<String, Double>> entry : getXpBoostsMap( player ).entrySet() )
         {
             xpBoost += entry.getValue().getOrDefault( skill, 0D );
         }
@@ -1608,7 +1608,7 @@ public class Config
         return xpBoost;
     }
 
-    public static void setPlayerXpBoost( ServerPlayerEntity player, String xpBoostKey, Map<Skill, Double> newXpBoosts )
+    public static void setPlayerXpBoost( ServerPlayerEntity player, String xpBoostKey, Map<String, Double> newXpBoosts )
     {
         PmmoSavedData.get().setPlayerXpBoost( player.getUniqueID(), xpBoostKey, newXpBoosts );
     }
@@ -1623,7 +1623,7 @@ public class Config
         PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUniqueID() );
     }
 
-    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<Skill, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
+    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<String, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
     {   //SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
         if( player.world.isRemote() )
             xpBoosts = newBoosts;

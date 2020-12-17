@@ -19,7 +19,7 @@ public class BreakSpeedHandler
     {
         PlayerEntity player = event.getPlayer();
 
-        String skill = XP.getSkill( event.getState().getMaterial() ).name().toLowerCase();
+        String skill = XP.getSkill( event.getState().getMaterial() ).toLowerCase();
         double speedBonus;
         ItemStack itemStack = player.getHeldItemMainhand();
         ResourceLocation resLoc = itemStack.getItem().getRegistryName();
@@ -57,7 +57,7 @@ public class BreakSpeedHandler
             }
         }
 
-        int startLevel = Skill.getSkill( skill ).getLevel( player );
+        int startLevel = Skill.getLevel( skill, player );
 
         switch ( XP.correctHarvestTool( event.getState().getMaterial() ) )
         {

@@ -1,4 +1,8 @@
 {
+	"minecraft:log":
+	{
+		"extraChance": 1
+	},
 	"minecraft:oak_log":
 	{
 		"extraChance": 1

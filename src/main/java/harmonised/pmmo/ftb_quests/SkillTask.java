@@ -21,13 +21,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class SkillTask extends Task
 {
     public static TaskType SKILL;
-    public Skill skill;
+    public String skill;
     public double requiredLevel;
 
     public SkillTask(Quest quest)
     {
         super(quest);
-        skill = Skill.MINING;
+        skill = Skill.MINING.toString();
         requiredLevel = 1;
     }
 
@@ -41,7 +41,7 @@ public class SkillTask extends Task
     public void writeData(CompoundNBT nbt)
     {
         super.writeData(nbt);
-        nbt.putString( "skill", skill.toString() );
+        nbt.putString( "skill", skill );
         nbt.putDouble( "requiredLevel", requiredLevel );
     }
 
@@ -49,7 +49,7 @@ public class SkillTask extends Task
     public void readData(CompoundNBT nbt)
     {
         super.readData(nbt);
-        skill = Skill.getSkill( nbt.getString( "skill" ) );
+        skill = nbt.getString( "skill" );
         requiredLevel = nbt.getDouble( "requiredLevel" );
     }
 
@@ -57,7 +57,7 @@ public class SkillTask extends Task
     public void writeNetData(PacketBuffer buffer)
     {
         super.writeNetData(buffer);
-        buffer.writeString( skill.toString(), Short.MAX_VALUE );
+        buffer.writeString( skill, Short.MAX_VALUE );
         buffer.writeDouble( requiredLevel );
     }
 
@@ -65,7 +65,7 @@ public class SkillTask extends Task
     public void readNetData(PacketBuffer buffer)
     {
         super.readNetData(buffer);
-        skill = Skill.getSkill( buffer.readString( Short.MAX_VALUE ) );
+        skill = buffer.readString( Short.MAX_VALUE );
         requiredLevel = buffer.readDouble();
     }
 
@@ -74,16 +74,15 @@ public class SkillTask extends Task
     public void getConfig(ConfigGroup config)
     {
         super.getConfig(config);
-        config.addEnum("skill", skill, input -> skill = input, NameMap.of( Skill.INVALID_SKILL, Skill.valuesArray ).create());
+        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.INVALID_SKILL.toString(), Skill.getSkills().entrySet().toArray() ).create());
         config.addDouble( "requiredLevel", requiredLevel, input -> requiredLevel = input, 1, 1, Config.getConfig( "maxLevel" ) );
-
     }
 
     @Override
     public IFormattableTextComponent getAltTitle()
     {
 //        return I18n.format("ftbquests.task.ftbquests.skill") + ": " + TextFormatting.DARK_GREEN + skill;
-        return new TranslationTextComponent( skill.toString() ).setStyle(XP.textStyle.get( "dark_green" ) );
+        return new TranslationTextComponent( skill ).setStyle(XP.textStyle.get( "dark_green" ) );
     }
 
     @Override
@@ -108,7 +107,7 @@ public class SkillTask extends Task
         @Override
         public boolean canSubmit( ServerPlayerEntity player )
         {
-            return task.skill.getLevel( player ) >= task.requiredLevel;
+            return Skill.getLevel( task.skill, player ) >= task.requiredLevel;
         }
     }
 }

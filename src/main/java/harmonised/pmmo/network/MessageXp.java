@@ -15,10 +15,10 @@ import java.util.function.Supplier;
 public class MessageXp
 {
 	public double xp, gainedXp;
-	public int skill;
+	public String skill;
 	public boolean skip;
 	
-	public MessageXp( double xp, int skill, double gainedXp, boolean skip )
+	public MessageXp( double xp, String skill, double gainedXp, boolean skip )
 	{
 		this.xp = xp;
 		this.gainedXp = gainedXp;
@@ -36,7 +36,7 @@ public class MessageXp
 		MessageXp packet = new MessageXp();
 		packet.xp = buf.readDouble();
 		packet.gainedXp = buf.readDouble();
-		packet.skill = buf.readInt();
+		packet.skill = buf.readString();
 		packet.skip = buf.readBoolean();
 
 		return packet;
@@ -46,7 +46,7 @@ public class MessageXp
 	{
 		buf.writeDouble( packet.xp );
 		buf.writeDouble( packet.gainedXp );
-		buf.writeInt( packet.skill );
+		buf.writeString( packet.skill );
 		buf.writeBoolean( packet.skip );
 	}
 
