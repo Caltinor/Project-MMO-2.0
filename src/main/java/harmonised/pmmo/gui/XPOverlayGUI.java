@@ -5,6 +5,7 @@ import java.util.*;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.MessageLevelUp;
 import harmonised.pmmo.network.NetworkHandler;
@@ -31,9 +32,13 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class XPOverlayGUI extends AbstractGui
 {
+	public static final Logger LOGGER = LogManager.getLogger();
+
 	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, veinBarPosX, veinBarPosY, xpDropPosX, xpDropPosY, skillListX, skillListY;
 	private static int tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
 	private static ArrayList<String> skillsKeys;
@@ -42,7 +47,7 @@ public class XPOverlayGUI extends AbstractGui
 	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, skillListOffsetX = 0, skillListOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0, maxVeinCharge = 64D;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
-	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, barKey = false, listKey = false, veinKey = false, barPressed = false, listPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills, xpDropsShowXpBar;
+	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, barKey = false, listKey = false, veinKey = false, barPressed = false, listPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills, xpDropsShowXpBar, showLevelUpUnlocks;
 	private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft mc = Minecraft.getInstance();
@@ -72,8 +77,10 @@ public class XPOverlayGUI extends AbstractGui
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
 	{
-		if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
+		try
 		{
+			if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
+			{
 			player = Minecraft.getInstance().player;
 			if( !init )
 			{
@@ -151,6 +158,11 @@ public class XPOverlayGUI extends AbstractGui
 			RenderSystem.disableBlend();
 			RenderSystem.color3f( 255, 255, 255 );
 			RenderSystem.popMatrix();
+		}
+		}
+		catch( Exception e )
+		{
+			LOGGER.error( "Error rendering PMMO GUI", e );
 		}
 	}
 
@@ -638,6 +650,11 @@ public class XPOverlayGUI extends AbstractGui
 		else
 			xpDropsShowXpBar = Config.forgeConfig.xpDropsShowXpBar.get();
 
+		if( prefsMap.containsKey( "showLevelUpUnlocks" ) )
+			showLevelUpUnlocks = prefsMap.get("showLevelUpUnlocks" ) != 0;
+		else
+			showLevelUpUnlocks = Config.forgeConfig.showLevelUpUnlocks.get();
+
 		if( !xpDropsAttachedToBar )
 			xpDropYLimit = 999999999;
 		else
@@ -784,7 +801,8 @@ public class XPOverlayGUI extends AbstractGui
 
 		player.sendStatusMessage( msg.setStyle( Skill.getSkillStyle( skill ) ), false);
 
-		checkUnlocks( level, skill, player );
+		if( showLevelUpUnlocks )
+			checkUnlocks( level, skill, player );
 
 		if( skill.equals( Skill.SWIMMING.toString() ) && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
 			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightvisionUnlocked" ).setStyle( Skill.getSkillStyle( skill ) ), true );
@@ -904,8 +922,50 @@ public class XPOverlayGUI extends AbstractGui
 		xpGap = 0;
 	}
 
+	private static void addItemsWithSameLevel( int level, String skill, JType jType, Map<JType, Map<String, Map<String, Double>>> output )
+	{
+		output.put( jType, new HashMap<>() );
+		Map<String, Map<String, Double>> outputJMap = output.get( jType );
+		for( Map.Entry<String, Map<String, Double>> element : JsonConfig.data.getOrDefault( jType, new HashMap<>() ).entrySet() )
+		{
+			if( element.getValue().getOrDefault( skill, -1D ) == level )
+				outputJMap.put( element.getKey(), element.getValue() );
+		}
+	}
+
 	public static void checkUnlocks( int level, String skill, PlayerEntity player )
 	{
-		//TODO
+		Map<JType, Map<String, Map<String, Double>>> itemsWithReqs = new HashMap<>();
+
+		addItemsWithSameLevel( level, skill, JType.REQ_WEAR, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_WEAPON, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_TOOL, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_PLACE, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_BREAK, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_USE, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_USE_ENCHANTMENT, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_BIOME, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_KILL, itemsWithReqs );
+		addItemsWithSameLevel( level, skill, JType.REQ_CRAFT, itemsWithReqs );
+
+		String jTypeName, unlockName;
+		Item item;
+
+		for( Map.Entry<JType, Map<String, Map<String, Double>>> element : itemsWithReqs.entrySet() )
+		{
+			jTypeName = element.getKey().toString().replace( "req_", "" ).replaceAll( "_", " " );
+			for( Map.Entry<String, Map<String, Double>> itemElement : element.getValue().entrySet() )
+			{
+				item = XP.getItem( itemElement.getKey() );
+				if( !item.equals( Items.AIR ) )
+					unlockName = new TranslationTextComponent( item.getTranslationKey() ).getString();
+				else
+					unlockName = itemElement.getKey();
+				if( XP.checkReq( player, itemElement.getValue() ) )
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUpFeatureUnlock", unlockName, jTypeName ).setStyle( XP.getColorStyle( 0x00ff00 ) ), false );
+				else
+					player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUpPartialFeatureUnlock", unlockName, jTypeName ).setStyle( XP.getColorStyle( 0xffff00 ) ), false );
+			}
+		}
 	}
 }

@@ -82,6 +82,8 @@
 	"pmmo.sprintInfo": "%1$s%% Sprint Speed Bonus",
 	"pmmo.underwaterNightVisionLocked": "Underwater Nightvision is locked until level %1$s Swimming",
 	"pmmo.underwaterNightVisionUnLocked": "Underwater Nightvision is unlocked since level %1$s Swimming",
+	"pmmo.levelUpFeatureUnlock": "You have unlocked %1$s! (%2$s)",
+	"pmmo.levelUpPartialFeatureUnlock": "You have partially unlocked %1$s (%2$s)",
 	"pmmo.notSkilledEnoughToSurvive": "%1$s is too harsh for you to survive in it!",
 	"pmmo.notSkilledEnoughToWear": "You are not skilled enough to wear %1$s!",
 	"pmmo.notSkilledEnoughToUseEnchantment": "You are not skilled enough to handle the %1$s Enchantment on your %2$s!",
