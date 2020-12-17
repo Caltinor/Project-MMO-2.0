@@ -33,6 +33,8 @@ public class FishedHandler
     {
         if( !( event.getEntityPlayer() instanceof EntityPlayerMP ) )
             return;
+        if( FConfig.disableNormalFishDrops )
+            event.setCanceled( true );
         EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
         int startLevel = Skill.getLevel( Skill.FISHING.toString(), player );
         int level;

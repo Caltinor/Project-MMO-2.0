@@ -792,6 +792,10 @@ public class FConfig
     public static int nightvisionUnlockLevel = 25;
 
     //Fishing
+    @Config.Comment( "Should normal drops from Fishing be disabled?" )
+    @Config.Name( "disableNormalFishDrops" )
+    public static boolean disableNormalFishDrops = false;
+
     @Config.Comment( "What is the chance on each successful fishing attempt to access the fish_pool" )
     @Config.Name( "fishPoolBaseChance" )
     @Config.RangeDouble( min = 0, max = 100 )
