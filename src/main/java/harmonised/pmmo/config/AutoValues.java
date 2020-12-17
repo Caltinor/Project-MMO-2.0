@@ -146,14 +146,14 @@ public class AutoValues
     public static String getItemSpecificSkill( String resLoc )
     {
         Map<String, Double> itemSpecificMap = JsonConfig.data.get( JType.ITEM_SPECIFIC ).getOrDefault( resLoc.toString(), new HashMap<>() );
-        String skill = null;
+        String skill;
 
-        if( itemSpecificMap.getOrDefault( "meleeWeapon", 0D ) != 0 )
-            skill = Skill.COMBAT.toString();
-        else if( itemSpecificMap.getOrDefault( "archeryWeapon", 0D ) != 0 )
+        if( itemSpecificMap.getOrDefault( "archeryWeapon", 0D ) != 0 )
             skill = Skill.ARCHERY.toString();
         else if( itemSpecificMap.getOrDefault( "magicWeapon", 0D ) != 0 )
             skill = Skill.MAGIC.toString();
+        else
+            skill = Skill.COMBAT.toString();
 
         return skill;
     }
