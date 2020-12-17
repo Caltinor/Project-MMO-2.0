@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.annotation.Nullable;
 
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -189,10 +190,10 @@ public class DebugCommand extends CommandBase
                             return;
                         }
                         else
-                            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ) );
                     }
                     else
-                        PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                        PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ) );
                 }
                     return;
 
@@ -234,6 +235,6 @@ public class DebugCommand extends CommandBase
             }
         }
         else
-            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ) );
     }
 }

@@ -93,45 +93,39 @@ public class CheckStatCommand extends CommandBase
 
             if( args.length > 1 )
             {
-                Skill skill = Skill.getSkill( args[1] );
-                String skillName = skill.name().toLowerCase();
-                if( !skill.equals( Skill.INVALID_SKILL ) || args[1].toLowerCase().equals( "power" ) )
+                String skill = args[1];
+                double level = 1;
+
+                if( args[1].toLowerCase().equals( "power" ) )
                 {
-                    double level = 1;
+                    level = XP.getPowerLevel( target.getUniqueID() );
+                    PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.playerLevelDisplay", target.getDisplayName().getUnformattedText(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TextComponentTranslation( "pmmo.power" ).setStyle( XP.textStyle.get( "cyan" ) ) ) );
+                }
+                else
+                {
+                    level = Skill.getLevelDecimal( skill, target.getUniqueID() );
+                    PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.playerLevelDisplay", target.getDisplayName().getUnformattedText(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TextComponentTranslation( "pmmo." + skill ).setStyle( Skill.getSkillStyle( skill ) ) ) );
+                }
 
-                    if( args[1].toLowerCase().equals( "power" ) )
-                    {
-                        level = XP.getPowerLevel( target.getUniqueID() );
-                        PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.playerLevelDisplay", target.getDisplayName().getUnformattedText(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TextComponentTranslation( "pmmo.power" ).setStyle( XP.textStyle.get( "cyan" ) ) ) );
-                    }
-                    else
-                    {
-                        level = skill.getLevelDecimal( target.getUniqueID() );
-                        PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.playerLevelDisplay", target.getDisplayName().getUnformattedText(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TextComponentTranslation( "pmmo." + skillName ).setStyle( XP.getSkillStyle( skill ) ) ) );
-                    }
+                //EXTRA INFO
+                switch( skill )
+                {
+                    case "fishing":
+                        double fishPoolBaseChance = FConfig.fishPoolBaseChance;
+                        double fishPoolChancePerLevel = FConfig.fishPoolChancePerLevel;
+                        double fishPoolMaxChance = FConfig.fishPoolMaxChance;
+                        double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
+                        if( fishPoolChance > fishPoolMaxChance )
+                            fishPoolChance = fishPoolMaxChance;
 
-                    //EXTRA INFO
-                    switch( skillName )
-                    {
-                        case "fishing":
-                            double fishPoolBaseChance = FConfig.fishPoolBaseChance;
-                            double fishPoolChancePerLevel = FConfig.fishPoolChancePerLevel;
-                            double fishPoolMaxChance = FConfig.fishPoolMaxChance;
-                            double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
-                            if( fishPoolChance > fishPoolMaxChance )
-                                fishPoolChance = fishPoolMaxChance;
-
-                            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( XP.getSkillStyle( skill ) ) );
-                            break;
-                    }
+                        PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( Skill.getSkillStyle( skill ) ) );
+                        break;
                 }
             }
             else
                 PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.textStyle.get( "red" ) ) );
         }
         else
-            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
-
-        return;
+            PmmoCommand.reply( player, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ) );
     }
 }

@@ -5,11 +5,11 @@ import harmonised.pmmo.skills.Skill;
 public class XpDrop
 {
 	public int age;
-	public Skill skill;
+	public String skill;
 	public double Y, startXp, gainedXp;
 	public boolean skip;
 	
-	XpDrop( int age, double Y, Skill skill, double startXp, double gainedXp, boolean skip )
+	XpDrop( int age, double Y, String skill, double startXp, double gainedXp, boolean skip )
 	{
 		this.age = age;
 		this.Y = Y;

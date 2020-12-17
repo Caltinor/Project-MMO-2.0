@@ -26,7 +26,7 @@ public class FishedHandler
         double fishPoolBaseChance = FConfig.fishPoolBaseChance;
         double fishPoolChancePerLevel = FConfig.fishPoolChancePerLevel;
         double fishPoolMaxChance = FConfig.fishPoolMaxChance;
-        return Math.min( fishPoolMaxChance, fishPoolBaseChance + fishPoolChancePerLevel * Skill.FISHING.getLevelDecimal( player ) );
+        return Math.min( fishPoolMaxChance, fishPoolBaseChance + fishPoolChancePerLevel * Skill.getLevelDecimal( Skill.FISHING.toString(), player ) );
     }
 
     public static void handleFished( ItemFishedEvent event )
@@ -34,7 +34,7 @@ public class FishedHandler
         if( !( event.getEntityPlayer() instanceof EntityPlayerMP ) )
             return;
         EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
-        int startLevel = Skill.FISHING.getLevel( player );
+        int startLevel = Skill.getLevel( Skill.FISHING.toString(), player );
         int level;
         NonNullList<ItemStack> items = event.getDrops();
         double award = 10D;
@@ -159,7 +159,7 @@ public class FishedHandler
                 award += match.get( "xp" ) * count;
             }
 
-            XP.awardXp( player, Skill.FISHING, "catching " + items, award, false, false, false );
+            XP.awardXp( player, Skill.FISHING.toString(), "catching " + items, award, false, false, false );
         }
     }
 }

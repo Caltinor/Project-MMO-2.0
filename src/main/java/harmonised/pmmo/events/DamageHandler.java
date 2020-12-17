@@ -31,7 +31,7 @@ public class DamageHandler
 {
     public static double getEnduranceMultiplier( EntityPlayer player )
     {
-        int enduranceLevel = Skill.ENDURANCE.getLevel( player );
+        int enduranceLevel = Skill.getLevel( Skill.ENDURANCE.toString(), player );
         double endurancePerLevel = FConfig.endurancePerLevel;
         double maxEndurance = FConfig.maxEndurance;
         double endurePercent = (enduranceLevel * endurancePerLevel);
@@ -43,7 +43,7 @@ public class DamageHandler
 
     public static double getFallSaveChance(EntityPlayer player )
     {
-        int agilityLevel = Skill.AGILITY.getLevel( player );
+        int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
         double maxFallSaveChance = FConfig.maxFallSaveChance;
         double saveChancePerLevel = Math.min( maxFallSaveChance, FConfig.saveChancePerLevel / 100 );
 
@@ -124,12 +124,12 @@ public class DamageHandler
                         hideEndurance = true;
 
                     if( event.getSource().getTrueSource() != null )
-                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getUnformattedText(), enduranceXp, hideEndurance, false, false );
+                        XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getTrueSource().getDisplayName().getUnformattedText(), enduranceXp, hideEndurance, false, false );
                     else
-                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
+                        XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
 
                     if( agilityXp > 0 )
-                        XP.awardXp( player, Skill.AGILITY, "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
+                        XP.awardXp( player, Skill.AGILITY.toString(), "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
                 }
             }
 
@@ -151,8 +151,8 @@ public class DamageHandler
                     ItemStack itemStack = player.getHeldItemMainhand();
                     ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
                     Map<String, Double> weaponReq = XP.getJsonMap( resLoc, JType.REQ_WEAPON );
-                    Skill skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY : Skill.COMBAT;
-                    Skill itemSpecificSkill = AutoValues.getItemSpecificSkill( itemStack.getItem().getRegistryName().toString() );
+                    String skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY.toString() : Skill.COMBAT.toString();
+                    String itemSpecificSkill = AutoValues.getItemSpecificSkill( itemStack.getItem().getRegistryName().toString() );
                     if( itemSpecificSkill != null )
                         skill = itemSpecificSkill;
                     if( FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
@@ -183,7 +183,7 @@ public class DamageHandler
 
                             for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getName() ).entrySet() )
                             {
-                                int level = Skill.getSkill( entry.getKey() ).getLevel( player );
+                                int level = Skill.getLevel( entry.getKey(), player );
 
                                 if( level < entry.getValue() )
                                     player.sendStatusMessage( new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
@@ -204,12 +204,12 @@ public class DamageHandler
                     float targetMaxHealth = target.getMaxHealth();
                     float lowHpBonus = 1.0f;
 
-                    if( skill.equals( Skill.COMBAT ) )
-                        damage += skill.getLevel( player ) / FConfig.levelsPerDamageMelee;
-                    else if( skill.equals( Skill.ARCHERY ) )
-                        damage += skill.getLevel( player ) / FConfig.levelsPerDamageArchery;
-                    else if( skill.equals( Skill.MAGIC ) )
-                        damage += skill.getLevel( player ) / FConfig.levelsPerDamageMagic;
+                    if( skill.equals( Skill.COMBAT.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageMelee;
+                    else if( skill.equals( Skill.ARCHERY.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageArchery;
+                    else if( skill.equals( Skill.MAGIC.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageMagic;
 
                     damage /= (weaponGap + 1) / (double) (killGap + 1);
                     event.setAmount( (float) damage );
@@ -236,7 +236,7 @@ public class DamageHandler
                             lowHpBonus += 1;
                     }
 
-                    if( skill.equals( Skill.ARCHERY ) || skill.equals( Skill.MAGIC ) )
+                    if( skill.equals( Skill.ARCHERY.toString() ) || skill.equals( Skill.MAGIC.toString() ) )
                     {
                         double distance = event.getEntity().getDistance( player );
                         if( distance > 16 )

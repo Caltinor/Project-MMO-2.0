@@ -66,9 +66,9 @@ public class PlayerTickHandler
 
             if( gap > 0.5 )
             {
-                int swimLevel = Skill.SWIMMING.getLevel( player );
-                int flyLevel = Skill.FLYING.getLevel( player );
-                int agilityLevel = Skill.AGILITY.getLevel( player );
+                int swimLevel = Skill.getLevel( Skill.SWIMMING.toString(), player );
+                int flyLevel = Skill.getLevel( Skill.FLYING.toString(), player );
+                int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
                 int nightvisionUnlockLevel = FConfig.nightvisionUnlockLevel;
                 double swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
                 double speedAmp = 0;
@@ -135,21 +135,21 @@ public class PlayerTickHandler
                     if( player.isSprinting() )
                     {
                         if( player.isInWater() && ( waterAbove || waterBelow ) )
-                            XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming fast", swimAward * 1.25f, true, false, false );
+                            XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming fast", swimAward * 1.25f, true, false, false );
                         else
-                            XP.awardXp( serverPlayer, Skill.AGILITY, "running", runAward, true, false, false );
+                            XP.awardXp( serverPlayer, Skill.AGILITY.toString(), "running", runAward, true, false, false );
                     }
 
                     if( player.isInWater() && ( waterAbove || waterBelow ) )
                     {
                         if( !player.isSprinting() )
-                            XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming", swimAward, true, false, false );
+                            XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming", swimAward, true, false, false );
                     }
                     else if( player.isElytraFlying() )
-                        XP.awardXp( serverPlayer, Skill.FLYING, "flying", flyAward, true, false, false );
+                        XP.awardXp( serverPlayer, Skill.FLYING.toString(), "flying", flyAward, true, false, false );
 
                     if( ( player.getRidingEntity() instanceof EntityBoat ) && player.isInWater() )
-                        XP.awardXp( serverPlayer, Skill.SWIMMING, "swimming in a boat", swimAward / 5, true, false, false );
+                        XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming in a boat", swimAward / 5, true, false, false );
                 }
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
             }

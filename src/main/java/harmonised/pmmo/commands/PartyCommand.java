@@ -4,6 +4,7 @@ import harmonised.pmmo.party.Party;
 import harmonised.pmmo.party.PartyMemberInfo;
 import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.XP;
 import net.minecraft.command.CommandBase;
@@ -200,11 +201,11 @@ public class PartyCommand extends CommandBase
                             }
                         }
                         else
-                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.invalidPlayer", args[1] ).setStyle( XP.skillStyle.get( "red" ) ), false );
+                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.invalidPlayer", args[1] ).setStyle( Skill.getSkillStyle( "red" ) ), false );
 
                     }
                     else
-                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ), false );
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ), false );
                 }
                     return;
 

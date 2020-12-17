@@ -22,7 +22,7 @@ public class TameHandler
             if( xpValue.size() > 0 )
                 XP.awardXpMap( tamer.getUniqueID(), xpValue, "taming", false, false );
             else
-                XP.awardXp( tamer, Skill.TAMING, "taming", FConfig.defaultTamingXp, false, false, false );
+                XP.awardXp( tamer, Skill.TAMING.toString(), "taming", FConfig.defaultTamingXp, false, false, false );
         }
     }
 }

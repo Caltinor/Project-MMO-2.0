@@ -42,7 +42,7 @@ public class JumpHandler
                     if( player.isPotionActive( MobEffects.JUMP_BOOST ) )
                         jumpAmp = player.getActivePotionEffect( MobEffects.JUMP_BOOST ).getAmplifier() + 1;
 
-                    XP.awardXp( (EntityPlayerMP) player, Skill.AGILITY, "jumping", Math.max( (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), 1 ), true, false, false );
+                    XP.awardXp( (EntityPlayerMP) player, Skill.AGILITY.toString(), "jumping", Math.max( (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), 1 ), true, false, false );
                 }
             }
         }
@@ -56,7 +56,7 @@ public class JumpHandler
         double maxJumpBoost = FConfig.getConfig( "maxJumpBoost" );
         double maxJumpBoostPref = maxJumpBoost;
         int levelsPerCrouchJumpBoost = (int) Math.floor( FConfig.getConfig( "levelsPerCrouchJumpBoost" ) );
-        agilityLevel = Skill.AGILITY.getLevel( player );
+        agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
         if( prefsMap.containsKey( "maxCrouchJumpBoost" ) )
             maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxCrouchJumpBoost" ) / 100);
         jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsPerCrouchJumpBoost );
@@ -72,7 +72,7 @@ public class JumpHandler
         double maxJumpBoost = FConfig.getConfig( "maxJumpBoost" );
         double maxJumpBoostPref = maxJumpBoost;
         int levelsPerSprintJumpBoost = (int) Math.floor( FConfig.getConfig( "levelsPerSprintJumpBoost" ) );
-        agilityLevel = Skill.AGILITY.getLevel( player );
+        agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
         if( prefsMap.containsKey( "maxSprintJumpBoost" ) )
             maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxSprintJumpBoost" ) / 100);
         jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsPerSprintJumpBoost );

@@ -97,7 +97,7 @@
 //            }
 //        }
 //        else
-//            player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ), false );
+//            player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ), false );
 //
 //        return;
 //    }

@@ -24,13 +24,9 @@ public class Levels
     {
         EntityPlayer player = CraftTweakerMC.getPlayer( mcPlayer );
         NBTTagCompound reqLevels = CraftTweakerMC.getNBTCompound( args );
-        Skill skill;
         for( String key : reqLevels.getKeySet() )
         {
-            skill = Skill.getSkill( key );
-            if( skill.equals( Skill.INVALID_SKILL ) )
-                LOGGER.info( "ZenScript -> PMMO -> checkLevels -> Invalid Skill Provided! \"" + key + "\"" );
-            if( reqLevels.getDouble( key ) > skill.getLevelDecimal( player ) )
+            if( reqLevels.getDouble( key ) > Skill.getLevelDecimal( key, player ) )
                 return false;
         }
         return true;
@@ -43,14 +39,9 @@ public class Levels
         if( player instanceof EntityPlayerMP )
         {
             NBTTagCompound xpAwards = CraftTweakerMC.getNBTCompound( args );
-            Skill skill;
             for( String key : xpAwards.getKeySet() )
             {
-                skill = Skill.getSkill( key );
-                if( skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.info( "ZenScript -> PMMO -> awardXp -> Invalid Skill Provided! \"" + key + "\"" );
-                else
-                    skill.addXp( (EntityPlayerMP) player, xpAwards.getDouble( key ), "CraftTweaker", false, ignoreBonuses );
+                Skill.addXp( key, (EntityPlayerMP) player, xpAwards.getDouble( key ), "CraftTweaker", false, ignoreBonuses );
             }
         }
         else if( player instanceof EntityPlayerSP )
@@ -66,14 +57,9 @@ public class Levels
         if( player instanceof EntityPlayerMP )
         {
             NBTTagCompound xpAwards = CraftTweakerMC.getNBTCompound( args );
-            Skill skill;
             for( String key : xpAwards.getKeySet() )
             {
-                skill = Skill.getSkill( key );
-                if( skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.info( "ZenScript -> PMMO -> awardLevels -> Invalid Skill Provided! \"" + key + "\"" );
-                else
-                    skill.addLevel( (EntityPlayerMP) player, xpAwards.getDouble( key ), "CraftTweaker", false, true );
+                Skill.addLevel( key, (EntityPlayerMP) player, xpAwards.getDouble( key ), "CraftTweaker", false, true );
             }
         }
         else if( player instanceof EntityPlayerSP )
@@ -89,14 +75,9 @@ public class Levels
         if( player instanceof EntityPlayerMP )
         {
             NBTTagCompound xpAwards = CraftTweakerMC.getNBTCompound( args );
-            Skill skill;
             for( String key : xpAwards.getKeySet() )
             {
-                skill = Skill.getSkill( key );
-                if( skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.info( "ZenScript -> PMMO -> setXp -> Invalid Skill Provided! \"" + key + "\"" );
-                else
-                    skill.setXp( (EntityPlayerMP) player, xpAwards.getDouble( key ) );
+                Skill.setXp( key, (EntityPlayerMP) player, xpAwards.getDouble( key ) );
             }
         }
         else if( player instanceof EntityPlayerSP )
@@ -112,14 +93,9 @@ public class Levels
         if( player instanceof EntityPlayerMP )
         {
             NBTTagCompound xpAwards = CraftTweakerMC.getNBTCompound( args );
-            Skill skill;
             for( String key : xpAwards.getKeySet() )
             {
-                skill = Skill.getSkill( key );
-                if( skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.info( "ZenScript -> PMMO -> setLevels -> Invalid Skill Provided! \"" + key + "\"" );
-                else
-                    skill.setLevel( (EntityPlayerMP) player, xpAwards.getDouble( key ) );
+                Skill.setLevel( key, (EntityPlayerMP) player, xpAwards.getDouble( key ) );
             }
         }
         else if( player instanceof EntityPlayerSP )

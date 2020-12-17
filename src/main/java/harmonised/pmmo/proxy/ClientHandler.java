@@ -71,7 +71,7 @@ public class ClientHandler
                 break;
 
             case 6:
-                FConfig.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringSkill( newPackage ) );
+                FConfig.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringString( newPackage ) );
                 break;
 
             default:

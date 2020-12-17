@@ -30,7 +30,7 @@ public class FConfig
     //Client only, too lazy to put it somewhere better
     private static final Map<String, Double> abilities = new HashMap<>();
     private static Map<String, Double> preferences = new HashMap<>();
-    private static Map<String, Map<Skill, Double>> xpBoosts = new HashMap<>();
+    private static Map<String, Map<String, Double>> xpBoosts = new HashMap<>();
 
     //Miscellaneous
     @Config.Comment( "Should the Welcome message come up?" )
@@ -1035,7 +1035,7 @@ public class FConfig
         }
     }
 
-    public static Map<Skill, Double> getXpMap( EntityPlayer player )
+    public static Map<String, Double> getXpMap( EntityPlayer player )
     {
         if( player.world.isRemote )
             return XP.getOfflineXpMap( player.getUniqueID() );
@@ -1079,7 +1079,7 @@ public class FConfig
         preferences = newPreferencesMap;
     }
 
-    public static Map<String, Map<Skill, Double>> getXpBoostsMap( EntityPlayer player )
+    public static Map<String, Map<String, Double>> getXpBoostsMap( EntityPlayer player )
     {
         if( player.world.isRemote )
             return xpBoosts;
@@ -1087,7 +1087,7 @@ public class FConfig
             return PmmoSavedData.get().getPlayerXpBoostsMap( player.getUniqueID() );
     }
 
-    public static Map<Skill, Double> getXpBoostMap( EntityPlayer player, UUID xpBoostUUID )
+    public static Map<String, Double> getXpBoostMap( EntityPlayer player, UUID xpBoostUUID )
     {
         if( player.world.isRemote )
             return xpBoosts.getOrDefault( xpBoostUUID, new HashMap<>() );
@@ -1095,11 +1095,11 @@ public class FConfig
             return PmmoSavedData.get().getPlayerXpBoostMap( player.getUniqueID(), xpBoostUUID );
     }
 
-    public static double getPlayerXpBoost( EntityPlayer player, Skill skill )
+    public static double getPlayerXpBoost( EntityPlayer player, String skill )
     {
         double xpBoost = 0;
 
-        for( Map.Entry<String, Map<Skill, Double>> entry : getXpBoostsMap( player ).entrySet() )
+        for( Map.Entry<String, Map<String, Double>> entry : getXpBoostsMap( player ).entrySet() )
         {
             xpBoost += entry.getValue().getOrDefault( skill, 0D );
         }
@@ -1107,7 +1107,7 @@ public class FConfig
         return xpBoost;
     }
 
-    public static void setPlayerXpBoost(EntityPlayerMP player, String xpBoostKey, Map<Skill, Double> newXpBoosts )
+    public static void setPlayerXpBoost(EntityPlayerMP player, String xpBoostKey, Map<String, Double> newXpBoosts )
     {
         PmmoSavedData.get().setPlayerXpBoost( player.getUniqueID(), xpBoostKey, newXpBoosts );
     }
@@ -1122,7 +1122,7 @@ public class FConfig
         PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUniqueID() );
     }
 
-    public static void setPlayerXpBoostsMaps( EntityPlayer player, Map<String, Map<Skill, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
+    public static void setPlayerXpBoostsMaps( EntityPlayer player, Map<String, Map<String, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
     {   //SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
         if( player.world.isRemote )
             xpBoosts = newBoosts;

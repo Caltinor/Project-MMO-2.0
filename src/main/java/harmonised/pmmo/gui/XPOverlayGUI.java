@@ -35,22 +35,21 @@ public class XPOverlayGUI extends Gui
 {
 	private static int barWidth = 102, barHeight = 5, barPosX, barPosY, veinBarPosX, veinBarPosY, xpDropPosX, xpDropPosY, skillListX, skillListY;
 	private static int tempAlpha, levelGap = 0, skillGap, xpGap, halfscreen, tempInt, xpDropDecayAge = 0;
-	private static ArrayList<Skill> skillsKeys;
+	private static ArrayList<String> skillsKeys;
 	private static double xp, goalXp, cooldown;
 	private static double lastTime, startLevel, timeDiff, bonus, level, decayRate, decayAmount, growAmount, xpDropOffset = 0, xpDropOffsetCap = 0, minXpGrow = 0.2;
 	private static double barOffsetX = 0, barOffsetY = 0, veinBarOffsetX, veinBarOffsetY, xpDropOffsetX = 0, xpDropOffsetY = 0, skillListOffsetX = 0, skillListOffsetY = 0, xpDropSpawnDistance = 0, xpDropOpacityPerTime = 0, xpDropMaxOpacity = 0, biomePenaltyMultiplier = 0, maxVeinCharge = 64D;
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
-	private static String skillName = "none";
 	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, barKey = false, listKey = false, veinKey = false, barPressed = false, listPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills, xpDropsShowXpBar;
 	private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/xpbar.png" );
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft mc = Minecraft.getMinecraft();
 	private static EntityPlayer player = mc.player;
-	public static Map<Skill, ASkill> skills = new HashMap<>();
+	public static Map<String, ASkill> skills = new HashMap<>();
 	//	private static ArrayList<String> skillsKeys = new ArrayList<String>();
 	private static ASkill aSkill;
-	private static Skill skill = Skill.INVALID_SKILL, tempSkill = Skill.INVALID_SKILL;
+	private static String skill = Skill.INVALID_SKILL.toString(), tempSkill = Skill.INVALID_SKILL.toString();
 	private static FontRenderer fontRenderer = mc.fontRenderer;
 	private static int maxLevel, color, breakAmount, veinMaxBlocks;
 	private static double maxXp;
@@ -70,87 +69,84 @@ public class XPOverlayGUI extends Gui
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
 	{
-		if( !skill.equals( Skill.INVALID_SKILL ) )
+		if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
 		{
-			if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
+			player = Minecraft.getMinecraft().player;
+			if( !init )
 			{
-				player = Minecraft.getMinecraft().player;
-				if( !init )
-				{
-					doInit();
-					init = true;
-				}
-
-				GlStateManager.pushMatrix();
-				GlStateManager.enableBlend();
-				sr = new ScaledResolution( mc );
-
-//				drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
-//				drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
-//				drawCenteredString( fontRenderer, "Fully Customizable - Modpack Maker friendly!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
-//				drawCenteredString( fontRenderer, "GUI that covers every feature of PMMO, including Modpack changes, Live!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
-
-				barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
-				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
-				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
-				xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
-				skillListX = (int) ( sr.getScaledWidth() * skillListOffsetX );
-				skillListY = (int) ( sr.getScaledHeight() * skillListOffsetY );
-
-				aSkill = skills.get( skill );
-
-				timeDiff = (System.nanoTime() - lastTime);
-				lastTime = System.nanoTime();
-
-				barKey = ClientHandler.SHOW_BAR.isKeyDown();
-				listKey = ClientHandler.SHOW_LIST.isKeyDown();
-				veinKey = ClientHandler.VEIN_KEY.isKeyDown();
-
-				if( barKey || xpBarAlwaysOn )
-					cooldown = 1;
-
-				if( barKey )
-				{
-					if( !barPressed )
-					{
-						barOn = !barOn;
-						barPressed = true;
-					}
-				}
-				else
-					barPressed = false;
-
-				if( listKey )
-				{
-					if( !listPressed )
-					{
-						listOn = !listOn;
-						listPressed = true;
-					}
-				}
-				else
-					listPressed = false;
-
-				if( !Minecraft.getMinecraft().isGamePaused() )
-				{
-					doRayTrace();
-					doCrosshair();
-					doVein();
-					doSkills();
-				}
-				doXpDrops();
-				doXpBar();
-
-				if( showSkillsListAtCorner )
-					doSkillList();
-
-				if( cooldown > 0 )
-					cooldown -= timeDiff / 1000000D;
-
-				GlStateManager.disableBlend();
-				GlStateManager.color( 255, 255, 255 );
-				GlStateManager.popMatrix();
+				doInit();
+				init = true;
 			}
+
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			sr = new ScaledResolution( mc );
+
+//			drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+//			drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+//			drawCenteredString( fontRenderer, "Fully Customizable - Modpack Maker friendly!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+//			drawCenteredString( fontRenderer, "GUI that covers every feature of PMMO, including Modpack changes, Live!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+
+			barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
+			barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
+			xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
+			xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
+			skillListX = (int) ( sr.getScaledWidth() * skillListOffsetX );
+			skillListY = (int) ( sr.getScaledHeight() * skillListOffsetY );
+
+			aSkill = skills.get( skill );
+
+			timeDiff = (System.nanoTime() - lastTime);
+			lastTime = System.nanoTime();
+
+			barKey = ClientHandler.SHOW_BAR.isKeyDown();
+			listKey = ClientHandler.SHOW_LIST.isKeyDown();
+			veinKey = ClientHandler.VEIN_KEY.isKeyDown();
+
+			if( barKey || xpBarAlwaysOn )
+				cooldown = 1;
+
+			if( barKey )
+			{
+				if( !barPressed )
+				{
+					barOn = !barOn;
+					barPressed = true;
+				}
+			}
+			else
+				barPressed = false;
+
+			if( listKey )
+			{
+				if( !listPressed )
+				{
+					listOn = !listOn;
+					listPressed = true;
+				}
+			}
+			else
+				listPressed = false;
+
+			if( !Minecraft.getMinecraft().isGamePaused() )
+			{
+				doRayTrace();
+				doCrosshair();
+				doVein();
+				doSkills();
+			}
+			doXpDrops();
+			doXpBar();
+
+			if( showSkillsListAtCorner )
+				doSkillList();
+
+			if( cooldown > 0 )
+				cooldown -= timeDiff / 1000000D;
+
+			GlStateManager.disableBlend();
+			GlStateManager.color( 255, 255, 255 );
+			GlStateManager.popMatrix();
 		}
 	}
 
@@ -271,7 +267,7 @@ public class XPOverlayGUI extends Gui
 					tempAlpha = (int) Math.floor( xpDropMaxOpacity - tempInt );
 
 				if( tempAlpha > 3 )
-					drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TextComponentTranslation( "pmmo." + xpDrop.skill.name().toLowerCase() ).getUnformattedText(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ XP.getSkillColor( xpDrop.skill ) );
+					drawCenteredString( fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TextComponentTranslation( "pmmo." + xpDrop.skill.toString() ).getUnformattedText(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ Skill.getSkillColor( xpDrop.skill ) );
 			}
 		}
 
@@ -281,7 +277,7 @@ public class XPOverlayGUI extends Gui
 
 	private void doSkills()
 	{
-		for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )		//Update Skills
+		for( Map.Entry<String, ASkill> entry : skills.entrySet() )		//Update Skills
 		{
 			aSkill = entry.getValue();
 
@@ -328,6 +324,9 @@ public class XPOverlayGUI extends Gui
 
 			aSkill = skills.get( skill );
 
+			if( aSkill == null )
+				return;
+
 			drawTexturedModalRect( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
 			if( !FConfig.xpBarTheme )
 			{
@@ -347,22 +346,22 @@ public class XPOverlayGUI extends Gui
 				drawTexturedModalRect( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
 			}
 			if( aSkill.pos >= maxLevel )
-				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), maxLevel ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
+				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText(), maxLevel ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor( skill ) );
 			else
-				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, XP.getSkillColor( skill ) );
+				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor( skill ) );
 
 			if( (barKey || xpLeftDisplayAlwaysOn) && skills.get( skill ) != null )
 			{
 				if( skills.get( skill ).xp >= maxXp )
-					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.maxLevel" ).getUnformattedText(), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
+					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.maxLevel" ).getUnformattedText(), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor( skill ) );
 				else
 				{
 					if( goalXp >= maxXp )
 						goalXp =  maxXp;
 
 					goalXp = XP.xpAtLevel( XP.levelAtXp( aSkill.xp ) + 1 );
-					drawCenteredString( fontRenderer, DP.dprefix( skills.get( skill ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, XP.getSkillColor( skill ) );
-					drawCenteredString( fontRenderer,  new TextComponentTranslation( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getUnformattedText(), barPosX + (barWidth / 2), 26 + barPosY, XP.getSkillColor( skill ) );
+					drawCenteredString( fontRenderer, DP.dprefix( skills.get( skill ).xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor( skill ) );
+					drawCenteredString( fontRenderer,  new TextComponentTranslation( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getUnformattedText(), barPosX + (barWidth / 2), 26 + barPosY, Skill.getSkillColor( skill ) );
 				}
 			}
 
@@ -456,7 +455,7 @@ public class XPOverlayGUI extends Gui
 			if( System.nanoTime() - lastBonusUpdate > 250000000 )
 			{
 				biomeBoosts = XP.getBiomeBoosts( player );
-				for( Map.Entry<Skill, ASkill> entry : skills.entrySet() )
+				for( Map.Entry<String, ASkill> entry : skills.entrySet() )
 				{
 					tempSkill = entry.getKey();
 
@@ -474,19 +473,19 @@ public class XPOverlayGUI extends Gui
 			}
 
 			skillsKeys = new ArrayList<>( skills.keySet() );
-			skillsKeys.sort( Comparator.<Skill>comparingDouble( a -> skills.get( a ).xp ).reversed() );
+			skillsKeys.sort( Comparator.<String>comparingDouble( a -> skills.get( a ).xp ).reversed() );
 
-			for( Map.Entry<Skill, ASkill> entry : new HashSet<>( skills.entrySet() ) )
+			for( Map.Entry<String, ASkill> entry : new HashSet<>( skills.entrySet() ) )
 			{
 				aSkill = entry.getValue();
-				skillName = entry.getKey().toString();
+				skill = entry.getKey();
 				level = XP.levelAtXpDecimal( aSkill.xp );
 				tempString = DP.dp( Math.floor( level * 100D ) / 100D );
-				color = XP.getSkillColor( entry.getKey() );
+				color = Skill.getSkillColor( entry.getKey() );
 				if( level >= maxLevel )
 					tempString = "" + maxLevel;
 				drawString( fontRenderer, tempString, skillListX + levelGap + 4 - fontRenderer.getStringWidth( tempString ), skillListY + 3 + listIndex, color );
-				drawString( fontRenderer, " | " + new TextComponentTranslation( "pmmo." + skillName ).getUnformattedText(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color );
+				drawString( fontRenderer, " | " + new TextComponentTranslation( "pmmo." + skill ).getUnformattedText(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color );
 				drawString( fontRenderer, " | " + DP.dprefix( aSkill.xp ), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color );
 
 				if( aSkill.bonus != 0 )
@@ -716,7 +715,7 @@ public class XPOverlayGUI extends Gui
 //		}
 //	}
 
-	public static void sendLvlUp( int level, Skill skill )
+	public static void sendLvlUp( int level, String skill )
 	{
 		player = Minecraft.getMinecraft().player;
 
@@ -729,25 +728,25 @@ public class XPOverlayGUI extends Gui
 
 		switch( skill )
 		{
-			case BUILDING:
+			case "building":
 				double levelsPerOneReach = configMap.get( "levelsPerOneReach" );
 				double maxExtraReachBoost = configMap.get( "maxExtraReachBoost" );
 				double reachBoost = level / levelsPerOneReach;
 				if( reachBoost > maxExtraReachBoost )
 					reachBoost = maxExtraReachBoost;
-				msg = new TextComponentTranslation( "pmmo.levelUpReachBoost", level, new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), DP.dpSoft( reachBoost ) );
+				msg = new TextComponentTranslation( "pmmo.levelUpReachBoost", level, new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText(), DP.dpSoft( reachBoost ) );
 				break;
 
-			case COMBAT:
+			case "combat":
 				double levelsPerDamageMelee = configMap.get( "levelsPerDamageMelee" );
 				double maxExtraDamageBoost = configMap.get( "maxExtraDamageBoost" );
 				double damageBoost = level / levelsPerDamageMelee;
 				if( damageBoost > maxExtraDamageBoost )
 					damageBoost = maxExtraDamageBoost;
-				msg = new TextComponentTranslation( "pmmo.levelUpDamageBoost", level, new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), DP.dpSoft( damageBoost ) );
+				msg = new TextComponentTranslation( "pmmo.levelUpDamageBoost", level, new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText(), DP.dpSoft( damageBoost ) );
 				break;
 
-			case ENDURANCE:
+			case "endurance":
 				double endurancePerLevel = configMap.get( "endurancePerLevel" );
 				double maxEndurance = configMap.get( "maxEndurance" );
 				double enduranceBoost = level * endurancePerLevel;
@@ -760,26 +759,26 @@ public class XPOverlayGUI extends Gui
 //				if( heartBoost > maxExtraHeartBoost )
 //					heartBoost = (int) maxExtraHeartBoost;
 				if( level % (int) levelsPerHeart == 0 && heartBoost <= (int) maxExtraHeartBoost )
-					player.sendStatusMessage( new TextComponentTranslation( "pmmo.gainedExtraHeart" ).setStyle( XP.getSkillStyle( skill ) ), false);
+					player.sendStatusMessage( new TextComponentTranslation( "pmmo.gainedExtraHeart" ).setStyle( Skill.getSkillStyle( skill ) ), false);
 
-				msg = new TextComponentTranslation( "pmmo.levelUpEnduranceBoost", level, new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), enduranceBoost );
+				msg = new TextComponentTranslation( "pmmo.levelUpEnduranceBoost", level, new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText(), enduranceBoost );
 				break;
 
-			case AGILITY:
-				msg = new TextComponentTranslation( "pmmo.levelUpSprintSpeedBonus", level, new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText(), DP.dpSoft( AttributeHandler.getSpeedBoostMultiplier( level ) * 100 ) + "%" );
+			case "agility":
+				msg = new TextComponentTranslation( "pmmo.levelUpSprintSpeedBonus", level, new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText(), DP.dpSoft( AttributeHandler.getSpeedBoostMultiplier( level ) * 100 ) + "%" );
 				break;
 
 			default:
-				msg = new TextComponentTranslation( "pmmo.levelUp", level, new TextComponentTranslation( "pmmo." + skill.name().toLowerCase() ).getUnformattedText() );
+				msg = new TextComponentTranslation( "pmmo.levelUp", level, new TextComponentTranslation( "pmmo." + skill.toString() ).getUnformattedText() );
 				break;
 		}
 
-		player.sendStatusMessage( msg.setStyle( XP.getSkillStyle( skill ) ), false);
+		player.sendStatusMessage( msg.setStyle( Skill.getSkillStyle( skill ) ), false);
 
 		checkUnlocks( level, skill, player );
 
-		if( skill == Skill.SWIMMING && level - 1 < FConfig.nightvisionUnlockLevel && level >= FConfig.nightvisionUnlockLevel )
-			player.sendStatusMessage( new TextComponentTranslation( "pmmo.underwaterNightVisionUnLocked", level ).setStyle( XP.getSkillStyle( skill ) ), true );
+		if( Skill.SWIMMING.equals( skill ) && level - 1 < FConfig.nightvisionUnlockLevel && level >= FConfig.nightvisionUnlockLevel )
+			player.sendStatusMessage( new TextComponentTranslation( "pmmo.underwaterNightVisionUnLocked", level ).setStyle( Skill.getSkillStyle( skill ) ), true );
 
 		listWasOn = barOn;
 
@@ -787,18 +786,18 @@ public class XPOverlayGUI extends Gui
 			barOn = true;
 
 		if( lvlUpScreenshot )
-			screenshots.add( player.getDisplayName().getUnformattedText() + " " + skill.name().toLowerCase() + " " + level );
+			screenshots.add( player.getDisplayName().getUnformattedText() + " " + skill.toString() + " " + level );
 
 //		XP.scanUnlocks( level, skill );
 
-		NetworkHandler.sendToServer( new MessageLevelUp( skill.getValue(), level ) );
+		NetworkHandler.sendToServer( new MessageLevelUp( skill, level ) );
 	}
 
-	public static void makeXpDrop( double xp, Skill skillIn, int cooldown, double gainedXp, boolean skip )
+	public static void makeXpDrop( double xp, String skillIn, int cooldown, double gainedXp, boolean skip )
 	{
 		xpDropWasStacked = false;
 
-		if( XPOverlayGUI.skill.equals( Skill.INVALID_SKILL ) )
+		if( !skip )
 			XPOverlayGUI.skill = skillIn;
 
 		if( xp + gainedXp <= 0 )
@@ -823,20 +822,20 @@ public class XPOverlayGUI extends Gui
 
 			for( int i = 0; i < xpDrops.size(); i++ )
 			{
-				if( xpDrops.get( i ).skill == skillIn )
+				if( xpDrops.get( i ).skill.equals( skillIn ) )
 				{
 					xpDrops.remove( i );
 					i = 0;
 				}
 			}
 
-//			System.out.println( mc.player.getDisplayName().getUnformattedText() + " " + skill.name() + " has been set to: " + xp );
+//			System.out.println( mc.player.getDisplayName().getUnformattedText() + " " + skill + " has been set to: " + xp );
 		}
 		else if( stackXpDrops && xpDrops.size() > 0 )
 		{
 			for( XpDrop xpDrop : xpDrops )
 			{
-				if( xpDrop.skill == skillIn && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0) )
+				if( xpDrop.skill.equals( skillIn ) && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0) )
 				{
 					xpDrop.gainedXp += gainedXp;
 					xpDrop.startXp += gainedXp;
@@ -876,8 +875,8 @@ public class XPOverlayGUI extends Gui
 					levelGap = fontRenderer.getStringWidth( DP.dp( XP.levelAtXpDecimal( skills.get( thisSkill ).goalXp ) ) );
 			}
 
-			if( skillGap < fontRenderer.getStringWidth( new TextComponentTranslation( "pmmo." + thisSkill.name().toLowerCase() ).getUnformattedText() ) )
-				skillGap = fontRenderer.getStringWidth( new TextComponentTranslation( "pmmo." + thisSkill.name().toLowerCase() ).getUnformattedText() );
+			if( skillGap < fontRenderer.getStringWidth( new TextComponentTranslation( "pmmo." + thisSkill ).getUnformattedText() ) )
+				skillGap = fontRenderer.getStringWidth( new TextComponentTranslation( "pmmo." + thisSkill ).getUnformattedText() );
 
 			if( xpGap < fontRenderer.getStringWidth( DP.dp( skills.get( thisSkill ).goalXp ) ) )
 				xpGap = fontRenderer.getStringWidth( DP.dprefix( skills.get( thisSkill ).goalXp ) );
@@ -890,13 +889,13 @@ public class XPOverlayGUI extends Gui
 //		skillsKeys = new ArrayList<>();
 		xpDrops = new ArrayList<>();
 		xp = 0;
-		skill = Skill.INVALID_SKILL;
+		skill = Skill.INVALID_SKILL.toString();
 		levelGap = 0;
 		skillGap = 0;
 		xpGap = 0;
 	}
 
-	public static void checkUnlocks( int level, Skill skill, EntityPlayer player )
+	public static void checkUnlocks( int level, String skill, EntityPlayer player )
 	{
 		//TODO
 	}

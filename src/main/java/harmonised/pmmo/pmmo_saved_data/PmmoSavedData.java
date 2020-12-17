@@ -26,11 +26,11 @@ public class PmmoSavedData extends WorldSavedData
     private static PmmoSavedData pmmoSavedData;
     private static MinecraftServer server;
     private static String ID = Reference.MOD_ID;
-    private Map<UUID, Map<Skill, Double>> xp = new HashMap<>();
-    private Map<UUID, Map<Skill, Double>> scheduledXp = new HashMap<>();
+    private Map<UUID, Map<String, Double>> xp = new HashMap<>();
+    private Map<UUID, Map<String, Double>> scheduledXp = new HashMap<>();
     private Map<UUID, Map<String, Double>> abilities = new HashMap<>();
     private Map<UUID, Map<String, Double>> preferences = new HashMap<>();
-    private Map<UUID, Map<String, Map<Skill, Double>>> xpBoosts = new HashMap<>();    //playerUUID -> boostUUID -> boostMap
+    private Map<UUID, Map<String, Map<String, Double>>> xpBoosts = new HashMap<>();    //playerUUID -> boostUUID -> boostMap
     private Set<Party> parties = new HashSet<>();
     private Map<UUID, String> name = new HashMap<>();
 
@@ -60,28 +60,21 @@ public class PmmoSavedData extends WorldSavedData
                     NBTTagCompound xpTag = playerTag.getCompoundTag( "xp" );
                     for( String tag : new HashSet<>( xpTag.getKeySet() ) )
                     {
-                        if( Skill.getInt( tag ) == 0 )
-                        {
-                            if( Skill.getInt( tag.toLowerCase() ) != 0 )
-                                xpTag.setTag( tag.toLowerCase(), xpTag.getCompoundTag(tag) );
-
-                            if( tag.toLowerCase().equals( "repairing" ) )
-                                xpTag.setTag( "smithing", xpTag.getCompoundTag(tag) );
-
-                            LOGGER.info( "REMOVING INVALID SKILL " + tag + " FROM PLAYER " + playerUuidKey );
-                            xpTag.removeTag( tag );
-                        }
+                        if( xpTag.getDouble( tag ) > 0 )
+                            xpTag.setDouble( tag.toLowerCase(), xpTag.getDouble( tag ) );
+                        else
+                            xpTag.removeTag( tag.toLowerCase() );
                     }
                 }
 
                 if( playerTag.hasKey( "name" ) )
                     name.put( UUID.fromString( playerUuidKey ), playerTag.getString( "name" ) );
 
-                xp = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xp" ) );
-                scheduledXp = NBTHelper.nbtToMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "scheduledXp" ) );
+                xp = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xp" ) );
+                scheduledXp = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "scheduledXp" ) );
                 abilities = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "abilities" ) );
                 preferences = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "preferences" ) );
-                xpBoosts = NBTHelper.nbtToMapStringMapUuidSkill( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xpBoosts" ) );
+                xpBoosts = NBTHelper.nbtToMapStringMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xpBoosts" ) );
             }
         }
 
@@ -116,15 +109,15 @@ public class PmmoSavedData extends WorldSavedData
         NBTTagCompound playersTag = new NBTTagCompound(), partiesTag = new NBTTagCompound(), partyTag, membersTag, memberInfoTag;
         Map<String, NBTTagCompound> playerMap;
 
-        for( Map.Entry<UUID, Map<Skill, Double>> entry : xp.entrySet() )
+        for( Map.Entry<UUID, Map<String, Double>> entry : xp.entrySet() )
         {
             playerMap = new HashMap<>();
 
-            playerMap.put( "xp", NBTHelper.mapSkillToNbt(                   xp.getOrDefault(            entry.getKey(), new HashMap<>() ) ) );
-            playerMap.put( "scheduledXp", NBTHelper.mapSkillToNbt(          scheduledXp.getOrDefault(   entry.getKey(), new HashMap<>() ) ) );
-            playerMap.put( "abilities", NBTHelper.mapStringToNbt(           abilities.getOrDefault(     entry.getKey(), new HashMap<>() ) ) );
-            playerMap.put( "preferences", NBTHelper.mapStringToNbt(         preferences.getOrDefault(   entry.getKey(), new HashMap<>() ) ) );
-            playerMap.put( "xpBoosts", NBTHelper.mapStringMapSkillToNbt(    xpBoosts.getOrDefault(      entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "xp", NBTHelper.mapStringToNbt(                   xp.getOrDefault(            entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "scheduledXp", NBTHelper.mapStringToNbt(          scheduledXp.getOrDefault(   entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "abilities", NBTHelper.mapStringToNbt(            abilities.getOrDefault(     entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "preferences", NBTHelper.mapStringToNbt(          preferences.getOrDefault(   entry.getKey(), new HashMap<>() ) ) );
+            playerMap.put( "xpBoosts", NBTHelper.mapStringMapStringToNbt(    xpBoosts.getOrDefault(      entry.getKey(), new HashMap<>() ) ) );
 
             NBTTagCompound playerTag = NBTHelper.mapStringNbtToNbt( playerMap );
             playerTag.setString( "name", name.get( entry.getKey() ) );
@@ -162,14 +155,14 @@ public class PmmoSavedData extends WorldSavedData
         return outData;
     }
 
-    public Map<Skill, Double> getXpMap( UUID uuid )
+    public Map<String, Double> getXpMap( UUID uuid )
     {
         if( !xp.containsKey( uuid ) )
             xp.put( uuid, new HashMap<>() );
         return xp.get( uuid );
     }
 
-    public Map<Skill, Double> getScheduledXpMap( UUID uuid )
+    public Map<String, Double> getScheduledXpMap( UUID uuid )
     {
         if( !scheduledXp.containsKey( uuid ) )
             scheduledXp.put( uuid, new HashMap<>() );
@@ -190,84 +183,60 @@ public class PmmoSavedData extends WorldSavedData
         return preferences.get( uuid );
     }
 
-    public double getXp( Skill skill, UUID uuid )
+    public double getXp( String skill, UUID uuid )
     {
-        if( skill.equals( Skill.INVALID_SKILL ) )
-        {
-            LOGGER.debug( "Invalid Skill at getXp" );
-            return -1;
-        }
-
+        skill = skill.toLowerCase();
         return xp.getOrDefault( uuid, new HashMap<>() ).getOrDefault( skill, 0D );
     }
 
-    public int getLevel( Skill skill, UUID uuid )
+    public int getLevel( String skill, UUID uuid )
     {
         return XP.levelAtXp( getXp( skill, uuid ) );
     }
 
-    public double getLevelDecimal( Skill skill, UUID uuid )
+    public double getLevelDecimal( String skill, UUID uuid )
     {
         return XP.levelAtXpDecimal( getXp( skill, uuid ) );
     }
 
-    public boolean setXp( Skill skill, UUID uuid, double amount )
+    public boolean setXp( String skill, UUID uuid, double amount )
     {
-        if( !skill.equals( Skill.INVALID_SKILL ) )
-        {
-            double maxXp = FConfig.getConfig( "maxXp" );
+        skill = skill.toLowerCase();
+        double maxXp = FConfig.getConfig( "maxXp" );
 
-            if( amount > maxXp )
-                amount = maxXp;
+        if( amount > maxXp )
+            amount = maxXp;
 
-            if( amount < 0 )
-                amount = 0;
+        if( amount < 0 )
+            amount = 0;
 
-            if( !xp.containsKey( uuid ) )
-                xp.put( uuid, new HashMap<>() );
-            if( amount > 0 )
-                xp.get( uuid ).put( skill, amount );
-            else
-                xp.get( uuid ).remove( skill );
-            setDirty( true );
-            return true;
-        }
+        if( !xp.containsKey( uuid ) )
+            xp.put( uuid, new HashMap<>() );
+        if( amount > 0 )
+            xp.get( uuid ).put( skill, amount );
         else
-        {
-            LOGGER.info( "Invalid Skill at method setXp, amount: " + amount );
-            return false;
-        }
+            xp.get( uuid ).remove( skill );
+        setDirty( true );
+        return true;
     }
 
-    public boolean addXp( Skill skill, UUID uuid, double amount )
+    public boolean addXp( String skill, UUID uuid, double amount )
     {
-        if( !skill.equals( Skill.INVALID_SKILL ) )
-        {
-            setXp( skill, uuid, getXp( skill, uuid ) + amount );
-            setDirty( true );
-            return true;
-        }
-        else
-        {
-            LOGGER.info( "Invalid Skill at method addXp, amount: " + amount );
-            return false;
-        }
+        setXp( skill, uuid, getXp( skill, uuid ) + amount );
+        setDirty( true );
+        return true;
     }
 
-    public void scheduleXp( Skill skill, UUID uuid, double amount, String sourceName )
+    public void scheduleXp( String skill, UUID uuid, double amount, String sourceName )
     {
-        if( !skill.equals( Skill.INVALID_SKILL ) )
-        {
-            Map<Skill, Double> scheduledXpMap = getScheduledXpMap( uuid );
-            if( !scheduledXpMap.containsKey( skill ) )
-                scheduledXpMap.put( skill, amount );
-            else
-                scheduledXpMap.put( skill, amount + scheduledXpMap.get( skill ) );
-            LOGGER.info( "Scheduled " + amount + "xp for: " + sourceName + ", to: " + getName( uuid ) );
-            setDirty( true );
-        }
+        skill = skill.toLowerCase();
+        Map<String, Double> scheduledXpMap = getScheduledXpMap( uuid );
+        if( !scheduledXpMap.containsKey( skill ) )
+            scheduledXpMap.put( skill, amount );
         else
-            LOGGER.info( "Invalid Skill at method addXp, amount: " + amount );
+            scheduledXpMap.put( skill, amount + scheduledXpMap.get( skill ) );
+        LOGGER.info( "Scheduled " + amount + "xp for: " + sourceName + ", to: " + getName( uuid ) );
+        setDirty( true );
     }
 
     public void removeScheduledXpUuid( UUID uuid )
@@ -383,21 +352,21 @@ public class PmmoSavedData extends WorldSavedData
         return PmmoSavedData.server;
     }
 
-    public Map<String, Map<Skill, Double>> getPlayerXpBoostsMap( UUID playerUUID )
+    public Map<String, Map<String, Double>> getPlayerXpBoostsMap( UUID playerUUID )
     {
         return xpBoosts.getOrDefault( playerUUID, new HashMap<>() );
     }
 
-    public Map<Skill, Double> getPlayerXpBoostMap( UUID playerUUID, UUID xpBoostUUID )
+    public Map<String, Double> getPlayerXpBoostMap( UUID playerUUID, UUID xpBoostUUID )
     {
         return getPlayerXpBoostsMap( playerUUID ).getOrDefault( xpBoostUUID, new HashMap<>() );
     }
 
-    public double getPlayerXpBoost( UUID playerUUID, Skill skill )
+    public double getPlayerXpBoost( UUID playerUUID, String skill )
     {
         double xpBoost = 0;
 
-        for( Map.Entry<String , Map<Skill, Double>> entry : getPlayerXpBoostsMap( playerUUID ).entrySet() )
+        for( Map.Entry<String , Map<String, Double>> entry : getPlayerXpBoostsMap( playerUUID ).entrySet() )
         {
             xpBoost += entry.getValue().getOrDefault( skill, 0D );
         }
@@ -405,16 +374,16 @@ public class PmmoSavedData extends WorldSavedData
         return xpBoost;
     }
 
-    public void setPlayerXpBoostsMaps( UUID playerUUID, Map<String, Map<Skill, Double>> newBoosts )
+    public void setPlayerXpBoostsMaps( UUID playerUUID, Map<String, Map<String, Double>> newBoosts )
     {
         xpBoosts.put( playerUUID, newBoosts );
         setDirty( true );
     }
 
 
-    public void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Map<Skill, Double> newXpBoosts )
+    public void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Map<String, Double> newXpBoosts )
     {
-        for( Map.Entry<Skill, Double> entry : newXpBoosts.entrySet() )
+        for( Map.Entry<String, Double> entry : newXpBoosts.entrySet() )
         {
             setPlayerXpBoost( playerUUID, xpBoostKey, entry.getKey(), entry.getValue() );
         }
@@ -437,12 +406,12 @@ public class PmmoSavedData extends WorldSavedData
         setDirty( true );
     }
 
-    public Map<UUID, Map<Skill, Double>> getAllXpMaps()
+    public Map<UUID, Map<String, Double>> getAllXpMaps()
     {
         return xp;
     }
 
-    private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Skill skill, Double xpBoost )
+    private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, String skill, Double xpBoost )
     {
         if( !this.xpBoosts.containsKey( playerUUID ) )
             this.xpBoosts.put( playerUUID, new HashMap<>() );

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PmmoCommand extends CommandTreeBase
 {
-    public static List<String> skillCompletions = new ArrayList( Skill.stringMap.keySet() );
+    public static List<String> skillCompletions = new ArrayList<>( Skill.getSkills().keySet() );
     public static List<String> suggestPref = new ArrayList<>();
 
     public PmmoCommand()
@@ -25,6 +25,11 @@ public class PmmoCommand extends CommandTreeBase
         super.addSubcommand( new SyncCommand() );
         super.addSubcommand( new CheckBiomeCommand() );
         super.addSubcommand( new CheckStatCommand() );
+    }
+
+    public static void updateCompletions()
+    {
+        skillCompletions = new ArrayList<>( Skill.getSkills().keySet() );
     }
 
     @Override

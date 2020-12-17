@@ -9,11 +9,14 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
@@ -27,30 +30,30 @@ public class BlockPlacedHandler
 {
     private static final Map<UUID, BlockPos> lastPosPlaced = new HashMap<>();
 
-    public static void handlePlaced( BlockEvent.MultiPlaceEvent event )
+    public static boolean handlePlaced(Entity entity, IBlockState state, World world, BlockPos pos )
     {
-        if( event.getEntity() instanceof EntityPlayerMP && !(event.getEntity() instanceof FakePlayer ) )
+        if( entity instanceof EntityPlayerMP && !(entity instanceof FakePlayer ) )
         {
-            EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+            EntityPlayerMP player = (EntityPlayerMP) entity;
 
             if ( XP.isPlayerSurvival( player ) )
             {
-                Block block = event.getPlacedBlock().getBlock();
+                Block block = state.getBlock();
 
                 if( block.equals( Blocks.WATER ) )
                 {
-                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", FConfig.jesusXp, true, false, false );
-                    return;
+                    XP.awardXp( player, Skill.MAGIC.toString(), "Walking on water -gasp-", FConfig.jesusXp, true, false, false );
+                    return false;
                 }
 
                 if( XP.checkReq( player, block.getRegistryName(), JType.REQ_PLACE ) )
                 {
                     double blockHardnessLimitForPlacing = FConfig.blockHardnessLimitForPlacing;
-                    double blockHardness = event.getPlacedBlock().getBlockHardness( event.getWorld(), event.getPos() );
+                    double blockHardness = state.getBlockHardness( world, pos );
                     if ( blockHardness > blockHardnessLimitForPlacing )
                         blockHardness = blockHardnessLimitForPlacing;
-                    String playerName = player.getName().toString();
-                    BlockPos blockPos = event.getPos();
+                    String playerName = player.getName();
+                    BlockPos blockPos = pos;
                     UUID playerUUID = player.getUniqueID();
                     Map<String, Double> award = new HashMap<>();
                     String sourceName = "Placing a Block";
@@ -74,7 +77,7 @@ public class BlockPlacedHandler
                     XP.awardXpMap( player.getUniqueID(), award, sourceName, false, false );
 
                     if (lastPosPlaced.containsKey(playerName))
-                        lastPosPlaced.replace(playerUUID, event.getPos());
+                        lastPosPlaced.replace(playerUUID, pos);
                     else
                         lastPosPlaced.put(playerUUID, blockPos);
                 }
@@ -93,14 +96,13 @@ public class BlockPlacedHandler
                     else
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlaceDown", block.getUnlocalizedName(), "", true, 2 ), (EntityPlayerMP) player );
 
-                    event.setCanceled( true );
+                    return true;
                 }
 
-                for( BlockSnapshot blockSnapshot : event.getReplacedBlockSnapshots() )
-                {
-                    ChunkDataHandler.addPos( event.getWorld().getWorldType().getId(), blockSnapshot.getPos(), player.getUniqueID() );
-                }
+
+                ChunkDataHandler.addPos( world.getWorldType().getId(), pos, player.getUniqueID() );
             }
         }
+        return false;
     }
 }

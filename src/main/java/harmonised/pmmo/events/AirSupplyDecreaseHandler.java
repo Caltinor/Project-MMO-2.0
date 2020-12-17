@@ -21,8 +21,8 @@
 //            if( entity instanceof EntityPlayer )
 //            {
 //                EntityPlayer player = (EntityPlayer) entity;
-//                int enduranceLevel = Skill.ENDURANCE.getLevel( player );
-//                int swimmingLevel = Skill.SWIMMING.getLevel( player );
+//                int enduranceLevel = Skill.getLevel( Skill.ENDURANCE.toString(), player );
+//                int swimmingLevel = Skill.getLevel( Skill.SWIMMING.toString(), player );
 //                int respirationBoost = (int) ( ( (double) swimmingLevel + ( (double) enduranceLevel / 2.5D ) ) / 50D );
 //                respiration += Math.min( respirationBoost, 5 );
 //            }

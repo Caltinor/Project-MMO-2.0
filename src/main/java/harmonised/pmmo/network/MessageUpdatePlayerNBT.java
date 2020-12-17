@@ -1,11 +1,13 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.proxy.ServerHandler;
 import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import io.netty.buffer.ByteBuf;
@@ -63,6 +65,7 @@ public class MessageUpdatePlayerNBT extends MessageBase<MessageUpdatePlayerNBT>
             case 2: //config
                 FConfig.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
                 WorldTickHandler.refreshVein();
+                PmmoCommand.updateCompletions();
                 break;
 
             case 3: //stats

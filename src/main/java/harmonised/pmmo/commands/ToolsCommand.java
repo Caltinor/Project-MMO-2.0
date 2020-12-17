@@ -56,7 +56,7 @@ public class ToolsCommand extends CommandBase
         }
         else if( player != null )
         {
-            Map<Skill, Double> skillMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
+            Map<String, Double> skillMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
             String command = args[0].toLowerCase();
 
             if( args.length == 2 )
@@ -171,7 +171,7 @@ public class ToolsCommand extends CommandBase
                         double level = Double.parseDouble( args[1] );
                         if( Double.isNaN( level ) )
                         {
-                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.invalidNumber", args[1] ).setStyle( XP.skillStyle.get( "red" ) ), false );
+                            player.sendStatusMessage( new TextComponentTranslation( "pmmo.invalidNumber", args[1] ).setStyle( Skill.getSkillStyle( "red" ) ), false );
                             return;
                         }
                         if( level < 1 )
@@ -188,7 +188,7 @@ public class ToolsCommand extends CommandBase
 
                             if( Double.isNaN( goalLevel ) )
                             {
-                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.invalidNumber", args[2] ).setStyle( XP.skillStyle.get( "red" ) ), false );
+                                player.sendStatusMessage( new TextComponentTranslation( "pmmo.invalidNumber", args[2] ).setStyle( Skill.getSkillStyle( "red" ) ), false );
                                 return;
                             }
 
@@ -216,7 +216,7 @@ public class ToolsCommand extends CommandBase
                             player.sendStatusMessage( new TextComponentTranslation( "pmmo.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dpSoft(level) ), DP.dpSoft(xp) ), false );
                     }
                     else
-                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ), false );
+                        player.sendStatusMessage( new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ), false );
 
                 }
                     return;

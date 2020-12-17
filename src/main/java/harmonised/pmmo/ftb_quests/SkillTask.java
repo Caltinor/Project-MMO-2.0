@@ -21,13 +21,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SkillTask extends Task
 {
     public static TaskType SKILL;
-    public Skill skill;
+    public String skill;
     public double requiredLevel;
 
     public SkillTask( Quest quest )
     {
         super(quest);
-        skill = Skill.MINING;
+        skill = Skill.MINING.toString();
         requiredLevel = 1;
     }
 
@@ -49,7 +49,7 @@ public class SkillTask extends Task
     public void readData(NBTTagCompound nbt)
     {
         super.readData(nbt);
-        skill = Skill.getSkill( nbt.getString( "skill" ) );
+        skill = nbt.getString( "skill" );
         requiredLevel = nbt.getDouble( "requiredLevel" );
     }
 
@@ -65,7 +65,7 @@ public class SkillTask extends Task
     public void readNetData( DataIn buffer)
     {
         super.readNetData(buffer);
-        skill = Skill.getSkill( buffer.readString() );
+        skill = buffer.readString();
         requiredLevel = buffer.readDouble();
     }
 
@@ -74,7 +74,7 @@ public class SkillTask extends Task
     public void getConfig(ConfigGroup config)
     {
         super.getConfig(config);
-        config.addEnum("skill", () -> skill, input -> skill = input, NameMap.create( Skill.INVALID_SKILL, Skill.valuesArray ));
+        config.addEnum("skill", () -> skill, input -> skill = (String) input, NameMap.create( Skill.MINING.toString(), Skill.getSkills() ));
         config.addDouble( "requiredLevel", () -> requiredLevel, input -> requiredLevel = input, 1, 1, FConfig.getConfig( "maxLevel" ) );
 
     }
@@ -108,7 +108,7 @@ public class SkillTask extends Task
         @Override
         public boolean canSubmit( EntityPlayerMP player )
         {
-            return task.skill.getLevel( player ) >= task.requiredLevel;
+            return Skill.getLevel( task.skill, player ) >= task.requiredLevel;
         }
     }
 }

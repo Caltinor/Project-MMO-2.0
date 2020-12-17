@@ -2,15 +2,16 @@ package harmonised.pmmo.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class MessageXp extends MessageBase<MessageXp>
 {
 	public double xp;
 	public double gainedXp;
-	public int skill;
+	public String skill;
 	public boolean skip;
 
-	public MessageXp( double xp, int skill, double gainedXp, boolean skip )
+	public MessageXp( double xp, String skill, double gainedXp, boolean skip )
 	{
 		this.xp = xp;
 		this.gainedXp = gainedXp;
@@ -28,7 +29,7 @@ public class MessageXp extends MessageBase<MessageXp>
 	{
 		xp = buf.readDouble();
 		gainedXp = buf.readDouble();
-		skill = buf.readInt();
+		skill = ByteBufUtils.readUTF8String( buf );
 		skip = buf.readBoolean();
 	}
 
@@ -37,7 +38,7 @@ public class MessageXp extends MessageBase<MessageXp>
 	{
 		buf.writeDouble( xp );
 		buf.writeDouble( gainedXp );
-		buf.writeInt( skill );
+		ByteBufUtils.writeUTF8String( buf, skill );
 		buf.writeBoolean( skip );
 	}
 

@@ -16,7 +16,7 @@ public class packetHandler
         UUID uuid = Minecraft.getMinecraft().player.getUniqueID();
         String name = Minecraft.getMinecraft().player.getName();
         
-        if( packet.skill == 42069 )
+        if( packet.skill.equals( "42069" ) )
         {
             XP.removeOfflineXpUuid( uuid );
             XPOverlayGUI.clearXP();
@@ -33,10 +33,10 @@ public class packetHandler
                 XPOverlayGUI.listOn = true;
 
             if( packet.xp == 0 && packet.gainedXp == 0 )
-                XP.getOfflineXpMap( uuid ).remove( Skill.getSkill( packet.skill ) );
+                XP.getOfflineXpMap( uuid ).remove( packet.skill );
             else
-                XP.getOfflineXpMap( uuid ).put( Skill.getSkill( packet.skill ), packet.xp + packet.gainedXp );
-            XPOverlayGUI.makeXpDrop( packet.xp, Skill.getSkill( packet.skill ), 10000, packet.gainedXp, packet.skip );
+                XP.getOfflineXpMap( uuid ).put( packet.skill, packet.xp + packet.gainedXp );
+            XPOverlayGUI.makeXpDrop( packet.xp, packet.skill, 10000, packet.gainedXp, packet.skip );
         }
     }
 }

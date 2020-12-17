@@ -2,7 +2,6 @@ package harmonised.pmmo.util;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.Skill;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.HashMap;
@@ -11,11 +10,11 @@ import java.util.UUID;
 
 public class NBTHelper
 {
-    public static <T> Map<String, T> MapSkillKeyToString( Map<Skill, T> inMap )
+    public static <T> Map<String, T> MapStringKeyToString( Map<String, T> inMap )
     {
         Map<String, T> outMap = new HashMap<>();
 
-        for( Map.Entry<Skill, T> entry : inMap.entrySet() )
+        for( Map.Entry<String, T> entry : inMap.entrySet() )
         {
             outMap.put( entry.getKey().toString(), entry.getValue() );
         }
@@ -35,20 +34,7 @@ public class NBTHelper
         return map;
     }
 
-    public static Map<Skill, Double> nbtToMapSkill( NBTTagCompound nbt )
-    {
-        Map<Skill, Double> map = new HashMap<>();
-
-        for( String key : nbt.getKeySet() )
-        {
-            if( Skill.getSkill( key ) != Skill.INVALID_SKILL )
-                map.put( Skill.getSkill( key ), nbt.getDouble( key ) );
-        }
-
-        return map;
-    }
-
-    public static NBTTagCompound mapStringToNbt(Map<String, Double> map )
+    public static NBTTagCompound mapStringToNbt( Map<String, Double> map )
     {
         if( map == null )
             return new NBTTagCompound();
@@ -63,40 +49,16 @@ public class NBTHelper
         return nbt;
     }
 
-    public static NBTTagCompound mapStringMapSkillToNbt( Map<String, Map<Skill, Double>> map )
+    public static NBTTagCompound mapStringMapStringToNbt( Map<String, Map<String, Double>> map )
     {
         NBTTagCompound nbt = new NBTTagCompound();
 
-        for( Map.Entry<String, Map<Skill, Double>> entry : map.entrySet() )
+        for( Map.Entry<String, Map<String, Double>> entry : map.entrySet() )
         {
-            nbt.setTag( entry.getKey(), mapSkillToNbt( entry.getValue() ) );
+            nbt.setTag( entry.getKey(), mapStringToNbt( entry.getValue() ) );
         }
 
         return nbt;
-    }
-
-    public static NBTTagCompound mapSkillToNbt( Map<Skill, Double> map )
-    {
-        NBTTagCompound nbt = new NBTTagCompound();
-
-        for( Map.Entry<Skill, Double> entry : map.entrySet() )
-        {
-            nbt.setDouble( entry.getKey().toString(), entry.getValue() );
-        }
-
-        return nbt;
-    }
-
-    public static NBTTagCompound mapUuidSkillToNbt( Map<UUID, Map<Skill, Double>> inMap )
-    {
-        NBTTagCompound outData = new NBTTagCompound();
-
-        for( Map.Entry<UUID, Map<Skill, Double>> entry : inMap.entrySet() )
-        {
-            outData.setTag( entry.getKey().toString(), mapSkillToNbt( entry.getValue() ) );
-        }
-
-        return outData;
     }
 
     public static NBTTagCompound mapUuidStringToNbt( Map<UUID, Map<String, Double>> inMap )
@@ -123,33 +85,21 @@ public class NBTHelper
         return outMap;
     }
 
-    public static Map<UUID, Map<Skill, Double>> nbtToMapUuidSkill( NBTTagCompound inData )
+    public static Map<String, Map<String, Double>> nbtToMapStringString( NBTTagCompound inData )
     {
-        Map<UUID, Map<Skill, Double>> outMap = new HashMap<>();
-
-        for( String uuidKey : inData.getKeySet() )
-        {
-            outMap.put( UUID.fromString( uuidKey ), nbtToMapSkill( inData.getCompoundTag( uuidKey ) ) );
-        }
-
-        return outMap;
-    }
-
-    public static Map<String, Map<Skill, Double>> nbtToMapStringSkill( NBTTagCompound inData )
-    {
-        Map<String, Map<Skill, Double>> outMap = new HashMap<>();
+        Map<String, Map<String, Double>> outMap = new HashMap<>();
 
         for( String key : inData.getKeySet() )
         {
-            outMap.put( key, nbtToMapSkill( inData.getCompoundTag( key ) ) );
+            outMap.put( key, nbtToMapString( inData.getCompoundTag( key ) ) );
         }
 
         return outMap;
     }
 
-    public static Map<UUID, Map<String, Map<Skill, Double>>> nbtToMapStringMapUuidSkill(NBTTagCompound inData )
+    public static Map<UUID, Map<String, Map<String, Double>>> nbtToMapStringMapUuidString( NBTTagCompound inData )
     {
-        Map<UUID, Map<String, Map<Skill, Double>>> outMap = new HashMap<>();
+        Map<UUID, Map<String, Map<String, Double>>> outMap = new HashMap<>();
 
         for( String playerUUIDKey : inData.getKeySet() )
         {
@@ -158,7 +108,7 @@ public class NBTHelper
 
             for( String xpBoostKey : inData.getCompoundTag( playerUUIDKey ).getKeySet() )
             {
-                outMap.get( playerUUID ).put( xpBoostKey, nbtToMapSkill( inData.getCompoundTag( playerUUIDKey ).getCompoundTag( xpBoostKey ) ) );
+                outMap.get( playerUUID ).put( xpBoostKey, nbtToMapString( inData.getCompoundTag( playerUUIDKey ).getCompoundTag( xpBoostKey ) ) );
             }
         }
 
@@ -192,9 +142,9 @@ public class NBTHelper
         return outData;
     }
 
-    public static Map<UUID, Map<Skill, Double>> nbtToXpMaps( NBTTagCompound input )
+    public static Map<UUID, Map<String, Double>> nbtToXpMaps( NBTTagCompound input )
     {
-        Map<UUID, Map<Skill, Double>> output = new HashMap<>();
+        Map<UUID, Map<String, Double>> output = new HashMap<>();
         UUID uuid;
         for( String key1 : input.getKeySet() )
         {
@@ -202,27 +152,25 @@ public class NBTHelper
             output.put( uuid, new HashMap<>() );
             for( String key2 : input.getCompoundTag( key1 ).getKeySet() )
             {
-                output.get( uuid ).put( Skill.getSkill( key2 ), input.getCompoundTag( key1 ).getDouble( key2 ) );
+                output.get( uuid ).put( key2, input.getCompoundTag( key1 ).getDouble( key2 ) );
             }
         }
 
         return output;
     }
 
-    public static NBTTagCompound xpMapsToNbt( Map<UUID, Map<Skill, Double>> input )
+    public static NBTTagCompound xpMapsToNbt( Map<UUID, Map<String, Double>> input )
     {
         NBTTagCompound output = new NBTTagCompound();
-        String key2;
 
         for( UUID key1 : input.keySet() )
         {
             output.setTag( key1.toString(), new NBTTagCompound() );
             output.getCompoundTag( key1.toString() ).setString( "name", PmmoSavedData.get().getName( key1 ) );
-            for( Skill skill : input.get( key1 ).keySet() )
+            for( String skill : input.get( key1 ).keySet() )
             {
-                key2 = skill.toString();
                 Double value = input.get( key1 ).get( skill );
-                output.getCompoundTag( key1.toString() ).setDouble( key2, value );
+                output.getCompoundTag( key1.toString() ).setDouble( skill, value );
             }
         }
 

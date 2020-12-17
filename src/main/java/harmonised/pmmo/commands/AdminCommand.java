@@ -114,79 +114,73 @@ public class AdminCommand extends CommandBase
                         {
                             if( args.length > 2 )
                             {
-                                String skillName = args[2];
-                                Skill skill = Skill.getSkill( skillName );
+                                String skill = args[2];
 
-                                if( !skill.equals( Skill.INVALID_SKILL ) )
+                                if( args.length > 3 )
                                 {
-                                    if( args.length > 3 )
+                                    String type = args[3].toLowerCase();
+
+                                    if( type.equals( "level" ) || type.equals( "xp" ) )
                                     {
-                                        String type = args[3].toLowerCase();
-
-                                        if( type.equals( "level" ) || type.equals( "xp" ) )
+                                        if( args.length > 4 )
                                         {
-                                            if( args.length > 4 )
+                                            double newValue = parseDouble( args[4] );
+
+                                            if( args.length > 5 && args[5].toLowerCase().equals( "false" ) )
+                                                    ignoreBonuses = false;
+
+                                            if( !Double.isNaN( newValue ) )
                                             {
-                                                double newValue = parseDouble( args[4] );
-
-                                                if( args.length > 5 && args[5].toLowerCase().equals( "false" ) )
-                                                        ignoreBonuses = false;
-
-                                                if( !Double.isNaN( newValue ) )
+                                                switch( args[1].toLowerCase() )
                                                 {
-                                                    switch( args[1].toLowerCase() )
+                                                    case "add":
                                                     {
-                                                        case "add":
-                                                        {
-                                                            if( type.equals( "level" ) )
-                                                                skill.addLevel( targetPlayer, newValue, "add level Command", false, ignoreBonuses );
-                                                            else if( type.equals( "xp" ) )
-                                                                skill.addXp( targetPlayer, newValue, "add xp Command", false, ignoreBonuses );
+                                                        if( type.equals( "level" ) )
+                                                            Skill.addLevel( skill, targetPlayer, newValue, "add level Command", false, ignoreBonuses );
+                                                        else if( type.equals( "xp" ) )
+                                                            Skill.addXp( skill, targetPlayer, newValue, "add xp Command", false, ignoreBonuses );
 
-                                                            LOGGER.info( "PMMO Command Add: " + targetPlayerName + " " + skillName + " has had " + newValue + " " + type + " added" );
-                                                        }
-                                                            return;
-
-                                                        case "set":
-                                                        {
-                                                            if( type.equals( "level" ) )
-                                                                skill.setLevel( targetPlayer, newValue );
-                                                            else if( type.equals( "xp" ) )
-                                                                skill.setXp( targetPlayer, newValue );
-
-                                                            LOGGER.info( "PMMO Command Set: " + targetPlayerName + " " + skillName + " has been set to " + newValue + " " + type );
-                                                        }
-                                                            return;
+                                                        LOGGER.info( "PMMO Command Add: " + targetPlayerName + " " + skill + " has had " + newValue + " " + type + " added" );
                                                     }
+                                                        return;
+
+                                                    case "set":
+                                                    {
+                                                        if( type.equals( "level" ) )
+                                                            Skill.setLevel( skill, targetPlayer, newValue );
+                                                        else if( type.equals( "xp" ) )
+                                                            Skill.setXp( skill, targetPlayer, newValue );
+
+                                                        LOGGER.info( "PMMO Command Set: " + targetPlayerName + " " + skill + " has been set to " + newValue + " " + type );
+                                                    }
+                                                        return;
                                                 }
-                                                else
-                                                    PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.notANumber", args[4] ).setStyle( XP.skillStyle.get( "red" ) ) );
                                             }
                                             else
-                                                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                                                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.notANumber", args[4] ).setStyle( Skill.getSkillStyle( "red" ) ) );
                                         }
                                         else
-                                            PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.invalidChoice", args[3] ).setStyle( XP.textStyle.get( "red" ) ) );
+                                            PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ) );
                                     }
                                     else
-                                        PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                                        PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.invalidChoice", args[3] ).setStyle( XP.textStyle.get( "red" ) ) );
                                 }
                                 else
-                                    PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.invalidSkill", args[1] ).setStyle( XP.skillStyle.get( "red" ) ) );
+                                    PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ) );
                             }
                             else
-                                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ) );
                         }
                         return;
 
                         case "clear":
                         {
-                            Set<Skill> skills = PmmoSavedData.get().getXpMap( targetPlayer.getUniqueID() ).keySet();
-                            for( Skill theSkill : skills )
+                            Set<String> skills = PmmoSavedData.get().getXpMap( targetPlayer.getUniqueID() ).keySet();
+                            for( String theSkill : skills )
                             {
-                                theSkill.setXp( targetPlayer, 0D );
+                                Skill.setXp( theSkill, targetPlayer, 0D );
                             }
-                            NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0, true ), targetPlayer );
+                            NetworkHandler.sendToPlayer( new MessageXp( 0f, "42069", 0, true ), targetPlayer );
                             targetPlayer.sendStatusMessage( new TextComponentTranslation( "pmmo.skillsCleared" ), false );
 
                             LOGGER.info( "PMMO Command Clear: " + targetPlayerName + " has had their stats wiped!" );
@@ -201,10 +195,10 @@ public class AdminCommand extends CommandBase
                     }
                 }
                 else
-                    PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.skillStyle.get( "red" ) ) );
+                    PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( Skill.getSkillStyle( "red" ) ) );
             }
             else
-                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.invalidPlayer", args[0] ).setStyle( XP.skillStyle.get( "red" ) ) );
+                PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.invalidPlayer", args[0] ).setStyle( Skill.getSkillStyle( "red" ) ) );
         }
         else
             PmmoCommand.reply( sender, new TextComponentTranslation( "pmmo.missingNextArgument" ).setStyle( XP.textStyle.get( "red" ) ) );

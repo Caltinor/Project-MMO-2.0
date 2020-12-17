@@ -99,7 +99,7 @@ public class BlockBrokenHandler
 
             for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_BREAK ).get( block.getRegistryName().toString() ).entrySet() )
             {
-                startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
+                startLevel = Skill.getLevel( entry.getKey(), player );
 
                 double entryValue = entry.getValue();
 
@@ -135,8 +135,7 @@ public class BlockBrokenHandler
         double blockHardnessLimitForBreaking = FConfig.blockHardnessLimitForBreaking;
         boolean wasPlaced = ChunkDataHandler.checkPos( world, pos ) != null;
         ItemStack toolUsed = player.getHeldItemMainhand();
-        Skill skill = XP.getSkill( state );
-        String skillName = skill.toString();
+        String skill = XP.getSkill( state );
 //			String regKey = block.getRegistryName().toString();
         double hardness = state.getBlockHardness( event.getWorld(), pos );
         if( hardness > blockHardnessLimitForBreaking )
@@ -158,19 +157,19 @@ public class BlockBrokenHandler
         String awardMsg = "";
         switch( XP.getSkill( material ) )
         {
-            case MINING:
+            case "mining":
                 awardMsg = "Mining";
                 break;
 
-            case WOODCUTTING:
+            case "woodcutting":
                 awardMsg = "Chopping";
                 break;
 
-            case EXCAVATION:
+            case "excavation":
                 awardMsg = "Digging";
                 break;
 
-            case FARMING:
+            case "farming":
                 awardMsg = "Harvesting";
                 break;
 
@@ -218,7 +217,7 @@ public class BlockBrokenHandler
             drops = new ArrayList<>();
 
         Map<String, Double> award = new HashMap<>();
-        award.put( skillName, hardness );
+        award.put( skill, hardness );
 
         int dropItemCount = 0;
 
@@ -285,7 +284,7 @@ public class BlockBrokenHandler
             }
 
             totalDrops = rewardable + dropsLeft;
-            award.put( skillName, hardness );
+            award.put( skill, hardness );
             award = XP.addMapsAnyDouble( award, xpMap );
             XP.multiplyMapAnyDouble( award, totalDrops );
 
@@ -294,7 +293,7 @@ public class BlockBrokenHandler
         else if( block instanceof BlockCrops && drops.size() > 0 ) //IS PLANT
         {
             award = new HashMap<>();
-            award.put( skillName, hardness );
+            award.put( skill, hardness );
 
             int totalExtraDrops;
 
@@ -339,7 +338,7 @@ public class BlockBrokenHandler
         if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) > 0 )
         {
             award = new HashMap<>();
-            award.put( skillName, hardness );
+            award.put( skill, hardness );
 
             boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
 
@@ -431,7 +430,7 @@ public class BlockBrokenHandler
             if( !wasPlaced )			//EXTRA DROPS
             {
                 award = new HashMap<>();
-                award.put( skillName, hardness );
+                award.put( skill, hardness );
 
                 double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) / 100D;
 
@@ -464,7 +463,7 @@ public class BlockBrokenHandler
             {
                 Map<String, Map<String, Double>> treasurePool = JsonConfig.data2.get( JType.TREASURE ).get( block.getRegistryName().toString() );
                 Map<String, Double> treasureItemMap;
-                int excavationLevel = Skill.EXCAVATION.getLevel( player );
+                int excavationLevel = Skill.getLevel( Skill.EXCAVATION.toString(), player );
                 double chance;
 
                 for( Map.Entry<String, Map<String, Double>> treasureItem : treasurePool.entrySet() )
@@ -503,12 +502,9 @@ public class BlockBrokenHandler
         if( gap > 0 )
             player.getHeldItemMainhand().damageItem( gap - 1, player );
 
-        Skill awardSkill;
-
-        for( String awardSkillName : award.keySet() )
+        for( String awardSkill : award.keySet() )
         {
-            awardSkill = Skill.getSkill( awardSkillName );
-            XP.awardXp( (EntityPlayerMP) player, awardSkill, awardMsg, award.get( awardSkillName ) / (gap + 1), !skill.equals( awardSkill ), false, false );
+            XP.awardXp( (EntityPlayerMP) player, awardSkill, awardMsg, award.get( awardSkill ) / (gap + 1), !skill.equals( awardSkill ), false, false );
         }
     }
 

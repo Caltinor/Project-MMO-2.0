@@ -33,9 +33,17 @@ public class EventHandler
 	}
 
 	@SubscribeEvent
-	public static void blockPlaced( BlockEvent.MultiPlaceEvent event )
+	public static void blockPlaced( BlockEvent.EntityMultiPlaceEvent event )
 	{
-		BlockPlacedHandler.handlePlaced( event );
+		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), event.getWorld(), event.getPos() ) )
+			event.setCanceled( true );
+	}
+
+	@SubscribeEvent
+	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
+	{
+		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), event.getWorld(), event.getPos() ) )
+			event.setCanceled( true );
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
