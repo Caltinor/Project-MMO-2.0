@@ -528,6 +528,10 @@ public class FConfig
     @Config.Name( "xpDropsShowXpBar" )
     public static boolean xpDropsShowXpBar = true;
 
+    @Config.Comment( "Should you be notified by what new features you have access to on level ups?" )
+    @Config.Name( "showLevelUpUnlocks" )
+    public static boolean showLevelUpUnlocks = true;
+
     //Breaking Speed
     @Config.Comment( "Minimum Breaking Speed (1 is Original speed, 0.5 is half)" )
     @Config.Name( "minBreakSpeed" )
