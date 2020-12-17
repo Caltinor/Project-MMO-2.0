@@ -117,6 +117,7 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("xpLeftDisplayAlwaysOn", "", "", 0, 1, prefsMap.getOrDefault( "xpLeftDisplayAlwaysOn", 0D ), 0D, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("lvlUpScreenshot", "", "", 0, 1, prefsMap.getOrDefault( "lvlUpScreenshot", 0D ), 0D, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("xpDropsShowXpBar", "", "", 0, 1, prefsMap.getOrDefault( "xpDropsShowXpBar", 1D ), 1D, false, true, false, true ) );
+                prefsEntries.add( new PrefsEntry("showLevelUpUnlocks", "", "", 0, 1, prefsMap.getOrDefault( "showLevelUpUnlocks", 1D ), 1D, false, true, false, true ) );
                 break;
         }
 

@@ -222,6 +222,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> lvlUpScreenshot;
         public ConfigHelper.ConfigValueListener<Boolean> lvlUpScreenshotShowSkills;
         public ConfigHelper.ConfigValueListener<Boolean> xpDropsShowXpBar;
+        public ConfigHelper.ConfigValueListener<Boolean> showLevelUpUnlocks;
 
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
@@ -948,6 +949,11 @@ public class Config
                         .comment( "Should Xp Drops make the Xp Bar pop up?" )
                         .translation( "pmmo.xpDropsShowXpBar" )
                         .define( "xpDropsShowXpBar", true ) );
+
+                this.showLevelUpUnlocks = subscriber.subscribe(builder
+                        .comment( "Should you be notified by what new features you have access to on level ups?" )
+                        .translation( "pmmo.showLevelUpUnlocks" )
+                        .define( "showLevelUpUnlocks", true ) );
 
                 builder.pop();
             }
