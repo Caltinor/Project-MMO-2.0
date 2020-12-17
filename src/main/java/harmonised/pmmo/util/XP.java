@@ -57,65 +57,59 @@ public class XP
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
-	private static Map<Skill, Integer> skillColors = new HashMap<>();
 	public static Set<UUID> isVeining = new HashSet<>();
-	public static Map<Skill, Style> skillStyle = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
 	public static Map<UUID, String> playerNames = new HashMap<>();
 	public static Map<String, UUID> playerUUIDs = new HashMap<>();
-	public static Map<UUID, Map<Skill, Double>> offlineXp = new HashMap<>();
+	public static Map<UUID, Map<String, Double>> offlineXp = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
 	private static int debugInt = 0;
 
 	public static void initValues()
 	{
 ////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
-		skillColors.put( Skill.INVALID_SKILL, 0xffffff );
-		skillColors.put( Skill.MINING, 0x00ffff );
-		skillColors.put( Skill.BUILDING, 0x00ffff );
-		skillColors.put( Skill.EXCAVATION, 0xe69900 );
-		skillColors.put( Skill.WOODCUTTING, 0xffa31a );
-		skillColors.put( Skill.FARMING, 0x00e600 );
-		skillColors.put( Skill.AGILITY, 0x66cc66 );
-		skillColors.put( Skill.ENDURANCE, 0xcc0000 );
-		skillColors.put( Skill.COMBAT, 0xff3300 );
-		skillColors.put( Skill.ARCHERY, 0xffff00 );
-		skillColors.put( Skill.SMITHING, 0xf0f0f0 );
-		skillColors.put( Skill.FLYING, 0xccccff );
-		skillColors.put( Skill.SWIMMING, 0x3366ff );
-		skillColors.put( Skill.FISHING, 0x00ccff );
-		skillColors.put( Skill.CRAFTING, 0xff9900 );
-		skillColors.put( Skill.MAGIC, 0x0000ff );
-		skillColors.put( Skill.SLAYER, 0xffffff );
-		skillColors.put( Skill.HUNTER, 0xcf7815 );
-		skillColors.put( Skill.FLETCHING, 0xff9700 );
-		skillColors.put( Skill.TAMING, 0xffffff );
-		skillColors.put( Skill.ENGINEERING, 0xffffff );
-		skillColors.put( Skill.COOKING, 0xe69900 );
-		skillColors.put( Skill.ALCHEMY, 0xe69900 );
+		Skill.setSkill( Skill.INVALID_SKILL.toString(), 0xffffff );
+		Skill.setSkill( Skill.MINING.toString(), 0x00ffff );
+		Skill.setSkill( Skill.BUILDING.toString(), 0x00ffff );
+		Skill.setSkill( Skill.EXCAVATION.toString(), 0xe69900 );
+		Skill.setSkill( Skill.WOODCUTTING.toString(), 0xffa31a );
+		Skill.setSkill( Skill.FARMING.toString(), 0x00e600 );
+		Skill.setSkill( Skill.AGILITY.toString(), 0x66cc66 );
+		Skill.setSkill( Skill.ENDURANCE.toString(), 0xcc0000 );
+		Skill.setSkill( Skill.COMBAT.toString(), 0xff3300 );
+		Skill.setSkill( Skill.ARCHERY.toString(), 0xffff00 );
+		Skill.setSkill( Skill.SMITHING.toString(), 0xf0f0f0 );
+		Skill.setSkill( Skill.FLYING.toString(), 0xccccff );
+		Skill.setSkill( Skill.SWIMMING.toString(), 0x3366ff );
+		Skill.setSkill( Skill.FISHING.toString(), 0x00ccff );
+		Skill.setSkill( Skill.CRAFTING.toString(), 0xff9900 );
+		Skill.setSkill( Skill.MAGIC.toString(), 0x0000ff );
+		Skill.setSkill( Skill.SLAYER.toString(), 0xffffff );
+		Skill.setSkill( Skill.HUNTER.toString(), 0xcf7815 );
+		Skill.setSkill( Skill.TAMING.toString(), 0xffffff );
+		Skill.setSkill( Skill.COOKING.toString(), 0xe69900 );
+		Skill.setSkill( Skill.ALCHEMY.toString(), 0xe69900 );
 
-		skillStyle.put( Skill.MINING, new Style().setColor( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.BUILDING, new Style().setColor( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.EXCAVATION, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.WOODCUTTING, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FARMING, new Style().setColor( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.AGILITY, new Style().setColor( TextFormatting.GREEN ) );
-		skillStyle.put( Skill.ENDURANCE, new Style().setColor( TextFormatting.DARK_RED ) );
-		skillStyle.put( Skill.COMBAT, new Style().setColor( TextFormatting.RED ) );
-		skillStyle.put( Skill.ARCHERY, new Style().setColor( TextFormatting.YELLOW ) );
-		skillStyle.put( Skill.SMITHING, new Style().setColor( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.FLYING, new Style().setColor( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.SWIMMING, new Style().setColor( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.FISHING, new Style().setColor( TextFormatting.AQUA ) );
-		skillStyle.put( Skill.CRAFTING, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.MAGIC, new Style().setColor( TextFormatting.BLUE ) );
-		skillStyle.put( Skill.SLAYER, new Style().setColor( TextFormatting.GRAY ) );
-		skillStyle.put( Skill.HUNTER, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.FLETCHING, new Style().setColor( TextFormatting.DARK_GREEN ) );
-		skillStyle.put( Skill.TAMING, new Style().setColor( TextFormatting.WHITE ) );
-		skillStyle.put( Skill.ENGINEERING, new Style().setColor( TextFormatting.WHITE ) );
-		skillStyle.put( Skill.COOKING, new Style().setColor( TextFormatting.GOLD ) );
-		skillStyle.put( Skill.ALCHEMY, new Style().setColor( TextFormatting.GOLD ) );
+		Skill.setSkillStyle( Skill.MINING.toString(), new Style().setColor( TextFormatting.AQUA ) );
+		Skill.setSkillStyle( Skill.BUILDING.toString(), new Style().setColor( TextFormatting.AQUA ) );
+		Skill.setSkillStyle( Skill.EXCAVATION.toString(), new Style().setColor( TextFormatting.GOLD ) );
+		Skill.setSkillStyle( Skill.WOODCUTTING.toString(), new Style().setColor( TextFormatting.GOLD ) );
+		Skill.setSkillStyle( Skill.FARMING.toString(), new Style().setColor( TextFormatting.GREEN ) );
+		Skill.setSkillStyle( Skill.AGILITY.toString(), new Style().setColor( TextFormatting.GREEN ) );
+		Skill.setSkillStyle( Skill.ENDURANCE.toString(), new Style().setColor( TextFormatting.DARK_RED ) );
+		Skill.setSkillStyle( Skill.COMBAT.toString(), new Style().setColor( TextFormatting.RED ) );
+		Skill.setSkillStyle( Skill.ARCHERY.toString(), new Style().setColor( TextFormatting.YELLOW ) );
+		Skill.setSkillStyle( Skill.SMITHING.toString(), new Style().setColor( TextFormatting.GRAY ) );
+		Skill.setSkillStyle( Skill.FLYING.toString(), new Style().setColor( TextFormatting.GRAY ) );
+		Skill.setSkillStyle( Skill.SWIMMING.toString(), new Style().setColor( TextFormatting.AQUA ) );
+		Skill.setSkillStyle( Skill.FISHING.toString(), new Style().setColor( TextFormatting.AQUA ) );
+		Skill.setSkillStyle( Skill.CRAFTING.toString(), new Style().setColor( TextFormatting.GOLD ) );
+		Skill.setSkillStyle( Skill.MAGIC.toString(), new Style().setColor( TextFormatting.BLUE ) );
+		Skill.setSkillStyle( Skill.SLAYER.toString(), new Style().setColor( TextFormatting.GRAY ) );
+		Skill.setSkillStyle( Skill.HUNTER.toString(), new Style().setColor( TextFormatting.GOLD ) );
+		Skill.setSkillStyle( Skill.TAMING.toString(), new Style().setColor( TextFormatting.WHITE ) );
+		Skill.setSkillStyle( Skill.COOKING.toString(), new Style().setColor( TextFormatting.GOLD ) );
+		Skill.setSkillStyle( Skill.ALCHEMY.toString(), new Style().setColor( TextFormatting.GOLD ) );
 
 //		skillStyle.put(Skill.MINING, TextFormatting.AQUA );
 //		skillStyle.put( Skill.BUILDING, TextFormatting.AQUA );
@@ -201,22 +195,17 @@ public class XP
 		materialHarvestTool.put( Material.SPONGE, "shears" );
 	}
 
-	public static Style getSkillStyle( Skill skill )
-	{
-		return skillStyle.getOrDefault( skill, new Style() );
-	}
-
-	public static Skill getSkill( Material material )
+	public static String getSkill( Material material )
 	{
 		return getSkillFromTool( XP.correctHarvestTool( material ) );
 	}
 
-	public static Skill getSkill( BlockState state )
+	public static String getSkill( BlockState state )
 	{
 		return getSkill( state.getMaterial() );
 	}
 
-//	public static Skill getSkill( Block block )
+//	public static String getSkill( Block block )
 //	{
 //		if( block.getTags().contains( getResLoc(  "forge:ores") ) )
 //			return Skill.MINING;
@@ -228,30 +217,30 @@ public class XP
 //			return Skill.INVALID_SKILL;
 //	}
 
-	public static Skill getSkillFromTool( String tool )
+	public static String getSkillFromTool( String tool )
 	{
 		if( tool == null )
-			return Skill.INVALID_SKILL;
+			return Skill.INVALID_SKILL.toString();
 
 		switch( tool )
 		{
 			case "pickaxe":
-				return Skill.MINING;
+				return Skill.MINING.toString();
 
 			case "shovel":
-				return Skill.EXCAVATION;
+				return Skill.EXCAVATION.toString();
 
 			case "axe":
-				return Skill.WOODCUTTING;
+				return Skill.WOODCUTTING.toString();
 
 			case "hoe":
-				return Skill.FARMING;
+				return Skill.FARMING.toString();
 
 			case "shears":
-				return Skill.CRAFTING;
+				return Skill.CRAFTING.toString();
 
 			default:
-				return Skill.INVALID_SKILL;
+				return Skill.INVALID_SKILL.toString();
 		}
 	}
 
@@ -273,11 +262,6 @@ public class XP
 		}
 
 		return theMap;
-	}
-
-	public static Integer getSkillColor( Skill skill )
-	{
-		return skillColors.getOrDefault( skill, 0xffffff );
 	}
 
 	public static String correctHarvestTool(Material material)
@@ -425,32 +409,32 @@ public class XP
 		if( JsonConfig.data.get( JType.REQ_BREAK ).containsKey( resLoc.toString() ) )
 			highestReq = JsonConfig.data.get( JType.REQ_BREAK ).get( resLoc.toString() ).entrySet().stream().map(a -> doubleObjectToInt( a.getValue() ) ).reduce( 0, Math::max );
 		int startLevel;
-		Skill skill;
+		String skill;
 
 		switch( jType )
 		{
 			case INFO_ORE:
-				skill = Skill.MINING;
+				skill = Skill.MINING.toString();
 				break;
 
 			case INFO_LOG:
-				skill = Skill.WOODCUTTING;
+				skill = Skill.WOODCUTTING.toString();
 				break;
 
 			case INFO_PLANT:
-				skill = Skill.FARMING;
+				skill = Skill.FARMING.toString();
 				break;
 
 			case INFO_SMELT:
-				skill = Skill.SMITHING;
+				skill = Skill.SMITHING.toString();
 				break;
 
 			case INFO_COOK:
-				skill = Skill.COOKING;
+				skill = Skill.COOKING.toString();
 				break;
 
 			case INFO_BREW:
-				skill = Skill.ALCHEMY;
+				skill = Skill.ALCHEMY.toString();
 				break;
 
 			default:
@@ -458,7 +442,7 @@ public class XP
 				return 0;
 		}
 
-		startLevel = offline ? XP.getOfflineLevel( skill, uuid ) : skill.getLevel( uuid );
+		startLevel = offline ? XP.getOfflineLevel( skill, uuid ) : Skill.getLevel( skill, uuid );
 
 		if( JsonConfig.data.get( jType ).containsKey( regKey ) && JsonConfig.data.get( jType ).get( regKey ).containsKey( "extraChance" ) )
 			extraChancePerLevel = JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" );
@@ -548,11 +532,11 @@ public class XP
 
 	public static float getPowerLevel( UUID uuid )
 	{
-		int enduranceLevel = Skill.ENDURANCE.getLevel( uuid );
+		int enduranceLevel = Skill.getLevel( Skill.ENDURANCE.toString(), uuid );
 
-		int combatLevel = Skill.COMBAT.getLevel( uuid );
-		int archeryLevel = Skill.ARCHERY.getLevel( uuid );
-		int magicLevel = Skill.MAGIC.getLevel( uuid );
+		int combatLevel = Skill.getLevel( Skill.COMBAT.toString(), uuid );
+		int archeryLevel = Skill.getLevel( Skill.ARCHERY.toString(), uuid );
+		int magicLevel = Skill.getLevel( Skill.MAGIC.toString(), uuid );
 
 		int maxOffensive = combatLevel;
 		if( maxOffensive < archeryLevel )
@@ -621,7 +605,7 @@ public class XP
 
 	public static void syncPlayerXpBoost( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapSkillToNbt( Config.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( Config.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayerData3( PlayerEntity player )
@@ -698,7 +682,7 @@ public class XP
 	public static void syncPlayer( PlayerEntity player )
 	{
 //    	UUID uuid = player.getUniqueID();
-//        CompoundNBT xpTag 		 = NBTHelper.mapSkillToNbt ( Config.getXpMap( player ) );
+//        CompoundNBT xpTag 		 = NBTHelper.mapStringToNbt ( Config.getXpMap( player ) );
 		CompoundNBT prefsTag = NBTHelper.mapStringToNbt( Config.getPreferencesMap( player ) );
 		CompoundNBT abilitiesTag = NBTHelper.mapStringToNbt( Config.getAbilitiesMap( player ) );
 
@@ -706,14 +690,14 @@ public class XP
 		syncPlayerXpBoost( player );
 		updateRecipes( (ServerPlayerEntity) player );
 
-		NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0f, true ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageXp( 0f, "42069", 0f, true ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
 		AttributeHandler.updateAll( player );
 
-		for( Map.Entry<Skill, Double> entry : Config.getXpMap( player ).entrySet() )
+		for( Map.Entry<String, Double> entry : Config.getXpMap( player ).entrySet() )
 		{
-			NetworkHandler.sendToPlayer( new MessageXp( entry.getValue(), entry.getKey().getValue(), 0, true ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageXp( entry.getValue(), entry.getKey(), 0, true ), (ServerPlayerEntity) player );
 		}
 	}
 
@@ -787,7 +771,7 @@ public class XP
 			{
 				for( Map.Entry<String, Double> entry : reqMap.entrySet() )
 				{
-					startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
+					startLevel = Skill.getLevel( entry.getKey(), player );
 
 					if( startLevel < entry.getValue() )
 						failedReq = true;
@@ -952,7 +936,7 @@ public class XP
 		return itemXpMap;
 	}
 
-	public static double getStackXpBoost(PlayerEntity player, ItemStack itemStack, String skillName, boolean type /*false = worn, true = held*/ )
+	public static double getStackXpBoost(PlayerEntity player, ItemStack itemStack, String skill, boolean type /*false = worn, true = held*/ )
 	{
 		if( itemStack == null || itemStack.isEmpty() )
 			return 0;
@@ -964,11 +948,11 @@ public class XP
 		String regName = item.getRegistryName().toString();
 		Map<String, Double> itemXpMap = JsonConfig.data.get( jType ).get( regName );
 
-		if( itemXpMap != null && itemXpMap.containsKey( skillName ) )
+		if( itemXpMap != null && itemXpMap.containsKey( skill ) )
 		{
 			if( type || checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
 			{
-				boost = itemXpMap.get( skillName );
+				boost = itemXpMap.get( skill );
 				if( Config.forgeConfig.scaleXpBoostByDurability.get() && itemStack.isDamageable() )
 					boost *= getXpBoostDurabilityMultiplier( itemStack );
 			}
@@ -977,12 +961,12 @@ public class XP
 		return boost;
 	}
 
-	public static double getGlobalMultiplier( Skill skill )
+	public static double getGlobalMultiplier( String skill )
 	{
 		return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill.toString(), 1D );
 	}
 
-	public static double getDimensionMultiplier(Skill skill, PlayerEntity player )
+	public static double getDimensionMultiplier(String skill, PlayerEntity player )
 	{
 		try
 		{
@@ -995,11 +979,11 @@ public class XP
 		}
 	}
 
-	public static double getDifficultyMultiplier( PlayerEntity player, Skill skill )
+	public static double getDifficultyMultiplier( PlayerEntity player, String skill )
 	{
 		double difficultyMultiplier = 1;
 
-		if( skill == Skill.COMBAT || skill == Skill.ARCHERY || skill == Skill.ENDURANCE )
+		if( skill.equals( Skill.COMBAT.toString() ) || skill.equals( Skill.ARCHERY.toString() ) || skill.equals( Skill.ENDURANCE.toString() ) )
 		{
 			switch( player.world.getDifficulty() )
 			{
@@ -1027,14 +1011,13 @@ public class XP
 		return difficultyMultiplier;
 	}
 
-	public static double getItemBoost( PlayerEntity player, Skill skill )
+	public static double getItemBoost( PlayerEntity player, String skill )
 	{
 		if( player.getHeldItemMainhand().getItem().getRegistryName() == null )
 			return 0;
 
 		double itemBoost = 0;
-
-		String skillName = skill.toString().toLowerCase();
+		skill = skill.toLowerCase();
 		PlayerInventory inv = player.inventory;
 
 		if( Curios.isLoaded() )
@@ -1046,23 +1029,23 @@ public class XP
 			{
 				for (int i = 0; i < value.getSlots(); i++)
 				{
-					itemBoost += getStackXpBoost( player, value.getStackInSlot(i), skillName, false );
+					itemBoost += getStackXpBoost( player, value.getStackInSlot(i), skill, false );
 				}
 			};
 		}
 
-		itemBoost += getStackXpBoost( player, player.getHeldItemMainhand(), skillName, true );
+		itemBoost += getStackXpBoost( player, player.getHeldItemMainhand(), skill, true );
 
 		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 39 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 39 ), skill, false );
 		if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 38 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 38 ), skill, false );
 		if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 37 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 37 ), skill, false );
 		if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 36 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 36 ), skill, false );
 		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 40 ), skillName, false );
+			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 40 ), skill, false );
 
 		return itemBoost;
 	}
@@ -1072,13 +1055,13 @@ public class XP
 		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimKey, new HashMap<>() );
 	}
 
-	public static double getDimensionBoost( PlayerEntity player, Skill skill )
+	public static double getDimensionBoost( PlayerEntity player, String skill )
 	{
 		String dimensionKey = player.world.getDimension().getType().getRegistryName().toString();
 		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill.toString(), 0D );
 	}
 
-	public static double getGlobalBoost( Skill skill )
+	public static double getGlobalBoost( String skill )
 	{
 		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill.toString(), 0D );
 	}
@@ -1115,7 +1098,7 @@ public class XP
 		return biomeBoosts;
 	}
 
-	public static double getMultiplier( PlayerEntity player, Skill skill )
+	public static double getMultiplier( PlayerEntity player, String skill )
 	{
 		double multiplier = Config.forgeConfig.globalMultiplier.get();
 
@@ -1142,52 +1125,14 @@ public class XP
 		return Math.sqrt( Math.pow( ( p1.getX() - p2.getX() ), 2 ) + Math.pow( ( p1.getZ() - p2.getZ() ), 2 ) );
 	}
 
-	public static int getMaxVein( PlayerEntity player, Skill skill )
+	public static void awardXp( ServerPlayerEntity player, String skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
 	{
-		int maxVein = 0;
-		int level = skill.getLevel( player ) - 1;
-
-		switch( skill )
-		{
-			case MINING:
-				maxVein = level / 5;
-				break;
-
-			case WOODCUTTING:
-				maxVein = level / 2;
-				break;
-
-			case EXCAVATION:
-				maxVein = level;
-				break;
-
-			case FARMING:
-				maxVein = level;
-				break;
-		}
-
-		return maxVein;
-	}
-
-	public static void awardXp( ServerPlayerEntity player, Skill skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
-	{
-//		if( !(player instanceof ServerPlayerEntity) )
-//		{
-//			LOGGER.error( "NOT ServerPlayerEntity PLAYER XP AWARD ATTEMPTED! THIS SHOULD NOT HAPPEN! SOURCE: " + sourceName + ", SKILL: " + skill.name() + ", AMOUNT: " + amount + ", CLASS: " + player.getClass().getName().toString() );
-//			return;
-//		}
+		skill = skill.toLowerCase();
 
 		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
 			return;
 
-		if( skill.getValue() == 0 )
-		{
-			LOGGER.error( "INVALID SKILL AT AWARD XP! SOURCE: " + sourceName + ", AMOUNT: " + amount );
-			return;
-		}
-
 		PmmoSavedData pmmoSavedData = PmmoSavedData.get();
-		String skillName = skill.name().toLowerCase();
 		UUID uuid = player.getUniqueID();
 
 		if( !causedByParty )
@@ -1212,8 +1157,8 @@ public class XP
 			amount *= getMultiplier( player, skill );
 
 		String playerName = player.getDisplayName().getString();
-		int startLevel = skill.getLevel( uuid );
-		double startXp = skill.getXp( uuid );
+		int startLevel = Skill.getLevel( skill, uuid );
+		double startXp = Skill.getXp( skill, uuid );
 		double maxXp = Config.getConfig( "maxXp" );
 
 		if( startXp >= 2000000000 )
@@ -1221,8 +1166,8 @@ public class XP
 
 		if( startXp + amount >= 2000000000 )
 		{
-			sendMessage( skillName + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-			LOGGER.info( player.getDisplayName().getString() + " " + skillName + " 2b cap reached" );
+			sendMessage( skill + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
+			LOGGER.info( player.getDisplayName().getString() + " " + skill + " 2b cap reached" );
 			amount = 2000000000 - startXp;
 		}
 
@@ -1231,7 +1176,7 @@ public class XP
 
 		pmmoSavedData.addXp( skill, uuid, amount );
 
-		int currLevel = skill.getLevel( uuid );
+		int currLevel = Skill.getLevel( skill, uuid );
 
 		if( startLevel != currLevel ) //Level Up! Or Down?
 		{
@@ -1253,9 +1198,9 @@ public class XP
 				}
 			}
 
-			if( JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() ) != null )
+			if( JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skill.toLowerCase() ) != null )
 			{
-				Map<String, Double> commandMap = JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skillName.toLowerCase() );
+				Map<String, Double> commandMap = JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skill.toLowerCase() );
 
 				for( Map.Entry<String, Double> entry : commandMap.entrySet() )
 				{
@@ -1266,7 +1211,7 @@ public class XP
 						try
 						{
 							player.getServer().getCommandManager().getDispatcher().execute( command, player.getServer().getCommandSource() );
-							LOGGER.info( "Executing command \"" + command + "\"\nTrigger: " + playerName + " level up from " + startLevel + " to " + currLevel + " in " + skill.name() + ", trigger level " + commandLevel );
+							LOGGER.info( "Executing command \"" + command + "\"\nTrigger: " + playerName + " level up from " + startLevel + " to " + currLevel + " in " + skill + ", trigger level " + commandLevel );
 						}
 						catch( CommandSyntaxException e )
 						{
@@ -1277,14 +1222,14 @@ public class XP
 			}
 		}
 
-		NetworkHandler.sendToPlayer( new MessageXp( startXp, skill.getValue(), amount, skip ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageXp( startXp, skill, amount, skip ), (ServerPlayerEntity) player );
 		if( !skip )
-			LOGGER.debug( playerName + " +" + amount + "xp in: "  + skillName + " for: " + sourceName + " total xp: " + skill.getXp( uuid ) );
+			LOGGER.debug( playerName + " +" + amount + "xp in: "  + skill + " for: " + sourceName + " total xp: " + Skill.getXp( skill, uuid ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
-			sendMessage( skillName + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-			LOGGER.info( playerName + " " + skillName + " max startLevel reached" );
+			sendMessage( skill + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
+			LOGGER.info( playerName + " " + skill + " max startLevel reached" );
 		}
 	}
 
@@ -1302,7 +1247,7 @@ public class XP
 	{
 		for( Map.Entry<String, Double> entry : map.entrySet() )
 		{
-			Skill.getSkill( entry.getKey() ).addXp( uuid, (double) entry.getValue(), sourceName, skip, ignoreBonuses );
+			Skill.addXp( entry.getKey(), uuid, (double) entry.getValue(), sourceName, skip, ignoreBonuses );
 		}
 	}
 
@@ -1310,7 +1255,7 @@ public class XP
 	{
 		for( Map.Entry<String, Double> entry : map.entrySet() )
 		{
-			Skill.getSkill( entry.getKey() ).addXp( uuid, entry.getValue(), sourceName, skip, ignoreBonuses );
+			Skill.addXp( entry.getKey(), uuid, entry.getValue(), sourceName, skip, ignoreBonuses );
 		}
 	}
 
@@ -1335,7 +1280,7 @@ public class XP
 		}
 	}
 
-	public static void scanUnlocks( int level, Skill skill )
+	public static void scanUnlocks( int level, String skill )
 	{
 
 	}
@@ -1364,7 +1309,7 @@ public class XP
 			if( reqs != null )
 			{
 				gap = (int) Math.floor( reqs.entrySet().stream()
-						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), Skill.getSkill( entry.getKey() ).getLevel( player ) ) )
+						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), Skill.getLevel( entry.getKey(), player ) ) )
 						.reduce( 0, Math::max ) );
 			}
 		}
@@ -1387,12 +1332,12 @@ public class XP
 		return new Vec3d( pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D );
 	}
 
-	public static void spawnRocket( World world, BlockPos pos, Skill skill )
+	public static void spawnRocket( World world, BlockPos pos, String skill )
 	{
 		spawnRocket( world, new Vec3d( pos.getX(), pos.getY(), pos.getZ() ), skill );
 	}
 
-	public static void spawnRocket( World world, Vec3d pos, Skill skill )
+	public static void spawnRocket( World world, Vec3d pos, String skill )
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		CompoundNBT fw = new CompoundNBT();
@@ -1400,7 +1345,7 @@ public class XP
 		CompoundNBT l = new CompoundNBT();
 
 		int[] colors = new int[1];
-		colors[0] = getSkillColor( skill );
+		colors[0] = Skill.getSkillColor( skill );
 //		int[] fadeColors = {0xff0000, 0x00ff00, 0x0000ff};
 
 		l.putInt( "Flicker", 1 );
@@ -1457,7 +1402,7 @@ public class XP
 	public static Map<String, Double> getEnchantUseReq( ResourceLocation resLoc, int enchantLevel )
 	{
 		Map<String, Double> reqs = new HashMap<>();
-		String skillName;
+		String skill;
 		int highestSpecifiedLevel = 0;
 
 		if( JsonConfig.data2.getOrDefault( JType.REQ_USE_ENCHANTMENT, new HashMap<>() ).containsKey( resLoc.toString() ) )
@@ -1481,13 +1426,13 @@ public class XP
 				Map<String, Double> skillMap = levelMaps.get( String.valueOf( level ) );
 				for( Map.Entry<String, Double> skillElement : skillMap.entrySet() )
 				{
-					skillName = Skill.getSkill( skillElement.getKey() ).toString();
-					if( !skillName.equals( Skill.INVALID_SKILL.toString() ) )
+					skill = skillElement.getKey();
+					if( !skill.equals( Skill.INVALID_SKILL.toString() ) )
 					{
-						if( !reqs.containsKey( skillName ) )
-							reqs.put( skillName, skillElement.getValue() );
-						else if( reqs.get( skillName ) < skillElement.getValue() )
-							reqs.put( skillName, skillElement.getValue() );
+						if( !reqs.containsKey( skill ) )
+							reqs.put( skill, skillElement.getValue() );
+						else if( reqs.get( skill ) < skillElement.getValue() )
+							reqs.put( skill, skillElement.getValue() );
 					}
 				}
 			}
@@ -1630,7 +1575,7 @@ public class XP
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( biome.getRegistryName().toString() ) ).setStyle( textStyle.get( "red" ) ), false );
 						for( Map.Entry<String, Double> entry : biomeReq.entrySet() )
 						{
-							int startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
+							int startLevel = Skill.getLevel( entry.getKey(), player );
 
 							if( startLevel < (double) entry.getValue() )
 								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( (double) entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
@@ -1662,19 +1607,19 @@ public class XP
 		return sum;
 	}
 
-	public static Map<Skill, Double> getOfflineXpMap( UUID uuid )
+	public static Map<String, Double> getOfflineXpMap( UUID uuid )
 	{
 		if( !offlineXp.containsKey( uuid ) )
 			offlineXp.put( uuid, new HashMap<>() );
 		return offlineXp.get( uuid );
 	}
 
-	public static void setOfflineXpMaps( Map<UUID, Map<Skill, Double>> newOfflineXp )
+	public static void setOfflineXpMaps( Map<UUID, Map<String, Double>> newOfflineXp )
 	{
 		offlineXp = new HashMap<>( newOfflineXp );
 	}
 
-	public static void setOfflineXpMap( UUID uuid, Map<Skill, Double> newOfflineXp )
+	public static void setOfflineXpMap( UUID uuid, Map<String, Double> newOfflineXp )
 	{
 		offlineXp.put( uuid, newOfflineXp );
 	}
@@ -1684,19 +1629,13 @@ public class XP
 		offlineXp.remove( uuid );
 	}
 
-	public static int getOfflineLevel( Skill skill, UUID uuid )
+	public static int getOfflineLevel( String skill, UUID uuid )
 	{
 		return levelAtXp( getOfflineXp( skill, uuid ) );
 	}
 
-	public static double getOfflineXp( Skill skill, UUID uuid )
+	public static double getOfflineXp( String skill, UUID uuid )
 	{
-		if( skill.equals( Skill.INVALID_SKILL ) )
-		{
-			LOGGER.error( "Invalid Skill at getOfflineXp" );
-			return -1;
-		}
-
 		return offlineXp.getOrDefault( uuid, new HashMap<>() ).getOrDefault( skill, 0D );
 	}
 

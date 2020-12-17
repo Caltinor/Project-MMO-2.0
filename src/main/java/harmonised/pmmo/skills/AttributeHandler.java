@@ -37,7 +37,7 @@ public class AttributeHandler
 	public static double getReachBoost( PlayerEntity player )
 	{
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-		double buildLevel = Skill.BUILDING.getLevel( player );
+		double buildLevel = Skill.getLevel( Skill.BUILDING.toString(), player );
 		double reach = -0.91 + ( buildLevel / Config.getConfig( "levelsPerOneReach" ) );
 		double maxReach = Config.getConfig( "maxExtraReachBoost" );
 		double maxReachPref = maxReach;
@@ -66,7 +66,7 @@ public class AttributeHandler
 
 	public static double getSpeedBoost( PlayerEntity player )
 	{
-		int agilityLevel = Skill.AGILITY.getLevel( player );
+		int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
 		return getBaseSpeed( player ) * getSpeedBoostMultiplier( agilityLevel );
 	}
 
@@ -84,7 +84,7 @@ public class AttributeHandler
 	public static int getHeartBoost( PlayerEntity player )
 	{
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-		double enduranceLevel = Skill.ENDURANCE.getLevel( player );
+		double enduranceLevel = Skill.getLevel( Skill.ENDURANCE.toString(), player );
 		int heartBoost = (int) Math.floor( enduranceLevel / Config.getConfig( "levelsPerHeart" ) ) * 2;
 		int maxHP = (int) Config.getConfig( "maxExtraHeartBoost" ) * 2;
 		int maxHPPref = maxHP;
@@ -131,11 +131,11 @@ public class AttributeHandler
 	{
 		IAttributeInstance damageAttribute = player.getAttribute( SharedMonsterAttributes.ATTACK_DAMAGE );
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-		double maxDamage = Config.getConfig( "maxExtraDamageBoost" );
+		double maxDamage = Config.getConfig( "maxExtraDamageBoostMelee" );
 		double maxDamagePref = maxDamage;
-		if( prefsMap.containsKey( "maxExtraDamageBoost" ) )
-			maxDamagePref = prefsMap.get( "maxExtraDamageBoost" );
-		double combatLevel = Skill.COMBAT.getLevel( player );
+		if( prefsMap.containsKey( "maxExtraDamageBoostMelee" ) )
+			maxDamagePref = prefsMap.get( "maxExtraDamageBoostMelee" );
+		double combatLevel = Skill.getLevel( Skill.COMBAT.toString(), player );
 		double damageBoost = Math.min( maxDamage, Math.min( maxDamagePref, combatLevel / Config.getConfig( "levelsPerDamageMelee" ) ) );
 
 		AttributeModifier damageModifier = new AttributeModifier( damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );

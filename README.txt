@@ -77,7 +77,7 @@ Skill.SKILLNAME.addLevel rewards level double
 Skill.SKILLNAME.addXp rewards xp double
 XP.getXp( ResourceLocation item, JType type ) returns a Map<String, Double> of the xp/level values stored for that item, in that type
 
-XP.getLevelDecimal (takes in skillName + player, returns level as double, works on client/server)
+XP.getLevelDecimal (takes in skill + player, returns level as double, works on client/server)
 XP.xpAtLevel (takes in a level as int, returns double xp value)
 XP.xpAtLevelDecimal (takes in a level as double, returns double xp value)
 XP.getSkillsTag (takes in player, returns PMMO Skills CompoundNBT of all the player's xp values, as doubles)

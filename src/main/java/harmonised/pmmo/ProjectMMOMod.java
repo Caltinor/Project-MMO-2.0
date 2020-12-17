@@ -53,7 +53,6 @@ public class ProjectMMOMod
         MinecraftForge.EVENT_BUS.addListener( this::serverAboutToStart );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
 
-        PmmoCommand.init();
         Config.init();
     }
 

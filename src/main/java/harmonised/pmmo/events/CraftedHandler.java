@@ -48,7 +48,7 @@ public class CraftedHandler
 
             for( Map.Entry<String, Double> entry : award.entrySet() )
             {
-                XP.awardXp( player, Skill.getSkill( entry.getKey() ), "crafting", entry.getValue(), false, false, false );
+                XP.awardXp( player, entry.getKey(), "crafting", entry.getValue(), false, false, false );
             }
         }
     }

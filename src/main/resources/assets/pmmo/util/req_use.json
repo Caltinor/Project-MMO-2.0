@@ -259,44 +259,43 @@
 	"lycanitesmobs:whirlwindcharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:lightballcharge":
 	{
 		"combat": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:bloodsummoningstaff":
 	{
 		"magic": 50,
-		"blood_magic": 50,
 		"combat": 50
 	},
 	"lycanitesmobs:crystalshardcharge":
 	{
-		"taming": 50,
+		"taming": 30,
 		"crafting": 50
 	},
 	"lycanitesmobs:frostboltcharge":
 	{
-		"taming": 50,
-		"elemental": 50
+		"taming": 30,
+		"magic": 20
 	},
 	"lycanitesmobs:tundracharge":
 	{
-		"taming": 50,
-		"elemental": 50
+		"taming": 30,
+		"magic": 20
 	},
 	"lycanitesmobs:spectralboltcharge":
 	{
-		"taming": 50,
+		"taming": 30,
 		"magic": 50
 	},
 	"lycanitesmobs:soulstone":
 	{
-		"taming": 50,
+		"taming": 30,
 		"crafting": 50,
-		"magic": 50
+		"magic": 30
 	},
 	"lycanitesmobs:summoningstaff":
 	{
@@ -305,77 +304,77 @@
 	"lycanitesmobs:venomshotcharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:planttreat":
 	{
 		"farming": 50,
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:dragontreat":
 	{
 		"combat": 50,
 		"crafting": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:boulderblastcharge":
 	{
 		"mining": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:hellfireballcharge":
 	{
-		"taming": 50,
+		"taming": 30,
 		"magic": 50
 	},
 	"lycanitesmobs:wormtreat":
 	{
 		"farming": 50,
-		"taming": 50,
-		"cooking": 50
+		"taming": 30,
+		"cooking": 35
 	},
 	"lycanitesmobs:beasttreat":
 	{
-		"taming": 50,
+		"taming": 30,
 		"cooking": 50
 	},
 	"lycanitesmobs:throwingscythecharge":
 	{
-		"fletching": 50,
-		"taming": 50
+		"crafting": 50,
+		"taming": 30
 	},
 	"lycanitesmobs:demonicblastcharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:bloodleechcharge":
 	{
-		"taming": 50,
+		"taming": 30,
 		"magic": 50,
 		"combat": 50
 	},
 	"lycanitesmobs:acidsplashcharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:savagesummoningstaff":
 	{
 		"magic": 50,
-		"taming": 50,
+		"taming": 30,
 		"combat": 50
 	},
 	"lycanitesmobs:lobdarklingscharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:undeadtreat":
 	{
 		"combat": 10,
-		"fletching": 10,
+		"crafting": 10,
 		"taming": 10
 	},
 	"lycanitesmobs:soulkeydiamond":
@@ -386,23 +385,23 @@
 	"lycanitesmobs:chaosorbcharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:stablesummoningstaff":
 	{
-		"taming": 50,
+		"taming": 30,
 		"crafting": 50
 	},
 	"lycanitesmobs:aquatictreat":
 	{
 		"fishing": 10,
 		"taming": 10,
-		"fletching": 10
+		"crafting": 10
 	},
 	"lycanitesmobs:embercharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:demontreat":
 	{
@@ -416,8 +415,8 @@
 	},
 	"lycanitesmobs:soulkeyemerald":
 	{
-		"crafting": 75,
-		"combat": 75
+		"crafting": 60,
+		"combat": 60
 	},
 	"lycanitesmobs:imptreat":
 	{
@@ -427,51 +426,51 @@
 	"lycanitesmobs:lifedraincharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:devilstarcharge":
 	{
 		"magic": 50,
-		"taming": 50
+		"taming": 30
 	},
 	"lycanitesmobs:aberrationtreat":
 	{
 		"combat": 10,
-		"fletching": 10,
+		"crafting": 10,
 		"taming": 10
 	},
 	"lycanitesmobs:arthropodtreat":
 	{
 		"cooking": 10,
-		"fletching": 10,
+		"crafting": 10,
 		"taming": 10
 	},
 	"lycanitesmobs:arcanelaserstormcharge":
 	{
 		"combat": 50,
-		"taming": 50,
-		"magic": 50
+		"taming": 30,
+		"magic": 30
 	},
 	"lycanitesmobs:sturdysummoningstaff":
 	{
 		"smithing": 50,
-		"taming": 50,
-		"magic": 50
+		"taming": 30,
+		"magic": 30
 	},
 	"lycanitesmobs:aetherwavecharge":
 	{
-		"astral_magic": 50,
-		"taming": 50
+		"magic": 50,
+		"taming": 30
 	},
 	"lycanitesmobs:soulkey":
 	{
-		"crafting": 80,
-		"combat": 80
+		"crafting": 60,
+		"combat": 60
 	},
 	"lycanitesmobs:aviantreat":
 	{
 		"cooking": 10,
-		"fletching": 10
+		"crafting": 10
 	},
 	"lycanitesmobs:equipment_infuser":
 	{
@@ -491,7 +490,7 @@
 	},
 	"lycanitesmobs:equipmentforge_greater":
 	{
-		"combat": 90,
-		"crafting": 90
+		"combat": 70,
+		"crafting": 70
 	}
 }

@@ -22,49 +22,43 @@ public class CheckStatCommand
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
-        Skill skill = Skill.getSkill( args[3] );
-        String skillName = skill.name().toLowerCase();
+        String skill = args[3].toLowerCase();
 
-        if( skill.getValue() != 0 || args[3].toLowerCase().equals( "power" ) )
+        try
         {
-            try
+            double level = 1;
+
+            ServerPlayerEntity target = EntityArgument.getPlayer( context, "player name" );
+            if( skill.equals( "power" ) )
             {
-                double level = 1;
-
-                ServerPlayerEntity target = EntityArgument.getPlayer( context, "player name" );
-                if( args[3].toLowerCase().equals( "power" ) )
-                {
-                    level = XP.getPowerLevel( target.getUniqueID() );
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).setStyle( new Style().setColor( TextFormatting.AQUA ) ) ), false );
-                }
-                else
-                {
-                    level = skill.getLevelDecimal( target.getUniqueID() );
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skillName ).setStyle( XP.getSkillStyle( skill ) ) ), false );
-                }
-
-                //EXTRA INFO
-                switch( skillName )
-                {
-                    case "fishing":
-                        double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
-                        double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
-                        double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
-                        double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
-                        if( fishPoolChance > fishPoolMaxChance )
-                            fishPoolChance = fishPoolMaxChance;
-
-                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( XP.getSkillStyle( skill ) ), false );
-                        break;
-                }
+                level = XP.getPowerLevel( target.getUniqueID() );
+                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).setStyle( new Style().setColor( TextFormatting.AQUA ) ) ), false );
             }
-            catch( CommandSyntaxException e )
+            else
             {
-                sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+                level = Skill.getLevelDecimal( skill, target.getUniqueID() );
+                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skill ).setStyle( Skill.getSkillStyle( skill ) ) ), false );
+            }
+
+            //EXTRA INFO
+            switch( skill )
+            {
+                case "fishing":
+                    double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
+                    double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
+                    double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
+                    double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
+                    if( fishPoolChance > fishPoolMaxChance )
+                        fishPoolChance = fishPoolMaxChance;
+
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( Skill.getSkillStyle( skill ) ), false );
+                    break;
             }
         }
-        else
-            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", args[3] ).setStyle( XP.textStyle.get( "red" ) ), false );
+        catch( CommandSyntaxException e )
+        {
+            sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+        }
 
         return 1;
     }

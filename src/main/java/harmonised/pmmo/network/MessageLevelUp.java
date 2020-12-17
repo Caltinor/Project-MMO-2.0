@@ -18,9 +18,10 @@ import java.util.function.Supplier;
 public class MessageLevelUp
 {
     public static final Logger LOGGER = LogManager.getLogger();
-    private int skill, level;
+    private int level;
+    private String skill;
 
-    public MessageLevelUp( int skill, int level )
+    public MessageLevelUp( String skill, int level )
     {
         this.skill = skill;
         this.level = level;
@@ -34,7 +35,7 @@ public class MessageLevelUp
     {
         MessageLevelUp packet = new MessageLevelUp();
 
-        packet.skill = buf.readInt();
+        packet.skill = buf.readString();
         packet.level = buf.readInt();
 
         return packet;
@@ -42,7 +43,7 @@ public class MessageLevelUp
 
     public static void encode( MessageLevelUp packet, PacketBuffer buf )
     {
-        buf.writeInt( packet.skill );
+        buf.writeString( packet.skill );
         buf.writeInt( packet.level );
     }
 
@@ -55,18 +56,17 @@ public class MessageLevelUp
                 ServerPlayerEntity player = ctx.get().getSender();
                 if( player == null )
                     return;
-                Skill skill = Skill.getSkill( packet.skill );
+                String skill = packet.skill.toLowerCase();
 
-                if( packet.level <= skill.getLevel( player ) )
+                if( packet.level <= Skill.getLevel( skill, player ) )
                 {
                     Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-                    String skillName = skill.name().toLowerCase();
                     Vec3d playerPos = player.getPositionVec();
 
                     if( Config.forgeConfig.levelUpFirework.get() && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
                         XP.spawnRocket( player.world, player.getPosition(), skill );
 
-                    LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skillName + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
+                    LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skill + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
 
                     if( packet.level % Config.forgeConfig.levelsPerMilestone.get() == 0 && Config.forgeConfig.broadcastMilestone.get() )
                     {
@@ -75,7 +75,7 @@ public class MessageLevelUp
                             if( otherPlayer.getUniqueID() != player.getUniqueID() )
                             {
                                 Map<String, Double> otherprefsMap = Config.getPreferencesMap( otherPlayer );
-                                otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skillName ) ).setStyle( XP.getSkillStyle( skill ) ), false );
+                                otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skill ) ).setStyle( Skill.getSkillStyle( skill ) ), false );
                                 if( Config.forgeConfig.milestoneLevelUpFirework.get() )
                                 {
                                     if( !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
@@ -86,7 +86,7 @@ public class MessageLevelUp
                     }
                 }
                 else
-                    NetworkHandler.sendToPlayer( new MessageXp( skill.getXp( player ), skill.getValue(), 0, true ), player );
+                    NetworkHandler.sendToPlayer( new MessageXp( Skill.getXp( skill, player ), skill, 0, true ), player );
             }
             catch( Exception e )
             {

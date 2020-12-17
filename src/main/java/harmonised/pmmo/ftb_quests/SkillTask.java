@@ -20,13 +20,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class SkillTask extends Task
 {
     public static TaskType SKILL;
-    public Skill skill;
+    public String skill;
     public double requiredLevel;
 
     public SkillTask(Quest quest)
     {
         super(quest);
-        skill = Skill.MINING;
+        skill = Skill.MINING.toString();
         requiredLevel = 1;
     }
 
@@ -40,7 +40,7 @@ public class SkillTask extends Task
     public void writeData(CompoundNBT nbt)
     {
         super.writeData(nbt);
-        nbt.putString( "skill", skill.toString() );
+        nbt.putString( "skill", skill );
         nbt.putDouble( "requiredLevel", requiredLevel );
     }
 
@@ -48,7 +48,7 @@ public class SkillTask extends Task
     public void readData(CompoundNBT nbt)
     {
         super.readData(nbt);
-        skill = Skill.getSkill( nbt.getString( "skill" ) );
+        skill = nbt.getString( "skill" );
         requiredLevel = nbt.getDouble( "requiredLevel" );
     }
 
@@ -64,7 +64,7 @@ public class SkillTask extends Task
     public void readNetData(PacketBuffer buffer)
     {
         super.readNetData(buffer);
-        skill = Skill.getSkill( buffer.readString( Short.MAX_VALUE ) );
+        skill = buffer.readString( Short.MAX_VALUE );
         requiredLevel = buffer.readDouble();
     }
 
@@ -73,7 +73,7 @@ public class SkillTask extends Task
     public void getConfig(ConfigGroup config)
     {
         super.getConfig(config);
-        config.addEnum("skill", skill, input -> skill = input, NameMap.of( Skill.INVALID_SKILL, Skill.valuesArray ).create());
+        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.INVALID_SKILL, Skill.getSkills().keySet().toArray() ).create());
         config.addDouble( "requiredLevel", requiredLevel, input -> requiredLevel = input, 1, 1, Config.getConfig( "maxLevel" ) );
 
     }
@@ -107,7 +107,7 @@ public class SkillTask extends Task
         @Override
         public boolean canSubmit( ServerPlayerEntity player )
         {
-            return task.skill.getLevel( player ) >= task.requiredLevel;
+            return Skill.getLevel( task.skill, player ) >= task.requiredLevel;
         }
     }
 }

@@ -1,5 +1,6 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
@@ -71,7 +72,8 @@ public class MessageUpdatePlayerNBT
                     {
                         Config.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
                         WorldTickHandler.refreshVein();
-                        }
+                        PmmoCommand.init();
+                    }
                     else
                         LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
                     break;

@@ -25,7 +25,7 @@ public class BreedHandler
             if( xpValue.size() > 0 )
                 XP.awardXpMap( event.getCausedByPlayer().getUniqueID(), xpValue, "breeding", false, false );
             else
-                XP.awardXp( causedByPlayer, Skill.FARMING, "breeding", defaultBreedingXp, false, false, false );
+                XP.awardXp( causedByPlayer, Skill.FARMING.toString(), "breeding", defaultBreedingXp, false, false, false );
         }
     }
 }

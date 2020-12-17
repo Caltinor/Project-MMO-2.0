@@ -75,7 +75,7 @@ public class ClientHandler
                 break;
 
             case 6:
-                Config.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringSkill( newPackage ) );
+                Config.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringString( newPackage ) );
                 break;
 
             default:

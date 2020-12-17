@@ -74,7 +74,7 @@ public class WorldTickHandler
         BlockState veinState;
         Map<String, Double> abilitiesMap;
         String regKey;
-        Skill skill;
+        String skill;
         double cost;
         boolean correctBlock, correctItem, correctHeldItem, fullyGrown, isOwner;
         UUID blockUUID, playerUUID;
@@ -285,7 +285,7 @@ public class WorldTickHandler
         Block block = veinInfo.state.getBlock();
         Material material = veinInfo.state.getMaterial();
         String regKey = block.getRegistryName().toString();
-        Skill skill = XP.getSkill( material );
+        String skill = XP.getSkill( material );
 
         int yLimit = 1;
 
@@ -343,7 +343,7 @@ public class WorldTickHandler
     public static double getVeinCost( BlockState state, BlockPos pos, PlayerEntity player )
     {
         Material material = state.getMaterial();
-        Skill skill = XP.getSkill( material );
+        String skill = XP.getSkill( material );
         double cost;
 //        double startHardness = state.getBlockHardness( player.world, pos );
         double hardness = state.getBlockHardness( player.world, pos );
@@ -356,30 +356,28 @@ public class WorldTickHandler
 
         switch( skill )
         {
-            case MINING:
-                cost = hardness / ( (double) Skill.MINING.getLevel( player ) / levelsPerHardnessMining );
+            case "mining":
+                cost = hardness / ( (double) Skill.getLevel( Skill.MINING.toString(), player ) / levelsPerHardnessMining );
                 break;
 
-            case WOODCUTTING:
-                cost = hardness / ( Skill.WOODCUTTING.getLevel( player ) / levelsPerHardnessWoodcutting );
+            case "woodcutting":
+                cost = hardness / ( Skill.getLevel( Skill.WOODCUTTING.toString(), player ) / levelsPerHardnessWoodcutting );
                 break;
 
-            case EXCAVATION:
-                cost = hardness / ( Skill.EXCAVATION.getLevel( player ) / levelsPerHardnessExcavation );
+            case "excavation":
+                cost = hardness / ( Skill.getLevel( Skill.EXCAVATION.toString(), player ) / levelsPerHardnessExcavation );
                 break;
 
-            case FARMING:
-                cost = hardness / ( Skill.FARMING.getLevel( player ) / levelsPerHardnessFarming );
+            case "farming":
+                cost = hardness / ( Skill.getLevel( Skill.FARMING.toString(), player ) / levelsPerHardnessFarming );
                 break;
 
-            case CRAFTING:
-                cost = hardness / ( Skill.CRAFTING.getLevel( player ) / levelsPerHardnessCrafting );
+            case "crafting":
+                cost = hardness / ( Skill.getLevel( Skill.CRAFTING.toString(), player ) / levelsPerHardnessCrafting );
                 break;
 
             default:
-                if( !state.getBlock().equals( Blocks.AIR ) && !skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.error( "WRONG SKILL AT VEIN COST: " + state.getBlock().getRegistryName() + " " + skill.name() );
-                return hardness;
+                cost = hardness;
         }
 
         if( cost < minVeinCost )

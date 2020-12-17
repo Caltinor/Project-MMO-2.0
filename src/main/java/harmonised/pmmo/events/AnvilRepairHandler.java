@@ -34,7 +34,7 @@ public class AnvilRepairHandler
                 {
                     ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
                     boolean bypassEnchantLimit = Config.forgeConfig.bypassEnchantLimit.get();
-                    int currLevel = Skill.SMITHING.getLevel( player );
+                    int currLevel = Skill.getLevel( Skill.SWIMMING.toString(), player );
                     ItemStack rItem = event.getIngredientInput();		//IGNORED FOR PURPOSE OF REPAIR
                     ItemStack lItem = event.getItemInput();
                     ItemStack oItem = event.getItemResult();
@@ -70,7 +70,7 @@ public class AnvilRepairHandler
                         if( award > 0 )
                         {
                             NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), (ServerPlayerEntity) player );
-                            XP.awardXp( player, Skill.SMITHING, "repairing an item by: " + repaired, award, false, false, false );
+                            XP.awardXp( player, Skill.SMITHING.toString(), "repairing an item by: " + repaired, award, false, false, false );
                         }
                     }
 

@@ -60,15 +60,14 @@ public class StatsScreen extends Screen
 
     public static void addXpMapEntryAsText( List<ITextComponent> text, Map<String, Double> xpBoosts )
     {
-        Skill skill;
-        String skillName;
+        String skill;
         Style color;
         for( Map.Entry<String, Double> entry : xpBoosts.entrySet() )
         {
-            skill = Skill.getSkill( entry.getKey() );
-            color = XP.getSkillStyle( skill );
-            skillName = new TranslationTextComponent( "pmmo." + skill.toString() ).getString();
-            text.add( new StringTextComponent( ( entry.getValue() < 0 ? " " : " +" ) + new TranslationTextComponent( "pmmo.levelDisplayPercentage", DP.dpSoft( entry.getValue() ), skillName ).getString() ).setStyle( color ) );
+            skill = entry.getKey();
+            color = Skill.getSkillStyle( skill );
+            skill = new TranslationTextComponent( "pmmo." + skill.toString() ).getString();
+            text.add( new StringTextComponent( ( entry.getValue() < 0 ? " " : " +" ) + new TranslationTextComponent( "pmmo.levelDisplayPercentage", DP.dpSoft( entry.getValue() ), skill ).getString() ).setStyle( color ) );
         }
     }
 
@@ -92,55 +91,55 @@ public class StatsScreen extends Screen
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.damage" );
-        text.add( new TranslationTextComponent( "pmmo.damageBonusMelee", Skill.COMBAT.getLevel( player ) / Config.forgeConfig.levelsPerDamageMelee.get() ).setStyle( XP.skillStyle.get( Skill.COMBAT ) ) );
-        text.add( new TranslationTextComponent( "pmmo.damageBonusArchery", Skill.ARCHERY.getLevel( player ) / Config.forgeConfig.levelsPerDamageArchery.get() ).setStyle( XP.skillStyle.get( Skill.ARCHERY ) ) );
-        text.add( new TranslationTextComponent( "pmmo.damageBonusMagic", Skill.MAGIC.getLevel( player ) / Config.forgeConfig.levelsPerDamageMagic.get() ).setStyle( XP.skillStyle.get( Skill.MAGIC ) ) );
+        text.add( new TranslationTextComponent( "pmmo.damageBonusMelee", Skill.getLevel( Skill.COMBAT.toString(), player ) / Config.forgeConfig.levelsPerDamageMelee.get() ).setStyle( Skill.getSkillStyle( Skill.COMBAT.toString() ) ) );
+        text.add( new TranslationTextComponent( "pmmo.damageBonusArchery", Skill.getLevel( Skill.ARCHERY.toString(), player ) / Config.forgeConfig.levelsPerDamageArchery.get() ).setStyle( Skill.getSkillStyle( Skill.ARCHERY.toString() ) ) );
+        text.add( new TranslationTextComponent( "pmmo.damageBonusMagic", Skill.getLevel( Skill.MAGIC.toString(), player ) / Config.forgeConfig.levelsPerDamageMagic.get() ).setStyle( Skill.getSkillStyle( Skill.MAGIC.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.speed" );
-        text.add( new TranslationTextComponent( "pmmo.sprintSpeedBonus", DP.dpSoft( AttributeHandler.getSpeedBoostMultiplier( Skill.AGILITY.getLevel( player ) ) * 100D ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        text.add( new TranslationTextComponent( "pmmo.sprintSpeedBonus", DP.dpSoft( AttributeHandler.getSpeedBoostMultiplier( Skill.getLevel( Skill.AGILITY.toString(), player ) ) * 100D ) ).setStyle( Skill.getSkillStyle( Skill.AGILITY.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.jump" );
-        text.add( new TranslationTextComponent( "pmmo.jumpBonusSprint", DP.dpSoft( JumpHandler.getSprintJumpBoost( player ) / 0.14D ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
-        text.add( new TranslationTextComponent( "pmmo.jumpBonusCrouch", DP.dpSoft( JumpHandler.getCrouchJumpBoost( player ) / 0.14D ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        text.add( new TranslationTextComponent( "pmmo.jumpBonusSprint", DP.dpSoft( JumpHandler.getSprintJumpBoost( player ) / 0.14D ) ).setStyle( Skill.getSkillStyle( Skill.AGILITY.toString() ) ) );
+        text.add( new TranslationTextComponent( "pmmo.jumpBonusCrouch", DP.dpSoft( JumpHandler.getCrouchJumpBoost( player ) / 0.14D ) ).setStyle( Skill.getSkillStyle( Skill.AGILITY.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.fallSaveChance" );
-        text.add( new TranslationTextComponent( "pmmo.fallSaveChancePercentage", DP.dpSoft( DamageHandler.getFallSaveChance( player ) ) ).setStyle( XP.skillStyle.get( Skill.AGILITY ) ) );
+        text.add( new TranslationTextComponent( "pmmo.fallSaveChancePercentage", DP.dpSoft( DamageHandler.getFallSaveChance( player ) ) ).setStyle( Skill.getSkillStyle( Skill.AGILITY.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.endurance" );
-        text.add( new TranslationTextComponent( "pmmo.damageReductionPercentage", DP.dpSoft( DamageHandler.getEnduranceMultiplier( player ) ) ).setStyle( XP.skillStyle.get( Skill.ENDURANCE ) ) );
+        text.add( new TranslationTextComponent( "pmmo.damageReductionPercentage", DP.dpSoft( DamageHandler.getEnduranceMultiplier( player ) ) ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.hearts" );
-        text.add( new TranslationTextComponent( "pmmo.heartBonus", AttributeHandler.getHeartBoost( player ) ).setStyle( XP.skillStyle.get( Skill.ENDURANCE ) ) );
+        text.add( new TranslationTextComponent( "pmmo.heartBonus", AttributeHandler.getHeartBoost( player ) ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.reach" );
-        text.add( new TranslationTextComponent( "pmmo.reachBonus", DP.dpSoft( AttributeHandler.getReachBoost( player ) ) ).setStyle( XP.skillStyle.get( Skill.BUILDING ) ) );
+        text.add( new TranslationTextComponent( "pmmo.reachBonus", DP.dpSoft( AttributeHandler.getReachBoost( player ) ) ).setStyle( Skill.getSkillStyle( Skill.BUILDING.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
 //        text = new ArrayList<>();
 //        entryTitle = new TranslationTextComponent( "pmmo.respiration" );
-//        text.add( new TranslationTextComponent( "pmmo.respirationBonus", getRespirationBonus( player ) ).setStyle( XP.skillStyle.get( Skill.SWIMMING ) ) );
+//        text.add( new TranslationTextComponent( "pmmo.respirationBonus", getRespirationBonus( player ) ).setStyle( Skill.getSkillStyle( Skill.SWIMMING ) ) );
 //        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.underwaterNightVision" );
-        text.add( new TranslationTextComponent( Skill.SWIMMING.getLevelDecimal( player ) >= Config.getConfig( "nightvisionUnlockLevel" ) ? "pmmo.unlocked" : "pmmo.locked" ).setStyle( XP.skillStyle.get( Skill.SWIMMING ) ) );
+        text.add( new TranslationTextComponent( Skill.getLevelDecimal( Skill.SWIMMING.toString(), player ) >= Config.getConfig( "nightvisionUnlockLevel" ) ? "pmmo.unlocked" : "pmmo.locked" ).setStyle( Skill.getSkillStyle( Skill.SWIMMING.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.rareFishPool" );
-        text.add( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dpSoft( FishedHandler.getFishPoolChance( player ) ) ).setStyle( XP.skillStyle.get( Skill.FISHING ) ) );
+        text.add( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dpSoft( FishedHandler.getFishPoolChance( player ) ) ).setStyle( Skill.getSkillStyle( Skill.FISHING.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         ItemStack itemStack;
@@ -244,10 +243,10 @@ public class StatsScreen extends Screen
             text.add( new TranslationTextComponent( "pmmo.biome" ) );
             addXpMapEntryAsText( text, map );    //Biome
         }
-        for( Map.Entry<String, Map<Skill, Double>> outterEntry : Config.getXpBoostsMap( player ).entrySet() )
+        for( Map.Entry<String, Map<String, Double>> outterEntry : Config.getXpBoostsMap( player ).entrySet() )
         {
             text.add( new TranslationTextComponent( outterEntry.getKey() ) );
-            addXpMapEntryAsText( text, NBTHelper.MapSkillKeyToString( outterEntry.getValue() ) );    //Biome
+            addXpMapEntryAsText( text, NBTHelper.MapStringKeyToString( outterEntry.getValue() ) );    //Biome
         }
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );        scrollPanel = new StatsScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
 

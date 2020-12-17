@@ -39,12 +39,12 @@ public class ClearCommand
                 AttributeHandler.updateAll( player );
                 XP.updateRecipes( player );
 
-                Map<Skill, Double> xpMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
-                for( Skill skill : new HashSet<>( xpMap.keySet() ) )
+                Map<String, Double> xpMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
+                for( String skill : new HashSet<>( xpMap.keySet() ) )
                 {
                     xpMap.remove( skill );
                 }
-                NetworkHandler.sendToPlayer( new MessageXp( 0f, 42069, 0, true ), player );
+                NetworkHandler.sendToPlayer( new MessageXp( 0f, "42069", 0, true ), player );
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsCleared" ), false );
 
                 LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );

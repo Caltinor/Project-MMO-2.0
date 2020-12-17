@@ -68,7 +68,6 @@ public class PlayerConnectedHandler
         {
             CompoundNBT pmmoTag = player.getPersistentData().getCompound( Reference.MOD_ID );
             CompoundNBT tag;
-            Skill skill;
             UUID uuid = player.getUniqueID();
             Map<String, Double> map;
 
@@ -79,12 +78,8 @@ public class PlayerConnectedHandler
                 tag = pmmoTag.getCompound( "skills" );
                 for( String key : tag.keySet() )
                 {
-                    skill = Skill.getSkill( key );
-                    if( skill != Skill.INVALID_SKILL )
-                    {
-                        skill.setXp( uuid, skill.getXp( uuid ) + tag.getDouble( key ) );
-                        LOGGER.info( "Adding " + tag.getDouble( key ) + " xp in " + skill.toString() );
-                    }
+                    Skill.setXp( key, uuid, Skill.getXp( key, uuid ) + tag.getDouble( key ) );
+                    LOGGER.info( "Adding " + tag.getDouble( key ) + " xp in " + key );
                 }
             }
 
@@ -116,14 +111,14 @@ public class PlayerConnectedHandler
 
     private static void awardScheduledXp( UUID uuid )
     {
-        Map<Skill, Double> scheduledXp = PmmoSavedData.get().getScheduledXpMap( uuid );
+        Map<String, Double> scheduledXp = PmmoSavedData.get().getScheduledXpMap( uuid );
 
         if( scheduledXp.size() > 0 )
             LOGGER.info( "Awarding Scheduled Xp for: " + PmmoSavedData.get().getName( uuid ) );
 
-        for( Map.Entry<Skill, Double> entry : scheduledXp.entrySet() )
+        for( Map.Entry<String, Double> entry : scheduledXp.entrySet() )
         {
-            entry.getKey().addXp( uuid, entry.getValue(), "scheduledXp", false, false );
+            Skill.addXp( entry.getKey(), uuid, entry.getValue(), "scheduledXp", false, false );
             LOGGER.info( "+" + entry.getValue() + " in " + entry.getKey().toString() );
         }
         PmmoSavedData.get().removeScheduledXpUuid( uuid );

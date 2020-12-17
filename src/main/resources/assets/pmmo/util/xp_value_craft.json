@@ -1527,7 +1527,6 @@
 	"lycanitesmobs:bloodsummoningstaff":
 	{
 		"magic": 100,
-		"blood_magic": 100,
 		"crafting": 100
 	},
 	"lycanitesmobs:crystalshardcharge":
@@ -1536,13 +1535,11 @@
 	},
 	"lycanitesmobs:frostboltcharge":
 	{
-		"magic": 100,
-		"elemental": 100
+		"magic": 100
 	},
 	"lycanitesmobs:tundracharge":
 	{
-		"magic": 100,
-		"elemental": 100
+		"magic": 100
 	},
 	"lycanitesmobs:spectralboltcharge":
 	{
@@ -1606,7 +1603,7 @@
 	},
 	"lycanitesmobs:throwingscythecharge":
 	{
-		"fletching": 100
+		"crafting": 100
 	},
 	"lycanitesmobs:demonicblastcharge":
 	{
@@ -1624,7 +1621,7 @@
 	"lycanitesmobs:savagesummoningstaff":
 	{
 		"magic": 100,
-		"fletching": 100
+		"crafting": 100
 	},
 	"lycanitesmobs:lobdarklingscharge":
 	{
@@ -1632,7 +1629,7 @@
 	},
 	"lycanitesmobs:undeadtreat":
 	{
-		"fletching": 100
+		"crafting": 100
 	},
 	"lycanitesmobs:soulkeydiamond":
 	{
@@ -1644,7 +1641,7 @@
 	},
 	"lycanitesmobs:equipmentpart_woodenrod":
 	{
-		"fletching": 60
+		"crafting": 60
 	},
 	"lycanitesmobs:stablesummoningstaff":
 	{
@@ -1652,7 +1649,7 @@
 	},
 	"lycanitesmobs:aquatictreat":
 	{
-		"fletching": 100
+		"crafting": 100
 	},
 	"lycanitesmobs:embercharge":
 	{
@@ -1676,7 +1673,7 @@
 	},
 	"lycanitesmobs:equipmentpart_woodenhilt":
 	{
-		"fletching": 60
+		"crafting": 60
 	},
 	"lycanitesmobs:imptreat":
 	{
@@ -1700,12 +1697,12 @@
 	},
 	"lycanitesmobs:aberrationtreat":
 	{
-		"fletching": 100
+		"crafting": 100
 	},
 	"lycanitesmobs:arthropodtreat":
 	{
 		"cooking": 100,
-		"fletching": 100
+		"crafting": 100
 	},
 	"lycanitesmobs:arcanelaserstormcharge":
 	{
@@ -1718,7 +1715,7 @@
 	},
 	"lycanitesmobs:aetherwavecharge":
 	{
-		"astral_magic": 100
+		"magic": 100
 	},
 	"lycanitesmobs:soulkey":
 	{
@@ -1727,7 +1724,7 @@
 	"lycanitesmobs:aviantreat":
 	{
 		"cooking": 100,
-		"fletching": 100
+		"crafting": 100
 	},
 	"lycanitesmobs:shadowstonebrick_stairs":
 	{

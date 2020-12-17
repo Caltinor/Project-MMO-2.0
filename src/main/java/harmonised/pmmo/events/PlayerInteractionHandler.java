@@ -109,7 +109,7 @@ public class PlayerInteractionHandler
 //                            {
                                 for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_USE ).get( block.getRegistryName().toString() ).entrySet() )
                                 {
-                                    startLevel = Skill.getSkill( entry.getKey() ).getLevel( player );
+                                    startLevel = Skill.getLevel( entry.getKey(), player );
 
                                     double entryValue = entry.getValue();
 
@@ -126,7 +126,7 @@ public class PlayerInteractionHandler
                     {
                         event.setCanceled( false );
 
-                        int startSmithingLevel = Skill.SMITHING.getLevel( player );
+                        int startSmithingLevel = Skill.getLevel( Skill.SWIMMING.toString(), player );
                         int smithingLevel;
                         Integer lowestReqLevel = null;
 
@@ -288,7 +288,7 @@ public class PlayerInteractionHandler
                                     }
 
                                     if( award > 0 )
-                                        XP.awardXp( (ServerPlayerEntity) player, Skill.SMITHING, item.getRegistryName().toString(), award, false, false, false );
+                                        XP.awardXp( (ServerPlayerEntity) player, Skill.SMITHING.toString(), item.getRegistryName().toString(), award, false, false, false );
 
                                     player.getHeldItemOffhand().shrink( 1 );
                                     player.sendBreakAnimation(Hand.OFF_HAND );

@@ -73,21 +73,21 @@ public class PrefsScreen extends Screen
         switch( jType )
         {
             case SETTINGS:
-                value = Math.min( Skill.BUILDING.getLevel( player ) / Config.getConfig( "levelsPerOneReach" ), Config.getConfig( "maxExtraReachBoost" ) );
+                value = Math.min( Skill.getLevel( Skill.BUILDING.toString(), player ) / Config.getConfig( "levelsPerOneReach" ), Config.getConfig( "maxExtraReachBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraReachBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraReachBoost", value ), value, true, true, true, false ) );
-                value = Math.min( Skill.ENDURANCE.getLevel( player ) / Config.getConfig( "levelsPerHeart" ), Config.getConfig( "maxExtraHeartBoost" ) );
+                value = Math.min( Skill.getLevel( Skill.ENDURANCE.toString(), player ) / Config.getConfig( "levelsPerHeart" ), Config.getConfig( "maxExtraHeartBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraHeartBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraHeartBoost", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.COMBAT.getLevel( player ) / Config.getConfig( "levelsPerDamageMelee" ), Config.getConfig( "maxExtraDamageBoostMelee" ) );
+                value = Math.min( Skill.getLevel( Skill.COMBAT.toString(), player ) / Config.getConfig( "levelsPerDamageMelee" ), Config.getConfig( "maxExtraDamageBoostMelee" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraDamageBoostMelee", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostMelee", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.ARCHERY.getLevel( player ) / Config.getConfig( "levelsPerDamageArchery" ), Config.getConfig( "maxExtraDamageBoostArchery" ) );
+                value = Math.min( Skill.getLevel( Skill.ARCHERY.toString(), player ) / Config.getConfig( "levelsPerDamageArchery" ), Config.getConfig( "maxExtraDamageBoostArchery" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraDamageBoostArchery", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostArchery", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.MAGIC.getLevel( player ) / Config.getConfig( "levelsPerDamageMagic" ), Config.getConfig( "maxExtraDamageBoostMagic" ) );
+                value = Math.min( Skill.getLevel( Skill.MAGIC.toString(), player ) / Config.getConfig( "levelsPerDamageMagic" ), Config.getConfig( "maxExtraDamageBoostMagic" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraDamageBoostMagic", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostMagic", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "speedBoostPerLevel" ), Config.getConfig( "maxSpeedBoost" ) );
+                value = Math.min( Skill.getLevel( Skill.AGILITY.toString(), player ) * Config.getConfig( "speedBoostPerLevel" ), Config.getConfig( "maxSpeedBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxSpeedBoost", "", "", 0, value, prefsMap.getOrDefault( "maxSpeedBoost", value ), value, true, true, true, false ) );
-                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "levelsPerSprintJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
+                value = Math.min( Skill.getLevel( Skill.AGILITY.toString(), player ) * Config.getConfig( "levelsPerSprintJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxSprintJumpBoost", "", "", 0, value, prefsMap.getOrDefault( "maxSprintJumpBoost", value ), value, true, true, true, false ) );
-                value = Math.min( Skill.AGILITY.getLevel( player ) * Config.getConfig( "levelsPerCrouchJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
+                value = Math.min( Skill.getLevel( Skill.AGILITY.toString(), player ) * Config.getConfig( "levelsPerCrouchJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxCrouchJumpBoost", "", "", 0, value, prefsMap.getOrDefault( "maxCrouchJumpBoost", value ), value, true, true, true, false ) );
                 prefsEntries.add( new PrefsEntry("wipeAllSkillsUponDeathPermanently", "", "", 0, 1, prefsMap.getOrDefault( "wipeAllSkillsUponDeathPermanently", 0D ), 0, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("spawnFireworksCausedByMe", "", "", 0, 1, prefsMap.getOrDefault( "spawnFireworksCausedByMe", 1D ), 1, false, true, false, true ) );

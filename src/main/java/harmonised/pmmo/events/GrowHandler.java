@@ -35,7 +35,7 @@ public class GrowHandler
             if( award.size() > 0 )
                 XP.awardXpMap( uuid, award, "Growing " + resLoc + " at " + pos, true, false );
             else
-                Skill.FARMING.addXp( uuid, Config.forgeConfig.defaultSaplingGrowXp.get(), "Growing " + resLoc + " at " + pos, true, false );
+                Skill.addXp( Skill.FARMING.toString(), uuid, Config.forgeConfig.defaultSaplingGrowXp.get(), "Growing " + resLoc + " at " + pos, true, false );
         }
     }
 
@@ -113,7 +113,7 @@ public class GrowHandler
                 if( award.size() > 0 )
                     XP.awardXpMap( uuid, award, "Growing " + block.getRegistryName() + " at " + pos, true, false );
                 else
-                    Skill.FARMING.addXp( uuid, Config.forgeConfig.defaultCropGrowXp.get(), "Growing " + block.getRegistryName() + " at " + pos, true, false );
+                    Skill.addXp( Skill.FARMING.toString(), uuid, Config.forgeConfig.defaultCropGrowXp.get(), "Growing " + block.getRegistryName() + " at " + pos, true, false );
             }
         }
     }

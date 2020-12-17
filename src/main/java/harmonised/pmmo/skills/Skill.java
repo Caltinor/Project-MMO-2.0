@@ -1,91 +1,108 @@
 package harmonised.pmmo.skills;
 
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.events.PlayerConnectedHandler;
+import harmonised.pmmo.commands.PmmoCommand;
+import harmonised.pmmo.config.JType;
+import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public enum Skill
 {
-    INVALID_SKILL( 0 ),
-    MINING( 1 ),
-    BUILDING(2 ),
-    EXCAVATION( 3 ),
-    WOODCUTTING( 4 ),
-    FARMING( 5 ),
-    AGILITY( 6 ),
-    ENDURANCE( 7 ),
-    COMBAT( 8 ),
-    ARCHERY( 9 ),
-    SMITHING( 10 ),
-    FLYING( 11 ),
-    SWIMMING( 12 ),
-    FISHING( 13 ),
-    CRAFTING( 14 ),
-    MAGIC( 15 ),
-    SLAYER( 16 ),
-    HUNTER( 17 ),
-    FLETCHING( 18 ),
-    TAMING( 19 ),
-    ENGINEERING( 20 ),
-    BLOOD_MAGIC( 21 ),
-    ASTRAL_MAGIC( 22 ),
-    GOOD_MAGIC( 23 ),
-    EVIL_MAGIC( 24 ),
-    ARCANE_MAGIC( 25 ),
-    ELEMENTAL( 26 ),
-    EARTH( 27 ),
-    WATER( 28 ),
-    AIR( 29 ),
-    FIRE( 30 ),
-    LIGHTNING( 31 ),
-    VOID( 32 ),
-    THAUMATIC( 33 ),
-    SUMMONING( 34 ),
-    INVENTION( 35 ),
-    RUNECRAFTING( 36 ),
-    PRAYER( 37 ),
-    COOKING( 38 ),
-    FIREMAKING( 39 ),
-    TRADING( 41 ),
-    SAILING( 42 ),
-    ALCHEMY( 43 ),
-    CONSTRUCTION( 44 ),
-    LEATHERWORKING( 45 ),
-    EXPLORATION( 46 );
+    INVALID_SKILL( 0xffffff ),
+    MINING( 0x00ffff ),
+    BUILDING( 0x00ffff ),
+    EXCAVATION( 0xe69900 ),
+    WOODCUTTING( 0xffa31a ),
+    FARMING( 0x00e600 ),
+    AGILITY( 0x66cc66 ),
+    ENDURANCE( 0xcc0000 ),
+    COMBAT( 0xff3300 ),
+    ARCHERY( 0xffff00 ),
+    SMITHING( 0xf0f0f0 ),
+    FLYING( 0xccccff ),
+    SWIMMING( 0x3366ff ),
+    FISHING( 0x00ccff ),
+    CRAFTING( 0xff9900 ),
+    MAGIC( 0x0000ff ),
+    SLAYER( 0xffffff ),
+    HUNTER( 0xcf7815 ),
+    TAMING( 0xffffff ),
+    COOKING( 0xe69900 ),
+    ALCHEMY( 0xe69900 );
 
-    public static final Map<Skill, Integer> skillMap = new HashMap<>();
-//    public static final Map<Integer, Skill> intMap = new HashMap<>();
-    public static final Map<String, Skill> stringMap = new HashMap<>();
-    public static final Skill[] valuesArray = new Skill[ Skill.values().length - 1 ];
-    //    Skill[] VALUES = values();
+    private static final Map<String, Integer> validSkills = new HashMap<>();
+    private static final Map<String, Style> skillStyle = new HashMap<>();
+    public final String name;
+    public final int color;
 
-    private final int value;
+    Skill( int color )
+    {
+        this.name = name();
+        this.color = color;
+    }
 
     static
     {
-        int i = 0;
-        for( Skill skill : Skill.values() )
+        for( Skill skill : values() )
         {
-            if( !skill.equals( Skill.INVALID_SKILL ) )
-            {
-                skillMap.put( skill, skill.value );
-//                intMap.put( skill.value, skill );
-                stringMap.put( skill.toString(), skill );
-                valuesArray[ i++ ] = skill;
-            }
+            setSkill( skill.toString(), skill.color );
         }
+    }
+
+    public static void setSkill( String skill, int color )
+    {
+        validSkills.put( skill, color );
+        if( color == 0xff0000 )
+            skillStyle.put( skill, new Style().setColor( TextFormatting.RED ) );
+        else if( color == 0x00ff00 )
+            skillStyle.put( skill, new Style().setColor( TextFormatting.GREEN ) );
+        else if( color == 0x0000ff )
+            skillStyle.put( skill, new Style().setColor( TextFormatting.BLUE ) );
+        else if( color == 0xffff00 )
+            skillStyle.put( skill, new Style().setColor( TextFormatting.YELLOW ) );
+        else if( color == 0x00ffff )
+            skillStyle.put( skill, new Style().setColor( TextFormatting.AQUA ) );
+        else if( color == 0xff00ff )
+            skillStyle.put( skill, new Style().setColor( TextFormatting.LIGHT_PURPLE ) );
+        else
+            skillStyle.put( skill, new Style() );
+    }
+
+    public static int getSkillColor( String skill )
+    {
+        return validSkills.getOrDefault( skill, 0xffffff );
+    }
+
+    public static Style getSkillStyle( String skill )
+    {
+        return skillStyle.getOrDefault( skill, new Style() );
+    }
+
+    public static void updateSkills()
+    {
+        int color;
+        Map test = JsonConfig.data;
+        for( Map.Entry<String, Map<String, Double>> entry : JsonConfig.data.getOrDefault( JType.SKILLS, new HashMap<>() ).entrySet() )
+        {
+            color = 0xffffff;
+            if( entry.getValue().containsKey( "color" ) )
+                color = (int) Math.floor( entry.getValue().get( "color" ) );
+            setSkill( entry.getKey(), color );
+        }
+        PmmoCommand.init();
+    }
+
+    public static void setSkillStyle( String skill, Style style )
+    {
+        skillStyle.put( skill.toLowerCase(), style );
     }
 
     @Override
@@ -94,153 +111,107 @@ public enum Skill
         return this.name().toLowerCase();
     }
 
-    Skill( int i )
+    public boolean equals( String string )
     {
-        this.value = i;
+        return this.toString().equals( string.toLowerCase() );
     }
 
-//    public static
-
-    public static int getInt( String i )
+    public static Map<String, Integer> getSkills()
     {
-        if( stringMap.get( i.toLowerCase() ) != null )
-            return stringMap.get( i.toLowerCase() ).getValue();
+        return new HashMap<>( validSkills );
+    }
+
+    public static int getLevel( String skill, PlayerEntity player)
+    {
+        if( player.world.isRemote )
+            return XP.levelAtXp( XP.getOfflineXp( skill, player.getUniqueID() ) );
         else
-            return 0;
+            return PmmoSavedData.get().getLevel( skill, player.getUniqueID() );
     }
 
-    public static String getString( int i )
+    public static int getLevel( String skill, UUID uuid )
     {
-        for( Skill theEnum : Skill.values() )
-        {
-            if( theEnum.value == i )
-                return theEnum.name().toLowerCase();
-        }
-        return "none";
+        return PmmoSavedData.get().getLevel( skill, uuid );
     }
 
-    public static Skill getSkill( String input )
+    public static double getLevelDecimal( String skill, PlayerEntity player )
     {
-        for( Skill theEnum : Skill.values() )
-        {
-            if( theEnum.name().toLowerCase().equals( input.toLowerCase() ) )
-                return theEnum;
-        }
-        return Skill.INVALID_SKILL;
-    }
-
-    public static Skill getSkill( int input )
-    {
-
-        for( Skill theEnum : Skill.values() )
-        {
-            if( theEnum.value == input )
-                return theEnum;
-        }
-        return Skill.INVALID_SKILL;
-    }
-
-    public int getValue()
-    {
-        return this.value;
-    }
-
-    public ResourceLocation getResLoc()
-    {
-        return new ResourceLocation( Reference.MOD_ID, this.toString() );
-    }
-
-    public int getLevel( PlayerEntity player )
-    {
-        if( player.world.isRemote() )
-            return XP.levelAtXp( XP.getOfflineXp( this, player.getUniqueID() ) );
+        if( player.world.isRemote )
+            return XP.levelAtXpDecimal( XP.getOfflineXp( skill, player.getUniqueID() ) );
         else
-            return PmmoSavedData.get().getLevel( this, player.getUniqueID() );
+            return PmmoSavedData.get().getLevelDecimal( skill, player.getUniqueID() );
     }
 
-    public int getLevel( UUID uuid )
+    public static double getLevelDecimal( String skill, UUID uuid )
     {
-        return PmmoSavedData.get().getLevel( this, uuid );
+        return PmmoSavedData.get().getLevelDecimal( skill, uuid );
     }
 
-    public double getLevelDecimal( PlayerEntity player )
+    public static double getXp( String skill, PlayerEntity player )
     {
-        if( player.world.isRemote() )
-            return XP.levelAtXpDecimal( XP.getOfflineXp( this, player.getUniqueID() ) );
+        if( player.world.isRemote )
+            return XP.getOfflineXp( skill, player.getUniqueID() );
         else
-            return PmmoSavedData.get().getLevelDecimal( this, player.getUniqueID() );
+            return PmmoSavedData.get().getXp( skill, player.getUniqueID() );
     }
 
-    public double getLevelDecimal( UUID uuid )
+    public static double getXp( String skill, UUID uuid )
     {
-        return PmmoSavedData.get().getLevelDecimal( this, uuid );
+        return PmmoSavedData.get().getXp( skill, uuid );
     }
 
-    public double getXp( PlayerEntity player )
+    public static void setLevel( String skill, ServerPlayerEntity player, double amount )
     {
-        if( player.world.isRemote() )
-            return XP.getOfflineXp( this, player.getUniqueID() );
-        else
-            return PmmoSavedData.get().getXp( this, player.getUniqueID() );
+        setXp( skill, player, XP.xpAtLevelDecimal( amount ) );
     }
 
-    public double getXp( UUID uuid )
-    {
-        return PmmoSavedData.get().getXp( this, uuid );
-    }
-
-    public void setLevel( ServerPlayerEntity player, double amount )
-    {
-        this.setXp( player, XP.xpAtLevelDecimal( amount ) );
-    }
-
-    public void setXp( UUID uuid, double amount )
+    public static void setXp( String skill, UUID uuid, double amount )
     {
         ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );
 
         if( player == null )
-            PmmoSavedData.get().setXp( this, uuid, amount );
+            PmmoSavedData.get().setXp( skill, uuid, amount );
         else
-            setXp( player, amount );
+            setXp( skill, player, amount );
     }
 
-    public void setXp( ServerPlayerEntity player, double amount )
+    public static void setXp( String skill, ServerPlayerEntity player, double amount )
     {
-        if( PmmoSavedData.get().setXp( this, player.getUniqueID(), amount ) )
+        if( PmmoSavedData.get().setXp( skill, player.getUniqueID(), amount ) )
         {
             AttributeHandler.updateAll( player );
             XP.updateRecipes( player );
 
-            NetworkHandler.sendToPlayer( new MessageXp( amount, this.getValue(), 0, false ), (ServerPlayerEntity) player );
+            NetworkHandler.sendToPlayer( new MessageXp( amount, skill, 0, false ), (ServerPlayerEntity) player );
         }
     }
 
-    public void addLevel( UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
+    public static void addLevel( String skill, UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        double missingXp = XP.xpAtLevelDecimal( this.getLevelDecimal( uuid ) + amount ) - this.getXp( uuid );
+        double missingXp = XP.xpAtLevelDecimal( getLevelDecimal( skill, uuid ) + amount ) - getXp( skill, uuid );
 
-        this.addXp( uuid, missingXp, sourceName, skip, ignoreBonuses );
+        addXp( skill, uuid, missingXp, sourceName, skip, ignoreBonuses );
     }
 
-    public void addLevel( ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
+    public static void addLevel( String skill, ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        double missingXp = XP.xpAtLevelDecimal( this.getLevelDecimal( player ) + amount ) - this.getXp( player );
+        double missingXp = XP.xpAtLevelDecimal( getLevelDecimal( skill, player ) + amount ) - getXp( skill, player );
 
-        this.addXp( player, missingXp, sourceName, skip, ignoreBonuses );
+        addXp( skill, player, missingXp, sourceName, skip, ignoreBonuses );
     }
 
-    public void addXp( UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
+    public static void addXp( String skill, UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
         ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );
 
         if( player == null )
-            PmmoSavedData.get().scheduleXp( this, uuid, amount, sourceName );
+            PmmoSavedData.get().scheduleXp( skill, uuid, amount, sourceName );
         else
-            addXp( player, amount, sourceName, skip, ignoreBonuses );
+            addXp( skill, player, amount, sourceName, skip, ignoreBonuses );
     }
 
-    public void addXp( ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
+    public static void addXp( String skill, ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        XP.awardXp( player, this, sourceName, amount, skip, ignoreBonuses, false );
+        XP.awardXp( player, skill, sourceName, amount, skip, ignoreBonuses, false );
     }
 }

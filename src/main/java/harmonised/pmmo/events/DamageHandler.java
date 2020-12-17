@@ -33,7 +33,7 @@ public class DamageHandler
 {
     public static double getEnduranceMultiplier( PlayerEntity player )
     {
-        int enduranceLevel = Skill.ENDURANCE.getLevel( player );
+        int enduranceLevel = Skill.getLevel( Skill.ENDURANCE.toString(), player );
         double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
         double maxEndurance = Config.forgeConfig.maxEndurance.get();
         double endurePercent = (enduranceLevel * endurancePerLevel);
@@ -45,7 +45,7 @@ public class DamageHandler
 
     public static double getFallSaveChance(PlayerEntity player )
     {
-        int agilityLevel = Skill.AGILITY.getLevel( player );
+        int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
         double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
         double saveChancePerLevel = Math.min( maxFallSaveChance, Config.forgeConfig.saveChancePerLevel.get() / 100 );
 
@@ -125,12 +125,12 @@ public class DamageHandler
                         hideEndurance = true;
 
                     if( event.getSource().getTrueSource() != null )
-                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getTrueSource().getDisplayName().getString(), enduranceXp, hideEndurance, false, false );
+                        XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getTrueSource().getDisplayName().getString(), enduranceXp, hideEndurance, false, false );
                     else
-                        XP.awardXp( player, Skill.ENDURANCE, event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
+                        XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
 
                     if( agilityXp > 0 )
-                        XP.awardXp( player, Skill.AGILITY, "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
+                        XP.awardXp( player, Skill.AGILITY.toString(), "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
                 }
             }
 
@@ -152,8 +152,8 @@ public class DamageHandler
                     ItemStack itemStack = player.getHeldItemMainhand();
                     ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
                     Map<String, Double> weaponReq = XP.getJsonMap( resLoc, JType.REQ_WEAPON );
-                    Skill skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY : Skill.COMBAT;
-                    Skill itemSpecificSkill = AutoValues.getItemSpecificSkill( itemStack.getItem().getRegistryName().toString() );
+                    String skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY.toString() : Skill.COMBAT.toString();
+                    String itemSpecificSkill = AutoValues.getItemSpecificSkill( itemStack.getItem().getRegistryName().toString() );
                     if( itemSpecificSkill != null )
                         skill = itemSpecificSkill;
                     if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
@@ -184,7 +184,7 @@ public class DamageHandler
 
                             for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ).entrySet() )
                             {
-                                int level = Skill.getSkill( entry.getKey() ).getLevel( player );
+                                int level = Skill.getLevel( entry.getKey(), player );
 
                                 if( level < entry.getValue() )
                                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
@@ -209,11 +209,11 @@ public class DamageHandler
                         damage = targetHealth;
 
                     if( skill.equals( Skill.COMBAT ) )
-                        damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageMelee.get();
+                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMelee.get();
                     else if( skill.equals( Skill.ARCHERY ) )
-                        damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageArchery.get();
+                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageArchery.get();
                     else if( skill.equals( Skill.MAGIC ) )
-                        damage += skill.getLevel( player ) / Config.forgeConfig.levelsPerDamageMagic.get();
+                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMagic.get();
 
                     damage /= (weaponGap + 1) / (double) (killGap + 1);
                     event.setAmount( damage );

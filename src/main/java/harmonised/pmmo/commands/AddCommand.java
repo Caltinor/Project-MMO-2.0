@@ -26,10 +26,9 @@ public class AddCommand
     public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
         String[] args = context.getInput().split( " " );
-        String skillName = StringArgumentType.getString( context, "Skill" ).toLowerCase();
+        String skill = StringArgumentType.getString( context, "Skill" ).toLowerCase();
         String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
         boolean ignoreBonuses = true;
-        Skill skill = Skill.getSkill( skillName );
         PlayerEntity sender = null;
 
         try
@@ -50,43 +49,33 @@ public class AddCommand
             //not player, it's fine
         }
 
-        if( skill != Skill.INVALID_SKILL )
+        try
         {
-            try
-            {
-                Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
+            Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
 
-                for( ServerPlayerEntity player : players )
+            for( ServerPlayerEntity player : players )
+            {
+                String playerName = player.getDisplayName().getString();
+                double newValue = DoubleArgumentType.getDouble( context, "Value To Add" );
+
+                if( type.equals( "level" ) )
+                    Skill.addLevel( skill, player, newValue, "add level Command", false, ignoreBonuses );
+                else if( type.equals( "xp" ) )
+                    Skill.addXp( skill, player, newValue, "add xp Command", false, ignoreBonuses );
+                else
                 {
-                    String playerName = player.getDisplayName().getString();
-                    double newValue = DoubleArgumentType.getDouble( context, "Value To Add" );
+                    LOGGER.error( "PMMO Command Add: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
-                    if( type.equals( "level" ) )
-                        skill.addLevel( player, newValue, "add level Command", false, ignoreBonuses );
-                    else if( type.equals( "xp" ) )
-                        skill.addXp( player, newValue, "add xp Command", false, ignoreBonuses );
-                    else
-                    {
-                        LOGGER.error( "PMMO Command Add: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
-
-                        if( sender != null )
-                            sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
-                    }
-
-                    LOGGER.info( "PMMO Command Add: " + playerName + " " + args[4] + " has had " + args[6] + " " + args[5] + " added" );
+                    if( sender != null )
+                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                 }
-            }
-            catch( CommandSyntaxException e )
-            {
-                LOGGER.error( "PMMO Command Add: Add Command Failed to get Players [" + Arrays.toString(args) + "]", e );
+
+                LOGGER.info( "PMMO Command Add: " + playerName + " " + args[4] + " has had " + args[6] + " " + args[5] + " added" );
             }
         }
-        else
+        catch( CommandSyntaxException e )
         {
-            LOGGER.error( "PMMO Command Add: Invalid 5th Element in command (skill name) " + Arrays.toString( args ) );
-
-            if( sender != null )
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidSkill", skillName ).setStyle( XP.textStyle.get( "red" ) ), false );
+            LOGGER.error( "PMMO Command Add: Add Command Failed to get Players [" + Arrays.toString(args) + "]", e );
         }
 
         return 1;

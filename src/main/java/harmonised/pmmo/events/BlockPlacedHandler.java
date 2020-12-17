@@ -9,12 +9,15 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
@@ -28,30 +31,29 @@ public class BlockPlacedHandler
 {
     private static final Map<UUID, BlockPos> lastPosPlaced = new HashMap<>();
 
-    public static void handlePlaced( BlockEvent.EntityMultiPlaceEvent event )
+    public static boolean handlePlaced( Entity entity, BlockState state, World world, BlockPos pos )
     {
-        if( event.getEntity() instanceof ServerPlayerEntity && !(event.getEntity() instanceof FakePlayer ) )
+        if( entity instanceof ServerPlayerEntity && !(entity instanceof FakePlayer ) )
         {
-            ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
+            ServerPlayerEntity player = (ServerPlayerEntity) entity;
 
             if ( XP.isPlayerSurvival( player ) )
             {
-                Block block = event.getPlacedBlock().getBlock();
-
+                Block block = state.getBlock();
                 if( block.equals( Blocks.WATER ) )
                 {
-                    XP.awardXp( player, Skill.MAGIC, "Walking on water -gasp-", Config.forgeConfig.jesusXp.get(), true, false, false );
-                    return;
+                    XP.awardXp( player, Skill.MAGIC.toString(), "Walking on water -gasp-", Config.forgeConfig.jesusXp.get(), true, false, false );
+                    return false;
                 }
 
                 if( XP.checkReq( player, block.getRegistryName(), JType.REQ_PLACE ) )
                 {
                     double blockHardnessLimitForPlacing = Config.forgeConfig.blockHardnessLimitForPlacing.get();
-                    double blockHardness = event.getPlacedBlock().getBlockHardness( event.getWorld(), event.getPos() );
+                    double blockHardness = block.getBlockHardness( state, world, pos );
                     if ( blockHardness > blockHardnessLimitForPlacing )
                         blockHardness = blockHardnessLimitForPlacing;
                     String playerName = player.getName().toString();
-                    BlockPos blockPos = event.getPos();
+                    BlockPos blockPos = pos;
                     UUID playerUUID = player.getUniqueID();
                     Map<String, Double> award = new HashMap<>();
                     String sourceName = "Placing a Block";
@@ -75,7 +77,7 @@ public class BlockPlacedHandler
                     XP.awardXpMap( player.getUniqueID(), award, sourceName, false, false );
 
                     if (lastPosPlaced.containsKey(playerName))
-                        lastPosPlaced.replace(playerUUID, event.getPos());
+                        lastPosPlaced.replace(playerUUID, pos );
                     else
                         lastPosPlaced.put(playerUUID, blockPos);
                 }
@@ -94,14 +96,12 @@ public class BlockPlacedHandler
                     else
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToPlaceDown", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
 
-                    event.setCanceled( true );
+                    return true;
                 }
 
-                for( BlockSnapshot blockSnapshot : event.getReplacedBlockSnapshots() )
-                {
-                    ChunkDataHandler.addPos( event.getWorld().getDimension().getType().getRegistryName(), blockSnapshot.getPos(), player.getUniqueID() );
-                }
+                ChunkDataHandler.addPos( world.getDimension().getType().getRegistryName(), pos, player.getUniqueID() );
             }
         }
+        return false;
     }
 }

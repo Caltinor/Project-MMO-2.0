@@ -1,5 +1,9 @@
 package harmonised.pmmo.events;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -24,7 +28,15 @@ public class EventHandler
 	@SubscribeEvent
 	public static void blockPlaced( BlockEvent.EntityMultiPlaceEvent event )
 	{
-		BlockPlacedHandler.handlePlaced( event );
+		if( BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), event.getWorld().getWorld(), event.getPos() ) )
+			event.setCanceled( true );
+	}
+
+	@SubscribeEvent
+	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
+	{
+		if( BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), event.getWorld().getWorld(), event.getPos() ) )
+			event.setCanceled( true );
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

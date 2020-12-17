@@ -23,13 +23,9 @@ public class Levels
     {
         PlayerEntity player = mcPlayer.getInternal();
         CompoundNBT reqLevels = args.getInternal();
-        Skill skill;
-        for( String key : reqLevels.keySet() )
+        for( String skill : reqLevels.keySet() )
         {
-            skill = Skill.getSkill( key );
-            if( skill.equals( Skill.INVALID_SKILL ) )
-                LOGGER.error( "ZenScript -> PMMO -> checkLevels -> Invalid Skill Provided! \"" + key + "\"" );
-            if( reqLevels.getDouble( key ) > skill.getLevelDecimal( player ) )
+            if( reqLevels.getDouble( skill ) > Skill.getLevelDecimal( skill, player ) )
                 return false;
         }
         return true;
@@ -42,14 +38,9 @@ public class Levels
         if( player instanceof ServerPlayerEntity )
         {
             CompoundNBT xpAwards = args.getInternal();
-            Skill skill;
-            for( String key : xpAwards.keySet() )
+            for( String skill : xpAwards.keySet() )
             {
-                skill = Skill.getSkill( key );
-                if( skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.error( "ZenScript -> PMMO -> awardXp -> Invalid Skill Provided! \"" + key + "\"" );
-                else
-                    skill.addXp( (ServerPlayerEntity) player, xpAwards.getDouble( key ), "CraftTweaker", false, ignoreBonuses );
+                Skill.addXp( skill, (ServerPlayerEntity) player, xpAwards.getDouble( skill ), "CraftTweaker", false, ignoreBonuses );
             }
         }
         else if( player instanceof ClientPlayerEntity )
@@ -65,14 +56,9 @@ public class Levels
         if( player instanceof ServerPlayerEntity )
         {
             CompoundNBT xpAwards = args.getInternal();
-            Skill skill;
-            for( String key : xpAwards.keySet() )
+            for( String skill : xpAwards.keySet() )
             {
-                skill = Skill.getSkill( key );
-                if( skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.error( "ZenScript -> PMMO -> awardLevels -> Invalid Skill Provided! \"" + key + "\"" );
-                else
-                    skill.addLevel( (ServerPlayerEntity) player, xpAwards.getDouble( key ), "CraftTweaker", false, true );
+                Skill.addLevel( skill, (ServerPlayerEntity) player, xpAwards.getDouble( skill ), "CraftTweaker", false, true );
             }
         }
         else if( player instanceof ClientPlayerEntity )
@@ -88,14 +74,9 @@ public class Levels
         if( player instanceof ServerPlayerEntity )
         {
             CompoundNBT xpAwards = args.getInternal();
-            Skill skill;
-            for( String key : xpAwards.keySet() )
+            for( String skill : xpAwards.keySet() )
             {
-                skill = Skill.getSkill( key );
-                if( skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.error( "ZenScript -> PMMO -> setXp -> Invalid Skill Provided! \"" + key + "\"" );
-                else
-                    skill.setXp( (ServerPlayerEntity) player, xpAwards.getDouble( key ) );
+                Skill.setXp( skill, (ServerPlayerEntity) player, xpAwards.getDouble( skill ) );
             }
         }
         else if( player instanceof ClientPlayerEntity )
@@ -111,14 +92,9 @@ public class Levels
         if( player instanceof ServerPlayerEntity )
         {
             CompoundNBT xpAwards = args.getInternal();
-            Skill skill;
-            for( String key : xpAwards.keySet() )
+            for( String skill : xpAwards.keySet() )
             {
-                skill = Skill.getSkill( key );
-                if( skill.equals( Skill.INVALID_SKILL ) )
-                    LOGGER.error( "ZenScript -> PMMO -> setLevels -> Invalid Skill Provided! \"" + key + "\"" );
-                else
-                    skill.setLevel( (ServerPlayerEntity) player, xpAwards.getDouble( key ) );
+                Skill.setLevel( skill, (ServerPlayerEntity) player, xpAwards.getDouble( skill ) );
             }
         }
         else if( player instanceof ClientPlayerEntity )
