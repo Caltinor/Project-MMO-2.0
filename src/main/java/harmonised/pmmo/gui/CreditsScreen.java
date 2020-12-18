@@ -140,12 +140,12 @@ public class CreditsScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "de_de", "Matterfall#1952", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "de_de", "Matterfall#1952", new TranslationTextComponent( "pmmo.translated", "German" ).getString(), button ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
 
-        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "es_ar", "N1co#9248", new TranslationTextComponent( "pmmo.translated", "Chinese Simplified" ).getString(), button ->
+        listButtons.add( new ListButtonBig( 0, 0, 1, 6, "es_ar", "N1co#9248", new TranslationTextComponent( "pmmo.translated", "Spanish" ).getString(), button ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
         }));
