@@ -1113,14 +1113,11 @@ public class ListScreen extends GuiScreen
 
     public static double getLowestSalvageReq( Map<String, Map<String, Double>> map )
     {
-        Integer lowestReq = null;
-        int levelReq;
+        double lowestReq = FConfig.getConfig( "maxLevel" );
 
         for( Map.Entry<String, Map<String, Double>> entry : map.entrySet() )
         {
-            levelReq = (int) (double) entry.getValue().get( "levelReq" );
-            if( lowestReq == null || levelReq < lowestReq )
-                lowestReq = levelReq;
+            lowestReq = Math.min( lowestReq, (int) (double) entry.getValue().get( "levelReq" ) );
         }
 
         return lowestReq;

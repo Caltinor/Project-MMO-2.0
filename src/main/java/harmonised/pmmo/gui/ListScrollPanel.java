@@ -55,7 +55,7 @@ public class ListScrollPanel extends GuiScreen
 
         for ( ListButton button : buttons )
         {
-            height += button.getHeight() + 3;
+            height += button.getHeight() + 4;
         }
 
         return height;

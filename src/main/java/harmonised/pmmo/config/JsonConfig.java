@@ -937,7 +937,7 @@ public class JsonConfig
         ResourceLocation salvageFromItemResLoc;
         String salvageToItemResLoc;
         Map<String, Double> salvageToItemMap;
-        Item item;
+        Item item, salvageToItem;
 
         for( Map.Entry<String, Map<String, Map<String, Double>>> inputSalvageFromItemEntry : input.entrySet() )
         {
@@ -945,14 +945,15 @@ public class JsonConfig
             item = XP.getItem( salvageFromItemResLoc );
             if( !item.equals( Items.AIR ) )
             {
-                output.put( salvageFromItemResLoc.toString(), new HashMap<>() );
-                outputSalvageFromItemMap = output.get( salvageFromItemResLoc.toString() );
                 for( Map.Entry<String, Map<String, Double>> inputSalvageToItemEntry : inputSalvageFromItemEntry.getValue().entrySet() )
                 {
-                    item = XP.getItem( inputSalvageToItemEntry.getKey() );
+                    salvageToItem = XP.getItem( inputSalvageToItemEntry.getKey() );
                     salvageToItemResLoc = item.getRegistryName().toString();
-                    if( !item.equals( Items.AIR ) )
+                    if( !salvageToItem.equals( Items.AIR ) )
                     {
+                        output.put( salvageFromItemResLoc.toString(), new HashMap<>() );
+                        outputSalvageFromItemMap = output.get( salvageFromItemResLoc.toString() );
+
                         salvageToItemMap = inputSalvageToItemEntry.getValue();
 
                         if( !( salvageToItemMap.containsKey( "salvageMax" ) ) )
