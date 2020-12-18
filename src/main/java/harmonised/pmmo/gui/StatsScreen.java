@@ -119,7 +119,7 @@ public class StatsScreen extends GuiScreen
 
         text = new ArrayList<>();
         entryTitle = new TextComponentTranslation( "pmmo.hearts" );
-        text.add( new TextComponentTranslation( "pmmo.heartBonus", AttributeHandler.getHeartBoost( player ) ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
+        text.add( new TextComponentTranslation( "pmmo.heartBonus", AttributeHandler.getHeartBoost( player ) / 2 ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
