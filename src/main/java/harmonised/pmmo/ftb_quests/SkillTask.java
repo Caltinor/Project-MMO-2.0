@@ -82,7 +82,7 @@ public class SkillTask extends Task
     public String getAltTitle()
     {
 //        return I18n.format("ftbquests.task.ftbquests.skill") + ": " + TextFormatting.DARK_GREEN + skill;
-        return TextFormatting.DARK_GREEN + skill.toString();
+        return TextFormatting.DARK_GREEN + skill;
     }
 
     @Override

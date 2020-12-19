@@ -358,5 +358,12 @@
 	"pmmo.levelUpDamageBoostArchery": "%1$s %2$s level up! %3$s Damage Bonus in Archery!",
 	"pmmo.levelUpDamageBoostMagic": "%1$s %2$s level up! %3$s Damage Bonus in Magic!",
 	"pmmo.levelUpFeatureUnlock": "You have unlocked %1$s! (%2$s)",
-	"pmmo.levelUpPartialFeatureUnlock": "You have partially unlocked %1$s (%2$s)"
+	"pmmo.levelUpPartialFeatureUnlock": "You have partially unlocked %1$s (%2$s)",
+	"pmmo.ignoreBonuses": "Ignore Bonuses",
+	"ftbquests.reward.pmmo.xpreward": "Skill Xp Reward",
+	"ftbquests.reward.pmmo.xpreward.skill": "Skill",
+	"ftbquests.reward.pmmo.xpreward.amount": "Xp Reward",
+	"ftbquests.reward.pmmo.levelreward": "Skill Level Reward",
+	"ftbquests.reward.pmmo.levelreward.skill": "Skill",
+	"ftbquests.reward.pmmo.levelreward.amount": "Level Reward"
 }

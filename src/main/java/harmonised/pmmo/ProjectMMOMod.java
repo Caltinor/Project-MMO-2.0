@@ -1,5 +1,6 @@
 package harmonised.pmmo;
 
+import com.feed_the_beast.ftbquests.quest.reward.RewardType;
 import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import com.feed_the_beast.mods.ftbguilibrary.icon.Icon;
 import harmonised.pmmo.commands.PmmoCommand;
@@ -49,7 +50,10 @@ public class ProjectMMOMod
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::modsLoading );
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::clientLoading );
         if( ModList.get().isLoaded( "ftbquests" ) )
-            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistry );
+        {
+            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistryTaskType );
+            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( RewardType.class, RegisterHandler::handleFTBQRegistryRewardType );
+        }
         MinecraftForge.EVENT_BUS.addListener( this::serverAboutToStart );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
 

@@ -1,7 +1,6 @@
 package harmonised.pmmo.config;
 
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -903,7 +902,7 @@ public class Config
                 this.minXpGrow = subscriber.subscribe(builder
                         .comment( "What is the minimum amount xp grows a set amount of time? (Default 0.2, increase to speed up growth)" )
                         .translation( "pmmo.minXpGrow" )
-                        .defineInRange( "minXpGrow", 1D, 0.01D, 100D ) );
+                        .defineInRange( "minXpGrow", 5D, 0.01D, 100D ) );
 
                 this.xpDropsAttachedToBar = subscriber.subscribe(builder
                         .comment( "Should xp drops sync up with the bar being open or closed? HIGHLY RECOMMEND TO KEEP FALSE IF YOU ARE MOVING XP DROP POSITIONS" )

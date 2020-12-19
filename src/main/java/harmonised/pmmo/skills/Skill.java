@@ -59,21 +59,25 @@ public enum Skill
 
     public static void setSkill( String skill, int color )
     {
-        validSkills.put( skill, color );
-        if( color == 0xff0000 )
-            skillStyle.put( skill, new Style().setColor( TextFormatting.RED ) );
-        else if( color == 0x00ff00 )
-            skillStyle.put( skill, new Style().setColor( TextFormatting.GREEN ) );
-        else if( color == 0x0000ff )
-            skillStyle.put( skill, new Style().setColor( TextFormatting.BLUE ) );
-        else if( color == 0xffff00 )
-            skillStyle.put( skill, new Style().setColor( TextFormatting.YELLOW ) );
-        else if( color == 0x00ffff )
-            skillStyle.put( skill, new Style().setColor( TextFormatting.AQUA ) );
-        else if( color == 0xff00ff )
-            skillStyle.put( skill, new Style().setColor( TextFormatting.LIGHT_PURPLE ) );
-        else
-            skillStyle.put( skill, new Style() );
+        skill = skill.toLowerCase();
+        if( !skill.equals( INVALID_SKILL.toString() ) )
+        {
+            validSkills.put( skill, color );
+            if( color == 0xff0000 )
+                skillStyle.put( skill, new Style().setColor( TextFormatting.RED ) );
+            else if( color == 0x00ff00 )
+                skillStyle.put( skill, new Style().setColor( TextFormatting.GREEN ) );
+            else if( color == 0x0000ff )
+                skillStyle.put( skill, new Style().setColor( TextFormatting.BLUE ) );
+            else if( color == 0xffff00 )
+                skillStyle.put( skill, new Style().setColor( TextFormatting.YELLOW ) );
+            else if( color == 0x00ffff )
+                skillStyle.put( skill, new Style().setColor( TextFormatting.AQUA ) );
+            else if( color == 0xff00ff )
+                skillStyle.put( skill, new Style().setColor( TextFormatting.LIGHT_PURPLE ) );
+            else
+                skillStyle.put( skill, new Style() );
+        }
     }
 
     public static int getSkillColor( String skill )
