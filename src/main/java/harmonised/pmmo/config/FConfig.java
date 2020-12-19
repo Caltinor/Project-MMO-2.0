@@ -976,6 +976,10 @@ public class FConfig
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", autoGenerateWeaponReqDynamicallyEnabled ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", autoGenerateToolReqDynamicallyEnabled ? 1D : 0D );
 
+        localConfig.put( "scaleXpBoostByDurability", scaleXpBoostByDurability ? 1D : 0D );
+        localConfig.put( "scaleXpBoostByDurabilityStart", scaleXpBoostByDurabilityStart);
+        localConfig.put( "scaleXpBoostByDurabilityEnd", scaleXpBoostByDurabilityEnd );
+
         localConfig.put( "maxLevel", (double) maxLevel );
         localConfig.put( "baseXp", baseXp );
         localConfig.put( "xpIncreasePerLevel", xpIncreasePerLevel );
