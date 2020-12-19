@@ -56,7 +56,6 @@ public class XP
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
-	private static Map<String, Integer> skillColors = new HashMap<>();
 	public static Set<UUID> isVeining = new HashSet<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
 	public static Map<UUID, String> playerNames = new HashMap<>();
@@ -72,33 +71,6 @@ public class XP
 
 	public static void initValues()
 	{
-////////////////////////////////////COLOR_VALUES///////////////////////////////////////////////////
-		Skill.setSkill( Skill.INVALID_SKILL.toString(), 0xffffff );
-		Skill.setSkill( Skill.MINING.toString(), 0x00ffff );
-		Skill.setSkill( Skill.BUILDING.toString(), 0x00ffff );
-		Skill.setSkill( Skill.EXCAVATION.toString(), 0xe69900 );
-		Skill.setSkill( Skill.WOODCUTTING.toString(), 0xffa31a );
-		Skill.setSkill( Skill.FARMING.toString(), 0x00e600 );
-		Skill.setSkill( Skill.AGILITY.toString(), 0x66cc66 );
-		Skill.setSkill( Skill.ENDURANCE.toString(), 0xcc0000 );
-		Skill.setSkill( Skill.COMBAT.toString(), 0xff3300 );
-		Skill.setSkill( Skill.ARCHERY.toString(), 0xffff00 );
-		Skill.setSkill( Skill.SMITHING.toString(), 0xf0f0f0 );
-		Skill.setSkill( Skill.FLYING.toString(), 0xccccff );
-		Skill.setSkill( Skill.SWIMMING.toString(), 0x3366ff );
-		Skill.setSkill( Skill.FISHING.toString(), 0x00ccff );
-		Skill.setSkill( Skill.CRAFTING.toString(), 0xff9900 );
-		Skill.setSkill( Skill.MAGIC.toString(), 0x0000ff );
-		Skill.setSkill( Skill.SLAYER.toString(), 0xffffff );
-		Skill.setSkill( Skill.HUNTER.toString(), 0xcf7815 );
-		Skill.setSkill( Skill.TAMING.toString(), 0xffffff );
-		Skill.setSkill( Skill.COOKING.toString(), 0xe69900 );
-		Skill.setSkill( Skill.ALCHEMY.toString(), 0xe69900 );
-
-		for( Map.Entry<String, Integer> entry : skillColors.entrySet() )
-		{
-			Skill.setSkillStyle( entry.getKey(), Style.EMPTY.setColor(Color.fromInt( entry.getValue() ) ) );
-		}
 ////////////////////////////////////Style//////////////////////////////////////////////
 		textStyle.put( "red", 			Style.EMPTY.applyFormatting( TextFormatting.RED ) );
 		textStyle.put( "green", 		Style.EMPTY.applyFormatting( TextFormatting.GREEN ) );
@@ -232,11 +204,6 @@ public class XP
 		}
 
 		return theMap;
-	}
-
-	public static Integer getSkillColor( String skill )
-	{
-		return skillColors.getOrDefault( skill, 0xffffff );
 	}
 
 	public static ResourceLocation getBiomeResLoc( World world, Biome biome )
@@ -1337,7 +1304,7 @@ public class XP
 		CompoundNBT l = new CompoundNBT();
 
 		int[] colors = new int[1];
-		colors[0] = getSkillColor( skill );
+		colors[0] = Skill.getSkillColor( skill );
 //		int[] fadeColors = {0xff0000, 0x00ff00, 0x0000ff};
 
 		l.putInt( "Flicker", 1 );
