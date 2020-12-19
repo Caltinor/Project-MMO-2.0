@@ -58,7 +58,6 @@ public class XP
 	private static Map<Material, String> materialHarvestTool = new HashMap<>();
 	private static Map<String, Integer> skillColors = new HashMap<>();
 	public static Set<UUID> isVeining = new HashSet<>();
-	public static Map<String, Style> skillStyle = new HashMap<>();
 	public static Map<String, Style> textStyle = new HashMap<>();
 	public static Map<UUID, String> playerNames = new HashMap<>();
 	public static Map<String, UUID> playerUUIDs = new HashMap<>();

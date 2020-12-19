@@ -52,7 +52,7 @@ public class StatsScrollPanel extends ScrollPanel
 
         for( StatsEntry a : statsEntries )
         {
-            height += a.getHeight() + 2;
+            height += a.getHeight() + 3;
         }
 
         return height;

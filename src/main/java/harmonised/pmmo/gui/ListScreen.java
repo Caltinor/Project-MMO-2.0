@@ -1097,7 +1097,7 @@ public class ListScreen extends Screen
         if( jType.equals( JType.SKILLS ) )
             title = getTransComp( "pmmo.playerStats", XP.playerNames.get( uuid ) );
         else if( jType.equals( JType.HISCORE ) )
-            title = getTransComp( "pmmo.skillHiscores", getTransComp( "pmmo." + type ) ).setStyle( XP.skillStyle.get( type ) );
+            title = getTransComp( "pmmo.skillHiscores", getTransComp( "pmmo." + type ) ).setStyle( Skill.getSkillStyle( type ) );
 
         if( font.getStringWidth( title.getString() ) > 220 )
             drawCenteredString( stack, font, title, sr.getScaledWidth() / 2, y - 10, 0xffffff );
