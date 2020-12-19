@@ -105,8 +105,6 @@ public class XPOverlayGUI extends AbstractGui
 			skillListX = (int) ( sr.getScaledWidth() * skillListOffsetX );
 			skillListY = (int) ( sr.getScaledHeight() * skillListOffsetY );
 
-			aSkill = skills.get( skill );
-
 			timeDiff = (System.nanoTime() - lastTime);
 			lastTime = System.nanoTime();
 
@@ -139,6 +137,14 @@ public class XPOverlayGUI extends AbstractGui
 			else
 				listPressed = false;
 
+			aSkill = skills.get( skill );
+
+			if( aSkill == null && skills.size() > 0 )
+			{
+				skill = skills.keySet().iterator().next();
+				aSkill = skills.get( skill );
+			}
+
 			if( !Minecraft.getInstance().isGamePaused() )
 			{
 				doRayTrace();
@@ -146,8 +152,12 @@ public class XPOverlayGUI extends AbstractGui
 				doVein();
 				doSkills();
 			}
-			doXpDrops( stack );
-			doXpBar();
+
+			if( aSkill != null )
+			{
+				doXpDrops( stack );
+				doXpBar();
+			}
 
 			if( showSkillsListAtCorner )
 				doSkillList();
@@ -324,8 +334,6 @@ public class XPOverlayGUI extends AbstractGui
 
 	private void doXpBar()
 	{
-		if( aSkill == null )
-			return;
 		themePos += ( 2.5 + 7.5 * ( aSkill.pos % Math.floor( aSkill.pos ) ) ) * (timeDiff / 1000000);
 
 		if( themePos > 10000 )
