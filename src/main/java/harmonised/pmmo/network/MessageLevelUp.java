@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MessageLevelUp extends MessageBase<MessageLevelUp>
@@ -70,7 +72,8 @@ public class MessageLevelUp extends MessageBase<MessageLevelUp>
 
                 if( packet.level % FConfig.levelsPerMilestone == 0 && FConfig.broadcastMilestone )
                 {
-                    player.getServer().getPlayerList().getPlayers().forEach( otherPlayer ->
+                    List<EntityPlayerMP> players = new ArrayList<>( player.getServer().getPlayerList().getPlayers() );
+                    for( EntityPlayerMP otherPlayer : players )
                     {
                         if( otherPlayer.getUniqueID() != player.getUniqueID() )
                         {
@@ -82,7 +85,7 @@ public class MessageLevelUp extends MessageBase<MessageLevelUp>
                                     XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );
                             }
                         }
-                    });
+                    };
                 }
             }
             else
