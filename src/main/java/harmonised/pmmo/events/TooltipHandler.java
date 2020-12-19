@@ -93,8 +93,8 @@ public class TooltipHandler
                 Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get( JType.SALVAGE_FROM ).get( regKey );
                 Map<String, Map<String, Double>> treasureInfo = JsonConfig.data2.get( JType.TREASURE ).get( regKey );
                 Map<String, Map<String, Double>> treasureFromInfo = JsonConfig.data2.get( JType.TREASURE_FROM ).get( regKey );
-                Map<String, Double> heldItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_HELD ).get( regKey );
-                Map<String, Double> wornItemXpBoost = JsonConfig.data.get( JType.XP_BONUS_WORN ).get( regKey );
+                Map<String, Double> heldItemXpBoost = XP.getStackXpBoosts( itemStack, true );
+                Map<String, Double> wornItemXpBoost = XP.getStackXpBoosts( itemStack, false );
 
                 //Dynamic Reqs
                 if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 )
@@ -239,14 +239,12 @@ public class TooltipHandler
                     if( heldItemXpBoost != null && heldItemXpBoost.size() > 0 )
                     {
                         heldItemXpBoost = new HashMap<>( heldItemXpBoost );
-                        XP.multiplyMapAnyDouble( heldItemXpBoost, XP.getXpBoostDurabilityMultiplier( itemStack ) );
                         addTooltipTextSkillPercentage( "pmmo.itemXpBoostHeld", heldItemXpBoost, event );
                     }
 
                     if( wornItemXpBoost != null && wornItemXpBoost.size() > 0 )
                     {
                         wornItemXpBoost = new HashMap<>( wornItemXpBoost );
-                        XP.multiplyMapAnyDouble( wornItemXpBoost, XP.getXpBoostDurabilityMultiplier( itemStack ) );
                         addTooltipTextSkillPercentage( "pmmo.itemXpBoostWorn", wornItemXpBoost, event );
                     }
 

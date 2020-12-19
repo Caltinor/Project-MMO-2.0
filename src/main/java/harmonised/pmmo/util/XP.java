@@ -875,8 +875,8 @@ public class XP
 		if( itemStack.isDamageable() )
 		{
 			double durabilityPercentage = 1 - itemStack.getDamage() / (double) itemStack.getMaxDamage();
-			double scaleStart = Config.forgeConfig.scaleXpBoostByDurabilityStart.get() / 100D;
-			double scaleEnd = Math.max( scaleStart, Config.forgeConfig.scaleXpBoostByDurabilityEnd.get() / 100D );
+			double scaleStart = Config.getConfig( "scaleXpBoostByDurabilityStart" ) / 100D;
+			double scaleEnd = Math.max( scaleStart, Config.getConfig( "scaleXpBoostByDurabilityEnd" ) / 100D );
 			scale = DP.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
 		}
 		return scale;
@@ -888,7 +888,8 @@ public class XP
 		JType jType = type ? JType.XP_BONUS_HELD : JType.XP_BONUS_WORN;
 		String regName = item.getRegistryName().toString();
 		Map<String, Double> itemXpMap = JsonConfig.data.get( jType ).getOrDefault( regName, new HashMap<>() );
-		multiplyMapAnyDouble( itemXpMap, getXpBoostDurabilityMultiplier( itemStack ) );
+		if( Config.getConfig( "scaleXpBoostByDurability" ) != 0 )
+			multiplyMapAnyDouble( itemXpMap, getXpBoostDurabilityMultiplier( itemStack ) );
 		return itemXpMap;
 	}
 
@@ -909,7 +910,7 @@ public class XP
 			if( type || checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
 			{
 				boost = itemXpMap.get( skill );
-				if( Config.forgeConfig.scaleXpBoostByDurability.get() && itemStack.isDamageable() )
+				if( Config.getConfig( "scaleXpBoostByDurability" ) != 0 && itemStack.isDamageable() )
 					boost *= getXpBoostDurabilityMultiplier( itemStack );
 			}
 		}
