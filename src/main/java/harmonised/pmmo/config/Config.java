@@ -43,6 +43,10 @@ public class Config
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", forgeConfig.autoGenerateToolReqDynamicallyEnabled.get() ? 1D : 0D );
 
+        localConfig.put( "scaleXpBoostByDurability", forgeConfig.scaleXpBoostByDurability.get() ? 1D : 0D );
+        localConfig.put( "scaleXpBoostByDurabilityStart", forgeConfig.scaleXpBoostByDurabilityStart.get() );
+        localConfig.put( "scaleXpBoostByDurabilityEnd", forgeConfig.scaleXpBoostByDurabilityEnd.get() );
+
         localConfig.put( "maxLevel", (double) forgeConfig.maxLevel.get() );
         localConfig.put( "baseXp", forgeConfig.baseXp.get() );
         localConfig.put( "xpIncreasePerLevel", forgeConfig.xpIncreasePerLevel.get() );
