@@ -4,7 +4,7 @@ I am a new mod dev, so please let me know if the following is not correct:
 
 ///Craft Tweaker Support
 
-Example of Craft Tweaker use with PMMO
+Example of Craft Tweaker use with PMMO (May or may not be available for either Minecraft version, you may ask in our Discord if you'd like to make sure of the current state)
 
 `
 import crafttweaker.api.data.MapData;
@@ -60,27 +60,18 @@ Else, it will return false if any 1 is not met.
 
 ///API
 
-I believe I have API support for my mod! You should be able to access my mod's Levels by the methods
-
-(If you want to use my API with customizable-by-user values, please contact me! I have an idea of how that could be done, and that is a new method that takes in an ENUM I provide to specify what you want done, with a Registry Name that you provide)
-
 Xp.awardXpTrigger is the most flexible way to award people experience, made specifically for API
 The xp values can be configured by anyone inside data.json, by the use of a given key, example: "doomweapon.consume.invisible" inside the "trigger_xp" entry of data.json will determine how much xp, and in what skills this action will award when the xp award is triggered from an API
 
 Others:
 
-Skill.SKILLNAME.getLevel returns level int
-Skill.SKILLNAME.getXp returns xp double
-Skill.SKILLNAME.setLevel sets level double
-Skill.SKILLNAME.setXp sets xp double
-Skill.SKILLNAME.addLevel rewards level double
-Skill.SKILLNAME.addXp rewards xp double
+Skill.getLevel returns level int
+Skill.getXp returns xp double
+Skill.setLevel sets level double
+Skill.setXp sets xp double
+Skill.addLevel rewards level double
+Skill.addXp rewards xp double
 XP.getXp( ResourceLocation item, JType type ) returns a Map<String, Double> of the xp/level values stored for that item, in that type
-
-XP.getLevelDecimal (takes in skill + player, returns level as double, works on client/server)
-XP.xpAtLevel (takes in a level as int, returns double xp value)
-XP.xpAtLevelDecimal (takes in a level as double, returns double xp value)
-XP.getxpMap (takes in player, returns PMMO Skills CompoundNBT of all the player's xp values, as doubles)
 
 To use the API, include these two lines in your gradle.build
 
