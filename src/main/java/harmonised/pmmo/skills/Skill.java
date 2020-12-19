@@ -60,8 +60,12 @@ public enum Skill
 
     public static void setSkill( String skill, int color )
     {
-        validSkills.put( skill, color );
-        skillStyle.put( skill, Style.EMPTY.setColor( Color.fromInt( color ) ) );
+        skill = skill.toLowerCase();
+        if( !skill.equals( INVALID_SKILL.toString() ) )
+        {
+            validSkills.put( skill, color );
+            skillStyle.put( skill, Style.EMPTY.setColor( Color.fromInt( color ) ) );
+        }
     }
 
     public static int getSkillColor( String skill )

@@ -74,7 +74,7 @@ public class SkillTask extends Task
     public void getConfig(ConfigGroup config)
     {
         super.getConfig(config);
-        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.INVALID_SKILL.toString(), Skill.getSkills().entrySet().toArray() ).create());
+        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.MINING.toString(), Skill.getSkills().keySet().toArray() ).create());
         config.addDouble( "requiredLevel", requiredLevel, input -> requiredLevel = input, 1, 1, Config.getConfig( "maxLevel" ) );
     }
 
