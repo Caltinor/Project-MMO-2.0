@@ -1,25 +1,20 @@
 package harmonised.pmmo;
 
-import com.feed_the_beast.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
-import harmonised.pmmo.events.RegisterHandler;
 import harmonised.pmmo.events.ServerStoppingHandler;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.proxy.ClientProxy;
 import harmonised.pmmo.proxy.CommonProxy;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;

@@ -1,15 +1,11 @@
 package harmonised.pmmo.config;
 
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Configuration;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -489,7 +485,7 @@ public class FConfig
 
     @Config.Comment( "What is the minimum amount xp grows a set amount of time? (Default 0.2, increase to speed up growth)" )
     @Config.Name( "minXpGrow" )
-    @Config.RangeDouble( min = 0, max = 1 )
+    @Config.RangeDouble( min = 0, max = 100 )
     public static double minXpGrow = 1D;
 
     @Config.Comment( "Should xp drops sync up with the bar being open or closed? HIGHLY RECOMMEND TO KEEP FALSE IF YOU ARE MOVING XP DROP POSITIONS" )
