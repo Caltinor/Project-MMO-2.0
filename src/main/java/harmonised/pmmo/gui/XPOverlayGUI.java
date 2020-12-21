@@ -484,13 +484,15 @@ public class XPOverlayGUI extends AbstractGui
 			skillsKeys = new ArrayList<>( skills.keySet() );
 			skillsKeys.sort( Comparator.<String>comparingDouble( a -> skills.get( a ).xp ).reversed() );
 
-			for( Map.Entry<String, ASkill> entry : new HashSet<>( skills.entrySet() ) )
+			for( String key : skillsKeys )
 			{
-				tempASkill = entry.getValue();
-				tempSkill = entry.getKey();
+				tempSkill = key;
+				tempASkill = skills.get( key );
+				if( tempASkill == null )
+					continue;
 				level = XP.levelAtXpDecimal( tempASkill.xp );
 				tempString = DP.dp( Math.floor( level * 100D ) / 100D );
-				color = Skill.getSkillColor( entry.getKey() );
+				color = Skill.getSkillColor( tempSkill );
 				if( level >= maxLevel )
 					tempString = "" + maxLevel;
 				drawString( fontRenderer, tempString, skillListX + levelGap + 4 - fontRenderer.getStringWidth( tempString ), skillListY + 3 + listIndex, color );
