@@ -81,7 +81,7 @@ public class BlockBrokenHandler
         {
             int startLevel;
 
-            if( XP.correctHarvestTool( material ).equals( "axe" ) )
+            if( XP.getHarvestTool( state ).equals( "axe" ) )
             {
                 NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getUnlocalizedName(), "", true, 2 ), (EntityPlayerMP) player );
                 NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getUnlocalizedName(), "", false, 2 ), (EntityPlayerMP) player );
@@ -155,7 +155,7 @@ public class BlockBrokenHandler
 //        }
 
         String awardMsg = "";
-        switch( XP.getSkill( material ) )
+        switch( XP.getSkill( state ) )
         {
             case "mining":
                 awardMsg = "Mining";

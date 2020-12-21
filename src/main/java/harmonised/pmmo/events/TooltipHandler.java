@@ -4,18 +4,16 @@ import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.FConfig;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -61,7 +59,7 @@ public class TooltipHandler
                 String regKey = item.getRegistryName().toString();
                 double hardness;
                 double dValue;
-                Material material = null;
+                IBlockState state = null;
 
 //                if( ClientHandler.OPEN_MENU.isKeyDown() )
 //                {
@@ -138,7 +136,7 @@ public class TooltipHandler
 
                 if( item instanceof ItemBlock )
                 {
-                    material = ( (ItemBlock) item).getBlock().getDefaultState().getMaterial();
+                    state = ( (ItemBlock) item).getBlock().getDefaultState();
                     hardness = ( (ItemBlock) item).getBlock().getDefaultState().getBlockHardness( null, new BlockPos( 0, 0, 0 ) );
                     if( hardness > 0 )
                         tooltip.add( new TextComponentTranslation( "pmmo.hardness", DP.dpSoft( hardness ) ).getUnformattedText() );
@@ -266,7 +264,7 @@ public class TooltipHandler
 
                     if( breakReq != null && breakReq.size() > 0 )
                     {
-                        if( XP.correctHarvestTool( material ).equals( "axe" ) )
+                        if( state != null && XP.getHarvestTool( state ).equals( "axe" ) )
                             addTooltipTextSkill( "pmmo.chop", breakReq, event );
                         else if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable )
                             addTooltipTextSkill( "pmmo.harvest", breakReq, event );
