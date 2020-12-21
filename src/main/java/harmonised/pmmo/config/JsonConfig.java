@@ -943,15 +943,17 @@ public class JsonConfig
         {
             salvageFromItemResLoc = XP.getResLoc( inputSalvageFromItemEntry.getKey() );
             item = XP.getItem( salvageFromItemResLoc );
+
             if( !item.equals( Items.AIR ) )
             {
                 for( Map.Entry<String, Map<String, Double>> inputSalvageToItemEntry : inputSalvageFromItemEntry.getValue().entrySet() )
                 {
                     salvageToItem = XP.getItem( inputSalvageToItemEntry.getKey() );
-                    salvageToItemResLoc = item.getRegistryName().toString();
+                    salvageToItemResLoc = salvageToItem.getRegistryName().toString();
                     if( !salvageToItem.equals( Items.AIR ) )
                     {
-                        output.put( salvageFromItemResLoc.toString(), new HashMap<>() );
+                        if( !output.containsKey( salvageFromItemResLoc.toString() ) )
+                            output.put( salvageFromItemResLoc.toString(), new HashMap<>() );
                         outputSalvageFromItemMap = output.get( salvageFromItemResLoc.toString() );
 
                         salvageToItemMap = inputSalvageToItemEntry.getValue();
