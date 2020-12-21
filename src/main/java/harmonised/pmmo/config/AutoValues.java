@@ -231,8 +231,6 @@ public class AutoValues
                     {
 //                ItemStack itemStack = new ItemStack( block );
                         String resLoc = block.getRegistryName().toString();
-                        Material material = block.getDefaultState().getMaterial();
-                        String skill = XP.getSkill( material );
                         JType jType = JType.NONE;
                         Map<String, Double> infoMap = new HashMap<>();
                         double chance = 0;

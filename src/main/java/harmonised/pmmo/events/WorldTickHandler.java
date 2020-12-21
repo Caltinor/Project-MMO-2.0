@@ -107,7 +107,7 @@ public class WorldTickHandler
                     isOwner = blockUUID == null || blockUUID.equals( playerUUID );
                     skill = XP.getSkill( veinState );
 
-                    if( skill.equals( Skill.FARMING ) && !( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) )
+                    if( skill.equals( Skill.FARMING.toString() ) && !( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) )
                     {
                         if( veinState.has( BlockStateProperties.AGE_0_1 ) )
                         {
@@ -285,7 +285,7 @@ public class WorldTickHandler
         Block block = veinInfo.state.getBlock();
         Material material = veinInfo.state.getMaterial();
         String regKey = block.getRegistryName().toString();
-        String skill = XP.getSkill( material );
+        String skill = XP.getSkill( veinInfo.state );
 
         int yLimit = 1;
 
@@ -295,7 +295,7 @@ public class WorldTickHandler
                 yLimit = 0;
         }
 
-        while( ( isCreative || veinLeft * 10 > veinCost * vein.size() || ( Config.forgeConfig.veinWoodTopToBottom.get() && !isLooped && skill.equals( Skill.WOODCUTTING  ) ) ) && vein.size() <= veinMaxBlocks )
+        while( ( isCreative || veinLeft * 10 > veinCost * vein.size() || ( Config.forgeConfig.veinWoodTopToBottom.get() && !isLooped && skill.equals( Skill.WOODCUTTING.toString()  ) ) ) && vein.size() <= veinMaxBlocks )
         {
             for( BlockPos curPos : curLayer )
             {
@@ -342,11 +342,11 @@ public class WorldTickHandler
 
     public static double getVeinCost( BlockState state, BlockPos pos, PlayerEntity player )
     {
-        Material material = state.getMaterial();
-        String skill = XP.getSkill( material );
+        String skill = XP.getSkill( state );
         double cost;
 //        double startHardness = state.getBlockHardness( player.world, pos );
         double hardness = state.getBlockHardness( player.world, pos );
+        double level = Skill.getLevel( skill, player );
 
         if( hardness < minVeinHardness )
             hardness = minVeinHardness;
@@ -357,27 +357,29 @@ public class WorldTickHandler
         switch( skill )
         {
             case "mining":
-                cost = hardness / ( (double) Skill.getLevel( Skill.MINING.toString(), player ) / levelsPerHardnessMining );
+                cost = hardness / ( level / levelsPerHardnessMining );
                 break;
 
             case "woodcutting":
-                cost = hardness / ( Skill.getLevel( Skill.WOODCUTTING.toString(), player ) / levelsPerHardnessWoodcutting );
+                cost = hardness / ( level / levelsPerHardnessWoodcutting );
                 break;
 
             case "excavation":
-                cost = hardness / ( Skill.getLevel( Skill.EXCAVATION.toString(), player ) / levelsPerHardnessExcavation );
+                cost = hardness / ( level / levelsPerHardnessExcavation );
                 break;
 
             case "farming":
-                cost = hardness / ( Skill.getLevel( Skill.FARMING.toString(), player ) / levelsPerHardnessFarming );
+                cost = hardness / ( level / levelsPerHardnessFarming );
                 break;
 
             case "crafting":
-                cost = hardness / ( Skill.getLevel( Skill.CRAFTING.toString(), player ) / levelsPerHardnessCrafting );
+                level = Skill.getLevel( Skill.CRAFTING.toString(), player );
+                cost = hardness / ( level / levelsPerHardnessCrafting );
                 break;
 
             default:
                 cost = hardness;
+                break;
         }
 
         if( cost < minVeinCost )

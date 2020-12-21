@@ -9,24 +9,21 @@ import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.rmi.log.LogHandler;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +62,7 @@ public class TooltipHandler
                 String regKey = item.getRegistryName().toString();
                 float hardness;
                 double dValue;
-                Material material = null;
+                BlockState state = null;
 
                 if( ClientHandler.OPEN_MENU.isKeyDown() )
                 {
@@ -141,8 +138,8 @@ public class TooltipHandler
 
                 if( item instanceof BlockItem)
                 {
-                    material = ( (BlockItem) item).getBlock().getDefaultState().getMaterial();
-                    hardness = ( (BlockItem) item).getBlock().getDefaultState().getBlockHardness( null, new BlockPos( 0, 0, 0 ) );
+                    state = ( (BlockItem) item).getBlock().getDefaultState();
+                    hardness = state.getBlockHardness( null, new BlockPos( 0, 0, 0 ) );
                     if( hardness > 0 )
                         tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo.hardness", DP.dp( hardness ) ).getString() ) );
 //                    tooltip.add( new StringTextComponent( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
@@ -269,7 +266,7 @@ public class TooltipHandler
 
                     if( breakReq != null && breakReq.size() > 0 )
                     {
-                        if( XP.correctHarvestTool( material ).equals( "axe" ) )
+                        if( state != null && XP.getHarvestTool( state ).equals( "axe" ) )
                             addTooltipTextSkill( "pmmo.chop", breakReq, event );
                         else if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( item.getRegistryName().toString() ) || item instanceof IPlantable )
                             addTooltipTextSkill( "pmmo.harvest", breakReq, event );
