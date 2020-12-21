@@ -77,7 +77,7 @@ public class BlockBrokenHandler
         {
             int startLevel;
 
-            if( XP.correctHarvestTool( material ).equals( "axe" ) )
+            if( XP.getHarvestTool( blockState ).equals( "axe" ) )
             {
                 NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
                 NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
@@ -130,7 +130,7 @@ public class BlockBrokenHandler
         double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
         boolean wasPlaced = ChunkDataHandler.checkPos( world, event.getPos() ) != null;
         ItemStack toolUsed = player.getHeldItemMainhand();
-        String skill = XP.getSkill( material ).toLowerCase();
+        String skill = XP.getSkill( state );
 //			String regKey = block.getRegistryName().toString();
         double hardness = state.getBlockHardness( event.getWorld(), event.getPos() );
         if( hardness > blockHardnessLimitForBreaking )
@@ -150,7 +150,7 @@ public class BlockBrokenHandler
 //        }
 
         String awardMsg = "";
-        switch( XP.getSkill( material ) )
+        switch( XP.getSkill( state ) )
         {
             case "mining":
                 awardMsg = "Mining";

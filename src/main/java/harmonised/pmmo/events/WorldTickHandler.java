@@ -295,7 +295,7 @@ public class WorldTickHandler
         Block block = veinInfo.state.getBlock();
         Material material = veinInfo.state.getMaterial();
         String regKey = block.getRegistryName().toString();
-        String skill = XP.getSkill( material );
+        String skill = XP.getSkill( veinInfo.state );
 
         int yLimit = 1;
 
@@ -352,11 +352,11 @@ public class WorldTickHandler
 
     public static double getVeinCost( BlockState state, BlockPos pos, PlayerEntity player )
     {
-        Material material = state.getMaterial();
-        String skill = XP.getSkill( material );
+        String skill = XP.getSkill( state );
         double cost;
 //        double startHardness = state.getBlockHardness( player.world, pos );
         double hardness = state.getBlockHardness( player.world, pos );
+        double level = Skill.getLevel( skill, player );
 
         if( hardness < minVeinHardness )
             hardness = minVeinHardness;
@@ -367,23 +367,23 @@ public class WorldTickHandler
         switch( skill )
         {
             case "mining":
-                cost = hardness / ( (double) Skill.getLevel( Skill.MINING.toString(), player ) / levelsPerHardnessMining );
+                cost = hardness / ( level / levelsPerHardnessMining );
                 break;
 
             case "woodcutting":
-                cost = hardness / ( Skill.getLevel( Skill.WOODCUTTING.toString(), player ) / levelsPerHardnessWoodcutting );
+                cost = hardness / ( level / levelsPerHardnessWoodcutting );
                 break;
 
             case "excavation":
-                cost = hardness / ( Skill.getLevel( Skill.EXCAVATION.toString(), player ) / levelsPerHardnessExcavation );
+                cost = hardness / ( level / levelsPerHardnessExcavation );
                 break;
 
             case "farming":
-                cost = hardness / ( Skill.getLevel( Skill.FARMING.toString(), player ) / levelsPerHardnessFarming );
+                cost = hardness / ( level / levelsPerHardnessFarming );
                 break;
 
             case "crafting":
-                cost = hardness / ( Skill.getLevel( Skill.CRAFTING.toString(), player ) / levelsPerHardnessCrafting );
+                cost = hardness / ( level / levelsPerHardnessCrafting );
                 break;
 
             default:

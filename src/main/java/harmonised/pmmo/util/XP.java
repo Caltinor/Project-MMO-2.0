@@ -137,27 +137,26 @@ public class XP
 		materialHarvestTool.put( Material.SPONGE, "shears" );
 	}
 
-	public static String getSkill( Material material )
-	{
-		return getSkillFromTool( XP.correctHarvestTool( material ) );
-	}
-
 	public static String getSkill( BlockState state )
 	{
-		return getSkill( state.getMaterial() );
+		String skill = getSkillFromTool( getHarvestTool( state ) );
+		if( skill.equals( Skill.INVALID_SKILL.toString() ) )
+			return getSkill( state.getBlock() );
+		else
+			return skill;
 	}
 
-//	public static String getSkill( Block block )
-//	{
-//		if( block.getTags().contains( getResLoc(  "forge:ores") ) )
-//			return Skill.MINING.toString();
-//		else if( block.getTags().contains( getResLoc( "forge:logs" ) ) )
-//			return Skill.WOODCUTTING.toString();
-//		else if( block.getTags().contains( getResLoc( "forge:plants" ) ) )
-//			return Skill.FARMING.toString();
-//		else
-//			return Skill.INVALID_SKILL.toString();
-//	}
+	public static String getSkill( Block block )
+	{
+		if( block.getTags().contains( getResLoc(  "forge:ores") ) )
+			return Skill.MINING.toString();
+		else if( block.getTags().contains( getResLoc( "forge:logs" ) ) )
+			return Skill.WOODCUTTING.toString();
+		else if( block.getTags().contains( getResLoc( "forge:plants" ) ) )
+			return Skill.FARMING.toString();
+		else
+			return Skill.INVALID_SKILL.toString();
+	}
 
 	public static String getSkillFromTool( String tool )
 	{
@@ -221,15 +220,38 @@ public class XP
 		return world.func_241828_r().func_230520_a_().getKey( world.getDimensionType() );
 	}
 
-	public static String correctHarvestTool(Material material)
+	public static String getHarvestTool( BlockState state )
 	{
-		if( material == null )
-			return "none";
+		String correctTool = materialHarvestTool.getOrDefault( state.getMaterial(), "none" );
 
-		if( materialHarvestTool.get( material ) != null )
-			return materialHarvestTool.get( material );
-		else
-			return "none";
+		if( correctTool.equals( "none" ) )
+		{
+			double pickDestroySpeed   = new ItemStack( Items.DIAMOND_PICKAXE ).getDestroySpeed( state );
+			double axeDestroySpeed    = new ItemStack( Items.DIAMOND_AXE ).getDestroySpeed( state );
+			double shovelDestroySpeed = new ItemStack( Items.DIAMOND_SHOVEL ).getDestroySpeed( state );
+			double swordDestroySpeed = new ItemStack( Items.DIAMOND_SWORD ).getDestroySpeed( state );
+
+			double highestDestroySpeed = pickDestroySpeed;
+			correctTool = "pickaxe";
+
+			if( highestDestroySpeed < axeDestroySpeed )
+			{
+				highestDestroySpeed = axeDestroySpeed;
+				correctTool = "axe";
+			}
+			if( highestDestroySpeed < shovelDestroySpeed )
+			{
+				highestDestroySpeed = shovelDestroySpeed;
+				correctTool = "shovel";
+			}
+			if( highestDestroySpeed < swordDestroySpeed )
+			{
+//				highestDestroySpeed = swordDestroySpeed;
+				correctTool = "shears";
+			}
+		}
+
+		return correctTool;
 	}
 
 	public static String checkMaterial( Material material )

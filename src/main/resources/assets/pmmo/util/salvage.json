@@ -1431,7 +1431,7 @@
 	{
 		"minecraft:stick":
 		{
-			"salvageMax": 3,
+			"salvageMax": 2,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
 			"maxChance": 75,
