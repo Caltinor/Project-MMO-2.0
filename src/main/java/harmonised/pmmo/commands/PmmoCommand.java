@@ -23,6 +23,7 @@ public class PmmoCommand
     public static String[] acceptOrDecline = { "accept", "decline" };
 
     public static String[] suggestSearchRegistry = { "item",
+                                                     "block",
                                                      "biome",
                                                      "enchant",
                                                      "potionEffect",
