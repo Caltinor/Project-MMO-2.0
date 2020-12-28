@@ -2,6 +2,7 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.block.Block;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.enchantment.Enchantment;
@@ -36,6 +37,17 @@ public class SearchRegCommand
         {
             case "item":
                 for( Item item : ForgeRegistries.ITEMS )
+                {
+                    String regName = item.getRegistryName().toString();
+                    if( regName.contains( query ) )
+                    {
+                        append( regName, listOut, listOutExtra, listOutForBuilder );
+                    }
+                }
+                break;
+
+            case "block":
+                for( Block item : ForgeRegistries.BLOCKS )
                 {
                     String regName = item.getRegistryName().toString();
                     if( regName.contains( query ) )
