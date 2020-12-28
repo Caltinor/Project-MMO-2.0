@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
+import net.minecraft.block.Block;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -59,6 +60,7 @@ public class DebugCommand extends CommandBase
                 completions.add( "enchant" );
                 completions.add( "entity" );
                 completions.add( "item" );
+                completions.add( "block" );
                 completions.add( "potioneffect" );
             }
             else if( args.length == 3 )
@@ -129,6 +131,17 @@ public class DebugCommand extends CommandBase
                             {
                                 case "item":
                                     for( Item item : ForgeRegistries.ITEMS )
+                                    {
+                                        String regName = item.getRegistryName().toString();
+                                        if( regName.contains( query ) )
+                                        {
+                                            append( regName, listOut, listOutExtra, listOutForBuilder );
+                                        }
+                                    }
+                                    break;
+
+                                case "block":
+                                    for( Block item : ForgeRegistries.BLOCKS )
                                     {
                                         String regName = item.getRegistryName().toString();
                                         if( regName.contains( query ) )
