@@ -74,7 +74,7 @@ public class LevelReward extends Reward
     {
         super.getConfig( config );
         config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.MINING.toString(), Skill.getSkills().keySet().toArray() ).create() );
-        config.addDouble( "amount", 1, input -> amount = input, 1, 0.01, Config.getConfig("maxLevel" ) );
+        config.addDouble( "amount", amount, input -> amount = input, 1, -Config.getConfig("maxLevel" ), Config.getConfig("maxLevel" ) );
     }
 
     @Override
