@@ -78,7 +78,7 @@ public class XpReward extends Reward
     {
         super.getConfig( config );
         config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.MINING.toString(), Skill.getSkills().keySet().toArray() ).create() );
-        config.addDouble( "amount", 83, input -> amount = input, 1, 0.01, Config.getConfig("maxXp" ) );
+        config.addDouble( "amount", amount, input -> amount = input, 1, -Config.getConfig("maxXp" ), Config.getConfig("maxXp" ) );
         config.addBool( "ignoreBonuses", ignoreBonuses, v -> ignoreBonuses = v, false ).setNameKey( "pmmo.ignoreBonuses" );
     }
 

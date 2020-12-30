@@ -9,45 +9,56 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CraftedHandler
 {
+    public static final Logger LOGGER = LogManager.getLogger();
+
     public static void handleCrafted( PlayerEvent.ItemCraftedEvent event )
     {
-        if( event.getPlayer() instanceof ServerPlayerEntity )
+        try
         {
-            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-            double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
-            double durabilityMultiplier = 1;
-
-            ItemStack itemStack = event.getCrafting();
-            ResourceLocation resLoc = itemStack.getItem().getRegistryName();
-            Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_CRAFT );
-
-            Map<String, Double> award = new HashMap<>();
-            if( xpValue.size() == 0 )
+            if( event.getPlayer() instanceof ServerPlayerEntity )
             {
-                if( itemStack.getItem() instanceof BlockItem)
-                    award.put( "crafting", (double) ((BlockItem) itemStack.getItem()).getBlock().getDefaultState().getBlockHardness( null, null ) );
-                else
-                    award.put( "crafting", defaultCraftingXp );
-            }
-            else
-                XP.addMapsAnyDouble( award, xpValue );
+                ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+                double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
+                double durabilityMultiplier = 1;
 
-            if( itemStack.isDamageable() )
-                durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamage() ) / (double) itemStack.getMaxDamage();
+                ItemStack itemStack = event.getCrafting();
+                ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+                Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_CRAFT );
+
+                Map<String, Double> award = new HashMap<>();
+                if( xpValue.size() == 0 )
+                {
+                    if( itemStack.getItem() instanceof BlockItem)
+                        award.put( "crafting", (double) ((BlockItem) itemStack.getItem()).getBlock().getDefaultState().getBlockHardness( null, null ) );
+                    else
+                        award.put( "crafting", defaultCraftingXp );
+                }
+                else
+                    XP.addMapsAnyDouble( award, xpValue );
+
+                if( itemStack.isDamageable() )
+                    durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamage() ) / (double) itemStack.getMaxDamage();
 
 //            XP.multiplyMap( award, itemStack.getCount() );
-            XP.multiplyMapAnyDouble( award, durabilityMultiplier );
+                XP.multiplyMapAnyDouble( award, durabilityMultiplier );
 
-            for( Map.Entry<String, Double> entry : award.entrySet() )
-            {
-                XP.awardXp( player, entry.getKey(), "crafting", entry.getValue(), false, false, false );
+                for( Map.Entry<String, Double> entry : award.entrySet() )
+                {
+                    XP.awardXp( player, entry.getKey(), "crafting", entry.getValue(), false, false, false );
+                }
             }
+        }
+        catch( Exception e )
+        {
+            LOGGER.error( "PMMO error while crafting", e );
         }
     }
 }

@@ -840,22 +840,25 @@ public class XPOverlayGUI extends AbstractGui
 
 		tempASkill = skills.get( skillIn );
 
-		if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
+		if( gainedXp <= 0 )
 		{
-			tempASkill.pos = XP.levelAtXpDecimal( xp );
+			tempASkill.xp = xp + gainedXp;
+			tempASkill.goalXp = tempASkill.xp;
+			tempASkill.pos = XP.levelAtXpDecimal( tempASkill.xp );
 			tempASkill.goalPos = tempASkill.pos;
-			tempASkill.xp = xp;
-			tempASkill.goalXp = xp;
 
-			if( xpDropsShowXpBar )
-				XPOverlayGUI.cooldown = cooldown;
-
-			for( int i = 0; i < xpDrops.size(); i++ )
+			if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
 			{
-				if( xpDrops.get( i ).skill.equals( skillIn ) )
+				if( xpDropsShowXpBar )
+					XPOverlayGUI.cooldown = cooldown;
+
+				for( int i = 0; i < xpDrops.size(); i++ )
 				{
-					xpDrops.remove( i );
-					i = 0;
+					if( xpDrops.get( i ).skill.equals( skillIn ) )
+					{
+						xpDrops.remove( i );
+						i = 0;
+					}
 				}
 			}
 
