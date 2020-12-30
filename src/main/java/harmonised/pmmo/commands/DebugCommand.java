@@ -78,8 +78,7 @@ public class DebugCommand extends CommandBase
     @Override
     public List<String> getAliases()
     {
-        List<String> aliases = new ArrayList<>();
-        return aliases;
+        return new ArrayList<>();
     }
 
     @Override

@@ -79,7 +79,6 @@ public enum Skill
                 skillStyle.put( skill, new Style().setColor(TextFormatting.LIGHT_PURPLE ) );
             else
                 skillStyle.put( skill, new Style() );
-
         }
     }
 

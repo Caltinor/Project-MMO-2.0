@@ -1163,7 +1163,7 @@ public class XP
 //			return;
 //		}
 
-		if( amount <= 0.0f || player.world.isRemote || player instanceof FakePlayer )
+		if( player.world.isRemote || player instanceof FakePlayer )
 			return;
 
 		PmmoSavedData pmmoSavedData = PmmoSavedData.get();
@@ -1195,7 +1195,7 @@ public class XP
 		double startXp = Skill.getXp( skill, uuid );
 		double maxXp = FConfig.getConfig( "maxXp" );
 
-		if( startXp >= 2000000000 )
+		if( amount == 0 || startXp >= 2000000000 )
 			return;
 
 		if( startXp + amount >= 2000000000 )
@@ -1204,9 +1204,6 @@ public class XP
 			LOGGER.info( player.getDisplayName().getUnformattedText() + " " + skill + " 2b cap reached" );
 			amount = 2000000000 - startXp;
 		}
-
-		if( amount <= 0 )
-			return;
 
 		pmmoSavedData.addXp( skill, uuid, amount );
 
