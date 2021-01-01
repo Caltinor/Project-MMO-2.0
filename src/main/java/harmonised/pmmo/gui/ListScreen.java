@@ -633,22 +633,22 @@ public class ListScreen extends GuiScreen
                     else
                         button.text.add( " " + getTransComp( "pmmo.caughtAmountRange", minCount, maxCount ).setStyle( color ).getFormattedText() );
 
-                    button.text.add( " " + getTransComp( "pmmo.xpEach", DP.dpSoft( (double) fishPoolMap.get("xp") ) ).setStyle( color ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.xpEach", DP.dpSoft( fishPoolMap.get("xp") ) ).setStyle( color ).getFormattedText() );
 
                     if ( button.itemStack.isItemEnchantable() )
                     {
-                        if( (double) fishPoolMap.get( "enchantLevelReq" ) <= level && button.unlocked )
-                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
+                        if( fishPoolMap.get( "enchantLevelReq" ) <= level && button.unlocked )
+                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "green" ) ).getFormattedText() );
                         else
-                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( (double) fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
+                            button.text.add( " " + getTransComp( "pmmo.enchantLevelReq", DP.dpSoft( fishPoolMap.get( "enchantLevelReq" ) ) ).setStyle( XP.textStyle.get( "red" ) ).getFormattedText() );
                     }
 
                     button.text.add( "" );
 //                    button.text.add( getTransComp( "pmmo.info" ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.startWeight", DP.dpSoft( (double) fishPoolMap.get("startWeight") ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( (double) fishPoolMap.get("startLevel") ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( (double) fishPoolMap.get("endWeight") ) ).getFormattedText() );
-                    button.text.add( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( (double) fishPoolMap.get("endLevel") ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.startWeight", DP.dpSoft( fishPoolMap.get("startWeight") ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.startLevel", DP.dpSoft( fishPoolMap.get("startLevel") ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.endWeight", DP.dpSoft( fishPoolMap.get("endWeight") ) ).getFormattedText() );
+                    button.text.add( " " + getTransComp( "pmmo.endLevel", DP.dpSoft( fishPoolMap.get("endLevel") ) ).getFormattedText() );
                 }
                 break;
 

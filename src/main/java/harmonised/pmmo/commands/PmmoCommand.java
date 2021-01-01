@@ -27,6 +27,12 @@ public class PmmoCommand extends CommandTreeBase
         super.addSubcommand( new CheckStatCommand() );
     }
 
+    @Override
+    public int getRequiredPermissionLevel()
+    {
+        return 0;
+    }
+
     public static void updateCompletions()
     {
         skillCompletions = new ArrayList<>( Skill.getSkills().keySet() );

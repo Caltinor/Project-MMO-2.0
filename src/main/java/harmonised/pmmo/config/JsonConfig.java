@@ -668,9 +668,6 @@ public class JsonConfig
 
                 outMap.put( "endWeight", endWeight );
 
-                if( startWeight > endWeight )
-                    startWeight = endWeight;
-
                 outMap.put( "startWeight", startWeight );
                 outMap.put( "endLevel", endLevel );
 
