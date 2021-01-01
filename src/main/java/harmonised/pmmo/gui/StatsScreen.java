@@ -116,7 +116,7 @@ public class StatsScreen extends Screen
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.endurance" );
-        text.add( new TranslationTextComponent( "pmmo.damageReductionPercentage", DP.dpSoft( DamageHandler.getEnduranceMultiplier( player ) ) ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
+        text.add( new TranslationTextComponent( "pmmo.damageReductionPercentage", DP.dpSoft( DamageHandler.getEnduranceMultiplier( player ) * 100D ) ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
