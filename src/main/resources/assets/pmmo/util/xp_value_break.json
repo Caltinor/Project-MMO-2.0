@@ -803,6 +803,14 @@
 	{
 		"mining": 12
 	},
+	"scalinghealth:heart_crystal_ore":
+	{
+		"mining": 20
+	},
+	"scalinghealth:power_crystal_ore":
+	{
+		"mining": 20
+	},
 	"treemendous:douglas_sapling":
 	{
 		"woodcutting": 10

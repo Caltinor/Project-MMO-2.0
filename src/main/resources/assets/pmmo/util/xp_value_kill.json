@@ -746,5 +746,9 @@
 	"lycanitesmobs:arisaur":
 	{
 		"farming": 20
+	},
+	"artifacts:mimic":
+	{
+		"combat": 45
 	}
 }
