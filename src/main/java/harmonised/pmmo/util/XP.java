@@ -940,7 +940,7 @@ public class XP
 		Item item = itemStack.getItem();
 		JType jType = type ? JType.XP_BONUS_HELD : JType.XP_BONUS_WORN;
 		String regName = item.getRegistryName().toString();
-		Map<String, Double> itemXpMap = JsonConfig.data.get( jType ).getOrDefault( regName, new HashMap<>() );
+		Map<String, Double> itemXpMap = new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( regName, new HashMap<>() ) );
 		if( FConfig.getConfig( "scaleXpBoostByDurability" ) != 0 )
 			multiplyMapAnyDouble( itemXpMap, getXpBoostDurabilityMultiplier( itemStack ) );
 		return itemXpMap;
