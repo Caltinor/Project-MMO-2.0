@@ -320,18 +320,15 @@
 	},
 	"enderstorage:ender_chest":
 	{
-		"smithing": 40,
-		"magic": 4
+		"smithing": 40
 	},
 	"enderstorage:ender_tank":
 	{
-		"smithing": 50,
-		"magic": 3
+		"smithing": 50
 	},
 	"enderstorage:ender_pouch":
 	{
-		"crafting": 50,
-		"magic": 5
+		"crafting": 50
 	},
 	"create:redstone_link":
 	{

@@ -166,13 +166,11 @@
 	},
 	"enderstorage:ender_chest":
 	{
-		"building": 30,
-		"magic": 4
+		"building": 30
 	},
 	"enderstorage:ender_tank":
 	{
-		"building": 40,
-		"magic": 3
+		"building": 40
 	},
 	"enderstorage:ender_pouch":
 	{

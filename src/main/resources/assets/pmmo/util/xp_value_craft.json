@@ -2109,5 +2109,25 @@
 	"lycanitesmobs:peaks_kebab":
 	{
 		"cooking": 50
+	},
+	"scalinghealth:heart_crystal":
+	{
+		"crafting": 20,
+		"magic": 30,
+		"endurance": 15
+	},
+	"scalinghealth:power_crystal":
+	{
+		"crafting": 20,
+		"magic": 30,
+		"combat": 15
+	},
+	"scalinghealth:bandages":
+	{
+		"crafting": 4
+	},
+	"scalinghealth:medkit":
+	{
+		"crafting": 18
 	}
 }
