@@ -900,6 +900,10 @@ public class FConfig
     @Config.Name( "autoGenerateWearReqDynamicallyEnabled" )
     public static boolean autoGenerateWearReqDynamicallyEnabled = true;
 
+    @Config.Comment( "Should Automatically generated values for Wearing be Combat instead of Endurance? (True = Combat, False = Endurance)" )
+    @Config.Name( "autoGenerateWearReqAsCombat" )
+    public static boolean autoGenerateWearReqAsCombat = true;
+
     @Config.Comment( "Automatically assign values for Weapon Requirement?" )
     @Config.Name( "autoGenerateWeaponReqEnabled" )
     public static boolean autoGenerateWeaponReqEnabled = true;
@@ -973,6 +977,7 @@ public class FConfig
         localConfig.put( "strictReqTool", strictReqTool ? 1D : 0D );
         localConfig.put( "autoGenerateValuesEnabled", autoGenerateValuesEnabled ? 1D : 0D );
         localConfig.put( "autoGenerateWearReqDynamicallyEnabled", autoGenerateWearReqDynamicallyEnabled ? 1D : 0D );
+        localConfig.put( "autoGenerateWearReqAsCombat", autoGenerateWearReqAsCombat ? 1D : 0D );
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", autoGenerateWeaponReqDynamicallyEnabled ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", autoGenerateToolReqDynamicallyEnabled ? 1D : 0D );
 

@@ -168,6 +168,7 @@ public class AutoValues
                 {
                     ItemStack itemStack = new ItemStack( item );
                     String resLoc = item.getRegistryName().toString();
+                    String wearReqSkill = FConfig.autoGenerateWearReqAsCombat ? Skill.COMBAT.toString() : Skill.ENDURANCE.toString();
 
                     double enduranceReq = getWearReqFromStack( itemStack ) + XP.getJsonMap( resLoc, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWear", 0D );
                     double combatReq = getWeaponReqFromStack( itemStack ) + XP.getJsonMap( resLoc, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
@@ -177,7 +178,7 @@ public class AutoValues
                     if( enduranceReq > 1 && FConfig.wearReqEnabled && FConfig.autoGenerateWearReqEnabled )
                     {
                         Map<String, Double> reqWear     = new HashMap<>();
-                        reqWear.put( Skill.ENDURANCE.toString(), Math.max( 1, enduranceReq ) );
+                        reqWear.put( wearReqSkill, Math.max( 1, enduranceReq ) );
                         addJsonConfigValue( resLoc, JType.REQ_WEAR, reqWear, false );
                     }
 

@@ -1484,8 +1484,9 @@ public class XP
 	{
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
 		Map<String, Double> wearReq = XP.getJsonMap( resLoc, JType.REQ_WEAR );
-		if( !wearReq.containsKey( Skill.ENDURANCE.toString() ) && FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
-			wearReq.put( Skill.ENDURANCE.toString(), AutoValues.getWearReqFromStack( itemStack ) );
+		String wearReqSkill = FConfig.autoGenerateWearReqAsCombat ? Skill.COMBAT.toString() : Skill.ENDURANCE.toString();
+		if( !wearReq.containsKey( wearReqSkill ) && FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
+			wearReq.put( wearReqSkill, AutoValues.getWearReqFromStack( itemStack ) );
 
 		if( !checkReq( player, wearReq ) )
 		{

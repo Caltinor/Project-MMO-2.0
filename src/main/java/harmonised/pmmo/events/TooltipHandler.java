@@ -99,11 +99,12 @@ public class TooltipHandler
                     {
                         if( wearReq == null )
                             wearReq = new HashMap<>();
+                        String wearReqSkill = FConfig.getConfig( "autoGenerateWearReqAsCombat" ) != 0 ? Skill.COMBAT.toString() : Skill.ENDURANCE.toString();
                         double dynReq = AutoValues.getWearReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWear", 0D );
-                        if( dynReq > 0 && !wearReq.containsKey( Skill.ENDURANCE.toString() ) )
+                        if( dynReq > 0 && !wearReq.containsKey( wearReqSkill ) )
                         {
-                            if( wearReq.getOrDefault( Skill.ENDURANCE.toString(), 0D ) < dynReq )
-                                wearReq.put( Skill.ENDURANCE.toString(), dynReq );
+                            if( wearReq.getOrDefault( wearReqSkill, 0D ) < dynReq )
+                                wearReq.put( wearReqSkill, dynReq );
                         }
                     }
 
