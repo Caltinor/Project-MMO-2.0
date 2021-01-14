@@ -157,7 +157,7 @@ public class XPOverlayGUI extends AbstractGui
 		{
 			LOGGER.error( "Error rendering PMMO GUI", e );
 		}
-		RenderSystem.disableBlend();
+//		RenderSystem.disableBlend();
 		RenderSystem.color3f( 255, 255, 255 );
 		RenderSystem.popMatrix();
 	}
