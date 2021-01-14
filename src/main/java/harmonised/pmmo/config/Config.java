@@ -1,6 +1,7 @@
 package harmonised.pmmo.config;
 
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -40,6 +41,7 @@ public class Config
         localConfig.put( "strictReqTool", forgeConfig.strictReqTool.get() ? 1D : 0D );
         localConfig.put( "autoGenerateValuesEnabled", forgeConfig.autoGenerateValuesEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateWearReqDynamicallyEnabled", forgeConfig.autoGenerateWearReqDynamicallyEnabled.get() ? 1D : 0D );
+        localConfig.put( "autoGenerateWearReqAsCombat", forgeConfig.autoGenerateWearReqAsCombat.get() ? 1D : 0D );
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", forgeConfig.autoGenerateToolReqDynamicallyEnabled.get() ? 1D : 0D );
 
@@ -350,6 +352,7 @@ public class Config
 //        public ConfigHelper.ConfigValueListener<Double> defaultExtraChanceBrew;
         public ConfigHelper.ConfigValueListener<Boolean> autoGenerateWearReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> autoGenerateWearReqDynamicallyEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> autoGenerateWearReqAsCombat;
         public ConfigHelper.ConfigValueListener<Boolean> autoGenerateWeaponReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> autoGenerateWeaponReqDynamicallyEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> autoGenerateToolReqEnabled;
@@ -1457,6 +1460,11 @@ public class Config
                         .comment( "Automatically assign values for Wear Requirement Dynamically? (This enables Live Scaling, for mods like Tinker's, or Draconic Evolution)" )
                         .translation( "pmmo.autoGenerateWearReqDynamicallyEnabled" )
                         .define( "autoGenerateWearReqDynamicallyEnabled", true ) );
+
+                this.autoGenerateWearReqAsCombat = subscriber.subscribe(builder
+                        .comment( "Should Automatically generated values for Wearing be Combat instead of Endurance? (True = Combat, False = Endurance)" )
+                        .translation( "pmmo.autoGenerateWearReqAsCombat" )
+                        .define( "autoGenerateWearReqAsCombat", false ) );
 
                 this.autoGenerateWeaponReqEnabled = subscriber.subscribe(builder
                         .comment( "Automatically assign values for Weapon Requirement?" )
