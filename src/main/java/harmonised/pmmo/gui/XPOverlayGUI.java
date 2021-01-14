@@ -156,7 +156,7 @@ public class XPOverlayGUI extends Gui
 		{
 			LOGGER.error( "Error rendering PMMO GUI", e );
 		}
-		GlStateManager.disableBlend();
+//		GlStateManager.disableBlend();
 		GlStateManager.color( 255, 255, 255 );
 		GlStateManager.popMatrix();
 	}
