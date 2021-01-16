@@ -173,7 +173,7 @@ public enum Skill
             AttributeHandler.updateAll( player );
             XP.updateRecipes( player );
 
-            NetworkHandler.sendToPlayer( new MessageXp( amount, skill, 0, false ), (ServerPlayerEntity) player );
+            NetworkHandler.sendToPlayer( new MessageXp( amount, skill, 0, false ), player );
         }
     }
 
@@ -203,6 +203,6 @@ public enum Skill
 
     public static void addXp( String skill, ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        XP.awardXp( player, skill, sourceName, amount, skip, ignoreBonuses, false );
+        XP.awardXp( player, skill, sourceName, amount, skip, ignoreBonuses, true );
     }
 }
