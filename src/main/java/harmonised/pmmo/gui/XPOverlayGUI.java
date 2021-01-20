@@ -74,83 +74,82 @@ public class XPOverlayGUI extends Gui
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
 	{
+		if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
+
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		try
 		{
-			if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
-				{
-				player = Minecraft.getMinecraft().player;
-				if( !init )
-				{
-					doInit();
-					init = true;
-				}
-				sr = new ScaledResolution( mc );
+			player = Minecraft.getMinecraft().player;
+			if( !init )
+			{
+				doInit();
+				init = true;
+			}
+			sr = new ScaledResolution( mc );
 
 //				drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Fully Customizable - Modpack Maker friendly!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "GUI that covers every feature of PMMO, including Modpack changes, Live!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 
-				barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
-				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
-				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
-				xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
-				skillListX = (int) ( sr.getScaledWidth() * skillListOffsetX );
-				skillListY = (int) ( sr.getScaledHeight() * skillListOffsetY );
+			barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
+			barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
+			xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
+			xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
+			skillListX = (int) ( sr.getScaledWidth() * skillListOffsetX );
+			skillListY = (int) ( sr.getScaledHeight() * skillListOffsetY );
 
-				timeDiff = (System.nanoTime() - lastTime);
-				lastTime = System.nanoTime();
+			timeDiff = (System.nanoTime() - lastTime);
+			lastTime = System.nanoTime();
 
-				barKey = ClientHandler.SHOW_BAR.isKeyDown();
-				listKey = ClientHandler.SHOW_LIST.isKeyDown();
-				veinKey = ClientHandler.VEIN_KEY.isKeyDown();
+			barKey = ClientHandler.SHOW_BAR.isKeyDown();
+			listKey = ClientHandler.SHOW_LIST.isKeyDown();
+			veinKey = ClientHandler.VEIN_KEY.isKeyDown();
 
-				if( barKey || xpBarAlwaysOn )
-					cooldown = 1;
+			if( barKey || xpBarAlwaysOn )
+				cooldown = 1;
 
-				if( barKey )
+			if( barKey )
+			{
+				if( !barPressed )
 				{
-					if( !barPressed )
-					{
-						barOn = !barOn;
-						barPressed = true;
-					}
+					barOn = !barOn;
+					barPressed = true;
 				}
-				else
-					barPressed = false;
-
-				if( listKey )
-				{
-					if( !listPressed )
-					{
-						listOn = !listOn;
-						listPressed = true;
-					}
-				}
-				else
-					listPressed = false;
-
-				updateASkill();
-				if( showSkillsListAtCorner )
-					doSkillList();
-				if( !Minecraft.getMinecraft().isGamePaused() )
-				{
-					doRayTrace();
-//					doCrosshair();
-					doVein();
-					doSkills();
-				}
-				if( aSkill != null )
-				{
-					doXpDrops();
-					doXpBar();
-				}
-
-				if( cooldown > 0 )
-					cooldown -= timeDiff / 1000000D;
 			}
+			else
+				barPressed = false;
+
+			if( listKey )
+			{
+				if( !listPressed )
+				{
+					listOn = !listOn;
+					listPressed = true;
+				}
+			}
+			else
+				listPressed = false;
+
+			updateASkill();
+			if( showSkillsListAtCorner )
+				doSkillList();
+			if( !Minecraft.getMinecraft().isGamePaused() )
+			{
+				doRayTrace();
+//					doCrosshair();
+				doVein();
+				doSkills();
+			}
+			if( aSkill != null )
+			{
+				doXpDrops();
+				doXpBar();
+			}
+
+			if( cooldown > 0 )
+				cooldown -= timeDiff / 1000000D;
 		}
 		catch( Exception e )
 		{
@@ -330,47 +329,53 @@ public class XPOverlayGUI extends Gui
 		{
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
-			Minecraft.getMinecraft().getTextureManager().bindTexture( bar );
-			GlStateManager.color( 255, 255, 255 );
-
-			drawTexturedModalRect( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
-			if( !FConfig.xpBarTheme )
+			try
 			{
-				drawTexturedModalRect( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
-			}
-			else
-			{
-				tempInt = (int) Math.floor( ( barWidth ) * ( aSkill.pos - Math.floor( aSkill.pos ) ) );
+				Minecraft.getMinecraft().getTextureManager().bindTexture( bar );
+				GlStateManager.color( 255, 255, 255 );
 
-				if( tempInt > 100 )
-					tempInt = 100;
-
-				if( aSkill.pos >= maxLevel )
-					tempInt = 100;
-
-				drawTexturedModalRect( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
-				drawTexturedModalRect( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
-			}
-			if( aSkill.pos >= maxLevel )
-				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + activeSkill.toString() ).getUnformattedText(), maxLevel ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor(activeSkill) );
-			else
-				drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + activeSkill.toString() ).getUnformattedText(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor(activeSkill) );
-
-			if( (barKey || xpLeftDisplayAlwaysOn) )
-			{
-				if( aSkill.xp >= maxXp )
-					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.maxLevel" ).getUnformattedText(), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor(activeSkill) );
+				drawTexturedModalRect( barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
+				if( !FConfig.xpBarTheme )
+				{
+					drawTexturedModalRect( barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
+				}
 				else
 				{
-					if( goalXp >= maxXp )
-						goalXp =  maxXp;
+					tempInt = (int) Math.floor( ( barWidth ) * ( aSkill.pos - Math.floor( aSkill.pos ) ) );
 
-					goalXp = XP.xpAtLevel( XP.levelAtXp( aSkill.xp ) + 1 );
-					drawCenteredString( fontRenderer, DP.dprefix( aSkill.xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor(activeSkill) );
-					drawCenteredString( fontRenderer,  new TextComponentTranslation( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getUnformattedText(), barPosX + (barWidth / 2), 26 + barPosY, Skill.getSkillColor(activeSkill) );
+					if( tempInt > 100 )
+						tempInt = 100;
+
+					if( aSkill.pos >= maxLevel )
+						tempInt = 100;
+
+					drawTexturedModalRect( barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
+					drawTexturedModalRect( barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
+				}
+				if( aSkill.pos >= maxLevel )
+					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + activeSkill.toString() ).getUnformattedText(), maxLevel ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor(activeSkill) );
+				else
+					drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.levelDisplay", new TextComponentTranslation( "pmmo." + activeSkill.toString() ).getUnformattedText(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getUnformattedText(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor(activeSkill) );
+
+				if( (barKey || xpLeftDisplayAlwaysOn) )
+				{
+					if( aSkill.xp >= maxXp )
+						drawCenteredString( fontRenderer, new TextComponentTranslation( "pmmo.maxLevel" ).getUnformattedText(), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor(activeSkill) );
+					else
+					{
+						if( goalXp >= maxXp )
+							goalXp =  maxXp;
+
+						goalXp = XP.xpAtLevel( XP.levelAtXp( aSkill.xp ) + 1 );
+						drawCenteredString( fontRenderer, DP.dprefix( aSkill.xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor(activeSkill) );
+						drawCenteredString( fontRenderer,  new TextComponentTranslation( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getUnformattedText(), barPosX + (barWidth / 2), 26 + barPosY, Skill.getSkillColor(activeSkill) );
+					}
 				}
 			}
-
+			catch( Exception e )
+			{
+				LOGGER.error( "Error rendering PMMO GUI XP Bar", e );
+			}
 			GlStateManager.disableBlend();
 			GlStateManager.popMatrix();
 		}
