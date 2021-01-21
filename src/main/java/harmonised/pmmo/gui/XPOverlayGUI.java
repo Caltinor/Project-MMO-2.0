@@ -74,90 +74,91 @@ public class XPOverlayGUI extends Gui
 	@SubscribeEvent
 	public void renderOverlay( RenderGameOverlayEvent event )
 	{
-		if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
-
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		try
+		if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )
 		{
-			player = Minecraft.getMinecraft().player;
-			if( !init )
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			try
 			{
-				doInit();
-				init = true;
-			}
-			sr = new ScaledResolution( mc );
+				player = Minecraft.getMinecraft().player;
+				if( !init )
+				{
+					doInit();
+					init = true;
+				}
+				sr = new ScaledResolution( mc );
 
 //				drawCenteredString( fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "Fully Customizable - Modpack Maker friendly!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 //				drawCenteredString( fontRenderer, "GUI that covers every feature of PMMO, including Modpack changes, Live!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
 
-			barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
-			barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
-			xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
-			xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
-			skillListX = (int) ( sr.getScaledWidth() * skillListOffsetX );
-			skillListY = (int) ( sr.getScaledHeight() * skillListOffsetY );
+				barPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * barOffsetX );
+				barPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * barOffsetY );
+				xpDropPosX = (int) ( ( sr.getScaledWidth() - barWidth ) * xpDropOffsetX );
+				xpDropPosY = (int) ( ( sr.getScaledHeight() - barHeight ) * xpDropOffsetY );
+				skillListX = (int) ( sr.getScaledWidth() * skillListOffsetX );
+				skillListY = (int) ( sr.getScaledHeight() * skillListOffsetY );
 
-			timeDiff = (System.nanoTime() - lastTime);
-			lastTime = System.nanoTime();
+				timeDiff = (System.nanoTime() - lastTime);
+				lastTime = System.nanoTime();
 
-			barKey = ClientHandler.SHOW_BAR.isKeyDown();
-			listKey = ClientHandler.SHOW_LIST.isKeyDown();
-			veinKey = ClientHandler.VEIN_KEY.isKeyDown();
+				barKey = ClientHandler.SHOW_BAR.isKeyDown();
+				listKey = ClientHandler.SHOW_LIST.isKeyDown();
+				veinKey = ClientHandler.VEIN_KEY.isKeyDown();
 
-			if( barKey || xpBarAlwaysOn )
-				cooldown = 1;
+				if( barKey || xpBarAlwaysOn )
+					cooldown = 1;
 
-			if( barKey )
-			{
-				if( !barPressed )
+				if( barKey )
 				{
-					barOn = !barOn;
-					barPressed = true;
+					if( !barPressed )
+					{
+						barOn = !barOn;
+						barPressed = true;
+					}
 				}
-			}
-			else
-				barPressed = false;
+				else
+					barPressed = false;
 
-			if( listKey )
-			{
-				if( !listPressed )
+				if( listKey )
 				{
-					listOn = !listOn;
-					listPressed = true;
+					if( !listPressed )
+					{
+						listOn = !listOn;
+						listPressed = true;
+					}
 				}
-			}
-			else
-				listPressed = false;
+				else
+					listPressed = false;
 
-			updateASkill();
-			if( showSkillsListAtCorner )
-				doSkillList();
-			if( !Minecraft.getMinecraft().isGamePaused() )
-			{
-				doRayTrace();
+				updateASkill();
+				if( showSkillsListAtCorner )
+					doSkillList();
+				if( !Minecraft.getMinecraft().isGamePaused() )
+				{
+					doRayTrace();
 //					doCrosshair();
-				doVein();
-				doSkills();
-			}
-			if( aSkill != null )
-			{
-				doXpDrops();
-				doXpBar();
-			}
+					doVein();
+					doSkills();
+				}
+				if( aSkill != null )
+				{
+					doXpDrops();
+					doXpBar();
+				}
 
-			if( cooldown > 0 )
-				cooldown -= timeDiff / 1000000D;
+				if( cooldown > 0 )
+					cooldown -= timeDiff / 1000000D;
+			}
+			catch( Exception e )
+			{
+				LOGGER.error( "Error rendering PMMO GUI", e );
+			}
+//			GlStateManager.disableBlend();
+			GlStateManager.color( 255, 255, 255 );
+			GlStateManager.popMatrix();
 		}
-		catch( Exception e )
-		{
-			LOGGER.error( "Error rendering PMMO GUI", e );
-		}
-//		GlStateManager.disableBlend();
-		GlStateManager.color( 255, 255, 255 );
-		GlStateManager.popMatrix();
 	}
 
 	private void updateASkill()

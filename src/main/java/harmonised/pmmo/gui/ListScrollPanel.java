@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.skills.Skill;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -78,7 +79,16 @@ public class ListScrollPanel extends GuiScreen
 
                 button.drawButton( mc, mouseX, mouseY, 0 );
 
-                drawString( mc.fontRenderer, button.title, this.left + 6, button.y + 2, button.unlocked ? 0x54fc54 : 0xfc5454 );
+                int color = button.unlocked ? 0x54fc54 : 0xfc5454;
+
+                if( jType.equals( JType.SKILLS ) )
+                {
+                    color = Skill.getSkillColor( button.regKey );
+                    if( color == 0xffffff )
+                        color = 0x54fc54;
+                }
+
+                drawString( Minecraft.getMinecraft().fontRenderer, button.title, this.left + 6, button.y + 2, color );
 
                 int i = 0;
                 for( String line : button.text )
