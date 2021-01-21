@@ -28,9 +28,10 @@ public class DeathHandler
     {
         EntityLivingBase target = event.getEntityLiving();
         Entity source = event.getSource().getTrueSource();
-        double deathXpPenaltyMultiplier = FConfig.deathXpPenaltyMultiplier;
+        double deathPenaltyMultiplier = FConfig.deathPenaltyMultiplier;
         double passiveMobHunterXp = FConfig.passiveMobHunterXp;
         double aggresiveMobSlayerXp = FConfig.aggresiveMobSlayerXp;
+        boolean deathLoosesLevels = FConfig.deathLoosesLevels;
 
         if( target instanceof EntityPlayerMP && !( target instanceof FakePlayer ) )
         {
@@ -59,7 +60,14 @@ public class DeathHandler
                         double startXp = entry.getValue();
                         double floorXp = XP.xpAtLevelDecimal( Math.floor( XP.levelAtXpDecimal( startXp ) ) );
                         double diffXp = startXp - floorXp;
-                        double lostXp = diffXp * deathXpPenaltyMultiplier;
+                        double lostXp;
+                        if( deathLoosesLevels )
+                        {
+                            double requiredLevel = XP.levelAtXpDecimal( startXp ) * deathPenaltyMultiplier;
+                            lostXp = startXp - XP.xpAtLevelDecimal( requiredLevel );
+                        }
+                        else
+                            lostXp = diffXp * deathPenaltyMultiplier;
                         double finalXp = startXp - lostXp;
                         totalLost += lostXp;
 

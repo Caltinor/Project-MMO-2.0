@@ -368,6 +368,10 @@ public class FConfig
     @Config.Name( "milestoneLevelUpFirework" )
     public static boolean milestoneLevelUpFirework = true;
 
+    @Config.Comment( "Should players loose Percentage of Full Levels instead of Xp above Whole Level upon death?" )
+    @Config.Name( "deathLoosesLevels" )
+    public static boolean deathLoosesLevels = false;
+
     @Config.Comment( "Should levels be determined using an Exponential formula? (false = the original way)" )
     @Config.Name( "useExponentialFormula" )
     public static boolean useExponentialFormula = true;
@@ -418,10 +422,10 @@ public class FConfig
     @Config.RangeDouble( min = 0, max = 1000 )
     public static double biomePenaltyMultiplier = 0.5D;
 
-    @Config.Comment( "How much of the xp above whole level you loose (1 = 100% = from 5.5 to 5.0, 0.5 = 50% = from 5.5 to 5.25" )
-    @Config.Name( "deathXpPenaltyMultiplier" )
+    @Config.Comment( "How much percentage of level you loose on death (Full Levels or Xp above Whole Level depends on deathLoosesLevels)" )
+    @Config.Name( "deathPenaltyMultiplier" )
     @Config.RangeDouble( min = 0, max = 1000 )
-    public static double deathXpPenaltyMultiplier = 0.5D;
+    public static double deathPenaltyMultiplier = 0.5D;
 
     //GUI
     @Config.Comment( "True is the animated rainbow, False is the old, plain grey box" )
