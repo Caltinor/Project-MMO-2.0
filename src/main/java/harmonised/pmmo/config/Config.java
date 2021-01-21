@@ -189,6 +189,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
         public ConfigHelper.ConfigValueListener<Boolean> levelUpFirework;
         public ConfigHelper.ConfigValueListener<Boolean> milestoneLevelUpFirework;
+        public ConfigHelper.ConfigValueListener<Boolean> deathLoosesLevels;
 
         public ConfigHelper.ConfigValueListener<Boolean> useExponentialFormula;
         public ConfigHelper.ConfigValueListener<Double> exponentialBaseXp;
@@ -202,7 +203,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> normalMultiplier;
         public ConfigHelper.ConfigValueListener<Double> hardMultiplier;
         public ConfigHelper.ConfigValueListener<Double> biomePenaltyMultiplier;
-        public ConfigHelper.ConfigValueListener<Double> deathXpPenaltyMultiplier;
+        public ConfigHelper.ConfigValueListener<Double> deathPenaltyMultiplier;
 
         //GUI
         public ConfigHelper.ConfigValueListener<Boolean> xpBarTheme;
@@ -781,6 +782,11 @@ public class Config
                         .translation( "pmmo.milestoneLevelUpFirework" )
                         .define( "milestoneLevelUpFirework", true ) );
 
+                this.deathLoosesLevels = subscriber.subscribe(builder
+                        .comment( "Should players loose Percentage of Full Levels instead of Xp above Whole Level upon death?" )
+                        .translation( "pmmo.deathLoosesLevels" )
+                        .define( "deathLoosesLevels", false ) );
+
                 this.useExponentialFormula = subscriber.subscribe(builder
                         .comment( "Should levels be determined using an Exponential formula? (false = the original way)" )
                         .translation( "pmmo.useExponentialFormula" )
@@ -836,10 +842,10 @@ public class Config
                         .translation( "pmmo.biomePenaltyMultiplier" )
                         .defineInRange( "biomePenaltyMultiplier", 0.5D, 0, 1) );
 
-                this.deathXpPenaltyMultiplier = subscriber.subscribe(builder
-                        .comment( "How much of the xp above whole level you loose (1 = 100% = from 5.5 to 5.0, 0.5 = 50% = from 5.5 to 5.25" )
-                        .translation( "pmmo.deathXpPenaltyMultiplier" )
-                        .defineInRange( "deathXpPenaltyMultiplier", 0.5D, 0, 1) );
+                this.deathPenaltyMultiplier = subscriber.subscribe(builder
+                        .comment( "How much percentage of level you loose on death (Full Levels or Xp above Whole Level depends on deathLoosesLevels)" )
+                        .translation( "pmmo.deathPenaltyMultiplier" )
+                        .defineInRange( "deathPenaltyMultiplier", 0.5D, 0, 1) );
 
                 builder.pop();
             }
