@@ -347,6 +347,11 @@ public class FConfig
     @Config.RangeInt( min = 1, max = 1000000 )
     public static int levelsPerMilestone = 10;
 
+    @Config.Comment( "Every how many levels should a total level milestone broadcast be sent to all players? (50 = every 50 levels)" )
+    @Config.Name( "levelsPerTotalLevelMilestone" )
+    @Config.RangeInt( min = 1, max = 1000000 )
+    public static int levelsPerTotalLevelMilestone = 50;
+
     @Config.Comment( "Should a player have all their skills wiped to level 1 upon death?" )
     @Config.Name( "wipeAllSkillsUponDeathPermanently" )
     public static boolean wipeAllSkillsUponDeathPermanently = false;
@@ -485,8 +490,8 @@ public class FConfig
 
     @Config.Comment( "What is the minimum amount xp grows a set amount of time? (Default 0.2, increase to speed up growth)" )
     @Config.Name( "minXpGrow" )
-    @Config.RangeDouble( min = 0, max = 100 )
-    public static double minXpGrow = 1D;
+    @Config.RangeDouble( min = 0, max = 1 )
+    public static double minXpGrow = 5D;
 
     @Config.Comment( "Should xp drops sync up with the bar being open or closed? HIGHLY RECOMMEND TO KEEP FALSE IF YOU ARE MOVING XP DROP POSITIONS" )
     @Config.Name( "xpDropsAttachedToBar" )
@@ -902,7 +907,7 @@ public class FConfig
 
     @Config.Comment( "Should Automatically generated values for Wearing be Combat instead of Endurance? (True = Combat, False = Endurance)" )
     @Config.Name( "autoGenerateWearReqAsCombat" )
-    public static boolean autoGenerateWearReqAsCombat = true;
+    public static boolean autoGenerateWearReqAsCombat = false;
 
     @Config.Comment( "Automatically assign values for Weapon Requirement?" )
     @Config.Name( "autoGenerateWeaponReqEnabled" )
