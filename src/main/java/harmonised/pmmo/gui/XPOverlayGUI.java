@@ -805,6 +805,15 @@ public class XPOverlayGUI extends AbstractGui
 
 		player.sendStatusMessage( msg.setStyle( Skill.getSkillStyle( skill ) ), false);
 
+		Map<String, Double> skillsMap = XP.getOfflineXpMap( player.getUniqueID() );
+		skillsMap.put( skill, XP.xpAtLevel( level ) );
+		int totalLevel = XP.getTotalLevelFromMap( skillsMap );
+		if( ( totalLevel % Config.forgeConfig.levelsPerTotalLevelMilestone.get() ) == 0 )
+		{
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.totalLevelUp", totalLevel ).setStyle( XP.getColorStyle( 0x00ff00 ) ), true );
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.totalLevelUp", totalLevel ).setStyle( XP.getColorStyle( 0x00ff00 ) ), false );
+		}
+
 		if( showLevelUpUnlocks )
 			checkUnlocks( level, skill, player );
 
