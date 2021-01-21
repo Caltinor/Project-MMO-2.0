@@ -184,6 +184,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> baseXp;
         public ConfigHelper.ConfigValueListener<Double> xpIncreasePerLevel;
         public ConfigHelper.ConfigValueListener<Integer> levelsPerMilestone;
+        public ConfigHelper.ConfigValueListener<Integer> levelsPerTotalLevelMilestone;
         public ConfigHelper.ConfigValueListener<Boolean> wipeAllSkillsUponDeathPermanently;
         public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
         public ConfigHelper.ConfigValueListener<Boolean> levelUpFirework;
@@ -754,6 +755,11 @@ public class Config
                         .comment( "Every how many levels should a level up broadcast be sent to all players? (10 = every 10 levels)" )
                         .translation( "pmmo.levelsPerMilestone" )
                         .defineInRange( "levelsPerMilestone", 10, 1, 1000000 ) );
+
+                this.levelsPerTotalLevelMilestone = subscriber.subscribe(builder
+                        .comment( "Every how many levels should a total level milestone broadcast be sent to all players? (50 = every 50 levels)" )
+                        .translation( "pmmo.levelsPerTotalLevelMilestone" )
+                        .defineInRange( "levelsPerTotalLevelMilestone", 50, 1, 1000000 ) );
 
                 this.wipeAllSkillsUponDeathPermanently = subscriber.subscribe(builder
                         .comment( "Should a player have all their skills wiped to level 1 upon death?" )

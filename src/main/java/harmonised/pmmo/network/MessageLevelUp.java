@@ -1,6 +1,7 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -60,7 +61,8 @@ public class MessageLevelUp
                     return;
                 String skill = packet.skill.toLowerCase();
 
-                if( packet.level <= Skill.getLevel( skill, player ) )
+                int realLevel = Skill.getLevel( skill, player );
+                if( packet.level <= realLevel )
                 {
                     Map<String, Double> prefsMap = Config.getPreferencesMap( player );
                     Vec3d playerPos = player.getPositionVec();
@@ -70,22 +72,34 @@ public class MessageLevelUp
 
                     LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skill + "! [" + player.dimension.getRegistryName().toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
 
-                    if( packet.level % Config.forgeConfig.levelsPerMilestone.get() == 0 && Config.forgeConfig.broadcastMilestone.get() )
+                    if( Config.forgeConfig.broadcastMilestone.get() )
                     {
-                        List<ServerPlayerEntity> players = new ArrayList<>( player.server.getPlayerList().getPlayers() );
-                        for( ServerPlayerEntity otherPlayer : players )
+                        Map<String, Double> skillsMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
+                        skillsMap.put( skill, XP.xpAtLevel( packet.level ) );
+                        int totalLevel = XP.getTotalLevelFromMap( skillsMap );
+
+                        boolean levelUpMilestone    =   ( packet.level % Config.forgeConfig.levelsPerMilestone.get() ) == 0;
+                        boolean totalLevelMilestone =   ( totalLevel % Config.forgeConfig.levelsPerTotalLevelMilestone.get() ) == 0;
+
+                        if( levelUpMilestone || totalLevelMilestone )
                         {
-                            if( otherPlayer.getUniqueID() != player.getUniqueID() )
+                            List<ServerPlayerEntity> players = new ArrayList<>( player.server.getPlayerList().getPlayers() );
+                            for( ServerPlayerEntity otherPlayer : players )
                             {
-                                Map<String, Double> otherprefsMap = Config.getPreferencesMap( otherPlayer );
-                                otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skill ) ).setStyle( Skill.getSkillStyle( skill ) ), false );
-                                if( Config.forgeConfig.milestoneLevelUpFirework.get() )
+                                if( otherPlayer.getUniqueID() != player.getUniqueID() )
                                 {
-                                    if( !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
-                                        XP.spawnRocket( otherPlayer.world, otherPlayer.getPosition(), skill );
+                                    Map<String, Double> otherprefsMap = Config.getPreferencesMap( otherPlayer );
+                                    if( levelUpMilestone )
+                                    {
+                                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skill ) ).setStyle( Skill.getSkillStyle( skill ) ), false );
+                                        if( Config.forgeConfig.milestoneLevelUpFirework.get() && !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
+                                            XP.spawnRocket( otherPlayer.world, otherPlayer.getPositionVec(), skill );
+                                    }
+                                    if( totalLevelMilestone )
+                                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneTotalLevel", player.getDisplayName(), totalLevel ).setStyle( XP.textStyle.get( "green" ) ), false );
                                 }
-                            }
-                        };
+                            };
+                        }
                     }
                 }
                 else
