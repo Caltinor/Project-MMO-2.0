@@ -3,6 +3,7 @@ package harmonised.pmmo.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.skills.Skill;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -77,7 +78,16 @@ public class ListScrollPanel extends ScrollPanel
 
                 button.render( stack,  mouseX, mouseY, 0 );
 
-                drawString( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, button.unlocked ? 0x54fc54 : 0xfc5454 );
+                int color = button.unlocked ? 0x54fc54 : 0xfc5454;
+
+                if( jType.equals( JType.SKILLS ) )
+                {
+                    color = Skill.getSkillColor( button.regKey );
+                    if( color == 0xffffff )
+                        color = 0x54fc54;
+                }
+
+                drawString( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, color );
 
                 int i = 0;
                 for( ITextComponent line : button.text )
