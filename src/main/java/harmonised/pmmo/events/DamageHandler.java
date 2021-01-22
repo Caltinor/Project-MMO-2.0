@@ -171,6 +171,15 @@ public class DamageHandler
                         }
                     }
 
+                    //Apply damage bonuses
+                    damage = event.getAmount();
+                    if( skill.equals( Skill.COMBAT.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageMelee;
+                    else if( skill.equals( Skill.ARCHERY.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageArchery;
+                    else if( skill.equals( Skill.MAGIC.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageMagic;
+
                     int killGap = 0;
 
                     if( target.getName() != null )
@@ -197,39 +206,37 @@ public class DamageHandler
                             return;
                         }
                     }
-                    damage = event.getAmount();
                     float amount = 0;
                     float playerHealth = player.getHealth();
                     float targetHealth = target.getHealth();
                     float targetMaxHealth = target.getMaxHealth();
                     float lowHpBonus = 1.0f;
 
-                    if( skill.equals( Skill.COMBAT.toString() ) )
-                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageMelee;
-                    else if( skill.equals( Skill.ARCHERY.toString() ) )
-                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageArchery;
-                    else if( skill.equals( Skill.MAGIC.toString() ) )
-                        damage += Skill.getLevel( skill, player ) / FConfig.levelsPerDamageMagic;
-
-                    damage /= (weaponGap + 1) / (double) (killGap + 1);
+                    //apply damage penalties
+                    damage /= weaponGap + 1;
+                    damage /= killGap + 1;
                     event.setAmount( (float) damage );
 
-                    if( damage > targetHealth )		//no overkill xp
+                    //no overkill xp
+                    if( damage > targetHealth )
                         damage = targetHealth;
 
                     amount += damage * 3;
 
-                    if ( startDmg >= targetHealth )	//kill reduce xp
+                    //kill reduce xp
+                    if ( startDmg >= targetHealth )
                         amount /= 2;
 
-                    if( startDmg >= targetMaxHealth )	//max hp kill reduce xp
+                    //max hp kill reduce xp
+                    if( startDmg >= targetMaxHealth )
                         amount /= 1.5;
 
 //					player.setHealth( 1f );
 
-                    if( target instanceof EntityAnimal )		//reduce xp if passive mob
+                    //reduce xp if passive mob
+                    if( target instanceof EntityAnimal )
                         amount /= 2;
-                    else if( playerHealth <= 10 )				//if aggresive mob and low hp
+                    else if( playerHealth <= 10 )	//increase xp if aggresive mob and player low on hp
                     {
                         lowHpBonus += ( 11 - playerHealth ) / 5;
                         if( playerHealth <= 2 )
@@ -247,12 +254,12 @@ public class DamageHandler
                         amount += ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
                         amount *= lowHpBonus;
 
-                        XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
+                        XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName(), amount, false, false, false );
                     }
                     else
                     {
                         amount *= lowHpBonus;
-                        XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
+                        XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName(), amount, false, false, false );
                     }
 
                     if( weaponGap > 0 )
