@@ -63,8 +63,9 @@ public class ListScrollPanel extends ScrollPanel
     protected void drawPanel(int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
         accumulativeHeight = 0;
-        for( ListButton button : buttons )
+        for( int i = 0; i < buttons.size(); i++ )
         {
+            ListButton button = buttons.get( i );
             button.x = this.right - button.getWidth() - 8;
             button.y = relativeY + accumulativeHeight;
 
@@ -86,12 +87,15 @@ public class ListScrollPanel extends ScrollPanel
                         color = 0x54fc54;
                 }
 
+                if( jType.equals( JType.SKILLS ) || jType.equals( JType.HISCORE ) )
+                    drawString( Minecraft.getInstance().fontRenderer, (i+1) + ".", this.left + 178, button.y + 2, color );
+
                 drawString( Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, color );
 
-                int i = 0;
+                int j = 0;
                 for( String line : button.text )
                 {
-                    drawString( Minecraft.getInstance().fontRenderer, line, this.left + 6, button.y + 11 + (i++ * 9), 0xffffff );
+                    drawString( Minecraft.getInstance().fontRenderer, line, this.left + 6, button.y + 11 + (j++ * 9), 0xffffff );
                 }
             }
             accumulativeHeight += button.getHeight() + 4;
