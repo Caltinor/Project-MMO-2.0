@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -74,7 +75,7 @@ public class MessageLevelUp
 
                     if( Config.forgeConfig.broadcastMilestone.get() )
                     {
-                        Map<String, Double> skillsMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
+                        Map<String, Double> skillsMap = new HashMap<>( PmmoSavedData.get().getXpMap( player.getUniqueID() ) );
                         skillsMap.put( skill, XP.xpAtLevel( packet.level ) );
                         int totalLevel = XP.getTotalLevelFromMap( skillsMap );
 
