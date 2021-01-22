@@ -153,7 +153,7 @@ public class ListButton extends Button
 
     public void clickActionSkills()
     {
-        if( !regKey.equals( Skill.INVALID_SKILL ) || regKey.equals( "totalLevel" ) )
+        if( !regKey.equals( Skill.INVALID_SKILL.toString() ) || regKey.equals( "totalLevel" ) )
             Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "" ), regKey, JType.HISCORE, Minecraft.getInstance().player ) );
         else if( XP.playerNames.containsValue( regKey ) )
             Minecraft.getInstance().displayGuiScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TranslationTextComponent( "" ), regKey, JType.SKILLS, Minecraft.getInstance().player ) );

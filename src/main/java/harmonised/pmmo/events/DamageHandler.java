@@ -172,6 +172,15 @@ public class DamageHandler
                         }
                     }
 
+                    //Apply damage bonuses
+                    damage = event.getAmount();
+                    if( skill.equals( Skill.COMBAT.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMelee.get();
+                    else if( skill.equals( Skill.ARCHERY.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageArchery.get();
+                    else if( skill.equals( Skill.MAGIC.toString() ) )
+                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMagic.get();
+
                     int killGap = 0;
 
                     if( target.getEntityString() != null )
@@ -198,46 +207,44 @@ public class DamageHandler
                             return;
                         }
                     }
-                    damage = event.getAmount();
                     float amount = 0;
                     float playerHealth = player.getHealth();
                     float targetHealth = target.getHealth();
                     float targetMaxHealth = target.getMaxHealth();
                     float lowHpBonus = 1.0f;
 
-                    if( damage > targetHealth )		//no overkill xp
-                        damage = targetHealth;
-
-                    if( skill.equals( Skill.COMBAT ) )
-                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMelee.get();
-                    else if( skill.equals( Skill.ARCHERY ) )
-                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageArchery.get();
-                    else if( skill.equals( Skill.MAGIC ) )
-                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMagic.get();
-
-                    damage /= (weaponGap + 1) / (double) (killGap + 1);
+                    //apply damage penalties
+                    damage /= weaponGap + 1;
+                    damage /= killGap + 1;
                     event.setAmount( damage );
+
+                    //no overkill xp
+                    if( damage > targetHealth )
+                        damage = targetHealth;
 
                     amount += damage * 3;
 
-                    if ( startDmg >= targetHealth )	//kill reduce xp
+                    //kill reduce xp
+                    if ( startDmg >= targetHealth )
                         amount /= 2;
 
-                    if( startDmg >= targetMaxHealth )	//max hp kill reduce xp
+                    //max hp kill reduce xp
+                    if( startDmg >= targetMaxHealth )
                         amount /= 1.5;
 
 //					player.setHealth( 1f );
 
-                    if( target instanceof AnimalEntity)		//reduce xp if passive mob
+                    //reduce xp if passive mob
+                    if( target instanceof AnimalEntity)
                         amount /= 2;
-                    else if( playerHealth <= 10 )				//if aggresive mob and low hp
+                    else if( playerHealth <= 10 )   //increase xp if aggresive mob and player low on hp
                     {
                         lowHpBonus += ( 11 - playerHealth ) / 5;
                         if( playerHealth <= 2 )
                             lowHpBonus += 1;
                     }
 
-                    if( skill.equals( Skill.ARCHERY ) || skill.equals( Skill.MAGIC ) )
+                    if( skill.equals( Skill.ARCHERY.toString() ) || skill.equals( Skill.MAGIC.toString() ) )
                     {
                         double distance = event.getEntity().getDistance( player );
                         if( distance > 16 )
