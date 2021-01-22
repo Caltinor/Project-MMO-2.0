@@ -804,7 +804,7 @@ public class XPOverlayGUI extends Gui
 
 		player.sendStatusMessage( msg.setStyle( Skill.getSkillStyle( skill ) ), false);
 
-		Map<String, Double> skillsMap = XP.getOfflineXpMap( player.getUniqueID() );
+		Map<String, Double> skillsMap = new HashMap<>( XP.getOfflineXpMap( player.getUniqueID() ) );
 		skillsMap.put( skill, XP.xpAtLevel( level ) );
 		int totalLevel = XP.getTotalLevelFromMap( skillsMap );
 		System.out.println( totalLevel );
