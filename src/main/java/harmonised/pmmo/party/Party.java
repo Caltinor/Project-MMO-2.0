@@ -81,6 +81,11 @@ public class Party
     {
         Set<EntityPlayerMP> membersInRange = XP.getEntitiesInRange( originPlayer.getPositionVector(), getOnlineMembers( originPlayer.getServer() ), FConfig.partyRange );
         membersInRange.remove( originPlayer );
+        for( EntityPlayerMP memberInRange : new HashSet<>( membersInRange ) )
+        {
+            if( !XP.isPlayerSurvival( memberInRange ) )
+                membersInRange.remove( memberInRange );
+        }
         return membersInRange;
     }
 
