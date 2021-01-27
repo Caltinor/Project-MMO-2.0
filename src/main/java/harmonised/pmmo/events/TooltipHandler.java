@@ -84,6 +84,7 @@ public class TooltipHandler
                 Map<String, Double> xpValueCooking = JsonConfig.data.get( JType.XP_VALUE_COOK ).get( regKey );
                 Map<String, Double> xpValueBrewing = JsonConfig.data.get( JType.XP_VALUE_BREW ).get( regKey );
                 Map<String, Double> xpValueGrowing = JsonConfig.data.get( JType.XP_VALUE_GROW ).get( regKey );
+                Map<String, Double> xpValuePlacing = JsonConfig.data.get( JType.XP_VALUE_PLACE).get( regKey );
                 Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get( JType.SALVAGE ).get( regKey );
                 Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get( JType.SALVAGE_FROM ).get( regKey );
                 Map<String, Map<String, Double>> treasureInfo = JsonConfig.data2.get( JType.TREASURE ).get( regKey );
@@ -219,6 +220,17 @@ public class TooltipHandler
                         for( String key : xpValueGrowing.keySet() )
                         {
                             dValue = xpValueGrowing.get( key );
+                            tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( Skill.getSkillStyle( key ) ).getFormattedText() );
+                        }
+                    }
+
+                    if( xpValuePlacing != null && xpValuePlacing.size() > 0 )      //XP PLACE
+                    {
+                        tooltip.add( new TextComponentTranslation( "pmmo.xpValuePlace" ).getFormattedText() );
+
+                        for( String key : xpValuePlacing.keySet() )
+                        {
+                            dValue = xpValuePlacing.get( key );
                             tooltip.add( new TextComponentTranslation( "pmmo.levelDisplay", " " + new TextComponentTranslation( "pmmo." + key ).getUnformattedText(), DP.dp( dValue ) ).setStyle( Skill.getSkillStyle( key ) ).getFormattedText() );
                         }
                     }

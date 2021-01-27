@@ -24,6 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -57,9 +58,11 @@ public class BlockBrokenHandler
         Block block = state.getBlock();
         World world = event.getWorld();
         BlockPos pos = event.getPos();
-        Material material = event.getState().getMaterial();
         Block blockAbove = world.getBlockState( pos.up() ).getBlock();
         boolean passedBreakReq = true;
+
+        if( XP.isHoldingDebugItemInOffhand( player ) )
+            player.sendStatusMessage( new TextComponentString( block.getRegistryName().toString() ), false );
 
         if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
             passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), JType.REQ_BREAK );

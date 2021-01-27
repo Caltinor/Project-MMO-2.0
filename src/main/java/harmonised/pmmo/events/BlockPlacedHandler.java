@@ -16,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.BlockSnapshot;
@@ -35,6 +36,9 @@ public class BlockPlacedHandler
         if( entity instanceof EntityPlayerMP && !(entity instanceof FakePlayer ) )
         {
             EntityPlayerMP player = (EntityPlayerMP) entity;
+
+            if( XP.isHoldingDebugItemInOffhand( player ) )
+                player.sendStatusMessage( new TextComponentString( state.getBlock().getRegistryName().toString() ), false );
 
             if ( XP.isPlayerSurvival( player ) )
             {

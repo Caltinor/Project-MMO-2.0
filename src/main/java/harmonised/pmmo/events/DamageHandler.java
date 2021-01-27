@@ -143,7 +143,7 @@ public class DamageHandler
 
                 EntityPlayerMP player = (EntityPlayerMP) event.getSource().getTrueSource();
 
-                if( player.getHeldItemMainhand().getItem().equals( Items.CARROT_ON_A_STICK ) )
+                if( XP.isHoldingDebugItemInOffhand( player ) )
                     player.sendStatusMessage( new TextComponentString( target.getName() ), false );
 
                 if( XP.isPlayerSurvival( player ) )
@@ -156,7 +156,7 @@ public class DamageHandler
                     if( skill.equals( Skill.COMBAT.toString() ) )
                         skill = itemSpecificSkill;
                     if( FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
-                        weaponReq.put( skill, weaponReq.getOrDefault( skill.toString(), AutoValues.getWeaponReqFromStack( itemStack ) ) );
+                        weaponReq.put( skill, weaponReq.getOrDefault( skill, AutoValues.getWeaponReqFromStack( itemStack ) ) );
                     int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
                     int gap = Math.max( weaponGap, enchantGap );

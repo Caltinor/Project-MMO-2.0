@@ -1750,4 +1750,14 @@ public class XP
 
 		return startXp + ( ( endXp - startXp ) * pos );
 	}
+
+	public static boolean isHoldingDebugItemInOffhand( EntityPlayer player )
+	{
+		return isItemDebugItem( player.getHeldItemOffhand().getItem() );
+	}
+
+	public static boolean isItemDebugItem( Item item )
+	{
+		return Items.RECORD_CAT.equals( item );
+	}
 }
