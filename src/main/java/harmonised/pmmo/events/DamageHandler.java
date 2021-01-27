@@ -144,7 +144,7 @@ public class DamageHandler
 
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
 
-                if( player.getHeldItemMainhand().getItem().equals( Items.DEBUG_STICK ) )
+                if( XP.isHoldingDebugItemInOffhand( player ) )
                     player.sendStatusMessage( new StringTextComponent( target.getEntityString() ), false );
 
                 if( XP.isPlayerSurvival( player ) )

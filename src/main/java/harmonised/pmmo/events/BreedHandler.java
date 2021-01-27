@@ -6,6 +6,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 
@@ -21,6 +22,9 @@ public class BreedHandler
             double defaultBreedingXp = Config.forgeConfig.defaultBreedingXp.get();
             String regKey = event.getChild().getEntityString();
             Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_BREED );
+
+            if( XP.isHoldingDebugItemInOffhand( causedByPlayer ) )
+                causedByPlayer.sendStatusMessage( new StringTextComponent( regKey ), false );
 
             if( xpValue.size() > 0 )
                 XP.awardXpMap( event.getCausedByPlayer().getUniqueID(), xpValue, "breeding", false, false );

@@ -86,6 +86,7 @@ public class TooltipHandler
                 Map<String, Double> xpValueCooking = JsonConfig.data.get( JType.XP_VALUE_COOK ).get( regKey );
                 Map<String, Double> xpValueBrewing = JsonConfig.data.get( JType.XP_VALUE_BREW ).get( regKey );
                 Map<String, Double> xpValueGrowing = JsonConfig.data.get( JType.XP_VALUE_GROW ).get( regKey );
+                Map<String, Double> xpValuePlacing = JsonConfig.data.get( JType.XP_VALUE_PLACE ).get( regKey );
                 Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get( JType.SALVAGE ).get( regKey );
                 Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get( JType.SALVAGE_FROM ).get( regKey );
                 Map<String, Map<String, Double>> treasureInfo = JsonConfig.data2.get( JType.TREASURE ).get( regKey );
@@ -117,8 +118,8 @@ public class TooltipHandler
                         if( weaponReq == null )
                             weaponReq = new HashMap<>();
                         double dynReq = AutoValues.getWeaponReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
-                        if( dynReq > 0 && !weaponReq.containsKey( itemSpecificSkill.toString() ) )
-                            weaponReq.put( itemSpecificSkill.toString(), dynReq );
+                        if( dynReq > 0 && !weaponReq.containsKey( itemSpecificSkill ) )
+                            weaponReq.put( itemSpecificSkill, dynReq );
                     }
 
                     //Tool
@@ -221,6 +222,17 @@ public class TooltipHandler
                         for( String key : xpValueGrowing.keySet() )
                         {
                             dValue = xpValueGrowing.get( key );
+                            tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ).setStyle( Skill.getSkillStyle( key ) ) );
+                        }
+                    }
+
+                    if( xpValuePlacing != null && xpValuePlacing.size() > 0 )      //XP PLACE
+                    {
+                        tooltip.add( new TranslationTextComponent( "pmmo.xpValuePlace" ) );
+
+                        for( String key : xpValuePlacing.keySet() )
+                        {
+                            dValue = xpValuePlacing.get( key );
                             tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dp( dValue ) ).setStyle( Skill.getSkillStyle( key ) ) );
                         }
                     }
