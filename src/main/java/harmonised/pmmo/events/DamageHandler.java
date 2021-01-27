@@ -17,8 +17,6 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
@@ -26,7 +24,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class DamageHandler
@@ -144,7 +141,7 @@ public class DamageHandler
 
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
 
-                if( player.getHeldItemMainhand().getItem().equals( Items.DEBUG_STICK ) )
+                if( XP.isHoldingDebugItemInOffhand( player ) )
                     player.sendStatusMessage( new StringTextComponent( target.getEntityString() ), false );
 
                 if( XP.isPlayerSurvival( player ) )

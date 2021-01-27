@@ -12,16 +12,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +35,9 @@ public class BlockPlacedHandler
         if( entity instanceof ServerPlayerEntity && !(entity instanceof FakePlayer) )
         {
             ServerPlayerEntity player = (ServerPlayerEntity) entity;
+            
+            if( XP.isHoldingDebugItemInOffhand( player ) )
+                player.sendStatusMessage( new StringTextComponent( state.getBlock().getRegistryName().toString() ), false );
 
             if ( XP.isPlayerSurvival( player ) )
             {
@@ -54,12 +56,11 @@ public class BlockPlacedHandler
                     if ( blockHardness > blockHardnessLimitForPlacing )
                         blockHardness = blockHardnessLimitForPlacing;
                     String playerName = player.getName().toString();
-                    BlockPos blockPos = pos;
                     UUID playerUUID = player.getUniqueID();
                     Map<String, Double> award = new HashMap<>();
                     String sourceName = "Placing a Block";
 
-                    if (!lastPosPlaced.containsKey(playerUUID) || !lastPosPlaced.get(playerUUID).equals(blockPos))
+                    if (!lastPosPlaced.containsKey(playerUUID) || !lastPosPlaced.get(playerUUID).equals(pos) )
                     {
                         award = XP.getXp( block.getRegistryName(), JType.XP_VALUE_PLACE );
 
@@ -80,7 +81,7 @@ public class BlockPlacedHandler
                     if (lastPosPlaced.containsKey(playerName))
                         lastPosPlaced.replace(playerUUID, pos);
                     else
-                        lastPosPlaced.put(playerUUID, blockPos);
+                        lastPosPlaced.put(playerUUID, pos);
                 }
                 else
                 {

@@ -1711,4 +1711,14 @@ public class XP
 
 		return startXp + ( ( endXp - startXp ) * pos );
 	}
+
+	public static boolean isHoldingDebugItemInOffhand(PlayerEntity player )
+	{
+		return isItemDebugItem( player.getHeldItemOffhand().getItem() );
+	}
+
+	public static boolean isItemDebugItem( Item item )
+	{
+		return Items.MUSIC_DISC_CAT.equals( item );
+	}
 }

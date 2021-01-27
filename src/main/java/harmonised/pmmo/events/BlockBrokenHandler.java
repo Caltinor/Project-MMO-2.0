@@ -24,6 +24,7 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -53,9 +54,11 @@ public class BlockBrokenHandler
         BlockState blockState = event.getState();
         Block block = blockState.getBlock();
         World world = (World) event.getWorld();
-        Material material = event.getState().getMaterial();
         Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
         boolean passedBreakReq = true;
+
+        if( XP.isHoldingDebugItemInOffhand( player ) )
+            player.sendStatusMessage( new StringTextComponent( block.getRegistryName().toString() ), false );
 
         if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
             passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), JType.REQ_BREAK );
