@@ -1964,6 +1964,126 @@
 			"levelReq": 1
 		}
 	},
+	"appliedenergistics2:certus_quartz_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:certus_quartz_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:certus_quartz_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:certus_quartz_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:certus_quartz_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:nether_quartz_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:nether_quartz_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:nether_quartz_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:nether_quartz_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"appliedenergistics2:nether_quartz_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
 	"create:dolomite":
 	{
 		"minecraft:cobblestone":
@@ -2220,6 +2340,3366 @@
 			"maxChance": 75,
 			"xpPerItem": 10,
 			"levelReq": 10
+		}
+	},
+	"iceandfire:copper_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:copper_boots":
+	{
+		"iceandfire:copper_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"iceandfire:copper_chestplate":
+	{
+		"iceandfire:copper_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"iceandfire:copper_helmet":
+	{
+		"iceandfire:copper_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"iceandfire:copper_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:copper_horse_armor":
+	{
+		"iceandfire:copper_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"iceandfire:copper_leggings":
+	{
+		"iceandfire:copper_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"iceandfire:copper_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:copper_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:copper_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:dragonbone_axe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_boots":
+	{
+		"iceandfire:dragonbone":
+		{
+			"salvageMax": 4,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_chestplate":
+	{
+		"iceandfire:dragonbone":
+		{
+			"salvageMax": 8,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_helmet":
+	{
+		"iceandfire:dragonbone":
+		{
+			"salvageMax": 5,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_hoe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_horse_armor":
+	{
+		"iceandfire:dragonbone":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_leggings":
+	{
+		"iceandfire:dragonbone":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_pickaxe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_shovel":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonbone_sword":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:dragonsteel_fire_axe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_boots":
+	{
+		"iceandfire:dragonsteel_fire_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_chestplate":
+	{
+		"iceandfire:dragonsteel_fire_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_helmet":
+	{
+		"iceandfire:dragonsteel_fire_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_hoe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_horse_armor":
+	{
+		"iceandfire:dragonsteel_fire_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_leggings":
+	{
+		"iceandfire:dragonsteel_fire_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_pickaxe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_shovel":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_fire_sword":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_axe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_boots":
+	{
+		"iceandfire:dragonsteel_ice_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_chestplate":
+	{
+		"iceandfire:dragonsteel_ice_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_helmet":
+	{
+		"iceandfire:dragonsteel_ice_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_hoe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_horse_armor":
+	{
+		"iceandfire:dragonsteel_ice_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_leggings":
+	{
+		"iceandfire:dragonsteel_ice_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_pickaxe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_shovel":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_ice_sword":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_axe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_boots":
+	{
+		"iceandfire:dragonsteel_lightning_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_chestplate":
+	{
+		"iceandfire:dragonsteel_lightning_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_helmet":
+	{
+		"iceandfire:dragonsteel_lightning_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_hoe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_horse_armor":
+	{
+		"iceandfire:dragonsteel_lightning_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_leggings":
+	{
+		"iceandfire:dragonsteel_lightning_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_pickaxe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_shovel":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:dragonsteel_lightning_sword":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 50
+		}
+	},
+	"iceandfire:myrmex_desert_axe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_boots":
+	{
+		"iceandfire:myrmex_desert_chitin":
+		{
+			"salvageMax": 4,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_chestplate":
+	{
+		"iceandfire:myrmex_desert_chitin":
+		{
+			"salvageMax": 8,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_helmet":
+	{
+		"iceandfire:myrmex_desert_chitin":
+		{
+			"salvageMax": 5,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_hoe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_horse_armor":
+	{
+		"iceandfire:myrmex_desert_chitin":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_leggings":
+	{
+		"iceandfire:myrmex_desert_chitin":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_pickaxe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_shovel":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_desert_sword":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_axe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_boots":
+	{
+		"iceandfire:myrmex_jungle_chitin":
+		{
+			"salvageMax": 4,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_chestplate":
+	{
+		"iceandfire:myrmex_jungle_chitin":
+		{
+			"salvageMax": 8,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_helmet":
+	{
+		"iceandfire:myrmex_jungle_chitin":
+		{
+			"salvageMax": 5,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_hoe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_horse_armor":
+	{
+		"iceandfire:myrmex_jungle_chitin":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_leggings":
+	{
+		"iceandfire:myrmex_jungle_chitin":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_pickaxe":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_shovel":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:myrmex_jungle_sword":
+	{
+		"iceandfire:witherbone":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"iceandfire:silver_axe":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_boots":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_chestplate":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_helmet":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_hoe":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_horse_armor":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_leggings":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_pickaxe":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_shovel":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"iceandfire:silver_sword":
+	{
+		"thermal:silver_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"botania:elementium_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:elementium_boots":
+	{
+		"botania:elementium_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:elementium_chestplate":
+	{
+		"botania:elementium_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:elementium_helmet":
+	{
+		"botania:elementium_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:elementium_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:elementium_horse_armor":
+	{
+		"botania:elementium_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:elementium_leggings":
+	{
+		"botania:elementium_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:elementium_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:elementium_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:elementium_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:manasteel_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:manasteel_boots":
+	{
+		"botania:manasteel_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:manasteel_chestplate":
+	{
+		"botania:manasteel_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:manasteel_helmet":
+	{
+		"botania:manasteel_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:manasteel_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:manasteel_horse_armor":
+	{
+		"botania:manasteel_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:manasteel_leggings":
+	{
+		"botania:manasteel_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"botania:manasteel_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:manasteel_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:manasteel_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"botania:terrasteel_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_boots":
+	{
+		"botania:terrasteel":
+		{
+			"salvageMax": 4,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_chestplate":
+	{
+		"botania:terrasteel":
+		{
+			"salvageMax": 8,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_helmet":
+	{
+		"botania:terrasteel":
+		{
+			"salvageMax": 5,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_horse_armor":
+	{
+		"botania:terrasteel":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_leggings":
+	{
+		"botania:terrasteel":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"botania:terrasteel_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"aiotbotania:livingrock_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"aiotbotania:livingrock_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"aiotbotania:livingrock_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"aiotbotania:livingrock_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"aiotbotania:livingrock_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"aiotbotania:livingwood_axe":
+	{
+		"botania:livingwood":
+		{
+			"salvageMax": 5,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 1
+		}
+	},
+	"aiotbotania:livingwood_hoe":
+	{
+		"botania:livingwood":
+		{
+			"salvageMax": 4,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 1
+		}
+	},
+	"aiotbotania:livingwood_pickaxe":
+	{
+		"botania:livingwood":
+		{
+			"salvageMax": 5,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 1
+		}
+	},
+	"aiotbotania:livingwood_shovel":
+	{
+		"botania:livingwood":
+		{
+			"salvageMax": 3,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 1
+		}
+	},
+	"aiotbotania:livingwood_sword":
+	{
+		"botania:livingwood":
+		{
+			"salvageMax": 4,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 1
+		}
+	},
+	"craftandhunt:blaze_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:blaze_boots":
+	{
+		"craftandhunt:blaze_glass":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:blaze_chestplate":
+	{
+		"craftandhunt:blaze_glass":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:blaze_helmet":
+	{
+		"craftandhunt:blaze_glass":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:blaze_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:blaze_horse_armor":
+	{
+		"craftandhunt:blaze_glass":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:blaze_leggings":
+	{
+		"craftandhunt:blaze_glass":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:blaze_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:blaze_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:blaze_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:bone_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:bone_boots":
+	{
+		"minecraft:bone":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:bone_chestplate":
+	{
+		"minecraft:bone":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:bone_helmet":
+	{
+		"minecraft:bone":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:bone_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:bone_horse_armor":
+	{
+		"minecraft:bone":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:bone_leggings":
+	{
+		"minecraft:bone":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:bone_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:bone_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:bone_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:horror_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:horror_boots":
+	{
+		"craftandhunt:parasite_starved":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:horror_chestplate":
+	{
+		"craftandhunt:parasite_starved":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:horror_helmet":
+	{
+		"craftandhunt:parasite_starved":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:horror_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:horror_horse_armor":
+	{
+		"craftandhunt:parasite_starved":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:horror_leggings":
+	{
+		"craftandhunt:parasite_starved":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:horror_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:horror_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:horror_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shark_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shark_boots":
+	{
+		"craftandhunt:thrasher_tooth":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shark_chestplate":
+	{
+		"craftandhunt:thrasher_tooth":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shark_helmet":
+	{
+		"craftandhunt:thrasher_tooth":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shark_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shark_horse_armor":
+	{
+		"craftandhunt:thrasher_tooth":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shark_leggings":
+	{
+		"craftandhunt:thrasher_tooth":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shark_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shark_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shark_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shell_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shell_boots":
+	{
+		"minecraft:scute":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shell_chestplate":
+	{
+		"minecraft:scute":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shell_helmet":
+	{
+		"minecraft:scute":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shell_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shell_horse_armor":
+	{
+		"minecraft:scute":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shell_leggings":
+	{
+		"minecraft:scute":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shell_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shell_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shell_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shulker_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shulker_boots":
+	{
+		"minecraft:shulker_shell":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shulker_chestplate":
+	{
+		"minecraft:shulker_shell":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shulker_helmet":
+	{
+		"minecraft:shulker_shell":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shulker_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shulker_horse_armor":
+	{
+		"minecraft:shulker_shell":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shulker_leggings":
+	{
+		"minecraft:shulker_shell":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:shulker_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shulker_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:shulker_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:spider_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:spider_boots":
+	{
+		"craftandhunt:spider_chitin":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:spider_chestplate":
+	{
+		"craftandhunt:spider_chitin":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:spider_helmet":
+	{
+		"craftandhunt:spider_chitin":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:spider_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:spider_horse_armor":
+	{
+		"craftandhunt:spider_chitin":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:spider_leggings":
+	{
+		"craftandhunt:spider_chitin":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"craftandhunt:spider_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:spider_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:spider_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"craftandhunt:wither_axe":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_boots":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_chestplate":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_helmet":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_hoe":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_horse_armor":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_leggings":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_pickaxe":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_shovel":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"craftandhunt:wither_sword":
+	{
+		"minecraft:wither_skeleton_skull":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"cyclic:netherbrick_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:netherbrick_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:netherbrick_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:netherbrick_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:netherbrick_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:sandstone_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:sandstone_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:sandstone_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:sandstone_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"cyclic:sandstone_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 1.5,
+			"levelReq": 5
+		}
+	},
+	"enigmaticlegacy:etherium_axe":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_boots":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_chestplate":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_helmet":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_hoe":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_horse_armor":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_leggings":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_pickaxe":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_shovel":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"enigmaticlegacy:etherium_sword":
+	{
+		"enigmaticlegacy:etherium_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:bronze_axe":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_boots":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_chestplate":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_helmet":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_hoe":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_horse_armor":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_leggings":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_pickaxe":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_shovel":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:bronze_sword":
+	{
+		"thermal:bronze_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:lapis_lazuli_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_boots":
+	{
+		"minecraft:lapis_lazuli":
+		{
+			"salvageMax": 4,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_chestplate":
+	{
+		"minecraft:lapis_lazuli":
+		{
+			"salvageMax": 8,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_helmet":
+	{
+		"minecraft:lapis_lazuli":
+		{
+			"salvageMax": 5,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_horse_armor":
+	{
+		"minecraft:lapis_lazuli":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_leggings":
+	{
+		"minecraft:lapis_lazuli":
+		{
+			"salvageMax": 7,
+			"baseChance": 0.5,
+			"chancePerLevel": 0.5,
+			"maxChance": 80,
+			"xpPerItem": 75,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:lapis_lazuli_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 40
+		}
+	},
+	"mekanismtools:osmium_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_boots":
+	{
+		"mekanism:ingot_osmium":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_chestplate":
+	{
+		"mekanism:ingot_osmium":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_helmet":
+	{
+		"mekanism:ingot_osmium":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_horse_armor":
+	{
+		"mekanism:ingot_osmium":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_leggings":
+	{
+		"mekanism:ingot_osmium":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:osmium_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:refined_glowstone_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_boots":
+	{
+		"mekanism:ingot_refined_glowstone":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_chestplate":
+	{
+		"mekanism:ingot_refined_glowstone":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_helmet":
+	{
+		"mekanism:ingot_refined_glowstone":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_horse_armor":
+	{
+		"mekanism:ingot_refined_glowstone":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_leggings":
+	{
+		"mekanism:ingot_refined_glowstone":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_glowstone_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_boots":
+	{
+		"mekanism:ingot_refined_obsidian":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_chestplate":
+	{
+		"mekanism:ingot_refined_obsidian":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_helmet":
+	{
+		"mekanism:ingot_refined_obsidian":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_horse_armor":
+	{
+		"mekanism:ingot_refined_obsidian":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_leggings":
+	{
+		"mekanism:ingot_refined_obsidian":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:refined_obsidian_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 45
+		}
+	},
+	"mekanismtools:steel_axe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_boots":
+	{
+		"mekanism:ingot_steel":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_chestplate":
+	{
+		"mekanism:ingot_steel":
+		{
+			"salvageMax": 8,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_helmet":
+	{
+		"mekanism:ingot_steel":
+		{
+			"salvageMax": 5,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_hoe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_horse_armor":
+	{
+		"mekanism:ingot_steel":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_leggings":
+	{
+		"mekanism:ingot_steel":
+		{
+			"salvageMax": 7,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_pickaxe":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_shovel":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
+		}
+	},
+	"mekanismtools:steel_sword":
+	{
+		"minecraft:stick":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 2.5,
+			"levelReq": 30
 		}
 	}
 }
