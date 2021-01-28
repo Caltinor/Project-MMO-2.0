@@ -803,6 +803,22 @@
 	{
 		"mining": 12
 	},
+	"iceandfire:amythest_ore":
+	{
+		"mining": 25
+	},
+	"iceandfire:copper_ore":
+	{
+		"mining": 7
+	},
+	"iceandfire:sapphire_ore":
+	{
+		"mining": 30
+	},
+	"iceandfire:silver_ore":
+	{
+		"mining": 22
+	},
 	"scalinghealth:heart_crystal_ore":
 	{
 		"mining": 20
@@ -1278,5 +1294,572 @@
 	"treemendous:juniper_leaves":
 	{
 		"woodcutting": 1.5
+	},
+	"ars_nouveau:red_archwood_log":
+	{
+		"woodcutting": 7.35
+	},
+	"ars_nouveau:red_archwood_wood":
+	{
+		"woodcutting": 7.35
+	},
+	"ars_nouveau:green_archwood_log":
+	{
+		"woodcutting": 7.25
+	},
+	"ars_nouveau:green_archwood_wood":
+	{
+		"woodcutting": 7.25
+	},
+	"ars_nouveau:blue_archwood_log":
+	{
+		"woodcutting": 7.5
+	},
+	"ars_nouveau:blue_archwood_wood":
+	{
+		"woodcutting": 7.5
+	},
+	"ars_nouveau:purple_archwood_log":
+	{
+		"woodcutting": 7.615
+	},
+	"ars_nouveau:purple_archwood_wood":
+	{
+		"woodcutting": 7.615
+	},
+	"ars_nouveau:arcane_ore":
+	{
+		"mining": 13.5
+	},
+	"ars_nouveau:mana_bloom_crop":
+	{
+		"farming": 3
+	},
+	"astralsorcery:aquamarine_sand_ore":
+	{
+		"excavation": 5,
+		"magic": 2
+	},
+	"astralsorcery:rock_crystal_ore":
+	{
+		"mining": 22,
+		"magic": 35
+	},
+	"astralsorcery:starmetal_ore":
+	{
+		"mining": 12,
+		"magic": 22
+	},
+	"bigreactors:anglesite_ore":
+	{
+		"mining": 35
+	},
+	"bigreactors:benitoite_ore":
+	{
+		"mining": 35
+	},
+	"bigreactors:yellorite_ore":
+	{
+		"mining": 28
+	},
+	"bno:netheraluminum_ore":
+	{
+		"mining": 8
+	},
+	"bno:nethercoal_ore":
+	{
+		"mining": 4
+	},
+	"bno:nethercopper_ore":
+	{
+		"mining": 7
+	},
+	"bno:netherdiamond_ore":
+	{
+		"mining": 35
+	},
+	"bno:netheremerald_ore":
+	{
+		"mining": 60
+	},
+	"bno:netheriron_ore":
+	{
+		"mining": 12
+	},
+	"bno:netherlapis_ore":
+	{
+		"mining": 5
+	},
+	"bno:netherlead_ore":
+	{
+		"mining": 20
+	},
+	"bno:nethernickel_ore":
+	{
+		"mining": 28
+	},
+	"bno:netherosmium_ore":
+	{
+		"mining": 16
+	},
+	"bno:netherredstone_ore":
+	{
+		"mining": 1.5
+	},
+	"bno:nethersilver_ore":
+	{
+		"mining": 22
+	},
+	"bno:nethertin_ore":
+	{
+		"mining": 10
+	},
+	"bno:netheruranium_ore":
+	{
+		"mining": 22
+	},
+	"druidcraft:amber_ore":
+	{
+		"mining": 22,
+		"magic": 12
+	},
+	"druidcraft:fiery_glass_ore":
+	{
+		"mining": 22,
+		"magic": 12
+	},
+	"druidcraft:moonstone_ore":
+	{
+		"mining": 22,
+		"magic": 12
+	},
+	"druidcraft:rockroot_ore":
+	{
+		"mining": 22,
+		"magic": 12
+	},
+	"elementalcraft:crystalore":
+	{
+		"mining": 16,
+		"magic": 8
+	},
+	"enigmaticlegacy:etherium_ore":
+	{
+		"mining": 22
+	},
+	"forbidden_arcanus:arcane_crystal_ore":
+	{
+		"mining": 12,
+		"magic": 6
+	},
+	"good_nights_sleep:necrum_ore":
+	{
+		"mining": 16,
+		"magic": 4
+	},
+	"good_nights_sleep:negatite_ore":
+	{
+		"mining": 22,
+		"magic": 8
+	},
+	"good_nights_sleep:positite_ore":
+	{
+		"mining": 22,
+		"magic": 8
+	},
+	"good_nights_sleep:rainbow_ore":
+	{
+		"mining": 16,
+		"magic": 4
+	},
+	"good_nights_sleep:zitrite_ore":
+	{
+		"mining": 12,
+		"magic": 2
+	},
+	"mekanism:fluorite_ore":
+	{
+		"mining": 10
+	},
+	"mekanism:osmium_ore":
+	{
+		"mining": 16
+	},
+	"mysticalagradditions:end_inferium_ore":
+	{
+		"mining": 8,
+		"magic": 4
+	},
+	"mysticalagradditions:end_prosperity_ore":
+	{
+		"mining": 8,
+		"magic": 2
+	},
+	"mysticalagradditions:nether_inferium_ore":
+	{
+		"mining": 8,
+		"magic": 4
+	},
+	"mysticalagradditions:nether_prosperity_ore":
+	{
+		"mining": 8,
+		"magic": 2
+	},
+	"mysticalagriculture:inferium_ore":
+	{
+		"mining": 8,
+		"magic": 4
+	},
+	"mysticalagriculture:prosperity_ore":
+	{
+		"mining": 8,
+		"magic": 2
+	},
+	"mysticalagriculture:soulium_ore":
+	{
+		"mining": 18,
+		"magic": 4
+	},
+	"powah:uraninite_ore":
+	{
+		"mining": 18
+	},
+	"powah:uraninite_ore_dense":
+	{
+		"mining": 30
+	},
+	"powah:uraninite_ore_poor":
+	{
+		"mining": 4
+	},
+	"rats:cheese_ore":
+	{
+		"mining": 12
+	},
+	"rats:oratchalcum_ore":
+	{
+		"mining": 22
+	},
+	"rats:ratlantean_gem_ore":
+	{
+		"mining": 28,
+		"magic": 8
+	},
+	"rftools:dimensional_shard_ore":
+	{
+		"mining": 22,
+		"magic": 35
+	},
+	"silentgear:azure_silver_ore":
+	{
+		"mining": 30
+	},
+	"silentgear:crimson_iron_ore":
+	{
+		"mining": 22
+	},
+	"silentgems:agate_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:alexandrite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:amber_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:ametrine_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:ammolite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:apatite_ore":
+	{
+		"mining": 6
+	},
+	"silentgems:aquamarine_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:benitoite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:black_diamond_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:carnelian_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:cats_eye_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:chaos_ore":
+	{
+		"mining": 8
+	},
+	"silentgems:chrysoprase_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:citrine_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:coral_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:ender_ore":
+	{
+		"mining": 12
+	},
+	"silentgems:euclase_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:fluorite_ore":
+	{
+		"mining": 10
+	},
+	"silentgems:garnet_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:green_sapphire_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:heliodor_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:iolite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:jade_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:jasper_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:kunzite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:kyanite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:lepidolite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:malachite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:moldavite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:moonstone_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:morganite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:onyx_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:opal_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:pearl_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:peridot_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:phosphophyllite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:pyrope_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:rose_quartz_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:ruby_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:sapphire_ore":
+	{
+		"mining": 30
+	},
+	"silentgems:sodalite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:spinel_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:sunstone_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:tanzanite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:tektite_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:topaz_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:turquoise_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:yellow_diamond_ore":
+	{
+		"mining": 18
+	},
+	"silentgems:zircon_ore":
+	{
+		"mining": 18
+	},
+	"silents_mechanisms:bauxite_ore":
+	{
+		"mining": 8
+	},
+	"silents_mechanisms:bismuth_ore":
+	{
+		"mining": 15
+	},
+	"silents_mechanisms:platinum_ore":
+	{
+		"mining": 28
+	},
+	"silents_mechanisms:uranium_ore":
+	{
+		"mining": 22
+	},
+	"silents_mechanisms:zinc_ore":
+	{
+		"mining": 12
+	},
+	"silentsgems:amethyst_ore":
+	{
+		"mining": 25
+	},
+	"thermal:apatite_ore":
+	{
+		"mining": 6
+	},
+	"thermal:cinnabar_ore":
+	{
+		"mining": 18
+	},
+	"thermal:copper_ore":
+	{
+		"mining": 7
+	},
+	"thermal:lead_ore":
+	{
+		"mining": 20
+	},
+	"thermal:nickel_ore":
+	{
+		"mining": 22
+	},
+	"thermal:niter_ore":
+	{
+		"mining": 16
+	},
+	"thermal:ruby_ore":
+	{
+		"mining": 18
+	},
+	"thermal:sapphire_ore":
+	{
+		"mining": 30
+	},
+	"thermal:silver_ore":
+	{
+		"mining": 22
+	},
+	"thermal:sulfur_ore":
+	{
+		"mining": 16
+	},
+	"thermal:tin_ore":
+	{
+		"mining": 10
+	},
+	"tmechworks:aluminum_ore":
+	{
+		"mining": 8
+	},
+	"tmechworks:copper_ore":
+	{
+		"mining": 7
+	},
+	"undergarden:cloggrum_ore":
+	{
+		"mining": 18
+	},
+	"undergarden:coal_ore":
+	{
+		"mining": 4
+	},
+	"undergarden:diamond_ore":
+	{
+		"mining": 35
+	},
+	"undergarden:froststeel_ore":
+	{
+		"mining": 18
+	},
+	"undergarden:gold_ore":
+	{
+		"mining": 22
+	},
+	"undergarden:iron_ore":
+	{
+		"mining": 12
+	},
+	"undergarden:regalium_ore":
+	{
+		"mining": 18
+	},
+	"undergarden:utherium_ore":
+	{
+		"mining": 18
 	}
 }

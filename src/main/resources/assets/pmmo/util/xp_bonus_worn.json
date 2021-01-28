@@ -110,6 +110,11 @@
 		"flying": 50,
 		"combat": 25
 	},
+	"minecraft:enchanting_table":
+	{
+		"magic": 10,
+		"alchemy": 10
+	},
 	"minecraft:carved_pumpkin":
 	{
 		"combat": 5

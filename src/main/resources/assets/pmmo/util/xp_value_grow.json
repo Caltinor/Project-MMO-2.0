@@ -299,5 +299,9 @@
 	"treemendous:juniper_sapling":
 	{
 		"farming": 15
+	},
+	"ars_nouveau:mana_bloom_crop":
+	{
+		"farming": 14
 	}
 }
