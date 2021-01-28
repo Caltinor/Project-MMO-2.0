@@ -990,6 +990,10 @@ public class FConfig
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", autoGenerateWeaponReqDynamicallyEnabled ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", autoGenerateToolReqDynamicallyEnabled ? 1D : 0D );
 
+        localConfig.put( "wearReqEnabled", wearReqEnabled ? 1D : 0D );
+        localConfig.put( "toolReqEnabled", toolReqEnabled ? 1D : 0D );
+        localConfig.put( "weaponReqEnabled", weaponReqEnabled ? 1D : 0D );
+
         localConfig.put( "scaleXpBoostByDurability", scaleXpBoostByDurability ? 1D : 0D );
         localConfig.put( "scaleXpBoostByDurabilityStart", scaleXpBoostByDurabilityStart);
         localConfig.put( "scaleXpBoostByDurabilityEnd", scaleXpBoostByDurabilityEnd );

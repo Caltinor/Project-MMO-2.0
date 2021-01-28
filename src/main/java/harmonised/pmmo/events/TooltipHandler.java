@@ -96,7 +96,7 @@ public class TooltipHandler
                 if( FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 )
                 {
                     //Wear
-                    if( FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
+                    if( FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 && FConfig.getConfig( "wearReqEnabled" ) != 0 )
                     {
                         if( wearReq == null )
                             wearReq = new HashMap<>();
@@ -111,17 +111,17 @@ public class TooltipHandler
 
                     //Weapon
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( regKey );
-                    if( FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
+                    if( FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 && FConfig.getConfig( "weaponReqEnabled" ) != 0 )
                     {
                         if( weaponReq == null )
                             weaponReq = new HashMap<>();
                         double dynReq = AutoValues.getWeaponReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
-                        if( dynReq > 0 && !weaponReq.containsKey( itemSpecificSkill.toString() ) )
-                            weaponReq.put( itemSpecificSkill.toString(), dynReq );
+                        if( dynReq > 0 && !weaponReq.containsKey( itemSpecificSkill ) )
+                            weaponReq.put( itemSpecificSkill, dynReq );
                     }
 
                     //Tool
-                    if( FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
+                    if( FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 && FConfig.getConfig( "toolReqEnabled" ) != 0 )
                     {
                         if( toolReq == null )
                             toolReq = new HashMap<>();
