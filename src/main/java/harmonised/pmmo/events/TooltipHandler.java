@@ -106,14 +106,14 @@ public class TooltipHandler
                         double dynReq = AutoValues.getWearReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWear", 0D );
                         if( dynReq > 0 && !wearReq.containsKey( wearReqSkill ) )
                         {
-                            if( wearReq.getOrDefault( wearReqSkill, 0D ) < dynReq && Config.getConfig( "wearReqEnabled" ) != 0 )
+                            if( Config.getConfig( "wearReqEnabled" ) != 0  && wearReq.getOrDefault( wearReqSkill, 0D ) < dynReq )
                                 wearReq.put( wearReqSkill, dynReq );
                         }
                     }
 
                     //Weapon
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( regKey );
-                    if( Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 && Config.getConfig( "weaponReqEnabled" ) != 0 )
+                    if( Config.getConfig( "weaponReqEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
                     {
                         if( weaponReq == null )
                             weaponReq = new HashMap<>();
@@ -123,7 +123,7 @@ public class TooltipHandler
                     }
 
                     //Tool
-                    if( Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 && Config.getConfig( "toolReqEnabled" ) != 0 )
+                    if( Config.getConfig( "toolReqEnabled" ) != 0 && Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
                     {
                         if( toolReq == null )
                             toolReq = new HashMap<>();
