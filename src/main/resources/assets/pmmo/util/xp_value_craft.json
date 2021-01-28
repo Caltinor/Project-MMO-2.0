@@ -2129,5 +2129,13 @@
 	"scalinghealth:medkit":
 	{
 		"crafting": 18
+	},
+	"ars_nouveau:mana_gem":
+	{
+		"crafting": 0
+	},
+	"ars_nouveau:mana_gem_block":
+	{
+		"crafting": 0
 	}
 }
