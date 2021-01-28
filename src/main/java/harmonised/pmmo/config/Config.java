@@ -39,11 +39,16 @@ public class Config
         localConfig.put( "veiningAllowed", forgeConfig.veiningAllowed.get() ? 1D : 0D );
         localConfig.put( "useExponentialFormula", forgeConfig.useExponentialFormula.get() ? 1D : 0D );
         localConfig.put( "strictReqTool", forgeConfig.strictReqTool.get() ? 1D : 0D );
+
         localConfig.put( "autoGenerateValuesEnabled", forgeConfig.autoGenerateValuesEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateWearReqDynamicallyEnabled", forgeConfig.autoGenerateWearReqDynamicallyEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateWearReqAsCombat", forgeConfig.autoGenerateWearReqAsCombat.get() ? 1D : 0D );
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", forgeConfig.autoGenerateToolReqDynamicallyEnabled.get() ? 1D : 0D );
+
+        localConfig.put( "wearReqEnabled", forgeConfig.wearReqEnabled.get() ? 1D : 0D );
+        localConfig.put( "toolReqEnabled", forgeConfig.toolReqEnabled.get() ? 1D : 0D );
+        localConfig.put( "weaponReqEnabled", forgeConfig.weaponReqEnabled.get() ? 1D : 0D );
 
         localConfig.put( "scaleXpBoostByDurability", forgeConfig.scaleXpBoostByDurability.get() ? 1D : 0D );
         localConfig.put( "scaleXpBoostByDurabilityStart", forgeConfig.scaleXpBoostByDurabilityStart.get() );

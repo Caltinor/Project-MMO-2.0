@@ -98,7 +98,7 @@ public class TooltipHandler
                 if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 )
                 {
                     //Wear
-                    if( Config.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
+                    if( Config.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 && Config.getConfig( "wearReqEnabled" ) != 0 )
                     {
                         if( wearReq == null )
                             wearReq = new HashMap<>();
@@ -113,7 +113,7 @@ public class TooltipHandler
 
                     //Weapon
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( regKey );
-                    if( Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
+                    if( Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 && Config.getConfig( "weaponReqEnabled" ) != 0 )
                     {
                         if( weaponReq == null )
                             weaponReq = new HashMap<>();
@@ -123,7 +123,7 @@ public class TooltipHandler
                     }
 
                     //Tool
-                    if( Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
+                    if( Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 && Config.getConfig( "toolReqEnabled" ) != 0 )
                     {
                         if( toolReq == null )
                             toolReq = new HashMap<>();
