@@ -1479,6 +1479,8 @@ public class XP
 
 	public static void applyWornPenalty( PlayerEntity player, ItemStack itemStack )
 	{
+		if( Config.getConfig( "wearReqEnabled" ) == 0 )
+			return;
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName();
 		Map<String, Double> wearReq = XP.getJsonMap( resLoc, JType.REQ_WEAR );
 		String wearReqSkill = Config.forgeConfig.autoGenerateWearReqAsCombat.get() ? Skill.COMBAT.toString() : Skill.ENDURANCE.toString();
@@ -1513,6 +1515,8 @@ public class XP
 
 	public static void applyEnchantmentUsePenalty( PlayerEntity player, ItemStack itemStack )
 	{
+		if( Config.getConfig( "enchantUseReqEnabled" ) == 0 )
+			return;
 		ResourceLocation resLoc = itemStack.getItem().getRegistryName(), enchantResLoc;
 		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments( itemStack );
 

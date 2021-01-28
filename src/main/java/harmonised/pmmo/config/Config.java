@@ -49,6 +49,7 @@ public class Config
         localConfig.put( "wearReqEnabled", forgeConfig.wearReqEnabled.get() ? 1D : 0D );
         localConfig.put( "toolReqEnabled", forgeConfig.toolReqEnabled.get() ? 1D : 0D );
         localConfig.put( "weaponReqEnabled", forgeConfig.weaponReqEnabled.get() ? 1D : 0D );
+        localConfig.put( "enchantUseReqEnabled", forgeConfig.enchantUseReqEnabled.get() ? 1D : 0D );
 
         localConfig.put( "scaleXpBoostByDurability", forgeConfig.scaleXpBoostByDurability.get() ? 1D : 0D );
         localConfig.put( "scaleXpBoostByDurabilityStart", forgeConfig.scaleXpBoostByDurabilityStart.get() );
