@@ -106,24 +106,24 @@ public class TooltipHandler
                         double dynReq = AutoValues.getWearReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWear", 0D );
                         if( dynReq > 0 && !wearReq.containsKey( wearReqSkill ) )
                         {
-                            if( wearReq.getOrDefault( wearReqSkill, 0D ) < dynReq )
+                            if( wearReq.getOrDefault( wearReqSkill, 0D ) < dynReq && Config.getConfig( "wearReqEnabled" ) != 0 )
                                 wearReq.put( wearReqSkill, dynReq );
                         }
                     }
 
                     //Weapon
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( regKey );
-                    if( Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
+                    if( Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 && Config.getConfig( "weaponReqEnabled" ) != 0 )
                     {
                         if( weaponReq == null )
                             weaponReq = new HashMap<>();
                         double dynReq = AutoValues.getWeaponReqFromStack( itemStack ) + XP.getJsonMap( regKey, JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
-                        if( dynReq > 0 && !weaponReq.containsKey( itemSpecificSkill.toString() ) )
-                            weaponReq.put( itemSpecificSkill.toString(), dynReq );
+                        if( dynReq > 0 && !weaponReq.containsKey( itemSpecificSkill ) )
+                            weaponReq.put( itemSpecificSkill, dynReq );
                     }
 
                     //Tool
-                    if( Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
+                    if( Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 && Config.getConfig( "toolReqEnabled" ) != 0 )
                     {
                         if( toolReq == null )
                             toolReq = new HashMap<>();

@@ -45,6 +45,10 @@ public class Config
         localConfig.put( "autoGenerateWeaponReqDynamicallyEnabled", forgeConfig.autoGenerateWeaponReqDynamicallyEnabled.get() ? 1D : 0D );
         localConfig.put( "autoGenerateToolReqDynamicallyEnabled", forgeConfig.autoGenerateToolReqDynamicallyEnabled.get() ? 1D : 0D );
 
+        localConfig.put( "wearReqEnabled", forgeConfig.wearReqEnabled.get() ? 1D : 0D );
+        localConfig.put( "toolReqEnabled", forgeConfig.toolReqEnabled.get() ? 1D : 0D );
+        localConfig.put( "weaponReqEnabled", forgeConfig.weaponReqEnabled.get() ? 1D : 0D );
+
         localConfig.put( "scaleXpBoostByDurability", forgeConfig.scaleXpBoostByDurability.get() ? 1D : 0D );
         localConfig.put( "scaleXpBoostByDurabilityStart", forgeConfig.scaleXpBoostByDurabilityStart.get() );
         localConfig.put( "scaleXpBoostByDurabilityEnd", forgeConfig.scaleXpBoostByDurabilityEnd.get() );
