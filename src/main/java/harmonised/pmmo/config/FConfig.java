@@ -993,6 +993,7 @@ public class FConfig
         localConfig.put( "wearReqEnabled", wearReqEnabled ? 1D : 0D );
         localConfig.put( "toolReqEnabled", toolReqEnabled ? 1D : 0D );
         localConfig.put( "weaponReqEnabled", weaponReqEnabled ? 1D : 0D );
+        localConfig.put( "enchantUseReqEnabled", enchantUseReqEnabled ? 1D : 0D );
 
         localConfig.put( "scaleXpBoostByDurability", scaleXpBoostByDurability ? 1D : 0D );
         localConfig.put( "scaleXpBoostByDurabilityStart", scaleXpBoostByDurabilityStart);

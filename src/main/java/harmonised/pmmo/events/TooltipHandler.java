@@ -96,7 +96,7 @@ public class TooltipHandler
                 if( FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 )
                 {
                     //Wear
-                    if( FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 && FConfig.getConfig( "wearReqEnabled" ) != 0 )
+                    if( FConfig.getConfig( "wearReqEnabled" ) != 0 && FConfig.getConfig( "autoGenerateWearReqDynamicallyEnabled" ) != 0 )
                     {
                         if( wearReq == null )
                             wearReq = new HashMap<>();
@@ -111,7 +111,7 @@ public class TooltipHandler
 
                     //Weapon
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( regKey );
-                    if( FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 && FConfig.getConfig( "weaponReqEnabled" ) != 0 )
+                    if( FConfig.getConfig( "weaponReqEnabled" ) != 0 && FConfig.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
                     {
                         if( weaponReq == null )
                             weaponReq = new HashMap<>();
@@ -121,7 +121,7 @@ public class TooltipHandler
                     }
 
                     //Tool
-                    if( FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 && FConfig.getConfig( "toolReqEnabled" ) != 0 )
+                    if( FConfig.getConfig( "toolReqEnabled" ) != 0 && FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
                     {
                         if( toolReq == null )
                             toolReq = new HashMap<>();

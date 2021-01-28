@@ -25,7 +25,7 @@ public class BreakSpeedHandler
         if( resLoc == null )
             return;
         Map<String, Double> toolReq = XP.getJsonMap( resLoc, JType.REQ_TOOL );
-        if( FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
+        if( FConfig.getConfig( "toolReqEnabled" ) != 0 && FConfig.getConfig( "autoGenerateValuesEnabled" ) != 0 && FConfig.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
         {
             Map<String, Double> dynToolReq = AutoValues.getToolReqFromStack( itemStack );
             for( Map.Entry<String, Double> entry : dynToolReq.entrySet() )
