@@ -98,6 +98,10 @@ public class FConfig
     @Config.Name( "veiningOtherPlayerBlocksAllowed" )
     public static boolean veiningOtherPlayerBlocksAllowed = false;
 
+    @Config.Comment( "Should blocks broken by veining damage your tool?" )
+    @Config.Name( "damageToolWhileVeining" )
+    public static boolean damageToolWhileVeining = true;
+
     @Config.Comment( "What is the maximum distance a player's vein can reach?" )
     @Config.Name( "veinMaxDistance" )
     @Config.RangeDouble( min = 1, max = 1000000000 )

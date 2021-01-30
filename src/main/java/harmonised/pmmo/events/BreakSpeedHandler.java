@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.Map;
 
@@ -17,7 +18,8 @@ public class BreakSpeedHandler
     public static void handleBreakSpeed( net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed event )
     {
         EntityPlayer player = event.getEntityPlayer();
-
+        if( player instanceof FakePlayer )
+            return;
         String skill = XP.getSkill( event.getState() );
         double speedBonus;
         ItemStack itemStack = player.getHeldItemMainhand();
