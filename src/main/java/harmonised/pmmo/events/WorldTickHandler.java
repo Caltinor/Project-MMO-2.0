@@ -214,7 +214,7 @@ public class WorldTickHandler
         TileEntity tileentity = blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
         Block.spawnDrops(blockstate, world, pos, tileentity, player, toolUsed );
 
-        if( world.setBlockState(pos, ifluidstate.getBlockState(), 3) && toolUsed.isDamageable() && !player.isCreative() )
+        if( Config.forgeConfig.damageToolWhileVeining.get() && world.setBlockState(pos, ifluidstate.getBlockState(), 3) && toolUsed.isDamageable() && !player.isCreative() )
             toolUsed.damageItem( 1, player, (a) -> a.sendBreakAnimation( Hand.MAIN_HAND ) );
     }
 
