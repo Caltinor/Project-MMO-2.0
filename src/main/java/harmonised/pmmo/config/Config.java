@@ -126,6 +126,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> veinWoodTopToBottom;
         public ConfigHelper.ConfigValueListener<Boolean> sleepRechargesAllPlayersVeinCharge;
         public ConfigHelper.ConfigValueListener<Boolean> veiningOtherPlayerBlocksAllowed;
+        public ConfigHelper.ConfigValueListener<Boolean> damageToolWhileVeining;
         public ConfigHelper.ConfigValueListener<Integer> veinMaxBlocks;
         public ConfigHelper.ConfigValueListener<Integer> veinSpeed;
         public ConfigHelper.ConfigValueListener<Double> veinMaxDistance;
@@ -464,6 +465,11 @@ public class Config
                         .comment( "Should players be allowed to vein blocks that they did not place?" )
                         .translation( "pmmo.veiningOtherPlayerBlocksAllowed" )
                         .define( "veiningOtherPlayerBlocksAllowed", false ) );
+
+                this.damageToolWhileVeining = subscriber.subscribe(builder
+                        .comment( "Should blocks broken by veining damage your tool?" )
+                        .translation( "pmmo.damageToolWhileVeining" )
+                        .define( "damageToolWhileVeining", true ) );
 
                 this.veinMaxDistance = subscriber.subscribe(builder
                         .comment( "What is the maximum distance a player's vein can reach?" )
