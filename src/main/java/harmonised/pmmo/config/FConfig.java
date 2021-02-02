@@ -738,6 +738,11 @@ public class FConfig
     @Config.RangeInt( min = 0, max = 100 )
     public static int anvilFinalItemMaxCostToAnvil = 10;
 
+    @Config.Comment( "From what level can you salvage from both hands at the same time?" )
+    @Config.Name( "dualSalvageSmithingLevelReq" )
+    @Config.RangeInt( min = 0, max = 100 )
+    public static int dualSalvageSmithingLevelReq = 50;
+
     @Config.Comment( "Anvil combination limits enchantments to max level set in this config" )
     @Config.Name( "bypassEnchantLimit" )
     public static boolean bypassEnchantLimit = true;
@@ -1050,6 +1055,8 @@ public class FConfig
         localConfig.put( "maxVeinCharge", maxVeinCharge );
         localConfig.put( "veinMaxBlocks", (double) veinMaxBlocks );
 
+        localConfig.put( "dualSalvageSmithingLevelReq", (double) dualSalvageSmithingLevelReq );
+        
         config = localConfig;
     }
 
