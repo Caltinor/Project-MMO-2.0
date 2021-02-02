@@ -138,6 +138,11 @@ public class StatsScreen extends Screen
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
+        entryTitle = new TranslationTextComponent( "pmmo.dualSalvage" );
+        text.add( new TranslationTextComponent( Skill.getLevelDecimal( Skill.SMITHING.toString(), player ) >= Config.getConfig( "dualSalvageSmithingLevelReq" ) ? "pmmo.unlocked" : "pmmo.locked" ).setStyle( Skill.getSkillStyle( Skill.SMITHING.toString() ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
+
+        text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.rareFishPool" );
         text.add( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dpSoft( FishedHandler.getFishPoolChance( player ) ) ).setStyle( Skill.getSkillStyle( Skill.FISHING.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );

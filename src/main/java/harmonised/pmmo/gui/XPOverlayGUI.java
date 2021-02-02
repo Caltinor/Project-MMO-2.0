@@ -816,8 +816,14 @@ public class XPOverlayGUI extends AbstractGui
 		if( showLevelUpUnlocks )
 			checkUnlocks( level, skill, player );
 
-		if( skill.equals( Skill.SWIMMING.toString() ) && level - 1 < Config.forgeConfig.nightvisionUnlockLevel.get() && level >= Config.forgeConfig.nightvisionUnlockLevel.get() )
-			player.sendStatusMessage( new TranslationTextComponent( "pmmo.nightvisionUnlocked" ).setStyle( Skill.getSkillStyle( skill ) ), true );
+		int nightvisionUnlockLevel = (int) Config.getConfig( "nightvisionUnlockLevel" );
+		int dualSalvageUnlockLevel = (int) Config.getConfig( "dualSalvageSmithingLevelReq" );
+
+		if( Skill.SWIMMING.equals( skill ) && level - 1 < nightvisionUnlockLevel && level >= nightvisionUnlockLevel )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.underwaterNightVisionUnLocked", level ).setStyle( Skill.getSkillStyle( skill ) ), false );
+
+		if( Skill.SMITHING.equals( skill ) && level - 1 < dualSalvageUnlockLevel && level >= dualSalvageUnlockLevel )
+			player.sendStatusMessage( new TranslationTextComponent( "pmmo.dualSalvageUnLocked", level ).setStyle( Skill.getSkillStyle( skill ) ), false );
 
 		listWasOn = barOn;
 
