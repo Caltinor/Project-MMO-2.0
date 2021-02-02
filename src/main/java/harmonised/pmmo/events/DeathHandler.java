@@ -13,6 +13,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.FakePlayer;
@@ -144,5 +145,10 @@ public class DeathHandler
                 }
             }
         }
+    }
+
+    public static boolean canBeSalvaged( Item item )
+    {
+        return JsonConfig.data2.get( JType.SALVAGE ).containsKey( item.getRegistryName().toString() );
     }
 }

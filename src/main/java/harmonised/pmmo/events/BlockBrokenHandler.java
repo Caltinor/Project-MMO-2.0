@@ -134,15 +134,11 @@ public class BlockBrokenHandler
         if( !XP.isPlayerSurvival( player ) || isRemote )
             return;
 
-        Material material = event.getState().getMaterial();
         double blockHardnessLimitForBreaking = FConfig.blockHardnessLimitForBreaking;
         boolean wasPlaced = ChunkDataHandler.checkPos( world, pos ) != null;
-        ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( state );
 //			String regKey = block.getRegistryName().toString();
-        double hardness = state.getBlockHardness( event.getWorld(), pos );
-        if( hardness > blockHardnessLimitForBreaking )
-            hardness = blockHardnessLimitForBreaking;
+        double hardness = Math.min( blockHardnessLimitForBreaking, state.getBlockHardness( event.getWorld(), pos ) );
 
         boolean isEffective = true;
 
@@ -244,7 +240,7 @@ public class BlockBrokenHandler
 
             double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
             int rewardable, guaranteedDrop, extraDrop, totalDrops, guaranteedDropEach;
-            rewardable = extraDrop = guaranteedDrop = totalDrops = 0;
+            rewardable = extraDrop = guaranteedDrop = 0;
 
             guaranteedDropEach = (int) Math.floor( extraChance );
             extraChance = ( ( extraChance ) - Math.floor( extraChance ) ) * 100;
