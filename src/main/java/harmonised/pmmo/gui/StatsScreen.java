@@ -138,6 +138,11 @@ public class StatsScreen extends GuiScreen
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
+        entryTitle = new TextComponentTranslation( "pmmo.dualSalvage" );
+        text.add( new TextComponentTranslation( Skill.getLevelDecimal( Skill.SMITHING.toString(), player ) >= FConfig.getConfig( "dualSalvageSmithingLevelReq" ) ? "pmmo.unlocked" : "pmmo.locked" ).setStyle( Skill.getSkillStyle( Skill.SMITHING.toString() ) ) );
+        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
+
+        text = new ArrayList<>();
         entryTitle = new TextComponentTranslation( "pmmo.rareFishPool" );
         text.add( new TextComponentTranslation( "pmmo.fishPoolChance", DP.dpSoft( FishedHandler.getFishPoolChance( player ) ) ).setStyle( Skill.getSkillStyle( Skill.FISHING.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );

@@ -807,7 +807,6 @@ public class XPOverlayGUI extends Gui
 		Map<String, Double> skillsMap = new HashMap<>( XP.getOfflineXpMap( player.getUniqueID() ) );
 		skillsMap.put( skill, XP.xpAtLevel( level ) );
 		int totalLevel = XP.getTotalLevelFromMap( skillsMap );
-		System.out.println( totalLevel );
 		if( ( totalLevel % FConfig.levelsPerTotalLevelMilestone ) == 0 )
 		{
 			player.sendStatusMessage( new TextComponentTranslation( "pmmo.totalLevelUp", totalLevel ).setStyle( XP.textStyle.get( "green" ) ), true );
@@ -817,8 +816,14 @@ public class XPOverlayGUI extends Gui
 		if( showLevelUpUnlocks )
 			checkUnlocks( level, skill, player );
 
-		if( Skill.SWIMMING.equals( skill ) && level - 1 < FConfig.nightvisionUnlockLevel && level >= FConfig.nightvisionUnlockLevel )
-			player.sendStatusMessage( new TextComponentTranslation( "pmmo.underwaterNightVisionUnLocked", level ).setStyle( Skill.getSkillStyle( skill ) ), true );
+		int nightvisionUnlockLevel = (int) FConfig.getConfig( "nightvisionUnlockLevel" );
+		int dualSalvageUnlockLevel = (int) FConfig.getConfig( "dualSalvageSmithingLevelReq" );
+
+		if( Skill.SWIMMING.equals( skill ) && level - 1 < nightvisionUnlockLevel && level >= nightvisionUnlockLevel )
+			player.sendStatusMessage( new TextComponentTranslation( "pmmo.underwaterNightVisionUnLocked", level ).setStyle( Skill.getSkillStyle( skill ) ), false );
+
+		if( Skill.SMITHING.equals( skill ) && level - 1 < dualSalvageUnlockLevel && level >= dualSalvageUnlockLevel )
+			player.sendStatusMessage( new TextComponentTranslation( "pmmo.dualSalvageUnLocked", level ).setStyle( Skill.getSkillStyle( skill ) ), false );
 
 		listWasOn = barOn;
 
