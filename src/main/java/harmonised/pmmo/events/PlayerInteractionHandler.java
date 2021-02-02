@@ -132,27 +132,22 @@ public class PlayerInteractionHandler
 
                         if( player.isCrouching() )
                         {
-                            if( ( block.equals( goldBlock ) || block.equals( smithBlock ) ) )
+                            if( block.equals( goldBlock ) || block.equals( smithBlock ) )
                             {
-                                if( item.equals( Items.AIR ) )
+                                if( itemStack.isEmpty() )
                                     return;
-
                                 if( isRemote )
                                     return;
 
-                                if( !event.getHand().equals( Hand.OFF_HAND ) )
-                                    return;
+                                boolean mainCanBeSalvaged = canBeSalvaged( player.getHeldItemMainhand().getItem() );
+                                boolean offCanBeSalvaged = canBeSalvaged( player.getHeldItemOffhand().getItem() );
 
-                                itemStack = player.getHeldItemOffhand();
-                                item = itemStack.getItem();
-
-                                if( JsonConfig.data2.get( JType.SALVAGE ).containsKey( item.getRegistryName().toString() ) )
-                                    event.setCanceled( true );
-                                else
+                                if( !( mainCanBeSalvaged || offCanBeSalvaged ) )
                                 {
                                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                                     return;
                                 }
+                                event.setCanceled( true );
 
                                 if( !( XP.getHorizontalDistance( player.getPositionVec(), XP.blockToMiddleVec( event.getPos() ) ) < 2 ) )
                                 {
@@ -160,25 +155,16 @@ public class PlayerInteractionHandler
                                     return;
                                 }
 
-//                            if( event.getHand() != Hand.OFF_HAND )
-//                            {
-//                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.offhandToDiss" ), false );
-//                                XP.sendMessage( "_________________________________", false, player );
-//                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.durabilityInfo", item.getTranslationKey(), "" + DP.dp( displayDurabilityPercent ), false, 0 ), (ServerPlayerEntity) player );
-//                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.materialSaveChanceInfo", DP.dp( chance ), potentialReturnAmount ), false );
-//                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.repairInfo", "" + DP.dp( enchantChance ), "" + itemStack.getRepairCost(), false, 0 ), (ServerPlayerEntity) player );
-//                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.enchantmentBypassInfo", "" + maxPlayerBypass ), false );
-//                                return;
-//                            }
-
                                 if( !XP.isPlayerSurvival( player ) )
                                 {
                                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.survivalOnlyWarning" ).setStyle( XP.textStyle.get( "red" ) ), true );
                                     return;
                                 }
 
-                                //SALVAGE IS AVAILABLE
+                                //SALVAGE IS AVAILABLE FOR ONE OR MORE HANDS
                                 Map<String, Map<String, Double>> salvageFromItemMap = JsonConfig.data2.get( JType.SALVAGE ).get( regKey );
+                                if( salvageFromItemMap == null )
+                                    return; //IT WAS THE OTHER HAND
                                 Map<String, Double> salvageToItemMap;
                                 boolean ableToSalvageAny = false;
                                 double award = 0;
@@ -290,7 +276,7 @@ public class PlayerInteractionHandler
                                     if( award > 0 )
                                         XP.awardXp( (ServerPlayerEntity) player, Skill.SMITHING.toString(), item.getRegistryName().toString(), award, false, false, false );
 
-                                    player.getHeldItemOffhand().shrink( 1 );
+                                    itemStack.shrink( 1 );
                                     player.sendBreakAnimation(Hand.OFF_HAND );
                                 }
                                 else
@@ -305,5 +291,10 @@ public class PlayerInteractionHandler
         {
             LOGGER.error( e );
         }
+    }
+
+    public static boolean canBeSalvaged( Item item )
+    {
+        return JsonConfig.data2.get( JType.SALVAGE ).containsKey( item.getRegistryName().toString() );
     }
 }
