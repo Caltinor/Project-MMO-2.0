@@ -135,9 +135,7 @@ public class BlockBrokenHandler
         ItemStack toolUsed = player.getHeldItemMainhand();
         String skill = XP.getSkill( state );
 //			String regKey = block.getRegistryName().toString();
-        double hardness = state.getBlockHardness( event.getWorld(), event.getPos() );
-        if( hardness > blockHardnessLimitForBreaking )
-            hardness = blockHardnessLimitForBreaking;
+        double hardness = Math.min( blockHardnessLimitForBreaking, state.getBlockHardness( event.getWorld(), event.getPos() ) );
 
         boolean isEffective = true;
 
