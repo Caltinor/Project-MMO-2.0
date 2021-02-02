@@ -1681,22 +1681,19 @@ public class XP
 		double exponentialBase = Config.getConfig( "exponentialBase" );
 		double exponentialRate = Config.getConfig( "exponentialRate" );
 		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
-
 		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
 
 		int theXp = 0;
 
-		for( int startLevel = 0; ; startLevel++ )
+		for( int level = 0; ; level++ )
 		{
-			if( xp < theXp || startLevel >= maxLevel )
-			{
-				return startLevel;
-			}
+			if( xp < theXp || level >= maxLevel )
+				return level;
 
 			if( useExponentialFormula )
-				theXp += exponentialBaseXp * Math.pow( exponentialBase, exponentialRate * ( startLevel ) );
+				theXp += exponentialBaseXp * Math.pow( exponentialBase, exponentialRate * ( level ) );
 			else
-				theXp += baseXp + startLevel * xpIncreasePerLevel;
+				theXp += baseXp + level * xpIncreasePerLevel;
 		}
 	}
 
@@ -1708,8 +1705,8 @@ public class XP
 	{
 		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
 
-		if( levelAtXp( xp ) == maxLevel )
-			xp = xpAtLevel( maxLevel );
+		if( levelAtXp( xp ) >= maxLevel )
+			return maxLevel;
 		int startLevel = levelAtXp( xp );
 		double startXp = xpAtLevel( startLevel );
 		double goalXp = xpAtLevel( startLevel + 1 );
