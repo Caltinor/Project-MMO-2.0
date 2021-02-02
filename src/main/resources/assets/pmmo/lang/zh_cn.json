@@ -365,5 +365,10 @@
 	"ftbquests.reward.pmmo.xpreward.amount": "经验奖励",
 	"ftbquests.reward.pmmo.levelreward": "技能等级奖励",
 	"ftbquests.reward.pmmo.levelreward.skill": "技能",
-	"ftbquests.reward.pmmo.levelreward.amount": "等级奖励"
+	"ftbquests.reward.pmmo.levelreward.amount": "等级奖励",
+	"pmmo.dualSalvage": "Dual Salvaging",
+	"pmmo.dualSalvageLocked": "Dual Salvaging is locked until level %1$s Smithing",
+	"pmmo.dualSalvageUnLocked": "Dual Salvaging is unlocked since level %1$s Smithing",
+	"pmmo.totalLevelUp": "You have reached %1$s Total Levels!",
+	"pmmo.milestoneTotalLevel": "%1$s has reached level %2$s Total Level!"
 }
