@@ -101,6 +101,8 @@ public class Config
         localConfig.put( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
         localConfig.put( "veinMaxBlocks", (double) forgeConfig.veinMaxBlocks.get() );
 
+        localConfig.put( "dualSalvageSmithingLevelReq", (double) forgeConfig.dualSalvageSmithingLevelReq.get() );
+
         config = localConfig;
     }
 
@@ -307,6 +309,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> extraChanceToNotBreakAnvilPerLevel;
         public ConfigHelper.ConfigValueListener<Double> anvilFinalItemBonusRepaired;
         public ConfigHelper.ConfigValueListener<Integer> anvilFinalItemMaxCostToAnvil;
+        public ConfigHelper.ConfigValueListener<Integer> dualSalvageSmithingLevelReq;
 
         public ConfigHelper.ConfigValueListener<Boolean> smeltingXpEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> smeltingEnabled;
@@ -1227,6 +1230,11 @@ public class Config
                         .comment( "Vanilla caps at 50, at around 30 vanilla you can no longer anvil the item again. allows unlocking infinite Anvil uses." )
                         .translation( "pmmo.anvilFinalItemMaxCostToAnvil" )
                         .defineInRange( "anvilFinalItemMaxCostToAnvil", 10, 0, 50) );
+
+                this.dualSalvageSmithingLevelReq = subscriber.subscribe(builder
+                        .comment( "From what level can you salvage from both hands at the same time?" )
+                        .translation( "pmmo.dualSalvageSmithingLevelReq" )
+                        .defineInRange( "dualSalvageSmithingLevelReq", 50, 1, 99999) );
 
                 this.bypassEnchantLimit = subscriber.subscribe(builder
                         .comment( "Anvil combination limits enchantments to max level set in this config" )

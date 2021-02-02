@@ -19,7 +19,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -126,10 +128,6 @@ public class PlayerInteractionHandler
                     {
                         event.setCanceled( false );
 
-                        int startSmithingLevel = Skill.getLevel( Skill.SMITHING.toString(), player );
-                        int smithingLevel;
-                        Integer lowestReqLevel = null;
-
                         if( player.isCrouching() )
                         {
                             if( block.equals( goldBlock ) || block.equals( smithBlock ) )
@@ -162,125 +160,9 @@ public class PlayerInteractionHandler
                                 }
 
                                 //SALVAGE IS AVAILABLE FOR ONE OR MORE HANDS
-                                Map<String, Map<String, Double>> salvageFromItemMap = JsonConfig.data2.get( JType.SALVAGE ).get( regKey );
-                                if( salvageFromItemMap == null )
-                                    return; //IT WAS THE OTHER HAND
-                                Map<String, Double> salvageToItemMap;
-                                boolean ableToSalvageAny = false;
-                                double award = 0;
-
-                                for( Map.Entry<String, Map<String, Double>> salvageToItemEntry : salvageFromItemMap.entrySet() )
-                                {
-                                    smithingLevel = startSmithingLevel;
-                                    Item salvageToItem = XP.getItem( salvageToItemEntry.getKey() );
-                                    salvageToItemMap = salvageToItemEntry.getValue();
-
-                                    double baseChance = salvageToItemMap.get( "baseChance" );
-                                    double chancePerLevel = salvageToItemMap.get( "chancePerLevel" );
-                                    double maxSalvageMaterialChance = salvageToItemMap.get( "maxChance" );
-                                    int reqLevel = (int) Math.floor( salvageToItemMap.get( "levelReq" ) );
-                                    int salvageMax = (int) Math.floor( salvageToItemMap.get( "salvageMax" ) );
-                                    smithingLevel -= reqLevel;
-
-                                    if( lowestReqLevel == null || lowestReqLevel > reqLevel )
-                                        lowestReqLevel = reqLevel;
-                                    if( smithingLevel >= 0 )
-                                    {
-                                        ableToSalvageAny = true;
-                                        double chance = baseChance + ( chancePerLevel * smithingLevel );
-
-                                        if( chance > maxSalvageMaterialChance )
-                                            chance = maxSalvageMaterialChance;
-
-                                        double startDmg = itemStack.getDamage();
-                                        double maxDmg = itemStack.getMaxDamage();
-                                        double displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
-                                        double durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
-
-                                        if( Double.isNaN( durabilityPercent ) )
-                                            durabilityPercent = 1;
-
-                                        int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
-
-                                        int returnAmount = 0;
-
-                                        for( int i = 0; i < potentialReturnAmount; i++ )
-                                        {
-                                            if( Math.ceil( Math.random() * 10000 ) <= chance * 100 )
-                                                returnAmount++;
-                                        }
-                                        award += salvageToItemMap.get( "xpPerItem" ) * returnAmount;
-
-                                        if( returnAmount > 0 )
-                                            XP.dropItems( returnAmount, salvageToItem, event.getWorld(), event.getPos() );
-
-                                        if( returnAmount == potentialReturnAmount )
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), false, 1 ), (ServerPlayerEntity) player );
-                                        else if( returnAmount > 0 )
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), false, 3 ), (ServerPlayerEntity) player );
-                                        else
-                                            NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
-                                    }
-                                }
-
-                                if( ableToSalvageAny )
-                                {
-                                    //ENCHANTS
-                                    Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
-//                                int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
-//                                int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
-                                    double maxSalvageEnchantChance = Config.forgeConfig.maxSalvageEnchantChance.get();
-                                    double enchantSaveChancePerLevel = Config.forgeConfig.enchantSaveChancePerLevel.get();
-//                                int maxPlayerBypass = (int) Math.floor( (double) startSmithingLevel / (double) levelsPerOneEnchantBypass );
-//                                if( maxPlayerBypass > maxEnchantmentBypass )
-//                                    maxPlayerBypass = maxEnchantmentBypass;
-                                    double enchantChance = (startSmithingLevel - lowestReqLevel) * enchantSaveChancePerLevel;
-                                    if( enchantChance > maxSalvageEnchantChance )
-                                        enchantChance = maxSalvageEnchantChance;
-
-                                    if( enchants.size() > 0 )
-                                    {
-                                        ItemStack salvagedBook = new ItemStack( Items.ENCHANTED_BOOK );
-                                        Set<Enchantment> enchantKeys = enchants.keySet();
-                                        Map<Enchantment, Integer> newEnchantMap = new HashMap<>();
-                                        int enchantLevel;
-                                        boolean fullEnchants = true;
-
-                                        for( Enchantment enchant : enchantKeys )
-                                        {
-                                            enchantLevel = 0;
-                                            for( int i = 1; i <= enchants.get( enchant ); i++ )
-                                            {
-                                                if( Math.floor( Math.random() * 100 ) < enchantChance )
-                                                    enchantLevel = i;
-                                                else
-                                                {
-                                                    fullEnchants = false;
-//				    						i = enchants.get( enchant ) + 1;
-                                                }
-                                            }
-                                            if( enchantLevel > 0 )
-                                                newEnchantMap.put( enchant, enchantLevel );
-                                        }
-                                        if( newEnchantMap.size() > 0 )
-                                        {
-                                            EnchantmentHelper.setEnchantments( newEnchantMap, salvagedBook );
-                                            Block.spawnAsEntity( event.getWorld(), event.getPos(), salvagedBook );
-                                            if( fullEnchants )
-                                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedAllEnchants" ).setStyle( XP.textStyle.get( "green" ) ), false );
-                                            else
-                                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedSomeEnchants" ).setStyle( XP.textStyle.get( "yellow" ) ), false );
-                                        }
-                                    }
-
-                                    if( award > 0 )
-                                        XP.awardXp( (ServerPlayerEntity) player, Skill.SMITHING.toString(), item.getRegistryName().toString(), award, false, false, false );
-
-                                    itemStack.shrink( 1 );
-                                    player.sendBreakAnimation(Hand.OFF_HAND );
-                                }
-                                else
-                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvageLackLevelLonger", lowestReqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                                salvageItem( player, itemStack, event.getWorld(), event.getPos() );
+                                if( Skill.getLevel( Skill.SMITHING.toString(), player ) >= Config.getConfig( "dualSalvageSmithingLevelReq" ) && event.getHand().equals( Hand.MAIN_HAND ) && offCanBeSalvaged )
+                                    salvageItem( player, player.getHeldItemOffhand(), event.getWorld(), event.getPos() );
                             }
                         }
                     }
@@ -291,6 +173,134 @@ public class PlayerInteractionHandler
         {
             LOGGER.error( e );
         }
+    }
+
+    public static void salvageItem(PlayerEntity player, ItemStack itemStack, World world, BlockPos pos )
+    {
+        Item item = itemStack.getItem();
+        String regKey = item.getRegistryName().toString();
+        Map<String, Map<String, Double>> salvageFromItemMap = JsonConfig.data2.get( JType.SALVAGE ).get( regKey );
+        if( salvageFromItemMap == null )
+            return; //THIS ITEM DOES NOT SALVAGE
+        Map<String, Double> salvageToItemMap;
+        boolean ableToSalvageAny = false;
+        double award = 0;
+        int startSmithingLevel = Skill.getLevel( Skill.SMITHING.toString(), player );
+        int smithingLevel;
+        Integer lowestReqLevel = null;
+
+        for( Map.Entry<String, Map<String, Double>> salvageToItemEntry : salvageFromItemMap.entrySet() )
+        {
+            smithingLevel = startSmithingLevel;
+            Item salvageToItem = XP.getItem( salvageToItemEntry.getKey() );
+            salvageToItemMap = salvageToItemEntry.getValue();
+
+            double baseChance = salvageToItemMap.get( "baseChance" );
+            double chancePerLevel = salvageToItemMap.get( "chancePerLevel" );
+            double maxSalvageMaterialChance = salvageToItemMap.get( "maxChance" );
+            int reqLevel = (int) Math.floor( salvageToItemMap.get( "levelReq" ) );
+            int salvageMax = (int) Math.floor( salvageToItemMap.get( "salvageMax" ) );
+            smithingLevel -= reqLevel;
+
+            if( lowestReqLevel == null || lowestReqLevel > reqLevel )
+                lowestReqLevel = reqLevel;
+            if( smithingLevel >= 0 )
+            {
+                ableToSalvageAny = true;
+                double chance = baseChance + ( chancePerLevel * smithingLevel );
+
+                if( chance > maxSalvageMaterialChance )
+                    chance = maxSalvageMaterialChance;
+
+                double startDmg = itemStack.getDamage();
+                double maxDmg = itemStack.getMaxDamage();
+                double displayDurabilityPercent = ( 1.00f - ( startDmg / maxDmg ) ) * 100;
+                double durabilityPercent = ( 1.00f - ( startDmg / maxDmg ) );
+
+                if( Double.isNaN( durabilityPercent ) )
+                    durabilityPercent = 1;
+
+                int potentialReturnAmount = (int) Math.floor( salvageMax * durabilityPercent );
+
+                int returnAmount = 0;
+
+                for( int i = 0; i < potentialReturnAmount; i++ )
+                {
+                    if( Math.ceil( Math.random() * 10000 ) <= chance * 100 )
+                        returnAmount++;
+                }
+                award += salvageToItemMap.get( "xpPerItem" ) * returnAmount;
+
+                if( returnAmount > 0 )
+                    XP.dropItems( returnAmount, salvageToItem, world, pos );
+
+                if( returnAmount == potentialReturnAmount )
+                    NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), false, 1 ), (ServerPlayerEntity) player );
+                else if( returnAmount > 0 )
+                    NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), false, 3 ), (ServerPlayerEntity) player );
+                else
+                    NetworkHandler.sendToPlayer( new MessageTripleTranslation( "pmmo.salvageMessage", "" + returnAmount, "" + potentialReturnAmount, salvageToItem.getTranslationKey(), true, 2 ), (ServerPlayerEntity) player );
+            }
+        }
+
+        if( ableToSalvageAny )
+        {
+            //ENCHANTS
+            Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( itemStack );
+//                                int maxEnchantmentBypass = Config.forgeConfig.maxEnchantmentBypass.get();
+//                                int levelsPerOneEnchantBypass = Config.forgeConfig.levelsPerOneEnchantBypass.get();
+            double maxSalvageEnchantChance = Config.forgeConfig.maxSalvageEnchantChance.get();
+            double enchantSaveChancePerLevel = Config.forgeConfig.enchantSaveChancePerLevel.get();
+//                                int maxPlayerBypass = (int) Math.floor( (double) startSmithingLevel / (double) levelsPerOneEnchantBypass );
+//                                if( maxPlayerBypass > maxEnchantmentBypass )
+//                                    maxPlayerBypass = maxEnchantmentBypass;
+            double enchantChance = (startSmithingLevel - lowestReqLevel) * enchantSaveChancePerLevel;
+            if( enchantChance > maxSalvageEnchantChance )
+                enchantChance = maxSalvageEnchantChance;
+
+            if( enchants.size() > 0 )
+            {
+                ItemStack salvagedBook = new ItemStack( Items.ENCHANTED_BOOK );
+                Set<Enchantment> enchantKeys = enchants.keySet();
+                Map<Enchantment, Integer> newEnchantMap = new HashMap<>();
+                int enchantLevel;
+                boolean fullEnchants = true;
+
+                for( Enchantment enchant : enchantKeys )
+                {
+                    enchantLevel = 0;
+                    for( int i = 1; i <= enchants.get( enchant ); i++ )
+                    {
+                        if( Math.floor( Math.random() * 100 ) < enchantChance )
+                            enchantLevel = i;
+                        else
+                        {
+                            fullEnchants = false;
+//				    						i = enchants.get( enchant ) + 1;
+                        }
+                    }
+                    if( enchantLevel > 0 )
+                        newEnchantMap.put( enchant, enchantLevel );
+                }
+                if( newEnchantMap.size() > 0 )
+                {
+                    EnchantmentHelper.setEnchantments( newEnchantMap, salvagedBook );
+                    Block.spawnAsEntity( world, pos, salvagedBook );
+                    if( fullEnchants )
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedAllEnchants" ).setStyle( XP.textStyle.get( "green" ) ), false );
+                    else
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedSomeEnchants" ).setStyle( XP.textStyle.get( "yellow" ) ), false );
+                }
+            }
+
+            if( award > 0 )
+                XP.awardXp( (ServerPlayerEntity) player, Skill.SMITHING.toString(), item.getRegistryName().toString(), award, false, false, false );
+
+            itemStack.shrink( 1 );
+            player.sendBreakAnimation(Hand.OFF_HAND );
+        }
+        else
+            player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvageLackLevelLonger", lowestReqLevel, new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
     }
 
     public static boolean canBeSalvaged( Item item )
