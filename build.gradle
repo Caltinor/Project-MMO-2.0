@@ -56,7 +56,7 @@ apply plugin: "com.wynprice.cursemaven"
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.12-3.42.3"
+version = "1.12-3.43"
 group = "harmonised.pmmo" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Project_MMO"
 
