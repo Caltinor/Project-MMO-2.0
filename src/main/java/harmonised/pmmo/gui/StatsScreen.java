@@ -24,7 +24,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
-import net.minecraftforge.items.IItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import java.util.*;
@@ -253,7 +252,7 @@ public class StatsScreen extends Screen
         for( Map.Entry<String, Map<String, Double>> outterEntry : Config.getXpBoostsMap( player ).entrySet() )
         {
             text.add( new TranslationTextComponent( outterEntry.getKey() ) );
-            addXpMapEntryAsText( text, NBTHelper.MapStringKeyToString( outterEntry.getValue() ) );    //Biome
+            addXpMapEntryAsText( text, NBTHelper.mapStringKeyToString( outterEntry.getValue() ) );    //Biome
         }
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
         scrollPanel = new StatsScrollPanel( new MatrixStack(), Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, y + 10, x + 16, statsEntries );
