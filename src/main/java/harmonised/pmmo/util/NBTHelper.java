@@ -10,6 +10,16 @@ import java.util.UUID;
 
 public class NBTHelper
 {
+    public static <T> Map<String, T> stringMapToLowerCase( Map<String, T> inMap )
+    {
+        Map<String, T> outMap = new HashMap<>();
+        for( Map.Entry<String, T> entry : inMap.entrySet() )
+        {
+            outMap.put( entry.getKey().toLowerCase(), entry.getValue() );
+        }
+        return outMap;
+    }
+
     public static <T> Map<String, T> MapStringKeyToString( Map<String, T> inMap )
     {
         Map<String, T> outMap = new HashMap<>();

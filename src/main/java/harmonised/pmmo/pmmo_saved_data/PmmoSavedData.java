@@ -358,10 +358,14 @@ public class PmmoSavedData extends WorldSavedData
 
     public void setPlayerXpBoostsMaps( UUID playerUUID, Map<String, Map<String, Double>> newBoosts )
     {
-        xpBoosts.put( playerUUID, newBoosts );
+        Map<String, Map<String, Double>> sanitizedBoosts = new HashMap<>();
+        for( Map.Entry<String, Map<String, Double>> boostMapEntry : newBoosts.entrySet() )
+        {
+            sanitizedBoosts.put( boostMapEntry.getKey(), NBTHelper.stringMapToLowerCase( boostMapEntry.getValue() ) );
+        }
+        xpBoosts.put( playerUUID, sanitizedBoosts );
         setDirty( true );
     }
-
 
     public void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Map<String, Double> newXpBoosts )
     {
@@ -374,6 +378,17 @@ public class PmmoSavedData extends WorldSavedData
             XP.syncPlayerXpBoost( player );
         setDirty( true );
 
+    }
+
+    private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, String skill, Double xpBoost )
+    {
+        if( !this.xpBoosts.containsKey( playerUUID ) )
+            this.xpBoosts.put( playerUUID, new HashMap<>() );
+        if( !this.xpBoosts.get( playerUUID ).containsKey( xpBoostKey ) )
+            this.xpBoosts.get( playerUUID ).put( xpBoostKey, new HashMap<>() );
+
+        this.xpBoosts.get( playerUUID ).get( xpBoostKey ).put( skill.toLowerCase(), xpBoost );
+        setDirty( true );
     }
 
     public void removePlayerXpBoost( UUID playerUUID, String xpBoostKey )
@@ -391,16 +406,5 @@ public class PmmoSavedData extends WorldSavedData
     public Map<UUID, Map<String, Double>> getAllXpMaps()
     {
         return xp;
-    }
-
-    private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, String skill, Double xpBoost )
-    {
-        if( !this.xpBoosts.containsKey( playerUUID ) )
-            this.xpBoosts.put( playerUUID, new HashMap<>() );
-        if( !this.xpBoosts.get( playerUUID ).containsKey( xpBoostKey ) )
-            this.xpBoosts.get( playerUUID ).put( xpBoostKey, new HashMap<>() );
-
-        this.xpBoosts.get( playerUUID ).get( xpBoostKey ).put( skill, xpBoost );
-        setDirty( true );
     }
 }
