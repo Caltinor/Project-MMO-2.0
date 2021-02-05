@@ -19,6 +19,16 @@
 	{
 		"building": 10
 	},
+	"#forge:saplings":
+	{
+		"farming": 5,
+		"woodcutting": 10
+	},
+	"#minecraft:saplings":
+	{
+		"farming": 5,
+		"woodcutting": 10
+	},
 	"minecraft:oak_sapling":
 	{
 		"farming": 5,

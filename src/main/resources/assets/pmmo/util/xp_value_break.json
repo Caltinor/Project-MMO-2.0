@@ -1,39 +1,63 @@
 {
-	"minecraft:nether_quartz_ore":
+	"#forge:ores/copper":
+	{
+		"mining": 6.5
+	},
+	"#forge:ores/tin":
+	{
+		"mining": 7.5
+	},
+	"#forge:ores/nickel":
+	{
+		"mining": 8
+	},
+	"#forge:ores/silver":
+	{
+		"mining": 13
+	},
+	"#forge:ores/aluminum":
+	{
+		"mining": 14
+	},
+	"#forge:ores/zinc":
+	{
+		"mining": 22
+	},
+	"#forge:ores/quartz":
 	{
 		"mining": 1.5
+	},
+	"#forge:ores/coal":
+	{
+		"mining": 2
+	},
+	"#forge:ores/iron":
+	{
+		"mining": 12
+	},
+	"#forge:ores/gold":
+	{
+		"mining": 22
+	},
+	"#forge:ores/redstone":
+	{
+		"mining": 1.5
+	},
+	"#forge:ores/diamond":
+	{
+		"mining": 35
+	},
+	"#forge:ores/lapis":
+	{
+		"mining": 5
+	},
+	"#forge:ores/emerald":
+	{
+		"mining": 60
 	},
 	"minecraft:nether_quartz":
 	{
 		"mining": 1.5
-	},
-	"minecraft:coal_ore":
-	{
-		"mining": 2
-	},
-	"minecraft:iron_ore":
-	{
-		"mining": 12
-	},
-	"minecraft:gold_ore":
-	{
-		"mining": 22
-	},
-	"minecraft:diamond_ore":
-	{
-		"mining": 35
-	},
-	"minecraft:redstone_ore":
-	{
-		"mining": 1.5
-	},
-	"minecraft:lapis_ore":
-	{
-		"mining": 5
-	},
-	"minecraft:emerald_ore":
-	{
-		"mining": 60
 	},
 	"minecraft:granite":
 	{
@@ -58,10 +82,6 @@
 	"minecraft:polished_andesite":
 	{
 		"mining": 0.5
-	},
-	"minecraft:stone":
-	{
-		"mining": 0.1
 	},
 	"minecraft:stone_bricks":
 	{
@@ -218,6 +238,10 @@
 	"minecraft:acacia_sapling":
 	{
 		"woodcutting": 26
+	},
+	"#minecraft:logs":
+	{
+		"woodcutting": 8
 	},
 	"minecraft:log":
 	{
@@ -585,14 +609,6 @@
 	{
 		"mining": 20
 	},
-	"oresandmetals:tin_ore":
-	{
-		"mining": 7
-	},
-	"oresandmetals:copper_ore":
-	{
-		"mining": 4
-	},
 	"appliedenergistics2:quartz_ore":
 	{
 		"mining": 8
@@ -600,14 +616,6 @@
 	"appliedenergistics2:charged_quartz_ore":
 	{
 		"mining": 20
-	},
-	"create:copper_ore":
-	{
-		"mining": 7
-	},
-	"create:zinc_ore":
-	{
-		"mining": 22
 	},
 	"create:dolomite":
 	{
@@ -1861,5 +1869,13 @@
 	"undergarden:utherium_ore":
 	{
 		"mining": 18
+	},
+	"byg:holly_log":
+	{
+		"woodcutting": 8
+	},
+	"byg:zelkova_log":
+	{
+		"woodcutting": 9
 	}
 }

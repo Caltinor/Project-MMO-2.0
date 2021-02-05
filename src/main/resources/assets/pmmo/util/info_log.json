@@ -1,4 +1,8 @@
 {
+	"#minecraft:logs":
+	{
+		"extraChance": 1
+	},
 	"minecraft:log":
 	{
 		"extraChance": 1

@@ -11,14 +11,14 @@
 	},
 	"minecraft:overworld":
 	{
-		"minecraft:stone": 0
+		"minecraft:bedrock": 0
 	},
 	"minecraft:the_nether":
 	{
-		"minecraft:netherrack": 0
+		"minecraft:bedrock": 0
 	},
 	"minecraft:the_end":
 	{
-		"minecraft:end_stone": 0
+		"minecraft:bedrock": 0
 	}
 }

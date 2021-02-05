@@ -1,47 +1,63 @@
 {
-	"minecraft:nether_quartz_ore":
+	"#forge:ores/copper":
 	{
-		"extraChance": 0.55
+		"extraChance": 0.8
 	},
-	"minecraft:coal_ore":
+	"#forge:ores/tin":
 	{
-		"extraChance": 1
+		"extraChance": 0.8
 	},
-	"minecraft:iron_ore":
+	"#forge:ores/nickel":
+	{
+		"extraChance": 0.6
+	},
+	"#forge:ores/silver":
+	{
+		"extraChance": 0.4
+	},
+	"#forge:ores/aluminum":
+	{
+		"extraChance": 0.45
+	},
+	"#forge:ores/zinc":
 	{
 		"extraChance": 0.75
 	},
-	"minecraft:gold_ore":
+	"#forge:ores/quartz":
+	{
+		"extraChance": 0.55
+	},
+	"#forge:ores/coal":
+	{
+		"extraChance": 1
+	},
+	"#forge:ores/iron":
+	{
+		"extraChance": 0.75
+	},
+	"#forge:ores/gold":
 	{
 		"extraChance": 0.5
 	},
-	"minecraft:diamond_ore":
-	{
-		"extraChance": 0.33
-	},
-	"minecraft:redstone_ore":
+	"#forge:ores/redstone":
 	{
 		"extraChance": 2
 	},
-	"minecraft:lapis_ore":
+	"#forge:ores/diamond":
+	{
+		"extraChance": 0.33
+	},
+	"#forge:ores/lapis":
 	{
 		"extraChance": 1.5
 	},
-	"minecraft:emerald_ore":
+	"#forge:ores/emerald":
 	{
 		"extraChance": 0.75
 	},
 	"minecraft:glowstone":
 	{
 		"extraChance": 0.1
-	},
-	"create:copper_ore":
-	{
-		"extraChance": 0.8
-	},
-	"create:zinc_ore":
-	{
-		"extraChance": 0.75
 	},
 	"endreborn:quartz_ore":
 	{

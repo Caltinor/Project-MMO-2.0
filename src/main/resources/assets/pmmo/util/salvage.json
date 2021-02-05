@@ -1427,71 +1427,11 @@
 			"levelReq": 1
 		}
 	},
-	"minecraft:oak_leaves":
+	"#minecraft:leaves":
 	{
 		"minecraft:stick":
 		{
 			"salvageMax": 2,
-			"baseChance": 30,
-			"chancePerLevel": 1.5,
-			"maxChance": 75,
-			"xpPerItem": 1,
-			"levelReq": 1
-		}
-	},
-	"minecraft:birch_leaves":
-	{
-		"minecraft:stick":
-		{
-			"salvageMax": 2,
-			"baseChance": 30,
-			"chancePerLevel": 1.5,
-			"maxChance": 75,
-			"xpPerItem": 1,
-			"levelReq": 1
-		}
-	},
-	"minecraft:spruce_leaves":
-	{
-		"minecraft:stick":
-		{
-			"salvageMax": 1,
-			"baseChance": 30,
-			"chancePerLevel": 1.5,
-			"maxChance": 75,
-			"xpPerItem": 1,
-			"levelReq": 1
-		}
-	},
-	"minecraft:jungle_leaves":
-	{
-		"minecraft:stick":
-		{
-			"salvageMax": 3,
-			"baseChance": 30,
-			"chancePerLevel": 1.5,
-			"maxChance": 75,
-			"xpPerItem": 1,
-			"levelReq": 1
-		}
-	},
-	"minecraft:dark_oak_leaves":
-	{
-		"minecraft:stick":
-		{
-			"salvageMax": 3,
-			"baseChance": 30,
-			"chancePerLevel": 1.5,
-			"maxChance": 75,
-			"xpPerItem": 1,
-			"levelReq": 1
-		}
-	},
-	"minecraft:acacia_leaves":
-	{
-		"minecraft:stick":
-		{
-			"salvageMax": 1,
 			"baseChance": 30,
 			"chancePerLevel": 1.5,
 			"maxChance": 75,
@@ -1580,7 +1520,7 @@
 			"levelReq": 99
 		}
 	},
-	"minecraft:emerald_ore":
+	"#forge:ores/emerald":
 	{
 		"minecraft:zombie_villager_spawn_egg":
 		{

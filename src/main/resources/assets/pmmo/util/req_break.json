@@ -42,13 +42,5 @@
 	"oresandmetals:mithril_ore":
 	{
 		"mining": 25
-	},
-	"oresandmetals:tin_ore":
-	{
-		"mining": 5
-	},
-	"oresandmetals:copper_ore":
-	{
-		"mining": 5
 	}
 }

@@ -141,7 +141,7 @@
 			"maxCount": 3
 		}
 	},
-	"minecraft:coal_ore":
+	"#forge:ores/coal":
 	{
 		"minecraft:diamond":
 		{
@@ -154,7 +154,7 @@
 			"maxCount": 1
 		}
 	},
-	"minecraft:stone":
+	"#forge:stone":
 	{
 		"minecraft:iron_nugget":
 		{
@@ -162,45 +162,6 @@
 			"startLevel": 1,
 			"endChance": 2,
 			"endLevel": 150,
-			"xpPerItem": 5,
-			"minCount": 1,
-			"maxCount": 3
-		}
-	},
-	"minecraft:granite":
-	{
-		"minecraft:iron_nugget":
-		{
-			"startChance": 0.1,
-			"startLevel": 1,
-			"endChance": 3,
-			"endLevel": 150,
-			"xpPerItem": 5,
-			"minCount": 2,
-			"maxCount": 3
-		}
-	},
-	"minecraft:diorite":
-	{
-		"minecraft:iron_nugget":
-		{
-			"startChance": 0.1,
-			"startLevel": 1,
-			"endChance": 3,
-			"endLevel": 150,
-			"xpPerItem": 5,
-			"minCount": 1,
-			"maxCount": 3
-		}
-	},
-	"minecraft:andesite":
-	{
-		"minecraft:iron_nugget":
-		{
-			"startChance": 0.1,
-			"startLevel": 1,
-			"endChance": 3,
-			"endLevel": 100,
 			"xpPerItem": 5,
 			"minCount": 1,
 			"maxCount": 3

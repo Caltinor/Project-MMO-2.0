@@ -1,4 +1,60 @@
 {
+	"#forge:ores/copper":
+	{
+		"smithing": 7.5
+	},
+	"#forge:ores/tin":
+	{
+		"smithing": 6.5
+	},
+	"#forge:ores/nickel":
+	{
+		"smithing": 8.5
+	},
+	"#forge:ores/silver":
+	{
+		"smithing": 11
+	},
+	"#forge:ores/aluminum":
+	{
+		"smithing": 12.5
+	},
+	"#forge:ores/zinc":
+	{
+		"smithing": 16
+	},
+	"#forge:ores/quartz":
+	{
+		"smithing": 8
+	},
+	"#forge:ores/coal":
+	{
+		"smithing": 8
+	},
+	"#forge:ores/iron":
+	{
+		"smithing": 12
+	},
+	"#forge:ores/gold":
+	{
+		"smithing": 18
+	},
+	"#forge:ores/redstone":
+	{
+		"smithing": 15
+	},
+	"#forge:ores/diamond":
+	{
+		"smithing": 35
+	},
+	"#forge:ores/lapis":
+	{
+		"smithing": 25
+	},
+	"#forge:ores/emerald":
+	{
+		"smithing": 60
+	},
 	"minecraft:charcoal":
 	{
 		"smithing": 8
@@ -10,6 +66,10 @@
 	"minecraft:cobblestone":
 	{
 		"smithing": 0.5
+	},
+	"#forge:stone":
+	{
+		"smithing": 1
 	},
 	"minecraft:stone":
 	{
@@ -39,6 +99,10 @@
 	{
 		"smithing": 1.2
 	},
+	"#forge:sandstone":
+	{
+		"smithing": 3
+	},
 	"minecraft:sandstone":
 	{
 		"smithing": 3
@@ -46,42 +110,6 @@
 	"minecraft:red_sandstone":
 	{
 		"smithing": 3.6
-	},
-	"minecraft:coal_ore":
-	{
-		"smithing": 8
-	},
-	"minecraft:iron_ore":
-	{
-		"smithing": 12
-	},
-	"minecraft:gold_ore":
-	{
-		"smithing": 18
-	},
-	"minecraft:nether_gold_ore":
-	{
-		"smithing": 22
-	},
-	"minecraft:nether_quartz_ore":
-	{
-		"smithing": 8
-	},
-	"minecraft:diamond_ore":
-	{
-		"smithing": 35
-	},
-	"minecraft:redstone_ore":
-	{
-		"smithing": 15
-	},
-	"minecraft:lapis_ore":
-	{
-		"smithing": 25
-	},
-	"minecraft:emerald_ore":
-	{
-		"smithing": 60
 	},
 	"minecraft:ancient_debris":
 	{
@@ -193,6 +221,10 @@
 	{
 		"smithing": 100
 	},
+	"#minecraft:logs":
+	{
+		"smithing": 0.25
+	},
 	"minecraft:log":
 	{
 		"smithing": 0.25
@@ -302,14 +334,6 @@
 		"smithing": 12
 	},
 	"appliedenergistics2:certus_quartz_dust":
-	{
-		"smithing": 16
-	},
-	"create:copper_ore":
-	{
-		"smithing": 7
-	},
-	"create:zinc_ore":
 	{
 		"smithing": 16
 	},
@@ -1408,5 +1432,13 @@
 	"woot:si_dust":
 	{
 		"smithing": 12
+	},
+	"byg:holly_log":
+	{
+		"smithing": 0.25
+	},
+	"byg:zelkova_log":
+	{
+		"smithing": 0.25
 	}
 }
