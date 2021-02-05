@@ -16,8 +16,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -136,17 +138,6 @@ public class TooltipHandler
                         }
                     }
                 }
-                //////////////
-
-                if( item instanceof BlockItem)
-                {
-                    state = ( (BlockItem) item).getBlock().getDefaultState();
-                    hardness = state.getBlockHardness( null, new BlockPos( 0, 0, 0 ) );
-                    if( hardness > 0 )
-                        tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo.hardness", DP.dp( hardness ) ).getString() ) );
-//                    tooltip.add( new StringTextComponent( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
-                }
-
                 //XP VALUE
                 {
                     if( xpValueGeneral != null && xpValueGeneral.size() > 0 )      //XP GENERAL
@@ -515,6 +506,24 @@ public class TooltipHandler
                         {
                             LOGGER.error( e );
                         }
+                    }
+                }
+
+                //ADVANCED TOOLTIP
+                if( event.getFlags().isAdvanced() )
+                {
+                    for( ResourceLocation tagKey : item.getTags() )
+                    {
+                        tooltip.add( new StringTextComponent( "#" + tagKey.toString() ).setStyle( XP.getColorStyle( 0x666666 ) ) );
+                    }
+
+                    if( item instanceof BlockItem)
+                    {
+                        state = ( (BlockItem) item).getBlock().getDefaultState();
+                        hardness = state.getBlockHardness( null, new BlockPos( 0, 0, 0 ) );
+                        if( hardness > 0 )
+                            tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo.hardness", DP.dp( hardness ) ).getString() ) );
+//                    tooltip.add( new StringTextComponent( XP.checkMaterial( material ) + " " + XP.getSkill( material ) ) );
                     }
                 }
             }

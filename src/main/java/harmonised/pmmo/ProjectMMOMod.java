@@ -66,7 +66,6 @@ public class ProjectMMOMod
         NetworkHandler.registerPackets();
         MinecraftForge.EVENT_BUS.register( harmonised.pmmo.events.EventHandler.class );
         MinecraftForge.EVENT_BUS.register( harmonised.pmmo.skills.AttributeHandler.class );
-        JsonConfig.init();
     }
 
     private void clientLoading( FMLClientSetupEvent event )
@@ -76,6 +75,7 @@ public class ProjectMMOMod
 
     private void serverAboutToStart( FMLServerAboutToStartEvent event )
     {
+        JsonConfig.init();
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
             AutoValues.setAutoValues();
         ChunkDataHandler.init();

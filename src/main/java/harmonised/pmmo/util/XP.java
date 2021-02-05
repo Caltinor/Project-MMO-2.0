@@ -25,6 +25,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
@@ -34,6 +35,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tags.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -780,6 +782,69 @@ public class XP
 		}
 
 		return highestReq;
+	}
+
+	public static Set<String> getElementsFromTag( String tag )
+	{
+		Set<String> results = new HashSet<>();
+
+		for( ITag.INamedTag<Item> namedTag : ItemTags.getAllTags() )
+		{
+			if( namedTag.getName().toString().equals( tag ) )
+			{
+				for( Item element : namedTag.getAllElements() )
+				{
+					try
+					{
+						results.add( element.getRegistryName().toString() );
+					} catch( Exception e ){ /* Failed, don't care */ };
+				}
+			}
+		}
+
+		for( ITag.INamedTag<Block> namedTag : BlockTags.getAllTags() )
+		{
+			if( namedTag.getName().toString().equals( tag ) )
+			{
+				for( Block element : namedTag.getAllElements() )
+				{
+					try
+					{
+						results.add( element.getRegistryName().toString() );
+					} catch( Exception e ){ /* Failed, don't care */ };
+				}
+			}
+		}
+
+		for( ITag.INamedTag<Fluid> namedTag : FluidTags.getAllTags() )
+		{
+			if( namedTag.getName().toString().equals( tag ) )
+			{
+				for( Fluid element : namedTag.getAllElements() )
+				{
+					try
+					{
+						results.add( element.getRegistryName().toString() );
+					} catch( Exception e ){ /* Failed, don't care */ };
+				}
+			}
+		}
+
+		for( ITag.INamedTag<EntityType<?>> namedTag : EntityTypeTags.getAllTags() )
+		{
+			if( namedTag.getName().toString().equals( tag ) )
+			{
+				for( EntityType<?> element : namedTag.getAllElements() )
+				{
+					try
+					{
+						results.add( element.getRegistryName().toString() );
+					} catch( Exception e ){ /* Failed, don't care */ };
+				}
+			}
+		}
+
+		return results;
 	}
 
 	public static Item getItem( String regKey )

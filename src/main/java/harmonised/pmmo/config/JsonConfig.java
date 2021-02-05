@@ -8,8 +8,10 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.data.TagsProvider;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -18,8 +20,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
+import net.minecraft.tags.*;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeTagHandler;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.data.ForgeBlockTagsProvider;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -82,6 +87,8 @@ public class JsonConfig
         initJTypes();       //check (from config) which JTypes should be read from data
         initData();         //copy over defaults if files aren't found (to do: check if valid json)
         readRawData();      //read in the data from /config/pmmo/
+        extractTagsAsData( rawData );   //replaces tags with actual items that have the tags
+        extractTagsAsData( rawData2 );  //replaces tags with actual items that have the tags
         processRawData();   //turn Raw data into Usable data
 
         JsonConfig.data = localData;
@@ -291,6 +298,29 @@ public class JsonConfig
                     rawData2.put( jType, new HashMap<>() );
                 else
                     rawData.put( jType, new HashMap<>() );
+            }
+        }
+    }
+
+    private static <T> void extractTagsAsData( Map<JType, Map<String, T>> rawMap )
+    {
+        String tag;
+        for( JType jType : rawMap.keySet() )
+        {
+            for( String itemKey : new HashSet<>( rawMap.get( jType ).keySet() ) )
+            {
+                if( itemKey.charAt(0) == '#' )
+                {
+                    tag = itemKey.substring(1);
+                    Set<String> associatedItems = XP.getElementsFromTag( tag );
+
+                    for( String regKey : associatedItems )
+                    {
+                        if( !rawMap.get( jType ).containsKey( regKey ) )
+                            rawMap.get( jType ).put( regKey, rawMap.get( jType ).get( itemKey ) );
+                    }
+                    rawMap.get( jType ).remove( itemKey );
+                }
             }
         }
     }
