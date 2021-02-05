@@ -10,6 +10,7 @@ import harmonised.pmmo.party.Party;
 import harmonised.pmmo.party.PartyMemberInfo;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -147,8 +148,10 @@ public class DamageHandler
                 if( XP.isPlayerSurvival( player ) )
                 {
                     ItemStack itemStack = player.getHeldItemMainhand();
-                    ResourceLocation resLoc = player.getHeldItemMainhand().getItem().getRegistryName();
-                    Map<String, Double> weaponReq = XP.getJsonMap( resLoc, JType.REQ_WEAPON );
+                    ResourceLocation mainResLoc = player.getHeldItemMainhand().getItem().getRegistryName();
+                    ResourceLocation offResLoc = player.getHeldItemOffhand().getItem().getRegistryName();
+                    Map<String, Double> weaponReq = XP.getJsonMap( mainResLoc, JType.REQ_WEAPON );
+                    NBTHelper.maxDoubleMaps( weaponReq, XP.getJsonMap( offResLoc, JType.REQ_WEAPON ) );
                     String skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY.toString() : Skill.COMBAT.toString();
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( itemStack.getItem().getRegistryName().toString() );
                     if( skill.equals( Skill.COMBAT.toString() ) )

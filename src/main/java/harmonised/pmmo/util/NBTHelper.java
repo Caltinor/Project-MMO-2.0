@@ -10,6 +10,15 @@ import java.util.UUID;
 
 public class NBTHelper
 {
+    public static <T> Map<T, Double> maxDoubleMaps( Map<T, Double> mapA, Map<T, Double> mapB )
+    {
+        for( Map.Entry<T, Double> entry : mapB.entrySet() )
+        {
+            mapA.put( entry.getKey(), Math.max( entry.getValue(), mapA.getOrDefault( entry.getKey(), entry.getValue() ) ) );
+        }
+        return mapA;
+    }
+
     public static <T> Map<String, T> stringMapToLowerCase( Map<String, T> inMap )
     {
         Map<String, T> outMap = new HashMap<>();
