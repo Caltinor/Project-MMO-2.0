@@ -30,6 +30,10 @@ public class PrefsEntry
         this.isSwitch = isSwitch;
         this.removeIfMax = removeIfMax;
 
+        if( minVal == maxVal )
+            maxVal = 0.00001;
+        if( Double.isNaN( curVal ) )
+            curVal = defaultVal;
         if( defaultVal > maxVal )
             defaultVal = maxVal;
         if( defaultVal < minVal )
