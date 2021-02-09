@@ -1,37 +1,21 @@
 {
-	"#forge:ores/copper":
-	{
-		"extraChance": 0.8
-	},
-	"#forge:ores/tin":
-	{
-		"extraChance": 0.8
-	},
-	"#forge:ores/nickel":
-	{
-		"extraChance": 0.6
-	},
-	"#forge:ores/silver":
-	{
-		"extraChance": 0.4
-	},
 	"#forge:ores/aluminum":
 	{
 		"extraChance": 0.45
-	},
-	"#forge:ores/zinc":
-	{
-		"extraChance": 0.75
-	},
-	"#forge:ores/quartz":
-	{
-		"extraChance": 0.55
 	},
 	"#forge:ores/coal":
 	{
 		"extraChance": 1
 	},
-	"#forge:ores/iron":
+	"#forge:ores/copper":
+	{
+		"extraChance": 0.8
+	},
+	"#forge:ores/diamond":
+	{
+		"extraChance": 0.33
+	},
+	"#forge:ores/emerald":
 	{
 		"extraChance": 0.75
 	},
@@ -39,69 +23,37 @@
 	{
 		"extraChance": 0.5
 	},
-	"#forge:ores/redstone":
+	"#forge:ores/iron":
 	{
-		"extraChance": 2
-	},
-	"#forge:ores/diamond":
-	{
-		"extraChance": 0.33
+		"extraChance": 0.75
 	},
 	"#forge:ores/lapis":
 	{
 		"extraChance": 1.5
 	},
-	"#forge:ores/emerald":
+	"#forge:ores/nickel":
 	{
-		"extraChance": 0.75
+		"extraChance": 0.6
 	},
-	"minecraft:glowstone":
+	"#forge:ores/quartz":
 	{
-		"extraChance": 0.1
+		"extraChance": 0.55
 	},
-	"endreborn:quartz_ore":
+	"#forge:ores/redstone":
 	{
-		"extraChance": 0.9
+		"extraChance": 2
 	},
-	"endreborn:obsidian_ore":
+	"#forge:ores/silver":
+	{
+		"extraChance": 0.4
+	},
+	"#forge:ores/tin":
 	{
 		"extraChance": 0.8
 	},
-	"endreborn:wolframium_ore":
-	{
-		"extraChance": 0.9
-	},
-	"endreborn:end_wolframium_ore":
-	{
-		"extraChance": 1.2
-	},
-	"charm:pig_iron_ore":
+	"#forge:ores/zinc":
 	{
 		"extraChance": 0.75
-	},
-	"iceandfire:amythest_ore":
-	{
-		"extraChance": 0.75
-	},
-	"iceandfire:copper_ore":
-	{
-		"extraChance": 0.8
-	},
-	"iceandfire:sapphire_ore":
-	{
-		"extraChance": 0.75
-	},
-	"iceandfire:silver_ore":
-	{
-		"extraChance": 0.5
-	},
-	"scalinghealth:heart_crystal_ore":
-	{
-		"extraChance": 0.25
-	},
-	"scalinghealth:power_crystal_ore":
-	{
-		"extraChance": 0.25
 	},
 	"ars_nouveau:arcane_ore":
 	{
@@ -187,6 +139,10 @@
 	{
 		"extraChance": 0.5
 	},
+	"charm:pig_iron_ore":
+	{
+		"extraChance": 0.75
+	},
 	"druidcraft:amber_ore":
 	{
 		"extraChance": 0.75
@@ -206,6 +162,22 @@
 	"elementalcraft:crystalore":
 	{
 		"extraChance": 0.5
+	},
+	"endreborn:end_wolframium_ore":
+	{
+		"extraChance": 1.2
+	},
+	"endreborn:obsidian_ore":
+	{
+		"extraChance": 0.8
+	},
+	"endreborn:quartz_ore":
+	{
+		"extraChance": 0.9
+	},
+	"endreborn:wolframium_ore":
+	{
+		"extraChance": 0.9
 	},
 	"enigmaticlegacy:etherium_ore":
 	{
@@ -235,6 +207,22 @@
 	{
 		"extraChance": 0.5
 	},
+	"iceandfire:amythest_ore":
+	{
+		"extraChance": 0.75
+	},
+	"iceandfire:copper_ore":
+	{
+		"extraChance": 0.8
+	},
+	"iceandfire:sapphire_ore":
+	{
+		"extraChance": 0.75
+	},
+	"iceandfire:silver_ore":
+	{
+		"extraChance": 0.5
+	},
 	"mekanism:fluorite_ore":
 	{
 		"extraChance": 0.5
@@ -242,6 +230,10 @@
 	"mekanism:osmium_ore":
 	{
 		"extraChance": 0.5
+	},
+	"minecraft:glowstone":
+	{
+		"extraChance": 0.1
 	},
 	"mysticalagradditions:end_inferium_ore":
 	{
@@ -298,6 +290,14 @@
 	"rftools:dimensional_shard_ore":
 	{
 		"extraChance": 0.75
+	},
+	"scalinghealth:heart_crystal_ore":
+	{
+		"extraChance": 0.25
+	},
+	"scalinghealth:power_crystal_ore":
+	{
+		"extraChance": 0.25
 	},
 	"silentgear:azure_silver_ore":
 	{

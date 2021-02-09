@@ -3,10 +3,6 @@
 	{
 		"farming": 10
 	},
-	"minecraft:sheep":
-	{
-		"farming": 30
-	},
 	"minecraft:cow":
 	{
 		"farming": 35
@@ -14,5 +10,9 @@
 	"minecraft:pig":
 	{
 		"farming": 25
+	},
+	"minecraft:sheep":
+	{
+		"farming": 30
 	}
 }

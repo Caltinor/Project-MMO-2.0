@@ -201,17 +201,15 @@ public class PrefsScreen extends Screen
     @Override
     public void renderBackground( MatrixStack stack, int p_renderBackground_1_)
     {
-        if (this.minecraft != null)
+        if ( this.minecraft != null && !jType.equals( JType.GUI_SETTINGS ) )
         {
+            boxHeight = 256;
+            boxWidth = 256;
+            Minecraft.getInstance().getTextureManager().bindTexture( box );
             this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
+            this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
         }
-
-        boxHeight = 256;
-        boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
-
-        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
 
     @Override

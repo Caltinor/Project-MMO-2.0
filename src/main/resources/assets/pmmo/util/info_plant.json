@@ -1,19 +1,7 @@
 {
-	"minecraft:cocoa_beans":
+	"minecraft:bamboo":
 	{
-		"extraChance": 1.5
-	},
-	"minecraft:wheat":
-	{
-		"extraChance": 0.5
-	},
-	"minecraft:melon":
-	{
-		"extraChance": 1
-	},
-	"minecraft:pumpkin":
-	{
-		"extraChance": 0.6
+		"extraChance": 0.35
 	},
 	"minecraft:beetroot":
 	{
@@ -23,9 +11,17 @@
 	{
 		"extraChance": 0.45
 	},
-	"minecraft:sugar_cane":
+	"minecraft:carrot":
 	{
-		"extraChance": 0.33
+		"extraChance": 1.5
+	},
+	"minecraft:carrots":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:cocoa_beans":
+	{
+		"extraChance": 1.5
 	},
 	"minecraft:kelp":
 	{
@@ -35,11 +31,15 @@
 	{
 		"extraChance": 0.25
 	},
-	"minecraft:bamboo":
+	"minecraft:melon":
 	{
-		"extraChance": 0.35
+		"extraChance": 1
 	},
-	"minecraft:sea_pickle":
+	"minecraft:nether_wart":
+	{
+		"extraChance": 0.75
+	},
+	"minecraft:potato":
 	{
 		"extraChance": 1.5
 	},
@@ -47,20 +47,20 @@
 	{
 		"extraChance": 1.5
 	},
-	"minecraft:potato":
+	"minecraft:pumpkin":
+	{
+		"extraChance": 0.6
+	},
+	"minecraft:sea_pickle":
 	{
 		"extraChance": 1.5
 	},
-	"minecraft:carrots":
+	"minecraft:sugar_cane":
 	{
-		"extraChance": 1.5
+		"extraChance": 0.33
 	},
-	"minecraft:carrot":
+	"minecraft:wheat":
 	{
-		"extraChance": 1.5
-	},
-	"minecraft:nether_wart":
-	{
-		"extraChance": 0.75
+		"extraChance": 0.5
 	}
 }

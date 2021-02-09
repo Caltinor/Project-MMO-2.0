@@ -1,61 +1,4 @@
 {
-	"minecraft:mutton":
-	{
-		"cooking": 7.5
-	},
-	"minecraft:rabbit":
-	{
-		"cooking": 15
-	},
-	"minecraft:salmon":
-	{
-		"cooking": 7.5
-	},
-	"minecraft:cod":
-	{
-		"cooking": 5
-	},
-	"minecraft:beef":
-	{
-		"cooking": 10
-	},
-	"minecraft:porkchop":
-	{
-		"cooking": 12.5
-	},
-	"minecraft:chicken":
-	{
-		"cooking": 7.5
-	},
-	"minecraft:potato":
-	{
-		"cooking": 5
-	},
-	"minecraft:wet_sponge":
-	{
-		"cooking": 15,
-		"crafting": 15
-	},
-	"minecraft:cactus":
-	{
-		"cooking": 12.5,
-		"crafting": 4
-	},
-	"minecraft:sea_pickle":
-	{
-		"cooking": 12.5,
-		"crafting": 3
-	},
-	"minecraft:chorus_fruit":
-	{
-		"cooking": 25,
-		"crafting": 22.5
-	},
-	"minecraft:kelp":
-	{
-		"cooking": 6,
-		"crafting": 5
-	},
 	"aquaculture:fish_fillet_raw":
 	{
 		"cooking": 7.5
@@ -68,11 +11,11 @@
 	{
 		"cooking": 7.5
 	},
-	"minecraft:egg":
+	"foodexpansion:bat_wing":
 	{
 		"cooking": 7.5
 	},
-	"foodexpansion:squid":
+	"foodexpansion:dough":
 	{
 		"cooking": 7.5
 	},
@@ -80,39 +23,7 @@
 	{
 		"cooking": 7.5
 	},
-	"minecraft:red_mushroom":
-	{
-		"cooking": 7.5
-	},
-	"minecraft:brown_mushroom":
-	{
-		"cooking": 7.5
-	},
-	"foodexpansion:bat_wing":
-	{
-		"cooking": 7.5
-	},
-	"minecraft:beetroot_seed":
-	{
-		"cooking": 5
-	},
-	"minecraft:melon_seed":
-	{
-		"cooking": 5
-	},
-	"minecraft:pumpkin_seed":
-	{
-		"cooking": 5
-	},
-	"minecraft:wheat_seed":
-	{
-		"cooking": 5
-	},
-	"foodexpansion:dough":
-	{
-		"cooking": 7.5
-	},
-	"foodexpansion:wolf_meat":
+	"foodexpansion:llama_meat":
 	{
 		"cooking": 7.5
 	},
@@ -124,15 +35,51 @@
 	{
 		"cooking": 7.5
 	},
-	"foodexpansion:llama_meat":
-	{
-		"cooking": 7.5
-	},
 	"foodexpansion:polar_bear_meat":
 	{
 		"cooking": 7.5
 	},
+	"foodexpansion:squid":
+	{
+		"cooking": 7.5
+	},
+	"foodexpansion:wolf_meat":
+	{
+		"cooking": 7.5
+	},
 	"lycanitesmobs:raw_arisaur_meat":
+	{
+		"cooking": 40
+	},
+	"lycanitesmobs:raw_aspid_meat":
+	{
+		"cooking": 30
+	},
+	"lycanitesmobs:raw_chupacabra_meat":
+	{
+		"cooking": 35
+	},
+	"lycanitesmobs:raw_concapede_meat":
+	{
+		"cooking": 40
+	},
+	"lycanitesmobs:raw_ika_meat":
+	{
+		"cooking": 40
+	},
+	"lycanitesmobs:raw_joust_meat":
+	{
+		"cooking": 35
+	},
+	"lycanitesmobs:raw_krake_meat":
+	{
+		"cooking": 30
+	},
+	"lycanitesmobs:raw_maka_meat":
+	{
+		"cooking": 40
+	},
+	"lycanitesmobs:raw_pinky_meat":
 	{
 		"cooking": 40
 	},
@@ -144,40 +91,93 @@
 	{
 		"cooking": 35
 	},
-	"lycanitesmobs:raw_pinky_meat":
-	{
-		"cooking": 40
-	},
-	"lycanitesmobs:raw_ika_meat":
-	{
-		"cooking": 40
-	},
-	"lycanitesmobs:raw_chupacabra_meat":
-	{
-		"cooking": 35
-	},
-	"lycanitesmobs:raw_aspid_meat":
-	{
-		"cooking": 30
-	},
-	"lycanitesmobs:raw_maka_meat":
-	{
-		"cooking": 40
-	},
 	"lycanitesmobs:raw_yeti_meat":
 	{
 		"cooking": 40
 	},
-	"lycanitesmobs:raw_concapede_meat":
+	"minecraft:beef":
 	{
-		"cooking": 40
+		"cooking": 10
 	},
-	"lycanitesmobs:raw_joust_meat":
+	"minecraft:beetroot_seed":
 	{
-		"cooking": 35
+		"cooking": 5
 	},
-	"lycanitesmobs:raw_krake_meat":
+	"minecraft:brown_mushroom":
 	{
-		"cooking": 30
+		"cooking": 7.5
+	},
+	"minecraft:cactus":
+	{
+		"cooking": 12.5,
+		"crafting": 4
+	},
+	"minecraft:chicken":
+	{
+		"cooking": 7.5
+	},
+	"minecraft:chorus_fruit":
+	{
+		"cooking": 25,
+		"crafting": 22.5
+	},
+	"minecraft:cod":
+	{
+		"cooking": 5
+	},
+	"minecraft:egg":
+	{
+		"cooking": 7.5
+	},
+	"minecraft:kelp":
+	{
+		"cooking": 6,
+		"crafting": 5
+	},
+	"minecraft:melon_seed":
+	{
+		"cooking": 5
+	},
+	"minecraft:mutton":
+	{
+		"cooking": 7.5
+	},
+	"minecraft:porkchop":
+	{
+		"cooking": 12.5
+	},
+	"minecraft:potato":
+	{
+		"cooking": 5
+	},
+	"minecraft:pumpkin_seed":
+	{
+		"cooking": 5
+	},
+	"minecraft:rabbit":
+	{
+		"cooking": 15
+	},
+	"minecraft:red_mushroom":
+	{
+		"cooking": 7.5
+	},
+	"minecraft:salmon":
+	{
+		"cooking": 7.5
+	},
+	"minecraft:sea_pickle":
+	{
+		"cooking": 12.5,
+		"crafting": 3
+	},
+	"minecraft:wet_sponge":
+	{
+		"cooking": 15,
+		"crafting": 15
+	},
+	"minecraft:wheat_seed":
+	{
+		"cooking": 5
 	}
 }

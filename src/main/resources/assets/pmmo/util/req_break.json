@@ -3,23 +3,31 @@
 	{
 		"combat": 5
 	},
-	"oresandmetals:light_animica_ore":
+	"oresandmetals:adamantite_ore":
 	{
-		"mining": 90
-	},
-	"oresandmetals:dark_animica_ore":
-	{
-		"mining": 90
+		"mining": 35
 	},
 	"oresandmetals:banite_ore":
 	{
 		"mining": 80
 	},
-	"oresandmetals:necrite_ore":
+	"oresandmetals:dark_animica_ore":
 	{
-		"mining": 70
+		"mining": 90
 	},
-	"oresandmetals:phasmatite_ore":
+	"oresandmetals:drakolith_ore":
+	{
+		"mining": 60
+	},
+	"oresandmetals:light_animica_ore":
+	{
+		"mining": 90
+	},
+	"oresandmetals:mithril_ore":
+	{
+		"mining": 25
+	},
+	"oresandmetals:necrite_ore":
 	{
 		"mining": 70
 	},
@@ -27,20 +35,12 @@
 	{
 		"mining": 60
 	},
-	"oresandmetals:drakolith_ore":
+	"oresandmetals:phasmatite_ore":
 	{
-		"mining": 60
+		"mining": 70
 	},
 	"oresandmetals:runite_ore":
 	{
 		"mining": 50
-	},
-	"oresandmetals:adamantite_ore":
-	{
-		"mining": 35
-	},
-	"oresandmetals:mithril_ore":
-	{
-		"mining": 25
 	}
 }

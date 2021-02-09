@@ -1,207 +1,55 @@
 {
-	"minecraft:netherite_pickaxe":
-	{
-		"mining": 60
-	},
-	"minecraft:netherite_shovel":
-	{
-		"excavation": 60
-	},
-	"minecraft:netherite_axe":
-	{
-		"woodcutting": 60
-	},
-	"minecraft:netherite_hoe":
-	{
-		"farming": 40
-	},
-	"minecraft:diamond_pickaxe":
-	{
-		"mining": 40
-	},
-	"minecraft:diamond_shovel":
-	{
-		"excavation": 40
-	},
-	"minecraft:diamond_axe":
-	{
-		"woodcutting": 40
-	},
-	"minecraft:diamond_hoe":
-	{
-		"farming": 30
-	},
-	"minecraft:golden_pickaxe":
-	{
-		"mining": 30
-	},
-	"minecraft:golden_shovel":
-	{
-		"excavation": 30
-	},
-	"minecraft:golden_axe":
+	"appliedenergistics2:certus_quartz_axe":
 	{
 		"woodcutting": 30
 	},
-	"minecraft:golden_hoe":
+	"appliedenergistics2:certus_quartz_hoe":
 	{
-		"farming": 50
+		"farming": 30
 	},
-	"minecraft:iron_pickaxe":
+	"appliedenergistics2:certus_quartz_pickaxe":
 	{
-		"mining": 20
+		"mining": 30
 	},
-	"minecraft:iron_shovel":
+	"appliedenergistics2:certus_quartz_shovel":
 	{
-		"excavation": 20
+		"excavation": 30
 	},
-	"minecraft:iron_axe":
+	"appliedenergistics2:nether_quartz_axe":
 	{
-		"woodcutting": 20
+		"woodcutting": 17
 	},
-	"minecraft:iron_hoe":
+	"appliedenergistics2:nether_quartz_hoe":
 	{
-		"farming": 20
+		"farming": 17
 	},
-	"minecraft:stone_pickaxe":
+	"appliedenergistics2:nether_quartz_pickaxe":
 	{
-		"mining": 10
+		"mining": 17
 	},
-	"minecraft:stone_shovel":
+	"appliedenergistics2:nether_quartz_shovel":
 	{
-		"excavation": 10
+		"excavation": 17
 	},
-	"minecraft:stone_axe":
+	"aquaculture:neptunium_axe":
 	{
-		"woodcutting": 10
+		"woodcutting": 30
 	},
-	"minecraft:stone_hoe":
+	"aquaculture:neptunium_hoe":
 	{
-		"farming": 10
+		"farming": 40
 	},
-	"minecraft:wooden_pickaxe":
+	"aquaculture:neptunium_pickaxe":
 	{
-		"mining": 1
+		"mining": 30
 	},
-	"minecraft:wooden_shovel":
+	"aquaculture:neptunium_shovel":
 	{
-		"excavation": 1
+		"excavation": 30
 	},
-	"minecraft:wooden_axe":
+	"create:deforester":
 	{
-		"woodcutting": 1
-	},
-	"minecraft:wooden_hoe":
-	{
-		"farming": 1
-	},
-	"oresandmetals:elder_rune_pickaxe":
-	{
-		"mining": 90
-	},
-	"oresandmetals:elder_rune_shovel":
-	{
-		"excavation": 90
-	},
-	"oresandmetals:elder_rune_axe":
-	{
-		"woodcutting": 90
-	},
-	"oresandmetals:banite_pickaxe":
-	{
-		"mining": 80
-	},
-	"oresandmetals:banite_shovel":
-	{
-		"excavation": 80
-	},
-	"oresandmetals:banite_axe":
-	{
-		"woodcutting": 80
-	},
-	"oresandmetals:necronium_pickaxe":
-	{
-		"mining": 70
-	},
-	"oresandmetals:necronium_shovel":
-	{
-		"excavation": 70
-	},
-	"oresandmetals:necronium_axe":
-	{
-		"woodcutting": 70
-	},
-	"oresandmetals:orikalkum_pickaxe":
-	{
-		"mining": 60
-	},
-	"oresandmetals:orikalkum_shovel":
-	{
-		"excavation": 60
-	},
-	"oresandmetals:orikalkum_axe":
-	{
-		"woodcutting": 60
-	},
-	"oresandmetals:rune_pickaxe":
-	{
-		"mining": 50
-	},
-	"oresandmetals:rune_shovel":
-	{
-		"excavation": 50
-	},
-	"oresandmetals:rune_axe":
-	{
-		"woodcutting": 50
-	},
-	"oresandmetals:adamant_pickaxe":
-	{
-		"mining": 35
-	},
-	"oresandmetals:adamant_shovel":
-	{
-		"excavation": 35
-	},
-	"oresandmetals:adamant_axe":
-	{
-		"woodcutting": 35
-	},
-	"oresandmetals:mithril_pickaxe":
-	{
-		"mining": 25
-	},
-	"oresandmetals:mithril_shovel":
-	{
-		"excavation": 25
-	},
-	"oresandmetals:mithril_axe":
-	{
-		"woodcutting": 25
-	},
-	"oresandmetals:steel_pickaxe":
-	{
-		"mining": 15
-	},
-	"oresandmetals:steel_shovel":
-	{
-		"excavation": 15
-	},
-	"oresandmetals:steel_axe":
-	{
-		"woodcutting": 15
-	},
-	"oresandmetals:bronze_pickaxe":
-	{
-		"mining": 5
-	},
-	"oresandmetals:bronze_shovel":
-	{
-		"excavation": 5
-	},
-	"oresandmetals:bronze_axe":
-	{
-		"woodcutting": 5
+		"woodcutting": 92
 	},
 	"doomweapon:argent_axe":
 	{
@@ -225,81 +73,9 @@
 	{
 		"excavation": 80
 	},
-	"appliedenergistics2:certus_quartz_axe":
-	{
-		"woodcutting": 30
-	},
-	"appliedenergistics2:certus_quartz_shovel":
-	{
-		"excavation": 30
-	},
-	"appliedenergistics2:certus_quartz_hoe":
-	{
-		"farming": 30
-	},
-	"appliedenergistics2:certus_quartz_pickaxe":
-	{
-		"mining": 30
-	},
-	"appliedenergistics2:nether_quartz_axe":
-	{
-		"woodcutting": 17
-	},
-	"appliedenergistics2:nether_quartz_shovel":
-	{
-		"excavation": 17
-	},
-	"appliedenergistics2:nether_quartz_hoe":
-	{
-		"farming": 17
-	},
-	"appliedenergistics2:nether_quartz_pickaxe":
-	{
-		"mining": 17
-	},
-	"create:deforester":
-	{
-		"woodcutting": 92
-	},
-	"endreborn:wolframium_axe":
-	{
-		"woodcutting": 35
-	},
-	"endreborn:wolframium_shovel":
-	{
-		"excavation": 35
-	},
-	"endreborn:wolframium_hoe":
-	{
-		"farming": 35
-	},
-	"endreborn:wolframium_pickaxe":
-	{
-		"mining": 35
-	},
-	"endreborn:endorium_axe":
-	{
-		"woodcutting": 60
-	},
-	"endreborn:endorium_shovel":
-	{
-		"excavation": 60
-	},
-	"endreborn:endorium_hoe":
-	{
-		"farming": 60
-	},
-	"endreborn:endorium_pickaxe":
-	{
-		"mining": 60
-	},
 	"endreborn:end_stone_axe":
 	{
 		"woodcutting": 20
-	},
-	"endreborn:end_stone_shovel":
-	{
-		"excavation": 20
 	},
 	"endreborn:end_stone_hoe":
 	{
@@ -309,19 +85,47 @@
 	{
 		"mining": 20
 	},
-	"aquaculture:neptunium_pickaxe":
+	"endreborn:end_stone_shovel":
 	{
-		"mining": 30
+		"excavation": 20
 	},
-	"aquaculture:neptunium_shovel":
+	"endreborn:endorium_axe":
 	{
-		"excavation": 30
+		"woodcutting": 60
 	},
-	"aquaculture:neptunium_axe":
+	"endreborn:endorium_hoe":
 	{
-		"woodcutting": 30
+		"farming": 60
 	},
-	"aquaculture:neptunium_hoe":
+	"endreborn:endorium_pickaxe":
+	{
+		"mining": 60
+	},
+	"endreborn:endorium_shovel":
+	{
+		"excavation": 60
+	},
+	"endreborn:wolframium_axe":
+	{
+		"woodcutting": 35
+	},
+	"endreborn:wolframium_hoe":
+	{
+		"farming": 35
+	},
+	"endreborn:wolframium_pickaxe":
+	{
+		"mining": 35
+	},
+	"endreborn:wolframium_shovel":
+	{
+		"excavation": 35
+	},
+	"extendednether:netherite_axe":
+	{
+		"woodcutting": 60
+	},
+	"extendednether:netherite_hoe":
 	{
 		"farming": 40
 	},
@@ -333,29 +137,13 @@
 	{
 		"excavation": 60
 	},
-	"extendednether:netherite_axe":
+	"iceandfire:copper_axe":
 	{
-		"woodcutting": 60
+		"woodcutting": 10
 	},
-	"extendednether:netherite_hoe":
+	"iceandfire:copper_hoe":
 	{
-		"farming": 40
-	},
-	"iceandfire:silver_pickaxe":
-	{
-		"mining": 15
-	},
-	"iceandfire:silver_shovel":
-	{
-		"excavation": 15
-	},
-	"iceandfire:silver_axe":
-	{
-		"woodcutting": 15
-	},
-	"iceandfire:silver_hoe":
-	{
-		"farming": 15
+		"farming": 10
 	},
 	"iceandfire:copper_pickaxe":
 	{
@@ -365,22 +153,6 @@
 	{
 		"excavation": 10
 	},
-	"iceandfire:copper_axe":
-	{
-		"woodcutting": 10
-	},
-	"iceandfire:copper_hoe":
-	{
-		"farming": 10
-	},
-	"iceandfire:dragonbone_pickaxe":
-	{
-		"mining": 35
-	},
-	"iceandfire:dragonbone_shovel":
-	{
-		"excavation": 35
-	},
 	"iceandfire:dragonbone_axe":
 	{
 		"woodcutting": 35
@@ -389,43 +161,11 @@
 	{
 		"farming": 35
 	},
-	"iceandfire:myrmex_desert_pickaxe":
-	{
-		"mining": 15
-	},
-	"iceandfire:myrmex_desert_shovel":
-	{
-		"excavation": 15
-	},
-	"iceandfire:myrmex_desert_axe":
-	{
-		"woodcutting": 15
-	},
-	"iceandfire:myrmex_desert_hoe":
-	{
-		"farming": 15
-	},
-	"iceandfire:myrmex_jungle_pickaxe":
-	{
-		"mining": 15
-	},
-	"iceandfire:myrmex_jungle_shovel":
-	{
-		"excavation": 15
-	},
-	"iceandfire:mymrex_jungle_axe":
-	{
-		"woodcutting": 15
-	},
-	"iceandfire:mymrex_jungle_hoe":
-	{
-		"farming": 15
-	},
-	"iceandfire:dragonsteel_fire_pickaxe":
+	"iceandfire:dragonbone_pickaxe":
 	{
 		"mining": 35
 	},
-	"iceandfire:dragonsteel_fire_shovel":
+	"iceandfire:dragonbone_shovel":
 	{
 		"excavation": 35
 	},
@@ -437,11 +177,11 @@
 	{
 		"farming": 35
 	},
-	"iceandfire:dragonsteel_ice_pickaxe":
+	"iceandfire:dragonsteel_fire_pickaxe":
 	{
 		"mining": 35
 	},
-	"iceandfire:dragonsteel_ice_shovel":
+	"iceandfire:dragonsteel_fire_shovel":
 	{
 		"excavation": 35
 	},
@@ -453,11 +193,11 @@
 	{
 		"farming": 35
 	},
-	"iceandfire:dragonsteel_lightning_pickaxe":
+	"iceandfire:dragonsteel_ice_pickaxe":
 	{
 		"mining": 35
 	},
-	"iceandfire:dragonsteel_lightning_shovel":
+	"iceandfire:dragonsteel_ice_shovel":
 	{
 		"excavation": 35
 	},
@@ -469,7 +209,267 @@
 	{
 		"farming": 35
 	},
-	"treemendous:iron_lumber_axe":
+	"iceandfire:dragonsteel_lightning_pickaxe":
+	{
+		"mining": 35
+	},
+	"iceandfire:dragonsteel_lightning_shovel":
+	{
+		"excavation": 35
+	},
+	"iceandfire:mymrex_jungle_axe":
+	{
+		"woodcutting": 15
+	},
+	"iceandfire:mymrex_jungle_hoe":
+	{
+		"farming": 15
+	},
+	"iceandfire:myrmex_desert_axe":
+	{
+		"woodcutting": 15
+	},
+	"iceandfire:myrmex_desert_hoe":
+	{
+		"farming": 15
+	},
+	"iceandfire:myrmex_desert_pickaxe":
+	{
+		"mining": 15
+	},
+	"iceandfire:myrmex_desert_shovel":
+	{
+		"excavation": 15
+	},
+	"iceandfire:myrmex_jungle_pickaxe":
+	{
+		"mining": 15
+	},
+	"iceandfire:myrmex_jungle_shovel":
+	{
+		"excavation": 15
+	},
+	"iceandfire:silver_axe":
+	{
+		"woodcutting": 15
+	},
+	"iceandfire:silver_hoe":
+	{
+		"farming": 15
+	},
+	"iceandfire:silver_pickaxe":
+	{
+		"mining": 15
+	},
+	"iceandfire:silver_shovel":
+	{
+		"excavation": 15
+	},
+	"minecraft:diamond_axe":
+	{
+		"woodcutting": 40
+	},
+	"minecraft:diamond_hoe":
+	{
+		"farming": 30
+	},
+	"minecraft:diamond_pickaxe":
+	{
+		"mining": 40
+	},
+	"minecraft:diamond_shovel":
+	{
+		"excavation": 40
+	},
+	"minecraft:golden_axe":
+	{
+		"woodcutting": 30
+	},
+	"minecraft:golden_hoe":
+	{
+		"farming": 50
+	},
+	"minecraft:golden_pickaxe":
+	{
+		"mining": 30
+	},
+	"minecraft:golden_shovel":
+	{
+		"excavation": 30
+	},
+	"minecraft:iron_axe":
+	{
+		"woodcutting": 20
+	},
+	"minecraft:iron_hoe":
+	{
+		"farming": 20
+	},
+	"minecraft:iron_pickaxe":
+	{
+		"mining": 20
+	},
+	"minecraft:iron_shovel":
+	{
+		"excavation": 20
+	},
+	"minecraft:netherite_axe":
+	{
+		"woodcutting": 60
+	},
+	"minecraft:netherite_hoe":
+	{
+		"farming": 40
+	},
+	"minecraft:netherite_pickaxe":
+	{
+		"mining": 60
+	},
+	"minecraft:netherite_shovel":
+	{
+		"excavation": 60
+	},
+	"minecraft:stone_axe":
+	{
+		"woodcutting": 10
+	},
+	"minecraft:stone_hoe":
+	{
+		"farming": 10
+	},
+	"minecraft:stone_pickaxe":
+	{
+		"mining": 10
+	},
+	"minecraft:stone_shovel":
+	{
+		"excavation": 10
+	},
+	"minecraft:wooden_axe":
+	{
+		"woodcutting": 1
+	},
+	"minecraft:wooden_hoe":
+	{
+		"farming": 1
+	},
+	"minecraft:wooden_pickaxe":
+	{
+		"mining": 1
+	},
+	"minecraft:wooden_shovel":
+	{
+		"excavation": 1
+	},
+	"oresandmetals:adamant_axe":
+	{
+		"woodcutting": 35
+	},
+	"oresandmetals:adamant_pickaxe":
+	{
+		"mining": 35
+	},
+	"oresandmetals:adamant_shovel":
+	{
+		"excavation": 35
+	},
+	"oresandmetals:banite_axe":
+	{
+		"woodcutting": 80
+	},
+	"oresandmetals:banite_pickaxe":
+	{
+		"mining": 80
+	},
+	"oresandmetals:banite_shovel":
+	{
+		"excavation": 80
+	},
+	"oresandmetals:bronze_axe":
+	{
+		"woodcutting": 5
+	},
+	"oresandmetals:bronze_pickaxe":
+	{
+		"mining": 5
+	},
+	"oresandmetals:bronze_shovel":
+	{
+		"excavation": 5
+	},
+	"oresandmetals:elder_rune_axe":
+	{
+		"woodcutting": 90
+	},
+	"oresandmetals:elder_rune_pickaxe":
+	{
+		"mining": 90
+	},
+	"oresandmetals:elder_rune_shovel":
+	{
+		"excavation": 90
+	},
+	"oresandmetals:mithril_axe":
+	{
+		"woodcutting": 25
+	},
+	"oresandmetals:mithril_pickaxe":
+	{
+		"mining": 25
+	},
+	"oresandmetals:mithril_shovel":
+	{
+		"excavation": 25
+	},
+	"oresandmetals:necronium_axe":
+	{
+		"woodcutting": 70
+	},
+	"oresandmetals:necronium_pickaxe":
+	{
+		"mining": 70
+	},
+	"oresandmetals:necronium_shovel":
+	{
+		"excavation": 70
+	},
+	"oresandmetals:orikalkum_axe":
+	{
+		"woodcutting": 60
+	},
+	"oresandmetals:orikalkum_pickaxe":
+	{
+		"mining": 60
+	},
+	"oresandmetals:orikalkum_shovel":
+	{
+		"excavation": 60
+	},
+	"oresandmetals:rune_axe":
+	{
+		"woodcutting": 50
+	},
+	"oresandmetals:rune_pickaxe":
+	{
+		"mining": 50
+	},
+	"oresandmetals:rune_shovel":
+	{
+		"excavation": 50
+	},
+	"oresandmetals:steel_axe":
+	{
+		"woodcutting": 15
+	},
+	"oresandmetals:steel_pickaxe":
+	{
+		"mining": 15
+	},
+	"oresandmetals:steel_shovel":
+	{
+		"excavation": 15
+	},
+	"treemendous:diamond_lumber_axe":
 	{
 		"woodcutting": 25
 	},
@@ -477,7 +477,7 @@
 	{
 		"woodcutting": 25
 	},
-	"treemendous:diamond_lumber_axe":
+	"treemendous:iron_lumber_axe":
 	{
 		"woodcutting": 25
 	},

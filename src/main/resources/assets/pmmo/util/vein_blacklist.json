@@ -13,11 +13,11 @@
 	{
 		"minecraft:bedrock": 0
 	},
-	"minecraft:the_nether":
+	"minecraft:the_end":
 	{
 		"minecraft:bedrock": 0
 	},
-	"minecraft:the_end":
+	"minecraft:the_nether":
 	{
 		"minecraft:bedrock": 0
 	}

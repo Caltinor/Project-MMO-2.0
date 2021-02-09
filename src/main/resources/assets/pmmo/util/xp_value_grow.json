@@ -7,37 +7,102 @@
 	{
 		"farming": 10
 	},
-	"minecraft:oak_sapling":
+	"ars_nouveau:mana_bloom_crop":
 	{
-		"farming": 10
+		"farming": 14
 	},
-	"minecraft:birch_sapling":
-	{
-		"farming": 20
-	},
-	"minecraft:spruce_sapling":
-	{
-		"farming": 15
-	},
-	"minecraft:jungle_sapling":
+	"autumnity:maple_sapling":
 	{
 		"farming": 25
 	},
-	"minecraft:dark_oak_sapling":
+	"autumnity:orange_maple_sapling":
+	{
+		"farming": 35
+	},
+	"autumnity:red_maple_sapling":
+	{
+		"farming": 30
+	},
+	"autumnity:yellow_maple_sapling":
+	{
+		"farming": 30
+	},
+	"biomesoplenty:dead_sapling":
+	{
+		"farming": 3
+	},
+	"biomesoplenty:fir_sapling":
+	{
+		"farming": 20
+	},
+	"biomesoplenty:flowering_oak_sapling":
 	{
 		"farming": 15
+	},
+	"biomesoplenty:hellbark_sapling":
+	{
+		"farming": 25
+	},
+	"biomesoplenty:jacaranda_sapling":
+	{
+		"farming": 30
+	},
+	"biomesoplenty:magic_sapling":
+	{
+		"farming": 20,
+		"magic": 20
+	},
+	"biomesoplenty:mahogany_sapling":
+	{
+		"farming": 40
+	},
+	"biomesoplenty:maple_sapling":
+	{
+		"farming": 40
+	},
+	"biomesoplenty:orange_autumn_sapling":
+	{
+		"farming": 30
+	},
+	"biomesoplenty:origin_sapling":
+	{
+		"farming": 5
+	},
+	"biomesoplenty:palm_sapling":
+	{
+		"farming": 40
+	},
+	"biomesoplenty:pink_cherry_sapling":
+	{
+		"farming": 35
+	},
+	"biomesoplenty:rainbow_birch_sapling":
+	{
+		"farming": 35
+	},
+	"biomesoplenty:redwood_sapling":
+	{
+		"farming": 25
+	},
+	"biomesoplenty:umbran_sapling":
+	{
+		"farming": 30
+	},
+	"biomesoplenty:white_cherry_sapling":
+	{
+		"farming": 35
+	},
+	"biomesoplenty:willow_sapling":
+	{
+		"farming": 35
+	},
+	"biomesoplenty:yellow_autumn_sapling":
+	{
+		"farming": 30
 	},
 	"minecraft:acacia_sapling":
 	{
 		"farming": 30
-	},
-	"minecraft:sugar_cane":
-	{
-		"farming": 5
-	},
-	"minecraft:cactus":
-	{
-		"farming": 6
 	},
 	"minecraft:bamboo":
 	{
@@ -47,26 +112,6 @@
 	{
 		"farming": 1.2
 	},
-	"minecraft:kelp":
-	{
-		"farming": 2
-	},
-	"minecraft:kelp_plant":
-	{
-		"farming": 2
-	},
-	"minecraft:sea_pickle":
-	{
-		"farming": 4
-	},
-	"minecraft:wheat":
-	{
-		"farming": 9
-	},
-	"minecraft:wheat_seeds":
-	{
-		"farming": 9
-	},
 	"minecraft:beetroot":
 	{
 		"farming": 12
@@ -74,6 +119,14 @@
 	"minecraft:beetroots":
 	{
 		"farming": 12
+	},
+	"minecraft:birch_sapling":
+	{
+		"farming": 20
+	},
+	"minecraft:cactus":
+	{
+		"farming": 6
 	},
 	"minecraft:carrot":
 	{
@@ -83,6 +136,34 @@
 	{
 		"farming": 8
 	},
+	"minecraft:cocoa":
+	{
+		"farming": 17
+	},
+	"minecraft:dark_oak_sapling":
+	{
+		"farming": 15
+	},
+	"minecraft:jungle_sapling":
+	{
+		"farming": 25
+	},
+	"minecraft:kelp":
+	{
+		"farming": 2
+	},
+	"minecraft:kelp_plant":
+	{
+		"farming": 2
+	},
+	"minecraft:nether_wart":
+	{
+		"farming": 11
+	},
+	"minecraft:oak_sapling":
+	{
+		"farming": 10
+	},
 	"minecraft:potato":
 	{
 		"farming": 6.6
@@ -91,100 +172,27 @@
 	{
 		"farming": 6.6
 	},
-	"minecraft:cocoa":
+	"minecraft:sea_pickle":
 	{
-		"farming": 17
+		"farming": 4
 	},
-	"minecraft:nether_wart":
-	{
-		"farming": 11
-	},
-	"biomesoplenty:origin_sapling":
-	{
-		"farming": 5
-	},
-	"biomesoplenty:flowering_oak_sapling":
+	"minecraft:spruce_sapling":
 	{
 		"farming": 15
 	},
-	"biomesoplenty:rainbow_birch_sapling":
+	"minecraft:sugar_cane":
 	{
-		"farming": 35
+		"farming": 5
 	},
-	"biomesoplenty:yellow_autumn_sapling":
+	"minecraft:wheat":
 	{
-		"farming": 30
+		"farming": 9
 	},
-	"biomesoplenty:orange_autumn_sapling":
+	"minecraft:wheat_seeds":
 	{
-		"farming": 30
-	},
-	"biomesoplenty:maple_sapling":
-	{
-		"farming": 40
-	},
-	"biomesoplenty:fir_sapling":
-	{
-		"farming": 20
-	},
-	"biomesoplenty:redwood_sapling":
-	{
-		"farming": 25
-	},
-	"biomesoplenty:white_cherry_sapling":
-	{
-		"farming": 35
-	},
-	"biomesoplenty:pink_cherry_sapling":
-	{
-		"farming": 35
-	},
-	"biomesoplenty:mahogany_sapling":
-	{
-		"farming": 40
-	},
-	"biomesoplenty:jacaranda_sapling":
-	{
-		"farming": 30
-	},
-	"biomesoplenty:palm_sapling":
-	{
-		"farming": 40
-	},
-	"biomesoplenty:willow_sapling":
-	{
-		"farming": 35
-	},
-	"biomesoplenty:dead_sapling":
-	{
-		"farming": 3
-	},
-	"biomesoplenty:magic_sapling":
-	{
-		"farming": 20,
-		"magic": 20
-	},
-	"biomesoplenty:umbran_sapling":
-	{
-		"farming": 30
-	},
-	"biomesoplenty:hellbark_sapling":
-	{
-		"farming": 25
-	},
-	"traverse:red_autumnal_sapling":
-	{
-		"farming": 35
+		"farming": 9
 	},
 	"traverse:brown_autumnal_sapling":
-	{
-		"farming": 30
-	},
-	"traverse:orange_autumnal_sapling":
-	{
-		"farming": 35
-	},
-	"traverse:yellow_autumnal_sapling":
 	{
 		"farming": 30
 	},
@@ -192,71 +200,19 @@
 	{
 		"farming": 20
 	},
-	"autumnity:red_maple_sapling":
-	{
-		"farming": 30
-	},
-	"autumnity:orange_maple_sapling":
+	"traverse:orange_autumnal_sapling":
 	{
 		"farming": 35
 	},
-	"autumnity:yellow_maple_sapling":
+	"traverse:red_autumnal_sapling":
+	{
+		"farming": 35
+	},
+	"traverse:yellow_autumnal_sapling":
 	{
 		"farming": 30
 	},
-	"autumnity:maple_sapling":
-	{
-		"farming": 25
-	},
-	"treemendous:douglas_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:pine_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:larch_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:fir_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:maple_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:red_maple_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:brown_maple_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:japanese_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:beech_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:cherry_sapling":
-	{
-		"farming": 15
-	},
 	"treemendous:alder_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:chestnut_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:plane_sapling":
 	{
 		"farming": 15
 	},
@@ -264,27 +220,11 @@
 	{
 		"farming": 15
 	},
-	"treemendous:linden_sapling":
+	"treemendous:beech_sapling":
 	{
 		"farming": 15
 	},
-	"treemendous:robinia_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:willow_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:pomegranate_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:magnolia_sapling":
-	{
-		"farming": 15
-	},
-	"treemendous:walnut_sapling":
+	"treemendous:brown_maple_sapling":
 	{
 		"farming": 15
 	},
@@ -292,7 +232,15 @@
 	{
 		"farming": 15
 	},
-	"treemendous:poplar_sapling":
+	"treemendous:cherry_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:chestnut_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:douglas_sapling":
 	{
 		"farming": 15
 	},
@@ -300,7 +248,11 @@
 	{
 		"farming": 15
 	},
-	"treemendous:rainbow_eucalyptus_sapling":
+	"treemendous:fir_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:japanese_sapling":
 	{
 		"farming": 15
 	},
@@ -308,8 +260,56 @@
 	{
 		"farming": 15
 	},
-	"ars_nouveau:mana_bloom_crop":
+	"treemendous:larch_sapling":
 	{
-		"farming": 14
+		"farming": 15
+	},
+	"treemendous:linden_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:magnolia_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:maple_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:pine_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:plane_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:pomegranate_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:poplar_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:rainbow_eucalyptus_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:red_maple_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:robinia_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:walnut_sapling":
+	{
+		"farming": 15
+	},
+	"treemendous:willow_sapling":
+	{
+		"farming": 15
 	}
 }

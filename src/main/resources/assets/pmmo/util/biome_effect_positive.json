@@ -1,9 +1,9 @@
 {
-	"minecraft:plains":
+	"biomesoplenty:highland":
 	{
 		"minecraft:speed": 0
 	},
-	"biomesoplenty:highland":
+	"minecraft:plains":
 	{
 		"minecraft:speed": 0
 	}

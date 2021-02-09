@@ -1,52 +1,4 @@
 {
-	"minecraft:mutton":
-	{
-		"extraChance": 1
-	},
-	"minecraft:rabbit":
-	{
-		"extraChance": 1
-	},
-	"minecraft:salmon":
-	{
-		"extraChance": 1.5
-	},
-	"minecraft:cod":
-	{
-		"extraChance": 1.75
-	},
-	"minecraft:beef":
-	{
-		"extraChance": 0.75
-	},
-	"minecraft:porkchop":
-	{
-		"extraChance": 1.25
-	},
-	"minecraft:chicken":
-	{
-		"extraChance": 0.5
-	},
-	"minecraft:potato":
-	{
-		"extraChance": 0.5
-	},
-	"minecraft:cactus":
-	{
-		"extraChance": 2
-	},
-	"minecraft:sea_pickle":
-	{
-		"extraChance": 2
-	},
-	"minecraft:chorus_fruit":
-	{
-		"extraChance": 0.33
-	},
-	"minecraft:kelp":
-	{
-		"extraChance": 0.6
-	},
 	"aquaculture:fish_fillet_raw":
 	{
 		"extraChance": 1.5
@@ -59,43 +11,7 @@
 	{
 		"extraChance": 1.5
 	},
-	"minecraft:egg":
-	{
-		"extraChance": 1.5
-	},
-	"foodexpansion:squid":
-	{
-		"extraChance": 1.5
-	},
-	"foodexpansion:horse_meat":
-	{
-		"extraChance": 1.5
-	},
-	"minecraft:red_mushroom":
-	{
-		"extraChance": 1.5
-	},
-	"minecraft:brown_mushroom":
-	{
-		"extraChance": 1.5
-	},
 	"foodexpansion:bat_wing":
-	{
-		"extraChance": 1.5
-	},
-	"minecraft:beetroot_seed":
-	{
-		"extraChance": 1.5
-	},
-	"minecraft:melon_seed":
-	{
-		"extraChance": 1.5
-	},
-	"minecraft:pumpkin_seed":
-	{
-		"extraChance": 1.5
-	},
-	"minecraft:wheat_seed":
 	{
 		"extraChance": 1.5
 	},
@@ -103,7 +19,11 @@
 	{
 		"extraChance": 1.5
 	},
-	"foodexpansion:wolf_meat":
+	"foodexpansion:horse_meat":
+	{
+		"extraChance": 1.5
+	},
+	"foodexpansion:llama_meat":
 	{
 		"extraChance": 1.5
 	},
@@ -115,15 +35,51 @@
 	{
 		"extraChance": 1.5
 	},
-	"foodexpansion:llama_meat":
-	{
-		"extraChance": 1.5
-	},
 	"foodexpansion:polar_bear_meat":
 	{
 		"extraChance": 1.5
 	},
+	"foodexpansion:squid":
+	{
+		"extraChance": 1.5
+	},
+	"foodexpansion:wolf_meat":
+	{
+		"extraChance": 1.5
+	},
 	"lycanitesmobs:raw_arisaur_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_aspid_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_chupacabra_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_concapede_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_ika_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_joust_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_krake_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_maka_meat":
+	{
+		"extraChance": 0.7
+	},
+	"lycanitesmobs:raw_pinky_meat":
 	{
 		"extraChance": 0.7
 	},
@@ -135,40 +91,84 @@
 	{
 		"extraChance": 0.7
 	},
-	"lycanitesmobs:raw_pinky_meat":
-	{
-		"extraChance": 0.7
-	},
-	"lycanitesmobs:raw_ika_meat":
-	{
-		"extraChance": 0.7
-	},
-	"lycanitesmobs:raw_chupacabra_meat":
-	{
-		"extraChance": 0.7
-	},
-	"lycanitesmobs:raw_aspid_meat":
-	{
-		"extraChance": 0.7
-	},
-	"lycanitesmobs:raw_maka_meat":
-	{
-		"extraChance": 0.7
-	},
 	"lycanitesmobs:raw_yeti_meat":
 	{
 		"extraChance": 0.7
 	},
-	"lycanitesmobs:raw_concapede_meat":
+	"minecraft:beef":
 	{
-		"extraChance": 0.7
+		"extraChance": 0.75
 	},
-	"lycanitesmobs:raw_joust_meat":
+	"minecraft:beetroot_seed":
 	{
-		"extraChance": 0.7
+		"extraChance": 1.5
 	},
-	"lycanitesmobs:raw_krake_meat":
+	"minecraft:brown_mushroom":
 	{
-		"extraChance": 0.7
+		"extraChance": 1.5
+	},
+	"minecraft:cactus":
+	{
+		"extraChance": 2
+	},
+	"minecraft:chicken":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:chorus_fruit":
+	{
+		"extraChance": 0.33
+	},
+	"minecraft:cod":
+	{
+		"extraChance": 1.75
+	},
+	"minecraft:egg":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:kelp":
+	{
+		"extraChance": 0.6
+	},
+	"minecraft:melon_seed":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:mutton":
+	{
+		"extraChance": 1
+	},
+	"minecraft:porkchop":
+	{
+		"extraChance": 1.25
+	},
+	"minecraft:potato":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:pumpkin_seed":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:rabbit":
+	{
+		"extraChance": 1
+	},
+	"minecraft:red_mushroom":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:salmon":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:sea_pickle":
+	{
+		"extraChance": 2
+	},
+	"minecraft:wheat_seed":
+	{
+		"extraChance": 1.5
 	}
 }
