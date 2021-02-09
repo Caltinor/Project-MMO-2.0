@@ -202,17 +202,15 @@ public class PrefsScreen extends GuiScreen
     @Override
     public void drawBackground(int p_renderBackground_1_)
     {
-        if (this.mc != null)
+        if ( this.mc != null && !jType.equals( JType.GUI_SETTINGS ) )
         {
+            boxHeight = 256;
+            boxWidth = 256;
+            Minecraft.getMinecraft().getTextureManager().bindTexture( box );
             this.drawGradientRect(0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this));
+            this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
         }
-
-        boxHeight = 256;
-        boxWidth = 256;
-        Minecraft.getMinecraft().getTextureManager().bindTexture( box );
-
-        this.drawTexturedModalRect( x, y, 0, 0,  boxWidth, boxHeight );
     }
 
 //    @Override

@@ -1,4 +1,328 @@
 {
+	"charm:curse_break":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"charm:homing":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"charm:magnetic":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"charm:salvage":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:accelerate":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:altruistic":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:anima_conduit":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:bonus_shot":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:burning":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:chain_reaction":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:chains":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:chilling":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:committed":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:cooldown":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:cowardice":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:critical_hit":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:deflect":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:echo":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:electrified":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:enigma_resonator":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:exploding":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:final_shout":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:fire_trail":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:food_reserves":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:freezing":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:frenzied":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:fuse_shot":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:gravity":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:gravity_pulse":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:growing":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:health_synergy":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:leeching":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:poison_cloud":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:potion_barrier":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:prospector":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:radiance":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:radiance_shot":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:rampaging":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:recycler":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:replenish":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:ricochet":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:shockwave":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:snowball":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:soul_siphon":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:speed_synergy":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:stunning":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:supercharge":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:surprise_gift":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:swiftfooted":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:swirling":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:tempo_theft":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:thundering":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:weakening":
+	{
+		"levelReq": 25,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
+	"dungeons_gear:wild_rage":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
+	},
 	"minecraft:bane_of_arthropods":
 	{
 		"levelReq": 15,
@@ -6,6 +330,20 @@
 		"chancePerLevel": 1,
 		"maxChance": 90,
 		"maxLevel": 10
+	},
+	"minecraft:blast_protection":
+	{
+		"levelReq": 25,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 8
+	},
+	"minecraft:channeling":
+	{
+		"levelReq": 35,
+		"chancePerLevel": 1,
+		"maxChance": 50
 	},
 	"minecraft:depth_strider":
 	{
@@ -77,23 +415,27 @@
 		"chancePerLevel": 1,
 		"maxChance": 50
 	},
-	"minecraft:silk_touch":
-	{
-		"levelReq": 40,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"minecraft:channeling":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
 	"minecraft:multishot":
 	{
 		"levelReq": 35,
 		"chancePerLevel": 1,
 		"maxChance": 50
+	},
+	"minecraft:piercing":
+	{
+		"levelReq": 35,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 7
+	},
+	"minecraft:power":
+	{
+		"levelReq": 20,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 8
 	},
 	"minecraft:projectile_protection":
 	{
@@ -101,14 +443,6 @@
 		"levelPerLevel": 20,
 		"chancePerLevel": 1,
 		"maxChance": 85,
-		"maxLevel": 8
-	},
-	"minecraft:blast_protection":
-	{
-		"levelReq": 25,
-		"levelPerLevel": 25,
-		"chancePerLevel": 1,
-		"maxChance": 80,
 		"maxLevel": 8
 	},
 	"minecraft:protection":
@@ -119,6 +453,30 @@
 		"maxChance": 75,
 		"maxLevel": 8
 	},
+	"minecraft:punch":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 90,
+		"maxLevel": 10
+	},
+	"minecraft:quick_charge":
+	{
+		"levelReq": 20,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 80,
+		"maxLevel": 5
+	},
+	"minecraft:riptide":
+	{
+		"levelReq": 25,
+		"levelPerLevel": 25,
+		"chancePerLevel": 1,
+		"maxChance": 85,
+		"maxLevel": 7
+	},
 	"minecraft:sharpness":
 	{
 		"levelReq": 20,
@@ -127,13 +485,11 @@
 		"maxChance": 80,
 		"maxLevel": 8
 	},
-	"minecraft:sweeping":
+	"minecraft:silk_touch":
 	{
-		"levelReq": 15,
-		"levelPerLevel": 20,
+		"levelReq": 40,
 		"chancePerLevel": 1,
-		"maxChance": 85,
-		"maxLevel": 5
+		"maxChance": 50
 	},
 	"minecraft:smite":
 	{
@@ -141,6 +497,14 @@
 		"levelPerLevel": 20,
 		"chancePerLevel": 1,
 		"maxChance": 90,
+		"maxLevel": 5
+	},
+	"minecraft:sweeping":
+	{
+		"levelReq": 15,
+		"levelPerLevel": 20,
+		"chancePerLevel": 1,
+		"maxChance": 85,
 		"maxLevel": 5
 	},
 	"minecraft:thorns":
@@ -158,369 +522,5 @@
 		"chancePerLevel": 1,
 		"maxChance": 75,
 		"maxLevel": 5
-	},
-	"minecraft:quick_charge":
-	{
-		"levelReq": 20,
-		"levelPerLevel": 25,
-		"chancePerLevel": 1,
-		"maxChance": 80,
-		"maxLevel": 5
-	},
-	"minecraft:power":
-	{
-		"levelReq": 20,
-		"levelPerLevel": 25,
-		"chancePerLevel": 1,
-		"maxChance": 80,
-		"maxLevel": 8
-	},
-	"minecraft:punch":
-	{
-		"levelReq": 15,
-		"levelPerLevel": 20,
-		"chancePerLevel": 1,
-		"maxChance": 90,
-		"maxLevel": 10
-	},
-	"minecraft:piercing":
-	{
-		"levelReq": 35,
-		"levelPerLevel": 25,
-		"chancePerLevel": 1,
-		"maxChance": 80,
-		"maxLevel": 7
-	},
-	"minecraft:riptide":
-	{
-		"levelReq": 25,
-		"levelPerLevel": 25,
-		"chancePerLevel": 1,
-		"maxChance": 85,
-		"maxLevel": 7
-	},
-	"dungeons_gear:accelerate":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:radiance":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:rampaging":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:freezing":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:shockwave":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:tempo_theft":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:chains":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:altruistic":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:critical_hit":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:wild_rage":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:leeching":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:soul_siphon":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:fuse_shot":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:gravity":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:final_shout":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:fire_trail":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:bonus_shot":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:frenzied":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:gravity_pulse":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:committed":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:food_reserves":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:weakening":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:health_synergy":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:radiance_shot":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:burning":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:recycler":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:prospector":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:ricochet":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:potion_barrier":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:anima_conduit":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:speed_synergy":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:growing":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:chilling":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:supercharge":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:surprise_gift":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:enigma_resonator":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:echo":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:swiftfooted":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:exploding":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:cooldown":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:cowardice":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:snowball":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:poison_cloud":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:chain_reaction":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:replenish":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:stunning":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:thundering":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:swirling":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:electrified":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"dungeons_gear:deflect":
-	{
-		"levelReq": 25,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"charm:curse_break":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"charm:homing":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"charm:salvage":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
-	},
-	"charm:magnetic":
-	{
-		"levelReq": 35,
-		"chancePerLevel": 1,
-		"maxChance": 50
 	}
 }

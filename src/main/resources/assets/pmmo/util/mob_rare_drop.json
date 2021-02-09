@@ -1,8 +1,16 @@
 {
+	"minecraft:chicken":
+	{
+		"minecraft:egg": 10
+	},
 	"minecraft:ender_dragon":
 	{
 		"minecraft:dragon_head": 1,
 		"minecraft:dragon_egg": 10
+	},
+	"minecraft:sheep":
+	{
+		"minecraft:string": 10
 	},
 	"minecraft:slime":
 	{
@@ -11,13 +19,5 @@
 	"minecraft:zombie":
 	{
 		"minecraft:beetroot": 40
-	},
-	"minecraft:sheep":
-	{
-		"minecraft:string": 10
-	},
-	"minecraft:chicken":
-	{
-		"minecraft:egg": 10
 	}
 }

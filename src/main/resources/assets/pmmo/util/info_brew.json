@@ -1,7 +1,23 @@
 {
-	"minecraft:nether_wart":
+	"aquaculture:jellyfish":
 	{
 		"extraChance": 0.25
+	},
+	"aquaculture:leech":
+	{
+		"extraChance": 0.25
+	},
+	"minecraft:blaze_powder":
+	{
+		"extraChance": 0.35
+	},
+	"minecraft:dragon_breath":
+	{
+		"extraChance": 3
+	},
+	"minecraft:fermented_spider_eye":
+	{
+		"extraChance": 0.6
 	},
 	"minecraft:ghast_tear":
 	{
@@ -11,19 +27,31 @@
 	{
 		"extraChance": 0.45
 	},
+	"minecraft:glowstone_dust":
+	{
+		"extraChance": 0.45
+	},
 	"minecraft:golden_carrot":
 	{
 		"extraChance": 0.5
 	},
-	"minecraft:sugar":
+	"minecraft:gunpowder":
 	{
-		"extraChance": 0.3
+		"extraChance": 0.45
 	},
 	"minecraft:magma_cream":
 	{
 		"extraChance": 0.6
 	},
-	"minecraft:glowstone_dust":
+	"minecraft:nether_wart":
+	{
+		"extraChance": 0.25
+	},
+	"minecraft:phantom_membrane":
+	{
+		"extraChance": 0.7
+	},
+	"minecraft:pufferfish":
 	{
 		"extraChance": 0.45
 	},
@@ -31,48 +59,20 @@
 	{
 		"extraChance": 0.65
 	},
-	"minecraft:blaze_powder":
+	"minecraft:redstone":
 	{
-		"extraChance": 0.35
-	},
-	"minecraft:gunpowder":
-	{
-		"extraChance": 0.45
-	},
-	"minecraft:fermented_spider_eye":
-	{
-		"extraChance": 0.6
+		"extraChance": 0.4
 	},
 	"minecraft:spider_eye":
 	{
 		"extraChance": 0.45
 	},
-	"minecraft:redstone":
+	"minecraft:sugar":
 	{
-		"extraChance": 0.4
+		"extraChance": 0.3
 	},
 	"minecraft:turtle_helmet":
 	{
 		"extraChance": 2
-	},
-	"minecraft:dragon_breath":
-	{
-		"extraChance": 3
-	},
-	"minecraft:pufferfish":
-	{
-		"extraChance": 0.45
-	},
-	"minecraft:phantom_membrane":
-	{
-		"extraChance": 0.7
-	},
-	"aquaculture:jellyfish":
-	{
-		"extraChance": 0.25
-	},
-	"aquaculture:leech":
-	{
-		"extraChance": 0.25
 	}
 }

@@ -1,155 +1,11 @@
 {
-	"minecraft:log":
+	"#minecraft:logs":
 	{
 		"extraChance": 1
 	},
-	"minecraft:oak_log":
-	{
-		"extraChance": 1
-	},
-	"minecraft:birch_log":
-	{
-		"extraChance": 0.85
-	},
-	"minecraft:spruce_log":
-	{
-		"extraChance": 0.65
-	},
-	"minecraft:jungle_log":
-	{
-		"extraChance": 0.55
-	},
-	"minecraft:dark_oak_log":
-	{
-		"extraChance": 0.5
-	},
-	"minecraft:acacia_log":
+	"autumnity:maple_log":
 	{
 		"extraChance": 1.25
-	},
-	"minecraft:oak_wood":
-	{
-		"extraChance": 1
-	},
-	"minecraft:birch_wood":
-	{
-		"extraChance": 0.85
-	},
-	"minecraft:spruce_wood":
-	{
-		"extraChance": 0.65
-	},
-	"minecraft:jungle_wood":
-	{
-		"extraChance": 0.55
-	},
-	"minecraft:dark_oak_wood":
-	{
-		"extraChance": 0.5
-	},
-	"minecraft:acacia_wood":
-	{
-		"extraChance": 1.25
-	},
-	"biomesoplenty:fir_wood":
-	{
-		"extraChance": 0.7
-	},
-	"biomesoplenty:redwood_wood":
-	{
-		"extraChance": 0.8
-	},
-	"biomesoplenty:cherry_wood":
-	{
-		"extraChance": 1
-	},
-	"biomesoplenty:mahogany_wood":
-	{
-		"extraChance": 0.85
-	},
-	"biomesoplenty:jacaranda_wood":
-	{
-		"extraChance": 1
-	},
-	"biomesoplenty:palm_wood":
-	{
-		"extraChance": 1.5
-	},
-	"biomesoplenty:willow_wood":
-	{
-		"extraChance": 1.25
-	},
-	"biomesoplenty:dead_wood":
-	{
-		"extraChance": 1.75
-	},
-	"biomesoplenty:magic_wood":
-	{
-		"extraChance": 1.2
-	},
-	"biomesoplenty:umbran_wood":
-	{
-		"extraChance": 1
-	},
-	"biomesoplenty:hellbark_wood":
-	{
-		"extraChance": 1.1
-	},
-	"biomesoplenty:fir_log":
-	{
-		"extraChance": 0.7
-	},
-	"biomesoplenty:redwood_log":
-	{
-		"extraChance": 0.8
-	},
-	"biomesoplenty:cherry_log":
-	{
-		"extraChance": 1
-	},
-	"biomesoplenty:mahogany_log":
-	{
-		"extraChance": 0.85
-	},
-	"biomesoplenty:jacaranda_log":
-	{
-		"extraChance": 1
-	},
-	"biomesoplenty:palm_log":
-	{
-		"extraChance": 1.5
-	},
-	"biomesoplenty:willow_log":
-	{
-		"extraChance": 1.25
-	},
-	"biomesoplenty:dead_log":
-	{
-		"extraChance": 1.75
-	},
-	"biomesoplenty:magic_log":
-	{
-		"extraChance": 1.2
-	},
-	"biomesoplenty:umbran_log":
-	{
-		"extraChance": 1
-	},
-	"biomesoplenty:hellbark_log":
-	{
-		"extraChance": 1.1
-	},
-	"traverse:fir_wood":
-	{
-		"extraChance": 0.8
-	},
-	"traverse:fir_log":
-	{
-		"extraChance": 0.8
-	},
-	"autumnity:sappy_maple_wood":
-	{
-		"extraChance": 1.35
 	},
 	"autumnity:maple_wood":
 	{
@@ -159,95 +15,163 @@
 	{
 		"extraChance": 1.35
 	},
-	"autumnity:maple_log":
+	"autumnity:sappy_maple_wood":
+	{
+		"extraChance": 1.35
+	},
+	"biomesoplenty:cherry_log":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:cherry_wood":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:dead_log":
+	{
+		"extraChance": 1.75
+	},
+	"biomesoplenty:dead_wood":
+	{
+		"extraChance": 1.75
+	},
+	"biomesoplenty:fir_log":
+	{
+		"extraChance": 0.7
+	},
+	"biomesoplenty:fir_wood":
+	{
+		"extraChance": 0.7
+	},
+	"biomesoplenty:hellbark_log":
+	{
+		"extraChance": 1.1
+	},
+	"biomesoplenty:hellbark_wood":
+	{
+		"extraChance": 1.1
+	},
+	"biomesoplenty:jacaranda_log":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:jacaranda_wood":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:magic_log":
+	{
+		"extraChance": 1.2
+	},
+	"biomesoplenty:magic_wood":
+	{
+		"extraChance": 1.2
+	},
+	"biomesoplenty:mahogany_log":
+	{
+		"extraChance": 0.85
+	},
+	"biomesoplenty:mahogany_wood":
+	{
+		"extraChance": 0.85
+	},
+	"biomesoplenty:palm_log":
+	{
+		"extraChance": 1.5
+	},
+	"biomesoplenty:palm_wood":
+	{
+		"extraChance": 1.5
+	},
+	"biomesoplenty:redwood_log":
+	{
+		"extraChance": 0.8
+	},
+	"biomesoplenty:redwood_wood":
+	{
+		"extraChance": 0.8
+	},
+	"biomesoplenty:umbran_log":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:umbran_wood":
+	{
+		"extraChance": 1
+	},
+	"biomesoplenty:willow_log":
 	{
 		"extraChance": 1.25
 	},
-	"treemendous:douglas_log":
+	"biomesoplenty:willow_wood":
+	{
+		"extraChance": 1.25
+	},
+	"minecraft:acacia_log":
+	{
+		"extraChance": 1.25
+	},
+	"minecraft:acacia_wood":
+	{
+		"extraChance": 1.25
+	},
+	"minecraft:birch_log":
+	{
+		"extraChance": 0.85
+	},
+	"minecraft:birch_wood":
+	{
+		"extraChance": 0.85
+	},
+	"minecraft:dark_oak_log":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:dark_oak_wood":
+	{
+		"extraChance": 0.5
+	},
+	"minecraft:jungle_log":
+	{
+		"extraChance": 0.55
+	},
+	"minecraft:jungle_wood":
+	{
+		"extraChance": 0.55
+	},
+	"minecraft:log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:oak_log":
+	{
+		"extraChance": 1
+	},
+	"minecraft:oak_wood":
+	{
+		"extraChance": 1
+	},
+	"minecraft:spruce_log":
 	{
 		"extraChance": 0.65
 	},
-	"treemendous:douglas_wood":
+	"minecraft:spruce_wood":
 	{
 		"extraChance": 0.65
 	},
-	"treemendous:pine_log":
+	"traverse:fir_log":
 	{
-		"extraChance": 0.65
+		"extraChance": 0.8
 	},
-	"treemendous:pine_wood":
+	"traverse:fir_wood":
 	{
-		"extraChance": 0.65
-	},
-	"treemendous:larch_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:larch_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:fir_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:fir_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:maple_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:maple_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:japanese_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:japanese_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:beech_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:beech_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:cherry_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:cherry_wood":
-	{
-		"extraChance": 0.65
+		"extraChance": 0.8
 	},
 	"treemendous:alder_log":
 	{
 		"extraChance": 0.65
 	},
 	"treemendous:alder_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:chestnut_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:chestnut_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:plane_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:plane_wood":
 	{
 		"extraChance": 0.65
 	},
@@ -259,51 +183,11 @@
 	{
 		"extraChance": 0.65
 	},
-	"treemendous:linden_log":
+	"treemendous:beech_log":
 	{
 		"extraChance": 0.65
 	},
-	"treemendous:linden_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:robinia_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:robinia_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:willow_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:willow_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:pomegranate_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:pomegranate_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:magnolia_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:magnolia_wood":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:walnut_log":
-	{
-		"extraChance": 0.65
-	},
-	"treemendous:walnut_wood":
+	"treemendous:beech_wood":
 	{
 		"extraChance": 0.65
 	},
@@ -315,11 +199,27 @@
 	{
 		"extraChance": 0.65
 	},
-	"treemendous:poplar_log":
+	"treemendous:cherry_log":
 	{
 		"extraChance": 0.65
 	},
-	"treemendous:poplar_wood":
+	"treemendous:cherry_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:chestnut_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:chestnut_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:douglas_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:douglas_wood":
 	{
 		"extraChance": 0.65
 	},
@@ -331,11 +231,19 @@
 	{
 		"extraChance": 0.65
 	},
-	"treemendous:rainbow_eucalyptus_log":
+	"treemendous:fir_log":
 	{
 		"extraChance": 0.65
 	},
-	"treemendous:rainbow_eucalyptus_wood":
+	"treemendous:fir_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:japanese_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:japanese_wood":
 	{
 		"extraChance": 0.65
 	},
@@ -344,6 +252,102 @@
 		"extraChance": 0.65
 	},
 	"treemendous:juniper_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:larch_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:larch_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:linden_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:linden_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:magnolia_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:magnolia_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:maple_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:maple_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:pine_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:pine_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:plane_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:plane_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:pomegranate_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:pomegranate_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:poplar_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:poplar_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:rainbow_eucalyptus_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:rainbow_eucalyptus_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:robinia_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:robinia_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:walnut_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:walnut_wood":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:willow_log":
+	{
+		"extraChance": 0.65
+	},
+	"treemendous:willow_wood":
 	{
 		"extraChance": 0.65
 	}

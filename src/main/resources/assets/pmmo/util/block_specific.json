@@ -1,5 +1,9 @@
 {
-	"minecraft:sugar_cane":
+	"minecraft:bamboo":
+	{
+		"growsUpwards": 1
+	},
+	"minecraft:cactus":
 	{
 		"growsUpwards": 1
 	},
@@ -11,11 +15,7 @@
 	{
 		"growsUpwards": 1
 	},
-	"minecraft:bamboo":
-	{
-		"growsUpwards": 1
-	},
-	"minecraft:cactus":
+	"minecraft:sugar_cane":
 	{
 		"growsUpwards": 1
 	}
