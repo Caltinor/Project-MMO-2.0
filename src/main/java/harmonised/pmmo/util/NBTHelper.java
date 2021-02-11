@@ -38,7 +38,8 @@ public class NBTHelper
 
         for( String key : nbt.getKeySet() )
         {
-            map.put( key, nbt.getDouble( key ) );
+            if( !Double.isNaN( nbt.getDouble( key ) ) )
+                map.put( key, nbt.getDouble( key ) );
         }
 
         return map;
