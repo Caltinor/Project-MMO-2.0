@@ -1184,7 +1184,7 @@ public class XP
 //			return;
 //		}
 
-		if( player.world.isRemote || player instanceof FakePlayer )
+		if( player.world.isRemote || Double.isNaN( amount ) || player instanceof FakePlayer )
 			return;
 
 		PmmoSavedData pmmoSavedData = PmmoSavedData.get();

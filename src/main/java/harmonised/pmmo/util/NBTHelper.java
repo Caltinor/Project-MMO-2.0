@@ -35,7 +35,7 @@ public class NBTHelper
 
         for( Map.Entry<String, T> entry : inMap.entrySet() )
         {
-            outMap.put( entry.getKey().toString(), entry.getValue() );
+            outMap.put( entry.getKey(), entry.getValue() );
         }
 
         return outMap;
@@ -47,7 +47,8 @@ public class NBTHelper
 
         for( String key : nbt.keySet() )
         {
-            map.put( key, nbt.getDouble( key ) );
+            if( !Double.isNaN( nbt.getDouble( key ) ) )
+                map.put( key, nbt.getDouble( key ) );
         }
 
         return map;
