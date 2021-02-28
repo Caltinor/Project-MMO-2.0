@@ -113,15 +113,15 @@ public class DeathHandler
 
             if( JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )
             {
-                Map<String, Double> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
+                 Map<String, Double> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
                 for( Map.Entry<String, Double> entry : killXp.entrySet() )
                 {
                     XP.awardXp( player, entry.getKey(), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false, false );
                 }
             }
-            else if( target instanceof AnimalEntity)
+            else if( target instanceof AnimalEntity )
                 XP.awardXp( player, Skill.HUNTER.toString(), player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleValue, false, false, false );
-            else if( target instanceof MobEntity)
+            else if( target instanceof MobEntity )
                 XP.awardXp( player, Skill.SLAYER.toString(), player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false, false, false );
 
             if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getEntityString() ) )

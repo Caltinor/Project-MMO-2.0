@@ -85,7 +85,10 @@ public class AutoValues
         if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
             wearReq = Math.ceil( wearReq );
 
-        return wearReq;
+        if( wearReq > 1 )
+            wearReq += Config.getConfig( "autoGenerateWearReqOffset" );
+
+        return Math.max( 0, wearReq );
     }
 
     public static double getWeaponReqFromStack( ItemStack itemStack )
@@ -108,7 +111,10 @@ public class AutoValues
         if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
             weaponReq = Math.ceil( weaponReq );
 
-        return weaponReq;
+        if( weaponReq > 0 )
+            weaponReq += Config.getConfig( "autoGenerateWeaponReqOffset" );
+
+        return Math.max( 0, weaponReq );
     }
 
     public static Map<String, Double> getToolReqFromStack( ItemStack itemStack )
@@ -140,6 +146,13 @@ public class AutoValues
 
         if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
             XP.ceilMapAnyDouble( reqTool );
+
+        for( String skill : reqTool.keySet() )
+        {
+            double level = reqTool.get( skill );
+            if( level > 1 )
+                reqTool.replace( skill, Math.max( 0, level + Config.getConfig( "autoGenerateToolReqOffset" ) ) );
+        }
 
         return reqTool;
     }

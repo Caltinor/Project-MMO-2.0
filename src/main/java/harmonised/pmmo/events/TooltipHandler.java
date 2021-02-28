@@ -64,7 +64,7 @@ public class TooltipHandler
                 String regKey = item.getRegistryName().toString();
                 float hardness;
                 double dValue;
-                BlockState state = null;
+                BlockState state = item instanceof BlockItem ? ( (BlockItem) item).getBlock().getDefaultState() : null;
 
                 if( ClientHandler.OPEN_MENU.isKeyDown() )
                 {
@@ -517,9 +517,8 @@ public class TooltipHandler
                         tooltip.add( new StringTextComponent( "#" + tagKey.toString() ).setStyle( XP.getColorStyle( 0x666666 ) ) );
                     }
 
-                    if( item instanceof BlockItem)
+                    if( state != null )
                     {
-                        state = ( (BlockItem) item).getBlock().getDefaultState();
                         hardness = state.getBlockHardness( null, new BlockPos( 0, 0, 0 ) );
                         if( hardness > 0 )
                             tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo.hardness", DP.dp( hardness ) ).getString() ) );
@@ -546,10 +545,12 @@ public class TooltipHandler
 
             for( String key : theMap.keySet() )
             {
-                level = Skill.getLevel( key, player );
-
                 value = theMap.get( key );
-                tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dpSoft( value ) ).setStyle( XP.textStyle.get( level < value ? "red" : "green" ) ) );
+                if( value > 1 )
+                {
+                    level = Skill.getLevel( key, player );
+                    tooltip.add( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + key ).getString(), DP.dpSoft( value ) ).setStyle( XP.textStyle.get( level < value ? "red" : "green" ) ) );
+                }
             }
         }
     }
