@@ -20,10 +20,10 @@ import net.minecraftforge.common.ForgeMod;
 
 public class AttributeHandler
 {
-	private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
-	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");
-	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
-	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
+	private static final UUID reachModifierID  = UUID.fromString( "b20d3436-0d39-4868-96ab-d0a4856e68c6" );
+	private static final UUID speedModifierID  = UUID.fromString( "d6103cbc-b90b-4c4b-b3c0-92701fb357b3" );
+	private static final UUID hpModifierID     = UUID.fromString( "c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb" );
+	private static final UUID damageModifierID = UUID.fromString( "992b11f1-7b3f-48d9-8ebd-1acfc3257b17" );
 
 	public static void updateAll( PlayerEntity player )
 	{

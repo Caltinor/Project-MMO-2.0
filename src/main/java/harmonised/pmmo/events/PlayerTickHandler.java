@@ -1,7 +1,6 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.JType;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
@@ -16,8 +15,6 @@ import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
@@ -71,7 +68,6 @@ public class PlayerTickHandler
                 int swimLevel = Skill.getLevel( Skill.SWIMMING.toString(), player );
                 int flyLevel = Skill.getLevel( Skill.FLYING.toString(), player );
                 int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
-                int nightvisionUnlockLevel = Config.forgeConfig.nightvisionUnlockLevel.get();
                 float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
                 float speedAmp = 0;
                 PlayerInventory inv = player.inventory;
@@ -102,7 +98,10 @@ public class PlayerTickHandler
                     if( !player.getHeldItemMainhand().isEmpty() )
                         XP.applyEnchantmentUsePenalty( player, player.getHeldItemMainhand() );
                     if( !player.getHeldItemOffhand().isEmpty() )
+                    {
+                        XP.applyWornPenalty( player, player.getHeldItemOffhand() );
                         XP.applyEnchantmentUsePenalty( player, player.getHeldItemOffhand() );
+                    }
                 }
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
@@ -130,10 +129,10 @@ public class PlayerTickHandler
                             waterBelow = false;
                     }
                 }
-
                 boolean waterAbove = player.getEntityWorld().getBlockState( playerPos.up()   ).getBlock().equals( waterBlock );
+                boolean nightVisionPref = Config.getPreferencesMap( player ).getOrDefault( "underwaterNightVision", 1D ) == 1;
 
-                if( swimLevel >= nightvisionUnlockLevel && player.isInWater() && waterAbove )
+                if( nightVisionPref && XP.isNightvisionUnlocked( player) && XP.isNightvisionUnlocked( player ) && player.isInWater() && waterAbove )
                     player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 300, 0, false, false ) );
 
                 if( !player.world.isRemote() )

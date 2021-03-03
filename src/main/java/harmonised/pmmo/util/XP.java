@@ -425,7 +425,7 @@ public class XP
 		startLevel = offline ? XP.getOfflineLevel( skill, uuid ) : Skill.getLevel( skill, uuid );
 
 		if( JsonConfig.data.get( jType ).containsKey( regKey ) && JsonConfig.data.get( jType ).get( regKey ).containsKey( "extraChance" ) )
-			if( JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" ) instanceof Double )
+			if( JsonConfig.data.get(jType).get(regKey).get("extraChance") != null )
 				extraChancePerLevel = JsonConfig.data.get( jType ).get( regKey ).get( "extraChance" );
 
 		extraChance = (startLevel - highestReq) * extraChancePerLevel;
@@ -1778,7 +1778,7 @@ public class XP
 		return startXp + ( ( endXp - startXp ) * pos );
 	}
 
-	public static boolean isHoldingDebugItemInOffhand(PlayerEntity player )
+	public static boolean isHoldingDebugItemInOffhand( PlayerEntity player )
 	{
 		return isItemDebugItem( player.getHeldItemOffhand().getItem() );
 	}
@@ -1786,5 +1786,10 @@ public class XP
 	public static boolean isItemDebugItem( Item item )
 	{
 		return Items.MUSIC_DISC_CAT.equals( item );
+	}
+
+	public static boolean isNightvisionUnlocked( PlayerEntity player )
+	{
+		return Skill.getLevel( Skill.SWIMMING.toString(), player ) >= Config.getConfig( "nightvisionUnlockLevel" );
 	}
 }

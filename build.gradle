@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.4-3.44.4'
+version = '1.16.4-3.45'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -107,11 +107,11 @@ dependencies
             minecraft 'net.minecraftforge:forge:1.16.4-35.1.7'
             implementation 'com.google.code.gson:gson:2.8.6'
 
-//            compileOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3:api")
-//            runtimeOnly fg.deobf("mezz.jei:jei-1.15.2:6.0.0.3")
+            compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52:api")
+            runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52")
 //            runtimeOnly fg.deobf("curse.maven:jei:3039766")
 //            runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
-//            runtimeOnly fg.deobf("curse.maven:curio-of-undying:2994182")
+            runtimeOnly fg.deobf("curse.maven:curio-of-undying:3122649")
 //            runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
 //            runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
 
@@ -125,9 +125,8 @@ dependencies
             runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3077866")
             compileOnly fg.deobf("curse.maven:item-filters:3066686")
             runtimeOnly fg.deobf("curse.maven:item-filters:3066686")
-
-            runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0")
-            compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.3-4.0.2.0:api")
+            runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0")
+            compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0:api")
         }
 
 jar {

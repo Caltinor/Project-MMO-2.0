@@ -97,6 +97,8 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("wipeAllSkillsUponDeathPermanently", "", "", 0, 1, prefsMap.getOrDefault( "wipeAllSkillsUponDeathPermanently", 0D ), 0, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("spawnFireworksCausedByMe", "", "", 0, 1, prefsMap.getOrDefault( "spawnFireworksCausedByMe", 1D ), 1, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("spawnFireworksCausedByOthers", "", "", 0, 1, prefsMap.getOrDefault( "spawnFireworksCausedByOthers", 1D ), 1, false, true, false, true ) );
+                if( XP.isNightvisionUnlocked( player ) )
+                    prefsEntries.add( new PrefsEntry("underwaterNightVision", "", "", 0, 1, prefsMap.getOrDefault( "underwaterNightVision", 1D ), 1, false, true, false, true ) );
                 break;
 
             case GUI_SETTINGS:

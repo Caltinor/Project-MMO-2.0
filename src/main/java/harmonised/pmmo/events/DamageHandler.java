@@ -60,7 +60,10 @@ public class DamageHandler
             Entity source = event.getSource().getTrueSource();
             if( target instanceof ServerPlayerEntity )		//player hurt
             {
+                boolean isFallDamage = event.getSource().getDamageType().equals( "fall" );
                 ServerPlayerEntity player = (ServerPlayerEntity) target;
+//                int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
+//                damage -= agilityLevel / 50;
                 double agilityXp = 0;
                 double enduranceXp;
                 boolean hideEndurance = false;
@@ -76,11 +79,6 @@ public class DamageHandler
 
                         if( sourceMemberInfo != null )
                             damage *= friendlyFireMultiplier;
-                        if( damage == 0 )
-                        {
-                            event.setCanceled( true );
-                            return;
-                        }
                     }
                 }
 ///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +88,7 @@ public class DamageHandler
 
                 enduranceXp = ( damage * 5 ) + ( endured * 7.5 );
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
-                if( event.getSource().getDamageType().equals( "fall" ) )
+                if( isFallDamage )
                 {
                     double award;
                     int saved = 0;
@@ -104,9 +102,6 @@ public class DamageHandler
                     }
                     damage -= saved;
 
-                    if( damage <= 0 )
-                        event.setCanceled( true );
-
                     if( saved != 0 && player.getHealth() > damage )
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedFall", saved ), true );
 
@@ -114,8 +109,6 @@ public class DamageHandler
 
                     agilityXp = award;
                 }
-
-                event.setAmount( damage );
 
                 if( player.getHealth() > damage )
                 {
@@ -173,7 +166,6 @@ public class DamageHandler
                     }
 
                     //Apply damage bonuses
-                    damage = event.getAmount();
                     if( skill.equals( Skill.COMBAT.toString() ) )
                         damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMelee.get();
                     if( skill.equals( Skill.ARCHERY.toString() ) )
@@ -216,7 +208,6 @@ public class DamageHandler
                     //apply damage penalties
                     damage /= weaponGap + 1;
                     damage /= killGap + 1;
-                    event.setAmount( damage );
 
                     //no overkill xp
                     if( damage > targetHealth )
@@ -267,6 +258,9 @@ public class DamageHandler
                         player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
                 }
             }
+            event.setAmount( damage );
+            if( event.getAmount() <= 0 )
+                event.setCanceled( true );
         }
     }
 }
