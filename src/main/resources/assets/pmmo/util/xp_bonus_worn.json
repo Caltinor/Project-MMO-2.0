@@ -535,5 +535,240 @@
 	{
 		"swimming": 15,
 		"fishing": 7.5
+	},
+	"spartanshields:shield_basic_bronze":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_constantan":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_copper":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_diamond":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_electrum":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_gold":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_invar":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_iron":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_lead":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_netherite":
+	{
+		"endurance": 50,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_nickel":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_obsidian":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_platinum":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_silver":
+	{
+		"endurance": 15,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_steel":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_stone":
+	{
+		"endurance": 12,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_tin":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_wood":
+	{
+		"endurance": 10,
+		"combat": 10
+	},
+	"spartanshields:shield_botania_elementium":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_botania_manasteel":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_botania_terrasteel":
+	{
+		"endurance": 50,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_lapis_lazuli":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_osmium":
+	{
+		"endurance": 15,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_powered_advanced":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_powered_basic":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_powered_elite":
+	{
+		"endurance": 35,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_powered_ultimate":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_refined_glowstone":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_refined_obsidian":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_bronze":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_constantan":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_copper":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_diamond":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_electrum":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_gold":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_invar":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_iron":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_lead":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_netherite":
+	{
+		"endurance": 50,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_nickel":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_obsidian":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_platinum":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_silver":
+	{
+		"endurance": 15,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_steel":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_stone":
+	{
+		"endurance": 12,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_tin":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_wood":
+	{
+		"endurance": 10,
+		"combat": 10
 	}
 }

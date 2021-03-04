@@ -1,53 +1,81 @@
--------------------------------------------
-Source installation information for modders
--------------------------------------------
-This code follows the Minecraft Forge installation methodology. It will apply
-some small patches to the vanilla MCP source code, giving you and it access 
-to some of the data and functions you need to build a successful mod.
+https://www.curseforge.com/minecraft/mc-mods/project-mmo
 
-Note also that the patches are built against "unrenamed" MCP source code (aka
-srgnames) - this means that you will not be able to read them directly against
-normal code.
+I am a new mod dev, so please let me know if the following is not correct:
 
-Source pack installation information:
+///Craft Tweaker Support
 
-Standalone source installation
-==============================
+Example of Craft Tweaker use with PMMO (May or may not be available for either Minecraft version, you may ask in our Discord if you'd like to make sure of the current state)
 
-See the Forge Documentation online for more detailed instructions:
-http://mcforge.readthedocs.io/en/latest/gettingstarted/
+`
+import crafttweaker.api.data.MapData;
+import crafttweaker.api.data.IData;
+import mods.pmmo.ct.Levels;
+import crafttweaker.api.events.CTEventManager;
+import crafttweaker.api.event.entity.player.MCUseHoeEvent;
+`
 
-Step 1: Open your command-line and browse to the folder where you extracted the zip file.
+//Check if the player has met the required stats
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	var metLevelsSpecified = Levels.checkLevels( new MapData( {"agility": 10 as IData, "farming": 50 as IData} ), event.getPlayer() );
+}));
+`
 
-Step 2: You're left with a choice.
-If you prefer to use Eclipse:
-1. Run the following command: "gradlew genEclipseRuns" (./gradlew genEclipseRuns if you are on Mac/Linux)
-2. Open Eclipse, Import > Existing Gradle Project > Select Folder 
-   or run "gradlew eclipse" to generate the project.
-(Current Issue)
-4. Open Project > Run/Debug Settings > Edit runClient and runServer > Environment
-5. Edit MOD_CLASSES to show [modid]%%[Path]; 2 times rather then the generated 4.
+//Award the player levels
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	Levels.awardLevels( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+}));
+`
 
-If you prefer to use IntelliJ:
-1. Open IDEA, and import project.
-2. Select your build.gradle file and have it import.
-3. Run the following command: "gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
-4. Refresh the Gradle Project in IDEA if required.
+//Award the player Xp (the extra boolean is ignoreBonuses, such as xp boosting items, or biomes)
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	Levels.awardXp( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer(), true );
+}));
+`
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can run "gradlew --refresh-dependencies" to refresh the local cache. "gradlew clean" to reset everything {this does not affect your code} and then start the processs again.
+//Set player levels
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	Levels.setLevels( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+}));
+`
 
-Should it still not work, 
-Refer to #ForgeGradle on EsperNet for more information about the gradle environment.
-or the Forge Project Discord discord.gg/UvedJ9m
+//Set player xp
+`
+CTEventManager.register(new MCUseHoeEvent(event =>
+{
+	Levels.setXp( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+}));
+`
 
-Forge source installation
-=========================
-MinecraftForge ships with this code and installs it as part of the forge
-installation process, no further action is required on your part.
+This script (.zs) will check for level 10 agility, and level 50 farming.
+If the player has all of the stats specified, it will return true
+Else, it will return false if any 1 is not met.
 
-LexManos' Install Video
-=======================
-https://www.youtube.com/watch?v=8VEdtQLuLO0&feature=youtu.be
+///API
 
-For more details update more often refer to the Forge Forums:
-http://www.minecraftforge.net/forum/index.php/topic,14048.0.html
+Xp.awardXpTrigger is the most flexible way to award people experience, made specifically for API
+The xp values can be configured by anyone inside data.json, by the use of a given key, example: "doomweapon.consume.invisible" inside the "trigger_xp" entry of data.json will determine how much xp, and in what skills this action will award when the xp award is triggered from an API
+
+Others:
+
+Skill.getLevel returns level int
+Skill.getXp returns xp double
+Skill.setLevel sets level double
+Skill.setXp sets xp double
+Skill.addLevel rewards level double
+Skill.addXp rewards xp double
+XP.getXp( ResourceLocation item, JType type ) returns a Map<String, Double> of the xp/level values stored for that item, in that type
+
+To use the API, include these two lines in your gradle.build
+
+repositories { maven { url "http://dvs1.progwml6.com/files/maven/" } }
+dependencies { compileOnly fg.deobf("curse.maven:project-mmo:${version}") }
+
+If you have issues with this, or know what could be wrong, please contact me on Discord, or otherwise!

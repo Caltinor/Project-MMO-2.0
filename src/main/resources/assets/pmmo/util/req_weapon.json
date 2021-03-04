@@ -1483,6 +1483,534 @@
 	{
 		"archery": 15
 	},
+	"spartanweaponry:battleaxe_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:battleaxe_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:battleaxe_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:battleaxe_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:battleaxe_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:battleaxe_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:battleaxe_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:battleaxe_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:battleaxe_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:battleaxe_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:battleaxe_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:battleaxe_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:battleaxe_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:battleaxe_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:battleaxe_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:battleaxe_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:boomerang_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:boomerang_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:boomerang_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:boomerang_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:boomerang_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:boomerang_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:boomerang_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:boomerang_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:boomerang_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:boomerang_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:boomerang_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:boomerang_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:boomerang_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:boomerang_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:boomerang_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:boomerang_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:cestus":
+	{
+		"combat": 1
+	},
+	"spartanweaponry:cestus_studded":
+	{
+		"combat": 3
+	},
+	"spartanweaponry:club_studded":
+	{
+		"combat": 3
+	},
+	"spartanweaponry:club_wood":
+	{
+		"combat": 1
+	},
+	"spartanweaponry:dagger_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:dagger_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:dagger_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:dagger_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:dagger_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:dagger_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:dagger_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:dagger_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:dagger_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:dagger_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:dagger_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:dagger_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:dagger_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:dagger_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:dagger_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:dagger_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:flanged_mace_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:flanged_mace_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:flanged_mace_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:flanged_mace_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:flanged_mace_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:flanged_mace_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:flanged_mace_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:flanged_mace_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:flanged_mace_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:flanged_mace_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:flanged_mace_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:flanged_mace_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:flanged_mace_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:flanged_mace_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:flanged_mace_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:flanged_mace_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:glaive_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:glaive_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:glaive_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:glaive_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:glaive_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:glaive_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:glaive_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:glaive_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:glaive_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:glaive_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:glaive_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:glaive_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:glaive_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:glaive_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:glaive_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:glaive_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:greatsword_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:greatsword_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:greatsword_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:greatsword_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:greatsword_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:greatsword_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:greatsword_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:greatsword_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:greatsword_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:greatsword_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:greatsword_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:greatsword_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:greatsword_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:greatsword_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:greatsword_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:greatsword_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:halberd_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:halberd_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:halberd_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:halberd_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:halberd_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:halberd_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:halberd_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:halberd_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:halberd_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:halberd_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:halberd_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:halberd_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:halberd_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:halberd_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:halberd_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:halberd_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:hammer_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:hammer_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:hammer_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:hammer_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:hammer_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:hammer_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:hammer_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:hammer_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:hammer_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:hammer_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:hammer_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:hammer_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:hammer_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:hammer_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:hammer_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:hammer_wood":
+	{
+		"combat": 5
+	},
 	"spartanweaponry:heavy_crossbow_bronze":
 	{
 		"archery": 13
@@ -1547,6 +2075,198 @@
 	{
 		"archery": 10
 	},
+	"spartanweaponry:javelin_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:javelin_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:javelin_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:javelin_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:javelin_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:javelin_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:javelin_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:javelin_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:javelin_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:javelin_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:javelin_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:javelin_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:javelin_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:javelin_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:javelin_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:javelin_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:katana_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:katana_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:katana_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:katana_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:katana_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:katana_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:katana_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:katana_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:katana_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:katana_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:katana_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:katana_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:katana_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:katana_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:katana_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:katana_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:lance_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:lance_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:lance_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:lance_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:lance_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:lance_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:lance_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:lance_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:lance_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:lance_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:lance_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:lance_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:lance_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:lance_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:lance_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:lance_wood":
+	{
+		"combat": 5
+	},
 	"spartanweaponry:longbow_bronze":
 	{
 		"archery": 8
@@ -1610,6 +2330,582 @@
 	"spartanweaponry:longbow_wood":
 	{
 		"archery": 5
+	},
+	"spartanweaponry:longsword_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:longsword_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:longsword_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:longsword_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:longsword_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:longsword_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:longsword_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:longsword_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:longsword_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:longsword_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:longsword_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:longsword_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:longsword_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:longsword_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:longsword_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:longsword_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:pike_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:pike_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:pike_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:pike_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:pike_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:pike_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:pike_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:pike_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:pike_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:pike_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:pike_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:pike_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:pike_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:pike_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:pike_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:pike_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:quarterstaff_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:quarterstaff_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:quarterstaff_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:quarterstaff_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:quarterstaff_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:quarterstaff_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:quarterstaff_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:quarterstaff_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:quarterstaff_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:quarterstaff_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:quarterstaff_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:quarterstaff_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:quarterstaff_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:quarterstaff_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:quarterstaff_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:quarterstaff_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:rapier_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:rapier_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:rapier_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:rapier_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:rapier_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:rapier_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:rapier_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:rapier_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:rapier_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:rapier_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:rapier_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:rapier_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:rapier_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:rapier_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:rapier_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:rapier_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:saber_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:saber_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:saber_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:saber_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:saber_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:saber_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:saber_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:saber_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:saber_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:saber_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:saber_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:saber_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:saber_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:saber_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:saber_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:saber_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:spear_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:spear_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:spear_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:spear_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:spear_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:spear_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:spear_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:spear_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:spear_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:spear_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:spear_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:spear_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:spear_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:spear_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:spear_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:spear_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:throwing_knife_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:throwing_knife_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:throwing_knife_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:throwing_knife_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:throwing_knife_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:throwing_knife_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:throwing_knife_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:throwing_knife_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:throwing_knife_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:throwing_knife_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:throwing_knife_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:throwing_knife_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:throwing_knife_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:throwing_knife_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:throwing_knife_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:throwing_knife_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:tomahawk_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:tomahawk_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:tomahawk_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:tomahawk_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:tomahawk_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:tomahawk_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:tomahawk_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:tomahawk_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:tomahawk_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:tomahawk_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:tomahawk_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:tomahawk_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:tomahawk_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:tomahawk_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:tomahawk_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:tomahawk_wood":
+	{
+		"combat": 5
+	},
+	"spartanweaponry:warhammer_bronze":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:warhammer_copper":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:warhammer_diamond":
+	{
+		"combat": 45
+	},
+	"spartanweaponry:warhammer_electrum":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:warhammer_gold":
+	{
+		"combat": 35
+	},
+	"spartanweaponry:warhammer_invar":
+	{
+		"combat": 22
+	},
+	"spartanweaponry:warhammer_iron":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:warhammer_lead":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:warhammer_netherite":
+	{
+		"combat": 65
+	},
+	"spartanweaponry:warhammer_nickel":
+	{
+		"combat": 20
+	},
+	"spartanweaponry:warhammer_platinum":
+	{
+		"combat": 37
+	},
+	"spartanweaponry:warhammer_silver":
+	{
+		"combat": 17
+	},
+	"spartanweaponry:warhammer_steel":
+	{
+		"combat": 25
+	},
+	"spartanweaponry:warhammer_stone":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:warhammer_tin":
+	{
+		"combat": 15
+	},
+	"spartanweaponry:warhammer_wood":
+	{
+		"combat": 5
 	},
 	"switchbow:switchbow":
 	{
