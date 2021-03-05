@@ -1578,6 +1578,8 @@ public class XP
 			return;
 		String biomeKey = resLoc.toString();
 		UUID playerUUID = player.getUniqueID();
+		if( !JsonConfig.data.containsKey( JType.REQ_BIOME ) )
+			return;
 		Map<String, Double> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
 		Map<String, Map<String, Double>> negativeEffects = JsonConfig.data.get( JType.BIOME_EFFECT_NEGATIVE );
 		Map<String, Map<String, Double>> positiveEffects = JsonConfig.data.get( JType.BIOME_EFFECT_POSITIVE );
