@@ -640,7 +640,7 @@ public class ListScreen extends Screen
                     maxCount = (int) (double) fishPoolMap.get( "maxCount" );
 
                     button.text.add( new StringTextComponent( "" ) );
-                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentWeight", weight ).getString() ).setStyle( color ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentWeight", DP.dpSoft( weight ) ).getString() ).setStyle( color ) );
 
                     if ( minCount == maxCount )
                         button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.caughtAmount", minCount ).getString() ).setStyle( color ) );

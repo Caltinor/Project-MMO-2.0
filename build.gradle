@@ -1,8 +1,8 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url  = 'https://plugins.gradle.org/m2/' }
-        maven { url='https://dist.creeper.host/Sponge/maven' }
+        maven { url = 'https://plugins.gradle.org/m2/' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         jcenter()
         mavenCentral()
     }
@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.4-3.45.2'
+version = '1.16.4-3.45.3'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 

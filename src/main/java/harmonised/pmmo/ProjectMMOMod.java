@@ -33,6 +33,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class ProjectMMOMod
 {
     private static String PROTOCOL_VERSION = "1";
+    public static boolean worldStarted = false;
     public static SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
             .named( new ResourceLocation( Reference.MOD_ID, "main_channel" ) )
             .clientAcceptedVersions( PROTOCOL_VERSION::equals )
@@ -75,6 +76,8 @@ public class ProjectMMOMod
 
     private void serverAboutToStart( FMLServerAboutToStartEvent event )
     {
+        worldStarted = false;
+        ModList.get().isLoaded( "ftbquests" );
         JsonConfig.init();
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
             AutoValues.setAutoValues();
@@ -88,6 +91,7 @@ public class ProjectMMOMod
 
     private void serverStart( FMLServerStartingEvent event )
     {
+        worldStarted = true;
         PmmoSavedData.init( event.getServer() );
         Config.initServer();
         WorldTickHandler.refreshVein();

@@ -25,6 +25,7 @@ import java.util.Set;
 public class AutoValues
 {
     public static final Logger LOGGER = LogManager.getLogger();
+    private static boolean outputToConsole = Config.forgeConfig.outputAllAutoValuesToLog.get();
 
     private static void addJsonConfigValue( String resLoc, JType jType, Map<String, Double> values, boolean fillIfExists )
     {
@@ -42,6 +43,22 @@ public class AutoValues
                     value = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), value ) );
                 if( !JsonConfig.localData.get( jType ).get( resLoc ).containsKey( entry.getKey() ) )
                     JsonConfig.localData.get( jType ).get( resLoc ).put( entry.getKey(), value );
+                if( outputToConsole )
+                {
+                    //addData( "xp_value_smelt", 	"#forge:ores/aluminum",	{ "smithing": 12.5 } );
+                    StringBuilder addDataString = new StringBuilder("addData( \"" + jType.toString().toLowerCase() + "\",\t\"" + resLoc + "\", { ");
+                    boolean firstEntry = true;
+                    for( Map.Entry<String, Double> jsonEntry : values.entrySet() )
+                    {
+                        if( !firstEntry )
+                            addDataString.append(", ");
+                        else
+                            firstEntry = false;
+                        addDataString.append( "\"" ).append( jsonEntry.getKey() ).append( "\": " ).append( jsonEntry.getValue() );
+                    }
+                    addDataString.append( " } );" );
+                    LOGGER.info( addDataString.toString() );
+                }
             }
             if( JsonConfig.localData.get( jType ).get( resLoc ).size() == 0 )
                 JsonConfig.localData.get( jType ).remove( resLoc );

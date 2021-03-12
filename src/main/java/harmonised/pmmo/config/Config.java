@@ -1,5 +1,6 @@
 package harmonised.pmmo.config;
 
+import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -386,6 +387,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> toolReqScaleLog;
         public ConfigHelper.ConfigValueListener<Double> toolReqScaleOre;
         public ConfigHelper.ConfigValueListener<Double> toolReqScaleDirt;
+        public ConfigHelper.ConfigValueListener<Boolean> outputAllAutoValuesToLog;
 
         public ConfigImplementation(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber)
         {
@@ -1594,6 +1596,11 @@ public class Config
                         .translation( "pmmo.toolReqScaleDirt" )
                         .defineInRange( "toolReqScaleDirt", 5D, 0D, 1000000D ) );
 
+                this.outputAllAutoValuesToLog = subscriber.subscribe(builder
+                        .comment( "Spam the log with every Auto Value generation?" )
+                        .translation( "pmmo.outputAllAutoValuesToLog" )
+                        .define( "outputAllAutoValuesToLog", false ) );
+
                 builder.pop();
             }
         }
@@ -1607,7 +1614,8 @@ public class Config
             return Config.localConfig.get( key );
         else
         {
-            LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
+            if( ProjectMMOMod.worldStarted )
+                LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
             return -1;
         }
     }

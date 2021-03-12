@@ -42,6 +42,7 @@ public class BlockBrokenHandler
 
     public static void handleBroken( BlockEvent.BreakEvent event )
     {
+        Config.getConfig( "wdqdqw" );
 //        RemoveThisClass.doStuff( event );
         PlayerEntity player = event.getPlayer();
         if( !( player instanceof FakePlayer ) )
