@@ -956,6 +956,12 @@ public class XP
 //		return getPmmoTagElement( player, "abilities" );
 //	}
 
+	public static double getMaxLevel()
+	{
+		double serverMaxLevel = Config.getConfig( "maxLevel" );
+		return serverMaxLevel <= 1 ? Config.forgeConfig.maxLevel.get() : serverMaxLevel;
+	}
+
 	public static double getXpBoostDurabilityMultiplier( ItemStack itemStack )
 	{
 		double scale = 1;
@@ -1699,7 +1705,7 @@ public class XP
 		double exponentialBaseXp = Config.getConfig( "exponentialBaseXp" );
 		double exponentialBase = Config.getConfig( "exponentialBase" );
 		double exponentialRate = Config.getConfig( "exponentialRate" );
-		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+		int maxLevel = (int) Math.floor( XP.getMaxLevel() );
 		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
 
 		int theXp = 0;
@@ -1722,7 +1728,7 @@ public class XP
 	}
 	public static double levelAtXpDecimal( double xp )
 	{
-		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+		int maxLevel = (int) Math.floor( XP.getMaxLevel() );
 
 		if( levelAtXp( xp ) >= maxLevel )
 			return maxLevel;
@@ -1753,7 +1759,7 @@ public class XP
 		double exponentialBase = Config.getConfig( "exponentialBase" );
 		double exponentialRate = Config.getConfig( "exponentialRate" );
 
-		int maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+		int maxLevel = (int) Math.floor( XP.getMaxLevel() );
 		if( givenLevel > maxLevel )
 			givenLevel = maxLevel;
 		double theXp = 0;

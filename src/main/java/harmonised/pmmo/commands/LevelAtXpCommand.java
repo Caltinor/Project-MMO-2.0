@@ -17,7 +17,7 @@ public class LevelAtXpCommand
         String[] args = context.getInput().split(" ");
         double xp = Double.parseDouble( args[3] );
         double maxXp = Config.getConfig( "maxXp" );
-        double maxLevel = Config.getConfig( "maxLevel" );
+        double maxLevel = XP.getMaxLevel();
 
         if( xp < 0 )
             xp = 0;

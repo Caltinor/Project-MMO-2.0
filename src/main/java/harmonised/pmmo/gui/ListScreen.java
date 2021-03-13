@@ -828,7 +828,7 @@ public class ListScreen extends Screen
                         button.title = getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + button.regKey ), DP.dpSoft( XP.levelAtXpDecimal( curXp ) ) ).setStyle( Skill.getSkillStyle( button.regKey ) ).getString();
 
                         button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentXp", DP.dpSoft( curXp ) ).getString() ) );
-                        if( Skill.getLevel( skill, player ) != Config.getConfig( "maxLevel" ) )
+                        if( Skill.getLevel( skill, player ) != XP.getMaxLevel() )
                         {
                             button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.nextLevelXp", DP.dpSoft( nextXp ) ).getString() ) );
                             button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.RemainderXp", DP.dpSoft( nextXp - curXp ) ).getString() ) );
@@ -1135,7 +1135,7 @@ public class ListScreen extends Screen
 
     public static double getLowestSalvageReq( Map<String, Map<String, Double>> map )
     {
-        double lowestReq = Config.getConfig( "maxLevel" );
+        double lowestReq = XP.getMaxLevel();
 
         for( Map.Entry<String, Map<String, Double>> entry : map.entrySet() )
         {

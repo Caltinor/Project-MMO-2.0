@@ -13,7 +13,7 @@ public class XpFromToCommand
 {
     public static int execute( CommandContext<CommandSource> context ) throws CommandException
     {
-        double maxLevel = Config.getConfig( "maxLevel" );
+        double maxLevel = XP.getMaxLevel();
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 

@@ -1614,7 +1614,7 @@ public class Config
             return Config.localConfig.get( key );
         else
         {
-            if( ProjectMMOMod.worldStarted )
+//            if( ProjectMMOMod.worldStarted )
                 LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
             return -1;
         }

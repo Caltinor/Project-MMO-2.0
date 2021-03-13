@@ -77,11 +77,16 @@ public class ProjectMMOMod
     private void serverAboutToStart( FMLServerAboutToStartEvent event )
     {
         worldStarted = false;
-        ModList.get().isLoaded( "ftbquests" );
+//        ModList.get().isLoaded( "ftbquests" );
         JsonConfig.init();
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
             AutoValues.setAutoValues();
         ChunkDataHandler.init();
+
+        worldStarted = true;
+        Config.initServer();
+        WorldTickHandler.refreshVein();
+
     }
 
     private void registerCommands( RegisterCommandsEvent event )
@@ -91,10 +96,7 @@ public class ProjectMMOMod
 
     private void serverStart( FMLServerStartingEvent event )
     {
-        worldStarted = true;
         PmmoSavedData.init( event.getServer() );
-        Config.initServer();
-        WorldTickHandler.refreshVein();
         if( Config.forgeConfig.craftReqEnabled.get() )
             event.getServer().getGameRules().get( GameRules.DO_LIMITED_CRAFTING ).set(true, event.getServer() );
     }

@@ -600,7 +600,7 @@ public class XPOverlayGUI extends AbstractGui
 			xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
 
 		if( prefsMap.containsKey( "maxLevel" ) )
-			maxLevel = (int) Math.floor( Config.getConfig( "maxLevel" ) );
+			maxLevel = (int) Math.floor( XP.getMaxLevel() );
 		else
 			maxLevel = (int) Math.floor( Config.forgeConfig.maxLevel.get() );
 

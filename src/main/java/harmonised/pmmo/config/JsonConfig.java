@@ -513,7 +513,7 @@ public class JsonConfig
     {
         Map<String, Map<String, Double>> input = rawData.get( jType );
         Map<String, Map<String, Double>> output = localData.get( jType );
-        double maxLevel = Config.getConfig( "maxLevel" );
+        double maxLevel = XP.getMaxLevel();
         double value;
 
         LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );

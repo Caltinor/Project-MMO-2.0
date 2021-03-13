@@ -123,7 +123,7 @@ public class AutoValues
 
         ResourceLocation regKey = itemStack.getItem().getRegistryName();
         double weaponReqOffset = regKey == null ? 0D : XP.getJsonMap( regKey.toString(), JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetWeapon", 0D );
-        double weaponReq = Math.min( Config.forgeConfig.maxLevel.get(), Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) + weaponReqOffset ) );
+        double weaponReq = Math.min( XP.getMaxLevel(), Math.ceil( (attackDamage) * Config.forgeConfig.attackDamageReqScale.get() * (4+attackSpeed) + weaponReqOffset ) );
 
         if( Config.forgeConfig.autoGenerateRoundedValuesOnly.get() )
             weaponReq = Math.ceil( weaponReq );
