@@ -114,7 +114,7 @@ public class TooltipHandler
                     }
 
                     //Weapon
-                    String itemSpecificSkill = AutoValues.getItemSpecificSkill( regKey );
+                    String itemSpecificSkill = AutoValues.getItemSpecificSkillOrDefault( regKey, Skill.COMBAT.toString() );
                     if( Config.getConfig( "weaponReqEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
                     {
                         if( weaponReq == null )
