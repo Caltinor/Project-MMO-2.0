@@ -220,9 +220,10 @@ public class XP
 		return world.func_242406_i( pos ).get().getRegistryName();
 	}
 
-	public static ResourceLocation getDimResLoc(World world )
+	public static ResourceLocation getDimResLoc( World world )
 	{
-		return world.func_241828_r().func_230520_a_().getKey( world.getDimensionType() );
+		return world.getDimensionKey().getRegistryName();
+//		return world.func_241828_r().func_230520_a_().getKey( world.getDimensionType() );
 	}
 
 	public static String getHarvestTool( BlockState state )
@@ -1808,7 +1809,7 @@ public class XP
 	{
 //        System.out.println( "xp drop added at " + xpDrop.getPos() );
 		if( Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
-		NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), player );
+			NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), player );
 	}
 
 	public static void addWorldXpDrop( WorldXpDrop xpDrop, UUID uuid )

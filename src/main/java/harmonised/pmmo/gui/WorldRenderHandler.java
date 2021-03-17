@@ -16,8 +16,11 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.IReorderingProcessor;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -26,7 +29,7 @@ import java.util.*;
 public class WorldRenderHandler
 {
     private static long lastTime = System.nanoTime();
-    private final static List<WorldXpDrop> xpDrops = new ArrayList<>();
+    private final static Map<ResourceLocation, List<WorldXpDrop>> xpDrops = new HashMap<>();
 
     public static float worldXpDropsSizeMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get() );
     public static float worldXpDropsDecaySpeedMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get() );
@@ -36,23 +39,31 @@ public class WorldRenderHandler
     public void handleWorldRender( RenderWorldLastEvent event )
     {
 //        temp1++;
+        Minecraft mc = Minecraft.getInstance();
+        World world = mc.world;
+        if( world == null )
+            return;
+//        ResourceLocation dimResLoc = world.getDimensionType().getEffects();
+        ResourceLocation dimResLoc = XP.getDimResLoc( world );
+        if( !xpDrops.containsKey( dimResLoc ) )
+            return;
+        List<WorldXpDrop> dimXpDrops = xpDrops.get( dimResLoc );
         long currTime = System.nanoTime();
         double d = (currTime - lastTime) / 1000000000D;
-        Minecraft mc = Minecraft.getInstance();
         FontRenderer fr = mc.getRenderManager().getFontRenderer();
         MatrixStack stack = event.getMatrixStack();
         IRenderTypeBuffer.Impl buffer = mc.getRenderTypeBuffers().getBufferSource();
         Vector3d pos = mc.gameRenderer.getActiveRenderInfo().getProjectedView();
 
         stack.push();
-        for( int i = xpDrops.size()-1; i >= 0; i-- )
+        for( int i = dimXpDrops.size()-1; i >= 0; i-- )
         {
-            WorldXpDrop xpDrop = xpDrops.get( i );
+            WorldXpDrop xpDrop = dimXpDrops.get( i );
             if( xpDrop == null )
                 continue;
             if( xpDrop.xp <= 0 )
             {
-                xpDrops.remove( i );
+                dimXpDrops.remove( i );
                 continue;
             }
             stack.push();
@@ -83,9 +94,15 @@ public class WorldRenderHandler
 
     public static void addWorldXpDropOffline( WorldXpDrop xpDrop )
     {
+        Minecraft mc = Minecraft.getInstance();
 //        System.out.println( "remote xp drop added at " + xpDrop.getPos() );
-        PlayerEntity player = Minecraft.getInstance().player;
-        if( player != null && Config.getPreferencesMap( Minecraft.getInstance().player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
-            WorldRenderHandler.xpDrops.add( xpDrop );
+        PlayerEntity player = mc.player;
+        if( player != null && Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
+        {
+            ResourceLocation dimResLoc = xpDrop.getWorldResLoc();
+            if( !xpDrops.containsKey( dimResLoc ) )
+                xpDrops.put( dimResLoc, new ArrayList<>() );
+            xpDrops.get( dimResLoc ).add( xpDrop );
+        }
     }
 }

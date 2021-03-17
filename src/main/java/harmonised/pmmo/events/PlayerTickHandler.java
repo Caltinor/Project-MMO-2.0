@@ -7,6 +7,7 @@ import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.skills.CheeseTracker;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
@@ -31,8 +32,9 @@ import java.util.UUID;
 
 public class PlayerTickHandler
 {
-    private static Map<UUID, Long> lastAward = new HashMap<>();
-    private static Map<UUID, Long> lastVeinAward = new HashMap<>();
+    private final static Map<UUID, Long> lastAward = new HashMap<>();
+    private final static Map<UUID, Long> lastVeinAward = new HashMap<>();
+    private final static Map<UUID, Long> lastCheeseUpdate = new HashMap<>();
     public static boolean syncPrefs = false;
     private static int ticksSinceAttributeRefresh = 0;
 
@@ -62,9 +64,12 @@ public class PlayerTickHandler
                 lastAward.put( uuid, System.nanoTime() );
             if( !lastVeinAward.containsKey( uuid ) )
                 lastVeinAward.put( uuid, System.nanoTime() );
+            if( !lastCheeseUpdate.containsKey( uuid ) )
+                lastCheeseUpdate.put( uuid, System.nanoTime() );
 
-            double gap = ( (System.nanoTime() - lastAward.get( uuid) ) / 1000000000D );
-            double veinGap = ( (System.nanoTime() - lastVeinAward.get( uuid) ) / 1000000000D );
+            double gap          = ( (System.nanoTime() - lastAward.get( uuid            ) ) / 1000000000D );
+            double veinGap      = ( (System.nanoTime() - lastVeinAward.get( uuid        ) ) / 1000000000D );
+            double cheeseGap    = ( (System.nanoTime() - lastCheeseUpdate.get( uuid     ) ) / 1000000000D );
 
             if( gap > 0.5 )
             {
@@ -195,6 +200,12 @@ public class PlayerTickHandler
                 {
                     WorldTickHandler.updateVein( player, veinGap );
                     lastVeinAward.put( uuid, System.nanoTime() );
+                }
+
+                if( cheeseGap > 0.25 )
+                {
+                    CheeseTracker.trackCheese( (ServerPlayerEntity) player );
+                    lastCheeseUpdate.put( uuid, System.nanoTime() );
                 }
             }
         }
