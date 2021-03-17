@@ -2,12 +2,14 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +28,7 @@ public class CraftedHandler
             if( event.getPlayer() instanceof ServerPlayerEntity )
             {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+                Vector3d pos = player.getPositionVec();
                 double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
                 double durabilityMultiplier = 1;
 
@@ -50,9 +53,11 @@ public class CraftedHandler
 //            XP.multiplyMap( award, itemStack.getCount() );
                 XP.multiplyMapAnyDouble( award, durabilityMultiplier );
 
-                for( Map.Entry<String, Double> entry : award.entrySet() )
+                for( String awardSkillName : award.keySet() )
                 {
-                    XP.awardXp( player, entry.getKey(), "crafting", entry.getValue(), false, false, false );
+                    WorldXpDrop xpDrop = new WorldXpDrop( pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, award.get( awardSkillName ), awardSkillName );
+                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    Skill.addXp( awardSkillName, player, award.get( awardSkillName ), "crafting", false, false );
                 }
             }
         }

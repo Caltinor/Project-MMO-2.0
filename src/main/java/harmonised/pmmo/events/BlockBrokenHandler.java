@@ -8,6 +8,7 @@ import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.DP;
+import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -517,6 +518,6 @@ public class BlockBrokenHandler
 
     public static double getTreasureItemChance( int level, Map<String, Double> map )
     {
-        return DP.mapCapped( level, map.get( "startLevel" ), map.get( "endLevel" ), map.get( "startChance" ), map.get( "endChance" ) );
+        return Util.mapCapped( level, map.get( "startLevel" ), map.get( "endLevel" ), map.get( "startChance" ), map.get( "endChance" ) );
     }
 }

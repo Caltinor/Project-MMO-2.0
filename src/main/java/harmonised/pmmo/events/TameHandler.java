@@ -2,9 +2,12 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.entity.living.AnimalTameEvent;
 
 import java.util.Map;
@@ -17,12 +20,22 @@ public class TameHandler
         {
             ServerPlayerEntity tamer = (ServerPlayerEntity) event.getTamer();
             String regKey = event.getAnimal().getEntityString();
-            Map<String, Double> xpValue = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_TAME );
+            Map<String, Double> award = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_TAME );
 
-            if( xpValue.size() > 0 )
-                XP.awardXpMap( tamer.getUniqueID(), xpValue, "taming", false, false );
-            else
-                XP.awardXp( tamer, Skill.TAMING.toString(), "taming", Config.forgeConfig.defaultTamingXp.get(), false, false, false );
+            if( award.size() == 0 )
+                award.put( Skill.TAMING.toString(), Config.forgeConfig.defaultTamingXp.get() );
+
+            if( XP.isHoldingDebugItemInOffhand( tamer ) )
+                tamer.sendStatusMessage( new StringTextComponent( regKey ), false );
+
+            for( String awardSkillName : award.keySet() )
+            {
+                Vector3d xpDropPos = event.getAnimal().getPositionVec();
+                WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY() + event.getAnimal().getEyeHeight() + 0.523, xpDropPos.getZ(), 0.5, award.get( awardSkillName ), awardSkillName );
+                xpDrop.setDecaySpeed( 0.35 );
+                WorldRenderHandler.addWorldXpDrop( xpDrop );
+                Skill.addXp( awardSkillName, tamer, award.get( awardSkillName ), "taming " + regKey, false, false );
+            }
         }
     }
 }

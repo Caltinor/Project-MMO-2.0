@@ -972,7 +972,7 @@ public class XP
 			double durabilityPercentage = 1 - itemStack.getDamage() / (double) itemStack.getMaxDamage();
 			double scaleStart = Config.getConfig( "scaleXpBoostByDurabilityStart" ) / 100D;
 			double scaleEnd = Math.max( scaleStart, Config.getConfig( "scaleXpBoostByDurabilityEnd" ) / 100D );
-			scale = DP.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
+			scale = Util.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
 		}
 		return scale;
 	}
@@ -1649,7 +1649,7 @@ public class XP
 
 	public static double getWeight( int startLevel, Map<String, Double> fishItem )
 	{
-		return DP.mapCapped( startLevel, fishItem.get( "startLevel" ), fishItem.get( "endLevel" ), fishItem.get( "startWeight" ), fishItem.get( "endWeight" ) );
+		return Util.mapCapped( startLevel, fishItem.get( "startLevel" ), fishItem.get( "endLevel" ), fishItem.get( "startWeight" ), fishItem.get( "endWeight" ) );
 	}
 
 	public static <T> int getTotalLevelFromMap( Map<T, Double> input )

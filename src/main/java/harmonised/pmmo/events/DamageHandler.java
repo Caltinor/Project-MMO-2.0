@@ -4,6 +4,7 @@ import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.party.Party;
@@ -20,6 +21,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.FakePlayer;
@@ -115,13 +117,25 @@ public class DamageHandler
                     if( agilityXp > 0 )
                         hideEndurance = true;
 
+                    Vector3d pos = player.getPositionVec();
+
                     if( event.getSource().getTrueSource() != null )
                         XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getTrueSource().getDisplayName().getString(), enduranceXp, hideEndurance, false, false );
                     else
                         XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
+                    if( enduranceXp > 0 )
+                    {
+                        WorldXpDrop xpDrop = new WorldXpDrop( pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, enduranceXp, Skill.ENDURANCE.toString() );
+                        WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    }
 
                     if( agilityXp > 0 )
+                    {
+                        WorldXpDrop xpDrop = new WorldXpDrop( pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, agilityXp, Skill.AGILITY.toString() );
+                        xpDrop.setSize( 1.523f );
+                        WorldRenderHandler.addWorldXpDrop( xpDrop );
                         XP.awardXp( player, Skill.AGILITY.toString(), "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
+                    }
                 }
             }
 
@@ -248,14 +262,14 @@ public class DamageHandler
 
                         amount += ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
                         amount *= lowHpBonus;
-
-                        XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
                     }
                     else
-                    {
                         amount *= lowHpBonus;
-                        XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
-                    }
+
+                    Vector3d xpDropPos = target.getPositionVec();
+                    WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY() + target.getHeight(), xpDropPos.getZ(), target.getHeight(), amount, skill );
+                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
 
                     if( weaponGap > 0 )
                         player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );

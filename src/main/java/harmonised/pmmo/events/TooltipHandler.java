@@ -7,6 +7,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.gui.GlossaryScreen;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import net.minecraft.block.BlockState;
@@ -464,7 +465,7 @@ public class TooltipHandler
                             String key = (String) treasureToArray[ treasureToArrayPos ];
 
                             salvageToItemMap = treasureInfo.get( key );
-                            chance = DP.mapCapped( level, salvageToItemMap.get( "startLevel" ), salvageToItemMap.get( "endLevel" ), salvageToItemMap.get( "startChance" ), salvageToItemMap.get( "endChance" ) );
+                            chance = Util.mapCapped( level, salvageToItemMap.get( "startLevel" ), salvageToItemMap.get( "endLevel" ), salvageToItemMap.get( "startChance" ), salvageToItemMap.get( "endChance" ) );
                             xpPerItem = salvageToItemMap.get( "xpPerItem" );
                             String itemName = new TranslationTextComponent( XP.getItem( key ).getTranslationKey() ).getString();
                             minCount = (int) (double) salvageToItemMap.get( "minCount" );
@@ -498,7 +499,7 @@ public class TooltipHandler
                             Map<String, Double> treasureToMap = JsonConfig.data2.get( JType.TREASURE ).get( key ).get( regKey );
                             int minCount = (int) (double) treasureFromMap.get( "minCount" );
                             int maxCount = (int) (double) treasureFromMap.get( "maxCount" );
-                            double chance = DP.mapCapped( level, treasureToMap.get( "startLevel" ), treasureToMap.get( "endLevel" ), treasureToMap.get( "startChance" ), treasureToMap.get( "endChance" ) );
+                            double chance = Util.mapCapped( level, treasureToMap.get( "startLevel" ), treasureToMap.get( "endLevel" ), treasureToMap.get( "startChance" ), treasureToMap.get( "endChance" ) );
 
                             tooltip.add( new TranslationTextComponent( "pmmo.valueFromValue", " " + ( minCount == maxCount ? minCount : minCount + "-" + maxCount ), displayName ).setStyle( XP.textStyle.get( chance > 0 ? "green" : "red" ) ) );
                         }

@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
@@ -19,6 +20,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.HashMap;
@@ -138,24 +140,49 @@ public class PlayerTickHandler
                 if( !player.world.isRemote() )
                 {
                     ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+                    Vector3d xpDropPos = player.getPositionVec();
                     if( player.isSprinting() )
                     {
                         if( player.isInWater() && ( waterAbove || waterBelow ) )
+                        {
+                            WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                            WorldRenderHandler.addWorldXpDrop( xpDrop );
                             XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming fast", swimAward * 1.25f, true, false, false );
+                        }
                         else
+                        {
+                            WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY() + 0.523, xpDropPos.getZ(), 0.15, runAward, Skill.AGILITY.toString() );
+                            WorldRenderHandler.addWorldXpDrop( xpDrop );
                             XP.awardXp( serverPlayer, Skill.AGILITY.toString(), "running", runAward, true, false, false );
+                        }
                     }
 
                     if( player.isInWater() && ( waterAbove || waterBelow || player.areEyesInFluid( FluidTags.WATER ) ) )
                     {
                         if( !player.isSprinting() )
+                        {
+                            WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                            WorldRenderHandler.addWorldXpDrop( xpDrop );
                             XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming", swimAward, true, false, false );
+                        }
                     }
                     else if( player.isElytraFlying() )
+                    {
+                        WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, flyAward, Skill.FLYING.toString() );
+                        WorldRenderHandler.addWorldXpDrop( xpDrop );
                         XP.awardXp( serverPlayer, Skill.FLYING.toString(), "flying", flyAward, true, false, false );
+                    }
 
-                    if( (player.getRidingEntity() instanceof BoatEntity) && player.isInWater() )
-                        XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming in a boat", swimAward / 5, true, false, false );
+                    if( (player.getRidingEntity() instanceof BoatEntity) && waterBelow )
+                    {
+                        double award = swimAward;
+                        if( !player.isSprinting() )
+                            award /= 10;
+
+                        WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                        WorldRenderHandler.addWorldXpDrop( xpDrop );
+                        XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming in a boat", award, true, false, false );
+                    }
                 }
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
             }

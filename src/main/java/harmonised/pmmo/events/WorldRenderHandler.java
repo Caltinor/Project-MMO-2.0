@@ -79,7 +79,7 @@ public class WorldRenderHandler
 
     public static void addWorldXpDrop( WorldXpDrop xpDrop )
     {
-//        System.out.println( "xp drop added" );
+        System.out.println( "xp drop added at " + xpDrop.getPos() );
         xpDrops.add( xpDrop );
     }
 }

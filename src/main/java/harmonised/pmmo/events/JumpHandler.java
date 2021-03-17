@@ -1,11 +1,13 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
@@ -42,7 +44,11 @@ public class JumpHandler
                     if( player.isPotionActive( Effects.JUMP_BOOST ) )
                         jumpAmp = player.getActivePotionEffect( Effects.JUMP_BOOST ).getAmplifier() + 1;
 
-                    XP.awardXp( (ServerPlayerEntity) player, Skill.AGILITY.toString(), "jumping", Math.max( (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), 1 ), true, false, false );
+                    Vector3d xpDropPos = player.getPositionVec();
+                    double award = Math.max( (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), 1 );
+                    WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY() + 0.523, xpDropPos.getZ(), 0.15, award, Skill.AGILITY.toString() );
+                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    XP.awardXp( (ServerPlayerEntity) player, Skill.AGILITY.toString(), "jumping", award, true, false, false );
                 }
             }
         }

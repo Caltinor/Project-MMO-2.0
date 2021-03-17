@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageTripleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.Skill;
@@ -294,7 +295,11 @@ public class PlayerInteractionHandler
             }
 
             if( award > 0 )
+            {
+                WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.35, award, Skill.SMITHING.toString() );
+                WorldRenderHandler.addWorldXpDrop( xpDrop );
                 XP.awardXp( (ServerPlayerEntity) player, Skill.SMITHING.toString(), item.getRegistryName().toString(), award, false, false, false );
+            }
 
             itemStack.shrink( 1 );
             player.sendBreakAnimation(Hand.OFF_HAND );

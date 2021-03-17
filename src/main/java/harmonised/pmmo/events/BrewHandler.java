@@ -1,7 +1,10 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.gui.WorldXpDrop;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -47,9 +50,15 @@ public class BrewHandler
                     }
                 }
 
-                Map<String, Double> award = XP.multiplyMapAnyDouble( XP.getXp( brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
+                Map<String, Double> award = XP.multiplyMapAnyDouble( XP.getXp( ingredient.getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
 
-                XP.awardXpMap( uuid, award, "Brewing", true, false );
+                for( String awardSkillName : award.keySet() )
+                {
+                    WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.4, award.get( awardSkillName ), awardSkillName );
+                    xpDrop.setDecaySpeed( 0.25 );
+                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), "brewing", false, false );
+                }
             }
         }
         catch( Exception e )

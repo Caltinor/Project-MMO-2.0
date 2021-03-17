@@ -58,16 +58,4 @@ public class DP
 		else
 			return String.format( Locale.ENGLISH , "%.2f", input );
 	}
-
-	public static double mapCapped(double input, double inLow, double inHigh, double outLow, double outHigh )
-	{
-		if( input < inLow )
-			input = inLow;
-		if( input > inHigh )
-			input = inHigh;
-
-		if( inLow == inHigh || outLow == outHigh )
-			return outHigh;
-		return ( (input - inLow) / (inHigh - inLow) ) * (outHigh - outLow) + outLow;
-	}
 }
