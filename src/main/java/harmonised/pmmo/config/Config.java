@@ -245,6 +245,13 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> xpDropsShowXpBar;
         public ConfigHelper.ConfigValueListener<Boolean> showLevelUpUnlocks;
 
+        public ConfigHelper.ConfigValueListener<Boolean> worldXpDropsEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> worldXpDropsShowSkill;
+        public ConfigHelper.ConfigValueListener<Double> worldXpDropsSizeMultiplier;
+        public ConfigHelper.ConfigValueListener<Double> worldXpDropsDecaySpeedMultiplier;
+        public ConfigHelper.ConfigValueListener<Double> worldXpDropsRotationCap;
+
+
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
         public ConfigHelper.ConfigValueListener<Double> blocksToUnbreakableY;
@@ -1001,6 +1008,31 @@ public class Config
                         .comment( "Should you be notified by what new features you have access to on level ups?" )
                         .translation( "pmmo.showLevelUpUnlocks" )
                         .define( "showLevelUpUnlocks", true ) );
+
+                this.worldXpDropsEnabled = subscriber.subscribe(builder
+                        .comment( "Should World Xp Drops appear when xp is gained?" )
+                        .translation( "pmmo.worldXpDropsEnabled" )
+                        .define( "worldXpDropsEnabled", true ) );
+
+                this.worldXpDropsShowSkill = subscriber.subscribe(builder
+                        .comment( "Should World Xp Drops Skill appear?" )
+                        .translation( "pmmo.worldXpDropsShowSkill" )
+                        .define( "worldXpDropsShowSkill", true ) );
+
+                this.worldXpDropsSizeMultiplier = subscriber.subscribe(builder
+                        .comment( "Value by which World Xp Drops Size is scaled (2 = twice as big)" )
+                        .translation( "pmmo.worldXpDropsSizeMultiplier" )
+                        .defineInRange( "worldXpDropsSizeMultiplier", 1D, 0.01D, 100D ) );
+
+                this.worldXpDropsDecaySpeedMultiplier = subscriber.subscribe(builder
+                        .comment( "Value by which World Xp Drops Decay Speed is scaled (2 = twice as fast)" )
+                        .translation( "pmmo.worldXpDropsDecaySpeedMultiplier" )
+                        .defineInRange( "worldXpDropsDecaySpeedMultiplier", 1D, 0.01D, 100D ) );
+
+                this.worldXpDropsRotationCap = subscriber.subscribe(builder
+                        .comment( "How far (Max) should World Xp Drops be rotated (Degrees, either direction from flat)" )
+                        .translation( "pmmo.worldXpDropsDecaySpeedMultiplier" )
+                        .defineInRange( "worldXpDropsDecaySpeedMultiplier", 25D, 0D, 180D ) );
 
                 builder.pop();
             }

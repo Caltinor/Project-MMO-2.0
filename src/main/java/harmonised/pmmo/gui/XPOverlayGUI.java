@@ -609,6 +609,26 @@ public class XPOverlayGUI extends AbstractGui
 		else
 			maxXp = XP.xpAtLevel( maxLevel );
 
+		if( prefsMap.containsKey( "worldXpDropsSizeMultiplier" ) )
+			WorldRenderHandler.worldXpDropsSizeMultiplier = (float) ( 0f + prefsMap.get( "worldXpDropsSizeMultiplier" ) );
+		else
+			WorldRenderHandler.worldXpDropsSizeMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get() );
+
+		if( prefsMap.containsKey( "worldXpDropsDecaySpeedMultiplier" ) )
+			WorldRenderHandler.worldXpDropsDecaySpeedMultiplier = (float) ( 0f + prefsMap.get( "worldXpDropsDecaySpeedMultiplier" ) );
+		else
+			WorldRenderHandler.worldXpDropsDecaySpeedMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get() );
+
+		if( prefsMap.containsKey( "worldXpDropsRotationCap" ) )
+			WorldXpDrop.worldXpDropsRotationCap = (float) ( 0f + prefsMap.get( "worldXpDropsRotationCap" ) );
+		else
+			WorldXpDrop.worldXpDropsRotationCap = (float) ( 0f + Config.forgeConfig.worldXpDropsRotationCap.get() );
+
+		if( prefsMap.containsKey( "worldXpDropsShowSkill" ) )
+			WorldRenderHandler.worldXpDropsShowSkill = prefsMap.get("worldXpDropsShowSkill") != 0;
+		else
+			WorldRenderHandler.worldXpDropsShowSkill = Config.forgeConfig.worldXpDropsShowSkill.get();
+
 		if( prefsMap.containsKey( "xpDropsAttachedToBar" ) )
 			xpDropsAttachedToBar = prefsMap.get("xpDropsAttachedToBar") != 0;
 		else

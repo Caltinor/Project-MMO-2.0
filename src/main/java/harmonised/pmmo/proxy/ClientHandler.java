@@ -3,6 +3,7 @@ package harmonised.pmmo.proxy;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.ListScreen;
+import harmonised.pmmo.gui.WorldRenderHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
@@ -40,6 +41,7 @@ public class ClientHandler
     public static void init()
     {
         MinecraftForge.EVENT_BUS.register( new XPOverlayGUI() );
+        MinecraftForge.EVENT_BUS.register( new WorldRenderHandler() );
         ClientRegistry.registerKeyBinding( SHOW_BAR );
         ClientRegistry.registerKeyBinding( SHOW_LIST );
         ClientRegistry.registerKeyBinding( TOGGLE_TOOLTIP );

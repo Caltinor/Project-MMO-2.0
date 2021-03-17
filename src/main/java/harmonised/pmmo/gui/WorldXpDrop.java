@@ -1,5 +1,6 @@
 package harmonised.pmmo.gui;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -8,6 +9,8 @@ import net.minecraft.world.World;
 
 public class WorldXpDrop
 {
+    public static float worldXpDropsRotationCap = (float) ( 0f + Config.forgeConfig.worldXpDropsRotationCap.get() );
+
     private final ResourceLocation worldResLoc;
     private final Vector3d pos;
     private final String skill;
@@ -64,7 +67,7 @@ public class WorldXpDrop
 
     private static float getRandomRotation()
     {
-        return (float) Math.random()*50 - 25;
+        return (float) ( Math.random()*worldXpDropsRotationCap*2 - worldXpDropsRotationCap );
     }
 
     public Vector3d getPos()

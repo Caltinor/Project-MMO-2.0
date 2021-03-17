@@ -10,7 +10,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.PlayerConnectedHandler;
-import harmonised.pmmo.events.WorldRenderHandler;
+import harmonised.pmmo.gui.WorldRenderHandler;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.party.Party;
@@ -20,6 +20,7 @@ import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -1806,6 +1807,7 @@ public class XP
 	public static void addWorldXpDrop(WorldXpDrop xpDrop, ServerPlayerEntity player )
 	{
 //        System.out.println( "xp drop added at " + xpDrop.getPos() );
+		if( Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
 		NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), player );
 	}
 
@@ -1818,7 +1820,6 @@ public class XP
 
 	public static void addWorldXpDropOffline( WorldXpDrop xpDrop )
 	{
-//        System.out.println( "remote xp drop added at " + xpDrop.getPos() );
-		WorldRenderHandler.xpDrops.add( xpDrop );
+		WorldRenderHandler.addWorldXpDropOffline( xpDrop );
 	}
 }

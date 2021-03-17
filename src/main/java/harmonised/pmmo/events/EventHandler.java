@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.util.Reference;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
@@ -14,7 +15,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber( modid = Reference.MOD_ID )
 public class EventHandler
 {
 
@@ -196,11 +197,5 @@ public class EventHandler
 	public static void cropGrow( BlockEvent.CropGrowEvent.Post event )
 	{
 		GrowHandler.handleCropGrow( event );
-	}
-
-	@SubscribeEvent
-	public static void worldRender( RenderWorldLastEvent event )
-	{
-		WorldRenderHandler.handleWorldRender( event );
 	}
 }

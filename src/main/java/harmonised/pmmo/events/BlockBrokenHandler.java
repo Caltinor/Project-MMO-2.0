@@ -508,7 +508,8 @@ public class BlockBrokenHandler
         for( String awardSkillName : award.keySet() )
         {
             double xp = award.get( awardSkillName ) / (gap + 1);
-            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos, 0.35, xp, awardSkillName );
+            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos, 0.25, xp, awardSkillName );
+            xpDrop.setDecaySpeed( 1.25 );
             XP.addWorldXpDrop( xpDrop, (ServerPlayerEntity) player );
             Skill.addXp( awardSkillName, (ServerPlayerEntity) player, award.get( awardSkillName ), awardMsg, false, false );
         }
