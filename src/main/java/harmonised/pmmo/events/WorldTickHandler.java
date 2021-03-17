@@ -13,8 +13,6 @@ import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropsBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -270,7 +268,7 @@ public class WorldTickHandler
         if( world == null )
             return true;
 
-        ResourceLocation dimensionKey = XP.getDimensionResLoc( world );
+        ResourceLocation dimensionKey = XP.getDimResLoc( world );
         if( dimensionKey == null )
             return true;
 

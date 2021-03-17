@@ -35,8 +35,8 @@ public class BreedHandler
 
             for( String awardSkillName : award.keySet() )
             {
-                WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.5, award.get( awardSkillName ), awardSkillName );
-                WorldRenderHandler.addWorldXpDrop( xpDrop );
+                WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( causedByPlayer.getServerWorld() ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.5, award.get( awardSkillName ), awardSkillName );
+                XP.addWorldXpDrop( xpDrop, causedByPlayer );
                 Skill.addXp( awardSkillName, causedByPlayer, award.get( awardSkillName ), "breeding " + regKey, false, false );
             }
         }

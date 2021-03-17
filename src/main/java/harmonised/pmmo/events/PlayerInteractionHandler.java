@@ -296,8 +296,8 @@ public class PlayerInteractionHandler
 
             if( award > 0 )
             {
-                WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.35, award, Skill.SMITHING.toString() );
-                WorldRenderHandler.addWorldXpDrop( xpDrop );
+                WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.35, award, Skill.SMITHING.toString() );
+                XP.addWorldXpDrop( xpDrop, (ServerPlayerEntity) player);
                 XP.awardXp( (ServerPlayerEntity) player, Skill.SMITHING.toString(), item.getRegistryName().toString(), award, false, false, false );
             }
 

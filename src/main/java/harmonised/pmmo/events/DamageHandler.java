@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
@@ -64,6 +65,7 @@ public class DamageHandler
             {
                 boolean isFallDamage = event.getSource().getDamageType().equals( "fall" );
                 ServerPlayerEntity player = (ServerPlayerEntity) target;
+                ServerWorld world = player.getServerWorld();
 //                int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
 //                damage -= agilityLevel / 50;
                 double agilityXp = 0;
@@ -125,15 +127,15 @@ public class DamageHandler
                         XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
                     if( enduranceXp > 0 )
                     {
-                        WorldXpDrop xpDrop = new WorldXpDrop( pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, enduranceXp, Skill.ENDURANCE.toString() );
-                        WorldRenderHandler.addWorldXpDrop( xpDrop );
+                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, enduranceXp, Skill.ENDURANCE.toString() );
+                        XP.addWorldXpDrop( xpDrop, player );
                     }
 
                     if( agilityXp > 0 )
                     {
-                        WorldXpDrop xpDrop = new WorldXpDrop( pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, agilityXp, Skill.AGILITY.toString() );
+                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, agilityXp, Skill.AGILITY.toString() );
                         xpDrop.setSize( 1.523f );
-                        WorldRenderHandler.addWorldXpDrop( xpDrop );
+                        XP.addWorldXpDrop( xpDrop, player );
                         XP.awardXp( player, Skill.AGILITY.toString(), "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
                     }
                 }
@@ -148,6 +150,7 @@ public class DamageHandler
 //					System.out.println( test.getValue() + " " + test.getBaseValue() );
 
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
+                ServerWorld world = player.getServerWorld();
 
                 if( XP.isHoldingDebugItemInOffhand( player ) )
                     player.sendStatusMessage( new StringTextComponent( target.getEntityString() ), false );
@@ -267,8 +270,8 @@ public class DamageHandler
                         amount *= lowHpBonus;
 
                     Vector3d xpDropPos = target.getPositionVec();
-                    WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY() + target.getHeight(), xpDropPos.getZ(), target.getHeight(), amount, skill );
-                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + target.getHeight(), xpDropPos.getZ(), target.getHeight(), amount, skill );
+                    XP.addWorldXpDrop( xpDrop, player );
                     XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
 
                     if( weaponGap > 0 )

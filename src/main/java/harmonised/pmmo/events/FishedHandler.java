@@ -163,11 +163,12 @@ public class FishedHandler
                 award += match.get( "xp" ) * count;
             }
 
+
             Vector3d bobPos = event.getHookEntity().getPositionVec();
             Vector3d xpDropPos = new Vector3d( bobPos.getX(), bobPos.getY() + 2, bobPos.getZ() );
-            WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos, 0.5, award, Skill.FISHING.toString() );
+            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( player.getServerWorld() ), xpDropPos, 0.5, award, Skill.FISHING.toString() );
             xpDrop.setDecaySpeed( 0.2 );
-            WorldRenderHandler.addWorldXpDrop( xpDrop );
+            XP.addWorldXpDrop( xpDrop, player );
             XP.awardXp( player, Skill.FISHING.toString(), "catching " + items, award, false, false, false );
         }
     }

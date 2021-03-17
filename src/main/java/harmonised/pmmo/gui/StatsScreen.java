@@ -237,7 +237,7 @@ public class StatsScreen extends Screen
             };
         }
 
-        map = XP.getDimensionBoosts( "" + XP.getDimensionResLoc( player.world ) );
+        map = XP.getDimensionBoosts( "" + XP.getDimResLoc( player.world ) );
         if( map.size() > 0 )
         {
             text.add( new TranslationTextComponent( "pmmo.dimension" ) );

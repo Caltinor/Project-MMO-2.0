@@ -73,10 +73,10 @@ public class AnvilRepairHandler
                     if( award > 0 )
                     {
                         Vector3d pos = player.getPositionVec();
-                        WorldXpDrop xpDrop = new WorldXpDrop( new Vector3d( pos.getX(), pos.getY() + player.getEyeHeight(), pos.getZ() ).add( player.getLookVec().mul( 1.523, 1.523, 1.523 ) ), 0.523, award, Skill.SMITHING.toString() );
+                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( player.getServerWorld() ), new Vector3d( pos.getX(), pos.getY() + player.getEyeHeight(), pos.getZ() ).add( player.getLookVec().mul( 1.523, 1.523, 1.523 ) ), 0.523, award, Skill.SMITHING.toString() );
                         xpDrop.setDecaySpeed( 0.25 );
                         xpDrop.setSize( 2 );
-                        WorldRenderHandler.addWorldXpDrop( xpDrop );
+                        XP.addWorldXpDrop( xpDrop, player );
                         NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraRepaired", "" + (int) repaired, "" + (int) ( repaired * bonusRepair ), true, 1 ), player );
                         XP.awardXp( player, Skill.SMITHING.toString(), "repairing an item by: " + repaired, award, false, false, false );
                     }

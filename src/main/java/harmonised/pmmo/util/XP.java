@@ -219,7 +219,7 @@ public class XP
 		return world.func_242406_i( pos ).get().getRegistryName();
 	}
 
-	public static ResourceLocation getDimensionResLoc( World world )
+	public static ResourceLocation getDimResLoc(World world )
 	{
 		return world.func_241828_r().func_230520_a_().getKey( world.getDimensionType() );
 	}
@@ -1022,7 +1022,7 @@ public class XP
 	{
 		try
 		{
-			String dimensionKey = XP.getDimensionResLoc( player.world ).toString();
+			String dimensionKey = XP.getDimResLoc( player.world ).toString();
 			return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill, 1D );
 		}
 		catch( Exception e )
@@ -1111,7 +1111,7 @@ public class XP
 	{
 		try
 		{
-			String dimensionKey = XP.getDimensionResLoc( player.world ).toString();
+			String dimensionKey = XP.getDimResLoc( player.world ).toString();
 			return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill, 0D );
 		}
 		catch( NullPointerException e )
@@ -1801,5 +1801,24 @@ public class XP
 	public static boolean isNightvisionUnlocked( PlayerEntity player )
 	{
 		return Skill.getLevel( Skill.SWIMMING.toString(), player ) >= Config.getConfig( "nightvisionUnlockLevel" );
+	}
+
+	public static void addWorldXpDrop(WorldXpDrop xpDrop, ServerPlayerEntity player )
+	{
+//        System.out.println( "xp drop added at " + xpDrop.getPos() );
+		NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), player );
+	}
+
+	public static void addWorldXpDrop( WorldXpDrop xpDrop, UUID uuid )
+	{
+		ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );
+		if( player != null )
+			addWorldXpDrop( xpDrop, player );
+	}
+
+	public static void addWorldXpDropOffline( WorldXpDrop xpDrop )
+	{
+//        System.out.println( "remote xp drop added at " + xpDrop.getPos() );
+		WorldRenderHandler.xpDrops.add( xpDrop );
 	}
 }

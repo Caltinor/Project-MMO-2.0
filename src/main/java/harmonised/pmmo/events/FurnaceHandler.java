@@ -4,7 +4,6 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -45,7 +44,7 @@ public class FurnaceHandler
             }
 
             source += " " + input.getItem().getRegistryName();
-            source += " [" + XP.getDimensionResLoc( world ).toString() + "|x" + pos.getX() + "|y" + pos.getY() + "|z" + pos.getZ() + "]";
+            source += " [" + XP.getDimResLoc( world ).toString() + "|x" + pos.getX() + "|y" + pos.getY() + "|z" + pos.getZ() + "]";
             UUID uuid = ChunkDataHandler.checkPos( world, pos );
 
             if( uuid != null )
@@ -69,9 +68,9 @@ public class FurnaceHandler
 
                 for( String awardSkillName : award.keySet() )
                 {
-                    WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.4, award.get( awardSkillName ), awardSkillName );
+                    WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.4, award.get( awardSkillName ), awardSkillName );
                     xpDrop.setDecaySpeed( 0.25 );
-                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    XP.addWorldXpDrop( xpDrop, uuid );
                     Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), source, false, false );
                 }
             }

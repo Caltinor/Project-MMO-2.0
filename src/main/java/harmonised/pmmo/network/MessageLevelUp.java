@@ -68,7 +68,7 @@ public class MessageLevelUp
                     if( Config.forgeConfig.levelUpFirework.get() && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
                         XP.spawnRocket( player.world, player.getPositionVec(), skill );
 
-                    LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skill + "! [" + XP.getDimensionResLoc( player.world ).toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
+                    LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skill + "! [" + XP.getDimResLoc( player.world ).toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
 
                     if( Config.forgeConfig.broadcastMilestone.get() )
                     {

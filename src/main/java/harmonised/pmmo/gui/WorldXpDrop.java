@@ -1,11 +1,14 @@
 package harmonised.pmmo.gui;
 
 import harmonised.pmmo.skills.Skill;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 
 public class WorldXpDrop
 {
+    private final ResourceLocation worldResLoc;
     private final Vector3d pos;
     private final String skill;
     private final int color;
@@ -15,34 +18,53 @@ public class WorldXpDrop
     private double decaySpeed = 1;
     public double xp;
 
-    public WorldXpDrop( double x, double y, double z, double maxOffsetFromMiddle, double xp, String skill )
+    public WorldXpDrop( ResourceLocation worldResLoc, double x, double y, double z, double maxOffsetFromMiddle, double xp, String skill )
     {
+        this.worldResLoc = worldResLoc;
         this.pos = new Vector3d( x + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, y + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, z + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle );
         this.startXp = xp;
         this.xp = xp;
         this.skill = skill;
         this.color = Skill.getSkillColor( skill );
-        this.rotation = (float) Math.random()*60 - 30;
+        this.rotation = getRandomRotation();
     }
 
-    public WorldXpDrop( Vector3d pos, double maxOffsetFromMiddle, double xp, String skill )
+    public WorldXpDrop( ResourceLocation worldResLoc, Vector3d pos, double maxOffsetFromMiddle, double xp, String skill )
     {
+        this.worldResLoc = worldResLoc;
         this.pos = maxOffsetFromMiddle == 0 ? pos : new Vector3d( pos.getX() + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, pos.getY() + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, pos.getZ() + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle );
         this.startXp = xp;
         this.xp = xp;
         this.skill = skill;
         this.color = Skill.getSkillColor( skill );
-        this.rotation = (float) Math.random()*60 - 30;
+        this.rotation = getRandomRotation();
     }
 
-    public WorldXpDrop( BlockPos pos, double maxOffsetFromMiddle, double xp, String skill )
+    public WorldXpDrop( ResourceLocation worldResLoc, Vector3d pos, double xp, String skill )
     {
+        this.worldResLoc = worldResLoc;
+        this.pos = pos;
+        this.startXp = xp;
+        this.xp = xp;
+        this.skill = skill;
+        this.color = Skill.getSkillColor( skill );
+        this.rotation = getRandomRotation();
+    }
+
+    public WorldXpDrop( ResourceLocation worldResLoc, BlockPos pos, double maxOffsetFromMiddle, double xp, String skill )
+    {
+        this.worldResLoc = worldResLoc;
         this.pos = new Vector3d( pos.getX() + 0.5 + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, pos.getY() + 0.5 + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, pos.getZ() + 0.5 + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle );
         this.startXp = xp;
         this.xp = xp;
         this.skill = skill;
         this.color = Skill.getSkillColor( skill );
-        this.rotation = (float) Math.random()*60 - 30;
+        this.rotation = getRandomRotation();
+    }
+
+    private static float getRandomRotation()
+    {
+        return (float) Math.random()*50 - 25;
     }
 
     public Vector3d getPos()
@@ -93,5 +115,10 @@ public class WorldXpDrop
     public void setDecaySpeed( double decaySpeed )
     {
         this.decaySpeed = decaySpeed;
+    }
+
+    public ResourceLocation getWorldResLoc()
+    {
+        return worldResLoc;
     }
 }

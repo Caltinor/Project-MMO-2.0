@@ -24,7 +24,7 @@ public class GrowHandler
     {
         World world = (World) event.getWorld();
         BlockPos pos = event.getPos();
-        ResourceLocation dimResLoc = XP.getDimensionResLoc( world );
+        ResourceLocation dimResLoc = XP.getDimResLoc( world );
         UUID uuid = ChunkDataHandler.checkPos( dimResLoc, pos );
         ChunkDataHandler.delPos( dimResLoc, pos );
 
@@ -37,9 +37,9 @@ public class GrowHandler
 
             for( String awardSkillName : award.keySet() )
             {
-                WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523*2, pos.getZ() + 0.5, 1.5, award.get( awardSkillName ), awardSkillName );
+                WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523*2, pos.getZ() + 0.5, 1.5, award.get( awardSkillName ), awardSkillName );
                 xpDrop.setDecaySpeed( 0.1 );
-                WorldRenderHandler.addWorldXpDrop( xpDrop );
+                XP.addWorldXpDrop( xpDrop, uuid );
                 Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), "Growing " + resLoc + " at " + pos, false, false );
             }
         }
@@ -120,9 +120,9 @@ public class GrowHandler
 
                 for( String awardSkillName : award.keySet() )
                 {
-                    WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.5, award.get( awardSkillName ), awardSkillName );
+                    WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.5, award.get( awardSkillName ), awardSkillName );
                     xpDrop.setDecaySpeed( 0.1 );
-                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    XP.addWorldXpDrop( xpDrop, uuid );
                     Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), "Growing " + resLoc + " at " + pos, false, false );
                 }
             }

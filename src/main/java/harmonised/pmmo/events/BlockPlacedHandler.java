@@ -18,7 +18,6 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
@@ -81,8 +80,8 @@ public class BlockPlacedHandler
 
                     for( String awardSkillName : award.keySet() )
                     {
-                        WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.35, award.get( awardSkillName ), awardSkillName );
-                        WorldRenderHandler.addWorldXpDrop( xpDrop );
+                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.35, award.get( awardSkillName ), awardSkillName );
+                        XP.addWorldXpDrop( xpDrop, player );
                         Skill.addXp( awardSkillName, player, award.get( awardSkillName ), sourceName, false, false );
                     }
 
@@ -109,7 +108,7 @@ public class BlockPlacedHandler
                     return true;
                 }
 
-                ChunkDataHandler.addPos( XP.getDimensionResLoc( world ), pos, player.getUniqueID() );
+                ChunkDataHandler.addPos( XP.getDimResLoc( world ), pos, player.getUniqueID() );
             }
         }
         return false;

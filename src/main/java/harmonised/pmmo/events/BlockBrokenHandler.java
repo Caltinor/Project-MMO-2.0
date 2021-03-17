@@ -7,7 +7,6 @@ import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.*;
-import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
@@ -26,7 +25,6 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -48,7 +46,7 @@ public class BlockBrokenHandler
         PlayerEntity player = event.getPlayer();
         if( !( player instanceof FakePlayer ) )
             processReq( event );
-        ChunkDataHandler.delPos( XP.getDimensionResLoc( (World) event.getWorld() ), event.getPos() );
+        ChunkDataHandler.delPos( XP.getDimResLoc( (World) event.getWorld() ), event.getPos() );
     }
 
     private static void processReq( BlockEvent.BreakEvent event )
@@ -76,7 +74,7 @@ public class BlockBrokenHandler
             if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
             {
                 processBroken( event );
-                ChunkDataHandler.delPos( XP.getDimensionResLoc( world ), event.getPos() );
+                ChunkDataHandler.delPos( XP.getDimResLoc( world ), event.getPos() );
             }
         }
         else
@@ -510,8 +508,8 @@ public class BlockBrokenHandler
         for( String awardSkillName : award.keySet() )
         {
             double xp = award.get( awardSkillName ) / (gap + 1);
-            WorldXpDrop xpDrop = new WorldXpDrop( pos, 0.35, xp, awardSkillName );
-            WorldRenderHandler.addWorldXpDrop( xpDrop );
+            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos, 0.35, xp, awardSkillName );
+            XP.addWorldXpDrop( xpDrop, (ServerPlayerEntity) player );
             Skill.addXp( awardSkillName, (ServerPlayerEntity) player, award.get( awardSkillName ), awardMsg, false, false );
         }
     }

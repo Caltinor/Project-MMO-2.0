@@ -31,9 +31,9 @@ public class TameHandler
             for( String awardSkillName : award.keySet() )
             {
                 Vector3d xpDropPos = event.getAnimal().getPositionVec();
-                WorldXpDrop xpDrop = new WorldXpDrop( xpDropPos.getX(), xpDropPos.getY() + event.getAnimal().getEyeHeight() + 0.523, xpDropPos.getZ(), 0.5, award.get( awardSkillName ), awardSkillName );
+                WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( tamer.getServerWorld() ), xpDropPos.getX(), xpDropPos.getY() + event.getAnimal().getEyeHeight() + 0.523, xpDropPos.getZ(), 0.5, award.get( awardSkillName ), awardSkillName );
                 xpDrop.setDecaySpeed( 0.35 );
-                WorldRenderHandler.addWorldXpDrop( xpDrop );
+                XP.addWorldXpDrop( xpDrop, tamer );
                 Skill.addXp( awardSkillName, tamer, award.get( awardSkillName ), "taming " + regKey, false, false );
             }
         }
