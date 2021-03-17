@@ -38,8 +38,6 @@ public class CheeseTracker
         }
 
         playersLastLookVecs.put( uuid, currLookVec );
-
-        System.out.println( getLazyMultiplier( uuid ) );
     }
 
     public static double getLazyMultiplier( UUID uuid )
