@@ -1,7 +1,10 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.gui.WorldXpDrop;
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -63,7 +66,14 @@ public class FurnaceHandler
 
                 Map<String, Double> award = XP.multiplyMapAnyDouble( XP.getXp( input.getItem().getRegistryName(), xpType ), 1 + totalExtraDrops );
 
-                XP.awardXpMap( uuid, award, source, true, false );
+
+                for( String awardSkillName : award.keySet() )
+                {
+                    WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.4, award.get( awardSkillName ), awardSkillName );
+                    xpDrop.setDecaySpeed( 0.25 );
+                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), source, false, false );
+                }
             }
         }
         catch( Exception e )

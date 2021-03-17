@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.MessageGrow;
 import harmonised.pmmo.network.NetworkHandler;
@@ -42,6 +43,8 @@ public class BlockPlacedHandler
             if ( XP.isPlayerSurvival( player ) )
             {
                 Block block = state.getBlock();
+                if( block.equals( Blocks.BEDROCK ) )
+                    Config.getAbilitiesMap( player ).put( "veinLeft", Config.forgeConfig.maxVeinCharge.get() );
 
                 if( block.equals( Blocks.WATER ) )
                 {
@@ -76,7 +79,12 @@ public class BlockPlacedHandler
                         }
                     }
 
-                    XP.awardXpMap( player.getUniqueID(), award, sourceName, false, false );
+                    for( String awardSkillName : award.keySet() )
+                    {
+                        WorldXpDrop xpDrop = new WorldXpDrop( pos.getX(), pos.getY() + 1.523, pos.getZ(), 0.5, award.get( awardSkillName ), awardSkillName );
+                        WorldRenderHandler.addWorldXpDrop( xpDrop );
+                        Skill.addXp( awardSkillName, player, award.get( awardSkillName ), sourceName, false, false );
+                    }
 
                     if (lastPosPlaced.containsKey(playerName))
                         lastPosPlaced.replace(playerUUID, pos);

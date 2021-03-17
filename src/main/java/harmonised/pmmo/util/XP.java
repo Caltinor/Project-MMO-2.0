@@ -10,6 +10,8 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.PlayerConnectedHandler;
+import harmonised.pmmo.events.WorldRenderHandler;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.party.Party;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
@@ -1281,7 +1283,7 @@ public class XP
 		}
 
 		NetworkHandler.sendToPlayer( new MessageXp( startXp, skill, amount, skip ), player );
-		if( !skip )
+		if( !skip && Config.forgeConfig.logXpGainedInDebugLog.get() )
 			LOGGER.debug( playerName + " +" + amount + "xp in: "  + skill + " for: " + sourceName + " total xp: " + Skill.getXp( skill, uuid ) );
 
 		if( startXp + amount >= maxXp && startXp < maxXp )

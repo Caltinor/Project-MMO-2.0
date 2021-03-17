@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
@@ -31,11 +32,16 @@ public class GrowHandler
         {
             ResourceLocation resLoc = event.getWorld().getBlockState( pos ).getBlock().getRegistryName();
             Map<String, Double> award = XP.getXp( resLoc, JType.XP_VALUE_GROW );
+            if( award.size() == 0 )
+                award.put( Skill.FARMING.toString(), Config.forgeConfig.defaultSaplingGrowXp.get() );
 
-            if( award.size() > 0 )
-                XP.awardXpMap( uuid, award, "Growing " + resLoc + " at " + pos, true, false );
-            else
-                Skill.addXp( Skill.FARMING.toString(), uuid, Config.forgeConfig.defaultSaplingGrowXp.get(), "Growing " + resLoc + " at " + pos, true, false );
+            for( String awardSkillName : award.keySet() )
+            {
+                WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523*2, pos.getZ() + 0.5, 1.5, award.get( awardSkillName ), awardSkillName );
+                xpDrop.setDecaySpeed( 0.1 );
+                WorldRenderHandler.addWorldXpDrop( xpDrop );
+                Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), "Growing " + resLoc + " at " + pos, false, false );
+            }
         }
     }
 
@@ -109,11 +115,16 @@ public class GrowHandler
             if( age != -1 && age == maxAge )
             {
                 Map<String, Double> award = XP.getXp( resLoc, JType.XP_VALUE_GROW );
+                if( award.size() == 0 )
+                    award.put( Skill.FARMING.toString(), Config.forgeConfig.defaultCropGrowXp.get() );
 
-                if( award.size() > 0 )
-                    XP.awardXpMap( uuid, award, "Growing " + block.getRegistryName() + " at " + pos, true, false );
-                else
-                    Skill.addXp( Skill.FARMING.toString(), uuid, Config.forgeConfig.defaultCropGrowXp.get(), "Growing " + block.getRegistryName() + " at " + pos, true, false );
+                for( String awardSkillName : award.keySet() )
+                {
+                    WorldXpDrop xpDrop = new WorldXpDrop( pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.5, award.get( awardSkillName ), awardSkillName );
+                    xpDrop.setDecaySpeed( 0.1 );
+                    WorldRenderHandler.addWorldXpDrop( xpDrop );
+                    Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), "Growing " + resLoc + " at " + pos, false, false );
+                }
             }
         }
     }

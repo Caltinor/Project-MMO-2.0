@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -195,5 +196,11 @@ public class EventHandler
 	public static void cropGrow( BlockEvent.CropGrowEvent.Post event )
 	{
 		GrowHandler.handleCropGrow( event );
+	}
+
+	@SubscribeEvent
+	public static void worldRender( RenderWorldLastEvent event )
+	{
+		WorldRenderHandler.handleWorldRender( event );
 	}
 }

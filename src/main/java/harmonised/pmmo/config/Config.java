@@ -117,6 +117,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> showWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> showPatreonWelcome;
         public ConfigHelper.ConfigValueListener<Boolean> scaleXpBoostByDurability;
+        public ConfigHelper.ConfigValueListener<Boolean> logXpGainedInDebugLog;
         public ConfigHelper.ConfigValueListener<Double> scaleXpBoostByDurabilityStart;
         public ConfigHelper.ConfigValueListener<Double> scaleXpBoostByDurabilityEnd;
 
@@ -407,6 +408,11 @@ public class Config
                         .comment( "Should Xp Boosts be scaled by the item Durability? (Max boost at Max durability, 50% at half Durability)" )
                         .translation( "pmmo.scaleXpBoostByDurability" )
                         .define( "scaleXpBoostByDurability", true ) );
+
+                this.logXpGainedInDebugLog = subscriber.subscribe(builder
+                        .comment( "Should Xp gains be logged in debug.log?" )
+                        .translation( "pmmo.logXpGainedInDebugLog" )
+                        .define( "logXpGainedInDebugLog", false ) );
 
                 this.scaleXpBoostByDurabilityStart = subscriber.subscribe(builder
                         .comment( "At what durability percentage should the xp bonus go away fully at and below? (25 means at 25% or below durability, there is no longer any xp boost)" )

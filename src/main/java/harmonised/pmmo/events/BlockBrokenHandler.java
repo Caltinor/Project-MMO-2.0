@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.*;
@@ -24,6 +25,7 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -503,9 +505,13 @@ public class BlockBrokenHandler
         if( gap > 0 )
             player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 
+        BlockPos pos = event.getPos();
         for( String awardSkillName : award.keySet() )
         {
-            XP.awardXp( (ServerPlayerEntity) player, awardSkillName, awardMsg, award.get( awardSkillName ) / (gap + 1), !awardSkillName.equals( skill ), false, false );
+            double xp = award.get( awardSkillName ) / (gap + 1);
+            WorldXpDrop xpDrop = new WorldXpDrop( pos, 0.35, xp, awardSkillName );
+            WorldRenderHandler.addWorldXpDrop( xpDrop );
+            Skill.addXp( awardSkillName, (ServerPlayerEntity) player, award.get( awardSkillName ), awardMsg, false, false );
         }
     }
 
