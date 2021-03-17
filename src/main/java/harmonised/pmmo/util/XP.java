@@ -16,6 +16,7 @@ import harmonised.pmmo.network.*;
 import harmonised.pmmo.party.Party;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
+import harmonised.pmmo.skills.CheeseTracker;
 import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
@@ -1177,6 +1178,7 @@ public class XP
 		multiplier *= dimensionMultiplier;
 		multiplier *= difficultyMultiplier;
 		multiplier *= additiveMultiplier;
+		multiplier *= CheeseTracker.getLazyMultiplier( player.getUniqueID() );
 
 		return Math.max( 0, multiplier );
 	}
@@ -1809,7 +1811,10 @@ public class XP
 	{
 //        System.out.println( "xp drop added at " + xpDrop.getPos() );
 		if( Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
+		{
+			xpDrop.startXp = xpDrop.startXp * XP.getMultiplier( player, xpDrop.getSkill() );
 			NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), player );
+		}
 	}
 
 	public static void addWorldXpDrop( WorldXpDrop xpDrop, UUID uuid )

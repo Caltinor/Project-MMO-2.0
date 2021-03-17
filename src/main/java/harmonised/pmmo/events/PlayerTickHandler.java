@@ -202,7 +202,7 @@ public class PlayerTickHandler
                     lastVeinAward.put( uuid, System.nanoTime() );
                 }
 
-                if( cheeseGap > 0.25 )
+                if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > Config.forgeConfig.cheeseCheckFrequency.get() )
                 {
                     CheeseTracker.trackCheese( (ServerPlayerEntity) player );
                     lastCheeseUpdate.put( uuid, System.nanoTime() );

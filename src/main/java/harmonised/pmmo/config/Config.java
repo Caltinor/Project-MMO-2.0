@@ -129,6 +129,15 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> partyFriendlyFireAmount;
         public ConfigHelper.ConfigValueListener<Boolean> autoLeavePartyOnDisconnect;
 
+        //Anti Cheese
+        public ConfigHelper.ConfigValueListener<Boolean> antiCheeseEnabled;
+        public ConfigHelper.ConfigValueListener<Integer> cheeseMaxStorage;
+        public ConfigHelper.ConfigValueListener<Integer> freeCheese;
+        public ConfigHelper.ConfigValueListener<Integer> activityCheeseReplenishSpeed;
+        public ConfigHelper.ConfigValueListener<Double> cheeseCheckFrequency;
+        public ConfigHelper.ConfigValueListener<Double> minimumCheeseXpMultiplier;
+        public ConfigHelper.ConfigValueListener<Double> sendPlayerCheeseWarningBelowMultiplier;
+
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> veinWoodTopToBottom;
@@ -335,8 +344,6 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> brewingXpEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> brewingEnabled;
 
-        //Flying
-
         //Swimming
         public ConfigHelper.ConfigValueListener<Integer> nightvisionUnlockLevel;
 
@@ -465,6 +472,46 @@ public class Config
                         .comment( "Should players leave their party if they disconnect?" )
                         .translation( "pmmo.autoLeavePartyOnDisconnect" )
                         .define( "autoLeavePartyOnDisconnect", false ) );
+
+                builder.pop();
+            }
+
+            builder.push( "Anti Cheese" );
+            {
+                this.antiCheeseEnabled = subscriber.subscribe(builder
+                        .comment( "Should player xp rates be reduced while they afk?" )
+                        .translation( "pmmo.antiCheeseEnabled" )
+                        .define( "antiCheeseEnabled", true ) );
+
+                this.cheeseMaxStorage = subscriber.subscribe(builder
+                        .comment( "How many points of Cheese is the maximum? (At maximum, the xp gain is at minimum, which is the minimumCheeseXpMultiplier value)" )
+                        .translation( "pmmo.cheeseMaxStorage" )
+                        .defineInRange( "cheeseMaxStorage", 120, 1, 1000000000 ) );
+
+                this.freeCheese = subscriber.subscribe(builder
+                        .comment( "How many points of Cheese do not contribute to the Cheese Xp Penalty? (This should always be lower than cheeseMaxStorage, otherwise it'd break.)" )
+                        .translation( "pmmo.freeCheese" )
+                        .defineInRange( "freeCheese", 20, 1, 1000000000 ) );
+
+                this.activityCheeseReplenishSpeed = subscriber.subscribe(builder
+                        .comment( "How many points of Cheese are reduced when the player is no longer afk? (10 means ten times as fast as gaining while afk)" )
+                        .translation( "pmmo.activityCheeseReplenishSpeed" )
+                        .defineInRange( "activityCheeseReplenishSpeed", 10, 1, 1000000000 ) );
+
+                this.cheeseCheckFrequency = subscriber.subscribe(builder
+                        .comment( "How often are Cheese Points Given/Taken? (5 means every 5 seconds)" )
+                        .translation( "pmmo.cheeseCheckFrequency" )
+                        .defineInRange( "cheeseCheckFrequency", 5D, 0.1, 1000000000 ) );
+
+                this.minimumCheeseXpMultiplier = subscriber.subscribe(builder
+                        .comment( "What is the minimum xp multiplier a player can reach by afking? (0.1 means 10% xp gained of what you'd gain while not afking at all)" )
+                        .translation( "pmmo.minimumCheeseXpMultiplier" )
+                        .defineInRange( "minimumCheeseXpMultiplier", 0.1D, 0, 1 ) );
+
+                this.sendPlayerCheeseWarningBelowMultiplier = subscriber.subscribe(builder
+                        .comment( "When the Cheese Multiplier falls below this value, the player will get a warning to stop afking every Cheese Check (If this value is 1, any penalty will be displayed. 0 means no warnings will be displayed)" )
+                        .translation( "pmmo.sendPlayerCheeseWarningBelowMultiplier" )
+                        .defineInRange( "sendPlayerCheeseWarningBelowMultiplier", 1D, 0, 1 ) );
 
                 builder.pop();
             }

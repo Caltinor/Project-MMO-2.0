@@ -370,5 +370,6 @@
 	"pmmo.biome": "Biome",
 	"pmmo.locked": "Locked",
 	"pmmo.unlocked": "Unlocked",
-	"pmmo.levelUpDamageBoost": "%1$s %2$s level up! %3$s Damage Bonus!"
+	"pmmo.levelUpDamageBoost": "%1$s %2$s level up! %3$s Damage Bonus!",
+	"pmmo.afkMultiplierWarning": "Due to being idle, your xp gain is reduced to %1$s%%"
 }
