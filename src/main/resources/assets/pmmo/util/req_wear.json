@@ -119,6 +119,42 @@
 	{
 		"crafting": 25
 	},
+	"createplus:goggle_chainmail_helmet":
+	{
+		"endurance": 20,
+		"crafting": 25
+	},
+	"createplus:goggle_diamond_helmet":
+	{
+		"endurance": 40,
+		"crafting": 25
+	},
+	"createplus:goggle_golden_helmet":
+	{
+		"endurance": 10,
+		"crafting": 25
+	},
+	"createplus:goggle_iron_helmet":
+	{
+		"endurance": 30,
+		"crafting": 25
+	},
+	"createplus:goggle_leather_helmet":
+	{
+		"endurance": 5,
+		"crafting": 25
+	},
+	"createplus:goggle_netherite_helmet":
+	{
+		"endurance": 60,
+		"crafting": 25
+	},
+	"createplus:goggle_turtle_helmet":
+	{
+		"swimming": 5,
+		"endurance": 15,
+		"crafting": 25
+	},
 	"doomweapon:astro_doom_boots":
 	{
 		"endurance": 80,

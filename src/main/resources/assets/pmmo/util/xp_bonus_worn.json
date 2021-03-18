@@ -1,4 +1,39 @@
 {
+	"create:extendo_grip":
+	{
+		"building": 10,
+		"combat": 10,
+		"mining": 10
+	},
+	"createplus:goggle_chainmail_helmet":
+	{
+		"combat": 5
+	},
+	"createplus:goggle_diamond_helmet":
+	{
+		"magic": 2.5
+	},
+	"createplus:goggle_golden_helmet":
+	{
+		"mining": 5,
+		"endurance": 5
+	},
+	"createplus:goggle_iron_helmet":
+	{
+		"smithing": 5
+	},
+	"createplus:goggle_leather_helmet":
+	{
+		"woodcutting": 2.5,
+		"agility": 2.5,
+		"farming": 2.5,
+		"fishing": 2.5
+	},
+	"createplus:goggle_turtle_helmet":
+	{
+		"swimming": 15,
+		"fishing": 7.5
+	},
 	"dungeons_gear:cave_crawler_chestplate":
 	{
 		"slayer": 5
