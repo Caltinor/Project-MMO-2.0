@@ -1807,7 +1807,7 @@ public class XP
 		return Skill.getLevel( Skill.SWIMMING.toString(), player ) >= Config.getConfig( "nightvisionUnlockLevel" );
 	}
 
-	public static void addWorldXpDrop(WorldXpDrop xpDrop, ServerPlayerEntity player )
+	public static void addWorldXpDrop( WorldXpDrop xpDrop, ServerPlayerEntity player )
 	{
 //        System.out.println( "xp drop added at " + xpDrop.getPos() );
 		if( Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )

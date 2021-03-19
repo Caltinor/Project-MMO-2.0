@@ -4,9 +4,13 @@ import harmonised.pmmo.ProjectMMOMod;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.NetworkDirection;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class NetworkHandler
 {
+	public static final Logger LOGGER = LogManager.getLogger();
+
 	public static void registerPackets()
 	{
 		int index = 0;
@@ -28,7 +32,14 @@ public class NetworkHandler
 
 	public static void sendToPlayer( MessageWorldXp packet, ServerPlayerEntity player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		try
+		{
+			ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		}
+		catch( Exception e )
+		{
+			LOGGER.error( e );
+		}
 	}
 
 	public static void sendToPlayer( MessageDoubleTranslation packet, ServerPlayerEntity player )

@@ -486,12 +486,12 @@ public class Config
                 this.cheeseMaxStorage = subscriber.subscribe(builder
                         .comment( "How many points of Cheese is the maximum? (At maximum, the xp gain is at minimum, which is the minimumCheeseXpMultiplier value)" )
                         .translation( "pmmo.cheeseMaxStorage" )
-                        .defineInRange( "cheeseMaxStorage", 120, 1, 1000000000 ) );
+                        .defineInRange( "cheeseMaxStorage", 200, 1, 1000000000 ) );
 
                 this.freeCheese = subscriber.subscribe(builder
                         .comment( "How many points of Cheese do not contribute to the Cheese Xp Penalty? (This should always be lower than cheeseMaxStorage, otherwise it'd break.)" )
                         .translation( "pmmo.freeCheese" )
-                        .defineInRange( "freeCheese", 20, 1, 1000000000 ) );
+                        .defineInRange( "freeCheese", 100, 1, 1000000000 ) );
 
                 this.activityCheeseReplenishSpeed = subscriber.subscribe(builder
                         .comment( "How many points of Cheese are reduced when the player is no longer afk? (10 means ten times as fast as gaining while afk)" )

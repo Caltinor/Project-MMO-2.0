@@ -71,7 +71,7 @@ public class WorldRenderHandler
             Vector3d xpDropPos = xpDrop.getPos();
             int color = xpDrop.getColor();
             String text = "+" + DP.dpSoft( xpDrop.xp );
-            if( Config.forgeConfig.worldXpDropsShowSkill.get() )
+            if( worldXpDropsShowSkill )
                 text += " " + xpDrop.getSkill();
             float textWidth = fr.getStringWidth( text );
             float textOffset = -textWidth/2;

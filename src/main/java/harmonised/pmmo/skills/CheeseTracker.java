@@ -31,7 +31,7 @@ public class CheeseTracker
             playersLookCheeseCount.put( uuid, Math.max( 0, lookVecCheese - Config.forgeConfig.activityCheeseReplenishSpeed.get() ) );
         else
         {
-            playersLookCheeseCount.put( uuid, Math.min( Config.forgeConfig.cheeseMaxStorage.get(), lookVecCheese + 1 ) );
+            playersLookCheeseCount.put( uuid, Math.min( Config.forgeConfig.cheeseMaxStorage.get(), Math.min( Config.forgeConfig.cheeseMaxStorage.get(), lookVecCheese + 1 ) ) );
             double lazyMultiplier = getLazyMultiplier( uuid );
             if( lazyMultiplier < Config.forgeConfig.sendPlayerCheeseWarningBelowMultiplier.get() )
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.afkMultiplierWarning", DP.dpSoft( lazyMultiplier * 100 ) ).setStyle(XP.getColorStyle( 0xff0000 ) ), true );
