@@ -7,6 +7,22 @@
 	{
 		"farming": 10
 	},
+	"ars_nouveau:blue_archwood_sapling":
+	{
+		"farming": 23.5
+	},
+	"ars_nouveau:green_archwood_sapling":
+	{
+		"farming": 21.5
+	},
+	"ars_nouveau:purple_archwood_sapling":
+	{
+		"farming": 26.5
+	},
+	"ars_nouveau:red_archwood_sapling":
+	{
+		"farming": 22.5
+	},
 	"ars_nouveau:mana_bloom_crop":
 	{
 		"farming": 14

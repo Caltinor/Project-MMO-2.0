@@ -145,6 +145,26 @@
 	{
 		"building": 25
 	},
+	"ars_nouveau:blue_archwood_sapling":
+	{
+		"farming": 30,
+		"woodcutting": 25
+	},
+	"ars_nouveau:green_archwood_sapling":
+	{
+		"farming": 25,
+		"woodcutting": 20
+	},
+	"ars_nouveau:purple_archwood_sapling":
+	{
+		"farming": 35,
+		"woodcutting": 30
+	},
+	"ars_nouveau:red_archwood_sapling":
+	{
+		"farming": 30,
+		"woodcutting": 20
+	},
 	"autumnity:maple_sapling":
 	{
 		"farming": 25,
@@ -232,8 +252,8 @@
 	},
 	"biomesoplenty:redwood_sapling":
 	{
-		"farming": 30,
-		"woodcutting": 60
+		"farming": 35,
+		"woodcutting": 25
 	},
 	"biomesoplenty:umbran_sapling":
 	{
@@ -258,6 +278,11 @@
 	"bountifulbaubles:water_candle":
 	{
 		"magic": 10
+	},
+	"byg:baobab_sapling":
+	{
+		"farming": 60,
+		"woodcutting": 50
 	},
 	"create:adjustable_crate":
 	{

@@ -1079,7 +1079,7 @@ public class Config
                 this.worldXpDropsRotationCap = subscriber.subscribe(builder
                         .comment( "How far (Max) should World Xp Drops be rotated (Degrees, either direction from flat)" )
                         .translation( "pmmo.worldXpDropsDecaySpeedMultiplier" )
-                        .defineInRange( "worldXpDropsDecaySpeedMultiplier", 25D, 0D, 180D ) );
+                        .defineInRange( "worldXpDropsDecaySpeedMultiplier", 1D, 0D, 180D ) );
 
                 builder.pop();
             }

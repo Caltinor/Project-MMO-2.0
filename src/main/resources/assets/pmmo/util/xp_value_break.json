@@ -87,10 +87,6 @@
 	{
 		"woodcutting": 7.25
 	},
-	"ars_nouveau:mana_bloom_crop":
-	{
-		"farming": 3
-	},
 	"ars_nouveau:purple_archwood_log":
 	{
 		"woodcutting": 7.615
@@ -106,6 +102,10 @@
 	"ars_nouveau:red_archwood_wood":
 	{
 		"woodcutting": 7.35
+	},
+	"ars_nouveau:mana_bloom_crop":
+	{
+		"farming": 3
 	},
 	"astralsorcery:aquamarine_sand_ore":
 	{
@@ -299,14 +299,6 @@
 	"bno:netheruranium_ore":
 	{
 		"mining": 22
-	},
-	"byg:holly_log":
-	{
-		"woodcutting": 8
-	},
-	"byg:zelkova_log":
-	{
-		"woodcutting": 9
 	},
 	"charm:nether_gold_deposit":
 	{
@@ -544,6 +536,10 @@
 	"minecraft:blue_orchid":
 	{
 		"farming": 20
+	},
+	"minecraft:bone_block":
+	{
+		"excavation": 15
 	},
 	"minecraft:bookshelf":
 	{

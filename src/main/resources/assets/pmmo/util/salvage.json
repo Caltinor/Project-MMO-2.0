@@ -21,6 +21,15 @@
 			"maxChance": 75,
 			"xpPerItem": 1,
 			"levelReq": 1
+		},
+		"minecraft:apple":
+		{
+			"salvageMax": 1,
+			"baseChance": 0,
+			"chancePerLevel": 0.2,
+			"maxChance": 5,
+			"xpPerItem": 1,
+			"levelReq": 1
 		}
 	},
 	"aiotbotania:livingrock_axe":
@@ -3717,6 +3726,15 @@
 			"maxChance": 90,
 			"xpPerItem": 3.5,
 			"levelReq": 30
+		},
+		"minecraft:nether_star":
+		{
+			"salvageMax": 1,
+			"baseChance": 10,
+			"chancePerLevel": 1,
+			"maxChance": 90,
+			"xpPerItem": 666,
+			"levelReq": 50
 		}
 	},
 	"minecraft:bedrock":
@@ -3848,7 +3866,7 @@
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"xpPerItem": 10,
-			"levelReq": 10
+			"levelReq": 30
 		}
 	},
 	"minecraft:chainmail_boots":
@@ -3956,7 +3974,16 @@
 			"chancePerLevel": 1,
 			"maxChance": 80,
 			"xpPerItem": 10,
-			"levelReq": 20
+			"levelReq": 15
+		},
+		"minecraft:iron_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 20,
+			"levelReq": 15
 		}
 	},
 	"minecraft:conduit":
@@ -4029,6 +4056,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 40
+		},
+		"minecraft:diamond":
+		{
+			"salvageMax": 3,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 76.15,
+			"levelReq": 40
 		}
 	},
 	"minecraft:diamond_boots":
@@ -4039,7 +4075,7 @@
 			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
-			"xpPerItem": 75,
+			"xpPerItem": 76.15,
 			"levelReq": 40
 		}
 	},
@@ -4051,7 +4087,7 @@
 			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
-			"xpPerItem": 75,
+			"xpPerItem": 76.15,
 			"levelReq": 40
 		}
 	},
@@ -4063,7 +4099,7 @@
 			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
-			"xpPerItem": 75,
+			"xpPerItem": 76.15,
 			"levelReq": 40
 		}
 	},
@@ -4077,6 +4113,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 40
+		},
+		"minecraft:diamond":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 76.15,
+			"levelReq": 40
 		}
 	},
 	"minecraft:diamond_horse_armor":
@@ -4087,7 +4132,7 @@
 			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
-			"xpPerItem": 75,
+			"xpPerItem": 76.15,
 			"levelReq": 40
 		}
 	},
@@ -4099,7 +4144,7 @@
 			"baseChance": 0.5,
 			"chancePerLevel": 0.5,
 			"maxChance": 80,
-			"xpPerItem": 75,
+			"xpPerItem": 76.15,
 			"levelReq": 40
 		}
 	},
@@ -4113,6 +4158,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 40
+		},
+		"minecraft:diamond":
+		{
+			"salvageMax": 3,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 76.15,
+			"levelReq": 40
 		}
 	},
 	"minecraft:diamond_shovel":
@@ -4125,6 +4179,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 40
+		},
+		"minecraft:diamond":
+		{
+			"salvageMax": 1,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 76.15,
+			"levelReq": 40
 		}
 	},
 	"minecraft:diamond_sword":
@@ -4136,6 +4199,15 @@
 			"chancePerLevel": 2,
 			"maxChance": 80,
 			"xpPerItem": 2.5,
+			"levelReq": 40
+		},
+		"minecraft:diamond":
+		{
+			"salvageMax": 2,
+			"baseChance": 35,
+			"chancePerLevel": 2,
+			"maxChance": 80,
+			"xpPerItem": 76.15,
 			"levelReq": 40
 		}
 	},
@@ -4341,6 +4413,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 30
+		},
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
 		}
 	},
 	"minecraft:golden_boots":
@@ -4401,6 +4482,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 30
+		},
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
 		}
 	},
 	"minecraft:golden_horse_armor":
@@ -4437,6 +4527,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 30
+		},
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
 		}
 	},
 	"minecraft:golden_shovel":
@@ -4449,6 +4548,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 30
+		},
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
 		}
 	},
 	"minecraft:golden_sword":
@@ -4460,6 +4568,15 @@
 			"chancePerLevel": 2,
 			"maxChance": 80,
 			"xpPerItem": 2.5,
+			"levelReq": 30
+		},
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 35,
 			"levelReq": 30
 		}
 	},
@@ -4533,6 +4650,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 30
+		},
+		"minecraft:iron_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 30
 		}
 	},
 	"minecraft:iron_boots":
@@ -4593,6 +4719,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 30
+		},
+		"minecraft:iron_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 30
 		}
 	},
 	"minecraft:iron_horse_armor":
@@ -4628,6 +4763,15 @@
 			"chancePerLevel": 2,
 			"maxChance": 80,
 			"xpPerItem": 2.5,
+			"levelReq": 5
+		},
+		"minecraft:iron_ingot":
+		{
+			"salvageMax": 3,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 10,
 			"levelReq": 30
 		}
 	},
@@ -4641,6 +4785,15 @@
 			"maxChance": 80,
 			"xpPerItem": 2.5,
 			"levelReq": 30
+		},
+		"minecraft:iron_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 30
 		}
 	},
 	"minecraft:iron_sword":
@@ -4652,6 +4805,15 @@
 			"chancePerLevel": 2,
 			"maxChance": 80,
 			"xpPerItem": 2.5,
+			"levelReq": 30
+		},
+		"minecraft:iron_ingot":
+		{
+			"salvageMax": 2,
+			"baseChance": 15,
+			"chancePerLevel": 1.25,
+			"maxChance": 80,
+			"xpPerItem": 10,
 			"levelReq": 30
 		}
 	},
