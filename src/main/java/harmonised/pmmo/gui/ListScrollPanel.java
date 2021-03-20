@@ -24,7 +24,7 @@ public class ListScrollPanel extends ScrollPanel
     JType jType;
     private final int boxWidth = 256;
     private final int boxHeight = 256;
-    private final ArrayList<ListButton> buttons;
+    private ArrayList<ListButton> buttons;
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
@@ -45,6 +45,11 @@ public class ListScrollPanel extends ScrollPanel
         this.bottom = height + this.top;
         this.right = width + this.left;
         this.barLeft = this.left + this.width - barWidth;
+    }
+
+    public void setButtons( ArrayList<ListButton> buttons )
+    {
+        this.buttons = buttons;
     }
 
     @Override
@@ -88,8 +93,10 @@ public class ListScrollPanel extends ScrollPanel
                         color = 0x54fc54;
                 }
 
-                if( jType.equals( JType.SKILLS ) || jType.equals( JType.HISCORE ) )
+                if( jType.equals( JType.HISCORE ) )
                     drawString( stack, Minecraft.getInstance().fontRenderer, (i+1) + ".", this.left + 178, button.y + 2, color );
+                else if( jType.equals( JType.SKILLS ) && i > 0 )
+                    drawString( stack, Minecraft.getInstance().fontRenderer, (i) + ".", this.left + 178, button.y + 2, color );
 
                 drawString( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, color );
 

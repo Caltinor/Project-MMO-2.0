@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -41,10 +42,14 @@ public class ListScreen extends Screen
     private int boxHeight = 256;
     private int x, y, scrollX, scrollY, buttonX, buttonY, accumulativeHeight, buttonsSize, buttonsLoaded, futureHeight, minCount, maxCount;
     private ListScrollPanel scrollPanel;
+    private TextFieldWidget filterTextField;
+    private String filterText = "";
+
     private final PlayerEntity player;
     private final JType jType;
     private final double baseXp = Config.getConfig( "baseXp" );
     private ArrayList<ListButton> listButtons = new ArrayList<>();
+    private ArrayList<ListButton> activeListButtons = new ArrayList<>();
     private UUID uuid;
     private ITextComponent title;
     private String type;
@@ -687,7 +692,10 @@ public class ListScreen extends Screen
                     double xp;
 
                     if( type.equals( "totalLevel" ) )
-                        button.text.add( new StringTextComponent( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( playerUUID ) ) ) );
+                    {
+                        button.text.add( new StringTextComponent( " " + XP.getTotalLevelFromMap( XP.getOfflineXpMap( playerUUID ) ) ) );
+                        button.text.add( new TranslationTextComponent( "pmmo.xpX", " " + XP.getTotalXpFromMap( XP.getOfflineXpMap( playerUUID ) ) ) );
+                    }
                     else
                     {
                         Map<String, Double> skillsMap;
@@ -815,8 +823,9 @@ public class ListScreen extends Screen
                 {
                     if( button.regKey.equals( "totalLevel" ) )
                     {
-                        button.title = " " + getTransComp( "pmmo.totalLevel" ).getString();
-                        button.text.add( new StringTextComponent( "" + XP.getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) ) ) );
+                        button.title = "" + getTransComp( "pmmo.totalLevel" ).getString();
+                        button.text.add( new StringTextComponent( " " + XP.getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) ) ) );
+                        button.text.add( new TranslationTextComponent( "pmmo.xpX", " " + XP.getTotalXpFromMap( XP.getOfflineXpMap( uuid ) ) ) );
                     }
                     else
                     {
@@ -982,11 +991,16 @@ public class ListScreen extends Screen
             }
                 break;
         }
+
         scrollPanel = new ListScrollPanel( Minecraft.getInstance(), boxWidth - 40, boxHeight - 21, scrollY, scrollX, jType, player, listButtons );
         if( !MainScreen.scrollAmounts.containsKey( jType ) )
             MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
+        filterTextField = new TextFieldWidget( font, x, y + boxHeight - 10, boxWidth, 16, new TranslationTextComponent( "" ) );
+        filterTextField.setText( filterText );
+        filterTextField.setFocused2( true );
+        children.add( filterTextField );
         addButton( exitButton );
     }
 
@@ -1107,7 +1121,8 @@ public class ListScreen extends Screen
         x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
         y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
 
-        scrollPanel.render( stack,  mouseX, mouseY, partialTicks );
+        scrollPanel.render( stack, mouseX, mouseY, partialTicks );
+        filterTextField.render( stack, mouseX, mouseY, partialTicks );
 
         accumulativeHeight = 0;
         buttonsSize = listButtons.size();
@@ -1178,6 +1193,54 @@ public class ListScreen extends Screen
     }
 
     @Override
+    public boolean keyPressed( int keyCode, int scanCode, int modifiers )
+    {
+        filterTextField.keyPressed( keyCode, scanCode, modifiers );
+        return super.keyPressed( keyCode, scanCode, modifiers );
+    }
+
+    @Override
+    public boolean keyReleased( int keyCode, int scanCode, int modifiers )
+    {
+        filterTextField.keyReleased( keyCode, scanCode, modifiers );
+        filterText = filterTextField.getText();
+        if( filterTextField.isFocused() )
+            updateListFilter();
+        return false;
+    }
+
+    @Override
+    public boolean charTyped( char codePoint, int modifiers )
+    {
+        filterTextField.charTyped( codePoint, modifiers );
+        return false;
+    }
+
+    public void updateListFilter()
+    {
+        activeListButtons = new ArrayList<>();
+
+        for( ListButton button : listButtons )
+        {
+            if( button.title.toLowerCase().contains( filterText.toLowerCase() ) )
+            {
+                activeListButtons.add( button );
+                continue;
+            }
+            for( ITextComponent textComp : button.text )
+            {
+                if( textComp.getString().toLowerCase().contains( filterText.trim().toLowerCase() ) )
+                {
+                    activeListButtons.add( button );
+                    break;
+                }
+            }
+        }
+
+        scrollPanel.setButtons( activeListButtons );
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
         if( button == 1 )
@@ -1197,7 +1260,8 @@ public class ListScreen extends Screen
             }
         }
         scrollPanel.mouseClicked( mouseX, mouseY, button );
-        return super.mouseClicked(mouseX, mouseY, button);
+        filterTextField.mouseClicked( mouseX, mouseY, button );
+        return super.mouseClicked( mouseX, mouseY, button );
     }
 
     @Override

@@ -1668,6 +1668,18 @@ public class XP
 		return sum;
 	}
 
+	public static <T> int getTotalXpFromMap( Map<T, Double> input )
+	{
+		int sum = 0;
+
+		for( double xp : input.values() )
+		{
+			sum += xp;
+		}
+
+		return sum;
+	}
+
 	public static Map<String, Double> getOfflineXpMap( UUID uuid )
 	{
 		if( !offlineXp.containsKey( uuid ) )
