@@ -252,8 +252,8 @@
 	},
 	"biomesoplenty:redwood_sapling":
 	{
-		"farming": 35,
-		"woodcutting": 25
+		"farming": 30,
+		"woodcutting": 40
 	},
 	"biomesoplenty:umbran_sapling":
 	{

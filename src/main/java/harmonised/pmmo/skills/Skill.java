@@ -80,13 +80,10 @@ public enum Skill
 
     public static void updateSkills()
     {
-        int color;
         for( Map.Entry<String, Map<String, Double>> entry : JsonConfig.data.getOrDefault( JType.SKILLS, new HashMap<>() ).entrySet() )
         {
-            color = 0xffffff;
             if( entry.getValue().containsKey( "color" ) )
-                color = (int) Math.floor( entry.getValue().get( "color" ) );
-            setSkill( entry.getKey(), color );
+                setSkill( entry.getKey(), (int) Math.floor( entry.getValue().get( "color" ) ) );
         }
         PmmoCommand.init();
     }

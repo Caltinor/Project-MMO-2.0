@@ -223,8 +223,12 @@ public class XP
 
 	public static ResourceLocation getDimResLoc( World world )
 	{
-		return world.getDimensionKey().getRegistryName();
-//		return world.func_241828_r().func_230520_a_().getKey( world.getDimensionType() );
+		return world.getDimensionKey().getLocation();
+//		ResourceLocation dimResLoc = world.getDimensionKey().getLocation();
+//		if( dimResLoc.toString().equals( "minecraft:dimension" ) )
+//			return world.func_241828_r().func_230520_a_().getKey( world.getDimensionType() );
+//		else
+//			return dimResLoc;
 	}
 
 	public static String getHarvestTool( BlockState state )
@@ -1167,18 +1171,20 @@ public class XP
 		double globalMultiplier = getGlobalMultiplier( skill );
 		double dimensionMultiplier = getDimensionMultiplier( skill, player );
 		double difficultyMultiplier = getDifficultyMultiplier( player, skill );
+
 		double globalBoost = getGlobalBoost( skill );
 		double itemBoost = getItemBoost( player, skill );
 		double biomeBoost = getBiomeBoosts( player ).getOrDefault( skill, 0D );
 		double dimensionBoost = getDimensionBoost( player, skill );
 		double playerBoost = PmmoSavedData.get().getPlayerXpBoost( player.getUniqueID(), skill );
+
 		double additiveMultiplier = 1 + (itemBoost + biomeBoost + dimensionBoost + globalBoost + playerBoost ) / 100;
 
 		multiplier *= globalMultiplier;
 		multiplier *= dimensionMultiplier;
 		multiplier *= difficultyMultiplier;
 		multiplier *= additiveMultiplier;
-		multiplier *= CheeseTracker.getLazyMultiplier( player.getUniqueID() );
+		multiplier *= CheeseTracker.getLazyMultiplier( player.getUniqueID(), skill );
 
 		return Math.max( 0, multiplier );
 	}
@@ -1822,10 +1828,15 @@ public class XP
 	public static void addWorldXpDrop( WorldXpDrop xpDrop, ServerPlayerEntity player )
 	{
 //        System.out.println( "xp drop added at " + xpDrop.getPos() );
+		xpDrop.startXp = xpDrop.startXp * XP.getMultiplier( player, xpDrop.getSkill() );
 		if( Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
-		{
-			xpDrop.startXp = xpDrop.startXp * XP.getMultiplier( player, xpDrop.getSkill() );
 			NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), player );
+		UUID uuid = player.getUniqueID();
+		for( ServerPlayerEntity otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers() )
+		{
+			double distance = Util.getDistance( xpDrop.getPos(), otherPlayer.getPositionVec() );
+			if ( distance < 64D && !uuid.equals( otherPlayer.getUniqueID() ) && Config.getPreferencesMap( otherPlayer ).getOrDefault( "showOthersWorldXpDrops", 0D ) != 0 )
+				NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), otherPlayer );
 		}
 	}
 

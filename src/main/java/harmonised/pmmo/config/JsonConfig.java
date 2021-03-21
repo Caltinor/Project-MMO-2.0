@@ -781,7 +781,6 @@ public class JsonConfig
 
     private static void updateDataSkill( Map<String, Map<String, Double>> input, Map<String, Map<String, Double>> output )
     {
-        String innerKey;
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
             if( !output.containsKey( element.getKey() ) )
@@ -789,11 +788,11 @@ public class JsonConfig
 
             for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
             {
-                innerKey = entry.getKey().toLowerCase();
-                if( innerKey.equals( "color" ) )
+//                innerKey = entry.getKey().toLowerCase();
+//                if( innerKey.equals( "color" ) )
                     output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
-                else
-                    LOGGER.debug( "Invalid property of skill " + element.getKey() + ": " + innerKey );
+//                else
+//                    LOGGER.debug( "Invalid property of skill " + element.getKey() + ": " + innerKey );
             }
         }
     }

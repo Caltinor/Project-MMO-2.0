@@ -1852,5 +1852,85 @@
 	"treemendous:netherite_lumber_axe":
 	{
 		"woodcutting": 25
+	},
+	"upgradednetherite:ender_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:ender_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:ender_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:feather_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:feather_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:feather_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:fire_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:fire_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:fire_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:gold_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:gold_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:gold_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:phantom_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:phantom_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:phantom_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:poison_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:water_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:water_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:water_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:wither_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
 	}
 }

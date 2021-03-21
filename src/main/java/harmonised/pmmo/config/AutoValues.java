@@ -137,26 +137,25 @@ public class AutoValues
     public static Map<String, Double> getToolReqFromStack( ItemStack itemStack )
     {
         Map<String, Double> reqTool = new HashMap<>();
-        Item item = itemStack.getItem();
         double speed, toolReq;
 
         ResourceLocation regKey = itemStack.getItem().getRegistryName();
         double toolReqOffset = regKey == null ? 0D : XP.getJsonMap( regKey.toString(), JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetTool", 0D );
 
         //Woodcutting
-        speed = item.getDestroySpeed( itemStack, Blocks.OAK_LOG.getDefaultState() );
+        speed = itemStack.getDestroySpeed( Blocks.OAK_LOG.getDefaultState() );
         toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleLog.get() + toolReqOffset ) );
         if( toolReq > 5 )
             reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
 
         //Mining
-        speed = item.getDestroySpeed( itemStack, Blocks.STONE.getDefaultState() );
+        speed = itemStack.getDestroySpeed( Blocks.STONE.getDefaultState() );
         toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleOre.get() + toolReqOffset ) );
         if( toolReq > 5 )
             reqTool.put( Skill.MINING.toString(), toolReq );
 
         //Excavation
-        speed = item.getDestroySpeed( itemStack, Blocks.DIRT.getDefaultState() );
+        speed = itemStack.getDestroySpeed( Blocks.DIRT.getDefaultState() );
         toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleDirt.get() + toolReqOffset ) );
         if( toolReq > 5 )
             reqTool.put( Skill.EXCAVATION.toString(), toolReq );

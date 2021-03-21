@@ -203,6 +203,7 @@ public class PlayerTickHandler
                 }
 
                 if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > Config.forgeConfig.cheeseCheckFrequency.get() )
+//                if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > 0.1 )
                 {
                     CheeseTracker.trackCheese( (ServerPlayerEntity) player );
                     lastCheeseUpdate.put( uuid, System.nanoTime() );

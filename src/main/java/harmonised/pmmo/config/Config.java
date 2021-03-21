@@ -105,6 +105,8 @@ public class Config
         localConfig.put( "minVeinHardness", forgeConfig.minVeinHardness.get() );
         localConfig.put( "maxVeinCharge", forgeConfig.maxVeinCharge.get() );
         localConfig.put( "veinMaxBlocks", (double) forgeConfig.veinMaxBlocks.get() );
+        localConfig.put( "toolSpeedVeinScale", forgeConfig.toolSpeedVeinScale.get() );
+
 
         localConfig.put( "dualSalvageSmithingLevelReq", (double) forgeConfig.dualSalvageSmithingLevelReq.get() );
 
@@ -151,6 +153,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> minVeinHardness;
         public ConfigHelper.ConfigValueListener<Double> maxVeinCharge;
         public ConfigHelper.ConfigValueListener<Double> exhaustionPerBlock;
+        public ConfigHelper.ConfigValueListener<Double> toolSpeedVeinScale;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessMining;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessWoodcutting;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessExcavation;
@@ -571,27 +574,27 @@ public class Config
                 this.levelsPerHardnessMining = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of blocks, which is 2.0 Obsidian, or 33.3 Coal Ore)" )
                         .translation( "pmmo.levelsPerHardnessMining" )
-                        .defineInRange( "levelsPerHardnessMining", 160D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessMining", 320D, 0.01, 10000) );
 
                 this.levelsPerHardnessWoodcutting = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of logs, which is 50 Logs)" )
                         .translation( "pmmo.levelsPerHardnessWoodcutting" )
-                        .defineInRange( "levelsPerHardnessWoodcutting", 160D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessWoodcutting", 240D, 0.01, 10000) );
 
                 this.levelsPerHardnessExcavation = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 320) * 320 = 50 hardness worth of ground, which is 100 Dirt)" )
                         .translation( "pmmo.levelsPerHardnessExcavation" )
-                        .defineInRange( "levelsPerHardnessExcavation", 320D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessExcavation", 240D, 0.01, 10000) );
 
                 this.levelsPerHardnessFarming = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? Plants have no hardness, but there is a minimum hardness while veining config in here, which is 0.5 by default, making it 200 plants at level 50 farming, with 320 charge, if this is set to 160" )
                         .translation( "pmmo.levelsPerHardnessFarming" )
-                        .defineInRange( "levelsPerHardnessFarming", 160D, 0.1, 10000) );
+                        .defineInRange( "levelsPerHardnessFarming", 240D, 0.1, 10000) );
 
                 this.levelsPerHardnessCrafting = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 80, your level is 50, and you have 320 charge, you can vein (50 / 80) * 320 = 200 hardness worth of Crafting Related (Such as wool, carpet, bed) blocks, which depends on how hard they are)" )
                         .translation( "pmmo.levelsPerHardnessCrafting" )
-                        .defineInRange( "levelsPerHardnessCrafting", 160D, 0.1, 10000) );
+                        .defineInRange( "levelsPerHardnessCrafting", 240D, 0.1, 10000) );
 
                 this.maxVeinCharge = subscriber.subscribe(builder
                         .comment( "How much vein charge can a player hold at max? (1 recharges every second)" )
@@ -602,6 +605,11 @@ public class Config
                         .comment( "How much hunger should be exhausted per block veined?" )
                         .translation( "pmmo.exhaustionPerBlock" )
                         .defineInRange( "exhaustionPerBlock", 0.2D, 0, 20) );
+
+                this.toolSpeedVeinScale = subscriber.subscribe(builder
+                        .comment( "Boost in veining ability dependant on your tool's speed (5 is fairly balanced, raising this number makes tools more powerful while veining)" )
+                        .translation( "pmmo.exhaustionPerBlock" )
+                        .defineInRange( "exhaustionPerBlock", 5D, 0.000000001, 1000000000) );
 
                 builder.pop();
             }

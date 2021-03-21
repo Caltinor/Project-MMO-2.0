@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -13,6 +14,7 @@ import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -83,7 +85,7 @@ public class WorldTickHandler
         if( event.world.getServer() == null )
             return;
 
-        if( event.world.getDimensionType().equals( DimensionType.OVERWORLD ) && ticksSinceAttributeRefresh++ >= 200 )
+        if( XP.getDimResLoc( event.world ).equals( DimensionType.OVERWORLD.getRegistryName() ) && ticksSinceAttributeRefresh++ >= 200 )
         {
             for ( ServerPlayerEntity player : event.world.getServer().getPlayerList().getPlayers())
             {
@@ -361,6 +363,9 @@ public class WorldTickHandler
 
 //        if( startHardness == 0 )
 //            hardness = 0;
+//        System.out.println( "Stone: " + player.getHeldItemMainhand().getDestroySpeed( Blocks.STONE.getDefaultState() ) );
+//        System.out.println( "Wood: " + player.getHeldItemMainhand().getDestroySpeed( Blocks.OAK_LOG.getDefaultState() ) );
+//        System.out.println( "Dirt: " + player.getHeldItemMainhand().getDestroySpeed( Blocks.DIRT.getDefaultState() ) );
 
         switch( skill )
         {
@@ -388,6 +393,10 @@ public class WorldTickHandler
                 cost = hardness;
                 break;
         }
+
+        double mainItemSpeed = player.getHeldItemMainhand().getDestroySpeed( state );
+        if( mainItemSpeed > 1 )
+            cost /= Math.max( 1, ( ( mainItemSpeed + 4 ) * ( 1 / Config.getConfig( "toolSpeedVeinScale" ) ) ) );
 
         if( cost < minVeinCost )
             cost = minVeinCost;

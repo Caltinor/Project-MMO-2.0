@@ -130,6 +130,7 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("showLevelUpUnlocks", "", "", 0, 1, prefsMap.getOrDefault( "showLevelUpUnlocks", 1D ), 1D, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("worldXpDropsEnabled", "", "", 0, 1, prefsMap.getOrDefault( "worldXpDropsEnabled", 1D ), 1D, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("worldXpDropsShowSkill", "", "", 0, 1, prefsMap.getOrDefault( "worldXpDropsShowSkill", 1D ), 1D, false, true, false, true ) );
+                prefsEntries.add( new PrefsEntry("showOthersWorldXpDrops", "", "", 0, 1, prefsMap.getOrDefault( "showOthersWorldXpDrops", 0D ), 0D, false, true, false, true ) );
                 break;
         }
 

@@ -3951,6 +3951,15 @@
 			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 20
+		},
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 4,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
 		}
 	},
 	"minecraft:cobblestone_wall":

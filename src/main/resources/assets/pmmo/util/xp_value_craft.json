@@ -1,4 +1,8 @@
 {
+	"#forge:storage_blocks":
+	{
+		"crafting": 0
+	},
 	"appliedenergistics2:16k_cell_component":
 	{
 		"crafting": 40,
@@ -2137,5 +2141,9 @@
 		"crafting": 20,
 		"magic": 30,
 		"combat": 15
+	},
+	"quark:bamboo_block":
+	{
+		"crafting": 0
 	}
 }

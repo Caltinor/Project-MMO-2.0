@@ -371,5 +371,6 @@
 	"pmmo.locked": "Locked",
 	"pmmo.unlocked": "Unlocked",
 	"pmmo.levelUpDamageBoost": "%1$s %2$s level up! %3$s Damage Bonus!",
-	"pmmo.afkMultiplierWarning": "Due to being idle, your xp gain is reduced to %1$s%%"
+	"pmmo.afkMultiplierWarning": "Due to being idle, your xp gain is reduced to %1$s%%",
+	"pmmo.afkMultiplierRestored": "Due to no longer being idle, Your xp gain is restored to %1$s%%"
 }
