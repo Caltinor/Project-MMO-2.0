@@ -46,7 +46,7 @@ public class JumpHandler
 
                     Vector3d xpDropPos = player.getPositionVec();
                     double award = Math.max( (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), 1 );
-                    WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( player.getEntityWorld() ), xpDropPos.getX(), xpDropPos.getY() + 0.523, xpDropPos.getZ(), 0.15, award, Skill.AGILITY.toString() );
+                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( player.getEntityWorld() ), xpDropPos.getX(), xpDropPos.getY() + 0.523, xpDropPos.getZ(), 0.15, award, Skill.AGILITY.toString() );
                     XP.addWorldXpDrop( xpDrop, (ServerPlayerEntity) player );
                     XP.awardXp( (ServerPlayerEntity) player, Skill.AGILITY.toString(), "jumping", award, true, false, false );
                 }

@@ -80,7 +80,7 @@ public class BlockPlacedHandler
 
                     for( String awardSkillName : award.keySet() )
                     {
-                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.35, award.get( awardSkillName ), awardSkillName );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.35, award.get( awardSkillName ), awardSkillName );
                         XP.addWorldXpDrop( xpDrop, player );
                         Skill.addXp( awardSkillName, player, award.get( awardSkillName ), sourceName, false, false );
                     }

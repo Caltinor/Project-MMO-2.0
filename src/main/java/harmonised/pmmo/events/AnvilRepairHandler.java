@@ -73,7 +73,7 @@ public class AnvilRepairHandler
                     if( award > 0 )
                     {
                         Vector3d pos = player.getPositionVec();
-                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( player.getServerWorld() ), new Vector3d( pos.getX(), pos.getY() + player.getEyeHeight(), pos.getZ() ).add( player.getLookVec().mul( 1.523, 1.523, 1.523 ) ), 0.523, award, Skill.SMITHING.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromVector( XP.getDimResLoc( player.getServerWorld() ), new Vector3d( pos.getX(), pos.getY() + player.getEyeHeight(), pos.getZ() ).add( player.getLookVec().mul( 1.523, 1.523, 1.523 ) ), 0.523, award, Skill.SMITHING.toString() );
                         xpDrop.setDecaySpeed( 0.25 );
                         xpDrop.setSize( 2 );
                         XP.addWorldXpDrop( xpDrop, player );

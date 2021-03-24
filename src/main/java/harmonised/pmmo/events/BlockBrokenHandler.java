@@ -3,8 +3,10 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
+import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
+import harmonised.pmmo.network.MessageWorldText;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.Util;
@@ -22,6 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -508,9 +511,50 @@ public class BlockBrokenHandler
         for( String awardSkillName : award.keySet() )
         {
             double xp = award.get( awardSkillName ) / (gap + 1);
-            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos, 0.25, xp, awardSkillName );
+
+            if( (int) ( Math.random() * 152369 ) == 0 )
+            {
+                for( int i = 0; i < 1000; i++ )
+                {
+                    WorldText worldText = WorldText.fromBlockPos( XP.getDimResLoc( world ), pos.east( (int) ( Math.random()*30 - 15 ) ).north( (int) ( Math.random()*30 - 15 ) ), pos.east( (int) ( Math.random()*60 - 30 ) ).north( (int) ( Math.random()*60 - 30 ) ).up( 25 ) );
+                    worldText.setMaxOffset( 0.25f );
+                    String text = "";
+                    switch( (int) ( Math.random() * 4 ) )
+                    {
+                        case 0:
+                            text = "owo";
+                            break;
+
+                        case 1:
+                            text = "OwO";
+                            break;
+
+                        case 2:
+                            text = "uwu";
+                            break;
+
+                        case 3:
+                            text = "UwU";
+                            break;
+                    }
+                    worldText.setText( text );
+                    worldText.setHueColor( true );
+                    worldText.setEndHue( 1080 );
+                    worldText.setStartSize( 0 );
+                    worldText.setEndSize( 50 );
+                    worldText.setSecondsLifespan( (float) ( 10 + Math.random() * 50 ) );
+                    worldText.setStartRot( (float) ( Math.random() * 360 - 180 ) );
+                    worldText.setEndRot( (float) ( Math.random() * 360 - 180 ) );
+                    XP.addWorldTextRadius( worldText, 128 );
+                }
+            }
+
+//            NetworkHandler.sendToPlayer( new MessageWorldText( new WorldText( XP.getDimResLoc( world ), Util.blockPosToVector( pos ), options ) ), (ServerPlayerEntity) player );
+
+            WorldXpDrop xpDrop = WorldXpDrop.fromBlockPos( XP.getDimResLoc( world ), pos, 0.25, xp, awardSkillName );
             xpDrop.setDecaySpeed( 1.25 );
             XP.addWorldXpDrop( xpDrop, (ServerPlayerEntity) player );
+
             Skill.addXp( awardSkillName, (ServerPlayerEntity) player, award.get( awardSkillName ), awardMsg, false, false );
         }
     }

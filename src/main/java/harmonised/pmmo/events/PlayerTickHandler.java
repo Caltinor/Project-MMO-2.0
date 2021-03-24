@@ -152,13 +152,13 @@ public class PlayerTickHandler
                     {
                         if( player.isInWater() && ( waterAbove || waterBelow ) )
                         {
-                            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
                             XP.addWorldXpDrop( xpDrop, serverPlayer );
                             XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming fast", swimAward * 1.25f, true, false, false );
                         }
                         else
                         {
-                            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + 0.523, xpDropPos.getZ(), 0.15, runAward, Skill.AGILITY.toString() );
+                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + 0.523, xpDropPos.getZ(), 0.15, runAward, Skill.AGILITY.toString() );
                             XP.addWorldXpDrop( xpDrop, serverPlayer );
                             XP.awardXp( serverPlayer, Skill.AGILITY.toString(), "running", runAward, true, false, false );
                         }
@@ -168,14 +168,14 @@ public class PlayerTickHandler
                     {
                         if( !player.isSprinting() )
                         {
-                            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
                             XP.addWorldXpDrop( xpDrop, serverPlayer );
                             XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming", swimAward, true, false, false );
                         }
                     }
                     else if( player.isElytraFlying() )
                     {
-                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, flyAward, Skill.FLYING.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, flyAward, Skill.FLYING.toString() );
                         XP.addWorldXpDrop( xpDrop, serverPlayer );
                         XP.awardXp( serverPlayer, Skill.FLYING.toString(), "flying", flyAward, true, false, false );
                     }
@@ -186,7 +186,7 @@ public class PlayerTickHandler
                         if( !player.isSprinting() )
                             award /= 10;
 
-                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
                         XP.addWorldXpDrop( xpDrop, serverPlayer );
                         XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming in a boat", award, true, false, false );
                     }

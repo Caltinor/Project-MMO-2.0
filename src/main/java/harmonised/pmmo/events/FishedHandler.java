@@ -86,6 +86,9 @@ public class FishedHandler
                     currentWeight += weight;
                 }
 
+                if( matchKey == null )
+                    return;
+
                 Item item = XP.getItem( matchKey );
 
                 minCount = (int) Math.floor( match.get( "minCount" ) );
@@ -166,7 +169,7 @@ public class FishedHandler
 
             Vector3d bobPos = event.getHookEntity().getPositionVec();
             Vector3d xpDropPos = new Vector3d( bobPos.getX(), bobPos.getY() + 2, bobPos.getZ() );
-            WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( player.getServerWorld() ), xpDropPos, 0.5, award, Skill.FISHING.toString() );
+            WorldXpDrop xpDrop = WorldXpDrop.fromVector( XP.getDimResLoc( player.getServerWorld() ), xpDropPos, 0.5, award, Skill.FISHING.toString() );
             xpDrop.setDecaySpeed( 0.2 );
             XP.addWorldXpDrop( xpDrop, player );
             XP.awardXp( player, Skill.FISHING.toString(), "catching " + items, award, false, false, false );

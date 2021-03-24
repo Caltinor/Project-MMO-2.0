@@ -610,14 +610,14 @@ public class XPOverlayGUI extends AbstractGui
 			maxXp = XP.xpAtLevel( maxLevel );
 
 		if( prefsMap.containsKey( "worldXpDropsSizeMultiplier" ) )
-			WorldRenderHandler.worldXpDropsSizeMultiplier = (float) ( 0f + prefsMap.get( "worldXpDropsSizeMultiplier" ) );
+			WorldText.worldXpDropsSizeMultiplier = (float) ( 0f + prefsMap.get( "worldXpDropsSizeMultiplier" ) );
 		else
-			WorldRenderHandler.worldXpDropsSizeMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get() );
+			WorldText.worldXpDropsSizeMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get() );
 
 		if( prefsMap.containsKey( "worldXpDropsDecaySpeedMultiplier" ) )
-			WorldRenderHandler.worldXpDropsDecaySpeedMultiplier = (float) ( 0f + prefsMap.get( "worldXpDropsDecaySpeedMultiplier" ) );
+			WorldText.worldXpDropsDecaySpeedMultiplier = (float) ( 0f + prefsMap.get( "worldXpDropsDecaySpeedMultiplier" ) );
 		else
-			WorldRenderHandler.worldXpDropsDecaySpeedMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get() );
+			WorldText.worldXpDropsDecaySpeedMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get() );
 
 		if( prefsMap.containsKey( "worldXpDropsRotationCap" ) )
 			WorldXpDrop.worldXpDropsRotationCap = (float) ( 0f + prefsMap.get( "worldXpDropsRotationCap" ) );
@@ -625,9 +625,9 @@ public class XPOverlayGUI extends AbstractGui
 			WorldXpDrop.worldXpDropsRotationCap = (float) ( 0f + Config.forgeConfig.worldXpDropsRotationCap.get() );
 
 		if( prefsMap.containsKey( "worldXpDropsShowSkill" ) )
-			WorldRenderHandler.worldXpDropsShowSkill = prefsMap.get("worldXpDropsShowSkill") != 0;
+			WorldText.worldXpDropsShowSkill = prefsMap.get("worldXpDropsShowSkill") != 0;
 		else
-			WorldRenderHandler.worldXpDropsShowSkill = Config.forgeConfig.worldXpDropsShowSkill.get();
+			WorldText.worldXpDropsShowSkill = Config.forgeConfig.worldXpDropsShowSkill.get();
 
 		if( prefsMap.containsKey( "xpDropsAttachedToBar" ) )
 			xpDropsAttachedToBar = prefsMap.get("xpDropsAttachedToBar") != 0;

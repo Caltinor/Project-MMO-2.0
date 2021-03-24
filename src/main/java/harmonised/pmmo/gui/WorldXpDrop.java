@@ -17,46 +17,43 @@ public class WorldXpDrop
     private final int color;
     private float rotation;
     private float size = 1;
-    private double decaySpeed = 1;
-    public double xp, startXp;
+    private float decaySpeed = 1;
+    public float xp, startXp;
 
-    public WorldXpDrop( ResourceLocation worldResLoc, double x, double y, double z, double maxOffsetFromMiddle, double xp, String skill )
+    public static WorldXpDrop fromXYZ( ResourceLocation worldResLoc, double x, double y, double z, double maxOffset, double xp, String skill )
     {
-        this.worldResLoc = worldResLoc;
-        this.pos = new Vector3d( x + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, y + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, z + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle );
-        this.startXp = xp;
-        this.xp = this.startXp;
-        this.skill = skill;
-        this.color = Skill.getSkillColor( skill );
-        this.rotation = getRandomRotation();
+        return fromXYZ( worldResLoc, x, y, z, maxOffset, (float) xp, skill );
     }
 
-    public WorldXpDrop( ResourceLocation worldResLoc, Vector3d pos, double maxOffsetFromMiddle, double xp, String skill )
+    public static WorldXpDrop fromXYZ( ResourceLocation worldResLoc, double x, double y, double z, double maxOffset, float xp, String skill )
     {
-        this.worldResLoc = worldResLoc;
-        this.pos = maxOffsetFromMiddle == 0 ? pos : new Vector3d( pos.getX() + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, pos.getY() + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, pos.getZ() + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle );
-        this.startXp = xp;
-        this.xp = this.startXp;
-        this.skill = skill;
-        this.color = Skill.getSkillColor( skill );
-        this.rotation = getRandomRotation();
+        return new WorldXpDrop( worldResLoc, new Vector3d( x + Math.random()*maxOffset*2 - maxOffset, y + Math.random()*maxOffset*2 - maxOffset, z + Math.random()*maxOffset*2 - maxOffset ), xp, skill );
     }
 
-    public WorldXpDrop( ResourceLocation worldResLoc, Vector3d pos, double xp, String skill )
+    public static WorldXpDrop fromVector( ResourceLocation worldResLoc, Vector3d pos, double maxOffset, double xp, String skill )
+    {
+        return fromVector( worldResLoc, pos, maxOffset, (float) xp, skill );
+    }
+
+    public static WorldXpDrop fromVector( ResourceLocation worldResLoc, Vector3d pos, double maxOffset, float xp, String skill )
+    {
+        return new WorldXpDrop( worldResLoc, maxOffset == 0 ? pos : new Vector3d( pos.getX() + Math.random()*maxOffset*2 - maxOffset, pos.getY() + Math.random()*maxOffset*2 - maxOffset, pos.getZ() + Math.random()*maxOffset*2 - maxOffset ), xp, skill );
+    }
+
+    public static WorldXpDrop fromBlockPos( ResourceLocation worldResLoc, BlockPos pos, double maxOffset, double xp, String skill )
+    {
+        return fromBlockPos( worldResLoc, pos, maxOffset, (float) xp, skill );
+    }
+
+    public static WorldXpDrop fromBlockPos( ResourceLocation worldResLoc, BlockPos pos, double maxOffset, float xp, String skill )
+    {
+        return new WorldXpDrop( worldResLoc, new Vector3d( pos.getX() + 0.5 + Math.random()*maxOffset*2 - maxOffset, pos.getY() + 0.5 + Math.random()*maxOffset*2 - maxOffset, pos.getZ() + 0.5 + Math.random()*maxOffset*2 - maxOffset ), xp, skill );
+    }
+
+    private WorldXpDrop( ResourceLocation worldResLoc, Vector3d pos, float xp, String skill )
     {
         this.worldResLoc = worldResLoc;
         this.pos = pos;
-        this.startXp = xp;
-        this.xp = this.startXp;
-        this.skill = skill;
-        this.color = Skill.getSkillColor( skill );
-        this.rotation = getRandomRotation();
-    }
-
-    public WorldXpDrop( ResourceLocation worldResLoc, BlockPos pos, double maxOffsetFromMiddle, double xp, String skill )
-    {
-        this.worldResLoc = worldResLoc;
-        this.pos = new Vector3d( pos.getX() + 0.5 + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, pos.getY() + 0.5 + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle, pos.getZ() + 0.5 + Math.random()*maxOffsetFromMiddle*2 - maxOffsetFromMiddle );
         this.startXp = xp;
         this.xp = this.startXp;
         this.skill = skill;
@@ -84,7 +81,7 @@ public class WorldXpDrop
         return color;
     }
 
-    public double getStartXp()
+    public float getStartXp()
     {
         return startXp;
     }
@@ -109,12 +106,17 @@ public class WorldXpDrop
         this.size = size;
     }
 
-    public double getDecaySpeed()
+    public float getDecaySpeed()
     {
         return decaySpeed;
     }
 
     public void setDecaySpeed( double decaySpeed )
+    {
+        this.decaySpeed = (float) decaySpeed;
+    }
+
+    public void setDecaySpeed( float decaySpeed )
     {
         this.decaySpeed = decaySpeed;
     }

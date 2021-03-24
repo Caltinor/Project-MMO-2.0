@@ -49,13 +49,23 @@ public class DP
 		return String.format( Locale.ENGLISH , "%." + decPlaces + "f", input );
 	}
 
-	public static String dpSoft( Double input )
+	public static String dpSoft( double input )
 	{
 		if( input % 1 == 0 )
-			return String.format( Locale.ENGLISH , "%.0f", input );
+			return String.format( Locale.ENGLISH, "%.0f", input );
 		if( (input * 10) % 1 == 0 )
-			return String.format( Locale.ENGLISH , "%.1f", input );
+			return String.format( Locale.ENGLISH, "%.1f", input );
 		else
-			return String.format( Locale.ENGLISH , "%.2f", input );
+			return String.format( Locale.ENGLISH, "%.2f", input );
+	}
+
+	public static String dpSoft( float input )
+	{
+		if( input % 1 == 0 )
+			return String.format( Locale.ENGLISH, "%.0f", input );
+		if( (input * 10) % 1 == 0 )
+			return String.format( Locale.ENGLISH, "%.1f", input );
+		else
+			return String.format( Locale.ENGLISH, "%.2f", input );
 	}
 }

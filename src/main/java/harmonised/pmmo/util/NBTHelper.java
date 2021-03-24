@@ -331,4 +331,47 @@ public class NBTHelper
             }
         }
     }
+
+    public static float getOrDefaultFromNBT( CompoundNBT nbt, String key, float defaultValue )
+    {
+        return nbt.contains( key ) ? nbt.getFloat( key ) : defaultValue;
+    }
+
+    public static double getOrDefaultFromNBT( CompoundNBT nbt, String key, double defaultValue )
+    {
+        try
+        {
+            return nbt.contains( key ) ? nbt.getDouble( key ) : defaultValue;
+        }
+        catch( Exception e )
+        {
+            System.out.println( e );
+            return defaultValue;
+        }
+    }
+
+    public static long getOrDefaultFromNBT( CompoundNBT nbt, String key, long defaultValue )
+    {
+        return nbt.contains( key ) ? nbt.getLong( key ) : defaultValue;
+    }
+
+    public static int getOrDefaultFromNBT( CompoundNBT nbt, String key, int defaultValue )
+    {
+        return nbt.contains( key ) ? nbt.getInt( key ) : defaultValue;
+    }
+
+    public static String getOrDefaultFromNBT( CompoundNBT nbt, String key, String defaultValue )
+    {
+        return nbt.contains( key ) ? nbt.getString( key ) : defaultValue;
+    }
+
+    public static boolean getOrDefaultFromNBT( CompoundNBT nbt, String key, boolean defaultValue )
+    {
+        return nbt.contains( key ) ? nbt.getBoolean( key ) : defaultValue;
+    }
+
+    public static byte getOrDefaultFromNBT( CompoundNBT nbt, String key, byte defaultValue )
+    {
+        return nbt.contains( key ) ? nbt.getByte( key ) : defaultValue;
+    }
 }

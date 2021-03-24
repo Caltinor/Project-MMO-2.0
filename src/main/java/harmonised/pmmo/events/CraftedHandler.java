@@ -55,7 +55,7 @@ public class CraftedHandler
 
                 for( String awardSkillName : award.keySet() )
                 {
-                    WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( player.getServerWorld() ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, award.get( awardSkillName ), awardSkillName );
+                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( player.getServerWorld() ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, award.get( awardSkillName ), awardSkillName );
                     XP.addWorldXpDrop( xpDrop, player );
                     Skill.addXp( awardSkillName, player, award.get( awardSkillName ), "crafting", false, false );
                 }

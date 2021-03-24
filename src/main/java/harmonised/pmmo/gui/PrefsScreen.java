@@ -117,7 +117,7 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("minXpGrow", "", "", 0.01, 100, prefsMap.getOrDefault( "minXpGrow", 1D ), 1D, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("worldXpDropsSizeMultiplier", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsSizeMultiplier", 1D ), 1D, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("worldXpDropsDecaySpeedMultiplier", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsDecaySpeedMultiplier", 1D ), 1D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("worldXpDropsRotationCap", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsRotationCap", 1D ), 25D, true, true, false, false ) );
+                prefsEntries.add( new PrefsEntry("worldXpDropsRotationCap", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsRotationCap", 25D ), 25D, true, true, false, false ) );
 
                 prefsEntries.add( new PrefsEntry("showSkillsListAtCorner", "", "", 0, 1, prefsMap.getOrDefault( "showSkillsListAtCorner", 1D ), 1D, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("showXpDrops", "", "", 0, 1, prefsMap.getOrDefault( "showXpDrops", 1D ), 1D, false, true, false, true ) );

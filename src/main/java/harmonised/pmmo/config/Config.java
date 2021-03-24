@@ -831,7 +831,7 @@ public class Config
                 this.maxLevel = subscriber.subscribe(builder
                         .comment( "What is the global max level" )
                         .translation( "pmmo.maxLevel" )
-                        .defineInRange( "maxLevel", 120, 1, 1000000) );
+                        .defineInRange( "maxLevel", 150, 1, 1000000) );
 
                 this.baseXp = subscriber.subscribe(builder
                         .comment( "What is the baseXp to reach level 2 ( baseXp + level * xpPerLevel )" )

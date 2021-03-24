@@ -54,7 +54,7 @@ public class BrewHandler
 
                 for( String awardSkillName : award.keySet() )
                 {
-                    WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.4, award.get( awardSkillName ), awardSkillName );
+                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.4, award.get( awardSkillName ), awardSkillName );
                     xpDrop.setDecaySpeed( 0.25 );
                     XP.addWorldXpDrop( xpDrop, uuid );
                     Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), "brewing", false, false );

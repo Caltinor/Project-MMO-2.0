@@ -127,13 +127,13 @@ public class DamageHandler
                         XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
                     if( enduranceXp > 0 )
                     {
-                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, enduranceXp, Skill.ENDURANCE.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, enduranceXp, Skill.ENDURANCE.toString() );
                         XP.addWorldXpDrop( xpDrop, player );
                     }
 
                     if( agilityXp > 0 )
                     {
-                        WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, agilityXp, Skill.AGILITY.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, agilityXp, Skill.AGILITY.toString() );
                         xpDrop.setSize( 1.523f );
                         XP.addWorldXpDrop( xpDrop, player );
                         XP.awardXp( player, Skill.AGILITY.toString(), "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
@@ -270,7 +270,7 @@ public class DamageHandler
                         amount *= lowHpBonus;
 
                     Vector3d xpDropPos = target.getPositionVec();
-                    WorldXpDrop xpDrop = new WorldXpDrop( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + target.getHeight(), xpDropPos.getZ(), target.getHeight(), amount, skill );
+                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + target.getHeight(), xpDropPos.getZ(), target.getHeight(), amount, skill );
                     XP.addWorldXpDrop( xpDrop, player );
                     XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
 

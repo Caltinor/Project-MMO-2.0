@@ -11,6 +11,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.PlayerConnectedHandler;
 import harmonised.pmmo.gui.WorldRenderHandler;
+import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.party.Party;
@@ -78,6 +79,7 @@ public class XP
 	public static void initValues()
 	{
 ////////////////////////////////////Style//////////////////////////////////////////////
+		WorldText.init();
 		textStyle.put( "red", 			Style.EMPTY.applyFormatting( TextFormatting.RED ) );
 		textStyle.put( "green", 		Style.EMPTY.applyFormatting( TextFormatting.GREEN ) );
 		textStyle.put( "dark_green", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_GREEN ) );
@@ -1828,7 +1830,7 @@ public class XP
 	public static void addWorldXpDrop( WorldXpDrop xpDrop, ServerPlayerEntity player )
 	{
 //        System.out.println( "xp drop added at " + xpDrop.getPos() );
-		xpDrop.startXp = xpDrop.startXp * XP.getMultiplier( player, xpDrop.getSkill() );
+		xpDrop.startXp = xpDrop.startXp * (float) XP.getMultiplier( player, xpDrop.getSkill() );
 		if( Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
 			NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), player );
 		UUID uuid = player.getUniqueID();
@@ -1850,5 +1852,34 @@ public class XP
 	public static void addWorldXpDropOffline( WorldXpDrop xpDrop )
 	{
 		WorldRenderHandler.addWorldXpDropOffline( xpDrop );
+	}
+
+	public static void addWorldText( WorldText worldText, UUID uuid )
+	{
+		ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );
+		if( player != null )
+			addWorldText( worldText, player );
+	}
+
+	public static void addWorldTextRadius( WorldText worldText, double radius )
+	{
+		worldText.updatePos();
+		for( ServerPlayerEntity otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers() )
+		{
+			double distance = Util.getDistance( worldText.getPos(), otherPlayer.getPositionVec() );
+			if ( distance < radius )
+				NetworkHandler.sendToPlayer( new MessageWorldText( worldText ), otherPlayer );
+		}
+	}
+
+	public static void addWorldText( WorldText worldText, ServerPlayerEntity player )
+	{
+		worldText.updatePos();
+		NetworkHandler.sendToPlayer( new MessageWorldText( worldText ), player );
+	}
+
+	public static void addWorldTextOffline( WorldText worldText )
+	{
+		WorldRenderHandler.addWorldTextOffline( worldText );
 	}
 }

@@ -15,10 +15,10 @@ public class MessageWorldXp
     private ResourceLocation worldResLoc;
     private Vector3d pos;
     private String skill;
-    private double startXp;
+    private float startXp;
     private float rotation;
     private float size = 1;
-    private double decaySpeed = 1;
+    private float decaySpeed = 1;
     
     public MessageWorldXp( WorldXpDrop xpDrop )
     {
@@ -39,11 +39,12 @@ public class MessageWorldXp
     public static MessageWorldXp decode( PacketBuffer buf )
     {
         MessageWorldXp packet = new MessageWorldXp();
+
         packet.worldResLoc = XP.getResLoc( buf.readString() );
         packet.pos = new Vector3d( buf.readDouble(), buf.readDouble(), buf.readDouble() );
         packet.skill = buf.readString();
-        packet.startXp = buf.readDouble();
-        packet.decaySpeed = buf.readDouble();
+        packet.startXp = buf.readFloat();
+        packet.decaySpeed = buf.readFloat();
         packet.rotation = buf.readFloat();
         packet.size = buf.readFloat();
 
@@ -59,8 +60,8 @@ public class MessageWorldXp
         buf.writeDouble( packet.pos.getZ() );
 
         buf.writeString( packet.skill );
-        buf.writeDouble( packet.startXp );
-        buf.writeDouble( packet.decaySpeed );
+        buf.writeFloat( packet.startXp );
+        buf.writeFloat( packet.decaySpeed );
         buf.writeFloat( packet.rotation );
         buf.writeFloat( packet.size );
 
@@ -70,7 +71,7 @@ public class MessageWorldXp
     {
         ctx.get().enqueueWork(() ->
         {
-            WorldXpDrop xpDrop = new WorldXpDrop( packet.worldResLoc, packet.pos, packet.startXp, packet.skill );
+            WorldXpDrop xpDrop = WorldXpDrop.fromVector( packet.worldResLoc, packet.pos, 0, packet.startXp, packet.skill );
             xpDrop.setSize( packet.size );
             xpDrop.setDecaySpeed( packet.decaySpeed );
             xpDrop.setRotation( packet.rotation );
