@@ -82,12 +82,12 @@ public class Config
         localConfig.put( "maxExtraHeartBoost", (double) forgeConfig.maxExtraHeartBoost.get() );
         localConfig.put( "maxExtraReachBoost", forgeConfig.maxExtraReachBoost.get() );
 
-        localConfig.put( "levelsPerDamageMelee", forgeConfig.levelsPerDamageMelee.get() );
-        localConfig.put( "maxExtraDamageBoostMelee", forgeConfig.maxExtraDamageBoostMelee.get() );
-        localConfig.put( "levelsPerDamageArchery", forgeConfig.levelsPerDamageArchery.get() );
-        localConfig.put( "maxExtraDamageBoostArchery", forgeConfig.maxExtraDamageBoostArchery.get() );
-        localConfig.put( "levelsPerDamageMagic", forgeConfig.levelsPerDamageMagic.get() );
-        localConfig.put( "maxExtraDamageBoostMagic", forgeConfig.maxExtraDamageBoostMagic.get() );
+        localConfig.put( "damageBonusPercentPerLevelMelee", forgeConfig.damageBonusPercentPerLevelMelee.get() );
+        localConfig.put( "maxExtraDamagePercentageBoostMelee", forgeConfig.maxExtraDamagePercentageBoostMelee.get() );
+        localConfig.put( "damageBonusPercentPerLevelArchery", forgeConfig.damageBonusPercentPerLevelArchery.get() );
+        localConfig.put( "maxExtraDamagePercentageBoostArchery", forgeConfig.maxExtraDamagePercentageBoostArchery.get() );
+        localConfig.put( "damageBonusPercentPerLevelMagic", forgeConfig.damageBonusPercentPerLevelMagic.get() );
+        localConfig.put( "maxExtraDamagePercentageBoostMagic", forgeConfig.maxExtraDamagePercentageBoostMagic.get() );
 
         localConfig.put( "mobHPBoostPerPowerLevel", forgeConfig.mobHPBoostPerPowerLevel.get() );
         localConfig.put( "maxMobHPBoost", forgeConfig.maxMobHPBoost.get() );
@@ -307,15 +307,17 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> maxEndurance;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHeart;
         public ConfigHelper.ConfigValueListener<Integer> maxExtraHeartBoost;
+        public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBase;
+        public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBoostPerLevel;
 
         //Combat
-        public ConfigHelper.ConfigValueListener<Double> levelsPerDamageMelee;
-        public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoostMelee;
-        public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoostArchery;
-        public ConfigHelper.ConfigValueListener<Double> maxExtraDamageBoostMagic;
+        public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMelee;
+        public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostMelee;
+        public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostArchery;
+        public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostMagic;
 
         //Archery
-        public ConfigHelper.ConfigValueListener<Double> levelsPerDamageArchery;
+        public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelArchery;
 
         //Smithing
         public ConfigHelper.ConfigValueListener<Boolean> anvilHandlingEnabled;
@@ -361,7 +363,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> defaultCraftingXp;
 
         //Magic
-        public ConfigHelper.ConfigValueListener<Double> levelsPerDamageMagic;
+        public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMagic;
 
         //Slayer
         public ConfigHelper.ConfigValueListener<Double> passiveMobHunterXp;
@@ -608,8 +610,8 @@ public class Config
 
                 this.toolSpeedVeinScale = subscriber.subscribe(builder
                         .comment( "Boost in veining ability dependant on your tool's speed (5 is fairly balanced, raising this number makes tools more powerful while veining)" )
-                        .translation( "pmmo.exhaustionPerBlock" )
-                        .defineInRange( "exhaustionPerBlock", 5D, 0.000000001, 1000000000) );
+                        .translation( "pmmo.toolSpeedVeinScale" )
+                        .defineInRange( "toolSpeedVeinScale", 5D, 0.000000001, 1000000000) );
 
                 builder.pop();
             }
@@ -1263,35 +1265,46 @@ public class Config
                         .translation( "pmmo.maxExtraHeartBoost" )
                         .defineInRange( "maxExtraHeartBoost", 100, 0, 1000000000) );
 
+                this.hpRegenPerMinuteBase = subscriber.subscribe(builder
+                        .comment( "How many half hearts regenerate per minute at level 0 Endurance (at 1, and at level 0 Endurance, you regenerate half a heart every 60 seconds)" )
+                        .translation( "pmmo.hpRegenPerMinuteBase" )
+                        .defineInRange( "hpRegenPerMinuteBase", 1D, 0.001, 1000 ) );
+
+                this.hpRegenPerMinuteBoostPerLevel = subscriber.subscribe(builder
+                        .comment( "Addition per level to hpRegenPerMinuteBase (if set to 0.01, every 100 Endurance levels, you regen 1 more half heart per 60 seconds)" )
+                        .translation( "pmmo.hpRegenPerMinuteBoostPerLevel" )
+                        .defineInRange( "hpRegenPerMinuteBoostPerLevel", 0.02D, 0.00001, 1000 ) );
+
+
                 builder.pop();
             }
 
             builder.push( "Combat" );
             {
-                this.levelsPerDamageMelee = subscriber.subscribe(builder
-                        .comment( "Per how many levels you gain 1 Extra Damage from Combat" )
-                        .translation( "pmmo.levelsPerDamageMelee" )
-                        .defineInRange( "levelsPerDamageMelee", 20D, 1, 1000000000) );
+                this.damageBonusPercentPerLevelMelee = subscriber.subscribe(builder
+                        .comment( "How much percentage bonus damage do you get per Combat level in Melee?" )
+                        .translation( "pmmo.damageBonusPercentPerLevelMelee" )
+                        .defineInRange( "damageBonusPercentPerLevelMelee", 0.005D, 0.001, 1000) );
 
-                this.maxExtraDamageBoostMelee = subscriber.subscribe(builder
+                this.maxExtraDamagePercentageBoostMelee = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
-                        .translation( "pmmo.maxExtraDamageBoostMelee" )
-                        .defineInRange( "maxExtraDamageBoostMelee", 100D, 0, 1000000000) );
+                        .translation( "pmmo.maxExtraDamagePercentageBoostMelee" )
+                        .defineInRange( "maxExtraDamagePercentageBoostMelee", 100D, 0, 1000000000) );
 
                 builder.pop();
             }
 
             builder.push( "Archery" );
             {
-                this.levelsPerDamageArchery = subscriber.subscribe(builder
-                        .comment( "Per how many levels you gain 1 Extra Damage from Archery" )
-                        .translation( "pmmo.levelsPerDamageArchery" )
-                        .defineInRange( "levelsPerDamageArchery", 20D, 1, 1000000000) );
+                this.damageBonusPercentPerLevelArchery = subscriber.subscribe(builder
+                        .comment( "How much percentage bonus damage do you get per Archery level in Archery?" )
+                        .translation( "pmmo.damageBonusPercentPerLevelArchery" )
+                        .defineInRange( "damageBonusPercentPerLevelArchery", 0.005D, 0.001, 1000) );
 
-                this.maxExtraDamageBoostArchery = subscriber.subscribe(builder
+                this.maxExtraDamagePercentageBoostArchery = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Archery skill max?" )
-                        .translation( "pmmo.maxExtraDamageBoostArchery" )
-                        .defineInRange( "maxExtraDamageBoostArchery", 100D, 0, 1000000000) );
+                        .translation( "pmmo.maxExtraDamagePercentageBoostArchery" )
+                        .defineInRange( "maxExtraDamagePercentageBoostArchery", 100D, 0, 1000000000) );
 
                 builder.pop();
             }
@@ -1474,15 +1487,15 @@ public class Config
 
             builder.push( "Magic" );
             {
-                this.levelsPerDamageMagic = subscriber.subscribe(builder
-                        .comment( "Per how many levels you gain 1 Extra Damage from Magic" )
-                        .translation( "pmmo.levelsPerDamageMagic" )
-                        .defineInRange( "levelsPerDamageMagic", 20D, 1, 1000000000) );
+                this.damageBonusPercentPerLevelMagic = subscriber.subscribe(builder
+                        .comment( "How much percentage bonus damage do you get per Magic level in Magic?" )
+                        .translation( "pmmo.damageBonusPercentPerLevelMagic" )
+                        .defineInRange( "damageBonusPercentPerLevelMagic", 0.005D, 0.001, 1000) );
 
-                this.maxExtraDamageBoostMagic = subscriber.subscribe(builder
+                this.maxExtraDamagePercentageBoostMagic = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Magic skill max?" )
-                        .translation( "pmmo.maxExtraDamageBoostMagic" )
-                        .defineInRange( "maxExtraDamageBoostMagic", 100D, 0, 1000000000) );
+                        .translation( "pmmo.maxExtraDamagePercentageBoostMagic" )
+                        .defineInRange( "maxExtraDamagePercentageBoostMagic", 100D, 0, 1000000000) );
 
                 builder.pop();
             }

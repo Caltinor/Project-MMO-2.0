@@ -35,6 +35,7 @@ public class PlayerTickHandler
     private final static Map<UUID, Long> lastAward = new HashMap<>();
     private final static Map<UUID, Long> lastVeinAward = new HashMap<>();
     private final static Map<UUID, Long> lastCheeseUpdate = new HashMap<>();
+    private final static Map<UUID, Long> hpRegen = new HashMap<>();
     public static boolean syncPrefs = false;
     private static int ticksSinceAttributeRefresh = 0;
 
@@ -66,10 +67,13 @@ public class PlayerTickHandler
                 lastVeinAward.put( uuid, System.nanoTime() );
             if( !lastCheeseUpdate.containsKey( uuid ) )
                 lastCheeseUpdate.put( uuid, System.nanoTime() );
+            if( !hpRegen.containsKey( uuid ) )
+                hpRegen.put( uuid, System.nanoTime() );
 
-            double gap          = ( (System.nanoTime() - lastAward.get( uuid            ) ) / 1000000000D );
-            double veinGap      = ( (System.nanoTime() - lastVeinAward.get( uuid        ) ) / 1000000000D );
-            double cheeseGap    = ( (System.nanoTime() - lastCheeseUpdate.get( uuid     ) ) / 1000000000D );
+            double gap          = ( ( System.nanoTime() - lastAward.get         ( uuid ) ) / 1000000000D );
+            double veinGap      = ( ( System.nanoTime() - lastVeinAward.get     ( uuid ) ) / 1000000000D );
+            double cheeseGap    = ( ( System.nanoTime() - lastCheeseUpdate.get  ( uuid ) ) / 1000000000D );
+            double hpRegenGap   = ( ( System.nanoTime() - hpRegen.get           ( uuid ) ) / 1000000000D );
 
             if( gap > 0.5 )
             {
@@ -200,13 +204,19 @@ public class PlayerTickHandler
                 {
                     WorldTickHandler.updateVein( player, veinGap );
                     lastVeinAward.put( uuid, System.nanoTime() );
-                }
 
-                if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > Config.forgeConfig.cheeseCheckFrequency.get() )
+                    if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > Config.forgeConfig.cheeseCheckFrequency.get() )
 //                if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > 0.1 )
-                {
-                    CheeseTracker.trackCheese( (ServerPlayerEntity) player );
-                    lastCheeseUpdate.put( uuid, System.nanoTime() );
+                    {
+                        CheeseTracker.trackCheese( (ServerPlayerEntity) player );
+                        lastCheeseUpdate.put( uuid, System.nanoTime() );
+                    }
+
+                    if( hpRegenGap > getHpRegenTime( player ) )
+                    {
+                        player.heal( 1f );
+                        hpRegen.put( uuid, System.nanoTime() );
+                    }
                 }
             }
         }
@@ -229,5 +239,13 @@ public class PlayerTickHandler
                 syncPrefs = false;
             }
         }
+    }
+
+    private static double getHpRegenTime( PlayerEntity player )
+    {
+        Config.forgeConfig.hpRegenPerMinuteBase.get();
+        Config.forgeConfig.hpRegenPerMinuteBoostPerLevel.get();
+
+        return 60 / ( Config.forgeConfig.hpRegenPerMinuteBase.get() + Skill.getLevel( Skill.ENDURANCE.toString(), player ) * Config.forgeConfig.hpRegenPerMinuteBoostPerLevel.get() );
     }
 }

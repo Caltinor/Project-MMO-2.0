@@ -132,14 +132,14 @@ public class AttributeHandler
 	{
 		ModifiableAttributeInstance damageAttribute = player.getAttribute( Attributes.ATTACK_DAMAGE );
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-		double maxDamage = Config.getConfig( "maxExtraDamageBoostMelee" );
+		double maxDamage = Config.getConfig( "maxExtraDamagePercentageBoostMelee" );
 		double maxDamagePref = maxDamage;
-		if( prefsMap.containsKey( "maxExtraDamageBoostMelee" ) )
-			maxDamagePref = prefsMap.get( "maxExtraDamageBoostMelee" );
+		if( prefsMap.containsKey( "maxExtraDamagePercentageBoostMelee" ) )
+			maxDamagePref = prefsMap.get( "maxExtraDamagePercentageBoostMelee" );
 		double combatLevel = Skill.getLevel( Skill.COMBAT.toString(), player );
-		double damageBoost = Math.min( maxDamage, Math.min( maxDamagePref, combatLevel / Config.getConfig( "levelsPerDamageMelee" ) ) );
+		double damageBoost = Math.min( maxDamage, Math.min( maxDamagePref, combatLevel * Config.getConfig( "damageBonusPercentPerLevelMelee" ) ) );
 
-		AttributeModifier damageModifier = new AttributeModifier( damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.ADDITION );
+		AttributeModifier damageModifier = new AttributeModifier( damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.MULTIPLY_BASE );
 		damageAttribute.removeModifier( damageModifierID );
 		damageAttribute.applyPersistentModifier( damageModifier );
 	}

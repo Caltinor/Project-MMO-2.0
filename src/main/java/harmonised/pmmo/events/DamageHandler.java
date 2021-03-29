@@ -186,12 +186,15 @@ public class DamageHandler
                     }
 
                     //Apply damage bonuses
-                    if( skill.equals( Skill.COMBAT.toString() ) )
-                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMelee.get();
+                    System.out.println( damage );
+                    //Combat is taken care of in AttributeHandler
+//                    if( skill.equals( Skill.COMBAT.toString() ) )
+//                        damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelMelee.get();
                     if( skill.equals( Skill.ARCHERY.toString() ) )
-                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageArchery.get();
+                        damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelArchery.get();
                     else if( skill.equals( Skill.MAGIC.toString() ) )
-                        damage += Skill.getLevel( skill, player ) / Config.forgeConfig.levelsPerDamageMagic.get();
+                        damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get();
+                    System.out.println( damage );
 
                     int killGap = 0;
 

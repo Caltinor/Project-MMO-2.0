@@ -82,12 +82,12 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("maxExtraReachBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraReachBoost", value ), value, true, true, true, false ) );
                 value = Math.min( Skill.getLevel( Skill.ENDURANCE.toString(), player ) / Config.getConfig( "levelsPerHeart" ), Config.getConfig( "maxExtraHeartBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxExtraHeartBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraHeartBoost", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.getLevel( Skill.COMBAT.toString(), player ) / Config.getConfig( "levelsPerDamageMelee" ), Config.getConfig( "maxExtraDamageBoostMelee" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraDamageBoostMelee", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostMelee", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.getLevel( Skill.ARCHERY.toString(), player ) / Config.getConfig( "levelsPerDamageArchery" ), Config.getConfig( "maxExtraDamageBoostArchery" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraDamageBoostArchery", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostArchery", value ), value, false, true, true, false ) );
-                value = Math.min( Skill.getLevel( Skill.MAGIC.toString(), player ) / Config.getConfig( "levelsPerDamageMagic" ), Config.getConfig( "maxExtraDamageBoostMagic" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraDamageBoostMagic", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamageBoostMagic", value ), value, false, true, true, false ) );
+                value = Math.min( Skill.getLevel( Skill.COMBAT.toString(), player ) * Config.getConfig( "damageBonusPercentPerLevelMelee" ), Config.getConfig( "maxExtraDamagePercentageBoostMelee" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraDamagePercentageBoostMelee", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamagePercentageBoostMelee", value ), value, true, true, true, false ) );
+                value = Math.min( Skill.getLevel( Skill.ARCHERY.toString(), player ) * Config.getConfig( "damageBonusPercentPerLevelArchery" ), Config.getConfig( "maxExtraDamagePercentageBoostArchery" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraDamagePercentageBoostArchery", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamagePercentageBoostArchery", value ), value, true, true, true, false ) );
+                value = Math.min( Skill.getLevel( Skill.MAGIC.toString(), player ) * Config.getConfig( "damageBonusPercentPerLevelMagic" ), Config.getConfig( "maxExtraDamagePercentageBoostMagic" ) );
+                prefsEntries.add( new PrefsEntry("maxExtraDamagePercentageBoostMagic", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamagePercentageBoostMagic", value ), value, true, true, true, false ) );
                 value = Math.min( Skill.getLevel( Skill.AGILITY.toString(), player ) * Config.getConfig( "speedBoostPerLevel" ), Config.getConfig( "maxSpeedBoost" ) );
                 prefsEntries.add( new PrefsEntry("maxSpeedBoost", "", "", 0, value, prefsMap.getOrDefault( "maxSpeedBoost", value ), value, true, true, true, false ) );
                 value = Math.min( Skill.getLevel( Skill.AGILITY.toString(), player ) * Config.getConfig( "levelsPerSprintJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
