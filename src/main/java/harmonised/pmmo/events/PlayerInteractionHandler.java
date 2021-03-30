@@ -28,12 +28,26 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class PlayerInteractionHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final Set<Block> salvageStations = new HashSet<>();
+
+    public static void initSalvageStations()
+    {
+        salvageStations.clear();
+        for( Map.Entry<String, Map<String, Double>> entry : JsonConfig.data.get( JType.BLOCK_SPECIFIC ).entrySet() )
+        {
+            if( entry.getValue().getOrDefault( "salvageStation", 0D ) != 0 )
+                salvageStations.add( XP.getBlock( entry.getKey() ) );
+        }
+        if( salvageStations.size() == 0 )
+            salvageStations.add( Blocks.SMITHING_TABLE );
+    }
 
     public static void handlePlayerInteract( PlayerInteractEvent event )
     {
@@ -44,8 +58,6 @@ public class PlayerInteractionHandler
                 PlayerEntity player = event.getPlayer();
                 ItemStack itemStack = event.getItemStack();
                 Item item = itemStack.getItem();
-                Block goldBlock 	= 	Blocks.GOLD_BLOCK;
-                Block smithBlock    =   Blocks.SMITHING_TABLE;
 
                 if( item.getRegistryName() == null )
                     return;
@@ -53,7 +65,7 @@ public class PlayerInteractionHandler
                 String regKey = item.getRegistryName().toString();
                 int startLevel;
                 boolean isRemote = player.world.isRemote();
-                boolean matched;
+                boolean matched = false;
 
                 if( event instanceof PlayerInteractEvent.RightClickItem)
                 {
@@ -61,9 +73,12 @@ public class PlayerInteractionHandler
                     {
                         if( JsonConfig.data2.get( JType.SALVAGE ).containsKey( regKey ) )
                         {
-                            matched = XP.scanBlock( smithBlock, 1, player );
-                            if( !matched )
-                                matched = XP.scanBlock( goldBlock, 1, player );
+                            for( Block salvageStationBlock : salvageStations )
+                            {
+                                matched = XP.scanBlock( salvageStationBlock, 1, player );
+                                if( matched )
+                                    break;
+                            }
 
                             if( matched )
                             {
@@ -131,7 +146,7 @@ public class PlayerInteractionHandler
 
                         if( player.isCrouching() )
                         {
-                            if( block.equals( goldBlock ) || block.equals( smithBlock ) )
+                            if( salvageStations.contains( block ) )
                             {
                                 if( itemStack.isEmpty() )
                                     return;

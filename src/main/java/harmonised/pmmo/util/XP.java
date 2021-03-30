@@ -858,12 +858,17 @@ public class XP
 		return results;
 	}
 
+	public static Block getBlock( String regKey )
+	{
+		ResourceLocation resLoc = getResLoc( regKey );
+		Block block = ForgeRegistries.BLOCKS.getValue( resLoc );
+		return block == null ? Blocks.AIR : block;
+	}
+
 	public static Item getItem( String regKey )
 	{
 		ResourceLocation resLoc = getResLoc( regKey );
-
 		Item item = ForgeRegistries.ITEMS.getValue( resLoc );
-
 		if( item != null && !item.equals( Items.AIR ) )
 			return item;
 		else
@@ -872,7 +877,6 @@ public class XP
 			if( block != null )
 				return block.asItem();
 		}
-
 		return Items.AIR;
 	}
 

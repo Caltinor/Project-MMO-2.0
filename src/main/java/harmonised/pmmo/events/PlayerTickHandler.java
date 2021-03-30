@@ -241,11 +241,9 @@ public class PlayerTickHandler
         }
     }
 
-    private static double getHpRegenTime( PlayerEntity player )
+    public static double getHpRegenTime( PlayerEntity player )
     {
-        Config.forgeConfig.hpRegenPerMinuteBase.get();
-        Config.forgeConfig.hpRegenPerMinuteBoostPerLevel.get();
-
-        return 60 / ( Config.forgeConfig.hpRegenPerMinuteBase.get() + Skill.getLevel( Skill.ENDURANCE.toString(), player ) * Config.forgeConfig.hpRegenPerMinuteBoostPerLevel.get() );
+        double dividend = Config.getConfig( "hpRegenPerMinuteBase" ) + Skill.getLevel( Skill.ENDURANCE.toString(), player ) * Config.getConfig( "hpRegenPerMinuteBoostPerLevel" );
+        return dividend <= 0 ? 60 : 60 / dividend;
     }
 }

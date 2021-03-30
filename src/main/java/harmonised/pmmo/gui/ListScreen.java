@@ -999,6 +999,7 @@ public class ListScreen extends Screen
         children.add( scrollPanel );
         filterTextField = new TextFieldWidget( font, x, y + boxHeight - 10, boxWidth, 16, new TranslationTextComponent( "" ) );
         filterTextField.setText( filterText );
+        updateListFilter();
         filterTextField.setFocused2( true );
         children.add( filterTextField );
         addButton( exitButton );
@@ -1129,7 +1130,7 @@ public class ListScreen extends Screen
 
         super.render( stack, mouseX, mouseY, partialTicks );
 
-        for( ListButton button : listButtons )
+        for( ListButton button : activeListButtons )
         {
             buttonX = mouseX - button.x;
             buttonY = mouseY - button.y;

@@ -4,6 +4,7 @@ import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.events.PlayerInteractionHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.*;
@@ -94,6 +95,7 @@ public class JsonConfig
         JsonConfig.data = localData;
         JsonConfig.data2 = localData2;
         Skill.updateSkills();   //Update potential new skills
+        PlayerInteractionHandler.initSalvageStations();
     }
 
     private static void initMaps()

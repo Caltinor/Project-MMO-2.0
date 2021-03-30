@@ -62,9 +62,9 @@
 	"pmmo.totalLevelUp": "You have reached %1$s Total Levels!",
 	"pmmo.gainedExtraHeart": "You have gained an Extra Heart!",
 	"pmmo.levelUpSprintSpeedBonus": "%1$s %2$s level up! %3$s Sprint Speed Bonus!",
-	"pmmo.levelUpDamageBoostMelee": "%1$s %2$s level up! %3$s Damage Bonus in Melee!",
-	"pmmo.levelUpDamageBoostArchery": "%1$s %2$s level up! %3$s Damage Bonus in Archery!",
-	"pmmo.levelUpDamageBoostMagic": "%1$s %2$s level up! %3$s Damage Bonus in Magic!",
+	"pmmo.levelUpDamageBoostPercentMelee": "%1$s %2$s level up! %3$s%% Damage Bonus in Melee!",
+	"pmmo.levelUpDamageBoostPercentArchery": "%1$s %2$s level up! %3$s%% Damage Bonus in Archery!",
+	"pmmo.levelUpDamageBoostPercentMagic": "%1$s %2$s level up! %3$s%% Damage Bonus in Magic!",
 	"pmmo.levelUpReachBoost": "%1$s %2$s level up! %3$s Reach Bonus!",
 	"pmmo.levelUpEnduranceBoost": "%1$s %2$s level up! %3$s%% Endurance!",
 	"pmmo.durabilityInfo": "%1$s %2$s%%",
@@ -372,5 +372,6 @@
 	"pmmo.unlocked": "Unlocked",
 	"pmmo.levelUpDamageBoost": "%1$s %2$s level up! %3$s Damage Bonus!",
 	"pmmo.afkMultiplierWarning": "Due to being idle, your xp gain is reduced to %1$s%%",
-	"pmmo.afkMultiplierRestored": "Due to no longer being idle, Your xp gain is restored to %1$s%%"
+	"pmmo.afkMultiplierRestored": "Due to no longer being idle, Your xp gain is restored to %1$s%%",
+	"pmmo.halfHeartRegenerationSeconds": "%1$s HP Regen per 60s"
 }

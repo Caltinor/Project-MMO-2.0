@@ -77,6 +77,8 @@ public class Config
         localConfig.put( "levelsPerSprintJumpBoost", forgeConfig.levelsPerSprintJumpBoost.get() );
         localConfig.put( "levelsPerOneReach", forgeConfig.levelsPerOneReach.get() );
         localConfig.put( "endurancePerLevel", forgeConfig.endurancePerLevel.get() );
+        localConfig.put( "hpRegenPerMinuteBase", forgeConfig.hpRegenPerMinuteBase.get() );
+        localConfig.put( "hpRegenPerMinuteBoostPerLevel", forgeConfig.hpRegenPerMinuteBoostPerLevel.get() );
         localConfig.put( "maxEndurance", forgeConfig.maxEndurance.get() );
         localConfig.put( "levelsPerHeart", forgeConfig.levelsPerHeart.get() );
         localConfig.put( "maxExtraHeartBoost", (double) forgeConfig.maxExtraHeartBoost.get() );
@@ -576,7 +578,7 @@ public class Config
                 this.levelsPerHardnessMining = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of blocks, which is 2.0 Obsidian, or 33.3 Coal Ore)" )
                         .translation( "pmmo.levelsPerHardnessMining" )
-                        .defineInRange( "levelsPerHardnessMining", 320D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessMining", 240D, 0.01, 10000) );
 
                 this.levelsPerHardnessWoodcutting = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of logs, which is 50 Logs)" )
@@ -1266,14 +1268,14 @@ public class Config
                         .defineInRange( "maxExtraHeartBoost", 100, 0, 1000000000) );
 
                 this.hpRegenPerMinuteBase = subscriber.subscribe(builder
-                        .comment( "How many half hearts regenerate per minute at level 0 Endurance (at 1, and at level 0 Endurance, you regenerate half a heart every 60 seconds)" )
+                        .comment( "How many half hearts regenerate per minute at level 0 Endurance (at 1, and at level 0 Endurance, you regenerate half a heart every 60 seconds, 0 means no base regeneration)" )
                         .translation( "pmmo.hpRegenPerMinuteBase" )
-                        .defineInRange( "hpRegenPerMinuteBase", 1D, 0.001, 1000 ) );
+                        .defineInRange( "hpRegenPerMinuteBase", 1D, 0, 1000 ) );
 
                 this.hpRegenPerMinuteBoostPerLevel = subscriber.subscribe(builder
-                        .comment( "Addition per level to hpRegenPerMinuteBase (if set to 0.01, every 100 Endurance levels, you regen 1 more half heart per 60 seconds)" )
+                        .comment( "Addition per level to hpRegenPerMinuteBase (if set to 0.01, every 100 Endurance levels, you regen 1 more half heart per 60 seconds, 0 means no extra regeneration)" )
                         .translation( "pmmo.hpRegenPerMinuteBoostPerLevel" )
-                        .defineInRange( "hpRegenPerMinuteBoostPerLevel", 0.02D, 0.00001, 1000 ) );
+                        .defineInRange( "hpRegenPerMinuteBoostPerLevel", 0.02D, 0, 1000 ) );
 
 
                 builder.pop();

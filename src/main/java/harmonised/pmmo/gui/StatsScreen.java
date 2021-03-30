@@ -8,6 +8,7 @@ import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.DamageHandler;
 import harmonised.pmmo.events.FishedHandler;
 import harmonised.pmmo.events.JumpHandler;
+import harmonised.pmmo.events.PlayerTickHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.DP;
@@ -121,6 +122,7 @@ public class StatsScreen extends Screen
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.hearts" );
         text.add( new TranslationTextComponent( "pmmo.heartBonus", AttributeHandler.getHeartBoost( player ) / 2 ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
+        text.add( new TranslationTextComponent( "pmmo.halfHeartRegenerationSeconds", DP.dpSoft( 60D / PlayerTickHandler.getHpRegenTime( player ) ) ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
