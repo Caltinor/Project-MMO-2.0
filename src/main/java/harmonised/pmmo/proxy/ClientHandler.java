@@ -10,6 +10,7 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.NBTHelper;
+import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
@@ -76,6 +77,8 @@ public class ClientHandler
                 {
                     abilitiesMap.put( tag, newPackage.getDouble( tag ) );
                 }
+                if( XP.isPlayerSurvival( player ) )
+                    XPOverlayGUI.updateVein();
                 break;
 
             case 6:

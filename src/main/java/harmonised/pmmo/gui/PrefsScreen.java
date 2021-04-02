@@ -118,6 +118,7 @@ public class PrefsScreen extends Screen
                 prefsEntries.add( new PrefsEntry("worldXpDropsSizeMultiplier", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsSizeMultiplier", 1D ), 1D, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("worldXpDropsDecaySpeedMultiplier", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsDecaySpeedMultiplier", 1D ), 1D, true, true, false, false ) );
                 prefsEntries.add( new PrefsEntry("worldXpDropsRotationCap", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsRotationCap", 25D ), 25D, true, true, false, false ) );
+                prefsEntries.add( new PrefsEntry("maxVeinDisplay", "", "", 0, 10000, prefsMap.getOrDefault( "maxVeinDisplay", 250D ), 250D, false, true, false, false ) );
 
                 prefsEntries.add( new PrefsEntry("showSkillsListAtCorner", "", "", 0, 1, prefsMap.getOrDefault( "showSkillsListAtCorner", 1D ), 1D, false, true, false, true ) );
                 prefsEntries.add( new PrefsEntry("showXpDrops", "", "", 0, 1, prefsMap.getOrDefault( "showXpDrops", 1D ), 1D, false, true, false, true ) );
@@ -243,7 +244,10 @@ public class PrefsScreen extends Screen
             {
                 prefEntry.mouseClicked( mouseX, mouseY, button );
                 if ( !prefEntry.isSwitch && prefEntry.textField.mouseClicked( mouseX, mouseY, button ) )
+                {
                     this.setFocusedDefault( prefEntry.textField );
+                    prefEntry.textField.setFocused2( true );
+                }
             }
         }
 

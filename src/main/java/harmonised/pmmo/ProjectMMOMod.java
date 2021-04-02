@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -33,7 +34,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class ProjectMMOMod
 {
     private static String PROTOCOL_VERSION = "1";
-    public static boolean worldStarted = false;
+    public static boolean serverStarted = false, jeiLoaded = false;
     public static SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
             .named( new ResourceLocation( Reference.MOD_ID, "main_channel" ) )
             .clientAcceptedVersions( PROTOCOL_VERSION::equals )
@@ -51,9 +52,11 @@ public class ProjectMMOMod
             FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistryTaskType );
             FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( RewardType.class, RegisterHandler::handleFTBQRegistryRewardType );
         }
+        jeiLoaded = ModList.get().isLoaded( "jei" );
         MinecraftForge.EVENT_BUS.addListener( this::serverAboutToStart );
-        MinecraftForge.EVENT_BUS.addListener( this::registerCommands );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
+        MinecraftForge.EVENT_BUS.addListener( this::serverStarted );
+        MinecraftForge.EVENT_BUS.addListener( this::registerCommands );
 
 //        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> Requirements::init );
 
@@ -76,17 +79,20 @@ public class ProjectMMOMod
 
     private void serverAboutToStart( FMLServerAboutToStartEvent event )
     {
-        worldStarted = false;
+        serverStarted = false;
 //        ModList.get().isLoaded( "ftbquests" );
         JsonConfig.init();
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
             AutoValues.setAutoValues();
         ChunkDataHandler.init();
 
-        worldStarted = true;
         Config.initServer();
         WorldTickHandler.refreshVein();
+    }
 
+    private void serverStarted( FMLServerStartedEvent event )
+    {
+        serverStarted = true;
     }
 
     private void registerCommands( RegisterCommandsEvent event )

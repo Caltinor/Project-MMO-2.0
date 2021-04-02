@@ -2,7 +2,6 @@ package harmonised.pmmo.config;
 
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -109,7 +108,6 @@ public class Config
         localConfig.put( "veinMaxBlocks", (double) forgeConfig.veinMaxBlocks.get() );
         localConfig.put( "toolSpeedVeinScale", forgeConfig.toolSpeedVeinScale.get() );
 
-
         localConfig.put( "dualSalvageSmithingLevelReq", (double) forgeConfig.dualSalvageSmithingLevelReq.get() );
 
         config = localConfig;
@@ -145,15 +143,16 @@ public class Config
         //Vein Mining
         public ConfigHelper.ConfigValueListener<Boolean> veiningAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> veinWoodTopToBottom;
-        public ConfigHelper.ConfigValueListener<Boolean> sleepRechargesAllPlayersVeinCharge;
         public ConfigHelper.ConfigValueListener<Boolean> veiningOtherPlayerBlocksAllowed;
         public ConfigHelper.ConfigValueListener<Boolean> damageToolWhileVeining;
         public ConfigHelper.ConfigValueListener<Integer> veinMaxBlocks;
         public ConfigHelper.ConfigValueListener<Integer> veinSpeed;
+        public ConfigHelper.ConfigValueListener<Integer> maxVeinDisplay;
         public ConfigHelper.ConfigValueListener<Double> veinMaxDistance;
         public ConfigHelper.ConfigValueListener<Double> minVeinCost;
         public ConfigHelper.ConfigValueListener<Double> minVeinHardness;
         public ConfigHelper.ConfigValueListener<Double> maxVeinCharge;
+        public ConfigHelper.ConfigValueListener<Double> sleepVeinRestorePercent;
         public ConfigHelper.ConfigValueListener<Double> exhaustionPerBlock;
         public ConfigHelper.ConfigValueListener<Double> toolSpeedVeinScale;
         public ConfigHelper.ConfigValueListener<Double> levelsPerHardnessMining;
@@ -453,27 +452,27 @@ public class Config
                 this.partyRange = subscriber.subscribe(builder
                         .comment( "In what range do Party members have to be to benefit from the other members?" )
                         .translation( "pmmo.partyRange" )
-                        .defineInRange( "partyRange", 64D, 1, 1000000000) );
+                        .defineInRange( "partyRange", 64D, 1, 1000000000 ) );
 
                 this.partyMaxMembers = subscriber.subscribe(builder
                         .comment( "How many Members can a party have?" )
                         .translation( "pmmo.partyMaxMembers" )
-                        .defineInRange( "partyMaxMembers", 10, 1, 1000000000) );
+                        .defineInRange( "partyMaxMembers", 10, 1, 1000000000 ) );
 
                 this.partyXpIncreasePerPlayer = subscriber.subscribe(builder
                         .comment( "How much bonus xp a Party gains extra, per player? (5 = 1 player -> 5% xp bonus, 2 players -> 10% xp bonus" )
                         .translation( "pmmo.partyXpIncreasePerPlayer" )
-                        .defineInRange( "partyXpIncreasePerPlayer", 5D, 0, 1000000000) );
+                        .defineInRange( "partyXpIncreasePerPlayer", 5D, 0, 1000000000 ) );
 
                 this.maxPartyXpBonus = subscriber.subscribe(builder
                         .comment( "How much bonus xp is the maximum that a Party can receive? (50 = 50% increase max. If partyXpIncreasePerPlayer is 5, and there are 20 members, the xp bonus caps at 50%, at 10 members)" )
                         .translation( "pmmo.maxPartyXpBonus" )
-                        .defineInRange( "maxPartyXpBonus", 50D, 0, 1000000000) );
+                        .defineInRange( "maxPartyXpBonus", 50D, 0, 1000000000 ) );
 
                 this.partyFriendlyFireAmount = subscriber.subscribe(builder
                         .comment( "How much damage you can deal to people in the same Party (0 = no damage, 100 = full damage)" )
                         .translation( "pmmo.partyFriendlyFireAmount" )
-                        .defineInRange( "partyFriendlyFireAmount", 100/3D, 0, 100) );
+                        .defineInRange( "partyFriendlyFireAmount", 100/3D, 0, 100 ) );
 
                 this.autoLeavePartyOnDisconnect = subscriber.subscribe(builder
                         .comment( "Should players leave their party if they disconnect?" )
@@ -535,11 +534,6 @@ public class Config
                         .translation( "pmmo.veinWoodTopToBottom" )
                         .define( "veinWoodTopToBottom", true ) );
 
-                this.sleepRechargesAllPlayersVeinCharge = subscriber.subscribe(builder
-                        .comment( "Should a succesful sleep recharge every player currently in that world Vein Charge?" )
-                        .translation( "pmmo.sleepRechargesAllPlayersVeinCharge" )
-                        .define( "sleepRechargesAllPlayersVeinCharge", true ) );
-
                 this.veiningOtherPlayerBlocksAllowed = subscriber.subscribe(builder
                         .comment( "Should players be allowed to vein blocks that they did not place?" )
                         .translation( "pmmo.veiningOtherPlayerBlocksAllowed" )
@@ -553,67 +547,77 @@ public class Config
                 this.veinMaxDistance = subscriber.subscribe(builder
                         .comment( "What is the maximum distance a player's vein can reach?" )
                         .translation( "pmmo.veinMaxDistance" )
-                        .defineInRange( "veinMaxDistance", 1000D, 1, 1000000000) );
+                        .defineInRange( "veinMaxDistance", 1000D, 1, 1000000000 ) );
 
                 this.veinMaxBlocks = subscriber.subscribe(builder
                         .comment( "How many blocks max can be veined?" )
                         .translation( "pmmo.veinMaxBlocks" )
-                        .defineInRange( "veinMaxBlocks", 10000, 1, 1000000) );
+                        .defineInRange( "veinMaxBlocks", 10000, 1, 1000000 ) );
 
                 this.veinSpeed = subscriber.subscribe(builder
                         .comment( "How many blocks get broken every tick?" )
                         .translation( "pmmo.veinSpeed" )
-                        .defineInRange( "veinSpeed", 1, 1, 10000) );
+                        .defineInRange( "veinSpeed", 1, 1, 10000 ) );
+
+                this.maxVeinDisplay = subscriber.subscribe(builder
+                        .comment( "How many blocks should be highlighted while holding the Vein key" )
+                        .translation( "pmmo.maxVeinDisplay" )
+                        .defineInRange( "maxVeinDisplay", 250, 0, 10000 ) );
 
                 this.minVeinCost = subscriber.subscribe(builder
                         .comment( "How much is the lowest cost for each block veined? (1 = 1 charge, 1 charge regens per second)" )
                         .translation( "pmmo.minVeinCost" )
-                        .defineInRange( "minVeinCost", 0.5D, 0.01, 10000) );
+                        .defineInRange( "minVeinCost", 0.5D, 0.01, 10000 ) );
 
                 this.minVeinHardness = subscriber.subscribe(builder
                         .comment( "What is the lowest hardness for each block veined? (Crops have 0 hardness, this makes crops not infinitely veined)" )
                         .translation( "pmmo.minVeinHardness" )
-                        .defineInRange( "minVeinHardness", 0.5D, 0, 10000) );
+                        .defineInRange( "minVeinHardness", 0.5D, 0, 10000 ) );
 
                 this.levelsPerHardnessMining = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of blocks, which is 2.0 Obsidian, or 33.3 Coal Ore)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160 ) * 320 = 100 hardness worth of blocks, which is 2.0 Obsidian, or 33.3 Coal Ore)" )
                         .translation( "pmmo.levelsPerHardnessMining" )
-                        .defineInRange( "levelsPerHardnessMining", 240D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessMining", 240D, 0.01, 10000 ) );
 
                 this.levelsPerHardnessWoodcutting = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160) * 320 = 100 hardness worth of logs, which is 50 Logs)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 32, your level is 50, and you have 64 charge, you can vein (50 / 160 ) * 320 = 100 hardness worth of logs, which is 50 Logs)" )
                         .translation( "pmmo.levelsPerHardnessWoodcutting" )
-                        .defineInRange( "levelsPerHardnessWoodcutting", 240D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessWoodcutting", 240D, 0.01, 10000 ) );
 
                 this.levelsPerHardnessExcavation = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 320) * 320 = 50 hardness worth of ground, which is 100 Dirt)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 16, your level is 50, and you have 64 charge, you can vein (50 / 320 ) * 320 = 50 hardness worth of ground, which is 100 Dirt)" )
                         .translation( "pmmo.levelsPerHardnessExcavation" )
-                        .defineInRange( "levelsPerHardnessExcavation", 240D, 0.01, 10000) );
+                        .defineInRange( "levelsPerHardnessExcavation", 240D, 0.01, 10000 ) );
 
                 this.levelsPerHardnessFarming = subscriber.subscribe(builder
                         .comment( "Every how many levels does 1 charge become worth +1 hardness? Plants have no hardness, but there is a minimum hardness while veining config in here, which is 0.5 by default, making it 200 plants at level 50 farming, with 320 charge, if this is set to 160" )
                         .translation( "pmmo.levelsPerHardnessFarming" )
-                        .defineInRange( "levelsPerHardnessFarming", 240D, 0.1, 10000) );
+                        .defineInRange( "levelsPerHardnessFarming", 240D, 0.1, 10000 ) );
 
                 this.levelsPerHardnessCrafting = subscriber.subscribe(builder
-                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 80, your level is 50, and you have 320 charge, you can vein (50 / 80) * 320 = 200 hardness worth of Crafting Related (Such as wool, carpet, bed) blocks, which depends on how hard they are)" )
+                        .comment( "Every how many levels does 1 charge become worth +1 hardness? (If this is set to 80, your level is 50, and you have 320 charge, you can vein (50 / 80 ) * 320 = 200 hardness worth of Crafting Related (Such as wool, carpet, bed) blocks, which depends on how hard they are)" )
                         .translation( "pmmo.levelsPerHardnessCrafting" )
-                        .defineInRange( "levelsPerHardnessCrafting", 240D, 0.1, 10000) );
+                        .defineInRange( "levelsPerHardnessCrafting", 240D, 0.1, 10000 ) );
 
                 this.maxVeinCharge = subscriber.subscribe(builder
                         .comment( "How much vein charge can a player hold at max? (1 recharges every second)" )
                         .translation( "pmmo.maxVeinCharge" )
-                        .defineInRange( "maxVeinCharge", 320D, 0, 100000) );
+                        .defineInRange( "maxVeinCharge", 320D, 0, 100000 ) );
+
+                this.sleepVeinRestorePercent = subscriber.subscribe(builder
+                        .comment( "How much vein is restored for each player when the day is skipped by sleeping in bed?" )
+                        .translation( "pmmo.sleepVeinRestorePercent" )
+                        .defineInRange( "sleepVeinRestorePercent", 0.8477D, 0, 1) );
 
                 this.exhaustionPerBlock = subscriber.subscribe(builder
                         .comment( "How much hunger should be exhausted per block veined?" )
                         .translation( "pmmo.exhaustionPerBlock" )
-                        .defineInRange( "exhaustionPerBlock", 0.2D, 0, 20) );
+                        .defineInRange( "exhaustionPerBlock", 0.2D, 0, 20 ) );
 
                 this.toolSpeedVeinScale = subscriber.subscribe(builder
                         .comment( "Boost in veining ability dependant on your tool's speed (5 is fairly balanced, raising this number makes tools more powerful while veining)" )
                         .translation( "pmmo.toolSpeedVeinScale" )
-                        .defineInRange( "toolSpeedVeinScale", 5D, 0.000000001, 1000000000) );
+                        .defineInRange( "toolSpeedVeinScale", 5D, 0.000000001, 1000000000 ) );
 
                 builder.pop();
             }
@@ -623,12 +627,12 @@ public class Config
                 this.maxMobDamageBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum amount an aggressive mob's damage will be boosted?" )
                         .translation( "pmmo.maxMobDamageBoost" )
-                        .defineInRange( "maxMobDamageBoost", 100D, 0, 1000000000) );
+                        .defineInRange( "maxMobDamageBoost", 100D, 0, 1000000000 ) );
 
                 this.mobDamageBoostPerPowerLevel = subscriber.subscribe(builder
                         .comment( "How much an aggresive mob's damage will increase per one Power Level?" )
                         .translation( "pmmo.mobDamageBoostPerPowerLevel" )
-                        .defineInRange( "mobDamageBoostPerPowerLevel", 1D, 0, 10) );
+                        .defineInRange( "mobDamageBoostPerPowerLevel", 1D, 0, 10 ) );
 
                 this.maxMobHPBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum amount an aggressive mob's HP will be boosted?" )
@@ -638,17 +642,17 @@ public class Config
                 this.mobHPBoostPerPowerLevel = subscriber.subscribe(builder
                         .comment( "How much an aggresive mob's HP will increase per one Power Level?" )
                         .translation( "pmmo.mobHPBoostPerPowerLevel" )
-                        .defineInRange( "mobHPBoostPerPowerLevel", 5D, 0, 100) );
+                        .defineInRange( "mobHPBoostPerPowerLevel", 5D, 0, 100 ) );
 
                 this.maxMobSpeedBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum amount an aggressive mob's speed will be boosted?" )
                         .translation( "pmmo.maxMobSpeedBoost" )
-                        .defineInRange( "maxMobSpeedBoost", 10D, 0, 100) );
+                        .defineInRange( "maxMobSpeedBoost", 10D, 0, 100 ) );
 
                 this.mobSpeedBoostPerPowerLevel = subscriber.subscribe(builder
                         .comment( "How much an aggresive mob's speed will increase per one Power Level?" )
                         .translation( "pmmo.mobSpeedBoostPerPowerLevel" )
-                        .defineInRange( "mobSpeedBoostPerPowerLevel", 1D, 0, 10) );
+                        .defineInRange( "mobSpeedBoostPerPowerLevel", 1D, 0, 10 ) );
 
                 this.biomeMobMultiplierEnabled = subscriber.subscribe(builder
                         .comment( "Should mob xp multipliers inside of biomes be enabled? false means no multipliers" )
@@ -835,7 +839,7 @@ public class Config
                 this.maxLevel = subscriber.subscribe(builder
                         .comment( "What is the global max level" )
                         .translation( "pmmo.maxLevel" )
-                        .defineInRange( "maxLevel", 150, 1, 1000000) );
+                        .defineInRange( "maxLevel", 150, 1, 1000000 ) );
 
                 this.baseXp = subscriber.subscribe(builder
                         .comment( "What is the baseXp to reach level 2 ( baseXp + level * xpPerLevel )" )
@@ -895,12 +899,12 @@ public class Config
                 this.exponentialBase = subscriber.subscribe(builder
                         .comment( "What is the x in: exponentialBaseXp * ( x^( exponentialRate * level ) )" )
                         .translation( "pmmo.exponentialBase" )
-                        .defineInRange( "exponentialBase", 1.104088404342588D, 0, 1000000) );
+                        .defineInRange( "exponentialBase", 1.104088404342588D, 0, 1000000 ) );
 
                 this.exponentialRate = subscriber.subscribe(builder
                         .comment( "What is the x in: exponentialBaseXp * ( exponentialBase^( x * level ) )" )
                         .translation( "pmmo.exponentialRate" )
-                        .defineInRange( "exponentialRate", 1D, 0, 1000000) );
+                        .defineInRange( "exponentialRate", 1D, 0, 1000000 ) );
 
                 builder.pop();
             }
@@ -910,27 +914,27 @@ public class Config
                 this.globalMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains (1 = normal, 2 = twice as much)" )
                         .translation( "pmmo.globalMultiplier" )
-                        .defineInRange( "globalMultiplier", 1D, 0, 1000) );
+                        .defineInRange( "globalMultiplier", 1D, 0, 1000 ) );
 
                 this.peacefulMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains on Peaceful Difficulty (1 = normal, 2 = twice as much)" )
                         .translation( "pmmo.peacefulMultiplier" )
-                        .defineInRange( "peacefulMultiplier", 1/3D, 0, 1000) );
+                        .defineInRange( "peacefulMultiplier", 1/3D, 0, 1000 ) );
 
                 this.easyMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains on Easy Difficulty (1 = normal, 2 = twice as much)" )
                         .translation( "pmmo.easyMultiplier" )
-                        .defineInRange( "easyMultiplier", 2/3D, 0, 1000) );
+                        .defineInRange( "easyMultiplier", 2/3D, 0, 1000 ) );
 
                 this.normalMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains on Normal Difficulty (1 = normal, 2 = twice as much)" )
                         .translation( "pmmo.normalMultiplier" )
-                        .defineInRange( "normalMultiplier", 1D, 0, 1000) );
+                        .defineInRange( "normalMultiplier", 1D, 0, 1000 ) );
 
                 this.hardMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp everyone gains on Hard Difficulty (1 = normal, 2 = twice as much)" )
                         .translation( "pmmo.hardMultiplier" )
-                        .defineInRange( "hardMultiplier", 4/3D, 0, 1000) );
+                        .defineInRange( "hardMultiplier", 4/3D, 0, 1000 ) );
 
                 this.biomePenaltyMultiplier = subscriber.subscribe(builder
                         .comment( "How much xp you get in biomes you do not meet the requirements for (1 = Full xp, 0.5 = Half xp)" )
@@ -996,7 +1000,7 @@ public class Config
                 this.xpDropSpawnDistance = subscriber.subscribe(builder
                         .comment( "How far away does the Xp Drop spawn" )
                         .translation( "pmmo.xpDropSpawnDistance" )
-                        .defineInRange( "xpDropSpawnDistance", 50D, 0, 1000) );
+                        .defineInRange( "xpDropSpawnDistance", 50D, 0, 1000 ) );
 
                 this.xpDropOpacityPerTime = subscriber.subscribe(builder
                         .comment( "How much out of MaxOpacity does the Xp Drop become visible per 1 distance" )
@@ -1011,7 +1015,7 @@ public class Config
                 this.xpDropDecayAge = subscriber.subscribe(builder
                         .comment( "At what age do xp drops start to decay?" )
                         .translation( "pmmo.xpDropDecayAge" )
-                        .defineInRange( "xpDropDecayAge", 350D, 0, 5000) );
+                        .defineInRange( "xpDropDecayAge", 350D, 0, 5000 ) );
 
                 this.minXpGrow = subscriber.subscribe(builder
                         .comment( "What is the minimum amount xp grows a set amount of time? (Default 0.2, increase to speed up growth)" )
@@ -1101,7 +1105,7 @@ public class Config
                 this.minBreakSpeed = subscriber.subscribe(builder
                         .comment( "Minimum Breaking Speed (1 is Original speed, 0.5 is half)" )
                         .translation( "pmmo.minBreakSpeed" )
-                        .defineInRange( "minBreakSpeed", 0.5D, 0, 100) );
+                        .defineInRange( "minBreakSpeed", 0.5D, 0, 100 ) );
 
                 this.blocksToUnbreakableY = subscriber.subscribe(builder
                         .comment( "How many blocks it takes to reach 0 Break Speed (will get capped by Minimum Breaking Speed)" )
@@ -1111,22 +1115,22 @@ public class Config
                 this.miningBonusSpeed = subscriber.subscribe(builder
                         .comment( "How much your mining speed increases per level (1 = 1% increase per level)" )
                         .translation( "pmmo.miningBonusSpeed" )
-                        .defineInRange( "miningBonusSpeed", 1D, 0, 10) );
+                        .defineInRange( "miningBonusSpeed", 1D, 0, 10 ) );
 
                 this.woodcuttingBonusSpeed = subscriber.subscribe(builder
                         .comment( "How much your cutting speed increases per level in (1 = 1% increase per level)" )
                         .translation( "pmmo.woodcuttingBonusSpeed" )
-                        .defineInRange( "woodcuttingBonusSpeed", 1D, 0, 10) );
+                        .defineInRange( "woodcuttingBonusSpeed", 1D, 0, 10 ) );
 
                 this.excavationBonusSpeed = subscriber.subscribe(builder
                         .comment( "How much your digging speed increases per level in (1 = 1% increase per level)" )
                         .translation( "pmmo.excavationBonusSpeed" )
-                        .defineInRange( "excavationBonusSpeed", 1D, 0, 10) );
+                        .defineInRange( "excavationBonusSpeed", 1D, 0, 10 ) );
 
                 this.farmingBonusSpeed = subscriber.subscribe(builder
                         .comment( "How much your farming speed increases per level in (1 = 1% increase per level)" )
                         .translation( "pmmo.farmingBonusSpeed" )
-                        .defineInRange( "farmingBonusSpeed", 1D, 0, 10) );
+                        .defineInRange( "farmingBonusSpeed", 1D, 0, 10 ) );
 
                 builder.pop();
             }
@@ -1136,7 +1140,7 @@ public class Config
                 this.blockHardnessLimitForBreaking = subscriber.subscribe(builder
                         .comment( "Hardest considered block (1 hardness = 1 remove xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
                         .translation( "pmmo.blockHardnessLimitForBreaking" )
-                        .defineInRange( "blockHardnessLimitForBreaking", 20D, 0, 1000000) );
+                        .defineInRange( "blockHardnessLimitForBreaking", 20D, 0, 1000000 ) );
 
                 builder.pop();
             }
@@ -1146,17 +1150,17 @@ public class Config
                 this.levelsPerOneReach = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of reach" )
                         .translation( "pmmo.levelsPerOneReach" )
-                        .defineInRange( "levelsPerOneReach", 20D, 1, 1000000000) );
+                        .defineInRange( "levelsPerOneReach", 20D, 1, 1000000000 ) );
 
                 this.maxExtraReachBoost = subscriber.subscribe(builder
                         .comment( "What is the maximum reach a player can have" )
                         .translation( "pmmo.maxExtraReachBoost" )
-                        .defineInRange( "maxExtraReachBoost", 20D, 0, 1000000000) );
+                        .defineInRange( "maxExtraReachBoost", 20D, 0, 1000000000 ) );
 
                 this.blockHardnessLimitForPlacing = subscriber.subscribe(builder
                         .comment( "Hardest considered block (1 hardness = 1 build xp. 0 = no xp for block hardness, 30 means obsidian caps at 30xp per block.)" )
                         .translation( "pmmo.blockHardnessLimitForPlacing" )
-                        .defineInRange( "blockHardnessLimitForPlacing", 20D, 0, 1000000) );
+                        .defineInRange( "blockHardnessLimitForPlacing", 20D, 0, 1000000 ) );
 
                 this.xpValuePlacingEnabled = subscriber.subscribe(builder
                         .comment( "Should xp values for crafting be enabled? false means the hardness value is used" )
@@ -1190,17 +1194,17 @@ public class Config
                 this.defaultBreedingXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Farming for breeding two animals? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultBreedingXp" )
-                        .defineInRange( "defaultBreedingXp", 10.0D, 0, 1000000) );
+                        .defineInRange( "defaultBreedingXp", 10.0D, 0, 1000000 ) );
 
                 this.defaultSaplingGrowXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Farming for growing a sapling? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultBreedingXp" )
-                        .defineInRange( "defaultBreedingXp", 25.0D, 0, 1000000) );
+                        .defineInRange( "defaultBreedingXp", 25.0D, 0, 1000000 ) );
 
                 this.defaultCropGrowXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Farming for growing crops? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultBreedingXp" )
-                        .defineInRange( "defaultBreedingXp", 15.0D, 0, 1000000) );
+                        .defineInRange( "defaultBreedingXp", 15.0D, 0, 1000000 ) );
 
                 builder.pop();
             }
@@ -1210,37 +1214,37 @@ public class Config
                 this.maxFallSaveChance = subscriber.subscribe(builder
                         .comment( "Maximum chance to save each point of fall damage (100 = no fall damage)" )
                         .translation( "pmmo.maxFallSaveChance" )
-                        .defineInRange( "maxFallSaveChance", 64D, 0, 100) );
+                        .defineInRange( "maxFallSaveChance", 64D, 0, 100 ) );
 
                 this.saveChancePerLevel = subscriber.subscribe(builder
                         .comment( "How much your chance to save each point of fall damage increases per level (1 = 1% increase per Level)" )
                         .translation( "pmmo.saveChancePerLevel" )
-                        .defineInRange( "saveChancePerLevel", 64D, 0, 100) );
+                        .defineInRange( "saveChancePerLevel", 64D, 0, 100 ) );
 
                 this.maxJumpBoost = subscriber.subscribe(builder
                         .comment( "How much jump boost can you gain max (above 0.33 makes you take fall damage)" )
                         .translation( "pmmo.maxJumpBoost" )
-                        .defineInRange( "maxJumpBoost", 0.33D, 0, 100) );
+                        .defineInRange( "maxJumpBoost", 0.33D, 0, 100 ) );
 
                 this.levelsPerCrouchJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Crouching" )
                         .translation( "pmmo.levelsPerCrouchJumpBoost" )
-                        .defineInRange( "levelsPerCrouchJumpBoost", 33D, 1, 1000000000) );
+                        .defineInRange( "levelsPerCrouchJumpBoost", 33D, 1, 1000000000 ) );
 
                 this.levelsPerSprintJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Sprinting" )
                         .translation( "pmmo.levelsPerSprintJumpBoost" )
-                        .defineInRange( "levelsPerSprintJumpBoost", 50D, 1, 1000000000) );
+                        .defineInRange( "levelsPerSprintJumpBoost", 50D, 1, 1000000000 ) );
 
                 this.maxSpeedBoost = subscriber.subscribe(builder
                         .comment( "How much speed boost you can get from Agility (100 = 100% vanilla + 100% = twice as fast max)" )
                         .translation( "pmmo.maxSpeedBoost" )
-                        .defineInRange( "maxSpeedBoost", 100D, 0, 1000000000) );
+                        .defineInRange( "maxSpeedBoost", 100D, 0, 1000000000 ) );
 
                 this.speedBoostPerLevel = subscriber.subscribe(builder
                         .comment( "How much speed boost you get from each level (1 = 1% speed boost per level)" )
                         .translation( "pmmo.speedBoostPerLevel" )
-                        .defineInRange( "speedBoostPerLevel", 0.5D, 0, 100) );
+                        .defineInRange( "speedBoostPerLevel", 0.5D, 0, 100 ) );
 
                 builder.pop();
             }
@@ -1250,22 +1254,22 @@ public class Config
                 this.maxEndurance = subscriber.subscribe(builder
                         .comment( "How much endurance is max (100 = god mode)" )
                         .translation( "pmmo.maxEndurance" )
-                        .defineInRange( "maxEndurance", 50D, 0, 100) );
+                        .defineInRange( "maxEndurance", 50D, 0, 100 ) );
 
                 this.endurancePerLevel = subscriber.subscribe(builder
                         .comment( "How much endurance you gain per level (1 = 1% per level)" )
                         .translation( "pmmo.endurancePerLevel" )
-                        .defineInRange( "endurancePerLevel", 0.25D, 0, 100) );
+                        .defineInRange( "endurancePerLevel", 0.25D, 0, 100 ) );
 
                 this.levelsPerHeart = subscriber.subscribe(builder
                         .comment( "Per how many levels you gain 1 Max Heart" )
                         .translation( "pmmo.levelsPerHeart" )
-                        .defineInRange( "levelsPerHeart", 10D, 1, 1000000000) );
+                        .defineInRange( "levelsPerHeart", 10D, 1, 1000000000 ) );
 
                 this.maxExtraHeartBoost = subscriber.subscribe(builder
                         .comment( "How many Max Hearts you can have (20 means 10 vanilla + 20 boosted)" )
                         .translation( "pmmo.maxExtraHeartBoost" )
-                        .defineInRange( "maxExtraHeartBoost", 100, 0, 1000000000) );
+                        .defineInRange( "maxExtraHeartBoost", 100, 0, 1000000000 ) );
 
                 this.hpRegenPerMinuteBase = subscriber.subscribe(builder
                         .comment( "How many half hearts regenerate per minute at level 0 Endurance (at 1, and at level 0 Endurance, you regenerate half a heart every 60 seconds, 0 means no base regeneration)" )
@@ -1286,12 +1290,12 @@ public class Config
                 this.damageBonusPercentPerLevelMelee = subscriber.subscribe(builder
                         .comment( "How much percentage bonus damage do you get per Combat level in Melee?" )
                         .translation( "pmmo.damageBonusPercentPerLevelMelee" )
-                        .defineInRange( "damageBonusPercentPerLevelMelee", 0.005D, 0.001, 1000) );
+                        .defineInRange( "damageBonusPercentPerLevelMelee", 0.005D, 0.001, 1000 ) );
 
                 this.maxExtraDamagePercentageBoostMelee = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Combat skill max?" )
                         .translation( "pmmo.maxExtraDamagePercentageBoostMelee" )
-                        .defineInRange( "maxExtraDamagePercentageBoostMelee", 100D, 0, 1000000000) );
+                        .defineInRange( "maxExtraDamagePercentageBoostMelee", 100D, 0, 1000000000 ) );
 
                 builder.pop();
             }
@@ -1301,12 +1305,12 @@ public class Config
                 this.damageBonusPercentPerLevelArchery = subscriber.subscribe(builder
                         .comment( "How much percentage bonus damage do you get per Archery level in Archery?" )
                         .translation( "pmmo.damageBonusPercentPerLevelArchery" )
-                        .defineInRange( "damageBonusPercentPerLevelArchery", 0.005D, 0.001, 1000) );
+                        .defineInRange( "damageBonusPercentPerLevelArchery", 0.005D, 0.001, 1000 ) );
 
                 this.maxExtraDamagePercentageBoostArchery = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Archery skill max?" )
                         .translation( "pmmo.maxExtraDamagePercentageBoostArchery" )
-                        .defineInRange( "maxExtraDamagePercentageBoostArchery", 100D, 0, 1000000000) );
+                        .defineInRange( "maxExtraDamagePercentageBoostArchery", 100D, 0, 1000000000 ) );
 
                 builder.pop();
             }
@@ -1321,32 +1325,32 @@ public class Config
                 this.maxSalvageEnchantChance = subscriber.subscribe(builder
                         .comment( "Max Percentage chance to return each Enchantment Level" )
                         .translation( "pmmo.maxSalvageEnchantChance" )
-                        .defineInRange( "maxSalvageEnchantChance", 90D, 0, 100) );
+                        .defineInRange( "maxSalvageEnchantChance", 90D, 0, 100 ) );
 
                 this.enchantSaveChancePerLevel = subscriber.subscribe(builder
                         .comment( "Each Enchantment Save Chance per Level" )
                         .translation( "pmmo.enchantSaveChancePerLevel" )
-                        .defineInRange( "enchantSaveChancePerLevel", 0.9D, 0, 100) );
+                        .defineInRange( "enchantSaveChancePerLevel", 0.9D, 0, 100 ) );
 
                 this.anvilCostReductionPerLevel = subscriber.subscribe(builder
                         .comment( "Vanilla starts at 50, hence: (50 - [this] * level)" )
                         .translation( "pmmo.anvilCostReductionPerLevel" )
-                        .defineInRange( "anvilCostReductionPerLevel", 0.25D, 0, 100) );
+                        .defineInRange( "anvilCostReductionPerLevel", 0.25D, 0, 100 ) );
 
                 this.extraChanceToNotBreakAnvilPerLevel = subscriber.subscribe(builder
                         .comment( "Chance to not break anvil, 100 = twice the value, half the chance per Level." )
                         .translation( "pmmo.extraChanceToNotBreakAnvilPerLevel" )
-                        .defineInRange( "extraChanceToNotBreakAnvilPerLevel", 1D, 0, 100) );
+                        .defineInRange( "extraChanceToNotBreakAnvilPerLevel", 1D, 0, 100 ) );
 
                 this.anvilFinalItemBonusRepaired = subscriber.subscribe(builder
                         .comment( "Bonus repair durability per level (100 = twice as much repair per level)" )
                         .translation( "pmmo.anvilFinalItemBonusRepaired" )
-                        .defineInRange( "anvilFinalItemBonusRepaired", 1D, 0, 100) );
+                        .defineInRange( "anvilFinalItemBonusRepaired", 1D, 0, 100 ) );
 
                 this.anvilFinalItemMaxCostToAnvil = subscriber.subscribe(builder
                         .comment( "Vanilla caps at 50, at around 30 vanilla you can no longer anvil the item again. allows unlocking infinite Anvil uses." )
                         .translation( "pmmo.anvilFinalItemMaxCostToAnvil" )
-                        .defineInRange( "anvilFinalItemMaxCostToAnvil", 10, 0, 50) );
+                        .defineInRange( "anvilFinalItemMaxCostToAnvil", 10, 0, 50 ) );
 
                 this.dualSalvageSmithingLevelReq = subscriber.subscribe(builder
                         .comment( "From what level can you salvage from both hands at the same time?" )
@@ -1361,12 +1365,12 @@ public class Config
                 this.levelsPerOneEnchantBypass = subscriber.subscribe(builder
                         .comment( "How many levels per each Enchantment Level Bypass above max level enchantment can support in vanilla" )
                         .translation( "pmmo.levelsPerOneEnchantBypass" )
-                        .defineInRange( "levelsPerOneEnchantBypass", 50, 1, 1000000000) );
+                        .defineInRange( "levelsPerOneEnchantBypass", 50, 1, 1000000000 ) );
 
                 this.maxEnchantmentBypass = subscriber.subscribe(builder
                         .comment( "Max amount of levels enchants are able to go above max vanilla level" )
                         .translation( "pmmo.maxEnchantmentBypass" )
-                        .defineInRange( "maxEnchantmentBypass", 10, 0, 1000000000) );
+                        .defineInRange( "maxEnchantmentBypass", 10, 0, 1000000000 ) );
 
                 this.maxEnchantLevel = subscriber.subscribe(builder
                         .comment( "Anvil combination limits enchantments to this level" )
@@ -1376,12 +1380,12 @@ public class Config
                 this.upgradeChance = subscriber.subscribe(builder
                         .comment( "What is the chance to Bypass a max enchant level (provided you got the skill to do so)" )
                         .translation( "pmmo.upgradeChance" )
-                        .defineInRange( "upgradeChance", 50D, 0, 100) );
+                        .defineInRange( "upgradeChance", 50D, 0, 100 ) );
 
                 this.failedUpgradeKeepLevelChance = subscriber.subscribe(builder
                         .comment( "What is the chance to Reduce a level after a Upgrade chance fails (100 = everytime you fail bypass, enchant level goes down by 1)" )
                         .translation( "pmmo.failedUpgradeKeepLevelChance" )
-                        .defineInRange( "failedUpgradeKeepLevelChance", 50D, 0, 100) );
+                        .defineInRange( "failedUpgradeKeepLevelChance", 50D, 0, 100 ) );
 
                 this.alwaysUseUpgradeChance = subscriber.subscribe(builder
                         .comment( "false = Upgrade Chance if only rolled if you are trying to upgrade your item ABOVE vanilla max level. true = you ALWAYS have an upgrade chance level." )
@@ -1441,7 +1445,7 @@ public class Config
                 this.nightvisionUnlockLevel = subscriber.subscribe(builder
                         .comment( "Underwater Nightvision Unlock Level" )
                         .translation( "pmmo.nightvisionUnlockLevel" )
-                        .defineInRange( "nightvisionUnlockLevel", 25, 0, 1000000) );
+                        .defineInRange( "nightvisionUnlockLevel", 25, 0, 1000000 ) );
 
                 builder.pop();
             }
@@ -1456,17 +1460,17 @@ public class Config
                 this.fishPoolBaseChance = subscriber.subscribe(builder
                         .comment( "What is the chance on each successful fishing attempt to access the fish_pool" )
                         .translation( "pmmo.fishPoolBaseChance" )
-                        .defineInRange( "fishPoolBaseChance", 0D, 0, 100) );
+                        .defineInRange( "fishPoolBaseChance", 0D, 0, 100 ) );
 
                 this.fishPoolChancePerLevel = subscriber.subscribe(builder
                         .comment( "What is the increase per level to access the fish_pool" )
                         .translation( "pmmo.fishPoolChancePerLevel" )
-                        .defineInRange( "fishPoolChancePerLevel", 0.5D, 0, 100) );
+                        .defineInRange( "fishPoolChancePerLevel", 0.5D, 0, 100 ) );
 
                 this.fishPoolMaxChance = subscriber.subscribe(builder
                         .comment( "What is the max chance to access the fish_pool" )
                         .translation( "pmmo.fishPoolMaxChance" )
-                        .defineInRange( "fishPoolMaxChance", 80D, 0, 100) );
+                        .defineInRange( "fishPoolMaxChance", 80D, 0, 100 ) );
 
 
                 builder.pop();
@@ -1482,7 +1486,7 @@ public class Config
                 this.defaultCraftingXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Crafting for each item crafted? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultCraftingXp" )
-                        .defineInRange( "defaultCraftingXp", 1D, 0, 1000000) );
+                        .defineInRange( "defaultCraftingXp", 1D, 0, 1000000 ) );
 
                 builder.pop();
             }
@@ -1492,12 +1496,12 @@ public class Config
                 this.damageBonusPercentPerLevelMagic = subscriber.subscribe(builder
                         .comment( "How much percentage bonus damage do you get per Magic level in Magic?" )
                         .translation( "pmmo.damageBonusPercentPerLevelMagic" )
-                        .defineInRange( "damageBonusPercentPerLevelMagic", 0.005D, 0.001, 1000) );
+                        .defineInRange( "damageBonusPercentPerLevelMagic", 0.005D, 0.001, 1000 ) );
 
                 this.maxExtraDamagePercentageBoostMagic = subscriber.subscribe(builder
                         .comment( "How much extra damage can you get from the Magic skill max?" )
                         .translation( "pmmo.maxExtraDamagePercentageBoostMagic" )
-                        .defineInRange( "maxExtraDamagePercentageBoostMagic", 100D, 0, 1000000000) );
+                        .defineInRange( "maxExtraDamagePercentageBoostMagic", 100D, 0, 1000000000 ) );
 
                 builder.pop();
             }
@@ -1507,7 +1511,7 @@ public class Config
                 this.aggresiveMobSlayerXp = subscriber.subscribe(builder
                         .comment( "How much slayer xp is awarded upon killing an aggresive mob by default" )
                         .translation( "pmmo.aggresiveMobSlayerXp" )
-                        .defineInRange( "aggresiveMobSlayerXp", 0D, 0, 10000) );
+                        .defineInRange( "aggresiveMobSlayerXp", 0D, 0, 10000 ) );
 
                 builder.pop();
             }
@@ -1517,7 +1521,7 @@ public class Config
                 this.passiveMobHunterXp = subscriber.subscribe(builder
                         .comment( "How much hunter xp is awarded upon killing a passive mob by default" )
                         .translation( "pmmo.passiveMobHunterXp" )
-                        .defineInRange( "passiveMobHunterXp", 0D, 0, 10000) );
+                        .defineInRange( "passiveMobHunterXp", 0D, 0, 10000 ) );
 
                 builder.pop();
             }
@@ -1537,7 +1541,7 @@ public class Config
                 this.defaultTamingXp = subscriber.subscribe(builder
                         .comment( "How much xp should be awarded in Taming for Taming an animal? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultTamingXp" )
-                        .defineInRange( "defaultTamingXp", 0D, 0, 1000000) );
+                        .defineInRange( "defaultTamingXp", 0D, 0, 1000000 ) );
 
                 builder.pop();
             }
@@ -1547,7 +1551,7 @@ public class Config
                 this.jesusXp = subscriber.subscribe(builder
                         .comment( "How much xp do you get for impersonating Jesus?" )
                         .translation( "pmmo.jesusXp" )
-                        .defineInRange( "jesusXp", 0.075D, 0, 1000000) );
+                        .defineInRange( "jesusXp", 0.075D, 0, 1000000 ) );
 
                 builder.pop();
             }
@@ -1722,8 +1726,8 @@ public class Config
             return Config.localConfig.get( key );
         else
         {
-//            if( ProjectMMOMod.worldStarted )
-                LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT (This is normal during boot if JEI is installed)" );
+            if( ProjectMMOMod.serverStarted || !ProjectMMOMod.jeiLoaded )
+                LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT" );
             return -1;
         }
     }

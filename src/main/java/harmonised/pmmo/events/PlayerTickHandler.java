@@ -214,7 +214,9 @@ public class PlayerTickHandler
 
                     if( hpRegenGap > getHpRegenTime( player ) )
                     {
+                        float startHp = player.getHealth();
                         player.heal( 1f );
+                        XP.awardXp( (ServerPlayerEntity) player, Skill.ENDURANCE.toString(), "Regeneration", ( 60 / getHpRegenTime( player ) ) * 3.251 * ( player.getHealth() - startHp ), true, false, false );
                         hpRegen.put( uuid, System.nanoTime() );
                     }
                 }

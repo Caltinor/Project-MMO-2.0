@@ -69,7 +69,7 @@ public class PrefsEntry
             slider.setMessage( new StringTextComponent( slider.getValue() == 1 ? "On" : "Off" ) );
         else
             textField.setText( slider.getMessage().getString() );
-        System.out.println( slider.getMessage().getString() );
+//        System.out.println( slider.getMessage().getString() );
     }
 
     public int getWidth()

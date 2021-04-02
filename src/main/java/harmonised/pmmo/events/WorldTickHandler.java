@@ -228,9 +228,14 @@ public class WorldTickHandler
             toolUsed.damageItem( 1, player, (a) -> a.sendBreakAnimation( Hand.MAIN_HAND ) );
     }
 
+    public static double getVeinLeft( PlayerEntity player )
+    {
+        return Config.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
+    }
+
     public static void scheduleVein(PlayerEntity player, VeinInfo veinInfo )
     {
-        double veinLeft = Config.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
+        double veinLeft = getVeinLeft( player );
         double veinCost = getVeinCost( veinInfo.state, veinInfo.pos, player );
         String blockKey = veinInfo.state.getBlock().getRegistryName().toString();
         ArrayList<BlockPos> blockPosArrayList;
@@ -271,9 +276,6 @@ public class WorldTickHandler
             return true;
 
         ResourceLocation dimensionKey = XP.getDimResLoc( world );
-        if( dimensionKey == null )
-            return true;
-
         Map<String, Double> dimensionBlacklist = null;
 
         if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( dimensionKey.toString() ) )
@@ -282,7 +284,7 @@ public class WorldTickHandler
         return dimensionBlacklist == null || !dimensionBlacklist.containsKey(blockKey);
     }
 
-    private static ArrayList<BlockPos> getVeinShape( VeinInfo veinInfo, double veinLeft, double veinCost, boolean isCreative, boolean isLooped )
+    public static ArrayList<BlockPos> getVeinShape( VeinInfo veinInfo, double veinLeft, double veinCost, boolean isCreative, boolean isLooped )
     {
         Set<BlockPos> vein = new HashSet<>();
         ArrayList<BlockPos> outVein = new ArrayList<>();
@@ -305,7 +307,7 @@ public class WorldTickHandler
                 yLimit = 0;
         }
 
-        while( ( isCreative || veinLeft * 10 > veinCost * vein.size() || ( Config.forgeConfig.veinWoodTopToBottom.get() && !isLooped && skill.equals( Skill.WOODCUTTING.toString()  ) ) ) && vein.size() <= veinMaxBlocks )
+        while( ( isCreative || veinLeft * 1.523 > veinCost * vein.size() || ( Config.forgeConfig.veinWoodTopToBottom.get() && !isLooped && skill.equals( Skill.WOODCUTTING.toString() ) ) ) && vein.size() <= veinMaxBlocks )
         {
             for( BlockPos curPos : curLayer )
             {
@@ -400,6 +402,8 @@ public class WorldTickHandler
 
         if( cost < minVeinCost )
             cost = minVeinCost;
+
+//        System.out.println( cost );
 
         return cost;
     }

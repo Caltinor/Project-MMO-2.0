@@ -12,6 +12,7 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
@@ -64,14 +65,15 @@ public class XPOverlayGUI extends AbstractGui
 	private static double itemBoost, biomeBoost, dimensionBoost, playerXpBoost, dimensionMultiplier, multiplier;
 	private static double tempDouble, veinPos = -1000, lastVeinPos = -1000, veinPosGoal, addAmount = 0, lossAmount = 0, veinLeft;
 	private static BlockState blockState, lastBlockState;
+	public static BlockPos blockPos, lastBlockPos;
 	private static String lastBlockRegKey = "", lastBlockTransKey = "";
 	private static Item lastToolHeld = Items.AIR;
 	private static Map<String, Double> biomeBoosts;
 	private static MatrixStack stack;
 	public static Set<String> screenshots = new HashSet<>();
 	public static boolean listWasOn = false, barOn = false, listOn = false, isVeining = false, canBreak = true, canVein = false, lookingAtBlock = false, metToolReq = true;
+	public static Set<BlockPos> veinShapeSet = new HashSet<>();
 	MainWindow sr;
-	BlockPos blockPos, lastBlockPos;
 
 
 	@SubscribeEvent
@@ -183,8 +185,11 @@ public class XPOverlayGUI extends AbstractGui
 			blockPos = ((BlockRayTraceResult) mc.objectMouseOver).getPos();
 			blockState = mc.world.getBlockState( blockPos );
 
-			if( lastBlockState == null )
+			if( lastBlockPos == null )
 				updateLastBlock();
+
+			if( !blockPos.equals( lastBlockPos ) && XP.isPlayerSurvival( player ) )
+				updateVein();
 
 			if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
 				lastVeinBlockUpdate = System.nanoTime();
@@ -206,6 +211,26 @@ public class XPOverlayGUI extends AbstractGui
 			lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
 		canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
 		lastBlockTransKey = lastBlockState.getBlock().getTranslationKey();
+	}
+
+	public static void updateVein()
+	{
+		if( blockState == null )
+			return;
+		veinShapeSet.clear();
+		VeinInfo veinInfo = new VeinInfo( mc.world, blockState, blockPos, player.getHeldItemMainhand() );
+		ArrayList<BlockPos> veinShape = WorldTickHandler.getVeinShape( veinInfo, WorldTickHandler.getVeinLeft( player ), WorldTickHandler.getVeinCost( blockState, blockPos, player ), false, false );
+		int veinShapeSize = veinShape.size();
+		int matches = 0;
+		for( int i = 0; i < veinShapeSize; i++ )
+		{
+			BlockPos pos = veinShape.get( i );
+			if( pos.equals( blockPos ) )
+				continue;
+			if( ++matches > breakAmount || matches > Config.getPreferencesMap( player ).getOrDefault( "maxVeinDisplay", (double) Config.forgeConfig.maxVeinDisplay.get() ) )
+				break;
+			veinShapeSet.add( pos );
+		}
 	}
 
 	private void doXpDrops( MatrixStack stack )
@@ -421,42 +446,45 @@ public class XPOverlayGUI extends AbstractGui
 		veinBarPosY = (int) (sr.getScaledHeight() * veinBarOffsetY - barHeight / 2 );
 
 
-		if( veinKey && XP.isPlayerSurvival( player ) )
+		if( veinKey )
 		{
-			Minecraft.getInstance().getTextureManager().bindTexture( bar );
+			if( XP.isPlayerSurvival( player ) )
+			{
+				Minecraft.getInstance().getTextureManager().bindTexture( bar );
 
-			blit( stack, veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
-			blit( stack, veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
+				blit( stack, veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
+				blit( stack, veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
 //						System.out.println( veinPos * maxVeinCharge );
-			drawCenteredString( stack, fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
+				drawCenteredString( stack, fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
 
-			metToolReq = XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL );
+				metToolReq = XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL );
 
-			if( !metToolReq )
-			{
-				drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
-				return;
-			}
-
-			if( lookingAtBlock && !canBreak )
-			{
-				drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getString(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
-				return;
-			}
-
-			if( lastBlockState != null && canBreak && ( lookingAtBlock || isVeining ) )
-			{
-				if( canVein )
+				if( !metToolReq )
 				{
-					breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
-					if( breakAmount > veinMaxBlocks )
-						breakAmount = veinMaxBlocks;
-					drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.canVein", breakAmount, new TranslationTextComponent( lastBlockTransKey ) ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
+					drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+					return;
 				}
-				else if( WorldTickHandler.canVeinDimension( lastBlockRegKey, player ) )
-					drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.cannotVein", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
-				else
-					drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.cannotVeinDimension", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+
+				if( lookingAtBlock && !canBreak )
+				{
+					drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getString(), sr.getScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+					return;
+				}
+
+				if( lastBlockState != null && canBreak && ( lookingAtBlock || isVeining ) )
+				{
+					if( canVein )
+					{
+						breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
+						if( breakAmount > veinMaxBlocks )
+							breakAmount = veinMaxBlocks;
+						drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.canVein", breakAmount, new TranslationTextComponent( lastBlockTransKey ) ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
+					}
+					else if( WorldTickHandler.canVeinDimension( lastBlockRegKey, player ) )
+						drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.cannotVein", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+					else
+						drawCenteredString( stack, fontRenderer, new TranslationTextComponent( "pmmo.cannotVeinDimension", new TranslationTextComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+				}
 			}
 		}
 	}
@@ -1012,5 +1040,25 @@ public class XPOverlayGUI extends AbstractGui
 					player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelUpPartialFeatureUnlock", unlockName, jTypeName ).setStyle( XP.getColorStyle( 0xffff00 ) ), false );
 			}
 		}
+	}
+
+	public static boolean getVeinKey()
+	{
+		return veinKey;
+	}
+
+	public static boolean getLookingAtBlock()
+	{
+		return lookingAtBlock;
+	}
+
+	public static boolean getMetToolReq()
+	{
+		return metToolReq;
+	}
+
+	public static boolean getCanBreak()
+	{
+		return canBreak;
 	}
 }

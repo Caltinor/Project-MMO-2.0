@@ -19,39 +19,39 @@ import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 public class EventHandler
 {
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void blockBroken( BreakEvent event )
 	{
 		BlockBrokenHandler.handleBroken( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void blockPlaced( BlockEvent.EntityMultiPlaceEvent event )
 	{
 		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), (World) event.getWorld(), event.getPos() ) )
 			event.setCanceled( true );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
 	{
 		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), (World) event.getWorld(), event.getPos() ) )
 			event.setCanceled( true );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void livingHurt( LivingDamageEvent event )
 	{
 		DamageHandler.handleDamage( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void livingDeath( LivingDeathEvent event )
 	{
 		DeathHandler.handleDeath( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void playerTick( TickEvent.PlayerTickEvent event )
 	{
 		PlayerTickHandler.handlePlayerTick( event );
@@ -63,7 +63,7 @@ public class EventHandler
 		PlayerRespawnHandler.handlePlayerRespawn( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void livingJump( LivingJumpEvent event )
 	{
 		JumpHandler.handleJump( event );
@@ -81,56 +81,56 @@ public class EventHandler
 		PlayerDisconnectedHandler.handlerPlayerDisconnected( event );
 	}
 
-//	@SubscribeEvent(priority = EventPriority.LOWEST)
+//	@SubscribeEvent( priority = EventPriority.LOWEST )
 //	public static void playerClone( PlayerEvent.Clone event )
 //	{
 //		PlayerCloneHandler.handleClone( event );
 //	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void onAnvilRepair( AnvilRepairEvent event )
 	{
 		AnvilRepairHandler.handleAnvilRepair( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void onItemFished( ItemFishedEvent event )
 	{
 		FishedHandler.handleFished( event );
 	}
 
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void itemCrafted( PlayerEvent.ItemCraftedEvent event )
 	{
 		CraftedHandler.handleCrafted( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void breakSpeed( PlayerEvent.BreakSpeed event )
 	{
 		BreakSpeedHandler.handleBreakSpeed( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void playerInteract( PlayerInteractEvent event )
 	{
 		PlayerInteractionHandler.handlePlayerInteract( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void livingSpawn( LivingSpawnEvent.EnteringChunk event )
 	{
 		SpawnHandler.handleSpawn( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void babySpawn( BabyEntitySpawnEvent event )
 	{
 		BreedHandler.handleBreedEvent( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void animalTaming( AnimalTameEvent event )
 	{
 		TameHandler.handleAnimalTaming( event );
@@ -157,7 +157,7 @@ public class EventHandler
 //	@SubscribeEvent
 //	public static void furnace( PlayerEvent.ItemSmeltedEvent )
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	@SubscribeEvent( priority = EventPriority.HIGHEST )
 	public static void sleepDone( SleepFinishedTimeEvent event )
 	{
 		SleepHandler.handleSleepFinished( event );
@@ -175,7 +175,7 @@ public class EventHandler
 		ChunkDataHandler.handleChunkDataSave( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void pistonPush( PistonEvent event )
 	{
 		PistonEventHandler.handlePistonPush( event );
@@ -187,13 +187,13 @@ public class EventHandler
 //		ItemHandler.handleItemEntityPickup( event );
 //	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void saplingGrow( SaplingGrowTreeEvent event )
 	{
 		GrowHandler.handleSaplingGrow( event );
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void cropGrow( BlockEvent.CropGrowEvent.Post event )
 	{
 		GrowHandler.handleCropGrow( event );

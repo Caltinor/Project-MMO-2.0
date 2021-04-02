@@ -1,15 +1,20 @@
 package harmonised.pmmo.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.IReorderingProcessor;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
@@ -35,7 +40,65 @@ public class WorldRenderHandler
         currTime = System.nanoTime();
         d = (currTime - lastTime) / 1000000000D;
         renderWorldText( event );
-//        renderWorldXpDrops( event );
+        renderWorldXpDrops( event );
+        if( XP.isPlayerSurvival( mc.player ) )
+            drawBoxHighlights( event );
+    }
+
+    public static void drawBoxHighlights( RenderWorldLastEvent event )
+    {
+        MatrixStack stack = event.getMatrixStack();
+        Vector3d cameraPos = mc.getRenderManager().info.getProjectedView();
+        stack.push();
+        stack.translate( -cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ() );
+        IRenderTypeBuffer.Impl buffer = mc.getRenderTypeBuffers().getBufferSource();
+        IVertexBuilder builder = buffer.getBuffer( RenderType.getLines() );
+
+        if( XPOverlayGUI.getVeinKey() && XPOverlayGUI.getLookingAtBlock() && XPOverlayGUI.getMetToolReq() && XPOverlayGUI.getCanBreak() )
+        {
+            for( BlockPos pos : XPOverlayGUI.veinShapeSet )
+            {
+                drawBoxHighlight( stack, builder, pos );
+//                System.out.println( pos );
+            }
+        }
+        stack.pop();
+        RenderSystem.disableDepthTest();
+        buffer.finish();
+    }
+
+    public static void drawBoxHighlight( MatrixStack stack, IVertexBuilder builder, BlockPos pos )
+    {
+        stack.push();
+        Matrix4f matrix4f = stack.getLast().getMatrix();
+        int red = 255;
+        int green = 0;
+        int blue = 255;
+        int alpha = 255;
+
+        for( int i = 0; i < 12; i++ )
+        {
+            int mode = i/4, j = i%4;
+            float modulus = j%2, divide = j/2;
+            switch( mode )
+            {
+                case 0:
+                    builder.pos( matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() ).color( red, green, blue, alpha ).endVertex();
+                    builder.pos( matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() + 1 ).color( red, green, blue, alpha ).endVertex();
+                    break;
+
+                case 1:
+                    builder.pos( matrix4f, pos.getX(), pos.getY() + modulus, pos.getZ() + divide ).color( red, green, blue, alpha ).endVertex();
+                    builder.pos( matrix4f, pos.getX() + 1, pos.getY() + modulus, pos.getZ() + divide ).color( red, green, blue, alpha ).endVertex();
+                    break;
+
+                case 2:
+                    builder.pos( matrix4f, pos.getX() + divide, pos.getY(), pos.getZ() + modulus ).color( red, green, blue, alpha ).endVertex();
+                    builder.pos( matrix4f, pos.getX() + divide, pos.getY() + 1, pos.getZ() + modulus ).color( red, green, blue, alpha ).endVertex();
+                    break;
+            }
+        }
+        stack.pop();
     }
 
     public static void drawText( MatrixStack stack, Vector3d cameraPos, Vector3d textPos, String text, float scale, float rotation, int color )
