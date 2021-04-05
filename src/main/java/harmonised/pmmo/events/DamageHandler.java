@@ -12,13 +12,16 @@ import harmonised.pmmo.party.PartyMemberInfo;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.NBTHelper;
+import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
@@ -153,24 +156,39 @@ public class DamageHandler
                 ServerWorld world = player.getServerWorld();
 
                 if( XP.isHoldingDebugItemInOffhand( player ) )
-                    player.sendStatusMessage( new StringTextComponent( target.getEntityString() ), false );
+                {
+                    player.sendStatusMessage( new StringTextComponent( "regName:" + target.getEntityString() ), false );
+                    player.sendStatusMessage( new StringTextComponent( "dmgType:" + event.getSource().damageType ), false );
+                }
 
                 if( XP.isPlayerSurvival( player ) )
                 {
-                    ItemStack itemStack = player.getHeldItemMainhand();
+                    ItemStack mainItemStack = player.getHeldItemMainhand();
                     ResourceLocation mainResLoc = player.getHeldItemMainhand().getItem().getRegistryName();
                     ResourceLocation offResLoc = player.getHeldItemOffhand().getItem().getRegistryName();
                     Map<String, Double> weaponReq = XP.getJsonMap( mainResLoc, JType.REQ_WEAPON );
                     NBTHelper.maxDoubleMaps( weaponReq, XP.getJsonMap( offResLoc, JType.REQ_WEAPON ) );
                     String skill;
-                    String itemSpecificSkill = AutoValues.getItemSpecificSkill( itemStack.getItem().getRegistryName().toString() );
+                    String itemSpecificSkill = AutoValues.getItemSpecificSkill( mainItemStack.getItem().getRegistryName().toString() );
+                    boolean longDistanceCombatDamage = false;
+                    boolean swordInMainHand = mainItemStack.getItem() instanceof SwordItem;
+
                     if( itemSpecificSkill != null )
                         skill = itemSpecificSkill;
                     else
-                        skill = event.getSource().damageType.equals( "arrow" ) ? Skill.ARCHERY.toString() : Skill.COMBAT.toString();
+                    {
+                        if( event.getSource().damageType.equals( "arrow" ) )
+                            skill = Skill.ARCHERY.toString();
+                        else
+                        {
+                            skill = Skill.COMBAT.toString();
+                            if( Util.getDistance( player.getPositionVec(), target.getPositionVec() ) > 4.20 + target.getWidth() + ( swordInMainHand ? 1.523 : 0 ) )
+                                longDistanceCombatDamage = true;
+                        }
+                    }
 
                     if( Config.getConfig( "wearReqEnabled" ) != 0 && Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
-                        weaponReq.put( skill, weaponReq.getOrDefault( skill, AutoValues.getWeaponReqFromStack( itemStack ) ) );
+                        weaponReq.put( skill, weaponReq.getOrDefault( skill, AutoValues.getWeaponReqFromStack( mainItemStack ) ) );
                     int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
                     int gap = Math.max( weaponGap, enchantGap );
@@ -184,6 +202,9 @@ public class DamageHandler
                             return;
                         }
                     }
+
+                    if( longDistanceCombatDamage )
+                        skill = Skill.MAGIC.toString();
 
                     //Apply damage bonuses
 //                    System.out.println( damage );

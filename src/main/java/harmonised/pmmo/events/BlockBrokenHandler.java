@@ -11,6 +11,7 @@ import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
+import javafx.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SeaPickleBlock;
@@ -27,6 +28,7 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -43,6 +45,7 @@ import java.util.*;
 public class BlockBrokenHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final Map<ResourceLocation, Map<BlockPos, Long>> cooldownTracker = new HashMap<>();
 
     public static void handleBroken( BlockEvent.BreakEvent event )
     {
@@ -57,9 +60,26 @@ public class BlockBrokenHandler
         PlayerEntity player = event.getPlayer();
         BlockState blockState = event.getState();
         Block block = blockState.getBlock();
+        BlockPos pos = event.getPos();
         World world = (World) event.getWorld();
-        Block blockAbove = world.getBlockState( event.getPos().up() ).getBlock();
+        Block blockAbove = world.getBlockState( pos.up() ).getBlock();
+        ResourceLocation dimResLoc = XP.getDimResLoc( (World) event.getWorld() );
+
         boolean passedBreakReq = true;
+
+        if( !cooldownTracker.containsKey( dimResLoc ) )
+            cooldownTracker.put( dimResLoc, new HashMap<>() );
+        Map<BlockPos, Long> dimCooldownTracker = cooldownTracker.get( dimResLoc );
+        Long cooldownSince = dimCooldownTracker.get( pos );
+        if( cooldownSince != null )
+        {
+            if( System.currentTimeMillis() - cooldownSince > 50 )
+                dimCooldownTracker.remove( pos );
+            else
+                return;
+        }
+        else
+            dimCooldownTracker.put( pos, System.currentTimeMillis() );
 
         if( XP.isHoldingDebugItemInOffhand( player ) )
             player.sendStatusMessage( new StringTextComponent( block.getRegistryName().toString() ), false );
@@ -77,7 +97,7 @@ public class BlockBrokenHandler
             if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
             {
                 processBroken( event );
-                ChunkDataHandler.delPos( XP.getDimResLoc( world ), event.getPos() );
+                ChunkDataHandler.delPos( XP.getDimResLoc( world ), pos );
             }
         }
         else

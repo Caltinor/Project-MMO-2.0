@@ -1,4 +1,52 @@
 {
+	"ars_nouveau:novice_boots":
+	{
+		"magic": 2
+	},
+	"ars_nouveau:novice_leggings":
+	{
+		"magic": 2.5
+	},
+	"ars_nouveau:novice_robes":
+	{
+		"magic": 3
+	},
+	"ars_nouveau:novice_hood":
+	{
+		"magic": 2.5
+	},
+	"ars_nouveau:apprentice_boots":
+	{
+		"magic": 3
+	},
+	"ars_nouveau:apprentice_leggings":
+	{
+		"magic": 3.5
+	},
+	"ars_nouveau:apprentice_robes":
+	{
+		"magic": 4
+	},
+	"ars_nouveau:apprentice_hood":
+	{
+		"magic": 3.5
+	},
+	"ars_nouveau:archmage_boots":
+	{
+		"magic": 4.5
+	},
+	"ars_nouveau:archmage_leggings":
+	{
+		"magic": 5.5
+	},
+	"ars_nouveau:archmage_robes":
+	{
+		"magic": 6.5
+	},
+	"ars_nouveau:archmage_hood":
+	{
+		"magic": 5.5
+	},
 	"create:extendo_grip":
 	{
 		"building": 10,

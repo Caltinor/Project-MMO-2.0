@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.4-3.51'
+version = '1.16.4-3.51.4'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -104,7 +104,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.16.4-35.1.7'
+            minecraft 'net.minecraftforge:forge:1.16.4-35.1.37'
             implementation 'com.google.code.gson:gson:2.8.6'
 
             compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52:api")
@@ -125,6 +125,14 @@ dependencies
             runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3077866")
             compileOnly fg.deobf("curse.maven:item-filters:3066686")
             runtimeOnly fg.deobf("curse.maven:item-filters:3066686")
+
+//            compileOnly fg.deobf("curse.maven:patchouli:3126931")
+//            runtimeOnly fg.deobf("curse.maven:patchouli:3126931")
+//            compileOnly fg.deobf("curse.maven:geckolib:3259843")
+//            runtimeOnly fg.deobf("curse.maven:geckolib:3259843")
+//            compileOnly fg.deobf("curse.maven:ars-nouveau:3259810")
+//            runtimeOnly fg.deobf("curse.maven:ars-nouveau:3259810")
+
             runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0")
             compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0:api")
         }

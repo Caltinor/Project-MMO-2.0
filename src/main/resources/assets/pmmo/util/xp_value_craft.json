@@ -1777,30 +1777,10 @@
 	{
 		"crafting": 0
 	},
-	"minecraft:diamond_boots":
-	{
-		"crafting": 240,
-		"smithing": 48
-	},
-	"minecraft:diamond_chestplate":
-	{
-		"crafting": 480,
-		"smithing": 96
-	},
-	"minecraft:diamond_helmet":
-	{
-		"crafting": 300,
-		"smithing": 60
-	},
 	"minecraft:diamond_hoe":
 	{
 		"crafting": 120,
 		"smithing": 24
-	},
-	"minecraft:diamond_leggings":
-	{
-		"crafting": 420,
-		"smithing": 84
 	},
 	"minecraft:diamond_pickaxe":
 	{
@@ -1846,30 +1826,10 @@
 		"crafting": 90,
 		"smithing": 18
 	},
-	"minecraft:golden_boots":
-	{
-		"crafting": 120,
-		"smithing": 24
-	},
-	"minecraft:golden_chestplate":
-	{
-		"crafting": 240,
-		"smithing": 48
-	},
-	"minecraft:golden_helmet":
-	{
-		"crafting": 150,
-		"smithing": 30
-	},
 	"minecraft:golden_hoe":
 	{
 		"crafting": 60,
 		"smithing": 12
-	},
-	"minecraft:golden_leggings":
-	{
-		"crafting": 210,
-		"smithing": 42
 	},
 	"minecraft:golden_pickaxe":
 	{
@@ -1912,11 +1872,6 @@
 		"crafting": 40,
 		"smithing": 8
 	},
-	"minecraft:iron_chestplate":
-	{
-		"crafting": 80,
-		"smithing": 16
-	},
 	"minecraft:iron_door":
 	{
 		"crafting": 20
@@ -1934,11 +1889,6 @@
 	"minecraft:iron_ingot":
 	{
 		"crafting": 0
-	},
-	"minecraft:iron_leggings":
-	{
-		"crafting": 70,
-		"smithing": 14
 	},
 	"minecraft:iron_nugget":
 	{
@@ -1970,26 +1920,6 @@
 	"minecraft:lapis_block":
 	{
 		"crafting": 0
-	},
-	"minecraft:leather_boots":
-	{
-		"crafting": 60,
-		"smithing": 12
-	},
-	"minecraft:leather_chestplate":
-	{
-		"crafting": 120,
-		"smithing": 24
-	},
-	"minecraft:leather_helmet":
-	{
-		"crafting": 75,
-		"smithing": 15
-	},
-	"minecraft:leather_leggings":
-	{
-		"crafting": 105,
-		"smithing": 21
 	},
 	"minecraft:light_weighted_pressure_plate":
 	{

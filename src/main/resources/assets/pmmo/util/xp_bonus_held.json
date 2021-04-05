@@ -16,6 +16,14 @@
 	{
 		"swimming": 2.5
 	},
+	"ars_nouveau:apprentice_spell_book":
+	{
+		"magic": 10
+	},
+	"ars_nouveau:archmage_spell_book":
+	{
+		"magic": 20
+	},
 	"dungeons_gear:eternal_knife":
 	{
 		"hunter": 40

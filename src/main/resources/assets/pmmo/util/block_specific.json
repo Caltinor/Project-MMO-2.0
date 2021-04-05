@@ -3,6 +3,10 @@
 	{
 		"growsUpwards": 1
 	},
+	"minecraft:bamboo_sapling":
+	{
+		"growsUpwards": 1
+	},
 	"minecraft:cactus":
 	{
 		"growsUpwards": 1

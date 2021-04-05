@@ -105,6 +105,43 @@
 	{
 		"fishing": 20
 	},
+	"ars_nouveau:novice_spell_book":
+	{
+		"mining": 30,
+		"woodcutting": 30,
+		"excavation": 30,
+		"combat": 30
+	},
+	"ars_nouveau:apprentice_spell_book":
+	{
+		"mining": 45,
+		"woodcutting": 45,
+		"excavation": 35,
+		"combat": 45,
+		"magic": 45
+	},
+	"ars_nouveau:archmage_spell_book":
+	{
+		"mining": 60,
+		"woodcutting": 50,
+		"excavation": 45,
+		"combat": 60,
+		"magic": 60
+	},
+	"ars_nouveau:glyph_fortune":
+	{
+		"mining": 45,
+		"magic": 55
+	},
+	"ars_nouveau:glyph_amplify":
+	{
+		"mining": 40,
+		"magic": 35
+	},
+	"ars_nouveau:glyph_heal":
+	{
+		"magic": 65
+	},
 	"combustivefishing:blazing_fishing_rod":
 	{
 		"fishing": 40

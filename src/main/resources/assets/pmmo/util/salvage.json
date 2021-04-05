@@ -1652,6 +1652,18 @@
 			"levelReq": 40
 		}
 	},
+	"create:controller_rail":
+	{
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
+		}
+	},
 	"create:dolomite":
 	{
 		"minecraft:cobblestone":
@@ -3771,6 +3783,42 @@
 			"maxChance": 80,
 			"xpPerItem": 10,
 			"levelReq": 10
+		}
+	},
+	"minecraft:activator_rail":
+	{
+		"minecraft:iron_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"minecraft:detector_rail":
+	{
+		"minecraft:iron_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 1,
+			"maxChance": 80,
+			"xpPerItem": 10,
+			"levelReq": 10
+		}
+	},
+	"minecraft:powered_rail":
+	{
+		"minecraft:gold_ingot":
+		{
+			"salvageMax": 1,
+			"baseChance": 15,
+			"chancePerLevel": 0.75,
+			"maxChance": 80,
+			"xpPerItem": 35,
+			"levelReq": 30
 		}
 	},
 	"minecraft:blue_ice":
