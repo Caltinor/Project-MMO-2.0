@@ -21,7 +21,7 @@ public class SleepHandler
             {
                 Map<String, Double> configMap = Config.getAbilitiesMap( player );
                 double maxVein = Config.forgeConfig.maxVeinCharge.get();
-                double newVein = rechargeAmount * maxVein + configMap.getOrDefault( "veinLeft", 0D );
+                double newVein = Math.min( maxVein, rechargeAmount * maxVein + configMap.getOrDefault( "veinLeft", 0D ) );
                 configMap.put( "veinLeft", newVein );
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.veinCharge", DP.dpSoft( ( newVein / maxVein ) * 100 ) ).setStyle( XP.getColorStyle( 0x00ff00 ) ), true );
             });

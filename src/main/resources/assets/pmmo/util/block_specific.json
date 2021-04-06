@@ -11,6 +11,10 @@
 	{
 		"growsUpwards": 1
 	},
+	"minecraft:smithing_table":
+	{
+		"salvageStation": 1
+	},
 	"minecraft:kelp":
 	{
 		"growsUpwards": 1

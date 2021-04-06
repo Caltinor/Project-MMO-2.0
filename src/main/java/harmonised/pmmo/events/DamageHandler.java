@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -22,6 +23,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
@@ -191,10 +194,40 @@ public class DamageHandler
                         weaponReq.put( skill, weaponReq.getOrDefault( skill, AutoValues.getWeaponReqFromStack( mainItemStack ) ) );
                     int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
-                    int gap = Math.max( weaponGap, enchantGap );
+                    //TINKERS
+                    int killGap = 0, tinkersMaterialsReqGap = 0;
+                    if( ProjectMMOMod.tinkersLoaded )
+                    {
+                        ListNBT tinkerTags = (ListNBT) mainItemStack.getOrCreateTag().get( "tic_materials" );
+                        if( tinkerTags != null )
+                        {
+                            for( INBT iNbtTag : tinkerTags )
+                            {
+                                String tag = iNbtTag.getString();
+                                Map<String, Double> tinkersMaterialsReqMap = XP.getJsonMap( tag, JType.REQ_TINKERS_MATERIALS );
+                                boolean materialReqMet = XP.checkReq( player, tinkersMaterialsReqMap );
+                                tinkersMaterialsReqGap = Math.max( tinkersMaterialsReqGap, XP.getSkillReqGap( player, tinkersMaterialsReqMap ) );
+
+                                if( !materialReqMet )
+                                {
+                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseTinkersMaterial", tag ).setStyle( XP.textStyle.get( "red" ) ), false );
+
+                                    for( Map.Entry<String, Double> entry : tinkersMaterialsReqMap.entrySet() )
+                                    {
+                                        if( Skill.getLevel( entry.getKey(), player ) < entry.getValue() )
+                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                                        else
+                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //END OF TINKERS
+                    int gap = Math.max( Math.max( weaponGap, enchantGap ), tinkersMaterialsReqGap );
                     if( gap > 0 )
                     {
-                        if( enchantGap < gap )
+                        if( enchantGap < gap && tinkersMaterialsReqGap < gap )
                             NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
                         if( Config.forgeConfig.strictReqWeapon.get() )
                         {
@@ -217,11 +250,9 @@ public class DamageHandler
                         damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get();
 //                    System.out.println( damage );
 
-                    int killGap = 0;
-
                     if( target.getEntityString() != null )
                     {
-                        killGap = XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), JType.REQ_KILL );
+                        killGap = Math.max( killGap, XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), JType.REQ_KILL ) );
                         if( killGap > 0 )
                         {
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );

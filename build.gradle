@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.4-3.51.4'
+version = '1.16.5-3.52.1'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -104,7 +104,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.16.4-35.1.37'
+            minecraft 'net.minecraftforge:forge:1.16.5-36.1.4'
             implementation 'com.google.code.gson:gson:2.8.6'
 
             compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52:api")
@@ -125,6 +125,11 @@ dependencies
             runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3077866")
             compileOnly fg.deobf("curse.maven:item-filters:3066686")
             runtimeOnly fg.deobf("curse.maven:item-filters:3066686")
+
+            compileOnly fg.deobf("curse.maven:tinkers-construct:3263129")
+            runtimeOnly fg.deobf("curse.maven:tinkers-construct:3263129")
+            compileOnly fg.deobf("curse.maven:mantle:3180804")
+            runtimeOnly fg.deobf("curse.maven:mantle:3180804")
 
 //            compileOnly fg.deobf("curse.maven:patchouli:3126931")
 //            runtimeOnly fg.deobf("curse.maven:patchouli:3126931")

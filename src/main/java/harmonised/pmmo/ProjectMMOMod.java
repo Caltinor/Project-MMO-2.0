@@ -34,7 +34,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class ProjectMMOMod
 {
     private static String PROTOCOL_VERSION = "1";
-    public static boolean serverStarted = false, jeiLoaded = false;
+    public static boolean serverStarted = false, jeiLoaded = false, tinkersLoaded = false;
     public static SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
             .named( new ResourceLocation( Reference.MOD_ID, "main_channel" ) )
             .clientAcceptedVersions( PROTOCOL_VERSION::equals )
@@ -53,6 +53,8 @@ public class ProjectMMOMod
             FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( RewardType.class, RegisterHandler::handleFTBQRegistryRewardType );
         }
         jeiLoaded = ModList.get().isLoaded( "jei" );
+        tinkersLoaded = ModList.get().isLoaded( "tconstruct" );
+
         MinecraftForge.EVENT_BUS.addListener( this::serverAboutToStart );
         MinecraftForge.EVENT_BUS.addListener( this::serverStart );
         MinecraftForge.EVENT_BUS.addListener( this::serverStarted );
