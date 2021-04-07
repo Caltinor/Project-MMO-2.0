@@ -13,6 +13,7 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,8 +21,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
 
@@ -36,12 +39,15 @@ public class PlayerTickHandler
     private final static Map<UUID, Long> lastVeinAward = new HashMap<>();
     private final static Map<UUID, Long> lastCheeseUpdate = new HashMap<>();
     private final static Map<UUID, Long> hpRegen = new HashMap<>();
+    private final static Map<UUID, Integer> sneakCounter = new HashMap<>();
+    private final static Map<UUID, Boolean> sneakTracker = new HashMap<>();
     public static boolean syncPrefs = false;
     private static int ticksSinceAttributeRefresh = 0;
 
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
         PlayerEntity player = event.player;
+        boolean isRemote = player.world.isRemote;
 
         if( XP.isPlayerSurvival( player ) && player.isAlive() )
         {
@@ -63,17 +69,78 @@ public class PlayerTickHandler
 
             if( !lastAward.containsKey( uuid ) )
                 lastAward.put( uuid, System.nanoTime() );
-            if( !lastVeinAward.containsKey( uuid ) )
-                lastVeinAward.put( uuid, System.nanoTime() );
-            if( !lastCheeseUpdate.containsKey( uuid ) )
-                lastCheeseUpdate.put( uuid, System.nanoTime() );
-            if( !hpRegen.containsKey( uuid ) )
-                hpRegen.put( uuid, System.nanoTime() );
+
+            if( !isRemote )
+            {
+                ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+                if( !lastVeinAward.containsKey( uuid ) )
+                    lastVeinAward.put( uuid, System.nanoTime() );
+                if( !lastCheeseUpdate.containsKey( uuid ) )
+                    lastCheeseUpdate.put( uuid, System.nanoTime() );
+                if( !hpRegen.containsKey( uuid ) )
+                    hpRegen.put( uuid, System.nanoTime() );
+
+                //Sneak
+                if( !sneakCounter.containsKey( uuid ) )
+                {
+                    sneakTracker.put( uuid, player.isSneaking() );
+                    sneakCounter.put( uuid, sneakTracker.get( uuid ) ? 1 : 0 );
+                }
+                int sneakCount = sneakCounter.get( uuid );
+                if( player.isSneaking() && !sneakTracker.get( uuid ) )
+                {
+                    sneakCount++;
+                    if( !player.world.isRemote )
+                    {
+                        double roll = Math.random();
+                        double chance = 0.01 * ( sneakCount - 250 ) / 5;
+                        if( sneakCount > 250 && roll < chance )
+                        {
+                            player.attackEntityFrom( DamageSource.WITHER, (float) Math.max( 1, chance*2.5 ) );
+                            System.out.println( chance );
+                            if(serverPlayer.getHealth() <= 0 )
+                                sneakCount = 0;
+                        }
+                        if( sneakCount > 50 )
+                        {
+                            double award = ( sneakCount - 50 ) / 200D;
+                            if( award > 0 )
+                                XP.awardXp( serverPlayer, Skill.ENDURANCE.toString(), "twerking", award, true, false, false );
+                        }
+                    }
+                }
+                sneakCounter.put( uuid, sneakCount );
+                sneakTracker.put( uuid, player.isSneaking() );
+                //End of sneak
+
+                double veinGap      = ( ( System.nanoTime() - lastVeinAward.get     ( uuid ) ) / 1000000000D );
+                double cheeseGap    = ( ( System.nanoTime() - lastCheeseUpdate.get  ( uuid ) ) / 1000000000D );
+                double hpRegenGap   = ( ( System.nanoTime() - hpRegen.get           ( uuid ) ) / 1000000000D );
+
+                if( veinGap > 0.25 )
+                {
+                    sneakCounter.put( uuid, Math.max( 0, sneakCount - 1 ) );
+                    WorldTickHandler.updateVein( player, veinGap );
+                    lastVeinAward.put( uuid, System.nanoTime() );
+
+                    if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > Config.forgeConfig.cheeseCheckFrequency.get() )
+//                if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > 0.1 )
+                    {
+                        CheeseTracker.trackCheese( serverPlayer );
+                        lastCheeseUpdate.put( uuid, System.nanoTime() );
+                    }
+
+                    if( hpRegenGap > getHpRegenTime( player ) )
+                    {
+                        float startHp = player.getHealth();
+                        player.heal( 1f );
+                        XP.awardXp( serverPlayer, Skill.ENDURANCE.toString(), "Regeneration", ( 60 / getHpRegenTime( player ) ) * 32.51 * ( player.getHealth() - startHp ), true, false, false );
+                        hpRegen.put( uuid, System.nanoTime() );
+                    }
+                }
+            }
 
             double gap          = ( ( System.nanoTime() - lastAward.get         ( uuid ) ) / 1000000000D );
-            double veinGap      = ( ( System.nanoTime() - lastVeinAward.get     ( uuid ) ) / 1000000000D );
-            double cheeseGap    = ( ( System.nanoTime() - lastCheeseUpdate.get  ( uuid ) ) / 1000000000D );
-            double hpRegenGap   = ( ( System.nanoTime() - hpRegen.get           ( uuid ) ) / 1000000000D );
 
             if( gap > 0.5 )
             {
@@ -86,7 +153,7 @@ public class PlayerTickHandler
 
                 XP.checkBiomeLevelReq( player );
 
-                if( !player.world.isRemote() )
+                if( !isRemote )
                 {
                     if( Curios.isLoaded() )
                     {
@@ -147,7 +214,7 @@ public class PlayerTickHandler
                 if( nightVisionPref && XP.isNightvisionUnlocked( player) && XP.isNightvisionUnlocked( player ) && player.isInWater() && waterAbove )
                     player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 300, 0, false, false ) );
 
-                if( !player.world.isRemote() )
+                if( !isRemote )
                 {
                     ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
                     ServerWorld world = serverPlayer.getServerWorld();
@@ -197,33 +264,9 @@ public class PlayerTickHandler
                 }
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
             }
-
-            if( !player.world.isRemote() )
-            {
-                if( veinGap > 0.25 )
-                {
-                    WorldTickHandler.updateVein( player, veinGap );
-                    lastVeinAward.put( uuid, System.nanoTime() );
-
-                    if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > Config.forgeConfig.cheeseCheckFrequency.get() )
-//                if( Config.forgeConfig.antiCheeseEnabled.get() && cheeseGap > 0.1 )
-                    {
-                        CheeseTracker.trackCheese( (ServerPlayerEntity) player );
-                        lastCheeseUpdate.put( uuid, System.nanoTime() );
-                    }
-
-                    if( hpRegenGap > getHpRegenTime( player ) )
-                    {
-                        float startHp = player.getHealth();
-                        player.heal( 1f );
-                        XP.awardXp( (ServerPlayerEntity) player, Skill.ENDURANCE.toString(), "Regeneration", ( 60 / getHpRegenTime( player ) ) * 3.251 * ( player.getHealth() - startHp ), true, false, false );
-                        hpRegen.put( uuid, System.nanoTime() );
-                    }
-                }
-            }
         }
 
-        if( player.world.isRemote() )
+        if( isRemote )
         {
             if( XPOverlayGUI.screenshots.size() > 0 )
             {
@@ -246,6 +289,6 @@ public class PlayerTickHandler
     public static double getHpRegenTime( PlayerEntity player )
     {
         double dividend = Config.getConfig( "hpRegenPerMinuteBase" ) + Skill.getLevel( Skill.ENDURANCE.toString(), player ) * Config.getConfig( "hpRegenPerMinuteBoostPerLevel" );
-        return dividend <= 0 ? 60 : 60 / dividend;
+        return dividend <= 0 ? Double.POSITIVE_INFINITY : 60 / dividend;
     }
 }

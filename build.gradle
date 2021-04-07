@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.5-3.52.1'
+version = '1.16.5-3.52.2'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -126,10 +126,10 @@ dependencies
             compileOnly fg.deobf("curse.maven:item-filters:3066686")
             runtimeOnly fg.deobf("curse.maven:item-filters:3066686")
 
-            compileOnly fg.deobf("curse.maven:tinkers-construct:3263129")
-            runtimeOnly fg.deobf("curse.maven:tinkers-construct:3263129")
-            compileOnly fg.deobf("curse.maven:mantle:3180804")
-            runtimeOnly fg.deobf("curse.maven:mantle:3180804")
+//            compileOnly fg.deobf("curse.maven:tinkers-construct:3263129")
+//            runtimeOnly fg.deobf("curse.maven:tinkers-construct:3263129")
+//            compileOnly fg.deobf("curse.maven:mantle:3180804")
+//            runtimeOnly fg.deobf("curse.maven:mantle:3180804")
 
 //            compileOnly fg.deobf("curse.maven:patchouli:3126931")
 //            runtimeOnly fg.deobf("curse.maven:patchouli:3126931")

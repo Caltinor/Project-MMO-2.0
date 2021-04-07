@@ -122,7 +122,9 @@ public class StatsScreen extends Screen
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.hearts" );
         text.add( new TranslationTextComponent( "pmmo.heartBonus", AttributeHandler.getHeartBoost( player ) / 2 ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
-        text.add( new TranslationTextComponent( "pmmo.halfHeartRegenerationSeconds", DP.dpSoft( 60D / PlayerTickHandler.getHpRegenTime( player ) ) ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
+        double hpRegenTime = PlayerTickHandler.getHpRegenTime( player );
+        if( hpRegenTime < Double.POSITIVE_INFINITY )
+            text.add( new TranslationTextComponent( "pmmo.halfHeartRegenerationSeconds", DP.dpSoft( 60D / hpRegenTime ) ).setStyle( Skill.getSkillStyle( Skill.ENDURANCE.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
