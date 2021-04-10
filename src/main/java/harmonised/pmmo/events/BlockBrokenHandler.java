@@ -27,6 +27,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -215,7 +216,7 @@ public class BlockBrokenHandler
                     .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
                     .withParameter( LootParameters.TOOL, toolUsed )
                     .withParameter( LootParameters.THIS_ENTITY, player )
-                    .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
+                    .withNullableParameter( LootParameters.BLOCK_ENTITY, TileEntity.readTileEntity( state, world.getTileEntity( event.getPos() ).serializeNBT() ) );
             if (fortune > 0)
             {
                 builder.withLuck(fortune);
@@ -232,7 +233,8 @@ public class BlockBrokenHandler
                         .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
                         .withParameter( LootParameters.TOOL, noEnchantTool )
                         .withParameter( LootParameters.THIS_ENTITY, player )
-                        .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
+                        .withNullableParameter( LootParameters.BLOCK_ENTITY, TileEntity.readTileEntity( state, world.getTileEntity( event.getPos() ).serializeNBT() ) );
+                ;
                 if (fortune > 0)
                 {
                     builder.withLuck(fortune);
