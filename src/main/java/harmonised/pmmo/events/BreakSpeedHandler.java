@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -35,7 +36,7 @@ public class BreakSpeedHandler
         ResourceLocation resLoc = itemStack.getItem().getRegistryName();
         if( resLoc == null )
             return;
-        Map<String, Double> toolReq = XP.getJsonMap( resLoc, JType.REQ_TOOL );
+        Map<String, Double> toolReq = TooltipSupplier.getTooltipData(resLoc, JType.REQ_TOOL, itemStack);
         if( Config.getConfig( "toolReqEnabled" ) != 0 && Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
         {
             Map<String, Double> dynToolReq = AutoValues.getToolReqFromStack( itemStack );

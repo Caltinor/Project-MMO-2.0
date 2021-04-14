@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import harmonised.pmmo.api.PredicateRegistry;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -738,7 +740,10 @@ public class XP
 
 		if( res.equals( Items.AIR.getRegistryName() ) || player.isCreative() )
 			return true;
-
+		
+		if( PredicateRegistry.predicateExists(res, jType)) 
+			return PredicateRegistry.checkPredicateReq(player, res, jType);
+		
 		return checkReq( player, getJsonMap( res.toString(), jType ) );
 	}
 
@@ -910,67 +915,67 @@ public class XP
 		return matched;
 	}
 
-//	public static CompoundNBT getPmmoTag( PlayerEntity player )
-//	{
-//		if( player != null )
-//		{
-//			CompoundNBT persistTag = player.getPersistentData();
-//			CompoundNBT pmmoTag = null;
-//
-//			if( !persistTag.contains( Reference.MOD_ID ) )			//if Player doesn't have pmmo tag, make it
-//			{
-//				pmmoTag = new CompoundNBT();
-//				persistTag.put( Reference.MOD_ID, pmmoTag );
-//			}
-//			else
-//			{
-//				pmmoTag = persistTag.getCompound( Reference.MOD_ID );	//if Player has pmmo tag, use it
-//			}
-//
-//			return pmmoTag;
-//		}
-//		else
-//			return new CompoundNBT();
-//	}
-//
-//	public static CompoundNBT getPmmoTagElement( PlayerEntity player, String element )
-//	{
-//		if( player != null )
-//		{
-//			CompoundNBT pmmoTag = getPmmoTag( player );
-//			CompoundNBT elementTag = null;
-//
-//			if( !pmmoTag.contains( element ) )					//if Player doesn't have element tag, make it
-//			{
-//				elementTag = new CompoundNBT();
-//				pmmoTag.put( element, elementTag );
-//			}
-//			else
-//			{
-//				elementTag = pmmoTag.getCompound( element );	//if Player has element tag, use it
-//			}
-//
-//			return elementTag;
-//		}
-//		else
-//			return new CompoundNBT();
-//	}
-//
-//	public static CompoundNBT getxpMap( PlayerEntity player )
-//	{
-//		return getPmmoTagElement( player, "skills" );
-//	}
-//
-//	public static CompoundNBT getPreferencesTag( PlayerEntity player )
-//	{
-//		return getPmmoTagElement( player, "preferences" );
-//	}
-//
-//	public static CompoundNBT getabilitiesMap( PlayerEntity player )
-//	{
-//		return getPmmoTagElement( player, "abilities" );
-//	}
+/*	public static CompoundNBT getPmmoTag( PlayerEntity player )
+	{
+		if( player != null )
+		{
+			CompoundNBT persistTag = player.getPersistentData();
+			CompoundNBT pmmoTag = null;
 
+			if( !persistTag.contains( Reference.MOD_ID ) )			//if Player doesn't have pmmo tag, make it
+			{
+				pmmoTag = new CompoundNBT();
+				persistTag.put( Reference.MOD_ID, pmmoTag );
+			}
+			else
+			{
+				pmmoTag = persistTag.getCompound( Reference.MOD_ID );	//if Player has pmmo tag, use it
+			}
+
+			return pmmoTag;
+		}
+		else
+			return new CompoundNBT();
+	}
+*/
+/*	public static CompoundNBT getPmmoTagElement( PlayerEntity player, String element )
+	{
+		if( player != null )
+		{
+			CompoundNBT pmmoTag = getPmmoTag( player );
+			CompoundNBT elementTag = null;
+
+			if( !pmmoTag.contains( element ) )					//if Player doesn't have element tag, make it
+			{
+				elementTag = new CompoundNBT();
+				pmmoTag.put( element, elementTag );
+			}
+			else
+			{
+				elementTag = pmmoTag.getCompound( element );	//if Player has element tag, use it
+			}
+
+			return elementTag;
+		}
+		else
+			return new CompoundNBT();
+	}
+*/
+/*	public static CompoundNBT getxpMap( PlayerEntity player )
+	{
+		return getPmmoTagElement( player, "skills" );
+	}
+*/
+/*	public static CompoundNBT getPreferencesTag( PlayerEntity player )
+	{
+		return getPmmoTagElement( player, "preferences" );
+	}
+*/
+/*	public static CompoundNBT getabilitiesMap( PlayerEntity player )
+	{
+		return getPmmoTagElement( player, "abilities" );
+	}
+*/
 	public static double getMaxLevel()
 	{
 		double serverMaxLevel = Config.getConfig( "maxLevel" );

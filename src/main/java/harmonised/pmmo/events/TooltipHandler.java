@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -11,7 +12,6 @@ import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -74,14 +74,14 @@ public class TooltipHandler
                     return;
                 }
 
-                Map<String, Double> craftReq = JsonConfig.data.get( JType.REQ_CRAFT ).get( regKey );
-                Map<String, Double> wearReq = JsonConfig.data.get( JType.REQ_WEAR ).get( regKey );
-                Map<String, Double> toolReq = JsonConfig.data.get( JType.REQ_TOOL ).get( regKey );
-                Map<String, Double> weaponReq = JsonConfig.data.get( JType.REQ_WEAPON ).get( regKey );
-                Map<String, Double> useReq = JsonConfig.data.get( JType.REQ_USE ).get( regKey );
+                Map<String, Double> craftReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_CRAFT, itemStack);
+                Map<String, Double> wearReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAR, itemStack);
+                Map<String, Double> toolReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_TOOL, itemStack);
+                Map<String, Double> weaponReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAPON, itemStack);
+                Map<String, Double> useReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_USE, itemStack);
                 Map<String, Double> useEnchantmentReq = XP.getEnchantsUseReq( itemStack );
-                Map<String, Double> placeReq = JsonConfig.data.get( JType.REQ_PLACE ).get( regKey );
-                Map<String, Double> breakReq = JsonConfig.data.get( JType.REQ_BREAK ).get( regKey );
+                Map<String, Double> placeReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_PLACE, itemStack);
+                Map<String, Double> breakReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_BREAK, itemStack);
                 Map<String, Double> xpValueGeneral = JsonConfig.data.get( JType.XP_VALUE_GENERAL ).get( regKey );
                 Map<String, Double> xpValueBreaking = JsonConfig.data.get( JType.XP_VALUE_BREAK ).get( regKey );
                 Map<String, Double> xpValueCrafting = JsonConfig.data.get( JType.XP_VALUE_CRAFT ).get( regKey );
