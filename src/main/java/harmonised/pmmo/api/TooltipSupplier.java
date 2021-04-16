@@ -70,7 +70,7 @@ public class TooltipSupplier {
 		if (tooltipExists(res, jType)) {
 			Map<String, Double> suppliedData = tooltips.get(jType).get(res).apply(stack);
 			return suppliedData == null ? new HashMap<>() : suppliedData;
-		}				
-		return JsonConfig.data.get(jType).get(res.toString());
+		}	
+		return JsonConfig.data.getOrDefault(jType, new HashMap<>()).getOrDefault(res.toString(), new HashMap<>());
 	}
 }
