@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.api.PredicateRegistry;
+import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
