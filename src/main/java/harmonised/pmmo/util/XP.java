@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.api.PredicateRegistry;
-import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -25,7 +24,6 @@ import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -44,6 +42,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.*;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -51,7 +50,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -732,6 +730,21 @@ public class XP
 	public static boolean checkReq( PlayerEntity player, String res, JType jType )
 	{
 		return checkReq( player, XP.getResLoc( res ), jType );
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static boolean checkReq( PlayerEntity player, TileEntity tile, JType jType )
+	{
+		if( tile == null )
+			return true;
+		
+		if( tile.getBlockState().isAir() )
+			return true;
+		
+		if( PredicateRegistry.predicateExists(tile.getBlockState().getBlock().getRegistryName(), jType))
+			return PredicateRegistry.checkPredicateReq(player, tile, jType);
+		
+		return checkReq( player, getJsonMap( tile.getBlockState().getBlock().getRegistryName().toString(), jType ) );
 	}
 
 	public static boolean checkReq( PlayerEntity player, ResourceLocation res, JType jType )

@@ -83,7 +83,9 @@ public class BreakSpeedHandler
         int toolGap = XP.getSkillReqGap( player, toolReq );
         int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
         int gap = Math.max( Math.max( toolGap, enchantGap ), tinkersMaterialsReqGap );
-        boolean breakReqMet = XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK );
+        boolean breakReqMet = event.getState().hasTileEntity()
+        		? XP.checkReq( player, event.getEntity().getEntityWorld().getTileEntity(event.getPos()), JType.REQ_BREAK)
+        		: XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK );
 
         if( !breakReqMet )
         {
