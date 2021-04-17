@@ -312,6 +312,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> maxExtraHeartBoost;
         public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBase;
         public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBoostPerLevel;
+        public ConfigHelper.ConfigValueListener<Double> hpRegenXpMultiplier;
 
         //Combat
         public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMelee;
@@ -1288,6 +1289,10 @@ public class Config
                         .translation( "pmmo.hpRegenPerMinuteBoostPerLevel" )
                         .defineInRange( "hpRegenPerMinuteBoostPerLevel", 0.02D, 0, 1000 ) );
 
+                this.hpRegenXpMultiplier = subscriber.subscribe(builder
+                        .comment( "Multiplier for xp gained in endurance from Regeneration" )
+                        .translation( "pmmo.hpRegenXpMultiplier" )
+                        .defineInRange( "hpRegenXpMultiplier", 15.23D, 0, 1000000 ) );
 
                 builder.pop();
             }
