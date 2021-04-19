@@ -285,12 +285,11 @@ public class JsonConfig
         {
             fileName = jType.name().toLowerCase() + ".json";
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
-
             try
-                    (
-                            InputStream input = new FileInputStream( file.getPath() );
-                            Reader reader = new BufferedReader( new InputStreamReader( input ) )
-                    )
+                (
+                    InputStream input = new FileInputStream( file.getPath() );
+                    Reader reader = new BufferedReader( new InputStreamReader( input ) )
+                )
             {
                 if( jTypes2.contains( jType ) )
                     rawData2.put( jType, gson.fromJson( reader, mapType2 ) );
