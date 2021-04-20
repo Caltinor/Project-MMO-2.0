@@ -51,7 +51,7 @@ public class BreakSpeedHandler
         int tinkersMaterialsReqGap = 0;
         if( ProjectMMOMod.tinkersLoaded )
         {
-            ListNBT tinkerTags = (ListNBT) itemStack.getOrCreateTag().get( "tic_materials" );
+            ListNBT tinkerTags = (ListNBT) itemStack.getTag().get( "tic_materials" );
             if( tinkerTags != null )
             {
                 for( INBT iNbtTag : tinkerTags )

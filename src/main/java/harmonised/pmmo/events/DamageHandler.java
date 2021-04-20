@@ -198,7 +198,7 @@ public class DamageHandler
                     int killGap = 0, tinkersMaterialsReqGap = 0;
                     if( ProjectMMOMod.tinkersLoaded )
                     {
-                        ListNBT tinkerTags = (ListNBT) mainItemStack.getOrCreateTag().get( "tic_materials" );
+                        ListNBT tinkerTags = (ListNBT) mainItemStack.getTag().get( "tic_materials" );
                         if( tinkerTags != null )
                         {
                             for( INBT iNbtTag : tinkerTags )
