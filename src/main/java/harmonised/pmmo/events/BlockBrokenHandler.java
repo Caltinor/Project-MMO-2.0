@@ -6,12 +6,10 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
-import harmonised.pmmo.network.MessageWorldText;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
-import javafx.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SeaPickleBlock;
@@ -25,8 +23,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -143,6 +141,9 @@ public class BlockBrokenHandler
         String regKey = block.getRegistryName().toString();
         final Map<String, Double> xpMap = XP.getXp( regKey, JType.XP_VALUE_BREAK );
         World world = (World) event.getWorld();
+        TileEntity tileEntity = world.getTileEntity( event.getPos() );
+        if( tileEntity != null )
+            tileEntity = TileEntity.readTileEntity( state, tileEntity.serializeNBT() );
         boolean isRemote = world.isRemote();
         PlayerEntity player = event.getPlayer();
         boolean veiningAllowed = Config.getConfig( "veiningAllowed" ) != 0;
@@ -206,43 +207,52 @@ public class BlockBrokenHandler
 
         boolean dropsItself = false;
 
-        List<ItemStack> drops, noSilkDrops;
+        List<ItemStack> noSilkDrops, drops = null;
 
-        if( world instanceof ServerWorld )
+        try
         {
-            LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
-                    .withRandom(world.rand)
-                    .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
-                    .withParameter( LootParameters.TOOL, toolUsed )
-                    .withParameter( LootParameters.THIS_ENTITY, player )
-                    .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
-            if (fortune > 0)
+            if( world instanceof ServerWorld )
             {
-                builder.withLuck(fortune);
-            }
-            drops = block.getDrops( event.getState(), builder );
-
-            if( EnchantmentHelper.getEnchantments( toolUsed ).containsKey( Enchantments.SILK_TOUCH ) )
-            {
-                ItemStack noEnchantTool = toolUsed.copy();
-                noEnchantTool.removeChildTag("Enchantments");
-
-                builder = new LootContext.Builder((ServerWorld) world)
+                LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
                         .withRandom(world.rand)
                         .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
-                        .withParameter( LootParameters.TOOL, noEnchantTool )
+                        .withParameter( LootParameters.TOOL, toolUsed )
                         .withParameter( LootParameters.THIS_ENTITY, player )
-                        .withNullableParameter( LootParameters.BLOCK_ENTITY, world.getTileEntity( event.getPos() ) );
+                        .withNullableParameter( LootParameters.BLOCK_ENTITY, tileEntity );
                 if (fortune > 0)
                 {
                     builder.withLuck(fortune);
                 }
-                noSilkDrops = block.getDrops( event.getState(), builder );
-                if( noSilkDrops.size() > 0 && noSilkDrops.get(0).getItem().equals( block.asItem() ) )
-                    dropsItself = true;
+                drops = block.getDrops( event.getState(), builder );
+
+                if( EnchantmentHelper.getEnchantments( toolUsed ).containsKey( Enchantments.SILK_TOUCH ) )
+                {
+                    ItemStack noEnchantTool = toolUsed.copy();
+                    noEnchantTool.removeChildTag("Enchantments");
+
+                    builder = new LootContext.Builder((ServerWorld) world)
+                            .withRandom(world.rand)
+                            .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
+                            .withParameter( LootParameters.TOOL, noEnchantTool )
+                            .withParameter( LootParameters.THIS_ENTITY, player )
+                            .withNullableParameter( LootParameters.BLOCK_ENTITY, tileEntity );
+                    ;
+                    if (fortune > 0)
+                    {
+                        builder.withLuck(fortune);
+                    }
+                    noSilkDrops = block.getDrops( event.getState(), builder );
+                    if( noSilkDrops.size() > 0 && noSilkDrops.get(0).getItem().equals( block.asItem() ) )
+                        dropsItself = true;
+                }
             }
         }
-        else
+        catch( Exception e )
+        {
+            LOGGER.error( e );
+        }
+
+        if( drops == null )
             drops = new ArrayList<>();
 
         Map<String, Double> award = new HashMap<>();

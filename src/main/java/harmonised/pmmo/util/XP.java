@@ -1390,17 +1390,15 @@ public class XP
 	public static int getSkillReqGap(PlayerEntity player, Map<String, Double> reqs )
 	{
 		int gap = 0;
-
 		if( !checkReq( player, reqs ) )
 		{
 			if( reqs != null )
 			{
 				gap = (int) Math.floor( reqs.entrySet().stream()
-						.map( entry -> getGap( (int) Math.floor( entry.getValue() ), Skill.getLevel( entry.getKey(), player ) ) )
+						.map( entry -> (int) Math.floor( entry.getValue() ) -  Skill.getLevel( entry.getKey(), player ) )
 						.reduce( 0, Math::max ) );
 			}
 		}
-
 		return gap;
 	}
 

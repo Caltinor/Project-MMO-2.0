@@ -3,6 +3,8 @@ package harmonised.pmmo.util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
+import java.util.Map;
+
 public class Util
 {
     public static double mapCapped( double input, double inLow, double inHigh, double outLow, double outHigh )
@@ -119,5 +121,25 @@ public class Util
         int g1 = (int) ((g + m) * 255);
         int b1 = (int) ((b + m) * 255);
         return r1 << 16 | b1 << 8 | g1;
+    }
+
+    public static <T> boolean mapIsAnyAbove1( Map<T, Double> input )
+    {
+        for( Map.Entry<T, Double> entry : input.entrySet() )
+        {
+            if( entry.getValue() > 1 )
+                return true;
+        }
+        return false;
+    }
+
+    public static <T> boolean mapIsAnyAbove1String( Map<String, Map<T, Double>> input, String key )
+    {
+        for( Map.Entry<T, Double> entry : input.get( key ).entrySet() )
+        {
+            if( entry.getValue() > 1 )
+                return true;
+        }
+        return false;
     }
 }

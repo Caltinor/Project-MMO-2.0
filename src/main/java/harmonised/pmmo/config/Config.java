@@ -218,6 +218,9 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> broadcastMilestone;
         public ConfigHelper.ConfigValueListener<Boolean> levelUpFirework;
         public ConfigHelper.ConfigValueListener<Boolean> milestoneLevelUpFirework;
+        public ConfigHelper.ConfigValueListener<Boolean> spawnFireworksCausedByMe;
+        public ConfigHelper.ConfigValueListener<Boolean> spawnFireworksCausedByOthers;
+        public ConfigHelper.ConfigValueListener<Boolean> underwaterNightVision;
         public ConfigHelper.ConfigValueListener<Boolean> deathLoosesLevels;
 
         public ConfigHelper.ConfigValueListener<Boolean> useExponentialFormula;
@@ -262,10 +265,10 @@ public class Config
 
         public ConfigHelper.ConfigValueListener<Boolean> worldXpDropsEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> worldXpDropsShowSkill;
+        public ConfigHelper.ConfigValueListener<Boolean> showOthersWorldXpDrops;
         public ConfigHelper.ConfigValueListener<Double> worldXpDropsSizeMultiplier;
         public ConfigHelper.ConfigValueListener<Double> worldXpDropsDecaySpeedMultiplier;
         public ConfigHelper.ConfigValueListener<Double> worldXpDropsRotationCap;
-
 
         //Breaking Speed
         public ConfigHelper.ConfigValueListener<Double> minBreakSpeed;
@@ -312,6 +315,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Integer> maxExtraHeartBoost;
         public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBase;
         public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBoostPerLevel;
+        public ConfigHelper.ConfigValueListener<Double> hpRegenXpMultiplier;
 
         //Combat
         public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMelee;
@@ -888,6 +892,16 @@ public class Config
                         .translation( "pmmo.milestoneLevelUpFirework" )
                         .define( "milestoneLevelUpFirework", true ) );
 
+                this.spawnFireworksCausedByMe = subscriber.subscribe(builder
+                        .comment( "Should fireworks appear on Milestone level up, to anyone, by you?" )
+                        .translation( "pmmo.spawnFireworksCausedByMe" )
+                        .define( "spawnFireworksCausedByMe", true ) );
+
+                this.spawnFireworksCausedByOthers = subscriber.subscribe(builder
+                        .comment( "Should fireworks appear on Milestone level up, from other players?" )
+                        .translation( "pmmo.spawnFireworksCausedByOthers" )
+                        .define( "spawnFireworksCausedByOthers", true ) );
+
                 this.deathLoosesLevels = subscriber.subscribe(builder
                         .comment( "Should players loose Percentage of Full Levels instead of Xp above Whole Level upon death?" )
                         .translation( "pmmo.deathLoosesLevels" )
@@ -1089,6 +1103,11 @@ public class Config
                         .translation( "pmmo.worldXpDropsShowSkill" )
                         .define( "worldXpDropsShowSkill", true ) );
 
+                this.showOthersWorldXpDrops = subscriber.subscribe(builder
+                        .comment( "Should World Xp Drops of other people show up for you?" )
+                        .translation( "pmmo.showOthersWorldXpDrops" )
+                        .define( "showOthersWorldXpDrops", false ) );
+
                 this.worldXpDropsSizeMultiplier = subscriber.subscribe(builder
                         .comment( "Value by which World Xp Drops Size is scaled (2 = twice as big)" )
                         .translation( "pmmo.worldXpDropsSizeMultiplier" )
@@ -1288,6 +1307,10 @@ public class Config
                         .translation( "pmmo.hpRegenPerMinuteBoostPerLevel" )
                         .defineInRange( "hpRegenPerMinuteBoostPerLevel", 0.02D, 0, 1000 ) );
 
+                this.hpRegenXpMultiplier = subscriber.subscribe(builder
+                        .comment( "Multiplier for xp gained in endurance from Regeneration" )
+                        .translation( "pmmo.hpRegenXpMultiplier" )
+                        .defineInRange( "hpRegenXpMultiplier", 15.23D, 0, 1000000 ) );
 
                 builder.pop();
             }
@@ -1453,6 +1476,11 @@ public class Config
                         .comment( "Underwater Nightvision Unlock Level" )
                         .translation( "pmmo.nightvisionUnlockLevel" )
                         .defineInRange( "nightvisionUnlockLevel", 25, 0, 1000000 ) );
+
+                this.underwaterNightVision = subscriber.subscribe(builder
+                        .comment( "Is Underwater Nightvision enabled?" )
+                        .translation( "pmmo.underwaterNightVision" )
+                        .define( "underwaterNightVision", true ) );
 
                 builder.pop();
             }

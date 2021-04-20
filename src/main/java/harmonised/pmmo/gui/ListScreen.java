@@ -7,6 +7,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.BlockBrokenHandler;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Reference;
@@ -276,13 +277,13 @@ public class ListScreen extends Screen
             {
                 Set<String> skills = XP.getOfflineXpMap( uuid ).keySet();
                 List<ListButton> buttonsToAdd = new ArrayList<>();
-                listButtons.add( new ListButton( 0, 0, 3, 6, "totalLevel", jType, "", button -> ((ListButton) button).clickActionSkills() ) );
+                tempList.add( new ListButton( 0, 0, 3, 6, "totalLevel", jType, "", button -> ((ListButton) button).clickActionSkills() ) );
                 for( String theSkill : skills )
                 {
                     buttonsToAdd.add( new ListButton( 0, 0, 3, 6, theSkill, jType, "", button -> ((ListButton) button).clickActionSkills() ) );
                 }
                 buttonsToAdd.sort( Comparator.comparingDouble( b -> XP.getOfflineXp( ((ListButton) b).regKey, uuid ) ).reversed() );
-                listButtons.addAll( buttonsToAdd );
+                tempList.addAll( buttonsToAdd );
             }
             break;
 
@@ -299,7 +300,7 @@ public class ListScreen extends Screen
                     buttonsToAdd.sort( Comparator.comparingDouble( b -> XP.getTotalLevelFromMap( XP.getOfflineXpMap( XP.playerUUIDs.get( ((ListButton) b).regKey ) ) ) ).reversed() );
                 else
                     buttonsToAdd.sort( Comparator.comparingDouble( b -> XP.getOfflineXp( theSkill, XP.playerUUIDs.get( ((ListButton) b).regKey ) ) ).reversed() );
-                listButtons.addAll( buttonsToAdd );
+                tempList.addAll( buttonsToAdd );
             }
             break;
 
@@ -336,20 +337,26 @@ public class ListScreen extends Screen
 
         for( String keyWord : keyWords )
         {
-            for( ListButton button : tempList)
+            for( ListButton button : tempList )
             {
                 if( button.regKey.contains( keyWord ) )
                 {
-                    if( !listButtons.contains(button) )
+                    if( !listButtons.contains( button ) )
                         listButtons.add( button );
                 }
             }
         }
 
-        for( ListButton button : tempList)
+        for( ListButton button : tempList )
         {
             if( !listButtons.contains( button ) )
                 listButtons.add( button );
+        }
+
+        for( ListButton button : tempList )
+        {
+            if( JsonConfig.levelJTypes.contains( jType ) && !Util.mapIsAnyAbove1String( reqMap, button.regKey ) )
+                listButtons.remove( button );
         }
 
         for( ListButton button : listButtons )
@@ -1011,6 +1018,8 @@ public class ListScreen extends Screen
 
         for( Map.Entry<String, Double> inEntry : map.entrySet() )
         {
+            if( inEntry.getValue() <= 1 )
+                continue;
             if( !ignoreReq && Skill.getLevelDecimal( inEntry.getKey(), player ) < inEntry.getValue() )
                 levelsToAdd.add( new StringTextComponent( " " + getTransComp( "pmmo.levelDisplay", getTransComp( "pmmo." + inEntry.getKey() ), DP.dpSoft( inEntry.getValue() ) ).getString() ).setStyle( XP.textStyle.get( "red" ) ) );
             else

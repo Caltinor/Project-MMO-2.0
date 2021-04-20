@@ -18,7 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.5-3.52.2'
+version = '1.16.5-3.53.1'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -125,6 +125,9 @@ dependencies
             runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3077866")
             compileOnly fg.deobf("curse.maven:item-filters:3066686")
             runtimeOnly fg.deobf("curse.maven:item-filters:3066686")
+
+            compileOnly fg.deobf("curse.maven:engineers-decor:3253781")
+            runtimeOnly fg.deobf("curse.maven:engineers-decor:3253781")
 
 //            compileOnly fg.deobf("curse.maven:tinkers-construct:3263129")
 //            runtimeOnly fg.deobf("curse.maven:tinkers-construct:3263129")

@@ -3,9 +3,9 @@ package harmonised.pmmo.gui;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.ConfigHelper;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.events.PlayerTickHandler;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -17,7 +17,6 @@ import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -79,59 +78,59 @@ public class PrefsScreen extends Screen
         {
             case SETTINGS:
                 value = Math.min( Skill.getLevel( Skill.BUILDING.toString(), player ) / Config.getConfig( "levelsPerOneReach" ), Config.getConfig( "maxExtraReachBoost" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraReachBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraReachBoost", value ), value, true, true, true, false ) );
+                addPrefsButtonDouble( Config.forgeConfig.maxExtraReachBoost, "maxExtraReachBoost", 0, value, true, true, true );
                 value = Math.min( Skill.getLevel( Skill.ENDURANCE.toString(), player ) / Config.getConfig( "levelsPerHeart" ), Config.getConfig( "maxExtraHeartBoost" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraHeartBoost", "", "", 0, value, prefsMap.getOrDefault( "maxExtraHeartBoost", value ), value, false, true, true, false ) );
+                addPrefsButtonInteger( Config.forgeConfig.maxExtraHeartBoost, "maxExtraHeartBoost", 0, value, false, true, true );
                 value = Math.min( Skill.getLevel( Skill.COMBAT.toString(), player ) * Config.getConfig( "damageBonusPercentPerLevelMelee" ), Config.getConfig( "maxExtraDamagePercentageBoostMelee" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraDamagePercentageBoostMelee", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamagePercentageBoostMelee", value ), value, true, true, true, false ) );
+                addPrefsButtonDouble( Config.forgeConfig.maxExtraDamagePercentageBoostMelee, "maxExtraDamagePercentageBoostMelee", 0, value, true, true, true );
                 value = Math.min( Skill.getLevel( Skill.ARCHERY.toString(), player ) * Config.getConfig( "damageBonusPercentPerLevelArchery" ), Config.getConfig( "maxExtraDamagePercentageBoostArchery" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraDamagePercentageBoostArchery", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamagePercentageBoostArchery", value ), value, true, true, true, false ) );
+                addPrefsButtonDouble( Config.forgeConfig.maxExtraDamagePercentageBoostArchery, "maxExtraDamagePercentageBoostArchery", 0, value, true, true, true );
                 value = Math.min( Skill.getLevel( Skill.MAGIC.toString(), player ) * Config.getConfig( "damageBonusPercentPerLevelMagic" ), Config.getConfig( "maxExtraDamagePercentageBoostMagic" ) );
-                prefsEntries.add( new PrefsEntry("maxExtraDamagePercentageBoostMagic", "", "", 0, value, prefsMap.getOrDefault( "maxExtraDamagePercentageBoostMagic", value ), value, true, true, true, false ) );
+                addPrefsButtonDouble( Config.forgeConfig.maxExtraDamagePercentageBoostMagic, "maxExtraDamagePercentageBoostMagic", 0, value, true, true, true );
                 value = Math.min( Skill.getLevel( Skill.AGILITY.toString(), player ) * Config.getConfig( "speedBoostPerLevel" ), Config.getConfig( "maxSpeedBoost" ) );
-                prefsEntries.add( new PrefsEntry("maxSpeedBoost", "", "", 0, value, prefsMap.getOrDefault( "maxSpeedBoost", value ), value, true, true, true, false ) );
+                addPrefsButtonDouble( Config.forgeConfig.maxSpeedBoost, "maxSpeedBoost", 0, value, true, true, true );
                 value = Math.min( Skill.getLevel( Skill.AGILITY.toString(), player ) * Config.getConfig( "levelsPerSprintJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
-                prefsEntries.add( new PrefsEntry("maxSprintJumpBoost", "", "", 0, value, prefsMap.getOrDefault( "maxSprintJumpBoost", value ), value, true, true, true, false ) );
+                addPrefsButtonDouble( Config.forgeConfig.maxJumpBoost, "maxSprintJumpBoost", 0, value, true, true, true );
                 value = Math.min( Skill.getLevel( Skill.AGILITY.toString(), player ) * Config.getConfig( "levelsPerCrouchJumpBoost" ), Config.getConfig( "maxJumpBoost" ) );
-                prefsEntries.add( new PrefsEntry("maxCrouchJumpBoost", "", "", 0, value, prefsMap.getOrDefault( "maxCrouchJumpBoost", value ), value, true, true, true, false ) );
-                prefsEntries.add( new PrefsEntry("wipeAllSkillsUponDeathPermanently", "", "", 0, 1, prefsMap.getOrDefault( "wipeAllSkillsUponDeathPermanently", 0D ), 0, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("spawnFireworksCausedByMe", "", "", 0, 1, prefsMap.getOrDefault( "spawnFireworksCausedByMe", 1D ), 1, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("spawnFireworksCausedByOthers", "", "", 0, 1, prefsMap.getOrDefault( "spawnFireworksCausedByOthers", 1D ), 1, false, true, false, true ) );
+                addPrefsButtonDouble( Config.forgeConfig.maxJumpBoost, "maxCrouchJumpBoost", 0, value, true, true, true );
+                addPrefsButtonBool( Config.forgeConfig.wipeAllSkillsUponDeathPermanently, "wipeAllSkillsUponDeathPermanently", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.spawnFireworksCausedByMe, "spawnFireworksCausedByMe", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.spawnFireworksCausedByOthers, "spawnFireworksCausedByOthers", false, true, false );
                 if( XP.isNightvisionUnlocked( player ) )
-                    prefsEntries.add( new PrefsEntry("underwaterNightVision", "", "", 0, 1, prefsMap.getOrDefault( "underwaterNightVision", 1D ), 1, false, true, false, true ) );
+                    addPrefsButtonBool( Config.forgeConfig.underwaterNightVision, "underwaterNightVision", false, true, false );
                 break;
 
             case GUI_SETTINGS:
-                prefsEntries.add( new PrefsEntry("barOffsetX", "", "", 0, 1, prefsMap.getOrDefault("barOffsetX", 0.5D ), 0.5D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("barOffsetY", "", "", 0, 1, prefsMap.getOrDefault( "barOffsetY", 0D ), 0D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("veinBarOffsetX", "", "", 0, 1, prefsMap.getOrDefault( "veinBarOffsetX", 0.5D ), 0.5D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("veinBarOffsetY", "", "", 0, 1, prefsMap.getOrDefault( "veinBarOffsetY", 0.65D ), 0.65D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("xpDropOffsetX", "", "", 0, 1, prefsMap.getOrDefault( "xpDropOffsetX", 0.5D ), 0.5D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("xpDropOffsetY", "", "", 0, 1, prefsMap.getOrDefault( "xpDropOffsetY", 0D ), 0D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("skillListOffsetX", "", "", 0, 1, prefsMap.getOrDefault( "skillListOffsetX", 0D ), 0D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("skillListOffsetY", "", "", 0, 1, prefsMap.getOrDefault( "skillListOffsetY", 0D ), 0D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("xpDropSpawnDistance", "", "", 0, 1000, prefsMap.getOrDefault( "xpDropSpawnDistance", 50D ), 50D, false, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("xpDropOpacityPerTime", "", "", 0, 255, prefsMap.getOrDefault( "xpDropOpacityPerTime", 5D ), 5D, false, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("xpDropMaxOpacity", "", "", 0, 255, prefsMap.getOrDefault( "xpDropMaxOpacity", 200D ), 200D, false, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("xpDropDecayAge", "", "", 0, 5000, prefsMap.getOrDefault( "xpDropDecayAge", 350D ), 350D, false, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("minXpGrow", "", "", 0.01, 100, prefsMap.getOrDefault( "minXpGrow", 1D ), 1D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("worldXpDropsSizeMultiplier", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsSizeMultiplier", 1D ), 1D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("worldXpDropsDecaySpeedMultiplier", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsDecaySpeedMultiplier", 1D ), 1D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("worldXpDropsRotationCap", "", "", 0.01, 100, prefsMap.getOrDefault( "worldXpDropsRotationCap", 25D ), 25D, true, true, false, false ) );
-                prefsEntries.add( new PrefsEntry("maxVeinDisplay", "", "", 0, 10000, prefsMap.getOrDefault( "maxVeinDisplay", 250D ), 250D, false, true, false, false ) );
+                addPrefsButtonDouble( Config.forgeConfig.barOffsetX, "barOffsetX", 0, 1, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.barOffsetY, "barOffsetY", 0, 1, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.veinBarOffsetX, "veinBarOffsetX", 0, 1, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.veinBarOffsetY, "veinBarOffsetY", 0, 1, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.xpDropOffsetX, "xpDropOffsetX", 0, 1, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.xpDropOffsetY, "xpDropOffsetY", 0, 1, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.skillListOffsetX, "skillListOffsetX", 0, 1, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.skillListOffsetY, "skillListOffsetY", 0, 1, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.xpDropSpawnDistance, "xpDropSpawnDistance", 0, 1000, false, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.xpDropOpacityPerTime, "xpDropOpacityPerTime", 0, 255, false, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.xpDropMaxOpacity, "xpDropMaxOpacity", 0, 255, false, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.xpDropDecayAge, "xpDropDecayAge", 0, 5000, false, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.minXpGrow, "minXpGrow", 0.01, 100, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.worldXpDropsSizeMultiplier, "worldXpDropsSizeMultiplier", 0.01, 100, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.worldXpDropsDecaySpeedMultiplier, "worldXpDropsDecaySpeedMultiplier", 0.01, 100, true, true, false );
+                addPrefsButtonDouble( Config.forgeConfig.worldXpDropsRotationCap, "worldXpDropsRotationCap", 0.01, 100, true, true, false );
+                addPrefsButtonInteger( Config.forgeConfig.maxVeinDisplay, "maxVeinDisplay", 0, 10000, false, true, false );
 
-                prefsEntries.add( new PrefsEntry("showSkillsListAtCorner", "", "", 0, 1, prefsMap.getOrDefault( "showSkillsListAtCorner", 1D ), 1D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("showXpDrops", "", "", 0, 1, prefsMap.getOrDefault( "showXpDrops", 1D ), 1D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("stackXpDrops", "", "", 0, 1, prefsMap.getOrDefault( "stackXpDrops", 1D ), 1D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("xpDropsAttachedToBar", "", "", 0, 1, prefsMap.getOrDefault( "xpDropsAttachedToBar", 1D ), 1D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("xpBarAlwaysOn", "", "", 0, 1, prefsMap.getOrDefault( "xpBarAlwaysOn", 0D ), 0D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("xpLeftDisplayAlwaysOn", "", "", 0, 1, prefsMap.getOrDefault( "xpLeftDisplayAlwaysOn", 0D ), 0D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("lvlUpScreenshot", "", "", 0, 1, prefsMap.getOrDefault( "lvlUpScreenshot", 0D ), 0D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("xpDropsShowXpBar", "", "", 0, 1, prefsMap.getOrDefault( "xpDropsShowXpBar", 1D ), 1D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("showLevelUpUnlocks", "", "", 0, 1, prefsMap.getOrDefault( "showLevelUpUnlocks", 1D ), 1D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("worldXpDropsEnabled", "", "", 0, 1, prefsMap.getOrDefault( "worldXpDropsEnabled", 1D ), 1D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("worldXpDropsShowSkill", "", "", 0, 1, prefsMap.getOrDefault( "worldXpDropsShowSkill", 1D ), 1D, false, true, false, true ) );
-                prefsEntries.add( new PrefsEntry("showOthersWorldXpDrops", "", "", 0, 1, prefsMap.getOrDefault( "showOthersWorldXpDrops", 0D ), 0D, false, true, false, true ) );
+                addPrefsButtonBool( Config.forgeConfig.showSkillsListAtCorner, "showSkillsListAtCorner", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.showXpDrops, "showXpDrops", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.stackXpDrops, "stackXpDrops", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.xpDropsAttachedToBar, "xpDropsAttachedToBar", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.xpBarAlwaysOn, "xpBarAlwaysOn", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.xpLeftDisplayAlwaysOn, "xpLeftDisplayAlwaysOn", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.lvlUpScreenshot, "lvlUpScreenshot", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.xpDropsShowXpBar, "xpDropsShowXpBar", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.showLevelUpUnlocks, "showLevelUpUnlocks", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.worldXpDropsEnabled, "worldXpDropsEnabled", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.worldXpDropsShowSkill, "worldXpDropsShowSkill", false, true, false );
+                addPrefsButtonBool( Config.forgeConfig.showOthersWorldXpDrops, "showOthersWorldXpDrops", false, true, false );
                 break;
         }
 
@@ -180,6 +179,26 @@ public class PrefsScreen extends Screen
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
         addButton(exitButton);
+    }
+
+    private void addPrefsButtonBool( ConfigHelper.ConfigValueListener<Boolean> config, String key, boolean showDec, boolean showStr, boolean removeIfMax )
+    {
+        addPrefsButtonValue( key, config.get() ? 1D : 0D, 0D, 1D, showDec, showStr, removeIfMax, true );
+    }
+
+    private void addPrefsButtonInteger( ConfigHelper.ConfigValueListener<Integer> config, String key, double min, double max, boolean showDec, boolean showStr, boolean removeIfMax )
+    {
+        addPrefsButtonValue( key, config.get(), min, max, showDec, showStr, removeIfMax, false );
+    }
+
+    private void addPrefsButtonDouble( ConfigHelper.ConfigValueListener<Double> config, String key, double min, double max, boolean showDec, boolean showStr, boolean removeIfMax )
+    {
+        addPrefsButtonValue( key, config.get(), min, max, showDec, showStr, removeIfMax, false );
+    }
+
+    private void addPrefsButtonValue( String key, double value, double min, double max, boolean showDec, boolean showStr, boolean removeIfMax, boolean isSwitch )
+    {
+        prefsEntries.add( new PrefsEntry( key, "", "", min, max, prefsMap.getOrDefault( key,value ), value, showDec, showStr, removeIfMax, isSwitch ) );
     }
 
     @Override
