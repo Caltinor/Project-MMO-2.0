@@ -134,12 +134,14 @@ public class BlockBrokenHandler
         }
     }
 
-    private static void processBroken( BlockEvent.BreakEvent event )
+    @SuppressWarnings("deprecation")
+	private static void processBroken( BlockEvent.BreakEvent event )
     {
         BlockState state = event.getState();
         Block block = state.getBlock();
         String regKey = block.getRegistryName().toString();
-        final Map<String, Double> xpMap = XP.getXp( regKey, JType.XP_VALUE_BREAK );
+        TileEntity tile = event.getWorld().getTileEntity(event.getPos());
+        final Map<String, Double> xpMap = tile == null ? XP.getXpBypass( block.getRegistryName() , JType.XP_VALUE_BREAK ) : XP.getXp( tile, JType.XP_VALUE_BREAK);
         World world = (World) event.getWorld();
         TileEntity tileEntity = world.getTileEntity( event.getPos() );
         if( tileEntity != null )
@@ -428,7 +430,7 @@ public class BlockBrokenHandler
             boolean isSilk = enchants.get( Enchantments.SILK_TOUCH ) != null;
 
             if( !wasPlaced && !isSilk )
-                XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), theDropItem.getCount() ) );
+                XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( xpMap , theDropItem.getCount() ) );
 
             if( dropsItself && !wasPlaced || !dropsItself && !isSilk )			//EXTRA DROPS
             {
@@ -445,7 +447,7 @@ public class BlockBrokenHandler
                 int totalExtraDrops = guaranteedDrop + extraDrop;
 
                 if( !dropsItself && wasPlaced )
-                    XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), ( theDropItem.getCount() ) ) );
+                    XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( xpMap , ( theDropItem.getCount() ) ) );
 
                 if( totalExtraDrops > 0 )
                 {
@@ -453,7 +455,7 @@ public class BlockBrokenHandler
                     NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
                 }
 
-                XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXp( block.getRegistryName(), JType.XP_VALUE_BREAK ), totalExtraDrops ) );
+                XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( xpMap , totalExtraDrops ) );
             }
 
             awardMsg = "Mining " + block.getRegistryName();

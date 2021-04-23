@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.api.PredicateRegistry;
+import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -70,7 +71,7 @@ public class XP
 	public static Map<String, UUID> playerUUIDs = new HashMap<>();
 	public static Map<UUID, Map<String, Double>> offlineXp = new HashMap<>();
 	private static Map<UUID, String> lastBiome = new HashMap<>();
-	private static int debugInt = 0;
+	//private static int debugInt = 0;
 
 	public static Style getColorStyle( int color )
 	{
@@ -194,12 +195,49 @@ public class XP
 		}
 	}
 
-	public static Map<String, Double> getXp( String registryName, JType jType )
+	public static Map<String, Double> getXp( TileEntity tile, JType jType )
 	{
-		return getXp( new ResourceLocation( registryName ), jType );
+		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
+		
+		if (TooltipSupplier.tooltipExists( res , jType))
+			return TooltipSupplier.getTooltipData( res , jType, tile );
+		
+		return getXp( res , jType );
+	}
+	
+	public static Map<String, Double> getXp( ItemStack stack, JType jType )
+	{
+		ResourceLocation res = stack.getItem().getRegistryName();
+		
+		if (TooltipSupplier.tooltipExists( res , jType))
+			return TooltipSupplier.getTooltipData( res , jType, stack );
+		
+		return getXp( stack.getItem().getRegistryName() , jType );
+	}
+	
+	public static Map<String, Double> getXp( Entity entity, JType jType )
+	{
+		ResourceLocation res = entity.getType().getRegistryName();
+		
+		if (TooltipSupplier.tooltipExists( res , jType))
+			return TooltipSupplier.getTooltipData( res , jType, entity );
+		
+		return getXp( entity.getType().getRegistryName() , jType );
+	}
+	
+	/**	This method is called to deliberately bypass the public getXP methods
+	 * this should only be used when an action does not require an API check.
+	 * 
+	 * @param registryName the object resourcelocation being passed
+	 * @param jType the JType being passed.
+	 * @return a map of the skill and xp value
+	 */
+	public static Map<String, Double> getXpBypass( ResourceLocation registryName, JType jType )
+	{
+		return getXp( registryName, jType);
 	}
 
-	public static Map<String, Double> getXp( ResourceLocation registryName, JType jType )
+	private static Map<String, Double> getXp( ResourceLocation registryName, JType jType )
 	{
 		Map<String, Double> theMap = new HashMap<>();
 
@@ -1372,10 +1410,10 @@ public class XP
 
 	}
 
-	private static int getGap( int a, int b )
+	/*private static int getGap( int a, int b )
 	{
 		return a - b;
-	}
+	}*/
 
 	public static int getSkillReqGap( PlayerEntity player, ResourceLocation res, JType jType )
 	{

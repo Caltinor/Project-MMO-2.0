@@ -2,7 +2,6 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Util;
@@ -26,7 +25,7 @@ public class BreedHandler
             String regKey = event.getChild().getEntityString();
             Vector3d midPos = Util.getMidVec( event.getParentA().getPositionVec(), event.getParentB().getPositionVec() );
             Vector3d xpDropPos = new Vector3d( midPos.getX(), midPos.getY() + event.getChild().getEyeHeight() + 0.523, midPos.getZ() );
-            Map<String, Double> award = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_BREED );
+            Map<String, Double> award = XP.getXp( event.getChild() , JType.XP_VALUE_BREED );
             if( award.size() == 0 )
                 award.put( Skill.FARMING.toString(), defaultBreedingXp );
 

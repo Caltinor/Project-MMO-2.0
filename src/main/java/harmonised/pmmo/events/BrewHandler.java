@@ -4,7 +4,6 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -50,7 +49,7 @@ public class BrewHandler
                     }
                 }
 
-                Map<String, Double> award = XP.multiplyMapAnyDouble( XP.getXp( ingredient.getItem().getRegistryName(), JType.XP_VALUE_BREW ), potionCount );
+                Map<String, Double> award = XP.multiplyMapAnyDouble( XP.getXp( ingredient, JType.XP_VALUE_BREW ), potionCount );
 
                 for( String awardSkillName : award.keySet() )
                 {
