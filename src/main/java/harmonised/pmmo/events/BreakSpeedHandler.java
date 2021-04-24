@@ -5,7 +5,6 @@ import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,6 +14,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
@@ -51,9 +51,10 @@ public class BreakSpeedHandler
         int tinkersMaterialsReqGap = 0;
         if( ProjectMMOMod.tinkersLoaded )
         {
-            ListNBT tinkerTags = (ListNBT) itemStack.getTag().get( "tic_materials" );
-            if( tinkerTags != null )
+        	CompoundNBT tinkerTag = itemStack.getTag();            
+            if( tinkerTag != null )
             {
+            	ListNBT tinkerTags = tinkerTag.getList( "tic_materials" , NBT.TAG_STRING );
                 for( INBT iNbtTag : tinkerTags )
                 {
                     String tag = iNbtTag.getString();
