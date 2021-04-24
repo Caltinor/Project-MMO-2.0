@@ -212,7 +212,7 @@ public class XP
 		if (TooltipSupplier.tooltipExists( res , jType))
 			return TooltipSupplier.getTooltipData( res , jType, stack );
 		
-		return getXp( stack.getItem().getRegistryName() , jType );
+		return getXp( res , jType );
 	}
 	
 	public static Map<String, Double> getXp( Entity entity, JType jType )
@@ -222,7 +222,7 @@ public class XP
 		if (TooltipSupplier.tooltipExists( res , jType))
 			return TooltipSupplier.getTooltipData( res , jType, entity );
 		
-		return getXp( entity.getType().getRegistryName() , jType );
+		return getXp( res , jType );
 	}
 	
 	/**	This method is called to deliberately bypass the public getXP methods
