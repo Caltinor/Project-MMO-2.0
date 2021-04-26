@@ -44,7 +44,7 @@ public class FishedHandler
         double award = 10D;
         for( ItemStack itemStack : items )
         {
-            Map<String, Double> itemXp = XP.getXp( itemStack.getItem().getRegistryName(), JType.XP_VALUE_GENERAL );
+            Map<String, Double> itemXp = XP.getXp( itemStack, JType.XP_VALUE_GENERAL );
             if( itemXp.containsKey( "fishing" ) )
                 award = itemXp.get( "fishing" );
         }

@@ -8,7 +8,6 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
@@ -33,8 +32,7 @@ public class CraftedHandler
                 double durabilityMultiplier = 1;
 
                 ItemStack itemStack = event.getCrafting();
-                ResourceLocation resLoc = itemStack.getItem().getRegistryName();
-                Map<String, Double> xpValue = XP.getXp( XP.getResLoc( resLoc.toString() ), JType.XP_VALUE_CRAFT );
+                Map<String, Double> xpValue = XP.getXp( itemStack , JType.XP_VALUE_CRAFT );
 
                 Map<String, Double> award = new HashMap<>();
                 if( xpValue.size() == 0 )

@@ -31,7 +31,7 @@ public class GrowHandler
         if( uuid != null )
         {
             ResourceLocation resLoc = event.getWorld().getBlockState( pos ).getBlock().getRegistryName();
-            Map<String, Double> award = XP.getXp( resLoc, JType.XP_VALUE_GROW );
+            Map<String, Double> award = XP.getXpBypass( resLoc, JType.XP_VALUE_GROW );
             if( award.size() == 0 )
                 award.put( Skill.FARMING.toString(), Config.forgeConfig.defaultSaplingGrowXp.get() );
 
@@ -114,7 +114,7 @@ public class GrowHandler
 
             if( age != -1 && age == maxAge )
             {
-                Map<String, Double> award = XP.getXp( resLoc, JType.XP_VALUE_GROW );
+                Map<String, Double> award = XP.getXpBypass( resLoc, JType.XP_VALUE_GROW );
                 if( award.size() == 0 )
                     award.put( Skill.FARMING.toString(), Config.forgeConfig.defaultCropGrowXp.get() );
 

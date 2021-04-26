@@ -1,9 +1,9 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
@@ -14,14 +14,12 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 public class DeathHandler
@@ -110,10 +108,10 @@ public class DeathHandler
 
 //            double normalMaxHp = target.getAttribute( Attributes.GENERIC_MAX_HEALTH ).getBaseValue();
 //            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
-
-            if( JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )
+            boolean registeredNBTdata = TooltipSupplier.tooltipExists(target.getType().getRegistryName(), JType.XP_VALUE_KILL);
+            if( registeredNBTdata || JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )
             {
-                 Map<String, Double> killXp = JsonConfig.data.get( JType.XP_VALUE_KILL ).get( target.getEntityString() );
+                 Map<String, Double> killXp = registeredNBTdata ? XP.getXp( target , JType.XP_VALUE_KILL) : XP.getXpBypass( target.getType().getRegistryName(), JType.XP_VALUE_KILL);
                 for( Map.Entry<String, Double> entry : killXp.entrySet() )
                 {
                     XP.awardXp( player, entry.getKey(), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false, false );

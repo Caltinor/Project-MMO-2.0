@@ -20,7 +20,7 @@ public class TameHandler
         {
             ServerPlayerEntity tamer = (ServerPlayerEntity) event.getTamer();
             String regKey = event.getAnimal().getEntityString();
-            Map<String, Double> award = XP.getXp( XP.getResLoc( regKey ), JType.XP_VALUE_TAME );
+            Map<String, Double> award = XP.getXp( event.getAnimal() , JType.XP_VALUE_TAME );
 
             if( award.size() == 0 )
                 award.put( Skill.TAMING.toString(), Config.forgeConfig.defaultTamingXp.get() );

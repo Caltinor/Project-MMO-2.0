@@ -20,9 +20,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Hand;
@@ -31,6 +31,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
@@ -198,9 +199,10 @@ public class DamageHandler
                     int killGap = 0, tinkersMaterialsReqGap = 0;
                     if( ProjectMMOMod.tinkersLoaded )
                     {
-                        ListNBT tinkerTags = (ListNBT) mainItemStack.getOrCreateTag().get( "tic_materials" );
-                        if( tinkerTags != null )
+                        CompoundNBT tinkerTag = mainItemStack.getTag();
+                        if( tinkerTag != null )
                         {
+                        	ListNBT tinkerTags = tinkerTag.getList( "tic_materials" , NBT.TAG_STRING);
                             for( INBT iNbtTag : tinkerTags )
                             {
                                 String tag = iNbtTag.getString();

@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -57,14 +58,14 @@ public class BlockPlacedHandler
                     double blockHardness = state.getBlockHardness( world, pos );
                     if ( blockHardness > blockHardnessLimitForPlacing )
                         blockHardness = blockHardnessLimitForPlacing;
-                    String playerName = player.getName().toString();
                     UUID playerUUID = player.getUniqueID();
                     Map<String, Double> award = new HashMap<>();
                     String sourceName = "Placing a Block";
 
                     if (!lastPosPlaced.containsKey(playerUUID) || !lastPosPlaced.get(playerUUID).equals(pos) )
                     {
-                        award = XP.getXp( block.getRegistryName(), JType.XP_VALUE_PLACE );
+                    	TileEntity tile = world.getTileEntity(pos);
+                        award = tile == null ? XP.getXpBypass( block.getRegistryName(), JType.XP_VALUE_PLACE ) : XP.getXp( tile, JType.XP_VALUE_PLACE);
 
                         if( award.size() == 0 )
                         {
@@ -85,7 +86,7 @@ public class BlockPlacedHandler
                         Skill.addXp( awardSkillName, player, award.get( awardSkillName ), sourceName, false, false );
                     }
 
-                    if (lastPosPlaced.containsKey(playerName))
+                    if (lastPosPlaced.containsKey(playerUUID))
                         lastPosPlaced.replace(playerUUID, pos);
                     else
                         lastPosPlaced.put(playerUUID, pos);
