@@ -108,10 +108,8 @@ public class TooltipSupplier {
 	{
 		if (jType == null) return false;
 		if (res == null) return false;
-		if (!tooltips.containsKey(jType)) 
-			return false;
 		
-		if (jType.equals(JType.REQ_BREAK)) 
+		if (jType.equals(JType.REQ_BREAK) || jType.equals(JType.XP_VALUE_BREAK)) //<<<<<HERE
 		{
 			if (!breakTooltips.containsKey(jType)) 
 				return false;
@@ -123,6 +121,9 @@ public class TooltipSupplier {
 				return false;
 			return entityTooltips.get(jType).containsKey(res);
 		}
+		else if (!tooltips.containsKey(jType)) 
+			return false;
+		
 		return tooltips.get(jType).containsKey(res);
 	}
 	
