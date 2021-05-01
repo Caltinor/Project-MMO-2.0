@@ -20,14 +20,19 @@ public class SpawnHandler
             MinecraftServer server = mob.getServer();
             if( server != null )
             {
+                int powerLevelContributorCount = 0;
                 float powerLevel = 0;
                 Collection<PlayerEntity> allPlayers = XP.getNearbyPlayers( mob );
 
                 for( PlayerEntity player : allPlayers )
                 {
                     if( XP.isPlayerSurvival( player ) )
+                    {
                         powerLevel += XP.getPowerLevel( player.getUniqueID() );
+                        powerLevelContributorCount++;
+                    }
                 }
+                powerLevel /= powerLevelContributorCount;
 
                 AttributeHandler.updateHP( mob, powerLevel );
                 AttributeHandler.updateDamage( mob, powerLevel );
