@@ -15,6 +15,10 @@
 	{
 		"salvageStation": 1
 	},
+	"minecraft:bedrock":
+	{
+		"salvageStation": 1
+	},
 	"minecraft:kelp":
 	{
 		"growsUpwards": 1

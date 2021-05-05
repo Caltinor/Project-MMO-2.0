@@ -19,6 +19,10 @@
 	{
 		"smithing": 60
 	},
+	"#forge:ores/netherite_scrap":
+	{
+		"smithing": 333
+	},
 	"#forge:ores/gold":
 	{
 		"smithing": 18

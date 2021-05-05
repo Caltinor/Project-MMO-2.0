@@ -19,6 +19,10 @@
 	{
 		"extraChance": 0.75
 	},
+	"#forge:ores/netherite_scrap":
+	{
+		"extraChance": 0.2
+	},
 	"#forge:ores/gold":
 	{
 		"extraChance": 0.5

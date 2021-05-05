@@ -825,7 +825,7 @@ public class Config
                 this.strictReqKill = subscriber.subscribe(builder
                         .comment( "When a Kill requirement is not met, should the player be stopped from dealing any damage?" )
                         .translation( "pmmo.strictReqKill" )
-                        .define( "strictReqKill", false ) );
+                        .define( "strictReqKill", true ) );
 
                 this.strictReqWeapon = subscriber.subscribe(builder
                         .comment( "When a Weapon requirement is not met, should the player be stopped from dealing any damage?" )

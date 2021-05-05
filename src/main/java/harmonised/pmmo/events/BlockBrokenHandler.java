@@ -138,6 +138,8 @@ public class BlockBrokenHandler
 	private static void processBroken( BlockEvent.BreakEvent event )
     {
         BlockState state = event.getState();
+        if( state.getMaterial().isLiquid() )
+            return;
         Block block = state.getBlock();
         String regKey = block.getRegistryName().toString();
         TileEntity tile = event.getWorld().getTileEntity(event.getPos());
@@ -211,47 +213,50 @@ public class BlockBrokenHandler
 
         List<ItemStack> noSilkDrops, drops = null;
 
-        try
+        if( block.canHarvestBlock( state, world, player.getPosition(), player ) )
         {
-            if( world instanceof ServerWorld )
+            try
             {
-                LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
-                        .withRandom(world.rand)
-                        .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
-                        .withParameter( LootParameters.TOOL, toolUsed )
-                        .withParameter( LootParameters.THIS_ENTITY, player )
-                        .withNullableParameter( LootParameters.BLOCK_ENTITY, tileEntity );
-                if (fortune > 0)
+                if( world instanceof ServerWorld )
                 {
-                    builder.withLuck(fortune);
-                }
-                drops = block.getDrops( event.getState(), builder );
-
-                if( EnchantmentHelper.getEnchantments( toolUsed ).containsKey( Enchantments.SILK_TOUCH ) )
-                {
-                    ItemStack noEnchantTool = toolUsed.copy();
-                    noEnchantTool.removeChildTag("Enchantments");
-
-                    builder = new LootContext.Builder((ServerWorld) world)
+                    LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
                             .withRandom(world.rand)
                             .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
-                            .withParameter( LootParameters.TOOL, noEnchantTool )
+                            .withParameter( LootParameters.TOOL, toolUsed )
                             .withParameter( LootParameters.THIS_ENTITY, player )
                             .withNullableParameter( LootParameters.BLOCK_ENTITY, tileEntity );
-                    ;
                     if (fortune > 0)
                     {
                         builder.withLuck(fortune);
                     }
-                    noSilkDrops = block.getDrops( event.getState(), builder );
-                    if( noSilkDrops.size() > 0 && noSilkDrops.get(0).getItem().equals( block.asItem() ) )
-                        dropsItself = true;
+                    drops = block.getDrops( event.getState(), builder );
+
+                    if( EnchantmentHelper.getEnchantments( toolUsed ).containsKey( Enchantments.SILK_TOUCH ) )
+                    {
+                        ItemStack noEnchantTool = toolUsed.copy();
+                        noEnchantTool.removeChildTag("Enchantments");
+
+                        builder = new LootContext.Builder((ServerWorld) world)
+                                .withRandom(world.rand)
+                                .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
+                                .withParameter( LootParameters.TOOL, noEnchantTool )
+                                .withParameter( LootParameters.THIS_ENTITY, player )
+                                .withNullableParameter( LootParameters.BLOCK_ENTITY, tileEntity );
+                        ;
+                        if (fortune > 0)
+                        {
+                            builder.withLuck(fortune);
+                        }
+                        noSilkDrops = block.getDrops( event.getState(), builder );
+                        if( noSilkDrops.size() > 0 && noSilkDrops.get(0).getItem().equals( block.asItem() ) )
+                            dropsItself = true;
+                    }
                 }
             }
-        }
-        catch( Exception e )
-        {
-            LOGGER.error( e );
+            catch( Exception e )
+            {
+                LOGGER.error( e );
+            }
         }
 
         if( drops == null )

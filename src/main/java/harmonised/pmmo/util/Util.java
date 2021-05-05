@@ -135,10 +135,13 @@ public class Util
 
     public static <T> boolean mapIsAnyAbove1String( Map<String, Map<T, Double>> input, String key )
     {
-        for( Map.Entry<T, Double> entry : input.get( key ).entrySet() )
+        if( input != null && input.containsKey( key ) )
         {
-            if( entry.getValue() > 1 )
-                return true;
+            for( Map.Entry<T, Double> entry : input.get( key ).entrySet() )
+            {
+                if( entry.getValue() > 1 )
+                    return true;
+            }
         }
         return false;
     }

@@ -19,6 +19,10 @@
 	{
 		"mining": 60
 	},
+	"#forge:ores/netherite_scrap":
+	{
+		"mining": 200
+	},
 	"#forge:ores/gold":
 	{
 		"mining": 22
