@@ -18,12 +18,12 @@ public class TileButton extends Button
     private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
     private final ResourceLocation items2 = XP.getResLoc( Reference.MOD_ID, "textures/gui/items2.png" );
     private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
+    private int page = 0;
     public int elementOne;
     public int offsetOne;
     public int elementTwo;
     public int offsetTwo;
     public int index;
-    public int page = 0;
     public String transKey;
     public JType jType;
 

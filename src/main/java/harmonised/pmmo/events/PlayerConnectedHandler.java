@@ -11,6 +11,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,7 +60,7 @@ public class PlayerConnectedHandler
                 }
 
                 if( showWelcome )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.welcome" ), false );
+                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.welcomeText", new TranslationTextComponent( "pmmo.clickMe" ).setStyle( XP.getColorStyle( 0xff00ff ).setUnderlined( true ).setClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/pmmo help" ) ).setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent( "pmmo.openInfo" ) ) ) ) ), false );
             }
         }
         else

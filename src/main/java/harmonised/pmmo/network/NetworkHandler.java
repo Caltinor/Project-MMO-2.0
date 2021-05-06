@@ -22,6 +22,7 @@ public class NetworkHandler
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageTripleTranslation.class, MessageTripleTranslation::encode, MessageTripleTranslation::decode, MessageTripleTranslation::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageUpdatePlayerNBT.class, MessageUpdatePlayerNBT::encode, MessageUpdatePlayerNBT::decode, MessageUpdatePlayerNBT::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageGrow.class, MessageGrow::encode, MessageGrow::decode, MessageGrow::handlePacket );
+		ProjectMMOMod.HANDLER.registerMessage( index++, MessageTrigger.class, MessageTrigger::encode, MessageTrigger::decode, MessageTrigger::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageLevelUp.class, MessageLevelUp::encode, MessageLevelUp::decode, MessageLevelUp::handlePacket );
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageUpdateBoolean.class, MessageUpdateBoolean::encode, MessageUpdateBoolean::decode, MessageUpdateBoolean::handlePacket );
 	}
@@ -76,6 +77,11 @@ public class NetworkHandler
 	}
 
 	public static void sendToPlayer( MessageGrow packet, ServerPlayerEntity player )
+	{
+		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+	}
+
+	public static void sendToPlayer( MessageTrigger packet, ServerPlayerEntity player )
 	{
 		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
 	}

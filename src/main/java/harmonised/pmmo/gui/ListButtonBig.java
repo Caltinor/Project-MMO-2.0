@@ -34,8 +34,10 @@ public class ListButtonBig extends Button
     public static final Logger LOGGER = LogManager.getLogger();
 
     private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big.png" );
+    private final ResourceLocation items2 = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big_2.png" );
 //    private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
-    //    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
+//    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
+    private int page = 0;
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
     public double mobWidth, mobHeight, mobScale;
@@ -73,7 +75,13 @@ public class ListButtonBig extends Button
         else
             offsetOne = 0;
 
-        if( elementTwo> 3 )
+        if( elementTwo >= 7 )
+        {
+            page = 1;
+            elementTwo -= 8;
+        }
+
+        if( elementTwo > 3 )
             offsetTwo = 128;
         else
             offsetTwo = 0;
@@ -98,6 +106,7 @@ public class ListButtonBig extends Button
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         minecraft.getTextureManager().bindTexture( items );
         this.blit( stack, this.x, this.y, this.offsetOne + ( this.isHovered() ? 64 : 0 ), this.elementOne, this.width, this.height);
+        minecraft.getTextureManager().bindTexture( page == 0 ? items : items2 );
         this.blit( stack, this.x, this.y, this.offsetTwo + ( this.isHovered() ? 64 : 0 ), this.elementTwo, this.width, this.height);
         if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
             itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );

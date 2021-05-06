@@ -269,11 +269,11 @@ public class DamageHandler
                                 else
                                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
                             }
-                        }
-                        if( Config.forgeConfig.strictReqKill.get() )
-                        {
-                            event.setCanceled( true );
-                            return;
+                            if( Config.forgeConfig.strictReqKill.get() )
+                            {
+                                event.setCanceled( true );
+                                return;
+                            }
                         }
                     }
                     float amount = 0;

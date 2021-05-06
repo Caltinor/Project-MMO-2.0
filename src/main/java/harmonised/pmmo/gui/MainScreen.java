@@ -60,43 +60,56 @@ public class MainScreen extends Screen
             Minecraft.getInstance().player.closeScreen();
         });
 
-        TileButton glossaryButton = new TileButton(0, y + 24 + 36 * 4, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
+        TileButton glossaryButton = new TileButton(0, 0, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), true ) );
         });
 
-        TileButton creditsButton = new TileButton( 0, y + 24 + 36 * 4, 3, 4, "pmmo.credits", JType.NONE, (button) ->
+        TileButton creditsButton = new TileButton( 0, 0, 3, 4, "pmmo.credits", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.CREDITS ) );
         });
 
-        TileButton prefsButton = new TileButton( 0, y + 24 + 36 * 4, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
+        TileButton prefsButton = new TileButton( 0, 0, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( ((TileButton) button).transKey ) ) );
         });
 
 
-        TileButton skillsButton = new TileButton( 0, y + 24 + 36 * 4, 3, 6, "pmmo.skills", JType.NONE, (button) ->
+        TileButton skillsButton = new TileButton( 0, 0, 3, 6, "pmmo.skills", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getInstance().player ) );
         });
 
-        TileButton statsButton = new TileButton( 0, y + 24 + 36 * 4, 3, 6, "pmmo.stats", JType.NONE, (button) ->
+        TileButton statsButton = new TileButton( 0, 0, 3, 6, "pmmo.stats", JType.NONE, (button) ->
         {
             Minecraft.getInstance().displayGuiScreen( new StatsScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ) ) );
         });
 
-        addButton(exitButton);
-        tileButtons.add(glossaryButton);
-        tileButtons.add(creditsButton);
-        tileButtons.add(prefsButton);
-        tileButtons.add(skillsButton);
-        tileButtons.add(statsButton);
+        TileButton infoButton = new TileButton( 0, 0, 3, 5, "pmmo.info", JType.NONE, (button) ->
+        {
+            Minecraft.getInstance().displayGuiScreen( new InfoScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ) ) );
+        });
 
-        for( int i = 0; i < tileButtons.size(); i++ )
+        addButton(exitButton);
+        tileButtons.add( glossaryButton );
+        tileButtons.add( creditsButton );
+        tileButtons.add( prefsButton );
+        tileButtons.add( skillsButton );
+        tileButtons.add( statsButton );
+        tileButtons.add( infoButton );
+
+//        y + 24 + 36
+
+        int buttonCount = tileButtons.size();
+        for( int i = 0; i < buttonCount; i++ )
         {
             TileButton button = tileButtons.get( i );
-            button.x = sr.getScaledWidth()/2 + i*( button.getWidth()+2 ) - tileButtons.size()*(button.getWidth()+2)/2 - 1;
+//            button.x = sr.getScaledWidth()/2 + i*( button.getWidth()+2 ) - tileButtons.size()*(button.getWidth()+2)/2 - 1;
+            button.x = sr.getScaledWidth()/2 - button.getWidth()/2;
+            button.y = y + 155;
+            button.x += Math.cos( i/(float)buttonCount * 6.2824 )*40;
+            button.y += Math.sin( i/(float)buttonCount * 6.2824 )*40;
             addButton( button );
         }
     }
