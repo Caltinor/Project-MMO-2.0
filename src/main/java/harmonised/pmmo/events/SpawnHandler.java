@@ -22,6 +22,7 @@ public class SpawnHandler
             {
                 int powerLevelContributorCount = 0;
                 float powerLevel = 0;
+
                 Collection<PlayerEntity> allPlayers = XP.getNearbyPlayers( mob );
 
                 for( PlayerEntity player : allPlayers )
@@ -32,7 +33,9 @@ public class SpawnHandler
                         powerLevelContributorCount++;
                     }
                 }
-                powerLevel /= powerLevelContributorCount;
+
+                if( powerLevelContributorCount > 1 )
+                    powerLevel /= powerLevelContributorCount;
 
                 AttributeHandler.updateHP( mob, powerLevel );
                 AttributeHandler.updateDamage( mob, powerLevel );
