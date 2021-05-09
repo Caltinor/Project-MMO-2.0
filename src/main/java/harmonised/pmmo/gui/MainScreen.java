@@ -22,12 +22,13 @@ public class MainScreen extends Screen
     private final List<IGuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
+    private final ResourceLocation star = XP.getResLoc( Reference.MOD_ID, "textures/gui/star.png" );
     private static TileButton exitButton;
     public static Map<JType, Integer> scrollAmounts = new HashMap<>();
 
-    Minecraft minecraft = Minecraft.getInstance();
-    MainWindow sr = minecraft.getMainWindow();
-    FontRenderer font = minecraft.fontRenderer;
+    Minecraft mc = Minecraft.getInstance();
+    MainWindow sr = mc.getMainWindow();
+    FontRenderer font = mc.fontRenderer;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -132,14 +133,14 @@ public class MainScreen extends Screen
         }
 
         RenderSystem.enableBlend();
-        Minecraft.getInstance().getTextureManager().bindTexture( logo );
+        mc.getTextureManager().bindTexture( logo );
         this.blit( stack,  sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override
     public void renderBackground( MatrixStack stack, int p_renderBackground_1_)
     {
-        if (this.minecraft != null)
+        if (this.mc != null)
         {
             this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));

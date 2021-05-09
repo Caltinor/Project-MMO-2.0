@@ -2,6 +2,7 @@ package harmonised.pmmo.proxy;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.gui.InfoScreen;
 import harmonised.pmmo.gui.ListScreen;
 import harmonised.pmmo.gui.WorldRenderHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
@@ -103,5 +104,10 @@ public class ClientHandler
     public static void syncPrefsToServer()
     {
         NetworkHandler.sendToServer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.getPreferencesMap( Minecraft.getInstance().player ) ), 0 ) );
+    }
+
+    public static void openInfoMenu()
+    {
+        Minecraft.getInstance().displayGuiScreen( new InfoScreen( Minecraft.getInstance().player.getUniqueID(),  new TranslationTextComponent( "pmmo.info" ) ) );
     }
 }

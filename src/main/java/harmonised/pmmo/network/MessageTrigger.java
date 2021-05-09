@@ -1,6 +1,7 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.gui.InfoScreen;
+import harmonised.pmmo.proxy.ClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -42,7 +43,7 @@ public class MessageTrigger
             if( Minecraft.getInstance().player != null )
             {
                 if( packet.type == 1 )
-                    Minecraft.getInstance().displayGuiScreen( new InfoScreen( Minecraft.getInstance().player.getUniqueID(),  new TranslationTextComponent( "pmmo.info" ) ) );
+                    ClientHandler.openInfoMenu();
             }
         });
         ctx.get().setPacketHandled(true);
