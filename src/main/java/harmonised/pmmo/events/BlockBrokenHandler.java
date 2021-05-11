@@ -69,11 +69,11 @@ public class BlockBrokenHandler
         Block blockAbove = world.getBlockState( pos.up() ).getBlock();
         ResourceLocation dimResLoc = XP.getDimResLoc( (World) event.getWorld() );
 
-//        if( !Util.isProduction() )
-//        {
-//            WebHandler.updateInfo();
-//            System.out.println( "Current: " + ProjectMMOMod.getCurrentVersion() + ", Latest: " + WebHandler.getLatestVersion() + ", " + ProjectMMOMod.isVersionBehind() );
-//        }
+        if( !Util.isProduction() )
+        {
+            WebHandler.updateInfo();
+            System.out.println( "Current: " + ProjectMMOMod.getCurrentVersion() + ", Latest: " + WebHandler.getLatestVersion() + ", " + ProjectMMOMod.isVersionBehind() );
+        }
 
         boolean passedBreakReq = true;
 

@@ -48,7 +48,8 @@ public class PlayerConnectedHandler
                 String updateMsg = WebHandler.getLatestMessage();
                 if( updateMsg != null )
                     style.setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new StringTextComponent( updateMsg ) ) );
-                IFormattableTextComponent textComp = new TranslationTextComponent( "pmmo.outdatedVersion", WebHandler.getLatestVersion(), ProjectMMOMod.getCurrentVersion() ).setStyle( style );
+                TranslationTextComponent textComp = new TranslationTextComponent( "pmmo.outdatedVersion", WebHandler.getLatestVersion(), ProjectMMOMod.getCurrentVersion() );
+                textComp.setStyle( style );
                 player.sendStatusMessage( textComp, false );
             }
 
