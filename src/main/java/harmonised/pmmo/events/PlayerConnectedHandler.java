@@ -1,6 +1,8 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
@@ -41,6 +43,9 @@ public class PlayerConnectedHandler
             migratePlayerDataToWorldSavedData( player );
             XP.syncPlayer( player );
             awardScheduledXp( uuid );
+
+            if( Config.forgeConfig.warnOutdatedVersion.get() && ProjectMMOMod.isVersionBehind() )
+                player.sendStatusMessage( new TranslationTextComponent( "pmmo.outdatedVersion", WebHandler.getLatestVersion(), ProjectMMOMod.getCurrentVersion() ).setStyle( XP.getColorStyle( 0xaa3333 ).setUnderlined( true ) ), false );
 
             if( !muteList.contains( uuid ) )
             {

@@ -2,6 +2,7 @@ package harmonised.pmmo.util;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.util.Map;
 
@@ -144,5 +145,10 @@ public class Util
             }
         }
         return false;
+    }
+
+    public static boolean isProduction()
+    {
+        return FMLEnvironment.production;
     }
 }

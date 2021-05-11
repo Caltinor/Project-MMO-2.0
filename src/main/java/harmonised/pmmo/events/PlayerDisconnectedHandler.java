@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +15,7 @@ public class PlayerDisconnectedHandler
         PlayerEntity player = event.getPlayer();
         if( player.world.isRemote() )
         {
-
+            WebHandler.updateInfo();
         }
         else
         {

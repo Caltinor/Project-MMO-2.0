@@ -1,5 +1,9 @@
 package harmonised.pmmo.events;
 
+import com.ferreusveritas.dynamictrees.api.network.MapSignal;
+import com.ferreusveritas.dynamictrees.blocks.branches.BranchBlock;
+import com.ferreusveritas.dynamictrees.systems.nodemappers.NetVolumeNode;
+import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -7,6 +11,7 @@ import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
@@ -38,6 +43,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.*;
 
 public class BlockBrokenHandler
@@ -62,6 +68,12 @@ public class BlockBrokenHandler
         World world = (World) event.getWorld();
         Block blockAbove = world.getBlockState( pos.up() ).getBlock();
         ResourceLocation dimResLoc = XP.getDimResLoc( (World) event.getWorld() );
+
+//        if( !Util.isProduction() )
+//        {
+//            WebHandler.updateInfo();
+//            System.out.println( "Current: " + ProjectMMOMod.getCurrentVersion() + ", Latest: " + WebHandler.getLatestVersion() + ", " + ProjectMMOMod.isVersionBehind() );
+//        }
 
         boolean passedBreakReq = true;
 
@@ -141,6 +153,7 @@ public class BlockBrokenHandler
         if( state.getMaterial().isLiquid() )
             return;
         Block block = state.getBlock();
+        BlockPos pos = event.getPos();
         String regKey = block.getRegistryName().toString();
         TileEntity tile = event.getWorld().getTileEntity(event.getPos());
         final Map<String, Double> xpMap = tile == null ? XP.getXpBypass( block.getRegistryName(), JType.XP_VALUE_BREAK ) : XP.getXp( tile, JType.XP_VALUE_BREAK );
@@ -467,7 +480,54 @@ public class BlockBrokenHandler
         }
 
         //LOG
-        if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
+        //Dynamic Trees
+        if( ProjectMMOMod.dynamicTreesLoaded && block instanceof BranchBlock )
+        {
+            BranchBlock branchBlock = (BranchBlock) block;
+            MapSignal signal = branchBlock.analyse( state, world, pos, null, new MapSignal());
+            NetVolumeNode volumeNet = new NetVolumeNode();
+            branchBlock.analyse( state, world, pos, signal.localRootDir, new MapSignal(volumeNet));
+            NetVolumeNode.Volume volume = volumeNet.getVolume();
+            float volumeFloat = volume.getVolume();
+            drops = branchBlock.getLogDrops( world, pos, branchBlock.getFamily().getSpeciesForLocation( world, pos ), volume );
+            award = new HashMap<>();
+
+            for( ItemStack itemStack : drops )
+            {
+                try
+                {
+                    int extraDrops;
+                    ResourceLocation resLoc = itemStack.getItem().getRegistryName();
+//                    Set<ResourceLocation> tags = block.getTags();
+//                    for( ResourceLocation tag : tags )
+//                    {
+//                        String tagName = tag.toString();
+//                        if( tagName.equals( "minecraft:logs" ) )
+//                        {
+//                            resLoc = itemStack.getItem().getRegistryName();
+//                            break;
+//                        }
+//                    }
+
+                    double extraChance = XP.getExtraChance( player.getUniqueID(), resLoc, JType.INFO_LOG, false );
+                    extraDrops = (int) ( itemStack.getCount() * extraChance / 100D );
+                    XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( XP.getXpBypass( resLoc, JType.XP_VALUE_BREAK ), volumeFloat + extraDrops ) );
+
+                    if( extraDrops > 0 )
+                    {
+                        ItemStack extraDropStack = itemStack.copy();
+                        extraDropStack.setCount( extraDrops );
+                        XP.dropItemStack( extraDropStack, world, pos );
+                        NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + extraDrops, extraDropStack.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    }
+                }
+                catch( Exception e )
+                {
+                    LOGGER.error( e );
+                }
+            }
+        }
+        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
         {
             if( !wasPlaced )			//EXTRA DROPS
             {
@@ -544,7 +604,6 @@ public class BlockBrokenHandler
         if( gap > 0 )
             player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 
-        BlockPos pos = event.getPos();
         for( String awardSkillName : award.keySet() )
         {
             double xp = award.get( awardSkillName ) / (gap + 1);

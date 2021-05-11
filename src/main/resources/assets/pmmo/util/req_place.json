@@ -582,7 +582,7 @@
 	},
 	"minecraft:acacia_sapling":
 	{
-		"farming": 5,
+		"farming": 10,
 		"woodcutting": 15
 	},
 	"minecraft:birch_sapling":
@@ -791,5 +791,50 @@
 	{
 		"farming": 15,
 		"woodcutting": 30
+	},
+	"dynamictrees:jungle_seed":
+	{
+		"farming": 20,
+		"woodcutting": 35
+	},
+	"dynamictrees:oak_seed":
+	{
+		"farming": 5,
+		"woodcutting": 10
+	},
+	"dynamictrees:apple_oak_seed":
+	{
+		"farming": 35,
+		"woodcutting": 15
+	},
+	"dynamictrees:acacia_seed":
+	{
+		"farming": 10,
+		"woodcutting": 15
+	},
+	"dynamictrees:dark_oak_seed":
+	{
+		"farming": 10,
+		"woodcutting": 25
+	},
+	"dynamictrees:spruce_seed":
+	{
+		"farming": 15,
+		"woodcutting": 30
+	},
+	"dynamictrees:birch_seed":
+	{
+		"farming": 50,
+		"woodcutting": 25
+	},
+	"dynamictrees:crimson_seed":
+	{
+		"farming": 50,
+		"woodcutting": 55
+	},
+	"dynamictrees:warped_seed":
+	{
+		"farming": 60,
+		"woodcutting": 50
 	}
 }

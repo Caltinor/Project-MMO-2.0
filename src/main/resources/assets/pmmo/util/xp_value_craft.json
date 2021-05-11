@@ -1707,10 +1707,6 @@
 	{
 		"crafting": 1000
 	},
-	"minecraft:beetroot_soup":
-	{
-		"cooking": 22.5
-	},
 	"minecraft:blast_furnace":
 	{
 		"crafting": 61
@@ -1722,10 +1718,6 @@
 	"minecraft:bone_block":
 	{
 		"crafting": 0
-	},
-	"minecraft:bread":
-	{
-		"cooking": 3.5
 	},
 	"minecraft:bucket":
 	{

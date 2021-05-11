@@ -383,5 +383,6 @@
   "pmmo.discord": "Join Our Discord!",
   "pmmo.features": "Project MMO Features List!",
   "pmmo.customize": "Customize Your Experience!",
-  "pmmo.curseforge": "Project MMO CurseForge Page!"
+  "pmmo.curseforge": "Project MMO CurseForge Page!",
+  "pmmo.outdatedVersion": "Project MMO version is outdated! Latest: %1$s, Installed: %2$s!"
 }

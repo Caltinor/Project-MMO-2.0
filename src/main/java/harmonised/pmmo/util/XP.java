@@ -237,13 +237,23 @@ public class XP
 		return getXp( registryName, jType);
 	}
 
+	public static Map<String, Double> getXpBypass( String registryName, JType jType )
+	{
+		return getXp( registryName, jType);
+	}
+
 	private static Map<String, Double> getXp( ResourceLocation registryName, JType jType )
+	{
+		return getXp( registryName.toString(), jType );
+	}
+
+	private static Map<String, Double> getXp( String registryName, JType jType )
 	{
 		Map<String, Double> theMap = new HashMap<>();
 
-		if( JsonConfig.data.get( jType ).containsKey( registryName.toString() ) )
+		if( JsonConfig.data.get( jType ).containsKey( registryName ) )
 		{
-			for( Map.Entry<String, Double> entry : JsonConfig.data.get( jType ).get( registryName.toString() ).entrySet() )
+			for( Map.Entry<String, Double> entry : JsonConfig.data.get( jType ).get( registryName ).entrySet() )
 			{
 				theMap.put( entry.getKey(), entry.getValue() );
 			}
