@@ -195,41 +195,11 @@ public class DamageHandler
                         weaponReq.put( skill, weaponReq.getOrDefault( skill, AutoValues.getWeaponReqFromStack( mainItemStack ) ) );
                     int weaponGap = XP.getSkillReqGap( player, weaponReq );
                     int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
-                    //TINKERS
-                    int killGap = 0, tinkersMaterialsReqGap = 0;
-                    if( ProjectMMOMod.tinkersLoaded )
-                    {
-                        CompoundNBT tinkerTag = mainItemStack.getTag();
-                        if( tinkerTag != null )
-                        {
-                        	ListNBT tinkerTags = tinkerTag.getList( "tic_materials" , NBT.TAG_STRING);
-                            for( INBT iNbtTag : tinkerTags )
-                            {
-                                String tag = iNbtTag.getString();
-                                Map<String, Double> tinkersMaterialsReqMap = XP.getJsonMap( tag, JType.REQ_TINKERS_MATERIALS );
-                                boolean materialReqMet = XP.checkReq( player, tinkersMaterialsReqMap );
-                                tinkersMaterialsReqGap = Math.max( tinkersMaterialsReqGap, XP.getSkillReqGap( player, tinkersMaterialsReqMap ) );
-
-                                if( !materialReqMet )
-                                {
-                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseTinkersMaterial", tag ).setStyle( XP.textStyle.get( "red" ) ), false );
-
-                                    for( Map.Entry<String, Double> entry : tinkersMaterialsReqMap.entrySet() )
-                                    {
-                                        if( Skill.getLevel( entry.getKey(), player ) < entry.getValue() )
-                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
-                                        else
-                                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //END OF TINKERS
-                    int gap = Math.max( Math.max( weaponGap, enchantGap ), tinkersMaterialsReqGap );
+                    int killGap = 0;
+                    int gap = Math.max( weaponGap, enchantGap );
                     if( gap > 0 )
                     {
-                        if( enchantGap < gap && tinkersMaterialsReqGap < gap )
+                        if( enchantGap < gap )
                             NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
                         if( Config.forgeConfig.strictReqWeapon.get() )
                         {
@@ -329,6 +299,9 @@ public class DamageHandler
                     Vector3d xpDropPos = target.getPositionVec();
                     WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + target.getHeight(), xpDropPos.getZ(), target.getHeight(), amount, skill );
                     XP.addWorldXpDrop( xpDrop, player );
+                    Map<String, Double> entityMap = XP.getXp( target, JType.XP_MULTIPLIER_ENTITY );
+                    if( entityMap.containsKey( skill ) )
+                        amount *= entityMap.get( skill );
                     XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
 
                     if( weaponGap > 0 )

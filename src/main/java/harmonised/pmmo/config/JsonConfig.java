@@ -72,7 +72,6 @@ public class JsonConfig
         levelJTypes.add( JType.REQ_WEAR );
         levelJTypes.add( JType.REQ_USE_ENCHANTMENT );
         levelJTypes.add( JType.REQ_TOOL );
-        levelJTypes.add( JType.REQ_TINKERS_MATERIALS );
         levelJTypes.add( JType.REQ_WEAPON );
         levelJTypes.add( JType.REQ_USE );
         levelJTypes.add( JType.REQ_PLACE );
@@ -139,9 +138,6 @@ public class JsonConfig
 
         if( Config.forgeConfig.toolReqEnabled.get() )
             jTypes.add( JType.REQ_TOOL );
-
-        if( Config.forgeConfig.tinkersMaterialsReqEnabled.get() )
-            jTypes.add( JType.REQ_TINKERS_MATERIALS );
 
         if( Config.forgeConfig.weaponReqEnabled.get() )
             jTypes.add( JType.REQ_WEAPON );
@@ -258,6 +254,7 @@ public class JsonConfig
         jTypes.add( JType.XP_VALUE_TRIGGER );
         jTypes.add( JType.XP_BONUS_DIMENSION );
         jTypes.add( JType.XP_MULTIPLIER_DIMENSION );
+        jTypes.add( JType.XP_MULTIPLIER_ENTITY );
     }
 
     private static void initData()
@@ -343,9 +340,6 @@ public class JsonConfig
 
         if( jTypes.contains( JType.REQ_TOOL ) )
             updateDataSkills( JType.REQ_TOOL, false );
-
-        if( jTypes.contains( JType.REQ_TINKERS_MATERIALS ) )
-            updateDataSkills( JType.REQ_TINKERS_MATERIALS, true );
 
         if( jTypes.contains( JType.REQ_WEAPON ) )
             updateDataSkills( JType.REQ_WEAPON, false );
@@ -475,6 +469,9 @@ public class JsonConfig
 
         if( jTypes.contains(  JType.XP_MULTIPLIER_DIMENSION ) )
             updateDataSkills( JType.XP_MULTIPLIER_DIMENSION, true );
+
+        if( jTypes.contains(  JType.XP_MULTIPLIER_ENTITY ) )
+            updateDataSkills( JType.XP_MULTIPLIER_ENTITY, true );
     }
 
     private static void createData( File dataFile, String fileName )

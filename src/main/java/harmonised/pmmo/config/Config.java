@@ -51,7 +51,6 @@ public class Config
 
         localConfig.put( "wearReqEnabled", forgeConfig.wearReqEnabled.get() ? 1D : 0D );
         localConfig.put( "toolReqEnabled", forgeConfig.toolReqEnabled.get() ? 1D : 0D );
-        localConfig.put( "tinkersMaterialsReqEnabled", forgeConfig.tinkersMaterialsReqEnabled.get() ? 1D : 0D );
         localConfig.put( "weaponReqEnabled", forgeConfig.weaponReqEnabled.get() ? 1D : 0D );
         localConfig.put( "enchantUseReqEnabled", forgeConfig.enchantUseReqEnabled.get() ? 1D : 0D );
 
@@ -177,7 +176,6 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> enchantUseReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> enchantUseReqAutoScaleEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> toolReqEnabled;
-        public ConfigHelper.ConfigValueListener<Boolean> tinkersMaterialsReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> weaponReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> killReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> killXpEnabled;
@@ -699,11 +697,6 @@ public class Config
                         .comment( "Should tool requirements be enabled? false means no requirements" )
                         .translation( "pmmo.toolReqEnabled" )
                         .define( "toolReqEnabled", true ) );
-
-                this.tinkersMaterialsReqEnabled = subscriber.subscribe(builder
-                        .comment( "Should Tinkers mod Materials requirements be enabled? false means no requirements" )
-                        .translation( "pmmo.tinkersMaterialsReqEnabled" )
-                        .define( "tinkersMaterialsReqEnabled", true ) );
 
                 this.weaponReqEnabled = subscriber.subscribe(builder
                         .comment( "Should weapon requirements be enabled? false means no requirements" )

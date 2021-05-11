@@ -51,7 +51,6 @@ public enum JType
     BLOCK_SPECIFIC(41),
     ITEM_SPECIFIC(42),
     VEIN_BLACKLIST(43),
-    REQ_TINKERS_MATERIALS( 44 ),
 
     TREASURE(100),
     SALVAGE(101),
@@ -65,6 +64,7 @@ public enum JType
     SETTINGS(207),
     GUI_SETTINGS(208),
     XP_MULTIPLIER_DIMENSION(209),
+    XP_MULTIPLIER_ENTITY(210),
     HISCORE(210);
 
     public static final Map<JType, Integer> jTypeMap = new HashMap<>();

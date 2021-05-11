@@ -47,43 +47,9 @@ public class BreakSpeedHandler
             }
         }
 
-        //TINKERS
-        int tinkersMaterialsReqGap = 0;
-        if( ProjectMMOMod.tinkersLoaded )
-        {
-        	CompoundNBT tinkerTag = itemStack.getTag();            
-            if( tinkerTag != null )
-            {
-            	ListNBT tinkerTags = tinkerTag.getList( "tic_materials" , NBT.TAG_STRING );
-                for( INBT iNbtTag : tinkerTags )
-                {
-                    String tag = iNbtTag.getString();
-                    Map<String, Double> tinkersMaterialsReqMap = XP.getJsonMap( tag, JType.REQ_TINKERS_MATERIALS );
-                    boolean materialReqMet = XP.checkReq( player, tinkersMaterialsReqMap );
-                    tinkersMaterialsReqGap = Math.max( tinkersMaterialsReqGap, XP.getSkillReqGap( player, tinkersMaterialsReqMap ) );
-
-                    if( !materialReqMet && System.currentTimeMillis() - lastWarning > 3251 )
-                    {
-                        lastWarning = System.currentTimeMillis();
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseTinkersMaterial", tag ).setStyle( XP.textStyle.get( "red" ) ), true );
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseTinkersMaterial", tag ).setStyle( XP.textStyle.get( "red" ) ), false );
-
-                        for( Map.Entry<String, Double> entry : tinkersMaterialsReqMap.entrySet() )
-                        {
-                            if( Skill.getLevel( entry.getKey(), player ) < entry.getValue() )
-                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
-                            else
-                                player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                        }
-                    }
-                }
-            }
-        }
-        //END OF TINKERS
-
         int toolGap = XP.getSkillReqGap( player, toolReq );
         int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
-        int gap = Math.max( Math.max( toolGap, enchantGap ), tinkersMaterialsReqGap );
+        int gap = Math.max( toolGap, enchantGap );
         boolean breakReqMet = event.getState().hasTileEntity()
         		? XP.checkReq( player, event.getEntity().getEntityWorld().getTileEntity(event.getPos()), JType.REQ_BREAK)
         		: XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK );
@@ -96,7 +62,7 @@ public class BreakSpeedHandler
         }
         else if( gap > 0 )
         {
-            if( enchantGap < gap && tinkersMaterialsReqGap < gap )
+            if( enchantGap < gap )
                 player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
 
             if( Config.getConfig( "strictReqTool" ) == 1 )
