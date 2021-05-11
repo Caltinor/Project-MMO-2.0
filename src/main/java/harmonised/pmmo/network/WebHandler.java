@@ -71,6 +71,25 @@ public class WebHandler
 
     public static String getLatestVersion()
     {
-        return (String) WebHandler.getWebData().objs.get( "latestVersion" + Reference.MC_VERSION );
+        try
+        {
+            return (String) WebHandler.getWebData().objs.get( "latestVersion" + Reference.MC_VERSION );
+        }
+        catch( Exception e )
+        {
+            return null;
+        }
+    }
+
+    public static String getLatestMessage()
+    {
+        try
+        {
+            return (String) WebHandler.getWebData().objs.get( "latestMessage" + Reference.MC_VERSION );
+        }
+        catch( Exception e )
+        {
+            return null;
+        }
     }
 }

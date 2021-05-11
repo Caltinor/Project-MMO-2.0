@@ -10,9 +10,7 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -45,7 +43,14 @@ public class PlayerConnectedHandler
             awardScheduledXp( uuid );
 
             if( Config.forgeConfig.warnOutdatedVersion.get() && ProjectMMOMod.isVersionBehind() )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.outdatedVersion", WebHandler.getLatestVersion(), ProjectMMOMod.getCurrentVersion() ).setStyle( XP.getColorStyle( 0xaa3333 ).setUnderlined( true ) ), false );
+            {
+                Style style = XP.getColorStyle( 0xaa3333 ).setUnderlined( true );
+                String updateMsg = WebHandler.getLatestMessage();
+                if( updateMsg != null )
+                    style.setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new StringTextComponent( updateMsg ) ) );
+                IFormattableTextComponent textComp = new TranslationTextComponent( "pmmo.outdatedVersion", WebHandler.getLatestVersion(), ProjectMMOMod.getCurrentVersion() ).setStyle( style );
+                player.sendStatusMessage( textComp, false );
+            }
 
             if( !muteList.contains( uuid ) )
             {

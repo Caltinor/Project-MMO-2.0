@@ -136,7 +136,7 @@ public class ProjectMMOMod
     {
         String latestVersionString = WebHandler.getLatestVersion();
         if( latestVersionString == null )
-            return false;   //Offline
+            return false;   //Failed to retrieve
         String currentVersionString = getCurrentVersion();
 
         String[] latestPmmoVersion = latestVersionString.split( "[.]" );
