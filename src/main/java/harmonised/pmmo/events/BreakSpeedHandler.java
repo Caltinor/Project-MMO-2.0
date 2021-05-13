@@ -22,8 +22,6 @@ import java.util.Map;
 
 public class BreakSpeedHandler
 {
-    private static long lastWarning = 0;
-
     public static void handleBreakSpeed( PlayerEvent.BreakSpeed event )
     {
         PlayerEntity player = event.getPlayer();

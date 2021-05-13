@@ -1956,4 +1956,17 @@ public class XP
 	{
 		WorldRenderHandler.addWorldTextOffline( worldText );
 	}
+
+	public static void sendPlayerSkillList( PlayerEntity player, Map<String, Double> skills )
+	{
+		for( Map.Entry<String, Double> entry : skills.entrySet() )
+		{
+			int level = Skill.getLevel( entry.getKey(), player );
+
+			if( level < entry.getValue() )
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+			else
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+		}
+	}
 }
