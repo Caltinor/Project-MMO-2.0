@@ -604,6 +604,8 @@ public class BlockBrokenHandler
         if( gap > 0 )
             player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
 
+        ResourceLocation dimResLoc = XP.getDimResLoc( world );
+
         for( String awardSkillName : award.keySet() )
         {
             double xp = award.get( awardSkillName ) / (gap + 1);
@@ -641,7 +643,7 @@ public class BlockBrokenHandler
                     worldText.setSecondsLifespan( (float) ( 10 + Math.random() * 50 ) );
                     worldText.setStartRot( (float) ( Math.random() * 360 - 180 ) );
                     worldText.setEndRot( (float) ( Math.random() * 360 - 180 ) );
-                    XP.addWorldTextRadius( worldText, 128 );
+                    XP.addWorldTextRadius( dimResLoc, worldText, 128 );
                 }
             }
 

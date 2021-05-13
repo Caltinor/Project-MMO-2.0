@@ -1,6 +1,7 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -65,8 +66,16 @@ public class MessageLevelUp
                     Map<String, Double> prefsMap = Config.getPreferencesMap( player );
                     Vector3d playerPos = player.getPositionVec();
 
+                    WorldText explosionText = WorldText.fromVector( XP.getDimResLoc( player.getServerWorld() ), player.getPositionVec() );
+                    explosionText.setColor( Skill.getSkillColor( skill ) );
+                    explosionText.setText( player.getDisplayName().getString() + " " + packet.level + " " + skill + " level up!" );
+                    explosionText.setMaxOffset( 1 );
+                    explosionText.setStartSize( 4 );
+                    explosionText.setEndSize( 0 );
+                    explosionText.setSecondsLifespan( 15.23f );
+
                     if( Config.forgeConfig.levelUpFirework.get() && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
-                        XP.spawnRocket( player.world, player.getPositionVec(), skill );
+                        XP.spawnRocket( player.world, player.getPositionVec(), skill, explosionText );
 
                     LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skill + "! [" + XP.getDimResLoc( player.world ).toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
 
@@ -91,7 +100,7 @@ public class MessageLevelUp
                                     {
                                         otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skill ) ).setStyle( Skill.getSkillStyle( skill ) ), false );
                                         if( Config.forgeConfig.milestoneLevelUpFirework.get() && !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
-                                            XP.spawnRocket( otherPlayer.world, otherPlayer.getPositionVec(), skill );
+                                            XP.spawnRocket( otherPlayer.world, otherPlayer.getPositionVec(), skill, explosionText );
                                     }
                                     if( totalLevelMilestone )
                                         otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneTotalLevel", player.getDisplayName(), totalLevel ).setStyle( XP.getColorStyle( 0x00ff00 ) ), false );
