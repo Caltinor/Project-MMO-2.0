@@ -40,7 +40,7 @@ public class NetworkHandler
 		}
 		catch( Exception e )
 		{
-			e.printStackTrace();
+			LOGGER.debug( e );
 		}
 	}
 
@@ -52,7 +52,7 @@ public class NetworkHandler
 		}
 		catch( Exception e )
 		{
-			e.printStackTrace();
+			LOGGER.debug( e );
 		}
 	}
 

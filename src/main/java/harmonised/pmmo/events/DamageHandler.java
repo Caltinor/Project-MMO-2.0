@@ -152,10 +152,6 @@ public class DamageHandler
 
             if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof ServerPlayerEntity )
             {
-//				IAttributeInstance test = target.getAttribute( Attributes.GENERIC_MOVEMENT_SPEED );
-//				if( !(target instanceof AnimalEntity) )
-//					System.out.println( test.getValue() + " " + test.getBaseValue() );
-
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
                 ServerWorld world = player.getServerWorld();
 
@@ -212,7 +208,6 @@ public class DamageHandler
                         skill = Skill.MAGIC.toString();
 
                     //Apply damage bonuses
-//                    System.out.println( damage );
                     //Combat is taken care of in AttributeHandler
 //                    if( skill.equals( Skill.COMBAT.toString() ) )
 //                        damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelMelee.get();
@@ -220,7 +215,6 @@ public class DamageHandler
                         damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelArchery.get();
                     else if( skill.equals( Skill.MAGIC.toString() ) )
                         damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get();
-//                    System.out.println( damage );
 
                     if( target.getEntityString() != null )
                     {
