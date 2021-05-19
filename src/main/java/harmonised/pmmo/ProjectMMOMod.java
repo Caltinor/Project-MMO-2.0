@@ -40,7 +40,7 @@ public class ProjectMMOMod
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    private static String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "1";
     public static boolean serverStarted = false, jeiLoaded = false, tinkersLoaded = false, dynamicTreesLoaded = false;
     public static SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
             .named( new ResourceLocation( Reference.MOD_ID, "main_channel" ) )
