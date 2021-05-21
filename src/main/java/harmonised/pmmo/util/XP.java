@@ -199,7 +199,7 @@ public class XP
 	{
 		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
 		
-		if (TooltipSupplier.tooltipExists( res , jType))
+		if (TooltipSupplier.tooltipExists( res, jType))
 			return TooltipSupplier.getTooltipData( res , jType, tile );
 		
 		return getXp( res , jType );
@@ -249,17 +249,7 @@ public class XP
 
 	private static Map<String, Double> getXp( String registryName, JType jType )
 	{
-		Map<String, Double> theMap = new HashMap<>();
-
-		if( JsonConfig.data.get( jType ).containsKey( registryName ) )
-		{
-			for( Map.Entry<String, Double> entry : JsonConfig.data.get( jType ).get( registryName ).entrySet() )
-			{
-				theMap.put( entry.getKey(), entry.getValue() );
-			}
-		}
-
-		return theMap;
+		return new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( registryName, new HashMap<>() ) );
 	}
 
 	public static ResourceLocation getBiomeResLoc( World world, Biome biome )

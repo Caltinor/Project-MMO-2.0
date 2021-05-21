@@ -18,23 +18,30 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.5-3.57.1'
+version = '1.16.5-3.57.2'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
-minecraft {
+minecraft
+{
     mappings channel: 'snapshot', version: '20200916-1.16.2'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    runs {
-        client {
+    runs
+    {
+        client
+        {
             workingDirectory project.file('run')
             arg "-mixin.config="+modid+".mixins.json"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            mods {
-                examplemod {
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods
+            {
+                pmmo
+                {
                     source sourceSets.main
                 }
             }
@@ -45,7 +52,7 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             mods {
-                examplemod {
+                pmmo {
                     source sourceSets.main
                 }
             }
@@ -104,7 +111,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.16.5-36.1.16'
+            minecraft 'net.minecraftforge:forge:1.16.5-36.1.23'
             implementation 'com.google.code.gson:gson:2.8.6'
 
             compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52:api")
@@ -119,12 +126,17 @@ dependencies
 
 //            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
 //            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
-            compileOnly fg.deobf("curse.maven:ftb-quests:3078812")
-            runtimeOnly fg.deobf("curse.maven:ftb-quests:3078812")
-            compileOnly fg.deobf("curse.maven:ftb-gui-library:3077866")
-            runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3077866")
-            compileOnly fg.deobf("curse.maven:item-filters:3066686")
-            runtimeOnly fg.deobf("curse.maven:item-filters:3066686")
+            compileOnly fg.deobf("curse.maven:ftb-quests:3316497")
+            runtimeOnly fg.deobf("curse.maven:ftb-quests:3316497")
+            compileOnly fg.deobf("curse.maven:ftb-gui-library:3313036")
+            runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3313036")
+            compileOnly fg.deobf("curse.maven:item-filters:3231742")
+            runtimeOnly fg.deobf("curse.maven:item-filters:3231742")
+            compileOnly fg.deobf("curse.maven:ftb-teams-forge:3313041")
+            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3313041")
+            compileOnly fg.deobf("curse.maven:architectury-forge:3316907")
+            runtimeOnly fg.deobf("curse.maven:architectury-forge:3316907")
+
 
             compileOnly fg.deobf("curse.maven:dynamictrees:3304858")
             runtimeOnly fg.deobf("curse.maven:dynamictrees:3304858")
@@ -188,6 +200,7 @@ publishing {
 
 apply plugin: 'org.spongepowered.mixin'
 
-mixin {
+mixin
+{
     add sourceSets.main, "${modid}.refmap.json"
 }

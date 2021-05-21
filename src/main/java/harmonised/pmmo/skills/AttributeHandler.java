@@ -45,7 +45,7 @@ public class AttributeHandler
 		if( prefsMap.containsKey( "maxExtraReachBoost" ) )
 			maxReachPref = prefsMap.get( "maxExtraReachBoost" );
 		reach = Math.min( maxReach, Math.min( maxReachPref, reach ) );
-		return reach;
+		return player.isCreative() ? Math.max( 50, reach ) : reach;
 	}
 
 	public static void updateReach( PlayerEntity player )

@@ -166,8 +166,8 @@ public class DamageHandler
                     ItemStack mainItemStack = player.getHeldItemMainhand();
                     ResourceLocation mainResLoc = player.getHeldItemMainhand().getItem().getRegistryName();
                     ResourceLocation offResLoc = player.getHeldItemOffhand().getItem().getRegistryName();
-                    Map<String, Double> weaponReq = XP.getJsonMap( mainResLoc, JType.REQ_WEAPON );
-                    NBTHelper.maxDoubleMaps( weaponReq, XP.getJsonMap( offResLoc, JType.REQ_WEAPON ) );
+                    Map<String, Double> weaponReq = XP.getXpBypass( mainResLoc, JType.REQ_WEAPON );
+                    NBTHelper.maxDoubleMaps( weaponReq, XP.getXpBypass( offResLoc, JType.REQ_WEAPON ) );
                     String skill;
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( mainItemStack.getItem().getRegistryName().toString() );
                     boolean longDistanceCombatDamage = false;

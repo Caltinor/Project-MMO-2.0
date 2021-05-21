@@ -11,12 +11,13 @@ import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.skills.*;
+import harmonised.pmmo.util.DrawUtil;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SeaPickleBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -43,7 +44,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.*;
 
 public class BlockBrokenHandler
@@ -68,12 +68,6 @@ public class BlockBrokenHandler
         World world = (World) event.getWorld();
         Block blockAbove = world.getBlockState( pos.up() ).getBlock();
         ResourceLocation dimResLoc = XP.getDimResLoc( (World) event.getWorld() );
-
-        if( !Util.isProduction() )
-        {
-            WebHandler.updateInfo();
-            System.out.println( "Current: " + ProjectMMOMod.getCurrentVersion() + ", Latest: " + WebHandler.getLatestVersion() + ", " + ProjectMMOMod.isVersionBehind() );
-        }
 
         boolean passedBreakReq = true;
 
@@ -164,6 +158,20 @@ public class BlockBrokenHandler
         boolean isRemote = world.isRemote();
         PlayerEntity player = event.getPlayer();
         boolean veiningAllowed = Config.getConfig( "veiningAllowed" ) != 0;
+
+        if( !Util.isProduction() )
+        {
+            BlockState coalState = Blocks.COAL_BLOCK.getDefaultState();
+            BlockState glassState = Blocks.GLASS.getDefaultState();
+            int mainRadius = 10;
+
+            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getSphereSolid( mainRadius ), glassState );
+//            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getCircleSolid( mainRadius ), glassState );
+//            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getCircle( mainRadius ), glassState );
+
+//            DrawUtil.drawToWorld( world, pos.up(), DrawUtil.getCircleSolid( mainRadius ), glassState );
+//            DrawUtil.drawToWorld( world, pos, DrawUtil.getCircle( mainRadius ), coalState );
+        }
 
         if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
