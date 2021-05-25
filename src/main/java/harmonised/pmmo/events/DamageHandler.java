@@ -152,10 +152,6 @@ public class DamageHandler
 
             if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof ServerPlayerEntity )
             {
-//				IAttributeInstance test = target.getAttribute( Attributes.GENERIC_MOVEMENT_SPEED );
-//				if( !(target instanceof AnimalEntity) )
-//					System.out.println( test.getValue() + " " + test.getBaseValue() );
-
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
                 ServerWorld world = player.getServerWorld();
 
@@ -170,8 +166,8 @@ public class DamageHandler
                     ItemStack mainItemStack = player.getHeldItemMainhand();
                     ResourceLocation mainResLoc = player.getHeldItemMainhand().getItem().getRegistryName();
                     ResourceLocation offResLoc = player.getHeldItemOffhand().getItem().getRegistryName();
-                    Map<String, Double> weaponReq = XP.getJsonMap( mainResLoc, JType.REQ_WEAPON );
-                    NBTHelper.maxDoubleMaps( weaponReq, XP.getJsonMap( offResLoc, JType.REQ_WEAPON ) );
+                    Map<String, Double> weaponReq = XP.getXpBypass( mainResLoc, JType.REQ_WEAPON );
+                    NBTHelper.maxDoubleMaps( weaponReq, XP.getXpBypass( offResLoc, JType.REQ_WEAPON ) );
                     String skill;
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( mainItemStack.getItem().getRegistryName().toString() );
                     boolean longDistanceCombatDamage = false;
@@ -212,7 +208,6 @@ public class DamageHandler
                         skill = Skill.MAGIC.toString();
 
                     //Apply damage bonuses
-//                    System.out.println( damage );
                     //Combat is taken care of in AttributeHandler
 //                    if( skill.equals( Skill.COMBAT.toString() ) )
 //                        damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelMelee.get();
@@ -220,7 +215,6 @@ public class DamageHandler
                         damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelArchery.get();
                     else if( skill.equals( Skill.MAGIC.toString() ) )
                         damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get();
-//                    System.out.println( damage );
 
                     if( target.getEntityString() != null )
                     {
@@ -230,15 +224,8 @@ public class DamageHandler
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
-                            for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ).entrySet() )
-                            {
-                                int level = Skill.getLevel( entry.getKey(), player );
+                            XP.sendPlayerSkillList( player, JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ) );
 
-                                if( level < entry.getValue() )
-                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
-                                else
-                                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                            }
                             if( Config.forgeConfig.strictReqKill.get() )
                             {
                                 event.setCanceled( true );

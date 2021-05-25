@@ -63,22 +63,6 @@
 	{
 		"extraChance": 1
 	},
-	"appliedenergistics2:certus_quartz_dust":
-	{
-		"extraChance": 1.2
-	},
-	"appliedenergistics2:gold_dust":
-	{
-		"extraChance": 0.5
-	},
-	"appliedenergistics2:iron_dust":
-	{
-		"extraChance": 1
-	},
-	"appliedenergistics2:nether_quartz_dust":
-	{
-		"extraChance": 1
-	},
 	"aquaculture:tin_can":
 	{
 		"extraChance": 15
@@ -95,22 +79,6 @@
 	{
 		"extraChance": 1
 	},
-	"biggerreactors:blutonium_dust":
-	{
-		"extraChance": 1
-	},
-	"biggerreactors:cyanite_dust":
-	{
-		"extraChance": 1
-	},
-	"biggerreactors:graphite_dust":
-	{
-		"extraChance": 1
-	},
-	"biggerreactors:ludicrite_dust":
-	{
-		"extraChance": 1
-	},
 	"bigreactors:anglesite_ore":
 	{
 		"extraChance": 1
@@ -120,10 +88,6 @@
 		"extraChance": 1
 	},
 	"bigreactors:yellorite_ore":
-	{
-		"extraChance": 1
-	},
-	"bigreactors:yellorium_dust":
 	{
 		"extraChance": 1
 	},
@@ -374,30 +338,6 @@
 	"iceandfire:silver_ore":
 	{
 		"extraChance": 0.5
-	},
-	"immersiveengineering:dust_gold":
-	{
-		"extraChance": 0.5
-	},
-	"immersiveengineering:dust_hop_graphite":
-	{
-		"extraChance": 1.2
-	},
-	"immersiveengineering:dust_iron":
-	{
-		"extraChance": 1
-	},
-	"mekanism:dust_netherite":
-	{
-		"extraChance": 1
-	},
-	"mekanism:dust_osmium":
-	{
-		"extraChance": 0.75
-	},
-	"mekanism:dust_quartz":
-	{
-		"extraChance": 1
 	},
 	"mekanism:fluorite_ore":
 	{
@@ -727,15 +667,7 @@
 	{
 		"extraChance": 0.5
 	},
-	"silentgear:azure_electrum_dust":
-	{
-		"extraChance": 1
-	},
 	"silentgear:azure_silver_chunks":
-	{
-		"extraChance": 1
-	},
-	"silentgear:azure_silver_dust":
 	{
 		"extraChance": 1
 	},
@@ -743,23 +675,11 @@
 	{
 		"extraChance": 1
 	},
-	"silentgear:blaze_gold_dust":
-	{
-		"extraChance": 1
-	},
 	"silentgear:crimson_iron_chunks":
 	{
 		"extraChance": 1
 	},
-	"silentgear:crimson_iron_dust":
-	{
-		"extraChance": 1
-	},
 	"silentgear:crimson_iron_ore":
-	{
-		"extraChance": 1
-	},
-	"silentgear:crimson_steel_dust":
 	{
 		"extraChance": 1
 	},
@@ -807,19 +727,7 @@
 	{
 		"extraChance": 1
 	},
-	"silentgems:chaos_gold_dust":
-	{
-		"extraChance": 1
-	},
-	"silentgems:chaos_iron_dust":
-	{
-		"extraChance": 1
-	},
 	"silentgems:chaos_ore":
-	{
-		"extraChance": 1
-	},
-	"silentgems:chaos_silver_dust":
 	{
 		"extraChance": 1
 	},
@@ -971,14 +879,6 @@
 	{
 		"extraChance": 1
 	},
-	"silents_mechanisms:aluminum_dust":
-	{
-		"extraChance": 0.75
-	},
-	"silents_mechanisms:aluminum_steel_dust":
-	{
-		"extraChance": 1
-	},
 	"silents_mechanisms:bauxite_chunks":
 	{
 		"extraChance": 0.75
@@ -987,29 +887,13 @@
 	{
 		"extraChance": 0.75
 	},
-	"silents_mechanisms:bismuth_brass_dust":
-	{
-		"extraChance": 1
-	},
 	"silents_mechanisms:bismuth_chunks":
-	{
-		"extraChance": 1
-	},
-	"silents_mechanisms:bismuth_dust":
 	{
 		"extraChance": 1
 	},
 	"silents_mechanisms:bismuth_ore":
 	{
 		"extraChance": 1
-	},
-	"silents_mechanisms:bismuth_steel_dust":
-	{
-		"extraChance": 1
-	},
-	"silents_mechanisms:brass_dust":
-	{
-		"extraChance": 0.75
 	},
 	"silents_mechanisms:copper_chunks":
 	{
@@ -1035,31 +919,15 @@
 	{
 		"extraChance": 0.35
 	},
-	"silents_mechanisms:platinum_dust":
-	{
-		"extraChance": 0.35
-	},
 	"silents_mechanisms:platinum_ore":
 	{
 		"extraChance": 0.35
-	},
-	"silents_mechanisms:redstone_alloy_dust":
-	{
-		"extraChance": 0.75
 	},
 	"silents_mechanisms:silver_chunks":
 	{
 		"extraChance": 0.5
 	},
-	"silents_mechanisms:steel_dust":
-	{
-		"extraChance": 1
-	},
 	"silents_mechanisms:uranium_chunks":
-	{
-		"extraChance": 0.35
-	},
-	"silents_mechanisms:uranium_dust":
 	{
 		"extraChance": 0.35
 	},
@@ -1068,10 +936,6 @@
 		"extraChance": 0.35
 	},
 	"silents_mechanisms:zinc_chunks":
-	{
-		"extraChance": 0.7
-	},
-	"silents_mechanisms:zinc_dust":
 	{
 		"extraChance": 0.7
 	},
@@ -1095,71 +959,23 @@
 	{
 		"extraChance": 1.2
 	},
-	"thermal:bronze_dust":
-	{
-		"extraChance": 1
-	},
 	"thermal:cinnabar_ore":
 	{
 		"extraChance": 0.6
-	},
-	"thermal:constantan_dust":
-	{
-		"extraChance": 1
-	},
-	"thermal:copper_dust":
-	{
-		"extraChance": 0.9
 	},
 	"thermal:copper_ore":
 	{
 		"extraChance": 0.85
 	},
-	"thermal:electrum_dust":
-	{
-		"extraChance": 1
-	},
-	"thermal:enderium_dust":
-	{
-		"extraChance": 1
-	},
-	"thermal:gold_dust":
-	{
-		"extraChance": 0.5
-	},
-	"thermal:invar_dust":
-	{
-		"extraChance": 1
-	},
-	"thermal:iron_dust":
-	{
-		"extraChance": 1
-	},
-	"thermal:lead_dust":
-	{
-		"extraChance": 0.75
-	},
 	"thermal:lead_ore":
 	{
 		"extraChance": 0.75
-	},
-	"thermal:lumium_dust":
-	{
-		"extraChance": 1
-	},
-	"thermal:nickel_dust":
-	{
-		"extraChance": 0.35
 	},
 	"thermal:nickel_ore":
 	{
 		"extraChance": 0.35
 	},
 	"thermal:niter_ore":
-	{
-		"extraChance": 1
-	},
-	"thermal:quartz_dust":
 	{
 		"extraChance": 1
 	},
@@ -1175,14 +991,6 @@
 	{
 		"extraChance": 1
 	},
-	"thermal:signalum_dust":
-	{
-		"extraChance": 1
-	},
-	"thermal:silver_dust":
-	{
-		"extraChance": 0.5
-	},
 	"thermal:silver_ore":
 	{
 		"extraChance": 0.5
@@ -1190,10 +998,6 @@
 	"thermal:sulfur_ore":
 	{
 		"extraChance": 1
-	},
-	"thermal:tin_dust":
-	{
-		"extraChance": 0.9
 	},
 	"thermal:tin_ore":
 	{
@@ -1330,9 +1134,5 @@
 	"undergarden:utherium_ore":
 	{
 		"extraChance": 0.5
-	},
-	"woot:si_dust":
-	{
-		"extraChance": 1
 	}
 }

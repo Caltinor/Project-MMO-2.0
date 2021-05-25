@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -36,6 +37,8 @@ public class PlayerInteractionHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final Set<Block> salvageStations = new HashSet<>();
+
+    private static long lastWarning = 0;
 
     public static void initSalvageStations()
     {
@@ -181,6 +184,25 @@ public class PlayerInteractionHandler
                                     salvageItem( player, player.getHeldItemOffhand(), event.getWorld(), event.getPos() );
                             }
                         }
+                    }
+                }
+            }
+            else if( event instanceof PlayerInteractEvent.EntityInteractSpecific )
+            {
+                PlayerEntity player = event.getPlayer();
+                PlayerInteractEvent.EntityInteractSpecific entityInteractEvent = (PlayerInteractEvent.EntityInteractSpecific) event;
+                Entity target = entityInteractEvent.getTarget();
+                Map<String, Double> reqMap = XP.getXp( target, JType.REQ_ENTITY_INTERACT );
+                if( !XP.checkReq( player, reqMap ) )
+                {
+                    event.setCanceled( true );
+                    boolean isRemote = player.world.isRemote();
+                    if( isRemote && System.currentTimeMillis() - lastWarning > 1523 )
+                    {
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToInteractWith", target.getName() ).setStyle( XP.textStyle.get( "red" ) ), false );
+                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToInteractWith", target.getName() ).setStyle( XP.textStyle.get( "red" ) ), true );
+                        XP.sendPlayerSkillList( player, reqMap );
+                        lastWarning = System.currentTimeMillis();
                     }
                 }
             }

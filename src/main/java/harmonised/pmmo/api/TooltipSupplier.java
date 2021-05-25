@@ -111,16 +111,17 @@ public class TooltipSupplier {
 		
 		if (jType.equals(JType.REQ_BREAK) || jType.equals(JType.XP_VALUE_BREAK)) //<<<<<HERE
 		{
-			if (!breakTooltips.containsKey(jType)) 
+			if (!breakTooltips.containsKey(jType))
 				return false;
 			return breakTooltips.get(jType).containsKey(res);
 		}
 		else if (jType.equals(JType.XP_VALUE_BREED) || jType.equals(JType.XP_VALUE_TAME) || jType.equals(JType.XP_VALUE_KILL))
 		{
-			if (!entityTooltips.containsKey(jType)) 
+			if (!entityTooltips.containsKey(jType))
 				return false;
 			return entityTooltips.get(jType).containsKey(res);
 		}
+
 		else if (!tooltips.containsKey(jType)) 
 			return false;
 		

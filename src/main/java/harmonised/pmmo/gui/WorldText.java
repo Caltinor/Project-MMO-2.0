@@ -431,4 +431,16 @@ public class WorldText
     {
         this.endRot = endRot;
     }
+
+    public void setPos( Vector3d pos )
+    {
+        this.startPos = pos;
+        this.endPos = pos;
+    }
+
+    public void setPos( Vector3d startPos, Vector3d endPos )
+    {
+        this.startPos = startPos;
+        this.endPos = endPos;
+    }
 }

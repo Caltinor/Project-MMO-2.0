@@ -1,7 +1,7 @@
 package harmonised.pmmo;
 
-import com.feed_the_beast.ftbquests.quest.reward.RewardType;
-import com.feed_the_beast.ftbquests.quest.task.TaskType;
+import dev.ftb.mods.ftbquests.quest.reward.RewardType;
+import dev.ftb.mods.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
@@ -9,6 +9,7 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
 import harmonised.pmmo.events.RegisterHandler;
 import harmonised.pmmo.events.WorldTickHandler;
+import harmonised.pmmo.ftb_quests.FTBQHandler;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -40,7 +41,7 @@ public class ProjectMMOMod
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    private static String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "1";
     public static boolean serverStarted = false, jeiLoaded = false, tinkersLoaded = false, dynamicTreesLoaded = false;
     public static SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
             .named( new ResourceLocation( Reference.MOD_ID, "main_channel" ) )
@@ -57,8 +58,7 @@ public class ProjectMMOMod
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::clientLoading );
         if( ModList.get().isLoaded( "ftbquests" ) )
         {
-            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( TaskType.class, RegisterHandler::handleFTBQRegistryTaskType );
-            FMLJavaModLoadingContext.get().getModEventBus().addGenericListener( RewardType.class, RegisterHandler::handleFTBQRegistryRewardType );
+            FTBQHandler.init();
         }
         jeiLoaded = ModList.get().isLoaded( "jei" );
         tinkersLoaded = ModList.get().isLoaded( "tconstruct" );

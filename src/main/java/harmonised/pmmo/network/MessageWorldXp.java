@@ -6,6 +6,7 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -71,7 +72,7 @@ public class MessageWorldXp
     {
         ctx.get().enqueueWork(() ->
         {
-            WorldXpDrop xpDrop = WorldXpDrop.fromVector( packet.worldResLoc, packet.pos, 0, packet.startXp, packet.skill );
+            WorldXpDrop xpDrop = WorldXpDrop.fromVector( packet.worldResLoc, packet.pos, 0, packet.startXp, new TranslationTextComponent( "pmmo." + packet.skill ).getString() );
             xpDrop.setSize( packet.size );
             xpDrop.setDecaySpeed( packet.decaySpeed );
             xpDrop.setRotation( packet.rotation );

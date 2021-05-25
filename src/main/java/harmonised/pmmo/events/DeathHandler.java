@@ -92,19 +92,11 @@ public class DeathHandler
 
             for( PlayerEntity thePlayer : nearbyPlayers )
             {
-                if( XP.getPowerLevel( player.getUniqueID() ) > 1 )
-                    scaleValue += 1;
-                else
-                    scaleValue += XP.getPowerLevel( thePlayer.getUniqueID() );
+                scaleValue += Math.max( 1, XP.getPowerLevel( thePlayer.getUniqueID() ) );
             }
 
-            scaleValue /= 5;
-
-            if( scaleValue < 1 )
-                scaleValue = 1;
-
-            if( scaleValue > 10 )
-                scaleValue = 10;
+            scaleValue = Math.max( 1, Math.min( 10, scaleValue * 0.2 ) );
+            scaleValue *= 0.2;
 
 //            double normalMaxHp = target.getAttribute( Attributes.GENERIC_MAX_HEALTH ).getBaseValue();
 //            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );

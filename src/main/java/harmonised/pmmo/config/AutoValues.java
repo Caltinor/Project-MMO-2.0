@@ -32,6 +32,7 @@ public class AutoValues
 
     public static Set<Item> itemsWithCookRecipe = new HashSet<>();
     public static Set<Item> itemsWithCraftRecipe = new HashSet<>();
+    public static Set<Item> itemsWithBlastRecipe = new HashSet<>();
     public static Map<Item, Set<Item>> cooksFrom = new HashMap<>();
 
     private static void addJsonConfigValue( String resLoc, JType jType, Map<String, Double> values, boolean fillIfExists )
@@ -206,6 +207,9 @@ public class AutoValues
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
         {
             Collection<IRecipe<?>> allRecipes = PmmoSavedData.getServer().getRecipeManager().getRecipes();
+            itemsWithCookRecipe.clear();
+            itemsWithCraftRecipe.clear();
+            itemsWithBlastRecipe.clear();
 
             for( IRecipe<?> recipe : allRecipes )
             {
@@ -226,6 +230,10 @@ public class AutoValues
                         }
                     }
                 }
+//                else if( recipe.getType() == IRecipeType.BLASTING )
+//                {
+//                    itemsWithBlastRecipe.add( item );
+//                }
             }
 
             for( Item item : ForgeRegistries.ITEMS )

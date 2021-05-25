@@ -199,7 +199,7 @@ public class XP
 	{
 		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
 		
-		if (TooltipSupplier.tooltipExists( res , jType))
+		if (TooltipSupplier.tooltipExists( res, jType))
 			return TooltipSupplier.getTooltipData( res , jType, tile );
 		
 		return getXp( res , jType );
@@ -249,17 +249,7 @@ public class XP
 
 	private static Map<String, Double> getXp( String registryName, JType jType )
 	{
-		Map<String, Double> theMap = new HashMap<>();
-
-		if( JsonConfig.data.get( jType ).containsKey( registryName ) )
-		{
-			for( Map.Entry<String, Double> entry : JsonConfig.data.get( jType ).get( registryName ).entrySet() )
-			{
-				theMap.put( entry.getKey(), entry.getValue() );
-			}
-		}
-
-		return theMap;
+		return new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( registryName, new HashMap<>() ) );
 	}
 
 	public static ResourceLocation getBiomeResLoc( World world, Biome biome )
@@ -1469,12 +1459,12 @@ public class XP
 		return new Vector3d( pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D );
 	}
 
-	public static void spawnRocket( World world, BlockPos pos, String skill )
+	public static void spawnRocket( World world, BlockPos pos, String skill, @Nullable WorldText explosionText )
 	{
-		spawnRocket( world, new Vector3d( pos.getX(), pos.getY(), pos.getZ() ), skill );
+		spawnRocket( world, new Vector3d( pos.getX(), pos.getY(), pos.getZ() ), skill, explosionText );
 	}
 
-	public static void spawnRocket( World world, Vector3d pos, String skill )
+	public static void spawnRocket( World world, Vector3d pos, String skill, @Nullable WorldText explosionText )
 	{
 		CompoundNBT nbt = new CompoundNBT();
 		CompoundNBT fw = new CompoundNBT();
@@ -1499,7 +1489,9 @@ public class XP
 		ItemStack itemStack = new ItemStack( Items.FIREWORK_ROCKET );
 		itemStack.setTag( nbt );
 
-		FireworkRocketEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
+		PMMOFireworkEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
+		if( explosionText != null )
+			fireworkRocketEntity.setExplosionText( explosionText );
 		world.addEntity( fireworkRocketEntity );
 	}
 
@@ -1934,14 +1926,17 @@ public class XP
 			addWorldText( worldText, player );
 	}
 
-	public static void addWorldTextRadius( WorldText worldText, double radius )
+	public static void addWorldTextRadius( ResourceLocation dimResLoc, WorldText worldText, double radius )
 	{
 		worldText.updatePos();
 		for( ServerPlayerEntity otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers() )
 		{
-			double distance = Util.getDistance( worldText.getPos(), otherPlayer.getPositionVec() );
-			if ( distance < radius )
-				NetworkHandler.sendToPlayer( new MessageWorldText( worldText ), otherPlayer );
+			if( dimResLoc == getDimResLoc( otherPlayer.getEntityWorld() ) )
+			{
+				double distance = Util.getDistance( worldText.getPos(), otherPlayer.getPositionVec() );
+				if ( distance < radius )
+					NetworkHandler.sendToPlayer( new MessageWorldText( worldText ), otherPlayer );
+			}
 		}
 	}
 
@@ -1954,5 +1949,18 @@ public class XP
 	public static void addWorldTextOffline( WorldText worldText )
 	{
 		WorldRenderHandler.addWorldTextOffline( worldText );
+	}
+
+	public static void sendPlayerSkillList( PlayerEntity player, Map<String, Double> skills )
+	{
+		for( Map.Entry<String, Double> entry : skills.entrySet() )
+		{
+			int level = Skill.getLevel( entry.getKey(), player );
+
+			if( level < entry.getValue() )
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+			else
+				player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+		}
 	}
 }

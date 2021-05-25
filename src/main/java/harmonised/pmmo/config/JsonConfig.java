@@ -71,6 +71,7 @@ public class JsonConfig
 
         levelJTypes.add( JType.REQ_WEAR );
         levelJTypes.add( JType.REQ_USE_ENCHANTMENT );
+        levelJTypes.add( JType.REQ_ENTITY_INTERACT );
         levelJTypes.add( JType.REQ_TOOL );
         levelJTypes.add( JType.REQ_WEAPON );
         levelJTypes.add( JType.REQ_USE );
@@ -126,9 +127,6 @@ public class JsonConfig
     private static void initJTypes()
     {
         jTypes = new HashSet<>();
-
-        if( Config.forgeConfig.wearReqEnabled.get() )
-            jTypes.add( JType.SKILLS );
 
         if( Config.forgeConfig.wearReqEnabled.get() )
             jTypes.add( JType.REQ_WEAR );
@@ -247,6 +245,7 @@ public class JsonConfig
         if( Config.forgeConfig.treasureEnabled.get() )
             jTypes.add( JType.TREASURE );
 
+        jTypes.add( JType.SKILLS );
         jTypes.add( JType.BLOCK_SPECIFIC );
         jTypes.add( JType.PLAYER_SPECIFIC );
         jTypes.add( JType.ITEM_SPECIFIC );
@@ -255,6 +254,7 @@ public class JsonConfig
         jTypes.add( JType.XP_BONUS_DIMENSION );
         jTypes.add( JType.XP_MULTIPLIER_DIMENSION );
         jTypes.add( JType.XP_MULTIPLIER_ENTITY );
+        jTypes.add( JType.REQ_ENTITY_INTERACT );
     }
 
     private static void initData()
@@ -337,6 +337,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.REQ_USE_ENCHANTMENT ) )
             updateDataEnchantmentLevel( rawData2.get( JType.REQ_USE_ENCHANTMENT ), localData2.get( JType.REQ_USE_ENCHANTMENT ) );
+
+        if( jTypes.contains( JType.REQ_ENTITY_INTERACT ) )
+            updateDataSkills( JType.REQ_ENTITY_INTERACT, false );
 
         if( jTypes.contains( JType.REQ_TOOL ) )
             updateDataSkills( JType.REQ_TOOL, false );

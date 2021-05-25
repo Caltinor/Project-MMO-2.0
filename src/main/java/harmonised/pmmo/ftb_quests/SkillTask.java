@@ -1,26 +1,27 @@
 package harmonised.pmmo.ftb_quests;
 
-import com.feed_the_beast.ftbquests.quest.PlayerData;
-import com.feed_the_beast.ftbquests.quest.Quest;
-import com.feed_the_beast.ftbquests.quest.task.*;
-import com.feed_the_beast.mods.ftbguilibrary.config.ConfigGroup;
-import com.feed_the_beast.mods.ftbguilibrary.config.NameMap;
-import harmonised.pmmo.config.Config;
+import dev.ftb.mods.ftblibrary.config.ConfigGroup;
+import dev.ftb.mods.ftblibrary.config.NameMap;
+import dev.ftb.mods.ftbquests.quest.Quest;
+import dev.ftb.mods.ftbquests.quest.TeamData;
+import dev.ftb.mods.ftbquests.quest.task.*;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.storage.PlayerData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 public class SkillTask extends Task
 {
-    public static TaskType SKILL;
+    public static TaskType SKILL = FTBQHandler.SKILL;
     public String skill;
     public double requiredLevel;
 
@@ -92,22 +93,10 @@ public class SkillTask extends Task
     }
 
     @Override
-    public TaskData createData(PlayerData data)
+    public void submitTask(TeamData teamData, ServerPlayerEntity player, ItemStack craftedItem )
     {
-        return new Data(this, data);
-    }
-
-    public static class Data extends BooleanTaskData<SkillTask>
-    {
-        private Data(SkillTask task, PlayerData data)
-        {
-            super(task, data);
-        }
-
-        @Override
-        public boolean canSubmit( ServerPlayerEntity player )
-        {
-            return Skill.getLevel( task.skill, player ) >= task.requiredLevel;
-        }
+        if( teamData.isCompleted( this ) )
+            return;
+        teamData.setProgress(this, Skill.getLevel( this.skill, player ) );
     }
 }

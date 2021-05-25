@@ -1026,7 +1026,7 @@ public class XPOverlayGUI extends AbstractGui
 
 		for( Map.Entry<JType, Map<String, Map<String, Double>>> element : itemsWithReqs.entrySet() )
 		{
-			jTypeName = element.getKey().toString().replace( "req_", "" ).replaceAll( "_", " " );
+			jTypeName = new TranslationTextComponent( "pmmo." + element.getKey().toString().replace( "req_", "" ).replaceAll( "_", " " ) ).getString();
 			for( Map.Entry<String, Map<String, Double>> itemElement : element.getValue().entrySet() )
 			{
 				item = XP.getItem( itemElement.getKey() );
