@@ -18,11 +18,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-<<<<<<< Upstream, based on upstream/master
-version = '1.16.5-3.56'
-=======
-version = '1.16.5-3.53.1'
->>>>>>> 2ab50e0 Revert "version update"
+version = '1.16.5-3.57.3'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 

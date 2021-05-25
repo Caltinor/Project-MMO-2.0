@@ -109,6 +109,10 @@ public enum Skill
         return new HashMap<>( validSkills );
     }
 
+    /**
+     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#getLevel(String, PlayerEntity) APIUtils.getLevel}
+     */
+    @Deprecated
     public static int getLevel( String skill, PlayerEntity player)
     {
         if( player.world.isRemote )
@@ -135,6 +139,10 @@ public enum Skill
         return PmmoSavedData.get().getLevelDecimal( skill, uuid );
     }
 
+    /**
+     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#getXp(String, PlayerEntity) APIUtils.getXp}
+     */
+    @Deprecated
     public static double getXp( String skill, PlayerEntity player )
     {
         if( player.world.isRemote )
@@ -148,6 +156,10 @@ public enum Skill
         return PmmoSavedData.get().getXp( skill, uuid );
     }
 
+    /**
+     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#setLevel(String, PlayerEntity, double) APIUtils.setLevel}
+     */
+    @Deprecated
     public static void setLevel( String skill, ServerPlayerEntity player, double amount )
     {
         setXp( skill, player, XP.xpAtLevelDecimal( amount ) );
@@ -163,6 +175,10 @@ public enum Skill
             setXp( skill, player, amount );
     }
 
+    /**
+     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#setXp(String, PlayerEntity, double) APIUtils.setXp}
+     */
+    @Deprecated
     public static void setXp( String skill, ServerPlayerEntity player, double amount )
     {
         if( PmmoSavedData.get().setXp( skill, player.getUniqueID(), amount ) )
@@ -174,6 +190,10 @@ public enum Skill
         }
     }
 
+    /**
+     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#addLevel(String, UUID, double, String, boolean, boolean) APIUtils.addLevel}
+     */
+    @Deprecated
     public static void addLevel( String skill, UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
         double missingXp = XP.xpAtLevelDecimal( getLevelDecimal( skill, uuid ) + amount ) - getXp( skill, uuid );
@@ -188,6 +208,10 @@ public enum Skill
         addXp( skill, player, missingXp, sourceName, skip, ignoreBonuses );
     }
 
+    /**
+     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#addXp(String, UUID, double, String, boolean, boolean) APIUtils.addXp}
+     */
+    @Deprecated
     public static void addXp( String skill, UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
         ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );

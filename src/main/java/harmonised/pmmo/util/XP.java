@@ -1375,7 +1375,11 @@ public class XP
 			LOGGER.info( playerName + " " + skill + " max startLevel reached" );
 		}
 	}
-
+	
+	/**
+	 * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#awardXpTrigger(UUID, String, String, boolean, boolean) APIUtils.awardTrigger}
+	 */
+	@Deprecated
 	public static void awardXpTrigger( UUID uuid, String triggerKey, @Nullable String sourceName, boolean skip, boolean ignoreBonuses )
 	{
 		if( JsonConfig.data.get( JType.XP_VALUE_TRIGGER ).containsKey( triggerKey ) )
