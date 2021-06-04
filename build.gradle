@@ -74,40 +74,40 @@ minecraft
 }
 
 repositories
-        {
-            jcenter()
+{
+    jcenter()
 
-            maven
-            {
-                // location of the maven that hosts JEI files
-                name = "Progwml6 maven"
-                url = "https://dvs1.progwml6.com/files/maven/"
-            }
+    maven
+    {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
 
-            maven
-            {
-                // location of a maven mirror for JEI files, as a fallback
-                name = "ModMaven"
-                url = "https://modmaven.k-4u.nl"
-            }
+    maven
+    {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
 
-            maven
-            {
-                url "http://dvs1.progwml6.com/files/maven/"
-            }
+    maven
+    {
+        url "http://dvs1.progwml6.com/files/maven/"
+    }
 
-            maven
-            {
-                url = "https://maven.theillusivec4.top/"
-            }
+    maven
+    {
+        url = "https://maven.theillusivec4.top/"
+    }
 
-            maven
-            {
-                url = "https://maven.blamejared.com/"
-            }
+    maven
+    {
+        url = "https://maven.blamejared.com/"
+    }
 
-            mavenLocal()
-        }
+    mavenLocal()
+}
 
 dependencies
         {

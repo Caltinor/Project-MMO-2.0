@@ -165,7 +165,7 @@ public class BlockBrokenHandler
             BlockState glassState = Blocks.GLASS.getDefaultState();
             int mainRadius = 10;
 
-            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getSphereSolid( mainRadius ), glassState );
+//            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getSphereSolid( mainRadius ), glassState );
 //            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getCircleSolid( mainRadius ), glassState );
 //            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getCircle( mainRadius ), glassState );
 
