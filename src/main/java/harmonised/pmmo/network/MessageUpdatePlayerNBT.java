@@ -4,6 +4,7 @@ import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
+import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.proxy.ServerHandler;
 import harmonised.pmmo.skills.AttributeHandler;
@@ -124,6 +125,10 @@ public class MessageUpdatePlayerNBT
                         ClientHandler.updateNBTTag( packet );
                     else
                         LOGGER.error( "XP BOOST PACKET SENT TO SERVER" );
+                    break;
+
+                case 7:
+                    PartyPendingSystem.offlineData = packet.reqPackage;
                     break;
 
                 default:

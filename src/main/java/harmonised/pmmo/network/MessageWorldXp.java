@@ -72,7 +72,7 @@ public class MessageWorldXp
     {
         ctx.get().enqueueWork(() ->
         {
-            WorldXpDrop xpDrop = WorldXpDrop.fromVector( packet.worldResLoc, packet.pos, 0, packet.startXp, new TranslationTextComponent( "pmmo." + packet.skill ).getString() );
+            WorldXpDrop xpDrop = WorldXpDrop.fromVector( packet.worldResLoc, packet.pos, 0, packet.startXp, packet.skill );
             xpDrop.setSize( packet.size );
             xpDrop.setDecaySpeed( packet.decaySpeed );
             xpDrop.setRotation( packet.rotation );

@@ -11,6 +11,7 @@ import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.DrawUtil;
 import harmonised.pmmo.util.Util;
