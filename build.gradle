@@ -204,4 +204,210 @@ apply plugin: 'org.spongepowered.mixin'
 mixin
 {
     add sourceSets.main, "${modid}.refmap.json"
+=======
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://plugins.gradle.org/m2/' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath "com.wynprice.cursemaven:CurseMaven:2.1.5"
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: "com.wynprice.cursemaven"
+
+version = '1.16.5-3.57.4'
+group = 'harmonised.pmmo'
+archivesBaseName = 'Project_MMO'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+minecraft
+{
+    mappings channel: 'snapshot', version: '20200916-1.16.2'
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    runs
+    {
+        client
+        {
+            workingDirectory project.file('run')
+            arg "-mixin.config="+modid+".mixins.json"
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            mods
+            {
+                pmmo
+                {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            arg "-mixin.config="+modid+".mixins.json"
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                pmmo {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories
+{
+    jcenter()
+
+    maven
+    {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+
+    maven
+    {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+
+    maven
+    {
+        url "http://dvs1.progwml6.com/files/maven/"
+    }
+
+    maven
+    {
+        url = "https://maven.theillusivec4.top/"
+    }
+
+    maven
+    {
+        url = "https://maven.blamejared.com/"
+    }
+
+    mavenLocal()
+}
+
+dependencies
+        {
+            minecraft 'net.minecraftforge:forge:1.16.5-36.1.23'
+            implementation 'com.google.code.gson:gson:2.8.6'
+
+            compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52:api")
+            runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.52")
+//            runtimeOnly fg.deobf("curse.maven:jei:3039766")
+//            runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
+            runtimeOnly fg.deobf("curse.maven:curio-of-undying:3122649")
+//            runtimeOnly fg.deobf("curse.maven:worldedit:2873556")
+//            runtimeOnly fg.deobf("curse.maven:atmospheric:2957921")
+
+//            runtimeOnly fg.deobf("curse.maven:azuredoom-doom-mod:3009638")
+
+//            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
+//            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
+            compileOnly fg.deobf("curse.maven:ftb-quests:3316497")
+            runtimeOnly fg.deobf("curse.maven:ftb-quests:3316497")
+            compileOnly fg.deobf("curse.maven:ftb-gui-library:3313036")
+            runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3313036")
+            compileOnly fg.deobf("curse.maven:item-filters:3231742")
+            runtimeOnly fg.deobf("curse.maven:item-filters:3231742")
+            compileOnly fg.deobf("curse.maven:ftb-teams-forge:3313041")
+            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3313041")
+            compileOnly fg.deobf("curse.maven:architectury-forge:3316907")
+            runtimeOnly fg.deobf("curse.maven:architectury-forge:3316907")
+
+
+            compileOnly fg.deobf("curse.maven:dynamictrees:3304858")
+            runtimeOnly fg.deobf("curse.maven:dynamictrees:3304858")
+
+
+//            compileOnly fg.deobf("curse.maven:engineers-decor:3253781")
+//            runtimeOnly fg.deobf("curse.maven:engineers-decor:3253781")
+
+//            compileOnly fg.deobf("curse.maven:epic-fight-mod:3281689")
+//            runtimeOnly fg.deobf("curse.maven:epic-fight-mod:3281689")
+
+
+//            compileOnly fg.deobf("curse.maven:tinkers-construct:3263129")
+//            runtimeOnly fg.deobf("curse.maven:tinkers-construct:3263129")
+//            compileOnly fg.deobf("curse.maven:mantle:3180804")
+//            runtimeOnly fg.deobf("curse.maven:mantle:3180804")
+
+//            compileOnly fg.deobf("curse.maven:patchouli:3126931")
+//            runtimeOnly fg.deobf("curse.maven:patchouli:3126931")
+//            compileOnly fg.deobf("curse.maven:geckolib:3259843")
+//            runtimeOnly fg.deobf("curse.maven:geckolib:3259843")
+//            compileOnly fg.deobf("curse.maven:ars-nouveau:3259810")
+//            runtimeOnly fg.deobf("curse.maven:ars-nouveau:3259810")
+
+            runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0")
+            compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.4.0:api")
+        }
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title": "pmmo",
+                "Specification-Vendor": "pmmosareus",
+                "Specification-Version": "1",
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" :"pmmosareus",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "${modid}.mixins.json"
+        ])
+    }
+}
+
+def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfArtifact = artifacts.add('default', reobfFile) {
+    type 'jar'
+    builtBy 'reobfJar'
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact reobfArtifact
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+apply plugin: 'org.spongepowered.mixin'
+
+mixin
+{
+    add sourceSets.main, "${modid}.refmap.json"
 }

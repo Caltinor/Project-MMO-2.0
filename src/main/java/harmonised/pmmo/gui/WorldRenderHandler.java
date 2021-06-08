@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -181,7 +182,7 @@ public class WorldRenderHandler
             int color = xpDrop.getColor();
             String text = "+" + DP.dpSoft( xpDrop.xp );
             if( WorldText.worldXpDropsShowSkill )
-                text += " " + xpDrop.getSkill();
+                text += " " + new TranslationTextComponent( xpDrop.getSkill() ).getString();
             drawText( stack, cameraPos, xpDrop.getPos(), text, scale, xpDrop.getRotation(), color );
             xpDrop.xp -= Math.max( 0.01523, xpDrop.xp * xpDrop.getDecaySpeed() * ( 1 + i * 0.01 ) ) * WorldText.worldXpDropsDecaySpeedMultiplier * d;
         }

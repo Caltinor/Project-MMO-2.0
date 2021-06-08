@@ -5,6 +5,7 @@ import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.gui.ScreenshotHandler;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.gui.XPOverlayGUI;
+import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.CheeseTracker;
@@ -39,6 +40,7 @@ public class PlayerTickHandler
     private final static Map<UUID, Long> lastVeinAward = new HashMap<>();
     private final static Map<UUID, Long> lastCheeseUpdate = new HashMap<>();
     private final static Map<UUID, Long> hpRegen = new HashMap<>();
+    private final static Map<UUID, Long> sync = new HashMap<>();
     private final static Map<UUID, Integer> sneakCounter = new HashMap<>();
     private final static Map<UUID, Boolean> sneakTracker = new HashMap<>();
     public static boolean syncPrefs = false;
@@ -79,6 +81,8 @@ public class PlayerTickHandler
                     lastCheeseUpdate.put( uuid, System.nanoTime() );
                 if( !hpRegen.containsKey( uuid ) )
                     hpRegen.put( uuid, System.nanoTime() );
+                if( !sync.containsKey( uuid ) )
+                    sync.put( uuid, System.nanoTime() );
 
                 //Sneak
                 if( !sneakCounter.containsKey( uuid ) )
@@ -116,6 +120,7 @@ public class PlayerTickHandler
                 double veinGap      = ( ( System.nanoTime() - lastVeinAward.get     ( uuid ) ) / 1000000000D );
                 double cheeseGap    = ( ( System.nanoTime() - lastCheeseUpdate.get  ( uuid ) ) / 1000000000D );
                 double hpRegenGap   = ( ( System.nanoTime() - hpRegen.get           ( uuid ) ) / 1000000000D );
+                double syncGap      = ( ( System.nanoTime() - sync.get              ( uuid ) ) / 1000000000D );
 
                 if( veinGap > 0.25 )
                 {
@@ -137,6 +142,13 @@ public class PlayerTickHandler
                         XP.awardXp( serverPlayer, Skill.ENDURANCE.toString(), "Regeneration", ( 60 / getHpRegenTime( player ) ) * Config.forgeConfig.hpRegenXpMultiplier.get() * ( player.getHealth() - startHp ), true, false, false );
                         hpRegen.put( uuid, System.nanoTime() );
                     }
+                }
+
+                if( syncGap > 2.5 )
+                {
+                    PartyPendingSystem.sendPlayerOfflineData( (ServerPlayerEntity) player );
+
+                    sync.put( uuid, System.nanoTime() );
                 }
             }
 

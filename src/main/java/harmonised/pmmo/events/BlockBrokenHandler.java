@@ -11,6 +11,7 @@ import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
+import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.skills.*;
 import harmonised.pmmo.util.DrawUtil;
 import harmonised.pmmo.util.Util;
@@ -165,7 +166,7 @@ public class BlockBrokenHandler
             BlockState glassState = Blocks.GLASS.getDefaultState();
             int mainRadius = 10;
 
-            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getSphereSolid( mainRadius ), glassState );
+//            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getSphereSolid( mainRadius ), glassState );
 //            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getCircleSolid( mainRadius ), glassState );
 //            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getCircle( mainRadius ), glassState );
 

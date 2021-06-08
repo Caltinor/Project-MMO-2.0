@@ -1,12 +1,20 @@
 package harmonised.pmmo.party;
 
+import harmonised.pmmo.network.MessageUpdatePlayerNBT;
+import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
+import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.math.vector.Vector3d;
 
 import java.util.*;
 
 public class PartyPendingSystem
 {
+    public static CompoundNBT offlineData = new CompoundNBT();
+
     public static Map<UUID, UUID> pendingInvitations = new HashMap<>();
     public static Map<UUID, Long> invitationDates = new HashMap<>();
     public static final long expirationTime = 5 * 60 * 1000;
@@ -67,5 +75,37 @@ public class PartyPendingSystem
             success = true;
         pendingInvitations.remove( inviteeUUID );
         return success;
+    }
+
+    public static void sendPlayerOfflineData( ServerPlayerEntity player )
+    {
+        CompoundNBT partyData = new CompoundNBT();
+
+        Party party = PmmoSavedData.get().getParty( player.getUniqueID() );
+        if( party != null )
+        {
+            Set<PartyMemberInfo> membersInfo = party.getAllMembersInfo();
+
+            for( PartyMemberInfo partyMemberInfo : membersInfo )
+            {
+                UUID uuid = partyMemberInfo.uuid;
+                ServerPlayerEntity partyMember = XP.getPlayerByUUID( uuid );
+                CompoundNBT partyMemberData = new CompoundNBT();
+
+                if( partyMember != null )
+                {
+                    partyMemberData.putFloat( "maxHp", partyMember.getMaxHealth() );
+                    partyMemberData.putFloat( "hp", partyMember.getHealth() );
+                    partyMemberData.putString( "dim", XP.getDimResLoc( partyMember.world ).toString() );
+                    Vector3d pos = partyMember.getPositionVec();
+                    partyMemberData.putDouble( "x", pos.getX() );
+                    partyMemberData.putDouble( "y", pos.getY() );
+                    partyMemberData.putDouble( "z", pos.getZ() );
+                }
+
+                partyData.put( PmmoSavedData.get().getName( uuid ), partyMemberData );
+            }
+        }
+        NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( partyData, 7 ), player );
     }
 }
