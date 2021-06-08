@@ -110,6 +110,8 @@ public class Config
 
         localConfig.put( "dualSalvageSmithingLevelReq", (double) forgeConfig.dualSalvageSmithingLevelReq.get() );
 
+        localConfig.put( "partyRange", forgeConfig.partyRange.get() );
+
         config = localConfig;
     }
 
@@ -1781,6 +1783,18 @@ public class Config
             if( ProjectMMOMod.serverStarted || !ProjectMMOMod.jeiLoaded )
                 LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT" );
             return -1;
+        }
+    }
+
+    public static double getConfigOrDefault( String key, double defaultValue )
+    {
+        if( Config.config.containsKey( key ) )
+            return Config.config.get( key );
+        else
+        {
+            if( ProjectMMOMod.serverStarted || !ProjectMMOMod.jeiLoaded )
+                LOGGER.error( "UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT" );
+            return defaultValue;
         }
     }
 
