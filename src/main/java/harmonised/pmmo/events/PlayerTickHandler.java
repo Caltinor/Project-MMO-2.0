@@ -267,11 +267,13 @@ public class PlayerTickHandler
                     {
                         double award = swimAward;
                         if( !player.isSprinting() )
-                            award /= 10;
+                            award *= 1.5;
+                        if( !player.velocityChanged )
+                            award *= 0.1;
 
                         WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
                         XP.addWorldXpDrop( xpDrop, serverPlayer );
-                        XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming in a boat", award, true, false, false );
+                        XP.awardXp( serverPlayer, Skill.SAILING.toString(), "Sailing", award, true, false, false );
                     }
                 }
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////

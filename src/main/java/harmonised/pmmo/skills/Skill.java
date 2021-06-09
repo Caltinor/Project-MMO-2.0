@@ -30,6 +30,7 @@ public enum Skill
     SMITHING( 0xf0f0f0 ),
     FLYING( 0xccccff ),
     SWIMMING( 0x3366ff ),
+    SAILING( 0x99b3ff ),
     FISHING( 0x00ccff ),
     CRAFTING( 0xff9900 ),
     MAGIC( 0x0000ff ),
@@ -157,7 +158,7 @@ public enum Skill
     }
 
     /**
-     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#setLevel(String, PlayerEntity, double) APIUtils.setLevel}
+     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#setLevel(String, ServerPlayerEntity, double) APIUtils.setLevel}
      */
     @Deprecated
     public static void setLevel( String skill, ServerPlayerEntity player, double amount )
@@ -176,7 +177,7 @@ public enum Skill
     }
 
     /**
-     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#setXp(String, PlayerEntity, double) APIUtils.setXp}
+     * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#setXp(String, ServerPlayerEntity, double) APIUtils.setXp}
      */
     @Deprecated
     public static void setXp( String skill, ServerPlayerEntity player, double amount )
