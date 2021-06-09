@@ -1,5 +1,6 @@
 package harmonised.pmmo.proxy;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.InfoScreen;
@@ -83,7 +84,7 @@ public class ClientHandler
                 break;
 
             case 6:
-                Config.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringString( newPackage ) );
+                APIUtils.setPlayerXpBoostsMaps( player, NBTHelper.nbtToMapStringString( newPackage ) );
                 break;
 
             case 7:

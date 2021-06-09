@@ -3,6 +3,7 @@ package harmonised.pmmo.gui;
 import java.util.*;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -504,7 +505,7 @@ public class XPOverlayGUI extends AbstractGui
 
 					itemBoost = XP.getItemBoost( player, tempSkill );
 					dimensionBoost = XP.getDimensionBoost( player, tempSkill );
-					playerXpBoost = Config.getPlayerXpBoost( player, tempSkill );
+					playerXpBoost = APIUtils.getPlayerXpBoost( player, tempSkill );
 
 //					multiplier = ( XP.getMultiplier(  player, tempSkill ) * 100 ) - 100;
 

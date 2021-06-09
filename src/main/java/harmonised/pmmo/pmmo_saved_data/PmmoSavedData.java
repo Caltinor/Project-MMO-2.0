@@ -338,9 +338,9 @@ public class PmmoSavedData extends WorldSavedData
         return xpBoosts.getOrDefault( playerUUID, new HashMap<>() );
     }
 
-    public Map<String, Double> getPlayerXpBoostMap( UUID playerUUID, UUID xpBoostUUID )
+    public Map<String, Double> getPlayerXpBoostMap( UUID playerUUID, String xpBoostKey )
     {
-        return getPlayerXpBoostsMap( playerUUID ).getOrDefault( xpBoostUUID, new HashMap<>() );
+        return getPlayerXpBoostsMap( playerUUID ).getOrDefault( xpBoostKey, new HashMap<>() );
     }
 
     public double getPlayerXpBoost( UUID playerUUID, String skill )

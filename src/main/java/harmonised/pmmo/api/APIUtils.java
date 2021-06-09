@@ -1,5 +1,6 @@
 package harmonised.pmmo.api;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -7,7 +8,9 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
+import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.Entity;
@@ -199,5 +202,79 @@ public class APIUtils {
 		Preconditions.checkNotNull(registryName);
 		Preconditions.checkNotNull(jType);
 		return XP.getXpBypass( registryName, jType );
+	}
+
+	/**
+	 * //Gets all xp boost maps
+	 */
+	public static Map<String, Map<String, Double>> getXpBoostsMap( PlayerEntity player )
+	{
+		if( player.world.isRemote() )
+			return Config.xpBoosts;
+		else
+			return PmmoSavedData.get().getPlayerXpBoostsMap( player.getUniqueID() );
+	}
+
+	/**
+	 * //Gets a specific xp boost map
+	 */
+	public static Map<String, Double> getXpBoostMap( PlayerEntity player, String xpBoostKey )
+	{
+		if( player.world.isRemote() )
+			return Config.xpBoosts.getOrDefault( xpBoostKey, new HashMap<>() );
+		else
+			return PmmoSavedData.get().getPlayerXpBoostMap( player.getUniqueID(), xpBoostKey );
+	}
+
+	/**
+	 * //Gets a specific xp boost in a specific skill
+	 */
+	public static double getPlayerXpBoost( PlayerEntity player, String skill )
+	{
+		double xpBoost = 0;
+
+		for( Map.Entry<String, Map<String, Double>> entry : getXpBoostsMap( player ).entrySet() )
+		{
+			xpBoost += entry.getValue().getOrDefault( skill, 0D );
+		}
+
+		return xpBoost;
+	}
+
+	/**
+	 * //Sets a specific xp boost map
+	 */
+	public static void setPlayerXpBoost( ServerPlayerEntity player, String xpBoostKey, Map<String, Double> newXpBoosts )
+	{
+		PmmoSavedData.get().setPlayerXpBoost( player.getUniqueID(), xpBoostKey, newXpBoosts );
+	}
+
+	/**
+	 * //Removes a specific xp boost map
+	 */
+	public void removePlayerXpBoost( ServerPlayerEntity player, String xpBoostKey )
+	{
+		PmmoSavedData.get().removePlayerXpBoost( player.getUniqueID(), xpBoostKey );
+	}
+
+	/**
+	 * //WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
+	 */
+	public void removeAllPlayerXpBoosts( ServerPlayerEntity player )
+	{
+		PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUniqueID() );
+	}
+
+	/**
+	 * SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
+	 * Only Project MMO should use this.
+	 */
+	@Deprecated
+	public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<String, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
+	{
+		if( player.world.isRemote() )
+			Config.xpBoosts = newBoosts;
+		else
+			PmmoSavedData.get().setPlayerXpBoostsMaps( player.getUniqueID(), newBoosts );
 	}
 }

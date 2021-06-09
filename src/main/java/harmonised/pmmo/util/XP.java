@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.PredicateRegistry;
 import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.AutoValues;
@@ -636,7 +637,7 @@ public class XP
 
 	public static void syncPlayerXpBoost( PlayerEntity player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( Config.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( APIUtils.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayerData3( PlayerEntity player )

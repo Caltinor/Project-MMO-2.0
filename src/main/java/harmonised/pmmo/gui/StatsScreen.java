@@ -2,6 +2,7 @@ package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.curios.Curios;
@@ -253,7 +254,7 @@ public class StatsScreen extends Screen
             text.add( new TranslationTextComponent( "pmmo.biome" ) );
             addXpMapEntryAsText( text, map );    //Biome
         }
-        for( Map.Entry<String, Map<String, Double>> outterEntry : Config.getXpBoostsMap( player ).entrySet() )
+        for( Map.Entry<String, Map<String, Double>> outterEntry : APIUtils.getXpBoostsMap( player ).entrySet() )
         {
             text.add( new TranslationTextComponent( outterEntry.getKey() ) );
             addXpMapEntryAsText( text, NBTHelper.mapStringKeyToString( outterEntry.getValue() ) );    //Biome
