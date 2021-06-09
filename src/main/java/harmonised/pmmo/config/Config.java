@@ -1,6 +1,7 @@
 package harmonised.pmmo.config;
 
 import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.XP;
 import net.minecraft.entity.player.PlayerEntity;
@@ -1840,5 +1841,76 @@ public class Config
     public static void setPreferencesMap( Map<String, Double> newPreferencesMap )
     {
         preferences = newPreferencesMap;
+    }
+
+    /**
+     * DEPRECATED - use APIUtils. instead!
+     * Gets all xp boost maps
+     */
+    @Deprecated
+    public static Map<String, Map<String, Double>> getXpBoostsMap( PlayerEntity player )
+    {
+        return APIUtils.getXpBoostsMap( player );
+    }
+
+    /**
+     * DEPRECATED - use APIUtils. instead!
+     * Gets a specific xp boost map
+     */
+    @Deprecated
+    public static Map<String, Double> getXpBoostMap( PlayerEntity player, String xpBoostKey )
+    {
+        return APIUtils.getXpBoostMap( player, xpBoostKey );
+    }
+
+    /**
+     * DEPRECATED - use APIUtils. instead!
+     * Gets a specific xp boost in a specific skill
+     */
+    @Deprecated
+    public static double getPlayerXpBoost( PlayerEntity player, String skill )
+    {
+        return APIUtils.getPlayerXpBoost( player, skill );
+    }
+
+    /**
+     * DEPRECATED - use APIUtils. instead!
+     * Sets a specific xp boost map
+     */
+    @Deprecated
+    public static void setPlayerXpBoost( ServerPlayerEntity player, String xpBoostKey, Map<String, Double> newXpBoosts )
+    {
+        APIUtils.setPlayerXpBoost( player, xpBoostKey, newXpBoosts );
+    }
+
+    /**
+     * DEPRECATED - use APIUtils. instead!
+     * Removes a specific xp boost map
+     */
+    @Deprecated
+    public static void removePlayerXpBoost( ServerPlayerEntity player, String xpBoostKey )
+    {
+        APIUtils.removePlayerXpBoost( player, xpBoostKey );
+    }
+
+    /**
+     * DEPRECATED - use APIUtils. instead!
+     * WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
+     */
+    @Deprecated
+    public static void removeAllPlayerXpBoosts( ServerPlayerEntity player )
+    {
+        APIUtils.removeAllPlayerXpBoosts( player );
+    }
+
+    /**
+     * DEPRECATED - use APIUtils. instead!
+     * SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
+     * Only Project MMO should use this.
+     */
+    @Deprecated
+    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<String, Double>> newBoosts )
+    {
+        APIUtils.setPlayerXpBoostsMaps( player, newBoosts );
     }
 }

@@ -174,7 +174,7 @@ public class APIUtils {
 	
 	/** returns the skill map for an entity object.
 	 * 
-	 * @param stack the entity whose map is being returned
+	 * @param entity the entity whose map is being returned
 	 * @param jType the JType for which map should be returned
 	 * @return a map of skills and values for the JType and entity
 	 */
@@ -252,7 +252,7 @@ public class APIUtils {
 	/**
 	 * //Removes a specific xp boost map
 	 */
-	public void removePlayerXpBoost( ServerPlayerEntity player, String xpBoostKey )
+	public static void removePlayerXpBoost( ServerPlayerEntity player, String xpBoostKey )
 	{
 		PmmoSavedData.get().removePlayerXpBoost( player.getUniqueID(), xpBoostKey );
 	}
@@ -260,7 +260,7 @@ public class APIUtils {
 	/**
 	 * //WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
 	 */
-	public void removeAllPlayerXpBoosts( ServerPlayerEntity player )
+	public static void removeAllPlayerXpBoosts( ServerPlayerEntity player )
 	{
 		PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUniqueID() );
 	}
@@ -270,7 +270,7 @@ public class APIUtils {
 	 * Only Project MMO should use this.
 	 */
 	@Deprecated
-	public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<String, Double>> newBoosts ) //WARNING: Overwrites ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
+	public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<String, Double>> newBoosts )
 	{
 		if( player.world.isRemote() )
 			Config.xpBoosts = newBoosts;
