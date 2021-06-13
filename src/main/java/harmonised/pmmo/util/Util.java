@@ -20,7 +20,10 @@ public class Util
 
     public static double map( double input, double inLow, double inHigh, double outLow, double outHigh )
     {
-        return ( (input - inLow) / (inHigh - inLow) ) * (outHigh - outLow) + outLow;
+        if( inLow == inHigh )
+            return outHigh;
+        else
+            return ( (input - inLow) / (inHigh - inLow) ) * (outHigh - outLow) + outLow;
     }
 
     public static Vector3d getMidVec( Vector3d v1, Vector3d v2 )
