@@ -1260,12 +1260,12 @@ public class Config
                 this.levelsPerCrouchJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Crouching" )
                         .translation( "pmmo.levelsPerCrouchJumpBoost" )
-                        .defineInRange( "levelsPerCrouchJumpBoost", 33D, 1, 1000000000 ) );
+                        .defineInRange( "levelsPerCrouchJumpBoost", 45D, 1, 1000000000 ) );
 
                 this.levelsPerSprintJumpBoost = subscriber.subscribe(builder
                         .comment( "Every how many levels you gain an extra block of jumping height while Sprinting" )
                         .translation( "pmmo.levelsPerSprintJumpBoost" )
-                        .defineInRange( "levelsPerSprintJumpBoost", 50D, 1, 1000000000 ) );
+                        .defineInRange( "levelsPerSprintJumpBoost", 60D, 1, 1000000000 ) );
 
                 this.maxSpeedBoost = subscriber.subscribe(builder
                         .comment( "How much speed boost you can get from Agility (100 = 100% vanilla + 100% = twice as fast max)" )

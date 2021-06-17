@@ -66,7 +66,7 @@ public class JumpHandler
         int levelsPerCrouchJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerCrouchJumpBoost" ) );
         agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
         if( prefsMap.containsKey( "maxCrouchJumpBoost" ) )
-            maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxCrouchJumpBoost" ) / 100);
+            maxJumpBoostPref = prefsMap.get( "maxCrouchJumpBoost" );
         jumpBoost = -0.011 + agilityLevel * ( 0.14 / levelsPerCrouchJumpBoost );
         jumpBoost = Math.min( maxJumpBoostPref, Math.min( maxJumpBoost, jumpBoost ) );
         return jumpBoost;
@@ -82,7 +82,7 @@ public class JumpHandler
         int levelsPerSprintJumpBoost = (int) Math.floor( Config.getConfig( "levelsPerSprintJumpBoost" ) );
         agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
         if( prefsMap.containsKey( "maxSprintJumpBoost" ) )
-            maxJumpBoostPref = 0.14 * ( prefsMap.get( "maxSprintJumpBoost" ) / 100);
+            maxJumpBoostPref = prefsMap.get( "maxSprintJumpBoost" );
         jumpBoost = -0.013 + agilityLevel * ( 0.14 / levelsPerSprintJumpBoost );
         jumpBoost = Math.min( maxJumpBoostPref, Math.min( maxJumpBoost, jumpBoost ) );
         return jumpBoost;
