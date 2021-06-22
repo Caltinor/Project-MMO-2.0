@@ -203,6 +203,9 @@ public class PlayerTickHandler
                 double flyAward  = ( 1D + flyLevel     / 30.77D ) * gap ;
                 double runAward  = ( 1D + agilityLevel / 30.77D ) * gap * ( 1D + speedAmp / 4D );
 
+                if( !player.velocityChanged )
+                    swimAward *= 0.1d;
+
                 lastAward.replace( uuid, System.nanoTime() );
                 Block waterBlock = Blocks.WATER;
                 Block tallSeagrassBlock = Blocks.TALL_SEAGRASS;
@@ -265,15 +268,12 @@ public class PlayerTickHandler
 
                     if( (player.getRidingEntity() instanceof BoatEntity) && waterBelow )
                     {
-                        double award = swimAward;
                         if( !player.isSprinting() )
-                            award *= 1.5;
-                        if( !player.velocityChanged )
-                            award *= 0.1;
+                            swimAward *= 1.5;
 
                         WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
                         XP.addWorldXpDrop( xpDrop, serverPlayer );
-                        XP.awardXp( serverPlayer, Skill.SAILING.toString(), "Sailing", award, true, false, false );
+                        XP.awardXp( serverPlayer, Skill.SAILING.toString(), "Sailing", swimAward, true, false, false );
                     }
                 }
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////

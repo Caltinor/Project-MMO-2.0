@@ -5,6 +5,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -28,7 +29,7 @@ public class FishedHandler
         double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
         double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
         double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
-        return Math.min( fishPoolMaxChance, fishPoolBaseChance + fishPoolChancePerLevel * Skill.getLevelDecimal( Skill.FISHING.toString(), player ) );
+        return Math.min( fishPoolMaxChance, fishPoolBaseChance + fishPoolChancePerLevel * Skill.getLevelDecimal( Skill.FISHING.toString(), player ) ) / 100D;
     }
 
     public static void handleFished( ItemFishedEvent event )
@@ -53,28 +54,22 @@ public class FishedHandler
         if( fishPool != null )
         {
             double fishPoolChance = getFishPoolChance( player );
-
-            if( Math.random() * 10000 < fishPoolChance * 100 )
+            if( Math.random() < fishPoolChance )
             {
                 String matchKey = null;
                 Map<String, Double> match = new HashMap<>();
 
-                double totalWeight = 0;
+                double totalWeight = getTotalFishPoolWeight( startLevel );
                 double weight;
                 double result;
                 double currentWeight = 0;
                 int count, minCount, maxCount;
 
-                for( Map.Entry<String, Map<String, Double>> entry : fishPool.entrySet() )
-                {
-                    totalWeight += XP.getWeight( startLevel, entry.getValue() );
-                }
-
                 result = Math.floor( Math.random() * (totalWeight + 1) );
 
                 for( Map.Entry<String, Map<String, Double>> entry : fishPool.entrySet() )
                 {
-                    weight = XP.getWeight( startLevel, entry.getValue() );
+                    weight = getFishPoolWeight( startLevel, entry.getValue() );
 
                     if( currentWeight < result && currentWeight + weight >= result )
                     {
@@ -174,5 +169,20 @@ public class FishedHandler
             XP.addWorldXpDrop( xpDrop, player );
             XP.awardXp( player, Skill.FISHING.toString(), "catching " + items, award, false, false, false );
         }
+    }
+    
+    public static double getTotalFishPoolWeight( double level )
+    {
+        double totalWeight = 0;
+        for( Map.Entry<String, Map<String, Double>> entry : JsonConfig.data.get( JType.FISH_POOL ).entrySet() )
+        {
+            totalWeight += getFishPoolWeight( level, entry.getValue() );
+        }
+        return totalWeight;
+    }
+
+    public static double getFishPoolWeight( double level, Map<String, Double> fishItem )
+    {
+        return Util.mapCapped( level, fishItem.get( "startLevel" ), fishItem.get( "endLevel" ), fishItem.get( "startWeight" ), fishItem.get( "endWeight" ) );
     }
 }

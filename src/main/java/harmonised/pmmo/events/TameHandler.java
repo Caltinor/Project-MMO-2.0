@@ -23,7 +23,7 @@ public class TameHandler
             Map<String, Double> award = XP.getXp( event.getAnimal() , JType.XP_VALUE_TAME );
 
             if( award.size() == 0 )
-                award.put( Skill.TAMING.toString(), Config.forgeConfig.defaultTamingXp.get() );
+                award.put( Config.forgeConfig.defaultTamingXpFarming.get() ? Skill.FARMING.toString() : Skill.TAMING.toString(), Config.forgeConfig.defaultTamingXp.get() );
 
             if( XP.isHoldingDebugItemInOffhand( tamer ) )
                 tamer.sendStatusMessage( new StringTextComponent( regKey ), false );

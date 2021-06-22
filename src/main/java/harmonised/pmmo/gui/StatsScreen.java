@@ -150,7 +150,7 @@ public class StatsScreen extends Screen
 
         text = new ArrayList<>();
         entryTitle = new TranslationTextComponent( "pmmo.rareFishPool" );
-        text.add( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dpSoft( FishedHandler.getFishPoolChance( player ) ) ).setStyle( Skill.getSkillStyle( Skill.FISHING.toString() ) ) );
+        text.add( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dpSoft( FishedHandler.getFishPoolChance( player ) * 100D ) ).setStyle( Skill.getSkillStyle( Skill.FISHING.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         ItemStack itemStack;

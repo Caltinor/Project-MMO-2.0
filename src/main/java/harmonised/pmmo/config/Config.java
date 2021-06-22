@@ -380,6 +380,7 @@ public class Config
 
         //Taming
         public ConfigHelper.ConfigValueListener<Boolean> breedingXpEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> defaultTamingXpFarming;
         public ConfigHelper.ConfigValueListener<Double> defaultTamingXp;
 
         //Easter Eggs
@@ -1505,7 +1506,7 @@ public class Config
                 this.fishPoolChancePerLevel = subscriber.subscribe(builder
                         .comment( "What is the increase per level to access the fish_pool" )
                         .translation( "pmmo.fishPoolChancePerLevel" )
-                        .defineInRange( "fishPoolChancePerLevel", 0.5D, 0, 100 ) );
+                        .defineInRange( "fishPoolChancePerLevel", 0.1523D, 0, 100 ) );
 
                 this.fishPoolMaxChance = subscriber.subscribe(builder
                         .comment( "What is the max chance to access the fish_pool" )
@@ -1582,6 +1583,11 @@ public class Config
                         .comment( "How much xp should be awarded in Taming for Taming an animal? (Json Overrides this) (Set to 0 to disable default xp)" )
                         .translation( "pmmo.defaultTamingXp" )
                         .defineInRange( "defaultTamingXp", 0D, 0, 1000000 ) );
+
+                this.defaultTamingXpFarming = subscriber.subscribe(builder
+                        .comment( "Should default Taming Xp go to Farming instead of Taming?" )
+                        .translation( "pmmo.defaultTamingXpFarming" )
+                        .define( "defaultTamingXpFarming", false ) );
 
                 builder.pop();
             }

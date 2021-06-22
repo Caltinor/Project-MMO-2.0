@@ -1725,11 +1725,6 @@ public class XP
 		lastBiome.put( playerUUID, biomeKey );
 	}
 
-	public static double getWeight( int startLevel, Map<String, Double> fishItem )
-	{
-		return Util.mapCapped( startLevel, fishItem.get( "startLevel" ), fishItem.get( "endLevel" ), fishItem.get( "startWeight" ), fishItem.get( "endWeight" ) );
-	}
-
 	public static <T> int getTotalLevelFromMap( Map<T, Double> input )
 	{
 		int sum = 0;

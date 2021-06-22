@@ -3,6 +3,7 @@ package harmonised.pmmo.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.events.FishedHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -44,14 +45,7 @@ public class CheckStatCommand
             switch( skill )
             {
                 case "fishing":
-                    double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
-                    double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
-                    double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
-                    double fishPoolChance = fishPoolBaseChance + fishPoolChancePerLevel * level;
-                    if( fishPoolChance > fishPoolMaxChance )
-                        fishPoolChance = fishPoolMaxChance;
-
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dp( fishPoolChance )  ).setStyle( Skill.getSkillStyle( skill ) ), false );
+                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dpSoft(FishedHandler.getFishPoolChance( sender ) )  ).setStyle( Skill.getSkillStyle( skill ) ), false );
                     break;
             }
         }

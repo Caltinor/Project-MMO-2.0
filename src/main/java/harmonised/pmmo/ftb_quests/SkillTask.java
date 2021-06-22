@@ -76,7 +76,7 @@ public class SkillTask extends Task
     {
         super.getConfig(config);
         config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.MINING.toString(), Skill.getSkills().keySet().toArray() ).create());
-        config.addDouble( "requiredLevel", requiredLevel, input -> requiredLevel = input, 1, 1, XP.getMaxLevel() );
+        config.addDouble( "requiredLevel", requiredLevel, input -> requiredLevel = input, requiredLevel, 1, XP.getMaxLevel() );
     }
 
     @Override
@@ -98,5 +98,11 @@ public class SkillTask extends Task
         if( teamData.isCompleted( this ) )
             return;
         teamData.setProgress(this, Skill.getLevel( this.skill, player ) );
+    }
+
+    @Override
+    public long getMaxProgress()
+    {
+        return (long) requiredLevel;
     }
 }

@@ -6,6 +6,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.BlockBrokenHandler;
+import harmonised.pmmo.events.FishedHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
@@ -644,7 +645,8 @@ public class ListScreen extends Screen
                     Map<String, Double> fishPoolMap = reqMap.get( button.regKey );
 
                     double level = Skill.getLevelDecimal( Skill.FISHING.toString(), player );
-                    double weight = XP.getWeight( (int) level, fishPoolMap );
+                    double weight = FishedHandler.getFishPoolWeight( level, fishPoolMap );
+                    double chance = weight / FishedHandler.getTotalFishPoolWeight( level );
                     button.unlocked = weight > 0;
                     Style color = XP.textStyle.get( button.unlocked ? "green" : "red" );
 
@@ -653,6 +655,8 @@ public class ListScreen extends Screen
 
                     button.text.add( new StringTextComponent( "" ) );
                     button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentWeight", DP.dpSoft( weight ) ).getString() ).setStyle( color ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.currentChance", DP.dpCustom( chance, 5 ) ).getString() ).setStyle( color ) );
+                    button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.dropChance", DP.dpSoft( 1/chance ) ).getString() ).setStyle( color ) );
 
                     if ( minCount == maxCount )
                         button.text.add( new StringTextComponent( " " + getTransComp( "pmmo.caughtAmount", minCount ).getString() ).setStyle( color ) );
