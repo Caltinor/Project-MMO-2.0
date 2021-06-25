@@ -26,9 +26,9 @@ public class FishedHandler
 {
     public static double getFishPoolChance( PlayerEntity player )
     {
-        double fishPoolBaseChance = Config.forgeConfig.fishPoolBaseChance.get();
-        double fishPoolChancePerLevel = Config.forgeConfig.fishPoolChancePerLevel.get();
-        double fishPoolMaxChance = Config.forgeConfig.fishPoolMaxChance.get();
+        double fishPoolBaseChance = Config.getConfig( "fishPoolBaseChance" );
+        double fishPoolChancePerLevel = Config.getConfig( "fishPoolChancePerLevel" );
+        double fishPoolMaxChance = Config.getConfig( "fishPoolMaxChance" );
         return Math.min( fishPoolMaxChance, fishPoolBaseChance + fishPoolChancePerLevel * Skill.getLevelDecimal( Skill.FISHING.toString(), player ) ) / 100D;
     }
 

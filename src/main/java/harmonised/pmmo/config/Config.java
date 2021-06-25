@@ -113,6 +113,10 @@ public class Config
 
         localConfig.put( "partyRange", forgeConfig.partyRange.get() );
 
+        localConfig.put( "fishPoolBaseChance", forgeConfig.fishPoolBaseChance.get() );
+        localConfig.put( "fishPoolChancePerLevel", forgeConfig.fishPoolChancePerLevel.get() );
+        localConfig.put( "fishPoolMaxChance", forgeConfig.fishPoolMaxChance.get() );
+
         config = localConfig;
     }
 
