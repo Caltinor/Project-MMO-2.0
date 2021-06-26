@@ -170,7 +170,6 @@ public class DamageHandler
                     NBTHelper.maxDoubleMaps( weaponReq, XP.getXpBypass( offResLoc, JType.REQ_WEAPON ) );
                     String skill;
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill( mainItemStack.getItem().getRegistryName().toString() );
-                    boolean longDistanceCombatDamage = false;
                     boolean swordInMainHand = mainItemStack.getItem() instanceof SwordItem;
 
                     if( itemSpecificSkill != null )
@@ -183,7 +182,7 @@ public class DamageHandler
                         {
                             skill = Skill.COMBAT.toString();
                             if( Util.getDistance( player.getPositionVec(), target.getPositionVec() ) > 4.20 + target.getWidth() + ( swordInMainHand ? 1.523 : 0 ) )
-                                longDistanceCombatDamage = true;
+                                skill = Skill.MAGIC.toString(); //Magically far melee damage
                         }
                     }
 
@@ -204,9 +203,6 @@ public class DamageHandler
                         }
                     }
 
-                    if( longDistanceCombatDamage )
-                        skill = Skill.MAGIC.toString();
-
                     //Apply damage bonuses
                     //Combat is taken care of in AttributeHandler
 //                    if( skill.equals( Skill.COMBAT.toString() ) )
@@ -215,6 +211,8 @@ public class DamageHandler
                         damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelArchery.get();
                     else if( skill.equals( Skill.MAGIC.toString() ) )
                         damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get();
+                    else if( skill.equals( Skill.GUNSLINGING.toString() ) )
+                        damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelGunslinging.get();
 
                     if( target.getEntityString() != null )
                     {
@@ -268,20 +266,30 @@ public class DamageHandler
                         if( playerHealth <= 2 )
                             lowHpBonus += 1;
                     }
+                    double distance = Util.getHorizontalDistance( event.getEntity().getPositionVec(), player.getPositionVec() );
 
-                    if( skill.equals( Skill.ARCHERY.toString() ) || skill.equals( Skill.MAGIC.toString() ) )
+                    if( skill.equals( Skill.COMBAT.toString() ) )
+                        amount *= lowHpBonus;
+                    else if( skill.equals( Skill.ARCHERY.toString() ) )
                     {
-                        double distance = event.getEntity().getDistance( player );
                         if( distance > 16 )
                             distance -= 16;
                         else
                             distance = 0;
 
-                        amount += ( Math.pow( distance, 1.25 ) * ( damage / target.getMaxHealth() ) * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
+                        amount += ( Math.pow( distance, 1.3251 ) * damage * 0.5f * ( damage / target.getMaxHealth() ) * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
                         amount *= lowHpBonus;
                     }
                     else
+                    {
+                        if( distance > 32 )
+                            distance -= 32;
+                        else
+                            distance = 0;
+
+                        amount += ( Math.pow( distance, 1.1523 ) * damage * 0.05f * ( damage / target.getMaxHealth() ) * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
                         amount *= lowHpBonus;
+                    }
 
                     Vector3d xpDropPos = target.getPositionVec();
                     WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + target.getHeight(), xpDropPos.getZ(), target.getHeight(), amount, skill );

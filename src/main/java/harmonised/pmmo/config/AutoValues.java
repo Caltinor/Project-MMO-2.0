@@ -198,6 +198,8 @@ public class AutoValues
             skill = Skill.MAGIC.toString();
         else if( itemSpecificMap.getOrDefault( "magicWeapon", 0D ) != 0 )
             skill = Skill.COMBAT.toString();
+        else if( itemSpecificMap.getOrDefault( "gunWeapon", 0D ) != 0 )
+            skill = Skill.GUNSLINGING.toString();
 
         return skill;
     }

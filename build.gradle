@@ -21,7 +21,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.5-3.59'
+version = '1.16.5-3.60'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -146,6 +146,8 @@ dependencies
             compileOnly fg.deobf("curse.maven:architectury-forge:3316907")
             runtimeOnly fg.deobf("curse.maven:architectury-forge:3316907")
 
+            runtimeOnly fg.deobf("curse.maven:cgm:3224957")
+            runtimeOnly fg.deobf("curse.maven:obfuscate:3336021")
 
             compileOnly fg.deobf("curse.maven:dynamictrees:3304858")
             runtimeOnly fg.deobf("curse.maven:dynamictrees:3304858")

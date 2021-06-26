@@ -26,6 +26,7 @@ public enum Skill
     AGILITY( 0x66cc66 ),
     ENDURANCE( 0xcc0000 ),
     COMBAT( 0xff3300 ),
+    GUNSLINGING( 0xd3c1a3 ),
     ARCHERY( 0xffff00 ),
     SMITHING( 0xf0f0f0 ),
     FLYING( 0xccccff ),

@@ -683,5 +683,49 @@
 	"switchbow:switchcrossbow":
 	{
 		"archeryWeapon": 1
+	},
+	"cgm:pistol":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:shotgun":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:rifle":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:grenade_launcher":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:bazooka":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:mini_gun":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:assault_rifle":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:machine_pistol":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:heavy_rifle":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:missile":
+	{
+		"gunWeapon": 1
+	},
+	"cgm:grenade":
+	{
+		"gunWeapon": 1
 	}
 }

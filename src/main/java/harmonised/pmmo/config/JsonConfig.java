@@ -318,10 +318,10 @@ public class JsonConfig
 
                     for( String regKey : associatedItems )
                     {
-                        if( !rawMap.get( jType ).containsKey( regKey ) )
+//                        if( !rawMap.get( jType ).containsKey( regKey ) )
                             rawMap.get( jType ).put( regKey, rawMap.get( jType ).get( itemKey ) );
                     }
-                    rawMap.get( jType ).remove( itemKey );
+//                    rawMap.get( jType ).remove( itemKey );
                 }
             }
         }

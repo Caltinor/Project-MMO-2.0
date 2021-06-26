@@ -859,7 +859,7 @@ public class XP
 
 		for( ITag.INamedTag<Item> namedTag : ItemTags.getAllTags() )
 		{
-			if( namedTag.getName().toString().equals( tag ) )
+			if( namedTag.getName().toString().startsWith( tag ) )
 			{
 				for( Item element : namedTag.getAllElements() )
 				{
@@ -1106,7 +1106,7 @@ public class XP
 	{
 		double difficultyMultiplier = 1;
 
-		if( skill.equals( Skill.COMBAT.toString() ) || skill.equals( Skill.ARCHERY.toString() ) || skill.equals( Skill.ENDURANCE.toString() ) )
+		if( skill.equals( Skill.COMBAT.toString() ) || skill.equals( Skill.ARCHERY.toString() ) || skill.equals( Skill.GUNSLINGING.toString() ) || skill.equals( Skill.ENDURANCE.toString() ) )
 		{
 			switch( player.world.getDifficulty() )
 			{

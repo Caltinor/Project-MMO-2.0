@@ -40,6 +40,11 @@ public class Util
         return Math.sqrt( Math.pow( p2.x - p1.x, 2 ) + Math.pow( p2.y - p1.y, 2 ) + Math.pow( p2.z - p1.z, 2 ) );
     }
 
+    public static double getHorizontalDistance( Vector3d p1, Vector3d p2 )
+    {
+        return Math.sqrt( Math.pow( p2.x - p1.x, 2 ) + Math.pow( p2.z - p1.z, 2 ) );
+    }
+
     public static <T> T orDefault( T input, T defaultTo )
     {
         return input == null ? defaultTo : input;

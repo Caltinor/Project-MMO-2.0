@@ -1436,5 +1436,9 @@
 	"woot:si_dust":
 	{
 		"smithing": 12
+	},
+	"#forge:dusts":
+	{
+		"smithing": 0
 	}
 }

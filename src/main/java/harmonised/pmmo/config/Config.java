@@ -89,6 +89,7 @@ public class Config
         localConfig.put( "damageBonusPercentPerLevelArchery", forgeConfig.damageBonusPercentPerLevelArchery.get() );
         localConfig.put( "maxExtraDamagePercentageBoostArchery", forgeConfig.maxExtraDamagePercentageBoostArchery.get() );
         localConfig.put( "damageBonusPercentPerLevelMagic", forgeConfig.damageBonusPercentPerLevelMagic.get() );
+        localConfig.put( "damageBonusPercentPerLevelGunslinging", forgeConfig.damageBonusPercentPerLevelGunslinging.get() );
         localConfig.put( "maxExtraDamagePercentageBoostMagic", forgeConfig.maxExtraDamagePercentageBoostMagic.get() );
 
         localConfig.put( "mobHPBoostPerPowerLevel", forgeConfig.mobHPBoostPerPowerLevel.get() );
@@ -377,6 +378,9 @@ public class Config
 
         //Magic
         public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMagic;
+
+        //Gunslinging
+        public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelGunslinging;
 
         //Slayer
         public ConfigHelper.ConfigValueListener<Double> passiveMobHunterXp;
@@ -1549,6 +1553,14 @@ public class Config
                         .defineInRange( "maxExtraDamagePercentageBoostMagic", 100D, 0, 1000000000 ) );
 
                 builder.pop();
+            }
+
+            builder.push( "Gunslinging" );
+            {
+                this.damageBonusPercentPerLevelGunslinging = subscriber.subscribe(builder
+                        .comment( "How much percentage bonus damage do you get per Gunslinging level in Gunslinging?" )
+                        .translation( "pmmo.damageBonusPercentPerLevelGunslinging" )
+                        .defineInRange( "damageBonusPercentPerLevelGunslinging", 0.005D, 0.001, 1000 ) );
             }
 
             builder.push( "Slayer" );
