@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -108,10 +109,9 @@ public class BlockPlacedHandler
 
                     return true;
                 }
-
-                ChunkDataHandler.addPos( XP.getDimResLoc( world ), pos, player.getUniqueID() );
             }
         }
+        ChunkDataHandler.addPos( XP.getDimResLoc( world ), pos, entity.getUniqueID() );
         return false;
     }
 }

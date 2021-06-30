@@ -288,6 +288,7 @@ public class DamageHandler
                             distance = 0;
 
                         amount += ( Math.pow( distance, 1.1523 ) * damage * 0.05f * ( damage / target.getMaxHealth() ) * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
+//                        amount += ( Math.pow( distance, 1.1523 ) * damage * 0.05f * ( damage >= targetMaxHealth ? 1.5 : 1 ) );	//add distance xp
                         amount *= lowHpBonus;
                     }
 

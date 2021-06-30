@@ -226,6 +226,6 @@ public enum Skill
 
     public static void addXp( String skill, ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        XP.awardXp( player, skill, sourceName, amount, skip, ignoreBonuses, true );
+        XP.awardXp( player, skill, sourceName, amount, skip, ignoreBonuses, false );
     }
 }

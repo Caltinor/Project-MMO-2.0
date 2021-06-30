@@ -14,6 +14,7 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.curios.Curios;
 import harmonised.pmmo.events.PlayerConnectedHandler;
+import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.gui.WorldRenderHandler;
 import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
@@ -32,7 +33,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
@@ -52,8 +52,8 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -1272,6 +1272,27 @@ public class XP
 		PmmoSavedData pmmoSavedData = PmmoSavedData.get();
 		UUID uuid = player.getUniqueID();
 
+		XpEvent xpEvent = new XpEvent( player, skill, sourceName, amount, skip, ignoreBonuses, causedByParty );
+		if( MinecraftForge.EVENT_BUS.post( xpEvent ) )
+			return;
+
+		skill = xpEvent.getSkill();
+		sourceName = xpEvent.getSourceName();
+		amount = xpEvent.getAmount();
+		skip = xpEvent.isSkip();
+		ignoreBonuses = xpEvent.isIgnoreBonuses();
+		causedByParty = xpEvent.isCausedByParty();
+
+		if( !ignoreBonuses && !causedByParty )
+			amount *= getMultiplier( player, skill );
+
+		String playerName = player.getDisplayName().getString();
+		int startLevel = Skill.getLevel( skill, uuid );
+		double startXp = Skill.getXp( skill, uuid );
+		double maxXp = Config.getConfig( "maxXp" );
+
+		pmmoSavedData.addXp( skill, uuid, amount );
+
 		if( !causedByParty )
 		{
 			Party party = pmmoSavedData.getParty( uuid );
@@ -1290,14 +1311,6 @@ public class XP
 			}
 		}
 
-		if( !ignoreBonuses )
-			amount *= getMultiplier( player, skill );
-
-		String playerName = player.getDisplayName().getString();
-		int startLevel = Skill.getLevel( skill, uuid );
-		double startXp = Skill.getXp( skill, uuid );
-		double maxXp = Config.getConfig( "maxXp" );
-
 		if( amount == 0 || startXp >= 2000000000 )
 			return;
 
@@ -1308,8 +1321,6 @@ public class XP
 			amount = 2000000000 - startXp;
 		}
 
-		pmmoSavedData.addXp( skill, uuid, amount );
-
 		int currLevel = Skill.getLevel( skill, uuid );
 
 		if( startLevel != currLevel ) //Level Up! Or Down?
@@ -1317,20 +1328,20 @@ public class XP
 			AttributeHandler.updateAll( player );
 			updateRecipes( player );
 
-			if( ModList.get().isLoaded( "compatskills" ) )
-			{
-				String commandArgs = "reskillable incrementskill " + playerName + " compatskills." + skill + " 1";
-
-				try
-				{
-					if( !player.world.isRemote )
-						player.getServer().getCommandManager().getDispatcher().execute( commandArgs, player.getCommandSource().withFeedbackDisabled() );
-				}
-				catch( CommandSyntaxException e )
-				{
-					LOGGER.error( "PMMO Level Up - compatskills command went wrong! args: " + commandArgs, e );
-				}
-			}
+//			if( ModList.get().isLoaded( "compatskills" ) )
+//			{
+//				String commandArgs = "reskillable incrementskill " + playerName + " compatskills." + skill + " 1";
+//
+//				try
+//				{
+//					if( !player.world.isRemote )
+//						player.getServer().getCommandManager().getDispatcher().execute( commandArgs, player.getCommandSource().withFeedbackDisabled() );
+//				}
+//				catch( CommandSyntaxException e )
+//				{
+//					LOGGER.error( "PMMO Level Up - compatskills command went wrong! args: " + commandArgs, e );
+//				}
+//			}
 
 			if( JsonConfig.data.get( JType.LEVEL_UP_COMMAND ).get( skill.toLowerCase() ) != null )
 			{

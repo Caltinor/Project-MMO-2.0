@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;

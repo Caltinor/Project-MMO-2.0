@@ -4,6 +4,8 @@ import com.ferreusveritas.dynamictrees.api.network.MapSignal;
 import com.ferreusveritas.dynamictrees.blocks.branches.BranchBlock;
 import com.ferreusveritas.dynamictrees.systems.nodemappers.NetVolumeNode;
 import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.api.events.SalvageEvent;
+import harmonised.pmmo.api.events.TreasureEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -40,6 +42,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.LogManager;
@@ -591,12 +594,23 @@ public class BlockBrokenHandler
                         int maxCount = (int) Math.floor( treasureItemMap.get( "maxCount" ) );
                         int count;
                         count = (int) Math.floor( (Math.random() * maxCount) + minCount );
-
-                        award.put( Skill.EXCAVATION.toString(), award.getOrDefault( Skill.EXCAVATION.toString(), 0D ) + treasureItemMap.get( "xpPerItem" ) * count );
+                        Map<String, Double> treasureAward = new HashMap<>();
+                        treasureAward.put( Skill.EXCAVATION.toString(), treasureItemMap.get( "xpPerItem" ) * count );
+                        BlockPos treasurePos = event.getPos();
 
                         ItemStack itemStack = new ItemStack( item, count );
-                        XP.dropItemStack( itemStack, world, event.getPos() );
+                        TreasureEvent treasureEvent = new TreasureEvent( player, treasurePos, itemStack, treasureAward );
+                        if( MinecraftForge.EVENT_BUS.post( treasureEvent ) )
+                            return;
+
+                        treasurePos = treasureEvent.getBlockPos();
+                        itemStack = treasureEvent.getItemStack();
+                        treasureAward = treasureEvent.getAward();
+
+                        XP.dropItemStack( itemStack, world, treasurePos );
                         foundTreasure = true;
+
+                        XP.addMapsAnyDouble( award, treasureAward );
 
                         player.sendStatusMessage( new TranslationTextComponent( "pmmo.youFoundTreasureItem", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
                         LOGGER.debug( player.getDisplayName().getString() + " found Treasure! " + count + " " + treasureItem.getKey() + " " + event.getPos() );

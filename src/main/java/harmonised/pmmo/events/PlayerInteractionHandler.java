@@ -1,5 +1,7 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.events.SalvageEvent;
+import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -24,6 +26,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -164,6 +167,10 @@ public class PlayerInteractionHandler
                                     player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotSalvage", new TranslationTextComponent( item.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                                     return;
                                 }
+
+                                SalvageEvent salvageEvent = new SalvageEvent( player, event.getPos() );
+                                if( MinecraftForge.EVENT_BUS.post( salvageEvent ) )
+                                    return;
                                 event.setCanceled( true );
 
                                 if( !( XP.getHorizontalDistance( player.getPositionVec(), XP.blockToMiddleVec( event.getPos() ) ) < 2 ) )

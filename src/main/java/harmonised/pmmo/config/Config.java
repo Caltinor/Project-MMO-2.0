@@ -1561,6 +1561,8 @@ public class Config
                         .comment( "How much percentage bonus damage do you get per Gunslinging level in Gunslinging?" )
                         .translation( "pmmo.damageBonusPercentPerLevelGunslinging" )
                         .defineInRange( "damageBonusPercentPerLevelGunslinging", 0.005D, 0.001, 1000 ) );
+
+                builder.pop();
             }
 
             builder.push( "Slayer" );
