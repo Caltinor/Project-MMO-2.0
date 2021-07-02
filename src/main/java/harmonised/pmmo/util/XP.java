@@ -569,12 +569,15 @@ public class XP
 		int combatLevel = Skill.getLevel( Skill.COMBAT.toString(), uuid );
 		int archeryLevel = Skill.getLevel( Skill.ARCHERY.toString(), uuid );
 		int magicLevel = Skill.getLevel( Skill.MAGIC.toString(), uuid );
+		int gunslingLevel = Skill.getLevel( Skill.GUNSLINGING.toString(), uuid );
 
 		int maxOffensive = combatLevel;
 		if( maxOffensive < archeryLevel )
 			maxOffensive = archeryLevel;
 		if( maxOffensive < magicLevel )
 			maxOffensive = magicLevel;
+		if( maxOffensive < gunslingLevel )
+			maxOffensive = gunslingLevel;
 
 		return ( enduranceLevel + (maxOffensive * 1.5f) ) / 50;
     }
