@@ -1056,7 +1056,9 @@ public class XP
 		Item item = itemStack.getItem();
 		JType jType = type ? JType.XP_BONUS_HELD : JType.XP_BONUS_WORN;
 		String regName = item.getRegistryName().toString();
-		Map<String, Double> itemXpMap = new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( regName, new HashMap<>() ) );
+		Map<String, Double> itemXpMap = PredicateRegistry.predicateExists(item.getRegistryName(), jType) 
+				? TooltipSupplier.getTooltipData(item.getRegistryName(), jType, itemStack) 
+				: JsonConfig.data.get( jType ).getOrDefault( regName, new HashMap<>() );
 		if( Config.getConfig( "scaleXpBoostByDurability" ) != 0 )
 			multiplyMapAnyDouble( itemXpMap, getXpBoostDurabilityMultiplier( itemStack ) );
 		return itemXpMap;
@@ -1072,7 +1074,9 @@ public class XP
 		double boost = 0;
 
 		String regName = item.getRegistryName().toString();
-		Map<String, Double> itemXpMap = JsonConfig.data.get( jType ).get( regName );
+		Map<String, Double> itemXpMap = PredicateRegistry.predicateExists(item.getRegistryName(), jType) 
+				? TooltipSupplier.getTooltipData(item.getRegistryName(), jType, itemStack) 
+				: JsonConfig.data.get( jType ).getOrDefault( regName, new HashMap<>() );
 
 		if( itemXpMap != null && itemXpMap.containsKey( skill ) )
 		{
