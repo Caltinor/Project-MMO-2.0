@@ -530,7 +530,7 @@ public class TooltipHandler
         }
         catch( Exception e )
         {
-            LOGGER.error( e );
+            e.printStackTrace();
         }
     }
 

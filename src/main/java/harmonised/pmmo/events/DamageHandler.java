@@ -304,7 +304,11 @@ public class DamageHandler
                         player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
                 }
             }
+            if( event.getSource().getTrueSource() instanceof PlayerEntity )
+                System.out.println( damage );
             event.setAmount( damage );
+            if( event.getSource().getTrueSource() instanceof PlayerEntity )
+                System.out.println( damage );
             if( event.getAmount() <= 0 )
                 event.setCanceled( true );
         }

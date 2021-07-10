@@ -97,7 +97,7 @@ public class StatsScreen extends Screen
         text.add( new TranslationTextComponent( "pmmo.damageBonusMelee", 100 * Skill.getLevel( Skill.COMBAT.toString(), player ) * Config.forgeConfig.damageBonusPercentPerLevelMelee.get() ).setStyle( Skill.getSkillStyle( Skill.COMBAT.toString() ) ) );
         text.add( new TranslationTextComponent( "pmmo.damageBonusArchery", 100 * Skill.getLevel( Skill.ARCHERY.toString(), player ) * Config.forgeConfig.damageBonusPercentPerLevelArchery.get() ).setStyle( Skill.getSkillStyle( Skill.ARCHERY.toString() ) ) );
         text.add( new TranslationTextComponent( "pmmo.damageBonusMagic", 100 * Skill.getLevel( Skill.MAGIC.toString(), player ) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get() ).setStyle( Skill.getSkillStyle( Skill.MAGIC.toString() ) ) );
-        text.add( new TranslationTextComponent( "pmmo.damageBonusGunslinging", 100 * Skill.getLevel( Skill.MAGIC.toString(), player ) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get() ).setStyle( Skill.getSkillStyle( Skill.MAGIC.toString() ) ) );
+        text.add( new TranslationTextComponent( "pmmo.damageBonusGunslinging", 100 * Skill.getLevel( Skill.MAGIC.toString(), player ) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get() ).setStyle( Skill.getSkillStyle( Skill.GUNSLINGING.toString() ) ) );
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();

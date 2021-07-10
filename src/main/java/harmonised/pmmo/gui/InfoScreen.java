@@ -62,9 +62,9 @@ public class InfoScreen extends Screen
             Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
         });
 
-        ListButtonBig discordButton = new ListButtonBig( 0, 0, 1, 11, "Discord", new TranslationTextComponent( "pmmo.discord" ).getString(), "", button ->
+        ListButtonBig discordButton = new ListButtonBig( 0, 0, 1, 9, "FAQ", new TranslationTextComponent( "pmmo.faq" ).getString(), "", button ->
         {
-            promptOpenLink( "https://discord.gg/5NVNkNB" );
+            promptOpenLink( "https://docs.google.com/document/d/1njMEjYR9aPvwLsTsH2eALV6ci4lNEULEoYlm83n4iOc" );
         });
 
         ListButtonBig featuresButton = new ListButtonBig( 0, 0, 1, 9, "Features", new TranslationTextComponent( "pmmo.features" ).getString(), "", button ->

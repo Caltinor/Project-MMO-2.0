@@ -488,6 +488,8 @@ public class ListScreen extends Screen
                     Map<String, Double> infoMap = XP.getJsonMap( button.regKey, jType );
                     List<ITextComponent> infoText = new ArrayList<>();
                     String transKey = "pmmo." + jType.toString().replace( "info_", "" ) + "ExtraDrop";
+                    if( !infoMap.containsKey( "extraChance" ) )
+                        continue;
                     double extraDroppedPerLevel = infoMap.get( "extraChance" ) / 100;
                     double extraDropped = XP.getExtraChance( player.getUniqueID(), button.regKey, jType, true ) / 100;
 
