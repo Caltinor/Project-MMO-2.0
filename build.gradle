@@ -21,7 +21,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.5-3.61'
+version = '1.16.5-3.61.2'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -135,10 +135,10 @@ dependencies
 
 //            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
 //            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
-            compileOnly fg.deobf("curse.maven:ftb-quests:3316497")
-            runtimeOnly fg.deobf("curse.maven:ftb-quests:3316497")
-            compileOnly fg.deobf("curse.maven:ftb-gui-library:3313036")
-            runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3313036")
+            compileOnly fg.deobf("curse.maven:ftb-quests:3385407")
+            runtimeOnly fg.deobf("curse.maven:ftb-quests:3385407")
+            compileOnly fg.deobf("curse.maven:ftb-gui-library:3373833")
+            runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3373833")
             compileOnly fg.deobf("curse.maven:item-filters:3231742")
             runtimeOnly fg.deobf("curse.maven:item-filters:3231742")
             compileOnly fg.deobf("curse.maven:ftb-teams-forge:3313041")

@@ -28,7 +28,7 @@ public class APIUtils {
 	 * entry of xp_value_trigger.json will determine how much xp, and in what skills 
 	 * this action will award when the xp award is triggered from an API
 	 * 
-	 * @param player the UUID of the player being awarded xp for the trigger
+	 * @param playerID the UUID of the player being awarded xp for the trigger
 	 * @param triggerKey the unique name of the xp trigger corresponding to the key in xp_value_trigger.json
 	 * @param sourceName a debug string used to identify what triggered the xp award.  this may be null
 	 * @param skip tells the gui and debugger to ignore this event and display nothing

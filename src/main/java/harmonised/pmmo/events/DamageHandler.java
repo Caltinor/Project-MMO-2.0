@@ -34,6 +34,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.Map;
 
@@ -60,7 +61,7 @@ public class DamageHandler
         return agilityLevel * saveChancePerLevel;
     }
 
-    public static void handleDamage( LivingDamageEvent event )
+    public static void handleDamage( LivingHurtEvent event )
     {
         if( !(event.getEntity() instanceof FakePlayer) )
         {
@@ -186,20 +187,24 @@ public class DamageHandler
                         }
                     }
 
-                    if( Config.getConfig( "wearReqEnabled" ) != 0 && Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
-                        weaponReq.put( skill, weaponReq.getOrDefault( skill, AutoValues.getWeaponReqFromStack( mainItemStack ) ) );
-                    int weaponGap = XP.getSkillReqGap( player, weaponReq );
-                    int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
                     int killGap = 0;
-                    int gap = Math.max( weaponGap, enchantGap );
-                    if( gap > 0 )
+                    int weaponGap = 0;
+                    if( Config.getConfig( "weaponReqEnabled" ) != 0 )
                     {
-                        if( enchantGap < gap )
-                            NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                        if( Config.forgeConfig.strictReqWeapon.get() )
+                        if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
+                            weaponReq.put( skill, weaponReq.getOrDefault( skill, AutoValues.getWeaponReqFromStack( mainItemStack ) ) );
+                        weaponGap = XP.getSkillReqGap( player, weaponReq );
+                        int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
+                        int gap = Math.max( weaponGap, enchantGap );
+                        if( gap > 0 )
                         {
-                            event.setCanceled( true );
-                            return;
+                            if( enchantGap < gap )
+                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                            if( Config.forgeConfig.strictReqWeapon.get() )
+                            {
+                                event.setCanceled( true );
+                                return;
+                            }
                         }
                     }
 
@@ -304,11 +309,7 @@ public class DamageHandler
                         player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
                 }
             }
-            if( event.getSource().getTrueSource() instanceof PlayerEntity )
-                System.out.println( damage );
             event.setAmount( damage );
-            if( event.getSource().getTrueSource() instanceof PlayerEntity )
-                System.out.println( damage );
             if( event.getAmount() <= 0 )
                 event.setCanceled( true );
         }
