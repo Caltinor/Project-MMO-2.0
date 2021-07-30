@@ -12,20 +12,74 @@ public class DP
 	public static String dprefix( Double input )
 	{
 		char prefix = ' ';
-		if( input >= 10000 && input < 1000000 )
+
+		if( input >= 1E+3 )
 		{
-			input /= 1000;
-			prefix = 'k';
-		}
-		else if( input >= 1000000 && input < 1000000000 )
-		{
-			input /= 1000000;
-			prefix = 'm';
-		}
-		else if( input >= 1000000000 )
-		{
-			input /= 1000000000;
-			prefix = 'b';
+			if( input >= 1E+6 )
+			{
+				if( input >= 1E+9 )
+				{
+					if( input >= 1E+12 )
+					{
+						if( input >= 1E+15 )
+						{
+							if( input >= 1E+18 )
+							{
+								if( input >= 1E+21 )
+								{
+									if( input >= 1E+24 )
+									{
+										if( input >= 1E+27 )
+										{
+											return String.valueOf( input );
+										}
+										else
+										{
+											input /= 1E+24;
+											prefix = 'y';
+										}
+									}
+									else
+									{
+										input /= 1E+21;
+										prefix = 'z';
+									}
+								}
+								else
+								{
+									input /= 1E+18;
+									prefix = 'e';
+								}
+							}
+							else
+							{
+								input /= 1E+15;
+								prefix = 'p';
+							}
+						}
+						else
+						{
+							input /= 1E+12;
+							prefix = 't';
+						}
+					}
+					else
+					{
+						input /= 1E+9;
+						prefix = 'g';
+					}
+				}
+				else
+				{
+					input /= 1E+6;
+					prefix = 'm';
+				}
+			}
+			else
+			{
+				input /= 1E+3;
+				prefix = 'k';
+			}
 		}
 		
 		if( prefix == ' ' )

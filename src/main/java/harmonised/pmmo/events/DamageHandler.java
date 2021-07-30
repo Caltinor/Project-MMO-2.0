@@ -155,6 +155,7 @@ public class DamageHandler
             {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
                 ServerWorld world = player.getServerWorld();
+                System.out.println( target.getHealth() + "/" + target.getMaxHealth() );
 
                 if( XP.isHoldingDebugItemInOffhand( player ) )
                 {
@@ -247,10 +248,7 @@ public class DamageHandler
                     damage /= killGap + 1;
 
                     //no overkill xp
-                    if( damage > targetHealth )
-                        damage = targetHealth;
-
-                    amount += damage * 3;
+                    amount += Math.min( damage, targetHealth ) * 3;
 
                     //kill reduce xp
                     if ( startDmg >= targetHealth )

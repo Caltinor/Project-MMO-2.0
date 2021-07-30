@@ -31,6 +31,14 @@ public class MessageXp
 		
 	}
 
+	public static void encode( MessageXp packet, PacketBuffer buf )
+	{
+		buf.writeDouble( packet.xp );
+		buf.writeDouble( packet.gainedXp );
+		buf.writeString( packet.skill );
+		buf.writeBoolean( packet.skip );
+	}
+
 	public static MessageXp decode( PacketBuffer buf )
 	{
 		MessageXp packet = new MessageXp();
@@ -40,14 +48,6 @@ public class MessageXp
 		packet.skip = buf.readBoolean();
 
 		return packet;
-	}
-
-	public static void encode( MessageXp packet, PacketBuffer buf )
-	{
-		buf.writeDouble( packet.xp );
-		buf.writeDouble( packet.gainedXp );
-		buf.writeString( packet.skill );
-		buf.writeBoolean( packet.skip );
 	}
 
 	public static void handlePacket( MessageXp packet, Supplier<NetworkEvent.Context> ctx )

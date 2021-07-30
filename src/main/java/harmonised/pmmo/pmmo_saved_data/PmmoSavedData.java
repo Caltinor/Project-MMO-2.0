@@ -52,9 +52,7 @@ public class PmmoSavedData extends WorldSavedData
                     CompoundNBT xpTag = playerTag.getCompound( "xp" );
                     for( String tag : new HashSet<>( xpTag.keySet() ) )
                     {
-                        if( xpTag.getDouble( tag ) > 0 )
-                            xpTag.putDouble( tag.toLowerCase(), xpTag.getDouble( tag ) );
-                        else
+                        if( xpTag.getDouble( tag ) <= 0 )
                             xpTag.remove( tag.toLowerCase() );
                     }
                 }
@@ -372,9 +370,7 @@ public class PmmoSavedData extends WorldSavedData
         {
             setPlayerXpBoost( playerUUID, xpBoostKey, entry.getKey(), entry.getValue() );
         }
-        ServerPlayerEntity player = XP.getPlayerByUUID( playerUUID, server );
-        if( player != null )
-            XP.syncPlayerXpBoost( player );
+        XP.syncPlayerXpBoost( playerUUID );
         setDirty( true );
     }
 
@@ -392,12 +388,14 @@ public class PmmoSavedData extends WorldSavedData
     public void removePlayerXpBoost( UUID playerUUID, String xpBoostKey )
     {
         getPlayerXpBoostsMap( playerUUID ).remove( xpBoostKey );
+        XP.syncPlayerXpBoost( playerUUID );
         setDirty( true );
     }
 
     public void removeAllPlayerXpBoosts( UUID playerUUID )
     {
         xpBoosts.remove( playerUUID );
+        XP.syncPlayerXpBoost( playerUUID );
         setDirty( true );
     }
 

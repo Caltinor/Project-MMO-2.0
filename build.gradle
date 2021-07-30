@@ -21,7 +21,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.5-3.61.2'
+version = '1.16.5-3.62'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -55,6 +55,8 @@ minecraft
             arg "-mixin.config="+modid+".mixins.json"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods
             {
                 pmmo
@@ -139,12 +141,12 @@ dependencies
             runtimeOnly fg.deobf("curse.maven:ftb-quests:3385407")
             compileOnly fg.deobf("curse.maven:ftb-gui-library:3373833")
             runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3373833")
-            compileOnly fg.deobf("curse.maven:item-filters:3231742")
-            runtimeOnly fg.deobf("curse.maven:item-filters:3231742")
-            compileOnly fg.deobf("curse.maven:ftb-teams-forge:3313041")
-            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3313041")
-            compileOnly fg.deobf("curse.maven:architectury-forge:3316907")
-            runtimeOnly fg.deobf("curse.maven:architectury-forge:3316907")
+            compileOnly fg.deobf("curse.maven:item-filters:3376819")
+            runtimeOnly fg.deobf("curse.maven:item-filters:3376819")
+            compileOnly fg.deobf("curse.maven:ftb-teams-forge:3373835")
+            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3373835")
+            compileOnly fg.deobf("curse.maven:architectury-forge:3385660")
+            runtimeOnly fg.deobf("curse.maven:architectury-forge:3385660")
 
             runtimeOnly fg.deobf("curse.maven:cgm:3224957")
             runtimeOnly fg.deobf("curse.maven:obfuscate:3336021")

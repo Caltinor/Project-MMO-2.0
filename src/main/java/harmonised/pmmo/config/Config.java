@@ -65,7 +65,7 @@ public class Config
         localConfig.put( "exponentialBaseXp", forgeConfig.exponentialBaseXp.get() );
         localConfig.put( "exponentialBase", forgeConfig.exponentialBase.get() );
         localConfig.put( "exponentialRate", forgeConfig.exponentialRate.get() );
-        localConfig.put( "maxXp", XP.xpAtLevel( forgeConfig.maxLevel.get() ) );
+        localConfig.put( "maxXp", Math.min( Double.MAX_VALUE, XP.xpAtLevel( forgeConfig.maxLevel.get() ) ) );
         localConfig.put( "biomePenaltyMultiplier", forgeConfig.biomePenaltyMultiplier.get() );
         localConfig.put( "nightvisionUnlockLevel", (double) forgeConfig.nightvisionUnlockLevel.get() );
         localConfig.put( "speedBoostPerLevel", forgeConfig.speedBoostPerLevel.get() );
@@ -864,7 +864,7 @@ public class Config
                 this.maxLevel = subscriber.subscribe(builder
                         .comment( "What is the global max level" )
                         .translation( "pmmo.maxLevel" )
-                        .defineInRange( "maxLevel", 150, 1, 1000000 ) );
+                        .defineInRange( "maxLevel", 1523, 1, 2000000000 ) );
 
                 this.baseXp = subscriber.subscribe(builder
                         .comment( "What is the baseXp to reach level 2 ( baseXp + level * xpPerLevel )" )

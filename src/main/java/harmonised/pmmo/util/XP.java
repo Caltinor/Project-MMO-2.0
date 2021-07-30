@@ -250,7 +250,7 @@ public class XP
 
 	private static Map<String, Double> getXp( String registryName, JType jType )
 	{
-		return new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( registryName, new HashMap<>() ) );
+		return new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( registryName, Collections.EMPTY_MAP ) );
 	}
 
 	public static ResourceLocation getBiomeResLoc( World world, Biome biome )
@@ -641,6 +641,13 @@ public class XP
 	public static void syncPlayerXpBoost( PlayerEntity player )
 	{
 		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( APIUtils.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
+	}
+
+	public static void syncPlayerXpBoost( UUID uuid )
+	{
+		ServerPlayerEntity player = getPlayerByUUID( uuid, PmmoSavedData.getServer() );
+		if( player != null )
+			NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( APIUtils.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
 	}
 
 	public static void syncPlayerData3( PlayerEntity player )
@@ -1318,15 +1325,15 @@ public class XP
 			}
 		}
 
-		if( amount == 0 || startXp >= 2000000000 )
+		if( amount == 0 /* || startXp >= 2000000000 */ )
 			return;
 
-		if( startXp + amount >= 2000000000 )
-		{
-			sendMessage( skill + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
-			LOGGER.info( player.getDisplayName().getString() + " " + skill + " 2b cap reached" );
-			amount = 2000000000 - startXp;
-		}
+//		if( startXp + amount >= 2000000000 )
+//		{
+//			sendMessage( skill + " cap of 2b xp reached, you fucking psycho!", false, player, TextFormatting.LIGHT_PURPLE );
+//			LOGGER.info( player.getDisplayName().getString() + " " + skill + " 2b cap reached" );
+//			amount = 2000000000 - startXp;
+//		}
 
 		int currLevel = Skill.getLevel( skill, uuid );
 
@@ -1813,7 +1820,7 @@ public class XP
 		int maxLevel = (int) Math.floor( XP.getMaxLevel() );
 		double xpIncreasePerLevel = Config.getConfig( "xpIncreasePerLevel" );
 
-		int theXp = 0;
+		double theXp = 0;
 
 		for( int level = 0; ; level++ )
 		{
