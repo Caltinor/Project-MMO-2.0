@@ -65,9 +65,58 @@ public class XP
 {
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	private static Map<Material, String> materialHarvestTool = new HashMap<>();
+	private static final Map<Material, String> materialHarvestTool = new HashMap<Material, String>()
+	{{
+		put( Material.ANVIL, "pickaxe" );		//PICKAXE
+		put( Material.GLASS, "pickaxe" );
+		put( Material.ICE, "pickaxe" );
+		put( Material.IRON, "pickaxe" );
+		put( Material.PACKED_ICE, "pickaxe" );
+		put( Material.PISTON, "pickaxe" );
+		put( Material.REDSTONE_LIGHT, "pickaxe" );
+		put( Material.ROCK, "pickaxe" );
+		put( Material.SHULKER, "pickaxe" );
+		put( Material.BARRIER, "pickaxe" );
+		put( Material.MISCELLANEOUS, "pickaxe" );
+		put( Material.WOOD, "axe" );			//AXE
+		put( Material.LEAVES, "axe" );
+		put( Material.GOURD, "axe" );
+		put( Material.CLAY, "shovel" );			//SHOVEL
+		put( Material.EARTH, "shovel" );
+		put( Material.SAND, "shovel" );
+		put( Material.SNOW, "shovel" );
+		put( Material.SEA_GRASS, "shovel" );
+		put( Material.SNOW_BLOCK, "shovel" );
+		put( Material.PLANTS, "hoe" );			//HOE
+		put( Material.OCEAN_PLANT, "hoe" );
+		put( Material.CACTUS, "hoe" );
+		put( Material.CORAL, "hoe" );
+		put( Material.TALL_PLANTS, "hoe" );
+		put( Material.BAMBOO, "hoe" );
+		put( Material.BAMBOO_SAPLING, "hoe" );
+		put( Material.ORGANIC, "hoe" );
+		put( Material.WOOL, "shears" );			//SHEARS (Crafting)
+		put( Material.CARPET, "shears" );
+		put( Material.TNT, "shears" );
+		put( Material.DRAGON_EGG, "shears" );
+		put( Material.WEB, "shears" );
+		put( Material.CAKE, "shears" );
+		put( Material.SPONGE, "shears" );
+	}};
 	public static Set<UUID> isVeining = new HashSet<>();
-	public static Map<String, Style> textStyle = new HashMap<>();
+	public static Map<String, Style> textStyle = new HashMap<String, Style>()
+	{{
+		put( "red", 		Style.EMPTY.applyFormatting( TextFormatting.RED ) );
+		put( "green", 		Style.EMPTY.applyFormatting( TextFormatting.GREEN ) );
+		put( "dark_green", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_GREEN ) );
+		put( "yellow", 		Style.EMPTY.applyFormatting( TextFormatting.YELLOW ) );
+		put( "grey", 		Style.EMPTY.applyFormatting( TextFormatting.GRAY ) );
+		put( "cyan", 		Style.EMPTY.applyFormatting( TextFormatting.AQUA ) );
+		put( "blue", 		Style.EMPTY.applyFormatting( TextFormatting.BLUE ) );
+		put( "dark_blue", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_BLUE ) );
+		put( "pink", 		Style.EMPTY.applyFormatting( TextFormatting.LIGHT_PURPLE ) );
+		put( "dark_purple", Style.EMPTY.applyFormatting( TextFormatting.DARK_PURPLE ) );
+	}};
 	public static Map<UUID, String> playerNames = new HashMap<>();
 	public static Map<String, UUID> playerUUIDs = new HashMap<>();
 	public static Map<UUID, Map<String, Double>> offlineXp = new HashMap<>();
@@ -83,69 +132,6 @@ public class XP
 	{
 ////////////////////////////////////Style//////////////////////////////////////////////
 		WorldText.init();
-		textStyle.put( "red", 			Style.EMPTY.applyFormatting( TextFormatting.RED ) );
-		textStyle.put( "green", 		Style.EMPTY.applyFormatting( TextFormatting.GREEN ) );
-		textStyle.put( "dark_green", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_GREEN ) );
-		textStyle.put( "yellow", 		Style.EMPTY.applyFormatting( TextFormatting.YELLOW ) );
-		textStyle.put( "grey", 			Style.EMPTY.applyFormatting( TextFormatting.GRAY ) );
-		textStyle.put( "cyan", 			Style.EMPTY.applyFormatting( TextFormatting.AQUA ) );
-		textStyle.put( "blue", 			Style.EMPTY.applyFormatting( TextFormatting.BLUE ) );
-		textStyle.put( "dark_blue", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_BLUE ) );
-		textStyle.put( "pink", 			Style.EMPTY.applyFormatting( TextFormatting.LIGHT_PURPLE ) );
-		textStyle.put( "dark_purple", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_PURPLE ) );
-////////////////////////////////////PATREONS//////////////////////////////////////////////
-		PlayerConnectedHandler.lapisPatreons.add( 		UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );	//LUCIFER
-
-		PlayerConnectedHandler.dandelionPatreons.add( 	UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
-		PlayerConnectedHandler.dandelionPatreons.add( 	UUID.fromString( "554b53b8-d0fa-409e-ab87-2a34bf83e506" ) );	//JOERKIG
-		PlayerConnectedHandler.dandelionPatreons.add( 	UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );	//DIDIS
-
-		PlayerConnectedHandler.dandelionPatreons.add( 	UUID.fromString( "21bb554a-f339-48ef-80f7-9a5083172892" ) );	//JUDICIUS
-		PlayerConnectedHandler.muteList.add( UUID.fromString( "21bb554a-f339-48ef-80f7-9a5083172892" ) );
-
-		PlayerConnectedHandler.ironPatreons.add( 		UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );	//STRESSINDICATOR
-		PlayerConnectedHandler.ironPatreons.add( 		UUID.fromString( "5bfdb948-7b66-476a-aefe-d45e4778fb2d" ) );	//DADDY_P1G
-		PlayerConnectedHandler.ironPatreons.add( 		UUID.fromString( "edafb5eb-9ccb-4121-bef7-e7ffded64ee3" ) );	//LEWDCINA
-////////////////////////////////////MATERIAL_HARVEST_TOOLS/////////////////////////////////////////
-		materialHarvestTool.put( Material.ANVIL, "pickaxe" );		//PICKAXE
-		materialHarvestTool.put( Material.GLASS, "pickaxe" );
-		materialHarvestTool.put( Material.ICE, "pickaxe" );
-		materialHarvestTool.put( Material.IRON, "pickaxe" );
-		materialHarvestTool.put( Material.PACKED_ICE, "pickaxe" );
-		materialHarvestTool.put( Material.PISTON, "pickaxe" );
-		materialHarvestTool.put( Material.REDSTONE_LIGHT, "pickaxe" );
-		materialHarvestTool.put( Material.ROCK, "pickaxe" );
-		materialHarvestTool.put( Material.SHULKER, "pickaxe" );
-		materialHarvestTool.put( Material.BARRIER, "pickaxe" );
-		materialHarvestTool.put( Material.MISCELLANEOUS, "pickaxe" );
-
-		materialHarvestTool.put( Material.WOOD, "axe" );			//AXE
-		materialHarvestTool.put( Material.LEAVES, "axe" );
-		materialHarvestTool.put( Material.GOURD, "axe" );
-
-		materialHarvestTool.put( Material.CLAY, "shovel" );			//SHOVEL
-		materialHarvestTool.put( Material.EARTH, "shovel" );
-		materialHarvestTool.put( Material.SAND, "shovel" );
-		materialHarvestTool.put( Material.SNOW, "shovel" );
-		materialHarvestTool.put( Material.SEA_GRASS, "shovel" );
-		materialHarvestTool.put( Material.SNOW_BLOCK, "shovel" );
-
-		materialHarvestTool.put( Material.PLANTS, "hoe" );			//HOE
-		materialHarvestTool.put( Material.OCEAN_PLANT, "hoe" );
-		materialHarvestTool.put( Material.CACTUS, "hoe" );
-		materialHarvestTool.put( Material.CORAL, "hoe" );
-		materialHarvestTool.put( Material.TALL_PLANTS, "hoe" );
-		materialHarvestTool.put( Material.BAMBOO, "hoe" );
-		materialHarvestTool.put( Material.BAMBOO_SAPLING, "hoe" );
-		materialHarvestTool.put( Material.ORGANIC, "hoe" );
-
-		materialHarvestTool.put( Material.WOOL, "shears" );			//SHEARS (Crafting)
-		materialHarvestTool.put( Material.CARPET, "shears" );
-		materialHarvestTool.put( Material.TNT, "shears" );
-		materialHarvestTool.put( Material.DRAGON_EGG, "shears" );
-		materialHarvestTool.put( Material.WEB, "shears" );
-		materialHarvestTool.put( Material.CAKE, "shears" );
-		materialHarvestTool.put( Material.SPONGE, "shears" );
 	}
 
 	public static String getSkill( BlockState state )
@@ -250,7 +236,7 @@ public class XP
 
 	private static Map<String, Double> getXp( String registryName, JType jType )
 	{
-		return new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( registryName, Collections.EMPTY_MAP ) );
+		return new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( registryName, new HashMap<>() ) );
 	}
 
 	public static ResourceLocation getBiomeResLoc( World world, Biome biome )
@@ -1733,21 +1719,18 @@ public class XP
 					{
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( getBiomeResLoc( player.world, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), true );
 						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( getBiomeResLoc( player.world, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), false );
-						for( Map.Entry<String, Double> entry : biomeReq.entrySet() )
-						{
-							int startLevel = Skill.getLevel( entry.getKey(), player );
-
-							if( startLevel < entry.getValue() )
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( entry.getValue() ) ).setStyle( textStyle.get( "red" ) ), false );
-							else
-								player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", " " + new TranslationTextComponent( "pmmo." + entry.getKey() ).getString(), "" + (int) Math.floor( entry.getValue() ) ).setStyle( textStyle.get( "green" ) ), false );
-						}
+						sendPlayerSkillList( player, biomeReq );
 					}
 				}
 			}
 		}
 
 		lastBiome.put( playerUUID, biomeKey );
+	}
+
+	public static int getTotalLevelFromUUID( UUID uuid )
+	{
+		return getTotalLevelFromMap( Config.getXpMap( uuid ) );
 	}
 
 	public static <T> int getTotalLevelFromMap( Map<T, Double> input )
@@ -1791,9 +1774,20 @@ public class XP
 		offlineXp.remove( uuid );
 	}
 
+	public static double getOfflineLevelDecimal( String skill, UUID uuid )
+	{
+		if( skill.equals( "totalLevel" ) )
+			return getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) );
+		else
+			return levelAtXpDecimal( XP.getOfflineXp( skill, uuid ) );
+	}
+
 	public static int getOfflineLevel( String skill, UUID uuid )
 	{
-		return levelAtXp( getOfflineXp( skill, uuid ) );
+		if( skill.equals( "totalLevel" ) )
+			return getTotalLevelFromMap( XP.getOfflineXpMap( uuid ) );
+		else
+			return levelAtXp( getOfflineXp( skill, uuid ) );
 	}
 
 	public static double getOfflineXp( String skill, UUID uuid )

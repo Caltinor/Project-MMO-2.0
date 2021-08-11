@@ -180,12 +180,18 @@ public class PmmoSavedData extends WorldSavedData
 
     public int getLevel( String skill, UUID uuid )
     {
-        return XP.levelAtXp( getXp( skill, uuid ) );
+        if( skill.equals( "totalLevel" ) )
+            return XP.getTotalLevelFromMap( Config.getXpMap( uuid ) );
+        else
+            return XP.levelAtXp( getXp( skill, uuid ) );
     }
 
     public double getLevelDecimal( String skill, UUID uuid )
     {
-        return XP.levelAtXpDecimal( getXp( skill, uuid ) );
+        if( skill.equals( "totalLevel" ) )
+            return getLevel( skill, uuid );
+        else
+            return XP.levelAtXpDecimal( getXp( skill, uuid ) );
     }
 
     public boolean setXp( String skill, UUID uuid, double amount )

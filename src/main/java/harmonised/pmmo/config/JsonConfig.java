@@ -182,6 +182,9 @@ public class JsonConfig
         if( Config.forgeConfig.biomeReqEnabled.get() )
             jTypes.add( JType.REQ_BIOME );
 
+        if( Config.forgeConfig.dimensionTravelReqEnabled.get() )
+            jTypes.add( JType.REQ_DIMENSION_TRAVEL );
+
         if( Config.forgeConfig.negativeBiomeEffectEnabled.get() )
             jTypes.add( JType.BIOME_EFFECT_NEGATIVE );
 
@@ -358,6 +361,9 @@ public class JsonConfig
 
         if( jTypes.contains( JType.REQ_BIOME ) )
             updateDataSkills( JType.REQ_BIOME, false );
+
+        if( jTypes.contains( JType.REQ_DIMENSION_TRAVEL ) )
+            updateDataSkills( JType.REQ_DIMENSION_TRAVEL, true );
 
         if( jTypes.contains( JType.REQ_KILL ) )
             updateDataSkills( JType.REQ_KILL, false );
@@ -791,6 +797,8 @@ public class JsonConfig
     {
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
+            if( element.getKey().equals( "totalLevel" ) )
+                continue;
             if( !output.containsKey( element.getKey() ) )
                 output.put( element.getKey(), new HashMap<>() );
 

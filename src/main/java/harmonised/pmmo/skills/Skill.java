@@ -115,10 +115,10 @@ public enum Skill
      * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#getLevel(String, PlayerEntity) APIUtils.getLevel}
      */
     @Deprecated
-    public static int getLevel( String skill, PlayerEntity player)
+    public static int getLevel( String skill, PlayerEntity player )
     {
         if( player.world.isRemote )
-            return XP.levelAtXp( XP.getOfflineXp( skill, player.getUniqueID() ) );
+            return XP.getOfflineLevel( skill, player.getUniqueID() );
         else
             return PmmoSavedData.get().getLevel( skill, player.getUniqueID() );
     }
@@ -131,7 +131,7 @@ public enum Skill
     public static double getLevelDecimal( String skill, PlayerEntity player )
     {
         if( player.world.isRemote )
-            return XP.levelAtXpDecimal( XP.getOfflineXp( skill, player.getUniqueID() ) );
+            return XP.getOfflineLevelDecimal( skill, player.getUniqueID() );
         else
             return PmmoSavedData.get().getLevelDecimal( skill, player.getUniqueID() );
     }

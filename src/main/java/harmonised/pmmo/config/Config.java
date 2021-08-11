@@ -192,6 +192,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> placeReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> breakReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> biomeReqEnabled;
+        public ConfigHelper.ConfigValueListener<Boolean> dimensionTravelReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> craftReqEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> negativeBiomeEffectEnabled;
         public ConfigHelper.ConfigValueListener<Boolean> positiveBiomeEffectEnabled;
@@ -750,6 +751,11 @@ public class Config
                         .comment( "Should biome requirements be enabled? false means no requirements" )
                         .translation( "pmmo.biomeReqEnabled" )
                         .define( "biomeReqEnabled", true ) );
+
+                this.dimensionTravelReqEnabled = subscriber.subscribe(builder
+                        .comment( "Should dimensional travel requirements be enabled? false means no requirements" )
+                        .translation( "pmmo.dimensionTravelReqEnabled" )
+                        .define( "dimensionTravelReqEnabled", true ) );
 
                 this.craftReqEnabled = subscriber.subscribe(builder
                         .comment( "Should certain items be restricted from being crafted, without the level requirement?" )
@@ -1828,7 +1834,12 @@ public class Config
         if( player.world.isRemote() )
             return XP.getOfflineXpMap( player.getUniqueID() );
         else
-            return PmmoSavedData.get().getXpMap( player.getUniqueID() );
+            return getXpMap( player.getUniqueID() );
+    }
+
+    public static Map<String, Double> getXpMap( UUID uuid )
+    {
+        return PmmoSavedData.get().getXpMap( uuid );
     }
 
     public static Map<String, Double> getConfigMap()

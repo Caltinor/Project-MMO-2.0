@@ -155,7 +155,6 @@ public class DamageHandler
             {
                 ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
                 ServerWorld world = player.getServerWorld();
-                System.out.println( target.getHealth() + "/" + target.getMaxHealth() );
 
                 if( XP.isHoldingDebugItemInOffhand( player ) )
                 {

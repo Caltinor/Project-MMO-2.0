@@ -23,10 +23,28 @@ public class PlayerConnectedHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static List<UUID> lapisPatreons      = new ArrayList<>();
-    public static List<UUID> dandelionPatreons  = new ArrayList<>();
-    public static List<UUID> ironPatreons       = new ArrayList<>();
-    public static Set<UUID> muteList           = new HashSet<>();
+    public static List<UUID> lapisPatreons      = new ArrayList<UUID>()
+    {{
+        add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );	//LUCIFER
+    }};
+    public static List<UUID> dandelionPatreons  = new ArrayList<UUID>()
+    {{
+        add( UUID.fromString( "8eb0578d-c113-49d3-abf6-a6d36f6d1116" ) );	//TYRIUS
+        add( UUID.fromString( "554b53b8-d0fa-409e-ab87-2a34bf83e506" ) );	//JOERKIG
+        add( UUID.fromString( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa" ) );	//DIDIS
+        add( UUID.fromString( "21bb554a-f339-48ef-80f7-9a5083172892" ) );	//JUDICIUS
+    }};
+    public static List<UUID> ironPatreons       = new ArrayList<UUID>()
+    {{
+        add( UUID.fromString( "0bc51f06-9906-41ea-9fb4-7e9be169c980" ) );	//STRESSINDICATOR
+        add( UUID.fromString( "5bfdb948-7b66-476a-aefe-d45e4778fb2d" ) );	//DADDY_P1G
+        add( UUID.fromString( "edafb5eb-9ccb-4121-bef7-e7ffded64ee3" ) );	//LEWDCINA
+        add( UUID.fromString( "8d2460f3-c840-4b8e-a2d2-f7d5168cbdeb" ) );	//QSIDED
+    }};
+    public static Set<UUID> muteList           = new HashSet<UUID>()
+    {{
+        add( UUID.fromString( "21bb554a-f339-48ef-80f7-9a5083172892" ) );	//Do not greet (specified by Patreon)
+    }};
 
     public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
     {
