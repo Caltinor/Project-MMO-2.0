@@ -173,6 +173,9 @@ public class JsonConfig
         if( Config.forgeConfig.growingXpEnabled.get() )
             jTypes.add( JType.XP_VALUE_GROW );
 
+        if( Config.forgeConfig.rightClickXpEnabled.get() )
+            jTypes.add( JType.XP_VALUE_RIGHT_CLICK );
+
         if( Config.forgeConfig.placeReqEnabled.get() )
             jTypes.add( JType.REQ_PLACE );
 
@@ -404,6 +407,9 @@ public class JsonConfig
         if( jTypes.contains( JType.XP_VALUE_GROW ) )
             updateDataSkills( JType.XP_VALUE_GROW, false );
 
+        if( jTypes.contains( JType.XP_VALUE_RIGHT_CLICK ) )
+            updateDataSkills( JType.XP_VALUE_RIGHT_CLICK, false );
+
         if( jTypes.contains( JType.XP_VALUE_TRIGGER ) )
             updateDataSkills( JType.XP_VALUE_TRIGGER, true );
 
@@ -533,7 +539,7 @@ public class JsonConfig
         LOGGER.debug( "Processing PMMO Data: Skills, Type: " + jType );
         for( Map.Entry<String, Map<String, Double>> element : input.entrySet() )
         {
-            if( ignoreValidCheck || !XP.getItem( element.getKey() ).equals( Items.AIR ) || validEntity( element.getKey() ) || validBiome( element.getKey() ) ) //skip items that don't exist in current modlist
+            if( ignoreValidCheck || isValid( element.getKey() ) ) //skip items that don't exist in current modlist
             {
                 if(  !output.containsKey( element.getKey() ) )
                     output.put( element.getKey(), new HashMap<>() );
@@ -1145,5 +1151,10 @@ public class JsonConfig
     public static boolean validBiome( String regKey )
     {
         return ForgeRegistries.BIOMES.containsKey( XP.getResLoc( regKey ) );
+    }
+
+    public static boolean isValid( String key )
+    {
+        return !XP.getItem( key ).equals( Items.AIR ) || validEntity( key ) || validBiome( key );
     }
 }
