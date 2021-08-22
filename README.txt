@@ -1,7 +1,5 @@
 https://www.curseforge.com/minecraft/mc-mods/project-mmo
 
-I am a new mod dev, so please let me know if the following is not correct:
-
 ///Craft Tweaker Support
 
 Example of Craft Tweaker use with PMMO (May or may not be available for either Minecraft version, you may ask in our Discord if you'd like to make sure of the current state)
