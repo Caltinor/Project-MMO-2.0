@@ -131,6 +131,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Boolean> logXpGainedInDebugLog;
         public ConfigHelper.ConfigValueListener<Double> scaleXpBoostByDurabilityStart;
         public ConfigHelper.ConfigValueListener<Double> scaleXpBoostByDurabilityEnd;
+        public ConfigHelper.ConfigValueListener<Boolean> rightClickXpEnabled;
 
         //Party
         public ConfigHelper.ConfigValueListener<Double> partyRange;
@@ -469,6 +470,11 @@ public class Config
                         .comment( "At what durability percentage should the xp bonus start going down from? (75 means that at 75% durability or above, the xp bonus will be max, and at 37.5%, the xp boost will be half" )
                         .translation( "pmmo.scaleXpBoostByDurabilityEnd" )
                         .defineInRange( "scaleXpBoostByDurabilityEnd", 75D, 0D, 100D ) );
+
+                this.rightClickXpEnabled = subscriber.subscribe(builder
+                        .comment( "Should right click xp be enabled?" )
+                        .translation( "pmmo.rightClickXpEnabled" )
+                        .define( "rightClickXpEnabled", true ) );
 
                 builder.pop();
             }

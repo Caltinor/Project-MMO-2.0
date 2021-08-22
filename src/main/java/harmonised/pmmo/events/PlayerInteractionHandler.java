@@ -1,5 +1,6 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.events.SalvageEvent;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
@@ -31,10 +32,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PlayerInteractionHandler
 {
@@ -67,6 +65,13 @@ public class PlayerInteractionHandler
 
                 if( item.getRegistryName() == null )
                     return;
+
+                if( !player.world.isRemote() )
+                {
+                    Map<String, Double> rightClickAwardMap = APIUtils.getXp( itemStack, JType.XP_VALUE_RIGHT_CLICK );
+                    if( rightClickAwardMap != null )
+                        XP.awardXpMap( playerUUID, rightClickAwardMap, "right_click", false, false );
+                }
 
                 String regKey = item.getRegistryName().toString();
                 int startLevel;
