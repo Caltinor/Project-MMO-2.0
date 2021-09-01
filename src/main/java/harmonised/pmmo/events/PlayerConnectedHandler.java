@@ -26,6 +26,13 @@ public class PlayerConnectedHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
+    public static List<UUID> lavenderPatreons      = new ArrayList<UUID>()
+    {{
+        add( UUID.fromString( "12319dec-8880-4e9b-8ddb-01719a66e793" ) );	//STARBBLE
+    }};
+    public static List<UUID> fieryPatreons      = new ArrayList<UUID>()
+    {{
+    }};
     public static List<UUID> lapisPatreons      = new ArrayList<UUID>()
     {{
         add( UUID.fromString( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a" ) );	//LUCIFER

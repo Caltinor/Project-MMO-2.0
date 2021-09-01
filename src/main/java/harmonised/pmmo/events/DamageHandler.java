@@ -27,6 +27,25 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Hand;
+import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -60,6 +79,13 @@ public class DamageHandler
         if( !(event.getEntity() instanceof FakePlayer) )
         {
             float damage = event.getAmount();
+            //Anti ghast crazy dmg
+            if( event.getSource() instanceof IndirectEntityDamageSource )
+            {
+                IndirectEntityDamageSource indirectSource = (IndirectEntityDamageSource) event.getSource();
+                if( indirectSource.getImmediateSource() instanceof FireballEntity )
+                    damage = Math.min( 69, damage );
+            }
             float startDmg = damage;
             LivingEntity target = event.getEntityLiving();
             Entity source = event.getSource().getEntity();

@@ -74,6 +74,22 @@ public class CreditsScreen extends Screen
             Minecraft.getInstance().setScreen( new MainScreen( uuid, new TranslatableComponent( "pmmo.skills" ) ) );
         });
 
+        PlayerConnectedHandler.lavenderPatreons.forEach( a ->
+        {
+            listButtons.add( new ListButtonBig( 0, 0, 1, 15, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lavenderPatreon" ).setStyle( XP.getColorStyle( 0xd200ff ) ).getString(), button ->
+            {
+                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+            }));
+        });
+
+        PlayerConnectedHandler.fieryPatreons.forEach( a ->
+        {
+            listButtons.add( new ListButtonBig( 0, 0, 1, 16, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.fieryPatreon" ).setStyle( XP.getColorStyle( 0xf97900 ) ).getString(), button ->
+            {
+                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+            }));
+        });
+
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
         {
             listButtons.add( new ListButtonBig( 0, 0, 1, 2, "", CreditorScreen.uuidName.get( a.toString() ), new TranslatableComponent( "pmmo.lapisPatreon" ).setStyle( XP.textStyle.get( "blue" ) ).getString(), button ->

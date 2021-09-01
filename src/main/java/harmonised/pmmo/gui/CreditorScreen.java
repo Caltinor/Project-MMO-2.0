@@ -157,6 +157,7 @@ public class CreditorScreen extends Screen
 
     public static void initCreditors()
     {
+        uuidName.put( "12319dec-8880-4e9b-8ddb-01719a66e793", "Starbble#4578" );
         uuidName.put( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a", "Lucifer#0666" );
         uuidName.put( "8eb0578d-c113-49d3-abf6-a6d36f6d1116", "Tyrius#0842" );
         uuidName.put( "2ea5efa1-756b-4c9e-9605-7f53830d6cfa", "didis54#5815" );
@@ -168,6 +169,22 @@ public class CreditorScreen extends Screen
         uuidName.put( "8d2460f3-c840-4b8e-a2d2-f7d5168cbdeb", "qSided#0420" );
         List<String> list;
 
+        /////////LAVENDER//////////////
+        PlayerConnectedHandler.lavenderPatreons.forEach( a ->
+        {
+            colors.put( uuidName.get( a.toString() ), 0xd200ff );
+            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
+        });
+        //STARBBLE
+        list = creditorsInfo.get( "Starbble#4578" );
+        list.add( "First Lavender Tier Patreon" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "05/05/2020" ).getString() );
+        /////////FIERY//////////////
+        PlayerConnectedHandler.fieryPatreons.forEach( a ->
+        {
+            colors.put( uuidName.get( a.toString() ), 0xf97900 );
+            creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
+        });
         /////////LAPIS//////////////
         PlayerConnectedHandler.lapisPatreons.forEach( a ->
         {
