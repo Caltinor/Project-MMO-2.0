@@ -157,6 +157,7 @@ public class CreditorScreen extends Screen
 
     public static void initCreditors()
     {
+        uuidName.put( "6aefd519-8f6b-4c3a-bb1b-aac88a8dd57e", "Deviate#0001" );
         uuidName.put( "12319dec-8880-4e9b-8ddb-01719a66e793", "Starbble#4578" );
         uuidName.put( "e4c7e475-c1ff-4f94-956c-ac5be02ce04a", "Lucifer#0666" );
         uuidName.put( "8eb0578d-c113-49d3-abf6-a6d36f6d1116", "Tyrius#0842" );
@@ -175,6 +176,9 @@ public class CreditorScreen extends Screen
             colors.put( uuidName.get( a.toString() ), 0xd200ff );
             creditorsInfo.put( uuidName.get( a.toString() ), new ArrayList<>());
         });
+        //DEVIATE
+        list = creditorsInfo.get( "Deviate#0001" );
+        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "04/09/2021" ).getString() );
         //STARBBLE
         list = creditorsInfo.get( "Starbble#4578" );
         list.add( "First Lavender Tier Patreon" );
