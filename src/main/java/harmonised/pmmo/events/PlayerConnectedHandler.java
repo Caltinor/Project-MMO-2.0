@@ -26,6 +26,7 @@ public class PlayerConnectedHandler
     public static List<UUID> lavenderPatreons      = new ArrayList<UUID>()
     {{
         add( UUID.fromString( "12319dec-8880-4e9b-8ddb-01719a66e793" ) );	//STARBBLE
+        add( UUID.fromString( "6aefd519-8f6b-4c3a-bb1b-aac88a8dd57e" ) );   //DEVIATE
     }};
     public static List<UUID> fieryPatreons      = new ArrayList<UUID>()
     {{
