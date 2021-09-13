@@ -1,7 +1,7 @@
 package harmonised.pmmo.util;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.util.Map;
@@ -26,21 +26,21 @@ public class Util
             return ( (input - inLow) / (inHigh - inLow) ) * (outHigh - outLow) + outLow;
     }
 
-    public static Vector3d getMidVec( Vector3d v1, Vector3d v2 )
+    public static Vec3 getMidVec( Vec3 v1, Vec3 v2 )
     {
-        return new Vector3d( (v1.x + v2.x)/2, (v1.y + v2.y)/2, (v1.z + v2.z)/2 );
+        return new Vec3( (v1.x + v2.x)/2, (v1.y + v2.y)/2, (v1.z + v2.z)/2 );
     }
 
     public static double getDistance( BlockPos p1, BlockPos p2 )
     {
-        return getDistance( new Vector3d( p1.getX(), p1.getY(), p1.getZ() ), new Vector3d( p2.getX(), p2.getY(), p2.getZ() ) );
+        return getDistance( new Vec3( p1.getX(), p1.getY(), p1.getZ() ), new Vec3( p2.getX(), p2.getY(), p2.getZ() ) );
     }
-    public static double getDistance( Vector3d p1, Vector3d p2 )
+    public static double getDistance( Vec3 p1, Vec3 p2 )
     {
         return Math.sqrt( Math.pow( p2.x - p1.x, 2 ) + Math.pow( p2.y - p1.y, 2 ) + Math.pow( p2.z - p1.z, 2 ) );
     }
 
-    public static double getHorizontalDistance( Vector3d p1, Vector3d p2 )
+    public static double getHorizontalDistance( Vec3 p1, Vec3 p2 )
     {
         return Math.sqrt( Math.pow( p2.x - p1.x, 2 ) + Math.pow( p2.z - p1.z, 2 ) );
     }
@@ -74,9 +74,9 @@ public class Util
         System.out.println( msg );
     }
 
-    public static Vector3d blockPosToVector( BlockPos pos )
+    public static Vec3 blockPosToVector( BlockPos pos )
     {
-        return new Vector3d( pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5 );
+        return new Vec3( pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5 );
     }
 
     public static int hueToRGB( float hue, float saturation, float brightness )

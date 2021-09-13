@@ -4,23 +4,22 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerDisconnectedHandler
 {
     public static void handlerPlayerDisconnected( PlayerEvent.PlayerLoggedOutEvent event )
     {
-        PlayerEntity player = event.getPlayer();
-        if( player.world.isRemote() )
+        Player player = event.getPlayer();
+        if( player.level.isClientSide() )
         {
             WebHandler.updateInfo();
         }
         else
         {
             if( Config.forgeConfig.autoLeavePartyOnDisconnect.get() )
-                PmmoSavedData.get().removeFromParty( player.getUniqueID() );
+                PmmoSavedData.get().removeFromParty( player.getUUID() );
             player.getServer().getPlayerList().getPlayers().forEach( XP::syncPlayersSkills );
         }
     }

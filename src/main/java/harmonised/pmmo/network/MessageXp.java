@@ -1,15 +1,8 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.gui.XPOverlayGUI;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
-import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.util.XP;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
-
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessageXp
@@ -31,20 +24,20 @@ public class MessageXp
 		
 	}
 
-	public static void encode( MessageXp packet, PacketBuffer buf )
+	public static void encode( MessageXp packet, FriendlyByteBuf buf )
 	{
 		buf.writeDouble( packet.xp );
 		buf.writeDouble( packet.gainedXp );
-		buf.writeString( packet.skill );
+		buf.writeUtf( packet.skill );
 		buf.writeBoolean( packet.skip );
 	}
 
-	public static MessageXp decode( PacketBuffer buf )
+	public static MessageXp decode( FriendlyByteBuf buf )
 	{
 		MessageXp packet = new MessageXp();
 		packet.xp = buf.readDouble();
 		packet.gainedXp = buf.readDouble();
-		packet.skill = buf.readString();
+		packet.skill = buf.readUtf();
 		packet.skip = buf.readBoolean();
 
 		return packet;

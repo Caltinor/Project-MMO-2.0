@@ -7,17 +7,16 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-public class PmmoSavedData extends WorldSavedData
+public class PmmoSavedData extends SavedData
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -37,20 +36,20 @@ public class PmmoSavedData extends WorldSavedData
     }
 
     @Override
-    public void read( CompoundNBT inData )
+    public void load( CompoundTag inData )
     {
-        CompoundNBT playersTag, playerTag;
+        CompoundTag playersTag, playerTag;
 
         if( inData.contains( "players" ) )
         {
             playersTag = inData.getCompound( "players" );
-            for( String playerUuidKey : playersTag.keySet() )
+            for( String playerUuidKey : playersTag.getAllKeys() )
             {
                 playerTag = playersTag.getCompound( playerUuidKey );
                 if( playerTag.contains( "xp" ) )
                 {
-                    CompoundNBT xpTag = playerTag.getCompound( "xp" );
-                    for( String tag : new HashSet<>( xpTag.keySet() ) )
+                    CompoundTag xpTag = playerTag.getCompound( "xp" );
+                    for( String tag : new HashSet<>( xpTag.getAllKeys() ) )
                     {
                         if( xpTag.getDouble( tag ) <= 0 )
                             xpTag.remove( tag.toLowerCase() );
@@ -70,18 +69,18 @@ public class PmmoSavedData extends WorldSavedData
 
         if( inData.contains( "parties" ) )
         {
-            CompoundNBT partiesTag = inData.getCompound( "parties" );
-            CompoundNBT partyTag, membersTag, memberInfoTag;
+            CompoundTag partiesTag = inData.getCompound( "parties" );
+            CompoundTag partyTag, membersTag, memberInfoTag;
             Set<PartyMemberInfo> membersInfo;
             PartyMemberInfo memberInfo;
 
-            for( String key : partiesTag.keySet() )
+            for( String key : partiesTag.getAllKeys() )
             {
                 partyTag = partiesTag.getCompound( key );
                 membersTag = partyTag.getCompound( "members" );
                 membersInfo = new HashSet<>();
 
-                for( String id : membersTag.keySet() )
+                for( String id : membersTag.getAllKeys() )
                 {
                     memberInfoTag = membersTag.getCompound( id );
                     memberInfo = new PartyMemberInfo( UUID.fromString( memberInfoTag.getString( "uuid" ) ), memberInfoTag.getLong( "joinDate" ), memberInfoTag.getDouble( "xpGained" ) );
@@ -94,10 +93,10 @@ public class PmmoSavedData extends WorldSavedData
     }
 
     @Override
-    public CompoundNBT write( CompoundNBT outData )
+    public CompoundTag save( CompoundTag outData )
     {
-        CompoundNBT playersTag = new CompoundNBT(), partiesTag = new CompoundNBT(), partyTag, membersTag, memberInfoTag;
-        Map<String, CompoundNBT> playerMap;
+        CompoundTag playersTag = new CompoundTag(), partiesTag = new CompoundTag(), partyTag, membersTag, memberInfoTag;
+        Map<String, CompoundTag> playerMap;
 
         for( Map.Entry<UUID, Map<String, Double>> entry : xp.entrySet() )
         {
@@ -109,7 +108,7 @@ public class PmmoSavedData extends WorldSavedData
             playerMap.put( "preferences", NBTHelper.mapStringToNbt(         preferences.getOrDefault(   entry.getKey(), Collections.emptyMap() ) ) );
             playerMap.put( "xpBoosts", NBTHelper.mapStringMapStringToNbt(   xpBoosts.getOrDefault(      entry.getKey(), Collections.emptyMap() ) ) );
 
-            CompoundNBT playerTag = NBTHelper.mapStringNbtToNbt( playerMap );
+            CompoundTag playerTag = NBTHelper.mapStringNbtToNbt( playerMap );
             playerTag.putString( "name", name.get( entry.getKey() ) );
 
             playersTag.put( entry.getKey().toString(), playerTag );
@@ -119,13 +118,13 @@ public class PmmoSavedData extends WorldSavedData
         int i = 0, j;
         for( Party party : parties )
         {
-            partyTag = new CompoundNBT();
-            membersTag = new CompoundNBT();
+            partyTag = new CompoundTag();
+            membersTag = new CompoundTag();
 
             j = 0;
             for( PartyMemberInfo memberInfo : party.getAllMembersInfo() )
             {
-                memberInfoTag = new CompoundNBT();
+                memberInfoTag = new CompoundTag();
 
                 memberInfoTag.putString( "uuid", memberInfo.uuid.toString() );
                 memberInfoTag.putLong( "joinDate", memberInfo.joinDate );
@@ -284,7 +283,7 @@ public class PmmoSavedData extends WorldSavedData
         else
         {
             ownerParty.addMember( newMemberUuid );
-            this.markDirty();
+            this.setDirty();
             return 0;   //0 = member has been added
         }
     }
@@ -300,7 +299,7 @@ public class PmmoSavedData extends WorldSavedData
             if( party.getPartySize() == 0 )
             {
                 parties.remove( party );
-                this.markDirty();
+                this.setDirty();
                 return 1;   //1 = The party became empty, and got deleted
             }
             else
@@ -324,7 +323,7 @@ public class PmmoSavedData extends WorldSavedData
     public static void init( MinecraftServer server )
     {
         PmmoSavedData.server = server;
-        PmmoSavedData.pmmoSavedData = server.getWorld( World.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+        PmmoSavedData.pmmoSavedData = server.getLevel( Level.OVERWORLD ).getDataStorage().computeIfAbsent( PmmoSavedData::new, NAME );
     }
 
     public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.

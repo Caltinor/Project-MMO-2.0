@@ -1,15 +1,15 @@
 package harmonised.pmmo.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.client.gui.Font;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraftforge.client.gui.ScrollPanel;
 import org.lwjgl.opengl.GL11;
@@ -18,22 +18,22 @@ import java.util.List;
 
 public class StatsScrollPanel extends ScrollPanel
 {
-    MainWindow sr;
+    Window sr;
     private final int boxWidth = 256;
     private final int boxHeight = 256;
     private final List<StatsEntry> statsEntries;
     private StatsEntry statsEntry;
-    private FontRenderer font;
+    private Font font;
 
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
 
-    public StatsScrollPanel( MatrixStack stack, Minecraft client, int width, int height, int top, int left, List<StatsEntry> statsEntries )
+    public StatsScrollPanel( PoseStack stack, Minecraft client, int width, int height, int top, int left, List<StatsEntry> statsEntries )
     {
         super(client, width, height, top, left);
         this.statsEntries = statsEntries;
-        this.sr = Minecraft.getInstance().getMainWindow();
-        this.font = Minecraft.getInstance().fontRenderer;
+        this.sr = Minecraft.getInstance().getWindow();
+        this.font = Minecraft.getInstance().font;
 
         this.client = client;
         this.width = width;
@@ -59,7 +59,7 @@ public class StatsScrollPanel extends ScrollPanel
     }
 
     @Override
-    protected void drawPanel( MatrixStack stack, int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
+    protected void drawPanel( PoseStack stack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY)
     {
         int accumulativeHeight = 0;
         for( int i = 0; i < statsEntries.size(); i++ )
@@ -68,16 +68,16 @@ public class StatsScrollPanel extends ScrollPanel
             statsEntry.setX( this.left + 6 );
             statsEntry.setY( relativeY + accumulativeHeight );
 
-            Color color = statsEntry.title.getStyle().getColor();
-            int hexColor = color == null ? 0xffffff : color.getColor();
+            TextColor color = statsEntry.title.getStyle().getColor();
+            int hexColor = color == null ? 0xffffff : color.getValue();
 
             fillGradient( stack, this.left + 4, statsEntry.getY() - 2, this.right - 2, statsEntry.getY() + statsEntry.getHeight() + 2, 0x22444444, 0x33222222 );
-            drawCenteredString( stack, font, statsEntry.title.getString(), sr.getScaledWidth()/2, statsEntry.getY(), hexColor );
+            drawCenteredString( stack, font, statsEntry.title.getString(), sr.getGuiScaledWidth()/2, statsEntry.getY(), hexColor );
             for( int j = 0; j < statsEntry.text.size(); j++ )
             {
-                IFormattableTextComponent line = statsEntry.text.get( j );
+                MutableComponent line = statsEntry.text.get( j );
                 color = line.getStyle().getColor();
-                hexColor = color == null ? 0xffffff : color.getColor();
+                hexColor = color == null ? 0xffffff : color.getValue();
                 drawString( stack, font, line.getString(), statsEntry.getX(), 2 + statsEntry.getY() + (j+1)*11, hexColor );
             }
 
@@ -117,14 +117,14 @@ public class StatsScrollPanel extends ScrollPanel
     }
 
     @Override
-    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
+    public void render( PoseStack stack,  int mouseX, int mouseY, float partialTicks)
     {
-        Tessellator tess = Tessellator.getInstance();
-        BufferBuilder worldr = tess.getBuffer();
+        Tesselator tess = Tesselator.getInstance();
+        BufferBuilder worldr = tess.getBuilder();
 
-        double scale = client.getMainWindow().getGuiScaleFactor();
+        double scale = client.getWindow().getGuiScale();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((int)(left  * scale), (int)(client.getMainWindow().getFramebufferHeight() - (bottom * scale)),
+        GL11.glScissor((int)(left  * scale), (int)(client.getWindow().getHeight() - (bottom * scale)),
                 (int)(width * scale), (int)(height * scale));
 
         int baseY = this.top + border - (int)this.scrollDistance;
@@ -144,24 +144,24 @@ public class StatsScrollPanel extends ScrollPanel
             }
 
             RenderSystem.disableTexture();
-            worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            worldr.pos(barLeft,            this.bottom, 0.0D).tex(0.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
-            worldr.pos(barLeft + barWidth, this.bottom, 0.0D).tex(1.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
-            worldr.pos(barLeft + barWidth, this.top,    0.0D).tex(1.0F, 0.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
-            worldr.pos(barLeft,            this.top,    0.0D).tex(0.0F, 0.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
-            tess.draw();
-            worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            worldr.pos(barLeft,            barTop + barHeight, 0.0D).tex(0.0F, 1.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
-            worldr.pos(barLeft + barWidth, barTop + barHeight, 0.0D).tex(1.0F, 1.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
-            worldr.pos(barLeft + barWidth, barTop,             0.0D).tex(1.0F, 0.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
-            worldr.pos(barLeft,            barTop,             0.0D).tex(0.0F, 0.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
-            tess.draw();
-            worldr.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-            worldr.pos(barLeft,                barTop + barHeight - 1, 0.0D).tex(0.0F, 1.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
-            worldr.pos(barLeft + barWidth - 1, barTop + barHeight - 1, 0.0D).tex(1.0F, 1.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
-            worldr.pos(barLeft + barWidth - 1, barTop,                 0.0D).tex(1.0F, 0.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
-            worldr.pos(barLeft,                barTop,                 0.0D).tex(0.0F, 0.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
-            tess.draw();
+            worldr.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+            worldr.vertex(barLeft,            this.bottom, 0.0D).uv(0.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
+            worldr.vertex(barLeft + barWidth, this.bottom, 0.0D).uv(1.0F, 1.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
+            worldr.vertex(barLeft + barWidth, this.top,    0.0D).uv(1.0F, 0.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
+            worldr.vertex(barLeft,            this.top,    0.0D).uv(0.0F, 0.0F).color(0x00, 0x00, 0x00, 0xFF).endVertex();
+            tess.end();
+            worldr.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+            worldr.vertex(barLeft,            barTop + barHeight, 0.0D).uv(0.0F, 1.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            worldr.vertex(barLeft + barWidth, barTop + barHeight, 0.0D).uv(1.0F, 1.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            worldr.vertex(barLeft + barWidth, barTop,             0.0D).uv(1.0F, 0.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            worldr.vertex(barLeft,            barTop,             0.0D).uv(0.0F, 0.0F).color(0x80, 0x80, 0x80, 0xFF).endVertex();
+            tess.end();
+            worldr.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+            worldr.vertex(barLeft,                barTop + barHeight - 1, 0.0D).uv(0.0F, 1.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.vertex(barLeft + barWidth - 1, barTop + barHeight - 1, 0.0D).uv(1.0F, 1.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.vertex(barLeft + barWidth - 1, barTop,                 0.0D).uv(1.0F, 0.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            worldr.vertex(barLeft,                barTop,                 0.0D).uv(0.0F, 0.0F).color(0xC0, 0xC0, 0xC0, 0xFF).endVertex();
+            tess.end();
         }
 
         RenderSystem.enableTexture();

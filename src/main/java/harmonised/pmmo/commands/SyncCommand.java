@@ -3,11 +3,11 @@ package harmonised.pmmo.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.util.XP;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,23 +18,23 @@ public class SyncCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute(CommandContext<CommandSource> context, @Nullable Collection<ServerPlayerEntity> players ) throws CommandException
+    public static int execute(CommandContext<CommandSourceStack> context, @Nullable Collection<ServerPlayer> players ) throws CommandRuntimeException
     {
         if( players != null )
         {
-            for( ServerPlayerEntity player : players )
+            for( ServerPlayer player : players )
             {
                 XP.syncPlayer( player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsResynced" ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.skillsResynced" ), false );
             }
         }
         else
         {
             try
             {
-                PlayerEntity player = context.getSource().asPlayer();
+                Player player = context.getSource().getPlayerOrException();
                 XP.syncPlayer( player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsResynced" ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.skillsResynced" ), false );
             }
             catch( CommandSyntaxException e )
             {

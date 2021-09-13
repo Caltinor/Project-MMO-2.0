@@ -13,12 +13,12 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
 
 public class APIUtils {
 
@@ -51,7 +51,7 @@ public class APIUtils {
 	 * @return the level of the skill for the supplied player
 	 */
 	@SuppressWarnings("deprecation")
-	public static int getLevel( String skill, PlayerEntity player ) 
+	public static int getLevel( String skill, Player player ) 
 	{
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
@@ -65,7 +65,7 @@ public class APIUtils {
 	 * @return the raw xp value of the skill for the supplied player
 	 */
 	@SuppressWarnings("deprecation")
-	public static double getXp( String skill, PlayerEntity player ) 
+	public static double getXp( String skill, Player player ) 
 	{
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
@@ -79,7 +79,7 @@ public class APIUtils {
 	 * @param amount the ultimate level value to be set
 	 */
 	@SuppressWarnings("deprecation")
-	public static void setLevel( String skill, ServerPlayerEntity player, double amount ) 
+	public static void setLevel( String skill, ServerPlayer player, double amount ) 
 	{
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
@@ -94,7 +94,7 @@ public class APIUtils {
 	 * @param amount the ultimate xp value to be set
 	 */
 	@SuppressWarnings("deprecation")
-	public static void setXp( String skill, ServerPlayerEntity player, double amount ) 
+	public static void setXp( String skill, ServerPlayer player, double amount ) 
 	{
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
@@ -152,7 +152,7 @@ public class APIUtils {
 	 * @param jType the JType for which map should be returned
 	 * @return a map of skills and values for the JType and TE
 	 */
-	public static Map<String, Double> getXp ( TileEntity tile, JType jType ) 
+	public static Map<String, Double> getXp ( BlockEntity tile, JType jType ) 
 	{
 		Preconditions.checkNotNull(tile);
 		Preconditions.checkNotNull(jType);
@@ -207,29 +207,29 @@ public class APIUtils {
 	/**
 	 * //Gets all xp boost maps
 	 */
-	public static Map<String, Map<String, Double>> getXpBoostsMap( PlayerEntity player )
+	public static Map<String, Map<String, Double>> getXpBoostsMap( Player player )
 	{
-		if( player.world.isRemote() )
+		if( player.level.isClientSide() )
 			return Config.xpBoosts;
 		else
-			return PmmoSavedData.get().getPlayerXpBoostsMap( player.getUniqueID() );
+			return PmmoSavedData.get().getPlayerXpBoostsMap( player.getUUID() );
 	}
 
 	/**
 	 * //Gets a specific xp boost map
 	 */
-	public static Map<String, Double> getXpBoostMap( PlayerEntity player, String xpBoostKey )
+	public static Map<String, Double> getXpBoostMap( Player player, String xpBoostKey )
 	{
-		if( player.world.isRemote() )
+		if( player.level.isClientSide() )
 			return Config.xpBoosts.getOrDefault( xpBoostKey, new HashMap<>() );
 		else
-			return PmmoSavedData.get().getPlayerXpBoostMap( player.getUniqueID(), xpBoostKey );
+			return PmmoSavedData.get().getPlayerXpBoostMap( player.getUUID(), xpBoostKey );
 	}
 
 	/**
 	 * //Gets a specific xp boost in a specific skill
 	 */
-	public static double getPlayerXpBoost( PlayerEntity player, String skill )
+	public static double getPlayerXpBoost( Player player, String skill )
 	{
 		double xpBoost = 0;
 
@@ -244,25 +244,25 @@ public class APIUtils {
 	/**
 	 * //Sets a specific xp boost map
 	 */
-	public static void setPlayerXpBoost( ServerPlayerEntity player, String xpBoostKey, Map<String, Double> newXpBoosts )
+	public static void setPlayerXpBoost( ServerPlayer player, String xpBoostKey, Map<String, Double> newXpBoosts )
 	{
-		PmmoSavedData.get().setPlayerXpBoost( player.getUniqueID(), xpBoostKey, newXpBoosts );
+		PmmoSavedData.get().setPlayerXpBoost( player.getUUID(), xpBoostKey, newXpBoosts );
 	}
 
 	/**
 	 * //Removes a specific xp boost map
 	 */
-	public static void removePlayerXpBoost( ServerPlayerEntity player, String xpBoostKey )
+	public static void removePlayerXpBoost( ServerPlayer player, String xpBoostKey )
 	{
-		PmmoSavedData.get().removePlayerXpBoost( player.getUniqueID(), xpBoostKey );
+		PmmoSavedData.get().removePlayerXpBoost( player.getUUID(), xpBoostKey );
 	}
 
 	/**
 	 * //WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
 	 */
-	public static void removeAllPlayerXpBoosts( ServerPlayerEntity player )
+	public static void removeAllPlayerXpBoosts( ServerPlayer player )
 	{
-		PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUniqueID() );
+		PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUUID() );
 	}
 
 	/**
@@ -270,11 +270,11 @@ public class APIUtils {
 	 * Only Project MMO should use this.
 	 */
 	@Deprecated
-	public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<String, Double>> newBoosts )
+	public static void setPlayerXpBoostsMaps( Player player, Map<String, Map<String, Double>> newBoosts )
 	{
-		if( player.world.isRemote() )
+		if( player.level.isClientSide() )
 			Config.xpBoosts = newBoosts;
 		else
-			PmmoSavedData.get().setPlayerXpBoostsMaps( player.getUniqueID(), newBoosts );
+			PmmoSavedData.get().setPlayerXpBoostsMaps( player.getUUID(), newBoosts );
 	}
 }

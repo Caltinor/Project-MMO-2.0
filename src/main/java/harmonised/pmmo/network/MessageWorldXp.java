@@ -3,18 +3,17 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.gui.WorldXpDrop;
 
 import harmonised.pmmo.util.XP;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class MessageWorldXp
 {
     private ResourceLocation worldResLoc;
-    private Vector3d pos;
+    private Vec3 pos;
     private String skill;
     private float startXp;
     private float rotation;
@@ -37,13 +36,13 @@ public class MessageWorldXp
 
     }
 
-    public static MessageWorldXp decode( PacketBuffer buf )
+    public static MessageWorldXp decode( FriendlyByteBuf buf )
     {
         MessageWorldXp packet = new MessageWorldXp();
 
-        packet.worldResLoc = XP.getResLoc( buf.readString() );
-        packet.pos = new Vector3d( buf.readDouble(), buf.readDouble(), buf.readDouble() );
-        packet.skill = buf.readString();
+        packet.worldResLoc = XP.getResLoc( buf.readUtf() );
+        packet.pos = new Vec3( buf.readDouble(), buf.readDouble(), buf.readDouble() );
+        packet.skill = buf.readUtf();
         packet.startXp = buf.readFloat();
         packet.decaySpeed = buf.readFloat();
         packet.rotation = buf.readFloat();
@@ -52,15 +51,15 @@ public class MessageWorldXp
         return packet;
     }
 
-    public static void encode( MessageWorldXp packet, PacketBuffer buf )
+    public static void encode( MessageWorldXp packet, FriendlyByteBuf buf )
     {
-        buf.writeString( packet.worldResLoc.toString() );
+        buf.writeUtf( packet.worldResLoc.toString() );
 
-        buf.writeDouble( packet.pos.getX() );
-        buf.writeDouble( packet.pos.getY() );
-        buf.writeDouble( packet.pos.getZ() );
+        buf.writeDouble( packet.pos.x() );
+        buf.writeDouble( packet.pos.y() );
+        buf.writeDouble( packet.pos.z() );
 
-        buf.writeString( packet.skill );
+        buf.writeUtf( packet.skill );
         buf.writeFloat( packet.startXp );
         buf.writeFloat( packet.decaySpeed );
         buf.writeFloat( packet.rotation );

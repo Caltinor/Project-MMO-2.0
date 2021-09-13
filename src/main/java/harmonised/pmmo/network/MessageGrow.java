@@ -1,8 +1,8 @@
 package harmonised.pmmo.network;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -20,7 +20,7 @@ public class MessageGrow
     {
     }
 
-    public static MessageGrow decode( PacketBuffer buf )
+    public static MessageGrow decode( FriendlyByteBuf buf )
     {
         MessageGrow packet = new MessageGrow();
 
@@ -30,7 +30,7 @@ public class MessageGrow
         return packet;
     }
 
-    public static void encode( MessageGrow packet, PacketBuffer buf )
+    public static void encode( MessageGrow packet, FriendlyByteBuf buf )
     {
         buf.writeInt( packet.slot );
         buf.writeInt( packet.amount );
@@ -43,9 +43,9 @@ public class MessageGrow
             if( Minecraft.getInstance().player != null )
             {
                 if( packet.slot == 0 )
-                    Minecraft.getInstance().player.getHeldItemMainhand().setCount( packet.amount );
+                    Minecraft.getInstance().player.getMainHandItem().setCount( packet.amount );
                 else if( packet.slot == 1 )
-                    Minecraft.getInstance().player.getHeldItemOffhand().setCount( packet.amount );
+                    Minecraft.getInstance().player.getOffhandItem().setCount( packet.amount );
             }
         });
         ctx.get().setPacketHandled(true);

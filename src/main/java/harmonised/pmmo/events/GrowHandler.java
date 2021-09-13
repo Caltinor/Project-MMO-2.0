@@ -6,12 +6,12 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.SaplingGrowTreeEvent;
 
@@ -22,7 +22,7 @@ public class GrowHandler
 {
     public static void handleSaplingGrow( SaplingGrowTreeEvent event )
     {
-        World world = (World) event.getWorld();
+        Level world = (Level) event.getWorld();
         BlockPos pos = event.getPos();
         ResourceLocation dimResLoc = XP.getDimResLoc( world );
         UUID uuid = ChunkDataHandler.checkPos( dimResLoc, pos );
@@ -47,7 +47,7 @@ public class GrowHandler
 
     public static void handleCropGrow( BlockEvent.CropGrowEvent.Post event )
     {
-        World world = (World) event.getWorld();
+        Level world = (Level) event.getWorld();
         BlockPos pos = event.getPos();
         ResourceLocation resLoc = event.getWorld().getBlockState( pos ).getBlock().getRegistryName();
         BlockState state = world.getBlockState( pos );
@@ -59,9 +59,9 @@ public class GrowHandler
         {
             BlockPos tempPos = pos;
 
-            while( world.getBlockState( tempPos.down() ).getBlock().equals( block ) && uuid == null )
+            while( world.getBlockState( tempPos.below() ).getBlock().equals( block ) && uuid == null )
             {
-                tempPos = tempPos.down();
+                tempPos = tempPos.below();
                 uuid = ChunkDataHandler.checkPos( world, tempPos );
             }
         }
@@ -71,44 +71,44 @@ public class GrowHandler
             int age = -1;
             int maxAge = -1;
 
-            if( state.hasProperty( BlockStateProperties.AGE_0_1 ) )
+            if( state.hasProperty( BlockStateProperties.AGE_1 ) )
             {
-                age = state.get( BlockStateProperties.AGE_0_1 );
+                age = state.getValue( BlockStateProperties.AGE_1 );
                 maxAge = 1;
             }
-            else if( state.hasProperty( BlockStateProperties.AGE_0_2 ) )
+            else if( state.hasProperty( BlockStateProperties.AGE_2 ) )
             {
-                age = state.get( BlockStateProperties.AGE_0_2 );
+                age = state.getValue( BlockStateProperties.AGE_2 );
                 maxAge = 2;
             }
-            else if( state.hasProperty( BlockStateProperties.AGE_0_3 ) )
+            else if( state.hasProperty( BlockStateProperties.AGE_3 ) )
             {
-                age = state.get( BlockStateProperties.AGE_0_3 );
+                age = state.getValue( BlockStateProperties.AGE_3 );
                 maxAge = 3;
             }
-            else if( state.hasProperty( BlockStateProperties.AGE_0_5 ) )
+            else if( state.hasProperty( BlockStateProperties.AGE_5 ) )
             {
-                age = state.get( BlockStateProperties.AGE_0_5 );
+                age = state.getValue( BlockStateProperties.AGE_5 );
                 maxAge = 5;
             }
-            else if( state.hasProperty( BlockStateProperties.AGE_0_7 ) )
+            else if( state.hasProperty( BlockStateProperties.AGE_7 ) )
             {
-                age = state.get( BlockStateProperties.AGE_0_7 );
+                age = state.getValue( BlockStateProperties.AGE_7 );
                 maxAge = 7;
             }
-            else if( state.hasProperty( BlockStateProperties.AGE_0_15 ) )
+            else if( state.hasProperty( BlockStateProperties.AGE_15 ) )
             {
-                age = state.get( BlockStateProperties.AGE_0_15 );
+                age = state.getValue( BlockStateProperties.AGE_15 );
                 maxAge = 15;
             }
-            else if( state.hasProperty( BlockStateProperties.AGE_0_25 ) )
+            else if( state.hasProperty( BlockStateProperties.AGE_25 ) )
             {
-                age = state.get( BlockStateProperties.AGE_0_25 );
+                age = state.getValue( BlockStateProperties.AGE_25 );
                 maxAge = 25;
             }
-            else if( state.hasProperty( BlockStateProperties.PICKLES_1_4 ) )
+            else if( state.hasProperty( BlockStateProperties.PICKLES ) )
             {
-                age = state.get( BlockStateProperties.PICKLES_1_4 );
+                age = state.getValue( BlockStateProperties.PICKLES );
                 maxAge = 4;
             }
 

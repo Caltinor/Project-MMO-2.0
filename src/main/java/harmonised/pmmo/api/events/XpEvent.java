@@ -1,9 +1,8 @@
 package harmonised.pmmo.api.events;
 
 import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class XpEvent extends PlayerEvent
@@ -13,7 +12,7 @@ public class XpEvent extends PlayerEvent
     private String sourceName;
     private boolean skip, ignoreBonuses, causedByParty;
 
-    public XpEvent( PlayerEntity player, String skill, String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
+    public XpEvent( Player player, String skill, String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
     {
         super( player );
         this.skill = skill;

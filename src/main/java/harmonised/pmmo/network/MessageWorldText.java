@@ -3,17 +3,17 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.gui.WorldText;
 
 import harmonised.pmmo.util.XP;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class MessageWorldText
 {
     private ResourceLocation worldResLoc;
-    private Vector3d startPos, endPos;
+    private Vec3 startPos, endPos;
     private String text = "EMPTY";
     private float secondsLifespan = 1;
     private float maxOffset = 0;
@@ -72,13 +72,13 @@ public class MessageWorldText
 
     }
 
-    public static MessageWorldText decode( PacketBuffer buf )
+    public static MessageWorldText decode( FriendlyByteBuf buf )
     {
         MessageWorldText packet = new MessageWorldText();
-        packet.worldResLoc = new ResourceLocation( buf.readString() );
-        packet.startPos = new Vector3d( buf.readDouble(), buf.readDouble(), buf.readDouble() );
-        packet.endPos = new Vector3d( buf.readDouble(), buf.readDouble(), buf.readDouble() );
-        packet.text = buf.readString();
+        packet.worldResLoc = new ResourceLocation( buf.readUtf() );
+        packet.startPos = new Vec3( buf.readDouble(), buf.readDouble(), buf.readDouble() );
+        packet.endPos = new Vec3( buf.readDouble(), buf.readDouble(), buf.readDouble() );
+        packet.text = buf.readUtf();
         packet.secondsLifespan = buf.readFloat();
         packet.maxOffset = buf.readFloat();
         packet.preset = buf.readByte();
@@ -103,19 +103,19 @@ public class MessageWorldText
         return packet;
     }
 
-    public static void encode( MessageWorldText packet, PacketBuffer buf )
+    public static void encode( MessageWorldText packet, FriendlyByteBuf buf )
     {
-        buf.writeString( packet.worldResLoc.toString() );
+        buf.writeUtf( packet.worldResLoc.toString() );
 
-        buf.writeDouble( packet.startPos.getX() );
-        buf.writeDouble( packet.startPos.getY() );
-        buf.writeDouble( packet.startPos.getZ() );
+        buf.writeDouble( packet.startPos.x() );
+        buf.writeDouble( packet.startPos.y() );
+        buf.writeDouble( packet.startPos.z() );
 
-        buf.writeDouble( packet.endPos.getX() );
-        buf.writeDouble( packet.endPos.getY() );
-        buf.writeDouble( packet.endPos.getZ() );
+        buf.writeDouble( packet.endPos.x() );
+        buf.writeDouble( packet.endPos.y() );
+        buf.writeDouble( packet.endPos.z() );
 
-        buf.writeString     ( packet.text               );
+        buf.writeUtf     ( packet.text               );
         buf.writeFloat      ( packet.secondsLifespan    );
         buf.writeFloat      ( packet.maxOffset          );
         buf.writeByte       ( packet.preset             );

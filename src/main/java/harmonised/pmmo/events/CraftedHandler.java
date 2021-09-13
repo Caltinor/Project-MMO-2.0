@@ -5,10 +5,10 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,10 +24,10 @@ public class CraftedHandler
     {
         try
         {
-            if( event.getPlayer() instanceof ServerPlayerEntity )
+            if( event.getPlayer() instanceof ServerPlayer )
             {
-                ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-                Vector3d pos = player.getPositionVec();
+                ServerPlayer player = (ServerPlayer) event.getPlayer();
+                Vec3 pos = player.position();
                 double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
                 double durabilityMultiplier = 1;
 
@@ -38,22 +38,22 @@ public class CraftedHandler
                 if( xpValue.size() == 0 )
                 {
                     if( itemStack.getItem() instanceof BlockItem)
-                        award.put( "crafting", (double) ((BlockItem) itemStack.getItem()).getBlock().getDefaultState().getBlockHardness( null, null ) );
+                        award.put( "crafting", (double) ((BlockItem) itemStack.getItem()).getBlock().defaultBlockState().getDestroySpeed( null, null ) );
                     else
                         award.put( "crafting", defaultCraftingXp );
                 }
                 else
                     XP.addMapsAnyDouble( award, xpValue );
 
-                if( itemStack.isDamageable() )
-                    durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamage() ) / (double) itemStack.getMaxDamage();
+                if( itemStack.isDamageableItem() )
+                    durabilityMultiplier = (double) ( itemStack.getMaxDamage() - itemStack.getDamageValue() ) / (double) itemStack.getMaxDamage();
 
 //            XP.multiplyMap( award, itemStack.getCount() );
                 XP.multiplyMapAnyDouble( award, durabilityMultiplier );
 
                 for( String awardSkillName : award.keySet() )
                 {
-                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( player.getServerWorld() ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, award.get( awardSkillName ), awardSkillName );
+                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( player.getLevel() ), pos.x(), pos.y() + player.getEyeHeight() + 0.523, pos.z(), 1.523, award.get( awardSkillName ), awardSkillName );
                     XP.addWorldXpDrop( xpDrop, player );
                     Skill.addXp( awardSkillName, player, award.get( awardSkillName ), "crafting", false, false );
                 }

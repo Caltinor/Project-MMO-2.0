@@ -1,6 +1,5 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -15,32 +14,27 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.Map;
 
 public class DamageHandler
 {
-    public static double getEnduranceMultiplier( PlayerEntity player )
+    public static double getEnduranceMultiplier( Player player )
     {
         int enduranceLevel = Skill.getLevel( Skill.ENDURANCE.toString(), player );
         double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
@@ -52,7 +46,7 @@ public class DamageHandler
         return endurePercent;
     }
 
-    public static double getFallSaveChance(PlayerEntity player )
+    public static double getFallSaveChance(Player player )
     {
         int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
         double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
@@ -68,25 +62,25 @@ public class DamageHandler
             float damage = event.getAmount();
             float startDmg = damage;
             LivingEntity target = event.getEntityLiving();
-            Entity source = event.getSource().getTrueSource();
-            if( target instanceof ServerPlayerEntity )		//player hurt
+            Entity source = event.getSource().getEntity();
+            if( target instanceof ServerPlayer )		//player hurt
             {
-                boolean isFallDamage = event.getSource().getDamageType().equals( "fall" );
-                ServerPlayerEntity player = (ServerPlayerEntity) target;
-                ServerWorld world = player.getServerWorld();
+                boolean isFallDamage = event.getSource().getMsgId().equals( "fall" );
+                ServerPlayer player = (ServerPlayer) target;
+                ServerLevel world = player.getLevel();
 //                int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
 //                damage -= agilityLevel / 50;
                 double agilityXp = 0;
                 double enduranceXp;
                 boolean hideEndurance = false;
 ///////////////////////////////////////////////////////////////////////PARTY//////////////////////////////////////////////////////////////////////////////////////////
-                if( source instanceof ServerPlayerEntity && !(source instanceof FakePlayer) )
+                if( source instanceof ServerPlayer && !(source instanceof FakePlayer) )
                 {
-                    ServerPlayerEntity sourcePlayer = (ServerPlayerEntity) source;
-                    Party party = PmmoSavedData.get().getParty( player.getUniqueID() );
+                    ServerPlayer sourcePlayer = (ServerPlayer) source;
+                    Party party = PmmoSavedData.get().getParty( player.getUUID() );
                     if( party != null )
                     {
-                        PartyMemberInfo sourceMemberInfo = party.getMemberInfo( sourcePlayer.getUniqueID() );
+                        PartyMemberInfo sourceMemberInfo = party.getMemberInfo( sourcePlayer.getUUID() );
                         double friendlyFireMultiplier = Config.forgeConfig.partyFriendlyFireAmount.get() / 100D;
 
                         if( sourceMemberInfo != null )
@@ -115,7 +109,7 @@ public class DamageHandler
                     damage -= saved;
 
                     if( saved != 0 && player.getHealth() > damage )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.savedFall", saved ), true );
+                        player.displayClientMessage( new TranslatableComponent( "pmmo.savedFall", saved ), true );
 
                     award = saved * 5;
 
@@ -127,21 +121,21 @@ public class DamageHandler
                     if( agilityXp > 0 )
                         hideEndurance = true;
 
-                    Vector3d pos = player.getPositionVec();
+                    Vec3 pos = player.position();
 
-                    if( event.getSource().getTrueSource() != null )
-                        XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getTrueSource().getDisplayName().getString(), enduranceXp, hideEndurance, false, false );
+                    if( event.getSource().getEntity() != null )
+                        XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getEntity().getDisplayName().getString(), enduranceXp, hideEndurance, false, false );
                     else
-                        XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getDamageType(), enduranceXp, hideEndurance, false, false );
+                        XP.awardXp( player, Skill.ENDURANCE.toString(), event.getSource().getMsgId(), enduranceXp, hideEndurance, false, false );
                     if( enduranceXp > 0 )
                     {
-                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, enduranceXp, Skill.ENDURANCE.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.x(), pos.y() + player.getEyeHeight() + 0.523, pos.z(), 1.523, enduranceXp, Skill.ENDURANCE.toString() );
                         XP.addWorldXpDrop( xpDrop, player );
                     }
 
                     if( agilityXp > 0 )
                     {
-                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.getX(), pos.getY() + player.getEyeHeight() + 0.523, pos.getZ(), 1.523, agilityXp, Skill.AGILITY.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.x(), pos.y() + player.getEyeHeight() + 0.523, pos.z(), 1.523, agilityXp, Skill.AGILITY.toString() );
                         xpDrop.setSize( 1.523f );
                         XP.addWorldXpDrop( xpDrop, player );
                         XP.awardXp( player, Skill.AGILITY.toString(), "surviving " + startDmg + " fall damage", agilityXp, false, false, false );
@@ -151,22 +145,22 @@ public class DamageHandler
 
 ///////////////////////////////////////Attacking////////////////////////////////////////////////////////////
 
-            if ( target instanceof LivingEntity && event.getSource().getTrueSource() instanceof ServerPlayerEntity )
+            if ( target instanceof LivingEntity && event.getSource().getEntity() instanceof ServerPlayer )
             {
-                ServerPlayerEntity player = (ServerPlayerEntity) event.getSource().getTrueSource();
-                ServerWorld world = player.getServerWorld();
+                ServerPlayer player = (ServerPlayer) event.getSource().getEntity();
+                ServerLevel world = player.getLevel();
 
                 if( XP.isHoldingDebugItemInOffhand( player ) )
                 {
-                    player.sendStatusMessage( new StringTextComponent( "regName:" + target.getEntityString() ), false );
-                    player.sendStatusMessage( new StringTextComponent( "dmgType:" + event.getSource().damageType ), false );
+                    player.displayClientMessage( new TextComponent( "regName:" + target.getEncodeId() ), false );
+                    player.displayClientMessage( new TextComponent( "dmgType:" + event.getSource().msgId ), false );
                 }
 
                 if( XP.isPlayerSurvival( player ) )
                 {
-                    ItemStack mainItemStack = player.getHeldItemMainhand();
-                    ResourceLocation mainResLoc = player.getHeldItemMainhand().getItem().getRegistryName();
-                    ResourceLocation offResLoc = player.getHeldItemOffhand().getItem().getRegistryName();
+                    ItemStack mainItemStack = player.getMainHandItem();
+                    ResourceLocation mainResLoc = player.getMainHandItem().getItem().getRegistryName();
+                    ResourceLocation offResLoc = player.getOffhandItem().getItem().getRegistryName();
                     Map<String, Double> weaponReq = XP.getXpBypass( mainResLoc, JType.REQ_WEAPON );
                     NBTHelper.maxDoubleMaps( weaponReq, XP.getXpBypass( offResLoc, JType.REQ_WEAPON ) );
                     String skill;
@@ -177,12 +171,12 @@ public class DamageHandler
                         skill = itemSpecificSkill;
                     else
                     {
-                        if( event.getSource().damageType.equals( "arrow" ) )
+                        if( event.getSource().msgId.equals( "arrow" ) )
                             skill = Skill.ARCHERY.toString();
                         else
                         {
                             skill = Skill.COMBAT.toString();
-                            if( Util.getDistance( player.getPositionVec(), target.getPositionVec() ) > 4.20 + target.getWidth() + ( swordInMainHand ? 1.523 : 0 ) )
+                            if( Util.getDistance( player.position(), target.position() ) > 4.20 + target.getBbWidth() + ( swordInMainHand ? 1.523 : 0 ) )
                                 skill = Skill.MAGIC.toString(); //Magically far melee damage
                         }
                     }
@@ -194,12 +188,12 @@ public class DamageHandler
                         if( Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateWeaponReqDynamicallyEnabled" ) != 0 )
                             weaponReq.put( skill, weaponReq.getOrDefault( skill, AutoValues.getWeaponReqFromStack( mainItemStack ) ) );
                         weaponGap = XP.getSkillReqGap( player, weaponReq );
-                        int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
+                        int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getMainHandItem() ) );
                         int gap = Math.max( weaponGap, enchantGap );
                         if( gap > 0 )
                         {
                             if( enchantGap < gap )
-                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getHeldItemMainhand().getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
+                                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToUseAsWeapon", player.getMainHandItem().getDescriptionId(), "", true, 2 ), (ServerPlayer) player );
                             if( Config.forgeConfig.strictReqWeapon.get() )
                             {
                                 event.setCanceled( true );
@@ -219,15 +213,15 @@ public class DamageHandler
                     else if( skill.equals( Skill.GUNSLINGING.toString() ) )
                         damage *= 1 + Skill.getLevel( skill, player ) * Config.forgeConfig.damageBonusPercentPerLevelGunslinging.get();
 
-                    if( target.getEntityString() != null )
+                    if( target.getEncodeId() != null )
                     {
-                        killGap = Math.max( killGap, XP.getSkillReqGap( player, XP.getResLoc( target.getEntityString() ), JType.REQ_KILL ) );
+                        killGap = Math.max( killGap, XP.getSkillReqGap( player, XP.getResLoc( target.getEncodeId() ), JType.REQ_KILL ) );
                         if( killGap > 0 )
                         {
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-                            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToDamage", new TranslationTextComponent( target.getType().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                            player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToDamage", new TranslatableComponent( target.getType().getDescriptionId() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+                            player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToDamage", new TranslatableComponent( target.getType().getDescriptionId() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
-                            XP.sendPlayerSkillList( player, JsonConfig.data.get( JType.REQ_KILL ).get( target.getEntityString() ) );
+                            XP.sendPlayerSkillList( player, JsonConfig.data.get( JType.REQ_KILL ).get( target.getEncodeId() ) );
 
                             if( Config.forgeConfig.strictReqKill.get() )
                             {
@@ -260,7 +254,7 @@ public class DamageHandler
 //					player.setHealth( 1f );
 
                     //reduce xp if passive mob
-                    if( target instanceof AnimalEntity)
+                    if( target instanceof Animal)
                         amount /= 2;
                     else if( playerHealth <= 10 )   //increase xp if aggresive mob and player low on hp
                     {
@@ -268,7 +262,7 @@ public class DamageHandler
                         if( playerHealth <= 2 )
                             lowHpBonus += 1;
                     }
-                    double distance = Util.getHorizontalDistance( event.getEntity().getPositionVec(), player.getPositionVec() );
+                    double distance = Util.getHorizontalDistance( event.getEntity().position(), player.position() );
 
                     if( skill.equals( Skill.COMBAT.toString() ) )
                         amount *= lowHpBonus;
@@ -294,16 +288,16 @@ public class DamageHandler
                         amount *= lowHpBonus;
                     }
 
-                    Vector3d xpDropPos = target.getPositionVec();
-                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + target.getHeight(), xpDropPos.getZ(), target.getHeight(), amount, skill );
+                    Vec3 xpDropPos = target.position();
+                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.x(), xpDropPos.y() + target.getBbHeight(), xpDropPos.z(), target.getBbHeight(), amount, skill );
                     XP.addWorldXpDrop( xpDrop, player );
                     Map<String, Double> entityMap = XP.getXp( target, JType.XP_MULTIPLIER_ENTITY );
                     if( entityMap.containsKey( skill ) )
                         amount *= entityMap.get( skill );
-                    XP.awardXp( player, skill, player.getHeldItemMainhand().getDisplayName().toString(), amount, false, false, false );
+                    XP.awardXp( player, skill, player.getMainHandItem().getHoverName().toString(), amount, false, false, false );
 
                     if( weaponGap > 0 )
-                        player.getHeldItemMainhand().damageItem( weaponGap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
+                        player.getMainHandItem().hurtAndBreak( weaponGap - 1, player, (a) -> a.broadcastBreakEvent(InteractionHand.MAIN_HAND ) );
                 }
             }
             event.setAmount( damage );

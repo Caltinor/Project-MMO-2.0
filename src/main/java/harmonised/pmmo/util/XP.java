@@ -25,41 +25,52 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.CheeseTracker;
 import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.*;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.*;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+//import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import javax.annotation.Nullable;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class XP
 {
@@ -67,38 +78,38 @@ public class XP
 
 	private static final Map<Material, String> materialHarvestTool = new HashMap<Material, String>()
 	{{
-		put( Material.ANVIL, "pickaxe" );		//PICKAXE
+		put( Material.HEAVY_METAL, "pickaxe" );		//PICKAXE
 		put( Material.GLASS, "pickaxe" );
 		put( Material.ICE, "pickaxe" );
-		put( Material.IRON, "pickaxe" );
-		put( Material.PACKED_ICE, "pickaxe" );
+		put( Material.METAL, "pickaxe" );
+		put( Material.ICE_SOLID, "pickaxe" );
 		put( Material.PISTON, "pickaxe" );
-		put( Material.REDSTONE_LIGHT, "pickaxe" );
-		put( Material.ROCK, "pickaxe" );
-		put( Material.SHULKER, "pickaxe" );
+		put( Material.BUILDABLE_GLASS, "pickaxe" );
+		put( Material.STONE, "pickaxe" );
+		put( Material.SHULKER_SHELL, "pickaxe" );
 		put( Material.BARRIER, "pickaxe" );
-		put( Material.MISCELLANEOUS, "pickaxe" );
+		put( Material.DECORATION, "pickaxe" );
 		put( Material.WOOD, "axe" );			//AXE
 		put( Material.LEAVES, "axe" );
-		put( Material.GOURD, "axe" );
+		put( Material.VEGETABLE, "axe" );
 		put( Material.CLAY, "shovel" );			//SHOVEL
-		put( Material.EARTH, "shovel" );
+		put( Material.DIRT, "shovel" );
 		put( Material.SAND, "shovel" );
+		put( Material.TOP_SNOW, "shovel" );
+		put( Material.REPLACEABLE_WATER_PLANT, "shovel" );
 		put( Material.SNOW, "shovel" );
-		put( Material.SEA_GRASS, "shovel" );
-		put( Material.SNOW_BLOCK, "shovel" );
-		put( Material.PLANTS, "hoe" );			//HOE
-		put( Material.OCEAN_PLANT, "hoe" );
+		put( Material.PLANT, "hoe" );			//HOE
+		put( Material.WATER_PLANT, "hoe" );
 		put( Material.CACTUS, "hoe" );
 		put( Material.CORAL, "hoe" );
-		put( Material.TALL_PLANTS, "hoe" );
+		put( Material.REPLACEABLE_PLANT, "hoe" );
 		put( Material.BAMBOO, "hoe" );
 		put( Material.BAMBOO_SAPLING, "hoe" );
-		put( Material.ORGANIC, "hoe" );
+		put( Material.GRASS, "hoe" );
 		put( Material.WOOL, "shears" );			//SHEARS (Crafting)
-		put( Material.CARPET, "shears" );
-		put( Material.TNT, "shears" );
-		put( Material.DRAGON_EGG, "shears" );
+		put( Material.CLOTH_DECORATION, "shears" );
+		put( Material.EXPLOSIVE, "shears" );
+		put( Material.EGG, "shears" );
 		put( Material.WEB, "shears" );
 		put( Material.CAKE, "shears" );
 		put( Material.SPONGE, "shears" );
@@ -106,16 +117,16 @@ public class XP
 	public static Set<UUID> isVeining = new HashSet<>();
 	public static Map<String, Style> textStyle = new HashMap<String, Style>()
 	{{
-		put( "red", 		Style.EMPTY.applyFormatting( TextFormatting.RED ) );
-		put( "green", 		Style.EMPTY.applyFormatting( TextFormatting.GREEN ) );
-		put( "dark_green", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_GREEN ) );
-		put( "yellow", 		Style.EMPTY.applyFormatting( TextFormatting.YELLOW ) );
-		put( "grey", 		Style.EMPTY.applyFormatting( TextFormatting.GRAY ) );
-		put( "cyan", 		Style.EMPTY.applyFormatting( TextFormatting.AQUA ) );
-		put( "blue", 		Style.EMPTY.applyFormatting( TextFormatting.BLUE ) );
-		put( "dark_blue", 	Style.EMPTY.applyFormatting( TextFormatting.DARK_BLUE ) );
-		put( "pink", 		Style.EMPTY.applyFormatting( TextFormatting.LIGHT_PURPLE ) );
-		put( "dark_purple", Style.EMPTY.applyFormatting( TextFormatting.DARK_PURPLE ) );
+		put( "red", 		Style.EMPTY.applyFormat( ChatFormatting.RED ) );
+		put( "green", 		Style.EMPTY.applyFormat( ChatFormatting.GREEN ) );
+		put( "dark_green", 	Style.EMPTY.applyFormat( ChatFormatting.DARK_GREEN ) );
+		put( "yellow", 		Style.EMPTY.applyFormat( ChatFormatting.YELLOW ) );
+		put( "grey", 		Style.EMPTY.applyFormat( ChatFormatting.GRAY ) );
+		put( "cyan", 		Style.EMPTY.applyFormat( ChatFormatting.AQUA ) );
+		put( "blue", 		Style.EMPTY.applyFormat( ChatFormatting.BLUE ) );
+		put( "dark_blue", 	Style.EMPTY.applyFormat( ChatFormatting.DARK_BLUE ) );
+		put( "pink", 		Style.EMPTY.applyFormat( ChatFormatting.LIGHT_PURPLE ) );
+		put( "dark_purple", Style.EMPTY.applyFormat( ChatFormatting.DARK_PURPLE ) );
 	}};
 	public static Map<UUID, String> playerNames = new HashMap<>();
 	public static Map<String, UUID> playerUUIDs = new HashMap<>();
@@ -125,7 +136,7 @@ public class XP
 
 	public static Style getColorStyle( int color )
 	{
-		return Style.EMPTY.setColor( Color.fromInt( color ) );
+		return Style.EMPTY.withColor( TextColor.fromRgb( color ) );
 	}
 
 	public static void initValues()
@@ -182,7 +193,7 @@ public class XP
 		}
 	}
 
-	public static Map<String, Double> getXp( TileEntity tile, JType jType )
+	public static Map<String, Double> getXp( BlockEntity tile, JType jType )
 	{
 		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
 		
@@ -239,22 +250,22 @@ public class XP
 		return new HashMap<>( JsonConfig.data.get( jType ).getOrDefault( registryName, new HashMap<>() ) );
 	}
 
-	public static ResourceLocation getBiomeResLoc( World world, Biome biome )
+	public static ResourceLocation getBiomeResLoc( Level world, Biome biome )
 	{
-		return world.func_241828_r().func_230521_a_( Registry.BIOME_KEY ).get().getKey( biome );
+		return world.registryAccess().registry( Registry.BIOME_REGISTRY ).get().getKey( biome );
 	}
 
-	public static ResourceLocation getBiomeResLoc( World world, BlockPos pos )
+	public static ResourceLocation getBiomeResLoc( Level world, BlockPos pos )
 	{
-		return world.func_242406_i( pos ).get().getRegistryName();
+		return world.getBiomeName( pos ).get().getRegistryName();
 	}
 
-	public static ResourceLocation getDimResLoc( World world )
+	public static ResourceLocation getDimResLoc( Level world )
 	{
-		return world.getDimensionKey().getLocation();
+		return world.dimension().location();
 //		ResourceLocation dimResLoc = world.getDimensionKey().getLocation();
 //		if( dimResLoc.toString().equals( "minecraft:dimension" ) )
-//			return world.func_241828_r().func_230520_a_().getKey( world.getDimensionType() );
+//			return world.registryAccess().dimensionTypes().getKey( world.getDimensionType() );
 //		else
 //			return dimResLoc;
 	}
@@ -297,19 +308,19 @@ public class XP
 	{
 		if( material.equals( Material.AIR ) )
 			return "AIR";
-		else if( material.equals( Material.STRUCTURE_VOID ) )
+		else if( material.equals( Material.STRUCTURAL_AIR ) )
 			return "STRUCTURE_VOID";
 		else if( material.equals( Material.PORTAL ) )
 			return "PORTAL";
-		else if( material.equals( Material.CARPET ) )
+		else if( material.equals( Material.CLOTH_DECORATION ) )
 			return "CARPET";
-		else if( material.equals( Material.PLANTS ) )
+		else if( material.equals( Material.PLANT ) )
 			return "PLANTS";
-		else if( material.equals( Material.OCEAN_PLANT ) )
+		else if( material.equals( Material.WATER_PLANT ) )
 			return "OCEAN_PLANT";
-		else if( material.equals( Material.TALL_PLANTS ) )
+		else if( material.equals( Material.REPLACEABLE_PLANT ) )
 			return "TALL_PLANTS";
-		else if( material.equals( Material.SEA_GRASS ) )
+		else if( material.equals( Material.REPLACEABLE_WATER_PLANT ) )
 			return "SEA_GRASS";
 		else if( material.equals( Material.WATER ) )
 			return "WATER";
@@ -317,29 +328,29 @@ public class XP
 			return "BUBBLE_COLUMN";
 		else if( material.equals( Material.LAVA ) )
 			return "LAVA";
-		else if( material.equals( Material.SNOW ) )
+		else if( material.equals( Material.TOP_SNOW ) )
 			return "SNOW";
 		else if( material.equals( Material.FIRE ) )
 			return "FIRE";
-		else if( material.equals( Material.MISCELLANEOUS ) )
+		else if( material.equals( Material.DECORATION ) )
 			return "MISCELLANEOUS";
 		else if( material.equals( Material.WEB ) )
 			return "WEB";
-		else if( material.equals( Material.REDSTONE_LIGHT ) )
+		else if( material.equals( Material.BUILDABLE_GLASS ) )
 			return "REDSTONE_LIGHT";
 		else if( material.equals( Material.CLAY ) )
 			return "CLAY";
-		else if( material.equals( Material.EARTH ) )
+		else if( material.equals( Material.DIRT ) )
 			return "EARTH";
-		else if( material.equals( Material.ORGANIC ) )
+		else if( material.equals( Material.GRASS ) )
 			return "ORGANIC";
-		else if( material.equals( Material.PACKED_ICE ) )
+		else if( material.equals( Material.ICE_SOLID ) )
 			return "PACKED_ICE";
 		else if( material.equals( Material.SAND ) )
 			return "SAND";
 		else if( material.equals( Material.SPONGE ) )
 			return "SPONGE";
-		else if( material.equals( Material.SHULKER ) )
+		else if( material.equals( Material.SHULKER_SHELL ) )
 			return "SHULKER";
 		else if( material.equals( Material.WOOD ) )
 			return "WOOD";
@@ -349,7 +360,7 @@ public class XP
 			return "BAMBOO";
 		else if( material.equals( Material.WOOL ) )
 			return "WOOL";
-		else if( material.equals( Material.TNT ) )
+		else if( material.equals( Material.EXPLOSIVE ) )
 			return "TNT";
 		else if( material.equals( Material.LEAVES ) )
 			return "LEAVES";
@@ -359,13 +370,13 @@ public class XP
 			return "ICE";
 		else if( material.equals( Material.CACTUS ) )
 			return "CACTUS";
-		else if( material.equals( Material.ROCK ) )
+		else if( material.equals( Material.STONE ) )
 			return "ROCK";
-		else if( material.equals( Material.IRON ) )
+		else if( material.equals( Material.METAL ) )
 			return "IRON";
-		else if( material.equals( Material.SNOW_BLOCK ) )
+		else if( material.equals( Material.SNOW ) )
 			return "SNOW_BLOCK";
-		else if( material.equals( Material.ANVIL ) )
+		else if( material.equals( Material.HEAVY_METAL ) )
 			return "ANVIL";
 		else if( material.equals( Material.BARRIER ) )
 			return "BARRIER";
@@ -373,9 +384,9 @@ public class XP
 			return "PISTON";
 		else if( material.equals( Material.CORAL ) )
 			return "CORAL";
-		else if( material.equals( Material.GOURD ) )
+		else if( material.equals( Material.VEGETABLE ) )
 			return "GOURD";
-		else if( material.equals( Material.DRAGON_EGG ) )
+		else if( material.equals( Material.EGG ) )
 			return "DRAGON_EGG";
 		else if( material.equals( Material.CAKE ) )
 			return "CAKE";
@@ -383,14 +394,14 @@ public class XP
 			return "UNKNOWN";
 	}
 
-	public static void sendMessage( String msg, boolean bar, PlayerEntity player )
+	public static void sendMessage( String msg, boolean bar, Player player )
 	{
-		player.sendStatusMessage( new StringTextComponent( msg ), bar );
+		player.displayClientMessage( new TextComponent( msg ), bar );
 	}
 
-	public static void sendMessage( String msg, boolean bar, PlayerEntity player, TextFormatting format )
+	public static void sendMessage( String msg, boolean bar, Player player, ChatFormatting format )
 	{
-		player.sendStatusMessage( new StringTextComponent( msg ).setStyle( Style.EMPTY.applyFormatting( format ) ), bar );
+		player.displayClientMessage( new TextComponent( msg ).setStyle( Style.EMPTY.applyFormat( format ) ), bar );
 	}
 
 	public static <T> Map<T, Double> addMapsAnyDouble(Map<T, Double> mapOne, Map<T, Double> mapTwo )
@@ -487,30 +498,30 @@ public class XP
 		return Math.random() < extraChance;
 	}
 
-	public static void dropItems(int dropsLeft, Item item, World world, BlockPos pos)
+	public static void dropItems(int dropsLeft, Item item, Level world, BlockPos pos)
 	{
 		if( dropsLeft > 0 )
 		{
 			while( dropsLeft > 64 )
 			{
-				Block.spawnAsEntity( world, pos, new ItemStack( item, 64 ) );
+				Block.popResource( world, pos, new ItemStack( item, 64 ) );
 				dropsLeft -= 64;
 			}
-			Block.spawnAsEntity( world, pos, new ItemStack( item, dropsLeft ) );
+			Block.popResource( world, pos, new ItemStack( item, dropsLeft ) );
 		}
 	}
 
-	public static void dropItemStack( ItemStack itemStack, World world, Vector3d pos )
+	public static void dropItemStack( ItemStack itemStack, Level world, Vec3 pos )
 	{
 		dropItemStack( itemStack, world, new BlockPos( pos ) );
 	}
 
-	public static void dropItemStack( ItemStack itemStack, World world, BlockPos pos )
+	public static void dropItemStack( ItemStack itemStack, Level world, BlockPos pos )
 	{
-		Block.spawnAsEntity( world, pos, itemStack );
+		Block.popResource( world, pos, itemStack );
 	}
 
-	public static boolean isPlayerSurvival( PlayerEntity player )
+	public static boolean isPlayerSurvival( Player player )
 	{
 		if( player.isCreative() || player.isSpectator() )
 			return false;
@@ -518,18 +529,18 @@ public class XP
 			return true;
 	}
 
-	public static Collection<PlayerEntity> getNearbyPlayers( Entity mob )
+	public static Collection<Player> getNearbyPlayers( Entity mob )
 	{
-		World world = mob.getEntityWorld();
-		List<? extends PlayerEntity> allPlayers = world.getPlayers();
-		Collection<PlayerEntity> nearbyPlayers = new ArrayList<>();
+		Level world = mob.getCommandSenderWorld();
+		List<? extends Player> allPlayers = world.players();
+		Collection<Player> nearbyPlayers = new ArrayList<>();
 
 		Float closestDistance = null;
 		float tempDistance;
 
-		for( PlayerEntity player : allPlayers )
+		for( Player player : allPlayers )
 		{
-			tempDistance = mob.getDistance( player );
+			tempDistance = mob.distanceTo( player );
 			if( closestDistance == null || tempDistance < closestDistance )
 				closestDistance = tempDistance;
 		}
@@ -538,9 +549,9 @@ public class XP
 		{
 			float searchRange = closestDistance + 30;
 
-			for( PlayerEntity player : allPlayers )
+			for( Player player : allPlayers )
 			{
-				if( mob.getDistance( player ) < searchRange )
+				if( mob.distanceTo( player ) < searchRange )
 					nearbyPlayers.add( player );
 			}
 		}
@@ -568,18 +579,18 @@ public class XP
 		return ( enduranceLevel + (maxOffensive * 1.5f) ) / 50;
     }
 
-	public static ServerPlayerEntity getPlayerByUUID( UUID uuid )
+	public static ServerPlayer getPlayerByUUID( UUID uuid )
 	{
 		return getPlayerByUUID( uuid, PmmoSavedData.getServer() );
 	}
 
-	public static ServerPlayerEntity getPlayerByUUID( UUID uuid, MinecraftServer server )
+	public static ServerPlayer getPlayerByUUID( UUID uuid, MinecraftServer server )
 	{
-		ServerPlayerEntity matchedPlayer = null;
+		ServerPlayer matchedPlayer = null;
 
-		for( ServerPlayerEntity player : server.getPlayerList().getPlayers() )
+		for( ServerPlayer player : server.getPlayerList().getPlayers() )
 		{
-			if( player.getUniqueID().equals( uuid ) )
+			if( player.getUUID().equals( uuid ) )
 			{
 				matchedPlayer = player;
 				break;
@@ -589,18 +600,18 @@ public class XP
 		return matchedPlayer;
 	}
 
-	public static double getDistance( Vector3d a, Vector3d b )
+	public static double getDistance( Vec3 a, Vec3 b )
 	{
-		return Math.sqrt( Math.pow( a.getX() - b.getX(), 2 ) + Math.pow( a.getY() - b.getY(), 2 ) + Math.pow( a.getZ() - b.getZ(), 2 ) );
+		return Math.sqrt( Math.pow( a.x() - b.x(), 2 ) + Math.pow( a.y() - b.y(), 2 ) + Math.pow( a.z() - b.z(), 2 ) );
 	}
 
-	public static <T extends Entity> Set<T> getEntitiesInRange( Vector3d origin, Set<T> entities, double range )
+	public static <T extends Entity> Set<T> getEntitiesInRange( Vec3 origin, Set<T> entities, double range )
 	{
 		Set<T> withinRange = new HashSet<>();
-		Vector3d pos;
+		Vec3 pos;
 		for( T entity : entities )
 		{
-			pos = entity.getPositionVec();
+			pos = entity.position();
 			double distance = getDistance( origin, pos );
 			if( distance <= range )
 				withinRange.add( entity );
@@ -609,55 +620,55 @@ public class XP
 		return withinRange;
 	}
 
-	public static void syncPlayerDataAndConfig( PlayerEntity player )
+	public static void syncPlayerDataAndConfig( Player player )
 	{
 		syncPlayerData3( player );
 		syncPlayerData4( player );
 		syncPlayerXpBoost( player );
 		syncPlayersSkills( player );
-		NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 1 ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 1 ), (ServerPlayer) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( Config.localConfig ), 2 ), (ServerPlayer) player );
 	}
 
-	public static void syncPlayersSkills( PlayerEntity player )
+	public static void syncPlayersSkills( Player player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.xpMapsToNbt( PmmoSavedData.get().getAllXpMaps() ), 3 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.xpMapsToNbt( PmmoSavedData.get().getAllXpMaps() ), 3 ), (ServerPlayer) player );
 	}
 
-	public static void syncPlayerXpBoost( PlayerEntity player )
+	public static void syncPlayerXpBoost( Player player )
 	{
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( APIUtils.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( APIUtils.getXpBoostsMap( player ) ), 6 ), (ServerPlayer) player );
 	}
 
 	public static void syncPlayerXpBoost( UUID uuid )
 	{
-		ServerPlayerEntity player = getPlayerByUUID( uuid, PmmoSavedData.getServer() );
+		ServerPlayer player = getPlayerByUUID( uuid, PmmoSavedData.getServer() );
 		if( player != null )
-			NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( APIUtils.getXpBoostsMap( player ) ), 6 ), (ServerPlayerEntity) player );
+			NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringMapStringToNbt( APIUtils.getXpBoostsMap( player ) ), 6 ), (ServerPlayer) player );
 	}
 
-	public static void syncPlayerData3( PlayerEntity player )
+	public static void syncPlayerData3( Player player )
 	{
-		CompoundNBT fullData = NBTHelper.data3ToNbt( JsonConfig.localData );
-		CompoundNBT dataChunk = new CompoundNBT();
+		CompoundTag fullData = NBTHelper.data3ToNbt( JsonConfig.localData );
+		CompoundTag dataChunk = new CompoundTag();
 		dataChunk.putBoolean( "wipe", true );
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayerEntity) player );
-		dataChunk = new CompoundNBT();
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayer) player );
+		dataChunk = new CompoundTag();
 
 		int i = 0;
-		for( String key3 : fullData.keySet() )
+		for( String key3 : fullData.getAllKeys() )
 		{
 			if( !dataChunk.contains( key3 ) )
-				dataChunk.put( key3, new CompoundNBT() );
+				dataChunk.put( key3, new CompoundTag() );
 
-			for( String key2 : fullData.getCompound( key3 ).keySet() )
+			for( String key2 : fullData.getCompound( key3 ).getAllKeys() )
 			{
 				if( i >= 1000 )	//if any single JType reaches 1000 Elements, send chunk reset count
 				{
 					i = 0;
-					NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayerEntity) player );
-					dataChunk = new CompoundNBT();
-					dataChunk.put( key3, new CompoundNBT() );
+					NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayer) player );
+					dataChunk = new CompoundTag();
+					dataChunk.put( key3, new CompoundTag() );
 				}
 
 				dataChunk.getCompound( key3 ).put( key2, fullData.getCompound( key3 ).getCompound( key2 ) );
@@ -665,37 +676,37 @@ public class XP
 			}
 		}
 
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 4 ), (ServerPlayer) player );
 	}
 
-	public static void syncPlayerData4( PlayerEntity player )
+	public static void syncPlayerData4( Player player )
 	{
-		CompoundNBT fullData = NBTHelper.data4ToNbt( JsonConfig.localData2 );
-		CompoundNBT dataChunk = new CompoundNBT();
+		CompoundTag fullData = NBTHelper.data4ToNbt( JsonConfig.localData2 );
+		CompoundTag dataChunk = new CompoundTag();
 		dataChunk.putBoolean( "wipe", true );
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayerEntity) player );
-		dataChunk = new CompoundNBT();
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayer) player );
+		dataChunk = new CompoundTag();
 
 		int i = 0;
-		for( String key4 : fullData.keySet() )
+		for( String key4 : fullData.getAllKeys() )
 		{
 			if( !dataChunk.contains( key4 ) )
-				dataChunk.put( key4, new CompoundNBT() );
+				dataChunk.put( key4, new CompoundTag() );
 
-			for( String key3 : fullData.getCompound( key4 ).keySet() )
+			for( String key3 : fullData.getCompound( key4 ).getAllKeys() )
 			{
 				if( !dataChunk.getCompound( key4 ).contains( key3 ) )
-					dataChunk.getCompound( key4 ).put( key3, new CompoundNBT() );
+					dataChunk.getCompound( key4 ).put( key3, new CompoundTag() );
 
-				for( String key2 : fullData.getCompound( key4 ).getCompound( key3 ).keySet() )
+				for( String key2 : fullData.getCompound( key4 ).getCompound( key3 ).getAllKeys() )
 				{
 					if( i >= 1000 )	//if any single JType reaches 1000 Elements, send chunk reset count
 					{
 						i = 0;
-						NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayerEntity) player );
-						dataChunk = new CompoundNBT();
-						dataChunk.put( key4, new CompoundNBT() );
-						dataChunk.getCompound( key4 ).put( key3, new CompoundNBT() );
+						NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayer) player );
+						dataChunk = new CompoundTag();
+						dataChunk.put( key4, new CompoundTag() );
+						dataChunk.getCompound( key4 ).put( key3, new CompoundTag() );
 					}
 
 					dataChunk.getCompound( key4 ).getCompound( key3 ).put( key2, fullData.getCompound( key4 ).getCompound( key3 ).getCompound( key2 ) );
@@ -704,27 +715,27 @@ public class XP
 			}
 		}
 
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayerEntity) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( dataChunk, 5 ), (ServerPlayer) player );
 	}
 
-	public static void syncPlayer( PlayerEntity player )
+	public static void syncPlayer( Player player )
     {
 //    	UUID uuid = player.getUniqueID();
 //        CompoundNBT xpTag 		 = NBTHelper.mapStringToNbt ( Config.getXpMap( player ) );
-        CompoundNBT prefsTag 	 = NBTHelper.mapStringToNbt( Config.getPreferencesMap( player ) );
-		CompoundNBT abilitiesTag = NBTHelper.mapStringToNbt( Config.getAbilitiesMap( player ) );
+        CompoundTag prefsTag 	 = NBTHelper.mapStringToNbt( Config.getPreferencesMap( player ) );
+		CompoundTag abilitiesTag = NBTHelper.mapStringToNbt( Config.getAbilitiesMap( player ) );
 
 		syncPlayerDataAndConfig( player );
-		updateRecipes( (ServerPlayerEntity) player );
+		updateRecipes( (ServerPlayer) player );
 
-        NetworkHandler.sendToPlayer( new MessageXp( 0f, "42069", 0f, true ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( prefsTag, 0 ), (ServerPlayerEntity) player );
-		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( abilitiesTag, 1 ), (ServerPlayerEntity) player );
+        NetworkHandler.sendToPlayer( new MessageXp( 0f, "42069", 0f, true ), (ServerPlayer) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( prefsTag, 0 ), (ServerPlayer) player );
+		NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( abilitiesTag, 1 ), (ServerPlayer) player );
 		AttributeHandler.updateAll( player );
 
         for( Map.Entry<String, Double> entry : Config.getXpMap( player ).entrySet() )
         {
-            NetworkHandler.sendToPlayer( new MessageXp( entry.getValue(), entry.getKey(), 0, true ), (ServerPlayerEntity) player );
+            NetworkHandler.sendToPlayer( new MessageXp( entry.getValue(), entry.getKey(), 0, true ), (ServerPlayer) player );
         }
     }
 
@@ -762,13 +773,13 @@ public class XP
 		return JsonConfig.data.getOrDefault( type, new HashMap<>() ).getOrDefault( registryName, new HashMap<>() );
 	}
 
-	public static boolean checkReq( PlayerEntity player, String res, JType jType )
+	public static boolean checkReq( Player player, String res, JType jType )
 	{
 		return checkReq( player, XP.getResLoc( res ), jType );
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static boolean checkReq( PlayerEntity player, TileEntity tile, JType jType )
+	public static boolean checkReq( Player player, BlockEntity tile, JType jType )
 	{
 		if( tile == null )
 			return true;
@@ -782,7 +793,7 @@ public class XP
 		return checkReq( player, getJsonMap( tile.getBlockState().getBlock().getRegistryName().toString(), jType ) );
 	}
 
-	public static boolean checkReq( PlayerEntity player, ResourceLocation res, JType jType )
+	public static boolean checkReq( Player player, ResourceLocation res, JType jType )
 	{
 		if( res == null )
 			return true;
@@ -796,15 +807,15 @@ public class XP
 		return checkReq( player, getJsonMap( res.toString(), jType ) );
 	}
 
-	public static boolean checkReq( PlayerEntity player, Map<String, Double> reqMap )
+	public static boolean checkReq( Player player, Map<String, Double> reqMap )
 	{
 		boolean failedReq = false;
 
 		try
 		{
-			if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).containsKey( player.getUniqueID().toString() ) )
+			if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).containsKey( player.getUUID().toString() ) )
 			{
-				if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).get( player.getUniqueID().toString() ).containsKey( "ignoreReq" ) )
+				if( JsonConfig.data.get( JType.PLAYER_SPECIFIC ).get( player.getUUID().toString() ).containsKey( "ignoreReq" ) )
 					return true;
 			}
 			double startLevel;
@@ -853,11 +864,11 @@ public class XP
 	{
 		Set<String> results = new HashSet<>();
 
-		for( ITag.INamedTag<Item> namedTag : ItemTags.getAllTags() )
+		for( Tag.Named<Item> namedTag : ItemTags.getWrappers() )
 		{
 			if( namedTag.getName().toString().startsWith( tag ) )
 			{
-				for( Item element : namedTag.getAllElements() )
+				for( Item element : namedTag.getValues() )
 				{
 					try
 					{
@@ -867,11 +878,11 @@ public class XP
 			}
 		}
 
-		for( ITag.INamedTag<Block> namedTag : BlockTags.getAllTags() )
+		for( Tag.Named<Block> namedTag : BlockTags.getWrappers() )
 		{
 			if( namedTag.getName().toString().equals( tag ) )
 			{
-				for( Block element : namedTag.getAllElements() )
+				for( Block element : namedTag.getValues() )
 				{
 					try
 					{
@@ -881,11 +892,11 @@ public class XP
 			}
 		}
 
-		for( ITag.INamedTag<Fluid> namedTag : FluidTags.getAllTags() )
+		for( Tag.Named<Fluid> namedTag : FluidTags.getWrappers() )
 		{
 			if( namedTag.getName().toString().equals( tag ) )
 			{
-				for( Fluid element : namedTag.getAllElements() )
+				for( Fluid element : namedTag.getValues() )
 				{
 					try
 					{
@@ -895,11 +906,11 @@ public class XP
 			}
 		}
 
-		for( ITag.INamedTag<EntityType<?>> namedTag : EntityTypeTags.getAllTags() )
+		for( Tag.Named<EntityType<?>> namedTag : EntityTypeTags.getWrappers() )
 		{
 			if( namedTag.getName().toString().equals( tag ) )
 			{
-				for( EntityType<?> element : namedTag.getAllElements() )
+				for( EntityType<?> element : namedTag.getValues() )
 				{
 					try
 					{
@@ -939,10 +950,10 @@ public class XP
 		return getItem( resLoc.toString() );
 	}
 
-	public static boolean scanBlock( Block block, int radius, PlayerEntity player )
+	public static boolean scanBlock( Block block, int radius, Player player )
 	{
 		Block currBlock;
-		BlockPos playerPos = vecToBlock( player.getPositionVec() );
+		BlockPos playerPos = vecToBlock( player.position() );
 		boolean matched = false;
 
 		for( int x = -radius; x <= radius; x++ )
@@ -951,7 +962,7 @@ public class XP
 			{
 				for( int z = -radius; z <= radius; z++ )
 				{
-					currBlock = player.world.getBlockState( new BlockPos( playerPos.getX() + x, playerPos.getY() + y, playerPos.getZ() + z ) ).getBlock();
+					currBlock = player.level.getBlockState( new BlockPos( playerPos.getX() + x, playerPos.getY() + y, playerPos.getZ() + z ) ).getBlock();
 					if( currBlock.equals( block ) )
 					{
 						matched = true;
@@ -1034,9 +1045,9 @@ public class XP
 	public static double getXpBoostDurabilityMultiplier( ItemStack itemStack )
 	{
 		double scale = 1;
-		if( itemStack.isDamageable() )
+		if( itemStack.isDamageableItem() )
 		{
-			double durabilityPercentage = 1 - itemStack.getDamage() / (double) itemStack.getMaxDamage();
+			double durabilityPercentage = 1 - itemStack.getDamageValue() / (double) itemStack.getMaxDamage();
 			double scaleStart = Config.getConfig( "scaleXpBoostByDurabilityStart" ) / 100D;
 			double scaleEnd = Math.max( scaleStart, Config.getConfig( "scaleXpBoostByDurabilityEnd" ) / 100D );
 			scale = Util.mapCapped( durabilityPercentage, scaleStart, scaleEnd, 0, 1 );
@@ -1057,7 +1068,7 @@ public class XP
 		return itemXpMap;
 	}
 
-	public static double getStackXpBoost(PlayerEntity player, ItemStack itemStack, String skill, boolean type /*false = worn, true = held*/ )
+	public static double getStackXpBoost(Player player, ItemStack itemStack, String skill, boolean type /*false = worn, true = held*/ )
 	{
 		if( itemStack == null || itemStack.isEmpty() )
 			return 0;
@@ -1076,7 +1087,7 @@ public class XP
 			if( type || checkReq( player, item.getRegistryName(), JType.REQ_WEAR ) )
 			{
 				boost = itemXpMap.get( skill );
-				if( Config.getConfig( "scaleXpBoostByDurability" ) != 0 && itemStack.isDamageable() )
+				if( Config.getConfig( "scaleXpBoostByDurability" ) != 0 && itemStack.isDamageableItem() )
 					boost *= getXpBoostDurabilityMultiplier( itemStack );
 			}
 		}
@@ -1089,11 +1100,11 @@ public class XP
 		return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill, 1D );
 	}
 
-	public static double getDimensionMultiplier( String skill, PlayerEntity player )
+	public static double getDimensionMultiplier( String skill, Player player )
 	{
 		try
 		{
-			String dimensionKey = XP.getDimResLoc( player.world ).toString();
+			String dimensionKey = XP.getDimResLoc( player.level ).toString();
 			return JsonConfig.data.get( JType.XP_MULTIPLIER_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill, 1D );
 		}
 		catch( Exception e )
@@ -1102,13 +1113,13 @@ public class XP
 		}
 	}
 
-	public static double getDifficultyMultiplier( PlayerEntity player, String skill )
+	public static double getDifficultyMultiplier( Player player, String skill )
 	{
 		double difficultyMultiplier = 1;
 
 		if( skill.equals( Skill.COMBAT.toString() ) || skill.equals( Skill.ARCHERY.toString() ) || skill.equals( Skill.GUNSLINGING.toString() ) || skill.equals( Skill.ENDURANCE.toString() ) )
 		{
-			switch( player.world.getDifficulty() )
+			switch( player.level.getDifficulty() )
 			{
 				case PEACEFUL:
 					difficultyMultiplier = Config.forgeConfig.peacefulMultiplier.get();
@@ -1134,17 +1145,17 @@ public class XP
 		return difficultyMultiplier;
 	}
 
-	public static double getItemBoost( PlayerEntity player, String skill )
+	public static double getItemBoost( Player player, String skill )
 	{
-		if( player.getHeldItemMainhand().getItem().getRegistryName() == null )
+		if( player.getMainHandItem().getItem().getRegistryName() == null )
 			return 0;
 
 		double itemBoost = 0;
 
 		skill = skill.toLowerCase();
-		PlayerInventory inv = player.inventory;
+		Inventory inv = player.getInventory();
 
-		if( Curios.isLoaded() )
+		/*if( Curios.isLoaded() )
 		{
 			Collection<ICurioStacksHandler> curiosItems = Curios.getCurios(player).collect( Collectors.toSet() );
 
@@ -1155,20 +1166,20 @@ public class XP
 					itemBoost += getStackXpBoost( player, value.getStacks().getStackInSlot(i), skill, false );
 				}
 			};
-		}
+		}*/
 
-		itemBoost += getStackXpBoost( player, player.getHeldItemMainhand(), skill, true );
+		itemBoost += getStackXpBoost( player, player.getMainHandItem(), skill, true );
 
-		if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 39 ), skill, false );
-		if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 38 ), skill, false );
-		if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 37 ), skill, false );
-		if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 36 ), skill, false );
-		if( !inv.getStackInSlot( 40 ).isEmpty() )	//Off-Hand
-			itemBoost += getStackXpBoost( player, inv.getStackInSlot( 40 ), skill, false );
+		if( !inv.getItem( 39 ).isEmpty() )	//Helm
+			itemBoost += getStackXpBoost( player, inv.getItem( 39 ), skill, false );
+		if( !inv.getItem( 38 ).isEmpty() )	//Chest
+			itemBoost += getStackXpBoost( player, inv.getItem( 38 ), skill, false );
+		if( !inv.getItem( 37 ).isEmpty() )	//Legs
+			itemBoost += getStackXpBoost( player, inv.getItem( 37 ), skill, false );
+		if( !inv.getItem( 36 ).isEmpty() )	//Boots
+			itemBoost += getStackXpBoost( player, inv.getItem( 36 ), skill, false );
+		if( !inv.getItem( 40 ).isEmpty() )	//Off-Hand
+			itemBoost += getStackXpBoost( player, inv.getItem( 40 ), skill, false );
 
 		return itemBoost;
 	}
@@ -1178,11 +1189,11 @@ public class XP
 		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimKey, new HashMap<>() );
 	}
 
-	public static double getDimensionBoost( PlayerEntity player, String skill )
+	public static double getDimensionBoost( Player player, String skill )
 	{
 		try
 		{
-			String dimensionKey = XP.getDimResLoc( player.world ).toString();
+			String dimensionKey = XP.getDimResLoc( player.level ).toString();
 			return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( dimensionKey, new HashMap<>() ).getOrDefault( skill, 0D );
 		}
 		catch( NullPointerException e )
@@ -1196,20 +1207,20 @@ public class XP
 		return JsonConfig.data.get( JType.XP_BONUS_DIMENSION ).getOrDefault( "all_dimensions", new HashMap<>() ).getOrDefault( skill, 0D );
 	}
 
-	public static CompoundNBT writeUniqueId( UUID uuid )
+	public static CompoundTag writeUniqueId( UUID uuid )
 	{
-		CompoundNBT compoundnbt = new CompoundNBT();
+		CompoundTag compoundnbt = new CompoundTag();
 		compoundnbt.putLong("M", uuid.getMostSignificantBits());
 		compoundnbt.putLong("L", uuid.getLeastSignificantBits());
 		return compoundnbt;
 	}
 
-	public static Map<String, Double> getBiomeBoosts( PlayerEntity player )
+	public static Map<String, Double> getBiomeBoosts( Player player )
 	{
 		Map<String, Double> biomeBoosts = new HashMap<>();
 		double biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
 
-		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
+		Biome biome = player.level.getBiome( vecToBlock( player.position() ) );
 		ResourceLocation resLoc = biome.getRegistryName();
 		if( resLoc == null )
 			return new HashMap<>();
@@ -1228,7 +1239,7 @@ public class XP
 		return biomeBoosts;
 	}
 
-	public static double getMultiplier( PlayerEntity player, String skill )
+	public static double getMultiplier( Player player, String skill )
 	{
 		double multiplier = Config.forgeConfig.globalMultiplier.get();
 
@@ -1240,7 +1251,7 @@ public class XP
 		double itemBoost = getItemBoost( player, skill );
 		double biomeBoost = getBiomeBoosts( player ).getOrDefault( skill, 0D );
 		double dimensionBoost = getDimensionBoost( player, skill );
-		double playerBoost = PmmoSavedData.get().getPlayerXpBoost( player.getUniqueID(), skill );
+		double playerBoost = PmmoSavedData.get().getPlayerXpBoost( player.getUUID(), skill );
 
 		double additiveMultiplier = 1 + (itemBoost + biomeBoost + dimensionBoost + globalBoost + playerBoost ) / 100;
 
@@ -1248,17 +1259,17 @@ public class XP
 		multiplier *= dimensionMultiplier;
 		multiplier *= difficultyMultiplier;
 		multiplier *= additiveMultiplier;
-		multiplier *= CheeseTracker.getLazyMultiplier( player.getUniqueID(), skill );
+		multiplier *= CheeseTracker.getLazyMultiplier( player.getUUID(), skill );
 
 		return Math.max( 0, multiplier );
 	}
 
-	public static double getHorizontalDistance( Vector3d p1, Vector3d p2 )
+	public static double getHorizontalDistance( Vec3 p1, Vec3 p2 )
 	{
-		return Math.sqrt( Math.pow( ( p1.getX() - p2.getX() ), 2 ) + Math.pow( ( p1.getZ() - p2.getZ() ), 2 ) );
+		return Math.sqrt( Math.pow( ( p1.x() - p2.x() ), 2 ) + Math.pow( ( p1.z() - p2.z() ), 2 ) );
 	}
 
-	public static void awardXp( ServerPlayerEntity player, String skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
+	public static void awardXp( ServerPlayer player, String skill, @Nullable String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
 	{
 //		if( !(player instanceof ServerPlayerEntity) )
 //		{
@@ -1266,11 +1277,11 @@ public class XP
 //			return;
 //		}
 
-		if( player.world.isRemote || Double.isNaN( amount ) || player instanceof FakePlayer )
+		if( player.level.isClientSide || Double.isNaN( amount ) || player instanceof FakePlayer )
 			return;
 
 		PmmoSavedData pmmoSavedData = PmmoSavedData.get();
-		UUID uuid = player.getUniqueID();
+		UUID uuid = player.getUUID();
 
 		XpEvent xpEvent = new XpEvent( player, skill, sourceName, amount, skip, ignoreBonuses, causedByParty );
 		if( MinecraftForge.EVENT_BUS.post( xpEvent ) )
@@ -1298,13 +1309,13 @@ public class XP
 			Party party = pmmoSavedData.getParty( uuid );
 			if( party != null )
 			{
-				Set<ServerPlayerEntity> membersInRange = party.getOnlineMembersInRange( player );
+				Set<ServerPlayer> membersInRange = party.getOnlineMembersInRange( player );
 				int membersInRangeSize = membersInRange.size();
 				double partyMultiplier = party.getMultiplier( membersInRangeSize );
 				amount *= partyMultiplier;
 				party.submitXpGained( uuid, amount );
 				amount /= membersInRangeSize + 1D;
-				for( ServerPlayerEntity partyMember : membersInRange )
+				for( ServerPlayer partyMember : membersInRange )
 				{
 					awardXp( partyMember, skill, sourceName, amount, true, ignoreBonuses, true );
 				}
@@ -1355,7 +1366,7 @@ public class XP
 						String command = entry.getKey().replace( ">player<", playerName ).replace( ">level<", "" + commandLevel );
 						try
 						{
-							player.getServer().getCommandManager().getDispatcher().execute( command, player.getServer().getCommandSource() );
+							player.getServer().getCommands().getDispatcher().execute( command, player.getServer().createCommandSourceStack() );
 							LOGGER.info( "Executing command \"" + command + "\"\nTrigger: " + playerName + " level up from " + startLevel + " to " + currLevel + " in " + skill + ", trigger level " + commandLevel );
 						}
 						catch( CommandSyntaxException e )
@@ -1373,7 +1384,7 @@ public class XP
 
 		if( startXp + amount >= maxXp && startXp < maxXp )
 		{
-			sendMessage( skill + " max startLevel reached, you psycho!", false, player, TextFormatting.LIGHT_PURPLE );
+			sendMessage( skill + " max startLevel reached, you psycho!", false, player, ChatFormatting.LIGHT_PURPLE );
 			LOGGER.info( playerName + " " + skill + " max startLevel reached" );
 		}
 	}
@@ -1400,24 +1411,24 @@ public class XP
 		}
 	}
 
-	public static void updateRecipes( ServerPlayerEntity player )
+	public static void updateRecipes( ServerPlayer player )
 	{
 		if( Config.forgeConfig.craftReqEnabled.get() )
 		{
-			Collection<IRecipe<?>> allRecipes = player.getServer().getRecipeManager().getRecipes();
-			Collection<IRecipe<?>> removeRecipes = new HashSet<>();
-			Collection<IRecipe<?>> newRecipes = new HashSet<>();
+			Collection<Recipe<?>> allRecipes = player.getServer().getRecipeManager().getRecipes();
+			Collection<Recipe<?>> removeRecipes = new HashSet<>();
+			Collection<Recipe<?>> newRecipes = new HashSet<>();
 
-			for( IRecipe<?> recipe : allRecipes )
+			for( Recipe<?> recipe : allRecipes )
 			{
-				if( XP.checkReq( player, recipe.getRecipeOutput().getItem().getRegistryName(), JType.REQ_CRAFT ) )
+				if( XP.checkReq( player, recipe.getResultItem().getItem().getRegistryName(), JType.REQ_CRAFT ) )
 					newRecipes.add( recipe );
 				else
 					removeRecipes.add( recipe );
 			}
 
-			player.getRecipeBook().remove( removeRecipes, player );
-			player.getRecipeBook().add( newRecipes, player );
+			player.getRecipeBook().removeRecipes( removeRecipes, player );
+			player.getRecipeBook().addRecipes( newRecipes, player );
 		}
 	}
 
@@ -1431,7 +1442,7 @@ public class XP
 		return a - b;
 	}*/
 
-	public static int getSkillReqGap( PlayerEntity player, ResourceLocation res, JType jType )
+	public static int getSkillReqGap( Player player, ResourceLocation res, JType jType )
 	{
 		Map<String, Double> reqs = getJsonMap( res.toString(), jType );
 
@@ -1441,7 +1452,7 @@ public class XP
 		return getSkillReqGap( player, reqs );
 	}
 
-	public static int getSkillReqGap(PlayerEntity player, Map<String, Double> reqs )
+	public static int getSkillReqGap(Player player, Map<String, Double> reqs )
 	{
 		int gap = 0;
 		if( !checkReq( player, reqs ) )
@@ -1456,32 +1467,32 @@ public class XP
 		return gap;
 	}
 
-	public static BlockPos vecToBlock( Vector3d pos )
+	public static BlockPos vecToBlock( Vec3 pos )
 	{
 		return new BlockPos( pos );
 	}
 
-	public static Vector3d blockToVec( BlockPos pos )
+	public static Vec3 blockToVec( BlockPos pos )
 	{
-		return new Vector3d( pos.getX(), pos.getY(), pos.getZ() );
+		return new Vec3( pos.getX(), pos.getY(), pos.getZ() );
 	}
 
-	public static Vector3d blockToMiddleVec( BlockPos pos )
+	public static Vec3 blockToMiddleVec( BlockPos pos )
 	{
-		return new Vector3d( pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D );
+		return new Vec3( pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D );
 	}
 
-	public static void spawnRocket( World world, BlockPos pos, String skill, @Nullable WorldText explosionText )
+	public static void spawnRocket( Level world, BlockPos pos, String skill, @Nullable WorldText explosionText )
 	{
-		spawnRocket( world, new Vector3d( pos.getX(), pos.getY(), pos.getZ() ), skill, explosionText );
+		spawnRocket( world, new Vec3( pos.getX(), pos.getY(), pos.getZ() ), skill, explosionText );
 	}
 
-	public static void spawnRocket( World world, Vector3d pos, String skill, @Nullable WorldText explosionText )
+	public static void spawnRocket( Level world, Vec3 pos, String skill, @Nullable WorldText explosionText )
 	{
-		CompoundNBT nbt = new CompoundNBT();
-		CompoundNBT fw = new CompoundNBT();
-		ListNBT explosion = new ListNBT();
-		CompoundNBT l = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
+		CompoundTag fw = new CompoundTag();
+		ListTag explosion = new ListTag();
+		CompoundTag l = new CompoundTag();
 
 		int[] colors = new int[1];
 		colors[0] = Skill.getSkillColor( skill );
@@ -1490,7 +1501,7 @@ public class XP
 		l.putInt( "Flicker", 1 );
 		l.putInt( "Trail", 0 );
 		l.putInt( "Type", 1 );
-		l.put( "Colors", new IntArrayNBT( colors ) );
+		l.put( "Colors", new IntArrayTag( colors ) );
 //		l.put( "FadeColors", new IntArrayNBT( fadeColors ) );
 		explosion.add(l);
 
@@ -1501,10 +1512,10 @@ public class XP
 		ItemStack itemStack = new ItemStack( Items.FIREWORK_ROCKET );
 		itemStack.setTag( nbt );
 
-		PMMOFireworkEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, itemStack );
+		PMMOFireworkEntity fireworkRocketEntity = new PMMOFireworkEntity( world, pos.x() + 0.5D, pos.y() + 0.5D, pos.z() + 0.5D, itemStack );
 		if( explosionText != null )
 			fireworkRocketEntity.setExplosionText( explosionText );
-		world.addEntity( fireworkRocketEntity );
+		world.addFreshEntity( fireworkRocketEntity );
 	}
 
 	public static <T> Map<T, Double> ceilMapAnyDouble( Map<T, Double> input )
@@ -1596,7 +1607,7 @@ public class XP
 		return reqs;
 	}
 
-	public static void applyWornPenalty( PlayerEntity player, ItemStack itemStack )
+	public static void applyWornPenalty( Player player, ItemStack itemStack )
 	{
 		if( Config.getConfig( "wearReqEnabled" ) == 0 )
 			return;
@@ -1613,26 +1624,26 @@ public class XP
 			if( gap > 9 )
 				gap = 9;
 
-			player.addPotionEffect( new EffectInstance( Effects.MINING_FATIGUE, 75, gap, false, true ) );
-			player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
-			player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
+			player.addEffect( new MobEffectInstance( MobEffects.DIG_SLOWDOWN, 75, gap, false, true ) );
+			player.addEffect( new MobEffectInstance( MobEffects.WEAKNESS, 75, gap, false, true ) );
+			player.addEffect( new MobEffectInstance( MobEffects.MOVEMENT_SLOWDOWN, 75, gap, false, true ) );
 
 			if( Config.forgeConfig.strictReqWear.get() || EnchantmentHelper.hasBindingCurse( itemStack ) )
 			{
 				ItemStack droppedItemStack = itemStack.copy();
-				player.dropItem( droppedItemStack, false, false );
+				player.drop( droppedItemStack, false, false );
 				itemStack.setCount( 0 );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.gotTooHotDroppedItem", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.gotTooHotDroppedItem", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+				player.displayClientMessage( new TranslatableComponent( "pmmo.gotTooHotDroppedItem", new TranslatableComponent( droppedItemStack.getItem().getDescriptionId() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.displayClientMessage( new TranslatableComponent( "pmmo.gotTooHotDroppedItem", new TranslatableComponent( droppedItemStack.getItem().getDescriptionId() ) ).setStyle( textStyle.get( "red" ) ), false );
 			}
 			else
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToWear", new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+				player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToWear", new TranslatableComponent( itemStack.getItem().getDescriptionId() ) ).setStyle( textStyle.get( "red" ) ), true );
 		}
 
 		applyEnchantmentUsePenalty( player, itemStack );
 	}
 
-	public static void applyEnchantmentUsePenalty( PlayerEntity player, ItemStack itemStack )
+	public static void applyEnchantmentUsePenalty( Player player, ItemStack itemStack )
 	{
 		if( Config.getConfig( "enchantUseReqEnabled" ) == 0 )
 			return;
@@ -1649,32 +1660,32 @@ public class XP
 				if( gap > 9 )
 					gap = 9;
 
-				player.addPotionEffect( new EffectInstance( Effects.MINING_FATIGUE, 75, gap, false, true ) );
-				player.addPotionEffect( new EffectInstance( Effects.WEAKNESS, 75, gap, false, true ) );
-				player.addPotionEffect( new EffectInstance( Effects.SLOWNESS, 75, gap, false, true ) );
+				player.addEffect( new MobEffectInstance( MobEffects.DIG_SLOWDOWN, 75, gap, false, true ) );
+				player.addEffect( new MobEffectInstance( MobEffects.WEAKNESS, 75, gap, false, true ) );
+				player.addEffect( new MobEffectInstance( MobEffects.MOVEMENT_SLOWDOWN, 75, gap, false, true ) );
 
 				if( Config.forgeConfig.strictReqUseEnchantment.get() || EnchantmentHelper.hasBindingCurse( itemStack ) )
 				{
 					ItemStack droppedItemStack = itemStack.copy();
-					player.dropItem( droppedItemStack, false, false );
+					player.drop( droppedItemStack, false, false );
 					itemStack.setCount( 0 );
-					player.sendStatusMessage( new TranslationTextComponent( "pmmo.gotTooHotDroppedItem", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
-					player.sendStatusMessage( new TranslationTextComponent( "pmmo.gotTooHotDroppedItem", new TranslationTextComponent( droppedItemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), false );
+					player.displayClientMessage( new TranslatableComponent( "pmmo.gotTooHotDroppedItem", new TranslatableComponent( droppedItemStack.getItem().getDescriptionId() ) ).setStyle( textStyle.get( "red" ) ), true );
+					player.displayClientMessage( new TranslatableComponent( "pmmo.gotTooHotDroppedItem", new TranslatableComponent( droppedItemStack.getItem().getDescriptionId() ) ).setStyle( textStyle.get( "red" ) ), false );
 				}
 				else
-					player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseEnchantment", new TranslationTextComponent( entry.getKey().getName() ), new TranslationTextComponent( itemStack.getItem().getTranslationKey() ) ).setStyle( textStyle.get( "red" ) ), true );
+					player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToUseEnchantment", new TranslatableComponent( entry.getKey().getDescriptionId() ), new TranslatableComponent( itemStack.getItem().getDescriptionId() ) ).setStyle( textStyle.get( "red" ) ), true );
 			}
 		}
 	}
 
-	public static void checkBiomeLevelReq( PlayerEntity player )
+	public static void checkBiomeLevelReq( Player player )
 	{
-		Biome biome = player.world.getBiome( vecToBlock( player.getPositionVec() ) );
-		ResourceLocation resLoc = XP.getBiomeResLoc( player.world, biome );
+		Biome biome = player.level.getBiome( vecToBlock( player.position() ) );
+		ResourceLocation resLoc = XP.getBiomeResLoc( player.level, biome );
 		if( resLoc == null )
 			return;
 		String biomeKey = resLoc.toString();
-		UUID playerUUID = player.getUniqueID();
+		UUID playerUUID = player.getUUID();
 		if( !JsonConfig.data.containsKey( JType.REQ_BIOME ) )
 			return;
 		Map<String, Double> biomeReq = JsonConfig.data.get( JType.REQ_BIOME ).get( biomeKey );
@@ -1693,10 +1704,10 @@ public class XP
 				{
 					for( Map.Entry<String, Double> entry : positiveEffect.entrySet() )
 					{
-						Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
+						MobEffect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
 						if( effect != null )
-							player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, false ) );
+							player.addEffect( new MobEffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, false ) );
 					}
 				}
 			}
@@ -1708,17 +1719,17 @@ public class XP
 			{
 				for( Map.Entry<String, Double> entry : negativeEffect.entrySet() )
 				{
-					Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
+					MobEffect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
 					if( effect != null )
-						player.addPotionEffect( new EffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, true ) );
+						player.addEffect( new MobEffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, true ) );
 				}
-				if( player.world.isRemote() )
+				if( player.level.isClientSide() )
 				{
 					if( !lastBiome.get( playerUUID ).equals( biomeKey ) )
 					{
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( getBiomeResLoc( player.world, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), true );
-						player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToSurvive", new TranslationTextComponent( getBiomeResLoc( player.world, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), false );
+						player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToSurvive", new TranslatableComponent( getBiomeResLoc( player.level, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), true );
+						player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToSurvive", new TranslatableComponent( getBiomeResLoc( player.level, biome ).toString() ) ).setStyle( textStyle.get( "red" ) ), false );
 						sendPlayerSkillList( player, biomeReq );
 					}
 				}
@@ -1892,9 +1903,9 @@ public class XP
 		return startXp + ( ( endXp - startXp ) * pos );
 	}
 
-	public static boolean isHoldingDebugItemInOffhand( PlayerEntity player )
+	public static boolean isHoldingDebugItemInOffhand( Player player )
 	{
-		return isItemDebugItem( player.getHeldItemOffhand().getItem() );
+		return isItemDebugItem( player.getOffhandItem().getItem() );
 	}
 
 	public static boolean isItemDebugItem( Item item )
@@ -1902,29 +1913,29 @@ public class XP
 		return Items.MUSIC_DISC_CAT.equals( item );
 	}
 
-	public static boolean isNightvisionUnlocked( PlayerEntity player )
+	public static boolean isNightvisionUnlocked( Player player )
 	{
 		return Skill.getLevel( Skill.SWIMMING.toString(), player ) >= Config.getConfig( "nightvisionUnlockLevel" );
 	}
 
-	public static void addWorldXpDrop( WorldXpDrop xpDrop, ServerPlayerEntity player )
+	public static void addWorldXpDrop( WorldXpDrop xpDrop, ServerPlayer player )
 	{
 //        System.out.println( "xp drop added at " + xpDrop.getPos() );
 		xpDrop.startXp = xpDrop.startXp * (float) XP.getMultiplier( player, xpDrop.getSkill() );
 		if( Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
 			NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), player );
-		UUID uuid = player.getUniqueID();
-		for( ServerPlayerEntity otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers() )
+		UUID uuid = player.getUUID();
+		for( ServerPlayer otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers() )
 		{
-			double distance = Util.getDistance( xpDrop.getPos(), otherPlayer.getPositionVec() );
-			if ( distance < 64D && !uuid.equals( otherPlayer.getUniqueID() ) && Config.getPreferencesMap( otherPlayer ).getOrDefault( "showOthersWorldXpDrops", 0D ) != 0 )
+			double distance = Util.getDistance( xpDrop.getPos(), otherPlayer.position() );
+			if ( distance < 64D && !uuid.equals( otherPlayer.getUUID() ) && Config.getPreferencesMap( otherPlayer ).getOrDefault( "showOthersWorldXpDrops", 0D ) != 0 )
 				NetworkHandler.sendToPlayer( new MessageWorldXp( xpDrop ), otherPlayer );
 		}
 	}
 
 	public static void addWorldXpDrop( WorldXpDrop xpDrop, UUID uuid )
 	{
-		ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );
+		ServerPlayer player = PmmoSavedData.getServer().getPlayerList().getPlayer( uuid );
 		if( player != null )
 			addWorldXpDrop( xpDrop, player );
 	}
@@ -1936,7 +1947,7 @@ public class XP
 
 	public static void addWorldText( WorldText worldText, UUID uuid )
 	{
-		ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );
+		ServerPlayer player = PmmoSavedData.getServer().getPlayerList().getPlayer( uuid );
 		if( player != null )
 			addWorldText( worldText, player );
 	}
@@ -1944,18 +1955,18 @@ public class XP
 	public static void addWorldTextRadius( ResourceLocation dimResLoc, WorldText worldText, double radius )
 	{
 		worldText.updatePos();
-		for( ServerPlayerEntity otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers() )
+		for( ServerPlayer otherPlayer : PmmoSavedData.getServer().getPlayerList().getPlayers() )
 		{
-			if( dimResLoc == getDimResLoc( otherPlayer.getEntityWorld() ) )
+			if( dimResLoc == getDimResLoc( otherPlayer.getCommandSenderWorld() ) )
 			{
-				double distance = Util.getDistance( worldText.getPos(), otherPlayer.getPositionVec() );
+				double distance = Util.getDistance( worldText.getPos(), otherPlayer.position() );
 				if ( distance < radius )
 					NetworkHandler.sendToPlayer( new MessageWorldText( worldText ), otherPlayer );
 			}
 		}
 	}
 
-	public static void addWorldText( WorldText worldText, ServerPlayerEntity player )
+	public static void addWorldText( WorldText worldText, ServerPlayer player )
 	{
 		worldText.updatePos();
 		NetworkHandler.sendToPlayer( new MessageWorldText( worldText ), player );
@@ -1966,16 +1977,16 @@ public class XP
 		WorldRenderHandler.addWorldTextOffline( worldText );
 	}
 
-	public static void sendPlayerSkillList( PlayerEntity player, Map<String, Double> skills )
+	public static void sendPlayerSkillList( Player player, Map<String, Double> skills )
 	{
 		for( Map.Entry<String, Double> entry : skills.entrySet() )
 		{
 			int level = Skill.getLevel( entry.getKey(), player );
 
 			if( level < entry.getValue() )
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+				player.displayClientMessage( new TranslatableComponent( "pmmo.levelDisplay", new TranslatableComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 			else
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.levelDisplay", new TranslationTextComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+				player.displayClientMessage( new TranslatableComponent( "pmmo.levelDisplay", new TranslatableComponent( "pmmo." + entry.getKey() ), "" + (int) Math.floor( entry.getValue() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
 		}
 	}
 }

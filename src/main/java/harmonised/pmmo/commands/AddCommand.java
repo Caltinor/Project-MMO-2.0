@@ -7,12 +7,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,13 +23,13 @@ public class AddCommand
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
     {
         String[] args = context.getInput().split( " " );
         String skill = StringArgumentType.getString( context, "Skill" ).toLowerCase();
         String type = StringArgumentType.getString( context, "Level|Xp" ).toLowerCase();
         boolean ignoreBonuses = true;
-        PlayerEntity sender = null;
+        Player sender = null;
 
         try
         {
@@ -42,7 +42,7 @@ public class AddCommand
 
         try
         {
-            sender = context.getSource().asPlayer();
+            sender = context.getSource().getPlayerOrException();
         }
         catch( CommandSyntaxException e )
         {
@@ -51,9 +51,9 @@ public class AddCommand
 
         try
         {
-            Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
+            Collection<ServerPlayer> players = EntityArgument.getPlayers( context, "target" );
 
-            for( ServerPlayerEntity player : players )
+            for( ServerPlayer player : players )
             {
                 String playerName = player.getDisplayName().getString();
                 double newValue = DoubleArgumentType.getDouble( context, "Value To Add" );
@@ -67,7 +67,7 @@ public class AddCommand
                     LOGGER.error( "PMMO Command Add: Invalid 6th Element in command (level|xp) " + Arrays.toString( args ) );
 
                     if( sender != null )
-                        sender.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
+                        sender.displayClientMessage( new TranslatableComponent( "pmmo.invalidChoice", args[5] ).setStyle( XP.textStyle.get( "red" ) ), false );
                 }
 
                 LOGGER.info( "PMMO Command Add: " + playerName + " " + args[4] + " has had " + args[6] + " " + args[5] + " added" );

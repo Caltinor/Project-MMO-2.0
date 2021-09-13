@@ -4,16 +4,15 @@ import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
 public class PartyPendingSystem
 {
-    public static CompoundNBT offlineData = new CompoundNBT();
+    public static CompoundTag offlineData = new CompoundTag();
 
     public static Map<UUID, UUID> pendingInvitations = new HashMap<>();
     public static Map<UUID, Long> invitationDates = new HashMap<>();
@@ -29,11 +28,11 @@ public class PartyPendingSystem
         return ownerUUID;
     }
 
-    public static int createInvitation( ServerPlayerEntity invitee, UUID ownerUUID )
+    public static int createInvitation( ServerPlayer invitee, UUID ownerUUID )
     {
         PmmoSavedData pmmoSavedData = PmmoSavedData.get();
         Party ownerParty = pmmoSavedData.getParty( ownerUUID );
-        UUID inviteeUUID = invitee.getUniqueID();
+        UUID inviteeUUID = invitee.getUUID();
         if( pendingInvitations.containsKey( inviteeUUID ) && pendingInvitations.get( inviteeUUID ).equals( ownerUUID ) )
             return -3;  //Invitation already pending
         else if( ownerParty == null )
@@ -50,9 +49,9 @@ public class PartyPendingSystem
         }
     }
 
-    public static int acceptInvitation( ServerPlayerEntity invitee, UUID ownerUUID )
+    public static int acceptInvitation( ServerPlayer invitee, UUID ownerUUID )
     {
-        UUID inviteeUUID = invitee.getUniqueID();
+        UUID inviteeUUID = invitee.getUUID();
         int result = -3;    //Invitation doesn't exist: Either expired, or didn't exist
         if( pendingInvitations.containsKey( inviteeUUID ) )
         {
@@ -77,11 +76,11 @@ public class PartyPendingSystem
         return success;
     }
 
-    public static void sendPlayerOfflineData( ServerPlayerEntity player )
+    public static void sendPlayerOfflineData( ServerPlayer player )
     {
-        CompoundNBT partyData = new CompoundNBT();
+        CompoundTag partyData = new CompoundTag();
 
-        Party party = PmmoSavedData.get().getParty( player.getUniqueID() );
+        Party party = PmmoSavedData.get().getParty( player.getUUID() );
         if( party != null )
         {
             Set<PartyMemberInfo> membersInfo = party.getAllMembersInfo();
@@ -89,18 +88,18 @@ public class PartyPendingSystem
             for( PartyMemberInfo partyMemberInfo : membersInfo )
             {
                 UUID uuid = partyMemberInfo.uuid;
-                ServerPlayerEntity partyMember = XP.getPlayerByUUID( uuid );
-                CompoundNBT partyMemberData = new CompoundNBT();
+                ServerPlayer partyMember = XP.getPlayerByUUID( uuid );
+                CompoundTag partyMemberData = new CompoundTag();
 
                 if( partyMember != null )
                 {
                     partyMemberData.putFloat( "maxHp", partyMember.getMaxHealth() );
                     partyMemberData.putFloat( "hp", partyMember.getHealth() );
-                    partyMemberData.putString( "dim", XP.getDimResLoc( partyMember.world ).toString() );
-                    Vector3d pos = partyMember.getPositionVec();
-                    partyMemberData.putDouble( "x", pos.getX() );
-                    partyMemberData.putDouble( "y", pos.getY() );
-                    partyMemberData.putDouble( "z", pos.getZ() );
+                    partyMemberData.putString( "dim", XP.getDimResLoc( partyMember.level ).toString() );
+                    Vec3 pos = partyMember.position();
+                    partyMemberData.putDouble( "x", pos.x() );
+                    partyMemberData.putDouble( "y", pos.y() );
+                    partyMemberData.putDouble( "z", pos.z() );
                 }
 
                 partyData.put( PmmoSavedData.get().getName( uuid ), partyMemberData );

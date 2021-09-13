@@ -2,16 +2,14 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import harmonised.pmmo.party.Party;
 import harmonised.pmmo.party.PartyPendingSystem;
-import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.XP;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,11 +19,11 @@ public class InvitePartyCommand
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
     {
-        PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
-        ServerPlayerEntity targetPlayer;
-        UUID uuid = player.getUniqueID();
+        Player player = (Player) context.getSource().getEntity();
+        ServerPlayer targetPlayer;
+        UUID uuid = player.getUUID();
 
         try
         {
@@ -41,24 +39,24 @@ public class InvitePartyCommand
         switch( result )
         {
             case -4:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.yourPartyIsFull" ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.yourPartyIsFull" ).setStyle(XP.textStyle.get( "red" ) ), false );
                 break;
 
             case -3:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAlreadyInvitedPlayerToYourParty", targetPlayer.getDisplayName() ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.youAlreadyInvitedPlayerToYourParty", targetPlayer.getDisplayName() ).setStyle(XP.textStyle.get( "red" ) ), false );
                 break;
 
             case -2:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.playerAlreadyInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.playerAlreadyInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
                 break;
 
             case -1:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAreNotInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.youAreNotInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
                 break;
 
             case 0:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.youHaveInvitedAPlayerToYourParty", targetPlayer.getDisplayName() ).setStyle(XP.textStyle.get( "yellow" ) ), false );
-                targetPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.playerInvitedYouToAParty", player.getDisplayName() ).setStyle(XP.textStyle.get( "yellow" ) ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.youHaveInvitedAPlayerToYourParty", targetPlayer.getDisplayName() ).setStyle(XP.textStyle.get( "yellow" ) ), false );
+                targetPlayer.displayClientMessage( new TranslatableComponent( "pmmo.playerInvitedYouToAParty", player.getDisplayName() ).setStyle(XP.textStyle.get( "yellow" ) ), false );
                 break;
         }
 

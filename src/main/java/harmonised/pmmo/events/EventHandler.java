@@ -2,16 +2,13 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -21,7 +18,7 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 
 import java.util.Map;
 
@@ -38,14 +35,14 @@ public class EventHandler
 	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void blockPlaced( BlockEvent.EntityMultiPlaceEvent event )
 	{
-		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), (World) event.getWorld(), event.getPos() ) )
+		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), (Level) event.getWorld(), event.getPos() ) )
 			event.setCanceled( true );
 	}
 
 	@SubscribeEvent( priority = EventPriority.LOWEST )
 	public static void blockPlaced( BlockEvent.EntityPlaceEvent event )
 	{
-		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), (World) event.getWorld(), event.getPos() ) )
+		if( event.getEntity() != null && BlockPlacedHandler.handlePlaced( event.getEntity(), event.getPlacedBlock(), (Level) event.getWorld(), event.getPos() ) )
 			event.setCanceled( true );
 	}
 
@@ -129,7 +126,7 @@ public class EventHandler
 	}
 
 	@SubscribeEvent( priority = EventPriority.LOWEST )
-	public static void livingSpawn( LivingSpawnEvent.EnteringChunk event )
+	public static void livingSpawn( LivingSpawnEvent.SpecialSpawn event )
 	{
 		SpawnHandler.handleSpawn( event );
 	}
@@ -212,16 +209,16 @@ public class EventHandler
 	@SubscribeEvent
 	public static void travelDimension( EntityTravelToDimensionEvent event )
 	{
-		if( event.getEntity() instanceof ServerPlayerEntity )
+		if( event.getEntity() instanceof ServerPlayer )
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
-			ResourceLocation destination = event.getDimension().getLocation();
+			ServerPlayer player = (ServerPlayer) event.getEntity();
+			ResourceLocation destination = event.getDimension().location();
 			Map<String, Double> reqMap = APIUtils.getXp( destination, JType.REQ_DIMENSION_TRAVEL );
 			if( !XP.checkReq( player, reqMap ) )
 			{
 				event.setCanceled( true );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToTravelToDimension", new TranslationTextComponent( event.getDimension().getLocation().toString() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-				player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToTravelToDimension", new TranslationTextComponent( event.getDimension().getLocation().toString() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+				player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToTravelToDimension", new TranslatableComponent( event.getDimension().location().toString() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+				player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToTravelToDimension", new TranslatableComponent( event.getDimension().location().toString() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 				XP.sendPlayerSkillList( player, reqMap );
 			}
 		}

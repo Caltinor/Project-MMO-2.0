@@ -7,14 +7,14 @@ import java.util.function.Predicate;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
 
 public class PredicateRegistry {
 	
-	private static Map<String, Predicate<PlayerEntity>> reqPredicates = new HashMap<>();
-	private static Map<String, BiPredicate<PlayerEntity, TileEntity>> reqBreakPredicates = new HashMap<>();
+	private static Map<String, Predicate<Player>> reqPredicates = new HashMap<>();
+	private static Map<String, BiPredicate<Player, BlockEntity>> reqBreakPredicates = new HashMap<>();
 	
 	/** registers a predicate to be used in determining if a given player is permitted
 	 * to perform a particular action. [Except for break action.  see registerBreakPredicate.
@@ -27,7 +27,7 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public static void registerPredicate(ResourceLocation res, JType jType, Predicate<PlayerEntity> pred) 
+	public static void registerPredicate(ResourceLocation res, JType jType, Predicate<Player> pred) 
 	{
 		String condition = jType.toString()+";"+res.toString();
 		if ( pred == null ) 
@@ -46,7 +46,7 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public static void registerBreakPredicate(ResourceLocation res, JType jType, BiPredicate<PlayerEntity, TileEntity> pred) 
+	public static void registerBreakPredicate(ResourceLocation res, JType jType, BiPredicate<Player, BlockEntity> pred) 
 	{
 		String condition = jType.toString()+";"+res.toString();
 		if ( pred == null ) 
@@ -76,7 +76,7 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @return whether the player is permitted to do the action (true if yes)
 	 */
-	public static boolean checkPredicateReq(PlayerEntity player, ResourceLocation res, JType jType) 
+	public static boolean checkPredicateReq(Player player, ResourceLocation res, JType jType) 
 	{
 		if ( !predicateExists( res, jType ) ) 
 			return false;
@@ -91,7 +91,7 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @return whether the player is permitted to do the action (true if yes)
 	 */
-	public static boolean checkPredicateReq(PlayerEntity player, TileEntity tile, JType jType) 
+	public static boolean checkPredicateReq(Player player, BlockEntity tile, JType jType) 
 	{
 		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
 		if ( !predicateExists( res, jType ) ) 

@@ -6,13 +6,12 @@ import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,27 +24,27 @@ public class ClearCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
     {
         String[] args = context.getInput().split( " " );
 
         try
         {
-            Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
+            Collection<ServerPlayer> players = EntityArgument.getPlayers( context, "target" );
 
-            for( ServerPlayerEntity player : players )
+            for( ServerPlayer player : players )
             {
                 String playerName = player.getDisplayName().getString();
                 AttributeHandler.updateAll( player );
                 XP.updateRecipes( player );
 
-                Map<String, Double> xpMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
+                Map<String, Double> xpMap = PmmoSavedData.get().getXpMap( player.getUUID() );
                 for( String skill : new HashSet<>( xpMap.keySet() ) )
                 {
                     xpMap.remove( skill );
                 }
                 NetworkHandler.sendToPlayer( new MessageXp( 0f, "42069", 0, true ), player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsCleared" ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.skillsCleared" ), false );
 
                 LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );
             }

@@ -2,7 +2,7 @@ package harmonised.pmmo.party;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.HashSet;
@@ -66,22 +66,22 @@ public class Party
         return membersInfo;
     }
 
-    public Set<ServerPlayerEntity> getOnlineMembers( MinecraftServer server )
+    public Set<ServerPlayer> getOnlineMembers( MinecraftServer server )
     {
-        Set<ServerPlayerEntity> onlineMembers = new HashSet<>();
-        for( ServerPlayerEntity onlinePlayer : server.getPlayerList().getPlayers() )
+        Set<ServerPlayer> onlineMembers = new HashSet<>();
+        for( ServerPlayer onlinePlayer : server.getPlayerList().getPlayers() )
         {
-            if( getMemberInfo( onlinePlayer.getUniqueID() ) != null )
+            if( getMemberInfo( onlinePlayer.getUUID() ) != null )
                 onlineMembers.add( onlinePlayer );
         }
         return onlineMembers;
     }
 
-    public Set<ServerPlayerEntity> getOnlineMembersInRange( ServerPlayerEntity originPlayer )
+    public Set<ServerPlayer> getOnlineMembersInRange( ServerPlayer originPlayer )
     {
-        Set<ServerPlayerEntity> membersInRange = XP.getEntitiesInRange( originPlayer.getPositionVec(), getOnlineMembers( originPlayer.getServer() ), Config.forgeConfig.partyRange.get() );
+        Set<ServerPlayer> membersInRange = XP.getEntitiesInRange( originPlayer.position(), getOnlineMembers( originPlayer.getServer() ), Config.forgeConfig.partyRange.get() );
         membersInRange.remove( originPlayer );
-        for( ServerPlayerEntity memberInRange : new HashSet<>( membersInRange ) )
+        for( ServerPlayer memberInRange : new HashSet<>( membersInRange ) )
         {
             if( !XP.isPlayerSurvival( memberInRange ) )
                 membersInRange.remove( memberInRange );
@@ -94,12 +94,12 @@ public class Party
         return membersInfo.size();
     }
 
-    public Set<PartyMemberInfo> getMembersInfo( Set<ServerPlayerEntity> membersInRange )
+    public Set<PartyMemberInfo> getMembersInfo( Set<ServerPlayer> membersInRange )
     {
         Set<PartyMemberInfo> onlineMembersInfo = new HashSet<>();
-        for( ServerPlayerEntity player : membersInRange )
+        for( ServerPlayer player : membersInRange )
         {
-            onlineMembersInfo.add( getMemberInfo( player.getUniqueID() ) );
+            onlineMembersInfo.add( getMemberInfo( player.getUUID() ) );
         }
         return onlineMembersInfo;
     }

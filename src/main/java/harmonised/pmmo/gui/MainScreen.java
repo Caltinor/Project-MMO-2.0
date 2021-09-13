@@ -1,25 +1,25 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.*;
 
 public class MainScreen extends Screen
 {
-    private final List<IGuiEventListener> children = Lists.newArrayList();
+    private final List<GuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
     private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
     private final ResourceLocation star = XP.getResLoc( Reference.MOD_ID, "textures/gui/star.png" );
@@ -27,8 +27,8 @@ public class MainScreen extends Screen
     public static Map<JType, Integer> scrollAmounts = new HashMap<>();
 
     Minecraft mc = Minecraft.getInstance();
-    MainWindow sr = mc.getMainWindow();
-    FontRenderer font = mc.fontRenderer;
+    Window sr = mc.getWindow();
+    Font font = mc.font;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -36,7 +36,7 @@ public class MainScreen extends Screen
     private List<TileButton> tileButtons;
     private UUID uuid;
 
-    public MainScreen( UUID uuid, ITextComponent titleIn )
+    public MainScreen( UUID uuid, Component titleIn )
     {
         super(titleIn);
         this.uuid = uuid;
@@ -53,43 +53,43 @@ public class MainScreen extends Screen
     {
         tileButtons = new ArrayList<>();
 
-        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        x = ( (sr.getGuiScaledWidth() / 2) - (boxWidth / 2) );
+        y = ( (sr.getGuiScaledHeight() / 2) - (boxHeight / 2) );
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getInstance().player.closeScreen();
+            Minecraft.getInstance().player.closeContainer();
         });
 
         TileButton glossaryButton = new TileButton(0, 0, 3, 5, "pmmo.glossary", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), true ) );
+            Minecraft.getInstance().setScreen( new GlossaryScreen( uuid, new TranslatableComponent( ((TileButton) button).transKey ), true ) );
         });
 
         TileButton creditsButton = new TileButton( 0, 0, 3, 4, "pmmo.credits", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new CreditsScreen( uuid, new TranslationTextComponent( ((TileButton) button).transKey ), JType.CREDITS ) );
+            Minecraft.getInstance().setScreen( new CreditsScreen( uuid, new TranslatableComponent( ((TileButton) button).transKey ), JType.CREDITS ) );
         });
 
         TileButton prefsButton = new TileButton( 0, 0, 3, 7, "pmmo.preferences", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( ((TileButton) button).transKey ) ) );
+            Minecraft.getInstance().setScreen( new PrefsChoiceScreen( new TranslatableComponent( ((TileButton) button).transKey ) ) );
         });
 
 
         TileButton skillsButton = new TileButton( 0, 0, 3, 6, "pmmo.skills", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getInstance().player ) );
+            Minecraft.getInstance().setScreen( new ListScreen( uuid,  new TranslatableComponent( ((TileButton) button).transKey ), "", JType.SKILLS, Minecraft.getInstance().player ) );
         });
 
         TileButton statsButton = new TileButton( 0, 0, 3, 6, "pmmo.stats", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new StatsScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ) ) );
+            Minecraft.getInstance().setScreen( new StatsScreen( uuid,  new TranslatableComponent( ((TileButton) button).transKey ) ) );
         });
 
         TileButton infoButton = new TileButton( 0, 0, 3, 5, "pmmo.info", JType.NONE, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new InfoScreen( uuid,  new TranslationTextComponent( ((TileButton) button).transKey ) ) );
+            Minecraft.getInstance().setScreen( new InfoScreen( uuid,  new TranslatableComponent( ((TileButton) button).transKey ) ) );
         });
 
         addButton(exitButton);
@@ -107,7 +107,7 @@ public class MainScreen extends Screen
         {
             TileButton button = tileButtons.get( i );
 //            button.x = sr.getScaledWidth()/2 + i*( button.getWidth()+2 ) - tileButtons.size()*(button.getWidth()+2)/2 - 1;
-            button.x = sr.getScaledWidth()/2 - button.getWidth()/2;
+            button.x = sr.getGuiScaledWidth()/2 - button.getWidth()/2;
             button.y = y + 155;
             button.x += Math.cos( i/(float)buttonCount * 6.2824 )*40;
             button.y += Math.sin( i/(float)buttonCount * 6.2824 )*40;
@@ -116,29 +116,29 @@ public class MainScreen extends Screen
     }
 
     @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
     {
         renderBackground( stack,  1 );
         super.render( stack, mouseX, mouseY, partialTicks );
 
-        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        x = ( (sr.getGuiScaledWidth() / 2) - (boxWidth / 2) );
+        y = ( (sr.getGuiScaledHeight() / 2) - (boxHeight / 2) );
 
 //        fillGradient( stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
         for( TileButton button : tileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                renderTooltip( stack, new TranslationTextComponent( button.transKey ), mouseX, mouseY );
+                renderTooltip( stack, new TranslatableComponent( button.transKey ), mouseX, mouseY );
         }
 
         RenderSystem.enableBlend();
-        mc.getTextureManager().bindTexture( logo );
-        this.blit( stack,  sr.getScaledWidth() / 2 - 100, sr.getScaledHeight() / 2 - 80, 0, 0,  200, 60 );
+        mc.getTextureManager().bind( logo );
+        this.blit( stack,  sr.getGuiScaledWidth() / 2 - 100, sr.getGuiScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
     @Override
-    public void renderBackground( MatrixStack stack, int p_renderBackground_1_)
+    public void renderBackground( PoseStack stack, int p_renderBackground_1_)
     {
         if (this.mc != null)
         {
@@ -151,7 +151,7 @@ public class MainScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getInstance().getTextureManager().bind( box );
         RenderSystem.disableBlend();
         this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }

@@ -2,8 +2,9 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.ProjectMMOMod;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,16 +28,16 @@ public class NetworkHandler
 		ProjectMMOMod.HANDLER.registerMessage( index++, MessageUpdateBoolean.class, MessageUpdateBoolean::encode, MessageUpdateBoolean::decode, MessageUpdateBoolean::handlePacket );
 	}
 
-	public static void sendToPlayer( MessageXp packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageXp packet, ServerPlayer player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
-	public static void sendToPlayer( MessageWorldXp packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageWorldXp packet, ServerPlayer player )
 	{
 		try
 		{
-			ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+			ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 		}
 		catch( Exception e )
 		{
@@ -44,11 +45,11 @@ public class NetworkHandler
 		}
 	}
 
-	public static void sendToPlayer( MessageWorldText packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageWorldText packet, ServerPlayer player )
 	{
 		try
 		{
-			ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+			ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 		}
 		catch( Exception e )
 		{
@@ -56,19 +57,19 @@ public class NetworkHandler
 		}
 	}
 
-	public static void sendToPlayer( MessageDoubleTranslation packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageDoubleTranslation packet, ServerPlayer player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
-	public static void sendToPlayer( MessageTripleTranslation packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageTripleTranslation packet, ServerPlayer player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
-	public static void sendToPlayer(MessageUpdatePlayerNBT packet, ServerPlayerEntity player )
+	public static void sendToPlayer(MessageUpdatePlayerNBT packet, ServerPlayer player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
 	public static void sendToServer( MessageUpdatePlayerNBT packet )
@@ -76,19 +77,19 @@ public class NetworkHandler
 		ProjectMMOMod.HANDLER.sendToServer( packet );
 	}
 
-	public static void sendToPlayer( MessageGrow packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageGrow packet, ServerPlayer player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
-	public static void sendToPlayer( MessageTrigger packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageTrigger packet, ServerPlayer player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
-	public static void sendToPlayer( MessageUpdateBoolean packet, ServerPlayerEntity player )
+	public static void sendToPlayer( MessageUpdateBoolean packet, ServerPlayer player )
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT );
 	}
 
 	public static void sendToServer( MessageKeypress packet )

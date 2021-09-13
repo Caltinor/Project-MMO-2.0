@@ -2,9 +2,9 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
@@ -12,24 +12,24 @@ import java.util.Collection;
 
 public class SpawnHandler
 {
-    public static void handleSpawn( LivingSpawnEvent.EnteringChunk event )
+    public static void handleSpawn( LivingSpawnEvent.SpecialSpawn event )
     {
-        if( event.getEntity() instanceof MobEntity && !(event.getEntity() instanceof AnimalEntity) )
+        if( event.getEntity() instanceof Mob && !(event.getEntity() instanceof Animal) )
         {
-            MobEntity mob = (MobEntity) event.getEntity();
+            Mob mob = (Mob) event.getEntity();
             MinecraftServer server = mob.getServer();
             if( server != null )
             {
                 int powerLevelContributorCount = 0;
                 float powerLevel = 0;
 
-                Collection<PlayerEntity> allPlayers = XP.getNearbyPlayers( mob );
+                Collection<Player> allPlayers = XP.getNearbyPlayers( mob );
 
-                for( PlayerEntity player : allPlayers )
+                for( Player player : allPlayers )
                 {
                     if( XP.isPlayerSurvival( player ) )
                     {
-                        powerLevel += XP.getPowerLevel( player.getUniqueID() );
+                        powerLevel += XP.getPowerLevel( player.getUUID() );
                         powerLevelContributorCount++;
                     }
                 }

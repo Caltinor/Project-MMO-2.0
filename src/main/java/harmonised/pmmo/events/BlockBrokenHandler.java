@@ -1,10 +1,5 @@
 package harmonised.pmmo.events;
 
-import com.ferreusveritas.dynamictrees.api.network.MapSignal;
-import com.ferreusveritas.dynamictrees.blocks.branches.BranchBlock;
-import com.ferreusveritas.dynamictrees.systems.nodemappers.NetVolumeNode;
-import harmonised.pmmo.ProjectMMOMod;
-import harmonised.pmmo.api.events.SalvageEvent;
 import harmonised.pmmo.api.events.TreasureEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -13,34 +8,31 @@ import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.skills.*;
-import harmonised.pmmo.util.DrawUtil;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SeaPickleBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SeaPickleBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
@@ -57,21 +49,21 @@ public class BlockBrokenHandler
 
     public static void handleBroken( BlockEvent.BreakEvent event )
     {
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         if( !( player instanceof FakePlayer ) )
             processReq( event );
-        ChunkDataHandler.delPos( XP.getDimResLoc( (World) event.getWorld() ), event.getPos() );
+        ChunkDataHandler.delPos( XP.getDimResLoc( (Level) event.getWorld() ), event.getPos() );
     }
 
     private static void processReq( BlockEvent.BreakEvent event )
     {
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         BlockState blockState = event.getState();
         Block block = blockState.getBlock();
         BlockPos pos = event.getPos();
-        World world = (World) event.getWorld();
-        Block blockAbove = world.getBlockState( pos.up() ).getBlock();
-        ResourceLocation dimResLoc = XP.getDimResLoc( (World) event.getWorld() );
+        Level world = (Level) event.getWorld();
+        Block blockAbove = world.getBlockState( pos.above() ).getBlock();
+        ResourceLocation dimResLoc = XP.getDimResLoc( (Level) event.getWorld() );
 
         boolean passedBreakReq = true;
 
@@ -90,7 +82,7 @@ public class BlockBrokenHandler
             dimCooldownTracker.put( pos, System.currentTimeMillis() );
 
         if( XP.isHoldingDebugItemInOffhand( player ) )
-            player.sendStatusMessage( new StringTextComponent( block.getRegistryName().toString() ), false );
+            player.displayClientMessage( new TextComponent( block.getRegistryName().toString() ), false );
 
         if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( blockAbove.getRegistryName().toString() ) && blockAbove instanceof IPlantable)
             passedBreakReq = XP.checkReq( player, blockAbove.getRegistryName(), JType.REQ_BREAK );
@@ -102,7 +94,7 @@ public class BlockBrokenHandler
 
         if( passedBreakReq )
         {
-            if( XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
+            if( XP.checkReq( player, player.getMainHandItem().getItem().getRegistryName(), JType.REQ_TOOL ) )
             {
                 processBroken( event );
                 ChunkDataHandler.delPos( XP.getDimResLoc( world ), pos );
@@ -114,18 +106,18 @@ public class BlockBrokenHandler
 
             if( XP.getHarvestTool( blockState ).equals( "axe" ) )
             {
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getDescriptionId(), "", true, 2 ), (ServerPlayer) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToChop", block.getDescriptionId(), "", false, 2 ), (ServerPlayer) player );
             }
             else if( JsonConfig.data.get( JType.INFO_PLANT ).containsKey( blockAbove.getRegistryName().toString() ) || block instanceof IPlantable )
             {
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToHarvest", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToHarvest", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToHarvest", block.getDescriptionId(), "", true, 2 ), (ServerPlayer) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToHarvest", block.getDescriptionId(), "", false, 2 ), (ServerPlayer) player );
             }
             else
             {
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToBreak", block.getTranslationKey(), "", true, 2 ), (ServerPlayerEntity) player );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToBreak", block.getTranslationKey(), "", false, 2 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToBreak", block.getDescriptionId(), "", true, 2 ), (ServerPlayer) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.notSkilledEnoughToBreak", block.getDescriptionId(), "", false, 2 ), (ServerPlayer) player );
             }
 
             for( Map.Entry<String, Double> entry : JsonConfig.data.get( JType.REQ_BREAK ).get( block.getRegistryName().toString() ).entrySet() )
@@ -135,9 +127,9 @@ public class BlockBrokenHandler
                 double entryValue = entry.getValue();
 
                 if( startLevel < entryValue )
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 2 ), (ServerPlayerEntity) player );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 2 ), (ServerPlayer) player );
                 else
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 1 ), (ServerPlayerEntity) player );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.levelDisplay", "pmmo." + entry.getKey(), "" + (int) Math.floor( entryValue ), false, 1 ), (ServerPlayer) player );
             }
 
             event.setCanceled( true );
@@ -153,20 +145,20 @@ public class BlockBrokenHandler
         Block block = state.getBlock();
         BlockPos pos = event.getPos();
         String regKey = block.getRegistryName().toString();
-        TileEntity tile = event.getWorld().getTileEntity(event.getPos());
+        BlockEntity tile = event.getWorld().getBlockEntity(event.getPos());
         final Map<String, Double> xpMap = tile == null ? XP.getXpBypass( block.getRegistryName(), JType.XP_VALUE_BREAK ) : XP.getXp( tile, JType.XP_VALUE_BREAK );
-        World world = (World) event.getWorld();
-        TileEntity tileEntity = world.getTileEntity( event.getPos() );
+        Level world = (Level) event.getWorld();
+        BlockEntity tileEntity = world.getBlockEntity( event.getPos() );
         if( tileEntity != null )
-            tileEntity = TileEntity.readTileEntity( state, tileEntity.serializeNBT() );
-        boolean isRemote = world.isRemote();
-        PlayerEntity player = event.getPlayer();
+            tileEntity = BlockEntity.loadStatic(pos, state, tileEntity.serializeNBT() );
+        boolean isRemote = world.isClientSide();
+        Player player = event.getPlayer();
         boolean veiningAllowed = Config.getConfig( "veiningAllowed" ) != 0;
 
-        if( !Util.isProduction() )
+        /*if( !Util.isProduction() )
         {
-            BlockState coalState = Blocks.COAL_BLOCK.getDefaultState();
-            BlockState glassState = Blocks.GLASS.getDefaultState();
+            BlockState coalState = Blocks.COAL_BLOCK.defaultBlockState();
+            BlockState glassState = Blocks.GLASS.defaultBlockState();
             int mainRadius = 10;
 
 //            DrawUtil.drawToWorld( world, pos.up( mainRadius ), DrawUtil.getSphereSolid( mainRadius ), glassState );
@@ -175,10 +167,10 @@ public class BlockBrokenHandler
 
 //            DrawUtil.drawToWorld( world, pos.up(), DrawUtil.getCircleSolid( mainRadius ), glassState );
 //            DrawUtil.drawToWorld( world, pos, DrawUtil.getCircle( mainRadius ), coalState );
-        }
+        }*/
 
-        if( XP.isVeining.contains( player.getUniqueID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
-            WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getHeldItemMainhand() ) );
+        if( XP.isVeining.contains( player.getUUID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
+            WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getMainHandItem() ) );
 
         if( !XP.isPlayerSurvival( player ) || isRemote )
             return;
@@ -186,10 +178,10 @@ public class BlockBrokenHandler
         Material material = event.getState().getMaterial();
         double blockHardnessLimitForBreaking = Config.forgeConfig.blockHardnessLimitForBreaking.get();
         boolean wasPlaced = ChunkDataHandler.checkPos( world, event.getPos() ) != null;
-        ItemStack toolUsed = player.getHeldItemMainhand();
+        ItemStack toolUsed = player.getMainHandItem();
         String skill = XP.getSkill( state );
 //			String regKey = block.getRegistryName().toString();
-        double hardness = Math.min( blockHardnessLimitForBreaking, state.getBlockHardness( event.getWorld(), event.getPos() ) );
+        double hardness = Math.min( blockHardnessLimitForBreaking, state.getDestroySpeed( event.getWorld(), event.getPos() ) );
 
         boolean isEffective = true;
 
@@ -229,27 +221,27 @@ public class BlockBrokenHandler
         }
         awardMsg += " " + block.getRegistryName();
 
-        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( player.getHeldItemMainhand() );
+        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments( player.getMainHandItem() );
         int fortune = 0;
-        if( enchants.get( Enchantments.FORTUNE ) != null )
-            fortune = enchants.get( Enchantments.FORTUNE );
+        if( enchants.get( Enchantments.BLOCK_FORTUNE ) != null )
+            fortune = enchants.get( Enchantments.BLOCK_FORTUNE );
 
         boolean dropsItself = false;
 
         List<ItemStack> noSilkDrops, drops = null;
 
-        if( block.canHarvestBlock( state, world, player.getPosition(), player ) )
+        if( block.canHarvestBlock( state, world, player.blockPosition(), player ) )
         {
             try
             {
-                if( world instanceof ServerWorld )
+                if( world instanceof ServerLevel )
                 {
-                    LootContext.Builder builder = new LootContext.Builder((ServerWorld) world)
-                            .withRandom(world.rand)
-                            .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
-                            .withParameter( LootParameters.TOOL, toolUsed )
-                            .withParameter( LootParameters.THIS_ENTITY, player )
-                            .withNullableParameter( LootParameters.BLOCK_ENTITY, tileEntity );
+                    LootContext.Builder builder = new LootContext.Builder((ServerLevel) world)
+                            .withRandom(world.random)
+                            .withParameter( LootContextParams.ORIGIN, player.position() )
+                            .withParameter( LootContextParams.TOOL, toolUsed )
+                            .withParameter( LootContextParams.THIS_ENTITY, player )
+                            .withOptionalParameter( LootContextParams.BLOCK_ENTITY, tileEntity );
                     if (fortune > 0)
                     {
                         builder.withLuck(fortune);
@@ -259,14 +251,14 @@ public class BlockBrokenHandler
                     if( EnchantmentHelper.getEnchantments( toolUsed ).containsKey( Enchantments.SILK_TOUCH ) )
                     {
                         ItemStack noEnchantTool = toolUsed.copy();
-                        noEnchantTool.removeChildTag("Enchantments");
+                        noEnchantTool.removeTagKey("Enchantments");
 
-                        builder = new LootContext.Builder((ServerWorld) world)
-                                .withRandom(world.rand)
-                                .withParameter( LootParameters.field_237457_g_, player.getPositionVec() )
-                                .withParameter( LootParameters.TOOL, noEnchantTool )
-                                .withParameter( LootParameters.THIS_ENTITY, player )
-                                .withNullableParameter( LootParameters.BLOCK_ENTITY, tileEntity );
+                        builder = new LootContext.Builder((ServerLevel) world)
+                                .withRandom(world.random)
+                                .withParameter( LootContextParams.ORIGIN, player.position() )
+                                .withParameter( LootContextParams.TOOL, noEnchantTool )
+                                .withParameter( LootContextParams.THIS_ENTITY, player )
+                                .withOptionalParameter( LootContextParams.BLOCK_ENTITY, tileEntity );
                         ;
                         if (fortune > 0)
                         {
@@ -310,7 +302,7 @@ public class BlockBrokenHandler
             Block baseBlock = event.getState().getBlock();
             BlockPos baseBlockPos = event.getPos();
 
-            double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
+            double extraChance = XP.getExtraChance( player.getUUID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
             int rewardable, guaranteedDrop, extraDrop, totalDrops, guaranteedDropEach;
             rewardable = extraDrop = guaranteedDrop = totalDrops = 0;
 
@@ -351,7 +343,7 @@ public class BlockBrokenHandler
             if( dropsLeft > 0 )
             {
                 XP.dropItems( dropsLeft, block.asItem(), world, event.getPos() );
-                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + dropsLeft, theDropItem.getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + dropsLeft, theDropItem.getDescriptionId(), true, 1 ), (ServerPlayer) player );
             }
 
             totalDrops = rewardable + dropsLeft;
@@ -361,7 +353,7 @@ public class BlockBrokenHandler
 
             awardMsg = "removing " + height + " + " + ( guaranteedDrop + extraDrop ) + " extra " + block.getRegistryName();
         }
-        else if( ( material.equals( Material.PLANTS ) || material.equals( Material.OCEAN_PLANT ) || material.equals( Material.TALL_PLANTS ) ) && drops.size() > 0 ) //IS PLANT
+        else if( ( material.equals( Material.PLANT ) || material.equals( Material.WATER_PLANT ) || material.equals( Material.REPLACEABLE_PLANT ) ) && drops.size() > 0 ) //IS PLANT
         {
             award = new HashMap<>();
             award.put( skill, hardness );
@@ -377,44 +369,44 @@ public class BlockBrokenHandler
             int maxAge = -1;
 
             {   //age stuff
-                if( state.hasProperty( BlockStateProperties.AGE_0_1 ) )
+                if( state.hasProperty( BlockStateProperties.AGE_1 ) )
                 {
-                    age = state.get( BlockStateProperties.AGE_0_1 );
+                    age = state.getValue( BlockStateProperties.AGE_1 );
                     maxAge = 1;
                 }
-                else if( state.hasProperty( BlockStateProperties.AGE_0_2 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_2 ) )
                 {
-                    age = state.get( BlockStateProperties.AGE_0_2 );
+                    age = state.getValue( BlockStateProperties.AGE_2 );
                     maxAge = 2;
                 }
-                else if( state.hasProperty( BlockStateProperties.AGE_0_3 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_3 ) )
                 {
-                    age = state.get( BlockStateProperties.AGE_0_3 );
+                    age = state.getValue( BlockStateProperties.AGE_3 );
                     maxAge = 3;
                 }
-                else if( state.hasProperty( BlockStateProperties.AGE_0_5 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_5 ) )
                 {
-                    age = state.get( BlockStateProperties.AGE_0_5 );
+                    age = state.getValue( BlockStateProperties.AGE_5 );
                     maxAge = 5;
                 }
-                else if( state.hasProperty( BlockStateProperties.AGE_0_7 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_7 ) )
                 {
-                    age = state.get( BlockStateProperties.AGE_0_7 );
+                    age = state.getValue( BlockStateProperties.AGE_7 );
                     maxAge = 7;
                 }
-                else if( state.hasProperty( BlockStateProperties.AGE_0_15 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_15 ) )
                 {
-                    age = state.get( BlockStateProperties.AGE_0_15 );
+                    age = state.getValue( BlockStateProperties.AGE_15 );
                     maxAge = 15;
                 }
-                else if( state.hasProperty( BlockStateProperties.AGE_0_25 ) )
+                else if( state.hasProperty( BlockStateProperties.AGE_25 ) )
                 {
-                    age = state.get( BlockStateProperties.AGE_0_25 );
+                    age = state.getValue( BlockStateProperties.AGE_25 );
                     maxAge = 25;
                 }
-                else if( state.hasProperty( BlockStateProperties.PICKLES_1_4 ) )
+                else if( state.hasProperty( BlockStateProperties.PICKLES ) )
                 {
-                    age = state.get( BlockStateProperties.PICKLES_1_4 );
+                    age = state.getValue( BlockStateProperties.PICKLES );
                     maxAge = 4;
                     if( wasPlaced )
                         return;
@@ -423,7 +415,7 @@ public class BlockBrokenHandler
 
             if( age == maxAge && age >= 0 || block instanceof SeaPickleBlock )
             {
-                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
+                double extraChance = XP.getExtraChance( player.getUUID(), block.getRegistryName(), JType.INFO_PLANT, false ) / 100;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -438,7 +430,7 @@ public class BlockBrokenHandler
                 if( totalExtraDrops > 0 )
                 {
                     XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getDescriptionId(), true, 1 ), (ServerPlayer) player );
                 }
 
                 awardMsg = "Harvesting " + ( dropItemCount ) + " + " + totalExtraDrops + " " + block.getRegistryName();
@@ -452,7 +444,7 @@ public class BlockBrokenHandler
         }
 
         //ORE
-        if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) > 0 )
+        if( XP.getExtraChance( player.getUUID(), block.getRegistryName(), JType.INFO_ORE, false ) > 0 )
         {
             award = new HashMap<>();
             award.put( skill, hardness );
@@ -464,7 +456,7 @@ public class BlockBrokenHandler
 
             if( dropsItself && !wasPlaced || !dropsItself && !isSilk )			//EXTRA DROPS
             {
-                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_ORE, false ) / 100;
+                double extraChance = XP.getExtraChance( player.getUUID(), block.getRegistryName(), JType.INFO_ORE, false ) / 100;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -482,7 +474,7 @@ public class BlockBrokenHandler
                 if( totalExtraDrops > 0 )
                 {
                     XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getDescriptionId(), true, 1 ), (ServerPlayer) player );
                 }
 
                 XP.addMapsAnyDouble( award, XP.multiplyMapAnyDouble( tile == null ? XP.getXpBypass( block.getRegistryName() , JType.XP_VALUE_BREAK ) : XP.getXp( tile, JType.XP_VALUE_BREAK), totalExtraDrops ) );
@@ -493,7 +485,7 @@ public class BlockBrokenHandler
 
         //LOG
         //Dynamic Trees
-        if( ProjectMMOMod.dynamicTreesLoaded && block instanceof BranchBlock )
+        /*if( ProjectMMOMod.dynamicTreesLoaded && block instanceof BranchBlock )
         {
             BranchBlock branchBlock = (BranchBlock) block;
             MapSignal signal = branchBlock.analyse( state, world, pos, null, new MapSignal());
@@ -539,14 +531,14 @@ public class BlockBrokenHandler
                 }
             }
         }
-        else if( XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
+        else*/ if( XP.getExtraChance( player.getUUID(), block.getRegistryName(), JType.INFO_LOG, false ) > 0 && isEffective )
         {
             if( !wasPlaced )			//EXTRA DROPS
             {
                 award = new HashMap<>();
                 award.put( skill, hardness );
 
-                double extraChance = XP.getExtraChance( player.getUniqueID(), block.getRegistryName(), JType.INFO_LOG, false ) / 100D;
+                double extraChance = XP.getExtraChance( player.getUUID(), block.getRegistryName(), JType.INFO_LOG, false ) / 100D;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -561,7 +553,7 @@ public class BlockBrokenHandler
                 if( totalExtraDrops > 0 )
                 {
                     XP.dropItems( guaranteedDrop + extraDrop, theDropItem.getItem(), world, event.getPos() );
-                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getTranslationKey(), true, 1 ), (ServerPlayerEntity) player );
+                    NetworkHandler.sendToPlayer( new MessageDoubleTranslation( "pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getDescriptionId(), true, 1 ), (ServerPlayer) player );
                 }
 
                 XP.multiplyMapAnyDouble( XP.addMapsAnyDouble( award, xpMap ), dropItemCount + totalExtraDrops );
@@ -612,20 +604,20 @@ public class BlockBrokenHandler
 
                         XP.addMapsAnyDouble( award, treasureAward );
 
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.youFoundTreasureItem", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                        player.displayClientMessage( new TranslatableComponent( "pmmo.youFoundTreasureItem", count, new TranslatableComponent( itemStack.getDescriptionId() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
                         LOGGER.debug( player.getDisplayName().getString() + " found Treasure! " + count + " " + treasureItem.getKey() + " " + event.getPos() );
                     }
 
                     if( foundTreasure )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.youFoundTreasure" ).setStyle( XP.textStyle.get( "green" ) ), true );
+                        player.displayClientMessage( new TranslatableComponent( "pmmo.youFoundTreasure" ).setStyle( XP.textStyle.get( "green" ) ), true );
                 }
             }
         }
 
-        int gap = XP.getSkillReqGap( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL );
+        int gap = XP.getSkillReqGap( player, player.getMainHandItem().getItem().getRegistryName(), JType.REQ_TOOL );
 
         if( gap > 0 )
-            player.getHeldItemMainhand().damageItem( gap - 1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND ) );
+            player.getMainHandItem().hurtAndBreak( gap - 1, player, (a) -> a.broadcastBreakEvent(InteractionHand.MAIN_HAND ) );
 
         ResourceLocation dimResLoc = XP.getDimResLoc( world );
 
@@ -637,7 +629,7 @@ public class BlockBrokenHandler
             {
                 for( int i = 0; i < 1000; i++ )
                 {
-                    WorldText worldText = WorldText.fromBlockPos( XP.getDimResLoc( world ), pos.east( (int) ( Math.random()*30 - 15 ) ).north( (int) ( Math.random()*30 - 15 ) ), pos.east( (int) ( Math.random()*60 - 30 ) ).north( (int) ( Math.random()*60 - 30 ) ).up( 25 ) );
+                    WorldText worldText = WorldText.fromBlockPos( XP.getDimResLoc( world ), pos.east( (int) ( Math.random()*30 - 15 ) ).north( (int) ( Math.random()*30 - 15 ) ), pos.east( (int) ( Math.random()*60 - 30 ) ).north( (int) ( Math.random()*60 - 30 ) ).above( 25 ) );
                     worldText.setMaxOffset( 0.25f );
                     String text = "";
                     switch( (int) ( Math.random() * 4 ) )
@@ -674,9 +666,9 @@ public class BlockBrokenHandler
 
             WorldXpDrop xpDrop = WorldXpDrop.fromBlockPos( XP.getDimResLoc( world ), pos, 0.25, xp, awardSkillName );
             xpDrop.setDecaySpeed( 1.25 );
-            XP.addWorldXpDrop( xpDrop, (ServerPlayerEntity) player );
+            XP.addWorldXpDrop( xpDrop, (ServerPlayer) player );
 
-            Skill.addXp( awardSkillName, (ServerPlayerEntity) player, award.get( awardSkillName ), awardMsg, false, false );
+            Skill.addXp( awardSkillName, (ServerPlayer) player, award.get( awardSkillName ), awardMsg, false, false );
         }
     }
 

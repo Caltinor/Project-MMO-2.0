@@ -4,8 +4,8 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,10 +17,10 @@ public class ServerHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void updateNBTTag(MessageUpdatePlayerNBT packet, PlayerEntity player )
+    public static void updateNBTTag(MessageUpdatePlayerNBT packet, Player player )
     {
-        CompoundNBT newPackage = packet.reqPackage;
-        Set<String> keySet = new HashSet<>( newPackage.keySet() );
+        CompoundTag newPackage = packet.reqPackage;
+        Set<String> keySet = new HashSet<>( newPackage.getAllKeys() );
 
         switch( packet.type )
         {

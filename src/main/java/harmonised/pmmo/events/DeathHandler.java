@@ -7,15 +7,15 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
@@ -28,16 +28,16 @@ public class DeathHandler
     public static void handleDeath( LivingDeathEvent event )
     {
         LivingEntity target = event.getEntityLiving();
-        Entity source = event.getSource().getTrueSource();
+        Entity source = event.getSource().getEntity();
         double deathPenaltyMultiplier = Config.forgeConfig.deathPenaltyMultiplier.get();
         double passiveMobHunterXp = Config.forgeConfig.passiveMobHunterXp.get();
         double aggresiveMobSlayerXp = Config.forgeConfig.aggresiveMobSlayerXp.get();
         boolean deathLoosesLevels = Config.forgeConfig.deathLoosesLevels.get();
 
-        if( target instanceof ServerPlayerEntity && !( target instanceof FakePlayer ) )
+        if( target instanceof ServerPlayer && !( target instanceof FakePlayer ) )
         {
-            ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
-            if( !player.world.isRemote() )
+            ServerPlayer player = (ServerPlayer) event.getEntity();
+            if( !player.level.isClientSide() )
             {
                 Map<String, Double> xpMap = Config.getXpMap( player );
                 Map<String, Double> prefsMap = Config.getPreferencesMap( player );
@@ -80,20 +80,20 @@ public class DeathHandler
                 }
 
                 if( totalLost > 0 )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).setStyle( XP.textStyle.get( "red" ) ), false );
+                    player.displayClientMessage( new TranslatableComponent( "pmmo.lostXp", DP.dprefix( totalLost ) ).setStyle( XP.textStyle.get( "red" ) ), false );
 
                 XP.syncPlayer( player );
             }
         }
-        else if( source instanceof ServerPlayerEntity && !( source instanceof FakePlayer ) )
+        else if( source instanceof ServerPlayer && !( source instanceof FakePlayer ) )
         {
-            ServerPlayerEntity player = (ServerPlayerEntity) source;
-            Collection<PlayerEntity> nearbyPlayers = XP.getNearbyPlayers( target );
+            ServerPlayer player = (ServerPlayer) source;
+            Collection<Player> nearbyPlayers = XP.getNearbyPlayers( target );
             double scaleValue = 0;
 
-            for( PlayerEntity thePlayer : nearbyPlayers )
+            for( Player thePlayer : nearbyPlayers )
             {
-                scaleValue += Math.max( 1, XP.getPowerLevel( thePlayer.getUniqueID() ) );
+                scaleValue += Math.max( 1, XP.getPowerLevel( thePlayer.getUUID() ) );
             }
 
             scaleValue = Math.max( 1, Math.min( 10, scaleValue * 0.2 ) );
@@ -102,22 +102,22 @@ public class DeathHandler
 //            double normalMaxHp = target.getAttribute( Attributes.GENERIC_MAX_HEALTH ).getBaseValue();
 //            double scaleMultiplier = ( 1 + ( target.getMaxHealth() - normalMaxHp ) / 10 );
             boolean registeredNBTdata = TooltipSupplier.tooltipExists(target.getType().getRegistryName(), JType.XP_VALUE_KILL);
-            if( registeredNBTdata || JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEntityString() ) )
+            if( registeredNBTdata || JsonConfig.data.get( JType.XP_VALUE_KILL ).containsKey( target.getEncodeId() ) )
             {
                  Map<String, Double> killXp = registeredNBTdata ? XP.getXp( target , JType.XP_VALUE_KILL) : XP.getXpBypass( target.getType().getRegistryName(), JType.XP_VALUE_KILL);
                 for( Map.Entry<String, Double> entry : killXp.entrySet() )
                 {
-                    XP.awardXp( player, entry.getKey(), player.getHeldItemMainhand().getDisplayName().toString(), entry.getValue() * scaleValue, false, false, false );
+                    XP.awardXp( player, entry.getKey(), player.getMainHandItem().getHoverName().toString(), entry.getValue() * scaleValue, false, false, false );
                 }
             }
-            else if( target instanceof AnimalEntity )
-                XP.awardXp( player, Skill.HUNTER.toString(), player.getHeldItemMainhand().getDisplayName().toString(), passiveMobHunterXp * scaleValue, false, false, false );
-            else if( target instanceof MobEntity )
-                XP.awardXp( player, Skill.SLAYER.toString(), player.getHeldItemMainhand().getDisplayName().toString(), aggresiveMobSlayerXp * scaleValue, false, false, false );
+            else if( target instanceof Animal )
+                XP.awardXp( player, Skill.HUNTER.toString(), player.getMainHandItem().getHoverName().toString(), passiveMobHunterXp * scaleValue, false, false, false );
+            else if( target instanceof Mob )
+                XP.awardXp( player, Skill.SLAYER.toString(), player.getMainHandItem().getHoverName().toString(), aggresiveMobSlayerXp * scaleValue, false, false, false );
 
-            if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getEntityString() ) )
+            if( JsonConfig.data.get( JType.MOB_RARE_DROP ).containsKey( target.getEncodeId() ) )
             {
-                Map<String, Double> dropTable = JsonConfig.data.get( JType.MOB_RARE_DROP ).get( target.getEntityString() );
+                Map<String, Double> dropTable = JsonConfig.data.get( JType.MOB_RARE_DROP ).get( target.getEncodeId() );
 
                 double chance;
 
@@ -129,10 +129,10 @@ public class DeathHandler
                     if( Math.floor( Math.random() * chance ) == 0 )
                     {
                         ItemStack itemStack = new ItemStack( XP.getItem( entry.getKey() ) );
-                        XP.dropItemStack( itemStack, player.world, target.getPositionVec() );
+                        XP.dropItemStack( itemStack, player.level, target.position() );
 
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.rareDrop", new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
+                        player.displayClientMessage( new TranslatableComponent( "pmmo.rareDrop", new TranslatableComponent( itemStack.getDescriptionId() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                        player.displayClientMessage( new TranslatableComponent( "pmmo.rareDrop", new TranslatableComponent( itemStack.getDescriptionId() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
                     }
                 }
             }

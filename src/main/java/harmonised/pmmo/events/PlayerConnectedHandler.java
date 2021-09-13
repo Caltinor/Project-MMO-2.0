@@ -8,16 +8,19 @@ import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.*;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.HoverEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class PlayerConnectedHandler
 {
@@ -48,10 +51,10 @@ public class PlayerConnectedHandler
 
     public static void handlePlayerConnected( PlayerEvent.PlayerLoggedInEvent event )
     {
-        PlayerEntity player = event.getPlayer();
-        if( !player.world.isRemote() )
+        Player player = event.getPlayer();
+        if( !player.level.isClientSide() )
         {
-            UUID uuid = player.getUniqueID();
+            UUID uuid = player.getUUID();
             boolean showWelcome = Config.forgeConfig.showWelcome.get();
             boolean showPatreonWelcome = Config.forgeConfig.showPatreonWelcome.get();
 
@@ -65,10 +68,10 @@ public class PlayerConnectedHandler
                 Style style = XP.getColorStyle( 0xaa3333 ).setUnderlined( true );
                 String updateMsg = WebHandler.getLatestMessage();
                 if( updateMsg != null )
-                    style.setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new StringTextComponent( updateMsg ) ) );
-                TranslationTextComponent textComp = new TranslationTextComponent( "pmmo.outdatedVersion", WebHandler.getLatestVersion(), ProjectMMOMod.getCurrentVersion() );
+                    style.withHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new TextComponent( updateMsg ) ) );
+                TranslatableComponent textComp = new TranslatableComponent( "pmmo.outdatedVersion", WebHandler.getLatestVersion(), ProjectMMOMod.getCurrentVersion() );
                 textComp.setStyle( style );
-                player.sendStatusMessage( textComp, false );
+                player.displayClientMessage( textComp, false );
             }
 
             if( !muteList.contains( uuid ) )
@@ -77,32 +80,32 @@ public class PlayerConnectedHandler
                 {
                     player.getServer().getPlayerList().getPlayers().forEach( (thePlayer) ->
                     {
-                        thePlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).setStyle( XP.textStyle.get( "cyan" ) ), false );
+                        thePlayer.displayClientMessage( new TranslatableComponent( "pmmo.lapisPatreonWelcome", thePlayer.getDisplayName().getString() ).setStyle( XP.textStyle.get( "cyan" ) ), false );
                     });
                 }
                 else if( showPatreonWelcome )
                 {
                     if( dandelionPatreons.contains( uuid ) )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.dandelionPatreonWelcome", player.getDisplayName().getString() ).setStyle( XP.textStyle.get( "yellow" ) ), false );
+                        player.displayClientMessage( new TranslatableComponent( "pmmo.dandelionPatreonWelcome", player.getDisplayName().getString() ).setStyle( XP.textStyle.get( "yellow" ) ), false );
                     else if( ironPatreons.contains( uuid ) )
-                        player.sendStatusMessage( new TranslationTextComponent( "pmmo.ironPatreonWelcome", player.getDisplayName().getString() ).setStyle( XP.textStyle.get( "grey" ) ), false );
+                        player.displayClientMessage( new TranslatableComponent( "pmmo.ironPatreonWelcome", player.getDisplayName().getString() ).setStyle( XP.textStyle.get( "grey" ) ), false );
                 }
 
                 if( showWelcome )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.welcomeText", new TranslationTextComponent( "pmmo.clickMe" ).setStyle( XP.getColorStyle( 0xff00ff ).setUnderlined( true ).setClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/pmmo help" ) ).setHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new TranslationTextComponent( "pmmo.openInfo" ) ) ) ) ), false );
+                    player.displayClientMessage( new TranslatableComponent( "pmmo.welcomeText", new TranslatableComponent( "pmmo.clickMe" ).setStyle( XP.getColorStyle( 0xff00ff ).setUnderlined( true ).withClickEvent( new ClickEvent( ClickEvent.Action.RUN_COMMAND, "/pmmo help" ) ).withHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, new TranslatableComponent( "pmmo.openInfo" ) ) ) ) ), false );
             }
         }
         else
             ClientHandler.hiscoreMap = new HashMap<>();
     }
 
-    private static void migratePlayerDataToWorldSavedData( PlayerEntity player )
+    private static void migratePlayerDataToWorldSavedData( Player player )
     {
         if( player.getPersistentData().contains( Reference.MOD_ID ) )
         {
-            CompoundNBT pmmoTag = player.getPersistentData().getCompound( Reference.MOD_ID );
-            CompoundNBT tag;
-            UUID uuid = player.getUniqueID();
+            CompoundTag pmmoTag = player.getPersistentData().getCompound( Reference.MOD_ID );
+            CompoundTag tag;
+            UUID uuid = player.getUUID();
             Map<String, Double> map;
 
             LOGGER.info( "Migrating Player " + player.getDisplayName().getString() + " Pmmo Data from PlayerData to WorldSavedData" );
@@ -110,7 +113,7 @@ public class PlayerConnectedHandler
             if( pmmoTag.contains( "skills" ) )
             {
                 tag = pmmoTag.getCompound( "skills" );
-                for( String key : tag.keySet() )
+                for( String key : tag.getAllKeys() )
                 {
                     Skill.setXp( key, uuid, Skill.getXp( key, uuid ) + tag.getDouble( key ) );
                     LOGGER.info( "Adding " + tag.getDouble( key ) + " xp in " + key );
@@ -121,7 +124,7 @@ public class PlayerConnectedHandler
             {
                 tag = pmmoTag.getCompound( "preferences" );
                 map = Config.getPreferencesMap( player );
-                for( String key : tag.keySet() )
+                for( String key : tag.getAllKeys() )
                 {
                     map.put( key, tag.getDouble( key ) );
                 }
@@ -131,7 +134,7 @@ public class PlayerConnectedHandler
             {
                 tag = pmmoTag.getCompound( "abilities" );
                 map = Config.getAbilitiesMap( player );
-                for( String key : tag.keySet() )
+                for( String key : tag.getAllKeys() )
                 {
                     map.put( key, tag.getDouble( key ) );
                 }

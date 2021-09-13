@@ -11,22 +11,20 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.CheeseTracker;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.HashMap;
@@ -48,22 +46,22 @@ public class PlayerTickHandler
 
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
-        PlayerEntity player = event.player;
-        boolean isRemote = player.world.isRemote;
+        Player player = event.player;
+        boolean isRemote = player.level.isClientSide;
 
         if( XP.isPlayerSurvival( player ) && player.isAlive() )
         {
-            UUID uuid = player.getUniqueID();
+            UUID uuid = player.getUUID();
 
             if( player.isSprinting() )
                 AttributeHandler.updateSpeed( player );
             else
                 AttributeHandler.resetSpeed( player );
 
-            if( !player.world.isRemote && ticksSinceAttributeRefresh++ >= 200 )
+            if( !player.level.isClientSide && ticksSinceAttributeRefresh++ >= 200 )
             {
                 ticksSinceAttributeRefresh = 0;
-                for ( ServerPlayerEntity otherPlayer : player.world.getServer().getPlayerList().getPlayers() )
+                for ( ServerPlayer otherPlayer : player.level.getServer().getPlayerList().getPlayers() )
                 {
                     AttributeHandler.updateAll( otherPlayer );
                 }
@@ -74,7 +72,7 @@ public class PlayerTickHandler
 
             if( !isRemote )
             {
-                ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+                ServerPlayer serverPlayer = (ServerPlayer) player;
                 if( !lastVeinAward.containsKey( uuid ) )
                     lastVeinAward.put( uuid, System.nanoTime() );
                 if( !lastCheeseUpdate.containsKey( uuid ) )
@@ -87,20 +85,20 @@ public class PlayerTickHandler
                 //Sneak
                 if( !sneakCounter.containsKey( uuid ) )
                 {
-                    sneakTracker.put( uuid, player.isSneaking() );
+                    sneakTracker.put( uuid, player.isShiftKeyDown() );
                     sneakCounter.put( uuid, sneakTracker.get( uuid ) ? 1 : 0 );
                 }
                 int sneakCount = sneakCounter.get( uuid );
-                if( player.isSneaking() && !sneakTracker.get( uuid ) )
+                if( player.isShiftKeyDown() && !sneakTracker.get( uuid ) )
                 {
                     sneakCount++;
-                    if( !player.world.isRemote )
+                    if( !player.level.isClientSide )
                     {
                         double roll = Math.random();
                         double chance = 0.01 * ( sneakCount - 250 ) / 5;
                         if( sneakCount > 250 && roll < chance )
                         {
-                            player.attackEntityFrom( DamageSource.WITHER, (float) Math.max( 1, chance*2.5 ) );
+                            player.hurt( DamageSource.WITHER, (float) Math.max( 1, chance*2.5 ) );
                             System.out.println( chance );
                             if(serverPlayer.getHealth() <= 0 )
                                 sneakCount = 0;
@@ -114,7 +112,7 @@ public class PlayerTickHandler
                     }
                 }
                 sneakCounter.put( uuid, sneakCount );
-                sneakTracker.put( uuid, player.isSneaking() );
+                sneakTracker.put( uuid, player.isShiftKeyDown() );
                 //End of sneak
 
                 double veinGap      = ( ( System.nanoTime() - lastVeinAward.get     ( uuid ) ) / 1000000000D );
@@ -146,7 +144,7 @@ public class PlayerTickHandler
 
                 if( syncGap > 2.5 )
                 {
-                    PartyPendingSystem.sendPlayerOfflineData( (ServerPlayerEntity) player );
+                    PartyPendingSystem.sendPlayerOfflineData( (ServerPlayer) player );
 
                     sync.put( uuid, System.nanoTime() );
                 }
@@ -159,15 +157,15 @@ public class PlayerTickHandler
                 int swimLevel = Skill.getLevel( Skill.SWIMMING.toString(), player );
                 int flyLevel = Skill.getLevel( Skill.FLYING.toString(), player );
                 int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
-                float swimAmp = EnchantmentHelper.getDepthStriderModifier( player );
+                float swimAmp = EnchantmentHelper.getDepthStrider( player );
                 float speedAmp = 0;
-                PlayerInventory inv = player.inventory;
+                Inventory inv = player.getInventory();
 
                 XP.checkBiomeLevelReq( player );
 
                 if( !isRemote )
                 {
-                    if( Curios.isLoaded() )
+                    /*if( Curios.isLoaded() )
                     {
                         Curios.getCurios(player).forEach(value ->
                         {
@@ -176,41 +174,41 @@ public class PlayerTickHandler
                                 XP.applyWornPenalty( player, value.getStacks().getStackInSlot(i) );
                             }
                         });
-                    }
+                    }*/
 
-                    if( !inv.getStackInSlot( 39 ).isEmpty() )	//Helm
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 39 ) );
-                    if( !inv.getStackInSlot( 38 ).isEmpty() )	//Chest
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 38 ) );
-                    if( !inv.getStackInSlot( 37 ).isEmpty() )	//Legs
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 37 ) );
-                    if( !inv.getStackInSlot( 36 ).isEmpty() )	//Boots
-                        XP.applyWornPenalty( player, player.inventory.getStackInSlot( 36 ) );
-                    if( !player.getHeldItemMainhand().isEmpty() )
-                        XP.applyEnchantmentUsePenalty( player, player.getHeldItemMainhand() );
-                    if( !player.getHeldItemOffhand().isEmpty() )
+                    if( !inv.getItem( 39 ).isEmpty() )	//Helm
+                        XP.applyWornPenalty( player, player.getInventory().getItem( 39 ) );
+                    if( !inv.getItem( 38 ).isEmpty() )	//Chest
+                        XP.applyWornPenalty( player, player.getInventory().getItem( 38 ) );
+                    if( !inv.getItem( 37 ).isEmpty() )	//Legs
+                        XP.applyWornPenalty( player, player.getInventory().getItem( 37 ) );
+                    if( !inv.getItem( 36 ).isEmpty() )	//Boots
+                        XP.applyWornPenalty( player, player.getInventory().getItem( 36 ) );
+                    if( !player.getMainHandItem().isEmpty() )
+                        XP.applyEnchantmentUsePenalty( player, player.getMainHandItem() );
+                    if( !player.getOffhandItem().isEmpty() )
                     {
-                        XP.applyWornPenalty( player, player.getHeldItemOffhand() );
-                        XP.applyEnchantmentUsePenalty( player, player.getHeldItemOffhand() );
+                        XP.applyWornPenalty( player, player.getOffhandItem() );
+                        XP.applyEnchantmentUsePenalty( player, player.getOffhandItem() );
                     }
                 }
 ////////////////////////////////////////////XP_STUFF//////////////////////////////////////////
 
-                if( player.isPotionActive( Effects.SPEED ) )
-                    speedAmp = player.getActivePotionEffect( Effects.SPEED ).getAmplifier() + 1;
+                if( player.hasEffect( MobEffects.MOVEMENT_SPEED ) )
+                    speedAmp = player.getEffect( MobEffects.MOVEMENT_SPEED ).getAmplifier() + 1;
 
                 double swimAward = ( 3D + swimLevel    / 10.00D ) * gap * ( 1D + swimAmp / 4D );
                 double flyAward  = ( 1D + flyLevel     / 30.77D ) * gap ;
                 double runAward  = ( 1D + agilityLevel / 30.77D ) * gap * ( 1D + speedAmp / 4D );
 
-                if( !player.velocityChanged )
+                if( !player.hurtMarked )
                     swimAward *= 0.1d;
 
                 lastAward.replace( uuid, System.nanoTime() );
                 Block waterBlock = Blocks.WATER;
                 Block tallSeagrassBlock = Blocks.TALL_SEAGRASS;
                 Block kelpBlock = Blocks.KELP_PLANT;
-                BlockPos playerPos = XP.vecToBlock( player.getPositionVec() );
+                BlockPos playerPos = XP.vecToBlock( player.position() );
                 Block currBlock;
                 boolean waterBelow = true;
 
@@ -218,60 +216,60 @@ public class PlayerTickHandler
                 {
                     for( int j = -1; j <= 1; j++ )
                     {
-                        currBlock = player.getEntityWorld().getBlockState( playerPos.down().east( i ).north( j ) ).getBlock();
+                        currBlock = player.getCommandSenderWorld().getBlockState( playerPos.below().east( i ).north( j ) ).getBlock();
                         if( !( currBlock.equals( waterBlock ) || currBlock.equals( tallSeagrassBlock ) || currBlock.equals( kelpBlock ) ) )
                             waterBelow = false;
                     }
                 }
-                boolean waterAbove = player.getEntityWorld().getBlockState( playerPos.up()   ).getBlock().equals( waterBlock );
+                boolean waterAbove = player.getCommandSenderWorld().getBlockState( playerPos.above()   ).getBlock().equals( waterBlock );
                 boolean nightVisionPref = Config.getPreferencesMap( player ).getOrDefault( "underwaterNightVision", 1D ) == 1;
 
                 if( nightVisionPref && XP.isNightvisionUnlocked( player) && XP.isNightvisionUnlocked( player ) && player.isInWater() && waterAbove )
-                    player.addPotionEffect( new EffectInstance( Effects.NIGHT_VISION, 300, 0, false, false ) );
+                    player.addEffect( new MobEffectInstance( MobEffects.NIGHT_VISION, 300, 0, false, false ) );
 
                 if( !isRemote )
                 {
-                    ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
-                    ServerWorld world = serverPlayer.getServerWorld();
-                    Vector3d xpDropPos = player.getPositionVec();
+                    ServerPlayer serverPlayer = (ServerPlayer) player;
+                    ServerLevel world = serverPlayer.getLevel();
+                    Vec3 xpDropPos = player.position();
                     if( player.isSprinting() )
                     {
                         if( player.isInWater() && ( waterAbove || waterBelow ) )
                         {
-                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.x(), xpDropPos.y(), xpDropPos.z(), 0.35, swimAward, Skill.SWIMMING.toString() );
                             XP.addWorldXpDrop( xpDrop, serverPlayer );
                             XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming fast", swimAward * 1.25f, true, false, false );
                         }
                         else
                         {
-                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY() + 0.523, xpDropPos.getZ(), 0.15, runAward, Skill.AGILITY.toString() );
+                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.x(), xpDropPos.y() + 0.523, xpDropPos.z(), 0.15, runAward, Skill.AGILITY.toString() );
                             XP.addWorldXpDrop( xpDrop, serverPlayer );
                             XP.awardXp( serverPlayer, Skill.AGILITY.toString(), "running", runAward, true, false, false );
                         }
                     }
 
-                    if( player.isInWater() && ( waterAbove || waterBelow || player.areEyesInFluid( FluidTags.WATER ) ) )
+                    if( player.isInWater() && ( waterAbove || waterBelow || player.isEyeInFluid( FluidTags.WATER ) ) )
                     {
                         if( !player.isSprinting() )
                         {
-                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                            WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.x(), xpDropPos.y(), xpDropPos.z(), 0.35, swimAward, Skill.SWIMMING.toString() );
                             XP.addWorldXpDrop( xpDrop, serverPlayer );
                             XP.awardXp( serverPlayer, Skill.SWIMMING.toString(), "swimming", swimAward, true, false, false );
                         }
                     }
-                    else if( player.isElytraFlying() )
+                    else if( player.isFallFlying() )
                     {
-                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, flyAward, Skill.FLYING.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.x(), xpDropPos.y(), xpDropPos.z(), 0.35, flyAward, Skill.FLYING.toString() );
                         XP.addWorldXpDrop( xpDrop, serverPlayer );
                         XP.awardXp( serverPlayer, Skill.FLYING.toString(), "flying", flyAward, true, false, false );
                     }
 
-                    if( (player.getRidingEntity() instanceof BoatEntity) && waterBelow )
+                    if( (player.getVehicle() instanceof Boat) && waterBelow )
                     {
                         if( !player.isSprinting() )
                             swimAward *= 1.5;
 
-                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.35, swimAward, Skill.SWIMMING.toString() );
+                        WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), xpDropPos.x(), xpDropPos.y(), xpDropPos.z(), 0.35, swimAward, Skill.SWIMMING.toString() );
                         XP.addWorldXpDrop( xpDrop, serverPlayer );
                         XP.awardXp( serverPlayer, Skill.SAILING.toString(), "Sailing", swimAward, true, false, false );
                     }
@@ -300,7 +298,7 @@ public class PlayerTickHandler
         }
     }
 
-    public static double getHpRegenTime( PlayerEntity player )
+    public static double getHpRegenTime( Player player )
     {
         double dividend = Config.getConfig( "hpRegenPerMinuteBase" ) + Skill.getLevel( Skill.ENDURANCE.toString(), player ) * Config.getConfig( "hpRegenPerMinuteBoostPerLevel" );
         return dividend <= 0 ? Double.POSITIVE_INFINITY : 60 / dividend;

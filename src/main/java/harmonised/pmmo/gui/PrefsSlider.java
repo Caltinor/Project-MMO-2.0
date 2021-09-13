@@ -1,12 +1,14 @@
 package harmonised.pmmo.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.gui.widget.Slider;
 
 import java.util.function.Consumer;
+
+import net.minecraft.client.gui.components.Button.OnPress;
 
 public class PrefsSlider extends Slider
 {
@@ -15,7 +17,7 @@ public class PrefsSlider extends Slider
     private static double lastValue;
     public String preference;
 
-    public PrefsSlider(int xPos, int yPos, int width, int height, String preference, ITextComponent prefix, ITextComponent suf, double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr, boolean isSwitch, IPressable handler )
+    public PrefsSlider(int xPos, int yPos, int width, int height, String preference, Component prefix, Component suf, double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr, boolean isSwitch, OnPress handler )
     {
         super(xPos, yPos, width, height, prefix, suf, minVal, maxVal, currentVal, showDec, drawStr, handler);
         this.preference = preference;
@@ -29,7 +31,7 @@ public class PrefsSlider extends Slider
         {
             this.sliderValue = this.sliderValue < 0.5 ? 0 : 1;
             if(drawString)
-                setMessage( new StringTextComponent( this.sliderValue == 1 ? "On" : "Off" ));
+                setMessage( new TextComponent( this.sliderValue == 1 ? "On" : "Off" ));
         }
         else
         {
@@ -68,7 +70,7 @@ public class PrefsSlider extends Slider
             }
 
             if(drawString)
-                setMessage( new StringTextComponent( dispString.getString() + val + suffix.getString() ));
+                setMessage( new TextComponent( dispString.getString() + val + suffix.getString() ));
         }
 
         if (parent != null)

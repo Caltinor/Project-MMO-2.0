@@ -1,20 +1,19 @@
 package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class XpFromToCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
     {
         double maxLevel = XP.getMaxLevel();
-        PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
+        Player player = (Player) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 
         double level = Double.parseDouble( args[3] );
@@ -47,10 +46,10 @@ public class XpFromToCommand
             if( goalXp < 0 )
                 goalXp = 0;
 
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpFromTo", DP.dp(goalXp - xp), ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), ( goalLevel % 1 == 0 ? (int) Math.floor( goalLevel ) : DP.dp(goalLevel) ) ), false );
+            player.displayClientMessage( new TranslatableComponent( "pmmo.xpFromTo", DP.dp(goalXp - xp), ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), ( goalLevel % 1 == 0 ? (int) Math.floor( goalLevel ) : DP.dp(goalLevel) ) ), false );
         }
         else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp(xp) ), false );
+            player.displayClientMessage( new TranslatableComponent( "pmmo.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp(xp) ), false );
 
         return 1;
     }

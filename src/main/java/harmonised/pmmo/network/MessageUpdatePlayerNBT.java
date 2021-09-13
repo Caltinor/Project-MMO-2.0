@@ -7,13 +7,13 @@ import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.proxy.ServerHandler;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.NBTHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,10 +25,10 @@ public class MessageUpdatePlayerNBT
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public CompoundNBT reqPackage = new CompoundNBT();
+    public CompoundTag reqPackage = new CompoundTag();
     public int type;
 
-    public MessageUpdatePlayerNBT( CompoundNBT theNBT, int type )
+    public MessageUpdatePlayerNBT( CompoundTag theNBT, int type )
     {
         this.reqPackage = theNBT;
         this.type = type;
@@ -38,18 +38,18 @@ public class MessageUpdatePlayerNBT
     {
     }
 
-    public static MessageUpdatePlayerNBT decode( PacketBuffer buf )
+    public static MessageUpdatePlayerNBT decode( FriendlyByteBuf buf )
     {
         MessageUpdatePlayerNBT packet = new MessageUpdatePlayerNBT();
-        packet.reqPackage = buf.readCompoundTag();
+        packet.reqPackage = buf.readNbt();
         packet.type = buf.readInt();
 
         return packet;
     }
 
-    public static void encode( MessageUpdatePlayerNBT packet, PacketBuffer buf )
+    public static void encode( MessageUpdatePlayerNBT packet, FriendlyByteBuf buf )
     {
-        buf.writeCompoundTag( packet.reqPackage );
+        buf.writeNbt( packet.reqPackage );
         buf.writeInt( packet.type );
     }
 
@@ -81,7 +81,7 @@ public class MessageUpdatePlayerNBT
                 case 3: //stats
                     if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
                     {
-                        for( String uuidKey : packet.reqPackage.keySet() )
+                        for( String uuidKey : packet.reqPackage.getAllKeys() )
                         {
                             UUID uuid = UUID.fromString( uuidKey );
                             String name = packet.reqPackage.getCompound( uuidKey ).getString( "name" );

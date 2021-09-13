@@ -3,12 +3,12 @@ package harmonised.pmmo.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import harmonised.pmmo.util.XP;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,15 +16,15 @@ public class NearbyPowerLevelCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
     {
         String[] args = context.getInput().split( " " );
-        PlayerEntity sender = null;
-        PlayerEntity target = null;
+        Player sender = null;
+        Player target = null;
 
         try
         {
-            sender = context.getSource().asPlayer();
+            sender = context.getSource().getPlayerOrException();
         }
         catch( CommandSyntaxException e )
         {
@@ -52,15 +52,15 @@ public class NearbyPowerLevelCommand
 
             double totalPowerLevel = 0;
 
-            for( PlayerEntity player : XP.getNearbyPlayers( target ) )
+            for( Player player : XP.getNearbyPlayers( target ) )
             {
-                totalPowerLevel += XP.getPowerLevel( player.getUniqueID() );
+                totalPowerLevel += XP.getPowerLevel( player.getUUID() );
             }
 
             LOGGER.info( "PMMO NearbyPowerLevel Command Output: " + totalPowerLevel );
 
             if( sender != null )
-                sender.sendStatusMessage( new StringTextComponent( totalPowerLevel + " " + new TranslationTextComponent( "pmmo.power" ).getString() ), false );
+                sender.displayClientMessage( new TextComponent( totalPowerLevel + " " + new TranslatableComponent( "pmmo.power" ).getString() ), false );
         }
 
         return 1;

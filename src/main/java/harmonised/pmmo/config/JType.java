@@ -1,7 +1,5 @@
 package harmonised.pmmo.config;
 
-import harmonised.pmmo.skills.Skill;
-
 import java.util.HashMap;
 import java.util.Map;
 

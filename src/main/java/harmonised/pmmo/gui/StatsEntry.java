@@ -1,20 +1,20 @@
 package harmonised.pmmo.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.BaseComponent;
 
 import java.util.List;
 
 public class StatsEntry
 {
-    public static FontRenderer font = Minecraft.getInstance().fontRenderer;
-    public TextComponent title;
-    public List<IFormattableTextComponent> text;
+    public static Font font = Minecraft.getInstance().font;
+    public BaseComponent title;
+    public List<MutableComponent> text;
     public int x, y;
 
-    public StatsEntry( int x, int y, TextComponent title, List<IFormattableTextComponent> text )
+    public StatsEntry( int x, int y, BaseComponent title, List<MutableComponent> text )
     {
         this.x = x;
         this.y = y;

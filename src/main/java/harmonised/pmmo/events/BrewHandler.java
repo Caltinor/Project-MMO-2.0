@@ -4,10 +4,10 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +18,7 @@ public class BrewHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void handlePotionBrew( NonNullList<ItemStack> brewingItemStacks, World world, BlockPos pos )
+    public static void handlePotionBrew( NonNullList<ItemStack> brewingItemStacks, Level world, BlockPos pos )
     {
         try
         {

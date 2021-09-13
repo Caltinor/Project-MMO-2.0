@@ -1,11 +1,10 @@
 package harmonised.pmmo.util;
 
 import com.google.common.collect.Lists;
-import javafx.util.Pair;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -87,7 +86,7 @@ public class DrawUtil
         {
             for( BlockPos pos : getCircleSolid( radius ) )
             {
-                posSet.add( pos.down( r - i ) );
+                posSet.add( pos.below( r - i ) );
             }
             i++;
         }
@@ -162,14 +161,14 @@ public class DrawUtil
         return halfLengths;
     }
 
-    public static void drawToWorld( World world, BlockPos offset, Set<BlockPos> posSet, BlockState state )
+    public static void drawToWorld( Level world, BlockPos offset, Set<BlockPos> posSet, BlockState state )
     {
         for( BlockPos pos : posSet )
         {
-            world.setBlockState( new BlockPos( offset.getX() + pos.getX(), offset.getY() + pos.getY(), offset.getZ() + pos.getZ() ), state );
+            world.setBlockAndUpdate( new BlockPos( offset.getX() + pos.getX(), offset.getY() + pos.getY(), offset.getZ() + pos.getZ() ), state );
         }
     }
-    public static void drawToWorld( World world, BlockPos offset, Set<BlockPos> posSet, BlockState state, Direction direction )
+    public static void drawToWorld( Level world, BlockPos offset, Set<BlockPos> posSet, BlockState state, Direction direction )
     {
         switch( direction )
         {
