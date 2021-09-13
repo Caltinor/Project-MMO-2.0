@@ -6,11 +6,11 @@ import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.DP;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,19 +33,19 @@ public class MessageLevelUp
     {
     }
 
-    public static MessageLevelUp decode( PacketBuffer buf )
+    public static MessageLevelUp decode( FriendlyByteBuf buf )
     {
         MessageLevelUp packet = new MessageLevelUp();
 
-        packet.skill = buf.readString( 64 );
+        packet.skill = buf.readUtf( 64 );
         packet.level = buf.readInt();
 
         return packet;
     }
 
-    public static void encode( MessageLevelUp packet, PacketBuffer buf )
+    public static void encode( MessageLevelUp packet, FriendlyByteBuf buf )
     {
-        buf.writeString( packet.skill );
+        buf.writeUtf( packet.skill );
         buf.writeInt( packet.level );
     }
 
@@ -55,7 +55,7 @@ public class MessageLevelUp
         {
             try
             {
-                ServerPlayerEntity player = ctx.get().getSender();
+                ServerPlayer player = ctx.get().getSender();
                 if( player == null )
                     return;
                 String skill = packet.skill.toLowerCase();
@@ -64,9 +64,9 @@ public class MessageLevelUp
                 if( packet.level <= realLevel )
                 {
                     Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-                    Vector3d playerPos = player.getPositionVec();
+                    Vec3 playerPos = player.position();
 
-                    WorldText explosionText = WorldText.fromVector( XP.getDimResLoc( player.getServerWorld() ), player.getPositionVec() );
+                    WorldText explosionText = WorldText.fromVector( XP.getDimResLoc( player.getLevel() ), player.position() );
                     explosionText.setColor( Skill.getSkillColor( skill ) );
                     explosionText.setText( player.getDisplayName().getString() + " " + packet.level + " " + skill + " level up!" );
                     explosionText.setMaxOffset( 1 );
@@ -75,13 +75,13 @@ public class MessageLevelUp
                     explosionText.setSecondsLifespan( 15.23f );
 
                     if( Config.forgeConfig.levelUpFirework.get() && !( prefsMap.containsKey( "spawnFireworksCausedByMe" ) && prefsMap.get( "spawnFireworksCausedByMe" ) == 0 ) )
-                        XP.spawnRocket( player.world, player.getPositionVec(), skill, explosionText );
+                        XP.spawnRocket( player.level, player.position(), skill, explosionText );
 
-                    LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skill + "! [" + XP.getDimResLoc( player.world ).toString() + "|x:" + DP.dp( playerPos.getX() ) + "|y:" + DP.dp( playerPos.getY() ) + "|z:" + DP.dp( playerPos.getZ() ) + "]" );
+                    LOGGER.info( player.getDisplayName().getString() + " has reached level " + packet.level + " in " + skill + "! [" + XP.getDimResLoc( player.level ).toString() + "|x:" + DP.dp( playerPos.x() ) + "|y:" + DP.dp( playerPos.y() ) + "|z:" + DP.dp( playerPos.z() ) + "]" );
 
                     if( Config.forgeConfig.broadcastMilestone.get() )
                     {
-                        Map<String, Double> skillsMap = new HashMap<>( PmmoSavedData.get().getXpMap( player.getUniqueID() ) );
+                        Map<String, Double> skillsMap = new HashMap<>( PmmoSavedData.get().getXpMap( player.getUUID() ) );
                         skillsMap.put( skill, XP.xpAtLevel( packet.level ) );
                         int totalLevel = XP.getTotalLevelFromMap( skillsMap );
 
@@ -90,20 +90,20 @@ public class MessageLevelUp
 
                         if( levelUpMilestone || totalLevelMilestone )
                         {
-                            List<ServerPlayerEntity> players = new ArrayList<>( player.server.getPlayerList().getPlayers() );
-                            for( ServerPlayerEntity otherPlayer : players )
+                            List<ServerPlayer> players = new ArrayList<>( player.server.getPlayerList().getPlayers() );
+                            for( ServerPlayer otherPlayer : players )
                             {
-                                if( otherPlayer.getUniqueID() != player.getUniqueID() )
+                                if( otherPlayer.getUUID() != player.getUUID() )
                                 {
                                     Map<String, Double> otherprefsMap = Config.getPreferencesMap( otherPlayer );
                                     if( levelUpMilestone )
                                     {
-                                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslationTextComponent( "pmmo." + skill ) ).setStyle( Skill.getSkillStyle( skill ) ), false );
+                                        otherPlayer.displayClientMessage( new TranslatableComponent( "pmmo.milestoneLevelUp", player.getDisplayName(), packet.level, new TranslatableComponent( "pmmo." + skill ) ).setStyle( Skill.getSkillStyle( skill ) ), false );
                                         if( Config.forgeConfig.milestoneLevelUpFirework.get() && !( otherprefsMap.containsKey( "spawnFireworksCausedByOthers" ) && otherprefsMap.get( "spawnFireworksCausedByOthers" ) == 0 ) )
-                                            XP.spawnRocket( otherPlayer.world, otherPlayer.getPositionVec(), skill, explosionText );
+                                            XP.spawnRocket( otherPlayer.level, otherPlayer.position(), skill, explosionText );
                                     }
                                     if( totalLevelMilestone )
-                                        otherPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.milestoneTotalLevel", player.getDisplayName(), totalLevel ).setStyle( XP.getColorStyle( 0x00ff00 ) ), false );
+                                        otherPlayer.displayClientMessage( new TranslatableComponent( "pmmo.milestoneTotalLevel", player.getDisplayName(), totalLevel ).setStyle( XP.getColorStyle( 0x00ff00 ) ), false );
                                 }
                             };
                         }

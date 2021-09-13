@@ -7,15 +7,15 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.WorldTickHandler;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.ForgeMod;
 
 public class AttributeHandler
@@ -25,9 +25,9 @@ public class AttributeHandler
 	private static final UUID hpModifierID     = UUID.fromString( "c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb" );
 	private static final UUID damageModifierID = UUID.fromString( "992b11f1-7b3f-48d9-8ebd-1acfc3257b17" );
 
-	public static void updateAll( PlayerEntity player )
+	public static void updateAll( Player player )
 	{
-		if( !player.world.isRemote() )
+		if( !player.level.isClientSide() )
 			WorldTickHandler.updateVein( player, 0 );
 
 		updateReach( player );
@@ -35,7 +35,7 @@ public class AttributeHandler
 		updateDamage( player );
 	}
 
-	public static double getReachBoost( PlayerEntity player )
+	public static double getReachBoost( Player player )
 	{
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 		double buildLevel = Skill.getLevel( Skill.BUILDING.toString(), player );
@@ -48,24 +48,24 @@ public class AttributeHandler
 		return player.isCreative() ? Math.max( 50, reach ) : reach;
 	}
 
-	public static void updateReach( PlayerEntity player )
+	public static void updateReach( Player player )
 	{
 		double reach = getReachBoost( player );
-		ModifiableAttributeInstance reachAttribute = player.getAttribute( ForgeMod.REACH_DISTANCE.get() );
+		AttributeInstance reachAttribute = player.getAttribute( ForgeMod.REACH_DISTANCE.get() );
 		if( reachAttribute.getModifier( reachModifierID ) == null || reachAttribute.getModifier( reachModifierID ).getAmount() != reach )
 		{
 			AttributeModifier reachModifier = new AttributeModifier( reachModifierID, "Reach bonus thanks to Build Level", reach, AttributeModifier.Operation.ADDITION );
 			reachAttribute.removeModifier( reachModifierID );
-			reachAttribute.applyPersistentModifier( reachModifier );
+			reachAttribute.addPermanentModifier( reachModifier );
 		}
 	}
 
-	public static double getBaseSpeed( PlayerEntity player )
+	public static double getBaseSpeed( Player player )
 	{
 		return player.getAttribute( Attributes.MOVEMENT_SPEED ).getBaseValue();
 	}
 
-	public static double getSpeedBoost( PlayerEntity player )
+	public static double getSpeedBoost( Player player )
 	{
 		int agilityLevel = Skill.getLevel( Skill.AGILITY.toString(), player );
 		return getBaseSpeed( player ) * getSpeedBoostMultiplier( agilityLevel );
@@ -82,7 +82,7 @@ public class AttributeHandler
 		return Math.max( 0, Math.min( maxSpeedBoost, Math.min( maxSpeedBoostPref, ( agilityLevel * Config.getConfig( "speedBoostPerLevel" ) ) / 100 ) ) );
 	}
 
-	public static int getHeartBoost( PlayerEntity player )
+	public static int getHeartBoost( Player player )
 	{
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 		double enduranceLevel = Skill.getLevel( Skill.ENDURANCE.toString(), player );
@@ -95,9 +95,9 @@ public class AttributeHandler
 		return heartBoost;
 	}
 
-	public static void updateSpeed( PlayerEntity player )
+	public static void updateSpeed( Player player )
 	{
-		ModifiableAttributeInstance speedAttribute = player.getAttribute( Attributes.MOVEMENT_SPEED );
+		AttributeInstance speedAttribute = player.getAttribute( Attributes.MOVEMENT_SPEED );
 		double speedBoost = getSpeedBoost( player );
 
 		if( speedBoost > 0 )
@@ -106,31 +106,31 @@ public class AttributeHandler
 			{
 				AttributeModifier speedModifier = new AttributeModifier( speedModifierID, "Speed bonus thanks to Agility Level", speedBoost, AttributeModifier.Operation.ADDITION );
 				speedAttribute.removeModifier( speedModifierID );
-				speedAttribute.applyPersistentModifier( speedModifier );
+				speedAttribute.addPermanentModifier( speedModifier );
 
 //				System.out.println( speedModifier.getAmount() );
 			}
 		}
 	}
 
-	public static void resetSpeed( PlayerEntity player )
+	public static void resetSpeed( Player player )
 	{
-		ModifiableAttributeInstance speedAttribute = player.getAttribute( Attributes.MOVEMENT_SPEED );
+		AttributeInstance speedAttribute = player.getAttribute( Attributes.MOVEMENT_SPEED );
 		speedAttribute.removeModifier( speedModifierID );
 	}
 
-	public static void updateHP( PlayerEntity player )
+	public static void updateHP( Player player )
 	{
 		int heartBoost = getHeartBoost( player );
-		ModifiableAttributeInstance hpAttribute = player.getAttribute( Attributes.MAX_HEALTH );
+		AttributeInstance hpAttribute = player.getAttribute( Attributes.MAX_HEALTH );
 		AttributeModifier hpModifier = new AttributeModifier( hpModifierID, "Max HP Bonus thanks to Endurance Level", heartBoost, AttributeModifier.Operation.ADDITION );
 		hpAttribute.removeModifier( hpModifierID );
-		hpAttribute.applyPersistentModifier( hpModifier );
+		hpAttribute.addPermanentModifier( hpModifier );
 	}
 
-	public static void updateDamage( PlayerEntity player )
+	public static void updateDamage( Player player )
 	{
-		ModifiableAttributeInstance damageAttribute = player.getAttribute( Attributes.ATTACK_DAMAGE );
+		AttributeInstance damageAttribute = player.getAttribute( Attributes.ATTACK_DAMAGE );
 		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
 		double maxDamage = Config.getConfig( "maxExtraDamagePercentageBoostMelee" );
 		double maxDamagePref = maxDamage;
@@ -141,18 +141,18 @@ public class AttributeHandler
 
 		AttributeModifier damageModifier = new AttributeModifier( damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.MULTIPLY_BASE );
 		damageAttribute.removeModifier( damageModifierID );
-		damageAttribute.applyPersistentModifier( damageModifier );
+		damageAttribute.addPermanentModifier( damageModifier );
 	}
 
-	public static void updateHP( MobEntity mob, float bonus )
+	public static void updateHP( Mob mob, float bonus )
 	{
-		ModifiableAttributeInstance hpAttribute = mob.getAttribute( Attributes.MAX_HEALTH );
+		AttributeInstance hpAttribute = mob.getAttribute( Attributes.MAX_HEALTH );
 		if( hpAttribute != null )
 		{
 			boolean wasMaxHealth = mob.getHealth() == mob.getMaxHealth();
 			double maxMobHPBoost = Config.getConfig( "maxMobHPBoost" );
 			double mobHPBoostPerPowerLevel = Config.getConfig( "mobHPBoostPerPowerLevel" );
-			if( !(mob instanceof AnimalEntity) )
+			if( !(mob instanceof Animal) )
 				bonus *= mobHPBoostPerPowerLevel;
 
 			bonus *= getBiomeMobMultiplier( mob, "hpBonus" );
@@ -163,16 +163,16 @@ public class AttributeHandler
 			AttributeModifier hpModifier = new AttributeModifier(hpModifierID, "Max HP Bonus thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
 
 			hpAttribute.removeModifier(hpModifierID);
-			hpAttribute.applyPersistentModifier(hpModifier);
+			hpAttribute.addPermanentModifier(hpModifier);
 
 			if( wasMaxHealth )
 				mob.setHealth( mob.getMaxHealth() );
 		}
 	}
 
-	public static void updateDamage( MobEntity mob, float bonus )
+	public static void updateDamage( Mob mob, float bonus )
 	{
-		ModifiableAttributeInstance damageAttribute = mob.getAttribute( Attributes.ATTACK_DAMAGE );
+		AttributeInstance damageAttribute = mob.getAttribute( Attributes.ATTACK_DAMAGE );
 		if( damageAttribute != null )
 		{
 			double maxMobDamageBoost = Config.getConfig( "maxMobDamageBoost" );
@@ -185,18 +185,18 @@ public class AttributeHandler
 
 			AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Nearby Player Power Level", bonus, AttributeModifier.Operation.ADDITION);
 			damageAttribute.removeModifier(damageModifierID);
-			damageAttribute.applyPersistentModifier(damageModifier);
+			damageAttribute.addPermanentModifier(damageModifier);
 		}
 //		else
 //			System.out.println( mob.getDisplayName().getString() );
 	}
 
-	public static void updateSpeed( MobEntity mob, float bonus )
+	public static void updateSpeed( Mob mob, float bonus )
 	{
-		ModifiableAttributeInstance speedAttribute = mob.getAttribute( Attributes.MOVEMENT_SPEED );
+		AttributeInstance speedAttribute = mob.getAttribute( Attributes.MOVEMENT_SPEED );
 		if( speedAttribute != null )
 		{
-			if( !(mob instanceof  AnimalEntity) )
+			if( !(mob instanceof  Animal) )
 			{
 				double maxMobSpeedBoost = Config.getConfig( "maxMobSpeedBoost" );
 				double mobSpeedBoostPerPowerLevel = Config.getConfig( "mobSpeedBoostPerPowerLevel" );
@@ -209,14 +209,14 @@ public class AttributeHandler
 
 				AttributeModifier speedModifier = new AttributeModifier(speedModifierID, "Movement Speed Boost thanks to Nearby Player Power Level", bonus / 100, AttributeModifier.Operation.ADDITION);
 				speedAttribute.removeModifier(speedModifierID);
-				speedAttribute.applyPersistentModifier(speedModifier);
+				speedAttribute.addPermanentModifier(speedModifier);
 			}
 		}
 	}
 
-	private static double getBiomeMobMultiplier( MobEntity mob, String type )
+	private static double getBiomeMobMultiplier( Mob mob, String type )
 	{
-		Biome biome = mob.world.getBiome( new BlockPos( mob.getPositionVec() ) );
+		Biome biome = mob.level.getBiome( new BlockPos( mob.position() ) );
 		ResourceLocation biomeResLoc = biome.getRegistryName();
 		double multiplier = 1;
 

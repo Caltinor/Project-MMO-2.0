@@ -1,15 +1,13 @@
 package harmonised.pmmo;
 
-import dev.ftb.mods.ftbquests.quest.reward.RewardType;
-import dev.ftb.mods.ftbquests.quest.task.TaskType;
+//import dev.ftb.mods.ftbquests.quest.reward.RewardType;
+//import dev.ftb.mods.ftbquests.quest.task.TaskType;
 import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.events.ChunkDataHandler;
-import harmonised.pmmo.events.RegisterHandler;
 import harmonised.pmmo.events.WorldTickHandler;
-import harmonised.pmmo.ftb_quests.FTBQHandler;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.proxy.ClientHandler;
@@ -18,21 +16,21 @@ import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
 
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.GameRules;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.JarVersionLookupHandler;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.fmlserverevents.FMLServerAboutToStartEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,10 +54,10 @@ public class ProjectMMOMod
         WebHandler.updateInfo();
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::modsLoading );
         FMLJavaModLoadingContext.get().getModEventBus().addListener( this::clientLoading );
-        if( ModList.get().isLoaded( "ftbquests" ) )
+        /*if( ModList.get().isLoaded( "ftbquests" ) )
         {
             FTBQHandler.init();
-        }
+        }*/
         jeiLoaded = ModList.get().isLoaded( "jei" );
         tinkersLoaded = ModList.get().isLoaded( "tconstruct" );
         dynamicTreesLoaded = ModList.get().isLoaded( "dynamictrees" );
@@ -115,7 +113,7 @@ public class ProjectMMOMod
     {
         PmmoSavedData.init( event.getServer() );
         if( Config.forgeConfig.craftReqEnabled.get() )
-            event.getServer().getGameRules().get( GameRules.DO_LIMITED_CRAFTING ).set(true, event.getServer() );
+            event.getServer().getGameRules().getRule( GameRules.RULE_LIMITED_CRAFTING ).set(true, event.getServer() );
     }
 
     public static String getCurrentVersion()

@@ -7,15 +7,15 @@ import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class FishedHandler
 {
-    public static double getFishPoolChance( PlayerEntity player )
+    public static double getFishPoolChance( Player player )
     {
         double fishPoolBaseChance = Config.getConfig( "fishPoolBaseChance" );
         double fishPoolChancePerLevel = Config.getConfig( "fishPoolChancePerLevel" );
@@ -34,11 +34,11 @@ public class FishedHandler
 
     public static void handleFished( ItemFishedEvent event )
     {
-        if( !( event.getPlayer() instanceof ServerPlayerEntity ) )
+        if( !( event.getPlayer() instanceof ServerPlayer ) )
             return;
         if( Config.forgeConfig.disableNormalFishDrops.get() )
             event.setCanceled( true );
-        ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+        ServerPlayer player = (ServerPlayer) event.getPlayer();
         int startLevel = Skill.getLevel( Skill.FISHING.toString(), player );
         int level;
         NonNullList<ItemStack> items = event.getDrops();
@@ -93,8 +93,8 @@ public class FishedHandler
 
                 ItemStack itemStack = new ItemStack( item, count );
 
-                if( itemStack.isDamageable() )
-                    itemStack.setDamage( (int) Math.floor( Math.random() * itemStack.getMaxDamage() ) );
+                if( itemStack.isDamageableItem() )
+                    itemStack.setDamageValue( (int) Math.floor( Math.random() * itemStack.getMaxDamage() ) );
 
                 if( itemStack.isEnchantable() )
                 {
@@ -106,7 +106,7 @@ public class FishedHandler
                         Enchantment enchant = ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( entry.getKey() ) );
                         Map<String, Double> enchantInfo = entry.getValue();
 
-                        if( enchant.canApply( itemStack ) )
+                        if( enchant.canEnchant( itemStack ) )
                         {
                             int enchantLevelReq = (int) Math.floor( enchantInfo.get( "levelReq" ) );
                             int itemLevelReq = (int) Math.floor( match.get( "enchantLevelReq" ) );
@@ -154,17 +154,17 @@ public class FishedHandler
                         EnchantmentHelper.setEnchantments( outEnchants, itemStack );
                 }
 
-                XP.dropItemStack( itemStack, player.world, player.getPositionVec() );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.extraFished", count, new TranslationTextComponent( itemStack.getTranslationKey() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+                XP.dropItemStack( itemStack, player.level, player.position() );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.extraFished", count, new TranslatableComponent( itemStack.getDescriptionId() ) ).setStyle( XP.textStyle.get( "green" ) ), true );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.extraFished", count, new TranslatableComponent( itemStack.getDescriptionId() ) ).setStyle( XP.textStyle.get( "green" ) ), false );
 
                 award += match.get( "xp" ) * count;
             }
 
 
-            Vector3d bobPos = event.getHookEntity().getPositionVec();
-            Vector3d xpDropPos = new Vector3d( bobPos.getX(), bobPos.getY() + 2, bobPos.getZ() );
-            WorldXpDrop xpDrop = WorldXpDrop.fromVector( XP.getDimResLoc( player.getServerWorld() ), xpDropPos, 0.5, award, Skill.FISHING.toString() );
+            Vec3 bobPos = event.getHookEntity().position();
+            Vec3 xpDropPos = new Vec3( bobPos.x(), bobPos.y() + 2, bobPos.z() );
+            WorldXpDrop xpDrop = WorldXpDrop.fromVector( XP.getDimResLoc( player.getLevel() ), xpDropPos, 0.5, award, Skill.FISHING.toString() );
             xpDrop.setDecaySpeed( 0.2 );
             XP.addWorldXpDrop( xpDrop, player );
             XP.awardXp( player, Skill.FISHING.toString(), "catching " + items, award, false, false, false );

@@ -1,31 +1,16 @@
 package harmonised.pmmo.config;
 
-import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.events.PlayerInteractionHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.data.TagsProvider;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.Potion;
-import net.minecraft.tags.*;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeTagHandler;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.common.data.ForgeBlockTagsProvider;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -55,7 +40,7 @@ public class JsonConfig
     public static Map<JType, Map<String, Map<String, Map<String, Double>>>> data2 = new HashMap<>();
 
     private static final ArrayList<String> validAttributes = new ArrayList<>();
-    private static final ArrayList<String> validFishEnchantInfo = new ArrayList<>();
+    //private static final ArrayList<String> validFishEnchantInfo = new ArrayList<>();
     private static final String dataPath = "pmmo/";
     private static final String hardDataPath = "/assets/pmmo/util/";
     public static final Set<JType> jTypes2 = new HashSet<>();
@@ -513,7 +498,7 @@ public class JsonConfig
 
         for( String key : theMap.keySet() )
         {
-            Effect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( key ) );
+            Potion effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( key ) );
             if( effect != null )
                 anyValidEffects = true;
             else
@@ -562,7 +547,7 @@ public class JsonConfig
 
                 for( Map.Entry<String, Double> entry : element.getValue().entrySet() )
                 {
-                    Potion potion = ForgeRegistries.POTION_TYPES.getValue( XP.getResLoc( entry.getKey() ) );
+                    Potion potion = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                     if( potion != null && entry.getValue() >= 0 && entry.getValue() < 255 )
                         output.get( element.getKey() ).put( entry.getKey(), entry.getValue() );
                     else

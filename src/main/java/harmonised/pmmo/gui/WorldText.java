@@ -5,10 +5,10 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.Util;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -16,14 +16,14 @@ import java.util.Map;
 
 public class WorldText
 {
-    private static Map<PresetTextOption, CompoundNBT> presetTextOptions = new HashMap<>();
+    private static Map<PresetTextOption, CompoundTag> presetTextOptions = new HashMap<>();
 
     public static float worldXpDropsSizeMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get() );
     public static float worldXpDropsDecaySpeedMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get() );
     public static boolean worldXpDropsShowSkill =  Config.forgeConfig.worldXpDropsShowSkill.get();
 
     private ResourceLocation worldResLoc;
-    private Vector3d startPos, endPos;
+    private Vec3 startPos, endPos;
     private String text = "EMPTY";
     private float secondsLifespan = 1;
     private float maxOffset = 0;
@@ -59,20 +59,20 @@ public class WorldText
 
     public static WorldText fromBlockPos( ResourceLocation worldResLoc, BlockPos startPos, BlockPos endPos )
     {
-        return new WorldText( worldResLoc, new Vector3d( startPos.getX() + 0.5, startPos.getY() + 0.5, startPos.getZ() + 0.5 ), new Vector3d( endPos.getX() + 0.5, endPos.getY() + 0.5, endPos.getZ() + 0.5 ) );
+        return new WorldText( worldResLoc, new Vec3( startPos.getX() + 0.5, startPos.getY() + 0.5, startPos.getZ() + 0.5 ), new Vec3( endPos.getX() + 0.5, endPos.getY() + 0.5, endPos.getZ() + 0.5 ) );
     }
 
-    public static WorldText fromVector( ResourceLocation worldResLoc, Vector3d pos )
+    public static WorldText fromVector( ResourceLocation worldResLoc, Vec3 pos )
     {
         return fromVector( worldResLoc, pos, pos );
     }
 
-    public static WorldText fromVector( ResourceLocation worldResLoc, Vector3d startPos, Vector3d endPos )
+    public static WorldText fromVector( ResourceLocation worldResLoc, Vec3 startPos, Vec3 endPos )
     {
         return new WorldText( worldResLoc, startPos, endPos );
     }
 
-    private WorldText( ResourceLocation worldResLoc, Vector3d startPos, Vector3d endPos )
+    private WorldText( ResourceLocation worldResLoc, Vec3 startPos, Vec3 endPos )
     {
         this.worldResLoc = worldResLoc;
         this.startPos = startPos;
@@ -100,23 +100,23 @@ public class WorldText
         return worldResLoc;
     }
 
-    public Vector3d getStartPos()
+    public Vec3 getStartPos()
     {
         return startPos;
     }
 
-    public Vector3d getEndPos()
+    public Vec3 getEndPos()
     {
         return endPos;
     }
 
-    public Vector3d getPos()
+    public Vec3 getPos()
     {
-        return new Vector3d
+        return new Vec3
         (
-            Util.map( spanRatio, 1, 0, startPos.getX(), endPos.getX() ),
-            Util.map( spanRatio, 1, 0, startPos.getY(), endPos.getY() ),
-            Util.map( spanRatio, 1, 0, startPos.getZ(), endPos.getZ() )
+            Util.map( spanRatio, 1, 0, startPos.x(), endPos.x() ),
+            Util.map( spanRatio, 1, 0, startPos.y(), endPos.y() ),
+            Util.map( spanRatio, 1, 0, startPos.z(), endPos.z() )
         );
     }
 
@@ -167,7 +167,7 @@ public class WorldText
             this.value = value;
         }
 
-        public CompoundNBT getPresetOptions()
+        public CompoundTag getPresetOptions()
         {
             return presetTextOptions.get( this );
         }
@@ -185,7 +185,7 @@ public class WorldText
 
     public static void init()
     {
-        CompoundNBT blockBreakPreset = new CompoundNBT();
+        CompoundTag blockBreakPreset = new CompoundTag();
         blockBreakPreset.putFloat( "maxOffset", 0.25F );
         blockBreakPreset.putFloat( "valueDecaySpeed", 1.25F );
         blockBreakPreset.putBoolean( "showValue", true );
@@ -224,8 +224,8 @@ public class WorldText
         double xOffset = Math.random()*maxOffset*2 - maxOffset;
         double yOffset = Math.random()*maxOffset*2 - maxOffset;
         double zOffset = Math.random()*maxOffset*2 - maxOffset;
-        this.startPos = maxOffset == 0 ? startPos : new Vector3d( startPos.getX() + xOffset, startPos.getY() + yOffset, startPos.getZ() + zOffset );
-        this.endPos = maxOffset == 0 ? endPos : new Vector3d( endPos.getX() + xOffset, endPos.getY() + yOffset, endPos.getZ() + zOffset );
+        this.startPos = maxOffset == 0 ? startPos : new Vec3( startPos.x() + xOffset, startPos.y() + yOffset, startPos.z() + zOffset );
+        this.endPos = maxOffset == 0 ? endPos : new Vec3( endPos.x() + xOffset, endPos.y() + yOffset, endPos.z() + zOffset );
     }
 
     public byte getPreset()
@@ -432,13 +432,13 @@ public class WorldText
         this.endRot = endRot;
     }
 
-    public void setPos( Vector3d pos )
+    public void setPos( Vec3 pos )
     {
         this.startPos = pos;
         this.endPos = pos;
     }
 
-    public void setPos( Vector3d startPos, Vector3d endPos )
+    public void setPos( Vec3 startPos, Vec3 endPos )
     {
         this.startPos = startPos;
         this.endPos = endPos;

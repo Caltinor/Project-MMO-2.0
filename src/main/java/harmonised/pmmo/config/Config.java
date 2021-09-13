@@ -4,8 +4,8 @@ import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import org.apache.logging.log4j.LogManager;
@@ -1829,12 +1829,12 @@ public class Config
         }
     }
 
-    public static Map<String, Double> getXpMap( PlayerEntity player )
+    public static Map<String, Double> getXpMap( Player player )
     {
-        if( player.world.isRemote() )
-            return XP.getOfflineXpMap( player.getUniqueID() );
+        if( player.level.isClientSide() )
+            return XP.getOfflineXpMap( player.getUUID() );
         else
-            return getXpMap( player.getUniqueID() );
+            return getXpMap( player.getUUID() );
     }
 
     public static Map<String, Double> getXpMap( UUID uuid )
@@ -1852,12 +1852,12 @@ public class Config
         config = inMap;
     }
 
-    public static Map<String, Double> getPreferencesMap( PlayerEntity player )
+    public static Map<String, Double> getPreferencesMap( Player player )
     {
-        if( player.world.isRemote() )
+        if( player.level.isClientSide() )
             return preferences;
         else
-            return PmmoSavedData.get().getPreferencesMap( player.getUniqueID() );
+            return PmmoSavedData.get().getPreferencesMap( player.getUUID() );
     }
 
     public static Map<String, Double> getPreferencesMapOffline()
@@ -1865,12 +1865,12 @@ public class Config
         return preferences;
     }
 
-    public static Map<String, Double> getAbilitiesMap( PlayerEntity player )
+    public static Map<String, Double> getAbilitiesMap( Player player )
     {
-        if( player.world.isRemote() )
+        if( player.level.isClientSide() )
             return abilities;
         else
-            return PmmoSavedData.get().getAbilitiesMap( player.getUniqueID() );
+            return PmmoSavedData.get().getAbilitiesMap( player.getUUID() );
     }
 
     public static void setPreferencesMap( Map<String, Double> newPreferencesMap )
@@ -1883,7 +1883,7 @@ public class Config
      * Gets all xp boost maps
      */
     @Deprecated
-    public static Map<String, Map<String, Double>> getXpBoostsMap( PlayerEntity player )
+    public static Map<String, Map<String, Double>> getXpBoostsMap( Player player )
     {
         return APIUtils.getXpBoostsMap( player );
     }
@@ -1893,7 +1893,7 @@ public class Config
      * Gets a specific xp boost map
      */
     @Deprecated
-    public static Map<String, Double> getXpBoostMap( PlayerEntity player, String xpBoostKey )
+    public static Map<String, Double> getXpBoostMap( Player player, String xpBoostKey )
     {
         return APIUtils.getXpBoostMap( player, xpBoostKey );
     }
@@ -1903,7 +1903,7 @@ public class Config
      * Gets a specific xp boost in a specific skill
      */
     @Deprecated
-    public static double getPlayerXpBoost( PlayerEntity player, String skill )
+    public static double getPlayerXpBoost( Player player, String skill )
     {
         return APIUtils.getPlayerXpBoost( player, skill );
     }
@@ -1913,7 +1913,7 @@ public class Config
      * Sets a specific xp boost map
      */
     @Deprecated
-    public static void setPlayerXpBoost( ServerPlayerEntity player, String xpBoostKey, Map<String, Double> newXpBoosts )
+    public static void setPlayerXpBoost( ServerPlayer player, String xpBoostKey, Map<String, Double> newXpBoosts )
     {
         APIUtils.setPlayerXpBoost( player, xpBoostKey, newXpBoosts );
     }
@@ -1923,7 +1923,7 @@ public class Config
      * Removes a specific xp boost map
      */
     @Deprecated
-    public static void removePlayerXpBoost( ServerPlayerEntity player, String xpBoostKey )
+    public static void removePlayerXpBoost( ServerPlayer player, String xpBoostKey )
     {
         APIUtils.removePlayerXpBoost( player, xpBoostKey );
     }
@@ -1933,7 +1933,7 @@ public class Config
      * WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
      */
     @Deprecated
-    public static void removeAllPlayerXpBoosts( ServerPlayerEntity player )
+    public static void removeAllPlayerXpBoosts( ServerPlayer player )
     {
         APIUtils.removeAllPlayerXpBoosts( player );
     }
@@ -1944,7 +1944,7 @@ public class Config
      * Only Project MMO should use this.
      */
     @Deprecated
-    public static void setPlayerXpBoostsMaps( PlayerEntity player, Map<String, Map<String, Double>> newBoosts )
+    public static void setPlayerXpBoostsMaps( Player player, Map<String, Map<String, Double>> newBoosts )
     {
         APIUtils.setPlayerXpBoostsMaps( player, newBoosts );
     }

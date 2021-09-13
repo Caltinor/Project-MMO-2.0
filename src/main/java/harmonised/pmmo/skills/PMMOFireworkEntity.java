@@ -4,31 +4,30 @@ import harmonised.pmmo.gui.WorldText;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class PMMOFireworkEntity extends FireworkRocketEntity
 {
     private WorldText explosionText;
 
-    public PMMOFireworkEntity(World worldIn, double x, double y, double z, ItemStack givenItem)
+    public PMMOFireworkEntity(Level worldIn, double x, double y, double z, ItemStack givenItem)
     {
         super(worldIn, x, y, z, givenItem);
-        this.fireworkAge = 0;
-        this.setPosition(x, y, z);
+        this.life = 0;
+        this.setPos(x, y, z);
         int i = 1;
         if (!givenItem.isEmpty() && givenItem.hasTag()) {
-            this.dataManager.set(FIREWORK_ITEM, givenItem.copy());
-            i += givenItem.getOrCreateChildTag("Fireworks").getByte("Flight");
+            this.entityData.set(DATA_ID_FIREWORKS_ITEM, givenItem.copy());
+            i += givenItem.getOrCreateTagElement("Fireworks").getByte("Flight");
         }
 
-        this.setMotion(this.rand.nextGaussian() * 0.001D, 0.05D, this.rand.nextGaussian() * 0.001D);
-        this.lifetime = 10 * i + this.rand.nextInt(6) + this.rand.nextInt(7);
+        this.setDeltaMovement(this.random.nextGaussian() * 0.001D, 0.05D, this.random.nextGaussian() * 0.001D);
+        this.lifetime = 10 * i + this.random.nextInt(6) + this.random.nextInt(7);
     }
 
     public void setExplosionText( WorldText explosionText )
@@ -37,16 +36,16 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
     }
 
     @Override
-    public void func_213893_k()
+    public void explode()
     {
-        this.world.setEntityState(this, (byte)17);
+        this.level.broadcastEntityEvent(this, (byte)17);
         if( explosionText != null )
         {
-            Vector3d pos = getPositionVec();
-            ResourceLocation dimResLoc = XP.getDimResLoc( world );
-            for( ServerPlayerEntity player : PmmoSavedData.getServer().getPlayerList().getPlayers() )
+            Vec3 pos = position();
+            ResourceLocation dimResLoc = XP.getDimResLoc( level );
+            for( ServerPlayer player : PmmoSavedData.getServer().getPlayerList().getPlayers() )
             {
-                if( world == player.getServerWorld() && Util.getDistance( pos, player.getPositionVec() ) < 325.1 )
+                if( level == player.getLevel() && Util.getDistance( pos, player.position() ) < 325.1 )
                 {
                     explosionText.setPos( pos );
                     explosionText.updatePos();
@@ -55,6 +54,6 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
             }
         }
 //        this.dealExplosionDamage();
-        this.remove();
+        this.remove(RemovalReason.DISCARDED);
     }
 }

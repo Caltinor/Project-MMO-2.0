@@ -6,10 +6,10 @@ import harmonised.pmmo.party.PartyPendingSystem;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 
@@ -19,9 +19,9 @@ public class JumpHandler
 {
     public static void handleJump( LivingEvent.LivingJumpEvent event )
     {
-        if( event.getEntityLiving() instanceof PlayerEntity && !(event.getEntityLiving() instanceof FakePlayer) )
+        if( event.getEntityLiving() instanceof Player && !(event.getEntityLiving() instanceof FakePlayer) )
         {
-            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+            Player player = (Player) event.getEntityLiving();
 
 //			if( !player.world.isRemote )
 //				System.out.println( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ) );
@@ -29,34 +29,34 @@ public class JumpHandler
             if( XP.isPlayerSurvival( player ) )
             {
                 double jumpBoost = 0;
-                if ( player.isSneaking() )
+                if ( player.isShiftKeyDown() )
                     jumpBoost = getCrouchJumpBoost( player );
                 else if (player.isSprinting())
                     jumpBoost = getSprintJumpBoost( player );
 
-                if ( player.world.isRemote )
+                if ( player.level.isClientSide )
                 {
                     if( jumpBoost > 0 )
-                        player.addVelocity( 0, jumpBoost, 0 );
+                        player.push( 0, jumpBoost, 0 );
                 }
                 else if (!player.isInWater())
                 {
                     double jumpAmp = 0;
 
-                    if( player.isPotionActive( Effects.JUMP_BOOST ) )
-                        jumpAmp = player.getActivePotionEffect( Effects.JUMP_BOOST ).getAmplifier() + 1;
+                    if( player.hasEffect( MobEffects.JUMP ) )
+                        jumpAmp = player.getEffect( MobEffects.JUMP ).getAmplifier() + 1;
 
-                    Vector3d xpDropPos = player.getPositionVec();
+                    Vec3 xpDropPos = player.position();
                     double award = Math.max( (jumpBoost * 10 + 1) * ( 1 + jumpAmp / 4 ), 1 );
-                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( player.getEntityWorld() ), xpDropPos.getX(), xpDropPos.getY() + 0.523, xpDropPos.getZ(), 0.15, award, Skill.AGILITY.toString() );
-                    XP.addWorldXpDrop( xpDrop, (ServerPlayerEntity) player );
-                    XP.awardXp( (ServerPlayerEntity) player, Skill.AGILITY.toString(), "jumping", award, true, false, false );
+                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( player.getCommandSenderWorld() ), xpDropPos.x(), xpDropPos.y() + 0.523, xpDropPos.z(), 0.15, award, Skill.AGILITY.toString() );
+                    XP.addWorldXpDrop( xpDrop, (ServerPlayer) player );
+                    XP.awardXp( (ServerPlayer) player, Skill.AGILITY.toString(), "jumping", award, true, false, false );
                 }
             }
         }
     }
 
-    public static double getCrouchJumpBoost( PlayerEntity player )
+    public static double getCrouchJumpBoost( Player player )
     {
         Map<String, Double> prefsMap = Config.getPreferencesMap( player );
         double agilityLevel;
@@ -72,7 +72,7 @@ public class JumpHandler
         return jumpBoost;
     }
 
-    public static double getSprintJumpBoost( PlayerEntity player )
+    public static double getSprintJumpBoost( Player player )
     {
         Map<String, Double> prefsMap = Config.getPreferencesMap( player );
         double agilityLevel;

@@ -2,10 +2,9 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.gui.XPOverlayGUI;
-import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -16,7 +15,7 @@ public class packetHandler
     {
         ctx.get().enqueueWork(() ->
         {
-            UUID uuid = Minecraft.getInstance().player.getUniqueID();
+            UUID uuid = Minecraft.getInstance().player.getUUID();
             String name = Minecraft.getInstance().player.getName().getString();
 
             if( packet.skill.equals( "42069" ) )

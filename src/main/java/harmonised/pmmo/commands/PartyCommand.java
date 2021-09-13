@@ -6,12 +6,11 @@ import harmonised.pmmo.party.PartyMemberInfo;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.XP;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Set;
 import java.util.UUID;
@@ -19,24 +18,24 @@ import java.util.stream.Collectors;
 
 public class PartyCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
     {
-        PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
-        UUID uuid = player.getUniqueID();
+        Player player = (Player) context.getSource().getEntity();
+        UUID uuid = player.getUUID();
         PmmoSavedData pmmoSavedData = PmmoSavedData.get();
         Party party = pmmoSavedData.getParty( uuid );
 
         if( party == null )
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAreNotInAParty" ).setStyle( XP.textStyle.get( "red" ) ), false );
+            player.displayClientMessage( new TranslatableComponent( "pmmo.youAreNotInAParty" ).setStyle( XP.textStyle.get( "red" ) ), false );
         else
         {
             Set<PartyMemberInfo> membersInfo = party.getAllMembersInfo();
-            Set<UUID> membersInRangeUUID = party.getOnlineMembersInRange( (ServerPlayerEntity) player ).stream().map( playerToMap -> playerToMap.getUniqueID() ).collect(Collectors.toSet());
+            Set<UUID> membersInRangeUUID = party.getOnlineMembersInRange( (ServerPlayer) player ).stream().map( playerToMap -> playerToMap.getUUID() ).collect(Collectors.toSet());
             double totalXpGained = party.getTotalXpGained();
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAreInAParty" ).setStyle( XP.textStyle.get( "green" ) ), false );
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.totalMembersOutOfMax", party.getPartySize(), Party.getMaxPartyMembers() ).setStyle( XP.textStyle.get( "green" ) ), false );
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.partyTotalXpGained", DP.dpSoft( totalXpGained ) ).setStyle( XP.textStyle.get( "green" ) ), false );
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.partyXpBonus", DP.dpSoft( ( party.getMultiplier( membersInRangeUUID.size() ) - 1 ) * 100 ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+            player.displayClientMessage( new TranslatableComponent( "pmmo.youAreInAParty" ).setStyle( XP.textStyle.get( "green" ) ), false );
+            player.displayClientMessage( new TranslatableComponent( "pmmo.totalMembersOutOfMax", party.getPartySize(), Party.getMaxPartyMembers() ).setStyle( XP.textStyle.get( "green" ) ), false );
+            player.displayClientMessage( new TranslatableComponent( "pmmo.partyTotalXpGained", DP.dpSoft( totalXpGained ) ).setStyle( XP.textStyle.get( "green" ) ), false );
+            player.displayClientMessage( new TranslatableComponent( "pmmo.partyXpBonus", DP.dpSoft( ( party.getMultiplier( membersInRangeUUID.size() ) - 1 ) * 100 ) ).setStyle( XP.textStyle.get( "green" ) ), false );
             for( PartyMemberInfo memberInfo : membersInfo )
             {
                 String xpGainedPercentage = DP.dpSoft( ( memberInfo.xpGained / totalXpGained ) * 100 );
@@ -44,7 +43,7 @@ public class PartyCommand
                 if( !memberInfo.uuid.equals( uuid ) )
                     color = membersInRangeUUID.contains( memberInfo.uuid ) ? "green" : "dark_green";
 
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.partyMemberListEntry", pmmoSavedData.getName( memberInfo.uuid ), DP.dpSoft( memberInfo.xpGained ), totalXpGained == 0 ? "0" : xpGainedPercentage, memberInfo.xpGained ).setStyle( XP.textStyle.get( color ) ), false );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.partyMemberListEntry", pmmoSavedData.getName( memberInfo.uuid ), DP.dpSoft( memberInfo.xpGained ), totalXpGained == 0 ? "0" : xpGainedPercentage, memberInfo.xpGained ).setStyle( XP.textStyle.get( color ) ), false );
             }
         }
         return 1;

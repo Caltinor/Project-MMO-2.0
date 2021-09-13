@@ -1,9 +1,8 @@
 package harmonised.pmmo.network;
 
 import harmonised.pmmo.util.XP;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
-
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -22,7 +21,7 @@ public class MessageKeypress
     {
     }
 
-    public static MessageKeypress decode(PacketBuffer buf )
+    public static MessageKeypress decode(FriendlyByteBuf buf )
     {
         MessageKeypress packet = new MessageKeypress();
         packet.keyState = buf.readBoolean();
@@ -31,7 +30,7 @@ public class MessageKeypress
         return packet;
     }
 
-    public static void encode(MessageKeypress packet, PacketBuffer buf )
+    public static void encode(MessageKeypress packet, FriendlyByteBuf buf )
     {
         buf.writeBoolean( packet.keyState );
         buf.writeInt( packet.key );
@@ -41,7 +40,7 @@ public class MessageKeypress
     {
         ctx.get().enqueueWork(() ->
         {
-            UUID playerUUID = ctx.get().getSender().getUniqueID();
+            UUID playerUUID = ctx.get().getSender().getUUID();
 
             if( packet.key == 1 )
             {

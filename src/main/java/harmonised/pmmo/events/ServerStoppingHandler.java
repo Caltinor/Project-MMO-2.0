@@ -1,6 +1,6 @@
 package harmonised.pmmo.events;
 
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 
 public class ServerStoppingHandler
 {

@@ -1,16 +1,11 @@
 package harmonised.pmmo.network;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.util.JSONException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;

@@ -7,13 +7,13 @@ import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,9 +21,9 @@ public class CheckStatsCommand
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
     {
-        PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
+        Player sender = (Player) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 
         if( sender == null )
@@ -34,20 +34,20 @@ public class CheckStatsCommand
 
         try
         {
-            PlayerEntity target = EntityArgument.getPlayer( context, "player name" );
+            Player target = EntityArgument.getPlayer( context, "player name" );
 
-            CompoundNBT packetxpMap = NBTHelper.mapStringToNbt(Config.getXpMap( target ) );
+            CompoundTag packetxpMap = NBTHelper.mapStringToNbt(Config.getXpMap( target ) );
 
-            packetxpMap.putString( "UUID", target.getUniqueID().toString() );
+            packetxpMap.putString( "UUID", target.getUUID().toString() );
             packetxpMap.putString( "name", target.getName().getString() );
 
-            NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( packetxpMap, 3 ), (ServerPlayerEntity) sender );
+            NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( packetxpMap, 3 ), (ServerPlayer) sender );
         }
         catch( CommandSyntaxException e )
         {
             LOGGER.error( "Error: Invalid Player requested at CheckStats Command \"" + args[2] + "\"", e );
 
-            sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+            sender.displayClientMessage(  new TranslatableComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
             return -1;
         }
 

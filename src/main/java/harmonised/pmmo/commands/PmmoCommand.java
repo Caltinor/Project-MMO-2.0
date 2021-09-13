@@ -6,18 +6,14 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.EntityArgument;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.Set;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
 
 public class PmmoCommand
 {
-    private static final Logger LOGGER = LogManager.getLogger();
+    //private static final Logger LOGGER = LogManager.getLogger();
     public static String[] suggestSkill;
     public static String[] levelOrXp = { "level", "xp" };
     public static String[] acceptOrDecline = { "accept", "decline" };
@@ -39,7 +35,7 @@ public class PmmoCommand
         }
     }
 
-    public static void register( CommandDispatcher<CommandSource> dispatcher )
+    public static void register( CommandDispatcher<CommandSourceStack> dispatcher )
     {
 //        int i = 0;
 //
@@ -51,21 +47,21 @@ public class PmmoCommand
         dispatcher.register( Commands.literal( Reference.MOD_ID )
                   //ADMIN
                     .then( Commands.literal( "admin" )
-                    .requires( player -> player.hasPermissionLevel( 2 ) )
+                    .requires( player -> player.hasPermission( 2 ) )
                     .then( Commands.argument( "target", EntityArgument.players() )
                     .then( Commands.literal( "set" )
                     .then( Commands.argument( "Skill", StringArgumentType.word() )
-                    .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
+                    .suggests( ( ctx, theBuilder ) -> SharedSuggestionProvider.suggest( suggestSkill, theBuilder ) )
                     .then( Commands.argument( "Level|Xp", StringArgumentType.word() )
-                    .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( levelOrXp, theBuilder ) )
+                    .suggests( ( ctx, theBuilder ) -> SharedSuggestionProvider.suggest( levelOrXp, theBuilder ) )
                     .then( Commands.argument( "New Value", DoubleArgumentType.doubleArg() )
                     .executes( SetCommand::execute )
                     ))))
                     .then( Commands.literal( "add" )
                     .then( Commands.argument( "Skill", StringArgumentType.word() )
-                    .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSkill, theBuilder ) )
+                    .suggests( ( ctx, theBuilder ) -> SharedSuggestionProvider.suggest( suggestSkill, theBuilder ) )
                     .then( Commands.argument( "Level|Xp", StringArgumentType.word() )
-                    .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( levelOrXp, theBuilder ) )
+                    .suggests( ( ctx, theBuilder ) -> SharedSuggestionProvider.suggest( levelOrXp, theBuilder ) )
                     .then( Commands.argument( "Value To Add", DoubleArgumentType.doubleArg() )
                     .executes( AddCommand::execute )
                     .then( Commands.argument( "Ignore Bonuses", BoolArgumentType.bool() )
@@ -88,7 +84,7 @@ public class PmmoCommand
                     .then( Commands.literal( "leave" )
                     .executes( LeavePartyCommand::execute ) ) )
                     .then( Commands.literal( "reload" )
-                    .requires( player ->  player.hasPermissionLevel( 2 ) )
+                    .requires( player ->  player.hasPermission( 2 ) )
                     .executes( ReloadConfigCommand::execute )
                   )
                   //RESYNC
@@ -121,7 +117,7 @@ public class PmmoCommand
                     .then( Commands.literal( "debug" )
                     .then( Commands.literal( "searchRegistry" )
                     .then(Commands.argument( "type", StringArgumentType.word() )
-                    .suggests( ( ctx, theBuilder ) -> ISuggestionProvider.suggest( suggestSearchRegistry, theBuilder ) )
+                    .suggests( ( ctx, theBuilder ) -> SharedSuggestionProvider.suggest( suggestSearchRegistry, theBuilder ) )
                     .then(Commands.argument( "search query", StringArgumentType.word() )
                     .executes( SearchRegCommand::execute )
                     )))

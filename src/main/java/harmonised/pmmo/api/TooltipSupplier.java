@@ -9,15 +9,15 @@ import org.apache.logging.log4j.Logger;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
 
 public class TooltipSupplier {
 	public static final Logger LOGGER = LogManager.getLogger();
 	private static Map<JType, Map<ResourceLocation, Function<ItemStack, Map<String, Double>>>> tooltips = new HashMap<>();
-	private static Map<JType, Map<ResourceLocation, Function<TileEntity, Map<String, Double>>>> breakTooltips = new HashMap<>();
+	private static Map<JType, Map<ResourceLocation, Function<BlockEntity, Map<String, Double>>>> breakTooltips = new HashMap<>();
 	private static Map<JType, Map<ResourceLocation, Function<Entity, Map<String, Double>>>> entityTooltips = new HashMap<>();
 	
 	/**registers a Function to be used in providing the requirements for specific item
@@ -57,7 +57,7 @@ public class TooltipSupplier {
 	 * @param jType the PMMO behavior type
 	 * @param func returns a map of skills and required levels
 	 */
-	public static void registerBreakTooltipData(ResourceLocation res, JType jType, Function<TileEntity, Map<String, Double>> func) 
+	public static void registerBreakTooltipData(ResourceLocation res, JType jType, Function<BlockEntity, Map<String, Double>> func) 
 	{
 		if (func == null) {LOGGER.info("Supplied Function Null"); return;}
 		if (jType == null) {LOGGER.info("Supplied JType Null"); return;}
@@ -155,7 +155,7 @@ public class TooltipSupplier {
 	 * @param stack the itemstack being evaluated for skill requirements
 	 * @return the skill map of the block.
 	 */	
-	public static Map<String, Double> getTooltipData(ResourceLocation res, JType jType, TileEntity tile)
+	public static Map<String, Double> getTooltipData(ResourceLocation res, JType jType, BlockEntity tile)
 	{
 		if (tooltipExists(res, jType)) {
 			Map<String, Double> suppliedData = breakTooltips.get(jType).get(res).apply(tile);

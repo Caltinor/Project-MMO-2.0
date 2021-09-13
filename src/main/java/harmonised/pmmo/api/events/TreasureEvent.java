@@ -1,8 +1,8 @@
 package harmonised.pmmo.api.events;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import java.util.Map;
@@ -13,7 +13,7 @@ public class TreasureEvent extends PlayerEvent
     ItemStack itemStack;
     Map<String, Double> award;
 
-    public TreasureEvent( PlayerEntity player, BlockPos blockPos, ItemStack itemStack, Map<String, Double> award )
+    public TreasureEvent( Player player, BlockPos blockPos, ItemStack itemStack, Map<String, Double> award )
     {
         super( player );
         this.blockPos = blockPos;

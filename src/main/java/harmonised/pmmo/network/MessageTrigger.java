@@ -1,11 +1,9 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.gui.InfoScreen;
 import harmonised.pmmo.proxy.ClientHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -22,7 +20,7 @@ public class MessageTrigger
     {
     }
 
-    public static MessageTrigger decode( PacketBuffer buf )
+    public static MessageTrigger decode( FriendlyByteBuf buf )
     {
         MessageTrigger packet = new MessageTrigger();
 
@@ -31,7 +29,7 @@ public class MessageTrigger
         return packet;
     }
 
-    public static void encode( MessageTrigger packet, PacketBuffer buf )
+    public static void encode( MessageTrigger packet, FriendlyByteBuf buf )
     {
         buf.writeInt( packet.type );
     }

@@ -1,8 +1,8 @@
 package harmonised.pmmo.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.util.ScreenShotHelper;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.Screenshot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,11 +25,11 @@ public class ScreenshotHandler
             File screenshotDir = new File( pmmoDir, folderName );
             screenshotDir.mkdirs();
             Minecraft mc = Minecraft.getInstance();
-            NativeImage nativeImage = ScreenShotHelper.createScreenshot(mc.getFramebuffer().framebufferWidth, mc.getFramebuffer().framebufferHeight, mc.getFramebuffer());
+            NativeImage nativeImage = Screenshot.takeScreenshot(mc.getMainRenderTarget().viewWidth, mc.getMainRenderTarget().viewHeight, mc.getMainRenderTarget());
             String screenshotDate = DATE_FORMAT.format( new Date() );
             File screenshotFile = new File( screenshotDir, screenshotName + " " + screenshotDate + ".png" );
 
-            nativeImage.write( screenshotFile );
+            nativeImage.writeToFile( screenshotFile );
         }
         catch ( Exception err )
         {

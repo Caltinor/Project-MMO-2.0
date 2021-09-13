@@ -2,11 +2,10 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.network.NetworkEvent;
-
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraft.network.chat.TranslatableComponent;
 import java.util.function.Supplier;
 
 public class MessageTripleTranslation
@@ -42,25 +41,25 @@ public class MessageTripleTranslation
     {
     }
 
-    public static MessageTripleTranslation decode( PacketBuffer buf )
+    public static MessageTripleTranslation decode( FriendlyByteBuf buf )
     {
         MessageTripleTranslation packet = new MessageTripleTranslation();
-        packet.tKey = buf.readString();
-        packet.fKey = buf.readString();
-        packet.sKey = buf.readString();
-        packet.rdKey = buf.readString();
+        packet.tKey = buf.readUtf();
+        packet.fKey = buf.readUtf();
+        packet.sKey = buf.readUtf();
+        packet.rdKey = buf.readUtf();
         packet.bar = buf.readBoolean();
         packet.color = buf.readInt();
 
         return packet;
     }
 
-    public static void encode( MessageTripleTranslation packet, PacketBuffer buf )
+    public static void encode( MessageTripleTranslation packet, FriendlyByteBuf buf )
     {
-        buf.writeString( packet.tKey );
-        buf.writeString( packet.fKey );
-        buf.writeString( packet.sKey );
-        buf.writeString( packet.rdKey );
+        buf.writeUtf( packet.tKey );
+        buf.writeUtf( packet.fKey );
+        buf.writeUtf( packet.sKey );
+        buf.writeUtf( packet.rdKey );
         buf.writeBoolean( packet.bar );
         buf.writeInt( packet.color );
     }
@@ -72,19 +71,19 @@ public class MessageTripleTranslation
             switch( packet.color )
             {
                 case 0: //white
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ), new TranslationTextComponent( packet.rdKey ) ), packet.bar );
+                    Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( packet.fKey ), new TranslatableComponent( packet.sKey ), new TranslatableComponent( packet.rdKey ) ), packet.bar );
                     break;
 
                 case 1: //green
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ), new TranslationTextComponent( packet.rdKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                    Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( packet.fKey ), new TranslatableComponent( packet.sKey ), new TranslatableComponent( packet.rdKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
                     break;
 
                 case 2: //red
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ), new TranslationTextComponent( packet.rdKey ) ).setStyle( XP.textStyle.get( "red" ) ), packet.bar );
+                    Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( packet.fKey ), new TranslatableComponent( packet.sKey ), new TranslatableComponent( packet.rdKey ) ).setStyle( XP.textStyle.get( "red" ) ), packet.bar );
                     break;
 
                 case 3: //yellow
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( packet.tKey, new TranslationTextComponent( packet.fKey ), new TranslationTextComponent( packet.sKey ), new TranslationTextComponent( packet.rdKey ) ).setStyle( XP.textStyle.get( "yellow" ) ), packet.bar );
+                    Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( packet.fKey ), new TranslatableComponent( packet.sKey ), new TranslatableComponent( packet.rdKey ) ).setStyle( XP.textStyle.get( "yellow" ) ), packet.bar );
                     break;
             }
         });

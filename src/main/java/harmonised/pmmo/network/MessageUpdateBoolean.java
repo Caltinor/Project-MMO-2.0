@@ -3,9 +3,9 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.gui.GlossaryScreen;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -24,7 +24,7 @@ public class MessageUpdateBoolean
     {
     }
 
-    public static MessageUpdateBoolean decode( PacketBuffer buf )
+    public static MessageUpdateBoolean decode( FriendlyByteBuf buf )
     {
         MessageUpdateBoolean packet = new MessageUpdateBoolean();
 
@@ -34,7 +34,7 @@ public class MessageUpdateBoolean
         return packet;
     }
 
-    public static void encode( MessageUpdateBoolean packet, PacketBuffer buf )
+    public static void encode( MessageUpdateBoolean packet, FriendlyByteBuf buf )
     {
         buf.writeBoolean( packet.value );
         buf.writeInt( packet.type );

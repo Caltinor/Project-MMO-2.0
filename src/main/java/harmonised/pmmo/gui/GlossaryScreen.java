@@ -1,33 +1,33 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.*;
 
 public class GlossaryScreen extends Screen
 {
-    private final List<IGuiEventListener> children = Lists.newArrayList();
+    private final List<GuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static TileButton exitButton;
 
     Minecraft minecraft = Minecraft.getInstance();
-    MainWindow sr = minecraft.getMainWindow();
-    FontRenderer font = minecraft.fontRenderer;
+    Window sr = minecraft.getWindow();
+    Font font = minecraft.font;
     private int boxWidth = 256;
     private int boxHeight = 256;
     private int x;
@@ -42,7 +42,7 @@ public class GlossaryScreen extends Screen
     private static String transKey;
     private boolean loadDefaultButtons;
 
-    public GlossaryScreen( UUID uuid, ITextComponent titleIn, boolean loadDefaultButtons )
+    public GlossaryScreen( UUID uuid, Component titleIn, boolean loadDefaultButtons )
     {
         super(titleIn);
         this.uuid = uuid;
@@ -129,15 +129,15 @@ public class GlossaryScreen extends Screen
     @Override
     protected void init()
     {
-        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        x = ( (sr.getGuiScaledWidth() / 2) - (boxWidth / 2) );
+        y = ( (sr.getGuiScaledHeight() / 2) - (boxHeight / 2) );
 
-        creativeText = new TranslationTextComponent( "pmmo.creativeWarning" ).getString();
+        creativeText = new TranslatableComponent( "pmmo.creativeWarning" ).getString();
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "", JType.NONE, button ->
         {
             history = new ArrayList<>();
-            Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
+            Minecraft.getInstance().setScreen( new MainScreen( uuid, new TranslatableComponent( "pmmo.potato" ) ) );
         });
 
         if( loadDefaultButtons )
@@ -165,7 +165,7 @@ public class GlossaryScreen extends Screen
     public static void onGlossaryButtonPress( TileButton button )
     {
         updateHistory( button.index );
-        Minecraft.getInstance().displayGuiScreen( new ListScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( button.transKey ), "", button.jType, Minecraft.getInstance().player ) );
+        Minecraft.getInstance().setScreen( new ListScreen( Minecraft.getInstance().player.getUUID(), new TranslatableComponent( button.transKey ), "", button.jType, Minecraft.getInstance().player ) );
     }
     
     public static void updateHistory( int index )
@@ -185,7 +185,7 @@ public class GlossaryScreen extends Screen
         }
 
         if( combo )
-            Minecraft.getInstance().player.playSound( SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
+            Minecraft.getInstance().player.playNotifySound( SoundEvents.UI_BUTTON_CLICK, SoundSource.MASTER, 0.8F + rand.nextFloat() * 0.4F, 0.9F + rand.nextFloat() * 0.15F );
     }
 
     public static boolean updateHistory( char index )
@@ -216,7 +216,7 @@ public class GlossaryScreen extends Screen
 
                 if( passed )
                 {
-                    Minecraft.getInstance().player.playSound(SoundEvents.ENTITY_PHANTOM_DEATH, SoundCategory.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
+                    Minecraft.getInstance().player.playNotifySound(SoundEvents.PHANTOM_DEATH, SoundSource.AMBIENT, 5F + rand.nextFloat() * 0.4F, -5F - rand.nextFloat() * 0.15F );
                     return true;
                 }
             }
@@ -225,39 +225,39 @@ public class GlossaryScreen extends Screen
     }
 
     @Override
-    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
+    public void render( PoseStack stack,  int mouseX, int mouseY, float partialTicks)
     {
         renderBackground( stack,  1 );
         super.render( stack, mouseX, mouseY, partialTicks );
 
-        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        x = ( (sr.getGuiScaledWidth() / 2) - (boxWidth / 2) );
+        y = ( (sr.getGuiScaledHeight() / 2) - (boxHeight / 2) );
 
         for( TileButton button : currentTileButtons )
         {
             if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                renderTooltip( stack,  new TranslationTextComponent( button.transKey ), mouseX, mouseY );
+                renderTooltip( stack,  new TranslatableComponent( button.transKey ), mouseX, mouseY );
         }
 
         if( Minecraft.getInstance().player.isCreative() )
         {
-            if( font.getStringWidth( creativeText ) > 220 )
+            if( font.width( creativeText ) > 220 )
             {
-                drawCenteredString( stack, Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 18, 0xffffff );
-                drawCenteredString( stack, Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 10, 0xffff00 );
+                drawCenteredString( stack, Minecraft.getInstance().font, transKey,sr.getGuiScaledWidth() / 2, y - 18, 0xffffff );
+                drawCenteredString( stack, Minecraft.getInstance().font, creativeText,sr.getGuiScaledWidth() / 2, y - 10, 0xffff00 );
             }
             else
             {
-                drawCenteredString( stack, Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 13, 0xffffff );
-                drawCenteredString( stack, Minecraft.getInstance().fontRenderer, creativeText,sr.getScaledWidth() / 2, y - 5, 0xffff00 );
+                drawCenteredString( stack, Minecraft.getInstance().font, transKey,sr.getGuiScaledWidth() / 2, y - 13, 0xffffff );
+                drawCenteredString( stack, Minecraft.getInstance().font, creativeText,sr.getGuiScaledWidth() / 2, y - 5, 0xffff00 );
             }
         }
         else
-            drawCenteredString( stack, Minecraft.getInstance().fontRenderer, transKey,sr.getScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString( stack, Minecraft.getInstance().font, transKey,sr.getGuiScaledWidth() / 2, y - 5, 0xffffff );
     }
 
     @Override
-    public void renderBackground( MatrixStack stack, int p_renderBackground_1_)
+    public void renderBackground( PoseStack stack, int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
@@ -267,7 +267,7 @@ public class GlossaryScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getInstance().getTextureManager().bind( box );
 
         this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }
@@ -305,7 +305,7 @@ public class GlossaryScreen extends Screen
     public static void setButtonsToDefault()
     {
         currentTileButtons = defaultTileButtons;
-        GlossaryScreen.transKey = new TranslationTextComponent( "pmmo.glossary" ).getString();
+        GlossaryScreen.transKey = new TranslatableComponent( "pmmo.glossary" ).getString();
     }
 
     public static void setButtonsToKey( String regKey )
@@ -321,9 +321,9 @@ public class GlossaryScreen extends Screen
         if( currentTileButtons.size() == 0 )
         {
             setButtonsToDefault();
-            GlossaryScreen.transKey = new TranslationTextComponent( "pmmo.glossary" ).getString();
+            GlossaryScreen.transKey = new TranslatableComponent( "pmmo.glossary" ).getString();
         }
         else
-            GlossaryScreen.transKey = new TranslationTextComponent( XP.getItem( regKey ).getTranslationKey() ).getString();
+            GlossaryScreen.transKey = new TranslatableComponent( XP.getItem( regKey ).getDescriptionId() ).getString();
     }
 }

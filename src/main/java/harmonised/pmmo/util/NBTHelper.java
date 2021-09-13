@@ -2,7 +2,7 @@ package harmonised.pmmo.util;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,11 +41,11 @@ public class NBTHelper
         return outMap;
     }
 
-    public static Map<String, Double> nbtToMapString( CompoundNBT nbt )
+    public static Map<String, Double> nbtToMapString( CompoundTag nbt )
     {
         Map<String, Double> map = new HashMap<>();
 
-        for( String key : nbt.keySet() )
+        for( String key : nbt.getAllKeys() )
         {
             if( !Double.isNaN( nbt.getDouble( key ) ) )
                 map.put( key, nbt.getDouble( key ) );
@@ -54,12 +54,12 @@ public class NBTHelper
         return map;
     }
 
-    public static CompoundNBT mapStringToNbt( Map<String, Double> map )
+    public static CompoundTag mapStringToNbt( Map<String, Double> map )
     {
         if( map == null )
-            return new CompoundNBT();
+            return new CompoundTag();
 
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
 
         for( Map.Entry<String, Double> entry : map.entrySet() )
         {
@@ -69,9 +69,9 @@ public class NBTHelper
         return nbt;
     }
 
-    public static CompoundNBT mapStringMapStringToNbt( Map<String, Map<String, Double>> map )
+    public static CompoundTag mapStringMapStringToNbt( Map<String, Map<String, Double>> map )
     {
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
 
         for( Map.Entry<String, Map<String, Double>> entry : map.entrySet() )
         {
@@ -81,10 +81,10 @@ public class NBTHelper
         return nbt;
     }
 
-    public static CompoundNBT mapUuidStringToNbt( Map<UUID, Map<String, Double>> inMap )
+    public static CompoundTag mapUuidStringToNbt( Map<UUID, Map<String, Double>> inMap )
     {
-        CompoundNBT outData = new CompoundNBT();
-        CompoundNBT innerData;
+        CompoundTag outData = new CompoundTag();
+        CompoundTag innerData;
 
         for( Map.Entry<UUID, Map<String, Double>> entry : inMap.entrySet() )
         {
@@ -94,10 +94,10 @@ public class NBTHelper
         return outData;
     }
 
-    public static Map<UUID, Map<String, Double>> nbtToMapUuidString( CompoundNBT inData )
+    public static Map<UUID, Map<String, Double>> nbtToMapUuidString( CompoundTag inData )
     {
         Map<UUID, Map<String, Double>> outMap = new HashMap<>();
-        for( String uuidKey : inData.keySet() )
+        for( String uuidKey : inData.getAllKeys() )
         {
             outMap.put( UUID.fromString( uuidKey ), nbtToMapString( inData.getCompound( uuidKey ) ) );
         }
@@ -105,11 +105,11 @@ public class NBTHelper
         return outMap;
     }
 
-    public static Map<String, Map<String, Double>> nbtToMapStringString( CompoundNBT inData )
+    public static Map<String, Map<String, Double>> nbtToMapStringString( CompoundTag inData )
     {
         Map<String, Map<String, Double>> outMap = new HashMap<>();
 
-        for( String key : inData.keySet() )
+        for( String key : inData.getAllKeys() )
         {
             outMap.put( key, nbtToMapString( inData.getCompound( key ) ) );
         }
@@ -117,16 +117,16 @@ public class NBTHelper
         return outMap;
     }
 
-    public static Map<UUID, Map<String, Map<String, Double>>> nbtToMapStringMapUuidString( CompoundNBT inData )
+    public static Map<UUID, Map<String, Map<String, Double>>> nbtToMapStringMapUuidString( CompoundTag inData )
     {
         Map<UUID, Map<String, Map<String, Double>>> outMap = new HashMap<>();
 
-        for( String playerUUIDKey : inData.keySet() )
+        for( String playerUUIDKey : inData.getAllKeys() )
         {
             UUID playerUUID = UUID.fromString( playerUUIDKey );
             outMap.put( playerUUID, new HashMap<>() );
 
-            for( String xpBoostKey : inData.getCompound( playerUUIDKey ).keySet() )
+            for( String xpBoostKey : inData.getCompound( playerUUIDKey ).getAllKeys() )
             {
                 outMap.get( playerUUID ).put( xpBoostKey, nbtToMapString( inData.getCompound( playerUUIDKey ).getCompound( xpBoostKey ) ) );
             }
@@ -135,11 +135,11 @@ public class NBTHelper
         return outMap;
     }
 
-    public static CompoundNBT mapStringNbtToNbt( Map<String, CompoundNBT> inMap )
+    public static CompoundTag mapStringNbtToNbt( Map<String, CompoundTag> inMap )
     {
-        CompoundNBT outNbt = new CompoundNBT();
+        CompoundTag outNbt = new CompoundTag();
 
-        for( Map.Entry<String, CompoundNBT> entry : inMap.entrySet() )
+        for( Map.Entry<String, CompoundTag> entry : inMap.entrySet() )
         {
             outNbt.put( entry.getKey(), entry.getValue() );
         }
@@ -147,12 +147,12 @@ public class NBTHelper
         return outNbt;
     }
 
-    public static CompoundNBT extractNbtPlayersIndividualTagsFromPlayersTag( CompoundNBT playersTag, String element )
+    public static CompoundTag extractNbtPlayersIndividualTagsFromPlayersTag( CompoundTag playersTag, String element )
     {
-        CompoundNBT outData = new CompoundNBT();
-        CompoundNBT playerTag;
+        CompoundTag outData = new CompoundTag();
+        CompoundTag playerTag;
 
-        for( String uuidKey : playersTag.keySet() )
+        for( String uuidKey : playersTag.getAllKeys() )
         {
             playerTag = playersTag.getCompound( uuidKey );
             if( playerTag.contains( element ) )
@@ -162,15 +162,15 @@ public class NBTHelper
         return outData;
     }
 
-    public static Map<UUID, Map<String, Double>> nbtToXpMaps( CompoundNBT input )
+    public static Map<UUID, Map<String, Double>> nbtToXpMaps( CompoundTag input )
     {
         Map<UUID, Map<String, Double>> output = new HashMap<>();
         UUID uuid;
-        for( String key1 : input.keySet() )
+        for( String key1 : input.getAllKeys() )
         {
             uuid = UUID.fromString( key1 );
             output.put( uuid, new HashMap<>() );
-            for( String key2 : input.getCompound( key1 ).keySet() )
+            for( String key2 : input.getCompound( key1 ).getAllKeys() )
             {
                 output.get( uuid ).put( key2, input.getCompound( key1 ).getDouble( key2 ) );
             }
@@ -179,13 +179,13 @@ public class NBTHelper
         return output;
     }
 
-    public static CompoundNBT xpMapsToNbt( Map<UUID, Map<String, Double>> input )
+    public static CompoundTag xpMapsToNbt( Map<UUID, Map<String, Double>> input )
     {
-        CompoundNBT output = new CompoundNBT();
+        CompoundTag output = new CompoundTag();
 
         for( UUID key1 : input.keySet() )
         {
-            output.put( key1.toString(), new CompoundNBT() );
+            output.put( key1.toString(), new CompoundTag() );
             output.getCompound( key1.toString() ).putString( "name", PmmoSavedData.get().getName( key1 ) );
             for( String skill : input.get( key1 ).keySet() )
             {
@@ -197,18 +197,18 @@ public class NBTHelper
         return output;
     }
 
-    public static Map<JType, Map<String, Map<String, Double>>> nbtToData3( CompoundNBT input )
+    public static Map<JType, Map<String, Map<String, Double>>> nbtToData3( CompoundTag input )
     {
         Map<JType, Map<String, Map<String, Double>>> output = new HashMap<>();
         JType jType;
-        for( String jTypeKey : input.keySet() )
+        for( String jTypeKey : input.getAllKeys() )
         {
             jType = JType.getJType( jTypeKey );
             output.put( jType, new HashMap<>() );
-            for( String topKey : input.getCompound( jTypeKey ).keySet() )
+            for( String topKey : input.getCompound( jTypeKey ).getAllKeys() )
             {
                 output.get( jType ).put( topKey, new HashMap<>() );
-                for( String botKey : input.getCompound( jTypeKey ).getCompound( topKey ).keySet() )
+                for( String botKey : input.getCompound( jTypeKey ).getCompound( topKey ).getAllKeys() )
                 {
                     output.get( jType ).get( topKey ).put( botKey, input.getCompound( jTypeKey ).getCompound( topKey ).getDouble( botKey ) );
                 }
@@ -218,16 +218,16 @@ public class NBTHelper
         return output;
     }
 
-    public static CompoundNBT data3ToNbt( Map<JType, Map<String, Map<String, Double>>> input )
+    public static CompoundTag data3ToNbt( Map<JType, Map<String, Map<String, Double>>> input )
     {
-        CompoundNBT output = new CompoundNBT();
+        CompoundTag output = new CompoundTag();
 
         for( JType jType : input.keySet() )
         {
-            output.put( jType.toString(), new CompoundNBT() );
+            output.put( jType.toString(), new CompoundTag() );
             for( String topKey : input.get( jType ).keySet() )
             {
-                output.getCompound( jType.toString() ).put( topKey, new CompoundNBT() );
+                output.getCompound( jType.toString() ).put( topKey, new CompoundTag() );
                 for( String botKey : input.get( jType ).get( topKey ).keySet() )
                 {
                     Double value = input.get( jType ).get( topKey ).get( botKey );
@@ -261,21 +261,21 @@ public class NBTHelper
         }
     }
 
-    public static Map<JType, Map<String, Map<String, Map<String, Double>>>> nbtToData4( CompoundNBT input )
+    public static Map<JType, Map<String, Map<String, Map<String, Double>>>> nbtToData4( CompoundTag input )
     {
         Map<JType, Map<String, Map<String, Map<String, Double>>>> output = new HashMap<>();
         JType jType;
-        for( String jTypeKey : input.keySet() )
+        for( String jTypeKey : input.getAllKeys() )
         {
             jType = JType.getJType( jTypeKey );
             output.put( jType, new HashMap<>() );
-            for( String topKey : input.getCompound( jTypeKey ).keySet() )
+            for( String topKey : input.getCompound( jTypeKey ).getAllKeys() )
             {
                 output.get( jType ).put( topKey, new HashMap<>() );
-                for( String midKey : input.getCompound( jTypeKey ).getCompound( topKey ).keySet() )
+                for( String midKey : input.getCompound( jTypeKey ).getCompound( topKey ).getAllKeys() )
                 {
                     output.get( jType ).get( topKey ).put( midKey, new HashMap<>() );
-                    for( String botKey : input.getCompound( jTypeKey ).getCompound( topKey ).getCompound( midKey ).keySet() )
+                    for( String botKey : input.getCompound( jTypeKey ).getCompound( topKey ).getCompound( midKey ).getAllKeys() )
                     {
                         output.get( jType ).get( topKey ).get( midKey ).put( botKey, input.getCompound( jTypeKey ).getCompound( topKey ).getCompound( midKey ).getDouble( botKey ) );
                     }
@@ -286,19 +286,19 @@ public class NBTHelper
         return output;
     }
 
-    public static CompoundNBT data4ToNbt( Map<JType, Map<String, Map<String, Map<String, Double>>>> input )
+    public static CompoundTag data4ToNbt( Map<JType, Map<String, Map<String, Map<String, Double>>>> input )
     {
-        CompoundNBT output = new CompoundNBT();
+        CompoundTag output = new CompoundTag();
 
         for( JType jType : input.keySet() )
         {
-            output.put( jType.toString(), new CompoundNBT() );
+            output.put( jType.toString(), new CompoundTag() );
             for( String topKey : input.get( jType ).keySet() )
             {
-                output.getCompound( jType.toString() ).put( topKey, new CompoundNBT() );
+                output.getCompound( jType.toString() ).put( topKey, new CompoundTag() );
                 for( String midKey : input.get( jType ).get( topKey ).keySet() )
                 {
-                    output.getCompound( jType.toString() ).getCompound( topKey ).put( midKey, new CompoundNBT() );
+                    output.getCompound( jType.toString() ).getCompound( topKey ).put( midKey, new CompoundTag() );
                     for( String botKey : input.get( jType ).get( topKey ).get( midKey ).keySet() )
                     {
                         Double value = input.get( jType ).get( topKey ).get( midKey ).get( botKey );
@@ -332,12 +332,12 @@ public class NBTHelper
         }
     }
 
-    public static float getOrDefaultFromNBT( CompoundNBT nbt, String key, float defaultValue )
+    public static float getOrDefaultFromNBT( CompoundTag nbt, String key, float defaultValue )
     {
         return nbt.contains( key ) ? nbt.getFloat( key ) : defaultValue;
     }
 
-    public static double getOrDefaultFromNBT( CompoundNBT nbt, String key, double defaultValue )
+    public static double getOrDefaultFromNBT( CompoundTag nbt, String key, double defaultValue )
     {
         try
         {
@@ -350,27 +350,27 @@ public class NBTHelper
         }
     }
 
-    public static long getOrDefaultFromNBT( CompoundNBT nbt, String key, long defaultValue )
+    public static long getOrDefaultFromNBT( CompoundTag nbt, String key, long defaultValue )
     {
         return nbt.contains( key ) ? nbt.getLong( key ) : defaultValue;
     }
 
-    public static int getOrDefaultFromNBT( CompoundNBT nbt, String key, int defaultValue )
+    public static int getOrDefaultFromNBT( CompoundTag nbt, String key, int defaultValue )
     {
         return nbt.contains( key ) ? nbt.getInt( key ) : defaultValue;
     }
 
-    public static String getOrDefaultFromNBT( CompoundNBT nbt, String key, String defaultValue )
+    public static String getOrDefaultFromNBT( CompoundTag nbt, String key, String defaultValue )
     {
         return nbt.contains( key ) ? nbt.getString( key ) : defaultValue;
     }
 
-    public static boolean getOrDefaultFromNBT( CompoundNBT nbt, String key, boolean defaultValue )
+    public static boolean getOrDefaultFromNBT( CompoundTag nbt, String key, boolean defaultValue )
     {
         return nbt.contains( key ) ? nbt.getBoolean( key ) : defaultValue;
     }
 
-    public static byte getOrDefaultFromNBT( CompoundNBT nbt, String key, byte defaultValue )
+    public static byte getOrDefaultFromNBT( CompoundTag nbt, String key, byte defaultValue )
     {
         return nbt.contains( key ) ? nbt.getByte( key ) : defaultValue;
     }

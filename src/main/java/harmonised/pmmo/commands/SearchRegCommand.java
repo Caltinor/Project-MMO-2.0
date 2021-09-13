@@ -2,14 +2,14 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.block.Block;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.potion.Effect;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.commands.CommandRuntimeException;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +25,7 @@ public class SearchRegCommand
         listOutForBuilder.append("addData( \"dataType\", \"").append(input).append("\", { \"info\": value } );\n");
     }
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
     {
         String query = StringArgumentType.getString( context, "search query" );
         String type = StringArgumentType.getString( context, "type" );
@@ -80,7 +80,7 @@ public class SearchRegCommand
                 break;
 
             case "potioneffect":
-                for( Effect item : ForgeRegistries.POTIONS )
+                for( Potion item : ForgeRegistries.POTIONS )
                 {
                     String regName = item.getRegistryName().toString();
                     if( regName.contains( query ) )
@@ -91,7 +91,7 @@ public class SearchRegCommand
                 break;
 
             case "entity":
-                for( EntityType item : ForgeRegistries.ENTITIES )
+                for( EntityType<?> item : ForgeRegistries.ENTITIES )
                 {
                     String regName = item.getRegistryName().toString();
                     if( regName.contains( query ) )

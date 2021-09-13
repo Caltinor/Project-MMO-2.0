@@ -6,9 +6,9 @@ import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.*;
 
@@ -17,10 +17,10 @@ public class CheeseTracker
     private static final Map<UUID, Integer> playersLookCheeseCount = new HashMap<>();
     private static final Map<UUID, Double> playersLastLookVecs = new HashMap<>();
 
-    public static void trackCheese( ServerPlayerEntity player )
+    public static void trackCheese( ServerPlayer player )
     {
-        UUID uuid = player.getUniqueID();
-        Vector3d playerLookVec = player.getLookVec();
+        UUID uuid = player.getUUID();
+        Vec3 playerLookVec = player.getLookAngle();
         double currLookVec = playerLookVec.x + playerLookVec.y + playerLookVec.z;
         double cheeseMaxStorage = Config.forgeConfig.cheeseMaxStorage.get();
         if( !playersLookCheeseCount.containsKey( uuid ) )
@@ -35,13 +35,13 @@ public class CheeseTracker
         {
             playersLookCheeseCount.put( uuid, Math.max( 0, lookVecCheese - Config.forgeConfig.activityCheeseReplenishSpeed.get() ) );
             if( lazyMultiplier != 1 )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.afkMultiplierRestored", DP.dpSoft( getLazyMultiplier( uuid ) * 100 ) ).setStyle(XP.getColorStyle( 0x00ff00 ) ), true );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.afkMultiplierRestored", DP.dpSoft( getLazyMultiplier( uuid ) * 100 ) ).setStyle(XP.getColorStyle( 0x00ff00 ) ), true );
         }
         else
         {
             playersLookCheeseCount.put( uuid, (int) Math.min( cheeseMaxStorage, Math.min( cheeseMaxStorage, lookVecCheese + 1 ) ) );
             if( lazyMultiplier < Config.forgeConfig.sendPlayerCheeseWarningBelowMultiplier.get() )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.afkMultiplierWarning", DP.dpSoft( getLazyMultiplier( uuid ) * 100 ) ).setStyle(XP.getColorStyle( 0xff0000 ) ), true );
+                player.displayClientMessage( new TranslatableComponent( "pmmo.afkMultiplierWarning", DP.dpSoft( getLazyMultiplier( uuid ) * 100 ) ).setStyle(XP.getColorStyle( 0xff0000 ) ), true );
         }
 
         playersLastLookVecs.put( uuid, currLookVec );

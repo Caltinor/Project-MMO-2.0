@@ -1,13 +1,13 @@
 package harmonised.pmmo.api.events;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class SalvageEvent extends PlayerEvent
 {
     BlockPos blockPos;
-    public SalvageEvent( PlayerEntity player, BlockPos blockPos )
+    public SalvageEvent( Player player, BlockPos blockPos )
     {
         super( player );
         this.blockPos = blockPos;

@@ -4,9 +4,9 @@ import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +17,7 @@ public class FurnaceHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void handleSmelted( ItemStack input, ItemStack output, World world, BlockPos pos, int type )
+    public static void handleSmelted( ItemStack input, ItemStack output, Level world, BlockPos pos, int type )
     {
         try
         {

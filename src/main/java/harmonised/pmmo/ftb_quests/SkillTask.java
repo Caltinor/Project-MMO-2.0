@@ -1,27 +1,10 @@
 package harmonised.pmmo.ftb_quests;
 
-import dev.ftb.mods.ftblibrary.config.ConfigGroup;
-import dev.ftb.mods.ftblibrary.config.NameMap;
-import dev.ftb.mods.ftbquests.quest.Quest;
-import dev.ftb.mods.ftbquests.quest.TeamData;
-import dev.ftb.mods.ftbquests.quest.task.*;
-import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.util.XP;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.storage.PlayerData;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 
-public class SkillTask extends Task
+public class SkillTask //extends Task
 {
-    public static TaskType SKILL = FTBQHandler.SKILL;
+    /*public static TaskType SKILL = FTBQHandler.SKILL;
     public String skill;
     public double requiredLevel;
 
@@ -104,5 +87,5 @@ public class SkillTask extends Task
     public long getMaxProgress()
     {
         return (long) requiredLevel;
-    }
+    }*/
 }

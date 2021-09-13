@@ -1,12 +1,12 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.util.XP;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.world.ChunkDataEvent;
 
 import java.util.*;
@@ -22,30 +22,30 @@ public class ChunkDataHandler
 
     public static void handleChunkDataLoad( ChunkDataEvent.Load event )
     {
-        CompoundNBT chunkNBT = event.getData();
+        CompoundTag chunkNBT = event.getData();
         if( chunkNBT != null )
         {
-            CompoundNBT levelNBT = chunkNBT.getCompound( "Level" );
+            CompoundTag levelNBT = chunkNBT.getCompound( "Level" );
             if( levelNBT.contains( "placedPos" ) )
             {
-                World world = (World) event.getWorld();
+                Level world = (Level) event.getWorld();
                 ResourceLocation dimResLoc = XP.getDimResLoc( world );
                 ChunkPos chunkPos = event.getChunk().getPos();
 
                 if( !placedMap.containsKey( dimResLoc ) )
                     placedMap.put( dimResLoc, new HashMap<>() );
 
-                CompoundNBT placedPosNBT = ( (CompoundNBT) levelNBT.get( "placedPos" ) );
+                CompoundTag placedPosNBT = ( (CompoundTag) levelNBT.get( "placedPos" ) );
                 if( placedPosNBT == null )
                     return;
                 Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
                 Map<BlockPos, UUID> blockMap = new HashMap<>();
-                Set<String> keySet = placedPosNBT.keySet();
+                Set<String> keySet = placedPosNBT.getAllKeys();
 
                 keySet.forEach( key ->
                 {
-                    CompoundNBT entry = placedPosNBT.getCompound( key );
-                    blockMap.put( NBTUtil.readBlockPos( entry.getCompound( "pos" ) ), new UUID( entry.getCompound( "UUID" ).getLong("M"), entry.getCompound( "UUID" ).getLong("L") ) );
+                    CompoundTag entry = placedPosNBT.getCompound( key );
+                    blockMap.put( NbtUtils.readBlockPos( entry.getCompound( "pos" ) ), new UUID( entry.getCompound( "UUID" ).getLong("M"), entry.getCompound( "UUID" ).getLong("L") ) );
                 });
 
                 chunkMap.remove( chunkPos );
@@ -56,26 +56,26 @@ public class ChunkDataHandler
 
     public static void handleChunkDataSave( ChunkDataEvent.Save event )
     {
-        World world = (World) event.getWorld();
+        Level world = (Level) event.getWorld();
         ResourceLocation dimResLoc = XP.getDimResLoc( world );
         if( placedMap.containsKey( dimResLoc ) )
         {
             ChunkPos chunkPos = event.getChunk().getPos();
             if( placedMap.get( dimResLoc ).containsKey( chunkPos ) )
             {
-                CompoundNBT levelNBT = (CompoundNBT) event.getData().get( "Level" );
+                CompoundTag levelNBT = (CompoundTag) event.getData().get( "Level" );
                 if( levelNBT == null )
                     return;
 
-                CompoundNBT newPlacedNBT = new CompoundNBT();
-                CompoundNBT insidesNBT;
+                CompoundTag newPlacedNBT = new CompoundTag();
+                CompoundTag insidesNBT;
 
                 int i = 0;
 
                 for( Map.Entry<BlockPos, UUID> entry : placedMap.get( dimResLoc ).get( chunkPos ).entrySet() )
                 {
-                    insidesNBT = new CompoundNBT();
-                    insidesNBT.put( "pos", NBTUtil.writeBlockPos( entry.getKey() ) );
+                    insidesNBT = new CompoundTag();
+                    insidesNBT.put( "pos", NbtUtils.writeBlockPos( entry.getKey() ) );
                     insidesNBT.put( "UUID", XP.writeUniqueId( entry.getValue() ) );
                     newPlacedNBT.put( i++ + "", insidesNBT );
                 }
@@ -119,7 +119,7 @@ public class ChunkDataHandler
         blockMap.remove( blockPos );
     }
 
-    public static UUID checkPos( World world, BlockPos pos )
+    public static UUID checkPos( Level world, BlockPos pos )
     {
         return checkPos( XP.getDimResLoc( world ), pos );
     }

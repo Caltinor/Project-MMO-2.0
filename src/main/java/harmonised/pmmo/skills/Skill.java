@@ -7,12 +7,10 @@ import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.Style;
 import java.util.*;
 
 public enum Skill
@@ -66,7 +64,7 @@ public enum Skill
         if( !skill.equals( INVALID_SKILL.toString() ) )
         {
             validSkills.put( skill, color );
-            skillStyle.put( skill, Style.EMPTY.setColor( Color.fromInt( color ) ) );
+            skillStyle.put( skill, Style.EMPTY.withColor( TextColor.fromRgb( color ) ) );
         }
     }
 
@@ -115,12 +113,12 @@ public enum Skill
      * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#getLevel(String, PlayerEntity) APIUtils.getLevel}
      */
     @Deprecated
-    public static int getLevel( String skill, PlayerEntity player )
+    public static int getLevel( String skill, Player player )
     {
-        if( player.world.isRemote )
-            return XP.getOfflineLevel( skill, player.getUniqueID() );
+        if( player.level.isClientSide )
+            return XP.getOfflineLevel( skill, player.getUUID() );
         else
-            return PmmoSavedData.get().getLevel( skill, player.getUniqueID() );
+            return PmmoSavedData.get().getLevel( skill, player.getUUID() );
     }
 
     public static int getLevel( String skill, UUID uuid )
@@ -128,12 +126,12 @@ public enum Skill
         return PmmoSavedData.get().getLevel( skill, uuid );
     }
 
-    public static double getLevelDecimal( String skill, PlayerEntity player )
+    public static double getLevelDecimal( String skill, Player player )
     {
-        if( player.world.isRemote )
-            return XP.getOfflineLevelDecimal( skill, player.getUniqueID() );
+        if( player.level.isClientSide )
+            return XP.getOfflineLevelDecimal( skill, player.getUUID() );
         else
-            return PmmoSavedData.get().getLevelDecimal( skill, player.getUniqueID() );
+            return PmmoSavedData.get().getLevelDecimal( skill, player.getUUID() );
     }
 
     public static double getLevelDecimal( String skill, UUID uuid )
@@ -145,12 +143,12 @@ public enum Skill
      * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#getXp(String, PlayerEntity) APIUtils.getXp}
      */
     @Deprecated
-    public static double getXp( String skill, PlayerEntity player )
+    public static double getXp( String skill, Player player )
     {
-        if( player.world.isRemote )
-            return XP.getOfflineXp( skill, player.getUniqueID() );
+        if( player.level.isClientSide )
+            return XP.getOfflineXp( skill, player.getUUID() );
         else
-            return PmmoSavedData.get().getXp( skill, player.getUniqueID() );
+            return PmmoSavedData.get().getXp( skill, player.getUUID() );
     }
 
     public static double getXp( String skill, UUID uuid )
@@ -162,14 +160,14 @@ public enum Skill
      * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#setLevel(String, ServerPlayerEntity, double) APIUtils.setLevel}
      */
     @Deprecated
-    public static void setLevel( String skill, ServerPlayerEntity player, double amount )
+    public static void setLevel( String skill, ServerPlayer player, double amount )
     {
         setXp( skill, player, XP.xpAtLevelDecimal( amount ) );
     }
 
     public static void setXp( String skill, UUID uuid, double amount )
     {
-        ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );
+        ServerPlayer player = PmmoSavedData.getServer().getPlayerList().getPlayer( uuid );
 
         if( player == null )
             PmmoSavedData.get().setXp( skill, uuid, amount );
@@ -181,9 +179,9 @@ public enum Skill
      * @deprecated This method is only for internal use now.  please use {@link harmonised.pmmo.api.APIUtils#setXp(String, ServerPlayerEntity, double) APIUtils.setXp}
      */
     @Deprecated
-    public static void setXp( String skill, ServerPlayerEntity player, double amount )
+    public static void setXp( String skill, ServerPlayer player, double amount )
     {
-        if( PmmoSavedData.get().setXp( skill, player.getUniqueID(), amount ) )
+        if( PmmoSavedData.get().setXp( skill, player.getUUID(), amount ) )
         {
             AttributeHandler.updateAll( player );
             XP.updateRecipes( player );
@@ -203,7 +201,7 @@ public enum Skill
         addXp( skill, uuid, missingXp, sourceName, skip, ignoreBonuses );
     }
 
-    public static void addLevel( String skill, ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
+    public static void addLevel( String skill, ServerPlayer player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
         double missingXp = XP.xpAtLevelDecimal( getLevelDecimal( skill, player ) + amount ) - getXp( skill, player );
 
@@ -216,7 +214,7 @@ public enum Skill
     @Deprecated
     public static void addXp( String skill, UUID uuid, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
-        ServerPlayerEntity player = PmmoSavedData.getServer().getPlayerList().getPlayerByUUID( uuid );
+        ServerPlayer player = PmmoSavedData.getServer().getPlayerList().getPlayer( uuid );
 
         if( player == null )
             PmmoSavedData.get().scheduleXp( skill, uuid, amount, sourceName );
@@ -224,7 +222,7 @@ public enum Skill
             addXp( skill, player, amount, sourceName, skip, ignoreBonuses );
     }
 
-    public static void addXp( String skill, ServerPlayerEntity player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
+    public static void addXp( String skill, ServerPlayer player, double amount, String sourceName, boolean skip, boolean ignoreBonuses )
     {
         XP.awardXp( player, skill, sourceName, amount, skip, ignoreBonuses, false );
     }

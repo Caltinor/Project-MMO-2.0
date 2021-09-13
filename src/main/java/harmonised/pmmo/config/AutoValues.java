@@ -4,26 +4,27 @@ import com.google.common.collect.Multimap;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.OreBlock;
 
 public class AutoValues
 {
@@ -90,10 +91,10 @@ public class AutoValues
 
     public static double getWearReqFromStack( ItemStack itemStack )
     {
-        Multimap<Attribute, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.HEAD );
-        Multimap<Attribute, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.CHEST );
-        Multimap<Attribute, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.LEGS );
-        Multimap<Attribute, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.FEET );
+        Multimap<Attribute, AttributeModifier> headHandAttributes = itemStack.getAttributeModifiers( EquipmentSlot.HEAD );
+        Multimap<Attribute, AttributeModifier> chestHandAttributes = itemStack.getAttributeModifiers( EquipmentSlot.CHEST );
+        Multimap<Attribute, AttributeModifier> legsHandAttributes = itemStack.getAttributeModifiers( EquipmentSlot.LEGS );
+        Multimap<Attribute, AttributeModifier> feetHandAttributes = itemStack.getAttributeModifiers( EquipmentSlot.FEET );
 
         Map<Attribute, AttributeModifier> attributes = mergeMultimaps( headHandAttributes, chestHandAttributes, legsHandAttributes, feetHandAttributes );
 
@@ -118,8 +119,8 @@ public class AutoValues
 
     public static double getWeaponReqFromStack( ItemStack itemStack )
     {
-        Multimap<Attribute, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.MAINHAND );
-        Multimap<Attribute, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlotType.OFFHAND );
+        Multimap<Attribute, AttributeModifier> mainHandAttributes = itemStack.getAttributeModifiers( EquipmentSlot.MAINHAND );
+        Multimap<Attribute, AttributeModifier> offHandAttributes = itemStack.getAttributeModifiers( EquipmentSlot.OFFHAND );
 
         Map<Attribute, AttributeModifier> attributes = mergeMultimaps( mainHandAttributes, offHandAttributes );
 
@@ -151,19 +152,19 @@ public class AutoValues
         double toolReqOffset = regKey == null ? 0D : XP.getJsonMap( regKey.toString(), JType.ITEM_SPECIFIC ).getOrDefault( "autoValueOffsetTool", 0D );
 
         //Woodcutting
-        speed = itemStack.getDestroySpeed( Blocks.OAK_LOG.getDefaultState() );
+        speed = itemStack.getDestroySpeed( Blocks.OAK_LOG.defaultBlockState() );
         toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleLog.get() + toolReqOffset ) );
         if( toolReq > 5 )
             reqTool.put( Skill.WOODCUTTING.toString(), toolReq );
 
         //Mining
-        speed = itemStack.getDestroySpeed( Blocks.STONE.getDefaultState() );
+        speed = itemStack.getDestroySpeed( Blocks.STONE.defaultBlockState() );
         toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleOre.get() + toolReqOffset ) );
         if( toolReq > 5 )
             reqTool.put( Skill.MINING.toString(), toolReq );
 
         //Excavation
-        speed = itemStack.getDestroySpeed( Blocks.DIRT.getDefaultState() );
+        speed = itemStack.getDestroySpeed( Blocks.DIRT.defaultBlockState() );
         toolReq = Math.max( 1, Math.min( Config.forgeConfig.maxLevel.get(), speed * Config.forgeConfig.toolReqScaleDirt.get() + toolReqOffset ) );
         if( toolReq > 5 )
             reqTool.put( Skill.EXCAVATION.toString(), toolReq );
@@ -208,23 +209,23 @@ public class AutoValues
     {
         if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
         {
-            Collection<IRecipe<?>> allRecipes = PmmoSavedData.getServer().getRecipeManager().getRecipes();
+            Collection<Recipe<?>> allRecipes = PmmoSavedData.getServer().getRecipeManager().getRecipes();
             itemsWithCookRecipe.clear();
             itemsWithCraftRecipe.clear();
             itemsWithBlastRecipe.clear();
 
-            for( IRecipe<?> recipe : allRecipes )
+            for( Recipe<?> recipe : allRecipes )
             {
-                Item item = recipe.getRecipeOutput().getItem();
-                if( recipe.getType() == IRecipeType.CRAFTING )
+                Item item = recipe.getResultItem().getItem();
+                if( recipe.getType() == RecipeType.CRAFTING )
                     itemsWithCraftRecipe.add( item );
-                else if( recipe.getType() == IRecipeType.SMOKING )
+                else if( recipe.getType() == RecipeType.SMOKING )
                 {
-                    Item outputItem = recipe.getRecipeOutput().getItem();
+                    Item outputItem = recipe.getResultItem().getItem();
                     itemsWithCookRecipe.add( outputItem );
                     for( Ingredient ingredient : recipe.getIngredients() )
                     {
-                        for( ItemStack itemStack : ingredient.getMatchingStacks() )
+                        for( ItemStack itemStack : ingredient.getItems() )
                         {
                             if( !cooksFrom.containsKey( outputItem ) )
                                 cooksFrom.put( outputItem, new HashSet<>() );
@@ -292,13 +293,13 @@ public class AutoValues
 
                         Map<String, Double> xpValueMap = new HashMap<>();
 
-                        if( item.isFood() )
+                        if( item.isEdible() )
                         {
-                            Food food = item.getFood();
+                            FoodProperties food = item.getFoodProperties();
                             if( food != null )
                             {
-                                float saturation = food.getSaturation();
-                                float healing = food.getHealing();
+                                float saturation = food.getSaturationModifier();
+                                float healing = food.getNutrition();
                                 cookingXp = saturation * 15 + healing;
 
                                 if( cookingXp > 0 )
@@ -322,13 +323,13 @@ public class AutoValues
                     if( ( Config.forgeConfig.autoGenerateCookingXpEnabled.get() || Config.forgeConfig.autoGenerateCookingExtraChanceEnabled.get() ) && itemsWithCookRecipe.contains( item ) )
                     {
                         double cookingXp = 0;
-                        if( item.isFood() )
+                        if( item.isEdible() )
                         {
-                            Food food = item.getFood();
+                            FoodProperties food = item.getFoodProperties();
                             if( food != null )
                             {
-                                float saturation = food.getSaturation();
-                                float healing = food.getHealing();
+                                float saturation = food.getSaturationModifier();
+                                float healing = food.getNutrition();
                                 cookingXp = saturation * 15 + healing;
                                 cookingXp *= Config.forgeConfig.autoGeneratedCraftingXpValueMultiplierCooking.get();
 
@@ -377,7 +378,7 @@ public class AutoValues
                             jType = JType.INFO_ORE;
                             chance = Config.forgeConfig.defaultExtraChanceOre.get();
                         }
-                        else if( block instanceof CropsBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
+                        else if( block instanceof CropBlock || tags.contains( new ResourceLocation( "minecraft:crops" ) ) )
                         {
                             jType = JType.INFO_PLANT;
                             chance = Config.forgeConfig.defaultExtraChancePlant.get();

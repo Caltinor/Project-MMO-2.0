@@ -3,19 +3,19 @@ package harmonised.pmmo.gui;
 import harmonised.pmmo.util.DP;
 import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class PrefsEntry
 {
-    public static FontRenderer font = Minecraft.getInstance().fontRenderer;
+    public static Font font = Minecraft.getInstance().font;
     public PrefsSlider slider;
     public Button button;
-    public TextFieldWidget textField;
+    public EditBox textField;
     public String preference, prefix, suffix;
     public double defaultVal;
     public final int sliderWidth = 150, height = 16;
@@ -45,17 +45,17 @@ public class PrefsEntry
 
         this.defaultVal = defaultVal;
 
-        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, new StringTextComponent( prefix ), new StringTextComponent( suffix ), minVal, maxVal, curVal, showDec, showStr, isSwitch, button ->
+        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, new TextComponent( prefix ), new TextComponent( suffix ), minVal, maxVal, curVal, showDec, showStr, isSwitch, button ->
         {
         });
 
         if( !isSwitch )
         {
-            textField = new TextFieldWidget( font, 0, 0, textFieldWidth, height, new TranslationTextComponent( "" ) );
-            textField.setMaxStringLength( 5 );
-            textField.setText( slider.getMessage().getString() );
+            textField = new EditBox( font, 0, 0, textFieldWidth, height, new TranslatableComponent( "" ) );
+            textField.setMaxLength( 5 );
+            textField.setValue( slider.getMessage().getString() );
         }
-        button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, new TranslationTextComponent( isSwitch ? "RESET" : "R" ), button ->
+        button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, new TranslatableComponent( isSwitch ? "RESET" : "R" ), button ->
         {
             resetValue();
         });
@@ -66,9 +66,9 @@ public class PrefsEntry
         slider.setValue( defaultVal );
         slider.updateSlider();
         if( isSwitch )
-            slider.setMessage( new StringTextComponent( slider.getValue() == 1 ? "On" : "Off" ) );
+            slider.setMessage( new TextComponent( slider.getValue() == 1 ? "On" : "Off" ) );
         else
-            textField.setText( slider.getMessage().getString() );
+            textField.setValue( slider.getMessage().getString() );
 //        System.out.println( slider.getMessage().getString() );
     }
 
