@@ -18,7 +18,6 @@ buildscript
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 version = '1.16.5-3.63'
 group = 'harmonised.pmmo'
