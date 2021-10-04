@@ -355,7 +355,7 @@ public class WorldTickHandler
     {
         String skill = XP.getSkill( state );
         double cost;
-//        double startHardness = state.getBlockHardness( player.world, pos );
+//        double startHardness = state.getBlockHardness( player.level, pos );
         double hardness = state.getDestroySpeed( player.level, pos );
         double level = Skill.getLevel( skill, player );
 

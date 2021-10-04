@@ -25,7 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
@@ -459,9 +459,9 @@ public class ListScreen extends Screen
                         {
                             if ( ForgeRegistries.POTIONS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                             {
-                                MobEffect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
+                                Potion effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                                 if ( effect != null )
-                                    negativeEffectText.add( new TextComponent( " " + getTransComp( effect.getDisplayName().getString() + " " + (int) ( entry.getValue() + 1) ).getString() ).setStyle( XP.textStyle.get("red") ) );
+                                    negativeEffectText.add( new TextComponent( " " + getTransComp( effect.getRegistryName().toString() + " " + (int) ( entry.getValue() + 1) ).getString() ).setStyle( XP.textStyle.get("red") ) );
                             }
                         }
                     }
@@ -472,9 +472,9 @@ public class ListScreen extends Screen
                         {
                             if ( ForgeRegistries.POTIONS.containsKey( XP.getResLoc( entry.getKey() ) ) )
                             {
-                                MobEffect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
+                                Potion effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
                                 if ( effect != null )
-                                    positiveEffectText.add( new TextComponent( " " + getTransComp( effect.getDisplayName().getString() + " " + (int) ( entry.getValue() + 1) ).getString() ).setStyle( XP.textStyle.get("green") ) );
+                                    positiveEffectText.add( new TextComponent( " " + getTransComp( effect.getRegistryName().toString() + " " + (int) ( entry.getValue() + 1) ).getString() ).setStyle( XP.textStyle.get("green") ) );
                             }
                         }
                     }
@@ -1020,7 +1020,7 @@ public class ListScreen extends Screen
         updateListFilter();
         filterTextField.setFocus( true );
         children.add( filterTextField );
-        addButton( exitButton );
+        addWidget( exitButton );
     }
 
     private static void addLevelsToButton( ListButton button, Map<String, Double> map, Player player, boolean ignoreReq )
@@ -1192,7 +1192,7 @@ public class ListScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bind( box );
+        Minecraft.getInstance().getTextureManager().bindForSetup( box );
 
         this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }

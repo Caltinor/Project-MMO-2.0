@@ -93,7 +93,7 @@ public class InfoScreen extends Screen
         });
 
 
-        addButton(exitButton);
+        addWidget(exitButton);
 
         tileButtons.add( discordButton );
         tileButtons.add( featuresButton );
@@ -124,7 +124,7 @@ public class InfoScreen extends Screen
             }
             button.x = buttonX;
             button.y = buttonY;
-            addButton( button );
+            addWidget( button );
         }
     }
 
@@ -177,7 +177,7 @@ public class InfoScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bind( box );
+        Minecraft.getInstance().getTextureManager().bindForSetup( box );
         RenderSystem.disableBlend();
         this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }

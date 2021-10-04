@@ -23,7 +23,7 @@ public class JumpHandler
         {
             Player player = (Player) event.getEntityLiving();
 
-//			if( !player.world.isRemote )
+//			if( !player.level.isClientSide )
 //				System.out.println( player.getEntityData().getCompoundTag( player.PERSISTED_NBT_TAG ) );
 
             if( XP.isPlayerSurvival( player ) )

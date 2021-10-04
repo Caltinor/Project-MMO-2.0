@@ -32,11 +32,10 @@ public class PmmoSavedData extends SavedData
     private Map<UUID, String> name = new HashMap<>();
     public PmmoSavedData()
     {
-        super( NAME );
+        super();
     }
 
-    @Override
-    public void load( CompoundTag inData )
+    public PmmoSavedData load( CompoundTag inData )
     {
         CompoundTag playersTag, playerTag;
 
@@ -90,6 +89,7 @@ public class PmmoSavedData extends SavedData
                 parties.add( new Party( partyTag.getLong( "creationDate" ), membersInfo ) );
             }
         }
+        return this;
     }
 
     @Override
@@ -323,7 +323,7 @@ public class PmmoSavedData extends SavedData
     public static void init( MinecraftServer server )
     {
         PmmoSavedData.server = server;
-        PmmoSavedData.pmmoSavedData = server.getLevel( Level.OVERWORLD ).getDataStorage().computeIfAbsent( PmmoSavedData::new, NAME );
+        PmmoSavedData.pmmoSavedData = server.getLevel( Level.OVERWORLD ).getDataStorage().computeIfAbsent( nbt -> new PmmoSavedData().load( nbt ), PmmoSavedData::new, NAME );
     }
 
     public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.

@@ -82,7 +82,8 @@ public class XPOverlayGUI extends GuiComponent
 	{
 		if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
 		{
-			RenderSystem.pushMatrix();
+			PoseStack stack = event.getMatrixStack();
+			stack.pushPose();
 			RenderSystem.enableBlend();
 			try
 			{
@@ -162,8 +163,9 @@ public class XPOverlayGUI extends GuiComponent
 			}
 			//Causes black screen
 			//RenderSystem.disableBlend();
-			RenderSystem.color3f( 255, 255, 255 );
-			RenderSystem.popMatrix();
+			//COUT
+//			RenderSystem.color( 255, 255, 255 );
+			stack.popPose();
 		}
 	}
 
@@ -357,12 +359,13 @@ public class XPOverlayGUI extends GuiComponent
 
 		if( cooldown > 0 )				//Xp Bar
 		{
-			RenderSystem.pushMatrix();
+			stack.pushPose();
 			RenderSystem.enableBlend();
 			try
 			{
-				Minecraft.getInstance().getTextureManager().bind( bar );
-				RenderSystem.color3f( 255, 255, 255 );
+				Minecraft.getInstance().getTextureManager().bindForSetup( bar );
+				//COUT
+//				RenderSystem.color3f( 255, 255, 255 );
 
 				blit( stack, barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
 				if( !Config.forgeConfig.xpBarTheme.get() )
@@ -407,7 +410,7 @@ public class XPOverlayGUI extends GuiComponent
 				LOGGER.error( "Error rendering PMMO GUI XP Bar", e );
 			}
 			RenderSystem.disableBlend();
-			RenderSystem.popMatrix();
+			stack.popPose();
 		}
 	}
 
@@ -451,7 +454,7 @@ public class XPOverlayGUI extends GuiComponent
 		{
 			if( XP.isPlayerSurvival( player ) )
 			{
-				Minecraft.getInstance().getTextureManager().bind( bar );
+				Minecraft.getInstance().getTextureManager().bindForSetup( bar );
 
 				blit( stack, veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
 				blit( stack, veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );

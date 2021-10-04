@@ -4,9 +4,6 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "pmmo.refmap.json",
   "mixins": [
-    "AbstractFurnaceTileEntityShrinkMixin",
-    "BrewingStandTileEntityShrinkMixin",
-    "LivingEntityChangeRespirationMixin"
   ],
   "server": [
   ],

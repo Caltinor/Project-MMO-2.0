@@ -66,16 +66,16 @@ public class PlayerInteractionHandler
                 if( item.getRegistryName() == null )
                     return;
 
-                if( !player.world.isRemote() )
+                if( !player.level.isClientSide() )
                 {
                     Map<String, Double> rightClickAwardMap = APIUtils.getXp( itemStack, JType.XP_VALUE_RIGHT_CLICK );
                     if( rightClickAwardMap != null )
-                        XP.awardXpMap( playerUUID, rightClickAwardMap, "right_click", false, false );
+                        XP.awardXpMap( player.getUUID(), rightClickAwardMap, "right_click", false, false );
                 }
 
                 String regKey = item.getRegistryName().toString();
                 int startLevel;
-                boolean isRemote = player.level.isClientSide();
+                boolean isClientSide = player.level.isClientSide();
                 boolean matched = false;
 
                 if( event instanceof PlayerInteractEvent.RightClickItem)
@@ -95,8 +95,8 @@ public class PlayerInteractionHandler
                             {
                                 event.setCanceled( true );
 
-//							if( isRemote )
-//								player.sendStatusMessage( new TranslationTextComponent( "pmmo.cannotUseProximity", new TranslationTextComponent( matchedBlock.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+//							if( isClientSide )
+//								player.sendStatusMessage( new TranslatableComponent( "pmmo.cannotUseProximity", new TranslatableComponent( matchedBlock.getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                             }
                         }
                     }
@@ -108,7 +108,7 @@ public class PlayerInteractionHandler
                     {
                         event.setCanceled( true );
 
-                        if( isRemote )
+                        if( isClientSide )
                             player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToPlaceDown", new TranslatableComponent( item.getDescriptionId() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                     }
                 }
@@ -116,7 +116,7 @@ public class PlayerInteractionHandler
                 {
                     event.setCanceled( true );
 
-                    if( isRemote )
+                    if( isClientSide )
                         player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToUse", new TranslatableComponent( item.getDescriptionId() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                 }
 
@@ -129,7 +129,7 @@ public class PlayerInteractionHandler
                         if( XP.isPlayerSurvival( player ) )
                         {
                             event.setCanceled( true );
-                            if( isRemote && event.getHand().equals( InteractionHand.MAIN_HAND ) )
+                            if( isClientSide && event.getHand().equals( InteractionHand.MAIN_HAND ) )
                             {
                                 player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToUse", new TranslatableComponent( block.getDescriptionId() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
                                 player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToUse", new TranslatableComponent( block.getDescriptionId() ) ).setStyle( XP.textStyle.get( "red" ) ), false );
@@ -161,7 +161,7 @@ public class PlayerInteractionHandler
                             {
                                 if( itemStack.isEmpty() )
                                     return;
-                                if( isRemote )
+                                if( isClientSide )
                                     return;
 
                                 boolean mainCanBeSalvaged = canBeSalvaged( player.getMainHandItem().getItem() );
@@ -208,8 +208,8 @@ public class PlayerInteractionHandler
                 if( !XP.checkReq( player, reqMap ) )
                 {
                     event.setCanceled( true );
-                    boolean isRemote = player.level.isClientSide();
-                    if( isRemote && System.currentTimeMillis() - lastWarning > 1523 )
+                    boolean isClientSide = player.level.isClientSide();
+                    if( isClientSide && System.currentTimeMillis() - lastWarning > 1523 )
                     {
                         player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToInteractWith", target.getName() ).setStyle( XP.textStyle.get( "red" ) ), false );
                         player.displayClientMessage( new TranslatableComponent( "pmmo.notSkilledEnoughToInteractWith", target.getName() ).setStyle( XP.textStyle.get( "red" ) ), true );

@@ -143,7 +143,7 @@ public class GlossaryScreen extends Screen
         if( loadDefaultButtons )
             setButtonsToDefault();
 
-        addButton(exitButton);
+        addWidget(exitButton);
 
         int col = 0;
         int row = 0;
@@ -153,7 +153,7 @@ public class GlossaryScreen extends Screen
             button.index = row * 6 + col;
             button.x = x + 22 + col * 36;
             button.y = y + 22 + row * 36;
-            addButton( button );
+            addWidget( button );
             if( ++col > 5 )
             {
                 col = 0;
@@ -267,7 +267,7 @@ public class GlossaryScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bind( box );
+        Minecraft.getInstance().getTextureManager().bindForSetup( box );
 
         this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }

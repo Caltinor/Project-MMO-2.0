@@ -25,6 +25,7 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.CheeseTracker;
 import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -101,7 +102,6 @@ public class XP
 		put( Material.PLANT, "hoe" );			//HOE
 		put( Material.WATER_PLANT, "hoe" );
 		put( Material.CACTUS, "hoe" );
-		put( Material.CORAL, "hoe" );
 		put( Material.REPLACEABLE_PLANT, "hoe" );
 		put( Material.BAMBOO, "hoe" );
 		put( Material.BAMBOO_SAPLING, "hoe" );
@@ -382,8 +382,6 @@ public class XP
 			return "BARRIER";
 		else if( material.equals( Material.PISTON ) )
 			return "PISTON";
-		else if( material.equals( Material.CORAL ) )
-			return "CORAL";
 		else if( material.equals( Material.VEGETABLE ) )
 			return "GOURD";
 		else if( material.equals( Material.EGG ) )
@@ -864,11 +862,11 @@ public class XP
 	{
 		Set<String> results = new HashSet<>();
 
-		for( Tag.Named<Item> namedTag : ItemTags.getWrappers() )
+		for( Map.Entry<ResourceLocation, Tag<Item>> namedTag : ItemTags.getAllTags().getAllTags().entrySet() )
 		{
-			if( namedTag.getName().toString().startsWith( tag ) )
+			if( namedTag.getKey().toString().startsWith( tag ) )
 			{
-				for( Item element : namedTag.getValues() )
+				for( Item element : namedTag.getValue().getValues() )
 				{
 					try
 					{
@@ -878,11 +876,11 @@ public class XP
 			}
 		}
 
-		for( Tag.Named<Block> namedTag : BlockTags.getWrappers() )
+		for( Map.Entry<ResourceLocation, Tag<Block>> namedTag : BlockTags.getAllTags().getAllTags().entrySet() )
 		{
-			if( namedTag.getName().toString().equals( tag ) )
+			if( namedTag.getKey().toString().equals( tag ) )
 			{
-				for( Block element : namedTag.getValues() )
+				for( Block element : namedTag.getValue().getValues() )
 				{
 					try
 					{
@@ -892,11 +890,11 @@ public class XP
 			}
 		}
 
-		for( Tag.Named<Fluid> namedTag : FluidTags.getWrappers() )
+		for( Map.Entry<ResourceLocation, Tag<Fluid>> namedTag : FluidTags.getAllTags().getAllTags().entrySet() )
 		{
-			if( namedTag.getName().toString().equals( tag ) )
+			if( namedTag.getKey().toString().equals( tag ) )
 			{
-				for( Fluid element : namedTag.getValues() )
+				for( Fluid element : namedTag.getValue().getValues() )
 				{
 					try
 					{
@@ -906,11 +904,11 @@ public class XP
 			}
 		}
 
-		for( Tag.Named<EntityType<?>> namedTag : EntityTypeTags.getWrappers() )
+		for( Map.Entry<ResourceLocation, Tag<EntityType<?>>> namedTag : EntityTypeTags.getAllTags().getAllTags().entrySet() )
 		{
-			if( namedTag.getName().toString().equals( tag ) )
+			if( namedTag.getKey().toString().equals( tag ) )
 			{
-				for( EntityType<?> element : namedTag.getValues() )
+				for( EntityType<?> element : namedTag.getValue().getValues() )
 				{
 					try
 					{
@@ -1345,7 +1343,7 @@ public class XP
 //
 //				try
 //				{
-//					if( !player.world.isRemote )
+//					if( !player.level.isClientSide )
 //						player.getServer().getCommandManager().getDispatcher().execute( commandArgs, player.getCommandSource().withFeedbackDisabled() );
 //				}
 //				catch( CommandSyntaxException e )
@@ -1704,10 +1702,16 @@ public class XP
 				{
 					for( Map.Entry<String, Double> entry : positiveEffect.entrySet() )
 					{
-						MobEffect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
+						Potion effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
 						if( effect != null )
-							player.addEffect( new MobEffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, false ) );
+						{
+							for( MobEffectInstance instance : effect.getEffects() )
+							{
+								player.addEffect( instance );
+							}
+						}
+//							player.addEffect( new MobEffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, false ) );
 					}
 				}
 			}
@@ -1719,10 +1723,16 @@ public class XP
 			{
 				for( Map.Entry<String, Double> entry : negativeEffect.entrySet() )
 				{
-					MobEffect effect = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
+					Potion potion = ForgeRegistries.POTIONS.getValue( XP.getResLoc( entry.getKey() ) );
 
-					if( effect != null )
-						player.addEffect( new MobEffectInstance( effect, 75, (int) Math.floor( entry.getValue() ), false, true ) );
+					if( potion != null )
+					{
+						for( MobEffectInstance instance : potion.getEffects() )
+						{
+							player.addEffect( instance );
+						}
+					}
+//						player.addEffect( new MobEffectInstance( , 75, (int) Math.floor( entry.getValue() ), false, true ) );
 				}
 				if( player.level.isClientSide() )
 				{

@@ -60,13 +60,13 @@ public class PrefsChoiceScreen extends Screen
             Minecraft.getInstance().setScreen( new PrefsScreen( new TranslatableComponent( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
         });
 
-        addButton( exitButton );
+        addWidget( exitButton );
         tileButtons.add( settingsButton );
         tileButtons.add( guiSettingsButton );
 
         for( TileButton button : tileButtons )
         {
-            addButton( button );
+            addWidget( button );
         }
     }
 
@@ -102,7 +102,7 @@ public class PrefsChoiceScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bind( box );
+        Minecraft.getInstance().getTextureManager().bindForSetup( box );
         RenderSystem.disableBlend();
         this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }

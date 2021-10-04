@@ -92,7 +92,7 @@ public class MainScreen extends Screen
             Minecraft.getInstance().setScreen( new InfoScreen( uuid,  new TranslatableComponent( ((TileButton) button).transKey ) ) );
         });
 
-        addButton(exitButton);
+        addWidget(exitButton);
         tileButtons.add( glossaryButton );
         tileButtons.add( creditsButton );
         tileButtons.add( prefsButton );
@@ -111,7 +111,7 @@ public class MainScreen extends Screen
             button.y = y + 155;
             button.x += Math.cos( i/(float)buttonCount * 6.2824 )*40;
             button.y += Math.sin( i/(float)buttonCount * 6.2824 )*40;
-            addButton( button );
+            addWidget( button );
         }
     }
 
@@ -133,7 +133,7 @@ public class MainScreen extends Screen
         }
 
         RenderSystem.enableBlend();
-        mc.getTextureManager().bind( logo );
+        mc.getTextureManager().bindForSetup( logo );
         this.blit( stack,  sr.getGuiScaledWidth() / 2 - 100, sr.getGuiScaledHeight() / 2 - 80, 0, 0,  200, 60 );
     }
 
@@ -151,7 +151,7 @@ public class MainScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bind( box );
+        Minecraft.getInstance().getTextureManager().bindForSetup( box );
         RenderSystem.disableBlend();
         this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }

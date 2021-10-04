@@ -76,17 +76,17 @@ public class CreditsScreen extends Screen
 
         PlayerConnectedHandler.lavenderPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 15, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.lavenderPatreon" ).setStyle( XP.getColorStyle( 0xd200ff ) ).getString(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 15, "", CreditorScreen.uuidName.get( a.toString() ), new TranslatableComponent( "pmmo.lavenderPatreon" ).setStyle( XP.getColorStyle( 0xd200ff ) ).getString(), button ->
             {
-                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+                Minecraft.getInstance().setScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
         });
 
         PlayerConnectedHandler.fieryPatreons.forEach( a ->
         {
-            listButtons.add( new ListButtonBig( 0, 0, 1, 16, "", CreditorScreen.uuidName.get( a.toString() ), new TranslationTextComponent( "pmmo.fieryPatreon" ).setStyle( XP.getColorStyle( 0xf97900 ) ).getString(), button ->
+            listButtons.add( new ListButtonBig( 0, 0, 1, 16, "", CreditorScreen.uuidName.get( a.toString() ), new TranslatableComponent( "pmmo.fieryPatreon" ).setStyle( XP.getColorStyle( 0xf97900 ) ).getString(), button ->
             {
-                Minecraft.getInstance().displayGuiScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
+                Minecraft.getInstance().setScreen( new CreditorScreen( ((ListButtonBig) button).playerName, "a", scrollPanel.getScroll() ) );
             }));
         });
 

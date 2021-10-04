@@ -151,7 +151,7 @@ public class BlockBrokenHandler
         BlockEntity tileEntity = world.getBlockEntity( event.getPos() );
         if( tileEntity != null )
             tileEntity = BlockEntity.loadStatic(pos, state, tileEntity.serializeNBT() );
-        boolean isRemote = world.isClientSide();
+        boolean isClientSide = world.isClientSide();
         Player player = event.getPlayer();
         boolean veiningAllowed = Config.getConfig( "veiningAllowed" ) != 0;
 
@@ -172,7 +172,7 @@ public class BlockBrokenHandler
         if( XP.isVeining.contains( player.getUUID() ) && veiningAllowed && !WorldTickHandler.activeVein.containsKey( player ) )
             WorldTickHandler.scheduleVein( player, new VeinInfo( world, state, event.getPos(), player.getMainHandItem() ) );
 
-        if( !XP.isPlayerSurvival( player ) || isRemote )
+        if( !XP.isPlayerSurvival( player ) || isClientSide )
             return;
 
         Material material = event.getState().getMaterial();

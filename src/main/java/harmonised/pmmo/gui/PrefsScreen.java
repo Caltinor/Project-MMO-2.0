@@ -178,7 +178,7 @@ public class PrefsScreen extends Screen
             MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
-        addButton(exitButton);
+        addWidget(exitButton);
     }
 
     private void addPrefsButtonBool( ConfigHelper.ConfigValueListener<Boolean> config, String key, boolean showDec, boolean showStr, boolean removeIfMax )
@@ -233,7 +233,7 @@ public class PrefsScreen extends Screen
         {
             boxHeight = 256;
             boxWidth = 256;
-            Minecraft.getInstance().getTextureManager().bind( box );
+            Minecraft.getInstance().getTextureManager().bindForSetup( box );
             this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
             this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );

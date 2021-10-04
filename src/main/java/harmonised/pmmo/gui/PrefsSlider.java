@@ -1,14 +1,12 @@
 package harmonised.pmmo.gui;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.Slider;
 
 import java.util.function.Consumer;
 
 import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraftforge.fmlclient.gui.widget.Slider;
 
 public class PrefsSlider extends Slider
 {

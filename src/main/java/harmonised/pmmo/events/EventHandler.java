@@ -2,11 +2,6 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.util.*;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.server.level.ServerPlayer;

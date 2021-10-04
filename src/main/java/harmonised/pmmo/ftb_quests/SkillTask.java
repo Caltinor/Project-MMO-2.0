@@ -66,7 +66,7 @@ public class SkillTask //extends Task
     public IFormattableTextComponent getAltTitle()
     {
 //        return I18n.format("ftbquests.task.ftbquests.skill") + ": " + TextFormatting.DARK_GREEN + skill;
-        return new TranslationTextComponent( skill ).setStyle(XP.textStyle.get( "dark_green" ) );
+        return new TranslatableComponent( skill ).setStyle(XP.textStyle.get( "dark_green" ) );
     }
 
     @Override

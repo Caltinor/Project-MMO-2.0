@@ -47,7 +47,7 @@ public class PlayerTickHandler
     public static void handlePlayerTick( TickEvent.PlayerTickEvent event )
     {
         Player player = event.player;
-        boolean isRemote = player.level.isClientSide;
+        boolean isClientSide = player.level.isClientSide;
 
         if( XP.isPlayerSurvival( player ) && player.isAlive() )
         {
@@ -70,7 +70,7 @@ public class PlayerTickHandler
             if( !lastAward.containsKey( uuid ) )
                 lastAward.put( uuid, System.nanoTime() );
 
-            if( !isRemote )
+            if( !isClientSide )
             {
                 ServerPlayer serverPlayer = (ServerPlayer) player;
                 if( !lastVeinAward.containsKey( uuid ) )
@@ -163,7 +163,7 @@ public class PlayerTickHandler
 
                 XP.checkBiomeLevelReq( player );
 
-                if( !isRemote )
+                if( !isClientSide )
                 {
                     /*if( Curios.isLoaded() )
                     {
@@ -227,7 +227,7 @@ public class PlayerTickHandler
                 if( nightVisionPref && XP.isNightvisionUnlocked( player) && XP.isNightvisionUnlocked( player ) && player.isInWater() && waterAbove )
                     player.addEffect( new MobEffectInstance( MobEffects.NIGHT_VISION, 300, 0, false, false ) );
 
-                if( !isRemote )
+                if( !isClientSide )
                 {
                     ServerPlayer serverPlayer = (ServerPlayer) player;
                     ServerLevel world = serverPlayer.getLevel();
@@ -278,7 +278,7 @@ public class PlayerTickHandler
             }
         }
 
-        if( isRemote )
+        if( isClientSide )
         {
             if( XPOverlayGUI.screenshots.size() > 0 )
             {

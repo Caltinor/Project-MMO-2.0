@@ -72,7 +72,7 @@ public class CreditorScreen extends Screen
 
 //        for( TileButton button : tileButtons )
 //        {
-//            addButton( button );
+//            addWidget( button );
 //        }
     }
 
@@ -178,11 +178,11 @@ public class CreditorScreen extends Screen
         });
         //DEVIATE
         list = creditorsInfo.get( "Deviate#0001" );
-        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "04/09/2021" ).getString() );
+        list.add( new TranslatableComponent( "pmmo.discordMemberSince", "04/09/2021" ).getString() );
         //STARBBLE
         list = creditorsInfo.get( "Starbble#4578" );
         list.add( "First Lavender Tier Patreon" );
-        list.add( new TranslationTextComponent( "pmmo.discordMemberSince", "05/05/2020" ).getString() );
+        list.add( new TranslatableComponent( "pmmo.discordMemberSince", "05/05/2020" ).getString() );
         /////////FIERY//////////////
         PlayerConnectedHandler.fieryPatreons.forEach( a ->
         {

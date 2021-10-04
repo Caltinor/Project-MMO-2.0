@@ -25,8 +25,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.*;
-//import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -142,8 +140,8 @@ public class StatsScreen extends Screen
         statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
 //        text = new ArrayList<>();
-//        entryTitle = new TranslationTextComponent( "pmmo.respiration" );
-//        text.add( new TranslationTextComponent( "pmmo.respirationBonus", getRespirationBonus( player ) ).setStyle( Skill.getSkillStyle( Skill.SWIMMING.toString() ) ) );
+//        entryTitle = new TranslatableComponent( "pmmo.respiration" );
+//        text.add( new TranslatableComponent( "pmmo.respirationBonus", getRespirationBonus( player ) ).setStyle( Skill.getSkillStyle( Skill.SWIMMING.toString() ) ) );
 //        statsEntries.add( new StatsEntry( 0, 0, entryTitle, text ) );
 
         text = new ArrayList<>();
@@ -164,7 +162,7 @@ public class StatsScreen extends Screen
         ItemStack itemStack;
         text = new ArrayList<>();
         entryTitle = new TranslatableComponent( "pmmo.xpBonuses" );
-        Inventory inv = player.inventory;
+        Inventory inv = player.getInventory();
 
         //Helm
         itemStack = inv.getItem( 39 );
@@ -274,7 +272,7 @@ public class StatsScreen extends Screen
             MainScreen.scrollAmounts.put( jType, 0 );
         scrollPanel.setScroll( MainScreen.scrollAmounts.get( jType ) );
         children.add( scrollPanel );
-        addButton(exitButton);
+        addWidget(exitButton);
     }
 
     @Override
@@ -305,7 +303,7 @@ public class StatsScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bind( box );
+        Minecraft.getInstance().getTextureManager().bindForSetup( box );
 
         this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
     }

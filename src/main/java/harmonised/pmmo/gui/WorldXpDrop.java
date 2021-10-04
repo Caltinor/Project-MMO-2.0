@@ -5,7 +5,6 @@ import harmonised.pmmo.skills.Skill;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.World;
 
 public class WorldXpDrop
 {

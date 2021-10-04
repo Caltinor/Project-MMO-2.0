@@ -71,6 +71,6 @@ public class LevelReward //extends Reward
     @Override
     public IFormattableTextComponent getAltTitle()
     {
-        return new TranslationTextComponent( "pmmo." + skill ).setStyle( Skill.getSkillStyle( skill ) );
+        return new TranslatableComponent( "pmmo." + skill ).setStyle( Skill.getSkillStyle( skill ) );
     }*/
 }

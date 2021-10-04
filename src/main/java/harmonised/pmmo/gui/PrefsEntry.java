@@ -1,12 +1,9 @@
 package harmonised.pmmo.gui;
 
-import harmonised.pmmo.util.DP;
-import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
