@@ -73,18 +73,18 @@ public enum JType
     public static final Map<String, JType> stringMap = new HashMap<>();
     private final int value;
 
-    JType( int value )
+    JType(int value)
     {
         this.value = value;
     }
 
     static
     {
-        for( JType jType : JType.values() )
+        for(JType jType : JType.values())
         {
-            jTypeMap.put( jType, jType.value );
-            intMap.put( jType.value, jType );
-            stringMap.put( jType.name().toLowerCase(), jType );
+            jTypeMap.put(jType, jType.value);
+            intMap.put(jType.value, jType);
+            stringMap.put(jType.name().toLowerCase(), jType);
         }
     }
 
@@ -99,13 +99,13 @@ public enum JType
         return this.name().toLowerCase();
     }
 
-    public static JType getJType( String str )
+    public static JType getJType(String str)
     {
-        return stringMap.get( str );
+        return stringMap.get(str);
     }
 
-    public static JType getJType( int i )
+    public static JType getJType(int i)
     {
-        return intMap.get( i );
+        return intMap.get(i);
     }
 }

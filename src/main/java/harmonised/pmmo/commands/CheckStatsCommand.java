@@ -14,40 +14,39 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 public class CheckStatsCommand
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
+    public static int execute(CommandContext<CommandSourceStack> context) throws CommandRuntimeException
     {
         Player sender = (Player) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 
-        if( sender == null )
+        if(sender == null)
         {
-            LOGGER.error( "Error: Pmmo checkstats sent by non-player" );
+            LOGGER.error("Error: Pmmo checkstats sent by non-player");
             return -1;
         }
 
         try
         {
-            Player target = EntityArgument.getPlayer( context, "player name" );
+            Player target = EntityArgument.getPlayer(context, "player name");
 
-            CompoundTag packetxpMap = NBTHelper.mapStringToNbt(Config.getXpMap( target ) );
+            CompoundTag packetxpMap = NBTHelper.mapStringToNbt(Config.getXpMap(target));
 
-            packetxpMap.putString( "UUID", target.getUUID().toString() );
-            packetxpMap.putString( "name", target.getName().getString() );
+            packetxpMap.putString("UUID", target.getUUID().toString());
+            packetxpMap.putString("name", target.getName().getString());
 
-            NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( packetxpMap, 3 ), (ServerPlayer) sender );
+            NetworkHandler.sendToPlayer(new MessageUpdatePlayerNBT(packetxpMap, 3), (ServerPlayer) sender);
         }
-        catch( CommandSyntaxException e )
+        catch(CommandSyntaxException e)
         {
-            LOGGER.error( "Error: Invalid Player requested at CheckStats Command \"" + args[2] + "\"", e );
+            LOGGER.error("Error: Invalid Player requested at CheckStats Command \"" + args[2] + "\"", e);
 
-            sender.displayClientMessage(  new TranslatableComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+            sender.displayClientMessage( new TranslatableComponent("pmmo.invalidPlayer", args[2]).setStyle(XP.textStyle.get("red")), false);
             return -1;
         }
 

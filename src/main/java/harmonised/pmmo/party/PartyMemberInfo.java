@@ -8,7 +8,7 @@ public class PartyMemberInfo
     public final long joinDate;
     public double xpGained;
 
-    public PartyMemberInfo( UUID uuid, long joinDate, double xpGained )
+    public PartyMemberInfo(UUID uuid, long joinDate, double xpGained)
     {
         this.uuid = uuid;
         this.joinDate = joinDate;

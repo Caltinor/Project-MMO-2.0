@@ -12,34 +12,34 @@ import java.util.Collection;
 
 public class SpawnHandler
 {
-    public static void handleSpawn( LivingSpawnEvent.SpecialSpawn event )
+    public static void handleSpawn(LivingSpawnEvent.SpecialSpawn event)
     {
-        if( event.getEntity() instanceof Mob && !(event.getEntity() instanceof Animal) )
+        if(event.getEntity() instanceof Mob && !(event.getEntity() instanceof Animal))
         {
             Mob mob = (Mob) event.getEntity();
             MinecraftServer server = mob.getServer();
-            if( server != null )
+            if(server != null)
             {
                 int powerLevelContributorCount = 0;
                 float powerLevel = 0;
 
-                Collection<Player> allPlayers = XP.getNearbyPlayers( mob );
+                Collection<Player> allPlayers = XP.getNearbyPlayers(mob);
 
-                for( Player player : allPlayers )
+                for(Player player : allPlayers)
                 {
-                    if( XP.isPlayerSurvival( player ) )
+                    if(XP.isPlayerSurvival(player))
                     {
-                        powerLevel += XP.getPowerLevel( player.getUUID() );
+                        powerLevel += XP.getPowerLevel(player.getUUID());
                         powerLevelContributorCount++;
                     }
                 }
 
-                if( powerLevelContributorCount > 1 )
+                if(powerLevelContributorCount > 1)
                     powerLevel /= powerLevelContributorCount;
 
-                AttributeHandler.updateHP( mob, powerLevel );
-                AttributeHandler.updateDamage( mob, powerLevel );
-                AttributeHandler.updateSpeed( mob, powerLevel );
+                AttributeHandler.updateHP(mob, powerLevel);
+                AttributeHandler.updateDamage(mob, powerLevel);
+                AttributeHandler.updateSpeed(mob, powerLevel);
             }
         }
     }

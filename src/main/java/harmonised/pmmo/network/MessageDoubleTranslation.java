@@ -4,8 +4,9 @@ import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraft.network.chat.TranslatableComponent;
+
 import java.util.function.Supplier;
 
 public class MessageDoubleTranslation
@@ -20,7 +21,7 @@ public class MessageDoubleTranslation
     private boolean bar;
     private int color;
 
-    public MessageDoubleTranslation( String tKey, String fKey, String sKey, boolean bar, int color )
+    public MessageDoubleTranslation(String tKey, String fKey, String sKey, boolean bar, int color)
     {
         this.tKey = tKey;
         this.fKey = fKey;
@@ -29,7 +30,7 @@ public class MessageDoubleTranslation
         this.color = color;
     }
 
-    public MessageDoubleTranslation( ResourceLocation tKey, ResourceLocation fKey, ResourceLocation sKey, boolean bar, int color )
+    public MessageDoubleTranslation(ResourceLocation tKey, ResourceLocation fKey, ResourceLocation sKey, boolean bar, int color)
     {
         this.tKey = tKey.toString();
         this.fKey = fKey.toString();
@@ -42,7 +43,7 @@ public class MessageDoubleTranslation
     {
     }
 
-    public static MessageDoubleTranslation decode( FriendlyByteBuf buf )
+    public static MessageDoubleTranslation decode(FriendlyByteBuf buf)
     {
         MessageDoubleTranslation packet = new MessageDoubleTranslation();
         packet.tKey = buf.readUtf();
@@ -54,56 +55,56 @@ public class MessageDoubleTranslation
         return packet;
     }
 
-    public static void encode( MessageDoubleTranslation packet, FriendlyByteBuf buf )
+    public static void encode(MessageDoubleTranslation packet, FriendlyByteBuf buf)
     {
-        buf.writeUtf( packet.tKey );
-        buf.writeUtf( packet.fKey );
-        buf.writeUtf( packet.sKey );
-        buf.writeBoolean( packet.bar );
-        buf.writeInt( packet.color );
+        buf.writeUtf(packet.tKey);
+        buf.writeUtf(packet.fKey);
+        buf.writeUtf(packet.sKey);
+        buf.writeBoolean(packet.bar);
+        buf.writeInt(packet.color);
     }
 
-    public static void handlePacket( MessageDoubleTranslation packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageDoubleTranslation packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
-            switch( packet.color )
+            switch(packet.color)
             {
                 case 0: //white
-                    Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( packet.fKey ), new TranslatableComponent( packet.sKey ) ), packet.bar );
+                    Minecraft.getInstance().player.displayClientMessage(new TranslatableComponent(packet.tKey, new TranslatableComponent(packet.fKey), new TranslatableComponent(packet.sKey)), packet.bar);
                     break;
 
                 case 1: //green
-                    if( packet.tKey.equals( "pmmo.extraDrop" ) )
+                    if(packet.tKey.equals("pmmo.extraDrop"))
                     {
-                        if( !regKey.equals( packet.sKey ) ) //item type
+                        if(!regKey.equals(packet.sKey)) //item type
                         {
                             regKey = packet.sKey;
-                            lastAmount = Integer.parseInt( packet.fKey );
+                            lastAmount = Integer.parseInt(packet.fKey);
                         }
 
-                        if( System.nanoTime() - lastTime < 3000000000L )
+                        if(System.nanoTime() - lastTime < 3000000000L)
                         {
-//                            System.out.println( lastAmount + " + " + Integer.parseInt( packet.fKey ) + " = " + (lastAmount + Integer.parseInt( packet.fKey )) );
-                            lastAmount += Integer.parseInt( packet.fKey );
+//                            System.out.println(lastAmount + " + " + Integer.parseInt(packet.fKey) + " = " + (lastAmount + Integer.parseInt(packet.fKey)));
+                            lastAmount += Integer.parseInt(packet.fKey);
                         }
                         else
-                            lastAmount = Integer.parseInt( packet.fKey );
+                            lastAmount = Integer.parseInt(packet.fKey);
 
                         lastTime = System.nanoTime();
 
-                        Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( "" + lastAmount ), new TranslatableComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                        Minecraft.getInstance().player.displayClientMessage(new TranslatableComponent(packet.tKey, new TranslatableComponent("" + lastAmount), new TranslatableComponent(packet.sKey)).setStyle(XP.textStyle.get("green")), packet.bar);
                     }
                     else
-                        Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( "" + packet.fKey ), new TranslatableComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "green" ) ), packet.bar );
+                        Minecraft.getInstance().player.displayClientMessage(new TranslatableComponent(packet.tKey, new TranslatableComponent("" + packet.fKey), new TranslatableComponent(packet.sKey)).setStyle(XP.textStyle.get("green")), packet.bar);
                     break;
 
                 case 2: //red
-                    Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( packet.fKey ), new TranslatableComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "red" ) ), packet.bar );
+                    Minecraft.getInstance().player.displayClientMessage(new TranslatableComponent(packet.tKey, new TranslatableComponent(packet.fKey), new TranslatableComponent(packet.sKey)).setStyle(XP.textStyle.get("red")), packet.bar);
                     break;
 
                 case 3: //yellow
-                    Minecraft.getInstance().player.displayClientMessage( new TranslatableComponent( packet.tKey, new TranslatableComponent( packet.fKey ), new TranslatableComponent( packet.sKey ) ).setStyle( XP.textStyle.get( "yellow" ) ), packet.bar );
+                    Minecraft.getInstance().player.displayClientMessage(new TranslatableComponent(packet.tKey, new TranslatableComponent(packet.fKey), new TranslatableComponent(packet.sKey)).setStyle(XP.textStyle.get("yellow")), packet.bar);
                     break;
             }
         });

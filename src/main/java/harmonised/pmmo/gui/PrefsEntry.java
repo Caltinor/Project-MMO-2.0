@@ -19,7 +19,7 @@ public class PrefsEntry
     private final int textFieldWidth = 36;
     public final boolean isSwitch, removeIfMax;
 
-    public PrefsEntry(String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr, boolean removeIfMax, boolean isSwitch )
+    public PrefsEntry(String preference, String prefix, String suffix, double minVal, double maxVal, double curVal, double defaultVal, boolean showDec, boolean showStr, boolean removeIfMax, boolean isSwitch)
     {
         this.preference = preference;
         this.prefix = prefix;
@@ -27,32 +27,32 @@ public class PrefsEntry
         this.isSwitch = isSwitch;
         this.removeIfMax = removeIfMax;
 
-        if( minVal == maxVal )
+        if(minVal == maxVal)
             maxVal = 0.00001;
-        if( Double.isNaN( curVal ) )
+        if(Double.isNaN(curVal))
             curVal = defaultVal;
-        if( defaultVal > maxVal )
+        if(defaultVal > maxVal)
             defaultVal = maxVal;
-        if( defaultVal < minVal )
+        if(defaultVal < minVal)
             defaultVal = minVal;
-        if( curVal > maxVal )
+        if(curVal > maxVal)
             curVal = maxVal;
-        if( curVal < minVal )
+        if(curVal < minVal)
             curVal = minVal;
 
         this.defaultVal = defaultVal;
 
-        slider = new PrefsSlider( 0, 0, sliderWidth, height, preference, new TextComponent( prefix ), new TextComponent( suffix ), minVal, maxVal, curVal, showDec, showStr, isSwitch, button ->
+        slider = new PrefsSlider(0, 0, sliderWidth, height, preference, new TextComponent(prefix), new TextComponent(suffix), minVal, maxVal, curVal, showDec, showStr, isSwitch, button ->
         {
         });
 
-        if( !isSwitch )
+        if(!isSwitch)
         {
-            textField = new EditBox( font, 0, 0, textFieldWidth, height, new TranslatableComponent( "" ) );
-            textField.setMaxLength( 5 );
-            textField.setValue( slider.getMessage().getString() );
+            textField = new EditBox(font, 0, 0, textFieldWidth, height, new TranslatableComponent(""));
+            textField.setMaxLength(5);
+            textField.setValue(slider.getMessage().getString());
         }
-        button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, new TranslatableComponent( isSwitch ? "RESET" : "R" ), button ->
+        button = new Button(0, 0, height + (isSwitch ? textFieldWidth : 0), height, new TranslatableComponent(isSwitch ? "RESET" : "R"), button ->
         {
             resetValue();
         });
@@ -60,13 +60,13 @@ public class PrefsEntry
 
     public void resetValue()
     {
-        slider.setValue( defaultVal );
+        slider.setValue(defaultVal);
         slider.updateSlider();
-        if( isSwitch )
-            slider.setMessage( new TextComponent( slider.getValue() == 1 ? "On" : "Off" ) );
+        if(isSwitch)
+            slider.setMessage(new TextComponent(slider.getValue() == 1 ? "On" : "Off"));
         else
-            textField.setValue( slider.getMessage().getString() );
-//        System.out.println( slider.getMessage().getString() );
+            textField.setValue(slider.getMessage().getString());
+//        System.out.println(slider.getMessage().getString());
     }
 
     public int getWidth()
@@ -89,11 +89,11 @@ public class PrefsEntry
         return slider.y;
     }
 
-    public void setX( int x )
+    public void setX(int x)
     {
         slider.x = x;
 
-        if( isSwitch )
+        if(isSwitch)
             button.x = x + sliderWidth;
         else
         {
@@ -102,29 +102,29 @@ public class PrefsEntry
         }
     }
 
-    public void setY( int y )
+    public void setY(int y)
     {
         slider.y = y;
         button.y = y;
-        if( !isSwitch )
+        if(!isSwitch)
             textField.y = y;
     }
 
-    public void mouseClicked( double mouseX, double mouseY, int button )
+    public void mouseClicked(double mouseX, double mouseY, int button)
     {
-        this.slider.mouseClicked( mouseX, mouseY, button );
-        this.button.mouseClicked( mouseX, mouseY, button );
+        this.slider.mouseClicked(mouseX, mouseY, button);
+        this.button.mouseClicked(mouseX, mouseY, button);
     }
 
-    public void mouseReleased( double mouseX, double mouseY, int button )
+    public void mouseReleased(double mouseX, double mouseY, int button)
     {
-        this.slider.mouseReleased( mouseX, mouseY, button );
-        this.button.mouseReleased( mouseX, mouseY, button );
+        this.slider.mouseReleased(mouseX, mouseY, button);
+        this.button.mouseReleased(mouseX, mouseY, button);
     }
 
-    public void mouseDragged( double mouseX, double mouseY, int button, double deltaX, double deltaY )
+    public void mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
     {
-        this.slider.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
-        this.button.mouseDragged( mouseX, mouseY, button, deltaX, deltaY );
+        this.slider.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        this.button.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 }

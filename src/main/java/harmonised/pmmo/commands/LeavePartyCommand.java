@@ -15,30 +15,30 @@ import java.util.UUID;
 
 public class LeavePartyCommand
 {
-    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
+    public static int execute(CommandContext<CommandSourceStack> context) throws CommandRuntimeException
     {
         Player player = (Player) context.getSource().getEntity();
         UUID uuid = player.getUUID();
         PmmoSavedData pmmoSavedData = PmmoSavedData.get();
-        Party party = pmmoSavedData.getParty( uuid );
-        int result = pmmoSavedData.removeFromParty( uuid );
-        switch( result )
+        Party party = pmmoSavedData.getParty(uuid);
+        int result = pmmoSavedData.removeFromParty(uuid);
+        switch(result)
         {
             case -1:
-                player.displayClientMessage( new TranslatableComponent( "pmmo.youAreNotInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.displayClientMessage(new TranslatableComponent("pmmo.youAreNotInAParty").setStyle(XP.textStyle.get("red")), false);
                 break;
 
             case 0:
             case 1:
-                Collection<ServerPlayer> members = party.getOnlineMembers( player.getServer() );
-                for( ServerPlayer memberPlayer : members )
+                Collection<ServerPlayer> members = party.getOnlineMembers(player.getServer());
+                for(ServerPlayer memberPlayer : members)
                 {
-                    if( !memberPlayer.getUUID().equals( uuid ) )
-                        memberPlayer.displayClientMessage( new TranslatableComponent( "pmmo.playerLeftYourParty", player.getDisplayName() ).setStyle( XP.textStyle.get( "red" ) ), false );
+                    if(!memberPlayer.getUUID().equals(uuid))
+                        memberPlayer.displayClientMessage(new TranslatableComponent("pmmo.playerLeftYourParty", player.getDisplayName()).setStyle(XP.textStyle.get("red")), false);
                 }
-                player.displayClientMessage( new TranslatableComponent( "pmmo.youLeftTheParty" ).setStyle(XP.textStyle.get( "green" ) ), false );
-                if( result == 1 )
-                    player.displayClientMessage( new TranslatableComponent( "pmmo.disbandedParty" ).setStyle(XP.textStyle.get( "yellow" ) ), false );
+                player.displayClientMessage(new TranslatableComponent("pmmo.youLeftTheParty").setStyle(XP.textStyle.get("green")), false);
+                if(result == 1)
+                    player.displayClientMessage(new TranslatableComponent("pmmo.disbandedParty").setStyle(XP.textStyle.get("yellow")), false);
                 break;
         }
 

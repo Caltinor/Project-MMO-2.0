@@ -30,9 +30,9 @@ public class PredicateRegistry {
 	public static void registerPredicate(ResourceLocation res, JType jType, Predicate<Player> pred) 
 	{
 		String condition = jType.toString()+";"+res.toString();
-		if ( pred == null ) 
+		if (pred == null) 
 			return;
-		reqPredicates.put( condition, pred );
+		reqPredicates.put(condition, pred);
 		XP.LOGGER.info("Predicate Registered: "+condition);
 	}
 	
@@ -49,9 +49,9 @@ public class PredicateRegistry {
 	public static void registerBreakPredicate(ResourceLocation res, JType jType, BiPredicate<Player, BlockEntity> pred) 
 	{
 		String condition = jType.toString()+";"+res.toString();
-		if ( pred == null ) 
+		if (pred == null) 
 			return;
-		reqBreakPredicates.put( condition, pred );
+		reqBreakPredicates.put(condition, pred);
 		XP.LOGGER.info("Predicate Registered: "+condition);
 	}
 	
@@ -64,8 +64,8 @@ public class PredicateRegistry {
 	public static boolean predicateExists(ResourceLocation res, JType jType) 
 	{
 		if (jType.equals(JType.REQ_BREAK))
-			return reqBreakPredicates.containsKey( jType.toString()+";"+res.toString() );
-		return reqPredicates.containsKey( jType.toString()+";"+res.toString() );
+			return reqBreakPredicates.containsKey(jType.toString()+";"+res.toString());
+		return reqPredicates.containsKey(jType.toString()+";"+res.toString());
 	}
 	
 	/**this is executed by PMMO logic to determine if the player is permitted to perform
@@ -78,9 +78,9 @@ public class PredicateRegistry {
 	 */
 	public static boolean checkPredicateReq(Player player, ResourceLocation res, JType jType) 
 	{
-		if ( !predicateExists( res, jType ) ) 
+		if (!predicateExists(res, jType)) 
 			return false;
-		return reqPredicates.get( jType.toString()+";"+res.toString() ).test(player); 
+		return reqPredicates.get(jType.toString()+";"+res.toString()).test(player); 
 	}
 	
 	/**this is executed by PMMO logic to determine if the player is permitted to break
@@ -94,8 +94,8 @@ public class PredicateRegistry {
 	public static boolean checkPredicateReq(Player player, BlockEntity tile, JType jType) 
 	{
 		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
-		if ( !predicateExists( res, jType ) ) 
+		if (!predicateExists(res, jType)) 
 			return false;
-		return reqBreakPredicates.get( jType.toString()+";"+res.toString() ).test(player, tile); 
+		return reqBreakPredicates.get(jType.toString()+";"+res.toString()).test(player, tile); 
 	}
 }

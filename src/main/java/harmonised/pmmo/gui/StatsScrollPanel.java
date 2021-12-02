@@ -25,7 +25,7 @@ public class StatsScrollPanel extends ScrollPanel
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
 
-    public StatsScrollPanel( PoseStack stack, Minecraft client, int width, int height, int top, int left, List<StatsEntry> statsEntries )
+    public StatsScrollPanel(PoseStack stack, Minecraft client, int width, int height, int top, int left, List<StatsEntry> statsEntries)
     {
         super(client, width, height, top, left);
         this.statsEntries = statsEntries;
@@ -47,7 +47,7 @@ public class StatsScrollPanel extends ScrollPanel
     {
         int height = 16;
 
-        for( StatsEntry a : statsEntries )
+        for(StatsEntry a : statsEntries)
         {
             height += a.getHeight() + 3;
         }
@@ -56,26 +56,26 @@ public class StatsScrollPanel extends ScrollPanel
     }
 
     @Override
-    protected void drawPanel( PoseStack stack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY)
+    protected void drawPanel(PoseStack stack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY)
     {
         int accumulativeHeight = 0;
-        for( int i = 0; i < statsEntries.size(); i++ )
+        for(int i = 0; i < statsEntries.size(); i++)
         {
-            statsEntry = statsEntries.get( i );
-            statsEntry.setX( this.left + 6 );
-            statsEntry.setY( relativeY + accumulativeHeight );
+            statsEntry = statsEntries.get(i);
+            statsEntry.setX(this.left + 6);
+            statsEntry.setY(relativeY + accumulativeHeight);
 
             TextColor color = statsEntry.title.getStyle().getColor();
             int hexColor = color == null ? 0xffffff : color.getValue();
 
-            fillGradient( stack, this.left + 4, statsEntry.getY() - 2, this.right - 2, statsEntry.getY() + statsEntry.getHeight() + 2, 0x22444444, 0x33222222 );
-            drawCenteredString( stack, font, statsEntry.title.getString(), sr.getGuiScaledWidth()/2, statsEntry.getY(), hexColor );
-            for( int j = 0; j < statsEntry.text.size(); j++ )
+            fillGradient(stack, this.left + 4, statsEntry.getY() - 2, this.right - 2, statsEntry.getY() + statsEntry.getHeight() + 2, 0x22444444, 0x33222222);
+            drawCenteredString(stack, font, statsEntry.title.getString(), sr.getGuiScaledWidth()/2, statsEntry.getY(), hexColor);
+            for(int j = 0; j < statsEntry.text.size(); j++)
             {
-                MutableComponent line = statsEntry.text.get( j );
+                MutableComponent line = statsEntry.text.get(j);
                 color = line.getStyle().getColor();
                 hexColor = color == null ? 0xffffff : color.getValue();
-                drawString( stack, font, line.getString(), statsEntry.getX(), 2 + statsEntry.getY() + (j+1)*11, hexColor );
+                drawString(stack, font, line.getString(), statsEntry.getX(), 2 + statsEntry.getY() + (j+1)*11, hexColor);
             }
 
             accumulativeHeight += statsEntry.getHeight() + 4;
@@ -93,7 +93,7 @@ public class StatsScrollPanel extends ScrollPanel
         return (int) this.scrollDistance;
     }
 
-    public void setScroll( int scroll )
+    public void setScroll(int scroll)
     {
         this.scrollDistance = scroll;
     }
@@ -114,7 +114,7 @@ public class StatsScrollPanel extends ScrollPanel
     }
 
     @Override
-    public void render( PoseStack stack,  int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack stack,  int mouseX, int mouseY, float partialTicks)
     {
         Tesselator tess = Tesselator.getInstance();
         BufferBuilder worldr = tess.getBuilder();
@@ -125,7 +125,7 @@ public class StatsScrollPanel extends ScrollPanel
                 (int)(width * scale), (int)(height * scale));
 
         int baseY = this.top + border - (int)this.scrollDistance;
-        this.drawPanel( stack, right, baseY, tess, mouseX, mouseY);
+        this.drawPanel(stack, right, baseY, tess, mouseX, mouseY);
 
         RenderSystem.disableDepthTest();
 

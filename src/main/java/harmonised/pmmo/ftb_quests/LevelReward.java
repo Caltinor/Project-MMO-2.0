@@ -9,9 +9,9 @@ public class LevelReward //extends Reward
     public double amount = 1;
     public boolean ignoreBonuses = false;
 
-    public LevelReward( Quest quest )
+    public LevelReward(Quest quest)
     {
-        super( quest );
+        super(quest);
         autoclaim = RewardAutoClaim.INVISIBLE;
     }
 
@@ -22,55 +22,55 @@ public class LevelReward //extends Reward
     }
 
     @Override
-    public void writeData( CompoundNBT nbt )
+    public void writeData(CompoundNBT nbt)
     {
-        super.writeData( nbt );
-        nbt.putString( "skill", skill );
-        nbt.putDouble( "amount", amount );
+        super.writeData(nbt);
+        nbt.putString("skill", skill);
+        nbt.putDouble("amount", amount);
     }
 
     @Override
-    public void readData( CompoundNBT nbt )
+    public void readData(CompoundNBT nbt)
     {
-        super.readData( nbt );
-        skill = nbt.getString( "skill" );
-        amount = nbt.getDouble( "amount" );
+        super.readData(nbt);
+        skill = nbt.getString("skill");
+        amount = nbt.getDouble("amount");
     }
 
     @Override
-    public void writeNetData( PacketBuffer buffer )
+    public void writeNetData(PacketBuffer buffer)
     {
-        super.writeNetData(buffer );
-        buffer.writeString( skill );
-        buffer.writeDouble( amount );
+        super.writeNetData(buffer);
+        buffer.writeString(skill);
+        buffer.writeDouble(amount);
     }
 
     @Override
-    public void readNetData( PacketBuffer buffer )
+    public void readNetData(PacketBuffer buffer)
     {
-        super.readNetData(buffer );
+        super.readNetData(buffer);
         skill = buffer.readString();
         amount = buffer.readDouble();
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void getConfig( ConfigGroup config )
+    public void getConfig(ConfigGroup config)
     {
-        super.getConfig( config );
-        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.MINING.toString(), Skill.getSkills().keySet().toArray() ).create() );
-        config.addDouble( "amount", amount, input -> amount = input, 1, -XP.getMaxLevel(), XP.getMaxLevel() );
+        super.getConfig(config);
+        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of(Skill.MINING.toString(), Skill.getSkills().keySet().toArray()).create());
+        config.addDouble("amount", amount, input -> amount = input, 1, -XP.getMaxLevel(), XP.getMaxLevel());
     }
 
     @Override
-    public void claim( ServerPlayerEntity player, boolean notify )
+    public void claim(ServerPlayerEntity player, boolean notify)
     {
-        Skill.addLevel( skill, player.getUniqueID(), amount, "Completing a Quest", !notify, ignoreBonuses );
+        Skill.addLevel(skill, player.getUniqueID(), amount, "Completing a Quest", !notify, ignoreBonuses);
     }
 
     @Override
     public IFormattableTextComponent getAltTitle()
     {
-        return new TranslatableComponent( "pmmo." + skill ).setStyle( Skill.getSkillStyle( skill ) );
+        return new TranslatableComponent("pmmo." + skill).setStyle(Skill.getSkillStyle(skill));
     }*/
 }

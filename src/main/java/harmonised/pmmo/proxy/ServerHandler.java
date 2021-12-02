@@ -6,8 +6,7 @@ import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.AttributeHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -17,29 +16,29 @@ public class ServerHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void updateNBTTag(MessageUpdatePlayerNBT packet, Player player )
+    public static void updateNBTTag(MessageUpdatePlayerNBT packet, Player player)
     {
         CompoundTag newPackage = packet.reqPackage;
-        Set<String> keySet = new HashSet<>( newPackage.getAllKeys() );
+        Set<String> keySet = new HashSet<>(newPackage.getAllKeys());
 
-        switch( packet.type )
+        switch(packet.type)
         {
             case 0:
-                Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-                for( String tag : keySet )
+                Map<String, Double> prefsMap = Config.getPreferencesMap(player);
+                for(String tag : keySet)
                 {
-                    prefsMap.remove( tag );
+                    prefsMap.remove(tag);
                 }
-                for( String tag : keySet )
+                for(String tag : keySet)
                 {
-                    prefsMap.put( tag, newPackage.getDouble( tag ) );
+                    prefsMap.put(tag, newPackage.getDouble(tag));
                 }
-                AttributeHandler.updateAll( player );
-                PmmoSavedData.get().setDirty( true );
+                AttributeHandler.updateAll(player);
+                PmmoSavedData.get().setDirty(true);
                 break;
 
             default:
-                LOGGER.error( "ERROR MessageUpdateNBT WRONG TYPE", packet );
+                LOGGER.error("ERROR MessageUpdateNBT WRONG TYPE", packet);
                 break;
         }
     }

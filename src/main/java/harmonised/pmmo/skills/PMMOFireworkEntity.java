@@ -30,7 +30,7 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
         this.lifetime = 10 * i + this.random.nextInt(6) + this.random.nextInt(7);
     }
 
-    public void setExplosionText( WorldText explosionText )
+    public void setExplosionText(WorldText explosionText)
     {
         this.explosionText = explosionText;
     }
@@ -39,17 +39,17 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
     public void explode()
     {
         this.level.broadcastEntityEvent(this, (byte)17);
-        if( explosionText != null )
+        if(explosionText != null)
         {
             Vec3 pos = position();
-            ResourceLocation dimResLoc = XP.getDimResLoc( level );
-            for( ServerPlayer player : PmmoSavedData.getServer().getPlayerList().getPlayers() )
+            ResourceLocation dimResLoc = XP.getDimResLoc(level);
+            for(ServerPlayer player : PmmoSavedData.getServer().getPlayerList().getPlayers())
             {
-                if( level == player.getLevel() && Util.getDistance( pos, player.position() ) < 325.1 )
+                if(level == player.getLevel() && Util.getDistance(pos, player.position()) < 325.1)
                 {
-                    explosionText.setPos( pos );
+                    explosionText.setPos(pos);
                     explosionText.updatePos();
-                    XP.addWorldTextRadius( dimResLoc, explosionText, 128 );
+                    XP.addWorldTextRadius(dimResLoc, explosionText, 128);
                 }
             }
         }

@@ -13,17 +13,17 @@
 //
 //import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 //
-//@Mixin( BrewingStandBlockEntity.class )
+//@Mixin(BrewingStandBlockEntity.class)
 //public class BrewingStandTileEntityShrinkMixin
 //{
 //    @Shadow
 //    private NonNullList<ItemStack> brewingItemStacks;
 //
-//    @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "brewPotions" )
-//    public void projectmmo$$handleSmeltingShrink( CallbackInfo info )
+//    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V"), method = "brewPotions")
+//    public void projectmmo$$handleSmeltingShrink(CallbackInfo info)
 //    {
 //        Level world = ((BrewingStandBlockEntity)(Object)this).getLevel();
 //        BlockPos pos = ((BrewingStandBlockEntity)(Object)this).getBlockPos();
-//        BrewHandler.handlePotionBrew( brewingItemStacks, world, pos );
+//        BrewHandler.handlePotionBrew(brewingItemStacks, world, pos);
 //    }
 //}

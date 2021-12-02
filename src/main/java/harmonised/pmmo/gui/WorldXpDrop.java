@@ -8,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class WorldXpDrop
 {
-    public static float worldXpDropsRotationCap = (float) ( 0f + Config.forgeConfig.worldXpDropsRotationCap.get() );
+    public static float worldXpDropsRotationCap = (float) (0f + Config.forgeConfig.worldXpDropsRotationCap.get());
 
     private final ResourceLocation worldResLoc;
     private final Vec3 pos;
@@ -19,50 +19,50 @@ public class WorldXpDrop
     private float decaySpeed = 1;
     public float xp, startXp;
 
-    public static WorldXpDrop fromXYZ( ResourceLocation worldResLoc, double x, double y, double z, double maxOffset, double xp, String skill )
+    public static WorldXpDrop fromXYZ(ResourceLocation worldResLoc, double x, double y, double z, double maxOffset, double xp, String skill)
     {
-        return fromXYZ( worldResLoc, x, y, z, maxOffset, (float) xp, skill );
+        return fromXYZ(worldResLoc, x, y, z, maxOffset, (float) xp, skill);
     }
 
-    public static WorldXpDrop fromXYZ( ResourceLocation worldResLoc, double x, double y, double z, double maxOffset, float xp, String skill )
+    public static WorldXpDrop fromXYZ(ResourceLocation worldResLoc, double x, double y, double z, double maxOffset, float xp, String skill)
     {
-        return new WorldXpDrop( worldResLoc, new Vec3( x + Math.random()*maxOffset*2 - maxOffset, y + Math.random()*maxOffset*2 - maxOffset, z + Math.random()*maxOffset*2 - maxOffset ), xp, skill );
+        return new WorldXpDrop(worldResLoc, new Vec3(x + Math.random()*maxOffset*2 - maxOffset, y + Math.random()*maxOffset*2 - maxOffset, z + Math.random()*maxOffset*2 - maxOffset), xp, skill);
     }
 
-    public static WorldXpDrop fromVector( ResourceLocation worldResLoc, Vec3 pos, double maxOffset, double xp, String skill )
+    public static WorldXpDrop fromVector(ResourceLocation worldResLoc, Vec3 pos, double maxOffset, double xp, String skill)
     {
-        return fromVector( worldResLoc, pos, maxOffset, (float) xp, skill );
+        return fromVector(worldResLoc, pos, maxOffset, (float) xp, skill);
     }
 
-    public static WorldXpDrop fromVector( ResourceLocation worldResLoc, Vec3 pos, double maxOffset, float xp, String skill )
+    public static WorldXpDrop fromVector(ResourceLocation worldResLoc, Vec3 pos, double maxOffset, float xp, String skill)
     {
-        return new WorldXpDrop( worldResLoc, maxOffset == 0 ? pos : new Vec3( pos.x() + Math.random()*maxOffset*2 - maxOffset, pos.y() + Math.random()*maxOffset*2 - maxOffset, pos.z() + Math.random()*maxOffset*2 - maxOffset ), xp, skill );
+        return new WorldXpDrop(worldResLoc, maxOffset == 0 ? pos : new Vec3(pos.x() + Math.random()*maxOffset*2 - maxOffset, pos.y() + Math.random()*maxOffset*2 - maxOffset, pos.z() + Math.random()*maxOffset*2 - maxOffset), xp, skill);
     }
 
-    public static WorldXpDrop fromBlockPos( ResourceLocation worldResLoc, BlockPos pos, double maxOffset, double xp, String skill )
+    public static WorldXpDrop fromBlockPos(ResourceLocation worldResLoc, BlockPos pos, double maxOffset, double xp, String skill)
     {
-        return fromBlockPos( worldResLoc, pos, maxOffset, (float) xp, skill );
+        return fromBlockPos(worldResLoc, pos, maxOffset, (float) xp, skill);
     }
 
-    public static WorldXpDrop fromBlockPos( ResourceLocation worldResLoc, BlockPos pos, double maxOffset, float xp, String skill )
+    public static WorldXpDrop fromBlockPos(ResourceLocation worldResLoc, BlockPos pos, double maxOffset, float xp, String skill)
     {
-        return new WorldXpDrop( worldResLoc, new Vec3( pos.getX() + 0.5 + Math.random()*maxOffset*2 - maxOffset, pos.getY() + 0.5 + Math.random()*maxOffset*2 - maxOffset, pos.getZ() + 0.5 + Math.random()*maxOffset*2 - maxOffset ), xp, skill );
+        return new WorldXpDrop(worldResLoc, new Vec3(pos.getX() + 0.5 + Math.random()*maxOffset*2 - maxOffset, pos.getY() + 0.5 + Math.random()*maxOffset*2 - maxOffset, pos.getZ() + 0.5 + Math.random()*maxOffset*2 - maxOffset), xp, skill);
     }
 
-    private WorldXpDrop( ResourceLocation worldResLoc, Vec3 pos, float xp, String skill )
+    private WorldXpDrop(ResourceLocation worldResLoc, Vec3 pos, float xp, String skill)
     {
         this.worldResLoc = worldResLoc;
         this.pos = pos;
         this.startXp = xp;
         this.xp = this.startXp;
         this.skill = skill;
-        this.color = Skill.getSkillColor( skill );
+        this.color = Skill.getSkillColor(skill);
         this.rotation = getRandomRotation();
     }
 
     private static float getRandomRotation()
     {
-        return (float) ( Math.random()*worldXpDropsRotationCap*2 - worldXpDropsRotationCap );
+        return (float) (Math.random()*worldXpDropsRotationCap*2 - worldXpDropsRotationCap);
     }
 
     public Vec3 getPos()
@@ -90,7 +90,7 @@ public class WorldXpDrop
         return rotation;
     }
 
-    public void setRotation( float rotation )
+    public void setRotation(float rotation)
     {
         this.rotation = rotation;
     }
@@ -110,12 +110,12 @@ public class WorldXpDrop
         return decaySpeed;
     }
 
-    public void setDecaySpeed( double decaySpeed )
+    public void setDecaySpeed(double decaySpeed)
     {
         this.decaySpeed = (float) decaySpeed;
     }
 
-    public void setDecaySpeed( float decaySpeed )
+    public void setDecaySpeed(float decaySpeed)
     {
         this.decaySpeed = decaySpeed;
     }

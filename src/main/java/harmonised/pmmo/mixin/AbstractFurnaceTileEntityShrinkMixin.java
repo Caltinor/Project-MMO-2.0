@@ -13,18 +13,18 @@
 //import org.spongepowered.asm.mixin.injection.Inject;
 //import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 //
-//@Mixin( AbstractFurnaceBlockEntity.class )
+//@Mixin(AbstractFurnaceBlockEntity.class)
 //public class AbstractFurnaceTileEntityShrinkMixin
 //{
 //    @Shadow
 //    protected NonNullList<ItemStack> items;
 //
-//    @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "smelt" )
-//    public void projectmmo$$handleSmeltingShrink( Recipe<?> p_214007_1_, CallbackInfo info )
+//    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V"), method = "smelt")
+//    public void projectmmo$$handleSmeltingShrink(Recipe<?> p_214007_1_, CallbackInfo info)
 //    {
 //        Level world = ((AbstractFurnaceBlockEntity)(Object)this).getLevel();
 //        BlockPos pos = ((AbstractFurnaceBlockEntity)(Object)this).getBlockPos();
-//        FurnaceHandler.handleSmelted( items.get(0), items.get(2), world, pos, 0 );
-//        FurnaceHandler.handleSmelted( items.get(0), items.get(2), world, pos, 1 );
+//        FurnaceHandler.handleSmelted(items.get(0), items.get(2), world, pos, 0);
+//        FurnaceHandler.handleSmelted(items.get(0), items.get(2), world, pos, 1);
 //    }
 //}

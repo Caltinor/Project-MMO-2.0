@@ -9,18 +9,18 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerDisconnectedHandler
 {
-    public static void handlerPlayerDisconnected( PlayerEvent.PlayerLoggedOutEvent event )
+    public static void handlerPlayerDisconnected(PlayerEvent.PlayerLoggedOutEvent event)
     {
         Player player = event.getPlayer();
-        if( player.level.isClientSide() )
+        if(player.level.isClientSide())
         {
             WebHandler.updateInfo();
         }
         else
         {
-            if( Config.forgeConfig.autoLeavePartyOnDisconnect.get() )
-                PmmoSavedData.get().removeFromParty( player.getUUID() );
-            player.getServer().getPlayerList().getPlayers().forEach( XP::syncPlayersSkills );
+            if(Config.forgeConfig.autoLeavePartyOnDisconnect.get())
+                PmmoSavedData.get().removeFromParty(player.getUUID());
+            player.getServer().getPlayerList().getPlayers().forEach(XP::syncPlayersSkills);
         }
     }
 }

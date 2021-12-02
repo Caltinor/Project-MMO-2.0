@@ -5,8 +5,8 @@ import net.minecraft.world.entity.player.Player;
 
 public class EnchantmentHandler
 {
-    public static void handleItemEnchanted( Player player, EnchantmentInstance enchantmentData )
+    public static void handleItemEnchanted(Player player, EnchantmentInstance enchantmentData)
     {
-        System.out.println( "wait, this worked?" );
+        System.out.println("wait, this worked?");
     }
 }

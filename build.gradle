@@ -19,15 +19,15 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.5-3.64.2'
+version = '1.18-3.64.2'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
-
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 minecraft
 {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: '1.18'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs
     {
@@ -108,7 +108,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.17.1-37.0.59'
+            minecraft 'net.minecraftforge:forge:1.18-38.0.12'
             implementation 'com.google.code.gson:gson:2.8.6'
 
 //            compileOnly fg.deobf("mezz.jei:jei-1.17.1-8.0.0.16:api")
@@ -168,7 +168,7 @@ jar
 {
     manifest
     {
-        attributes( [
+        attributes([
                 "Specification-Title": "pmmo",
                 "Specification-Vendor": "pmmosareus",
                 "Specification-Version": "1",

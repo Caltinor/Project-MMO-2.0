@@ -14,27 +14,27 @@ import java.util.Map;
 
 public class TameHandler
 {
-    public static void handleAnimalTaming( AnimalTameEvent event )
+    public static void handleAnimalTaming(AnimalTameEvent event)
     {
-        if( event.getTamer() instanceof ServerPlayer )
+        if(event.getTamer() instanceof ServerPlayer)
         {
             ServerPlayer tamer = (ServerPlayer) event.getTamer();
             String regKey = event.getAnimal().getEncodeId();
-            Map<String, Double> award = XP.getXp( event.getAnimal() , JType.XP_VALUE_TAME );
+            Map<String, Double> award = XP.getXp(event.getAnimal() , JType.XP_VALUE_TAME);
 
-            if( award.size() == 0 )
-                award.put( Config.forgeConfig.defaultTamingXpFarming.get() ? Skill.FARMING.toString() : Skill.TAMING.toString(), Config.forgeConfig.defaultTamingXp.get() );
+            if(award.size() == 0)
+                award.put(Config.forgeConfig.defaultTamingXpFarming.get() ? Skill.FARMING.toString() : Skill.TAMING.toString(), Config.forgeConfig.defaultTamingXp.get());
 
-            if( XP.isHoldingDebugItemInOffhand( tamer ) )
-                tamer.displayClientMessage( new TextComponent( regKey ), false );
+            if(XP.isHoldingDebugItemInOffhand(tamer))
+                tamer.displayClientMessage(new TextComponent(regKey), false);
 
-            for( String awardSkillName : award.keySet() )
+            for(String awardSkillName : award.keySet())
             {
                 Vec3 xpDropPos = event.getAnimal().position();
-                WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( tamer.getLevel() ), xpDropPos.x(), xpDropPos.y() + event.getAnimal().getEyeHeight() + 0.523, xpDropPos.z(), 0.5, award.get( awardSkillName ), awardSkillName );
-                xpDrop.setDecaySpeed( 0.35 );
-                XP.addWorldXpDrop( xpDrop, tamer );
-                Skill.addXp( awardSkillName, tamer, award.get( awardSkillName ), "taming " + regKey, false, false );
+                WorldXpDrop xpDrop = WorldXpDrop.fromXYZ(XP.getDimResLoc(tamer.getLevel()), xpDropPos.x(), xpDropPos.y() + event.getAnimal().getEyeHeight() + 0.523, xpDropPos.z(), 0.5, award.get(awardSkillName), awardSkillName);
+                xpDrop.setDecaySpeed(0.35);
+                XP.addWorldXpDrop(xpDrop, tamer);
+                Skill.addXp(awardSkillName, tamer, award.get(awardSkillName), "taming " + regKey, false, false);
             }
         }
     }

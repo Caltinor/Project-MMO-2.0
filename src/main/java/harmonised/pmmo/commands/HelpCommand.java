@@ -9,9 +9,9 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class HelpCommand
 {
-    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
+    public static int execute(CommandContext<CommandSourceStack> context) throws CommandRuntimeException
     {
-        NetworkHandler.sendToPlayer( new MessageTrigger( 1 ), (ServerPlayer) context.getSource().getEntity() );
+        NetworkHandler.sendToPlayer(new MessageTrigger(1), (ServerPlayer) context.getSource().getEntity());
         return 1;
     }
 }

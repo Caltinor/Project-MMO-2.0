@@ -35,7 +35,7 @@ public class APIUtils {
 	 * @param ignoreBonuses should this trigger event ignore bonuses from sources such as player, dimension, biome, etc.
 	 */
 	@SuppressWarnings("deprecation")
-	public static void awardXpTrigger( UUID playerID, String triggerKey, @Nullable String sourceName, boolean skip, boolean ignoreBonuses) 
+	public static void awardXpTrigger(UUID playerID, String triggerKey, @Nullable String sourceName, boolean skip, boolean ignoreBonuses) 
 	{
 		Preconditions.checkNotNull(playerID);
 		Preconditions.checkNotNull(triggerKey);
@@ -51,7 +51,7 @@ public class APIUtils {
 	 * @return the level of the skill for the supplied player
 	 */
 	@SuppressWarnings("deprecation")
-	public static int getLevel( String skill, Player player ) 
+	public static int getLevel(String skill, Player player) 
 	{
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
@@ -65,7 +65,7 @@ public class APIUtils {
 	 * @return the raw xp value of the skill for the supplied player
 	 */
 	@SuppressWarnings("deprecation")
-	public static double getXp( String skill, Player player ) 
+	public static double getXp(String skill, Player player) 
 	{
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
@@ -79,7 +79,7 @@ public class APIUtils {
 	 * @param amount the ultimate level value to be set
 	 */
 	@SuppressWarnings("deprecation")
-	public static void setLevel( String skill, ServerPlayer player, double amount ) 
+	public static void setLevel(String skill, ServerPlayer player, double amount) 
 	{
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
@@ -94,7 +94,7 @@ public class APIUtils {
 	 * @param amount the ultimate xp value to be set
 	 */
 	@SuppressWarnings("deprecation")
-	public static void setXp( String skill, ServerPlayer player, double amount ) 
+	public static void setXp(String skill, ServerPlayer player, double amount) 
 	{
 		Preconditions.checkNotNull(skill);
 		Preconditions.checkNotNull(player);
@@ -114,7 +114,7 @@ public class APIUtils {
 	 * @param ignoreBonuses should this trigger event ignore bonuses from sources such as player, dimension, biome, etc.
 	 */
 	@SuppressWarnings("deprecation")
-	public static void addLevel( String skill, UUID playerID, double amount, String sourceName, boolean skip, boolean ignoreBonuses ) 
+	public static void addLevel(String skill, UUID playerID, double amount, String sourceName, boolean skip, boolean ignoreBonuses) 
 	{
 		Preconditions.checkNotNull(playerID);
 		Preconditions.checkNotNull(skill);
@@ -136,7 +136,7 @@ public class APIUtils {
 	 * @param ignoreBonuses should this trigger event ignore bonuses from sources such as player, dimension, biome, etc.
 	 */
 	@SuppressWarnings("deprecation")
-	public static void addXp( String skill, UUID playerID, double amount, String sourceName, boolean skip, boolean ignoreBonuses ) 
+	public static void addXp(String skill, UUID playerID, double amount, String sourceName, boolean skip, boolean ignoreBonuses) 
 	{
 		Preconditions.checkNotNull(playerID);
 		Preconditions.checkNotNull(skill);
@@ -152,11 +152,11 @@ public class APIUtils {
 	 * @param jType the JType for which map should be returned
 	 * @return a map of skills and values for the JType and TE
 	 */
-	public static Map<String, Double> getXp ( BlockEntity tile, JType jType ) 
+	public static Map<String, Double> getXp (BlockEntity tile, JType jType) 
 	{
 		Preconditions.checkNotNull(tile);
 		Preconditions.checkNotNull(jType);
-		return XP.getXp( tile, jType );
+		return XP.getXp(tile, jType);
 	}
 	
 	/** returns the skill map for an itemstack object.
@@ -165,11 +165,11 @@ public class APIUtils {
 	 * @param jType the JType for which map should be returned
 	 * @return a map of skills and values for the JType and ItemStack
 	 */
-	public static Map<String, Double> getXp( ItemStack stack, JType jType )
+	public static Map<String, Double> getXp(ItemStack stack, JType jType)
 	{
 		Preconditions.checkNotNull(stack);
 		Preconditions.checkNotNull(jType);
-		return XP.getXp( stack, jType );
+		return XP.getXp(stack, jType);
 	}
 	
 	/** returns the skill map for an entity object.
@@ -178,11 +178,11 @@ public class APIUtils {
 	 * @param jType the JType for which map should be returned
 	 * @return a map of skills and values for the JType and entity
 	 */
-	public static Map<String, Double> getXp( Entity entity, JType jType )
+	public static Map<String, Double> getXp(Entity entity, JType jType)
 	{
 		Preconditions.checkNotNull(entity);
 		Preconditions.checkNotNull(jType);
-		return XP.getXp( entity, jType );
+		return XP.getXp(entity, jType);
 	}
 	
 	/** USE ONLY IF OTHER {@link #getXp(ItemStack, JType) getXP} METHODS ARE NOT APPLICABLE
@@ -197,45 +197,45 @@ public class APIUtils {
 	 * @param jType the JType for which map should be returned
 	 * @return a map of skills and values for the JType and object
 	 */
-	public static Map<String, Double> getXp( ResourceLocation registryName, JType jType )
+	public static Map<String, Double> getXp(ResourceLocation registryName, JType jType)
 	{
 		Preconditions.checkNotNull(registryName);
 		Preconditions.checkNotNull(jType);
-		return XP.getXpBypass( registryName, jType );
+		return XP.getXpBypass(registryName, jType);
 	}
 
 	/**
 	 * //Gets all xp boost maps
 	 */
-	public static Map<String, Map<String, Double>> getXpBoostsMap( Player player )
+	public static Map<String, Map<String, Double>> getXpBoostsMap(Player player)
 	{
-		if( player.level.isClientSide() )
+		if(player.level.isClientSide())
 			return Config.xpBoosts;
 		else
-			return PmmoSavedData.get().getPlayerXpBoostsMap( player.getUUID() );
+			return PmmoSavedData.get().getPlayerXpBoostsMap(player.getUUID());
 	}
 
 	/**
 	 * //Gets a specific xp boost map
 	 */
-	public static Map<String, Double> getXpBoostMap( Player player, String xpBoostKey )
+	public static Map<String, Double> getXpBoostMap(Player player, String xpBoostKey)
 	{
-		if( player.level.isClientSide() )
-			return Config.xpBoosts.getOrDefault( xpBoostKey, new HashMap<>() );
+		if(player.level.isClientSide())
+			return Config.xpBoosts.getOrDefault(xpBoostKey, new HashMap<>());
 		else
-			return PmmoSavedData.get().getPlayerXpBoostMap( player.getUUID(), xpBoostKey );
+			return PmmoSavedData.get().getPlayerXpBoostMap(player.getUUID(), xpBoostKey);
 	}
 
 	/**
 	 * //Gets a specific xp boost in a specific skill
 	 */
-	public static double getPlayerXpBoost( Player player, String skill )
+	public static double getPlayerXpBoost(Player player, String skill)
 	{
 		double xpBoost = 0;
 
-		for( Map.Entry<String, Map<String, Double>> entry : getXpBoostsMap( player ).entrySet() )
+		for(Map.Entry<String, Map<String, Double>> entry : getXpBoostsMap(player).entrySet())
 		{
-			xpBoost += entry.getValue().getOrDefault( skill, 0D );
+			xpBoost += entry.getValue().getOrDefault(skill, 0D);
 		}
 
 		return xpBoost;
@@ -244,25 +244,25 @@ public class APIUtils {
 	/**
 	 * //Sets a specific xp boost map
 	 */
-	public static void setPlayerXpBoost( ServerPlayer player, String xpBoostKey, Map<String, Double> newXpBoosts )
+	public static void setPlayerXpBoost(ServerPlayer player, String xpBoostKey, Map<String, Double> newXpBoosts)
 	{
-		PmmoSavedData.get().setPlayerXpBoost( player.getUUID(), xpBoostKey, newXpBoosts );
+		PmmoSavedData.get().setPlayerXpBoost(player.getUUID(), xpBoostKey, newXpBoosts);
 	}
 
 	/**
 	 * //Removes a specific xp boost map
 	 */
-	public static void removePlayerXpBoost( ServerPlayer player, String xpBoostKey )
+	public static void removePlayerXpBoost(ServerPlayer player, String xpBoostKey)
 	{
-		PmmoSavedData.get().removePlayerXpBoost( player.getUUID(), xpBoostKey );
+		PmmoSavedData.get().removePlayerXpBoost(player.getUUID(), xpBoostKey);
 	}
 
 	/**
 	 * //WARNING: Removes ALL Xp Boosts, INCLUDING ONES CAUSED BY OTHER MODS
 	 */
-	public static void removeAllPlayerXpBoosts( ServerPlayer player )
+	public static void removeAllPlayerXpBoosts(ServerPlayer player)
 	{
-		PmmoSavedData.get().removeAllPlayerXpBoosts( player.getUUID() );
+		PmmoSavedData.get().removeAllPlayerXpBoosts(player.getUUID());
 	}
 
 	/**
@@ -270,11 +270,11 @@ public class APIUtils {
 	 * Only Project MMO should use this.
 	 */
 	@Deprecated
-	public static void setPlayerXpBoostsMaps( Player player, Map<String, Map<String, Double>> newBoosts )
+	public static void setPlayerXpBoostsMaps(Player player, Map<String, Map<String, Double>> newBoosts)
 	{
-		if( player.level.isClientSide() )
+		if(player.level.isClientSide())
 			Config.xpBoosts = newBoosts;
 		else
-			PmmoSavedData.get().setPlayerXpBoostsMaps( player.getUUID(), newBoosts );
+			PmmoSavedData.get().setPlayerXpBoostsMaps(player.getUUID(), newBoosts);
 	}
 }

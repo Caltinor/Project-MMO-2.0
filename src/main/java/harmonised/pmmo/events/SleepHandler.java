@@ -12,18 +12,18 @@ import java.util.Map;
 
 public class SleepHandler
 {
-    public static void handleSleepFinished( SleepFinishedTimeEvent event )
+    public static void handleSleepFinished(SleepFinishedTimeEvent event)
     {
         double rechargeAmount = Config.forgeConfig.sleepVeinRestorePercent.get();
-        if( rechargeAmount > 0 )
+        if(rechargeAmount > 0)
         {
-            ( (Level) event.getWorld() ).getServer().getPlayerList().getPlayers().forEach(player ->
+            ((Level) event.getWorld()).getServer().getPlayerList().getPlayers().forEach(player ->
             {
-                Map<String, Double> configMap = Config.getAbilitiesMap( player );
+                Map<String, Double> configMap = Config.getAbilitiesMap(player);
                 double maxVein = Config.forgeConfig.maxVeinCharge.get();
-                double newVein = Math.min( maxVein, rechargeAmount * maxVein + configMap.getOrDefault( "veinLeft", 0D ) );
-                configMap.put( "veinLeft", newVein );
-                player.displayClientMessage( new TranslatableComponent( "pmmo.veinCharge", DP.dpSoft( ( newVein / maxVein ) * 100 ) ).setStyle( XP.getColorStyle( 0x00ff00 ) ), true );
+                double newVein = Math.min(maxVein, rechargeAmount * maxVein + configMap.getOrDefault("veinLeft", 0D));
+                configMap.put("veinLeft", newVein);
+                player.displayClientMessage(new TranslatableComponent("pmmo.veinCharge", DP.dpSoft((newVein / maxVein) * 100)).setStyle(XP.getColorStyle(0x00ff00)), true);
             });
         }
     }

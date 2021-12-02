@@ -14,7 +14,7 @@ public class VeinInfo
     public ItemStack itemStack;
     public Item startItem;
 
-    public VeinInfo( Level world, BlockState state, BlockPos pos, ItemStack itemStack )
+    public VeinInfo(Level world, BlockState state, BlockPos pos, ItemStack itemStack)
     {
         this.world = world;
         this.state = state;

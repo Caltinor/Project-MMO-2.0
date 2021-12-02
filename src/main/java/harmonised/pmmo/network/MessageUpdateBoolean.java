@@ -5,7 +5,7 @@ import harmonised.pmmo.gui.XPOverlayGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -14,7 +14,7 @@ public class MessageUpdateBoolean
     boolean value;
     int type;
 
-    public MessageUpdateBoolean( boolean value, int type )
+    public MessageUpdateBoolean(boolean value, int type)
     {
         this.value = value;
         this.type = type;
@@ -24,7 +24,7 @@ public class MessageUpdateBoolean
     {
     }
 
-    public static MessageUpdateBoolean decode( FriendlyByteBuf buf )
+    public static MessageUpdateBoolean decode(FriendlyByteBuf buf)
     {
         MessageUpdateBoolean packet = new MessageUpdateBoolean();
 
@@ -34,28 +34,28 @@ public class MessageUpdateBoolean
         return packet;
     }
 
-    public static void encode( MessageUpdateBoolean packet, FriendlyByteBuf buf )
+    public static void encode(MessageUpdateBoolean packet, FriendlyByteBuf buf)
     {
-        buf.writeBoolean( packet.value );
-        buf.writeInt( packet.type );
+        buf.writeBoolean(packet.value);
+        buf.writeInt(packet.type);
     }
 
-    public static void handlePacket( MessageUpdateBoolean packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageUpdateBoolean packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
-            switch( packet.type )
+            switch(packet.type)
             {
                 case 0: //vein stuff
-                if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
+                if(ctx.get().getDirection().getReceptionSide().equals(LogicalSide.CLIENT))
                 {
-                    if( Minecraft.getInstance().player != null )
+                    if(Minecraft.getInstance().player != null)
                         XPOverlayGUI.isVeining = packet.value;
                 }
                     break;
 
                 case 1: //update Glossary
-                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
+                    if(ctx.get().getDirection().getReceptionSide().equals(LogicalSide.CLIENT))
                         GlossaryScreen.initButtons();
                     break;
             }

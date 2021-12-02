@@ -1,10 +1,11 @@
 package harmonised.pmmo.events;
 
-import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
+
+import net.minecraftforge.event.server.ServerStoppingEvent;
 
 public class ServerStoppingHandler
 {
-    public static void handleServerStop( FMLServerStoppingEvent event )
+    public static void handleServerStop(ServerStoppingEvent event)
     {
         WorldTickHandler.refreshVein();
     }

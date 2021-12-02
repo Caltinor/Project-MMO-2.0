@@ -12,17 +12,17 @@ import java.util.UUID;
 
 public class CreatePartyCommand
 {
-    public static int execute( CommandContext<CommandSourceStack> context ) throws CommandRuntimeException
+    public static int execute(CommandContext<CommandSourceStack> context) throws CommandRuntimeException
     {
         Player player = (Player) context.getSource().getEntity();
         UUID uuid = player.getUUID();
         PmmoSavedData pmmoSavedData = PmmoSavedData.get();
-        boolean result = pmmoSavedData.makeParty( uuid );
+        boolean result = pmmoSavedData.makeParty(uuid);
 
-        if( result )
-            player.displayClientMessage( new TranslatableComponent( "pmmo.partyCreated" ).setStyle(XP.textStyle.get( "green" ) ), false );
+        if(result)
+            player.displayClientMessage(new TranslatableComponent("pmmo.partyCreated").setStyle(XP.textStyle.get("green")), false);
         else
-            player.displayClientMessage( new TranslatableComponent( "pmmo.youAreAlreadyInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+            player.displayClientMessage(new TranslatableComponent("pmmo.youAreAlreadyInAParty").setStyle(XP.textStyle.get("red")), false);
 
         return 1;
     }

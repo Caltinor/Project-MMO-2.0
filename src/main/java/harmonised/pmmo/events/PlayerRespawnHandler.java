@@ -6,11 +6,11 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerRespawnHandler
 {
-    public static void handlePlayerRespawn( PlayerEvent.PlayerRespawnEvent event )
+    public static void handlePlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
     {
         Player player = event.getPlayer();
 
-        AttributeHandler.updateAll( player );
-        player.setHealth( player.getMaxHealth() );
+        AttributeHandler.updateAll(player);
+        player.setHealth(player.getMaxHealth());
     }
 }

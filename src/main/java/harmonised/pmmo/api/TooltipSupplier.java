@@ -4,8 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
@@ -143,7 +142,7 @@ public class TooltipSupplier {
 			Map<String, Double> suppliedData = tooltips.get(jType).get(res).apply(stack);
 			return suppliedData == null ? new HashMap<>() : suppliedData;
 		}	
-		return XP.getXpBypass( res , jType);
+		return XP.getXpBypass(res , jType);
 	}
 	
 	/**this is executed by PMMO where the required map for block tooltips are used.  some PMMO
@@ -161,7 +160,7 @@ public class TooltipSupplier {
 			Map<String, Double> suppliedData = breakTooltips.get(jType).get(res).apply(tile);
 			return suppliedData == null ? new HashMap<>() : suppliedData;
 		}	
-		return XP.getXpBypass( res , jType);
+		return XP.getXpBypass(res , jType);
 	}
 	
 	/**this is executed by PMMO where the required map for entity interactions.  
@@ -177,6 +176,6 @@ public class TooltipSupplier {
 			Map<String, Double> suppliedData = entityTooltips.get(jType).get(res).apply(entity);
 			return suppliedData == null ? new HashMap<>() : suppliedData;
 		}	
-		return XP.getXpBypass( res , jType);
+		return XP.getXpBypass(res , jType);
 	}
 }

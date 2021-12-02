@@ -33,9 +33,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 public class XPOverlayGUI extends GuiComponent
 {
@@ -50,7 +50,7 @@ public class XPOverlayGUI extends GuiComponent
 	private static String tempString;
 	private static int theme = 2, themePos = 1, listIndex = 0, xpDropYLimit = 0;
 	private static boolean stackXpDrops = true, init = false, showSkillsListAtCorner = true, showXpDrops = true, barKey = false, listKey = false, veinKey = false, barPressed = false, listPressed = false, xpDropsAttachedToBar = true, xpDropWasStacked, xpLeftDisplayAlwaysOn, xpBarAlwaysOn, lvlUpScreenshot, lvlUpScreenshotShowSkills, xpDropsShowXpBar, showLevelUpUnlocks;
-	private final ResourceLocation bar = XP.getResLoc( Reference.MOD_ID, "textures/gui/xpbar.png" );
+	private final ResourceLocation bar = XP.getResLoc(Reference.MOD_ID, "textures/gui/xpbar.png");
 	private static ArrayList<XpDrop> xpDrops = new ArrayList<XpDrop>();
 	private static Minecraft mc = Minecraft.getInstance();
 	private static Player player = mc.player;
@@ -78,11 +78,11 @@ public class XPOverlayGUI extends GuiComponent
 
 
 	@SubscribeEvent
-	public void renderOverlay( RenderGameOverlayEvent event )
+	public void renderOverlay(RenderGameOverlayEvent event)
 	{
-		if( event.getType() == RenderGameOverlayEvent.ElementType.TEXT )	//Xp Drops
+		if(event.getType() == RenderGameOverlayEvent.ElementType.TEXT)	//Xp Drops
 		{
-			PoseStack stack = event.getMatrixStack();
+			stack = event.getMatrixStack();
 			stack.pushPose();
 			RenderSystem.enableBlend();
 			try
@@ -90,22 +90,22 @@ public class XPOverlayGUI extends GuiComponent
 				sr = mc.getWindow();
 				stack = event.getMatrixStack();
 				player = Minecraft.getInstance().player;
-				if( !init )
+				if(!init)
 				{
 					doInit();
 					init = true;
 				}
-//			drawCenteredString( stack, fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
-//			drawCenteredString( stack, fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
-//			drawCenteredString( stack, fontRenderer, "Fully Customizable - Modpack Maker friendly!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
-//			drawCenteredString( stack, fontRenderer, "GUI that covers every feature of PMMO, including Modpack changes, Live!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff );
+//			drawCenteredString(stack, fontRenderer, "Most actions in the game award Xp!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff);
+//			drawCenteredString(stack, fontRenderer, "Level Restrictions for Wearing/Using/Breaking/Placing/Etc!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff);
+//			drawCenteredString(stack, fontRenderer, "Fully Customizable - Modpack Maker friendly!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff);
+//			drawCenteredString(stack, fontRenderer, "GUI that covers every feature of PMMO, including Modpack changes, Live!", sr.getScaledWidth() / 2, sr.getScaledHeight() / 2 + 10, 0xffffffff);
 
-				barPosX = (int) ( ( sr.getGuiScaledWidth() - barWidth ) * barOffsetX );
-				barPosY = (int) ( ( sr.getGuiScaledHeight() - barHeight ) * barOffsetY );
-				xpDropPosX = (int) ( ( sr.getGuiScaledWidth() - barWidth ) * xpDropOffsetX );
-				xpDropPosY = (int) ( ( sr.getGuiScaledHeight() - barHeight ) * xpDropOffsetY );
-				skillListX = (int) ( sr.getGuiScaledWidth() * skillListOffsetX );
-				skillListY = (int) ( sr.getGuiScaledHeight() * skillListOffsetY );
+				barPosX = (int) ((sr.getGuiScaledWidth() - barWidth) * barOffsetX);
+				barPosY = (int) ((sr.getGuiScaledHeight() - barHeight) * barOffsetY);
+				xpDropPosX = (int) ((sr.getGuiScaledWidth() - barWidth) * xpDropOffsetX);
+				xpDropPosY = (int) ((sr.getGuiScaledHeight() - barHeight) * xpDropOffsetY);
+				skillListX = (int) (sr.getGuiScaledWidth() * skillListOffsetX);
+				skillListY = (int) (sr.getGuiScaledHeight() * skillListOffsetY);
 
 				timeDiff = (System.nanoTime() - lastTime);
 				lastTime = System.nanoTime();
@@ -114,12 +114,12 @@ public class XPOverlayGUI extends GuiComponent
 				listKey = ClientHandler.SHOW_LIST.isDown();
 				veinKey = ClientHandler.VEIN_KEY.isDown();
 
-				if( barKey || xpBarAlwaysOn )
+				if(barKey || xpBarAlwaysOn)
 					cooldown = 1;
 
-				if( barKey )
+				if(barKey)
 				{
-					if( !barPressed )
+					if(!barPressed)
 					{
 						barOn = !barOn;
 						barPressed = true;
@@ -128,9 +128,9 @@ public class XPOverlayGUI extends GuiComponent
 				else
 					barPressed = false;
 
-				if( listKey )
+				if(listKey)
 				{
-					if( !listPressed )
+					if(!listPressed)
 					{
 						listOn = !listOn;
 						listPressed = true;
@@ -140,67 +140,66 @@ public class XPOverlayGUI extends GuiComponent
 					listPressed = false;
 
 				updateASkill();
-				if( showSkillsListAtCorner )
+				if(showSkillsListAtCorner)
 					doSkillList();
-				if( !Minecraft.getInstance().isPaused() )
+				if(!Minecraft.getInstance().isPaused())
 				{
 					doRayTrace();
 //			doCrosshair();
 					doVein();
 					doSkills();
 				}
-				if( aSkill != null )
+				if(aSkill != null)
 				{
-					doXpDrops( stack );
+					doXpDrops(stack);
 					doXpBar();
 				}
-				if( cooldown > 0 )
+				if(cooldown > 0)
 					cooldown -= timeDiff / 1000000D;
 			}
-			catch( Exception e )
+			catch(Exception e)
 			{
-				LOGGER.error( "Error rendering PMMO GUI", e );
+				LOGGER.error("Error rendering PMMO GUI");
 			}
 			//Causes black screen
-			//RenderSystem.disableBlend();
-			//COUT
-//			RenderSystem.color( 255, 255, 255 );
+//			RenderSystem.disableBlend();
+//			RenderSystem.color(255, 255, 255);
 			stack.popPose();
 		}
 	}
 
 	private void updateASkill()
 	{
-		aSkill = skills.get( activeSkill );
-		if( aSkill == null && skills.size() > 0 )
+		aSkill = skills.get(activeSkill);
+		if(aSkill == null && skills.size() > 0)
 		{
 			activeSkill = skills.keySet().iterator().next();
-			aSkill = skills.get( activeSkill );
+			aSkill = skills.get(activeSkill);
 		}
 	}
 
 	private void doRayTrace()
 	{
-		if( mc.hitResult != null && mc.hitResult.getType() == HitResult.Type.BLOCK )
+		if(mc.hitResult != null && mc.hitResult.getType() == HitResult.Type.BLOCK)
 		{
 			lookingAtBlock = true;
 
 			blockPos = ((BlockHitResult) mc.hitResult).getBlockPos();
-			blockState = mc.level.getBlockState( blockPos );
+			blockState = mc.level.getBlockState(blockPos);
 
-			if( lastBlockPos == null )
+			if(lastBlockPos == null)
 				updateLastBlock();
 
-			if( !blockPos.equals( lastBlockPos ) && XP.isPlayerSurvival( player ) )
+			if(!blockPos.equals(lastBlockPos) && XP.isPlayerSurvival(player))
 				updateVein();
 
-			if( lastBlockState.getBlock().equals( blockState.getBlock() ) )
+			if(lastBlockState.getBlock().equals(blockState.getBlock()))
 				lastVeinBlockUpdate = System.nanoTime();
 //
-			if( !isVeining && System.nanoTime() - lastVeinBlockUpdate > 100000000L )
+			if(!isVeining && System.nanoTime() - lastVeinBlockUpdate > 100000000L)
 				updateLastBlock();
 
-			canBreak = XP.checkReq( player, lastBlockRegKey, JType.REQ_BREAK );
+			canBreak = XP.checkReq(player, lastBlockRegKey, JType.REQ_BREAK);
 		}
 		else
 			lookingAtBlock = false;
@@ -210,41 +209,41 @@ public class XPOverlayGUI extends GuiComponent
 	{
 		lastBlockState = blockState;
 		lastBlockPos = blockPos;
-		if( lastBlockState.getBlock().getRegistryName() != null )
+		if(lastBlockState.getBlock().getRegistryName() != null)
 			lastBlockRegKey = lastBlockState.getBlock().getRegistryName().toString();
-		canVein = WorldTickHandler.canVeinGlobal( lastBlockRegKey, player ) && WorldTickHandler.canVeinDimension( lastBlockRegKey, player );
+		canVein = WorldTickHandler.canVeinGlobal(lastBlockRegKey, player) && WorldTickHandler.canVeinDimension(lastBlockRegKey, player);
 		lastBlockTransKey = lastBlockState.getBlock().getDescriptionId();
 	}
 
 	public static void updateVein()
 	{
-		if( blockState == null )
+		if(blockState == null)
 			return;
 		veinShapeSet.clear();
-		VeinInfo veinInfo = new VeinInfo( mc.level, blockState, blockPos, player.getMainHandItem() );
-		ArrayList<BlockPos> veinShape = WorldTickHandler.getVeinShape( veinInfo, WorldTickHandler.getVeinLeft( player ), WorldTickHandler.getVeinCost( blockState, blockPos, player ), false, false );
+		VeinInfo veinInfo = new VeinInfo(mc.level, blockState, blockPos, player.getMainHandItem());
+		ArrayList<BlockPos> veinShape = WorldTickHandler.getVeinShape(veinInfo, WorldTickHandler.getVeinLeft(player), WorldTickHandler.getVeinCost(blockState, blockPos, player), false, false);
 		int veinShapeSize = veinShape.size();
 		int matches = 0;
-		for( int i = 0; i < veinShapeSize; i++ )
+		for(int i = 0; i < veinShapeSize; i++)
 		{
-			BlockPos pos = veinShape.get( i );
-			if( pos.equals( blockPos ) )
+			BlockPos pos = veinShape.get(i);
+			if(pos.equals(blockPos))
 				continue;
-			if( ++matches > breakAmount || matches > Config.getPreferencesMap( player ).getOrDefault( "maxVeinDisplay", (double) Config.forgeConfig.maxVeinDisplay.get() ) )
+			if(++matches > breakAmount || matches > Config.getPreferencesMap(player).getOrDefault("maxVeinDisplay", (double) Config.forgeConfig.maxVeinDisplay.get()))
 				break;
-			veinShapeSet.add( pos );
+			veinShapeSet.add(pos);
 		}
 	}
 
-	private void doXpDrops( PoseStack stack )
+	private void doXpDrops(PoseStack stack)
 	{
-		if( xpDropsAttachedToBar )
+		if(xpDropsAttachedToBar)
 		{
-			if( cooldown <= 0 )
+			if(cooldown <= 0)
 				xpDropOffsetCap = -9;
-			else if ( barKey || xpLeftDisplayAlwaysOn )
+			else if (barKey || xpLeftDisplayAlwaysOn)
 			{
-				if( aSkill.xp >= maxXp )
+				if(aSkill.xp >= maxXp)
 					xpDropOffsetCap = 25;
 				else
 					xpDropOffsetCap = 34;
@@ -252,40 +251,40 @@ public class XPOverlayGUI extends GuiComponent
 			else
 				xpDropOffsetCap = 16;
 
-			if( xpDropOffset > xpDropOffsetCap )
+			if(xpDropOffset > xpDropOffsetCap)
 				xpDropOffset -= 1d * timeDiff / 10000000;
 
-			if( xpDropOffset < xpDropOffsetCap )
+			if(xpDropOffset < xpDropOffsetCap)
 				xpDropOffset = xpDropOffsetCap;
 		}
 
-		for( int i = 0; i < xpDrops.size(); i++ )		//update Xp Drops
+		for(int i = 0; i < xpDrops.size(); i++)		//update Xp Drops
 		{
-			xpDrop = xpDrops.get( i );
+			xpDrop = xpDrops.get(i);
 			xpDrop.age += timeDiff / 5000000;
-			decayRate = 0.75f + ( 1 * xpDrops.size() * 0.02f );			//Xp Drop Y
+			decayRate = 0.75f + (1 * xpDrops.size() * 0.02f);			//Xp Drop Y
 			decayAmount = decayRate * timeDiff / 10000000;
 
-			if( !mc.isPaused() )
+			if(!mc.isPaused())
 			{
-				if( ( ( xpDrop.Y - decayAmount < 0 ) && xpDrop.age >= xpDropDecayAge ) || !showXpDrops || ( !xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge ) )
+				if(((xpDrop.Y - decayAmount < 0) && xpDrop.age >= xpDropDecayAge) || !showXpDrops || (!xpDropsAttachedToBar && xpDrop.age >= xpDropDecayAge))
 				{
-					tempASkill = skills.get( xpDrop.skill );
+					tempASkill = skills.get(xpDrop.skill);
 
-					if( !xpDrop.skip )
+					if(!xpDrop.skip)
 						activeSkill = xpDrop.skill;
 
 					decayRate = xpDrop.gainedXp * 0.03 * timeDiff / 10000000D;
-					if( stackXpDrops )
+					if(stackXpDrops)
 					{
-						if( decayRate < 0.1 )
+						if(decayRate < 0.1)
 							decayRate = 0.1;
 					}
 					else
-					if( decayRate < 1 )
+					if(decayRate < 1)
 						decayRate = 1;
 
-					if( xpDrop.gainedXp - ( decayRate ) < 0 )
+					if(xpDrop.gainedXp - (decayRate) < 0)
 					{
 						tempASkill.goalXp += xpDrop.gainedXp;
 						xpDrop.gainedXp = 0;
@@ -296,118 +295,118 @@ public class XPOverlayGUI extends GuiComponent
 						xpDrop.gainedXp -= decayRate;
 					}
 
-					tempASkill.goalPos = XP.levelAtXpDecimal( tempASkill.goalXp );
+					tempASkill.goalPos = XP.levelAtXpDecimal(tempASkill.goalXp);
 				}
 			}
 
-			if( showXpDrops )
+			if(showXpDrops)
 			{
-				if( xpDropOffset == xpDropOffsetCap )
+				if(xpDropOffset == xpDropOffsetCap)
 					xpDrop.Y -= decayAmount;
 
-				if( xpDrop.Y < ( i * 9 ) - xpDropYLimit )
-					xpDrop.Y = ( i * 9 ) - xpDropYLimit;
+				if(xpDrop.Y < (i * 9) - xpDropYLimit)
+					xpDrop.Y = (i * 9) - xpDropYLimit;
 
-				tempInt = (int) Math.floor( xpDrop.Y * xpDropOpacityPerTime ); //Opacity Loss
+				tempInt = (int) Math.floor(xpDrop.Y * xpDropOpacityPerTime); //Opacity Loss
 
-				if( tempInt < 0 )
+				if(tempInt < 0)
 					tempInt = -tempInt;
 
-				if( tempInt > xpDropMaxOpacity )
+				if(tempInt > xpDropMaxOpacity)
 					tempAlpha = 0;
 				else
-					tempAlpha = (int) Math.floor( xpDropMaxOpacity - tempInt );
+					tempAlpha = (int) Math.floor(xpDropMaxOpacity - tempInt);
 
-				if( tempAlpha > 3 )
-					drawCenteredString( stack, fontRenderer, "+" + DP.dprefix( xpDrop.gainedXp ) + " " + new TranslatableComponent( "pmmo." + xpDrop.skill ).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ Skill.getSkillColor( xpDrop.skill ) );
+				if(tempAlpha > 3)
+					drawCenteredString(stack, fontRenderer, "+" + DP.dprefix(xpDrop.gainedXp) + " " + new TranslatableComponent("pmmo." + xpDrop.skill).getString(), xpDropPosX + (barWidth / 2), (int) xpDrop.Y + (int) xpDropOffset + xpDropPosY, (tempAlpha << 24) |+ Skill.getSkillColor(xpDrop.skill));
 			}
 		}
 
-		if( xpDrops.size() > 0 && xpDrops.get( 0 ).gainedXp <= 0 )
-			xpDrops.remove( 0 );
+		if(xpDrops.size() > 0 && xpDrops.get(0).gainedXp <= 0)
+			xpDrops.remove(0);
 	}
 
 	private void doSkills()
 	{
-		for( Map.Entry<String, ASkill> entry : skills.entrySet() )		//Update Skills
+		for(Map.Entry<String, ASkill> entry : skills.entrySet())		//Update Skills
 		{
 			tempASkill = entry.getValue();
 
-			startLevel = Math.floor( tempASkill.pos );
-			growAmount = ( tempASkill.goalPos - tempASkill.pos ) * timeDiff / 100000D;
+			startLevel = Math.floor(tempASkill.pos);
+			growAmount = (tempASkill.goalPos - tempASkill.pos) * timeDiff / 100000D;
 
-			if( growAmount < minXpGrow )
+			if(growAmount < minXpGrow)
 				growAmount = minXpGrow;
 
-			if( tempASkill.pos < tempASkill.goalPos )
+			if(tempASkill.pos < tempASkill.goalPos)
 				tempASkill.pos += 0.00005d * growAmount;
-			tempASkill.pos = Math.min( tempASkill.goalPos, tempASkill.pos );
+			tempASkill.pos = Math.min(tempASkill.goalPos, tempASkill.pos);
 
-			tempASkill.xp = XP.xpAtLevelDecimal( tempASkill.pos );
+			tempASkill.xp = XP.xpAtLevelDecimal(tempASkill.pos);
 
-			if( startLevel < (int) tempASkill.pos )
-				sendLvlUp( (int) Math.floor( tempASkill.pos ), entry.getKey() );
+			if(startLevel < (int) tempASkill.pos)
+				sendLvlUp((int) Math.floor(tempASkill.pos), entry.getKey());
 		}
 	}
 
 	private void doXpBar()
 	{
-		themePos += ( 2.5 + 7.5 * ( aSkill.pos % Math.floor( aSkill.pos ) ) ) * (timeDiff / 1000000D);
+		themePos += (2.5 + 7.5 * (aSkill.pos % Math.floor(aSkill.pos))) * (timeDiff / 1000000D);
 
-		if( themePos > 10000 )
+		if(themePos > 10000)
 			themePos =  themePos % 10000;
 
-		if( cooldown > 0 )				//Xp Bar
+		if(cooldown > 0)				//Xp Bar
 		{
 			stack.pushPose();
 			RenderSystem.enableBlend();
 			try
 			{
-				Minecraft.getInstance().getTextureManager().bindForSetup( bar );
+				Minecraft.getInstance().getTextureManager().bindForSetup(bar);
 				//COUT
-//				RenderSystem.color3f( 255, 255, 255 );
+//				RenderSystem.color3f(255, 255, 255);
 
-				blit( stack, barPosX, barPosY + 10, 0, 0, barWidth, barHeight );
-				if( !Config.forgeConfig.xpBarTheme.get() )
+				blit(stack, barPosX, barPosY + 10, 0, 0, barWidth, barHeight);
+				if(!Config.forgeConfig.xpBarTheme.get())
 				{
-					blit( stack, barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor( barWidth * ( aSkill.pos - Math.floor( aSkill.pos ) ) ), barHeight );
+					blit(stack, barPosX, barPosY + 10, 0, barHeight * 1, (int) Math.floor(barWidth * (aSkill.pos - Math.floor(aSkill.pos))), barHeight);
 				}
 				else
 				{
-					tempInt = (int) Math.floor( ( barWidth ) * ( aSkill.pos - Math.floor( aSkill.pos ) ) );
+					tempInt = (int) Math.floor((barWidth) * (aSkill.pos - Math.floor(aSkill.pos)));
 
-					if( tempInt > 100 )
+					if(tempInt > 100)
 						tempInt = 100;
 
-					if( aSkill.pos >= maxLevel )
+					if(aSkill.pos >= maxLevel)
 						tempInt = 100;
 
-					blit( stack, barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight );
-					blit( stack, barPosX + 1, barPosY + 10, 1 + (int)( Math.floor( (double) themePos / 100 ) ), barHeight*2, tempInt, barHeight );
+					blit(stack, barPosX, barPosY + 10, 0, barHeight*3, barWidth - 1, barHeight);
+					blit(stack, barPosX + 1, barPosY + 10, 1 + (int)(Math.floor((double) themePos / 100)), barHeight*2, tempInt, barHeight);
 				}
-				if( aSkill.pos >= maxLevel )
-					drawCenteredString( stack, fontRenderer, new TranslatableComponent( "pmmo.levelDisplay", new TranslatableComponent( "pmmo." + activeSkill.toLowerCase() ).getString(), maxLevel ).getString(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor(activeSkill) );
+				if(aSkill.pos >= maxLevel)
+					drawCenteredString(stack, fontRenderer, new TranslatableComponent("pmmo.levelDisplay", new TranslatableComponent("pmmo." + activeSkill.toLowerCase()).getString(), maxLevel).getString(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor(activeSkill));
 				else
-					drawCenteredString( stack, fontRenderer, new TranslatableComponent( "pmmo.levelDisplay", new TranslatableComponent( "pmmo." + activeSkill.toLowerCase() ).getString(), DP.dp( Math.floor( aSkill.pos * 100D ) / 100D ) ).getString(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor(activeSkill) );
+					drawCenteredString(stack, fontRenderer, new TranslatableComponent("pmmo.levelDisplay", new TranslatableComponent("pmmo." + activeSkill.toLowerCase()).getString(), DP.dp(Math.floor(aSkill.pos * 100D) / 100D)).getString(), barPosX + (barWidth / 2), barPosY, Skill.getSkillColor(activeSkill));
 
-				if( (barKey || xpLeftDisplayAlwaysOn) )
+				if((barKey || xpLeftDisplayAlwaysOn))
 				{
-					if( aSkill.xp >= maxXp )
-						drawCenteredString( stack, fontRenderer, new TranslatableComponent( "pmmo.maxLevel" ).getString(), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor(activeSkill) );
+					if(aSkill.xp >= maxXp)
+						drawCenteredString(stack, fontRenderer, new TranslatableComponent("pmmo.maxLevel").getString(), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor(activeSkill));
 					else
 					{
-						if( goalXp >= maxXp )
+						if(goalXp >= maxXp)
 							goalXp =  maxXp;
 
-						goalXp = XP.xpAtLevel( XP.levelAtXp( aSkill.xp ) + 1 );
-						drawCenteredString( stack, fontRenderer, DP.dprefix( aSkill.xp ) + " / " + DP.dprefix( goalXp ), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor(activeSkill) );
-						drawCenteredString( stack, fontRenderer,  new TranslatableComponent( "pmmo.xpLeft", DP.dprefix( goalXp - aSkill.xp ) ).getString(), barPosX + (barWidth / 2), 26 + barPosY, Skill.getSkillColor(activeSkill) );
+						goalXp = XP.xpAtLevel(XP.levelAtXp(aSkill.xp) + 1);
+						drawCenteredString(stack, fontRenderer, DP.dprefix(aSkill.xp) + " / " + DP.dprefix(goalXp), barPosX + (barWidth / 2), 17 + barPosY, Skill.getSkillColor(activeSkill));
+						drawCenteredString(stack, fontRenderer,  new TranslatableComponent("pmmo.xpLeft", DP.dprefix(goalXp - aSkill.xp)).getString(), barPosX + (barWidth / 2), 26 + barPosY, Skill.getSkillColor(activeSkill));
 					}
 				}
 			}
-			catch( Exception e )
+			catch(Exception e)
 			{
-				LOGGER.error( "Error rendering PMMO GUI XP Bar", e );
+				LOGGER.error("Error rendering PMMO GUI XP Bar", e);
 			}
 			RenderSystem.disableBlend();
 			stack.popPose();
@@ -416,78 +415,78 @@ public class XPOverlayGUI extends GuiComponent
 
 	private void doVein()
 	{   // VEIN STUFF
-		veinLeft = Config.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
+		veinLeft = Config.getAbilitiesMap(player).getOrDefault("veinLeft", 0D);
 		veinPosGoal = veinLeft / maxVeinCharge;
 		addAmount = (veinPosGoal - veinPos) * (timeDiff / 200000000D);
-		if( addAmount < 0.00003 )
+		if(addAmount < 0.00003)
 			addAmount = 0.00003;
 		lossAmount = -(veinPosGoal - veinPos) * (timeDiff / 200000000D);
 
-		if( veinPos < veinPosGoal )
+		if(veinPos < veinPosGoal)
 		{
 			veinPos += addAmount;
-			if( veinPos > veinPosGoal )
+			if(veinPos > veinPosGoal)
 				veinPos = veinPosGoal;
 		}
-		else if( veinPos > veinPosGoal )
+		else if(veinPos > veinPosGoal)
 		{
 			veinPos -= lossAmount;
-			if( veinPos < veinPosGoal )
+			if(veinPos < veinPosGoal)
 				veinPos = veinPosGoal;
 		}
 
-		if( veinPos < 0 || veinPos > 1 )
+		if(veinPos < 0 || veinPos > 1)
 			veinPos = veinPosGoal;
 
-		if( veinPos == 1D && lastVeinPos != 1D )
-			player.displayClientMessage( new TranslatableComponent( "pmmo.veinCharge", 100 ).setStyle( XP.textStyle.get( "green" ) ), true );
+		if(veinPos == 1D && lastVeinPos != 1D)
+			player.displayClientMessage(new TranslatableComponent("pmmo.veinCharge", 100).setStyle(XP.textStyle.get("green")), true);
 
 		lastVeinPos = veinPos;
 
-//					System.out.println( veinPosGoal );
+//					System.out.println(veinPosGoal);
 
-		veinBarPosX = (int) (sr.getGuiScaledWidth() * veinBarOffsetX - barWidth / 2 );
-		veinBarPosY = (int) (sr.getGuiScaledHeight() * veinBarOffsetY - barHeight / 2 );
+		veinBarPosX = (int) (sr.getGuiScaledWidth() * veinBarOffsetX - barWidth / 2);
+		veinBarPosY = (int) (sr.getGuiScaledHeight() * veinBarOffsetY - barHeight / 2);
 
 
-		if( veinKey )
+		if(veinKey)
 		{
-			if( XP.isPlayerSurvival( player ) )
+			if(XP.isPlayerSurvival(player))
 			{
-				Minecraft.getInstance().getTextureManager().bindForSetup( bar );
+				Minecraft.getInstance().getTextureManager().bindForSetup(bar);
 
-				blit( stack, veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight );
-				blit( stack, veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor( barWidth * veinPos ), barHeight );
-//						System.out.println( veinPos * maxVeinCharge );
-				drawCenteredString( stack, fontRenderer, (int) Math.floor( veinPos * maxVeinCharge ) + "/" + (int) Math.floor( maxVeinCharge ) + " " + DP.dprefix( veinPos * 100D ) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00 );
+				blit(stack, veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight);
+				blit(stack, veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor(barWidth * veinPos), barHeight);
+//						System.out.println(veinPos * maxVeinCharge);
+				drawCenteredString(stack, fontRenderer, (int) Math.floor(veinPos * maxVeinCharge) + "/" + (int) Math.floor(maxVeinCharge) + " " + DP.dprefix(veinPos * 100D) + "%", veinBarPosX + (barWidth / 2), veinBarPosY - 8, 0x00ff00);
 
-				metToolReq = XP.checkReq( player, player.getMainHandItem().getItem().getRegistryName(), JType.REQ_TOOL );
+				metToolReq = XP.checkReq(player, player.getMainHandItem().getItem().getRegistryName(), JType.REQ_TOOL);
 
-				if( !metToolReq )
+				if(!metToolReq)
 				{
-					drawCenteredString( stack, fontRenderer, new TranslatableComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslatableComponent( player.getMainHandItem().getDescriptionId() ) ).setStyle( XP.textStyle.get( "red" ) ), sr.getGuiScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+					drawCenteredString(stack, fontRenderer, new TranslatableComponent("pmmo.notSkilledEnoughToUseAsTool", new TranslatableComponent(player.getMainHandItem().getDescriptionId())).setStyle(XP.textStyle.get("red")), sr.getGuiScaledWidth() / 2, veinBarPosY + 6, 0xffffff);
 					return;
 				}
 
-				if( lookingAtBlock && !canBreak )
+				if(lookingAtBlock && !canBreak)
 				{
-					drawCenteredString( stack, fontRenderer, new TranslatableComponent( "pmmo.notSkilledEnoughToBreak", new TranslatableComponent( lastBlockTransKey ) ).setStyle( XP.textStyle.get( "red" ) ).getString(), sr.getGuiScaledWidth() / 2, veinBarPosY + 6, 0xffffff );
+					drawCenteredString(stack, fontRenderer, new TranslatableComponent("pmmo.notSkilledEnoughToBreak", new TranslatableComponent(lastBlockTransKey)).setStyle(XP.textStyle.get("red")).getString(), sr.getGuiScaledWidth() / 2, veinBarPosY + 6, 0xffffff);
 					return;
 				}
 
-				if( lastBlockState != null && canBreak && ( lookingAtBlock || isVeining ) )
+				if(lastBlockState != null && canBreak && (lookingAtBlock || isVeining))
 				{
-					if( canVein )
+					if(canVein)
 					{
-						breakAmount = (int) ( ( maxVeinCharge * veinPos ) / WorldTickHandler.getVeinCost( lastBlockState, lastBlockPos, player ) );
-						if( breakAmount > veinMaxBlocks )
+						breakAmount = (int) ((maxVeinCharge * veinPos) / WorldTickHandler.getVeinCost(lastBlockState, lastBlockPos, player));
+						if(breakAmount > veinMaxBlocks)
 							breakAmount = veinMaxBlocks;
-						drawCenteredString( stack, fontRenderer, new TranslatableComponent( "pmmo.canVein", breakAmount, new TranslatableComponent( lastBlockTransKey ) ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00 );
+						drawCenteredString(stack, fontRenderer, new TranslatableComponent("pmmo.canVein", breakAmount, new TranslatableComponent(lastBlockTransKey)).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0x00ff00);
 					}
-					else if( WorldTickHandler.canVeinDimension( lastBlockRegKey, player ) )
-						drawCenteredString( stack, fontRenderer, new TranslatableComponent( "pmmo.cannotVein", new TranslatableComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+					else if(WorldTickHandler.canVeinDimension(lastBlockRegKey, player))
+						drawCenteredString(stack, fontRenderer, new TranslatableComponent("pmmo.cannotVein", new TranslatableComponent(lastBlockTransKey).getString()).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454);
 					else
-						drawCenteredString( stack, fontRenderer, new TranslatableComponent( "pmmo.cannotVeinDimension", new TranslatableComponent( lastBlockTransKey ).getString() ).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454 );
+						drawCenteredString(stack, fontRenderer, new TranslatableComponent("pmmo.cannotVeinDimension", new TranslatableComponent(lastBlockTransKey).getString()).getString(), veinBarPosX + (barWidth / 2), veinBarPosY + 6, 0xff5454);
 				}
 			}
 		}
@@ -495,60 +494,60 @@ public class XPOverlayGUI extends GuiComponent
 
 	private void doSkillList()
 	{
-		if( listOn && !mc.options.renderDebug )
+		if(listOn && !mc.options.renderDebug)
 		{
 			listIndex = 0;
 
-			if( System.nanoTime() - lastBonusUpdate > 250000000 )
+			if(System.nanoTime() - lastBonusUpdate > 250000000)
 			{
-				biomeBoosts = XP.getBiomeBoosts( player );
-				for( Map.Entry<String, ASkill> entry : skills.entrySet() )
+				biomeBoosts = XP.getBiomeBoosts(player);
+				for(Map.Entry<String, ASkill> entry : skills.entrySet())
 				{
 					tempSkill = entry.getKey();
 
-					itemBoost = XP.getItemBoost( player, tempSkill );
-					dimensionBoost = XP.getDimensionBoost( player, tempSkill );
-					playerXpBoost = APIUtils.getPlayerXpBoost( player, tempSkill );
+					itemBoost = XP.getItemBoost(player, tempSkill);
+					dimensionBoost = XP.getDimensionBoost(player, tempSkill);
+					playerXpBoost = APIUtils.getPlayerXpBoost(player, tempSkill);
 
-//					multiplier = ( XP.getMultiplier(  player, tempSkill ) * 100 ) - 100;
+//					multiplier = (XP.getMultiplier( player, tempSkill) * 100) - 100;
 
-					skills.get( tempSkill ).bonus = itemBoost + biomeBoosts.getOrDefault( tempSkill, 0D ) + dimensionBoost + playerXpBoost;
-					if( skills.get( tempSkill ).bonus <= -100 )
-						skills.get( tempSkill ).bonus = -100;
+					skills.get(tempSkill).bonus = itemBoost + biomeBoosts.getOrDefault(tempSkill, 0D) + dimensionBoost + playerXpBoost;
+					if(skills.get(tempSkill).bonus <= -100)
+						skills.get(tempSkill).bonus = -100;
 				}
 				lastBonusUpdate = System.nanoTime();
 			}
 
-			skillsKeys = new ArrayList<>( skills.keySet() );
-			skillsKeys.sort( Comparator.<String>comparingDouble( a -> skills.get( a ).xp ).reversed() );
+			skillsKeys = new ArrayList<>(skills.keySet());
+			skillsKeys.sort(Comparator.<String>comparingDouble(a -> skills.get(a).xp).reversed());
 
-			for( String key : skillsKeys )
+			for(String key : skillsKeys)
 			{
 				tempSkill = key;
-				tempASkill = skills.get( key );
-				if( tempASkill == null )
+				tempASkill = skills.get(key);
+				if(tempASkill == null)
 					continue;
-				level = XP.levelAtXpDecimal( tempASkill.xp );
-				tempString = DP.dp( Math.floor( level * 100D ) / 100D );
-				color = Skill.getSkillColor( tempSkill );
-				if( level >= maxLevel )
+				level = XP.levelAtXpDecimal(tempASkill.xp);
+				tempString = DP.dp(Math.floor(level * 100D) / 100D);
+				color = Skill.getSkillColor(tempSkill);
+				if(level >= maxLevel)
 					tempString = "" + maxLevel;
-				drawString( stack, fontRenderer, tempString, skillListX + levelGap + 4 - fontRenderer.width( tempString ), skillListY + 3 + listIndex, color );
-				drawString( stack, fontRenderer, " | " + new TranslatableComponent( "pmmo." + tempSkill ).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color );
-				drawString( stack, fontRenderer, " | " + DP.dprefix( tempASkill.xp ), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color );
+				drawString(stack, fontRenderer, tempString, skillListX + levelGap + 4 - fontRenderer.width(tempString), skillListY + 3 + listIndex, color);
+				drawString(stack, fontRenderer, " | " + new TranslatableComponent("pmmo." + tempSkill).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
+				drawString(stack, fontRenderer, " | " + DP.dprefix(tempASkill.xp), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color);
 
-				if( tempASkill.bonus != 0 )
+				if(tempASkill.bonus != 0)
 				{
-					bonus = Math.floor( tempASkill.bonus * 100 ) / 100;
+					bonus = Math.floor(tempASkill.bonus * 100) / 100;
 
-					if( bonus > 0 )
-						tempString = "+" + ( bonus % 1 == 0 ? (int) Math.floor( bonus ) : DP.dp( bonus ) ) + "%";
-					else if ( bonus < 0 )
-						tempString = ( bonus % 1 == 0 ? (int) Math.floor( bonus ) : DP.dp( bonus ) ) + "%";
+					if(bonus > 0)
+						tempString = "+" + (bonus % 1 == 0 ? (int) Math.floor(bonus) : DP.dp(bonus)) + "%";
+					else if (bonus < 0)
+						tempString = (bonus % 1 == 0 ? (int) Math.floor(bonus) : DP.dp(bonus)) + "%";
 					else
 						tempString = "";
 
-					drawString( stack, fontRenderer, tempString, skillListX + levelGap + skillGap + xpGap + 32, skillListY + 3 + listIndex, color );
+					drawString(stack, fontRenderer, tempString, skillListX + levelGap + skillGap + xpGap + 32, skillListY + 3 + listIndex, color);
 				}
 
 				listIndex += 9;
@@ -564,206 +563,206 @@ public class XPOverlayGUI extends GuiComponent
 	{
 		player = Minecraft.getInstance().player;
 
-		Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+		Map<String, Double> prefsMap = Config.getPreferencesMap(player);
 
-		if( prefsMap.containsKey( "barOffsetX" ) )
-			barOffsetX = prefsMap.get( "barOffsetX" );
+		if(prefsMap.containsKey("barOffsetX"))
+			barOffsetX = prefsMap.get("barOffsetX");
 		else
 			barOffsetX = Config.forgeConfig.barOffsetX.get();
 
-		if( prefsMap.containsKey( "barOffsetY" ) )
-			barOffsetY = prefsMap.get( "barOffsetY" );
+		if(prefsMap.containsKey("barOffsetY"))
+			barOffsetY = prefsMap.get("barOffsetY");
 		else
 			barOffsetY = Config.forgeConfig.barOffsetY.get();
 
-		if( prefsMap.containsKey( "veinBarOffsetX" ) )
-			veinBarOffsetX = prefsMap.get( "veinBarOffsetX" );
+		if(prefsMap.containsKey("veinBarOffsetX"))
+			veinBarOffsetX = prefsMap.get("veinBarOffsetX");
 		else
 			veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
 
-		if( prefsMap.containsKey( "veinBarOffsetY" ) )
-			veinBarOffsetY = prefsMap.get( "veinBarOffsetY" );
+		if(prefsMap.containsKey("veinBarOffsetY"))
+			veinBarOffsetY = prefsMap.get("veinBarOffsetY");
 		else
 			veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
 
-		if( prefsMap.containsKey( "xpDropOffsetX" ) )
-			xpDropOffsetX = prefsMap.get( "xpDropOffsetX" );
+		if(prefsMap.containsKey("xpDropOffsetX"))
+			xpDropOffsetX = prefsMap.get("xpDropOffsetX");
 		else
 			xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
 
-		if( prefsMap.containsKey( "xpDropOffsetY" ) )
-			xpDropOffsetY = prefsMap.get( "xpDropOffsetY" );
+		if(prefsMap.containsKey("xpDropOffsetY"))
+			xpDropOffsetY = prefsMap.get("xpDropOffsetY");
 		else
 			xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
 
-		if( prefsMap.containsKey( "skillListOffsetX" ) )
-			skillListOffsetX = prefsMap.get( "skillListOffsetX" );
+		if(prefsMap.containsKey("skillListOffsetX"))
+			skillListOffsetX = prefsMap.get("skillListOffsetX");
 		else
 			skillListOffsetX = Config.forgeConfig.skillListOffsetX.get();
 
-		if( prefsMap.containsKey( "skillListOffsetY" ) )
-			skillListOffsetY = prefsMap.get( "skillListOffsetY" );
+		if(prefsMap.containsKey("skillListOffsetY"))
+			skillListOffsetY = prefsMap.get("skillListOffsetY");
 		else
 			skillListOffsetY = Config.forgeConfig.skillListOffsetY.get();
 
-		if( prefsMap.containsKey( "xpDropSpawnDistance" ) )
-			xpDropSpawnDistance = prefsMap.get( "xpDropSpawnDistance" );
+		if(prefsMap.containsKey("xpDropSpawnDistance"))
+			xpDropSpawnDistance = prefsMap.get("xpDropSpawnDistance");
 		else
 			xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
 
-		if( prefsMap.containsKey( "xpDropOpacityPerTime" ) )
-			xpDropOpacityPerTime = prefsMap.get( "xpDropOpacityPerTime" );
+		if(prefsMap.containsKey("xpDropOpacityPerTime"))
+			xpDropOpacityPerTime = prefsMap.get("xpDropOpacityPerTime");
 		else
 			xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
 
-		if( prefsMap.containsKey( "xpDropMaxOpacity" ) )
-			xpDropMaxOpacity = prefsMap.get( "xpDropMaxOpacity" );
+		if(prefsMap.containsKey("xpDropMaxOpacity"))
+			xpDropMaxOpacity = prefsMap.get("xpDropMaxOpacity");
 		else
 			xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
 
-		if( prefsMap.containsKey( "minXpGrow" ) )
-			minXpGrow = prefsMap.get( "minXpGrow" );
+		if(prefsMap.containsKey("minXpGrow"))
+			minXpGrow = prefsMap.get("minXpGrow");
 		else
 			minXpGrow = Config.forgeConfig.minXpGrow.get();
 
-		if( prefsMap.containsKey( "xpDropDecayAge" ) )
-			xpDropDecayAge = (int) Math.floor( prefsMap.get( "xpDropDecayAge" ) );
+		if(prefsMap.containsKey("xpDropDecayAge"))
+			xpDropDecayAge = (int) Math.floor(prefsMap.get("xpDropDecayAge"));
 		else
-			xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
+			xpDropDecayAge = (int) Math.floor(Config.forgeConfig.xpDropDecayAge.get());
 
-		if( prefsMap.containsKey( "maxLevel" ) )
-			maxLevel = (int) Math.floor( XP.getMaxLevel() );
+		if(prefsMap.containsKey("maxLevel"))
+			maxLevel = (int) Math.floor(XP.getMaxLevel());
 		else
-			maxLevel = (int) Math.floor( Config.forgeConfig.maxLevel.get() );
+			maxLevel = (int) Math.floor(Config.forgeConfig.maxLevel.get());
 
-		if( prefsMap.containsKey( "maxXp" ) )
-			maxXp = (int) Math.floor( Config.getConfig( "maxXp" ) );
+		if(prefsMap.containsKey("maxXp"))
+			maxXp = (int) Math.floor(Config.getConfig("maxXp"));
 		else
-			maxXp = XP.xpAtLevel( maxLevel );
+			maxXp = XP.xpAtLevel(maxLevel);
 
-		if( prefsMap.containsKey( "worldXpDropsSizeMultiplier" ) )
-			WorldText.worldXpDropsSizeMultiplier = (float) ( 0f + prefsMap.get( "worldXpDropsSizeMultiplier" ) );
+		if(prefsMap.containsKey("worldXpDropsSizeMultiplier"))
+			WorldText.worldXpDropsSizeMultiplier = (float) (0f + prefsMap.get("worldXpDropsSizeMultiplier"));
 		else
-			WorldText.worldXpDropsSizeMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get() );
+			WorldText.worldXpDropsSizeMultiplier = (float) (0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get());
 
-		if( prefsMap.containsKey( "worldXpDropsDecaySpeedMultiplier" ) )
-			WorldText.worldXpDropsDecaySpeedMultiplier = (float) ( 0f + prefsMap.get( "worldXpDropsDecaySpeedMultiplier" ) );
+		if(prefsMap.containsKey("worldXpDropsDecaySpeedMultiplier"))
+			WorldText.worldXpDropsDecaySpeedMultiplier = (float) (0f + prefsMap.get("worldXpDropsDecaySpeedMultiplier"));
 		else
-			WorldText.worldXpDropsDecaySpeedMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get() );
+			WorldText.worldXpDropsDecaySpeedMultiplier = (float) (0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get());
 
-		if( prefsMap.containsKey( "worldXpDropsRotationCap" ) )
-			WorldXpDrop.worldXpDropsRotationCap = (float) ( 0f + prefsMap.get( "worldXpDropsRotationCap" ) );
+		if(prefsMap.containsKey("worldXpDropsRotationCap"))
+			WorldXpDrop.worldXpDropsRotationCap = (float) (0f + prefsMap.get("worldXpDropsRotationCap"));
 		else
-			WorldXpDrop.worldXpDropsRotationCap = (float) ( 0f + Config.forgeConfig.worldXpDropsRotationCap.get() );
+			WorldXpDrop.worldXpDropsRotationCap = (float) (0f + Config.forgeConfig.worldXpDropsRotationCap.get());
 
-		if( prefsMap.containsKey( "worldXpDropsShowSkill" ) )
+		if(prefsMap.containsKey("worldXpDropsShowSkill"))
 			WorldText.worldXpDropsShowSkill = prefsMap.get("worldXpDropsShowSkill") != 0;
 		else
 			WorldText.worldXpDropsShowSkill = Config.forgeConfig.worldXpDropsShowSkill.get();
 
-		if( prefsMap.containsKey( "xpDropsAttachedToBar" ) )
+		if(prefsMap.containsKey("xpDropsAttachedToBar"))
 			xpDropsAttachedToBar = prefsMap.get("xpDropsAttachedToBar") != 0;
 		else
 			xpDropsAttachedToBar = Config.forgeConfig.xpDropsAttachedToBar.get();
 
-		if( prefsMap.containsKey( "xpBarAlwaysOn" ) )
+		if(prefsMap.containsKey("xpBarAlwaysOn"))
 			xpBarAlwaysOn = prefsMap.get("xpBarAlwaysOn") != 0;
 		else
 			xpBarAlwaysOn = Config.forgeConfig.xpBarAlwaysOn.get();
 
-		if( prefsMap.containsKey( "xpLeftDisplayAlwaysOn" ) )
+		if(prefsMap.containsKey("xpLeftDisplayAlwaysOn"))
 			xpLeftDisplayAlwaysOn = prefsMap.get("xpLeftDisplayAlwaysOn") != 0;
 		else
 			xpLeftDisplayAlwaysOn = Config.forgeConfig.xpLeftDisplayAlwaysOn.get();
 
-		if( prefsMap.containsKey( "showSkillsListAtCorner" ) )
+		if(prefsMap.containsKey("showSkillsListAtCorner"))
 			showSkillsListAtCorner = prefsMap.get("showSkillsListAtCorner") != 0;
 		else
 			showSkillsListAtCorner = Config.forgeConfig.showSkillsListAtCorner.get();
 
-		if( prefsMap.containsKey( "showXpDrops" ) )
+		if(prefsMap.containsKey("showXpDrops"))
 			showXpDrops = prefsMap.get("showXpDrops") != 0;
 		else
 			showXpDrops = Config.forgeConfig.showXpDrops.get();
 
-		if( prefsMap.containsKey( "stackXpDrops" ) )
+		if(prefsMap.containsKey("stackXpDrops"))
 			stackXpDrops = prefsMap.get("stackXpDrops") != 0;
 		else
 			stackXpDrops = Config.forgeConfig.stackXpDrops.get();
 
-		if( prefsMap.containsKey( "lvlUpScreenshot" ) )
+		if(prefsMap.containsKey("lvlUpScreenshot"))
 			lvlUpScreenshot = prefsMap.get("lvlUpScreenshot") != 0;
 		else
 			lvlUpScreenshot = Config.forgeConfig.lvlUpScreenshot.get();
 
-		if( prefsMap.containsKey( "lvlUpScreenshotShowSkills" ) )
+		if(prefsMap.containsKey("lvlUpScreenshotShowSkills"))
 			lvlUpScreenshotShowSkills = prefsMap.get("lvlUpScreenshotShowSkills") != 0;
 		else
 			lvlUpScreenshotShowSkills = Config.forgeConfig.lvlUpScreenshotShowSkills.get();
 
-		if( prefsMap.containsKey( "xpDropsShowXpBar" ) )
-			xpDropsShowXpBar = prefsMap.get("xpDropsShowXpBar" ) != 0;
+		if(prefsMap.containsKey("xpDropsShowXpBar"))
+			xpDropsShowXpBar = prefsMap.get("xpDropsShowXpBar") != 0;
 		else
 			xpDropsShowXpBar = Config.forgeConfig.xpDropsShowXpBar.get();
 
-		if( prefsMap.containsKey( "showLevelUpUnlocks" ) )
-			showLevelUpUnlocks = prefsMap.get("showLevelUpUnlocks" ) != 0;
+		if(prefsMap.containsKey("showLevelUpUnlocks"))
+			showLevelUpUnlocks = prefsMap.get("showLevelUpUnlocks") != 0;
 		else
 			showLevelUpUnlocks = Config.forgeConfig.showLevelUpUnlocks.get();
 
-		if( !xpDropsAttachedToBar )
+		if(!xpDropsAttachedToBar)
 			xpDropYLimit = 999999999;
 		else
 			xpDropYLimit = 0;
 
-		if( barOffsetX < 0 || barOffsetX > 1 )
+		if(barOffsetX < 0 || barOffsetX > 1)
 			barOffsetX = Config.forgeConfig.barOffsetX.get();
 
-		if( barOffsetY < 0 || barOffsetY > 1 )
+		if(barOffsetY < 0 || barOffsetY > 1)
 			barOffsetY = Config.forgeConfig.barOffsetY.get();
 
-		if( xpDropOffsetX < 0 || xpDropOffsetX > 1 )
+		if(xpDropOffsetX < 0 || xpDropOffsetX > 1)
 			xpDropOffsetX = Config.forgeConfig.xpDropOffsetX.get();
 
-		if( xpDropOffsetY < 0 || xpDropOffsetY > 1 )
+		if(xpDropOffsetY < 0 || xpDropOffsetY > 1)
 			xpDropOffsetY = Config.forgeConfig.xpDropOffsetY.get();
 
-		if( skillListOffsetX < 0 || skillListOffsetX > 1 )
+		if(skillListOffsetX < 0 || skillListOffsetX > 1)
 			skillListOffsetX = Config.forgeConfig.skillListOffsetX.get();
 
-		if( skillListOffsetY < 0 || skillListOffsetY > 1 )
+		if(skillListOffsetY < 0 || skillListOffsetY > 1)
 			skillListOffsetY = Config.forgeConfig.skillListOffsetY.get();
 
-		if( veinBarOffsetX < 0 || veinBarOffsetX > 1 )
+		if(veinBarOffsetX < 0 || veinBarOffsetX > 1)
 			veinBarOffsetX = Config.forgeConfig.veinBarOffsetX.get();
 
-		if( veinBarOffsetY < 0 || veinBarOffsetY > 1 )
+		if(veinBarOffsetY < 0 || veinBarOffsetY > 1)
 			veinBarOffsetY = Config.forgeConfig.veinBarOffsetY.get();
 
-		if( xpDropSpawnDistance < 0 || xpDropSpawnDistance > 1000 )
+		if(xpDropSpawnDistance < 0 || xpDropSpawnDistance > 1000)
 			xpDropSpawnDistance = Config.forgeConfig.xpDropSpawnDistance.get();
 
-		if( xpDropOpacityPerTime < 0 || xpDropOpacityPerTime > 255 )
+		if(xpDropOpacityPerTime < 0 || xpDropOpacityPerTime > 255)
 			xpDropOpacityPerTime = Config.forgeConfig.xpDropOpacityPerTime.get();
 
-		if( xpDropMaxOpacity < 0 || xpDropMaxOpacity > 255 )
+		if(xpDropMaxOpacity < 0 || xpDropMaxOpacity > 255)
 			xpDropMaxOpacity = Config.forgeConfig.xpDropMaxOpacity.get();
 
-		if( xpDropDecayAge < 0 || xpDropDecayAge > 5000 )
-			xpDropDecayAge = (int) Math.floor( Config.forgeConfig.xpDropDecayAge.get() );
+		if(xpDropDecayAge < 0 || xpDropDecayAge > 5000)
+			xpDropDecayAge = (int) Math.floor(Config.forgeConfig.xpDropDecayAge.get());
 
-		if( minXpGrow < 0.01 || minXpGrow > 100 )
+		if(minXpGrow < 0.01 || minXpGrow > 100)
 			minXpGrow = Config.forgeConfig.minXpGrow.get();
 
-		biomePenaltyMultiplier = Config.getConfig( "biomePenaltyMultiplier" );
-		maxVeinCharge = Config.getConfig( "maxVeinCharge" );
-		veinMaxBlocks = (int) Config.getConfig( "veinMaxBlocks" );
+		biomePenaltyMultiplier = Config.getConfig("biomePenaltyMultiplier");
+		maxVeinCharge = Config.getConfig("maxVeinCharge");
+		veinMaxBlocks = (int) Config.getConfig("veinMaxBlocks");
 	}
 
 //	@SubscribeEvent
-//	public void renderWorldDrops( RenderWorldLastEvent event )
+//	public void renderWorldDrops(RenderLevelLastEvent event)
 //	{
-//		MatrixStack matrixStack = event.getMatrixStack();
+//		PoseStack matrixStack = event.getPoseStack();
 //		String theText = "test";
 //
 //		double d0 = this.renderManager.squareDistanceTo(entityIn);
@@ -789,13 +788,13 @@ public class XPOverlayGUI extends GuiComponent
 //		}
 //	}
 
-	public static void sendLvlUp( int level, String skill )
+	public static void sendLvlUp(int level, String skill)
 	{
 		player = Minecraft.getInstance().player;
 
 		Map<String, Double> configMap = Config.getConfigMap();
 
-		if( level < 1 || ( configMap.containsKey( "maxLevel" ) && level > configMap.get( "maxLevel" ) ) )
+		if(level < 1 || (configMap.containsKey("maxLevel") && level > configMap.get("maxLevel")))
 			return;
 
 		double percentDmgBoostPerLevel;
@@ -803,187 +802,187 @@ public class XPOverlayGUI extends GuiComponent
 		double damageBoost;
 		TranslatableComponent msg;
 
-		switch( skill )
+		switch(skill)
 		{
 			case "building":
-				double levelsPerOneReach = configMap.get( "levelsPerOneReach" );
-				double maxExtraReachBoost = configMap.get( "maxExtraReachBoost" );
-				double reachBoost = Math.min( maxExtraReachBoost, level / levelsPerOneReach );
-				msg = new TranslatableComponent( "pmmo.levelUpReachBoost", level, new TranslatableComponent( "pmmo." + skill.toLowerCase() ).getString(), DP.dpSoft( reachBoost ) );
+				double levelsPerOneReach = configMap.get("levelsPerOneReach");
+				double maxExtraReachBoost = configMap.get("maxExtraReachBoost");
+				double reachBoost = Math.min(maxExtraReachBoost, level / levelsPerOneReach);
+				msg = new TranslatableComponent("pmmo.levelUpReachBoost", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(reachBoost));
 				break;
 
 			case "combat":
-				percentDmgBoostPerLevel= configMap.get( "damageBonusPercentPerLevelMelee" );
-				maxExtraDamageBoost = configMap.get( "maxExtraDamagePercentageBoostMelee" );
-				damageBoost = Math.min( maxExtraDamageBoost, level * percentDmgBoostPerLevel ) * 100;
-				msg = new TranslatableComponent( "pmmo.levelUpDamageBoostPercentMelee", level, new TranslatableComponent( "pmmo." + skill.toLowerCase() ).getString(), DP.dpSoft( damageBoost ) );
+				percentDmgBoostPerLevel= configMap.get("damageBonusPercentPerLevelMelee");
+				maxExtraDamageBoost = configMap.get("maxExtraDamagePercentageBoostMelee");
+				damageBoost = Math.min(maxExtraDamageBoost, level * percentDmgBoostPerLevel) * 100;
+				msg = new TranslatableComponent("pmmo.levelUpDamageBoostPercentMelee", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(damageBoost));
 				break;
 
 			case "archery":
-				percentDmgBoostPerLevel = configMap.get( "damageBonusPercentPerLevelArchery" );
-				maxExtraDamageBoost = configMap.get( "maxExtraDamagePercentageBoostArchery" );
-				damageBoost = Math.min( maxExtraDamageBoost, level * percentDmgBoostPerLevel ) * 100;
-				msg = new TranslatableComponent( "pmmo.levelUpDamageBoostPercentArchery", level, new TranslatableComponent( "pmmo." + skill.toLowerCase() ).getString(), DP.dpSoft( damageBoost ) );
+				percentDmgBoostPerLevel = configMap.get("damageBonusPercentPerLevelArchery");
+				maxExtraDamageBoost = configMap.get("maxExtraDamagePercentageBoostArchery");
+				damageBoost = Math.min(maxExtraDamageBoost, level * percentDmgBoostPerLevel) * 100;
+				msg = new TranslatableComponent("pmmo.levelUpDamageBoostPercentArchery", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(damageBoost));
 				break;
 
 			case "magic":
-				percentDmgBoostPerLevel = configMap.get( "damageBonusPercentPerLevelMagic" );
-				maxExtraDamageBoost = configMap.get( "maxExtraDamagePercentageBoostMagic" );
-				damageBoost = Math.min( maxExtraDamageBoost, level * percentDmgBoostPerLevel ) * 100;
-				msg = new TranslatableComponent( "pmmo.levelUpDamageBoostPercentMagic", level, new TranslatableComponent( "pmmo." + skill.toLowerCase() ).getString(), DP.dpSoft( damageBoost ) );
+				percentDmgBoostPerLevel = configMap.get("damageBonusPercentPerLevelMagic");
+				maxExtraDamageBoost = configMap.get("maxExtraDamagePercentageBoostMagic");
+				damageBoost = Math.min(maxExtraDamageBoost, level * percentDmgBoostPerLevel) * 100;
+				msg = new TranslatableComponent("pmmo.levelUpDamageBoostPercentMagic", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(damageBoost));
 				break;
 
 			case "endurance":
-				double endurancePerLevel = configMap.get( "endurancePerLevel" );
-				double maxEndurance = configMap.get( "maxEndurance" );
-				double enduranceBoost = Math.min( maxEndurance, level * endurancePerLevel );
-				double levelsPerHeart = configMap.get( "levelsPerHeart" );
-				double maxExtraHeartBoost = configMap.get( "maxExtraHeartBoost" );
-				int heartBoost = Math.min( (int) maxExtraHeartBoost, (int) Math.floor( level / levelsPerHeart ) );
-				if( level % (int) levelsPerHeart == 0 && heartBoost <= (int) maxExtraHeartBoost )
-					player.displayClientMessage( new TranslatableComponent( "pmmo.gainedExtraHeart" ).setStyle( Skill.getSkillStyle( skill ) ), false);
+				double endurancePerLevel = configMap.get("endurancePerLevel");
+				double maxEndurance = configMap.get("maxEndurance");
+				double enduranceBoost = Math.min(maxEndurance, level * endurancePerLevel);
+				double levelsPerHeart = configMap.get("levelsPerHeart");
+				double maxExtraHeartBoost = configMap.get("maxExtraHeartBoost");
+				int heartBoost = Math.min((int) maxExtraHeartBoost, (int) Math.floor(level / levelsPerHeart));
+				if(level % (int) levelsPerHeart == 0 && heartBoost <= (int) maxExtraHeartBoost)
+					player.displayClientMessage(new TranslatableComponent("pmmo.gainedExtraHeart").setStyle(Skill.getSkillStyle(skill)), false);
 
-				msg = new TranslatableComponent( "pmmo.levelUpEnduranceBoost", level, new TranslatableComponent( "pmmo." + skill.toLowerCase() ).getString(), enduranceBoost );
+				msg = new TranslatableComponent("pmmo.levelUpEnduranceBoost", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), enduranceBoost);
 				break;
 
 			case "agility":
-				msg = new TranslatableComponent( "pmmo.levelUpSprintSpeedBonus", level, new TranslatableComponent( "pmmo." + skill.toLowerCase() ).getString(), DP.dpSoft( AttributeHandler.getSpeedBoostMultiplier( level ) * 100 ) + "%" );
+				msg = new TranslatableComponent("pmmo.levelUpSprintSpeedBonus", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(AttributeHandler.getSpeedBoostMultiplier(level) * 100) + "%");
 				break;
 
 			default:
-				msg = new TranslatableComponent( "pmmo.levelUp", level, new TranslatableComponent( "pmmo." + skill.toLowerCase() ).getString() );
+				msg = new TranslatableComponent("pmmo.levelUp", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString());
 				break;
 		}
 
-		player.displayClientMessage( msg.setStyle( Skill.getSkillStyle( skill ) ), false);
+		player.displayClientMessage(msg.setStyle(Skill.getSkillStyle(skill)), false);
 
-		Map<String, Double> skillsMap = new HashMap<>( XP.getOfflineXpMap( player.getUUID() ) );
-		skillsMap.put( skill, XP.xpAtLevel( level ) );
-		int totalLevel = XP.getTotalLevelFromMap( skillsMap );
-		if( ( totalLevel % Config.forgeConfig.levelsPerTotalLevelMilestone.get() ) == 0 )
+		Map<String, Double> skillsMap = new HashMap<>(XP.getOfflineXpMap(player.getUUID()));
+		skillsMap.put(skill, XP.xpAtLevel(level));
+		int totalLevel = XP.getTotalLevelFromMap(skillsMap);
+		if((totalLevel % Config.forgeConfig.levelsPerTotalLevelMilestone.get()) == 0)
 		{
-			player.displayClientMessage( new TranslatableComponent( "pmmo.totalLevelUp", totalLevel ).setStyle( XP.getColorStyle( 0x00ff00 ) ), true );
-			player.displayClientMessage( new TranslatableComponent( "pmmo.totalLevelUp", totalLevel ).setStyle( XP.getColorStyle( 0x00ff00 ) ), false );
+			player.displayClientMessage(new TranslatableComponent("pmmo.totalLevelUp", totalLevel).setStyle(XP.getColorStyle(0x00ff00)), true);
+			player.displayClientMessage(new TranslatableComponent("pmmo.totalLevelUp", totalLevel).setStyle(XP.getColorStyle(0x00ff00)), false);
 		}
 
-		if( showLevelUpUnlocks )
-			checkUnlocks( level, skill, player );
+		if(showLevelUpUnlocks)
+			checkUnlocks(level, skill, player);
 
-		int nightvisionUnlockLevel = (int) Config.getConfig( "nightvisionUnlockLevel" );
-		int dualSalvageUnlockLevel = (int) Config.getConfig( "dualSalvageSmithingLevelReq" );
+		int nightvisionUnlockLevel = (int) Config.getConfig("nightvisionUnlockLevel");
+		int dualSalvageUnlockLevel = (int) Config.getConfig("dualSalvageSmithingLevelReq");
 
-		if( Skill.SWIMMING.equals( skill ) && level - 1 < nightvisionUnlockLevel && level >= nightvisionUnlockLevel )
-			player.displayClientMessage( new TranslatableComponent( "pmmo.underwaterNightVisionUnLocked", level ).setStyle( Skill.getSkillStyle( skill ) ), false );
+		if(Skill.SWIMMING.equals(skill) && level - 1 < nightvisionUnlockLevel && level >= nightvisionUnlockLevel)
+			player.displayClientMessage(new TranslatableComponent("pmmo.underwaterNightVisionUnLocked", level).setStyle(Skill.getSkillStyle(skill)), false);
 
-		if( Skill.SMITHING.equals( skill ) && level - 1 < dualSalvageUnlockLevel && level >= dualSalvageUnlockLevel )
-			player.displayClientMessage( new TranslatableComponent( "pmmo.dualSalvageUnLocked", level ).setStyle( Skill.getSkillStyle( skill ) ), false );
+		if(Skill.SMITHING.equals(skill) && level - 1 < dualSalvageUnlockLevel && level >= dualSalvageUnlockLevel)
+			player.displayClientMessage(new TranslatableComponent("pmmo.dualSalvageUnLocked", level).setStyle(Skill.getSkillStyle(skill)), false);
 
 		listWasOn = barOn;
 
-		if( lvlUpScreenshotShowSkills )
+		if(lvlUpScreenshotShowSkills)
 			barOn = true;
 
-		if( lvlUpScreenshot )
-			screenshots.add( player.getDisplayName().getString() + " " + skill.toLowerCase() + " " + level );
+		if(lvlUpScreenshot)
+			screenshots.add(player.getDisplayName().getString() + " " + skill.toLowerCase() + " " + level);
 
-//		XP.scanUnlocks( level, skill );
+//		XP.scanUnlocks(level, skill);
 
-		NetworkHandler.sendToServer( new MessageLevelUp( skill, level ) );
+		NetworkHandler.sendToServer(new MessageLevelUp(skill, level));
 	}
 
-	public static void makeXpDrop( double xp, String skillIn, int cooldown, double gainedXp, boolean skip )
+	public static void makeXpDrop(double xp, String skillIn, int cooldown, double gainedXp, boolean skip)
 	{
 		xpDropWasStacked = false;
 
-		if( xp + gainedXp <= 0 || skillIn.equals( Skill.INVALID_SKILL.toString() ) )
+		if(xp + gainedXp <= 0 || skillIn.equals(Skill.INVALID_SKILL.toString()))
 		{
-			skills.remove( skillIn );
+			skills.remove(skillIn);
 			return;
 		}
-		else if( skills.get( skillIn ) == null )				//Handle client xp tracker
-			skills.put( skillIn, new ASkill( xp, XP.levelAtXpDecimal( xp ), xp, XP.levelAtXpDecimal( xp ) ) );
+		else if(skills.get(skillIn) == null)				//Handle client xp tracker
+			skills.put(skillIn, new ASkill(xp, XP.levelAtXpDecimal(xp), xp, XP.levelAtXpDecimal(xp)));
 
-		if( !skip )
+		if(!skip)
 		{
 			XPOverlayGUI.activeSkill = skillIn;
-			XPOverlayGUI.aSkill = skills.get( activeSkill );
+			XPOverlayGUI.aSkill = skills.get(activeSkill);
 		}
 
-		tempASkill = skills.get( skillIn );
+		tempASkill = skills.get(skillIn);
 
-		if( gainedXp <= 0 )
+		if(gainedXp <= 0)
 		{
 			tempASkill.xp = xp + gainedXp;
 			tempASkill.goalXp = tempASkill.xp;
-			tempASkill.pos = XP.levelAtXpDecimal( tempASkill.xp );
+			tempASkill.pos = XP.levelAtXpDecimal(tempASkill.xp);
 			tempASkill.goalPos = tempASkill.pos;
 
-			if( gainedXp == 0 )					//awardXp will NEVER award xp if the award is 0.
+			if(gainedXp == 0)					//awardXp will NEVER award xp if the award is 0.
 			{
-				if( xpDropsShowXpBar )
+				if(xpDropsShowXpBar)
 					XPOverlayGUI.cooldown = cooldown;
 
-				for( int i = 0; i < xpDrops.size(); i++ )
+				for(int i = 0; i < xpDrops.size(); i++)
 				{
-					if( xpDrops.get( i ).skill.equals( skillIn ) )
+					if(xpDrops.get(i).skill.equals(skillIn))
 					{
-						xpDrops.remove( i );
+						xpDrops.remove(i);
 						i = 0;
 					}
 				}
 			}
 
-//			System.out.println( mc.player.getDisplayName().getString() + " " + skill + " has been set to: " + xp );
+//			System.out.println(mc.player.getDisplayName().getString() + " " + skill + " has been set to: " + xp);
 		}
-		else if( stackXpDrops && xpDrops.size() > 0 )
+		else if(stackXpDrops && xpDrops.size() > 0)
 		{
-			for( XpDrop xpDrop : xpDrops )
+			for(XpDrop xpDrop : xpDrops)
 			{
-				if( xpDrop.skill.equals( skillIn ) && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0) )
+				if(xpDrop.skill.equals(skillIn) && (xpDrop.age < xpDropDecayAge || xpDrop.Y > 0))
 				{
 					xpDrop.gainedXp += gainedXp;
 					xpDrop.startXp += gainedXp;
-					if( xpDrops.get( xpDrops.size() - 1 ).age > xpDropDecayAge - 25 )
-						xpDrops.get( xpDrops.size() - 1 ).age = xpDropDecayAge - 25;
+					if(xpDrops.get(xpDrops.size() - 1).age > xpDropDecayAge - 25)
+						xpDrops.get(xpDrops.size() - 1).age = xpDropDecayAge - 25;
 
 					xpDropWasStacked = true;
 				}
 			}
 		}
 
-		if( !xpDropWasStacked && gainedXp != 0 )
+		if(!xpDropWasStacked && gainedXp != 0)
 		{
-			if( xpDrops.size() > 0 )
-				xpDrops.add( new XpDrop( 0, xpDrops.get( xpDrops.size() - 1 ).Y + 15, skillIn, xp, gainedXp, skip ) );
+			if(xpDrops.size() > 0)
+				xpDrops.add(new XpDrop(0, xpDrops.get(xpDrops.size() - 1).Y + 15, skillIn, xp, gainedXp, skip));
 			else
-				xpDrops.add( new XpDrop( 0, xpDropSpawnDistance, skillIn, xp, gainedXp, skip ) );
+				xpDrops.add(new XpDrop(0, xpDropSpawnDistance, skillIn, xp, gainedXp, skip));
 		}
 
-		if( xpDropsShowXpBar && !skip )
+		if(xpDropsShowXpBar && !skip)
 			XPOverlayGUI.cooldown = cooldown;
 
 		levelGap = 0;
 		skillGap = 0;
 		xpGap = 0;
 
-		skills.forEach( (thisSkill, thisASkill) ->
+		skills.forEach((thisSkill, thisASkill) ->
 		{
-			if( skills.get( thisSkill ).pos >= maxLevel )
+			if(skills.get(thisSkill).pos >= maxLevel)
 			{
-				if( levelGap < fontRenderer.width( "" + maxLevel ) )
-					levelGap = fontRenderer.width( "" + maxLevel );
+				if(levelGap < fontRenderer.width("" + maxLevel))
+					levelGap = fontRenderer.width("" + maxLevel);
 			}
 			else
 			{
-				if( levelGap < fontRenderer.width( DP.dp( XP.levelAtXpDecimal( skills.get( thisSkill ).goalXp ) ) ) )
-					levelGap = fontRenderer.width( DP.dp( XP.levelAtXpDecimal( skills.get( thisSkill ).goalXp ) ) );
+				if(levelGap < fontRenderer.width(DP.dp(XP.levelAtXpDecimal(skills.get(thisSkill).goalXp))))
+					levelGap = fontRenderer.width(DP.dp(XP.levelAtXpDecimal(skills.get(thisSkill).goalXp)));
 			}
 
-			if( skillGap < fontRenderer.width( new TranslatableComponent( "pmmo." + thisSkill.toLowerCase() ).getString() ) )
-				skillGap = fontRenderer.width( new TranslatableComponent( "pmmo." + thisSkill.toLowerCase() ).getString() );
+			if(skillGap < fontRenderer.width(new TranslatableComponent("pmmo." + thisSkill.toLowerCase()).getString()))
+				skillGap = fontRenderer.width(new TranslatableComponent("pmmo." + thisSkill.toLowerCase()).getString());
 
-			if( xpGap < fontRenderer.width( DP.dp( skills.get( thisSkill ).goalXp ) ) )
-				xpGap = fontRenderer.width( DP.dprefix( skills.get( thisSkill ).goalXp ) );
+			if(xpGap < fontRenderer.width(DP.dp(skills.get(thisSkill).goalXp)))
+				xpGap = fontRenderer.width(DP.dprefix(skills.get(thisSkill).goalXp));
 		});
 	}
 
@@ -999,49 +998,49 @@ public class XPOverlayGUI extends GuiComponent
 		xpGap = 0;
 	}
 
-	private static void addItemsWithSameLevel( int level, String skill, JType jType, Map<JType, Map<String, Map<String, Double>>> output )
+	private static void addItemsWithSameLevel(int level, String skill, JType jType, Map<JType, Map<String, Map<String, Double>>> output)
 	{
-		output.put( jType, new HashMap<>() );
-		Map<String, Map<String, Double>> outputJMap = output.get( jType );
-		for( Map.Entry<String, Map<String, Double>> element : JsonConfig.data.getOrDefault( jType, new HashMap<>() ).entrySet() )
+		output.put(jType, new HashMap<>());
+		Map<String, Map<String, Double>> outputJMap = output.get(jType);
+		for(Map.Entry<String, Map<String, Double>> element : JsonConfig.data.getOrDefault(jType, new HashMap<>()).entrySet())
 		{
-			if( element.getValue().getOrDefault( skill, -1D ) == level )
-				outputJMap.put( element.getKey(), element.getValue() );
+			if(element.getValue().getOrDefault(skill, -1D) == level)
+				outputJMap.put(element.getKey(), element.getValue());
 		}
 	}
 
-	public static void checkUnlocks( int level, String skill, Player player )
+	public static void checkUnlocks(int level, String skill, Player player)
 	{
 		Map<JType, Map<String, Map<String, Double>>> itemsWithReqs = new HashMap<>();
 
-		addItemsWithSameLevel( level, skill, JType.REQ_WEAR, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_WEAPON, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_TOOL, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_PLACE, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_BREAK, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_USE, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_USE_ENCHANTMENT, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_BIOME, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_KILL, itemsWithReqs );
-		addItemsWithSameLevel( level, skill, JType.REQ_CRAFT, itemsWithReqs );
+		addItemsWithSameLevel(level, skill, JType.REQ_WEAR, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_WEAPON, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_TOOL, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_PLACE, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_BREAK, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_USE, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_USE_ENCHANTMENT, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_BIOME, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_KILL, itemsWithReqs);
+		addItemsWithSameLevel(level, skill, JType.REQ_CRAFT, itemsWithReqs);
 
 		String jTypeName, unlockName;
 		Item item;
 
-		for( Map.Entry<JType, Map<String, Map<String, Double>>> element : itemsWithReqs.entrySet() )
+		for(Map.Entry<JType, Map<String, Map<String, Double>>> element : itemsWithReqs.entrySet())
 		{
-			jTypeName = new TranslatableComponent( "pmmo." + element.getKey().toString().replace( "req_", "" ).replaceAll( "_", " " ) ).getString();
-			for( Map.Entry<String, Map<String, Double>> itemElement : element.getValue().entrySet() )
+			jTypeName = new TranslatableComponent("pmmo." + element.getKey().toString().replace("req_", "").replaceAll("_", " ")).getString();
+			for(Map.Entry<String, Map<String, Double>> itemElement : element.getValue().entrySet())
 			{
-				item = XP.getItem( itemElement.getKey() );
-				if( !item.equals( Items.AIR ) )
-					unlockName = new TranslatableComponent( item.getDescriptionId() ).getString();
+				item = XP.getItem(itemElement.getKey());
+				if(!item.equals(Items.AIR))
+					unlockName = new TranslatableComponent(item.getDescriptionId()).getString();
 				else
 					unlockName = itemElement.getKey();
-				if( XP.checkReq( player, itemElement.getValue() ) )
-					player.displayClientMessage( new TranslatableComponent( "pmmo.levelUpFeatureUnlock", unlockName, jTypeName ).setStyle( XP.getColorStyle( 0x00ff00 ) ), false );
+				if(XP.checkReq(player, itemElement.getValue()))
+					player.displayClientMessage(new TranslatableComponent("pmmo.levelUpFeatureUnlock", unlockName, jTypeName).setStyle(XP.getColorStyle(0x00ff00)), false);
 				else
-					player.displayClientMessage( new TranslatableComponent( "pmmo.levelUpPartialFeatureUnlock", unlockName, jTypeName ).setStyle( XP.getColorStyle( 0xffff00 ) ), false );
+					player.displayClientMessage(new TranslatableComponent("pmmo.levelUpPartialFeatureUnlock", unlockName, jTypeName).setStyle(XP.getColorStyle(0xffff00)), false);
 			}
 		}
 	}

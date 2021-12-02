@@ -12,11 +12,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import com.mojang.math.Quaternion;
@@ -35,9 +32,9 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 
 public class ListButton extends Button
 {
-    private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items.png" );
-    private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
-//    private final Screen screen = new SkillsScreen( new TranslatableComponent( "pmmo.potato" ));
+    private final ResourceLocation items = XP.getResLoc(Reference.MOD_ID, "textures/gui/items.png");
+    private final ResourceLocation buttons = XP.getResLoc(Reference.MOD_ID, "textures/gui/buttons.png");
+//    private final Screen screen = new SkillsScreen(new TranslatableComponent("pmmo.potato"));
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
     public double mobWidth, mobHeight, mobScale;
@@ -51,88 +48,88 @@ public class ListButton extends Button
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
     Minecraft minecraft = Minecraft.getInstance();
 
-    public ListButton( int posX, int posY, int elementOne, int elementTwo, String regKey, JType jType, String buttonText, OnPress onPress )
+    public ListButton(int posX, int posY, int elementOne, int elementTwo, String regKey, JType jType, String buttonText, OnPress onPress)
     {
-        super(posX, posY, 32, 32, new TranslatableComponent( "" ), onPress);
+        super(posX, posY, 32, 32, new TranslatableComponent(""), onPress);
         this.regKey = regKey;
         this.buttonText = buttonText;
-        this.itemStack = new ItemStack( XP.getItem( regKey ) );
+        this.itemStack = new ItemStack(XP.getItem(regKey));
         this.elementOne = elementOne * 32;
         this.elementTwo = elementTwo * 32;
 
-        if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
-            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().level );
+        if(ForgeRegistries.ENTITIES.containsKey(XP.getResLoc(regKey)))
+            testEntity = ForgeRegistries.ENTITIES.getValue(XP.getResLoc(regKey)).create(Minecraft.getInstance().level);
 
-        if( testEntity instanceof LivingEntity )
+        if(testEntity instanceof LivingEntity)
             entity = (LivingEntity) testEntity;
 
-        switch( jType )
+        switch(jType)
         {
             case FISH_ENCHANT_POOL:
-                this.title = new TranslatableComponent( ForgeRegistries.ENCHANTMENTS.getValue( XP.getResLoc( regKey ) ).getFullname( 1 ).getString().replace( " I", "" ) ).getString();
+                this.title = new TranslatableComponent(ForgeRegistries.ENCHANTMENTS.getValue(XP.getResLoc(regKey)).getFullname(1).getString().replace(" I", "")).getString();
                 break;
 
             case XP_VALUE_BREED:
             case XP_VALUE_TAME:
             case REQ_KILL:
-                this.title = new TranslatableComponent( ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).getDescriptionId() ).getString();
+                this.title = new TranslatableComponent(ForgeRegistries.ENTITIES.getValue(XP.getResLoc(regKey)).getDescriptionId()).getString();
                 break;
 
             case DIMENSION:
-                if( regKey.equals( "all_dimensions" ) )
-                    this.title = new TranslatableComponent( "pmmo.allDimensions" ).getString();
-                else if( regKey.equals( "minecraft:overworld" ) || regKey.equals( "minecraft:the_nether" ) || regKey.equals( "minecraft:the_end" ) )
-                    this.title = new TranslatableComponent( regKey ).getString();
-//                else if( ForgeRegistries.MOD_DIMENSIONS.containsKey( XP.getResLoc( regKey ) ) )
-//                    this.title = new TranslatableComponent( ForgeRegistries.MOD_DIMENSIONS.getValue( XP.getResLoc( regKey ) ).getRegistryName().toString() ).getString();
+                if(regKey.equals("all_dimensions"))
+                    this.title = new TranslatableComponent("pmmo.allDimensions").getString();
+                else if(regKey.equals("minecraft:overworld") || regKey.equals("minecraft:the_nether") || regKey.equals("minecraft:the_end"))
+                    this.title = new TranslatableComponent(regKey).getString();
+//                else if(ForgeRegistries.MOD_DIMENSIONS.containsKey(XP.getResLoc(regKey)))
+//                    this.title = new TranslatableComponent(ForgeRegistries.MOD_DIMENSIONS.getValue(XP.getResLoc(regKey)).getRegistryName().toString()).getString();
                 //COUT
                 break;
 
             case STATS:
-                this.title = new TranslatableComponent( "pmmo." + regKey ).setStyle( Skill.getSkillStyle( regKey ) ).getString();
+                this.title = new TranslatableComponent("pmmo." + regKey).setStyle(Skill.getSkillStyle(regKey)).getString();
                 break;
 
             case HISCORE:
-                if( XP.playerNames.containsValue( regKey ) )
-                    this.title = new TextComponent( regKey ).setStyle( Skill.getSkillStyle( regKey ) ).getString();
+                if(XP.playerNames.containsValue(regKey))
+                    this.title = new TextComponent(regKey).setStyle(Skill.getSkillStyle(regKey)).getString();
                 else
-                    this.title = new TranslatableComponent( "pmmo." + regKey ).setStyle( Skill.getSkillStyle( regKey ) ).getString();
+                    this.title = new TranslatableComponent("pmmo." + regKey).setStyle(Skill.getSkillStyle(regKey)).getString();
                 break;
 
             case REQ_BIOME:
-//                this.title = new TranslatableComponent( ForgeRegistries.BIOMES.getValue( XP.getResLoc( regKey ) ).getTranslationKey() ).getString();
-                this.title = new TranslatableComponent( regKey ).getString();
+//                this.title = new TranslatableComponent(ForgeRegistries.BIOMES.getValue(XP.getResLoc(regKey)).getTranslationKey()).getString();
+                this.title = new TranslatableComponent(regKey).getString();
                 break;
 
             default:
-                this.title = new TranslatableComponent( itemStack.getDescriptionId() ).getString();
+                this.title = new TranslatableComponent(itemStack.getDescriptionId()).getString();
                 break;
         }
 
-        switch( regKey )
+        switch(regKey)
         {
             case "pmmo.otherCrafts":
             case "pmmo.otherAnimals":
             case "pmmo.otherPassiveMobs":
             case "pmmo.otherAggresiveMobs":
-                this.title = new TranslatableComponent( new TranslatableComponent( regKey ).getString() ).getString();
+                this.title = new TranslatableComponent(new TranslatableComponent(regKey).getString()).getString();
                 break;
         }
 
-        if( elementOne > 23 )
+        if(elementOne > 23)
             offsetOne = 192;
-        else if( elementOne > 15 )
+        else if(elementOne > 15)
             offsetOne = 128;
-        else if( elementOne > 7 )
+        else if(elementOne > 7)
             offsetOne = 64;
         else
             offsetOne = 0;
 
-        if( elementTwo > 23 )
+        if(elementTwo > 23)
             offsetTwo = 192;
-        else if( elementTwo > 15 )
+        else if(elementTwo > 15)
             offsetTwo = 128;
-        else if( elementTwo > 7 )
+        else if(elementTwo > 7)
             offsetTwo = 64;
         else
             offsetTwo = 0;
@@ -143,12 +140,12 @@ public class ListButton extends Button
     {
         int height = 11;
 
-        for( Component a : text )
+        for(Component a : text)
         {
             height += 9;
         }
 
-        if( height > 32 )
+        if(height > 32)
             return height;
         else
             return 32;
@@ -156,56 +153,56 @@ public class ListButton extends Button
 
     public void clickActionGlossary()
     {
-        GlossaryScreen.setButtonsToKey( regKey );
-        Minecraft.getInstance().setScreen( new GlossaryScreen( Minecraft.getInstance().player.getUUID(), new TranslatableComponent( "pmmo.glossary" ), false ) );
+        GlossaryScreen.setButtonsToKey(regKey);
+        Minecraft.getInstance().setScreen(new GlossaryScreen(Minecraft.getInstance().player.getUUID(), new TranslatableComponent("pmmo.glossary"), false));
     }
 
     public void clickActionSkills()
     {
-        if( XP.playerNames.containsValue( regKey ) )
-            Minecraft.getInstance().setScreen( new ListScreen( XP.playerUUIDs.get( regKey ), new TranslatableComponent( "" ), regKey, JType.SKILLS, Minecraft.getInstance().player ) );
+        if(XP.playerNames.containsValue(regKey))
+            Minecraft.getInstance().setScreen(new ListScreen(XP.playerUUIDs.get(regKey), new TranslatableComponent(""), regKey, JType.SKILLS, Minecraft.getInstance().player));
         else
-            Minecraft.getInstance().setScreen( new ListScreen( Minecraft.getInstance().player.getUUID(), new TranslatableComponent( "" ), regKey, JType.HISCORE, Minecraft.getInstance().player ) );
+            Minecraft.getInstance().setScreen(new ListScreen(Minecraft.getInstance().player.getUUID(), new TranslatableComponent(""), regKey, JType.HISCORE, Minecraft.getInstance().player));
     }
 
     @Override
-    public void renderButton( PoseStack stack, int x, int y, float partialTicks)
+    public void renderButton(PoseStack stack, int x, int y, float partialTicks)
     {
         Minecraft minecraft = Minecraft.getInstance();
         Font fontrenderer = minecraft.font;
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, this.alpha);
-        int i = this.getYImage(this.isHovered());
+        int i = this.getYImage(this.isHoveredOrFocused());
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        minecraft.getTextureManager().bindForSetup( buttons );
-        this.blit( stack, this.x, this.y, this.offsetOne + ( this.isHovered() ? 32 : 0 ), this.elementOne, this.width, this.height);
-        minecraft.getTextureManager().bindForSetup( items );
-        this.blit( stack, this.x, this.y, this.offsetTwo + ( this.isHovered() ? 32 : 0 ), this.elementTwo, this.width, this.height);
-        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
-            itemRenderer.renderGuiItem( itemStack, this.x + 8, this.y + 8 );
+        minecraft.getTextureManager().bindForSetup(buttons);
+        this.blit(stack, this.x, this.y, this.offsetOne + (this.isHoveredOrFocused() ? 32 : 0), this.elementOne, this.width, this.height);
+        minecraft.getTextureManager().bindForSetup(items);
+        this.blit(stack, this.x, this.y, this.offsetTwo + (this.isHoveredOrFocused() ? 32 : 0), this.elementTwo, this.width, this.height);
+        if(!itemStack.getItem().equals(Items.AIR) && entity == null)
+            itemRenderer.renderGuiItem(itemStack, this.x + 8, this.y + 8);
 
-        if( entity != null )
+        if(entity != null)
         {
-            mobHeight = entity.getDimensions( Pose.STANDING ).height;
-            mobWidth = entity.getDimensions( Pose.STANDING ).width;
+            mobHeight = entity.getDimensions(Pose.STANDING).height;
+            mobWidth = entity.getDimensions(Pose.STANDING).width;
             mobScale = 27;
 
-            if( mobHeight > 0 )
+            if(mobHeight > 0)
                 mobScale /= Math.max(mobHeight, mobWidth);
 
             //COUT
-//            drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, entity );
+//            drawEntityOnScreen(this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, entity);
         }
 
-        this.renderBg( stack, minecraft, x, y);
+        this.renderBg(stack, minecraft, x, y);
         int j = getFGColor();
-        this.drawCenteredString( stack, fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
+        this.drawCenteredString(stack, fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
     }
 
 //    public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)
 //    {
-//        float f = (float) ( (System.currentTimeMillis() / 25D ) % 360);
+//        float f = (float) ((System.currentTimeMillis() / 25D) % 360);
 //        float f1 = 0;
 //        RenderSystem.pushMatrix();
 //        RenderSystem.translatef((float)posX, (float)posY, 1050.0F);

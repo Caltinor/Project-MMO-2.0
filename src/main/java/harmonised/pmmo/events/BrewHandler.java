@@ -8,8 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import java.util.Map;
 import java.util.UUID;
@@ -18,15 +17,15 @@ public class BrewHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void handlePotionBrew( NonNullList<ItemStack> brewingItemStacks, Level world, BlockPos pos )
+    public static void handlePotionBrew(NonNullList<ItemStack> brewingItemStacks, Level world, BlockPos pos)
     {
         try
         {
             ItemStack ingredient = brewingItemStacks.get(3);
-            UUID uuid = ChunkDataHandler.checkPos( world, pos );
-            if( uuid != null )
+            UUID uuid = ChunkDataHandler.checkPos(world, pos);
+            if(uuid != null)
             {
-                double extraChance = XP.getExtraChance( uuid, brewingItemStacks.get( 3 ).getItem().getRegistryName(), JType.INFO_BREW, false ) / 100D;
+                double extraChance = XP.getExtraChance(uuid, brewingItemStacks.get(3).getItem().getRegistryName(), JType.INFO_BREW, false) / 100D;
 
                 int guaranteedDrop = (int) extraChance;
                 int extraDrop;
@@ -34,13 +33,13 @@ public class BrewHandler
                 ItemStack potion;
                 int potionCount = 0;
 
-                for( int i = 0; i < 3; i++ )
+                for(int i = 0; i < 3; i++)
                 {
                     potion = brewingItemStacks.get(i);
 
-                    if( !potion.isEmpty() )
+                    if(!potion.isEmpty())
                     {
-                        if( XP.rollChance( extraChance % 1 ) )
+                        if(XP.rollChance(extraChance % 1))
                             extraDrop = 1;
                         else
                             extraDrop = 0;
@@ -49,20 +48,20 @@ public class BrewHandler
                     }
                 }
 
-                Map<String, Double> award = XP.multiplyMapAnyDouble( XP.getXp( ingredient, JType.XP_VALUE_BREW ), potionCount );
+                Map<String, Double> award = XP.multiplyMapAnyDouble(XP.getXp(ingredient, JType.XP_VALUE_BREW), potionCount);
 
-                for( String awardSkillName : award.keySet() )
+                for(String awardSkillName : award.keySet())
                 {
-                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( world ), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.4, award.get( awardSkillName ), awardSkillName );
-                    xpDrop.setDecaySpeed( 0.25 );
-                    XP.addWorldXpDrop( xpDrop, uuid );
-                    Skill.addXp( awardSkillName, uuid, award.get( awardSkillName ), "brewing", false, false );
+                    WorldXpDrop xpDrop = WorldXpDrop.fromXYZ(XP.getDimResLoc(world), pos.getX() + 0.5, pos.getY() + 1.523, pos.getZ() + 0.5, 0.4, award.get(awardSkillName), awardSkillName);
+                    xpDrop.setDecaySpeed(0.25);
+                    XP.addWorldXpDrop(xpDrop, uuid);
+                    Skill.addXp(awardSkillName, uuid, award.get(awardSkillName), "brewing", false, false);
                 }
             }
         }
-        catch( Exception e )
+        catch(Exception e)
         {
-            LOGGER.error( e );
+            LOGGER.error(e);
         }
     }
 }

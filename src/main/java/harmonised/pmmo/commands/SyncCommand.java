@@ -8,8 +8,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.TranslatableComponent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -18,14 +17,14 @@ public class SyncCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute(CommandContext<CommandSourceStack> context, @Nullable Collection<ServerPlayer> players ) throws CommandRuntimeException
+    public static int execute(CommandContext<CommandSourceStack> context, @Nullable Collection<ServerPlayer> players) throws CommandRuntimeException
     {
-        if( players != null )
+        if(players != null)
         {
-            for( ServerPlayer player : players )
+            for(ServerPlayer player : players)
             {
-                XP.syncPlayer( player );
-                player.displayClientMessage( new TranslatableComponent( "pmmo.skillsResynced" ), false );
+                XP.syncPlayer(player);
+                player.displayClientMessage(new TranslatableComponent("pmmo.skillsResynced"), false);
             }
         }
         else
@@ -33,12 +32,12 @@ public class SyncCommand
             try
             {
                 Player player = context.getSource().getPlayerOrException();
-                XP.syncPlayer( player );
-                player.displayClientMessage( new TranslatableComponent( "pmmo.skillsResynced" ), false );
+                XP.syncPlayer(player);
+                player.displayClientMessage(new TranslatableComponent("pmmo.skillsResynced"), false);
             }
-            catch( CommandSyntaxException e )
+            catch(CommandSyntaxException e)
             {
-                LOGGER.error( "Sync command fired not from player " + context.getInput(), e );
+                LOGGER.error("Sync command fired not from player " + context.getInput(), e);
             }
         }
 

@@ -8,22 +8,14 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -37,10 +29,10 @@ public class ListButtonBig extends Button
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big.png" );
-    private final ResourceLocation items2 = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big_2.png" );
-//    private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
-//    private final Screen screen = new SkillsScreen( new TranslatableComponent( "pmmo.potato" ));
+    private final ResourceLocation items = XP.getResLoc(Reference.MOD_ID, "textures/gui/items_big.png");
+    private final ResourceLocation items2 = XP.getResLoc(Reference.MOD_ID, "textures/gui/items_big_2.png");
+//    private final ResourceLocation buttons = XP.getResLoc(Reference.MOD_ID, "textures/gui/buttons.png");
+//    private final Screen screen = new SkillsScreen(new TranslatableComponent("pmmo.potato"));
     private int page = 0;
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
@@ -56,36 +48,36 @@ public class ListButtonBig extends Button
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
     Minecraft minecraft = Minecraft.getInstance();
 
-    public ListButtonBig(int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, OnPress onPress )
+    public ListButtonBig(int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, OnPress onPress)
     {
-        super(posX, posY, 64, 64, new TranslatableComponent( buttonText ), onPress);
+        super(posX, posY, 64, 64, new TranslatableComponent(buttonText), onPress);
 //        this.regKey = regKey;
         this.buttonText = buttonText;
-        this.itemStack = new ItemStack( XP.getItem( regKey ) );
+        this.itemStack = new ItemStack(XP.getItem(regKey));
         this.elementOne = elementOne * 64;
         this.elementTwo = elementTwo * 64;
         this.playerName = playerName;
-        tooltipText.add( new TranslatableComponent( playerName ) );
-        if( tooltip != null )
-            this.tooltipText.add( new TranslatableComponent( tooltip ) );
+        tooltipText.add(new TranslatableComponent(playerName));
+        if(tooltip != null)
+            this.tooltipText.add(new TranslatableComponent(tooltip));
 
-        if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
-            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().level );
-        if( testEntity instanceof LivingEntity )
+        if(ForgeRegistries.ENTITIES.containsKey(XP.getResLoc(regKey)))
+            testEntity = ForgeRegistries.ENTITIES.getValue(XP.getResLoc(regKey)).create(Minecraft.getInstance().level);
+        if(testEntity instanceof LivingEntity)
             entity = (LivingEntity) testEntity;
 
-        if( elementOne > 3 )
+        if(elementOne > 3)
             offsetOne = 128;
         else
             offsetOne = 0;
 
-        if( elementTwo >= 7 )
+        if(elementTwo >= 7)
         {
             page = 1;
             elementTwo -= 8;
         }
 
-        if( elementTwo > 3 )
+        if(elementTwo > 3)
             offsetTwo = 128;
         else
             offsetTwo = 0;
@@ -98,49 +90,49 @@ public class ListButtonBig extends Button
     }
 
     @Override
-    public void renderButton( PoseStack stack, int mouseX, int mouseY, float partialTicks )
+    public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks)
     {
         isHovered = mouseX > this.x + 3 && mouseY > this.y && mouseX < this.x + 60 && mouseY < this.y + 64;
         Minecraft minecraft = Minecraft.getInstance();
         Font fontrenderer = minecraft.font;
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, this.alpha);
-        int i = this.getYImage(this.isHovered());
+        int i = this.getYImage(this.isHoveredOrFocused());
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        minecraft.getTextureManager().bindForSetup( items );
-        this.blit( stack, this.x, this.y, this.offsetOne + ( this.isHovered() ? 64 : 0 ), this.elementOne, this.width, this.height);
-        minecraft.getTextureManager().bindForSetup( page == 0 ? items : items2 );
-        this.blit( stack, this.x, this.y, this.offsetTwo + ( this.isHovered() ? 64 : 0 ), this.elementTwo, this.width, this.height);
-        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
-            itemRenderer.renderGuiItem( itemStack, this.x + 8, this.y + 8 );
+        minecraft.getTextureManager().bindForSetup(items);
+        this.blit(stack, this.x, this.y, this.offsetOne + (this.isHoveredOrFocused() ? 64 : 0), this.elementOne, this.width, this.height);
+        minecraft.getTextureManager().bindForSetup(page == 0 ? items : items2);
+        this.blit(stack, this.x, this.y, this.offsetTwo + (this.isHoveredOrFocused() ? 64 : 0), this.elementTwo, this.width, this.height);
+        if(!itemStack.getItem().equals(Items.AIR) && entity == null)
+            itemRenderer.renderGuiItem(itemStack, this.x + 8, this.y + 8);
 
-        if( entity != null )
+        if(entity != null)
         {
-            mobHeight = entity.getDimensions( Pose.STANDING ).height;
-            mobWidth = entity.getDimensions( Pose.STANDING ).width;
+            mobHeight = entity.getDimensions(Pose.STANDING).height;
+            mobWidth = entity.getDimensions(Pose.STANDING).width;
             mobScale = 54;
 
-            if( mobHeight > 0 )
+            if(mobHeight > 0)
                 mobScale /= Math.max(mobHeight, mobWidth);
 
             //COUT
-//            drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, entity );
+//            drawEntityOnScreen(this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, entity);
         }
 
-        this.renderBg( stack, minecraft, x, y );
+        this.renderBg(stack, minecraft, x, y);
         int j = getFGColor();
-        this.drawCenteredString( stack, fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
+        this.drawCenteredString(stack, fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
     }
 
     public void clickAction()
     {
-        LOGGER.debug( "Clicked " + this.title + " Button" );
+        LOGGER.debug("Clicked " + this.title + " Button");
     }
 
 //    public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)
 //    {
-//        float f = (float) ( (System.currentTimeMillis() / 25D ) % 360);
+//        float f = (float) ((System.currentTimeMillis() / 25D) % 360);
 //        float f1 = 0;
 //        RenderSystem.push();
 //        RenderSystem.translatef((float)posX, (float)posY, 1050.0F);

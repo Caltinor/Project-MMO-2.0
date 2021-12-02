@@ -17,14 +17,15 @@ import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.client.event.ScreenEvent;
 
 import java.util.*;
 
 public class InfoScreen extends Screen
 {
     private final List<GuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
-    private final ResourceLocation logo = XP.getResLoc( Reference.MOD_ID, "textures/gui/logo.png" );
+    private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
+    private final ResourceLocation logo = XP.getResLoc(Reference.MOD_ID, "textures/gui/logo.png");
     private static TileButton exitButton;
 
     Minecraft mc = Minecraft.getInstance();
@@ -37,7 +38,7 @@ public class InfoScreen extends Screen
     private List<ListButtonBig> tileButtons;
     private UUID uuid;
 
-    public InfoScreen( UUID uuid, Component titleIn )
+    public InfoScreen(UUID uuid, Component titleIn)
     {
         super(titleIn);
         this.uuid = uuid;
@@ -54,61 +55,61 @@ public class InfoScreen extends Screen
     {
         tileButtons = new ArrayList<>();
 
-        x = ( (sr.getGuiScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getGuiScaledHeight() / 2) - (boxHeight / 2) );
+        x = ((sr.getGuiScaledWidth() / 2) - (boxWidth / 2));
+        y = ((sr.getGuiScaledHeight() / 2) - (boxHeight / 2));
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getInstance().setScreen( new MainScreen( uuid, new TranslatableComponent( "pmmo.potato" ) ) );
+            Minecraft.getInstance().setScreen(new MainScreen(uuid, new TranslatableComponent("pmmo.potato")));
         });
 
-        ListButtonBig discordButton = new ListButtonBig( 0, 0, 1, 9, "FAQ", new TranslatableComponent( "pmmo.faq" ).getString(), "", button ->
+        ListButtonBig discordButton = new ListButtonBig(0, 0, 1, 9, "FAQ", new TranslatableComponent("pmmo.faq").getString(), "", button ->
         {
-            promptOpenLink( "https://docs.google.com/document/d/1njMEjYR9aPvwLsTsH2eALV6ci4lNEULEoYlm83n4iOc" );
+            promptOpenLink("https://docs.google.com/document/d/1njMEjYR9aPvwLsTsH2eALV6ci4lNEULEoYlm83n4iOc");
         });
 
-        ListButtonBig featuresButton = new ListButtonBig( 0, 0, 1, 9, "Features", new TranslatableComponent( "pmmo.features" ).getString(), "", button ->
+        ListButtonBig featuresButton = new ListButtonBig(0, 0, 1, 9, "Features", new TranslatableComponent("pmmo.features").getString(), "", button ->
         {
-            promptOpenLink( "https://harmonised7.github.io/minecraft/pmmo/Features.html" );
+            promptOpenLink("https://harmonised7.github.io/minecraft/pmmo/Features.html");
         });
 
-        ListButtonBig customizeButton = new ListButtonBig( 0, 0, 1, 10, "Customize", new TranslatableComponent( "pmmo.customize" ).getString(), "", button ->
+        ListButtonBig customizeButton = new ListButtonBig(0, 0, 1, 10, "Customize", new TranslatableComponent("pmmo.customize").getString(), "", button ->
         {
-            promptOpenLink( "https://docs.google.com/document/d/1OaNxk1I3PTBfdGV5PlHqUpaENTkr49Tg26YhK3N5zTQ" );
+            promptOpenLink("https://docs.google.com/document/d/1OaNxk1I3PTBfdGV5PlHqUpaENTkr49Tg26YhK3N5zTQ");
         });
 
-        ListButtonBig patreonButton = new ListButtonBig( 0, 0, 1, 14, "Patreon", new TranslatableComponent( "pmmo.patreon" ).getString(), "", button ->
+        ListButtonBig patreonButton = new ListButtonBig(0, 0, 1, 14, "Patreon", new TranslatableComponent("pmmo.patreon").getString(), "", button ->
         {
-            promptOpenLink( "https://patreon.com/harmonised" );
+            promptOpenLink("https://patreon.com/harmonised");
         });
 
-        ListButtonBig donateButton = new ListButtonBig( 0, 0, 1, 13, "Donate", new TranslatableComponent( "pmmo.donate" ).getString(), "", button ->
+        ListButtonBig donateButton = new ListButtonBig(0, 0, 1, 13, "Donate", new TranslatableComponent("pmmo.donate").getString(), "", button ->
         {
-            promptOpenLink( "https://ko-fi.com/harmonised" );
+            promptOpenLink("https://ko-fi.com/harmonised");
         });
 
-        ListButtonBig curseButton = new ListButtonBig( 0, 0, 1, 12, "CurseForge", new TranslatableComponent( "pmmo.curseforge" ).getString(), "", button ->
+        ListButtonBig curseButton = new ListButtonBig(0, 0, 1, 12, "CurseForge", new TranslatableComponent("pmmo.curseforge").getString(), "", button ->
         {
-            promptOpenLink( "https://curseforge.com/minecraft/mc-mods/project-mmo" );
+            promptOpenLink("https://curseforge.com/minecraft/mc-mods/project-mmo");
         });
 
 
         addWidget(exitButton);
 
-        tileButtons.add( discordButton );
-        tileButtons.add( featuresButton );
-        tileButtons.add( customizeButton );
-        tileButtons.add( patreonButton );
-        tileButtons.add( donateButton );
-        tileButtons.add( curseButton );
+        tileButtons.add(discordButton);
+        tileButtons.add(featuresButton);
+        tileButtons.add(customizeButton);
+        tileButtons.add(patreonButton);
+        tileButtons.add(donateButton);
+        tileButtons.add(curseButton);
 
-        for( int i = 0; i < tileButtons.size(); i++ )
+        for(int i = 0; i < tileButtons.size(); i++)
         {
-            ListButtonBig button = tileButtons.get( i );
+            ListButtonBig button = tileButtons.get(i);
             int mode = i % 3;
             int buttonX = -(button.getWidth()+2)/2 + sr.getGuiScaledWidth()/2;
             int buttonY = y + 20 + (i/3) * 100;
-            switch( mode )
+            switch(mode)
             {
                 case 0:
                     buttonX -= 50;
@@ -124,62 +125,62 @@ public class InfoScreen extends Screen
             }
             button.x = buttonX;
             button.y = buttonY;
-            addWidget( button );
+            addWidget(button);
         }
     }
 
-    public void promptOpenLink( String link )
+    public void promptOpenLink(String link)
     {
-        mc.setScreen(new ConfirmLinkScreen( (open) ->
+        mc.setScreen(new ConfirmLinkScreen((open) ->
         {
             if (open)
-                Util.getPlatform().openUri( link );
+                Util.getPlatform().openUri(link);
 
             this.minecraft.setScreen(this);
-        }, link, true) );
+        }, link, true));
     }
 
     @Override
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( stack,  1 );
-        super.render( stack, mouseX, mouseY, partialTicks );
+        renderBackground(stack,  1);
+        super.render(stack, mouseX, mouseY, partialTicks);
 
-        x = ( (sr.getGuiScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getGuiScaledHeight() / 2) - (boxHeight / 2) );
+        x = ((sr.getGuiScaledWidth() / 2) - (boxWidth / 2));
+        y = ((sr.getGuiScaledHeight() / 2) - (boxHeight / 2));
 
-        for( ListButtonBig button : tileButtons )
+        for(ListButtonBig button : tileButtons)
         {
-            if( mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64 )
+            if(mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64)
             {
-                renderTooltip( stack, new TextComponent( button.playerName ), mouseX, mouseY );
+                renderTooltip(stack, new TextComponent(button.playerName), mouseX, mouseY);
                 break;
             }
         }
 
-        if( font.width( title.getString() ) > 220 )
-            drawCenteredString( stack, font, title.getString(), sr.getGuiScaledWidth() / 2, y - 10, 0xffffff );
+        if(font.width(title.getString()) > 220)
+            drawCenteredString(stack, font, title.getString(), sr.getGuiScaledWidth() / 2, y - 10, 0xffffff);
         else
-            drawCenteredString( stack, font, title.getString(), sr.getGuiScaledWidth() / 2, y - 5, 0xffffff );
+            drawCenteredString(stack, font, title.getString(), sr.getGuiScaledWidth() / 2, y - 5, 0xffffff);
     }
 
     @Override
-    public void renderBackground( PoseStack stack, int p_renderBackground_1_)
+    public void renderBackground(PoseStack stack, int p_renderBackground_1_)
     {
         if (this.mc != null)
         {
-            this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
+            this.fillGradient(stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333);
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new ScreenEvent.BackgroundDrawnEvent(this, stack));
         }
         else
-            this.renderBackground( stack, p_renderBackground_1_ );
+            this.renderBackground(stack, p_renderBackground_1_);
 
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindForSetup( box );
+        Minecraft.getInstance().getTextureManager().bindForSetup(box);
         RenderSystem.disableBlend();
-        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);
     }
 
     @Override
@@ -191,7 +192,7 @@ public class InfoScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        if( button == 1 )
+        if(button == 1)
         {
             exitButton.onPress();
             return true;

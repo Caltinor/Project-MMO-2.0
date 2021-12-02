@@ -2,7 +2,7 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.util.XP;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -11,7 +11,7 @@ public class MessageKeypress
     int key;
     boolean keyState;
 
-    public MessageKeypress( boolean keyState, int key )
+    public MessageKeypress(boolean keyState, int key)
     {
         this.keyState = keyState;
         this.key = key;
@@ -21,7 +21,7 @@ public class MessageKeypress
     {
     }
 
-    public static MessageKeypress decode(FriendlyByteBuf buf )
+    public static MessageKeypress decode(FriendlyByteBuf buf)
     {
         MessageKeypress packet = new MessageKeypress();
         packet.keyState = buf.readBoolean();
@@ -30,24 +30,24 @@ public class MessageKeypress
         return packet;
     }
 
-    public static void encode(MessageKeypress packet, FriendlyByteBuf buf )
+    public static void encode(MessageKeypress packet, FriendlyByteBuf buf)
     {
-        buf.writeBoolean( packet.keyState );
-        buf.writeInt( packet.key );
+        buf.writeBoolean(packet.keyState);
+        buf.writeInt(packet.key);
     }
 
-    public static void handlePacket(MessageKeypress packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageKeypress packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
             UUID playerUUID = ctx.get().getSender().getUUID();
 
-            if( packet.key == 1 )
+            if(packet.key == 1)
             {
-                if( packet.keyState )
-                    XP.isVeining.add( playerUUID );
+                if(packet.keyState)
+                    XP.isVeining.add(playerUUID);
                 else
-                    XP.isVeining.remove( playerUUID );
+                    XP.isVeining.remove(playerUUID);
             }
         });
         ctx.get().setPacketHandled(true);

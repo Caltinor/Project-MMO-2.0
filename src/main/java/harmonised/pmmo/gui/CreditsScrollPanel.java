@@ -23,7 +23,7 @@ public class CreditsScrollPanel extends ScrollPanel
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
 
-    public CreditsScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, List<ListButtonBig> buttons )
+    public CreditsScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, List<ListButtonBig> buttons)
     {
         super(client, width, height, top, left);
         this.jType = jType;
@@ -44,7 +44,7 @@ public class CreditsScrollPanel extends ScrollPanel
     {
         int height = 48;
 
-        for( int i = 0; i < buttons.size(); i += 3 )
+        for(int i = 0; i < buttons.size(); i += 3)
         {
             height += 92;
         }
@@ -53,32 +53,32 @@ public class CreditsScrollPanel extends ScrollPanel
     }
 
     @Override
-    protected void drawPanel( PoseStack stack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY)
+    protected void drawPanel(PoseStack stack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY)
     {
         ListButtonBig button;
 
         int accumulativeHeight = 0;
 
-        for( int i = 0; i < buttons.size(); i++ )
+        for(int i = 0; i < buttons.size(); i++)
         {
-            button = buttons.get( i );
+            button = buttons.get(i);
 
-            if( (i + 1) % 3 == 1 )
+            if((i + 1) % 3 == 1)
             {
                 button.x = sr.getGuiScaledWidth() / 2 - 32;
-                button.y = relativeY + 12 + ( i / 3) * 92;
+                button.y = relativeY + 12 + (i / 3) * 92;
             }
             else
             {
-                button.x = sr.getGuiScaledWidth() / 2 - 32 + ( (i + 1) % 3 == 2 ? -28 : +28 );
-                button.y = relativeY + 12 + 46 + ( i / 3) * 92;
+                button.x = sr.getGuiScaledWidth() / 2 - 32 + ((i + 1) % 3 == 2 ? -28 : +28);
+                button.y = relativeY + 12 + 46 + (i / 3) * 92;
             }
 
-            if( accumulativeHeight + buttons.get( i ).getHeight() > scrollDistance && accumulativeHeight - height - 32 <= scrollDistance )
+            if(accumulativeHeight + buttons.get(i).getHeight() > scrollDistance && accumulativeHeight - height - 32 <= scrollDistance)
             {
-                button.render( stack,  mouseX, mouseY, 0 );
+                button.render(stack,  mouseX, mouseY, 0);
             }
-            if( i % 3 == 0 )
+            if(i % 3 == 0)
                 accumulativeHeight += 92;
         }
     }
@@ -94,7 +94,7 @@ public class CreditsScrollPanel extends ScrollPanel
         return (int) this.scrollDistance;
     }
 
-    public void setScroll( int scroll )
+    public void setScroll(int scroll)
     {
         this.scrollDistance = scroll;
     }
@@ -115,14 +115,14 @@ public class CreditsScrollPanel extends ScrollPanel
     }
 
     @Override
-    public void render( PoseStack stack,  int mouseX, int mouseY, float partialTicks)
+    public void render(PoseStack stack,  int mouseX, int mouseY, float partialTicks)
     {
 //        this.drawBackground();
 
 //        if (Minecraft.getInstance().world != null)
 //        {
-//            this.fillGradient( stack, 0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
-//            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super ) );
+//            this.fillGradient(stack, 0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
+//            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new ScreenEvent.BackgroundDrawnEvent(super));
 //        }
 
         Tesselator tess = Tesselator.getInstance();
@@ -153,7 +153,7 @@ public class CreditsScrollPanel extends ScrollPanel
 //        }
 
         int baseY = this.top + border - (int)this.scrollDistance;
-        this.drawPanel( stack, right, baseY, tess, mouseX, mouseY);
+        this.drawPanel(stack, right, baseY, tess, mouseX, mouseY);
 
         RenderSystem.disableDepthTest();
 

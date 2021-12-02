@@ -12,9 +12,9 @@ public class XpEvent extends PlayerEvent
     private String sourceName;
     private boolean skip, ignoreBonuses, causedByParty;
 
-    public XpEvent( Player player, String skill, String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty )
+    public XpEvent(Player player, String skill, String sourceName, double amount, boolean skip, boolean ignoreBonuses, boolean causedByParty)
     {
-        super( player );
+        super(player);
         this.skill = skill;
         this.amount = amount;
         this.sourceName = sourceName;
@@ -31,12 +31,12 @@ public class XpEvent extends PlayerEvent
 
     public int startLevel()
     {
-        return XP.levelAtXp( amount );
+        return XP.levelAtXp(amount);
     }
 
     public int endLevel()
     {
-        return XP.levelAtXp( amount + APIUtils.getXp( skill, getPlayer() ) );
+        return XP.levelAtXp(amount + APIUtils.getXp(skill, getPlayer()));
     }
 
     public String getSkill()

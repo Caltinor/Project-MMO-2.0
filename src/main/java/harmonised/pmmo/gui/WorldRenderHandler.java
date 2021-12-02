@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import com.mojang.math.Vector3f;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.*;
@@ -36,31 +36,31 @@ public class WorldRenderHandler
     private static double d;
 
     @SubscribeEvent
-    public void handleWorldRender( RenderWorldLastEvent event )
+    public void handleWorldRender(RenderLevelLastEvent event)
     {
         currTime = System.nanoTime();
         d = (currTime - lastTime) / 1000000000D;
-        renderWorldText( event );
-        renderWorldXpDrops( event );
-        if( XP.isPlayerSurvival( mc.player ) )
-            drawBoxHighlights( event );
+        renderWorldText(event);
+        renderWorldXpDrops(event);
+        if(XP.isPlayerSurvival(mc.player))
+            drawBoxHighlights(event);
     }
 
-    public static void drawBoxHighlights( RenderWorldLastEvent event )
+    public static void drawBoxHighlights(RenderLevelLastEvent event)
     {
-        PoseStack stack = event.getMatrixStack();
+        PoseStack stack = event.getPoseStack();
         Vec3 cameraPos = mc.getEntityRenderDispatcher().camera.getPosition();
         stack.pushPose();
-        stack.translate( -cameraPos.x(), -cameraPos.y(), -cameraPos.z() );
+        stack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
-        VertexConsumer builder = buffer.getBuffer( RenderType.lines() );
+        VertexConsumer builder = buffer.getBuffer(RenderType.lines());
 
-        if( XPOverlayGUI.getVeinKey() && XPOverlayGUI.getLookingAtBlock() && XPOverlayGUI.getMetToolReq() && XPOverlayGUI.getCanBreak() )
+        if(XPOverlayGUI.getVeinKey() && XPOverlayGUI.getLookingAtBlock() && XPOverlayGUI.getMetToolReq() && XPOverlayGUI.getCanBreak())
         {
-            for( BlockPos pos : XPOverlayGUI.veinShapeSet )
+            for(BlockPos pos : XPOverlayGUI.veinShapeSet)
             {
-                drawBoxHighlight( stack, builder, pos );
-//                System.out.println( pos );
+                drawBoxHighlight(stack, builder, pos);
+//                System.out.println(pos);
             }
         }
         stack.popPose();
@@ -68,7 +68,7 @@ public class WorldRenderHandler
         buffer.endBatch();
     }
 
-    public static void drawBoxHighlight( PoseStack stack, VertexConsumer builder, BlockPos pos )
+    public static void drawBoxHighlight(PoseStack stack, VertexConsumer builder, BlockPos pos)
     {
         stack.pushPose();
         Matrix4f matrix4f = stack.last().pose();
@@ -77,151 +77,151 @@ public class WorldRenderHandler
         int blue = 255;
         int alpha = 255;
 
-        for( int i = 0; i < 12; i++ )
+        for(int i = 0; i < 12; i++)
         {
             int mode = i/4, j = i%4;
             float modulus = j%2, divide = j/2;
-            switch( mode )
+            switch(mode)
             {
                 case 0:
-                    builder.vertex( matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() ).color( red, green, blue, alpha ).endVertex();
-                    builder.vertex( matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() + 1 ).color( red, green, blue, alpha ).endVertex();
+                    builder.vertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ()).color(red, green, blue, alpha).endVertex();
+                    builder.vertex(matrix4f, pos.getX() + modulus, pos.getY() + divide, pos.getZ() + 1).color(red, green, blue, alpha).endVertex();
                     break;
 
                 case 1:
-                    builder.vertex( matrix4f, pos.getX(), pos.getY() + modulus, pos.getZ() + divide ).color( red, green, blue, alpha ).endVertex();
-                    builder.vertex( matrix4f, pos.getX() + 1, pos.getY() + modulus, pos.getZ() + divide ).color( red, green, blue, alpha ).endVertex();
+                    builder.vertex(matrix4f, pos.getX(), pos.getY() + modulus, pos.getZ() + divide).color(red, green, blue, alpha).endVertex();
+                    builder.vertex(matrix4f, pos.getX() + 1, pos.getY() + modulus, pos.getZ() + divide).color(red, green, blue, alpha).endVertex();
                     break;
 
                 case 2:
-                    builder.vertex( matrix4f, pos.getX() + divide, pos.getY(), pos.getZ() + modulus ).color( red, green, blue, alpha ).endVertex();
-                    builder.vertex( matrix4f, pos.getX() + divide, pos.getY() + 1, pos.getZ() + modulus ).color( red, green, blue, alpha ).endVertex();
+                    builder.vertex(matrix4f, pos.getX() + divide, pos.getY(), pos.getZ() + modulus).color(red, green, blue, alpha).endVertex();
+                    builder.vertex(matrix4f, pos.getX() + divide, pos.getY() + 1, pos.getZ() + modulus).color(red, green, blue, alpha).endVertex();
                     break;
             }
         }
         stack.popPose();
     }
 
-    public static void drawText( PoseStack stack, Vec3 cameraPos, Vec3 textPos, String text, float scale, float rotation, int color )
+    public static void drawText(PoseStack stack, Vec3 cameraPos, Vec3 textPos, String text, float scale, float rotation, int color)
     {
         stack.pushPose();
-        float textWidth = fr.width( text );
+        float textWidth = fr.width(text);
         float textOffset = -textWidth/2;
-        stack.translate( textPos.x() - cameraPos.x(), textPos.y() - cameraPos.y(), textPos.z() - cameraPos.z() );
-//            stack.translate( 20 - pos.getX(), 4 - pos.getY(), 12 - pos.getZ() );
-        stack.mulPose( mc.getEntityRenderDispatcher().cameraOrientation() );
-        stack.mulPose( Vector3f.ZP.rotationDegrees( rotation ) );
-        stack.scale( -scale, -scale, scale );
-        FormattedCharSequence reorderingProcessor = FormattedCharSequence.forward( text, XP.getColorStyle( color ) );
-        fr.drawInBatch( reorderingProcessor, textOffset, 0, color, true, stack.last().pose(), buffer, false, color, 225 );
-//        stack.scale( 1, -1, 1 );
-//        fr.drawInBatch( a, textOffset, 0, 0xffffff, false, stack.getLast().getMatrix(), buffer, false, 0xffffff, 2 );
+        stack.translate(textPos.x() - cameraPos.x(), textPos.y() - cameraPos.y(), textPos.z() - cameraPos.z());
+//            stack.translate(20 - pos.getX(), 4 - pos.getY(), 12 - pos.getZ());
+        stack.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
+        stack.mulPose(Vector3f.ZP.rotationDegrees(rotation));
+        stack.scale(-scale, -scale, scale);
+        FormattedCharSequence reorderingProcessor = FormattedCharSequence.forward(text, XP.getColorStyle(color));
+        fr.drawInBatch(reorderingProcessor, textOffset, 0, color, true, stack.last().pose(), buffer, false, color, 225);
+//        stack.scale(1, -1, 1);
+//        fr.drawInBatch(a, textOffset, 0, 0xffffff, false, stack.getLast().getMatrix(), buffer, false, 0xffffff, 2);
         stack.popPose();
     }
 
-    private static void renderWorldText( RenderWorldLastEvent event )
+    private static void renderWorldText(RenderLevelLastEvent event)
     {
         //        temp1++;
         Level world = mc.level;
-        if( world == null )
+        if(world == null)
             return;
 //        ResourceLocation dimResLoc = world.getDimensionType().getEffects();
-        ResourceLocation dimResLoc = XP.getDimResLoc( world );
-        if( !worldTexts.containsKey( dimResLoc ) )
+        ResourceLocation dimResLoc = XP.getDimResLoc(world);
+        if(!worldTexts.containsKey(dimResLoc))
             return;
-        List<WorldText> dimTexts = worldTexts.get( dimResLoc );
-        PoseStack stack = event.getMatrixStack();
+        List<WorldText> dimTexts = worldTexts.get(dimResLoc);
+        PoseStack stack = event.getPoseStack();
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
         Vec3 cameraPos = mc.gameRenderer.getMainCamera().getPosition();
 
         stack.pushPose();
-        for( int i = dimTexts.size()-1; i >= 0; i-- )
+        for(int i = dimTexts.size()-1; i >= 0; i--)
         {
-            WorldText worldText = dimTexts.get( i );
-            if( worldText == null )
+            WorldText worldText = dimTexts.get(i);
+            if(worldText == null)
                 continue;
-            if( !worldText.tick( d * ( 1 + i*0.01 ) ) )
+            if(!worldText.tick(d * (1 + i*0.01)))
             {
-                dimTexts.remove( i );
+                dimTexts.remove(i);
                 continue;
             }
-            drawText( stack, cameraPos, worldText.getPos(), worldText.getText(), (float) worldText.getSize(), worldText.getRotation(), worldText.getColor() );
+            drawText(stack, cameraPos, worldText.getPos(), worldText.getText(), (float) worldText.getSize(), worldText.getRotation(), worldText.getColor());
         }
         stack.popPose();
         buffer.endBatch();
         lastTime = currTime;
     }
 
-    private static void renderWorldXpDrops( RenderWorldLastEvent event )
+    private static void renderWorldXpDrops(RenderLevelLastEvent event)
     {
         //        temp1++;
         Minecraft mc = Minecraft.getInstance();
         Level world = mc.level;
-        if( world == null )
+        if(world == null)
             return;
 //        ResourceLocation dimResLoc = world.getDimensionType().getEffects();
-        ResourceLocation dimResLoc = XP.getDimResLoc( world );
-        if( !xpDrops.containsKey( dimResLoc ) )
+        ResourceLocation dimResLoc = XP.getDimResLoc(world);
+        if(!xpDrops.containsKey(dimResLoc))
             return;
-        List<WorldXpDrop> dimXpDrops = xpDrops.get( dimResLoc );
-        PoseStack stack = event.getMatrixStack();
+        List<WorldXpDrop> dimXpDrops = xpDrops.get(dimResLoc);
+        PoseStack stack = event.getPoseStack();
         Vec3 cameraPos = mc.gameRenderer.getMainCamera().getPosition();
 
         stack.pushPose();
-        for( int i = dimXpDrops.size()-1; i >= 0; i-- )
+        for(int i = dimXpDrops.size()-1; i >= 0; i--)
         {
-            WorldXpDrop xpDrop = dimXpDrops.get( i );
-            if( xpDrop == null )
+            WorldXpDrop xpDrop = dimXpDrops.get(i);
+            if(xpDrop == null)
                 continue;
-            if( xpDrop.xp <= 0 )
+            if(xpDrop.xp <= 0)
             {
-                dimXpDrops.remove( i );
+                dimXpDrops.remove(i);
                 continue;
             }
-            float scale = 0.02f * ( xpDrop.xp / xpDrop.getStartXp() ) * xpDrop.getSize() * WorldText.worldXpDropsSizeMultiplier;
+            float scale = 0.02f * (xpDrop.xp / xpDrop.getStartXp()) * xpDrop.getSize() * WorldText.worldXpDropsSizeMultiplier;
             int color = xpDrop.getColor();
-            String text = "+" + DP.dpSoft( xpDrop.xp );
-            if( WorldText.worldXpDropsShowSkill )
-                text += " " + new TranslatableComponent( xpDrop.getSkill() ).getString();
-            drawText( stack, cameraPos, xpDrop.getPos(), text, scale, xpDrop.getRotation(), color );
-            xpDrop.xp -= Math.max( 0.01523, xpDrop.xp * xpDrop.getDecaySpeed() * ( 1 + i * 0.01 ) ) * WorldText.worldXpDropsDecaySpeedMultiplier * d;
+            String text = "+" + DP.dpSoft(xpDrop.xp);
+            if(WorldText.worldXpDropsShowSkill)
+                text += " " + new TranslatableComponent(xpDrop.getSkill()).getString();
+            drawText(stack, cameraPos, xpDrop.getPos(), text, scale, xpDrop.getRotation(), color);
+            xpDrop.xp -= Math.max(0.01523, xpDrop.xp * xpDrop.getDecaySpeed() * (1 + i * 0.01)) * WorldText.worldXpDropsDecaySpeedMultiplier * d;
         }
         stack.popPose();
         buffer.endBatch();
         lastTime = currTime;
     }
 
-    public static void addWorldXpDropOffline( WorldXpDrop xpDrop )
+    public static void addWorldXpDropOffline(WorldXpDrop xpDrop)
     {
         Minecraft mc = Minecraft.getInstance();
-//        System.out.println( "remote xp drop added at " + xpDrop.getPos() );
+//        System.out.println("remote xp drop added at " + xpDrop.getPos());
         Player player = mc.player;
-        if( player != null && Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
+        if(player != null && Config.getPreferencesMap(player).getOrDefault("worldXpDropsEnabled", 1D) != 0)
         {
             ResourceLocation dimResLoc = xpDrop.getWorldResLoc();
-            if( !xpDrops.containsKey( dimResLoc ) )
+            if(!xpDrops.containsKey(dimResLoc))
             {
-                xpDrops.put( dimResLoc, new ArrayList<>() );
+                xpDrops.put(dimResLoc, new ArrayList<>());
                 lastTime = System.nanoTime();
             }
-            xpDrops.get( dimResLoc ).add( xpDrop );
+            xpDrops.get(dimResLoc).add(xpDrop);
         }
     }
 
-    public static void addWorldTextOffline( WorldText worldText )
+    public static void addWorldTextOffline(WorldText worldText)
     {
         Minecraft mc = Minecraft.getInstance();
-//        System.out.println( "remote xp drop added at " + xpDrop.getPos() );
+//        System.out.println("remote xp drop added at " + xpDrop.getPos());
         Player player = mc.player;
-//        if( player != null && Config.getPreferencesMap( player ).getOrDefault( "worldXpDropsEnabled", 1D ) != 0 )
+//        if(player != null && Config.getPreferencesMap(player).getOrDefault("worldXpDropsEnabled", 1D) != 0)
 //        {
             ResourceLocation dimResLoc = worldText.getWorldResLoc();
-            if( !worldTexts.containsKey( dimResLoc ) )
+            if(!worldTexts.containsKey(dimResLoc))
             {
-                worldTexts.put( dimResLoc, new ArrayList<>() );
+                worldTexts.put(dimResLoc, new ArrayList<>());
                 lastTime = System.nanoTime();
             }
-            worldTexts.get( dimResLoc ).add( worldText );
+            worldTexts.get(dimResLoc).add(worldText);
 //        }
     }
 }
