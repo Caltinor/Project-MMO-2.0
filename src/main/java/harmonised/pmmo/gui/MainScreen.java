@@ -11,30 +11,25 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.client.event.ScreenEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
-public class MainScreen extends Screen
+public class MainScreen extends PmmoScreen
 {
-    private final List<GuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     private final ResourceLocation logo = XP.getResLoc(Reference.MOD_ID, "textures/gui/logo.png");
     private final ResourceLocation star = XP.getResLoc(Reference.MOD_ID, "textures/gui/star.png");
     private static TileButton exitButton;
     public static Map<JType, Integer> scrollAmounts = new HashMap<>();
 
-    Minecraft mc = Minecraft.getInstance();
-    Window sr = mc.getWindow();
-    Font font = mc.font;
-    private int boxWidth = 256;
-    private int boxHeight = 256;
     private int x;
     private int y;
-    private List<TileButton> tileButtons;
     private UUID uuid;
 
     public MainScreen(UUID uuid, Component titleIn)
@@ -125,17 +120,19 @@ public class MainScreen extends Screen
         x = ((sr.getGuiScaledWidth() / 2) - (boxWidth / 2));
         y = ((sr.getGuiScaledHeight() / 2) - (boxHeight / 2));
 
-//        fillGradient(stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
+        fillGradient(stack, x + 20, y + 30, x + 232, y + 235, 0x22444444, 0x33222222);
 
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderTexture(0, logo);
+        this.blit(stack,  sr.getGuiScaledWidth() / 2 - 100, sr.getGuiScaledHeight() / 2 - 80, 0, 0,  200, 60);
+
+        for(TileButton button : tileButtons)
+            button.render(stack, mouseX, mouseY, partialTicks);
         for(TileButton button : tileButtons)
         {
             if(mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32)
                 renderTooltip(stack, new TranslatableComponent(button.transKey), mouseX, mouseY);
         }
-
-        RenderSystem.enableBlend();
-        mc.getTextureManager().bindForSetup(logo);
-        this.blit(stack,  sr.getGuiScaledWidth() / 2 - 100, sr.getGuiScaledHeight() / 2 - 80, 0, 0,  200, 60);
     }
 
     @Override
@@ -149,10 +146,9 @@ public class MainScreen extends Screen
         else
             this.renderBackground(stack, p_renderBackground_1_);
 
-
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindForSetup(box);
+        RenderSystem.setShaderTexture(0, box);
         RenderSystem.disableBlend();
         this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);
     }

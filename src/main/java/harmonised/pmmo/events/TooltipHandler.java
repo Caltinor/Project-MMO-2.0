@@ -393,7 +393,7 @@ public class TooltipHandler
                             Map<String, Double> salvageToItemMap;
                             int reqLevel, finalLevel, salvageMax, potentialReturnAmount;
                             double baseChance, xpPerItem, chancePerLevel, maxSalvageMaterialChance, chance, durabilityPercent;
-                            String key = (String) salvageToArray[ salvageToArrayPos ];
+                            String key = (String) salvageToArray[salvageToArrayPos];
 
                             salvageToItemMap = salvageInfo.get(key);
                             reqLevel = (int) Math.floor(salvageToItemMap.get("levelReq"));
@@ -440,7 +440,7 @@ public class TooltipHandler
                             tooltip.add(new TranslatableComponent("pmmo.canBeSalvagedFrom").setStyle(XP.textStyle.get("green")));
                             level = Skill.getLevel(Skill.SMITHING.toString(), player);
 
-                            String key = (String) salvageFromArray[ salvageFromArrayPos ];
+                            String key = (String) salvageFromArray[salvageFromArrayPos];
                             String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
 
                             Map<String, Double> salvageFromMap = salvageFrom.get(key);
@@ -461,7 +461,7 @@ public class TooltipHandler
                             Map<String, Double> salvageToItemMap;
                             double chance, xpPerItem;
                             int minCount, maxCount;
-                            String key = (String) treasureToArray[ treasureToArrayPos ];
+                            String key = (String) treasureToArray[treasureToArrayPos];
 
                             salvageToItemMap = treasureInfo.get(key);
                             chance = Util.mapCapped(level, salvageToItemMap.get("startLevel"), salvageToItemMap.get("endLevel"), salvageToItemMap.get("startChance"), salvageToItemMap.get("endChance"));
@@ -491,7 +491,7 @@ public class TooltipHandler
                             tooltip.add(new TranslatableComponent("pmmo.treasureFrom").setStyle(XP.textStyle.get("green")));
                             level = Skill.getLevel(Skill.EXCAVATION.toString(), player);
 
-                            String key = (String) treasureFromArray[ treasureFromArrayPos ];
+                            String key = (String) treasureFromArray[treasureFromArrayPos];
                             String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
 
                             Map<String, Double> treasureFromMap = treasureFromInfo.get(key);

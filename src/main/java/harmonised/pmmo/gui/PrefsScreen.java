@@ -1,20 +1,13 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.ConfigHelper;
-import harmonised.pmmo.config.JType;
+import harmonised.pmmo.config.*;
 import harmonised.pmmo.events.PlayerTickHandler;
 import harmonised.pmmo.skills.Skill;
-import harmonised.pmmo.util.XP;
-import harmonised.pmmo.util.DP;
-import harmonised.pmmo.util.Reference;
-import com.mojang.blaze3d.platform.Window;
+import harmonised.pmmo.util.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
@@ -24,20 +17,16 @@ import net.minecraftforge.client.event.ScreenEvent;
 
 import java.util.*;
 
-public class PrefsScreen extends Screen
+public class PrefsScreen extends PmmoScreen
 {
     public static Map<String, Double> prefsMap;
-    private final List<GuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
+        private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     private int i;
     private double value;
     private static Button exitButton;
 
-    Minecraft minecraft = Minecraft.getInstance();
-    Window sr = minecraft.getWindow();
-    Font font = minecraft.font;
-    private int boxWidth = 256;
-    private int boxHeight = 256;
+    
+    
     private int x, y, scrollX, scrollY, buttonX;
     private PrefsScrollPanel scrollPanel;
     private final JType jType;
@@ -234,7 +223,7 @@ public class PrefsScreen extends Screen
         {
             boxHeight = 256;
             boxWidth = 256;
-            Minecraft.getInstance().getTextureManager().bindForSetup(box);
+            RenderSystem.setShaderTexture(0, box);
             this.fillGradient(stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333);
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new ScreenEvent.BackgroundDrawnEvent(this, stack));
             this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);

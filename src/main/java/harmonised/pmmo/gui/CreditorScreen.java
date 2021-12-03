@@ -18,23 +18,19 @@ import net.minecraftforge.client.event.ScreenEvent;
 
 import java.util.*;
 
-public class CreditorScreen extends Screen
+public class CreditorScreen extends PmmoScreen
 {
     public static final HashMap<String, String> uuidName = new HashMap<>();
-    private final List<GuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
+        private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     public static final Map<String, List<String>> creditorsInfo = new HashMap<>();
     public static Map<String, Integer> colors = new HashMap<>();
     private static TileButton exitButton;
 
-    Minecraft minecraft = Minecraft.getInstance();
-    Window sr = minecraft.getWindow();
-    Font font = minecraft.font;
-    private int boxWidth = 256;
-    private int boxHeight = 256;
+    
+    
     private int x;
     private int y;
-    private List<TileButton> tileButtons;
+    
 //    private UUID uuid;
     public String playerName;
     private int lastScroll;
@@ -122,7 +118,7 @@ public class CreditorScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindForSetup(box);
+        RenderSystem.setShaderTexture(0, box);
         RenderSystem.disableBlend();
         this.blit(stack, x, y, 0, 0, boxWidth, boxHeight);
     }

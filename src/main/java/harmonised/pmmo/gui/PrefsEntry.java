@@ -1,13 +1,15 @@
 package harmonised.pmmo.gui;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
-public class PrefsEntry
+public class PrefsEntry implements Widget
 {
     public static Font font = Minecraft.getInstance().font;
     public PrefsSlider slider;
@@ -126,5 +128,13 @@ public class PrefsEntry
     {
         this.slider.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
         this.button.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
+    {
+        slider.render(stack, mouseX, mouseY, partialTicks);
+        button.render(stack, mouseX, mouseY, partialTicks);
+        textField.render(stack, mouseX, mouseY, partialTicks);
     }
 }

@@ -65,18 +65,18 @@ public class TileButton extends Button
     @Override
     public void renderButton(PoseStack stack, int p_renderButton_1_, int p_renderButton_2_, float p_renderButton_3_)
     {
-        Minecraft minecraft = Minecraft.getInstance();
-//        FontRenderer fontrenderer = minecraft.fontRenderer;
+        Minecraft mc = Minecraft.getInstance();
+//        FontRenderer fontrenderer = mc.fontRenderer;
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, this.alpha);
 //        int i = this.getYImage(this.isHoveredOrFocused());
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        minecraft.getTextureManager().bindForSetup(buttons);
+        RenderSystem.setShaderTexture(0, buttons);
         this.blit(stack, this.x, this.y, this.offsetOne + (this.isHoveredOrFocused() ? 32 : 0), this.elementOne, this.width, this.height);
-        minecraft.getTextureManager().bindForSetup(page == 0 ? items : items2);
+        RenderSystem.setShaderTexture(0, page == 0 ? items : items2);
         this.blit(stack, this.x, this.y, this.offsetTwo + (this.isHoveredOrFocused() ? 32 : 0), this.elementTwo, this.width, this.height);
-        this.renderBg(stack, minecraft, p_renderButton_1_, p_renderButton_2_);
+        this.renderBg(stack,mc, p_renderButton_1_, p_renderButton_2_);
 //        int j = getFGColor();
 //        drawCenteredString(stack, fontrenderer, new TranslatableComponent(transKey).getString(), this.x + this.width / 2, this.y + (this.height - 8) / 2, 0xffffff);
     }

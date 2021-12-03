@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -36,18 +37,14 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
-public class ListScreen extends Screen
+public class ListScreen extends PmmoScreen
 {
-    private final List<GuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
+        private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static final Style greenColor = XP.textStyle.get("green");
     private static Button exitButton;
 
-    Minecraft minecraft = Minecraft.getInstance();
-    Window sr = minecraft.getWindow();
-    Font font = minecraft.font;
-    private int boxWidth = 256;
-    private int boxHeight = 256;
+    
+    
     private int x, y, scrollX, scrollY, buttonX, buttonY, accumulativeHeight, buttonsSize, buttonsLoaded, futureHeight, minCount, maxCount;
     private ListScrollPanel scrollPanel;
     private EditBox filterTextField;
@@ -1193,7 +1190,7 @@ public class ListScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindForSetup(box);
+        RenderSystem.setShaderTexture(0, box);
 
         this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);
     }

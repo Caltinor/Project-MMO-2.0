@@ -27,11 +27,11 @@ public class PmmoCommand
 
     public static void init()
     {
-        suggestSkill = new String[ Skill.getSkills().size() ];
+        suggestSkill = new String[Skill.getSkills().size()];
         int i = 0;
         for(String skill : Skill.getSkills().keySet())
         {
-            suggestSkill[ i++ ] = skill.toLowerCase();
+            suggestSkill[i++] = skill.toLowerCase();
         }
     }
 

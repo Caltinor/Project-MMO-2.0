@@ -46,7 +46,6 @@ public class ListButtonBig extends Button
     Entity testEntity = null;
     LivingEntity entity = null;
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-    Minecraft minecraft = Minecraft.getInstance();
 
     public ListButtonBig(int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, OnPress onPress)
     {
@@ -93,16 +92,16 @@ public class ListButtonBig extends Button
     public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks)
     {
         isHovered = mouseX > this.x + 3 && mouseY > this.y && mouseX < this.x + 60 && mouseY < this.y + 64;
-        Minecraft minecraft = Minecraft.getInstance();
-        Font fontrenderer = minecraft.font;
+        Minecraft mc = Minecraft.getInstance();
+        Font fontrenderer = mc.font;
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, this.alpha);
         int i = this.getYImage(this.isHoveredOrFocused());
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        minecraft.getTextureManager().bindForSetup(items);
+        RenderSystem.setShaderTexture(0, items);
         this.blit(stack, this.x, this.y, this.offsetOne + (this.isHoveredOrFocused() ? 64 : 0), this.elementOne, this.width, this.height);
-        minecraft.getTextureManager().bindForSetup(page == 0 ? items : items2);
+        RenderSystem.setShaderTexture(0, page == 0 ? items : items2);
         this.blit(stack, this.x, this.y, this.offsetTwo + (this.isHoveredOrFocused() ? 64 : 0), this.elementTwo, this.width, this.height);
         if(!itemStack.getItem().equals(Items.AIR) && entity == null)
             itemRenderer.renderGuiItem(itemStack, this.x + 8, this.y + 8);
@@ -120,7 +119,7 @@ public class ListButtonBig extends Button
 //            drawEntityOnScreen(this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, entity);
         }
 
-        this.renderBg(stack, minecraft, x, y);
+        this.renderBg(stack,mc, x, y);
         int j = getFGColor();
         this.drawCenteredString(stack, fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
     }

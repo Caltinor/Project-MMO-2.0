@@ -147,8 +147,8 @@ public class ProjectMMOMod
                 return true;
             try
             {
-                int latestNumber = Integer.parseInt(latestPmmoVersion[ i ]);
-                int givenNumber = Integer.parseInt(currentPmmoVersion[ i ]);
+                int latestNumber = Integer.parseInt(latestPmmoVersion[i]);
+                int givenNumber = Integer.parseInt(currentPmmoVersion[i]);
                 if(givenNumber > latestNumber)
                     return false;
                 if(givenNumber < latestNumber)

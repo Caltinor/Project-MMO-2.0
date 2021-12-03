@@ -362,7 +362,7 @@ public class XPOverlayGUI extends GuiComponent
 			RenderSystem.enableBlend();
 			try
 			{
-				Minecraft.getInstance().getTextureManager().bindForSetup(bar);
+				RenderSystem.setShaderTexture(0, bar);
 				//COUT
 //				RenderSystem.color3f(255, 255, 255);
 
@@ -453,7 +453,7 @@ public class XPOverlayGUI extends GuiComponent
 		{
 			if(XP.isPlayerSurvival(player))
 			{
-				Minecraft.getInstance().getTextureManager().bindForSetup(bar);
+				RenderSystem.setShaderTexture(0, bar);
 
 				blit(stack, veinBarPosX, veinBarPosY, 0, 0, barWidth, barHeight);
 				blit(stack, veinBarPosX, veinBarPosY, 0, barHeight, (int) Math.floor(barWidth * veinPos), barHeight);

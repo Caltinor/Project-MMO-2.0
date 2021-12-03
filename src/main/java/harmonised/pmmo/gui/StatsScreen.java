@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.*;
@@ -28,17 +29,13 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.client.event.ScreenEvent;
 
-public class StatsScreen extends Screen
+public class StatsScreen extends PmmoScreen
 {
     private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
-    private final List<GuiEventListener> children = Lists.newArrayList();
-    private static TileButton exitButton;
+        private static TileButton exitButton;
 
-    Minecraft minecraft = Minecraft.getInstance();
-    Window sr = minecraft.getWindow();
-    Font font = minecraft.font;
-    private int boxWidth = 256;
-    private int boxHeight = 256;
+    
+    
     private int x, y;
     private StatsScrollPanel scrollPanel;
     private List<StatsEntry> statsEntries;
@@ -295,7 +292,7 @@ public class StatsScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindForSetup(box);
+        RenderSystem.setShaderTexture(0, box);
 
         this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);
     }

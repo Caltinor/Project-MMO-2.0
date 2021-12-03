@@ -1,6 +1,7 @@
 package harmonised.pmmo.gui;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -20,17 +21,11 @@ import net.minecraftforge.client.event.ScreenEvent;
 
 import java.util.*;
 
-public class GlossaryScreen extends Screen
+public class GlossaryScreen extends PmmoScreen
 {
-    private final List<GuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static TileButton exitButton;
-
-    Minecraft minecraft = Minecraft.getInstance();
-    Window sr = minecraft.getWindow();
-    Font font = minecraft.font;
-    private int boxWidth = 256;
-    private int boxHeight = 256;
+    
     private int x;
     private int y;
     public static List<TileButton> defaultTileButtons = new ArrayList<>();
@@ -235,6 +230,8 @@ public class GlossaryScreen extends Screen
         y = ((sr.getGuiScaledHeight() / 2) - (boxHeight / 2));
 
         for(TileButton button : currentTileButtons)
+            button.render(stack, mouseX, mouseY, partialTicks);
+        for(TileButton button : currentTileButtons)
         {
             if(mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32)
                 renderTooltip(stack,  new TranslatableComponent(button.transKey), mouseX, mouseY);
@@ -268,7 +265,7 @@ public class GlossaryScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindForSetup(box);
+        RenderSystem.setShaderTexture(0, box);
 
         this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);
     }

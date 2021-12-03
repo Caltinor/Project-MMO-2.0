@@ -16,9 +16,7 @@ import java.util.ArrayList;
 
 public class ListScrollPanel extends ScrollPanel
 {
-    Window sr = Minecraft.getInstance().getWindow();
     Player player;
-    String regKey;
     JType jType;
     private final int boxWidth = 256;
     private final int boxHeight = 256;

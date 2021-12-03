@@ -18,20 +18,16 @@ import net.minecraftforge.client.event.ScreenEvent;
 
 import java.util.*;
 
-public class PrefsChoiceScreen extends Screen
+public class PrefsChoiceScreen extends PmmoScreen
 {
-    private final List<GuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
+        private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static TileButton exitButton;
 
-    Minecraft minecraft = Minecraft.getInstance();
-    Window sr = minecraft.getWindow();
-    Font font = minecraft.font;
-    private int boxWidth = 256;
-    private int boxHeight = 256;
+    
+    
     private int x;
     private int y;
-    private List<TileButton> tileButtons;
+
 
     public PrefsChoiceScreen(Component titleIn)
     {
@@ -103,7 +99,7 @@ public class PrefsChoiceScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindForSetup(box);
+        RenderSystem.setShaderTexture(0, box);
         RenderSystem.disableBlend();
         this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);
     }

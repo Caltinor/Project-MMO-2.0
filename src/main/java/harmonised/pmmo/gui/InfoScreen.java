@@ -21,18 +21,14 @@ import net.minecraftforge.client.event.ScreenEvent;
 
 import java.util.*;
 
-public class InfoScreen extends Screen
+public class InfoScreen extends PmmoScreen
 {
-    private final List<GuiEventListener> children = Lists.newArrayList();
     private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     private final ResourceLocation logo = XP.getResLoc(Reference.MOD_ID, "textures/gui/logo.png");
     private static TileButton exitButton;
 
-    Minecraft mc = Minecraft.getInstance();
-    Window sr = mc.getWindow();
-    Font font = mc.font;
-    private int boxWidth = 256;
-    private int boxHeight = 256;
+    
+    
     private int x;
     private int y;
     private List<ListButtonBig> tileButtons;
@@ -148,7 +144,8 @@ public class InfoScreen extends Screen
 
         x = ((sr.getGuiScaledWidth() / 2) - (boxWidth / 2));
         y = ((sr.getGuiScaledHeight() / 2) - (boxHeight / 2));
-
+        for(ListButtonBig button : tileButtons)
+            button.renderButton(stack, mouseX, mouseY, partialTicks);
         for(ListButtonBig button : tileButtons)
         {
             if(mouseX > button.x + 3 && mouseY > button.y && mouseX < button.x + 60 && mouseY < button.y + 64)
@@ -178,7 +175,7 @@ public class InfoScreen extends Screen
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindForSetup(box);
+        RenderSystem.setShaderTexture(0, box);
         RenderSystem.disableBlend();
         this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);
     }
