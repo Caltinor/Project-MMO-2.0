@@ -63,9 +63,9 @@ public class ChunkDataHandler
             ChunkPos chunkPos = event.getChunk().getPos();
             if(placedMap.get(dimResLoc).containsKey(chunkPos))
             {
+                if(!event.getData().contains("Level"))
+                    event.getData().put("Level", new CompoundTag());
                 CompoundTag levelNBT = (CompoundTag) event.getData().get("Level");
-                if(levelNBT == null)
-                    return;
 
                 CompoundTag newPlacedNBT = new CompoundTag();
                 CompoundTag insidesNBT;
