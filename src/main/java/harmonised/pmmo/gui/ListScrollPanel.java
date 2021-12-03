@@ -220,7 +220,7 @@ public class ListScrollPanel extends ScrollPanel
         RenderSystem.enableTexture();
         //COUT
 //        RenderSystem.shadeModel(GL11.GL_FLAT);
-//        RenderSystem.enableAlphaTest();
+        PmmoScreen.enableAlpha(1);
         RenderSystem.disableBlend();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }

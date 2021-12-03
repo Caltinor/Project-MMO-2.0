@@ -31,6 +31,7 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -42,8 +43,6 @@ public class ListScreen extends PmmoScreen
         private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static final Style greenColor = XP.textStyle.get("green");
     private static Button exitButton;
-
-    
     
     private int x, y, scrollX, scrollY, buttonX, buttonY, accumulativeHeight, buttonsSize, buttonsLoaded, futureHeight, minCount, maxCount;
     private ListScrollPanel scrollPanel;
@@ -1126,7 +1125,7 @@ public class ListScreen extends PmmoScreen
     public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
     {
         renderBackground(stack,  1);
-
+        scrollPanel.render(stack, mouseX, mouseY, partialTicks);
         if(jType.equals(JType.SKILLS))
             title = getTransComp("pmmo.playerStats", XP.playerNames.get(uuid));
         else if(jType.equals(JType.HISCORE))
@@ -1302,4 +1301,9 @@ public class ListScreen extends PmmoScreen
         return new TranslatableComponent(translationKey, args);
     }
 
+    public static <T> T make(T item, Consumer<T> action)
+    {
+        action.accept(item);
+        return item;
+    }
 }

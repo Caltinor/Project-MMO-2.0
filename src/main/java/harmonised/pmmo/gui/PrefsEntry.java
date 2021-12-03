@@ -135,6 +135,7 @@ public class PrefsEntry implements Widget
     {
         slider.render(stack, mouseX, mouseY, partialTicks);
         button.render(stack, mouseX, mouseY, partialTicks);
-        textField.render(stack, mouseX, mouseY, partialTicks);
+        if(textField != null)
+            textField.render(stack, mouseX, mouseY, partialTicks);
     }
 }

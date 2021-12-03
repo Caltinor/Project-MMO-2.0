@@ -164,7 +164,7 @@ public class StatsScrollPanel extends ScrollPanel
         RenderSystem.enableTexture();
         //COUT
 //        RenderSystem.shadeModel(GL_FLAT);
-//        RenderSystem.enableAlphaTest();
+        PmmoScreen.enableAlpha(1);
         RenderSystem.disableBlend();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }

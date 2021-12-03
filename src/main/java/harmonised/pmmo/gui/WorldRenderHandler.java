@@ -55,7 +55,8 @@ public class WorldRenderHandler
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
         VertexConsumer builder = buffer.getBuffer(RenderType.lines());
 
-        if(XPOverlayGUI.getVeinKey() && XPOverlayGUI.getLookingAtBlock() && XPOverlayGUI.getMetToolReq() && XPOverlayGUI.getCanBreak())
+        //COUT
+        if(false && XPOverlayGUI.getVeinKey() && XPOverlayGUI.getLookingAtBlock() && XPOverlayGUI.getMetToolReq() && XPOverlayGUI.getCanBreak())
         {
             for(BlockPos pos : XPOverlayGUI.veinShapeSet)
             {

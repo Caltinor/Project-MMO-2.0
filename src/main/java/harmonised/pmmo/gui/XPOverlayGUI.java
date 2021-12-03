@@ -363,8 +363,6 @@ public class XPOverlayGUI extends GuiComponent
 			try
 			{
 				RenderSystem.setShaderTexture(0, bar);
-				//COUT
-//				RenderSystem.color3f(255, 255, 255);
 
 				blit(stack, barPosX, barPosY + 10, 0, 0, barWidth, barHeight);
 				if(!Config.forgeConfig.xpBarTheme.get())

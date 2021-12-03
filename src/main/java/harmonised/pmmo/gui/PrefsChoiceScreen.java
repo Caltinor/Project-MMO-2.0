@@ -79,6 +79,8 @@ public class PrefsChoiceScreen extends PmmoScreen
 //        fillGradient(stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
         for(TileButton button : tileButtons)
+            button.render(stack, mouseX, mouseY, partialTicks);
+        for(TileButton button : tileButtons)
         {
             if(mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32)
                 renderTooltip(stack, new TranslatableComponent(button.transKey), mouseX, mouseY);
@@ -95,7 +97,6 @@ public class PrefsChoiceScreen extends PmmoScreen
         }
         else
             this.renderBackground(stack, p_renderBackground_1_);
-
 
         boxHeight = 256;
         boxWidth = 256;

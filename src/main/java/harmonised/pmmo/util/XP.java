@@ -1057,8 +1057,9 @@ public class XP
 		JType jType = type ? JType.XP_BONUS_HELD : JType.XP_BONUS_WORN;
 		String regName = item.getRegistryName().toString();
 		Map<String, Double> itemXpMap = PredicateRegistry.predicateExists(item.getRegistryName(), jType) 
-				? TooltipSupplier.getTooltipData(item.getRegistryName(), jType, itemStack) 
+				? TooltipSupplier.getTooltipData(item.getRegistryName(), jType, itemStack)
 				: JsonConfig.data.get(jType).getOrDefault(regName, new HashMap<>());
+		itemXpMap = new HashMap<>(itemXpMap);
 		if(Config.getConfig("scaleXpBoostByDurability") != 0)
 			multiplyMapAnyDouble(itemXpMap, getXpBoostDurabilityMultiplier(itemStack));
 		return itemXpMap;

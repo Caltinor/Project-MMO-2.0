@@ -122,8 +122,6 @@ public class PrefsScrollPanel extends ScrollPanel
     @Override
     public void render(PoseStack stack,  int mouseX, int mouseY, float partialTicks)
     {
-        for(PrefsEntry prefsEntry : prefsEntries)
-            prefsEntry.render(stack, mouseX, mouseY, partialTicks);
 //        this.drawBackground();
 
 //        if (Minecraft.getInstance().world != null)
@@ -197,8 +195,6 @@ public class PrefsScrollPanel extends ScrollPanel
         }
 
         RenderSystem.enableTexture();
-        //COUT
-//        RenderSystem.shadeModel(GL11.GL_FLAT);
         PmmoScreen.enableAlpha(1);
         RenderSystem.disableBlend();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
