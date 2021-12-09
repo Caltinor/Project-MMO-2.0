@@ -104,7 +104,7 @@ public class DeathHandler
             boolean registeredNBTdata = TooltipSupplier.tooltipExists(target.getType().getRegistryName(), JType.XP_VALUE_KILL);
             if(registeredNBTdata || JsonConfig.data.get(JType.XP_VALUE_KILL).containsKey(target.getEncodeId()))
             {
-                 Map<String, Double> killXp = registeredNBTdata ? XP.getXp(target , JType.XP_VALUE_KILL) : XP.getXpBypass(target.getType().getRegistryName(), JType.XP_VALUE_KILL);
+                 Map<String, Double> killXp = registeredNBTdata ? XP.getXp(target, JType.XP_VALUE_KILL) : XP.getXpBypass(target.getType().getRegistryName(), JType.XP_VALUE_KILL);
                 for(Map.Entry<String, Double> entry : killXp.entrySet())
                 {
                     XP.awardXp(player, entry.getKey(), player.getMainHandItem().getHoverName().toString(), entry.getValue() * scaleValue, false, false, false);

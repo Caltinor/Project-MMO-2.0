@@ -451,7 +451,7 @@ public class BlockBrokenHandler
             boolean isSilk = enchants.get(Enchantments.SILK_TOUCH) != null;
 
             if(!wasPlaced && !isSilk)
-                XP.addMapsAnyDouble(award, XP.multiplyMapAnyDouble(tile == null ? XP.getXpBypass(block.getRegistryName() , JType.XP_VALUE_BREAK) : XP.getXp(tile, JType.XP_VALUE_BREAK), theDropItem.getCount()));
+                XP.addMapsAnyDouble(award, XP.multiplyMapAnyDouble(tile == null ? XP.getXpBypass(block.getRegistryName(), JType.XP_VALUE_BREAK) : XP.getXp(tile, JType.XP_VALUE_BREAK), theDropItem.getCount()));
 
             if(dropsItself && !wasPlaced || !dropsItself && !isSilk)			//EXTRA DROPS
             {
@@ -468,7 +468,7 @@ public class BlockBrokenHandler
                 int totalExtraDrops = guaranteedDrop + extraDrop;
 
                 if(!dropsItself && wasPlaced)
-                    XP.addMapsAnyDouble(award, XP.multiplyMapAnyDouble(tile == null ? XP.getXpBypass(block.getRegistryName() , JType.XP_VALUE_BREAK) : XP.getXp(tile, JType.XP_VALUE_BREAK), (theDropItem.getCount())));
+                    XP.addMapsAnyDouble(award, XP.multiplyMapAnyDouble(tile == null ? XP.getXpBypass(block.getRegistryName(), JType.XP_VALUE_BREAK) : XP.getXp(tile, JType.XP_VALUE_BREAK), (theDropItem.getCount())));
 
                 if(totalExtraDrops > 0)
                 {
@@ -476,7 +476,7 @@ public class BlockBrokenHandler
                     NetworkHandler.sendToPlayer(new MessageDoubleTranslation("pmmo.extraDrop", "" + totalExtraDrops, theDropItem.getItem().getDescriptionId(), true, 1), (ServerPlayer) player);
                 }
 
-                XP.addMapsAnyDouble(award, XP.multiplyMapAnyDouble(tile == null ? XP.getXpBypass(block.getRegistryName() , JType.XP_VALUE_BREAK) : XP.getXp(tile, JType.XP_VALUE_BREAK), totalExtraDrops));
+                XP.addMapsAnyDouble(award, XP.multiplyMapAnyDouble(tile == null ? XP.getXpBypass(block.getRegistryName(), JType.XP_VALUE_BREAK) : XP.getXp(tile, JType.XP_VALUE_BREAK), totalExtraDrops));
             }
 
             awardMsg = "Mining " + block.getRegistryName();

@@ -83,9 +83,9 @@ public class DP
 		}
 		
 		if(prefix == ' ')
-			return String.format(Locale.ENGLISH , "%.2f", input);
+			return String.format(Locale.ENGLISH, "%.2f", input);
 		else
-			return String.format(Locale.ENGLISH , "%.3f", input) + prefix;
+			return String.format(Locale.ENGLISH, "%.3f", input) + prefix;
 	}
 	
 	public static String dp(Float input)
@@ -95,12 +95,12 @@ public class DP
 	
 	public static String dp(Double input)
 	{
-		return String.format(Locale.ENGLISH , "%.2f", input);
+		return String.format(Locale.ENGLISH, "%.2f", input);
 	}
 
 	public static String dpCustom(Double input, int decPlaces)
 	{
-		return String.format(Locale.ENGLISH , "%." + decPlaces + "f", input);
+		return String.format(Locale.ENGLISH, "%." + decPlaces + "f", input);
 	}
 
 	public static String dpSoft(double input)

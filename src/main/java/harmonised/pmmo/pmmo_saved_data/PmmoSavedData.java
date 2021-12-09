@@ -349,7 +349,7 @@ public class PmmoSavedData extends SavedData
     {
         double xpBoost = 0;
 
-        for(Map.Entry<String , Map<String, Double>> entry : getPlayerXpBoostsMap(playerUUID).entrySet())
+        for(Map.Entry<String, Map<String, Double>> entry : getPlayerXpBoostsMap(playerUUID).entrySet())
         {
             xpBoost += entry.getValue().getOrDefault(skill, 0D);
         }

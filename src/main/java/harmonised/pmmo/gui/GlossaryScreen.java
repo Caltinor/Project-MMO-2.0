@@ -75,7 +75,7 @@ public class GlossaryScreen extends PmmoScreen
         TileButton growXpButton = new TileButton(0, 0, 3, 35, "pmmo.growXpTitle",JType.XP_VALUE_GROW, button -> onGlossaryButtonPress((TileButton) button));
         TileButton dimensionButton = new TileButton(0, 0, 3, 8, "pmmo.dimensionTitle",JType.DIMENSION, button -> onGlossaryButtonPress((TileButton) button));
         TileButton fishPoolButton = new TileButton(0, 0, 3, 24, "pmmo.fishPoolTitle",JType.FISH_POOL, button -> onGlossaryButtonPress((TileButton) button));
-        TileButton mobButton = new TileButton(0, 0, 3, 26, "pmmo.mobTitle" ,JType.REQ_KILL, button -> onGlossaryButtonPress((TileButton) button));
+        TileButton mobButton = new TileButton(0, 0, 3, 26, "pmmo.mobTitle",JType.REQ_KILL, button -> onGlossaryButtonPress((TileButton) button));
         TileButton fishEnchantButton = new TileButton(0, 0, 3, 25, "pmmo.fishEnchantTitle", JType.FISH_ENCHANT_POOL, button -> onGlossaryButtonPress((TileButton) button));
         TileButton salvageToButton = new TileButton(0, 0, 3, 27, "pmmo.salvagesToTitle", JType.SALVAGE, button -> onGlossaryButtonPress((TileButton) button));
         TileButton salvageFromButton = new TileButton(0, 0, 3, 28, "pmmo.salvagesFromTitle", JType.SALVAGE_FROM, button -> onGlossaryButtonPress((TileButton) button));

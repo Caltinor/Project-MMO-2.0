@@ -31,7 +31,7 @@ public class CraftedHandler
                 double durabilityMultiplier = 1;
 
                 ItemStack itemStack = event.getCrafting();
-                Map<String, Double> xpValue = XP.getXp(itemStack , JType.XP_VALUE_CRAFT);
+                Map<String, Double> xpValue = XP.getXp(itemStack, JType.XP_VALUE_CRAFT);
 
                 Map<String, Double> award = new HashMap<>();
                 if(xpValue.size() == 0)

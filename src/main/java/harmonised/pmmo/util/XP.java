@@ -196,29 +196,29 @@ public class XP
 		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
 		
 		if (TooltipSupplier.tooltipExists(res, jType))
-			return TooltipSupplier.getTooltipData(res , jType, tile);
+			return TooltipSupplier.getTooltipData(res, jType, tile);
 		
-		return getXp(res , jType);
+		return getXp(res, jType);
 	}
 	
 	public static Map<String, Double> getXp(ItemStack stack, JType jType)
 	{
 		ResourceLocation res = stack.getItem().getRegistryName();
 		
-		if (TooltipSupplier.tooltipExists(res , jType))
-			return TooltipSupplier.getTooltipData(res , jType, stack);
+		if (TooltipSupplier.tooltipExists(res, jType))
+			return TooltipSupplier.getTooltipData(res, jType, stack);
 		
-		return getXp(res , jType);
+		return getXp(res, jType);
 	}
 	
 	public static Map<String, Double> getXp(Entity entity, JType jType)
 	{
 		ResourceLocation res = entity.getType().getRegistryName();
 		
-		if (TooltipSupplier.tooltipExists(res , jType))
-			return TooltipSupplier.getTooltipData(res , jType, entity);
+		if (TooltipSupplier.tooltipExists(res, jType))
+			return TooltipSupplier.getTooltipData(res, jType, entity);
 		
-		return getXp(res , jType);
+		return getXp(res, jType);
 	}
 	
 	/**	This method is called to deliberately bypass the public getXP methods

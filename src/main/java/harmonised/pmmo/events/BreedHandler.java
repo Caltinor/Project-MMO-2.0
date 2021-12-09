@@ -25,7 +25,7 @@ public class BreedHandler
             String regKey = event.getChild().getEncodeId();
             Vec3 midPos = Util.getMidVec(event.getParentA().position(), event.getParentB().position());
             Vec3 xpDropPos = new Vec3(midPos.x(), midPos.y() + event.getChild().getEyeHeight() + 0.523, midPos.z());
-            Map<String, Double> award = XP.getXp(event.getChild() , JType.XP_VALUE_BREED);
+            Map<String, Double> award = XP.getXp(event.getChild(), JType.XP_VALUE_BREED);
             if(award.size() == 0)
                 award.put(Skill.FARMING.toString(), defaultBreedingXp);
 
