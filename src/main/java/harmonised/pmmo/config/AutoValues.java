@@ -215,6 +215,8 @@ public class AutoValues
 
             for(Recipe<?> recipe : allRecipes)
             {
+                if(recipe == null)
+                    continue;
                 Item item = recipe.getResultItem().getItem();
                 if(recipe.getType() == RecipeType.CRAFTING)
                     itemsWithCraftRecipe.add(item);
@@ -313,7 +315,7 @@ public class AutoValues
                         if(cookingXp > 0)
                         {
                             if(itemsWithCraftRecipe.contains(item))
-                                xpValueMap.put(Skill.CRAFTING.toString(), cookingXp);
+                                xpValueMap.put(Skill.COOKING.toString(), cookingXp);
                         }
                         addJsonConfigValue(resLoc, JType.XP_VALUE_CRAFT, xpValueMap, true);
                     }

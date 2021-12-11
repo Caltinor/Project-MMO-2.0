@@ -1418,6 +1418,8 @@ public class XP
 
 			for(Recipe<?> recipe : allRecipes)
 			{
+				if(recipe == null)
+					continue;
 				if(XP.checkReq(player, recipe.getResultItem().getItem().getRegistryName(), JType.REQ_CRAFT))
 					newRecipes.add(recipe);
 				else
