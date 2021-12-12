@@ -14,90 +14,90 @@ public class NetworkHandler
 	public static void registerPackets()
 	{
 		int index = 0;
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageXp.class, MessageXp::encode, MessageXp::decode, MessageXp::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageWorldXp.class, MessageWorldXp::encode, MessageWorldXp::decode, MessageWorldXp::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageWorldText.class, MessageWorldText::encode, MessageWorldText::decode, MessageWorldText::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageKeypress.class, MessageKeypress::encode, MessageKeypress::decode, MessageKeypress::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageDoubleTranslation.class, MessageDoubleTranslation::encode, MessageDoubleTranslation::decode, MessageDoubleTranslation::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageTripleTranslation.class, MessageTripleTranslation::encode, MessageTripleTranslation::decode, MessageTripleTranslation::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageUpdatePlayerNBT.class, MessageUpdatePlayerNBT::encode, MessageUpdatePlayerNBT::decode, MessageUpdatePlayerNBT::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageGrow.class, MessageGrow::encode, MessageGrow::decode, MessageGrow::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageTrigger.class, MessageTrigger::encode, MessageTrigger::decode, MessageTrigger::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageLevelUp.class, MessageLevelUp::encode, MessageLevelUp::decode, MessageLevelUp::handlePacket );
-		ProjectMMOMod.HANDLER.registerMessage( index++, MessageUpdateBoolean.class, MessageUpdateBoolean::encode, MessageUpdateBoolean::decode, MessageUpdateBoolean::handlePacket );
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageXp.class, MessageXp::encode, MessageXp::decode, MessageXp::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageWorldXp.class, MessageWorldXp::encode, MessageWorldXp::decode, MessageWorldXp::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageWorldText.class, MessageWorldText::encode, MessageWorldText::decode, MessageWorldText::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageKeypress.class, MessageKeypress::encode, MessageKeypress::decode, MessageKeypress::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageDoubleTranslation.class, MessageDoubleTranslation::encode, MessageDoubleTranslation::decode, MessageDoubleTranslation::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageTripleTranslation.class, MessageTripleTranslation::encode, MessageTripleTranslation::decode, MessageTripleTranslation::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageUpdatePlayerNBT.class, MessageUpdatePlayerNBT::encode, MessageUpdatePlayerNBT::decode, MessageUpdatePlayerNBT::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageGrow.class, MessageGrow::encode, MessageGrow::decode, MessageGrow::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageTrigger.class, MessageTrigger::encode, MessageTrigger::decode, MessageTrigger::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageLevelUp.class, MessageLevelUp::encode, MessageLevelUp::decode, MessageLevelUp::handlePacket);
+		ProjectMMOMod.HANDLER.registerMessage(index++, MessageUpdateBoolean.class, MessageUpdateBoolean::encode, MessageUpdateBoolean::decode, MessageUpdateBoolean::handlePacket);
 	}
 
-	public static void sendToPlayer( MessageXp packet, ServerPlayerEntity player )
+	public static void sendToPlayer(MessageXp packet, ServerPlayerEntity player)
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 
-	public static void sendToPlayer( MessageWorldXp packet, ServerPlayerEntity player )
-	{
-		try
-		{
-			ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
-		}
-		catch( Exception e )
-		{
-			LOGGER.debug( e );
-		}
-	}
-
-	public static void sendToPlayer( MessageWorldText packet, ServerPlayerEntity player )
+	public static void sendToPlayer(MessageWorldXp packet, ServerPlayerEntity player)
 	{
 		try
 		{
-			ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+			ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 		}
-		catch( Exception e )
+		catch(Exception e)
 		{
-			LOGGER.debug( e );
+			LOGGER.debug(e);
 		}
 	}
 
-	public static void sendToPlayer( MessageDoubleTranslation packet, ServerPlayerEntity player )
+	public static void sendToPlayer(MessageWorldText packet, ServerPlayerEntity player)
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		try
+		{
+			ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+		}
+		catch(Exception e)
+		{
+			LOGGER.debug(e);
+		}
 	}
 
-	public static void sendToPlayer( MessageTripleTranslation packet, ServerPlayerEntity player )
+	public static void sendToPlayer(MessageDoubleTranslation packet, ServerPlayerEntity player)
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 
-	public static void sendToPlayer(MessageUpdatePlayerNBT packet, ServerPlayerEntity player )
+	public static void sendToPlayer(MessageTripleTranslation packet, ServerPlayerEntity player)
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 
-	public static void sendToServer( MessageUpdatePlayerNBT packet )
+	public static void sendToPlayer(MessageUpdatePlayerNBT packet, ServerPlayerEntity player)
 	{
-		ProjectMMOMod.HANDLER.sendToServer( packet );
+		ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 
-	public static void sendToPlayer( MessageGrow packet, ServerPlayerEntity player )
+	public static void sendToServer(MessageUpdatePlayerNBT packet)
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendToServer(packet);
 	}
 
-	public static void sendToPlayer( MessageTrigger packet, ServerPlayerEntity player )
+	public static void sendToPlayer(MessageGrow packet, ServerPlayerEntity player)
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 
-	public static void sendToPlayer( MessageUpdateBoolean packet, ServerPlayerEntity player )
+	public static void sendToPlayer(MessageTrigger packet, ServerPlayerEntity player)
 	{
-		ProjectMMOMod.HANDLER.sendTo( packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT );
+		ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 
-	public static void sendToServer( MessageKeypress packet )
+	public static void sendToPlayer(MessageUpdateBoolean packet, ServerPlayerEntity player)
 	{
-		ProjectMMOMod.HANDLER.sendToServer( packet );
+		ProjectMMOMod.HANDLER.sendTo(packet, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 
-	public static void sendToServer( MessageLevelUp packet )
+	public static void sendToServer(MessageKeypress packet)
 	{
-		ProjectMMOMod.HANDLER.sendToServer( packet );
+		ProjectMMOMod.HANDLER.sendToServer(packet);
+	}
+
+	public static void sendToServer(MessageLevelUp packet)
+	{
+		ProjectMMOMod.HANDLER.sendToServer(packet);
 	}
 }

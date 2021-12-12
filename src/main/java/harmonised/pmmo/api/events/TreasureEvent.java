@@ -13,9 +13,9 @@ public class TreasureEvent extends PlayerEvent
     ItemStack itemStack;
     Map<String, Double> award;
 
-    public TreasureEvent( PlayerEntity player, BlockPos blockPos, ItemStack itemStack, Map<String, Double> award )
+    public TreasureEvent(PlayerEntity player, BlockPos blockPos, ItemStack itemStack, Map<String, Double> award)
     {
-        super( player );
+        super(player);
         this.blockPos = blockPos;
         this.itemStack = itemStack;
         this.award = award;

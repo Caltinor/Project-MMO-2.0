@@ -12,32 +12,32 @@ import java.util.function.Supplier;
 
 public class packetHandler
 {
-    public static void handleXpPacket( MessageXp packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handleXpPacket(MessageXp packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
             UUID uuid = Minecraft.getInstance().player.getUniqueID();
             String name = Minecraft.getInstance().player.getName().getString();
 
-            if( packet.skill.equals( "42069" ) )
+            if(packet.skill.equals("42069"))
             {
-                XP.removeOfflineXpUuid( uuid );
+                XP.removeOfflineXpUuid(uuid);
                 XPOverlayGUI.clearXP();
             }
             else
             {
-                if(  !XP.playerNames.containsKey( uuid ) )
+                if( !XP.playerNames.containsKey(uuid))
                 {
-                    XP.playerNames.put( uuid, name );
-                    XP.playerUUIDs.put( name, uuid );
+                    XP.playerNames.put(uuid, name);
+                    XP.playerUUIDs.put(name, uuid);
                 }
 
-                if( Config.getXpMap( Minecraft.getInstance().player ).size() == 0 )
+                if(Config.getXpMap(Minecraft.getInstance().player).size() == 0)
                     XPOverlayGUI.listOn = true;
 
-                XP.getOfflineXpMap( uuid ).put( packet.skill, packet.xp + packet.gainedXp );
+                XP.getOfflineXpMap(uuid).put(packet.skill, packet.xp + packet.gainedXp);
 
-                XPOverlayGUI.makeXpDrop( packet.xp, packet.skill, 10000, packet.gainedXp, packet.skip );
+                XPOverlayGUI.makeXpDrop(packet.xp, packet.skill, 10000, packet.gainedXp, packet.skip);
             }
         });
         ctx.get().setPacketHandled(true);

@@ -11,46 +11,46 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class XpFromToCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         double maxLevel = XP.getMaxLevel();
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 
-        double level = Double.parseDouble( args[3] );
-        if( level < 1 )
+        double level = Double.parseDouble(args[3]);
+        if(level < 1)
             level = 1;
-        if( level > maxLevel )
+        if(level > maxLevel)
             level = maxLevel;
-        double xp = XP.xpAtLevelDecimal( level );
-        if( xp < 0 )
+        double xp = XP.xpAtLevelDecimal(level);
+        if(xp < 0)
             xp = 0;
 
-        if( args.length > 4 )
+        if(args.length > 4)
         {
-            double goalLevel = Double.parseDouble( args[4] );
-            if( goalLevel < 1 )
+            double goalLevel = Double.parseDouble(args[4]);
+            if(goalLevel < 1)
                 goalLevel = 1;
-            if( goalLevel > maxLevel )
+            if(goalLevel > maxLevel)
                 goalLevel = maxLevel;
 
-            if( goalLevel < level )
+            if(goalLevel < level)
             {
                 double temp = goalLevel;
                 goalLevel = level;
                 level = temp;
 
-                xp = XP.xpAtLevelDecimal( level );
+                xp = XP.xpAtLevelDecimal(level);
             }
 
-            double goalXp = XP.xpAtLevelDecimal( goalLevel );
-            if( goalXp < 0 )
+            double goalXp = XP.xpAtLevelDecimal(goalLevel);
+            if(goalXp < 0)
                 goalXp = 0;
 
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpFromTo", DP.dp(goalXp - xp), ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), ( goalLevel % 1 == 0 ? (int) Math.floor( goalLevel ) : DP.dp(goalLevel) ) ), false );
+            player.sendStatusMessage(new TranslationTextComponent("pmmo.xpFromTo", DP.dp(goalXp - xp), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), (goalLevel % 1 == 0 ? (int) Math.floor(goalLevel) : DP.dp(goalLevel))), false);
         }
         else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.xpAtLevel", ( level % 1 == 0 ? (int) Math.floor( level ) : DP.dp(level) ), DP.dp(xp) ), false );
+            player.sendStatusMessage(new TranslationTextComponent("pmmo.xpAtLevel", (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), DP.dp(xp)), false);
 
         return 1;
     }

@@ -21,7 +21,7 @@ public class MessageWorldXp
     private float size = 1;
     private float decaySpeed = 1;
     
-    public MessageWorldXp( WorldXpDrop xpDrop )
+    public MessageWorldXp(WorldXpDrop xpDrop)
     {
         this.worldResLoc = xpDrop.getWorldResLoc();
         this.pos = xpDrop.getPos();
@@ -37,12 +37,12 @@ public class MessageWorldXp
 
     }
 
-    public static MessageWorldXp decode( PacketBuffer buf )
+    public static MessageWorldXp decode(PacketBuffer buf)
     {
         MessageWorldXp packet = new MessageWorldXp();
 
-        packet.worldResLoc = XP.getResLoc( buf.readString() );
-        packet.pos = new Vector3d( buf.readDouble(), buf.readDouble(), buf.readDouble() );
+        packet.worldResLoc = XP.getResLoc(buf.readString());
+        packet.pos = new Vector3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
         packet.skill = buf.readString();
         packet.startXp = buf.readFloat();
         packet.decaySpeed = buf.readFloat();
@@ -52,32 +52,32 @@ public class MessageWorldXp
         return packet;
     }
 
-    public static void encode( MessageWorldXp packet, PacketBuffer buf )
+    public static void encode(MessageWorldXp packet, PacketBuffer buf)
     {
-        buf.writeString( packet.worldResLoc.toString() );
+        buf.writeString(packet.worldResLoc.toString());
 
-        buf.writeDouble( packet.pos.getX() );
-        buf.writeDouble( packet.pos.getY() );
-        buf.writeDouble( packet.pos.getZ() );
+        buf.writeDouble(packet.pos.getX());
+        buf.writeDouble(packet.pos.getY());
+        buf.writeDouble(packet.pos.getZ());
 
-        buf.writeString( packet.skill );
-        buf.writeFloat( packet.startXp );
-        buf.writeFloat( packet.decaySpeed );
-        buf.writeFloat( packet.rotation );
-        buf.writeFloat( packet.size );
+        buf.writeString(packet.skill);
+        buf.writeFloat(packet.startXp);
+        buf.writeFloat(packet.decaySpeed);
+        buf.writeFloat(packet.rotation);
+        buf.writeFloat(packet.size);
 
     }
 
-    public static void handlePacket( MessageWorldXp packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageWorldXp packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
-            WorldXpDrop xpDrop = WorldXpDrop.fromVector( packet.worldResLoc, packet.pos, 0, packet.startXp, packet.skill );
-            xpDrop.setSize( packet.size );
-            xpDrop.setDecaySpeed( packet.decaySpeed );
-            xpDrop.setRotation( packet.rotation );
-            XP.addWorldXpDropOffline( xpDrop );
+            WorldXpDrop xpDrop = WorldXpDrop.fromVector(packet.worldResLoc, packet.pos, 0, packet.startXp, packet.skill);
+            xpDrop.setSize(packet.size);
+            xpDrop.setDecaySpeed(packet.decaySpeed);
+            xpDrop.setRotation(packet.rotation);
+            XP.addWorldXpDropOffline(xpDrop);
         });
-        ctx.get().setPacketHandled( true );
+        ctx.get().setPacketHandled(true);
     }
 }

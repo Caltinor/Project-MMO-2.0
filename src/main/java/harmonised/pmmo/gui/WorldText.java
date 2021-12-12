@@ -18,8 +18,8 @@ public class WorldText
 {
     private static Map<PresetTextOption, CompoundNBT> presetTextOptions = new HashMap<>();
 
-    public static float worldXpDropsSizeMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get() );
-    public static float worldXpDropsDecaySpeedMultiplier = (float) ( 0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get() );
+    public static float worldXpDropsSizeMultiplier = (float) (0f + Config.forgeConfig.worldXpDropsSizeMultiplier.get());
+    public static float worldXpDropsDecaySpeedMultiplier = (float) (0f + Config.forgeConfig.worldXpDropsDecaySpeedMultiplier.get());
     public static boolean worldXpDropsShowSkill =  Config.forgeConfig.worldXpDropsShowSkill.get();
 
     private ResourceLocation worldResLoc;
@@ -52,39 +52,39 @@ public class WorldText
     private float startRot = 0;
     private float endRot = 0;
 
-    public static WorldText fromBlockPos( ResourceLocation worldResLoc, BlockPos pos )
+    public static WorldText fromBlockPos(ResourceLocation worldResLoc, BlockPos pos)
     {
-        return fromBlockPos( worldResLoc, pos, pos );
+        return fromBlockPos(worldResLoc, pos, pos);
     }
 
-    public static WorldText fromBlockPos( ResourceLocation worldResLoc, BlockPos startPos, BlockPos endPos )
+    public static WorldText fromBlockPos(ResourceLocation worldResLoc, BlockPos startPos, BlockPos endPos)
     {
-        return new WorldText( worldResLoc, new Vector3d( startPos.getX() + 0.5, startPos.getY() + 0.5, startPos.getZ() + 0.5 ), new Vector3d( endPos.getX() + 0.5, endPos.getY() + 0.5, endPos.getZ() + 0.5 ) );
+        return new WorldText(worldResLoc, new Vector3d(startPos.getX() + 0.5, startPos.getY() + 0.5, startPos.getZ() + 0.5), new Vector3d(endPos.getX() + 0.5, endPos.getY() + 0.5, endPos.getZ() + 0.5));
     }
 
-    public static WorldText fromVector( ResourceLocation worldResLoc, Vector3d pos )
+    public static WorldText fromVector(ResourceLocation worldResLoc, Vector3d pos)
     {
-        return fromVector( worldResLoc, pos, pos );
+        return fromVector(worldResLoc, pos, pos);
     }
 
-    public static WorldText fromVector( ResourceLocation worldResLoc, Vector3d startPos, Vector3d endPos )
+    public static WorldText fromVector(ResourceLocation worldResLoc, Vector3d startPos, Vector3d endPos)
     {
-        return new WorldText( worldResLoc, startPos, endPos );
+        return new WorldText(worldResLoc, startPos, endPos);
     }
 
-    private WorldText( ResourceLocation worldResLoc, Vector3d startPos, Vector3d endPos )
+    private WorldText(ResourceLocation worldResLoc, Vector3d startPos, Vector3d endPos)
     {
         this.worldResLoc = worldResLoc;
         this.startPos = startPos;
         this.endPos = endPos;
     }
 
-    public boolean tick( double d )
+    public boolean tick(double d)
     {
-        if( decayByValue )    //Value
+        if(decayByValue)    //Value
         {
-            value -= Math.max( 0.01523, value * valueDecaySpeed * worldXpDropsDecaySpeedMultiplier * d );
-            spanRatio = (float) Util.map( value, startValue, endValue, 1, 0 );
+            value -= Math.max(0.01523, value * valueDecaySpeed * worldXpDropsDecaySpeedMultiplier * d);
+            spanRatio = (float) Util.map(value, startValue, endValue, 1, 0);
         }
         else    //Age
         {
@@ -114,62 +114,62 @@ public class WorldText
     {
         return new Vector3d
         (
-            Util.map( spanRatio, 1, 0, startPos.getX(), endPos.getX() ),
-            Util.map( spanRatio, 1, 0, startPos.getY(), endPos.getY() ),
-            Util.map( spanRatio, 1, 0, startPos.getZ(), endPos.getZ() )
-        );
+            Util.map(spanRatio, 1, 0, startPos.getX(), endPos.getX()),
+            Util.map(spanRatio, 1, 0, startPos.getY(), endPos.getY()),
+            Util.map(spanRatio, 1, 0, startPos.getZ(), endPos.getZ())
+       );
     }
 
     public String getText()
     {
-        if( showValue )
-            return "+" + DP.dpSoft( value ) + " " + text;
+        if(showValue)
+            return "+" + DP.dpSoft(value) + " " + text;
         else
             return text;
     }
 
     public double getSize()
     {
-        return Util.map( spanRatio, 1, 0, startSize, endSize ) * worldXpDropsSizeMultiplier * 0.02;
+        return Util.map(spanRatio, 1, 0, startSize, endSize) * worldXpDropsSizeMultiplier * 0.02;
     }
 
     public float getRotation()
     {
-        return (float) Util.map( spanRatio, 1, 0, startRot, endRot );
+        return (float) Util.map(spanRatio, 1, 0, startRot, endRot);
     }
 
     public int getColor()
     {
-        if( hueColor )
-            return Util.hueToRGB( (float) Util.map( spanRatio, 1, 0, startHue, endHue ) % 360, (float) Util.mapCapped( spanRatio, 0, 1, endSaturation, startSaturation ), (float) Util.mapCapped( spanRatio, 0, 1, endBrightness, startBrightness ) );
+        if(hueColor)
+            return Util.hueToRGB((float) Util.map(spanRatio, 1, 0, startHue, endHue) % 360, (float) Util.mapCapped(spanRatio, 0, 1, endSaturation, startSaturation), (float) Util.mapCapped(spanRatio, 0, 1, endBrightness, startBrightness));
         else
             return color;
     }
 
     public enum PresetTextOption
     {
-        BLOCK_BREAK( (byte) 1 ),
-        BLOCK_PLACE( (byte) 2 );
+        BLOCK_BREAK((byte) 1),
+        BLOCK_PLACE((byte) 2);
 
         private static Map<Byte, PresetTextOption> options = new HashMap<>();
         private final byte value;
 
         static
         {
-            for( PresetTextOption presetTextOption : PresetTextOption.values() )
+            for(PresetTextOption presetTextOption : PresetTextOption.values())
             {
-                options.put( presetTextOption.value, presetTextOption );
+                options.put(presetTextOption.value, presetTextOption);
             }
         }
 
-        PresetTextOption( byte value )
+        PresetTextOption(byte value)
         {
             this.value = value;
         }
 
         public CompoundNBT getPresetOptions()
         {
-            return presetTextOptions.get( this );
+            return presetTextOptions.get(this);
         }
 
         public byte getValue()
@@ -177,21 +177,21 @@ public class WorldText
             return this.value;
         }
 
-        public static PresetTextOption getPresetOption( byte type )
+        public static PresetTextOption getPresetOption(byte type)
         {
-            return options.get( type );
+            return options.get(type);
         }
     }
 
     public static void init()
     {
         CompoundNBT blockBreakPreset = new CompoundNBT();
-        blockBreakPreset.putFloat( "maxOffset", 0.25F );
-        blockBreakPreset.putFloat( "valueDecaySpeed", 1.25F );
-        blockBreakPreset.putBoolean( "showValue", true );
-        blockBreakPreset.putBoolean( "decayByValue", true );
+        blockBreakPreset.putFloat("maxOffset", 0.25F);
+        blockBreakPreset.putFloat("valueDecaySpeed", 1.25F);
+        blockBreakPreset.putBoolean("showValue", true);
+        blockBreakPreset.putBoolean("decayByValue", true);
 
-        presetTextOptions.put( PresetTextOption.BLOCK_BREAK, blockBreakPreset );
+        presetTextOptions.put(PresetTextOption.BLOCK_BREAK, blockBreakPreset);
     }
 
     public void setText(String text)
@@ -214,7 +214,7 @@ public class WorldText
         return maxOffset;
     }
 
-    public void setMaxOffset( float maxOffset )
+    public void setMaxOffset(float maxOffset)
     {
         this.maxOffset = maxOffset;
     }
@@ -224,8 +224,8 @@ public class WorldText
         double xOffset = Math.random()*maxOffset*2 - maxOffset;
         double yOffset = Math.random()*maxOffset*2 - maxOffset;
         double zOffset = Math.random()*maxOffset*2 - maxOffset;
-        this.startPos = maxOffset == 0 ? startPos : new Vector3d( startPos.getX() + xOffset, startPos.getY() + yOffset, startPos.getZ() + zOffset );
-        this.endPos = maxOffset == 0 ? endPos : new Vector3d( endPos.getX() + xOffset, endPos.getY() + yOffset, endPos.getZ() + zOffset );
+        this.startPos = maxOffset == 0 ? startPos : new Vector3d(startPos.getX() + xOffset, startPos.getY() + yOffset, startPos.getZ() + zOffset);
+        this.endPos = maxOffset == 0 ? endPos : new Vector3d(endPos.getX() + xOffset, endPos.getY() + yOffset, endPos.getZ() + zOffset);
     }
 
     public byte getPreset()
@@ -432,13 +432,13 @@ public class WorldText
         this.endRot = endRot;
     }
 
-    public void setPos( Vector3d pos )
+    public void setPos(Vector3d pos)
     {
         this.startPos = pos;
         this.endPos = pos;
     }
 
-    public void setPos( Vector3d startPos, Vector3d endPos )
+    public void setPos(Vector3d startPos, Vector3d endPos)
     {
         this.startPos = startPos;
         this.endPos = endPos;

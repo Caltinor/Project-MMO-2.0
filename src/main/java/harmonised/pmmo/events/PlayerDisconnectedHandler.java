@@ -10,18 +10,18 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerDisconnectedHandler
 {
-    public static void handlerPlayerDisconnected( PlayerEvent.PlayerLoggedOutEvent event )
+    public static void handlerPlayerDisconnected(PlayerEvent.PlayerLoggedOutEvent event)
     {
         PlayerEntity player = event.getPlayer();
-        if( player.world.isRemote() )
+        if(player.world.isRemote())
         {
             WebHandler.updateInfo();
         }
         else
         {
-            if( Config.forgeConfig.autoLeavePartyOnDisconnect.get() )
-                PmmoSavedData.get().removeFromParty( player.getUniqueID() );
-            player.getServer().getPlayerList().getPlayers().forEach( XP::syncPlayersSkills );
+            if(Config.forgeConfig.autoLeavePartyOnDisconnect.get())
+                PmmoSavedData.get().removeFromParty(player.getUniqueID());
+            player.getServer().getPlayerList().getPlayers().forEach(XP::syncPlayersSkills);
         }
     }
 }

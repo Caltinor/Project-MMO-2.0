@@ -19,7 +19,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class CheckStatCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
@@ -29,29 +29,29 @@ public class CheckStatCommand
         {
             double level = 1;
 
-            ServerPlayerEntity target = EntityArgument.getPlayer( context, "player name" );
-            if( args[3].toLowerCase().equals( "power" ) )
+            ServerPlayerEntity target = EntityArgument.getPlayer(context, "player name");
+            if(args[3].toLowerCase().equals("power"))
             {
-                level = XP.getPowerLevel( target.getUniqueID() );
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo.power" ).setStyle( XP.textStyle.get( "cyan" ) ) ), false );
+                level = XP.getPowerLevel(target.getUniqueID());
+                sender.sendStatusMessage(new TranslationTextComponent("pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent("pmmo.power").setStyle(XP.textStyle.get("cyan"))), false);
             }
             else
             {
-                level = Skill.getLevelDecimal( skill, target.getUniqueID() );
-                sender.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent( "pmmo." + skill ).setStyle( Skill.getSkillStyle( skill ) ) ), false );
+                level = Skill.getLevelDecimal(skill, target.getUniqueID());
+                sender.sendStatusMessage(new TranslationTextComponent("pmmo.playerLevelDisplay", target.getDisplayName().getString(), (level % 1 == 0 ? (int) Math.floor(level) : DP.dp(level)), new TranslationTextComponent("pmmo." + skill).setStyle(Skill.getSkillStyle(skill))), false);
             }
 
             //EXTRA INFO
-            switch( skill )
+            switch(skill)
             {
                 case "fishing":
-                    sender.sendStatusMessage( new TranslationTextComponent( "pmmo.fishPoolChance", DP.dpSoft(FishedHandler.getFishPoolChance( sender ) )  ).setStyle( Skill.getSkillStyle( skill ) ), false );
+                    sender.sendStatusMessage(new TranslationTextComponent("pmmo.fishPoolChance", DP.dpSoft(FishedHandler.getFishPoolChance(sender)) ).setStyle(Skill.getSkillStyle(skill)), false);
                     break;
             }
         }
-        catch( CommandSyntaxException e )
+        catch(CommandSyntaxException e)
         {
-            sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+            sender.sendStatusMessage( new TranslationTextComponent("pmmo.invalidPlayer", args[2]).setStyle(XP.textStyle.get("red")), false);
         }
 
         return 1;

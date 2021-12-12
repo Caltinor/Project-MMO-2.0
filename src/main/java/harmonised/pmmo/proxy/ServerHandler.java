@@ -17,29 +17,29 @@ public class ServerHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void updateNBTTag(MessageUpdatePlayerNBT packet, PlayerEntity player )
+    public static void updateNBTTag(MessageUpdatePlayerNBT packet, PlayerEntity player)
     {
         CompoundNBT newPackage = packet.reqPackage;
-        Set<String> keySet = new HashSet<>( newPackage.keySet() );
+        Set<String> keySet = new HashSet<>(newPackage.keySet());
 
-        switch( packet.type )
+        switch(packet.type)
         {
             case 0:
-                Map<String, Double> prefsMap = Config.getPreferencesMap( player );
-                for( String tag : keySet )
+                Map<String, Double> prefsMap = Config.getPreferencesMap(player);
+                for(String tag : keySet)
                 {
-                    prefsMap.remove( tag );
+                    prefsMap.remove(tag);
                 }
-                for( String tag : keySet )
+                for(String tag : keySet)
                 {
-                    prefsMap.put( tag, newPackage.getDouble( tag ) );
+                    prefsMap.put(tag, newPackage.getDouble(tag));
                 }
-                AttributeHandler.updateAll( player );
-                PmmoSavedData.get().setDirty( true );
+                AttributeHandler.updateAll(player);
+                PmmoSavedData.get().setDirty(true);
                 break;
 
             default:
-                LOGGER.error( "ERROR MessageUpdateNBT WRONG TYPE", packet );
+                LOGGER.error("ERROR MessageUpdateNBT WRONG TYPE", packet);
                 break;
         }
     }

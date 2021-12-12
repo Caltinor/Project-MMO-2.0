@@ -23,9 +23,9 @@ public class XpReward extends Reward
     public double amount = 83;
     public boolean ignoreBonuses = false;
 
-    public XpReward( Quest quest )
+    public XpReward(Quest quest)
     {
-        super( quest );
+        super(quest);
         autoclaim = RewardAutoClaim.INVISIBLE;
     }
 
@@ -36,36 +36,36 @@ public class XpReward extends Reward
     }
 
     @Override
-    public void writeData( CompoundNBT nbt )
+    public void writeData(CompoundNBT nbt)
     {
-        super.writeData( nbt );
-        nbt.putString( "skill", skill );
-        nbt.putDouble( "amount", amount );
-        nbt.putBoolean( "ignoreBonuses", ignoreBonuses );
+        super.writeData(nbt);
+        nbt.putString("skill", skill);
+        nbt.putDouble("amount", amount);
+        nbt.putBoolean("ignoreBonuses", ignoreBonuses);
     }
 
     @Override
-    public void readData( CompoundNBT nbt )
+    public void readData(CompoundNBT nbt)
     {
-        super.readData( nbt );
-        skill = nbt.getString( "skill" );
-        amount = nbt.getDouble( "amount" );
-        ignoreBonuses = nbt.getBoolean( "ignoreBonuses" );
+        super.readData(nbt);
+        skill = nbt.getString("skill");
+        amount = nbt.getDouble("amount");
+        ignoreBonuses = nbt.getBoolean("ignoreBonuses");
     }
 
     @Override
-    public void writeNetData( PacketBuffer buffer )
+    public void writeNetData(PacketBuffer buffer)
     {
-        super.writeNetData(buffer );
-        buffer.writeString( skill );
-        buffer.writeDouble( amount );
-        buffer.writeBoolean( ignoreBonuses );
+        super.writeNetData(buffer);
+        buffer.writeString(skill);
+        buffer.writeDouble(amount);
+        buffer.writeBoolean(ignoreBonuses);
     }
 
     @Override
-    public void readNetData( PacketBuffer buffer )
+    public void readNetData(PacketBuffer buffer)
     {
-        super.readNetData(buffer );
+        super.readNetData(buffer);
         skill = buffer.readString();
         amount = buffer.readDouble();
         ignoreBonuses = buffer.readBoolean();
@@ -73,23 +73,23 @@ public class XpReward extends Reward
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void getConfig( ConfigGroup config )
+    public void getConfig(ConfigGroup config)
     {
-        super.getConfig( config );
-        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of( Skill.MINING.toString(), Skill.getSkills().keySet().toArray() ).create() );
-        config.addDouble( "amount", amount, input -> amount = input, 1, -Config.getConfig("maxXp" ), Config.getConfig("maxXp" ) );
-        config.addBool( "ignoreBonuses", ignoreBonuses, v -> ignoreBonuses = v, false ).setNameKey( "pmmo.ignoreBonuses" );
+        super.getConfig(config);
+        config.addEnum("skill", skill, input -> skill = (String) input, NameMap.of(Skill.MINING.toString(), Skill.getSkills().keySet().toArray()).create());
+        config.addDouble("amount", amount, input -> amount = input, 1, -Config.getConfig("maxXp"), Config.getConfig("maxXp"));
+        config.addBool("ignoreBonuses", ignoreBonuses, v -> ignoreBonuses = v, false).setNameKey("pmmo.ignoreBonuses");
     }
 
     @Override
-    public void claim( ServerPlayerEntity player, boolean notify )
+    public void claim(ServerPlayerEntity player, boolean notify)
     {
-        Skill.addXp( skill, player.getUniqueID(), amount, "Completing a Quest", !notify, ignoreBonuses );
+        Skill.addXp(skill, player.getUniqueID(), amount, "Completing a Quest", !notify, ignoreBonuses);
     }
 
     @Override
     public IFormattableTextComponent getAltTitle()
     {
-        return new TranslationTextComponent( "pmmo." + skill ).setStyle( Skill.getSkillStyle( skill ) );
+        return new TranslationTextComponent("pmmo." + skill).setStyle(Skill.getSkillStyle(skill));
     }
 }

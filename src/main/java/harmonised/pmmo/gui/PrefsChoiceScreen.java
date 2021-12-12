@@ -20,7 +20,7 @@ import java.util.*;
 public class PrefsChoiceScreen extends Screen
 {
     private final List<IGuiEventListener> children = Lists.newArrayList();
-    private final ResourceLocation box = XP.getResLoc( Reference.MOD_ID, "textures/gui/screenboxy.png" );
+    private final ResourceLocation box = XP.getResLoc(Reference.MOD_ID, "textures/gui/screenboxy.png");
     private static TileButton exitButton;
 
     Minecraft minecraft = Minecraft.getInstance();
@@ -32,7 +32,7 @@ public class PrefsChoiceScreen extends Screen
     private int y;
     private List<TileButton> tileButtons;
 
-    public PrefsChoiceScreen( ITextComponent titleIn )
+    public PrefsChoiceScreen(ITextComponent titleIn)
     {
         super(titleIn);
     }
@@ -42,69 +42,69 @@ public class PrefsChoiceScreen extends Screen
     {
         tileButtons = new ArrayList<>();
 
-        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        x = ((sr.getScaledWidth() / 2) - (boxWidth / 2));
+        y = ((sr.getScaledHeight() / 2) - (boxHeight / 2));
 
         exitButton = new TileButton(x + boxWidth - 24, y - 8, 7, 0, "pmmo.exit", JType.NONE, (something) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new MainScreen( Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent( "pmmo.potato" ) ) );
+            Minecraft.getInstance().displayGuiScreen(new MainScreen(Minecraft.getInstance().player.getUniqueID(), new TranslationTextComponent("pmmo.potato")));
         });
 
-        TileButton settingsButton = new TileButton( (int) ( x + 24 + 36 * 1.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
+        TileButton settingsButton = new TileButton((int) (x + 24 + 36 * 1.5), (int) (y + 24 + 36 * 2.5), 3, 7, "pmmo.settings", JType.SETTINGS, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TranslationTextComponent( ((TileButton) button).transKey ), JType.SETTINGS ) );
+            Minecraft.getInstance().displayGuiScreen(new PrefsScreen(new TranslationTextComponent(((TileButton) button).transKey), JType.SETTINGS));
         });
 
-        TileButton guiSettingsButton = new TileButton( (int) ( x + 24 + 36 * 3.5 ), (int) ( y + 24 + 36 * 2.5 ), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
+        TileButton guiSettingsButton = new TileButton((int) (x + 24 + 36 * 3.5), (int) (y + 24 + 36 * 2.5), 3, 7, "pmmo.guiSettings", JType.GUI_SETTINGS, (button) ->
         {
-            Minecraft.getInstance().displayGuiScreen( new PrefsScreen( new TranslationTextComponent( ((TileButton) button).transKey ), JType.GUI_SETTINGS ) );
+            Minecraft.getInstance().displayGuiScreen(new PrefsScreen(new TranslationTextComponent(((TileButton) button).transKey), JType.GUI_SETTINGS));
         });
 
-        addButton( exitButton );
-        tileButtons.add( settingsButton );
-        tileButtons.add( guiSettingsButton );
+        addButton(exitButton);
+        tileButtons.add(settingsButton);
+        tileButtons.add(guiSettingsButton);
 
-        for( TileButton button : tileButtons )
+        for(TileButton button : tileButtons)
         {
-            addButton( button );
+            addButton(button);
         }
     }
 
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
-        renderBackground( stack,  1 );
-        super.render( stack, mouseX, mouseY, partialTicks );
+        renderBackground(stack,  1);
+        super.render(stack, mouseX, mouseY, partialTicks);
 
-        x = ( (sr.getScaledWidth() / 2) - (boxWidth / 2) );
-        y = ( (sr.getScaledHeight() / 2) - (boxHeight / 2) );
+        x = ((sr.getScaledWidth() / 2) - (boxWidth / 2));
+        y = ((sr.getScaledHeight() / 2) - (boxHeight / 2));
 
-//        fillGradient( stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
+//        fillGradient(stack, x + 20, y + 52, x + 232, y + 164, 0x22444444, 0x33222222);
 
-        for( TileButton button : tileButtons )
+        for(TileButton button : tileButtons)
         {
-            if( mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32 )
-                renderTooltip( stack, new TranslationTextComponent( button.transKey ), mouseX, mouseY );
+            if(mouseX > button.x && mouseY > button.y && mouseX < button.x + 32 && mouseY < button.y + 32)
+                renderTooltip(stack, new TranslationTextComponent(button.transKey), mouseX, mouseY);
         }
     }
 
     @Override
-    public void renderBackground( MatrixStack stack, int p_renderBackground_1_)
+    public void renderBackground(MatrixStack stack, int p_renderBackground_1_)
     {
         if (this.minecraft != null)
         {
-            this.fillGradient( stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333 );
-            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent( this, stack ));
+            this.fillGradient(stack, 0, 0, this.width, this.height, 0x66222222, 0x66333333);
+            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this, stack));
         }
         else
-            this.renderBackground( stack, p_renderBackground_1_ );
+            this.renderBackground(stack, p_renderBackground_1_);
 
 
         boxHeight = 256;
         boxWidth = 256;
-        Minecraft.getInstance().getTextureManager().bindTexture( box );
+        Minecraft.getInstance().getTextureManager().bindTexture(box);
         RenderSystem.disableBlend();
-        this.blit( stack,  x, y, 0, 0,  boxWidth, boxHeight );
+        this.blit(stack,  x, y, 0, 0,  boxWidth, boxHeight);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class PrefsChoiceScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        if( button == 1 )
+        if(button == 1)
         {
             exitButton.onPress();
             return true;

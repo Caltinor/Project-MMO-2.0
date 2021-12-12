@@ -22,9 +22,9 @@ import java.util.Map;
 
 public class HelpCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
-        NetworkHandler.sendToPlayer( new MessageTrigger( 1 ), (ServerPlayerEntity) context.getSource().getEntity() );
+        NetworkHandler.sendToPlayer(new MessageTrigger(1), (ServerPlayerEntity) context.getSource().getEntity());
         return 1;
     }
 }

@@ -4,7 +4,7 @@ import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 
 public class ServerStoppingHandler
 {
-    public static void handleServerStop( FMLServerStoppingEvent event )
+    public static void handleServerStop(FMLServerStoppingEvent event)
     {
         WorldTickHandler.refreshVein();
     }

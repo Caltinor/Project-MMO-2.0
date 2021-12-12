@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class DrawUtil
 {
-    public static Set<BlockPos> getCircle( int r )
+    public static Set<BlockPos> getCircle(int r)
     {
         Set<BlockPos> posSet = new HashSet<>();
         int x = 0;
@@ -23,18 +23,18 @@ public class DrawUtil
 
         do
         {
-            posSet.add( new BlockPos( +x, 0, +y ) );
-            posSet.add( new BlockPos( +x, 0, -y ) );
-            posSet.add( new BlockPos( -x, 0, +y ) );
-            posSet.add( new BlockPos( -x, 0, -y ) );
+            posSet.add(new BlockPos(+x, 0, +y));
+            posSet.add(new BlockPos(+x, 0, -y));
+            posSet.add(new BlockPos(-x, 0, +y));
+            posSet.add(new BlockPos(-x, 0, -y));
 
-            posSet.add( new BlockPos( +y, 0, +x ) );
-            posSet.add( new BlockPos( +y, 0, -x ) );
-            posSet.add( new BlockPos( -y, 0, +x ) );
-            posSet.add( new BlockPos( -y, 0, -x ) );
+            posSet.add(new BlockPos(+y, 0, +x));
+            posSet.add(new BlockPos(+y, 0, -x));
+            posSet.add(new BlockPos(-y, 0, +x));
+            posSet.add(new BlockPos(-y, 0, -x));
 
             x++;
-            if( d < 0 )
+            if(d < 0)
             {
                 d += 2*x+2;
             }
@@ -44,57 +44,57 @@ public class DrawUtil
                 d += 2*(x-y)+1;
             }
         }
-        while( x < y );
+        while(x < y);
 
-        posSet.add( new BlockPos( +x, 0, +y ) );
-        posSet.add( new BlockPos( +x, 0, -y ) );
-        posSet.add( new BlockPos( -x, 0, +y ) );
-        posSet.add( new BlockPos( -x, 0, -y ) );
+        posSet.add(new BlockPos(+x, 0, +y));
+        posSet.add(new BlockPos(+x, 0, -y));
+        posSet.add(new BlockPos(-x, 0, +y));
+        posSet.add(new BlockPos(-x, 0, -y));
         return posSet;
     }
 
-    public static Set<BlockPos> getCircleSolid( int r )
+    public static Set<BlockPos> getCircleSolid(int r)
     {
         Set<BlockPos> posSet = new HashSet<>();
-        List<Integer> lengths = getCircleLengths( r );
+        List<Integer> lengths = getCircleLengths(r);
         int line = 0;
-        for( int length : lengths )
+        for(int length : lengths)
         {
-            for( int z = 0; z <= length; z++ )
+            for(int z = 0; z <= length; z++)
             {
-                posSet.add( new BlockPos( +line, 0, +z ) );
-                posSet.add( new BlockPos( +line, 0, -z ) );
-                posSet.add( new BlockPos( -line, 0, +z ) );
-                posSet.add( new BlockPos( -line, 0, -z ) );
+                posSet.add(new BlockPos(+line, 0, +z));
+                posSet.add(new BlockPos(+line, 0, -z));
+                posSet.add(new BlockPos(-line, 0, +z));
+                posSet.add(new BlockPos(-line, 0, -z));
 
-                posSet.add( new BlockPos( +z, 0, +line ) );
-                posSet.add( new BlockPos( +z, 0, -line ) );
-                posSet.add( new BlockPos( -z, 0, +line ) );
-                posSet.add( new BlockPos( -z, 0, -line ) );
+                posSet.add(new BlockPos(+z, 0, +line));
+                posSet.add(new BlockPos(+z, 0, -line));
+                posSet.add(new BlockPos(-z, 0, +line));
+                posSet.add(new BlockPos(-z, 0, -line));
             }
             line++;
         }
         return posSet;
     }
 
-    public static Set<BlockPos> getSphereSolid( int r )
+    public static Set<BlockPos> getSphereSolid(int r)
     {
         Set<BlockPos> posSet = new HashSet<>();
         int i = 0;
-        List<Integer> sphereRadii = getSphereRadii( r );
-        System.out.println( sphereRadii );
-        for( int radius : sphereRadii )
+        List<Integer> sphereRadii = getSphereRadii(r);
+        System.out.println(sphereRadii);
+        for(int radius : sphereRadii)
         {
-            for( BlockPos pos : getCircleSolid( radius ) )
+            for(BlockPos pos : getCircleSolid(radius))
             {
-                posSet.add( pos.down( r - i ) );
+                posSet.add(pos.down(r - i));
             }
             i++;
         }
         return posSet;
     }
 
-    public static List<Integer> getSphereRadii( int r )
+    public static List<Integer> getSphereRadii(int r)
     {
         List<Integer> fourthRadii = new ArrayList<>();
         List<Integer> allY = new ArrayList<>();
@@ -108,7 +108,7 @@ public class DrawUtil
         do
         {
             x++;
-            if( d < 0 )
+            if(d < 0)
             {
                 d += 2*x+2;
             }
@@ -118,26 +118,26 @@ public class DrawUtil
                 d += 2*(x-y)+1;
             }
 
-            if( y != oldY )
-                fourthRadii.add( x-1 );
+            if(y != oldY)
+                fourthRadii.add(x-1);
             oldY = y;
-            if( x == y )
+            if(x == y)
                 corner = true;
             else
-                allY.add( y );
+                allY.add(y);
         }
-        while( x < y );
-        if( corner )
-            fourthRadii.add( ++x );
+        while(x < y);
+        if(corner)
+            fourthRadii.add(++x);
 
-        List<Integer> reversedAllY = Lists.reverse( allY );
-        reversedAllY.add( reversedAllY.get( reversedAllY.size()-1 ) );
-        fourthRadii.addAll( reversedAllY );
+        List<Integer> reversedAllY = Lists.reverse(allY);
+        reversedAllY.add(reversedAllY.get(reversedAllY.size()-1));
+        fourthRadii.addAll(reversedAllY);
 
         return fourthRadii;
     }
 
-    public static List<Integer> getCircleLengths( int r )
+    public static List<Integer> getCircleLengths(int r)
     {
         List<Integer> halfLengths = new ArrayList<>();
         int x = 0;
@@ -146,9 +146,9 @@ public class DrawUtil
 
         do
         {
-            halfLengths.add( y );
+            halfLengths.add(y);
             x++;
-            if( d < 0 )
+            if(d < 0)
             {
                 d += 2*x+2;
             }
@@ -158,24 +158,24 @@ public class DrawUtil
                 d += 2*(x-y)+1;
             }
         }
-        while( x < y );
+        while(x < y);
         return halfLengths;
     }
 
-    public static void drawToWorld( World world, BlockPos offset, Set<BlockPos> posSet, BlockState state )
+    public static void drawToWorld(World world, BlockPos offset, Set<BlockPos> posSet, BlockState state)
     {
-        for( BlockPos pos : posSet )
+        for(BlockPos pos : posSet)
         {
-            world.setBlockState( new BlockPos( offset.getX() + pos.getX(), offset.getY() + pos.getY(), offset.getZ() + pos.getZ() ), state );
+            world.setBlockState(new BlockPos(offset.getX() + pos.getX(), offset.getY() + pos.getY(), offset.getZ() + pos.getZ()), state);
         }
     }
-    public static void drawToWorld( World world, BlockPos offset, Set<BlockPos> posSet, BlockState state, Direction direction )
+    public static void drawToWorld(World world, BlockPos offset, Set<BlockPos> posSet, BlockState state, Direction direction)
     {
-        switch( direction )
+        switch(direction)
         {
             case UP:
             case DOWN:
-                drawToWorld( world, offset, posSet, state );
+                drawToWorld(world, offset, posSet, state);
                 break;
 
             case EAST:

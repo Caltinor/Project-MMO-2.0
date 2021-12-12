@@ -18,7 +18,7 @@ public class MessageXp
 	public String skill;
 	public boolean skip;
 	
-	public MessageXp( double xp, String skill, double gainedXp, boolean skip )
+	public MessageXp(double xp, String skill, double gainedXp, boolean skip)
 	{
 		this.xp = xp;
 		this.gainedXp = gainedXp;
@@ -31,15 +31,15 @@ public class MessageXp
 		
 	}
 
-	public static void encode( MessageXp packet, PacketBuffer buf )
+	public static void encode(MessageXp packet, PacketBuffer buf)
 	{
-		buf.writeDouble( packet.xp );
-		buf.writeDouble( packet.gainedXp );
-		buf.writeString( packet.skill );
-		buf.writeBoolean( packet.skip );
+		buf.writeDouble(packet.xp);
+		buf.writeDouble(packet.gainedXp);
+		buf.writeString(packet.skill);
+		buf.writeBoolean(packet.skip);
 	}
 
-	public static MessageXp decode( PacketBuffer buf )
+	public static MessageXp decode(PacketBuffer buf)
 	{
 		MessageXp packet = new MessageXp();
 		packet.xp = buf.readDouble();
@@ -50,8 +50,8 @@ public class MessageXp
 		return packet;
 	}
 
-	public static void handlePacket( MessageXp packet, Supplier<NetworkEvent.Context> ctx )
+	public static void handlePacket(MessageXp packet, Supplier<NetworkEvent.Context> ctx)
 	{
-		packetHandler.handleXpPacket( packet, ctx );
+		packetHandler.handleXpPacket(packet, ctx);
 	}
 }

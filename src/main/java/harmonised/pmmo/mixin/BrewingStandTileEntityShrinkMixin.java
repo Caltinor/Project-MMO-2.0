@@ -14,17 +14,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin( BrewingStandTileEntity.class )
+@Mixin(BrewingStandTileEntity.class)
 public class BrewingStandTileEntityShrinkMixin
 {
     @Shadow
     private NonNullList<ItemStack> brewingItemStacks;
 
-    @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V" ), method = "brewPotions" )
-    public void projectmmo$$handleSmeltingShrink( CallbackInfo info )
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;shrink(I)V"), method = "brewPotions")
+    public void projectmmo$$handleSmeltingShrink(CallbackInfo info)
     {
         World world = ((BrewingStandTileEntity)(Object)this).getWorld();
         BlockPos pos = ((BrewingStandTileEntity)(Object)this).getPos();
-        BrewHandler.handlePotionBrew( brewingItemStacks, world, pos );
+        BrewHandler.handlePotionBrew(brewingItemStacks, world, pos);
     }
 }

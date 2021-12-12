@@ -18,14 +18,14 @@ public class SyncCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute(CommandContext<CommandSource> context, @Nullable Collection<ServerPlayerEntity> players ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context, @Nullable Collection<ServerPlayerEntity> players) throws CommandException
     {
-        if( players != null )
+        if(players != null)
         {
-            for( ServerPlayerEntity player : players )
+            for(ServerPlayerEntity player : players)
             {
-                XP.syncPlayer( player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsResynced" ), false );
+                XP.syncPlayer(player);
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.skillsResynced"), false);
             }
         }
         else
@@ -33,12 +33,12 @@ public class SyncCommand
             try
             {
                 PlayerEntity player = context.getSource().asPlayer();
-                XP.syncPlayer( player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsResynced" ), false );
+                XP.syncPlayer(player);
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.skillsResynced"), false);
             }
-            catch( CommandSyntaxException e )
+            catch(CommandSyntaxException e)
             {
-                LOGGER.error( "Sync command fired not from player " + context.getInput(), e );
+                LOGGER.error("Sync command fired not from player " + context.getInput(), e);
             }
         }
 

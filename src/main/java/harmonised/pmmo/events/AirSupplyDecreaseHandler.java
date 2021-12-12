@@ -11,24 +11,24 @@ public class AirSupplyDecreaseHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int returnPmmoAffectedRespiration(LivingEntity entity )
+    public static int returnPmmoAffectedRespiration(LivingEntity entity)
     {
-        int respiration = EnchantmentHelper.getRespirationModifier( entity );
+        int respiration = EnchantmentHelper.getRespirationModifier(entity);
 
         try
         {
-            if( entity instanceof PlayerEntity )
+            if(entity instanceof PlayerEntity)
             {
                 PlayerEntity player = (PlayerEntity) entity;
-                int enduranceLevel = Skill.getLevel( Skill.ENDURANCE.toString(), player );
-                int swimmingLevel = Skill.getLevel( Skill.SWIMMING.toString(), player );
-                int respirationBoost = (int) ( ( (double) swimmingLevel + ( (double) enduranceLevel / 2.5D ) ) / 50D );
-                respiration += Math.min( respirationBoost, 5 );
+                int enduranceLevel = Skill.getLevel(Skill.ENDURANCE.toString(), player);
+                int swimmingLevel = Skill.getLevel(Skill.SWIMMING.toString(), player);
+                int respirationBoost = (int) (((double) swimmingLevel + ((double) enduranceLevel / 2.5D)) / 50D);
+                respiration += Math.min(respirationBoost, 5);
             }
         }
-        catch( Exception e )
+        catch(Exception e)
         {
-            LOGGER.error( e );
+            LOGGER.error(e);
         }
 
         return respiration;

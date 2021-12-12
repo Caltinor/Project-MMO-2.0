@@ -88,7 +88,7 @@
     "pmmo.durabilityInfo": "%1$s %2$s%%",
     "pmmo.materialSaveChanceInfo": "%1$s%% de chance por material, m\u00e1ximo de %2$s  itens devolvidos",
     "pmmo.repairInfo": "%1$s%% de chance de manter o Encantamento, %2$s custo de reparo",
-    "pmmo.maxEnchantLevelWarning": "A atualiza\u00e7\u00e3o de %1$s falhou pois chegou ao n\u00edvel global M\u00e1ximo de n\u00edvel de Encantamento ( %2$s )",
+    "pmmo.maxEnchantLevelWarning": "A atualiza\u00e7\u00e3o de %1$s falhou pois chegou ao n\u00edvel global M\u00e1ximo de n\u00edvel de Encantamento (%2$s)",
     "pmmo.enchantLackOfLevelWarning": "A Atualiza\u00e7\u00e3o de %1$s falhou por falta de habilidade",
     "pmmo.enchantmentDegradedWarning": "Sua inexperi\u00eancia causou um degradamento de %1$s, agora o Encantamento est\u00e1 no n\u00edvel %2$s",
     "pmmo.enchantUpgradeAndSaveFail": "A Atualiza\u00e7\u00e3o de %1$s falhou com %2$s%% de chance de Atualiza\u00e7\u00e3o, assim como %3$s%% de chance de manter o N\u00edvel. N\u00edvel reduzido em 1",

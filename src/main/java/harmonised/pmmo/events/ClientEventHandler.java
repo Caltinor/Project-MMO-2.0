@@ -24,68 +24,68 @@ public class ClientEventHandler
 {
     private static boolean wasVeining = false, wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
 
-    public static void subscribeClientEvents( IEventBus eventBus )
+    public static void subscribeClientEvents(IEventBus eventBus)
     {
-        eventBus.register( harmonised.pmmo.events.ClientEventHandler.class );
+        eventBus.register(harmonised.pmmo.events.ClientEventHandler.class);
     }
 
     @SubscribeEvent
-    public static void keyPressEvent( net.minecraftforge.client.event.InputEvent.KeyInputEvent event )
+    public static void keyPressEvent(net.minecraftforge.client.event.InputEvent.KeyInputEvent event)
     {
-        if( Minecraft.getInstance().player != null )
+        if(Minecraft.getInstance().player != null)
         {
-            if( wasVeining != ClientHandler.VEIN_KEY.isKeyDown() )
+            if(wasVeining != ClientHandler.VEIN_KEY.isKeyDown())
             {
                 wasVeining = ClientHandler.VEIN_KEY.isKeyDown();
-                NetworkHandler.sendToServer( new MessageKeypress( ClientHandler.VEIN_KEY.isKeyDown(), 1 ) );
+                NetworkHandler.sendToServer(new MessageKeypress(ClientHandler.VEIN_KEY.isKeyDown(), 1));
             }
 
-            if( wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() || wasOpenSettings != ClientHandler.OPEN_SETTINGS.isKeyDown() || wasOpenSkills != ClientHandler.OPEN_SKILLS.isKeyDown() || wasOpenGlossary != ClientHandler.OPEN_GLOSSARY.isKeyDown() )
+            if(wasOpenMenu != ClientHandler.OPEN_MENU.isKeyDown() || wasOpenSettings != ClientHandler.OPEN_SETTINGS.isKeyDown() || wasOpenSkills != ClientHandler.OPEN_SKILLS.isKeyDown() || wasOpenGlossary != ClientHandler.OPEN_GLOSSARY.isKeyDown())
             {
                 UUID uuid = Minecraft.getInstance().player.getUniqueID();
                 String name = Minecraft.getInstance().player.getDisplayName().getString();
 
-                XP.playerNames.put( uuid, name );
-                XP.playerUUIDs.put( name, uuid );
+                XP.playerNames.put(uuid, name);
+                XP.playerUUIDs.put(name, uuid);
 
-                XPOverlayGUI.skills.forEach( (skill, aSkill) ->
+                XPOverlayGUI.skills.forEach((skill, aSkill) ->
                 {
-                    XP.getOfflineXpMap( uuid ).put( skill, aSkill.goalXp );
+                    XP.getOfflineXpMap(uuid).put(skill, aSkill.goalXp);
                 });
 
-                if( Minecraft.getInstance().currentScreen == null )
+                if(Minecraft.getInstance().currentScreen == null)
                 {
-                    if( ClientHandler.OPEN_MENU.isKeyDown() )
+                    if(ClientHandler.OPEN_MENU.isKeyDown())
                     {
-                        Minecraft.getInstance().displayGuiScreen( new MainScreen( uuid, new TranslationTextComponent( "pmmo.potato" ) ) );
+                        Minecraft.getInstance().displayGuiScreen(new MainScreen(uuid, new TranslationTextComponent("pmmo.potato")));
                         wasOpenMenu = ClientHandler.OPEN_MENU.isKeyDown();
                     }
-                    else if( ClientHandler.OPEN_SETTINGS.isKeyDown() )
+                    else if(ClientHandler.OPEN_SETTINGS.isKeyDown())
                     {
-                        Minecraft.getInstance().displayGuiScreen( new PrefsChoiceScreen( new TranslationTextComponent( "pmmo.preferences" ) ) );
+                        Minecraft.getInstance().displayGuiScreen(new PrefsChoiceScreen(new TranslationTextComponent("pmmo.preferences")));
                         wasOpenSettings = ClientHandler.OPEN_SETTINGS.isKeyDown();
                     }
-                    else if( ClientHandler.OPEN_SKILLS.isKeyDown() )
+                    else if(ClientHandler.OPEN_SKILLS.isKeyDown())
                     {
-                        Minecraft.getInstance().displayGuiScreen( new ListScreen( uuid,  new TranslationTextComponent( "pmmo.skills" ), "", JType.SKILLS, Minecraft.getInstance().player ) );
+                        Minecraft.getInstance().displayGuiScreen(new ListScreen(uuid,  new TranslationTextComponent("pmmo.skills"), "", JType.SKILLS, Minecraft.getInstance().player));
                         wasOpenSkills = ClientHandler.OPEN_SKILLS.isKeyDown();
                     }
-                    else if( ClientHandler.OPEN_GLOSSARY.isKeyDown() )
+                    else if(ClientHandler.OPEN_GLOSSARY.isKeyDown())
                     {
-                        Minecraft.getInstance().displayGuiScreen( new GlossaryScreen( uuid, new TranslationTextComponent( "pmmo.glossary" ), true ) );
+                        Minecraft.getInstance().displayGuiScreen(new GlossaryScreen(uuid, new TranslationTextComponent("pmmo.glossary"), true));
                         wasOpenGlossary = ClientHandler.OPEN_GLOSSARY.isKeyDown();
                     }
                 }
 
             }
 
-            if( !(Minecraft.getInstance().player == null) && ClientHandler.TOGGLE_TOOLTIP.isKeyDown() && !tooltipKeyWasPressed )
+            if(!(Minecraft.getInstance().player == null) && ClientHandler.TOGGLE_TOOLTIP.isKeyDown() && !tooltipKeyWasPressed)
             {
                 TooltipHandler.tooltipOn = !TooltipHandler.tooltipOn;
-                if( TooltipHandler.tooltipOn )
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooltipOn" ), true );
+                if(TooltipHandler.tooltipOn)
+                    Minecraft.getInstance().player.sendStatusMessage(new TranslationTextComponent("pmmo.tooltipOn"), true);
                 else
-                    Minecraft.getInstance().player.sendStatusMessage( new TranslationTextComponent( "pmmo.tooltipOff" ), true );
+                    Minecraft.getInstance().player.sendStatusMessage(new TranslationTextComponent("pmmo.tooltipOff"), true);
             }
 
             tooltipKeyWasPressed = ClientHandler.TOGGLE_TOOLTIP.isKeyDown();
@@ -93,8 +93,8 @@ public class ClientEventHandler
     }
 
     @SubscribeEvent
-    public static void tooltipEvent( ItemTooltipEvent event )
+    public static void tooltipEvent(ItemTooltipEvent event)
     {
-        TooltipHandler.handleTooltip( event );
+        TooltipHandler.handleTooltip(event);
     }
 }

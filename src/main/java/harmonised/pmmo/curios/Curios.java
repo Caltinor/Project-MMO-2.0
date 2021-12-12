@@ -26,7 +26,7 @@ public class Curios
     {
         public static Stream<ICurioStacksHandler> getCurios(PlayerEntity player)
         {
-            return CuriosApi.getCuriosHelper().getCuriosHandler( player )
+            return CuriosApi.getCuriosHelper().getCuriosHandler(player)
                     .map((curiosHandler) -> curiosHandler.getCurios().values().stream())
                     .orElse(Stream.empty());
         }

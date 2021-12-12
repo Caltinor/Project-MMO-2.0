@@ -15,30 +15,30 @@ import java.util.UUID;
 
 public class LeavePartyCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         UUID uuid = player.getUniqueID();
         PmmoSavedData pmmoSavedData = PmmoSavedData.get();
-        Party party = pmmoSavedData.getParty( uuid );
-        int result = pmmoSavedData.removeFromParty( uuid );
-        switch( result )
+        Party party = pmmoSavedData.getParty(uuid);
+        int result = pmmoSavedData.removeFromParty(uuid);
+        switch(result)
         {
             case -1:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAreNotInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.youAreNotInAParty").setStyle(XP.textStyle.get("red")), false);
                 break;
 
             case 0:
             case 1:
-                Collection<ServerPlayerEntity> members = party.getOnlineMembers( player.getServer() );
-                for( ServerPlayerEntity memberPlayer : members )
+                Collection<ServerPlayerEntity> members = party.getOnlineMembers(player.getServer());
+                for(ServerPlayerEntity memberPlayer : members)
                 {
-                    if( !memberPlayer.getUniqueID().equals( uuid ) )
-                        memberPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.playerLeftYourParty", player.getDisplayName() ).setStyle( XP.textStyle.get( "red" ) ), false );
+                    if(!memberPlayer.getUniqueID().equals(uuid))
+                        memberPlayer.sendStatusMessage(new TranslationTextComponent("pmmo.playerLeftYourParty", player.getDisplayName()).setStyle(XP.textStyle.get("red")), false);
                 }
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.youLeftTheParty" ).setStyle(XP.textStyle.get( "green" ) ), false );
-                if( result == 1 )
-                    player.sendStatusMessage( new TranslationTextComponent( "pmmo.disbandedParty" ).setStyle(XP.textStyle.get( "yellow" ) ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.youLeftTheParty").setStyle(XP.textStyle.get("green")), false);
+                if(result == 1)
+                    player.sendStatusMessage(new TranslationTextComponent("pmmo.disbandedParty").setStyle(XP.textStyle.get("yellow")), false);
                 break;
         }
 

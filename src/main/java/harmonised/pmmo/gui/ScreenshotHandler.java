@@ -16,24 +16,24 @@ public class ScreenshotHandler
     public static final Logger LOGGER = LogManager.getLogger();
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-    private static final File pmmoDir = new File( "screenshots/pmmo" );
+    private static final File pmmoDir = new File("screenshots/pmmo");
 
-    public static void takeScreenshot( String screenshotName, String folderName )
+    public static void takeScreenshot(String screenshotName, String folderName)
     {
         try
         {
-            File screenshotDir = new File( pmmoDir, folderName );
+            File screenshotDir = new File(pmmoDir, folderName);
             screenshotDir.mkdirs();
             Minecraft mc = Minecraft.getInstance();
             NativeImage nativeImage = ScreenShotHelper.createScreenshot(mc.getFramebuffer().framebufferWidth, mc.getFramebuffer().framebufferHeight, mc.getFramebuffer());
-            String screenshotDate = DATE_FORMAT.format( new Date() );
-            File screenshotFile = new File( screenshotDir, screenshotName + " " + screenshotDate + ".png" );
+            String screenshotDate = DATE_FORMAT.format(new Date());
+            File screenshotFile = new File(screenshotDir, screenshotName + " " + screenshotDate + ".png");
 
-            nativeImage.write( screenshotFile );
+            nativeImage.write(screenshotFile);
         }
-        catch ( Exception err )
+        catch (Exception err)
         {
-            LOGGER.error( "PMMO: FAILED TO TAKE SCREENSHOT", err );
+            LOGGER.error("PMMO: FAILED TO TAKE SCREENSHOT", err);
         }
     }
 }

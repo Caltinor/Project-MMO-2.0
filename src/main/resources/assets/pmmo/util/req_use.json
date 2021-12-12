@@ -82,15 +82,15 @@
 	},
 	"aquaculture:diamond_fishing_rod":
 	{
-		"fishing": 20
+		"fishing": 45
 	},
 	"aquaculture:gold_fishing_rod":
 	{
-		"fishing": 15
+		"fishing": 30
 	},
 	"aquaculture:iron_fishing_rod":
 	{
-		"fishing": 10
+		"fishing": 15
 	},
 	"aquaculture:neptunium_bow":
 	{
@@ -99,7 +99,7 @@
 	},
 	"aquaculture:neptunium_fishing_rod":
 	{
-		"fishing": 30
+		"fishing": 60
 	},
 	"aquaculture:tackle_box":
 	{

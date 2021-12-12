@@ -12,7 +12,7 @@ public class MessageKeypress
     int key;
     boolean keyState;
 
-    public MessageKeypress( boolean keyState, int key )
+    public MessageKeypress(boolean keyState, int key)
     {
         this.keyState = keyState;
         this.key = key;
@@ -22,7 +22,7 @@ public class MessageKeypress
     {
     }
 
-    public static MessageKeypress decode(PacketBuffer buf )
+    public static MessageKeypress decode(PacketBuffer buf)
     {
         MessageKeypress packet = new MessageKeypress();
         packet.keyState = buf.readBoolean();
@@ -31,24 +31,24 @@ public class MessageKeypress
         return packet;
     }
 
-    public static void encode(MessageKeypress packet, PacketBuffer buf )
+    public static void encode(MessageKeypress packet, PacketBuffer buf)
     {
-        buf.writeBoolean( packet.keyState );
-        buf.writeInt( packet.key );
+        buf.writeBoolean(packet.keyState);
+        buf.writeInt(packet.key);
     }
 
-    public static void handlePacket(MessageKeypress packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageKeypress packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
             UUID playerUUID = ctx.get().getSender().getUniqueID();
 
-            if( packet.key == 1 )
+            if(packet.key == 1)
             {
-                if( packet.keyState )
-                    XP.isVeining.add( playerUUID );
+                if(packet.keyState)
+                    XP.isVeining.add(playerUUID);
                 else
-                    XP.isVeining.remove( playerUUID );
+                    XP.isVeining.remove(playerUUID);
             }
         });
         ctx.get().setPacketHandled(true);

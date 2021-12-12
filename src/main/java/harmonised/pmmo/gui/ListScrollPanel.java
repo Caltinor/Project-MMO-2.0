@@ -30,7 +30,7 @@ public class ListScrollPanel extends ScrollPanel
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
     int accumulativeHeight;
 
-    public ListScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, PlayerEntity player, ArrayList<ListButton> buttons )
+    public ListScrollPanel(Minecraft client, int width, int height, int top, int left, JType jType, PlayerEntity player, ArrayList<ListButton> buttons)
     {
         super(client, width, height, top, left);
         this.player = player;
@@ -47,7 +47,7 @@ public class ListScrollPanel extends ScrollPanel
         this.barLeft = this.left + this.width - barWidth;
     }
 
-    public void setButtons( ArrayList<ListButton> buttons )
+    public void setButtons(ArrayList<ListButton> buttons)
     {
         this.buttons = buttons;
     }
@@ -57,7 +57,7 @@ public class ListScrollPanel extends ScrollPanel
     {
         int height = 0;
 
-        for( ListButton a : buttons )
+        for(ListButton a : buttons)
         {
             height += a.getHeightRealms() + 4;
         }
@@ -66,44 +66,44 @@ public class ListScrollPanel extends ScrollPanel
     }
 
     @Override
-    protected void drawPanel( MatrixStack stack, int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
+    protected void drawPanel(MatrixStack stack, int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
         accumulativeHeight = 0;
-        for( int i = 0; i < buttons.size(); i++ )
+        for(int i = 0; i < buttons.size(); i++)
         {
-            ListButton button = buttons.get( i );
+            ListButton button = buttons.get(i);
             button.x = this.right - button.getWidth() - 8;
             button.y = relativeY + accumulativeHeight;
 
-            if( button.y + button.getHeightRealms() + 2 > this.top && button.y - 2 < this.bottom )
+            if(button.y + button.getHeightRealms() + 2 > this.top && button.y - 2 < this.bottom)
             {
-                if( button.unlocked )
-                    fillGradient( stack, this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeightRealms() + 2, 0x22444444, 0x33222222);
+                if(button.unlocked)
+                    fillGradient(stack, this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeightRealms() + 2, 0x22444444, 0x33222222);
                 else
-                    fillGradient( stack, this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeightRealms() + 2, 0xaa444444, 0xaa222222);
+                    fillGradient(stack, this.left + 4, button.y - 2, this.right - 2, button.y + button.getHeightRealms() + 2, 0xaa444444, 0xaa222222);
 
-                button.render( stack,  mouseX, mouseY, 0 );
+                button.render(stack,  mouseX, mouseY, 0);
 
                 int color = button.unlocked ? 0x54fc54 : 0xfc5454;
 
-                if( jType.equals( JType.SKILLS ) )
+                if(jType.equals(JType.SKILLS))
                 {
-                    color = Skill.getSkillColor( button.regKey );
-                    if( color == 0xffffff )
+                    color = Skill.getSkillColor(button.regKey);
+                    if(color == 0xffffff)
                         color = 0x54fc54;
                 }
 
-                if( jType.equals( JType.HISCORE ) )
-                    drawString( stack, Minecraft.getInstance().fontRenderer, (i+1) + ".", this.left + 178, button.y + 2, color );
-                else if( jType.equals( JType.SKILLS ) && i > 0 )
-                    drawString( stack, Minecraft.getInstance().fontRenderer, (i) + ".", this.left + 178, button.y + 2, color );
+                if(jType.equals(JType.HISCORE))
+                    drawString(stack, Minecraft.getInstance().fontRenderer, (i+1) + ".", this.left + 178, button.y + 2, color);
+                else if(jType.equals(JType.SKILLS) && i > 0)
+                    drawString(stack, Minecraft.getInstance().fontRenderer, (i) + ".", this.left + 178, button.y + 2, color);
 
-                drawString( stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, color );
+                drawString(stack, Minecraft.getInstance().fontRenderer, button.title, this.left + 6, button.y + 2, color);
 
                 int j = 0;
-                for( ITextComponent line : button.text )
+                for(ITextComponent line : button.text)
                 {
-                    drawString( stack, Minecraft.getInstance().fontRenderer, line.getString(), this.left + 6, button.y + 11 + (j++ * 9), line.getStyle().getColor() == null ? 0xffffff : line.getStyle().getColor().getColor() );
+                    drawString(stack, Minecraft.getInstance().fontRenderer, line.getString(), this.left + 6, button.y + 11 + (j++ * 9), line.getStyle().getColor() == null ? 0xffffff : line.getStyle().getColor().getColor());
                 }
             }
             accumulativeHeight += button.getHeightRealms() + 4;
@@ -121,7 +121,7 @@ public class ListScrollPanel extends ScrollPanel
         return (int) this.scrollDistance;
     }
 
-    public void setScroll( int scroll )
+    public void setScroll(int scroll)
     {
         this.scrollDistance = scroll;
     }
@@ -147,14 +147,14 @@ public class ListScrollPanel extends ScrollPanel
     }
 
     @Override
-    public void render( MatrixStack stack, int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
 //        this.drawBackground();
 
 //        if (Minecraft.getInstance().world != null)
 //        {
-//            this.fillGradient( stack, 0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
-//            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super ) );
+//            this.fillGradient(stack, 0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
+//            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super));
 //        }
 
         Tessellator tess = Tessellator.getInstance();
@@ -185,7 +185,7 @@ public class ListScrollPanel extends ScrollPanel
 //        }
 
         int baseY = this.top + border - (int)this.scrollDistance;
-        this.drawPanel( stack, right, baseY, tess, mouseX, mouseY);
+        this.drawPanel(stack, right, baseY, tess, mouseX, mouseY);
 
         RenderSystem.disableDepthTest();
 

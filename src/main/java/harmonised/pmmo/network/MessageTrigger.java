@@ -13,7 +13,7 @@ public class MessageTrigger
 {
     int type;
 
-    public MessageTrigger( int type )
+    public MessageTrigger(int type)
     {
         this.type = type;
     }
@@ -22,7 +22,7 @@ public class MessageTrigger
     {
     }
 
-    public static MessageTrigger decode( PacketBuffer buf )
+    public static MessageTrigger decode(PacketBuffer buf)
     {
         MessageTrigger packet = new MessageTrigger();
 
@@ -31,18 +31,18 @@ public class MessageTrigger
         return packet;
     }
 
-    public static void encode( MessageTrigger packet, PacketBuffer buf )
+    public static void encode(MessageTrigger packet, PacketBuffer buf)
     {
-        buf.writeInt( packet.type );
+        buf.writeInt(packet.type);
     }
 
-    public static void handlePacket( MessageTrigger packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageTrigger packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
-            if( Minecraft.getInstance().player != null )
+            if(Minecraft.getInstance().player != null)
             {
-                if( packet.type == 1 )
+                if(packet.type == 1)
                     ClientHandler.openInfoMenu();
             }
         });

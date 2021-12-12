@@ -28,7 +28,7 @@ public class MessageUpdatePlayerNBT
     public CompoundNBT reqPackage = new CompoundNBT();
     public int type;
 
-    public MessageUpdatePlayerNBT( CompoundNBT theNBT, int type )
+    public MessageUpdatePlayerNBT(CompoundNBT theNBT, int type)
     {
         this.reqPackage = theNBT;
         this.type = type;
@@ -38,7 +38,7 @@ public class MessageUpdatePlayerNBT
     {
     }
 
-    public static MessageUpdatePlayerNBT decode( PacketBuffer buf )
+    public static MessageUpdatePlayerNBT decode(PacketBuffer buf)
     {
         MessageUpdatePlayerNBT packet = new MessageUpdatePlayerNBT();
         packet.reqPackage = buf.readCompoundTag();
@@ -47,84 +47,84 @@ public class MessageUpdatePlayerNBT
         return packet;
     }
 
-    public static void encode( MessageUpdatePlayerNBT packet, PacketBuffer buf )
+    public static void encode(MessageUpdatePlayerNBT packet, PacketBuffer buf)
     {
-        buf.writeCompoundTag( packet.reqPackage );
-        buf.writeInt( packet.type );
+        buf.writeCompoundTag(packet.reqPackage);
+        buf.writeInt(packet.type);
     }
 
-    public static void handlePacket( MessageUpdatePlayerNBT packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageUpdatePlayerNBT packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
-            switch( packet.type )
+            switch(packet.type)
             {
                 case 0: //prefs
                 case 1: //abilities
-                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
-                        ClientHandler.updateNBTTag( packet );
+                    if(ctx.get().getDirection().getReceptionSide().equals(LogicalSide.CLIENT))
+                        ClientHandler.updateNBTTag(packet);
                     else
-                        ServerHandler.updateNBTTag( packet, ctx.get().getSender() );
+                        ServerHandler.updateNBTTag(packet, ctx.get().getSender());
                     break;
 
                 case 2: //config
-                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
+                    if(ctx.get().getDirection().getReceptionSide().equals(LogicalSide.CLIENT))
                     {
-                        Config.setConfigMap( NBTHelper.nbtToMapString( packet.reqPackage ) );
+                        Config.setConfigMap(NBTHelper.nbtToMapString(packet.reqPackage));
                         WorldTickHandler.refreshVein();
                         PmmoCommand.init();
                     }
                     else
-                        LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
+                        LOGGER.error( "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet);
                     break;
 
                 case 3: //stats
-                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
+                    if(ctx.get().getDirection().getReceptionSide().equals(LogicalSide.CLIENT))
                     {
-                        for( String uuidKey : packet.reqPackage.keySet() )
+                        for(String uuidKey : packet.reqPackage.keySet())
                         {
-                            UUID uuid = UUID.fromString( uuidKey );
-                            String name = packet.reqPackage.getCompound( uuidKey ).getString( "name" );
-                            packet.reqPackage.getCompound( uuidKey ).remove( "name" );
+                            UUID uuid = UUID.fromString(uuidKey);
+                            String name = packet.reqPackage.getCompound(uuidKey).getString("name");
+                            packet.reqPackage.getCompound(uuidKey).remove("name");
 
-                            if( !XP.playerNames.containsKey( uuid ) )
+                            if(!XP.playerNames.containsKey(uuid))
                             {
-                                XP.playerNames.put( uuid, name );
-                                XP.playerUUIDs.put( name, uuid );
+                                XP.playerNames.put(uuid, name);
+                                XP.playerUUIDs.put(name, uuid);
                             }
                         }
 
-                        XP.setOfflineXpMaps( NBTHelper.nbtToXpMaps( packet.reqPackage ) );
+                        XP.setOfflineXpMaps(NBTHelper.nbtToXpMaps(packet.reqPackage));
                     }
                     else
-                        LOGGER.error(  "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet );
+                        LOGGER.error( "TYPE " + packet.type + " UPDATE NBT PACKET HAS BEEN SENT TO SERVER", packet);
                     break;
 
                 case 4: //data
-                    if( packet.reqPackage.contains( "wipe" ) )
+                    if(packet.reqPackage.contains("wipe"))
                     {
                         JsonConfig.data = new HashMap<>();
-                        JsonConfig.initMap( JsonConfig.data );
+                        JsonConfig.initMap(JsonConfig.data);
                     }
                     else
-                        NBTHelper.addData3( JsonConfig.data, NBTHelper.nbtToData3( packet.reqPackage ) );
+                        NBTHelper.addData3(JsonConfig.data, NBTHelper.nbtToData3(packet.reqPackage));
                     break;
 
                 case 5: //data2
-                    if( packet.reqPackage.contains( "wipe" ) )
+                    if(packet.reqPackage.contains("wipe"))
                     {
                         JsonConfig.data2 = new HashMap<>();
-                        JsonConfig.initMap2( JsonConfig.data2 );
+                        JsonConfig.initMap2(JsonConfig.data2);
                     }
                     else
-                        NBTHelper.addData4( JsonConfig.data2, NBTHelper.nbtToData4( packet.reqPackage ) );
+                        NBTHelper.addData4(JsonConfig.data2, NBTHelper.nbtToData4(packet.reqPackage));
                     break;
 
                 case 6:
-                    if( ctx.get().getDirection().getReceptionSide().equals( LogicalSide.CLIENT ) )
-                        ClientHandler.updateNBTTag( packet );
+                    if(ctx.get().getDirection().getReceptionSide().equals(LogicalSide.CLIENT))
+                        ClientHandler.updateNBTTag(packet);
                     else
-                        LOGGER.error( "XP BOOST PACKET SENT TO SERVER" );
+                        LOGGER.error("XP BOOST PACKET SENT TO SERVER");
                     break;
 
                 case 7:
@@ -132,7 +132,7 @@ public class MessageUpdatePlayerNBT
                     break;
 
                 default:
-                    LOGGER.error( "WRONG SYNC ID AT NBT UPDATE PACKET", packet );
+                    LOGGER.error("WRONG SYNC ID AT NBT UPDATE PACKET", packet);
                     break;
             }
         });

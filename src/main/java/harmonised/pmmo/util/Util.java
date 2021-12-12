@@ -8,85 +8,85 @@ import java.util.Map;
 
 public class Util
 {
-    public static double mapCapped( double input, double inLow, double inHigh, double outLow, double outHigh )
+    public static double mapCapped(double input, double inLow, double inHigh, double outLow, double outHigh)
     {
-        if( input < inLow )
+        if(input < inLow)
             input = inLow;
-        if( input > inHigh )
+        if(input > inHigh)
             input = inHigh;
 
-        return map( input, inLow, inHigh, outLow, outHigh );
+        return map(input, inLow, inHigh, outLow, outHigh);
     }
 
-    public static double map( double input, double inLow, double inHigh, double outLow, double outHigh )
+    public static double map(double input, double inLow, double inHigh, double outLow, double outHigh)
     {
-        if( inLow == inHigh )
+        if(inLow == inHigh)
             return outHigh;
         else
-            return ( (input - inLow) / (inHigh - inLow) ) * (outHigh - outLow) + outLow;
+            return ((input - inLow) / (inHigh - inLow)) * (outHigh - outLow) + outLow;
     }
 
-    public static Vector3d getMidVec( Vector3d v1, Vector3d v2 )
+    public static Vector3d getMidVec(Vector3d v1, Vector3d v2)
     {
-        return new Vector3d( (v1.x + v2.x)/2, (v1.y + v2.y)/2, (v1.z + v2.z)/2 );
+        return new Vector3d((v1.x + v2.x)/2, (v1.y + v2.y)/2, (v1.z + v2.z)/2);
     }
 
-    public static double getDistance( BlockPos p1, BlockPos p2 )
+    public static double getDistance(BlockPos p1, BlockPos p2)
     {
-        return getDistance( new Vector3d( p1.getX(), p1.getY(), p1.getZ() ), new Vector3d( p2.getX(), p2.getY(), p2.getZ() ) );
+        return getDistance(new Vector3d(p1.getX(), p1.getY(), p1.getZ()), new Vector3d(p2.getX(), p2.getY(), p2.getZ()));
     }
-    public static double getDistance( Vector3d p1, Vector3d p2 )
+    public static double getDistance(Vector3d p1, Vector3d p2)
     {
-        return Math.sqrt( Math.pow( p2.x - p1.x, 2 ) + Math.pow( p2.y - p1.y, 2 ) + Math.pow( p2.z - p1.z, 2 ) );
-    }
-
-    public static double getHorizontalDistance( Vector3d p1, Vector3d p2 )
-    {
-        return Math.sqrt( Math.pow( p2.x - p1.x, 2 ) + Math.pow( p2.z - p1.z, 2 ) );
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2) + Math.pow(p2.z - p1.z, 2));
     }
 
-    public static <T> T orDefault( T input, T defaultTo )
+    public static double getHorizontalDistance(Vector3d p1, Vector3d p2)
+    {
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.z - p1.z, 2));
+    }
+
+    public static <T> T orDefault(T input, T defaultTo)
     {
         return input == null ? defaultTo : input;
     }
 
-    public static void binaryPrint( byte input )
+    public static void binaryPrint(byte input)
     {
         StringBuilder msg = new StringBuilder();
-        for( int i = 7; i >= 0; i-- )
+        for(int i = 7; i >= 0; i--)
         {
-            msg.append( (1 << i & input) > 0 ? 1 : 0 );
+            msg.append((1 << i & input) > 0 ? 1 : 0);
         }
-        System.out.println( msg );
+        System.out.println(msg);
     }
 
-    public static void binaryPrint( int input )
+    public static void binaryPrint(int input)
     {
         StringBuilder msg = new StringBuilder();
-        for( int i = 0; i < 4; i++ )
+        for(int i = 0; i < 4; i++)
         {
-            for( int j = 7; j >= 0; j-- )
+            for(int j = 7; j >= 0; j--)
             {
-                msg.append( (1 << i*8 + j & input) > 0 ? 1 : 0 );
+                msg.append((1 << i*8 + j & input) > 0 ? 1 : 0);
             }
-            msg.append( " " );
+            msg.append(" ");
         }
-        System.out.println( msg );
+        System.out.println(msg);
     }
 
-    public static Vector3d blockPosToVector( BlockPos pos )
+    public static Vector3d blockPosToVector(BlockPos pos)
     {
-        return new Vector3d( pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5 );
+        return new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
     }
 
-    public static int hueToRGB( float hue, float saturation, float brightness )
+    public static int hueToRGB(float hue, float saturation, float brightness)
     {
         float r = 0, g = 0, b = 0;
 
         float chroma = brightness * saturation;
         float hue1 = hue/60F;
         float x = chroma * (1- Math.abs((hue1 % 2) - 1));
-        switch( (int) hue1 )
+        switch((int) hue1)
         {
             case 0:
                 r = chroma;
@@ -132,23 +132,23 @@ public class Util
         return r1 << 16 | b1 << 8 | g1;
     }
 
-    public static <T> boolean mapIsAnyAbove1( Map<T, Double> input )
+    public static <T> boolean mapIsAnyAbove1(Map<T, Double> input)
     {
-        for( Map.Entry<T, Double> entry : input.entrySet() )
+        for(Map.Entry<T, Double> entry : input.entrySet())
         {
-            if( entry.getValue() > 1 )
+            if(entry.getValue() > 1)
                 return true;
         }
         return false;
     }
 
-    public static <T> boolean mapIsAnyAbove1String( Map<String, Map<T, Double>> input, String key )
+    public static <T> boolean mapIsAnyAbove1String(Map<String, Map<T, Double>> input, String key)
     {
-        if( input != null && input.containsKey( key ) )
+        if(input != null && input.containsKey(key))
         {
-            for( Map.Entry<T, Double> entry : input.get( key ).entrySet() )
+            for(Map.Entry<T, Double> entry : input.get(key).entrySet())
             {
-                if( entry.getValue() > 1 )
+                if(entry.getValue() > 1)
                     return true;
             }
         }

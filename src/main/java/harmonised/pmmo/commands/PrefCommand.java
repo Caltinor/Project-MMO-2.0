@@ -20,16 +20,16 @@ import java.util.Map;
 
 public class PrefCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
-        Map<String, Double> prefsMap = Config.getPreferencesMap( player );
+        Map<String, Double> prefsMap = Config.getPreferencesMap(player);
         Double value = null;
-        if( args.length > 3 )
+        if(args.length > 3)
         {
-            value = Double.parseDouble( args[3] );
-            if( value < 0 )
+            value = Double.parseDouble(args[3]);
+            if(value < 0)
                 value = 0D;
         }
 
@@ -37,33 +37,33 @@ public class PrefCommand
         boolean matched = false;
         String match = "ERROR";
 
-//        for( String element : PmmoCommand.suggestPref )
+//        for(String element : PmmoCommand.suggestPref)
 //        {
-//            if( args[2].toLowerCase().equals( element.toLowerCase() ) )
+//            if(args[2].toLowerCase().equals(element.toLowerCase()))
 //            {
 //                match = element;
 //                matched = true;
 //            }
 //        }
 
-        if( matched )
+        if(matched)
         {
-            if( value != null )
+            if(value != null)
             {
-                prefsMap.put( match, value );
+                prefsMap.put(match, value);
 
-                NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( NBTHelper.mapStringToNbt( prefsMap ), 0 ), (ServerPlayerEntity) player );
-                AttributeHandler.updateAll( player );
+                NetworkHandler.sendToPlayer(new MessageUpdatePlayerNBT(NBTHelper.mapStringToNbt(prefsMap), 0), (ServerPlayerEntity) player);
+                AttributeHandler.updateAll(player);
 
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasBeenSet", match, args[3] ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.hasBeenSet", match, args[3]), false);
             }
-            else if( prefsMap.containsKey( match ) )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasTheValue", "" + match, "" + prefsMap.get( match ) ), false );
+            else if(prefsMap.containsKey(match))
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.hasTheValue", "" + match, "" + prefsMap.get(match)), false);
             else
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.hasUnsetValue", "" + match ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.hasUnsetValue", "" + match), false);
         }
         else
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.invalidChoice", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+            player.sendStatusMessage(new TranslationTextComponent("pmmo.invalidChoice", args[2]).setStyle(XP.textStyle.get("red")), false);
 
         return 1;
     }

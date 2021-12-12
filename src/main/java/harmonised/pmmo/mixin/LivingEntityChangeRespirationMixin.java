@@ -6,12 +6,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin( LivingEntity.class )
+@Mixin(LivingEntity.class)
 public class LivingEntityChangeRespirationMixin
 {
-    @Redirect( at = @At( value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getRespirationModifier(Lnet/minecraft/entity/LivingEntity;)I" ), method = "decreaseAirSupply" )
-    public int projectmmo$$changeLivingEntityRespiration( LivingEntity entity )
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getRespirationModifier(Lnet/minecraft/entity/LivingEntity;)I"), method = "decreaseAirSupply")
+    public int projectmmo$$changeLivingEntityRespiration(LivingEntity entity)
     {
-        return AirSupplyDecreaseHandler.returnPmmoAffectedRespiration( entity );
+        return AirSupplyDecreaseHandler.returnPmmoAffectedRespiration(entity);
     }
 }

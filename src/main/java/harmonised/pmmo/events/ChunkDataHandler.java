@@ -20,51 +20,51 @@ public class ChunkDataHandler
         placedMap = new HashMap<>();
     }
 
-    public static void handleChunkDataLoad( ChunkDataEvent.Load event )
+    public static void handleChunkDataLoad(ChunkDataEvent.Load event)
     {
         CompoundNBT chunkNBT = event.getData();
-        if( chunkNBT != null )
+        if(chunkNBT != null)
         {
-            CompoundNBT levelNBT = chunkNBT.getCompound( "Level" );
-            if( levelNBT.contains( "placedPos" ) )
+            CompoundNBT levelNBT = chunkNBT.getCompound("Level");
+            if(levelNBT.contains("placedPos"))
             {
                 World world = (World) event.getWorld();
-                ResourceLocation dimResLoc = XP.getDimResLoc( world );
+                ResourceLocation dimResLoc = XP.getDimResLoc(world);
                 ChunkPos chunkPos = event.getChunk().getPos();
 
-                if( !placedMap.containsKey( dimResLoc ) )
-                    placedMap.put( dimResLoc, new HashMap<>() );
+                if(!placedMap.containsKey(dimResLoc))
+                    placedMap.put(dimResLoc, new HashMap<>());
 
-                CompoundNBT placedPosNBT = ( (CompoundNBT) levelNBT.get( "placedPos" ) );
-                if( placedPosNBT == null )
+                CompoundNBT placedPosNBT = ((CompoundNBT) levelNBT.get("placedPos"));
+                if(placedPosNBT == null)
                     return;
-                Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
+                Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get(dimResLoc);
                 Map<BlockPos, UUID> blockMap = new HashMap<>();
                 Set<String> keySet = placedPosNBT.keySet();
 
-                keySet.forEach( key ->
+                keySet.forEach(key ->
                 {
-                    CompoundNBT entry = placedPosNBT.getCompound( key );
-                    blockMap.put( NBTUtil.readBlockPos( entry.getCompound( "pos" ) ), new UUID( entry.getCompound( "UUID" ).getLong("M"), entry.getCompound( "UUID" ).getLong("L") ) );
+                    CompoundNBT entry = placedPosNBT.getCompound(key);
+                    blockMap.put(NBTUtil.readBlockPos(entry.getCompound("pos")), new UUID(entry.getCompound("UUID").getLong("M"), entry.getCompound("UUID").getLong("L")));
                 });
 
-                chunkMap.remove( chunkPos );
-                chunkMap.put( chunkPos, blockMap );
+                chunkMap.remove(chunkPos);
+                chunkMap.put(chunkPos, blockMap);
             }
         }
     }
 
-    public static void handleChunkDataSave( ChunkDataEvent.Save event )
+    public static void handleChunkDataSave(ChunkDataEvent.Save event)
     {
         World world = (World) event.getWorld();
-        ResourceLocation dimResLoc = XP.getDimResLoc( world );
-        if( placedMap.containsKey( dimResLoc ) )
+        ResourceLocation dimResLoc = XP.getDimResLoc(world);
+        if(placedMap.containsKey(dimResLoc))
         {
             ChunkPos chunkPos = event.getChunk().getPos();
-            if( placedMap.get( dimResLoc ).containsKey( chunkPos ) )
+            if(placedMap.get(dimResLoc).containsKey(chunkPos))
             {
-                CompoundNBT levelNBT = (CompoundNBT) event.getData().get( "Level" );
-                if( levelNBT == null )
+                CompoundNBT levelNBT = (CompoundNBT) event.getData().get("Level");
+                if(levelNBT == null)
                     return;
 
                 CompoundNBT newPlacedNBT = new CompoundNBT();
@@ -72,60 +72,60 @@ public class ChunkDataHandler
 
                 int i = 0;
 
-                for( Map.Entry<BlockPos, UUID> entry : placedMap.get( dimResLoc ).get( chunkPos ).entrySet() )
+                for(Map.Entry<BlockPos, UUID> entry : placedMap.get(dimResLoc).get(chunkPos).entrySet())
                 {
                     insidesNBT = new CompoundNBT();
-                    insidesNBT.put( "pos", NBTUtil.writeBlockPos( entry.getKey() ) );
-                    insidesNBT.put( "UUID", XP.writeUniqueId( entry.getValue() ) );
-                    newPlacedNBT.put( i++ + "", insidesNBT );
+                    insidesNBT.put("pos", NBTUtil.writeBlockPos(entry.getKey()));
+                    insidesNBT.put("UUID", XP.writeUniqueId(entry.getValue()));
+                    newPlacedNBT.put(i++ + "", insidesNBT);
                 }
 
-                levelNBT.put( "placedPos", newPlacedNBT );
+                levelNBT.put("placedPos", newPlacedNBT);
             }
         }
     }
 
-    public static void addPos( ResourceLocation dimResLoc, BlockPos blockPos, UUID uuid )
+    public static void addPos(ResourceLocation dimResLoc, BlockPos blockPos, UUID uuid)
     {
-        ChunkPos chunkPos = new ChunkPos( blockPos );
+        ChunkPos chunkPos = new ChunkPos(blockPos);
 
-        if( !placedMap.containsKey( dimResLoc ) )
-            placedMap.put( dimResLoc, new HashMap<>() );
+        if(!placedMap.containsKey(dimResLoc))
+            placedMap.put(dimResLoc, new HashMap<>());
 
-        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
+        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get(dimResLoc);
 
-        if( !chunkMap.containsKey( chunkPos ) )
-            chunkMap.put( chunkPos, new HashMap<>() );
+        if(!chunkMap.containsKey(chunkPos))
+            chunkMap.put(chunkPos, new HashMap<>());
 
-        Map<BlockPos, UUID> blockMap = chunkMap.get( chunkPos );
+        Map<BlockPos, UUID> blockMap = chunkMap.get(chunkPos);
 
-        blockMap.put( blockPos, uuid );
+        blockMap.put(blockPos, uuid);
     }
 
-    public static void delPos( ResourceLocation dimResLoc, BlockPos blockPos )
+    public static void delPos(ResourceLocation dimResLoc, BlockPos blockPos)
     {
-        ChunkPos chunkPos = new ChunkPos( blockPos );
+        ChunkPos chunkPos = new ChunkPos(blockPos);
 
-        if( !placedMap.containsKey( dimResLoc ) )
-            placedMap.put( dimResLoc, new HashMap<>() );
+        if(!placedMap.containsKey(dimResLoc))
+            placedMap.put(dimResLoc, new HashMap<>());
 
-        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get( dimResLoc );
+        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get(dimResLoc);
 
-        if( !chunkMap.containsKey( chunkPos ) )
-            chunkMap.put( chunkPos, new HashMap<>() );
+        if(!chunkMap.containsKey(chunkPos))
+            chunkMap.put(chunkPos, new HashMap<>());
 
-        Map<BlockPos, UUID> blockMap = chunkMap.get( chunkPos );
+        Map<BlockPos, UUID> blockMap = chunkMap.get(chunkPos);
 
-        blockMap.remove( blockPos );
+        blockMap.remove(blockPos);
     }
 
-    public static UUID checkPos( World world, BlockPos pos )
+    public static UUID checkPos(World world, BlockPos pos)
     {
-        return checkPos( XP.getDimResLoc( world ), pos );
+        return checkPos(XP.getDimResLoc(world), pos);
     }
 
-    public static UUID checkPos( ResourceLocation dimResLoc, BlockPos blockPos )
+    public static UUID checkPos(ResourceLocation dimResLoc, BlockPos blockPos)
     {
-        return placedMap.getOrDefault( dimResLoc, new HashMap<>() ).getOrDefault( new ChunkPos( blockPos ), new HashMap<>() ).get( blockPos );
+        return placedMap.getOrDefault(dimResLoc, new HashMap<>()).getOrDefault(new ChunkPos(blockPos), new HashMap<>()).get(blockPos);
     }
 }

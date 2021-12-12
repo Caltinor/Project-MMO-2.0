@@ -21,7 +21,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '1.16.5-3.64.2'
+version = '1.16.5-3.66'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -182,7 +182,7 @@ jar
 {
     manifest
     {
-        attributes( [
+        attributes([
                 "Specification-Title": "pmmo",
                 "Specification-Vendor": "pmmosareus",
                 "Specification-Version": "1",

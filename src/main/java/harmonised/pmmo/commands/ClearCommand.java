@@ -25,34 +25,34 @@ public class ClearCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
-        String[] args = context.getInput().split( " " );
+        String[] args = context.getInput().split(" ");
 
         try
         {
-            Collection<ServerPlayerEntity> players = EntityArgument.getPlayers( context, "target" );
+            Collection<ServerPlayerEntity> players = EntityArgument.getPlayers(context, "target");
 
-            for( ServerPlayerEntity player : players )
+            for(ServerPlayerEntity player : players)
             {
                 String playerName = player.getDisplayName().getString();
-                AttributeHandler.updateAll( player );
-                XP.updateRecipes( player );
+                AttributeHandler.updateAll(player);
+                XP.updateRecipes(player);
 
-                Map<String, Double> xpMap = PmmoSavedData.get().getXpMap( player.getUniqueID() );
-                for( String skill : new HashSet<>( xpMap.keySet() ) )
+                Map<String, Double> xpMap = PmmoSavedData.get().getXpMap(player.getUniqueID());
+                for(String skill : new HashSet<>(xpMap.keySet()))
                 {
-                    xpMap.remove( skill );
+                    xpMap.remove(skill);
                 }
-                NetworkHandler.sendToPlayer( new MessageXp( 0f, "42069", 0, true ), player );
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.skillsCleared" ), false );
+                NetworkHandler.sendToPlayer(new MessageXp(0f, "42069", 0, true), player);
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.skillsCleared"), false);
 
-                LOGGER.info( "PMMO Command Clear: " + playerName + " has had their stats wiped!" );
+                LOGGER.info("PMMO Command Clear: " + playerName + " has had their stats wiped!");
             }
         }
-        catch( CommandSyntaxException e )
+        catch(CommandSyntaxException e)
         {
-            LOGGER.error( "Clear Command Failed to get Players [" + Arrays.toString(args) + "]", e );
+            LOGGER.error("Clear Command Failed to get Players [" + Arrays.toString(args) + "]", e);
         }
 
         return 1;

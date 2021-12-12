@@ -11,6 +11,7 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.NBTHelper;
+import harmonised.pmmo.util.ServerUtil;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -52,22 +53,23 @@ public class WorldTickHandler
         activeVein = new HashMap<>();
         veinSet = new HashMap<>();
 
-        minVeinCost = Config.getConfig( "minVeinCost" );
-        minVeinHardness = Config.getConfig( "minVeinHardness" );
-        levelsPerHardnessMining = Config.getConfig( "levelsPerHardnessMining" );
-        levelsPerHardnessWoodcutting = Config.getConfig( "levelsPerHardnessWoodcutting" );
-        levelsPerHardnessExcavation = Config.getConfig( "levelsPerHardnessExcavation" );
-        levelsPerHardnessFarming = Config.getConfig( "levelsPerHardnessFarming" );
-        levelsPerHardnessCrafting = Config.getConfig( "levelsPerHardnessCrafting" );
-        veinMaxDistance = (int) Math.floor( Config.forgeConfig.veinMaxDistance.get() );
+        minVeinCost = Config.getConfig("minVeinCost");
+        minVeinHardness = Config.getConfig("minVeinHardness");
+        levelsPerHardnessMining = Config.getConfig("levelsPerHardnessMining");
+        levelsPerHardnessWoodcutting = Config.getConfig("levelsPerHardnessWoodcutting");
+        levelsPerHardnessExcavation = Config.getConfig("levelsPerHardnessExcavation");
+        levelsPerHardnessFarming = Config.getConfig("levelsPerHardnessFarming");
+        levelsPerHardnessCrafting = Config.getConfig("levelsPerHardnessCrafting");
+        veinMaxDistance = (int) Math.floor(Config.forgeConfig.veinMaxDistance.get());
         exhaustionPerBlock = Config.forgeConfig.exhaustionPerBlock.get();
         veinMaxBlocks = Config.forgeConfig.veinMaxBlocks.get();
         maxVeinCharge = Config.forgeConfig.maxVeinCharge.get();
     }
 
-    public static void handleWorldTick( TickEvent.WorldTickEvent event )
+    public static void handleWorldTick(TickEvent.WorldTickEvent event)
     {
-        int veinSpeed = (int) Math.floor( Config.forgeConfig.veinSpeed.get() );
+        ServerUtil.tick(event);
+        int veinSpeed = (int) Math.floor(Config.forgeConfig.veinSpeed.get());
         VeinInfo veinInfo;
         World world;
         ItemStack startItemStack;
@@ -82,209 +84,209 @@ public class WorldTickHandler
         UUID blockUUID, playerUUID;
         int age = -1, maxAge = -2;
 
-        if( event.world.getServer() == null )
+        if(event.world.getServer() == null)
             return;
 
-        if( XP.getDimResLoc( event.world ).equals( DimensionType.OVERWORLD.getRegistryName() ) && ticksSinceAttributeRefresh++ >= 200 )
+        if(XP.getDimResLoc(event.world).equals(DimensionType.OVERWORLD.getRegistryName()) && ticksSinceAttributeRefresh++ >= 200)
         {
-            for ( ServerPlayerEntity player : event.world.getServer().getPlayerList().getPlayers())
+            for (ServerPlayerEntity player : event.world.getServer().getPlayerList().getPlayers())
             {
-                AttributeHandler.updateAll( player );
+                AttributeHandler.updateAll(player);
             }
         }
         
-        for( PlayerEntity player : event.world.getServer().getPlayerList().getPlayers() )
+        for(PlayerEntity player : event.world.getServer().getPlayerList().getPlayers())
         {
             playerUUID = player.getUniqueID();
 
-            for( int i = 0; i < veinSpeed; i++ )
+            for(int i = 0; i < veinSpeed; i++)
             {
-                if( activeVein.containsKey( player ) && veinSet.get( player ).size() > 0 )
+                if(activeVein.containsKey(player) && veinSet.get(player).size() > 0)
                 {
                     veinInfo = activeVein.get(player);
                     world = veinInfo.world;
                     startItemStack = veinInfo.itemStack;
                     startItem = veinInfo.startItem;
-                    veinPos = veinSet.get( player ).get( 0 );
-                    veinState = world.getBlockState( veinPos );
-                    abilitiesMap = Config.getAbilitiesMap( player );
+                    veinPos = veinSet.get(player).get(0);
+                    veinState = world.getBlockState(veinPos);
+                    abilitiesMap = Config.getAbilitiesMap(player);
                     regKey = veinState.getBlock().getRegistryName().toString();
-                    cost = getVeinCost( veinState, veinPos, player );
-                    correctBlock = world.getBlockState( veinPos ).getBlock().equals( veinInfo.state.getBlock() );
-                    correctItem = !startItem.isDamageable() || ( startItemStack.getDamage() < startItemStack.getMaxDamage() );
-                    correctHeldItem = player.getHeldItemMainhand().getItem().equals( startItem );
-                    blockUUID = ChunkDataHandler.checkPos( world, veinPos );
-                    isOwner = blockUUID == null || blockUUID.equals( playerUUID );
-                    skill = XP.getSkill( veinState );
+                    cost = getVeinCost(veinState, veinPos, player);
+                    correctBlock = world.getBlockState(veinPos).getBlock().equals(veinInfo.state.getBlock());
+                    correctItem = !startItem.isDamageable() || (startItemStack.getDamage() < startItemStack.getMaxDamage());
+                    correctHeldItem = player.getHeldItemMainhand().getItem().equals(startItem);
+                    blockUUID = ChunkDataHandler.checkPos(world, veinPos);
+                    isOwner = blockUUID == null || blockUUID.equals(playerUUID);
+                    skill = XP.getSkill(veinState);
 
-                    if( skill.equals( Skill.FARMING.toString() ) && !( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) && JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) ) )
+                    if(skill.equals(Skill.FARMING.toString()) && !(JsonConfig.data.get(JType.BLOCK_SPECIFIC).containsKey(regKey) && JsonConfig.data.get(JType.BLOCK_SPECIFIC).get(regKey).containsKey("growsUpwards")))
                     {
-                        if( veinState.hasProperty( BlockStateProperties.AGE_0_1 ) )
+                        if(veinState.hasProperty(BlockStateProperties.AGE_0_1))
                         {
-                            age = veinState.get( BlockStateProperties.AGE_0_1 );
+                            age = veinState.get(BlockStateProperties.AGE_0_1);
                             maxAge = 1;
                         }
-                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_2 ) )
+                        else if(veinState.hasProperty(BlockStateProperties.AGE_0_2))
                         {
-                            age = veinState.get( BlockStateProperties.AGE_0_2 );
+                            age = veinState.get(BlockStateProperties.AGE_0_2);
                             maxAge = 2;
                         }
-                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_3 ) )
+                        else if(veinState.hasProperty(BlockStateProperties.AGE_0_3))
                         {
-                            age = veinState.get( BlockStateProperties.AGE_0_3 );
+                            age = veinState.get(BlockStateProperties.AGE_0_3);
                             maxAge = 3;
                         }
-                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_5 ) )
+                        else if(veinState.hasProperty(BlockStateProperties.AGE_0_5))
                         {
-                            age = veinState.get( BlockStateProperties.AGE_0_5 );
+                            age = veinState.get(BlockStateProperties.AGE_0_5);
                             maxAge = 5;
                         }
-                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_7 ) )
+                        else if(veinState.hasProperty(BlockStateProperties.AGE_0_7))
                         {
-                            age = veinState.get( BlockStateProperties.AGE_0_7 );
+                            age = veinState.get(BlockStateProperties.AGE_0_7);
                             maxAge = 7;
                         }
-                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_15 ) )
+                        else if(veinState.hasProperty(BlockStateProperties.AGE_0_15))
                         {
-                            age = veinState.get( BlockStateProperties.AGE_0_15 );
+                            age = veinState.get(BlockStateProperties.AGE_0_15);
                             maxAge = 15;
                         }
-                        else if( veinState.hasProperty( BlockStateProperties.AGE_0_25 ) )
+                        else if(veinState.hasProperty(BlockStateProperties.AGE_0_25))
                         {
-                            age = veinState.get( BlockStateProperties.AGE_0_25 );
+                            age = veinState.get(BlockStateProperties.AGE_0_25);
                             maxAge = 25;
                         }
-                        else if( veinState.hasProperty( BlockStateProperties.PICKLES_1_4 ) )
+                        else if(veinState.hasProperty(BlockStateProperties.PICKLES_1_4))
                         {
-                            age = veinState.get( BlockStateProperties.PICKLES_1_4 );
+                            age = veinState.get(BlockStateProperties.PICKLES_1_4);
                             maxAge = 4;
                         }
 
-                        if( age >= 0 && age != maxAge )
+                        if(age >= 0 && age != maxAge)
                         {
-                            veinSet.get( player ).remove( 0 );
+                            veinSet.get(player).remove(0);
                             return;
                         }
                     }
 
-                    if( ( abilitiesMap.get( "veinLeft" ) >= cost || player.isCreative() ) && XP.isVeining.contains( player.getUniqueID() ) )
+                    if((abilitiesMap.get("veinLeft") >= cost || player.isCreative()) && XP.isVeining.contains(player.getUniqueID()))
                     {
-                        veinSet.get( player ).remove( 0 );
+                        veinSet.get(player).remove(0);
 
-                        BlockEvent.BreakEvent veinEvent = new BlockEvent.BreakEvent( world, veinPos, veinState, player );
+                        BlockEvent.BreakEvent veinEvent = new BlockEvent.BreakEvent(world, veinPos, veinState, player);
                         MinecraftForge.EVENT_BUS.post(veinEvent);
 
-                        if ( !veinEvent.isCanceled() )
+                        if (!veinEvent.isCanceled())
                         {
-                            if( correctBlock )
+                            if(correctBlock)
                             {
-                                if( player.isCreative() )
-                                    world.destroyBlock(veinPos, false );
-                                else if( correctItem && correctHeldItem && player.getFoodStats().getFoodLevel() > 0 )
+                                if(player.isCreative())
+                                    world.destroyBlock(veinPos, false);
+                                else if(correctItem && correctHeldItem && player.getFoodStats().getFoodLevel() > 0)
                                 {
-                                    if( Config.forgeConfig.veiningOtherPlayerBlocksAllowed.get() || isOwner )
+                                    if(Config.forgeConfig.veiningOtherPlayerBlocksAllowed.get() || isOwner)
                                     {
                                         abilitiesMap.put("veinLeft", abilitiesMap.get("veinLeft") - cost);
-                                        destroyBlock( world, veinPos, player, startItemStack );
-                                        player.addExhaustion( (float) exhaustionPerBlock );
+                                        destroyBlock(world, veinPos, player, startItemStack);
+                                        player.addExhaustion((float) exhaustionPerBlock);
                                     }
                                 }
                                 else
                                 {
-                                    activeVein.remove( player );
-                                    veinSet.remove( player );
-                                    NetworkHandler.sendToPlayer( new MessageUpdateBoolean( false, 0 ), (ServerPlayerEntity) player );
+                                    activeVein.remove(player);
+                                    veinSet.remove(player);
+                                    NetworkHandler.sendToPlayer(new MessageUpdateBoolean(false, 0), (ServerPlayerEntity) player);
                                 }
                             }
                         }
                     }
                     else
                     {
-                        activeVein.remove( player );
-                        veinSet.remove( player );
-                        NetworkHandler.sendToPlayer( new MessageUpdateBoolean( false, 0 ), (ServerPlayerEntity) player );
+                        activeVein.remove(player);
+                        veinSet.remove(player);
+                        NetworkHandler.sendToPlayer(new MessageUpdateBoolean(false, 0), (ServerPlayerEntity) player);
                     }
                 }
                 else
                 {
-                    activeVein.remove( player );
-                    veinSet.remove( player );
-                    NetworkHandler.sendToPlayer( new MessageUpdateBoolean( false, 0 ), (ServerPlayerEntity) player );
+                    activeVein.remove(player);
+                    veinSet.remove(player);
+                    NetworkHandler.sendToPlayer(new MessageUpdateBoolean(false, 0), (ServerPlayerEntity) player);
                 }
             }
         }
     }
 
-    public static void destroyBlock( World world, BlockPos pos, PlayerEntity player, ItemStack toolUsed )
+    public static void destroyBlock(World world, BlockPos pos, PlayerEntity player, ItemStack toolUsed)
     {
         BlockState blockstate = world.getBlockState(pos);
         FluidState ifluidstate = world.getFluidState(pos);
-        world.playEvent(2001, pos, Block.getStateId(blockstate) );
+        world.playEvent(2001, pos, Block.getStateId(blockstate));
 
         TileEntity tileentity = blockstate.hasTileEntity() ? world.getTileEntity(pos) : null;
-        Block.spawnDrops(blockstate, world, pos, tileentity, player, toolUsed );
+        Block.spawnDrops(blockstate, world, pos, tileentity, player, toolUsed);
 
-        if( Config.forgeConfig.damageToolWhileVeining.get() && world.setBlockState(pos, ifluidstate.getBlockState(), 3) && toolUsed.isDamageable() && !player.isCreative() )
-            toolUsed.damageItem( 1, player, (a) -> a.sendBreakAnimation( Hand.MAIN_HAND ) );
+        if(Config.forgeConfig.damageToolWhileVeining.get() && world.setBlockState(pos, ifluidstate.getBlockState(), 3) && toolUsed.isDamageable() && !player.isCreative())
+            toolUsed.damageItem(1, player, (a) -> a.sendBreakAnimation(Hand.MAIN_HAND));
     }
 
-    public static double getVeinLeft( PlayerEntity player )
+    public static double getVeinLeft(PlayerEntity player)
     {
-        return Config.getAbilitiesMap( player ).getOrDefault( "veinLeft", 0D );
+        return Config.getAbilitiesMap(player).getOrDefault("veinLeft", 0D);
     }
 
-    public static void scheduleVein(PlayerEntity player, VeinInfo veinInfo )
+    public static void scheduleVein(PlayerEntity player, VeinInfo veinInfo)
     {
-        double veinLeft = getVeinLeft( player );
-        double veinCost = getVeinCost( veinInfo.state, veinInfo.pos, player );
+        double veinLeft = getVeinLeft(player);
+        double veinCost = getVeinCost(veinInfo.state, veinInfo.pos, player);
         String blockKey = veinInfo.state.getBlock().getRegistryName().toString();
         ArrayList<BlockPos> blockPosArrayList;
 
-        if( !( canVeinGlobal( blockKey, player ) && canVeinDimension( blockKey, player )  ) || !XP.checkReq( player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL ) )
+        if(!(canVeinGlobal(blockKey, player) && canVeinDimension(blockKey, player) ) || !XP.checkReq(player, player.getHeldItemMainhand().getItem().getRegistryName(), JType.REQ_TOOL))
             return;
 
-        blockPosArrayList = getVeinShape( veinInfo, veinLeft, veinCost, player.isCreative(), false );
+        blockPosArrayList = getVeinShape(veinInfo, veinLeft, veinCost, player.isCreative(), false);
 
-        if( blockPosArrayList.size() > 0 )
+        if(blockPosArrayList.size() > 0)
         {
-            activeVein.put( player, veinInfo );
-            veinSet.put( player, blockPosArrayList );
-            NetworkHandler.sendToPlayer( new MessageUpdateBoolean( true, 0 ), (ServerPlayerEntity) player );
+            activeVein.put(player, veinInfo);
+            veinSet.put(player, blockPosArrayList);
+            NetworkHandler.sendToPlayer(new MessageUpdateBoolean(true, 0), (ServerPlayerEntity) player);
         }
     }
 
-    public static boolean canVeinGlobal( String blockKey, PlayerEntity player )
+    public static boolean canVeinGlobal(String blockKey, PlayerEntity player)
     {
-        if( player.isCreative() )
+        if(player.isCreative())
             return true;
 
         Map<String, Double> globalBlacklist = null;
 
-        if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( "all_dimensions" ) )
-            globalBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST ).get( "all_dimensions" );
+        if(JsonConfig.data.get(JType.VEIN_BLACKLIST).containsKey("all_dimensions"))
+            globalBlacklist = JsonConfig.data.get(JType.VEIN_BLACKLIST).get("all_dimensions");
 
         return globalBlacklist == null || !globalBlacklist.containsKey(blockKey);
     }
 
-    public static boolean canVeinDimension( String blockKey, PlayerEntity player )
+    public static boolean canVeinDimension(String blockKey, PlayerEntity player)
     {
-        if( player.isCreative() )
+        if(player.isCreative())
             return true;
 
         World world = player.world;
-        if( world == null )
+        if(world == null)
             return true;
 
-        ResourceLocation dimensionKey = XP.getDimResLoc( world );
+        ResourceLocation dimensionKey = XP.getDimResLoc(world);
         Map<String, Double> dimensionBlacklist = null;
 
-        if( JsonConfig.data.get( JType.VEIN_BLACKLIST ).containsKey( dimensionKey.toString() ) )
-            dimensionBlacklist = JsonConfig.data.get( JType.VEIN_BLACKLIST ).get( dimensionKey.toString() );
+        if(JsonConfig.data.get(JType.VEIN_BLACKLIST).containsKey(dimensionKey.toString()))
+            dimensionBlacklist = JsonConfig.data.get(JType.VEIN_BLACKLIST).get(dimensionKey.toString());
 
         return dimensionBlacklist == null || !dimensionBlacklist.containsKey(blockKey);
     }
 
-    public static ArrayList<BlockPos> getVeinShape( VeinInfo veinInfo, double veinLeft, double veinCost, boolean isCreative, boolean isLooped )
+    public static ArrayList<BlockPos> getVeinShape(VeinInfo veinInfo, double veinLeft, double veinCost, boolean isCreative, boolean isLooped)
     {
         Set<BlockPos> vein = new HashSet<>();
         ArrayList<BlockPos> outVein = new ArrayList<>();
@@ -292,42 +294,42 @@ public class WorldTickHandler
         ArrayList<BlockPos> nextLayer = new ArrayList<>();
         BlockPos originPos = veinInfo.pos;
         BlockPos highestPos = originPos;
-        curLayer.add( originPos );
+        curLayer.add(originPos);
         BlockPos curPos2;
         Block block = veinInfo.state.getBlock();
         Material material = veinInfo.state.getMaterial();
         String regKey = block.getRegistryName().toString();
-        String skill = XP.getSkill( veinInfo.state );
+        String skill = XP.getSkill(veinInfo.state);
 
         int yLimit = 1;
 
-        if( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).containsKey( regKey ) )
+        if(JsonConfig.data.get(JType.BLOCK_SPECIFIC).containsKey(regKey))
         {
-            if( JsonConfig.data.get( JType.BLOCK_SPECIFIC ).get( regKey ).containsKey( "growsUpwards" ) )
+            if(JsonConfig.data.get(JType.BLOCK_SPECIFIC).get(regKey).containsKey("growsUpwards"))
                 yLimit = 0;
         }
 
-        while( ( isCreative || veinLeft * 1.523 > veinCost * vein.size() || ( Config.forgeConfig.veinWoodTopToBottom.get() && !isLooped && skill.equals( Skill.WOODCUTTING.toString() ) ) ) && vein.size() <= veinMaxBlocks )
+        while((isCreative || veinLeft * 1.523 > veinCost * vein.size() || (Config.forgeConfig.veinWoodTopToBottom.get() && !isLooped && skill.equals(Skill.WOODCUTTING.toString()))) && vein.size() <= veinMaxBlocks)
         {
-            for( BlockPos curPos : curLayer )
+            for(BlockPos curPos : curLayer)
             {
-                if( curPos.withinDistance( originPos, veinMaxDistance ) )
+                if(curPos.withinDistance(originPos, veinMaxDistance))
                 {
-                    for( int i = yLimit; i >= -yLimit; i-- )
+                    for(int i = yLimit; i >= -yLimit; i--)
                     {
-                        for( int j = 1; j >= -1; j-- )
+                        for(int j = 1; j >= -1; j--)
                         {
-                            for( int k = 1; k >= -1; k-- )
+                            for(int k = 1; k >= -1; k--)
                             {
                                 curPos2 = curPos.up(i).north(j).east(k);
-                                if( !vein.contains( curPos2 ) && veinInfo.world.getBlockState( curPos2 ).getBlock().equals( block ) )
+                                if(!vein.contains(curPos2) && veinInfo.world.getBlockState(curPos2).getBlock().equals(block))
                                 {
-                                    vein.add( curPos2 );
-                                    outVein.add( curPos2 );
-                                    nextLayer.add( curPos2 );
+                                    vein.add(curPos2);
+                                    outVein.add(curPos2);
+                                    nextLayer.add(curPos2);
 
-                                    if( curPos2.getY() > highestPos.getY() )
-                                        highestPos = new BlockPos( curPos2 );
+                                    if(curPos2.getY() > highestPos.getY())
+                                        highestPos = new BlockPos(curPos2);
                                 }
                             }
                         }
@@ -335,60 +337,60 @@ public class WorldTickHandler
                 }
             }
 
-            if( nextLayer.size() == 0 )
+            if(nextLayer.size() == 0)
                 break;
 
             curLayer = nextLayer;
             nextLayer = new ArrayList<>();
         }
 
-        if( !isLooped )
+        if(!isLooped)
         {
-            if( ( Config.forgeConfig.veinWoodTopToBottom.get() && material.equals( Material.WOOD ) ) /* || block.equals( Blocks.SAND ) || block.equals( Blocks.GRAVEL ) */ )
+            if((Config.forgeConfig.veinWoodTopToBottom.get() && material.equals(Material.WOOD)) /* || block.equals(Blocks.SAND) || block.equals(Blocks.GRAVEL) */)
             veinInfo.pos = highestPos;
-            return getVeinShape( veinInfo, veinLeft, veinCost, isCreative, true );
+            return getVeinShape(veinInfo, veinLeft, veinCost, isCreative, true);
         }
 
         return outVein;
     }
 
-    public static double getVeinCost( BlockState state, BlockPos pos, PlayerEntity player )
+    public static double getVeinCost(BlockState state, BlockPos pos, PlayerEntity player)
     {
-        String skill = XP.getSkill( state );
+        String skill = XP.getSkill(state);
         double cost;
-//        double startHardness = state.getBlockHardness( player.world, pos );
-        double hardness = state.getBlockHardness( player.world, pos );
-        double level = Skill.getLevel( skill, player );
+//        double startHardness = state.getBlockHardness(player.world, pos);
+        double hardness = state.getBlockHardness(player.world, pos);
+        double level = Skill.getLevel(skill, player);
 
-        if( hardness < minVeinHardness )
+        if(hardness < minVeinHardness)
             hardness = minVeinHardness;
 
-//        if( startHardness == 0 )
+//        if(startHardness == 0)
 //            hardness = 0;
-//        System.out.println( "Stone: " + player.getHeldItemMainhand().getDestroySpeed( Blocks.STONE.getDefaultState() ) );
-//        System.out.println( "Wood: " + player.getHeldItemMainhand().getDestroySpeed( Blocks.OAK_LOG.getDefaultState() ) );
-//        System.out.println( "Dirt: " + player.getHeldItemMainhand().getDestroySpeed( Blocks.DIRT.getDefaultState() ) );
+//        System.out.println("Stone: " + player.getHeldItemMainhand().getDestroySpeed(Blocks.STONE.getDefaultState()));
+//        System.out.println("Wood: " + player.getHeldItemMainhand().getDestroySpeed(Blocks.OAK_LOG.getDefaultState()));
+//        System.out.println("Dirt: " + player.getHeldItemMainhand().getDestroySpeed(Blocks.DIRT.getDefaultState()));
 
-        switch( skill )
+        switch(skill)
         {
             case "mining":
-                cost = hardness / ( level / levelsPerHardnessMining );
+                cost = hardness / (level / levelsPerHardnessMining);
                 break;
 
             case "woodcutting":
-                cost = hardness / ( level / levelsPerHardnessWoodcutting );
+                cost = hardness / (level / levelsPerHardnessWoodcutting);
                 break;
 
             case "excavation":
-                cost = hardness / ( level / levelsPerHardnessExcavation );
+                cost = hardness / (level / levelsPerHardnessExcavation);
                 break;
 
             case "farming":
-                cost = hardness / ( level / levelsPerHardnessFarming );
+                cost = hardness / (level / levelsPerHardnessFarming);
                 break;
 
             case "crafting":
-                cost = hardness / ( level / levelsPerHardnessCrafting );
+                cost = hardness / (level / levelsPerHardnessCrafting);
                 break;
 
             default:
@@ -396,37 +398,37 @@ public class WorldTickHandler
                 break;
         }
 
-        double mainItemSpeed = player.getHeldItemMainhand().getDestroySpeed( state );
-        if( mainItemSpeed > 1 )
-            cost /= Math.max( 1, ( ( mainItemSpeed + 4 ) * ( 1 / Config.getConfig( "toolSpeedVeinScale" ) ) ) );
+        double mainItemSpeed = player.getHeldItemMainhand().getDestroySpeed(state);
+        if(mainItemSpeed > 1)
+            cost /= Math.max(1, ((mainItemSpeed + 4) * (1 / Config.getConfig("toolSpeedVeinScale"))));
 
-        if( cost < minVeinCost )
+        if(cost < minVeinCost)
             cost = minVeinCost;
 
-//        System.out.println( cost );
+//        System.out.println(cost);
 
         return cost;
     }
 
-    public static void updateVein( PlayerEntity player, double gap )
+    public static void updateVein(PlayerEntity player, double gap)
     {
-        Map<String, Double> abilitiesMap = Config.getAbilitiesMap( player );
+        Map<String, Double> abilitiesMap = Config.getAbilitiesMap(player);
 
-        if( !abilitiesMap.containsKey( "veinLeft" ) )
-            abilitiesMap.put( "veinLeft", maxVeinCharge );
+        if(!abilitiesMap.containsKey("veinLeft"))
+            abilitiesMap.put("veinLeft", maxVeinCharge);
 
-        double veinLeft = abilitiesMap.get( "veinLeft" );
-        if( veinLeft < 0 )
+        double veinLeft = abilitiesMap.get("veinLeft");
+        if(veinLeft < 0)
             veinLeft = 0D;
 
-        if( !activeVein.containsKey( player ) )
-            veinLeft += Math.min( gap, 2 );
+        if(!activeVein.containsKey(player))
+            veinLeft += Math.min(gap, 2);
 
-        if( veinLeft > maxVeinCharge )
+        if(veinLeft > maxVeinCharge)
             veinLeft = maxVeinCharge;
 
-        abilitiesMap.put( "veinLeft", veinLeft );
+        abilitiesMap.put("veinLeft", veinLeft);
 
-        NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT(NBTHelper.mapStringToNbt( abilitiesMap ), 1 ), (ServerPlayerEntity) player );
+        NetworkHandler.sendToPlayer(new MessageUpdatePlayerNBT(NBTHelper.mapStringToNbt(abilitiesMap), 1), (ServerPlayerEntity) player);
     }
 }

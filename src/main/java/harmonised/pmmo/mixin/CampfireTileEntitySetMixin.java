@@ -14,14 +14,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin( CampfireTileEntity.class )
+@Mixin(CampfireTileEntity.class)
 public class CampfireTileEntitySetMixin
 {
-    @Inject( at = @At( value = "INVOKE", target = "Lnet/minecraft/inventory/InventoryHelper;spawnItemStack(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V" ), method = "cookAndDrop", locals = LocalCapture.PRINT )
-    public void projectmmo$$handleCampfireSpawnItem( CallbackInfo info, int i, ItemStack itemstack, int j, IInventory iInventory, ItemStack itemstack1 )
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/InventoryHelper;spawnItemStack(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V"), method = "cookAndDrop", locals = LocalCapture.PRINT)
+    public void projectmmo$$handleCampfireSpawnItem(CallbackInfo info, int i, ItemStack itemstack, int j, IInventory iInventory, ItemStack itemstack1)
     {
         World world = ((CampfireTileEntity)(Object)this).getWorld();
         BlockPos pos = ((CampfireTileEntity)(Object)this).getPos();
-        FurnaceHandler.handleSmelted( itemstack, itemstack1, world, pos, 1 );
+        FurnaceHandler.handleSmelted(itemstack, itemstack1, world, pos, 1);
     }
 }

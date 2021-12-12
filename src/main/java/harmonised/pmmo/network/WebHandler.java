@@ -24,21 +24,21 @@ public class WebHandler
     {
         StringBuilder sb = new StringBuilder();
         int cp;
-        while ( (cp = rd.read() ) != -1)
+        while ((cp = rd.read()) != -1)
         {
             sb.append((char) cp);
         }
         return sb.toString();
     }
 
-    public static <T> T readJsonFromUrl( String url, Class<T> type ) throws IOException
+    public static <T> T readJsonFromUrl(String url, Class<T> type) throws IOException
     {
-        InputStream is = new URL( url ).openStream();
+        InputStream is = new URL(url).openStream();
         try
         {
-            BufferedReader rd = new BufferedReader(new InputStreamReader( is, Charset.forName("UTF-8" ) ) );
-            String jsonText = readAll( rd );
-            return JsonConfig.gson.fromJson( jsonText, type );
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            String jsonText = readAll(rd);
+            return JsonConfig.gson.fromJson(jsonText, type);
         }
         finally
         {
@@ -55,12 +55,12 @@ public class WebHandler
     {
         try
         {
-            JsonStructure newData = WebHandler.readJsonFromUrl( "https://raw.githubusercontent.com/Harmonised7/db/master/pmmo.json", WebHandler.JsonStructure.class );
+            JsonStructure newData = WebHandler.readJsonFromUrl("https://raw.githubusercontent.com/Harmonised7/db/master/pmmo.json", WebHandler.JsonStructure.class);
             data = newData; //If didn't crash
         }
-        catch( IOException e )
+        catch(IOException e)
         {
-            LOGGER.warn( "Could not connect to PMMO data server" );
+            LOGGER.warn("Could not connect to PMMO data server");
         }
     }
 
@@ -73,9 +73,9 @@ public class WebHandler
     {
         try
         {
-            return (String) WebHandler.getWebData().objs.get( "latestVersion" + Reference.MC_VERSION );
+            return (String) WebHandler.getWebData().objs.get("latestVersion" + Reference.MC_VERSION);
         }
-        catch( Exception e )
+        catch(Exception e)
         {
             return null;
         }
@@ -85,9 +85,9 @@ public class WebHandler
     {
         try
         {
-            return (String) WebHandler.getWebData().objs.get( "latestMessage" + Reference.MC_VERSION );
+            return (String) WebHandler.getWebData().objs.get("latestMessage" + Reference.MC_VERSION);
         }
-        catch( Exception e )
+        catch(Exception e)
         {
             return null;
         }

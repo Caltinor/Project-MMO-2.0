@@ -38,7 +38,7 @@ public class MessageWorldText
     private float endRot = 0;
 
 
-    public MessageWorldText( WorldText worldText )
+    public MessageWorldText(WorldText worldText)
     {
         this.worldResLoc = worldText.getWorldResLoc();
         this.startPos = worldText.getStartPos();
@@ -72,12 +72,12 @@ public class MessageWorldText
 
     }
 
-    public static MessageWorldText decode( PacketBuffer buf )
+    public static MessageWorldText decode(PacketBuffer buf)
     {
         MessageWorldText packet = new MessageWorldText();
-        packet.worldResLoc = new ResourceLocation( buf.readString() );
-        packet.startPos = new Vector3d( buf.readDouble(), buf.readDouble(), buf.readDouble() );
-        packet.endPos = new Vector3d( buf.readDouble(), buf.readDouble(), buf.readDouble() );
+        packet.worldResLoc = new ResourceLocation(buf.readString());
+        packet.startPos = new Vector3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        packet.endPos = new Vector3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
         packet.text = buf.readString();
         packet.secondsLifespan = buf.readFloat();
         packet.maxOffset = buf.readFloat();
@@ -103,69 +103,69 @@ public class MessageWorldText
         return packet;
     }
 
-    public static void encode( MessageWorldText packet, PacketBuffer buf )
+    public static void encode(MessageWorldText packet, PacketBuffer buf)
     {
-        buf.writeString( packet.worldResLoc.toString() );
+        buf.writeString(packet.worldResLoc.toString());
 
-        buf.writeDouble( packet.startPos.getX() );
-        buf.writeDouble( packet.startPos.getY() );
-        buf.writeDouble( packet.startPos.getZ() );
+        buf.writeDouble(packet.startPos.getX());
+        buf.writeDouble(packet.startPos.getY());
+        buf.writeDouble(packet.startPos.getZ());
 
-        buf.writeDouble( packet.endPos.getX() );
-        buf.writeDouble( packet.endPos.getY() );
-        buf.writeDouble( packet.endPos.getZ() );
+        buf.writeDouble(packet.endPos.getX());
+        buf.writeDouble(packet.endPos.getY());
+        buf.writeDouble(packet.endPos.getZ());
 
-        buf.writeString     ( packet.text               );
-        buf.writeFloat      ( packet.secondsLifespan    );
-        buf.writeFloat      ( packet.maxOffset          );
-        buf.writeByte       ( packet.preset             );
-        buf.writeBoolean    ( packet.hueColor           );
-        buf.writeInt        ( packet.color              );
-        buf.writeFloat      ( packet.startHue           );
-        buf.writeFloat      ( packet.startSaturation    );
-        buf.writeFloat      ( packet.startBrightness    );
-        buf.writeFloat      ( packet.endHue             );
-        buf.writeFloat      ( packet.endSaturation      );
-        buf.writeFloat      ( packet.endBrightness      );
-        buf.writeBoolean    ( packet.showValue          );
-        buf.writeFloat      ( packet.startValue         );
-        buf.writeFloat      ( packet.endValue           );
-        buf.writeFloat      ( packet.valueDecaySpeed    );
-        buf.writeBoolean    ( packet.decayByValue       );
-        buf.writeFloat      ( packet.startSize          );
-        buf.writeFloat      ( packet.endSize            );
-        buf.writeFloat      ( packet.startRot           );
-        buf.writeFloat      ( packet.endRot             );
+        buf.writeString     (packet.text              );
+        buf.writeFloat      (packet.secondsLifespan   );
+        buf.writeFloat      (packet.maxOffset         );
+        buf.writeByte       (packet.preset            );
+        buf.writeBoolean    (packet.hueColor          );
+        buf.writeInt        (packet.color             );
+        buf.writeFloat      (packet.startHue          );
+        buf.writeFloat      (packet.startSaturation   );
+        buf.writeFloat      (packet.startBrightness   );
+        buf.writeFloat      (packet.endHue            );
+        buf.writeFloat      (packet.endSaturation     );
+        buf.writeFloat      (packet.endBrightness     );
+        buf.writeBoolean    (packet.showValue         );
+        buf.writeFloat      (packet.startValue        );
+        buf.writeFloat      (packet.endValue          );
+        buf.writeFloat      (packet.valueDecaySpeed   );
+        buf.writeBoolean    (packet.decayByValue      );
+        buf.writeFloat      (packet.startSize         );
+        buf.writeFloat      (packet.endSize           );
+        buf.writeFloat      (packet.startRot          );
+        buf.writeFloat      (packet.endRot            );
     }
 
-    public static void handlePacket( MessageWorldText packet, Supplier<NetworkEvent.Context> ctx )
+    public static void handlePacket(MessageWorldText packet, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {
-            WorldText worldText = WorldText.fromVector( packet.worldResLoc, packet.startPos, packet.endPos );
-            worldText.setText               ( packet.text            );
-            worldText.setSecondsLifespan    ( packet.secondsLifespan );
-            worldText.setMaxOffset          ( packet.maxOffset       );
-            worldText.setPreset             ( packet.preset          );
-            worldText.setHueColor           ( packet.hueColor        );
-            worldText.setColor              ( packet.color           );
-            worldText.setStartHue           ( packet.startHue        );
-            worldText.setStartSaturation    ( packet.startSaturation );
-            worldText.setStartBrightness    ( packet.startBrightness );
-            worldText.setEndHue             ( packet.endHue          );
-            worldText.setEndSaturation      ( packet.endSaturation   );
-            worldText.setEndBrightness      ( packet.endBrightness   );
-            worldText.setShowValue          ( packet.showValue       );
-            worldText.setStartValue         ( packet.startValue      );
-            worldText.setEndValue           ( packet.endValue        );
-            worldText.setValueDecaySpeed    ( packet.valueDecaySpeed );
-            worldText.setDecayByValue       ( packet.decayByValue    );
-            worldText.setStartSize          ( packet.startSize       );
-            worldText.setEndSize            ( packet.endSize         );
-            worldText.setStartRot           ( packet.startRot        );
-            worldText.setEndRot             ( packet.endRot          );
-            XP.addWorldTextOffline( worldText );
+            WorldText worldText = WorldText.fromVector(packet.worldResLoc, packet.startPos, packet.endPos);
+            worldText.setText               (packet.text           );
+            worldText.setSecondsLifespan    (packet.secondsLifespan);
+            worldText.setMaxOffset          (packet.maxOffset      );
+            worldText.setPreset             (packet.preset         );
+            worldText.setHueColor           (packet.hueColor       );
+            worldText.setColor              (packet.color          );
+            worldText.setStartHue           (packet.startHue       );
+            worldText.setStartSaturation    (packet.startSaturation);
+            worldText.setStartBrightness    (packet.startBrightness);
+            worldText.setEndHue             (packet.endHue         );
+            worldText.setEndSaturation      (packet.endSaturation  );
+            worldText.setEndBrightness      (packet.endBrightness  );
+            worldText.setShowValue          (packet.showValue      );
+            worldText.setStartValue         (packet.startValue     );
+            worldText.setEndValue           (packet.endValue       );
+            worldText.setValueDecaySpeed    (packet.valueDecaySpeed);
+            worldText.setDecayByValue       (packet.decayByValue   );
+            worldText.setStartSize          (packet.startSize      );
+            worldText.setEndSize            (packet.endSize        );
+            worldText.setStartRot           (packet.startRot       );
+            worldText.setEndRot             (packet.endRot         );
+            XP.addWorldTextOffline(worldText);
         });
-        ctx.get().setPacketHandled( true );
+        ctx.get().setPacketHandled(true);
     }
 }

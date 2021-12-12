@@ -21,7 +21,7 @@ public class InvitePartyCommand
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         PlayerEntity player = (PlayerEntity) context.getSource().getEntity();
         ServerPlayerEntity targetPlayer;
@@ -29,36 +29,36 @@ public class InvitePartyCommand
 
         try
         {
-            targetPlayer = EntityArgument.getPlayer( context, "target" );
+            targetPlayer = EntityArgument.getPlayer(context, "target");
         }
-        catch( CommandSyntaxException err )
+        catch(CommandSyntaxException err)
         {
-            LOGGER.error( "PMMO Invite Party Command Error: Target player does not exist. How..?" );
+            LOGGER.error("PMMO Invite Party Command Error: Target player does not exist. How..?");
             return 1;
         }
 
-        int result = PartyPendingSystem.createInvitation( targetPlayer, uuid );
-        switch( result )
+        int result = PartyPendingSystem.createInvitation(targetPlayer, uuid);
+        switch(result)
         {
             case -4:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.yourPartyIsFull" ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.yourPartyIsFull").setStyle(XP.textStyle.get("red")), false);
                 break;
 
             case -3:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAlreadyInvitedPlayerToYourParty", targetPlayer.getDisplayName() ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.youAlreadyInvitedPlayerToYourParty", targetPlayer.getDisplayName()).setStyle(XP.textStyle.get("red")), false);
                 break;
 
             case -2:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.playerAlreadyInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.playerAlreadyInAParty").setStyle(XP.textStyle.get("red")), false);
                 break;
 
             case -1:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAreNotInAParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.youAreNotInAParty").setStyle(XP.textStyle.get("red")), false);
                 break;
 
             case 0:
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.youHaveInvitedAPlayerToYourParty", targetPlayer.getDisplayName() ).setStyle(XP.textStyle.get( "yellow" ) ), false );
-                targetPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.playerInvitedYouToAParty", player.getDisplayName() ).setStyle(XP.textStyle.get( "yellow" ) ), false );
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.youHaveInvitedAPlayerToYourParty", targetPlayer.getDisplayName()).setStyle(XP.textStyle.get("yellow")), false);
+                targetPlayer.sendStatusMessage(new TranslationTextComponent("pmmo.playerInvitedYouToAParty", player.getDisplayName()).setStyle(XP.textStyle.get("yellow")), false);
                 break;
         }
 

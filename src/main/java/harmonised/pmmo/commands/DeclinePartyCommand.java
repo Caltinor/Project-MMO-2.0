@@ -12,27 +12,27 @@ import java.util.UUID;
 
 public class DeclinePartyCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         ServerPlayerEntity player = (ServerPlayerEntity) context.getSource().getEntity();
         UUID uuid = player.getUniqueID();
-        UUID partyOwnerUUID = PartyPendingSystem.getOwnerUUID( uuid );
-        if( partyOwnerUUID == null )
+        UUID partyOwnerUUID = PartyPendingSystem.getOwnerUUID(uuid);
+        if(partyOwnerUUID == null)
         {
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAreNotInvitedToAnyParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+            player.sendStatusMessage(new TranslationTextComponent("pmmo.youAreNotInvitedToAnyParty").setStyle(XP.textStyle.get("red")), false);
             return 1;
         }
-        ServerPlayerEntity ownerPlayer = XP.getPlayerByUUID( partyOwnerUUID, player.getServer() );
-        boolean result = PartyPendingSystem.declineInvitation( uuid );
-        if( result )
+        ServerPlayerEntity ownerPlayer = XP.getPlayerByUUID(partyOwnerUUID, player.getServer());
+        boolean result = PartyPendingSystem.declineInvitation(uuid);
+        if(result)
         {
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.youHaveDeclinedPartyInvitation" ).setStyle(XP.textStyle.get( "yellow" ) ), false );
-            if( ownerPlayer != null )
-                ownerPlayer.sendStatusMessage( new TranslationTextComponent( "pmmo.playerDeclinedYourPartyInvitation", player.getDisplayName() ).setStyle(XP.textStyle.get( "yellow" ) ), false );
+            player.sendStatusMessage(new TranslationTextComponent("pmmo.youHaveDeclinedPartyInvitation").setStyle(XP.textStyle.get("yellow")), false);
+            if(ownerPlayer != null)
+                ownerPlayer.sendStatusMessage(new TranslationTextComponent("pmmo.playerDeclinedYourPartyInvitation", player.getDisplayName()).setStyle(XP.textStyle.get("yellow")), false);
         }
         else
         {
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.youAreNotInvitedToAnyParty" ).setStyle(XP.textStyle.get( "red" ) ), false );
+            player.sendStatusMessage(new TranslationTextComponent("pmmo.youAreNotInvitedToAnyParty").setStyle(XP.textStyle.get("red")), false);
         }
         return 1;
     }

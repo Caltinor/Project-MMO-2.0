@@ -50,16 +50,16 @@ msys=false
 darwin=false
 nonstop=false
 case "`uname`" in
-  CYGWIN* )
+  CYGWIN*)
     cygwin=true
     ;;
-  Darwin* )
+  Darwin*)
     darwin=true
     ;;
-  MINGW* )
+  MINGW*)
     msys=true
     ;;
-  NONSTOP* )
+  NONSTOP*)
     nonstop=true
     ;;
 esac

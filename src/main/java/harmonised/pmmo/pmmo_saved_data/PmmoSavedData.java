@@ -33,273 +33,273 @@ public class PmmoSavedData extends WorldSavedData
     private Map<UUID, String> name = new HashMap<>();
     public PmmoSavedData()
     {
-        super( NAME );
+        super(NAME);
     }
 
     @Override
-    public void read( CompoundNBT inData )
+    public void read(CompoundNBT inData)
     {
         CompoundNBT playersTag, playerTag;
 
-        if( inData.contains( "players" ) )
+        if(inData.contains("players"))
         {
-            playersTag = inData.getCompound( "players" );
-            for( String playerUuidKey : playersTag.keySet() )
+            playersTag = inData.getCompound("players");
+            for(String playerUuidKey : playersTag.keySet())
             {
-                playerTag = playersTag.getCompound( playerUuidKey );
-                if( playerTag.contains( "xp" ) )
+                playerTag = playersTag.getCompound(playerUuidKey);
+                if(playerTag.contains("xp"))
                 {
-                    CompoundNBT xpTag = playerTag.getCompound( "xp" );
-                    for( String tag : new HashSet<>( xpTag.keySet() ) )
+                    CompoundNBT xpTag = playerTag.getCompound("xp");
+                    for(String tag : new HashSet<>(xpTag.keySet()))
                     {
-                        if( xpTag.getDouble( tag ) <= 0 )
-                            xpTag.remove( tag.toLowerCase() );
+                        if(xpTag.getDouble(tag) <= 0)
+                            xpTag.remove(tag.toLowerCase());
                     }
                 }
 
-                if( playerTag.contains( "name" ) )
-                    name.put( UUID.fromString( playerUuidKey ), playerTag.getString( "name" ) );
+                if(playerTag.contains("name"))
+                    name.put(UUID.fromString(playerUuidKey), playerTag.getString("name"));
 
-                xp = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xp" ) );
-                scheduledXp = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "scheduledXp" ) );
-                abilities = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "abilities" ) );
-                preferences = NBTHelper.nbtToMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "preferences" ) );
-                xpBoosts = NBTHelper.nbtToMapStringMapUuidString( NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag( playersTag, "xpBoosts" ) );
+                xp = NBTHelper.nbtToMapUuidString(NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag(playersTag, "xp"));
+                scheduledXp = NBTHelper.nbtToMapUuidString(NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag(playersTag, "scheduledXp"));
+                abilities = NBTHelper.nbtToMapUuidString(NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag(playersTag, "abilities"));
+                preferences = NBTHelper.nbtToMapUuidString(NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag(playersTag, "preferences"));
+                xpBoosts = NBTHelper.nbtToMapStringMapUuidString(NBTHelper.extractNbtPlayersIndividualTagsFromPlayersTag(playersTag, "xpBoosts"));
             }
         }
 
-        if( inData.contains( "parties" ) )
+        if(inData.contains("parties"))
         {
-            CompoundNBT partiesTag = inData.getCompound( "parties" );
+            CompoundNBT partiesTag = inData.getCompound("parties");
             CompoundNBT partyTag, membersTag, memberInfoTag;
             Set<PartyMemberInfo> membersInfo;
             PartyMemberInfo memberInfo;
 
-            for( String key : partiesTag.keySet() )
+            for(String key : partiesTag.keySet())
             {
-                partyTag = partiesTag.getCompound( key );
-                membersTag = partyTag.getCompound( "members" );
+                partyTag = partiesTag.getCompound(key);
+                membersTag = partyTag.getCompound("members");
                 membersInfo = new HashSet<>();
 
-                for( String id : membersTag.keySet() )
+                for(String id : membersTag.keySet())
                 {
-                    memberInfoTag = membersTag.getCompound( id );
-                    memberInfo = new PartyMemberInfo( UUID.fromString( memberInfoTag.getString( "uuid" ) ), memberInfoTag.getLong( "joinDate" ), memberInfoTag.getDouble( "xpGained" ) );
-                    membersInfo.add( memberInfo );
+                    memberInfoTag = membersTag.getCompound(id);
+                    memberInfo = new PartyMemberInfo(UUID.fromString(memberInfoTag.getString("uuid")), memberInfoTag.getLong("joinDate"), memberInfoTag.getDouble("xpGained"));
+                    membersInfo.add(memberInfo);
                 }
 
-                parties.add( new Party( partyTag.getLong( "creationDate" ), membersInfo ) );
+                parties.add(new Party(partyTag.getLong("creationDate"), membersInfo));
             }
         }
     }
 
     @Override
-    public CompoundNBT write( CompoundNBT outData )
+    public CompoundNBT write(CompoundNBT outData)
     {
         CompoundNBT playersTag = new CompoundNBT(), partiesTag = new CompoundNBT(), partyTag, membersTag, memberInfoTag;
         Map<String, CompoundNBT> playerMap;
 
-        for( Map.Entry<UUID, Map<String, Double>> entry : xp.entrySet() )
+        for(Map.Entry<UUID, Map<String, Double>> entry : xp.entrySet())
         {
             playerMap = new HashMap<>();
 
-            playerMap.put( "xp", NBTHelper.mapStringToNbt(                  xp.getOrDefault(            entry.getKey(), Collections.emptyMap() ) ) );
-            playerMap.put( "scheduledXp", NBTHelper.mapStringToNbt(         scheduledXp.getOrDefault(   entry.getKey(), Collections.emptyMap() ) ) );
-            playerMap.put( "abilities", NBTHelper.mapStringToNbt(           abilities.getOrDefault(     entry.getKey(), Collections.emptyMap() ) ) );
-            playerMap.put( "preferences", NBTHelper.mapStringToNbt(         preferences.getOrDefault(   entry.getKey(), Collections.emptyMap() ) ) );
-            playerMap.put( "xpBoosts", NBTHelper.mapStringMapStringToNbt(   xpBoosts.getOrDefault(      entry.getKey(), Collections.emptyMap() ) ) );
+            playerMap.put("xp", NBTHelper.mapStringToNbt(                 xp.getOrDefault(           entry.getKey(), Collections.emptyMap())));
+            playerMap.put("scheduledXp", NBTHelper.mapStringToNbt(        scheduledXp.getOrDefault(  entry.getKey(), Collections.emptyMap())));
+            playerMap.put("abilities", NBTHelper.mapStringToNbt(          abilities.getOrDefault(    entry.getKey(), Collections.emptyMap())));
+            playerMap.put("preferences", NBTHelper.mapStringToNbt(        preferences.getOrDefault(  entry.getKey(), Collections.emptyMap())));
+            playerMap.put("xpBoosts", NBTHelper.mapStringMapStringToNbt(  xpBoosts.getOrDefault(     entry.getKey(), Collections.emptyMap())));
 
-            CompoundNBT playerTag = NBTHelper.mapStringNbtToNbt( playerMap );
-            playerTag.putString( "name", name.get( entry.getKey() ) );
+            CompoundNBT playerTag = NBTHelper.mapStringNbtToNbt(playerMap);
+            playerTag.putString("name", name.get(entry.getKey()));
 
-            playersTag.put( entry.getKey().toString(), playerTag );
+            playersTag.put(entry.getKey().toString(), playerTag);
         }
-        outData.put( "players", playersTag );
+        outData.put("players", playersTag);
 
         int i = 0, j;
-        for( Party party : parties )
+        for(Party party : parties)
         {
             partyTag = new CompoundNBT();
             membersTag = new CompoundNBT();
 
             j = 0;
-            for( PartyMemberInfo memberInfo : party.getAllMembersInfo() )
+            for(PartyMemberInfo memberInfo : party.getAllMembersInfo())
             {
                 memberInfoTag = new CompoundNBT();
 
-                memberInfoTag.putString( "uuid", memberInfo.uuid.toString() );
-                memberInfoTag.putLong( "joinDate", memberInfo.joinDate );
-                memberInfoTag.putDouble( "xpGained", memberInfo.xpGained );
+                memberInfoTag.putString("uuid", memberInfo.uuid.toString());
+                memberInfoTag.putLong("joinDate", memberInfo.joinDate);
+                memberInfoTag.putDouble("xpGained", memberInfo.xpGained);
 
-                membersTag.put( "" + j++, memberInfoTag );
+                membersTag.put("" + j++, memberInfoTag);
             }
-            partyTag.putLong( "creationDate", party.getCreationDate() );
-            partyTag.put( "members", membersTag );
+            partyTag.putLong("creationDate", party.getCreationDate());
+            partyTag.put("members", membersTag);
 
-            partiesTag.put( "" + i, partyTag );
+            partiesTag.put("" + i, partyTag);
 
             i++;
         }
-        outData.put( "parties", partiesTag );
+        outData.put("parties", partiesTag);
 
         return outData;
     }
 
-    public Map<String, Double> getXpMap( UUID uuid )
+    public Map<String, Double> getXpMap(UUID uuid)
     {
-        if( !xp.containsKey( uuid ) )
-            xp.put( uuid, new HashMap<>() );
-        return xp.get( uuid );
+        if(!xp.containsKey(uuid))
+            xp.put(uuid, new HashMap<>());
+        return xp.get(uuid);
     }
 
-    public Map<String, Double> getScheduledXpMap( UUID uuid )
+    public Map<String, Double> getScheduledXpMap(UUID uuid)
     {
-        if( !scheduledXp.containsKey( uuid ) )
-            scheduledXp.put( uuid, new HashMap<>() );
-        return scheduledXp.get( uuid );
+        if(!scheduledXp.containsKey(uuid))
+            scheduledXp.put(uuid, new HashMap<>());
+        return scheduledXp.get(uuid);
     }
 
-    public Map<String, Double> getAbilitiesMap( UUID uuid )
+    public Map<String, Double> getAbilitiesMap(UUID uuid)
     {
-        if( !abilities.containsKey( uuid ) )
-            abilities.put( uuid, new HashMap<>() );
-        return abilities.get( uuid );
+        if(!abilities.containsKey(uuid))
+            abilities.put(uuid, new HashMap<>());
+        return abilities.get(uuid);
     }
 
-    public Map<String, Double> getPreferencesMap( UUID uuid )
+    public Map<String, Double> getPreferencesMap(UUID uuid)
     {
-        if( !preferences.containsKey( uuid ) )
-            preferences.put( uuid, new HashMap<>() );
-        return preferences.get( uuid );
+        if(!preferences.containsKey(uuid))
+            preferences.put(uuid, new HashMap<>());
+        return preferences.get(uuid);
     }
 
-    public double getXp( String skill, UUID uuid )
+    public double getXp(String skill, UUID uuid)
     {
-        return xp.getOrDefault( uuid, new HashMap<>() ).getOrDefault( skill, 0D );
+        return xp.getOrDefault(uuid, new HashMap<>()).getOrDefault(skill, 0D);
     }
 
-    public int getLevel( String skill, UUID uuid )
+    public int getLevel(String skill, UUID uuid)
     {
-        if( skill.equals( "totalLevel" ) )
-            return XP.getTotalLevelFromMap( Config.getXpMap( uuid ) );
+        if(skill.equals("totalLevel"))
+            return XP.getTotalLevelFromMap(Config.getXpMap(uuid));
         else
-            return XP.levelAtXp( getXp( skill, uuid ) );
+            return XP.levelAtXp(getXp(skill, uuid));
     }
 
-    public double getLevelDecimal( String skill, UUID uuid )
+    public double getLevelDecimal(String skill, UUID uuid)
     {
-        if( skill.equals( "totalLevel" ) )
-            return getLevel( skill, uuid );
+        if(skill.equals("totalLevel"))
+            return getLevel(skill, uuid);
         else
-            return XP.levelAtXpDecimal( getXp( skill, uuid ) );
+            return XP.levelAtXpDecimal(getXp(skill, uuid));
     }
 
-    public boolean setXp( String skill, UUID uuid, double amount )
+    public boolean setXp(String skill, UUID uuid, double amount)
     {
-        double maxXp = Config.getConfig( "maxXp" );
+        double maxXp = Config.getConfig("maxXp");
 
-        if( amount > maxXp )
+        if(amount > maxXp)
             amount = maxXp;
 
-        if( amount < 0 )
+        if(amount < 0)
             amount = 0;
 
-        if( !xp.containsKey( uuid ) )
-            xp.put( uuid, new HashMap<>() );
-        if( amount > 0 )
-            xp.get( uuid ).put( skill, amount );
+        if(!xp.containsKey(uuid))
+            xp.put(uuid, new HashMap<>());
+        if(amount > 0)
+            xp.get(uuid).put(skill, amount);
         else
-            xp.get( uuid ).remove( skill );
-        setDirty( true );
+            xp.get(uuid).remove(skill);
+        setDirty(true);
         return true;
     }
 
-    public boolean addXp( String skill, UUID uuid, double amount )
+    public boolean addXp(String skill, UUID uuid, double amount)
     {
-        setXp( skill, uuid, getXp( skill, uuid ) + amount );
-        setDirty( true );
+        setXp(skill, uuid, getXp(skill, uuid) + amount);
+        setDirty(true);
         return true;
     }
 
-    public void scheduleXp( String skill, UUID uuid, double amount, String sourceName )
+    public void scheduleXp(String skill, UUID uuid, double amount, String sourceName)
     {
-        Map<String, Double> scheduledXpMap = getScheduledXpMap( uuid );
-        if( !scheduledXpMap.containsKey( skill ) )
-            scheduledXpMap.put( skill, amount );
+        Map<String, Double> scheduledXpMap = getScheduledXpMap(uuid);
+        if(!scheduledXpMap.containsKey(skill))
+            scheduledXpMap.put(skill, amount);
         else
-            scheduledXpMap.put( skill, amount + scheduledXpMap.get( skill ) );
-        LOGGER.debug( "Scheduled " + amount + "xp for: " + sourceName + ", to: " + getName( uuid ) );
-        setDirty( true );
+            scheduledXpMap.put(skill, amount + scheduledXpMap.get(skill));
+        LOGGER.debug("Scheduled " + amount + "xp for: " + sourceName + ", to: " + getName(uuid));
+        setDirty(true);
     }
 
-    public void removeScheduledXpUuid( UUID uuid )
+    public void removeScheduledXpUuid(UUID uuid)
     {
-        scheduledXp.remove( uuid );
+        scheduledXp.remove(uuid);
     }
 
-    public void setName( String name, UUID uuid )
+    public void setName(String name, UUID uuid)
     {
-        this.name.put( uuid, name );
+        this.name.put(uuid, name);
     }
 
-    public String getName( UUID uuid )
+    public String getName(UUID uuid)
     {
-        return name.getOrDefault( uuid, "Nameless Warning" );
+        return name.getOrDefault(uuid, "Nameless Warning");
     }
 
-    public Party getParty( UUID uuid )
+    public Party getParty(UUID uuid)
     {
         Party party = null;
-        for( Party thisParty : parties )
+        for(Party thisParty : parties)
         {
-            if( thisParty.getMemberInfo( uuid ) != null )
+            if(thisParty.getMemberInfo(uuid) != null)
                 party = thisParty;
         }
         return party;
     }
 
-    public boolean makeParty( UUID uuid )
+    public boolean makeParty(UUID uuid)
     {
-        if( getParty( uuid ) == null )
+        if(getParty(uuid) == null)
         {
-            Party party = new Party( System.currentTimeMillis(), new HashSet<>() );
-            party.addMember( uuid );
-            parties.add( party );
+            Party party = new Party(System.currentTimeMillis(), new HashSet<>());
+            party.addMember(uuid);
+            parties.add(party);
             return true;
         }
         else
             return false;
     }
 
-    public int addToParty( UUID ownerUuid, UUID newMemberUuid )
+    public int addToParty(UUID ownerUuid, UUID newMemberUuid)
     {
-        Party ownerParty = getParty( ownerUuid );
-        Party newMemberParty = getParty( newMemberUuid );
-        if( ownerParty == null )
+        Party ownerParty = getParty(ownerUuid);
+        Party newMemberParty = getParty(newMemberUuid);
+        if(ownerParty == null)
             return -1;  //-1 = owner does not have a party
-        else if( newMemberParty != null )
+        else if(newMemberParty != null)
             return -2;  //-2 = new member is already in a party
-        else if( ownerParty.getMembersCount() + 1 > Party.getMaxPartyMembers() )
+        else if(ownerParty.getMembersCount() + 1 > Party.getMaxPartyMembers())
             return -4;  //-4 = the party is full
         else
         {
-            ownerParty.addMember( newMemberUuid );
+            ownerParty.addMember(newMemberUuid);
             this.markDirty();
             return 0;   //0 = member has been added
         }
     }
 
-    public int removeFromParty( UUID uuid )
+    public int removeFromParty(UUID uuid)
     {
-        Party party = getParty( uuid );
-        if( party == null )
+        Party party = getParty(uuid);
+        if(party == null)
             return -1;  //-1 = not in a party
         else
         {
-            party.removeMember( uuid );
-            if( party.getPartySize() == 0 )
+            party.removeMember(uuid);
+            if(party.getPartySize() == 0)
             {
-                parties.remove( party );
+                parties.remove(party);
                 this.markDirty();
                 return 1;   //1 = The party became empty, and got deleted
             }
@@ -310,21 +310,21 @@ public class PmmoSavedData extends WorldSavedData
 
 //    public static PmmoSavedData get()
 //    {
-//        return server.getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+//        return server.getWorld(DimensionType.OVERWORLD).getSavedData().getOrCreate(PmmoSavedData::new, NAME);
 //    }
 //
-//    public static PmmoSavedData get( PlayerEntity player )
+//    public static PmmoSavedData get(PlayerEntity player)
 //    {
-//        if( player.getServer() == null )
-//            LOGGER.error( "FATAL PMMO ERROR: SERVER IS NULL. Could not get PmmoSavedData" );
+//        if(player.getServer() == null)
+//            LOGGER.error("FATAL PMMO ERROR: SERVER IS NULL. Could not get PmmoSavedData");
 //
-//        return player.getServer().getWorld( DimensionType.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+//        return player.getServer().getWorld(DimensionType.OVERWORLD).getSavedData().getOrCreate(PmmoSavedData::new, NAME);
 //    }
 
-    public static void init( MinecraftServer server )
+    public static void init(MinecraftServer server)
     {
         PmmoSavedData.server = server;
-        PmmoSavedData.pmmoSavedData = server.getWorld( World.OVERWORLD ).getSavedData().getOrCreate( PmmoSavedData::new, NAME );
+        PmmoSavedData.pmmoSavedData = server.getWorld(World.OVERWORLD).getSavedData().getOrCreate(PmmoSavedData::new, NAME);
     }
 
     public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.
@@ -337,72 +337,72 @@ public class PmmoSavedData extends WorldSavedData
         return PmmoSavedData.server;
     }
 
-    public Map<String, Map<String, Double>> getPlayerXpBoostsMap( UUID playerUUID )
+    public Map<String, Map<String, Double>> getPlayerXpBoostsMap(UUID playerUUID)
     {
-        return xpBoosts.getOrDefault( playerUUID, new HashMap<>() );
+        return xpBoosts.getOrDefault(playerUUID, new HashMap<>());
     }
 
-    public Map<String, Double> getPlayerXpBoostMap( UUID playerUUID, String xpBoostKey )
+    public Map<String, Double> getPlayerXpBoostMap(UUID playerUUID, String xpBoostKey)
     {
-        return getPlayerXpBoostsMap( playerUUID ).getOrDefault( xpBoostKey, new HashMap<>() );
+        return getPlayerXpBoostsMap(playerUUID).getOrDefault(xpBoostKey, new HashMap<>());
     }
 
-    public double getPlayerXpBoost( UUID playerUUID, String skill )
+    public double getPlayerXpBoost(UUID playerUUID, String skill)
     {
         double xpBoost = 0;
 
-        for( Map.Entry<String , Map<String, Double>> entry : getPlayerXpBoostsMap( playerUUID ).entrySet() )
+        for(Map.Entry<String , Map<String, Double>> entry : getPlayerXpBoostsMap(playerUUID).entrySet())
         {
-            xpBoost += entry.getValue().getOrDefault( skill, 0D );
+            xpBoost += entry.getValue().getOrDefault(skill, 0D);
         }
 
         return xpBoost;
     }
 
-    public void setPlayerXpBoostsMaps( UUID playerUUID, Map<String, Map<String, Double>> newBoosts )
+    public void setPlayerXpBoostsMaps(UUID playerUUID, Map<String, Map<String, Double>> newBoosts)
     {
         Map<String, Map<String, Double>> sanitizedBoosts = new HashMap<>();
-        for( Map.Entry<String, Map<String, Double>> boostMapEntry : newBoosts.entrySet() )
+        for(Map.Entry<String, Map<String, Double>> boostMapEntry : newBoosts.entrySet())
         {
-            sanitizedBoosts.put( boostMapEntry.getKey(), NBTHelper.stringMapToLowerCase( boostMapEntry.getValue() ) );
+            sanitizedBoosts.put(boostMapEntry.getKey(), NBTHelper.stringMapToLowerCase(boostMapEntry.getValue()));
         }
-        xpBoosts.put( playerUUID, sanitizedBoosts );
-        setDirty( true );
+        xpBoosts.put(playerUUID, sanitizedBoosts);
+        setDirty(true);
     }
 
-    public void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, Map<String, Double> newXpBoosts )
+    public void setPlayerXpBoost(UUID playerUUID, String xpBoostKey, Map<String, Double> newXpBoosts)
     {
-        for( Map.Entry<String, Double> entry : newXpBoosts.entrySet() )
+        for(Map.Entry<String, Double> entry : newXpBoosts.entrySet())
         {
-            setPlayerXpBoost( playerUUID, xpBoostKey, entry.getKey(), entry.getValue() );
+            setPlayerXpBoost(playerUUID, xpBoostKey, entry.getKey(), entry.getValue());
         }
-        XP.syncPlayerXpBoost( playerUUID );
-        setDirty( true );
+        XP.syncPlayerXpBoost(playerUUID);
+        setDirty(true);
     }
 
-    private void setPlayerXpBoost( UUID playerUUID, String xpBoostKey, String skill, Double xpBoost )
+    private void setPlayerXpBoost(UUID playerUUID, String xpBoostKey, String skill, Double xpBoost)
     {
-        if( !this.xpBoosts.containsKey( playerUUID ) )
-            this.xpBoosts.put( playerUUID, new HashMap<>() );
-        if( !this.xpBoosts.get( playerUUID ).containsKey( xpBoostKey ) )
-            this.xpBoosts.get( playerUUID ).put( xpBoostKey, new HashMap<>() );
+        if(!this.xpBoosts.containsKey(playerUUID))
+            this.xpBoosts.put(playerUUID, new HashMap<>());
+        if(!this.xpBoosts.get(playerUUID).containsKey(xpBoostKey))
+            this.xpBoosts.get(playerUUID).put(xpBoostKey, new HashMap<>());
 
-        this.xpBoosts.get( playerUUID ).get( xpBoostKey ).put( skill.toLowerCase(), xpBoost );
-        setDirty( true );
+        this.xpBoosts.get(playerUUID).get(xpBoostKey).put(skill.toLowerCase(), xpBoost);
+        setDirty(true);
     }
 
-    public void removePlayerXpBoost( UUID playerUUID, String xpBoostKey )
+    public void removePlayerXpBoost(UUID playerUUID, String xpBoostKey)
     {
-        getPlayerXpBoostsMap( playerUUID ).remove( xpBoostKey );
-        XP.syncPlayerXpBoost( playerUUID );
-        setDirty( true );
+        getPlayerXpBoostsMap(playerUUID).remove(xpBoostKey);
+        XP.syncPlayerXpBoost(playerUUID);
+        setDirty(true);
     }
 
-    public void removeAllPlayerXpBoosts( UUID playerUUID )
+    public void removeAllPlayerXpBoosts(UUID playerUUID)
     {
-        xpBoosts.remove( playerUUID );
-        XP.syncPlayerXpBoost( playerUUID );
-        setDirty( true );
+        xpBoosts.remove(playerUUID);
+        XP.syncPlayerXpBoost(playerUUID);
+        setDirty(true);
     }
 
     public Map<UUID, Map<String, Double>> getAllXpMaps()

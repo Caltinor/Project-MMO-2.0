@@ -8,7 +8,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class ItemHandler
 {
-    public static void handleItemEntityPickup( EntityItemPickupEvent event )
+    public static void handleItemEntityPickup(EntityItemPickupEvent event)
     {
 
     }

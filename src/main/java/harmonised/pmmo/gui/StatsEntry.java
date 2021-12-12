@@ -14,7 +14,7 @@ public class StatsEntry
     public List<IFormattableTextComponent> text;
     public int x, y;
 
-    public StatsEntry( int x, int y, TextComponent title, List<IFormattableTextComponent> text )
+    public StatsEntry(int x, int y, TextComponent title, List<IFormattableTextComponent> text)
     {
         this.x = x;
         this.y = y;
@@ -37,12 +37,12 @@ public class StatsEntry
         return y;
     }
 
-    public void setX( int x )
+    public void setX(int x)
     {
         this.x = x;
     }
 
-    public void setY( int y )
+    public void setY(int y)
     {
         this.y = y;
     }

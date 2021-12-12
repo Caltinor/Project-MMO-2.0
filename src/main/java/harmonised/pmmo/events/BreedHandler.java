@@ -16,27 +16,27 @@ import java.util.Map;
 
 public class BreedHandler
 {
-    public static void handleBreedEvent( BabyEntitySpawnEvent event )
+    public static void handleBreedEvent(BabyEntitySpawnEvent event)
     {
-        if( event.getChild() != null && event.getCausedByPlayer() != null && event.getCausedByPlayer() instanceof ServerPlayerEntity && !(event.getCausedByPlayer() instanceof FakePlayer) )
+        if(event.getChild() != null && event.getCausedByPlayer() != null && event.getCausedByPlayer() instanceof ServerPlayerEntity && !(event.getCausedByPlayer() instanceof FakePlayer))
         {
             ServerPlayerEntity causedByPlayer = (ServerPlayerEntity) event.getCausedByPlayer();
             double defaultBreedingXp = Config.forgeConfig.defaultBreedingXp.get();
             String regKey = event.getChild().getEntityString();
-            Vector3d midPos = Util.getMidVec( event.getParentA().getPositionVec(), event.getParentB().getPositionVec() );
-            Vector3d xpDropPos = new Vector3d( midPos.getX(), midPos.getY() + event.getChild().getEyeHeight() + 0.523, midPos.getZ() );
-            Map<String, Double> award = XP.getXp( event.getChild() , JType.XP_VALUE_BREED );
-            if( award.size() == 0 )
-                award.put( Skill.FARMING.toString(), defaultBreedingXp );
+            Vector3d midPos = Util.getMidVec(event.getParentA().getPositionVec(), event.getParentB().getPositionVec());
+            Vector3d xpDropPos = new Vector3d(midPos.getX(), midPos.getY() + event.getChild().getEyeHeight() + 0.523, midPos.getZ());
+            Map<String, Double> award = XP.getXp(event.getChild() , JType.XP_VALUE_BREED);
+            if(award.size() == 0)
+                award.put(Skill.FARMING.toString(), defaultBreedingXp);
 
-            if( XP.isHoldingDebugItemInOffhand( causedByPlayer ) )
-                causedByPlayer.sendStatusMessage( new StringTextComponent( regKey ), false );
+            if(XP.isHoldingDebugItemInOffhand(causedByPlayer))
+                causedByPlayer.sendStatusMessage(new StringTextComponent(regKey), false);
 
-            for( String awardSkillName : award.keySet() )
+            for(String awardSkillName : award.keySet())
             {
-                WorldXpDrop xpDrop = WorldXpDrop.fromXYZ( XP.getDimResLoc( causedByPlayer.getServerWorld() ), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.5, award.get( awardSkillName ), awardSkillName );
-                XP.addWorldXpDrop( xpDrop, causedByPlayer );
-                Skill.addXp( awardSkillName, causedByPlayer, award.get( awardSkillName ), "breeding " + regKey, false, false );
+                WorldXpDrop xpDrop = WorldXpDrop.fromXYZ(XP.getDimResLoc(causedByPlayer.getServerWorld()), xpDropPos.getX(), xpDropPos.getY(), xpDropPos.getZ(), 0.5, award.get(awardSkillName), awardSkillName);
+                XP.addWorldXpDrop(xpDrop, causedByPlayer);
+                Skill.addXp(awardSkillName, causedByPlayer, award.get(awardSkillName), "breeding " + regKey, false, false);
             }
         }
     }

@@ -21,33 +21,33 @@ public class CheckStatsCommand
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         PlayerEntity sender = (PlayerEntity) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
 
-        if( sender == null )
+        if(sender == null)
         {
-            LOGGER.error( "Error: Pmmo checkstats sent by non-player" );
+            LOGGER.error("Error: Pmmo checkstats sent by non-player");
             return -1;
         }
 
         try
         {
-            PlayerEntity target = EntityArgument.getPlayer( context, "player name" );
+            PlayerEntity target = EntityArgument.getPlayer(context, "player name");
 
-            CompoundNBT packetxpMap = NBTHelper.mapStringToNbt(Config.getXpMap( target ) );
+            CompoundNBT packetxpMap = NBTHelper.mapStringToNbt(Config.getXpMap(target));
 
-            packetxpMap.putString( "UUID", target.getUniqueID().toString() );
-            packetxpMap.putString( "name", target.getName().getString() );
+            packetxpMap.putString("UUID", target.getUniqueID().toString());
+            packetxpMap.putString("name", target.getName().getString());
 
-            NetworkHandler.sendToPlayer( new MessageUpdatePlayerNBT( packetxpMap, 3 ), (ServerPlayerEntity) sender );
+            NetworkHandler.sendToPlayer(new MessageUpdatePlayerNBT(packetxpMap, 3), (ServerPlayerEntity) sender);
         }
-        catch( CommandSyntaxException e )
+        catch(CommandSyntaxException e)
         {
-            LOGGER.error( "Error: Invalid Player requested at CheckStats Command \"" + args[2] + "\"", e );
+            LOGGER.error("Error: Invalid Player requested at CheckStats Command \"" + args[2] + "\"", e);
 
-            sender.sendStatusMessage(  new TranslationTextComponent( "pmmo.invalidPlayer", args[2] ).setStyle( XP.textStyle.get( "red" ) ), false );
+            sender.sendStatusMessage( new TranslationTextComponent("pmmo.invalidPlayer", args[2]).setStyle(XP.textStyle.get("red")), false);
             return -1;
         }
 

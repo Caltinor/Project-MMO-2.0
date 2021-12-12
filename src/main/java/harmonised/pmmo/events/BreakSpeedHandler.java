@@ -22,57 +22,57 @@ import java.util.Map;
 
 public class BreakSpeedHandler
 {
-    public static void handleBreakSpeed( PlayerEvent.BreakSpeed event )
+    public static void handleBreakSpeed(PlayerEvent.BreakSpeed event)
     {
         PlayerEntity player = event.getPlayer();
-        if( player instanceof FakePlayer)
+        if(player instanceof FakePlayer)
             return;
-        String skill = XP.getSkill( event.getState() ).toLowerCase();
+        String skill = XP.getSkill(event.getState()).toLowerCase();
         double speedBonus;
         ItemStack itemStack = player.getHeldItemMainhand();
 
         ResourceLocation resLoc = itemStack.getItem().getRegistryName();
-        if( resLoc == null )
+        if(resLoc == null)
             return;
         Map<String, Double> toolReq = TooltipSupplier.getTooltipData(resLoc, JType.REQ_TOOL, itemStack);
-        if( Config.getConfig( "toolReqEnabled" ) != 0 && Config.getConfig( "autoGenerateValuesEnabled" ) != 0 && Config.getConfig( "autoGenerateToolReqDynamicallyEnabled" ) != 0 )
+        if(Config.getConfig("toolReqEnabled") != 0 && Config.getConfig("autoGenerateValuesEnabled") != 0 && Config.getConfig("autoGenerateToolReqDynamicallyEnabled") != 0)
         {
-            Map<String, Double> dynToolReq = AutoValues.getToolReqFromStack( itemStack );
-            for( Map.Entry<String, Double> entry : dynToolReq.entrySet() )
+            Map<String, Double> dynToolReq = AutoValues.getToolReqFromStack(itemStack);
+            for(Map.Entry<String, Double> entry : dynToolReq.entrySet())
             {
-                if( !toolReq.containsKey( entry.getKey() ) )
-                    toolReq.put( entry.getKey(), Math.max( 1, entry.getValue() ) );
+                if(!toolReq.containsKey(entry.getKey()))
+                    toolReq.put(entry.getKey(), Math.max(1, entry.getValue()));
             }
         }
 
-        int toolGap = XP.getSkillReqGap( player, toolReq );
-        int enchantGap = XP.getSkillReqGap( player, XP.getEnchantsUseReq( player.getHeldItemMainhand() ) );
-        int gap = Math.max( toolGap, enchantGap );
+        int toolGap = XP.getSkillReqGap(player, toolReq);
+        int enchantGap = XP.getSkillReqGap(player, XP.getEnchantsUseReq(player.getHeldItemMainhand()));
+        int gap = Math.max(toolGap, enchantGap);
         boolean breakReqMet = event.getState().hasTileEntity()
-        		? XP.checkReq( player, event.getEntity().getEntityWorld().getTileEntity(event.getPos()), JType.REQ_BREAK)
-        		: XP.checkReq( player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK );
+        		? XP.checkReq(player, event.getEntity().getEntityWorld().getTileEntity(event.getPos()), JType.REQ_BREAK)
+        		: XP.checkReq(player, event.getState().getBlock().getRegistryName(), JType.REQ_BREAK);
 
-        if( !breakReqMet )
+        if(!breakReqMet)
         {
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToBreak", new TranslationTextComponent( event.getState().getBlock().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
-            event.setCanceled( true );
+            player.sendStatusMessage(new TranslationTextComponent("pmmo.notSkilledEnoughToBreak", new TranslationTextComponent(event.getState().getBlock().getTranslationKey())).setStyle(XP.textStyle.get("red")), true);
+            event.setCanceled(true);
             return;
         }
-        else if( gap > 0 )
+        else if(gap > 0)
         {
-            if( enchantGap < gap )
-                player.sendStatusMessage( new TranslationTextComponent( "pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent( player.getHeldItemMainhand().getTranslationKey() ) ).setStyle( XP.textStyle.get( "red" ) ), true );
+            if(enchantGap < gap)
+                player.sendStatusMessage(new TranslationTextComponent("pmmo.notSkilledEnoughToUseAsTool", new TranslationTextComponent(player.getHeldItemMainhand().getTranslationKey())).setStyle(XP.textStyle.get("red")), true);
 
-            if( Config.getConfig( "strictReqTool" ) == 1 )
+            if(Config.getConfig("strictReqTool") == 1)
             {
-                event.setCanceled( true );
+                event.setCanceled(true);
                 return;
             }
         }
 
-        int startLevel = Skill.getLevel( skill, player );
+        int startLevel = Skill.getLevel(skill, player);
 
-        switch ( XP.getHarvestTool( event.getState() ) )
+        switch (XP.getHarvestTool(event.getState()))
         {
             case "pickaxe":
                 float height = event.getPos().getY();
@@ -80,35 +80,35 @@ public class BreakSpeedHandler
                     height = -height;
 
                 double blocksToUnbreakableY = Config.forgeConfig.blocksToUnbreakableY.get();
-                double heightMultiplier = 1 - ( height / blocksToUnbreakableY );
+                double heightMultiplier = 1 - (height / blocksToUnbreakableY);
 
-                if ( heightMultiplier < Config.forgeConfig.minBreakSpeed.get() )
+                if (heightMultiplier < Config.forgeConfig.minBreakSpeed.get())
                     heightMultiplier = Config.forgeConfig.minBreakSpeed.get();
 
                 speedBonus = Config.forgeConfig.miningBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) * ( (float) heightMultiplier ) );
+                event.setNewSpeed(event.getOriginalSpeed() * (1 + (startLevel - toolGap) * (float) speedBonus) * ((float) heightMultiplier));
                 break;
 
             case "axe":
                 speedBonus = Config.forgeConfig.woodcuttingBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
+                event.setNewSpeed(event.getOriginalSpeed() * (1 + (startLevel - toolGap) * (float) speedBonus));
                 break;
 
             case "shovel":
                 speedBonus = Config.forgeConfig.excavationBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
+                event.setNewSpeed(event.getOriginalSpeed() * (1 + (startLevel - toolGap) * (float) speedBonus));
                 break;
 
             case "hoe":
                 speedBonus = Config.forgeConfig.farmingBonusSpeed.get() / 100;
-                event.setNewSpeed( event.getOriginalSpeed() * ( 1 + (startLevel - toolGap) * (float) speedBonus ) );
+                event.setNewSpeed(event.getOriginalSpeed() * (1 + (startLevel - toolGap) * (float) speedBonus));
                 break;
 
             default:
-                event.setNewSpeed( event.getOriginalSpeed() );
+                event.setNewSpeed(event.getOriginalSpeed());
                 break;
         }
 
-        event.setNewSpeed( event.getNewSpeed() / (toolGap + 1) );
+        event.setNewSpeed(event.getNewSpeed() / (toolGap + 1));
     }
 }

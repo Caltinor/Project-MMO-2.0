@@ -16,9 +16,9 @@ public class NearbyPowerLevelCommand
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
-        String[] args = context.getInput().split( " " );
+        String[] args = context.getInput().split(" ");
         PlayerEntity sender = null;
         PlayerEntity target = null;
 
@@ -26,41 +26,41 @@ public class NearbyPowerLevelCommand
         {
             sender = context.getSource().asPlayer();
         }
-        catch( CommandSyntaxException e )
+        catch(CommandSyntaxException e)
         {
             //no sender, it's fine
         }
 
-        if( args.length > 3 )
+        if(args.length > 3)
         {
             try
             {
-                target = EntityArgument.getPlayer( context, "target" );
+                target = EntityArgument.getPlayer(context, "target");
             }
-            catch( CommandSyntaxException e )
+            catch(CommandSyntaxException e)
             {
                 //no target, target will be sender
             }
         }
 
-        if( sender == null && target == null )
-            LOGGER.error( "PMMO NearbyPowerLevel Command: Sender not player, and target is invalid!" );
+        if(sender == null && target == null)
+            LOGGER.error("PMMO NearbyPowerLevel Command: Sender not player, and target is invalid!");
         else
         {
-            if( target == null )
+            if(target == null)
                 target = sender;
 
             double totalPowerLevel = 0;
 
-            for( PlayerEntity player : XP.getNearbyPlayers( target ) )
+            for(PlayerEntity player : XP.getNearbyPlayers(target))
             {
-                totalPowerLevel += XP.getPowerLevel( player.getUniqueID() );
+                totalPowerLevel += XP.getPowerLevel(player.getUniqueID());
             }
 
-            LOGGER.info( "PMMO NearbyPowerLevel Command Output: " + totalPowerLevel );
+            LOGGER.info("PMMO NearbyPowerLevel Command Output: " + totalPowerLevel);
 
-            if( sender != null )
-                sender.sendStatusMessage( new StringTextComponent( totalPowerLevel + " " + new TranslationTextComponent( "pmmo.power" ).getString() ), false );
+            if(sender != null)
+                sender.sendStatusMessage(new StringTextComponent(totalPowerLevel + " " + new TranslationTextComponent("pmmo.power").getString()), false);
         }
 
         return 1;

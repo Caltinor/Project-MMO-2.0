@@ -26,7 +26,7 @@ public class PrefsScrollPanel extends ScrollPanel
     private final Minecraft client;
     private final int width, height, top, bottom, right, left, barLeft, border = 4, barWidth = 6;
 
-    public PrefsScrollPanel( MatrixStack stack, Minecraft client, int width, int height, int top, int left, ArrayList<PrefsEntry> prefsEntries )
+    public PrefsScrollPanel(MatrixStack stack, Minecraft client, int width, int height, int top, int left, ArrayList<PrefsEntry> prefsEntries)
     {
         super(client, width, height, top, left);
         this.prefsEntries = prefsEntries;
@@ -46,7 +46,7 @@ public class PrefsScrollPanel extends ScrollPanel
     {
         int height = -4;
 
-        for( PrefsEntry a : prefsEntries )
+        for(PrefsEntry a : prefsEntries)
         {
             height += a.getHeight() + 2;
         }
@@ -55,37 +55,37 @@ public class PrefsScrollPanel extends ScrollPanel
     }
 
     @Override
-    protected void drawPanel( MatrixStack stack, int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
+    protected void drawPanel(MatrixStack stack, int entryRight, int relativeY, Tessellator tess, int mouseX, int mouseY)
     {
-        for( int i = 0; i < prefsEntries.size(); i++ )
+        for(int i = 0; i < prefsEntries.size(); i++)
         {
-            prefEntry = prefsEntries.get( i );
-            prefEntry.setX( this.left + 6 );
-            prefEntry.setY( 7 + relativeY + ( prefEntry.getHeight() + 2) * i );
+            prefEntry = prefsEntries.get(i);
+            prefEntry.setX(this.left + 6);
+            prefEntry.setY(7 + relativeY + (prefEntry.getHeight() + 2) * i);
             slider = prefEntry.slider;
 
-            if( prefEntry.getY() + prefEntry.getHeight() > this.top && prefEntry.getY() - prefEntry.getHeight() < this.bottom )
+            if(prefEntry.getY() + prefEntry.getHeight() > this.top && prefEntry.getY() - prefEntry.getHeight() < this.bottom)
             {
-                if( prefEntry.isSwitch )
+                if(prefEntry.isSwitch)
                 {
-                    if( slider.getValue() == 1 )
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0x22444444, 0x33222222);
+                    if(slider.getValue() == 1)
+                        fillGradient(stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0x22444444, 0x33222222);
                     else
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0xaa444444, 0xaa222222);
+                        fillGradient(stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0xaa444444, 0xaa222222);
                 }
                 else
                 {
-                    if( (float) prefEntry.defaultVal == (float) slider.getValue() )
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0xaa444444, 0xaa222222);
+                    if((float) prefEntry.defaultVal == (float) slider.getValue())
+                        fillGradient(stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0xaa444444, 0xaa222222);
                     else
-                        fillGradient( stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0x22444444, 0x33222222);
+                        fillGradient(stack, this.left + 4, prefEntry.getY() - 11, this.right - 2, prefEntry.getY() + slider.getHeightRealms() + 2, 0x22444444, 0x33222222);
                 }
 
-                drawCenteredString( stack,  font, prefEntry.preference, prefEntry.getX() + slider.getWidth() / 2, prefEntry.getY() - 9, 0xffffff );
-                slider.render( stack, mouseX, mouseY, 0);
-                prefEntry.button.render( stack, mouseX, mouseY, 0);
-                if( !prefEntry.isSwitch )
-                    prefEntry.textField.render( stack, mouseX, mouseY, 0);
+                drawCenteredString(stack,  font, prefEntry.preference, prefEntry.getX() + slider.getWidth() / 2, prefEntry.getY() - 9, 0xffffff);
+                slider.render(stack, mouseX, mouseY, 0);
+                prefEntry.button.render(stack, mouseX, mouseY, 0);
+                if(!prefEntry.isSwitch)
+                    prefEntry.textField.render(stack, mouseX, mouseY, 0);
             }
         }
     }
@@ -101,7 +101,7 @@ public class PrefsScrollPanel extends ScrollPanel
         return (int) this.scrollDistance;
     }
 
-    public void setScroll( int scroll )
+    public void setScroll(int scroll)
     {
         this.scrollDistance = scroll;
     }
@@ -122,14 +122,14 @@ public class PrefsScrollPanel extends ScrollPanel
     }
 
     @Override
-    public void render( MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack stack,  int mouseX, int mouseY, float partialTicks)
     {
 //        this.drawBackground();
 
 //        if (Minecraft.getInstance().world != null)
 //        {
-//            this.fillGradient( stack, 0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
-//            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super ) );
+//            this.fillGradient(stack, 0, 0, sr.getScaledWidth(), sr.getScaledHeight(), -1072689136, -804253680);
+//            net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(super));
 //        }
 
         Tessellator tess = Tessellator.getInstance();
@@ -160,7 +160,7 @@ public class PrefsScrollPanel extends ScrollPanel
 //        }
 
         int baseY = this.top + border - (int)this.scrollDistance;
-        this.drawPanel( stack, right, baseY, tess, mouseX, mouseY);
+        this.drawPanel(stack, right, baseY, tess, mouseX, mouseY);
 
         RenderSystem.disableDepthTest();
 

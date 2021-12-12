@@ -15,7 +15,7 @@ public class PrefsSlider extends Slider
     private static double lastValue;
     public String preference;
 
-    public PrefsSlider(int xPos, int yPos, int width, int height, String preference, ITextComponent prefix, ITextComponent suf, double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr, boolean isSwitch, IPressable handler )
+    public PrefsSlider(int xPos, int yPos, int width, int height, String preference, ITextComponent prefix, ITextComponent suf, double minVal, double maxVal, double currentVal, boolean showDec, boolean drawStr, boolean isSwitch, IPressable handler)
     {
         super(xPos, yPos, width, height, prefix, suf, minVal, maxVal, currentVal, showDec, drawStr, handler);
         this.preference = preference;
@@ -25,11 +25,11 @@ public class PrefsSlider extends Slider
     @Override
     public void updateSlider()
     {
-        if( isSwitch )
+        if(isSwitch)
         {
             this.sliderValue = this.sliderValue < 0.5 ? 0 : 1;
             if(drawString)
-                setMessage( new StringTextComponent( this.sliderValue == 1 ? "On" : "Off" ));
+                setMessage(new StringTextComponent(this.sliderValue == 1 ? "On" : "Off"));
         }
         else
         {
@@ -68,19 +68,19 @@ public class PrefsSlider extends Slider
             }
 
             if(drawString)
-                setMessage( new StringTextComponent( dispString.getString() + val + suffix.getString() ));
+                setMessage(new StringTextComponent(dispString.getString() + val + suffix.getString()));
         }
 
         if (parent != null)
         {
-            parent.onChangeSliderValue( this );
+            parent.onChangeSliderValue(this);
         }
 
         if (this.guiResponder != null)
-            this.guiResponder.accept( this );
+            this.guiResponder.accept(this);
     }
 
-    public void setResponder( Consumer<PrefsSlider> rssponderIn )
+    public void setResponder(Consumer<PrefsSlider> rssponderIn)
     {
         this.guiResponder = rssponderIn;
     }

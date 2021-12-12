@@ -7,9 +7,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 public class SalvageEvent extends PlayerEvent
 {
     BlockPos blockPos;
-    public SalvageEvent( PlayerEntity player, BlockPos blockPos )
+    public SalvageEvent(PlayerEntity player, BlockPos blockPos)
     {
-        super( player );
+        super(player);
         this.blockPos = blockPos;
     }
 

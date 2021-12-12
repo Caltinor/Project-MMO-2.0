@@ -16,7 +16,7 @@ import crafttweaker.api.event.entity.player.MCUseHoeEvent;
 `
 CTEventManager.register(new MCUseHoeEvent(event =>
 {
-	var metLevelsSpecified = Levels.checkLevels( new MapData( {"agility": 10 as IData, "farming": 50 as IData} ), event.getPlayer() );
+	var metLevelsSpecified = Levels.checkLevels(new MapData({"agility": 10 as IData, "farming": 50 as IData}), event.getPlayer());
 }));
 `
 
@@ -24,7 +24,7 @@ CTEventManager.register(new MCUseHoeEvent(event =>
 `
 CTEventManager.register(new MCUseHoeEvent(event =>
 {
-	Levels.awardLevels( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+	Levels.awardLevels(new MapData({"agility": 10 as IData, "farming": 3 as IData}), event.getPlayer());
 }));
 `
 
@@ -32,7 +32,7 @@ CTEventManager.register(new MCUseHoeEvent(event =>
 `
 CTEventManager.register(new MCUseHoeEvent(event =>
 {
-	Levels.awardXp( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer(), true );
+	Levels.awardXp(new MapData({"agility": 10 as IData, "farming": 3 as IData}), event.getPlayer(), true);
 }));
 `
 
@@ -40,7 +40,7 @@ CTEventManager.register(new MCUseHoeEvent(event =>
 `
 CTEventManager.register(new MCUseHoeEvent(event =>
 {
-	Levels.setLevels( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+	Levels.setLevels(new MapData({"agility": 10 as IData, "farming": 3 as IData}), event.getPlayer());
 }));
 `
 
@@ -48,7 +48,7 @@ CTEventManager.register(new MCUseHoeEvent(event =>
 `
 CTEventManager.register(new MCUseHoeEvent(event =>
 {
-	Levels.setXp( new MapData( {"agility": 10 as IData, "farming": 3 as IData} ), event.getPlayer() );
+	Levels.setXp(new MapData({"agility": 10 as IData, "farming": 3 as IData}), event.getPlayer());
 }));
 `
 
@@ -69,7 +69,7 @@ Skill.setLevel sets level double
 Skill.setXp sets xp double
 Skill.addLevel rewards level double
 Skill.addXp rewards xp double
-XP.getXp( ResourceLocation item, JType type ) returns a Map<String, Double> of the xp/level values stored for that item, in that type
+XP.getXp(ResourceLocation item, JType type) returns a Map<String, Double> of the xp/level values stored for that item, in that type
 
 To use the API, include these two lines in your gradle.build
 

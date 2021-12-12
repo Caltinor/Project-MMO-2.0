@@ -11,20 +11,20 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class ReloadConfigCommand
 {
-    public static int execute( CommandContext<CommandSource> context ) throws CommandException
+    public static int execute(CommandContext<CommandSource> context) throws CommandException
     {
         JsonConfig.init();  //Load Up Locally
-        if( Config.forgeConfig.autoGenerateValuesEnabled.get() )
+        if(Config.forgeConfig.autoGenerateValuesEnabled.get())
             AutoValues.setAutoValues(); //Set Auto Values
 
-        context.getSource().getServer().getPlayerList().getPlayers().forEach( player ->
+        context.getSource().getServer().getPlayerList().getPlayers().forEach(player ->
         {
-            XP.syncPlayerDataAndConfig( player );
-            XP.updateRecipes( player );
-            player.sendStatusMessage( new TranslationTextComponent( "pmmo.jsonConfigReload" ).setStyle( XP.textStyle.get( "green" ) ), false );
+            XP.syncPlayerDataAndConfig(player);
+            XP.updateRecipes(player);
+            player.sendStatusMessage(new TranslationTextComponent("pmmo.jsonConfigReload").setStyle(XP.textStyle.get("green")), false);
         });
 
-        System.out.println( "PMMO Config Reloaded" );
+        System.out.println("PMMO Config Reloaded");
 
         return 1;
     }

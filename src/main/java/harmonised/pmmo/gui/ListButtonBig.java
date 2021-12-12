@@ -33,10 +33,10 @@ public class ListButtonBig extends Button
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    private final ResourceLocation items = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big.png" );
-    private final ResourceLocation items2 = XP.getResLoc( Reference.MOD_ID, "textures/gui/items_big_2.png" );
-//    private final ResourceLocation buttons = XP.getResLoc( Reference.MOD_ID, "textures/gui/buttons.png" );
-//    private final Screen screen = new SkillsScreen( new TranslationTextComponent( "pmmo.potato" ));
+    private final ResourceLocation items = XP.getResLoc(Reference.MOD_ID, "textures/gui/items_big.png");
+    private final ResourceLocation items2 = XP.getResLoc(Reference.MOD_ID, "textures/gui/items_big_2.png");
+//    private final ResourceLocation buttons = XP.getResLoc(Reference.MOD_ID, "textures/gui/buttons.png");
+//    private final Screen screen = new SkillsScreen(new TranslationTextComponent("pmmo.potato"));
     private int page = 0;
     public int elementOne, elementTwo;
     public int offsetOne, offsetTwo;
@@ -52,36 +52,36 @@ public class ListButtonBig extends Button
     ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
     Minecraft minecraft = Minecraft.getInstance();
 
-    public ListButtonBig(int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, IPressable onPress )
+    public ListButtonBig(int posX, int posY, int elementOne, int elementTwo, String buttonText, String playerName, @Nullable String tooltip, IPressable onPress)
     {
-        super(posX, posY, 64, 64, new TranslationTextComponent( buttonText ), onPress);
+        super(posX, posY, 64, 64, new TranslationTextComponent(buttonText), onPress);
 //        this.regKey = regKey;
         this.buttonText = buttonText;
-        this.itemStack = new ItemStack( XP.getItem( regKey ) );
+        this.itemStack = new ItemStack(XP.getItem(regKey));
         this.elementOne = elementOne * 64;
         this.elementTwo = elementTwo * 64;
         this.playerName = playerName;
-        tooltipText.add( new TranslationTextComponent( playerName ) );
-        if( tooltip != null )
-            this.tooltipText.add( new TranslationTextComponent( tooltip ) );
+        tooltipText.add(new TranslationTextComponent(playerName));
+        if(tooltip != null)
+            this.tooltipText.add(new TranslationTextComponent(tooltip));
 
-        if( ForgeRegistries.ENTITIES.containsKey( XP.getResLoc( regKey ) ) )
-            testEntity = ForgeRegistries.ENTITIES.getValue( XP.getResLoc( regKey ) ).create( Minecraft.getInstance().world );
-        if( testEntity instanceof LivingEntity )
+        if(ForgeRegistries.ENTITIES.containsKey(XP.getResLoc(regKey)))
+            testEntity = ForgeRegistries.ENTITIES.getValue(XP.getResLoc(regKey)).create(Minecraft.getInstance().world);
+        if(testEntity instanceof LivingEntity)
             entity = (LivingEntity) testEntity;
 
-        if( elementOne > 3 )
+        if(elementOne > 3)
             offsetOne = 128;
         else
             offsetOne = 0;
 
-        if( elementTwo >= 7 )
+        if(elementTwo >= 7)
         {
             page = 1;
             elementTwo -= 8;
         }
 
-        if( elementTwo > 3 )
+        if(elementTwo > 3)
             offsetTwo = 128;
         else
             offsetTwo = 0;
@@ -94,7 +94,7 @@ public class ListButtonBig extends Button
     }
 
     @Override
-    public void renderButton( MatrixStack stack, int mouseX, int mouseY, float partialTicks )
+    public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
     {
         isHovered = mouseX > this.x + 3 && mouseY > this.y && mouseX < this.x + 60 && mouseY < this.y + 64;
         Minecraft minecraft = Minecraft.getInstance();
@@ -104,38 +104,38 @@ public class ListButtonBig extends Button
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        minecraft.getTextureManager().bindTexture( items );
-        this.blit( stack, this.x, this.y, this.offsetOne + ( this.isHovered() ? 64 : 0 ), this.elementOne, this.width, this.height);
-        minecraft.getTextureManager().bindTexture( page == 0 ? items : items2 );
-        this.blit( stack, this.x, this.y, this.offsetTwo + ( this.isHovered() ? 64 : 0 ), this.elementTwo, this.width, this.height);
-        if( !itemStack.getItem().equals( Items.AIR ) && entity == null )
-            itemRenderer.renderItemIntoGUI( itemStack, this.x + 8, this.y + 8 );
+        minecraft.getTextureManager().bindTexture(items);
+        this.blit(stack, this.x, this.y, this.offsetOne + (this.isHovered() ? 64 : 0), this.elementOne, this.width, this.height);
+        minecraft.getTextureManager().bindTexture(page == 0 ? items : items2);
+        this.blit(stack, this.x, this.y, this.offsetTwo + (this.isHovered() ? 64 : 0), this.elementTwo, this.width, this.height);
+        if(!itemStack.getItem().equals(Items.AIR) && entity == null)
+            itemRenderer.renderItemIntoGUI(itemStack, this.x + 8, this.y + 8);
 
-        if( entity != null )
+        if(entity != null)
         {
-            mobHeight = entity.getSize( Pose.STANDING ).height;
-            mobWidth = entity.getSize( Pose.STANDING ).width;
+            mobHeight = entity.getSize(Pose.STANDING).height;
+            mobWidth = entity.getSize(Pose.STANDING).width;
             mobScale = 54;
 
-            if( mobHeight > 0 )
+            if(mobHeight > 0)
                 mobScale /= Math.max(mobHeight, mobWidth);
 
-            drawEntityOnScreen( this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, entity );
+            drawEntityOnScreen(this.x + this.width / 2, this.y + this.height - 2, (int) mobScale, entity);
         }
 
-        this.renderBg( stack, minecraft, x, y );
+        this.renderBg(stack, minecraft, x, y);
         int j = getFGColor();
-        this.drawCenteredString( stack, fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
+        this.drawCenteredString(stack, fontrenderer, this.buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
     }
 
     public void clickAction()
     {
-        LOGGER.debug( "Clicked " + this.title + " Button" );
+        LOGGER.debug("Clicked " + this.title + " Button");
     }
 
     public static void drawEntityOnScreen(int posX, int posY, int scale, LivingEntity p_228187_5_)
     {
-        float f = (float) ( (System.currentTimeMillis() / 25D ) % 360);
+        float f = (float) ((System.currentTimeMillis() / 25D) % 360);
         float f1 = 0;
         RenderSystem.pushMatrix();
         RenderSystem.translatef((float)posX, (float)posY, 1050.0F);
