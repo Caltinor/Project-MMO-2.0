@@ -215,7 +215,7 @@ public class AutoValues
 
             for(Recipe<?> recipe : allRecipes)
             {
-                if(recipe == null)
+                if(recipe == null || recipe.getResultItem() == null)
                     continue;
                 Item item = recipe.getResultItem().getItem();
                 if(recipe.getType() == RecipeType.CRAFTING)

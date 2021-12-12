@@ -19,7 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.18-3.65.5'
+version = '1.18-3.66'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -108,7 +108,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.18-38.0.12'
+            minecraft 'net.minecraftforge:forge:1.18-38.0.17'
             implementation 'com.google.code.gson:gson:2.8.6'
 
 //            compileOnly fg.deobf("mezz.jei:jei-1.17.1-8.0.0.16:api")

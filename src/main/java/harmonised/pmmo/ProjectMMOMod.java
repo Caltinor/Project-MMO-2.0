@@ -11,6 +11,7 @@ import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.proxy.ClientHandler;
+import harmonised.pmmo.util.ServerUtil;
 import harmonised.pmmo.util.Util;
 import harmonised.pmmo.util.XP;
 import harmonised.pmmo.util.Reference;
@@ -100,6 +101,7 @@ public class ProjectMMOMod
     {
         if(Config.forgeConfig.autoGenerateValuesEnabled.get())
             AutoValues.setAutoValues();
+        ServerUtil.init(event.getServer());
         serverStarted = true;
     }
 

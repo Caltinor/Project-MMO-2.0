@@ -163,6 +163,8 @@
   "pmmo.ironPatreon": "Iron Tier Patreon",
   "pmmo.milestoneLevelUp": "%1$s has reached level %2$s in %3$s!",
   "pmmo.milestoneTotalLevel": "%1$s has reached level %2$s Total Level!",
+  "pmmo.milestoneTotalXp": "%1$s has reached %2$s Total Xp!",
+  "pmmo.milestoneXpInSkill": "%1$s has reached %2$s Xp in %3$s!",
   "pmmo.tooltipOn": "PMMO Tooltip Info has been turned on",
   "pmmo.tooltipOff": "PMMO Tooltip Info has been turned off",
   "pmmo.jsonConfigReload": "PMMO Json Config has been reloaded!",

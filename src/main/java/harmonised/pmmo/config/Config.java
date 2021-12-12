@@ -1816,8 +1816,8 @@ public class Config
             return Config.localConfig.get(key);
         else
         {
-            if(ProjectMMOMod.serverStarted || !ProjectMMOMod.jeiLoaded)
-                LOGGER.error("UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT");
+//            if(ProjectMMOMod.serverStarted || !ProjectMMOMod.jeiLoaded)
+//                LOGGER.error("UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT");
             return -1;
         }
     }
@@ -1828,8 +1828,8 @@ public class Config
             return Config.config.get(key);
         else
         {
-            if(ProjectMMOMod.serverStarted || !ProjectMMOMod.jeiLoaded)
-                LOGGER.error("UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT");
+//            if(ProjectMMOMod.serverStarted || !ProjectMMOMod.jeiLoaded)
+//                LOGGER.error("UNABLE TO READ PMMO CONFIG \"" + key + "\" PLEASE REPORT");
             return defaultValue;
         }
     }

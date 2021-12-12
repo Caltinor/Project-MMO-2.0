@@ -1,5 +1,6 @@
 package harmonised.pmmo.util;
 
+import harmonised.pmmo.ProjectMMOMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.loading.FMLEnvironment;

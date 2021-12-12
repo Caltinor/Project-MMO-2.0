@@ -25,6 +25,7 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.CheeseTracker;
 import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
+import net.minecraft.network.chat.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -58,10 +59,6 @@ import org.apache.logging.log4j.*;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -1297,9 +1294,38 @@ public class XP
 		String playerName = player.getDisplayName().getString();
 		int startLevel = Skill.getLevel(skill, uuid);
 		double startXp = Skill.getXp(skill, uuid);
+		double startTotalXp = getTotalXpFromMap(Config.getXpMap(player));
 		double maxXp = Config.getConfig("maxXp");
 
 		pmmoSavedData.addXp(skill, uuid, amount);
+
+		//Total xp 10^x milestone broadcast
+		{
+			int i = 0;
+			int nextTotalXpMilestone;
+			do
+			{
+				++i;
+				nextTotalXpMilestone = (int) Math.pow(10, i);
+			}
+			while(nextTotalXpMilestone < startTotalXp);
+			if(nextTotalXpMilestone < getTotalXpFromMap(Config.getXpMap(player)))
+				ServerUtil.sendMsgToAll(new TranslatableComponent("pmmo.milestoneTotalXp", playerName, nextTotalXpMilestone).setStyle(textStyle.get("green")), ChatType.CHAT);
+		}
+
+		//10^x Xp in skill milestone broadcast
+		{
+			int i = 0;
+			int nextXpMilestone;
+			do
+			{
+				++i;
+				nextXpMilestone = (int) Math.pow(10, i);
+			}
+			while(nextXpMilestone < startXp);
+			if(nextXpMilestone < Skill.getXp(skill, uuid))
+				ServerUtil.sendMsgToAll(new TranslatableComponent("pmmo.milestoneXpInSkill", playerName, nextXpMilestone, skill).setStyle(Skill.getSkillStyle(skill)), ChatType.CHAT);
+		}
 
 		if(!causedByParty)
 		{
@@ -1418,7 +1444,7 @@ public class XP
 
 			for(Recipe<?> recipe : allRecipes)
 			{
-				if(recipe == null)
+				if(recipe == null || recipe.getResultItem() == null)
 					continue;
 				if(XP.checkReq(player, recipe.getResultItem().getItem().getRegistryName(), JType.REQ_CRAFT))
 					newRecipes.add(recipe);

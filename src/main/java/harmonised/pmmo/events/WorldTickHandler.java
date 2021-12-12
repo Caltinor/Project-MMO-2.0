@@ -11,6 +11,7 @@ import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.NBTHelper;
+import harmonised.pmmo.util.ServerUtil;
 import harmonised.pmmo.util.XP;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -65,6 +66,7 @@ public class WorldTickHandler
 
     public static void handleWorldTick(TickEvent.WorldTickEvent event)
     {
+        ServerUtil.tick(event);
         int veinSpeed = (int) Math.floor(Config.forgeConfig.veinSpeed.get());
         VeinInfo veinInfo;
         Level world;
