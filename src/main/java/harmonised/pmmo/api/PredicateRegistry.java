@@ -82,7 +82,7 @@ public class PredicateRegistry {
 			return false;
 		boolean outcome = true;
 		for (Predicate<Player> pred : reqPredicates.get(jType.toString()+";"+res.toString())) {
-			if (!pred.test(player)) outcome = false;
+			if (!pred.test(player)) return false;
 		}
 		return outcome;
 	}
@@ -102,7 +102,7 @@ public class PredicateRegistry {
 			return false;
 		boolean outcome = true;
 		for (BiPredicate<Player, BlockEntity> pred : reqBreakPredicates.get(jType.toString()+";"+res.toString())) {
-			if (!pred.test(player, tile)) outcome = false;
+			if (!pred.test(player, tile)) return false;
 		}
 		return outcome;
 	}
