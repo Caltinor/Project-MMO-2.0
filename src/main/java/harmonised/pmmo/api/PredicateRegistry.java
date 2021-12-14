@@ -1,9 +1,9 @@
 package harmonised.pmmo.api;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+
+import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
@@ -13,8 +13,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class PredicateRegistry {
 	
-	private static Map<String, Predicate<Player>> reqPredicates = new HashMap<>();
-	private static Map<String, BiPredicate<Player, BlockEntity>> reqBreakPredicates = new HashMap<>();
+	private static LinkedListMultimap<String, Predicate<Player>> reqPredicates = LinkedListMultimap.create();
+	private static LinkedListMultimap<String, BiPredicate<Player, BlockEntity>> reqBreakPredicates = LinkedListMultimap.create();
 	
 	/** registers a predicate to be used in determining if a given player is permitted
 	 * to perform a particular action. [Except for break action.  see registerBreakPredicate.
@@ -32,7 +32,7 @@ public class PredicateRegistry {
 		String condition = jType.toString()+";"+res.toString();
 		if (pred == null) 
 			return;
-		reqPredicates.put(condition, pred);
+		reqPredicates.get(condition).add(pred);
 		XP.LOGGER.info("Predicate Registered: "+condition);
 	}
 	
@@ -51,7 +51,7 @@ public class PredicateRegistry {
 		String condition = jType.toString()+";"+res.toString();
 		if (pred == null) 
 			return;
-		reqBreakPredicates.put(condition, pred);
+		reqBreakPredicates.get(condition).add(pred);
 		XP.LOGGER.info("Predicate Registered: "+condition);
 	}
 	
@@ -80,7 +80,11 @@ public class PredicateRegistry {
 	{
 		if (!predicateExists(res, jType)) 
 			return false;
-		return reqPredicates.get(jType.toString()+";"+res.toString()).test(player); 
+		boolean outcome = true;
+		for (Predicate<Player> pred : reqPredicates.get(jType.toString()+";"+res.toString())) {
+			if (!pred.test(player)) outcome = false;
+		}
+		return outcome;
 	}
 	
 	/**this is executed by PMMO logic to determine if the player is permitted to break
@@ -96,6 +100,10 @@ public class PredicateRegistry {
 		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
 		if (!predicateExists(res, jType)) 
 			return false;
-		return reqBreakPredicates.get(jType.toString()+";"+res.toString()).test(player, tile); 
+		boolean outcome = true;
+		for (BiPredicate<Player, BlockEntity> pred : reqBreakPredicates.get(jType.toString()+";"+res.toString())) {
+			if (!pred.test(player, tile)) outcome = false;
+		}
+		return outcome;
 	}
 }

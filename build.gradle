@@ -16,10 +16,16 @@ buildscript
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
+mixin
+{
+	disableEclipseAddon = true
+    add sourceSets.main, "${modid}.refmap.json"
+}
 apply plugin: 'maven-publish'
 
-version = '1.18-3.66'
+version = '1.18.1-3.66'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -27,7 +33,7 @@ archivesBaseName = 'Project_MMO'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 minecraft
 {
-    mappings channel: 'official', version: '1.18'
+    mappings channel: 'official', version: '1.18.1'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs
     {
@@ -108,7 +114,8 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.18-38.0.17'
+            minecraft 'net.minecraftforge:forge:1.18.1-39.0.5'
+           	runtimeOnly fg.deobf("curse.maven:nbt-470136:3548174")
 
 //            compileOnly fg.deobf("mezz.jei:jei-1.17.1-8.0.0.16:api")
 //            runtimeOnly fg.deobf("mezz.jei:jei-1.17.1-8.0.0.16")
@@ -202,11 +209,4 @@ publishing
             url "file:///${project.projectDir}/mcmodsrepo"
         }
     }
-}
-
-apply plugin: 'org.spongepowered.mixin'
-
-mixin
-{
-    add sourceSets.main, "${modid}.refmap.json"
 }
