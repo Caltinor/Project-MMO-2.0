@@ -19,7 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.18-3.66'
+version = '1.18-3.67.2'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -27,7 +27,7 @@ archivesBaseName = 'Project_MMO'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 minecraft
 {
-    mappings channel: 'official', version: '1.18'
+    mappings channel: 'official', version: '1.18.1'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs
     {
@@ -108,7 +108,7 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.18-38.0.17'
+            minecraft 'net.minecraftforge:forge:1.18.1-39.0.5'
             implementation 'com.google.code.gson:gson:2.8.6'
 
 //            compileOnly fg.deobf("mezz.jei:jei-1.17.1-8.0.0.16:api")
