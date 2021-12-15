@@ -8,6 +8,7 @@ import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -68,51 +69,71 @@ public class GrowHandler
 
         if(uuid != null)
         {
-            int age = -1;
+            int age;
             int maxAge = -1;
 
+            IntegerProperty ageProp = null;
             if(state.hasProperty(BlockStateProperties.AGE_0_1))
             {
-                age = state.get(BlockStateProperties.AGE_0_1);
+                ageProp = BlockStateProperties.AGE_0_1;
                 maxAge = 1;
             }
             else if(state.hasProperty(BlockStateProperties.AGE_0_2))
             {
-                age = state.get(BlockStateProperties.AGE_0_2);
+                ageProp = BlockStateProperties.AGE_0_2;
                 maxAge = 2;
             }
             else if(state.hasProperty(BlockStateProperties.AGE_0_3))
             {
-                age = state.get(BlockStateProperties.AGE_0_3);
+                ageProp = BlockStateProperties.AGE_0_3;
                 maxAge = 3;
             }
             else if(state.hasProperty(BlockStateProperties.AGE_0_5))
             {
-                age = state.get(BlockStateProperties.AGE_0_5);
+                ageProp = BlockStateProperties.AGE_0_5;
                 maxAge = 5;
             }
             else if(state.hasProperty(BlockStateProperties.AGE_0_7))
             {
-                age = state.get(BlockStateProperties.AGE_0_7);
+                ageProp = BlockStateProperties.AGE_0_7;
                 maxAge = 7;
             }
             else if(state.hasProperty(BlockStateProperties.AGE_0_15))
             {
-                age = state.get(BlockStateProperties.AGE_0_15);
+                ageProp = BlockStateProperties.AGE_0_15;
                 maxAge = 15;
             }
             else if(state.hasProperty(BlockStateProperties.AGE_0_25))
             {
-                age = state.get(BlockStateProperties.AGE_0_25);
+                ageProp = BlockStateProperties.AGE_0_25;
                 maxAge = 25;
             }
             else if(state.hasProperty(BlockStateProperties.PICKLES_1_4))
             {
-                age = state.get(BlockStateProperties.PICKLES_1_4);
+                ageProp = BlockStateProperties.PICKLES_1_4;
                 maxAge = 4;
             }
 
-            if(age != -1 && age == maxAge)
+            if(ageProp == null)
+                return;
+            age = state.get(ageProp);
+
+            int bonusGrowth = 0;
+            if(age < maxAge)
+            {
+                double growthRateBonus = Config.forgeConfig.growthSpeedIncreasePerLevel.get()*Skill.getLevel(Skill.FARMING.toString(), uuid);
+                bonusGrowth = (int) growthRateBonus;
+                growthRateBonus %= 1;
+                if(Math.random() < growthRateBonus)
+                    bonusGrowth++;
+                if(bonusGrowth > 0)
+                {
+                    age = Math.min(age + bonusGrowth, maxAge);
+                    world.setBlockState(pos, state.with(ageProp, age));
+                }
+            }
+
+            if(age == maxAge)
             {
                 Map<String, Double> award = XP.getXpBypass(resLoc, JType.XP_VALUE_GROW);
                 if(award.size() == 0)

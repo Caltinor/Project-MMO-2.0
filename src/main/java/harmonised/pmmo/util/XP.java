@@ -1297,12 +1297,12 @@ public class XP
 
 		//Total xp 10^x milestone broadcast
 		{
-			int i = 0;
-			int nextTotalXpMilestone;
+			double i = 0;
+			double nextTotalXpMilestone;
 			do
 			{
 				++i;
-				nextTotalXpMilestone = (int) Math.pow(10, i);
+				nextTotalXpMilestone = Math.pow(10, i);
 			}
 			while(nextTotalXpMilestone < startTotalXp);
 			if(nextTotalXpMilestone < getTotalXpFromMap(Config.getXpMap(player)))
@@ -1311,12 +1311,12 @@ public class XP
 
 		//10^x Xp in skill milestone broadcast
 		{
-			int i = 0;
-			int nextXpMilestone;
+			double i = 0;
+			double nextXpMilestone;
 			do
 			{
 				++i;
-				nextXpMilestone = (int) Math.pow(10, i);
+				nextXpMilestone = Math.pow(10, i);
 			}
 			while(nextXpMilestone < startXp);
 			if(nextXpMilestone < Skill.getXp(skill, uuid))
