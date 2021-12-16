@@ -306,6 +306,7 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> defaultBreedingXp;
         public ConfigHelper.ConfigValueListener<Double> defaultCropGrowXp;
         public ConfigHelper.ConfigValueListener<Double> defaultSaplingGrowXp;
+        public ConfigHelper.ConfigValueListener<Double> growthSpeedIncreasePerLevel;
 
         //Agility
         public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
@@ -1251,6 +1252,11 @@ public class Config
                         .comment("How much xp should be awarded in Farming for growing a sapling? (Json Overrides this) (Set to 0 to disable default xp)")
                         .translation("pmmo.defaultBreedingXp")
                         .defineInRange("defaultBreedingXp", 25.0D, 0, 1000000));
+
+                this.growthSpeedIncreasePerLevel = subscriber.subscribe(builder
+                        .comment("How much faster on average should crops grow per level? (Percentage)")
+                        .translation("pmmo.growthSpeedIncreasePerLevel")
+                        .defineInRange("growthSpeedIncreasePerLevel", (1/3.0)/100.0, 0, 1000000));
 
                 this.defaultCropGrowXp = subscriber.subscribe(builder
                         .comment("How much xp should be awarded in Farming for growing crops? (Json Overrides this) (Set to 0 to disable default xp)")

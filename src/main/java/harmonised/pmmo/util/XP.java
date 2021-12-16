@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.PredicateRegistry;
 import harmonised.pmmo.api.TooltipSupplier;
@@ -242,7 +243,10 @@ public class XP
 
 	private static Map<String, Double> getXp(String registryName, JType jType)
 	{
-		return new HashMap<>(JsonConfig.data.get(jType).getOrDefault(registryName, new HashMap<>()));
+		//COUT, req spam reported
+//		if(!JsonConfig.data.containsKey(jType))
+//			LOGGER.error("XP.getXp: Invalid jType \"{}\", please report!", jType);
+		return new HashMap<>(JsonConfig.data.getOrDefault(jType, new HashMap<>()).getOrDefault(registryName, new HashMap<>()));
 	}
 
 	public static ResourceLocation getBiomeResLoc(Level world, Biome biome)
@@ -1301,12 +1305,12 @@ public class XP
 
 		//Total xp 10^x milestone broadcast
 		{
-			int i = 0;
-			int nextTotalXpMilestone;
+			double i = 0;
+			double nextTotalXpMilestone;
 			do
 			{
 				++i;
-				nextTotalXpMilestone = (int) Math.pow(10, i);
+				nextTotalXpMilestone = Math.pow(10, i);
 			}
 			while(nextTotalXpMilestone < startTotalXp);
 			if(nextTotalXpMilestone < getTotalXpFromMap(Config.getXpMap(player)))
@@ -1315,12 +1319,12 @@ public class XP
 
 		//10^x Xp in skill milestone broadcast
 		{
-			int i = 0;
-			int nextXpMilestone;
+			double i = 0;
+			double nextXpMilestone;
 			do
 			{
 				++i;
-				nextXpMilestone = (int) Math.pow(10, i);
+				nextXpMilestone = Math.pow(10, i);
 			}
 			while(nextXpMilestone < startXp);
 			if(nextXpMilestone < Skill.getXp(skill, uuid))
