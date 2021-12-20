@@ -168,10 +168,8 @@ public class DamageHandler
                 if(XP.isPlayerSurvival(player))
                 {
                     ItemStack mainItemStack = player.getMainHandItem();
-                    ResourceLocation mainResLoc = player.getMainHandItem().getItem().getRegistryName();
-                    ResourceLocation offResLoc = player.getOffhandItem().getItem().getRegistryName();
-                    Map<String, Double> weaponReq = XP.getXpBypass(mainResLoc, JType.REQ_WEAPON);
-                    NBTHelper.maxDoubleMaps(weaponReq, XP.getXpBypass(offResLoc, JType.REQ_WEAPON));
+                    Map<String, Double> weaponReq = XP.getXp(player.getMainHandItem(), JType.REQ_WEAPON);
+                    NBTHelper.maxDoubleMaps(weaponReq, XP.getXp(player.getOffhandItem(), JType.REQ_WEAPON));
                     String skill;
                     String itemSpecificSkill = AutoValues.getItemSpecificSkill(mainItemStack.getItem().getRegistryName().toString());
                     boolean swordInMainHand = mainItemStack.getItem() instanceof SwordItem;

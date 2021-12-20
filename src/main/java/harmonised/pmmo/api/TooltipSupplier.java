@@ -1,10 +1,14 @@
 package harmonised.pmmo.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 import org.apache.logging.log4j.*;
+
+import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.util.XP;
@@ -15,9 +19,9 @@ import net.minecraft.resources.ResourceLocation;
 
 public class TooltipSupplier {
 	public static final Logger LOGGER = LogManager.getLogger();
-	private static Map<JType, Map<ResourceLocation, Function<ItemStack, Map<String, Double>>>> tooltips = new HashMap<>();
-	private static Map<JType, Map<ResourceLocation, Function<BlockEntity, Map<String, Double>>>> breakTooltips = new HashMap<>();
-	private static Map<JType, Map<ResourceLocation, Function<Entity, Map<String, Double>>>> entityTooltips = new HashMap<>();
+	private static Map<JType, LinkedListMultimap<ResourceLocation, Function<ItemStack, Map<String, Double>>>> tooltips = new HashMap<>();
+	private static Map<JType, LinkedListMultimap<ResourceLocation, Function<BlockEntity, Map<String, Double>>>> breakTooltips = new HashMap<>();
+	private static Map<JType, LinkedListMultimap<ResourceLocation, Function<Entity, Map<String, Double>>>> entityTooltips = new HashMap<>();
 	
 	/**registers a Function to be used in providing the requirements for specific item
 	 * skill requirements. The map consists of skill name and skill value pairs.  
@@ -38,11 +42,10 @@ public class TooltipSupplier {
 		
 		if (!tooltips.containsKey(jType)) {
 			LOGGER.info("New tooltip category created for: "+jType.toString()+" "+res.toString());
-			tooltips.put(jType, new HashMap<>());
+			tooltips.put(jType, LinkedListMultimap.create());
 		}
 		if (tooltipExists(res, jType)) return;
-		//TODO implement existing function checker/logger though might not be needed
-		tooltips.get(jType).put(res, func);
+		tooltips.get(jType).get(res).add(func);
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
@@ -64,11 +67,10 @@ public class TooltipSupplier {
 		
 		if (!breakTooltips.containsKey(jType)) {
 			LOGGER.info("New tooltip category created for: "+jType.toString()+" "+res.toString());
-			breakTooltips.put(jType, new HashMap<>());
+			breakTooltips.put(jType, LinkedListMultimap.create());
 		}
 		if (tooltipExists(res, jType)) return;
-		//TODO implement existing function checker/logger though might not be needed
-		breakTooltips.get(jType).put(res, func);
+		breakTooltips.get(jType).get(res).add(func);
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
@@ -90,11 +92,10 @@ public class TooltipSupplier {
 		
 		if (!breakTooltips.containsKey(jType)) {
 			LOGGER.info("New tooltip category created for: "+jType.toString()+" "+res.toString());
-			entityTooltips.put(jType, new HashMap<>());
+			entityTooltips.put(jType, LinkedListMultimap.create());
 		}
 		if (tooltipExists(res, jType)) return;
-		//TODO implement existing function checker/logger though might not be needed
-		entityTooltips.get(jType).put(res, func);
+		entityTooltips.get(jType).get(res).add(func);
 	}
 	
 	/**this is an internal method to check if a function exists for the given conditions
@@ -108,7 +109,7 @@ public class TooltipSupplier {
 		if (jType == null) return false;
 		if (res == null) return false;
 		
-		if (jType.equals(JType.REQ_BREAK) || jType.equals(JType.XP_VALUE_BREAK)) //<<<<<HERE
+		if (jType.equals(JType.REQ_BREAK) || jType.equals(JType.XP_VALUE_BREAK))
 		{
 			if (!breakTooltips.containsKey(jType))
 				return false;
@@ -139,8 +140,19 @@ public class TooltipSupplier {
 	public static Map<String, Double> getTooltipData(ResourceLocation res, JType jType, ItemStack stack)
 	{
 		if (tooltipExists(res, jType)) {
-			Map<String, Double> suppliedData = tooltips.get(jType).get(res).apply(stack);
-			return suppliedData == null ? new HashMap<>() : suppliedData;
+			Map<String,Double> suppliedData = new HashMap<>();
+			List<Map<String, Double>> rawData = new ArrayList<>();
+			for (Function<ItemStack, Map<String, Double>> func : tooltips.get(jType).get(res)) {
+				rawData.add(func.apply(stack));
+			}
+			for (int i = 0; i < rawData.size(); i++) {
+				for (Map.Entry<String, Double> entry : rawData.get(i).entrySet()) {
+					suppliedData.merge(entry.getKey(), entry.getValue(), (o,n) -> {
+						return o > n ? o : n;
+					});
+				}
+			}
+			return suppliedData;
 		}	
 		return XP.getXpBypass(res, jType);
 	}
@@ -157,8 +169,19 @@ public class TooltipSupplier {
 	public static Map<String, Double> getTooltipData(ResourceLocation res, JType jType, BlockEntity tile)
 	{
 		if (tooltipExists(res, jType)) {
-			Map<String, Double> suppliedData = breakTooltips.get(jType).get(res).apply(tile);
-			return suppliedData == null ? new HashMap<>() : suppliedData;
+			Map<String,Double> suppliedData = new HashMap<>();
+			List<Map<String, Double>> rawData = new ArrayList<>();
+			for (Function<BlockEntity, Map<String, Double>> func : breakTooltips.get(jType).get(res)) {
+				rawData.add(func.apply(tile));
+			}
+			for (int i = 0; i < rawData.size(); i++) {
+				for (Map.Entry<String, Double> entry : rawData.get(i).entrySet()) {
+					suppliedData.merge(entry.getKey(), entry.getValue(), (o,n) -> {
+						return o > n ? o : n;
+					});
+				}
+			}
+			return suppliedData;
 		}	
 		return XP.getXpBypass(res, jType);
 	}
@@ -173,8 +196,19 @@ public class TooltipSupplier {
 	public static Map<String, Double> getTooltipData(ResourceLocation res, JType jType, Entity entity)
 	{
 		if (tooltipExists(res, jType)) {
-			Map<String, Double> suppliedData = entityTooltips.get(jType).get(res).apply(entity);
-			return suppliedData == null ? new HashMap<>() : suppliedData;
+			Map<String,Double> suppliedData = new HashMap<>();
+			List<Map<String, Double>> rawData = new ArrayList<>();
+			for (Function<Entity, Map<String, Double>> func : entityTooltips.get(jType).get(res)) {
+				rawData.add(func.apply(entity));
+			}
+			for (int i = 0; i < rawData.size(); i++) {
+				for (Map.Entry<String, Double> entry : rawData.get(i).entrySet()) {
+					suppliedData.merge(entry.getKey(), entry.getValue(), (o,n) -> {
+						return o > n ? o : n;
+					});
+				}
+			}
+			return suppliedData;
 		}	
 		return XP.getXpBypass(res, jType);
 	}
