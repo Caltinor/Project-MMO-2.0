@@ -1,5 +1,8 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -105,6 +108,11 @@ public class DamageHandler
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
                 if(isFallDamage)
                 {
+                	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
+                		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
+                		PerkRegistry.executePerk(PerkTrigger.FALL_DAMAGE, player, skillLevel);
+                	}
+                	//TODO this is gonna be a bit more complicated
                     double award;
                     int saved = 0;
                     double chance = getFallSaveChance(player);

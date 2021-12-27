@@ -1,5 +1,8 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.party.PartyPendingSystem;
@@ -23,23 +26,27 @@ public class JumpHandler
         {
             Player player = (Player) event.getEntityLiving();
 
-//			if(!player.level.isClientSide)
-//				System.out.println(player.getEntityData().getCompoundTag(player.PERSISTED_NBT_TAG));
-
             if(XP.isPlayerSurvival(player))
             {
-                double jumpBoost = 0;
-                if (player.isShiftKeyDown())
-                    jumpBoost = getCrouchJumpBoost(player);
-                else if (player.isSprinting())
-                    jumpBoost = getSprintJumpBoost(player);
-
-                if (player.level.isClientSide)
-                {
-                    if(jumpBoost > 0)
-                        player.push(0, jumpBoost, 0);
+                if (player.isCrouching() && !player.level.isClientSide) {
+                	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
+                		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
+                		PerkRegistry.executePerk(PerkTrigger.CROUCH_JUMP, (ServerPlayer)player, skillLevel);
+                	}
                 }
-                else if (!player.isInWater())
+                else if (player.isSprinting() && !player.level.isClientSide)
+                	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
+                		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
+                		PerkRegistry.executePerk(PerkTrigger.SPRINT_JUMP, (ServerPlayer)player, skillLevel);
+                	}
+                else if (!player.isCrouching() && ! player.isSprinting()) {
+                	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
+                		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
+                		PerkRegistry.executePerk(PerkTrigger.JUMPING, (ServerPlayer)player, skillLevel);
+                	}
+                }
+
+                if (!player.isInWater())
                 {
                     double jumpAmp = 0;
 
@@ -47,7 +54,8 @@ public class JumpHandler
                         jumpAmp = player.getEffect(MobEffects.JUMP).getAmplifier() + 1;
 
                     Vec3 xpDropPos = player.position();
-                    double award = Math.max((jumpBoost * 10 + 1) * (1 + jumpAmp / 4), 1);
+                    double award = 1; //TODO see if there's a way to preserve this variability
+                    //double award = Math.max((jumpBoost * 10 + 1) * (1 + jumpAmp / 4), 1);
                     WorldXpDrop xpDrop = WorldXpDrop.fromXYZ(XP.getDimResLoc(player.getCommandSenderWorld()), xpDropPos.x(), xpDropPos.y() + 0.523, xpDropPos.z(), 0.15, award, Skill.AGILITY.toString());
                     XP.addWorldXpDrop(xpDrop, (ServerPlayer) player);
                     XP.awardXp((ServerPlayer) player, Skill.AGILITY.toString(), "jumping", award, true, false, false);
@@ -55,8 +63,8 @@ public class JumpHandler
             }
         }
     }
-
-    public static double getCrouchJumpBoost(Player player)
+    //TODO remove
+    /*public static double getCrouchJumpBoost(Player player)
     {
         Map<String, Double> prefsMap = Config.getPreferencesMap(player);
         double agilityLevel;
@@ -64,7 +72,7 @@ public class JumpHandler
         double maxJumpBoost = Config.getConfig("maxJumpBoost");
         double maxJumpBoostPref = maxJumpBoost;
         int levelsPerCrouchJumpBoost = (int) Math.floor(Config.getConfig("levelsPerCrouchJumpBoost"));
-        agilityLevel = Skill.getLevel(Skill.AGILITY.toString(), player);
+        agilityLevel = APIUtils.getLevel(Skill.AGILITY.toString(), player);
         if(prefsMap.containsKey("maxCrouchJumpBoost"))
             maxJumpBoostPref = prefsMap.get("maxCrouchJumpBoost");
         jumpBoost = -0.011 + agilityLevel * (0.14 / levelsPerCrouchJumpBoost);
@@ -80,11 +88,11 @@ public class JumpHandler
         double maxJumpBoost = Config.getConfig("maxJumpBoost");
         double maxJumpBoostPref = maxJumpBoost;
         int levelsPerSprintJumpBoost = (int) Math.floor(Config.getConfig("levelsPerSprintJumpBoost"));
-        agilityLevel = Skill.getLevel(Skill.AGILITY.toString(), player);
+        agilityLevel = APIUtils.getLevel(Skill.AGILITY.toString(), player);
         if(prefsMap.containsKey("maxSprintJumpBoost"))
             maxJumpBoostPref = prefsMap.get("maxSprintJumpBoost");
         jumpBoost = -0.013 + agilityLevel * (0.14 / levelsPerSprintJumpBoost);
         jumpBoost = Math.min(maxJumpBoostPref, Math.min(maxJumpBoost, jumpBoost));
         return jumpBoost;
-    }
+    }*/
 }

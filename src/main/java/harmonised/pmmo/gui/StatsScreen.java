@@ -88,21 +88,23 @@ public class StatsScreen extends PmmoScreen
         text = new ArrayList<>();
 
         entryTitle = new TranslatableComponent("pmmo.damage");
-        text.add(new TranslatableComponent("pmmo.damageBonusMelee", 100 * Skill.getLevel(Skill.COMBAT.toString(), player) * Config.forgeConfig.damageBonusPercentPerLevelMelee.get()).setStyle(Skill.getSkillStyle(Skill.COMBAT.toString())));
-        text.add(new TranslatableComponent("pmmo.damageBonusArchery", 100 * Skill.getLevel(Skill.ARCHERY.toString(), player) * Config.forgeConfig.damageBonusPercentPerLevelArchery.get()).setStyle(Skill.getSkillStyle(Skill.ARCHERY.toString())));
-        text.add(new TranslatableComponent("pmmo.damageBonusMagic", 100 * Skill.getLevel(Skill.MAGIC.toString(), player) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get()).setStyle(Skill.getSkillStyle(Skill.MAGIC.toString())));
-        text.add(new TranslatableComponent("pmmo.damageBonusGunslinging", 100 * Skill.getLevel(Skill.MAGIC.toString(), player) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get()).setStyle(Skill.getSkillStyle(Skill.GUNSLINGING.toString())));
+        text.add(new TranslatableComponent("pmmo.damageBonusMelee", 100 * APIUtils.getLevel(Skill.COMBAT.toString(), player) * Config.forgeConfig.damageBonusPercentPerLevelMelee.get()).setStyle(Skill.getSkillStyle(Skill.COMBAT.toString())));
+        text.add(new TranslatableComponent("pmmo.damageBonusArchery", 100 * APIUtils.getLevel(Skill.ARCHERY.toString(), player) * Config.forgeConfig.damageBonusPercentPerLevelArchery.get()).setStyle(Skill.getSkillStyle(Skill.ARCHERY.toString())));
+        text.add(new TranslatableComponent("pmmo.damageBonusMagic", 100 * APIUtils.getLevel(Skill.MAGIC.toString(), player) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get()).setStyle(Skill.getSkillStyle(Skill.MAGIC.toString())));
+        text.add(new TranslatableComponent("pmmo.damageBonusGunslinging", 100 * APIUtils.getLevel(Skill.MAGIC.toString(), player) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get()).setStyle(Skill.getSkillStyle(Skill.GUNSLINGING.toString())));
         statsEntries.add(new StatsEntry(0, 0, entryTitle, text));
 
         text = new ArrayList<>();
         entryTitle = new TranslatableComponent("pmmo.speed");
-        text.add(new TranslatableComponent("pmmo.sprintSpeedBonus", DP.dpSoft(AttributeHandler.getSpeedBoostMultiplier(Skill.getLevel(Skill.AGILITY.toString(), player)) * 100D)).setStyle(Skill.getSkillStyle(Skill.AGILITY.toString())));
+        //TODO figure out how to generate this
+        //text.add(new TranslatableComponent("pmmo.sprintSpeedBonus", DP.dpSoft(AttributeHandler.getSpeedBoostMultiplier(Skill.getLevel(Skill.AGILITY.toString(), player)) * 100D)).setStyle(Skill.getSkillStyle(Skill.AGILITY.toString())));
         statsEntries.add(new StatsEntry(0, 0, entryTitle, text));
 
         text = new ArrayList<>();
         entryTitle = new TranslatableComponent("pmmo.jump");
-        text.add(new TranslatableComponent("pmmo.jumpBonusSprint", DP.dpSoft(JumpHandler.getSprintJumpBoost(player) / 0.14D)).setStyle(Skill.getSkillStyle(Skill.AGILITY.toString())));
-        text.add(new TranslatableComponent("pmmo.jumpBonusCrouch", DP.dpSoft(JumpHandler.getCrouchJumpBoost(player) / 0.14D)).setStyle(Skill.getSkillStyle(Skill.AGILITY.toString())));
+      //TODO figure out how to generate this
+        //text.add(new TranslatableComponent("pmmo.jumpBonusSprint", DP.dpSoft(JumpHandler.getSprintJumpBoost(player) / 0.14D)).setStyle(Skill.getSkillStyle(Skill.AGILITY.toString())));
+        //text.add(new TranslatableComponent("pmmo.jumpBonusCrouch", DP.dpSoft(JumpHandler.getCrouchJumpBoost(player) / 0.14D)).setStyle(Skill.getSkillStyle(Skill.AGILITY.toString())));
         statsEntries.add(new StatsEntry(0, 0, entryTitle, text));
 
         text = new ArrayList<>();
@@ -117,7 +119,8 @@ public class StatsScreen extends PmmoScreen
 
         text = new ArrayList<>();
         entryTitle = new TranslatableComponent("pmmo.hearts");
-        text.add(new TranslatableComponent("pmmo.heartBonus", AttributeHandler.getHeartBoost(player) / 2).setStyle(Skill.getSkillStyle(Skill.ENDURANCE.toString())));
+        //TODO figure out how to generate this
+        //text.add(new TranslatableComponent("pmo.heartBonus", AttributeHandler.getHeartBoost(player) / 2).setStyle(Skill.getSkillStyle(Skill.ENDURANCE.toString())));
         double hpRegenTime = PlayerTickHandler.getHpRegenTime(player);
         if(hpRegenTime < Double.POSITIVE_INFINITY)
             text.add(new TranslatableComponent("pmmo.halfHeartRegenerationSeconds", DP.dpSoft(60D / hpRegenTime)).setStyle(Skill.getSkillStyle(Skill.ENDURANCE.toString())));
@@ -125,7 +128,8 @@ public class StatsScreen extends PmmoScreen
 
         text = new ArrayList<>();
         entryTitle = new TranslatableComponent("pmmo.reach");
-        text.add(new TranslatableComponent("pmmo.reachBonus", DP.dpSoft(AttributeHandler.getReachBoost(player))).setStyle(Skill.getSkillStyle(Skill.BUILDING.toString())));
+        //TODO Figure out how to generate this
+        //text.add(new TranslatableComponent("pmmo.reachBonus", DP.dpSoft(AttributeHandler.getReachBoost(player))).setStyle(Skill.getSkillStyle(Skill.BUILDING.toString())));
         statsEntries.add(new StatsEntry(0, 0, entryTitle, text));
 
 //        text = new ArrayList<>();

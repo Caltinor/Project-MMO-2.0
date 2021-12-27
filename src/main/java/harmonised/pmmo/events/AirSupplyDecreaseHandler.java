@@ -8,6 +8,7 @@ import org.apache.logging.log4j.*;
 
 public class AirSupplyDecreaseHandler
 {
+	//TODO Move to Perks
     public static final Logger LOGGER = LogManager.getLogger();
 
     public static int returnPmmoAffectedRespiration(LivingEntity entity)

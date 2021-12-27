@@ -1,6 +1,6 @@
 package harmonised.pmmo.commands;
 
-import com.mojang.brigadier.context.CommandContext;
+/*import com.mojang.brigadier.context.CommandContext;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
@@ -13,11 +13,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.TranslatableComponent;
 
-import java.util.Map;
+import java.util.Map;*/
 
 public class PrefCommand
 {
-    public static int execute(CommandContext<CommandSourceStack> context) throws CommandRuntimeException
+	//TODO Unused
+    /*public static int execute(CommandContext<CommandSourceStack> context) throws CommandRuntimeException
     {
         Player player = (Player) context.getSource().getEntity();
         String[] args = context.getInput().split(" ");
@@ -63,5 +64,5 @@ public class PrefCommand
             player.displayClientMessage(new TranslatableComponent("pmmo.invalidChoice", args[2]).setStyle(XP.textStyle.get("red")), false);
 
         return 1;
-    }
+    }*/
 }

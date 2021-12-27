@@ -2,10 +2,12 @@ package harmonised.pmmo.commands;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.network.MessageXp;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.XP;
 import net.minecraft.commands.CommandRuntimeException;
 import net.minecraft.commands.CommandSourceStack;
@@ -34,7 +36,7 @@ public class ClearCommand
             for(ServerPlayer player : players)
             {
                 String playerName = player.getDisplayName().getString();
-                AttributeHandler.updateAll(player);
+                PerkRegistry.executePerk(PerkTrigger.SKILL_UP, (ServerPlayer)player, 1);
                 XP.updateRecipes(player);
 
                 Map<String, Double> xpMap = PmmoSavedData.get().getXpMap(player.getUUID());

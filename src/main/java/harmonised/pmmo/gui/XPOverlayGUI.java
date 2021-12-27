@@ -800,6 +800,12 @@ public class XPOverlayGUI extends GuiComponent
 		double damageBoost;
 		TranslatableComponent msg;
 
+		//TODO this needs to iterate through perks.
+		// on second thought maybe this just stops existing.  
+		// will deliberate and decide.  might be too hard to
+		// keep in since you'd need to ask every single perk
+		// during registration to give a new stat bonus specifically
+		// for the LEVEL_UP trigger, which may not apply.
 		switch(skill)
 		{
 			case "building":
@@ -844,7 +850,8 @@ public class XPOverlayGUI extends GuiComponent
 				break;
 
 			case "agility":
-				msg = new TranslatableComponent("pmmo.levelUpSprintSpeedBonus", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(AttributeHandler.getSpeedBoostMultiplier(level) * 100) + "%");
+				//TODO fix
+				msg = new TranslatableComponent("pmmo.levelUpSprintSpeedBonus");//, level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(AttributeHandler.getSpeedBoostMultiplier(level) * 100) + "%");
 				break;
 
 			default:

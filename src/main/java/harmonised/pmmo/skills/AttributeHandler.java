@@ -6,35 +6,32 @@ import java.util.UUID;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.events.WorldTickHandler;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.common.ForgeMod;
 
 public class AttributeHandler
 {
-	private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
+	//private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");
 	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
 
-	public static void updateAll(Player player)
+	/*public static void updateAll(Player player)
 	{
 		if(!player.level.isClientSide())
 			WorldTickHandler.updateVein(player, 0);
 
-		updateReach(player);
-		updateHP(player);
-		updateDamage(player);
-	}
-
+		//updateReach(player);
+		//updateHP(player);
+		//updateDamage(player);
+	}*/
+	/*
 	public static double getReachBoost(Player player)
 	{
 		Map<String, Double> prefsMap = Config.getPreferencesMap(player);
@@ -142,7 +139,7 @@ public class AttributeHandler
 		AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.MULTIPLY_BASE);
 		damageAttribute.removeModifier(damageModifierID);
 		damageAttribute.addPermanentModifier(damageModifier);
-	}
+	}*/
 
 	public static void updateHP(Mob mob, float bonus)
 	{

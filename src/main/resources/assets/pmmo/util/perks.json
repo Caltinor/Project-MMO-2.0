@@ -1,0 +1,17 @@
+{
+	"SKILL_UP": {
+		"combat": [
+			{"perk":"pmmo:damage",
+			 "power": 1,
+			 "scale": 1
+			},
+			{"perk":"pmmo:health",
+			 "power": 0.5
+			}
+		],
+		"endurance": [
+		
+		]
+	},
+	"
+}

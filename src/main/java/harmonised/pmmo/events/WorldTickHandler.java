@@ -1,13 +1,14 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.config.AutoValues;
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
 import harmonised.pmmo.network.MessageUpdateBoolean;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.skills.VeinInfo;
 import harmonised.pmmo.util.NBTHelper;
@@ -43,7 +44,6 @@ public class WorldTickHandler
     public static Map<Player, ArrayList<BlockPos>> veinSet;
     private static double minVeinCost, minVeinHardness, levelsPerHardnessMining, levelsPerHardnessWoodcutting, levelsPerHardnessExcavation, levelsPerHardnessFarming, levelsPerHardnessCrafting, veinMaxBlocks, maxVeinCharge, exhaustionPerBlock;
     private static int veinMaxDistance;
-    private static int ticksSinceAttributeRefresh = 0;
 //    public static long lastVeinUpdateTime = System.nanoTime();
 
     public static void refreshVein()
@@ -85,11 +85,14 @@ public class WorldTickHandler
         if(event.world.getServer() == null)
             return;
 
-        if(XP.getDimResLoc(event.world).equals(DimensionType.OVERWORLD_LOCATION.getRegistryName()) && ticksSinceAttributeRefresh++ >= 200)
+        if(XP.getDimResLoc(event.world).equals(DimensionType.OVERWORLD_LOCATION.getRegistryName()) && event.world.getServer().getTickCount() % 200 == 0)
         {
             for (ServerPlayer player : event.world.getServer().getPlayerList().getPlayers())
             {
-                AttributeHandler.updateAll(player);
+            	for (Map.Entry<String, Integer> skillEntry : Skill.getSkills().entrySet()) {
+            		int skillLevel = APIUtils.getLevel(skillEntry.getKey(), player);
+            		PerkRegistry.executePerk(PerkTrigger.SKILL_UP, (ServerPlayer)player, skillLevel);
+            	}
             }
         }
         
@@ -358,7 +361,7 @@ public class WorldTickHandler
         double cost;
 //        double startHardness = state.getBlockHardness(player.level, pos);
         double hardness = state.getDestroySpeed(player.level, pos);
-        double level = Skill.getLevel(skill, player);
+        double level = APIUtils.getLevel(skill, player);
 
         if(hardness < minVeinHardness)
             hardness = minVeinHardness;
