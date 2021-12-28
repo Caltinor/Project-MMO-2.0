@@ -63,6 +63,18 @@ public class PlayerTickHandler
             		PerkRegistry.terminatePerk(PerkTrigger.SPRINTING, (ServerPlayer)player, skillLevel);
             	}
             }
+            if(player.isSwimming()) {
+            	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
+            		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
+            		PerkRegistry.executePerk(PerkTrigger.SUBMERGED, (ServerPlayer)player, skillLevel);
+            	}
+            }
+            else {
+            	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
+            		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
+            		PerkRegistry.terminatePerk(PerkTrigger.SUBMERGED, (ServerPlayer)player, skillLevel);
+            	}
+            }
 
             if(!player.level.isClientSide && player.level.getServer().getTickCount() % 200 == 200)
             {
@@ -218,10 +230,6 @@ public class PlayerTickHandler
                     }
                 }
                 boolean waterAbove = player.getCommandSenderWorld().getBlockState(playerPos.above()  ).getBlock().equals(waterBlock);
-                boolean nightVisionPref = Config.getPreferencesMap(player).getOrDefault("underwaterNightVision", 1D) == 1;
-
-                if(nightVisionPref && XP.isNightvisionUnlocked(player) && XP.isNightvisionUnlocked(player) && player.isInWater() && waterAbove)
-                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0, false, false));
 
                 ServerLevel world = player.getLevel();
                 Vec3 xpDropPos = player.position();

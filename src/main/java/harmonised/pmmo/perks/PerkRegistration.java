@@ -1,7 +1,6 @@
 package harmonised.pmmo.perks;
 
-import org.apache.logging.log4j.util.TriConsumer;
-
+import org.apache.commons.lang3.function.TriFunction;
 import harmonised.pmmo.api.perks.PerkRegistry;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
@@ -17,18 +16,16 @@ public class PerkRegistration {
 		PerkRegistry.registerPerk(rl("health"), AttributePerks.HEALTH, NONE);
 		//Event Perks
 		PerkRegistry.registerPerk(rl("jump_boost"), EventPerks.JUMP, NONE);
+		PerkRegistry.registerPerk(rl("breath"), EventPerks.BREATH, NONE);
+		PerkRegistry.registerPerk(rl("fall_save"), EventPerks.FALL_SAVE, NONE);
 		//Effect Perks
 		PerkRegistry.registerPerk(rl("night_vision"), EffectPerks.NIGHT_VISION, EffectPerks.NIGHT_VISION_TERM);
+		PerkRegistry.registerPerk(rl("regen"), EffectPerks.REGEN, NONE);
 	}
 	
-	private static TriConsumer<ServerPlayer, CompoundTag, Integer> NONE = (a,b,c) -> {};
+	private static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> NONE = (a,b,c) -> {return new CompoundTag();};
 	
 	private static ResourceLocation rl(String str) {
 		return new ResourceLocation(Reference.MOD_ID, str);
 	}
-/* night vision				-Effect
- * fall save				-Event
- * regen					-Effect
- * longer breath			-Event
- */
 }

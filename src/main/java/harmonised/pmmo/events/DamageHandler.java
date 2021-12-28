@@ -29,6 +29,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -59,6 +60,8 @@ public class DamageHandler
 
         return agilityLevel * saveChancePerLevel;
     }
+    
+    private static final String SAVED = "saved";
 
     public static void handleDamage(LivingHurtEvent event)
     {
@@ -108,21 +111,13 @@ public class DamageHandler
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
                 if(isFallDamage)
                 {
+                	CompoundTag perkOutput = new CompoundTag();
                 	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
                 		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
-                		PerkRegistry.executePerk(PerkTrigger.FALL_DAMAGE, player, skillLevel);
+                		perkOutput.merge(PerkRegistry.executePerk(PerkTrigger.FALL_DAMAGE, player, skillLevel));
                 	}
-                	//TODO this is gonna be a bit more complicated
                     double award;
-                    int saved = 0;
-                    double chance = getFallSaveChance(player);
-                    for(int i = 0; i < damage; i++)
-                    {
-                        if(Math.ceil(Math.random() * 100) <= chance)
-                        {
-                            saved++;
-                        }
-                    }
+                    int saved = perkOutput.contains(SAVED) ? perkOutput.getInt(SAVED) : 0;
                     damage -= saved;
 
                     if(saved != 0 && player.getHealth() > damage)

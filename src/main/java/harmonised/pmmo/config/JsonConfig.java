@@ -1,8 +1,11 @@
 package harmonised.pmmo.config;
 
+import com.google.common.collect.LinkedListMultimap;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.events.PlayerInteractionHandler;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.XP;
@@ -27,6 +30,7 @@ public class JsonConfig
     public static Gson gson = new Gson();
     public static final Type mapType = new TypeToken<Map<String, Map<String, Double>>>(){}.getType();
     public static final Type mapType2 = new TypeToken<Map<String, Map<String, Map<String, Double>>>>(){}.getType();
+    public static final Type perkType = new TypeToken<Map<String, JsonObject>>(){}.getType();
 
     public static Set<JType> jTypes;
     private static Map<JType, Map<String, Map<String, Double>>> rawData = new HashMap<>();
@@ -76,6 +80,7 @@ public class JsonConfig
         extractTagsAsData(rawData);   //replaces tags with actual items that have the tags
         extractTagsAsData(rawData2);  //replaces tags with actual items that have the tags
         processRawData();   //turn Raw data into Usable data
+        readRawPerks();
 
         JsonConfig.data = localData;
         JsonConfig.data2 = localData2;
@@ -258,6 +263,47 @@ public class JsonConfig
 
             if (!dataFile.exists())   //If no data file, create one
                 createData(dataFile, fileName);
+        }
+    }
+    
+    private static void readRawPerks() {
+    	String fileName = JType.PERKS.name().toLowerCase() + ".json";
+        File file = FMLPaths.CONFIGDIR.get().resolve(dataPath + fileName).toFile();
+        Map<PerkTrigger, LinkedListMultimap<String, JsonObject>> settings = new HashMap<>();
+        try
+            (
+                InputStream input = new FileInputStream(file.getPath());
+                Reader reader = new BufferedReader(new InputStreamReader(input))
+           )
+        {
+        	JsonObject json = gson.fromJson(reader, perkType);
+        	for (String key : json.keySet()) {
+        		PerkTrigger trigger = null;
+        		//Find matching trigger for the raw strings entered. 
+        		for (PerkTrigger pt :PerkTrigger.values()) {
+        			if (pt.name().toUpperCase().equals(key) ) {
+        				trigger = pt;
+        				break;
+        			}
+        		}
+        		if (trigger == null) continue;
+        		else {
+        			JsonObject entries = json.get(key).getAsJsonObject();
+        			for (String entryKey : entries.keySet()) {
+        				LinkedListMultimap<String, JsonObject> members = LinkedListMultimap.create();
+        				JsonArray memList = entries.get(entryKey).getAsJsonArray();
+        				for (int i = 0; i < memList.size(); i++) {
+        					members.put(entryKey, memList.get(i).getAsJsonObject());
+        				}
+        				settings.put(trigger, members);
+        			}
+        		}
+        	}
+        	PerkRegistry.setSettings(settings);
+        }
+        catch(Exception e)
+        {
+            LOGGER.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + dataPath + fileName, e);
         }
     }
 
