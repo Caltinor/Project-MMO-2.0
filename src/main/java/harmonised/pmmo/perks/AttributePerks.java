@@ -18,8 +18,8 @@ public class AttributePerks {
 	
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");	
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> SPEED = (p, nbt, l) -> {
-		double maxSpeedBoost = nbt.getDouble(MAX_BOOST);
-		double boostPerLevel = nbt.getDouble(PER_LEVEL);
+		double maxSpeedBoost = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 50d;
+		double boostPerLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.1;
 		AttributeInstance speedAttribute = p.getAttribute(Attributes.MOVEMENT_SPEED);
 		int agilityLevel = APIUtils.getLevel(Skill.AGILITY.toString(), p);
 		double speedBoost = p.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() 
@@ -45,8 +45,8 @@ public class AttributePerks {
 	
 	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> DAMAGE = (p, nbt, l) -> {
-		double maxDamage = nbt.getDouble(MAX_BOOST);
-		double perLevel = nbt.getDouble(PER_LEVEL);
+		double maxDamage = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 10;
+		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.5;
 		AttributeInstance damageAttribute = p.getAttribute(Attributes.ATTACK_DAMAGE);
 		double combatLevel = APIUtils.getLevel(Skill.COMBAT.toString(), p);
 		double damageBoost = Math.min(maxDamage, combatLevel * perLevel);
@@ -59,8 +59,8 @@ public class AttributePerks {
 	
 	private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> REACH = (p, nbt, l) -> {
-		double perLevel = nbt.getDouble(PER_LEVEL);
-		double maxReach = nbt.getDouble(MAX_BOOST);
+		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.1;
+		double maxReach = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 10d;
 		double buildLevel = APIUtils.getLevel(Skill.BUILDING.toString(), p);
 		double reach = -0.91 + (buildLevel / perLevel);
 		reach = Math.min(maxReach, reach);
@@ -77,8 +77,8 @@ public class AttributePerks {
 	
 	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> HEALTH = (p, nbt, l) -> {
-		double perLevel = nbt.getDouble(PER_LEVEL);
-		double maxHeart	= nbt.getDouble(MAX_BOOST);
+		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.1;
+		double maxHeart	= nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 10d;
 		double enduranceLevel = APIUtils.getLevel(Skill.ENDURANCE.toString(), p);
 		int heartBoost = (int) Math.floor(enduranceLevel / perLevel) * 2;
 		int maxHP = (int) maxHeart * 2;

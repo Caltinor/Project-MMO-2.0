@@ -30,9 +30,10 @@ public class EffectPerks {
 	};
 	
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> REGEN = (player, nbt, level) -> {
-		long cooldown = nbt.getLong(COOLDOWN);
-		int duration = nbt.getInt(DURATION);
-		int perLevel = Math.max(0, (int)((double)level * nbt.getDouble(STRENGTH)));
+		long cooldown = nbt.contains(COOLDOWN) ? nbt.getLong(COOLDOWN) : 300l;
+		int duration = nbt.contains(DURATION) ? nbt.getInt(DURATION) : 1;
+		double strength = nbt.contains(STRENGTH) ? nbt.getDouble(STRENGTH) : 0.1;
+		int perLevel = Math.max(0, (int)((double)level * strength));
 		long currentCD = regen_cooldown.getOrDefault(player.getUUID(), System.currentTimeMillis());
 		if (currentCD < System.currentTimeMillis() - cooldown 
 				|| currentCD + 20 >= System.currentTimeMillis()) {
