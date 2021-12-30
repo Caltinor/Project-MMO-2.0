@@ -250,6 +250,7 @@ public class JsonConfig
         jTypes.add(JType.XP_MULTIPLIER_DIMENSION);
         jTypes.add(JType.XP_MULTIPLIER_ENTITY);
         jTypes.add(JType.REQ_ENTITY_INTERACT);
+        jTypes.add(JType.PERKS);
     }
 
     private static void initData()
@@ -276,27 +277,31 @@ public class JsonConfig
                 Reader reader = new BufferedReader(new InputStreamReader(input))
            )
         {
-        	JsonObject json = gson.fromJson(reader, perkType);
-        	for (String key : json.keySet()) {
+        	Map<String, JsonObject> json = gson.fromJson(reader, perkType);
+        	for (Map.Entry<String, JsonObject> map : json.entrySet()) {
         		PerkTrigger trigger = null;
         		//Find matching trigger for the raw strings entered. 
         		for (PerkTrigger pt :PerkTrigger.values()) {
-        			if (pt.name().toUpperCase().equals(key) ) {
+        			if (pt.name().toUpperCase().equals(map.getKey()) ) {
         				trigger = pt;
         				break;
         			}
         		}
         		if (trigger == null) continue;
         		else {
-        			JsonObject entries = json.get(key).getAsJsonObject();
-        			for (String entryKey : entries.keySet()) {
-        				LinkedListMultimap<String, JsonObject> members = LinkedListMultimap.create();
-        				JsonArray memList = entries.get(entryKey).getAsJsonArray();
+        			System.out.println("========================");
+        			System.out.println(trigger.name().toString());
+        			System.out.println("========================");
+        			JsonObject entries = map.getValue();
+        			LinkedListMultimap<String, JsonObject> members = LinkedListMultimap.create();
+        			for (String entryKey : entries.keySet()) {        				
+        				JsonArray memList = entries.get(entryKey).getAsJsonArray();        				
         				for (int i = 0; i < memList.size(); i++) {
-        					members.put(entryKey, memList.get(i).getAsJsonObject());
+        					System.out.println(entryKey+":"+memList.get(i).toString());
+        					members.get(entryKey).add(memList.get(i).getAsJsonObject());
         				}
-        				settings.put(trigger, members);
         			}
+        			settings.put(trigger, members);    				
         		}
         	}
         	PerkRegistry.setSettings(settings);
@@ -316,6 +321,7 @@ public class JsonConfig
 
         for(JType jType : jTypes)
         {
+        	if (jType.equals(JType.PERKS)) continue;
             fileName = jType.name().toLowerCase() + ".json";
             file = FMLPaths.CONFIGDIR.get().resolve(dataPath + fileName).toFile();
             try

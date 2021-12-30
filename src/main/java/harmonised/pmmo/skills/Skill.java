@@ -190,7 +190,7 @@ public enum Skill
     {
         if(PmmoSavedData.get().setXp(skill, player.getUUID(), amount))
         {
-            PerkRegistry.executePerk(PerkTrigger.SKILL_UP, player, XP.levelAtXp(amount));
+            PerkRegistry.executePerk(PerkTrigger.SKILL_UP, player); 
             XP.updateRecipes(player);
 
             NetworkHandler.sendToPlayer(new MessageXp(amount, skill, 0, false), player);

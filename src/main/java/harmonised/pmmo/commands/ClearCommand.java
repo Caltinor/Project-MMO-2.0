@@ -36,7 +36,6 @@ public class ClearCommand
             for(ServerPlayer player : players)
             {
                 String playerName = player.getDisplayName().getString();
-                PerkRegistry.executePerk(PerkTrigger.SKILL_UP, (ServerPlayer)player, 1);
                 XP.updateRecipes(player);
 
                 Map<String, Double> xpMap = PmmoSavedData.get().getXpMap(player.getUUID());
@@ -44,6 +43,7 @@ public class ClearCommand
                 {
                     xpMap.remove(skill);
                 }
+                PerkRegistry.executePerk(PerkTrigger.SKILL_UP, (ServerPlayer)player);
                 NetworkHandler.sendToPlayer(new MessageXp(0f, "42069", 0, true), player);
                 player.displayClientMessage(new TranslatableComponent("pmmo.skillsCleared"), false);
 

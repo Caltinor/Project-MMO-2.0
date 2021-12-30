@@ -19,11 +19,11 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.TickEvent;
@@ -51,31 +51,19 @@ public class PlayerTickHandler
         	ServerPlayer player = (ServerPlayer) event.player;
             UUID uuid = player.getUUID();
 
-            if(player.isSprinting()) {
-            	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
-            		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
-            		PerkRegistry.executePerk(PerkTrigger.SPRINTING, (ServerPlayer)player, skillLevel);
-            	}
-            }
-            else {
-            	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
-            		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
-            		PerkRegistry.terminatePerk(PerkTrigger.SPRINTING, (ServerPlayer)player, skillLevel);
-            	}
-            }
-            if(player.isSwimming()) {
-            	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
-            		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
-            		PerkRegistry.executePerk(PerkTrigger.SUBMERGED, (ServerPlayer)player, skillLevel);
-            	}
-            }
-            else {
-            	for (Map.Entry<String, Integer> skill : Skill.getSkills().entrySet()) {
-            		int skillLevel = APIUtils.getLevel(skill.getKey(), player);
-            		PerkRegistry.terminatePerk(PerkTrigger.SUBMERGED, (ServerPlayer)player, skillLevel);
-            	}
-            }
+            if(player.isSprinting()) 
+            	PerkRegistry.executePerk(PerkTrigger.SPRINTING, player);
+            else 
+            	PerkRegistry.terminatePerk(PerkTrigger.SPRINTING, player);
+            if(player.isSwimming()) 
+            	PerkRegistry.executePerk(PerkTrigger.SUBMERGED, player);
+            else 
+            	PerkRegistry.terminatePerk(PerkTrigger.SUBMERGED, player);
 
+            CompoundTag dataIn = new CompoundTag();
+            dataIn.putFloat("healthIn", player.getHealth());
+            PerkRegistry.executePerk(PerkTrigger.HEALTH_LEVEL, player, dataIn);
+            
             if(!player.level.isClientSide && player.level.getServer().getTickCount() % 200 == 200)
             {
             	WorldTickHandler.updateVein(player, 0);

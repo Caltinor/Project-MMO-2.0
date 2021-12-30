@@ -10,5 +10,5 @@ public enum PerkTrigger {
 	SPRINT_JUMP,
 	CROUCH_JUMP,
 	FALL_DAMAGE,
-	HEALTH_LOW
+	HEALTH_LEVEL
 }

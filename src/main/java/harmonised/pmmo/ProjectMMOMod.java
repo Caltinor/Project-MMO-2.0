@@ -10,6 +10,7 @@ import harmonised.pmmo.events.ChunkDataHandler;
 import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.network.WebHandler;
+import harmonised.pmmo.perks.PerkRegistration;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.util.ServerUtil;
 import harmonised.pmmo.util.Util;
@@ -95,6 +96,7 @@ public class ProjectMMOMod
 
         Config.initServer();
         WorldTickHandler.refreshVein();
+        PerkRegistration.init();
     }
 
     private void serverStarted(ServerStartedEvent event)

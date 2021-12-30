@@ -89,10 +89,7 @@ public class WorldTickHandler
         {
             for (ServerPlayer player : event.world.getServer().getPlayerList().getPlayers())
             {
-            	for (Map.Entry<String, Integer> skillEntry : Skill.getSkills().entrySet()) {
-            		int skillLevel = APIUtils.getLevel(skillEntry.getKey(), player);
-            		PerkRegistry.executePerk(PerkTrigger.SKILL_UP, (ServerPlayer)player, skillLevel);
-            	}
+            	PerkRegistry.executePerk(PerkTrigger.SKILL_UP, player);
             }
         }
         
