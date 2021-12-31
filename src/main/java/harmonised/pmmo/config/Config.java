@@ -1,6 +1,5 @@
 package harmonised.pmmo.config;
 
-import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.util.XP;
@@ -1947,16 +1946,5 @@ public class Config
     public static void removeAllPlayerXpBoosts(ServerPlayer player)
     {
         APIUtils.removeAllPlayerXpBoosts(player);
-    }
-
-    /**
-     * DEPRECATED - use APIUtils. instead!
-     * SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
-     * Only Project MMO should use this.
-     */
-    @Deprecated
-    public static void setPlayerXpBoostsMaps(Player player, Map<String, Map<String, Double>> newBoosts)
-    {
-        APIUtils.setPlayerXpBoostsMaps(player, newBoosts);
     }
 }

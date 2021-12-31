@@ -9,7 +9,6 @@ import harmonised.pmmo.gui.WorldRenderHandler;
 import harmonised.pmmo.gui.XPOverlayGUI;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.network.NetworkHandler;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.util.NBTHelper;
 import harmonised.pmmo.util.XP;
 import net.minecraft.client.Minecraft;
@@ -69,7 +68,6 @@ public class ClientHandler
                 {
                     prefsMap.put(tag, newPackage.getDouble(tag));
                 }
-                AttributeHandler.updateAll(player);
                 XPOverlayGUI.doInit();
                 break;
 
@@ -84,7 +82,7 @@ public class ClientHandler
                 break;
 
             case 6:
-                APIUtils.setPlayerXpBoostsMaps(player, NBTHelper.nbtToMapStringString(newPackage));
+                Config.xpBoosts = NBTHelper.nbtToMapStringString(newPackage);
                 break;
 
             case 7:

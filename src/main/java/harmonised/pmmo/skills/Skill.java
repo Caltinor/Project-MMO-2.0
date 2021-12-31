@@ -1,5 +1,7 @@
 package harmonised.pmmo.skills;
 
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.commands.PmmoCommand;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
@@ -80,11 +82,16 @@ public enum Skill
 
     public static void updateSkills()
     {
-        for(Map.Entry<String, Map<String, Double>> entry : JsonConfig.data.getOrDefault(JType.SKILLS, new HashMap<>()).entrySet())
-        {
-            if(entry.getValue().containsKey("color"))
-                setSkill(entry.getKey(), (int) Math.floor(entry.getValue().get("color")));
-        }
+    	for (Map.Entry<JType, Map<String, Map<String, Double>>> map : JsonConfig.data.entrySet()) 
+    	{
+	        for(Map.Entry<String, Map<String, Double>> entry : JsonConfig.data.getOrDefault(map.getKey(), new HashMap<>()).entrySet())
+	        {
+	        	setSkill(entry.getKey(), 
+	        			JsonConfig.data.getOrDefault(JType.SKILLS, new HashMap<>()).containsKey("color") ?
+	        			(int) Math.floor(entry.getValue().get("color")) :
+	        			16777215);
+	        }
+    	}
         PmmoCommand.init();
     }
 
@@ -183,7 +190,7 @@ public enum Skill
     {
         if(PmmoSavedData.get().setXp(skill, player.getUUID(), amount))
         {
-            AttributeHandler.updateAll(player);
+            PerkRegistry.executePerk(PerkTrigger.SKILL_UP, player); 
             XP.updateRecipes(player);
 
             NetworkHandler.sendToPlayer(new MessageXp(amount, skill, 0, false), player);

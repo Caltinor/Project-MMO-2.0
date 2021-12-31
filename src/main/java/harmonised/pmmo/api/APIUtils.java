@@ -264,17 +264,4 @@ public class APIUtils {
 	{
 		PmmoSavedData.get().removeAllPlayerXpBoosts(player.getUUID());
 	}
-
-	/**
-	 * SERVER ONLY, THE ONLY TIME CLIENT IS CALLED WHEN A PACKET IS RECEIVED >FROM SERVER<
-	 * Only Project MMO should use this.
-	 */
-	@Deprecated
-	public static void setPlayerXpBoostsMaps(Player player, Map<String, Map<String, Double>> newBoosts)
-	{
-		if(player.level.isClientSide())
-			Config.xpBoosts = newBoosts;
-		else
-			PmmoSavedData.get().setPlayerXpBoostsMaps(player.getUUID(), newBoosts);
-	}
 }

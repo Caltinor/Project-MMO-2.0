@@ -795,14 +795,20 @@ public class XPOverlayGUI extends GuiComponent
 		if(level < 1 || (configMap.containsKey("maxLevel") && level > configMap.get("maxLevel")))
 			return;
 
-		double percentDmgBoostPerLevel;
-		double maxExtraDamageBoost;
-		double damageBoost;
+		//double percentDmgBoostPerLevel;
+		//double maxExtraDamageBoost;
+		//double damageBoost;
 		TranslatableComponent msg;
 
+		// this needs to iterate through perks.
+		// on second thought maybe this just stops existing.  
+		// will deliberate and decide.  might be too hard to
+		// keep in since you'd need to ask every single perk
+		// during registration to give a new stat bonus specifically
+		// for the LEVEL_UP trigger, which may not apply.
 		switch(skill)
 		{
-			case "building":
+			/*case "building":
 				double levelsPerOneReach = configMap.get("levelsPerOneReach");
 				double maxExtraReachBoost = configMap.get("maxExtraReachBoost");
 				double reachBoost = Math.min(maxExtraReachBoost, level / levelsPerOneReach);
@@ -844,8 +850,8 @@ public class XPOverlayGUI extends GuiComponent
 				break;
 
 			case "agility":
-				msg = new TranslatableComponent("pmmo.levelUpSprintSpeedBonus", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(AttributeHandler.getSpeedBoostMultiplier(level) * 100) + "%");
-				break;
+				msg = new TranslatableComponent("pmmo.levelUpSprintSpeedBonus");//, level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString(), DP.dpSoft(AttributeHandler.getSpeedBoostMultiplier(level) * 100) + "%");
+				break;*/
 
 			default:
 				msg = new TranslatableComponent("pmmo.levelUp", level, new TranslatableComponent("pmmo." + skill.toLowerCase()).getString());
@@ -866,11 +872,11 @@ public class XPOverlayGUI extends GuiComponent
 		if(showLevelUpUnlocks)
 			checkUnlocks(level, skill, player);
 
-		int nightvisionUnlockLevel = (int) Config.getConfig("nightvisionUnlockLevel");
+		//int nightvisionUnlockLevel = (int) Config.getConfig("nightvisionUnlockLevel");
 		int dualSalvageUnlockLevel = (int) Config.getConfig("dualSalvageSmithingLevelReq");
 
-		if(Skill.SWIMMING.equals(skill) && level - 1 < nightvisionUnlockLevel && level >= nightvisionUnlockLevel)
-			player.displayClientMessage(new TranslatableComponent("pmmo.underwaterNightVisionUnLocked", level).setStyle(Skill.getSkillStyle(skill)), false);
+		//if(Skill.SWIMMING.equals(skill) && level - 1 < nightvisionUnlockLevel && level >= nightvisionUnlockLevel)
+		//	player.displayClientMessage(new TranslatableComponent("pmmo.underwaterNightVisionUnLocked", level).setStyle(Skill.getSkillStyle(skill)), false);
 
 		if(Skill.SMITHING.equals(skill) && level - 1 < dualSalvageUnlockLevel && level >= dualSalvageUnlockLevel)
 			player.displayClientMessage(new TranslatableComponent("pmmo.dualSalvageUnLocked", level).setStyle(Skill.getSkillStyle(skill)), false);

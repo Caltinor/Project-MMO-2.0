@@ -1,9 +1,9 @@
 package harmonised.pmmo.proxy;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.network.MessageUpdatePlayerNBT;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.AttributeHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.nbt.CompoundTag;
 import org.apache.logging.log4j.*;
@@ -33,7 +33,7 @@ public class ServerHandler
                 {
                     prefsMap.put(tag, newPackage.getDouble(tag));
                 }
-                AttributeHandler.updateAll(player);
+                WorldTickHandler.updateVein(player, 0);
                 PmmoSavedData.get().setDirty(true);
                 break;
 

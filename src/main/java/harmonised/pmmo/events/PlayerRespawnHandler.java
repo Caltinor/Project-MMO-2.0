@@ -1,16 +1,18 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.skills.AttributeHandler;
-import net.minecraft.world.entity.player.Player;
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerRespawnHandler
 {
     public static void handlePlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
     {
-        Player player = event.getPlayer();
-
-        AttributeHandler.updateAll(player);
-        player.setHealth(player.getMaxHealth());
+    	if (!event.getPlayer().level.isClientSide) {
+	        ServerPlayer player = (ServerPlayer) event.getPlayer();	
+	        PerkRegistry.executePerk(PerkTrigger.SKILL_UP, player);
+	        player.setHealth(player.getMaxHealth());
+    	}
     }
 }

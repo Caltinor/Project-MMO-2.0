@@ -1,5 +1,8 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
@@ -24,8 +27,8 @@ import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +41,7 @@ public class DamageHandler
 {
     public static double getEnduranceMultiplier(Player player)
     {
-        int enduranceLevel = Skill.getLevel(Skill.ENDURANCE.toString(), player);
+        int enduranceLevel = APIUtils.getLevel(Skill.ENDURANCE.toString(), player);
         double endurancePerLevel = Config.forgeConfig.endurancePerLevel.get();
         double maxEndurance = Config.forgeConfig.maxEndurance.get();
         double endurePercent = (enduranceLevel * endurancePerLevel);
@@ -50,12 +53,15 @@ public class DamageHandler
 
     public static double getFallSaveChance(Player player)
     {
-        int agilityLevel = Skill.getLevel(Skill.AGILITY.toString(), player);
+        int agilityLevel = APIUtils.getLevel(Skill.AGILITY.toString(), player);
         double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
         double saveChancePerLevel = Math.min(maxFallSaveChance, Config.forgeConfig.saveChancePerLevel.get() / 100);
 
         return agilityLevel * saveChancePerLevel;
     }
+    
+    private static final String SAVED = "saved";
+    private static final String DAMAGE = "damage";
 
     public static void handleDamage(LivingHurtEvent event)
     {
@@ -96,8 +102,11 @@ public class DamageHandler
                             damage *= friendlyFireMultiplier;
                     }
                 }
-///////////////////////////////////////////////////////////////////////ENDURANCE//////////////////////////////////////////////////////////////////////////////////////////
-                double endured = Math.max(0, damage * getEnduranceMultiplier(player));
+///////////////////////////////////////////////////////////////////////PERK MODIFICATION//////////////////////////////////////////////////////////////////////////////////////////
+                CompoundTag dataIn = new CompoundTag();
+                dataIn.putDouble("damageIn", damage);
+                CompoundTag perkOutput = PerkRegistry.executePerk(PerkTrigger.RECEIVE_DAMAGE, player, dataIn);
+                double endured = perkOutput.contains(SAVED) ? perkOutput.getDouble(SAVED) : 0;
 
                 damage -= endured;
 
@@ -105,16 +114,11 @@ public class DamageHandler
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
                 if(isFallDamage)
                 {
+                	
+                	dataIn.putDouble("damageIn", damage);
+                	perkOutput = PerkRegistry.executePerk(PerkTrigger.FALL_DAMAGE, player, dataIn);
                     double award;
-                    int saved = 0;
-                    double chance = getFallSaveChance(player);
-                    for(int i = 0; i < damage; i++)
-                    {
-                        if(Math.ceil(Math.random() * 100) <= chance)
-                        {
-                            saved++;
-                        }
-                    }
+                    int saved = perkOutput.contains(SAVED) ? perkOutput.getInt(SAVED) : 0;
                     damage -= saved;
 
                     if(saved != 0 && player.getHealth() > damage)
@@ -210,15 +214,11 @@ public class DamageHandler
                     }
 
                     //Apply damage bonuses
-                    //Combat is taken care of in AttributeHandler
-//                    if(skill.equals(Skill.COMBAT.toString()))
-//                        damage *= 1 + Skill.getLevel(skill, player) * Config.forgeConfig.damageBonusPercentPerLevelMelee.get();
-                    if(skill.equals(Skill.ARCHERY.toString()))
-                        damage *= 1 + Skill.getLevel(skill, player) * Config.forgeConfig.damageBonusPercentPerLevelArchery.get();
-                    else if(skill.equals(Skill.MAGIC.toString()))
-                        damage *= 1 + Skill.getLevel(skill, player) * Config.forgeConfig.damageBonusPercentPerLevelMagic.get();
-                    else if(skill.equals(Skill.GUNSLINGING.toString()))
-                        damage *= 1 + Skill.getLevel(skill, player) * Config.forgeConfig.damageBonusPercentPerLevelGunslinging.get();
+                    
+                    CompoundTag dataIn = new CompoundTag();
+                    dataIn.putFloat("damageIn", damage);
+                    CompoundTag dataOut = PerkRegistry.executePerk(PerkTrigger.DEAL_DAMAGE, player, dataIn);
+                    damage = dataOut.contains(DAMAGE) ? dataOut.getFloat(DAMAGE) : damage;
 
                     if(target.getEncodeId() != null)
                     {

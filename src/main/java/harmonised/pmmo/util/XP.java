@@ -1,11 +1,8 @@
 package harmonised.pmmo.util;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.PredicateRegistry;
 import harmonised.pmmo.api.TooltipSupplier;
@@ -13,8 +10,7 @@ import harmonised.pmmo.config.AutoValues;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.config.JsonConfig;
-import harmonised.pmmo.curios.Curios;
-import harmonised.pmmo.events.PlayerConnectedHandler;
+import harmonised.pmmo.events.WorldTickHandler;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.gui.WorldRenderHandler;
 import harmonised.pmmo.gui.WorldText;
@@ -22,7 +18,6 @@ import harmonised.pmmo.gui.WorldXpDrop;
 import harmonised.pmmo.network.*;
 import harmonised.pmmo.party.Party;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
-import harmonised.pmmo.skills.AttributeHandler;
 import harmonised.pmmo.skills.CheeseTracker;
 import harmonised.pmmo.skills.PMMOFireworkEntity;
 import harmonised.pmmo.skills.Skill;
@@ -39,13 +34,11 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.Registry;
@@ -73,6 +66,7 @@ public class XP
 {
 	public static final Logger LOGGER = LogManager.getLogger();
 
+	//TODO replace this system with a tag checker
 	private static final Map<Material, String> materialHarvestTool = new HashMap<Material, String>()
 	{{
 		put(Material.HEAVY_METAL, "pickaxe");		//PICKAXE
@@ -728,7 +722,7 @@ public class XP
         NetworkHandler.sendToPlayer(new MessageXp(0f, "42069", 0f, true), (ServerPlayer) player);
 		NetworkHandler.sendToPlayer(new MessageUpdatePlayerNBT(prefsTag, 0), (ServerPlayer) player);
 		NetworkHandler.sendToPlayer(new MessageUpdatePlayerNBT(abilitiesTag, 1), (ServerPlayer) player);
-		AttributeHandler.updateAll(player);
+		WorldTickHandler.updateVein(player, 0);
 
         for(Map.Entry<String, Double> entry : Config.getXpMap(player).entrySet())
         {
@@ -1363,7 +1357,7 @@ public class XP
 
 		if(startLevel != currLevel) //Level Up! Or Down?
 		{
-			AttributeHandler.updateAll(player);
+			WorldTickHandler.updateVein(player, 0);
 			updateRecipes(player);
 
 //			if(ModList.get().isLoaded("compatskills"))
