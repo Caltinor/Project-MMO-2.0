@@ -11,8 +11,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.ForgeMod;
 
 public class AttributePerks {
-	private static final String MAX_BOOST = "max";
-	private static final String PER_LEVEL = "power";
+	private static final String MAX_BOOST = "max_boost";
+	private static final String PER_LEVEL = "per_level";
 	private static final CompoundTag NONE = new CompoundTag();
 	
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");	

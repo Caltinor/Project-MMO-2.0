@@ -11,15 +11,14 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
 public class EventPerks {
-	private static final String PER_LEVEL = "power";
-	private static final String MAX_BOOST = "max";
+	private static final String PER_LEVEL = "per_level";
+	private static final String MAX_BOOST = "max_boost";
 	private static final String COOLDOWN = "cooldown";
-	private static final String STRENGTH = "power";
 	private static Map<UUID, Long> breathe_cooldown = new HashMap<>();
 	
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> JUMP = (player, nbt, level) -> {
 		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.05;
-		double maxBoost = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 5.0;
+		double maxBoost = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 2.0;
         double jumpBoost;
         jumpBoost = (level * perLevel) / 4d;
         jumpBoost = Math.min(maxBoost, jumpBoost);
@@ -32,7 +31,7 @@ public class EventPerks {
 	
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> BREATH = (player, nbt, level) -> {
 		long cooldown = nbt.contains(COOLDOWN) ? nbt.getLong(COOLDOWN) : 300l;
-		double strength = nbt.contains(STRENGTH) ? nbt.getDouble(STRENGTH) : 1d;
+		double strength = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 1d;
 		int perLevel = Math.max(1, (int)((double)level * strength));
 		long currentCD = breathe_cooldown.getOrDefault(player.getUUID(), System.currentTimeMillis());
 		int currentAir = player.getAirSupply();

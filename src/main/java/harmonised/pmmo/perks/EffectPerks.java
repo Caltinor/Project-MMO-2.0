@@ -12,16 +12,17 @@ import net.minecraft.world.effect.MobEffects;
 
 public class EffectPerks {
 	private static final String COOLDOWN = "cooldown";
-	private static final String DURATION = "time";
-	private static final String STRENGTH = "power";
+	private static final String DURATION = "duration";
+	private static final String STRENGTH = "per_level";
 	private static final String MIN_LEVEL = "min_level";
 	private static final CompoundTag EMPTY = new CompoundTag();
 	private static Map<UUID, Long> regen_cooldown = new HashMap<>();
 
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> NIGHT_VISION = (player, nbt, level) -> {
-		int min = nbt.contains(MIN_LEVEL) ? nbt.getInt(MIN_LEVEL) : 1;
+		int min = nbt.contains(MIN_LEVEL) ? nbt.getInt(MIN_LEVEL) : 50;
+		int duration = nbt.contains(DURATION) ? nbt.getInt(DURATION) : 30000;
 		if (level < min) return EMPTY;
-		player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 30000));
+		player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, duration));
 		return EMPTY;
 	};
 	
