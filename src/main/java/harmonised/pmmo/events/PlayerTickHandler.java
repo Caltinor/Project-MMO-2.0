@@ -266,21 +266,22 @@ public class PlayerTickHandler
 ////////////////////////////////////////////ABILITIES//////////////////////////////////////////
             }
         }
-
-        if(XPOverlayGUI.screenshots.size() > 0)
-        {
-            for(String key : new HashSet<>(XPOverlayGUI.screenshots))
+        if(event.player.level.isClientSide) {
+            if(XPOverlayGUI.screenshots.size() > 0)
             {
-                ScreenshotHandler.takeScreenshot(key, "levelup");
-                XPOverlayGUI.screenshots.remove(key);
-                XPOverlayGUI.listOn = XPOverlayGUI.listWasOn;
+                for(String key : new HashSet<>(XPOverlayGUI.screenshots))
+                {
+                    ScreenshotHandler.takeScreenshot(key, "levelup");
+                    XPOverlayGUI.screenshots.remove(key);
+                    XPOverlayGUI.listOn = XPOverlayGUI.listWasOn;
+                }
             }
-        }
 
-        if(syncPrefs)
-        {
-            ClientHandler.syncPrefsToServer();
-            syncPrefs = false;
+            if(syncPrefs)
+            {
+                ClientHandler.syncPrefsToServer();
+                syncPrefs = false;
+            }
         }
     }
 
