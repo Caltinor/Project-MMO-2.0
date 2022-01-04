@@ -17,10 +17,10 @@ public class EventPerks {
 	private static Map<UUID, Long> breathe_cooldown = new HashMap<>();
 	
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> JUMP = (player, nbt, level) -> {
-		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.05;
-		double maxBoost = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 2.0;
+		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.0023;
+		double maxBoost = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 0.33;
         double jumpBoost;
-        jumpBoost = (level * perLevel) / 4d;
+        jumpBoost = -0.011 + level * perLevel;
         jumpBoost = Math.min(maxBoost, jumpBoost);
         player.push(0, jumpBoost, 0);
         player.hurtMarked = true; 

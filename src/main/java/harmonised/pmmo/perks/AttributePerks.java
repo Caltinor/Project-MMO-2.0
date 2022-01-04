@@ -17,8 +17,8 @@ public class AttributePerks {
 	
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");	
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> SPEED = (player, nbt, level) -> {
-		double maxSpeedBoost = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 50d;
-		double boostPerLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.1;
+		double maxSpeedBoost = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 1d;
+		double boostPerLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.5;
 		AttributeInstance speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
 		double speedBoost = player.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() 
 							* Math.max(0, Math.min(maxSpeedBoost, Math.min(maxSpeedBoost, (level * boostPerLevel) / 100)));
@@ -43,8 +43,8 @@ public class AttributePerks {
 	
 	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> DAMAGE = (player, nbt, level) -> {
-		double maxDamage = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 10;
-		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.5;
+		double maxDamage = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 1;
+		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.05;
 		AttributeInstance damageAttribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
 		double damageBoost = Math.min(maxDamage, level * perLevel);
 		AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.MULTIPLY_BASE);
@@ -57,7 +57,7 @@ public class AttributePerks {
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> REACH = (player, nbt, level) -> {
 		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.1;
 		double maxReach = nbt.contains(MAX_BOOST) ? nbt.getDouble(MAX_BOOST) : 10d;
-		double reach = -0.91 + (level / perLevel);
+		double reach = -0.91 + (level * perLevel);
 		reach = Math.min(maxReach, reach);
 		reach = player.isCreative() ? Math.max(50, reach) : reach;		
 		AttributeInstance reachAttribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
