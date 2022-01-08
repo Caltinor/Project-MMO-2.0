@@ -1,4 +1,4 @@
-package harmonised.pmmo.api;
+package harmonised.pmmo.core;
 
 public class PMMORegistry {
 

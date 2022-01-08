@@ -1,0 +1,33 @@
+Event List:  This lists all of the events and sub-events planned.
+
+AnvilRepair
+BlockBroken
+EntityPlaced
+BreakSpeedEvent
+BreedEvent
+CraftEvent
+EntityDamageEvent
+//EntityAttackEvent
+DeathEvent
+EnchantmentEvent
+FishedEvent
+FurnaceEvent
+CropGrowEvent
+JumpEvent
+PistonEvent
+PlayerJoinEvent
+PlayerLeaveEvent
+PlayerCloneEvent
+PlayerIneract
+	RightClick
+	RightClickBlock
+	RightClickItem
+	LeftClick
+	LeftClickBlock
+	LeftClickItem
+PlayerRespawnEvent
+PlayerTickEvent
+SleepEvent
+TameEvent
+TooltipEvent
+WorldTickEvent

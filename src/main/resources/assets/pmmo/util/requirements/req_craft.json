@@ -1,0 +1,759 @@
+{
+	"appliedenergistics2:128_cubed_spatial_cell_component":
+	{
+		"crafting": 70
+	},
+	"appliedenergistics2:128_cubed_spatial_storage_cell":
+	{
+		"crafting": 70
+	},
+	"appliedenergistics2:16_cubed_spatial_cell_component":
+	{
+		"crafting": 65
+	},
+	"appliedenergistics2:16_cubed_spatial_storage_cell":
+	{
+		"crafting": 65
+	},
+	"appliedenergistics2:16k_cell_component":
+	{
+		"crafting": 40,
+		"smithing": 25
+	},
+	"appliedenergistics2:16k_crafting_storage":
+	{
+		"crafting": 40,
+		"smithing": 25
+	},
+	"appliedenergistics2:16k_fluid_cell_component":
+	{
+		"crafting": 35,
+		"smithing": 15
+	},
+	"appliedenergistics2:16k_fluid_storage_cell":
+	{
+		"crafting": 35,
+		"smithing": 15
+	},
+	"appliedenergistics2:16k_storage_cell":
+	{
+		"crafting": 40,
+		"smithing": 25
+	},
+	"appliedenergistics2:1k_cell_component":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"appliedenergistics2:1k_fluid_cell_component":
+	{
+		"crafting": 15,
+		"smithing": 5
+	},
+	"appliedenergistics2:1k_fluid_storage_cell":
+	{
+		"crafting": 15,
+		"smithing": 5
+	},
+	"appliedenergistics2:1k_storage_cell":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"appliedenergistics2:2_cubed_spatial_cell_component":
+	{
+		"crafting": 60
+	},
+	"appliedenergistics2:2_cubed_spatial_storage_cell":
+	{
+		"crafting": 60
+	},
+	"appliedenergistics2:4k_cell_component":
+	{
+		"crafting": 30,
+		"smithing": 15
+	},
+	"appliedenergistics2:4k_crafting_storage":
+	{
+		"crafting": 30,
+		"smithing": 15
+	},
+	"appliedenergistics2:4k_fluid_cell_component":
+	{
+		"crafting": 25,
+		"smithing": 10
+	},
+	"appliedenergistics2:4k_fluid_storage_cell":
+	{
+		"crafting": 25,
+		"smithing": 10
+	},
+	"appliedenergistics2:4k_storage_cell":
+	{
+		"crafting": 30,
+		"smithing": 15
+	},
+	"appliedenergistics2:64k_cell_component":
+	{
+		"crafting": 50,
+		"smithing": 35
+	},
+	"appliedenergistics2:64k_crafting_storage":
+	{
+		"crafting": 50,
+		"smithing": 35
+	},
+	"appliedenergistics2:64k_fluid_cell_component":
+	{
+		"crafting": 45,
+		"smithing": 25
+	},
+	"appliedenergistics2:64k_fluid_storage_cell":
+	{
+		"crafting": 45,
+		"smithing": 25
+	},
+	"appliedenergistics2:64k_storage_cell":
+	{
+		"crafting": 50,
+		"smithing": 35
+	},
+	"appliedenergistics2:annihilation_plane":
+	{
+		"crafting": 50,
+		"smithing": 42
+	},
+	"appliedenergistics2:charger":
+	{
+		"crafting": 50
+	},
+	"appliedenergistics2:condenser":
+	{
+		"crafting": 55
+	},
+	"appliedenergistics2:controller":
+	{
+		"crafting": 40,
+		"smithing": 20
+	},
+	"appliedenergistics2:crafting_terminal":
+	{
+		"crafting": 35
+	},
+	"appliedenergistics2:drive":
+	{
+		"crafting": 50,
+		"smithing": 25
+	},
+	"appliedenergistics2:fluid_annihilation_plane":
+	{
+		"crafting": 40,
+		"smithing": 35
+	},
+	"appliedenergistics2:fluid_formation_plane":
+	{
+		"crafting": 40,
+		"smithing": 32
+	},
+	"appliedenergistics2:fluid_interface":
+	{
+		"crafting": 40,
+		"smithing": 30
+	},
+	"appliedenergistics2:fluid_terminal":
+	{
+		"crafting": 40,
+		"smithing": 30
+	},
+	"appliedenergistics2:formation_plane":
+	{
+		"crafting": 45,
+		"smithing": 40
+	},
+	"appliedenergistics2:inscriber":
+	{
+		"crafting": 45
+	},
+	"appliedenergistics2:interface":
+	{
+		"crafting": 50,
+		"smithing": 40
+	},
+	"appliedenergistics2:interface_terminal":
+	{
+		"crafting": 50,
+		"smithing": 40
+	},
+	"appliedenergistics2:io_port":
+	{
+		"crafting": 60,
+		"smithing": 35
+	},
+	"appliedenergistics2:molecular_assembler":
+	{
+		"crafting": 40,
+		"smithing": 30
+	},
+	"appliedenergistics2:pattern_terminal":
+	{
+		"crafting": 30
+	},
+	"appliedenergistics2:quartz_growth_accelerator":
+	{
+		"crafting": 50,
+		"smithing": 30
+	},
+	"appliedenergistics2:spatial_io_port":
+	{
+		"crafting": 40,
+		"smithing": 30
+	},
+	"appliedenergistics2:spatial_pylon":
+	{
+		"crafting": 60,
+		"smithing": 30
+	},
+	"appliedenergistics2:terminal":
+	{
+		"crafting": 35
+	},
+	"appliedenergistics2:vibration_chamber":
+	{
+		"crafting": 10,
+		"smithing": 5
+	},
+	"appliedenergistics2:wireless_access_point":
+	{
+		"crafting": 50,
+		"smithing": 25
+	},
+	"appliedenergistics2:wireless_booster":
+	{
+		"crafting": 35,
+		"smithing": 30
+	},
+	"appliedenergistics2:wireless_receiver":
+	{
+		"crafting": 50,
+		"smithing": 25
+	},
+	"appliedenergistics2:wireless_terminal":
+	{
+		"crafting": 80,
+		"smithing": 50
+	},
+	"create:adjustable_crate":
+	{
+		"crafting": 20
+	},
+	"create:adjustable_pulley":
+	{
+		"crafting": 25
+	},
+	"create:adjustable_pulse_repeater":
+	{
+		"crafting": 25
+	},
+	"create:adjustable_repeater":
+	{
+		"crafting": 20
+	},
+	"create:analog_lever":
+	{
+		"crafting": 20
+	},
+	"create:andesite_alloy":
+	{
+		"crafting": 10,
+		"smithing": 5
+	},
+	"create:andesite_casing":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:attribute_filter":
+	{
+		"crafting": 15,
+		"smithing": 5
+	},
+	"create:basin":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:belt_connector":
+	{
+		"crafting": 10
+	},
+	"create:belt_observer":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:belt_tunnel":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:brass_casing":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:brass_hand":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:cart_assembler":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:clockwork_bearing":
+	{
+		"crafting": 20
+	},
+	"create:clutch":
+	{
+		"crafting": 20
+	},
+	"create:cogwheel":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:copper_casing":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:crafter_slot_cover":
+	{
+		"crafting": 10,
+		"smithing": 5
+	},
+	"create:cuckoo_clock":
+	{
+		"crafting": 20
+	},
+	"create:deforester":
+	{
+		"crafting": 30,
+		"smithing": 30
+	},
+	"create:deployer":
+	{
+		"crafting": 20
+	},
+	"create:electron_tube":
+	{
+		"crafting": 10,
+		"smithing": 5
+	},
+	"create:empty_schematic":
+	{
+		"crafting": 5
+	},
+	"create:encased_belt":
+	{
+		"crafting": 20
+	},
+	"create:encased_fan":
+	{
+		"crafting": 20
+	},
+	"create:encased_shaft":
+	{
+		"crafting": 20
+	},
+	"create:extractor":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:filter":
+	{
+		"crafting": 10,
+		"smithing": 5
+	},
+	"create:funnel":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:gearbox":
+	{
+		"crafting": 20
+	},
+	"create:gearshift":
+	{
+		"crafting": 20
+	},
+	"create:goggles":
+	{
+		"crafting": 25,
+		"smithing": 10
+	},
+	"create:hand_crank":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:handheld_blockzapper":
+	{
+		"crafting": 30,
+		"smithing": 30
+	},
+	"create:large_cogwheel":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:linear_chassis":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:linked_extractor":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:linked_transposer":
+	{
+		"crafting": 20
+	},
+	"create:mechanical_bearing":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:mechanical_crafter":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:mechanical_drill":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:mechanical_harvester":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:mechanical_mixer":
+	{
+		"crafting": 20
+	},
+	"create:mechanical_piston":
+	{
+		"crafting": 20
+	},
+	"create:mechanical_plough":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:mechanical_press":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:mechanical_saw":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:millstone":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:nozzle":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:piston_extension_pole":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:portable_storage_interface":
+	{
+		"crafting": 20
+	},
+	"create:powered_latch":
+	{
+		"crafting": 20
+	},
+	"create:powered_toggle_latch":
+	{
+		"crafting": 20
+	},
+	"create:propeller":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:pulse_repeater":
+	{
+		"crafting": 20
+	},
+	"create:radial_chassis":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:red_sand_paper":
+	{
+		"crafting": 5
+	},
+	"create:redstone_contact":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:redstone_link":
+	{
+		"crafting": 30,
+		"building": 20
+	},
+	"create:rope_pulley":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:rotation_speed_controller":
+	{
+		"crafting": 25
+	},
+	"create:sand_paper":
+	{
+		"crafting": 5
+	},
+	"create:schematic_and_quill":
+	{
+		"crafting": 5
+	},
+	"create:schematic_table":
+	{
+		"crafting": 20
+	},
+	"create:schematicannon":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:secondary_linear_chassis":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:sequenced_gearshift":
+	{
+		"crafting": 20
+	},
+	"create:shaft":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:speedometer":
+	{
+		"crafting": 20
+	},
+	"create:sticky_mechanical_piston":
+	{
+		"crafting": 20
+	},
+	"create:stockpile_switch":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:stressometer":
+	{
+		"crafting": 20
+	},
+	"create:super_glue":
+	{
+		"crafting": 10
+	},
+	"create:transposer":
+	{
+		"crafting": 20
+	},
+	"create:tree_fertilizer":
+	{
+		"crafting": 10,
+		"farming": 10
+	},
+	"create:turntable":
+	{
+		"crafting": 20
+	},
+	"create:vertical_gearbox":
+	{
+		"crafting": 20
+	},
+	"create:wand_of_symmetry":
+	{
+		"crafting": 30,
+		"smithing": 30
+	},
+	"create:water_wheel":
+	{
+		"crafting": 20
+	},
+	"create:whisk":
+	{
+		"crafting": 20,
+		"smithing": 10
+	},
+	"create:wrench":
+	{
+		"crafting": 10,
+		"smithing": 10
+	},
+	"enderstorage:ender_chest":
+	{
+		"smithing": 40
+	},
+	"enderstorage:ender_pouch":
+	{
+		"crafting": 50
+	},
+	"enderstorage:ender_tank":
+	{
+		"smithing": 50
+	},
+	"endreborn:ender_transmitter":
+	{
+		"crafting": 80
+	},
+	"ironchest:copper_chest":
+	{
+		"smithing": 10
+	},
+	"ironchest:copper_to_iron_chest_upgrade":
+	{
+		"smithing": 20
+	},
+	"ironchest:copper_to_silver_chest_upgrade":
+	{
+		"smithing": 20
+	},
+	"ironchest:crystal_chest":
+	{
+		"smithing": 50
+	},
+	"ironchest:diamond_chest":
+	{
+		"smithing": 40
+	},
+	"ironchest:diamond_to_crystal_chest_upgrade":
+	{
+		"smithing": 50
+	},
+	"ironchest:diamond_to_obsidian_chest_upgrade":
+	{
+		"smithing": 50
+	},
+	"ironchest:gold_chest":
+	{
+		"smithing": 30
+	},
+	"ironchest:gold_to_diamond_chest_upgrade":
+	{
+		"smithing": 40
+	},
+	"ironchest:iron_chest":
+	{
+		"smithing": 20
+	},
+	"ironchest:iron_to_gold_chest_upgrade":
+	{
+		"smithing": 30
+	},
+	"ironchest:obsidian_chest":
+	{
+		"smithing": 50
+	},
+	"ironchest:silver_chest":
+	{
+		"smithing": 20
+	},
+	"ironchest:silver_to_gold_chest_upgrade":
+	{
+		"smithing": 30
+	},
+	"ironchest:wood_to_copper_chest_upgrade":
+	{
+		"smithing": 10
+	},
+	"ironchest:wood_to_iron_chest_upgrade":
+	{
+		"smithing": 20
+	},
+	"minecraft:blast_furnace":
+	{
+		"crafting": 10
+	},
+	"minecraft:smoker":
+	{
+		"crafting": 10
+	},
+	"minecraft:stonecutter":
+	{
+		"crafting": 10
+	},
+	"storagedrawers:compacting_drawers_3":
+	{
+		"crafting": 30
+	},
+	"storagedrawers:controller":
+	{
+		"crafting": 40
+	},
+	"storagedrawers:controller_slave":
+	{
+		"crafting": 50
+	},
+	"storagedrawers:conversion_upgrade":
+	{
+		"crafting": 25
+	},
+	"storagedrawers:diamond_storage_upgrade":
+	{
+		"crafting": 40
+	},
+	"storagedrawers:emerald_storage_upgrade":
+	{
+		"crafting": 50
+	},
+	"storagedrawers:gold_storage_upgrade":
+	{
+		"crafting": 30
+	},
+	"storagedrawers:illumination_upgrade":
+	{
+		"crafting": 25
+	},
+	"storagedrawers:iron_storage_upgrade":
+	{
+		"crafting": 20
+	},
+	"storagedrawers:obsidian_storage_upgrade":
+	{
+		"crafting": 10
+	},
+	"storagedrawers:void_upgrade":
+	{
+		"crafting": 20
+	}
+}

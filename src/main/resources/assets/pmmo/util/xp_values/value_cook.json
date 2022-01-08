@@ -1,0 +1,34 @@
+{
+	"foodexpansion:bat_wing":
+	{
+		"cooking": 8
+	},
+	"minecraft:cactus":
+	{
+		"cooking": 13,
+		"crafting": 4
+	},
+	"minecraft:chorus_fruit":
+	{
+		"cooking": 25,
+		"crafting": 23
+	},
+	"minecraft:egg":
+	{
+		"cooking": 8
+	},
+	"minecraft:pumpkin_seed":
+	{
+		"cooking": 5
+	},
+	"minecraft:sea_pickle":
+	{
+		"cooking": 13,
+		"crafting": 3
+	},
+	"minecraft:wet_sponge":
+	{
+		"cooking": 15,
+		"crafting": 15
+	}
+}

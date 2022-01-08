@@ -1,0 +1,102 @@
+{
+	"#forge:ores/aluminum":
+	{
+		"mining": 25
+	},
+	"#forge:ores/copper":
+	{
+		"mining": 12
+	},
+	"#forge:ores/diamond":
+	{
+		"mining": 45
+	},
+	"#forge:ores/emerald":
+	{
+		"mining": 50
+	},
+	"#forge:ores/netherite_scrap":
+	{
+		"mining": 60
+	},
+	"#forge:ores/gold":
+	{
+		"mining": 32
+	},
+	"#forge:ores/iron":
+	{
+		"mining": 15
+	},
+	"#forge:ores/lapis":
+	{
+		"mining": 28
+	},
+	"#forge:ores/nickel":
+	{
+		"mining": 17
+	},
+	"#forge:ores/quartz":
+	{
+		"mining": 20
+	},
+	"#forge:ores/redstone":
+	{
+		"mining": 30
+	},
+	"#forge:ores/silver":
+	{
+		"mining": 27
+	},
+	"#forge:ores/tin":
+	{
+		"mining": 8
+	},
+	"#forge:ores/zinc":
+	{
+		"mining": 34
+	},
+	"minecraft:spawner":
+	{
+		"combat": 5
+	},
+	"oresandmetals:adamantite_ore":
+	{
+		"mining": 35
+	},
+	"oresandmetals:banite_ore":
+	{
+		"mining": 80
+	},
+	"oresandmetals:dark_animica_ore":
+	{
+		"mining": 90
+	},
+	"oresandmetals:drakolith_ore":
+	{
+		"mining": 60
+	},
+	"oresandmetals:light_animica_ore":
+	{
+		"mining": 90
+	},
+	"oresandmetals:mithril_ore":
+	{
+		"mining": 25
+	},
+	"oresandmetals:necrite_ore":
+	{
+		"mining": 70
+	},
+	"oresandmetals:orichalcite_ore":
+	{
+		"mining": 60
+	},
+	"oresandmetals:phasmatite_ore":
+	{
+		"mining": 70
+	},
+	"oresandmetals:runite_ore":
+	{
+		"mining": 50
+	}
+}

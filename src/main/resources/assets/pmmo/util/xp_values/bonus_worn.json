@@ -1,0 +1,902 @@
+{
+	"ars_nouveau:novice_boots":
+	{
+		"magic": 2
+	},
+	"ars_nouveau:novice_leggings":
+	{
+		"magic": 2.5
+	},
+	"ars_nouveau:novice_robes":
+	{
+		"magic": 3
+	},
+	"ars_nouveau:novice_hood":
+	{
+		"magic": 2.5
+	},
+	"ars_nouveau:apprentice_boots":
+	{
+		"magic": 3
+	},
+	"ars_nouveau:apprentice_leggings":
+	{
+		"magic": 3.5
+	},
+	"ars_nouveau:apprentice_robes":
+	{
+		"magic": 4
+	},
+	"ars_nouveau:apprentice_hood":
+	{
+		"magic": 3.5
+	},
+	"ars_nouveau:archmage_boots":
+	{
+		"magic": 4.5
+	},
+	"ars_nouveau:archmage_leggings":
+	{
+		"magic": 5.5
+	},
+	"ars_nouveau:archmage_robes":
+	{
+		"magic": 6.5
+	},
+	"ars_nouveau:archmage_hood":
+	{
+		"magic": 5.5
+	},
+	"create:extendo_grip":
+	{
+		"building": 10,
+		"combat": 10,
+		"mining": 10
+	},
+	"createplus:goggle_chainmail_helmet":
+	{
+		"combat": 5
+	},
+	"createplus:goggle_diamond_helmet":
+	{
+		"magic": 2.5
+	},
+	"createplus:goggle_golden_helmet":
+	{
+		"mining": 5,
+		"endurance": 5
+	},
+	"createplus:goggle_iron_helmet":
+	{
+		"smithing": 5
+	},
+	"createplus:goggle_leather_helmet":
+	{
+		"woodcutting": 2.5,
+		"agility": 2.5,
+		"farming": 2.5,
+		"fishing": 2.5
+	},
+	"createplus:goggle_turtle_helmet":
+	{
+		"swimming": 15,
+		"fishing": 7.5
+	},
+	"dungeons_gear:cave_crawler_chestplate":
+	{
+		"slayer": 5
+	},
+	"dungeons_gear:cave_crawler_helmet":
+	{
+		"slayer": 5
+	},
+	"dungeons_gear:dark_chestplate":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:dark_helmet":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:frost_bite_chestplate":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:frost_bite_helmet":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:grim_chestplate":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:grim_helmet":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:phantom_chestplate":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:phantom_helmet":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:royal_guard_chestplate":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:royal_guard_helmet":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:soul_hood":
+	{
+		"endurance": 5,
+		"slayer": 10,
+		"magic": 5
+	},
+	"dungeons_gear:soul_robe":
+	{
+		"endurance": 5,
+		"slayer": 10,
+		"magic": 5
+	},
+	"dungeons_gear:souldancer_hood":
+	{
+		"endurance": 10,
+		"slayer": 10,
+		"magic": 5
+	},
+	"dungeons_gear:souldancer_robe":
+	{
+		"endurance": 10,
+		"slayer": 10,
+		"magic": 5
+	},
+	"dungeons_gear:spelunker_chestplate":
+	{
+		"slayer": 5,
+		"mining": 5
+	},
+	"dungeons_gear:spelunker_helmet":
+	{
+		"slayer": 5,
+		"mining": 5
+	},
+	"dungeons_gear:titans_shroud_chestplate":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:titans_shroud_helmet":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:wither_chestplate":
+	{
+		"slayer": 10
+	},
+	"dungeons_gear:wither_helmet":
+	{
+		"slayer": 10
+	},
+	"iceandfire:armor_copper_metal_boots":
+	{
+		"combat": 5
+	},
+	"iceandfire:armor_copper_metal_chestplate":
+	{
+		"combat": 5
+	},
+	"iceandfire:armor_copper_metal_helmet":
+	{
+		"combat": 5
+	},
+	"iceandfire:armor_copper_metal_leggings":
+	{
+		"combat": 5
+	},
+	"iceandfire:armor_silver_metal_boots":
+	{
+		"endurance": 2.5,
+		"combat": 5,
+		"magic": 2.5
+	},
+	"iceandfire:armor_silver_metal_chestplate":
+	{
+		"endurance": 2.5,
+		"combat": 5,
+		"magic": 2.5
+	},
+	"iceandfire:armor_silver_metal_helmet":
+	{
+		"endurance": 2.5,
+		"combat": 5,
+		"magic": 2.5
+	},
+	"iceandfire:armor_silver_metal_leggings":
+	{
+		"endurance": 2.5,
+		"combat": 5,
+		"magic": 2.5
+	},
+	"iceandfire:blindfold":
+	{
+		"endurance": 5
+	},
+	"iceandfire:deathworm_red_boots":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_red_chestplate":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_red_helmet":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_red_leggings":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_white_boots":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_white_chestplate":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_white_helmet":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_white_leggings":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_yellow_boots":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_yellow_chestplate":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_yellow_helmet":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:deathworm_yellow_leggings":
+	{
+		"agility": 5,
+		"excavation": 5,
+		"combat": 2.5
+	},
+	"iceandfire:earplugs":
+	{
+		"endurance": 5,
+		"farming": 2.5,
+		"woodcutting": 2.5
+	},
+	"iceandfire:myrmex_desert_boots":
+	{
+		"agility": 5,
+		"farming": 5,
+		"combat": 2.5
+	},
+	"iceandfire:myrmex_desert_chestplate":
+	{
+		"agility": 5,
+		"farming": 5,
+		"combat": 2.5
+	},
+	"iceandfire:myrmex_desert_helmet":
+	{
+		"agility": 5,
+		"farming": 5,
+		"combat": 5
+	},
+	"iceandfire:myrmex_desert_leggings":
+	{
+		"agility": 5,
+		"farming": 5,
+		"combat": 2.5
+	},
+	"iceandfire:myrmex_jungle_boots":
+	{
+		"agility": 5,
+		"farming": 5,
+		"combat": 2.5
+	},
+	"iceandfire:myrmex_jungle_chestplate":
+	{
+		"agility": 5,
+		"farming": 5,
+		"combat": 2.5
+	},
+	"iceandfire:myrmex_jungle_helmet":
+	{
+		"agility": 5,
+		"farming": 5,
+		"combat": 5
+	},
+	"iceandfire:myrmex_jungle_leggings":
+	{
+		"agility": 5,
+		"farming": 5,
+		"combat": 2.5
+	},
+	"iceandfire:sheep_boots":
+	{
+		"endurance": 2.5,
+		"farming": 5,
+		"woodcutting": 2.5
+	},
+	"iceandfire:sheep_chestplate":
+	{
+		"endurance": 2.5,
+		"farming": 5,
+		"woodcutting": 2.5
+	},
+	"iceandfire:sheep_helmet":
+	{
+		"endurance": 2.5,
+		"farming": 5,
+		"woodcutting": 2.5
+	},
+	"iceandfire:sheep_leggings":
+	{
+		"endurance": 2.5,
+		"farming": 5,
+		"woodcutting": 2.5
+	},
+	"iceandfire:tide_blue_boots":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_blue_chestplate":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_blue_helmet":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_blue_leggings":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_bronze_boots":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_bronze_chestplate":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_bronze_helmet":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_bronze_leggings":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_deepblue_boots":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_deepblue_chestplate":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_deepblue_helmet":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_deepblue_leggings":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_green_boots":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_green_chestplate":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_green_helmet":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_green_leggings":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_purple_boots":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_purple_chestplate":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_purple_helmet":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_purple_leggings":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_red_boots":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_red_chestplate":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_red_helmet":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_red_leggings":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_teal_boots":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_teal_chestplate":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_teal_helmet":
+	{
+		"swimming": 5
+	},
+	"iceandfire:tide_teal_leggings":
+	{
+		"swimming": 5
+	},
+	"minecraft:carved_pumpkin":
+	{
+		"combat": 5
+	},
+	"minecraft:chainmail_boots":
+	{
+		"combat": 5
+	},
+	"minecraft:chainmail_chestplate":
+	{
+		"combat": 5
+	},
+	"minecraft:chainmail_helmet":
+	{
+		"combat": 5
+	},
+	"minecraft:chainmail_leggings":
+	{
+		"combat": 5
+	},
+	"minecraft:diamond_boots":
+	{
+		"magic": 2.5
+	},
+	"minecraft:diamond_chestplate":
+	{
+		"magic": 2.5
+	},
+	"minecraft:diamond_helmet":
+	{
+		"magic": 2.5
+	},
+	"minecraft:diamond_leggings":
+	{
+		"magic": 2.5
+	},
+	"minecraft:dragon_head":
+	{
+		"flying": 50,
+		"combat": 25
+	},
+	"minecraft:enchanting_table":
+	{
+		"magic": 10,
+		"alchemy": 10
+	},
+	"minecraft:golden_boots":
+	{
+		"mining": 5,
+		"endurance": 5
+	},
+	"minecraft:golden_chestplate":
+	{
+		"mining": 5,
+		"endurance": 5
+	},
+	"minecraft:golden_helmet":
+	{
+		"mining": 5,
+		"endurance": 5
+	},
+	"minecraft:golden_leggings":
+	{
+		"mining": 5,
+		"endurance": 5
+	},
+	"minecraft:heart_of_the_sea":
+	{
+		"swimming": 25,
+		"fishing": 10
+	},
+	"minecraft:iron_boots":
+	{
+		"smithing": 2.5
+	},
+	"minecraft:iron_chestplate":
+	{
+		"smithing": 2.5
+	},
+	"minecraft:iron_helmet":
+	{
+		"smithing": 2.5
+	},
+	"minecraft:iron_leggings":
+	{
+		"smithing": 2.5
+	},
+	"minecraft:leather_boots":
+	{
+		"agility": 2.5,
+		"farming": 2.5,
+		"woodcutting": 2.5,
+		"fishing": 2.5
+	},
+	"minecraft:leather_chestplate":
+	{
+		"agility": 2.5,
+		"farming": 2.5,
+		"woodcutting": 2.5,
+		"fishing": 2.5
+	},
+	"minecraft:leather_helmet":
+	{
+		"agility": 2.5,
+		"farming": 2.5,
+		"woodcutting": 2.5,
+		"fishing": 2.5
+	},
+	"minecraft:leather_leggings":
+	{
+		"agility": 2.5,
+		"farming": 2.5,
+		"woodcutting": 2.5,
+		"fishing": 2.5
+	},
+	"minecraft:nether_star":
+	{
+		"combat": 10,
+		"endurance": 10,
+		"archery": 10,
+		"magic": 10,
+		"flying": 20
+	},
+	"minecraft:shield":
+	{
+		"endurance": 12.5,
+		"combat": 5
+	},
+	"minecraft:turtle_helmet":
+	{
+		"swimming": 15,
+		"fishing": 7.5
+	},
+	"spartanshields:shield_basic_bronze":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_constantan":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_copper":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_diamond":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_electrum":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_gold":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_invar":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_iron":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_lead":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_netherite":
+	{
+		"endurance": 50,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_nickel":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_obsidian":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_platinum":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_silver":
+	{
+		"endurance": 15,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_steel":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_stone":
+	{
+		"endurance": 12,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_tin":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_basic_wood":
+	{
+		"endurance": 10,
+		"combat": 10
+	},
+	"spartanshields:shield_botania_elementium":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_botania_manasteel":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_botania_terrasteel":
+	{
+		"endurance": 50,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_lapis_lazuli":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_osmium":
+	{
+		"endurance": 15,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_powered_advanced":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_powered_basic":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_powered_elite":
+	{
+		"endurance": 35,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_powered_ultimate":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_refined_glowstone":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_mekanism_refined_obsidian":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_bronze":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_constantan":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_copper":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_diamond":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_electrum":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_gold":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_invar":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_iron":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_lead":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_netherite":
+	{
+		"endurance": 50,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_nickel":
+	{
+		"endurance": 20,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_obsidian":
+	{
+		"endurance": 40,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_platinum":
+	{
+		"endurance": 30,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_silver":
+	{
+		"endurance": 15,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_steel":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_stone":
+	{
+		"endurance": 12,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_tin":
+	{
+		"endurance": 12.5,
+		"combat": 10
+	},
+	"spartanshields:shield_tower_wood":
+	{
+		"endurance": 10,
+		"combat": 10
+	},
+	"upgradednetherite:ender_upgraded_netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"upgradednetherite:feather_upgraded_netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"upgradednetherite:fire_upgraded_netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"upgradednetherite:gold_upgraded_netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"upgradednetherite:netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"upgradednetherite:phantom_upgraded_netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"upgradednetherite:poison_upgraded_netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"upgradednetherite:water_upgraded_netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	},
+	"upgradednetherite:wither_upgraded_netherite_shield":
+	{
+		"endurance": 25,
+		"combat": 10
+	}
+}

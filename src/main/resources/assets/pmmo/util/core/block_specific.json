@@ -1,0 +1,34 @@
+{
+	"minecraft:bamboo":
+	{
+		"growsUpwards": 1
+	},
+	"minecraft:bamboo_sapling":
+	{
+		"growsUpwards": 1
+	},
+	"minecraft:cactus":
+	{
+		"growsUpwards": 1
+	},
+	"minecraft:smithing_table":
+	{
+		"salvageStation": 1
+	},
+	"minecraft:bedrock":
+	{
+		"salvageStation": 1
+	},
+	"minecraft:kelp":
+	{
+		"growsUpwards": 1
+	},
+	"minecraft:kelp_plant":
+	{
+		"growsUpwards": 1
+	},
+	"minecraft:sugar_cane":
+	{
+		"growsUpwards": 1
+	}
+}

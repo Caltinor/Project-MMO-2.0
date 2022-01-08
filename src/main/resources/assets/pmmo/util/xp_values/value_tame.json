@@ -1,0 +1,42 @@
+{
+	"iceandfire:fire_dragon":
+	{
+		"taming": 65
+	},
+	"iceandfire:hippocampus":
+	{
+		"taming": 30
+	},
+	"iceandfire:hippogryph":
+	{
+		"taming": 40
+	},
+	"iceandfire:ice_dragon":
+	{
+		"taming": 75
+	},
+	"iceandfire:lightning_dragon":
+	{
+		"taming": 100
+	},
+	"minecraft:exampleanimal":
+	{
+		"taming": 10
+	},
+	"minecraft:horse":
+	{
+		"taming": 30
+	},
+	"minecraft:ocelot":
+	{
+		"taming": 20
+	},
+	"minecraft:parrot":
+	{
+		"taming": 20
+	},
+	"minecraft:wolf":
+	{
+		"taming": 10
+	}
+}

@@ -1,0 +1,6 @@
+{
+	"minecraft:silverfish":
+	{
+		"combat": 10
+	}
+}

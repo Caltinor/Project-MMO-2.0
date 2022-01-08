@@ -1,0 +1,1936 @@
+{
+	"appliedenergistics2:certus_quartz_axe":
+	{
+		"woodcutting": 30
+	},
+	"appliedenergistics2:certus_quartz_hoe":
+	{
+		"farming": 30
+	},
+	"appliedenergistics2:certus_quartz_pickaxe":
+	{
+		"mining": 30
+	},
+	"appliedenergistics2:certus_quartz_shovel":
+	{
+		"excavation": 30
+	},
+	"appliedenergistics2:nether_quartz_axe":
+	{
+		"woodcutting": 17
+	},
+	"appliedenergistics2:nether_quartz_hoe":
+	{
+		"farming": 17
+	},
+	"appliedenergistics2:nether_quartz_pickaxe":
+	{
+		"mining": 17
+	},
+	"appliedenergistics2:nether_quartz_shovel":
+	{
+		"excavation": 17
+	},
+	"aquaculture:neptunium_axe":
+	{
+		"woodcutting": 30
+	},
+	"aquaculture:neptunium_hoe":
+	{
+		"farming": 40
+	},
+	"aquaculture:neptunium_pickaxe":
+	{
+		"mining": 30
+	},
+	"aquaculture:neptunium_shovel":
+	{
+		"excavation": 30
+	},
+	"create:deforester":
+	{
+		"woodcutting": 92
+	},
+	"doomweapon:argent_axe":
+	{
+		"woodcutting": 80
+	},
+	"doomweapon:argent_hoe":
+	{
+		"farming": 80
+	},
+	"doomweapon:argent_paxel":
+	{
+		"woodcutting": 80,
+		"excavation": 80,
+		"mining": 80
+	},
+	"doomweapon:argent_pickaxe":
+	{
+		"mining": 80
+	},
+	"doomweapon:argent_shovel":
+	{
+		"excavation": 80
+	},
+	"endreborn:end_stone_axe":
+	{
+		"woodcutting": 20
+	},
+	"endreborn:end_stone_hoe":
+	{
+		"farming": 20
+	},
+	"endreborn:end_stone_pickaxe":
+	{
+		"mining": 20
+	},
+	"endreborn:end_stone_shovel":
+	{
+		"excavation": 20
+	},
+	"endreborn:endorium_axe":
+	{
+		"woodcutting": 60
+	},
+	"endreborn:endorium_hoe":
+	{
+		"farming": 60
+	},
+	"endreborn:endorium_pickaxe":
+	{
+		"mining": 60
+	},
+	"endreborn:endorium_shovel":
+	{
+		"excavation": 60
+	},
+	"endreborn:wolframium_axe":
+	{
+		"woodcutting": 35
+	},
+	"endreborn:wolframium_hoe":
+	{
+		"farming": 35
+	},
+	"endreborn:wolframium_pickaxe":
+	{
+		"mining": 35
+	},
+	"endreborn:wolframium_shovel":
+	{
+		"excavation": 35
+	},
+	"extendednether:netherite_axe":
+	{
+		"woodcutting": 60
+	},
+	"extendednether:netherite_hoe":
+	{
+		"farming": 40
+	},
+	"extendednether:netherite_pickaxe":
+	{
+		"mining": 60
+	},
+	"extendednether:netherite_shovel":
+	{
+		"excavation": 60
+	},
+	"iceandfire:copper_axe":
+	{
+		"woodcutting": 10
+	},
+	"iceandfire:copper_hoe":
+	{
+		"farming": 10
+	},
+	"iceandfire:copper_pickaxe":
+	{
+		"mining": 10
+	},
+	"iceandfire:copper_shovel":
+	{
+		"excavation": 10
+	},
+	"iceandfire:dragonbone_axe":
+	{
+		"woodcutting": 35
+	},
+	"iceandfire:dragonbone_hoe":
+	{
+		"farming": 35
+	},
+	"iceandfire:dragonbone_pickaxe":
+	{
+		"mining": 35
+	},
+	"iceandfire:dragonbone_shovel":
+	{
+		"excavation": 35
+	},
+	"iceandfire:dragonsteel_fire_axe":
+	{
+		"woodcutting": 35
+	},
+	"iceandfire:dragonsteel_fire_hoe":
+	{
+		"farming": 35
+	},
+	"iceandfire:dragonsteel_fire_pickaxe":
+	{
+		"mining": 35
+	},
+	"iceandfire:dragonsteel_fire_shovel":
+	{
+		"excavation": 35
+	},
+	"iceandfire:dragonsteel_ice_axe":
+	{
+		"woodcutting": 35
+	},
+	"iceandfire:dragonsteel_ice_hoe":
+	{
+		"farming": 35
+	},
+	"iceandfire:dragonsteel_ice_pickaxe":
+	{
+		"mining": 35
+	},
+	"iceandfire:dragonsteel_ice_shovel":
+	{
+		"excavation": 35
+	},
+	"iceandfire:dragonsteel_lightning_axe":
+	{
+		"woodcutting": 35
+	},
+	"iceandfire:dragonsteel_lightning_hoe":
+	{
+		"farming": 35
+	},
+	"iceandfire:dragonsteel_lightning_pickaxe":
+	{
+		"mining": 35
+	},
+	"iceandfire:dragonsteel_lightning_shovel":
+	{
+		"excavation": 35
+	},
+	"iceandfire:mymrex_jungle_axe":
+	{
+		"woodcutting": 15
+	},
+	"iceandfire:mymrex_jungle_hoe":
+	{
+		"farming": 15
+	},
+	"iceandfire:myrmex_desert_axe":
+	{
+		"woodcutting": 15
+	},
+	"iceandfire:myrmex_desert_hoe":
+	{
+		"farming": 15
+	},
+	"iceandfire:myrmex_desert_pickaxe":
+	{
+		"mining": 15
+	},
+	"iceandfire:myrmex_desert_shovel":
+	{
+		"excavation": 15
+	},
+	"iceandfire:myrmex_jungle_pickaxe":
+	{
+		"mining": 15
+	},
+	"iceandfire:myrmex_jungle_shovel":
+	{
+		"excavation": 15
+	},
+	"iceandfire:silver_axe":
+	{
+		"woodcutting": 15
+	},
+	"iceandfire:silver_hoe":
+	{
+		"farming": 15
+	},
+	"iceandfire:silver_pickaxe":
+	{
+		"mining": 15
+	},
+	"iceandfire:silver_shovel":
+	{
+		"excavation": 15
+	},
+	"ilikewood:acacia_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:acacia_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:acacia_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:birch_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:birch_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:birch_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:cherry_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:cherry_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:cherry_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:crimson_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:crimson_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:crimson_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:dark_oak_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:dark_oak_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:dark_oak_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:dead_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:dead_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:dead_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:diamond_acacia_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_acacia_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_acacia_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_birch_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_birch_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_birch_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_cherry_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_cherry_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_cherry_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_crimson_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_crimson_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_crimson_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_dark_oak_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_dark_oak_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_dark_oak_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_dead_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_dead_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_dead_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_fir_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_fir_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_fir_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_hellbark_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_hellbark_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_hellbark_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_jacaranda_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_jacaranda_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_jacaranda_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_jungle_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_jungle_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_jungle_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_magic_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_magic_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_magic_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_mahogany_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_mahogany_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_mahogany_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_oak_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_oak_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_oak_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_palm_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_palm_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_palm_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_redwood_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_redwood_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_redwood_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_spruce_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_spruce_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_spruce_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_umbran_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_umbran_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_umbran_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_warped_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_warped_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_warped_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:diamond_willow_axe":
+	{
+		"woodcutting": 40
+	},
+	"ilikewood:diamond_willow_pickaxe":
+	{
+		"mining": 40
+	},
+	"ilikewood:diamond_willow_shovel":
+	{
+		"excavation": 40
+	},
+	"ilikewood:fir_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:fir_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:fir_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:golden_acacia_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_acacia_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_acacia_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_birch_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_birch_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_birch_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_cherry_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_cherry_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_cherry_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_crimson_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_crimson_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_crimson_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_dark_oak_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_dark_oak_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_dark_oak_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_dead_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_dead_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_dead_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_fir_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_fir_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_fir_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_hellbark_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_hellbark_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_hellbark_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_jacaranda_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_jacaranda_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_jacaranda_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_jungle_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_jungle_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_jungle_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_magic_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_magic_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_magic_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_mahogany_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_mahogany_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_mahogany_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_oak_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_oak_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_oak_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_palm_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_palm_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_palm_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_redwood_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_redwood_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_redwood_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_spruce_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_spruce_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_spruce_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_umbran_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_umbran_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_umbran_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_warped_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_warped_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_warped_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:golden_willow_axe":
+	{
+		"woodcutting": 30
+	},
+	"ilikewood:golden_willow_pickaxe":
+	{
+		"mining": 30
+	},
+	"ilikewood:golden_willow_shovel":
+	{
+		"excavation": 30
+	},
+	"ilikewood:hellbark_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:hellbark_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:hellbark_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:iron_acacia_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_acacia_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_acacia_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_birch_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_birch_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_birch_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_cherry_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_cherry_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_cherry_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_crimson_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_crimson_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_crimson_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_dark_oak_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_dark_oak_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_dark_oak_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_dead_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_dead_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_dead_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_fir_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_fir_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_fir_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_hellbark_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_hellbark_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_hellbark_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_jacaranda_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_jacaranda_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_jacaranda_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_jungle_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_jungle_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_jungle_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_magic_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_magic_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_magic_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_mahogany_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_mahogany_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_mahogany_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_oak_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_oak_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_oak_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_palm_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_palm_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_palm_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_redwood_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_redwood_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_redwood_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_spruce_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_spruce_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_spruce_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_umbran_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_umbran_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_umbran_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_warped_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_warped_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_warped_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:iron_willow_axe":
+	{
+		"woodcutting": 20
+	},
+	"ilikewood:iron_willow_pickaxe":
+	{
+		"mining": 20
+	},
+	"ilikewood:iron_willow_shovel":
+	{
+		"excavation": 20
+	},
+	"ilikewood:jacaranda_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:jacaranda_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:jacaranda_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:jungle_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:jungle_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:jungle_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:magic_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:magic_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:magic_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:mahogany_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:mahogany_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:mahogany_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:netherite_acacia_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_acacia_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_acacia_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_birch_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_birch_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_birch_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_cherry_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_cherry_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_cherry_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_crimson_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_crimson_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_crimson_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_dark_oak_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_dark_oak_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_dark_oak_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_dead_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_dead_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_dead_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_fir_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_fir_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_fir_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_hellbark_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_hellbark_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_hellbark_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_jacaranda_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_jacaranda_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_jacaranda_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_jungle_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_jungle_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_jungle_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_magic_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_magic_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_magic_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_mahogany_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_mahogany_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_mahogany_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_oak_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_oak_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_oak_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_palm_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_palm_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_palm_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_redwood_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_redwood_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_redwood_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_spruce_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_spruce_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_spruce_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_umbran_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_umbran_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_umbran_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_warped_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_warped_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_warped_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:netherite_willow_axe":
+	{
+		"woodcutting": 60
+	},
+	"ilikewood:netherite_willow_pickaxe":
+	{
+		"mining": 60
+	},
+	"ilikewood:netherite_willow_shovel":
+	{
+		"excavation": 60
+	},
+	"ilikewood:oak_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:oak_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:oak_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:palm_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:palm_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:palm_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:redwood_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:redwood_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:redwood_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:spruce_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:spruce_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:spruce_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:stone_acacia_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_acacia_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_acacia_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_birch_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_birch_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_birch_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_cherry_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_cherry_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_cherry_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_crimson_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_crimson_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_crimson_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_dark_oak_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_dark_oak_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_dark_oak_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_dead_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_dead_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_dead_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_fir_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_fir_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_fir_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_hellbark_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_hellbark_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_hellbark_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_jacaranda_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_jacaranda_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_jacaranda_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_jungle_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_jungle_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_jungle_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_magic_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_magic_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_magic_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_mahogany_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_mahogany_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_mahogany_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_oak_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_oak_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_oak_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_palm_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_palm_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_palm_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_redwood_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_redwood_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_redwood_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_spruce_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_spruce_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_spruce_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_umbran_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_umbran_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_umbran_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_warped_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_warped_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_warped_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:stone_willow_axe":
+	{
+		"woodcutting": 10
+	},
+	"ilikewood:stone_willow_pickaxe":
+	{
+		"mining": 10
+	},
+	"ilikewood:stone_willow_shovel":
+	{
+		"excavation": 10
+	},
+	"ilikewood:umbran_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:umbran_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:umbran_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:warped_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:warped_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:warped_shovel":
+	{
+		"excavation": 1
+	},
+	"ilikewood:willow_axe":
+	{
+		"woodcutting": 1
+	},
+	"ilikewood:willow_pickaxe":
+	{
+		"mining": 1
+	},
+	"ilikewood:willow_shovel":
+	{
+		"excavation": 1
+	},
+	"minecraft:diamond_axe":
+	{
+		"woodcutting": 40
+	},
+	"minecraft:diamond_hoe":
+	{
+		"farming": 30
+	},
+	"minecraft:diamond_pickaxe":
+	{
+		"mining": 40
+	},
+	"minecraft:diamond_shovel":
+	{
+		"excavation": 40
+	},
+	"minecraft:golden_axe":
+	{
+		"woodcutting": 30
+	},
+	"minecraft:golden_hoe":
+	{
+		"farming": 50
+	},
+	"minecraft:golden_pickaxe":
+	{
+		"mining": 30
+	},
+	"minecraft:golden_shovel":
+	{
+		"excavation": 30
+	},
+	"minecraft:iron_axe":
+	{
+		"woodcutting": 20
+	},
+	"minecraft:iron_hoe":
+	{
+		"farming": 20
+	},
+	"minecraft:iron_pickaxe":
+	{
+		"mining": 20
+	},
+	"minecraft:iron_shovel":
+	{
+		"excavation": 20
+	},
+	"minecraft:netherite_axe":
+	{
+		"woodcutting": 60
+	},
+	"minecraft:netherite_hoe":
+	{
+		"farming": 40
+	},
+	"minecraft:netherite_pickaxe":
+	{
+		"mining": 60
+	},
+	"minecraft:netherite_shovel":
+	{
+		"excavation": 60
+	},
+	"minecraft:stone_axe":
+	{
+		"woodcutting": 10
+	},
+	"minecraft:stone_hoe":
+	{
+		"farming": 10
+	},
+	"minecraft:stone_pickaxe":
+	{
+		"mining": 10
+	},
+	"minecraft:stone_shovel":
+	{
+		"excavation": 10
+	},
+	"minecraft:wooden_axe":
+	{
+		"woodcutting": 1
+	},
+	"minecraft:wooden_hoe":
+	{
+		"farming": 1
+	},
+	"minecraft:wooden_pickaxe":
+	{
+		"mining": 1
+	},
+	"minecraft:wooden_shovel":
+	{
+		"excavation": 1
+	},
+	"oresandmetals:adamant_axe":
+	{
+		"woodcutting": 35
+	},
+	"oresandmetals:adamant_pickaxe":
+	{
+		"mining": 35
+	},
+	"oresandmetals:adamant_shovel":
+	{
+		"excavation": 35
+	},
+	"oresandmetals:banite_axe":
+	{
+		"woodcutting": 80
+	},
+	"oresandmetals:banite_pickaxe":
+	{
+		"mining": 80
+	},
+	"oresandmetals:banite_shovel":
+	{
+		"excavation": 80
+	},
+	"oresandmetals:bronze_axe":
+	{
+		"woodcutting": 5
+	},
+	"oresandmetals:bronze_pickaxe":
+	{
+		"mining": 5
+	},
+	"oresandmetals:bronze_shovel":
+	{
+		"excavation": 5
+	},
+	"oresandmetals:elder_rune_axe":
+	{
+		"woodcutting": 90
+	},
+	"oresandmetals:elder_rune_pickaxe":
+	{
+		"mining": 90
+	},
+	"oresandmetals:elder_rune_shovel":
+	{
+		"excavation": 90
+	},
+	"oresandmetals:mithril_axe":
+	{
+		"woodcutting": 25
+	},
+	"oresandmetals:mithril_pickaxe":
+	{
+		"mining": 25
+	},
+	"oresandmetals:mithril_shovel":
+	{
+		"excavation": 25
+	},
+	"oresandmetals:necronium_axe":
+	{
+		"woodcutting": 70
+	},
+	"oresandmetals:necronium_pickaxe":
+	{
+		"mining": 70
+	},
+	"oresandmetals:necronium_shovel":
+	{
+		"excavation": 70
+	},
+	"oresandmetals:orikalkum_axe":
+	{
+		"woodcutting": 60
+	},
+	"oresandmetals:orikalkum_pickaxe":
+	{
+		"mining": 60
+	},
+	"oresandmetals:orikalkum_shovel":
+	{
+		"excavation": 60
+	},
+	"oresandmetals:rune_axe":
+	{
+		"woodcutting": 50
+	},
+	"oresandmetals:rune_pickaxe":
+	{
+		"mining": 50
+	},
+	"oresandmetals:rune_shovel":
+	{
+		"excavation": 50
+	},
+	"oresandmetals:steel_axe":
+	{
+		"woodcutting": 15
+	},
+	"oresandmetals:steel_pickaxe":
+	{
+		"mining": 15
+	},
+	"oresandmetals:steel_shovel":
+	{
+		"excavation": 15
+	},
+	"treemendous:diamond_lumber_axe":
+	{
+		"woodcutting": 25
+	},
+	"treemendous:golden_lumber_axe":
+	{
+		"woodcutting": 25
+	},
+	"treemendous:iron_lumber_axe":
+	{
+		"woodcutting": 25
+	},
+	"treemendous:netherite_lumber_axe":
+	{
+		"woodcutting": 25
+	},
+	"upgradednetherite:ender_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:ender_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:ender_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:feather_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:feather_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:feather_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:fire_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:fire_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:fire_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:gold_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:gold_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:gold_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:phantom_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:phantom_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:phantom_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:poison_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:water_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	},
+	"upgradednetherite:water_upgraded_netherite_pickaxe":
+	{
+		"mining": 80
+	},
+	"upgradednetherite:water_upgraded_netherite_shovel":
+	{
+		"excavation": 80
+	},
+	"upgradednetherite:wither_upgraded_netherite_axe":
+	{
+		"woodcutting": 80
+	}
+}

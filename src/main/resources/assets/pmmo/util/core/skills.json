@@ -1,0 +1,22 @@
+{
+	"farming":
+	{
+		"noAfkPenalty": 1
+	},
+	"smithing":
+	{
+		"noAfkPenalty": 1
+	},
+	"cooking":
+	{
+		"noAfkPenalty": 1
+	},
+	"alchemy":
+	{
+		"noAfkPenalty": 1
+	},
+	"engineering":
+	{
+		"color": 16777215
+	}
+}

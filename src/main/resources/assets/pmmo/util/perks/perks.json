@@ -1,0 +1,65 @@
+{
+	"SKILL_UP": {
+		"combat": [
+			{"perk":"pmmo:damage"}
+		],
+		"endurance": [ 
+			{"perk":"pmmo:health"}
+		],
+		"building": [
+			{"perk":"pmmo:reach"}
+		],
+		"agility": [ 
+			{"perk":"pmmo:speed"}
+		]
+	},
+	"JUMPING": { 
+		"agility": [ 
+			{"perk":"pmmo:jump_boost",
+			 "per_level": 0.005
+			}
+		]
+	},
+	"SPRINT_JUMP": { 
+		"agility": [ 
+			{"perk":"pmmo:jump_boost",
+			 "per_level": 0.01
+			}
+		]
+	},
+	"CROUCH_JUMP": { 
+		"agility": [ 
+			{"perk":"pmmo:jump_boost",
+			 "per_level": 0.015
+			}
+		]
+	},
+	"SUBMERGED": { 
+		"swimming": [ 
+			{"perk":"pmmo:breath"},
+			{"perk":"pmmo:night_vision"}
+		]
+	},
+	"FALL_DAMAGE": { 
+		"agility": [ 
+			{"perk":"pmmo:fall_save",
+			 "per_level": 0.05
+			}
+		],
+		"endurance": [ 
+			{"perk":"pmmo:fall_save",
+			 "per_level": 0.25}
+		]
+	},
+	"DEAL_DAMAGE": { 
+		"archery": [
+			{"perk":"pmmo:damage_boost"}
+		],
+		"magic": [
+			{"perk":"pmmo:damage_boost"}
+		],
+		"gunslinging": [
+			{"perk":"pmmo:damage_boost"}
+		]
+	}
+}

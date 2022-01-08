@@ -1,0 +1,18 @@
+{
+	"minecraft:cactus":
+	{
+		"extraChance": 2
+	},
+	"minecraft:chorus_fruit":
+	{
+		"extraChance": 0.33
+	},
+	"minecraft:egg":
+	{
+		"extraChance": 1.5
+	},
+	"minecraft:sea_pickle":
+	{
+		"extraChance": 2
+	}
+}
