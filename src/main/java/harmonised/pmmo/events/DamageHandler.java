@@ -110,7 +110,7 @@ public class DamageHandler
 
                 damage -= endured;
 
-                enduranceXp = (damage * 5) + (endured * 7.5);
+                enduranceXp = Math.min(0, damage * 5) + (endured * 7.5);
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
                 if(isFallDamage)
                 {
