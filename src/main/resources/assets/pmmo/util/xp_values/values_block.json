@@ -1,0 +1,6 @@
+{
+	"minecraft:stone": {
+		"BLOCK_BREAK": { "mining": 1 },
+		"BLOCK_PLACE": { "building": 1}
+	}
+}

@@ -21,8 +21,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import harmonised.pmmo.ProjectMMO;
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.api.enums.XpType;
 import harmonised.pmmo.config.CoreType;
 import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.core.XpUtils;
@@ -43,8 +43,10 @@ public class CoreParser {
 	private static final Gson gson = new Gson();
 
 	public static final Type basicIntegerJsonType = new TypeToken<Map<String, Map<String, Integer>>>(){}.getType();
-	public static final Type basicLongJsonType = new TypeToken<Map<String, Map<String, Long>>>(){}.getType();
+	//public static final Type basicLongJsonType = new TypeToken<Map<String, Map<String, Long>>>(){}.getType();
 	public static final Type basicDoubleJsonType = new TypeToken<Map<String, Map<String, Double>>>(){}.getType();
+	
+	public static final Type valueJsonType = new TypeToken<Map<String, Map<String, Map<String, Long>>>>(){}.getType();
 	
 	public static void init() {
 		parseRequirements();
@@ -68,11 +70,11 @@ public class CoreParser {
             {
             		Map<String, Map<String, Integer>> rawMap = gson.fromJson(reader, basicIntegerJsonType);
             		for (Map.Entry<String, Map<String, Integer>> raw : rawMap.entrySet()) {
-            			List<String> tagResults = List.of(raw.getKey());
-            			if (tagResults.get(0).startsWith("#"))
-            				tagResults = getTagMembers(tagResults.get(0));
-            			for (String key : tagResults) {
-            				SkillGates.setObjectSkillMap(type, new ResourceLocation(key), raw.getValue());
+            			List<ResourceLocation> tagResults = new ArrayList<>();
+            			if (raw.getKey().startsWith("#"))
+            				tagResults = getTagMembers(raw.getKey());
+            			for (ResourceLocation key : tagResults) {
+            				SkillGates.setObjectSkillMap(type, key, raw.getValue());
             			}
             		}
             }
@@ -87,7 +89,7 @@ public class CoreParser {
 		DATA_PATH path = DATA_PATH.EXP;
 		String filename;
 		File dataFile;
-		for (XpType type : XpType.values()) {
+		for (XpValueDataType type : XpValueDataType.values()) {
 			filename = type.name().toLowerCase() + ".json";
 			dataFile = FMLPaths.CONFIGDIR.get().resolve(path.config_path + filename).toFile();
 			
@@ -98,38 +100,51 @@ public class CoreParser {
 	                Reader reader = new BufferedReader(new InputStreamReader(input)))
 	            {
 						//Distinguish between long and double type configs
-						boolean isDoubleType = false;
-						Map<String, Map<String, Long>> rawLongMap = new HashMap<>();
-						Map<String, Map<String, Double>> rawDoubleMap = new HashMap<>();
+						boolean isModifierType = false;
+						Map<String, Map<String, Map<String, Long>>> rawValueMap = new HashMap<>();
+						Map<String, Map<String, Double>> rawModifierMap = new HashMap<>();
 						//Check for modifier types and fill the appropriate raw map for later evaluation
-						for (XpType modType : XpType.getModifierTypes()) {
+						for (XpValueDataType modType : XpValueDataType.modifierTypes) {
 							if (modType.equals(type)) {
-								rawDoubleMap = gson.fromJson(reader, basicDoubleJsonType);
-								isDoubleType = true;
+								rawModifierMap = gson.fromJson(reader, basicDoubleJsonType);
+								isModifierType = true;
 								break;
 							}
 						}
-						if (!isDoubleType)
-							rawLongMap = new Gson().fromJson(reader, basicLongJsonType);
+						if (!isModifierType)
+							rawValueMap = new Gson().fromJson(reader, valueJsonType);
 						/* Evaluate configs based on their types
 						 * This works by only filling the maps of the appropriate type.
 						 * The loop for the incorrect type will be empty and simply bypassed.
 						 */
-	            		for (Map.Entry<String, Map<String, Long>> raw : rawLongMap.entrySet()) {
-	            			List<String> tagResults = List.of(raw.getKey());
-	            			if (tagResults.get(0).startsWith("#"))
-	            				tagResults = getTagMembers(tagResults.get(0));
-	            			for (String key : tagResults) {
-	            				XpUtils.setObjectXpGainMap(type, new ResourceLocation(key), raw.getValue());
+	            		for (Map.Entry<String, Map<String, Map<String, Long>>> raw : rawValueMap.entrySet()) {	            			
+	            			List<ResourceLocation> tagResults = new ArrayList<>();
+	            			if (raw.getKey().startsWith("#"))
+	            				tagResults = getTagMembers(raw.getKey());
+	            			for (ResourceLocation key : tagResults) {
+	            				//Validate the event type entries and skip out 
+	            				for (Map.Entry<String, Map<String, Long>> subset : raw.getValue().entrySet()) {
+	            					//validate the event type key from the json
+	            					EventType validEventKey = null;
+	            					for (EventType eType : EventType.values()) {
+	            						if (subset.getKey().toUpperCase().equals(eType.name().toUpperCase())) {
+	            							validEventKey = eType;
+	            							break;
+	            						}
+	            					}
+	            					if (validEventKey == null) continue;
+	            					//enter the resulting data into the 
+	            					XpUtils.setObjectXpGainMap(validEventKey, key, subset.getValue());
+	            				}     				
 	            			}
 	            		}
-	            		
-	            		for (Map.Entry<String, Map<String, Double>> raw : rawDoubleMap.entrySet()) {
-	            			List<String> tagResults = List.of(raw.getKey());
-	            			if (tagResults.get(0).startsWith("#"))
-	            				tagResults = getTagMembers(tagResults.get(0));
-	            			for (String key : tagResults) {
-	            				XpUtils.setObjectXpModifierMap(type, new ResourceLocation(key), raw.getValue());
+
+	            		for (Map.Entry<String, Map<String, Double>> raw : rawModifierMap.entrySet()) {
+	            			List<ResourceLocation> tagResults = new ArrayList<>();
+	            			if (raw.getKey().startsWith("#"))
+	            				tagResults = getTagMembers(raw.getKey());
+	            			for (ResourceLocation key : tagResults) {
+	            				XpUtils.setObjectXpModifierMap(type, key, raw.getValue());
 	            			}
 	            		}
 	            }
@@ -153,15 +168,15 @@ public class CoreParser {
 		}
 	}
 	
-	public static List<String> getTagMembers(String tag)
+	public static List<ResourceLocation> getTagMembers(String tag)
 	{
-		List<String> results = new ArrayList<>();
+		List<ResourceLocation> results = new ArrayList<>();
 
 		for(Map.Entry<ResourceLocation, Tag<Item>> namedTag : ItemTags.getAllTags().getAllTags().entrySet()) {
 			if(namedTag.getKey().toString().startsWith(tag)) {
 				for(Item element : namedTag.getValue().getValues())	{
 					try	{
-						results.add(element.getRegistryName().toString());
+						results.add(element.getRegistryName());
 					} catch(Exception e){ /* Failed, don't care */ };
 				}
 			}
@@ -171,7 +186,7 @@ public class CoreParser {
 			if(namedTag.getKey().toString().equals(tag)) {
 				for(Block element : namedTag.getValue().getValues()) {
 					try	{
-						results.add(element.getRegistryName().toString());
+						results.add(element.getRegistryName());
 					} catch(Exception e){ /* Failed, don't care */ };
 				}
 			}
@@ -181,7 +196,7 @@ public class CoreParser {
 			if(namedTag.getKey().toString().equals(tag)) {
 				for(Fluid element : namedTag.getValue().getValues()) {
 					try	{
-						results.add(element.getRegistryName().toString());
+						results.add(element.getRegistryName());
 					} catch(Exception e){ /* Failed, don't care */ };
 				}
 			}
@@ -191,7 +206,7 @@ public class CoreParser {
 			if(namedTag.getKey().toString().equals(tag)) {
 				for(EntityType<?> element : namedTag.getValue().getValues()) {
 					try	{
-						results.add(element.getRegistryName().toString());
+						results.add(element.getRegistryName());
 					} catch(Exception e){ /* Failed, don't care */ };
 				}
 			}

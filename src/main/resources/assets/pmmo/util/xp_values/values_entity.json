@@ -1,0 +1,6 @@
+{
+	"minecraft:zombie": {
+		"RECEIVE_DAMAGE": { "combat": 10, "endurance": 5},
+		"DEAL_DAMAGE": { "combat": 15}
+	}
+}

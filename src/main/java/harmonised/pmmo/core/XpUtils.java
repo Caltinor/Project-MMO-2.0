@@ -8,15 +8,16 @@ import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 
-import harmonised.pmmo.api.enums.XpType;
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.readers.XpValueDataType;
 import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.resources.ResourceLocation;
 
 public class XpUtils {
 	
-	private static Map<XpType, Map<ResourceLocation, Map<String, Long>>> xpGainData = new HashMap<>();
-	private static Map<XpType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
+	private static Map<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainData = new HashMap<>();
+	private static Map<XpValueDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
 	
 	//===================XP INTERACTION METHODS=======================================
 	public static void setXpDiff(UUID playerID, String skillName, long change) {
@@ -28,22 +29,22 @@ public class XpUtils {
 		return PmmoSavedData.get().getXpRaw(playerID, skill);
 	}
 	
-	public static Map<String, Long> getObjectExperienceMap(XpType xpType, ResourceLocation objectID) {
-		return xpGainData.computeIfAbsent(xpType, s -> new HashMap<>()).getOrDefault(objectID, new HashMap<>());
+	public static Map<String, Long> getObjectExperienceMap(EventType EventType, ResourceLocation objectID) {
+		return xpGainData.computeIfAbsent(EventType, s -> new HashMap<>()).getOrDefault(objectID, new HashMap<>());
 	}
 	
-	public static void setObjectXpGainMap(XpType xpType, ResourceLocation objectID, Map<String, Long> xpMap) {
-		Preconditions.checkNotNull(xpType);
+	public static void setObjectXpGainMap(EventType eventType, ResourceLocation objectID, Map<String, Long> xpMap) {
+		Preconditions.checkNotNull(eventType);
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(xpMap);
-		xpGainData.computeIfAbsent(xpType, s -> new HashMap<>()).put(objectID, xpMap);
+		xpGainData.computeIfAbsent(eventType, s -> new HashMap<>()).put(objectID, xpMap);
 	}
 	
-	public static void setObjectXpModifierMap(XpType xpType, ResourceLocation objectID, Map<String, Double> xpMap) {
-		Preconditions.checkNotNull(xpType);
+	public static void setObjectXpModifierMap(XpValueDataType XpValueDataType, ResourceLocation objectID, Map<String, Double> xpMap) {
+		Preconditions.checkNotNull(XpValueDataType);
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(xpMap);
-		xpModifierData.computeIfAbsent(xpType, s -> new HashMap<>()).put(objectID, xpMap);
+		xpModifierData.computeIfAbsent(XpValueDataType, s -> new HashMap<>()).put(objectID, xpMap);
 	}
 	
 	//====================UTILITY METHODS==============================================
