@@ -18,5 +18,6 @@ public class ProjectMMO {
     	
     	MinecraftForge.EVENT_BUS.addListener(CommonSetup::onServerStartup);
     	MinecraftForge.EVENT_BUS.addListener(CommonSetup::onConfigReload);
+    	MinecraftForge.EVENT_BUS.addListener(CommonSetup::onCommandRegister);
     }
 }
