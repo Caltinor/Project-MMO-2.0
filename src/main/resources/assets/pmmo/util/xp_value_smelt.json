@@ -11,6 +11,14 @@
 	{
 		"smithing": 7.5
 	},
+	"minecraft:raw_copper":
+	{
+		"smithing": 7.5
+	},
+	"minecraft:raw_copper_block":
+	{
+		"smithing": 67.5
+	},
 	"#forge:ores/diamond":
 	{
 		"smithing": 35
@@ -27,9 +35,25 @@
 	{
 		"smithing": 18
 	},
+	"minecraft:raw_gold":
+	{
+		"smithing": 18
+	},
+	"minecraft:raw_gold_block":
+	{
+		"smithing": 162
+	},
 	"#forge:ores/iron":
 	{
 		"smithing": 12
+	},
+	"minecraft:raw_iron":
+	{
+		"smithing": 12
+	},
+	"minecraft:raw_iron_block":
+	{
+		"smithing": 108
 	},
 	"#forge:ores/lapis":
 	{
