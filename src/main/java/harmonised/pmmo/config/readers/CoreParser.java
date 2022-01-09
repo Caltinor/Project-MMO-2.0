@@ -14,9 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -26,6 +23,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.CoreType;
 import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.core.XpUtils;
+import harmonised.pmmo.setup.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
@@ -39,7 +37,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class CoreParser {
-	public static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson gson = new Gson();
 
 	public static final Type basicIntegerJsonType = new TypeToken<Map<String, Map<String, Integer>>>(){}.getType();
@@ -80,7 +77,7 @@ public class CoreParser {
             }
             catch(Exception e)
             {
-                LOGGER.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
+                MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
             }
         }
 	}
@@ -150,7 +147,7 @@ public class CoreParser {
 	            }
 	            catch(Exception e)
 	            {
-	                LOGGER.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
+	                MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
 	            }
 		}
 	}
@@ -241,19 +238,19 @@ public class CoreParser {
         }
         catch(IOException e)
         {
-            LOGGER.error("Could not create template json config!", dataFile.getPath(), e);
+            MsLoggy.error("Could not create template json config!", dataFile.getPath(), e);
             return;
         }
 
         try(InputStream inputStream = ProjectMMO.class.getResourceAsStream(path.src_path + fileName);
              FileOutputStream outputStream = new FileOutputStream(dataFile);)
         {
-            LOGGER.debug("Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath());
+            MsLoggy.debug("Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath());
             IOUtils.copy(inputStream, outputStream);
         }
         catch(IOException e)
         {
-            LOGGER.error("Error copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath(), e);
+            MsLoggy.error("Error copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath(), e);
         }
     }
 }
