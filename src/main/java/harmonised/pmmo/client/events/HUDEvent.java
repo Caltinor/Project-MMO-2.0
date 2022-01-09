@@ -1,6 +1,6 @@
 package harmonised.pmmo.client.events;
 
-import harmonised.pmmo.setup.Reference;
+import harmonised.pmmo.util.Reference;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

@@ -29,6 +29,12 @@ public class XpUtils {
 		return PmmoSavedData.get().getXpRaw(playerID, skill);
 	}
 	
+	public static boolean hasXpGainObjectEntry(EventType eventType, ResourceLocation objectID) {
+		if (!xpGainData.containsKey(eventType))
+			return false;
+		return xpGainData.get(eventType).containsKey(objectID);
+	}
+	
 	public static Map<String, Long> getObjectExperienceMap(EventType EventType, ResourceLocation objectID) {
 		return xpGainData.computeIfAbsent(EventType, s -> new HashMap<>()).getOrDefault(objectID, new HashMap<>());
 	}
@@ -54,6 +60,11 @@ public class XpUtils {
 				return i;
 		}
 		return Config.MAX_LEVEL.get();
+	}
+	
+	public static long getXpGainFromMap(Map<String, Long> sourceMap, UUID playerID) {
+		//TODO generate
+		return 0l;
 	}
 	//====================LOGICAL METHODS==============================================
 	

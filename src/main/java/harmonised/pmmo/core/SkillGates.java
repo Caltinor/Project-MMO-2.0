@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 import com.ibm.icu.text.Collator;
 
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.resources.ResourceLocation;
 
 public class SkillGates {
@@ -43,5 +45,24 @@ public class SkillGates {
 		}
 		out.sort(Collator.getInstance());
 		return out;
+	}
+	//====================REQDATA UTILITY METHODS======================================
+	public static boolean doesObjectReqExist(ReqType reqType, ResourceLocation objectID) {
+		return reqData.containsKey(reqType) ? reqData.get(reqType).containsKey(objectID) : false;
+	}
+	
+	public static boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
+		Map<String, Integer> requirements = getObjectSkillMap(reqType, objectID);
+		return doesPlayerMeetReq(reqType, objectID, playerID, requirements);	
+	}
+	
+	public static boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID, Map<String, Integer> requirements) {
+		boolean meetsReq = true;
+		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
+			int skillLevel = XpUtils.getLevelFromXP(PmmoSavedData.get().getXpRaw(playerID, req.getKey()));
+			if (req.getValue() > skillLevel)
+				return false;
+		}
+		return meetsReq;
 	}
 }

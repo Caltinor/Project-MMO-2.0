@@ -23,7 +23,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.CoreType;
 import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.core.XpUtils;
-import harmonised.pmmo.setup.MsLoggy;
+import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
@@ -40,7 +40,6 @@ public class CoreParser {
 	private static final Gson gson = new Gson();
 
 	public static final Type basicIntegerJsonType = new TypeToken<Map<String, Map<String, Integer>>>(){}.getType();
-	//public static final Type basicLongJsonType = new TypeToken<Map<String, Map<String, Long>>>(){}.getType();
 	public static final Type basicDoubleJsonType = new TypeToken<Map<String, Map<String, Double>>>(){}.getType();
 	
 	public static final Type valueJsonType = new TypeToken<Map<String, Map<String, Map<String, Long>>>>(){}.getType();

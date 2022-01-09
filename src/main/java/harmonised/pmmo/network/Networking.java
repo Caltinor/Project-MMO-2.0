@@ -1,6 +1,6 @@
 package harmonised.pmmo.network;
 
-import harmonised.pmmo.setup.Reference;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;

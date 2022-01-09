@@ -1,4 +1,4 @@
-package harmonised.pmmo.setup;
+package harmonised.pmmo.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +24,7 @@ public class MsLoggy {
 	}
 	
 	public static void error(String message, Object... obj) {
-		if (Config.ADV_LOGGING.get())
+		if (Config.ERROR_LOGGING.get())
 			LOGGER.error(message, obj);
 	}
 	

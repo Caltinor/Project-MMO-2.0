@@ -56,6 +56,7 @@ public class Config {
 	//====================SERVER SETTINGS===============================	
 	private static void setupServer(ForgeConfigSpec.Builder builder) {
 		buildLevels(builder);
+		buildAutoValue(builder);
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Integer> 	MAX_LEVEL;
@@ -93,5 +94,17 @@ public class Config {
 		builder.pop(); //COMPLETE EXPONENTIAL BLOCK
 		builder.pop(); //COMPLETE LEVELS BLOCK
 		
+	}
+	
+	public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_AUTO_VALUES;
+	
+	private static void buildAutoValue(ForgeConfigSpec.Builder builder) {
+		builder.comment("Auto Values estimate values based on item/block/entity properties", 
+						"and kick in when no other defined requirement or xp value is present").push("Auto Values");
+		
+		ENABLE_AUTO_VALUES = builder.comment("set this to false to disable the auto values system.")
+								.define("Auto Values Enabled", true);
+		
+		builder.pop();
 	}
 }

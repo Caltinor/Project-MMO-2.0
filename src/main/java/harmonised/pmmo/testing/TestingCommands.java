@@ -8,8 +8,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.core.XpUtils;
-import harmonised.pmmo.setup.Reference;
 import harmonised.pmmo.storage.PmmoSavedData;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;

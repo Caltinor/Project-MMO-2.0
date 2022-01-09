@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.setup.CommonSetup;
-import harmonised.pmmo.setup.Reference;
+import harmonised.pmmo.util.Reference;
 
 @Mod(Reference.MOD_ID)
 public class ProjectMMO {

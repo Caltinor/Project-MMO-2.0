@@ -2,7 +2,7 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.events.impl.BreakHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
-import harmonised.pmmo.setup.Reference;
+import harmonised.pmmo.util.Reference;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
