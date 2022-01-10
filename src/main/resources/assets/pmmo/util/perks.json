@@ -16,21 +16,21 @@
 	"JUMPING": { 
 		"agility": [ 
 			{"perk":"pmmo:jump_boost",
-			 "per_level": 0.005
+			 "per_level": 0.0005
 			}
 		]
 	},
 	"SPRINT_JUMP": { 
 		"agility": [ 
 			{"perk":"pmmo:jump_boost",
-			 "per_level": 0.01
+			 "per_level": 0.001
 			}
 		]
 	},
 	"CROUCH_JUMP": { 
 		"agility": [ 
 			{"perk":"pmmo:jump_boost",
-			 "per_level": 0.015
+			 "per_level": 0.0015
 			}
 		]
 	},
