@@ -1,10 +1,24 @@
 package harmonised.pmmo.ftb_quests;
 
 
+import dev.ftb.mods.ftblibrary.config.ConfigGroup;
+import dev.ftb.mods.ftblibrary.config.NameMap;
+import dev.ftb.mods.ftbquests.quest.Quest;
+import dev.ftb.mods.ftbquests.quest.TeamData;
+import dev.ftb.mods.ftbquests.quest.task.Task;
+import dev.ftb.mods.ftbquests.quest.task.TaskType;
+import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.XP;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class SkillTask //extends Task
+public class SkillTask extends Task
 {
-    /*public static TaskType SKILL = FTBQHandler.SKILL;
+    public static TaskType SKILL = FTBQHandler.SKILL;
     public String skill;
     public double requiredLevel;
 
@@ -22,7 +36,7 @@ public class SkillTask //extends Task
     }
 
     @Override
-    public void writeData(CompoundNBT nbt)
+    public void writeData(CompoundTag nbt)
     {
         super.writeData(nbt);
         nbt.putString("skill", skill);
@@ -30,7 +44,7 @@ public class SkillTask //extends Task
     }
 
     @Override
-    public void readData(CompoundNBT nbt)
+    public void readData(CompoundTag nbt)
     {
         super.readData(nbt);
         skill = nbt.getString("skill");
@@ -38,18 +52,18 @@ public class SkillTask //extends Task
     }
 
     @Override
-    public void writeNetData(PacketBuffer buffer)
+    public void writeNetData(FriendlyByteBuf buffer)
     {
         super.writeNetData(buffer);
-        buffer.writeString(skill, Short.MAX_VALUE);
+        buffer.writeUtf(skill, Short.MAX_VALUE);
         buffer.writeDouble(requiredLevel);
     }
 
     @Override
-    public void readNetData(PacketBuffer buffer)
+    public void readNetData(FriendlyByteBuf buffer)
     {
         super.readNetData(buffer);
-        skill = buffer.readString(Short.MAX_VALUE);
+        skill = buffer.readUtf(Short.MAX_VALUE);
         requiredLevel = buffer.readDouble();
     }
 
@@ -62,12 +76,13 @@ public class SkillTask //extends Task
         config.addDouble("requiredLevel", requiredLevel, input -> requiredLevel = input, requiredLevel, 1, XP.getMaxLevel());
     }
 
-    @Override
-    public IFormattableTextComponent getAltTitle()
-    {
-//        return I18n.format("ftbquests.task.ftbquests.skill") + ": " + TextFormatting.DARK_GREEN + skill;
-        return new TranslatableComponent(skill).setStyle(XP.textStyle.get("dark_green"));
-    }
+
+//    @Override
+//    public IFormattableTextComponent getAltTitle()
+//    {
+////        return I18n.format("ftbquests.task.ftbquests.skill") + ": " + TextFormatting.DARK_GREEN + skill;
+//        return new TranslatableComponent(skill).setStyle(XP.textStyle.get("dark_green"));
+//    }
 
     @Override
     public int autoSubmitOnPlayerTick()
@@ -76,7 +91,7 @@ public class SkillTask //extends Task
     }
 
     @Override
-    public void submitTask(TeamData teamData, ServerPlayerEntity player, ItemStack craftedItem)
+    public void submitTask(TeamData teamData, ServerPlayer player, ItemStack craftedItem)
     {
         if(teamData.isCompleted(this))
             return;
@@ -87,5 +102,5 @@ public class SkillTask //extends Task
     public long getMaxProgress()
     {
         return (long) requiredLevel;
-    }*/
+    }
 }

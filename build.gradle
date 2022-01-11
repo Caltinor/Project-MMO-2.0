@@ -25,7 +25,7 @@ mixin
 }
 apply plugin: 'maven-publish'
 
-version = '1.18.1-3.68.1'
+version = '1.18.1-3.69'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
@@ -129,16 +129,16 @@ dependencies
 
 //            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
 //            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
-//            compileOnly fg.deobf("curse.maven:ftb-quests:3385407")
-//            runtimeOnly fg.deobf("curse.maven:ftb-quests:3385407")
-//            compileOnly fg.deobf("curse.maven:ftb-gui-library:3373833")
-//            runtimeOnly fg.deobf("curse.maven:ftb-gui-library:3373833")
-//            compileOnly fg.deobf("curse.maven:item-filters:3376819")
-//            runtimeOnly fg.deobf("curse.maven:item-filters:3376819")
-//            compileOnly fg.deobf("curse.maven:ftb-teams-forge:3373835")
-//            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3373835")
-//            compileOnly fg.deobf("curse.maven:architectury-419699:3443080")
-//            runtimeOnly fg.deobf("curse.maven:architectury-419699:3443080")
+            compileOnly fg.deobf("curse.maven:ftb-quests-forge:3596442")
+            runtimeOnly fg.deobf("curse.maven:ftb-quests-forge:3596442")
+            compileOnly fg.deobf("curse.maven:ftb-library-forge:3598890")
+            runtimeOnly fg.deobf("curse.maven:ftb-library-forge:3598890")
+            compileOnly fg.deobf("curse.maven:item-filters-forge:3596362")
+            runtimeOnly fg.deobf("curse.maven:item-filters-forge:3596362")
+            compileOnly fg.deobf("curse.maven:ftb-teams-forge:3596307")
+            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3596307")
+            compileOnly fg.deobf("curse.maven:architectury-forge:3587338")
+            runtimeOnly fg.deobf("curse.maven:architectury-forge:3587338")
 
 //            runtimeOnly fg.deobf("curse.maven:cgm:3224957")
 //            runtimeOnly fg.deobf("curse.maven:obfuscate-289380:3458195")

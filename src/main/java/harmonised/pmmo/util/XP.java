@@ -712,7 +712,7 @@ public class XP
 	public static void syncPlayer(Player player)
     {
 //    	UUID uuid = player.getUniqueID();
-//        CompoundNBT xpTag 		 = NBTHelper.mapStringToNbt (Config.getXpMap(player));
+//        CompoundTag xpTag 		 = NBTHelper.mapStringToNbt (Config.getXpMap(player));
         CompoundTag prefsTag 	 = NBTHelper.mapStringToNbt(Config.getPreferencesMap(player));
 		CompoundTag abilitiesTag = NBTHelper.mapStringToNbt(Config.getAbilitiesMap(player));
 
@@ -966,16 +966,16 @@ public class XP
 		return matched;
 	}
 
-/*	public static CompoundNBT getPmmoTag(PlayerEntity player)
+/*	public static CompoundTag getPmmoTag(PlayerEntity player)
 	{
 		if(player != null)
 		{
-			CompoundNBT persistTag = player.getPersistentData();
-			CompoundNBT pmmoTag = null;
+			CompoundTag persistTag = player.getPersistentData();
+			CompoundTag pmmoTag = null;
 
 			if(!persistTag.contains(Reference.MOD_ID))			//if Player doesn't have pmmo tag, make it
 			{
-				pmmoTag = new CompoundNBT();
+				pmmoTag = new CompoundTag();
 				persistTag.put(Reference.MOD_ID, pmmoTag);
 			}
 			else
@@ -986,19 +986,19 @@ public class XP
 			return pmmoTag;
 		}
 		else
-			return new CompoundNBT();
+			return new CompoundTag();
 	}
 */
-/*	public static CompoundNBT getPmmoTagElement(PlayerEntity player, String element)
+/*	public static CompoundTag getPmmoTagElement(PlayerEntity player, String element)
 	{
 		if(player != null)
 		{
-			CompoundNBT pmmoTag = getPmmoTag(player);
-			CompoundNBT elementTag = null;
+			CompoundTag pmmoTag = getPmmoTag(player);
+			CompoundTag elementTag = null;
 
 			if(!pmmoTag.contains(element))					//if Player doesn't have element tag, make it
 			{
-				elementTag = new CompoundNBT();
+				elementTag = new CompoundTag();
 				pmmoTag.put(element, elementTag);
 			}
 			else
@@ -1009,20 +1009,20 @@ public class XP
 			return elementTag;
 		}
 		else
-			return new CompoundNBT();
+			return new CompoundTag();
 	}
 */
-/*	public static CompoundNBT getxpMap(PlayerEntity player)
+/*	public static CompoundTag getxpMap(PlayerEntity player)
 	{
 		return getPmmoTagElement(player, "skills");
 	}
 */
-/*	public static CompoundNBT getPreferencesTag(PlayerEntity player)
+/*	public static CompoundTag getPreferencesTag(PlayerEntity player)
 	{
 		return getPmmoTagElement(player, "preferences");
 	}
 */
-/*	public static CompoundNBT getabilitiesMap(PlayerEntity player)
+/*	public static CompoundTag getabilitiesMap(PlayerEntity player)
 	{
 		return getPmmoTagElement(player, "abilities");
 	}
@@ -1201,10 +1201,10 @@ public class XP
 
 	public static CompoundTag writeUniqueId(UUID uuid)
 	{
-		CompoundTag compoundnbt = new CompoundTag();
-		compoundnbt.putLong("M", uuid.getMostSignificantBits());
-		compoundnbt.putLong("L", uuid.getLeastSignificantBits());
-		return compoundnbt;
+		CompoundTag CompoundTag = new CompoundTag();
+		CompoundTag.putLong("M", uuid.getMostSignificantBits());
+		CompoundTag.putLong("L", uuid.getLeastSignificantBits());
+		return CompoundTag;
 	}
 
 	public static Map<String, Double> getBiomeBoosts(Player player)
