@@ -28,12 +28,14 @@ public class EventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void blockBroken(BreakEvent event)
 	{
+		if (event.isCanceled()) return;
 		BlockBrokenHandler.handleBroken(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void blockPlaced(BlockEvent.EntityMultiPlaceEvent event)
 	{
+		if (event.isCanceled()) return;
 		if(event.getEntity() != null && BlockPlacedHandler.handlePlaced(event.getEntity(), event.getPlacedBlock(), (Level) event.getWorld(), event.getPos()))
 			event.setCanceled(true);
 	}
@@ -41,6 +43,7 @@ public class EventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void blockPlaced(BlockEvent.EntityPlaceEvent event)
 	{
+		if (event.isCanceled()) return;
 		if(event.getEntity() != null && BlockPlacedHandler.handlePlaced(event.getEntity(), event.getPlacedBlock(), (Level) event.getWorld(), event.getPos()))
 			event.setCanceled(true);
 	}
@@ -48,12 +51,14 @@ public class EventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingHurt(LivingHurtEvent event)
 	{
+		if (event.isCanceled()) return;
 		DamageHandler.handleDamage(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingDeath(LivingDeathEvent event)
 	{
+		if (event.isCanceled()) return;
 		DeathHandler.handleDeath(event);
 	}
 
@@ -66,18 +71,21 @@ public class EventHandler
 	@SubscribeEvent
 	public static void playerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
+		if (event.isCanceled()) return;
 		PlayerRespawnHandler.handlePlayerRespawn(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingJump(LivingJumpEvent event)
 	{
+		if (event.isCanceled()) return;
 		JumpHandler.handleJump(event);
 	}
 
 	@SubscribeEvent
 	public static void PlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
+		if (event.isCanceled()) return;
 		PlayerConnectedHandler.handlePlayerConnected(event);
 	}
 
@@ -96,12 +104,14 @@ public class EventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onAnvilRepair(AnvilRepairEvent event)
 	{
+		if (event.isCanceled()) return;
 		AnvilRepairHandler.handleAnvilRepair(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onItemFished(ItemFishedEvent event)
 	{
+		if (event.isCanceled()) return;
 		FishedHandler.handleFished(event);
 	}
 
@@ -109,36 +119,42 @@ public class EventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void itemCrafted(PlayerEvent.ItemCraftedEvent event)
 	{
+		if (event.isCanceled()) return;
 		CraftedHandler.handleCrafted(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void breakSpeed(PlayerEvent.BreakSpeed event)
 	{
+		if (event.isCanceled()) return;
 		BreakSpeedHandler.handleBreakSpeed(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void playerInteract(PlayerInteractEvent event)
 	{
+		if (event.isCanceled()) return;
 		PlayerInteractionHandler.handlePlayerInteract(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void livingSpawn(LivingSpawnEvent.SpecialSpawn event)
 	{
+		if (event.isCanceled()) return;
 		SpawnHandler.handleSpawn(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void babySpawn(BabyEntitySpawnEvent event)
 	{
+		if (event.isCanceled()) return;
 		BreedHandler.handleBreedEvent(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void animalTaming(AnimalTameEvent event)
 	{
+		if (event.isCanceled()) return;
 		TameHandler.handleAnimalTaming(event);
 	}
 
@@ -184,6 +200,7 @@ public class EventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void pistonPush(PistonEvent event)
 	{
+		if (event.isCanceled()) return;
 		PistonEventHandler.handlePistonPush(event);
 	}
 
@@ -196,18 +213,21 @@ public class EventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void saplingGrow(SaplingGrowTreeEvent event)
 	{
+		if (event.isCanceled()) return;
 		GrowHandler.handleSaplingGrow(event);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void cropGrow(BlockEvent.CropGrowEvent.Post event)
 	{
+		if (event.isCanceled()) return;
 		GrowHandler.handleCropGrow(event);
 	}
 
 	@SubscribeEvent
 	public static void travelDimension(EntityTravelToDimensionEvent event)
 	{
+		if (event.isCanceled()) return;
 		if(event.getEntity() instanceof ServerPlayer)
 		{
 			ServerPlayer player = (ServerPlayer) event.getEntity();

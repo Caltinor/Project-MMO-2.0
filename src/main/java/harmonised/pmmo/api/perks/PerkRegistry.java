@@ -3,6 +3,7 @@ package harmonised.pmmo.api.perks;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.function.TriFunction;
 import com.google.common.base.Preconditions;
@@ -92,10 +93,15 @@ public class PerkRegistry {
 		}
 	}
 	
-	private static CompoundTag mergeTags(CompoundTag tag1, CompoundTag tag2) {
+	public static CompoundTag mergeTags(CompoundTag tag1, CompoundTag tag2) {
 		CompoundTag output = new CompoundTag();
-		for (String key : tag1.getAllKeys()) {
-			if (tag2.contains(key)) {
+		Set<String> allKeys = tag1.getAllKeys();
+		for (String key : tag2.getAllKeys()) {
+			if (!allKeys.contains(key))
+				allKeys.add(key);
+		}
+		for (String key : allKeys) {
+			if (tag1.contains(key) && tag2.contains(key)) {
 				if (tag1.get(key) instanceof NumericTag) {
 					if (tag1.get(key) instanceof DoubleTag)
 						output.putDouble(key, tag1.getDouble(key) + tag2.getDouble(key));
@@ -113,6 +119,10 @@ public class PerkRegistry {
 				else
 					output.put(key, tag1.get(key));
 			}
+			else if (tag1.contains(key) && !tag2.contains(key))
+				output.put(key, tag1.get(key));
+			else if (!tag1.contains(key) && tag2.contains(key))
+				output.put(key, tag2.get(key));				
 		}
 		return output;
 	}
