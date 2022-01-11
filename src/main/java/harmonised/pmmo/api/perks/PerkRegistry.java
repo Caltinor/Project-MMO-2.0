@@ -1,10 +1,9 @@
 package harmonised.pmmo.api.perks;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang3.function.TriFunction;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
@@ -95,9 +94,10 @@ public class PerkRegistry {
 	
 	public static CompoundTag mergeTags(CompoundTag tag1, CompoundTag tag2) {
 		CompoundTag output = new CompoundTag();
-		Set<String> allKeys = tag1.getAllKeys();
+		List<String> allKeys = new ArrayList<>(); 
+		tag1.getAllKeys().forEach(s -> allKeys.add(s));
 		for (String key : tag2.getAllKeys()) {
-			if (!allKeys.contains(key))
+			if (!allKeys.contains(key) && key != null)
 				allKeys.add(key);
 		}
 		for (String key : allKeys) {
