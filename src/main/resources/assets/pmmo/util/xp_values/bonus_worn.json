@@ -534,23 +534,23 @@
 	},
 	"minecraft:golden_boots":
 	{
-		"mining": 5,
-		"endurance": 5
+		"mining": 1.05,
+		"endurance": 1.05
 	},
 	"minecraft:golden_chestplate":
 	{
-		"mining": 5,
-		"endurance": 5
+		"mining": 1.05,
+		"endurance": 1.05
 	},
 	"minecraft:golden_helmet":
 	{
-		"mining": 5,
-		"endurance": 5
+		"mining": 1.05,
+		"endurance": 1.05
 	},
 	"minecraft:golden_leggings":
 	{
-		"mining": 5,
-		"endurance": 5
+		"mining": 1.05,
+		"endurance": 1.05
 	},
 	"minecraft:heart_of_the_sea":
 	{

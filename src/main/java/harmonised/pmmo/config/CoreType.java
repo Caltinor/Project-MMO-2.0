@@ -9,7 +9,7 @@ public enum CoreType {
     INFO_BREW,
     BIOME_EFFECT_NEGATIVE,
     BIOME_EFFECT_POSITIVE,
-    BIOME_MOB_MULTIPLIER,
+    BIOME_MOB_MULTIPLIER, //Used in mob scaling
     
     //FISH_POOL,
     //FISH_ENCHANT_POOL,    These 3 should be loot tables using pmmo loot predicates
@@ -20,7 +20,7 @@ public enum CoreType {
     ITEM_SPECIFIC,
     VEIN_BLACKLIST,    
 
-    TREASURE,
+    //TREASURE,   Loot Predicate as well
     SALVAGE/*,
 
     SALVAGE_FROM,

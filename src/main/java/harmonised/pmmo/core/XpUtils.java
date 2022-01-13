@@ -6,13 +6,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.XpValueDataType;
 import harmonised.pmmo.storage.PmmoSavedData;
+import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class XpUtils {
 	
@@ -66,6 +75,32 @@ public class XpUtils {
 		//TODO generate
 		return 0l;
 	}
+	
+	public static Map<String, Long> deserializeAwardMap(ListTag nbt) {
+		Map<String, Long> map = new HashMap<>();
+		if (nbt.getElementType() != Tag.TAG_COMPOUND) {
+			MsLoggy.error("An API method passed an invalid award map.  This may not have negative effects on gameplay," + 
+							"but may cause the source implementation to behave unexpectedly");
+			return map;
+		}
+		for (int i = 0; i < nbt.size(); i++) {
+			map.put(nbt.getCompound(i).getString(Reference.API_MAP_SERIALIZER_KEY)
+				   ,nbt.getCompound(i).getLong(Reference.API_MAP_SERIALIZER_VALUE));
+		}
+		return map;
+	}
+	
+	public static Map<String, Long> applyXpModifiers(Player player, @Nullable Entity targetEntity, Map<String, Long> mapIn) {
+		Map<String, Long> mapOut = new HashMap<>();
+		Map<String, Double> modifiers = getConsolidatedModifierMap(player, targetEntity);
+		for (Map.Entry<String, Long> award : mapIn.entrySet()) {
+			if (modifiers.containsKey(award.getKey()))
+				mapOut.put(award.getKey(), (long)(award.getValue() * modifiers.get(award.getKey())));
+			else
+				mapOut.put(award.getKey(), award.getValue());
+		}
+		return mapOut;
+	}
 	//====================LOGICAL METHODS==============================================
 	
 	private static List<Long> levelCache = new ArrayList<>();
@@ -87,5 +122,70 @@ public class XpUtils {
 					linearBase + (i) * linearPer;
 			levelCache.add(current);
 		}
+	}
+	
+	private static Map<String, Double> getConsolidatedModifierMap(Player player, @Nullable Entity entity) {
+		Map<String, Double> mapOut = new HashMap<>();
+		for (XpValueDataType type : XpValueDataType.modifierTypes) {
+			Map<String, Double> modifiers = new HashMap<>();
+			switch (type) {
+			case BONUS_BIOME: {
+				ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).getRegistryName();
+				modifiers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(biomeID, new HashMap<>());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+				}
+				break;
+			}
+			case BONUS_HELD: {
+				ItemStack offhandStack = player.getOffhandItem();
+				ItemStack mainhandStack = player.getMainHandItem();
+				//TODO get NBT based API data for this
+				ResourceLocation offhandID = offhandStack.getItem().getRegistryName();
+				modifiers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(offhandID, new HashMap<>());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+				}				
+				ResourceLocation mainhandID = mainhandStack.getItem().getRegistryName();				
+				modifiers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(mainhandID, new HashMap<>());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+				}				
+				break;
+			}
+			case BONUS_WORN: {
+				player.getArmorSlots().forEach((stack) -> {
+					//TODO get NBT based API data for this
+					ResourceLocation itemID = stack.getItem().getRegistryName();
+					Map<String, Double> modifers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(itemID, new HashMap<>());
+					for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+					}
+				});
+				break;
+			}
+			case BONUS_DIMENSION: {
+				ResourceLocation dimensionID = player.level.dimension().getRegistryName();
+				modifiers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(dimensionID, new HashMap<>());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+				}
+				break;
+			}
+			case MULTIPLIER_ENTITY: {
+				if (entity == null) break;
+				ResourceLocation dimensionID = new ResourceLocation(entity.getEncodeId());
+				modifiers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(dimensionID, new HashMap<>());
+				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+					mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+				}
+				break;
+			}
+			default: {}
+			}
+			
+		}
+		MsLoggy.info("Consolidated Modifier Map: "+MsLoggy.mapToString(mapOut));
+		return mapOut;
 	}
 }

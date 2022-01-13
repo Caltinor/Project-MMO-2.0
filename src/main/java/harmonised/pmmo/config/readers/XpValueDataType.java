@@ -23,9 +23,8 @@ public enum XpValueDataType {
     BONUS_WORN,
     BONUS_DIMENSION,
     
-    MULTIPLIER_DIMENSION,
     MULTIPLIER_ENTITY;
     
 	public static final XpValueDataType[] baseTypes = new XpValueDataType[]{VALUES_ITEM, VALUES_BLOCK, VALUES_ENTITY};
-	public static final XpValueDataType[] modifierTypes = new XpValueDataType[]{BONUS_BIOME, BONUS_HELD, BONUS_WORN, BONUS_DIMENSION, MULTIPLIER_DIMENSION, MULTIPLIER_ENTITY};
+	public static final XpValueDataType[] modifierTypes = new XpValueDataType[]{BONUS_BIOME, BONUS_HELD, BONUS_WORN, BONUS_DIMENSION, MULTIPLIER_ENTITY};
 }

@@ -43,7 +43,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean> ERROR_LOGGING;
 	
 	private static void buildMsLoggy(ForgeConfigSpec.Builder builder) {
-		builder.comment("PMMO Error Logging Configuration").push("Ms. Loggy");
+		builder.comment("PMMO Error Logging Configuration").push("Ms Loggy");
 		ADV_LOGGING = builder.comment("Should MsLoggy be enabled?  This will flood your log with data, but provides essential details",
 									  " when trying to find data errors and bug fixing.  ")
 						.define("Advanced Logging", false);

@@ -9,12 +9,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
 public class PmmoSavedData extends SavedData{
 	
-	private static PmmoSavedData pmmoSavedData;
 	private static MinecraftServer server;
 	private static String NAME = Reference.MOD_ID;
 	
@@ -27,6 +25,7 @@ public class PmmoSavedData extends SavedData{
 	
 	public void setXpRaw(UUID playerID, String skillName, long value) {
 		xp.computeIfAbsent(playerID, s -> new HashMap<>()).put(skillName, value);
+		this.setDirty();
 	}
 	
 	public Map<String, Long> getXpMap(UUID playerID) {
@@ -35,9 +34,10 @@ public class PmmoSavedData extends SavedData{
 	
 	public void setXpMap(UUID playerID, Map<String, Long> map) {
 		xp.put(playerID, map != null ? map : new HashMap<>());
+		this.setDirty();
 	}
 	//===========================CORE WSD LOGIC=====================
-	public PmmoSavedData() {super();}
+	public PmmoSavedData() {}
 	
 	private static final String SKILL_KEY = "skill";
 	private static final String VALUE_KEY = "value";
@@ -71,16 +71,13 @@ public class PmmoSavedData extends SavedData{
 		return nbt;
 	}
 	
-	public static void init(MinecraftServer server)
-    {
+	public static void init(MinecraftServer server) {
         PmmoSavedData.server = server;
-        PmmoSavedData.pmmoSavedData = server.getLevel(Level.OVERWORLD).getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
     }
 	
-	public static PmmoSavedData get()   //Only available on Server Side, after the Server has Started.
-    {
+	public static PmmoSavedData get() {  //Only available on Server Side, after the Server has Started.
 		//TODO maybe throw an exception if null?
-        return pmmoSavedData;
+        return server.overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
     }
 	
 	public static MinecraftServer getServer() {

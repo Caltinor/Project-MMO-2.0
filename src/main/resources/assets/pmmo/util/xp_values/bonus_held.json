@@ -97,7 +97,7 @@
 	},
 	"minecraft:golden_pickaxe":
 	{
-		"mining": 50
+		"mining": 1.5
 	},
 	"minecraft:golden_shovel":
 	{

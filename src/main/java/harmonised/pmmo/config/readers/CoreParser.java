@@ -1,4 +1,4 @@
-package harmonised.pmmo.config.readers;
+ package harmonised.pmmo.config.readers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,7 +29,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -68,9 +67,12 @@ public class CoreParser {
             		for (Map.Entry<String, Map<String, Integer>> raw : rawMap.entrySet()) {
             			List<ResourceLocation> tagResults = new ArrayList<>();
             			if (raw.getKey().startsWith("#"))
-            				tagResults = getTagMembers(raw.getKey());
+            				tagResults = getTagMembers(raw.getKey().substring(1));
+            			else
+            				tagResults.add(new ResourceLocation(raw.getKey()));
             			for (ResourceLocation key : tagResults) {
             				SkillGates.setObjectSkillMap(type, key, raw.getValue());
+            				MsLoggy.info(type.name()+": "+key.toString()+MsLoggy.mapToString(raw.getValue())+" loaded from config");
             			}
             		}
             }
@@ -113,10 +115,12 @@ public class CoreParser {
 						 * This works by only filling the maps of the appropriate type.
 						 * The loop for the incorrect type will be empty and simply bypassed.
 						 */
-	            		for (Map.Entry<String, Map<String, Map<String, Long>>> raw : rawValueMap.entrySet()) {	            			
+	            		for (Map.Entry<String, Map<String, Map<String, Long>>> raw : rawValueMap.entrySet()) {	
 	            			List<ResourceLocation> tagResults = new ArrayList<>();
-	            			if (raw.getKey().startsWith("#"))
-	            				tagResults = getTagMembers(raw.getKey());
+	            			if (raw.getKey().startsWith("#")) 
+	            				tagResults = getTagMembers(raw.getKey().substring(1));
+	            			else
+	            				tagResults.add(new ResourceLocation(raw.getKey()));
 	            			for (ResourceLocation key : tagResults) {
 	            				//Validate the event type entries and skip out 
 	            				for (Map.Entry<String, Map<String, Long>> subset : raw.getValue().entrySet()) {
@@ -129,7 +133,8 @@ public class CoreParser {
 	            						}
 	            					}
 	            					if (validEventKey == null) continue;
-	            					//enter the resulting data into the 
+	            					//enter the resulting data into the data map
+	            					MsLoggy.info(validEventKey+": "+key.toString()+MsLoggy.mapToString(subset.getValue())+" loaded from config");
 	            					XpUtils.setObjectXpGainMap(validEventKey, key, subset.getValue());
 	            				}     				
 	            			}
@@ -138,8 +143,11 @@ public class CoreParser {
 	            		for (Map.Entry<String, Map<String, Double>> raw : rawModifierMap.entrySet()) {
 	            			List<ResourceLocation> tagResults = new ArrayList<>();
 	            			if (raw.getKey().startsWith("#"))
-	            				tagResults = getTagMembers(raw.getKey());
+	            				tagResults = getTagMembers(raw.getKey().substring(1));
+	            			else 
+	            				tagResults.add(new ResourceLocation(raw.getKey()));
 	            			for (ResourceLocation key : tagResults) {
+	            				MsLoggy.info(key.toString()+MsLoggy.mapToString(raw.getValue())+" loaded from config");
 	            				XpUtils.setObjectXpModifierMap(type, key, raw.getValue());
 	            			}
 	            		}
@@ -166,45 +174,38 @@ public class CoreParser {
 	
 	public static List<ResourceLocation> getTagMembers(String tag)
 	{
+		ResourceLocation tagRL = new ResourceLocation(tag);
 		List<ResourceLocation> results = new ArrayList<>();
 
-		for(Map.Entry<ResourceLocation, Tag<Item>> namedTag : ItemTags.getAllTags().getAllTags().entrySet()) {
-			if(namedTag.getKey().toString().startsWith(tag)) {
-				for(Item element : namedTag.getValue().getValues())	{
-					try	{
-						results.add(element.getRegistryName());
-					} catch(Exception e){ /* Failed, don't care */ };
-				}
+		if (ItemTags.getAllTags().getAllTags().containsKey(tagRL)) {
+			for(Item element : ItemTags.getAllTags().getAllTags().get(tagRL).getValues())	{
+				try	{
+					results.add(element.getRegistryName());
+				} catch(Exception e){ /* Failed, don't care */ };
 			}
 		}
 
-		for(Map.Entry<ResourceLocation, Tag<Block>> namedTag : BlockTags.getAllTags().getAllTags().entrySet()) {
-			if(namedTag.getKey().toString().equals(tag)) {
-				for(Block element : namedTag.getValue().getValues()) {
-					try	{
-						results.add(element.getRegistryName());
-					} catch(Exception e){ /* Failed, don't care */ };
-				}
+		if (BlockTags.getAllTags().getAllTags().containsKey(tagRL)) {
+			for(Block element : BlockTags.getAllTags().getAllTags().get(tagRL).getValues()) {
+				try	{
+					results.add(element.getRegistryName());
+				} catch(Exception e){ /* Failed, don't care */ };
 			}
 		}
 
-		for(Map.Entry<ResourceLocation, Tag<Fluid>> namedTag : FluidTags.getAllTags().getAllTags().entrySet()){
-			if(namedTag.getKey().toString().equals(tag)) {
-				for(Fluid element : namedTag.getValue().getValues()) {
-					try	{
-						results.add(element.getRegistryName());
-					} catch(Exception e){ /* Failed, don't care */ };
-				}
+		if(FluidTags.getAllTags().getAllTags().containsKey(tagRL)) {
+			for(Fluid element : FluidTags.getAllTags().getAllTags().get(tagRL).getValues()) {
+				try	{
+					results.add(element.getRegistryName());
+				} catch(Exception e){ /* Failed, don't care */ };
 			}
 		}
-
-		for(Map.Entry<ResourceLocation, Tag<EntityType<?>>> namedTag : EntityTypeTags.getAllTags().getAllTags().entrySet())	{
-			if(namedTag.getKey().toString().equals(tag)) {
-				for(EntityType<?> element : namedTag.getValue().getValues()) {
-					try	{
-						results.add(element.getRegistryName());
-					} catch(Exception e){ /* Failed, don't care */ };
-				}
+		
+		if (EntityTypeTags.getAllTags().getAllTags().containsKey(tagRL)) {
+			for(EntityType<?> element : EntityTypeTags.getAllTags().getAllTags().get(tagRL).getValues()) {
+				try	{
+					results.add(element.getRegistryName());
+				} catch(Exception e){ /* Failed, don't care */ };
 			}
 		}
 

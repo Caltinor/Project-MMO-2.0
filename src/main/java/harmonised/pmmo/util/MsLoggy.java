@@ -1,5 +1,8 @@
 package harmonised.pmmo.util;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,5 +34,24 @@ public class MsLoggy {
 	public static void fatal(String message, Object... obj) {
 		if (Config.ADV_LOGGING.get())
 			LOGGER.fatal(message, obj);
+	}
+	
+	//=============PRINTING UTILITIES=========================
+	
+	public static String mapToString(Map<?, ?> map) {
+		String out = "";
+		for (Map.Entry<?, ?> entry : map.entrySet()) {
+			out += "{"+entry.getKey().toString()+":"+entry.getValue().toString()+"}";
+		}
+		return out;
+	}
+	
+	public static String listToString(List<?> list) {
+		String out = "[";
+		for (int i = 0; i < list.size(); i++) {
+			out += list.get(i).toString();
+		}
+		out += "]";
+		return out;
 	}
 }

@@ -1,6 +1,14 @@
 {
-	"minecraft:stone": {
-		"BLOCK_BREAK": { "mining": 1 },
+	"#forge:stone": {
+		"BLOCK_BREAK": { "mining": 10 },
+		"BLOCK_PLACE": { "building": 1}
+	},
+	"#minecraft:dirt": {
+		"BLOCK_BREAK": { "excavation": 10 },
+		"BLOCK_PLACE": { "building": 1}
+	},
+	"minecraft:oak_log": {
+		"BLOCK_BREAK": { "woodcutting": 10 },
 		"BLOCK_PLACE": { "building": 1}
 	}
 }

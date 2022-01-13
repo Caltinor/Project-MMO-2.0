@@ -12,6 +12,7 @@ import com.mojang.datafixers.util.Pair;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.TagBuilder;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -31,18 +32,27 @@ public class EventTriggerRegistry {
 	
 	public static CompoundTag executeEventListeners(EventType eventType, Event event, CompoundTag dataIn) {
 		List<Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> listeners = eventListeners.get(eventType);
-		CompoundTag output = new CompoundTag();
+		CompoundTag output = TagBuilder.start().withBool(IS_CANCELLED, false).build();
 		List<Integer> removals = new ArrayList<>();
 		for (int i = 0; i < listeners.size(); i++) {
 			CompoundTag funcOutput = listeners.get(i).getSecond().apply(event, dataIn);
-			if (funcOutput.contains(IS_CANCELLED)) 
+			if (funcOutput.contains(IS_CANCELLED)) {
 				output = TagUtils.mergeTags(output, funcOutput);
+				output.putBoolean(IS_CANCELLED, output.getBoolean(IS_CANCELLED) ? true : funcOutput.getBoolean(IS_CANCELLED));
+			}
 			else {
 				removals.add(i);
-				MsLoggy.debug("Event Listener: [" + listeners.get(i).getFirst().toString() +"] did not return a cancel status and was removed.");
 			}
 				
 		}
+		removeInvalidListeners(eventType, removals);
 		return output;
+	}
+	
+	private static void removeInvalidListeners(EventType eventType, List<Integer> removals) {
+		for (int i = removals.size()-1; i == 0; i--) {
+			MsLoggy.debug("Event Listener: [" + eventListeners.get(eventType).get(removals.get(i)).getFirst().toString() +"] did not return a cancel status and was removed.");
+			eventListeners.get(eventType).remove((int)removals.get(i));				
+		}
 	}
 }

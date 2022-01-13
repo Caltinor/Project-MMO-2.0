@@ -1,4 +1,7 @@
 {
+	"#forge:stone": { 
+		"mining": 10
+	},
 	"#forge:ores/aluminum":
 	{
 		"mining": 25
