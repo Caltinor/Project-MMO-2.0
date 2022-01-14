@@ -81,18 +81,18 @@ public class TooltipHandler
                 Map<String, Double> useEnchantmentReq = XP.getEnchantsUseReq(itemStack);
                 Map<String, Double> placeReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_PLACE, itemStack);
                 Map<String, Double> breakReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_BREAK, itemStack);
-                Map<String, Double> xpValueGeneral = JsonConfig.data.get(JType.XP_VALUE_GENERAL).get(regKey);
+                Map<String, Double> xpValueGeneral = JsonConfig.data.get(JType.XP_VALUE_GENERAL).getOrDefault(regKey, new HashMap<>());
                 Map<String, Double> xpValueBreaking = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREAK, itemStack);
                 Map<String, Double> xpValueCrafting = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_CRAFT, itemStack);
                 Map<String, Double> xpValueSmelting = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_SMELT, itemStack);
                 Map<String, Double> xpValueCooking = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_COOK, itemStack);
                 Map<String, Double> xpValueBrewing = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREW, itemStack);
-                Map<String, Double> xpValueGrowing = JsonConfig.data.get(JType.XP_VALUE_GROW).get(regKey);
+                Map<String, Double> xpValueGrowing = JsonConfig.data.get(JType.XP_VALUE_GROW).getOrDefault(regKey, new HashMap<>());
                 Map<String, Double> xpValuePlacing = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_PLACE, itemStack);
-                Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).get(regKey);
-                Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).get(regKey);
-                Map<String, Map<String, Double>> treasureInfo = JsonConfig.data2.get(JType.TREASURE).get(regKey);
-                Map<String, Map<String, Double>> treasureFromInfo = JsonConfig.data2.get(JType.TREASURE_FROM).get(regKey);
+                Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> treasureInfo = JsonConfig.data2.get(JType.TREASURE).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> treasureFromInfo = JsonConfig.data2.get(JType.TREASURE_FROM).getOrDefault(regKey, new HashMap<>());
                 Map<String, Double> heldItemXpBoost = XP.getStackXpBoosts(itemStack, true);
                 Map<String, Double> wornItemXpBoost = XP.getStackXpBoosts(itemStack, false);
 
