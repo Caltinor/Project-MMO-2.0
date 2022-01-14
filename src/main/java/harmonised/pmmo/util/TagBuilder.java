@@ -28,6 +28,11 @@ public class TagBuilder {
 		return this;
 	}
 	
+	public TagBuilder withFloat(@NonNull String key, @NonNull float value) {
+		nbt.putFloat(key, value);
+		return this;
+	}
+	
 	public TagBuilder withList(@NonNull String key, @NonNull ListTag list) {
 		nbt.put(key, list);
 		return this;

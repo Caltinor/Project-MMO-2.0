@@ -14,7 +14,7 @@ public class Networking {
 		s -> true);
 
 	public static void registerMessages() { 
-		int ID = 0;
+		//int ID = 0;
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {

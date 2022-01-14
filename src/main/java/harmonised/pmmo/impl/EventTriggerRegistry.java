@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 import com.mojang.datafixers.util.Pair;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagBuilder;
@@ -19,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
 
 public class EventTriggerRegistry {
-	public static final String IS_CANCELLED = "is_cancelled";
+	
 	
 	private static LinkedListMultimap<EventType, Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> eventListeners = LinkedListMultimap.create();
 	
@@ -32,13 +33,13 @@ public class EventTriggerRegistry {
 	
 	public static CompoundTag executeEventListeners(EventType eventType, Event event, CompoundTag dataIn) {
 		List<Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> listeners = eventListeners.get(eventType);
-		CompoundTag output = TagBuilder.start().withBool(IS_CANCELLED, false).build();
+		CompoundTag output = TagBuilder.start().withBool(APIUtils.IS_CANCELLED, false).build();
 		List<Integer> removals = new ArrayList<>();
 		for (int i = 0; i < listeners.size(); i++) {
 			CompoundTag funcOutput = listeners.get(i).getSecond().apply(event, dataIn);
-			if (funcOutput.contains(IS_CANCELLED)) {
+			if (funcOutput.contains(APIUtils.IS_CANCELLED)) {
 				output = TagUtils.mergeTags(output, funcOutput);
-				output.putBoolean(IS_CANCELLED, output.getBoolean(IS_CANCELLED) ? true : funcOutput.getBoolean(IS_CANCELLED));
+				output.putBoolean(APIUtils.IS_CANCELLED, output.getBoolean(APIUtils.IS_CANCELLED) ? true : funcOutput.getBoolean(APIUtils.IS_CANCELLED));
 			}
 			else {
 				removals.add(i);

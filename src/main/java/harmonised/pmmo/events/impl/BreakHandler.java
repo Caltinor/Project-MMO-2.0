@@ -6,6 +6,7 @@ import java.util.Map;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
@@ -15,13 +16,13 @@ import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.impl.EventTriggerRegistry;
+import harmonised.pmmo.impl.PerkRegistry;
 import harmonised.pmmo.impl.PredicateRegistry;
 import harmonised.pmmo.impl.TooltipRegistry;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,53 +31,16 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 public class BreakHandler {
 	
 	public static void handle(BreakEvent event) {
-		/* DESIGN NOTES
-		 * 
-		 * this should factor in the following features
-		 *  - Event Granularity (nested Experience checks)
-		 *  	- Event API hooks
-		 *  - Perk Triggers
-		 *  - AutoValues
-		 *  - Effects/Penalties
-		 *  - Party
-		 *  - Anti-Cheese
-		 *  - Unlocks
-		 *  	-NBT Checks included
-		 *  - XP Awards
-		 *  
-		 *  Sequence should be 
-		 *  - Requirement (in case cancelled)
-		 *  	-get item req 
-		 *  		-get NBT req
-		 *  			-if not get default req
-		 *  				-if not get/generate AutoValue
-		 *  - Event Triggers
-		 *  	-Event API hooks
-		 *  	-Perk Triggers
-		 *  - XP calculations
-		 *  	-get xp values from NBT
-		 *  		-if not get default value
-		 *  			-if not get/generate AutoValue
-		 *  	-penalties/effects
-		 *  		-anti-cheese
-		 *  	-party xp distribution
-		 *  -Award XP
-		 *  	-send XP Event to Event Bus
-		 *  	-award XP and notify
-		 *  
-		 * 
-		 */
-
 		if (!canPerform(event))
 			event.setCanceled(true);
 		else {
 			CompoundTag eventHookOutput = getEventHookResults(event);
-			if (eventHookOutput.getBoolean(EventTriggerRegistry.IS_CANCELLED)) 
+			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) 
 				event.setCanceled(true);
 			else {
-				//TODO un-comment these calls and replace the new tag with the perk execution
-				//CompoundTag perkDataIn = TagBuilder.start().build();
-				CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, new CompoundTag()); //PerkRegistry.executePerk(EventType.BLOCK_BREAK, event.getPlayer(), perkDataIn);
+				CompoundTag perkDataIn = eventHookOutput;
+				//if break data is needed by perks, we can add it here.  this is just default implementation.
+				CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, PerkRegistry.executePerk(EventType.BLOCK_BREAK, (ServerPlayer) event.getPlayer(), perkDataIn));
 				Map<String, Long> xpAward = calculateXpAward(event, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
 				awardXP(partyMembersInRange, xpAward);
@@ -91,7 +55,7 @@ public class BreakHandler {
 		else if (SkillGates.doesObjectReqExist(ReqType.REQ_BREAK, blockID))
 			return SkillGates.doesPlayerMeetReq(ReqType.REQ_BREAK, blockID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
-			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.REQ_BREAK, event.getState());
+			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.REQ_BREAK, blockID, ObjectType.BLOCK);
 			return SkillGates.doesPlayerMeetReq(ReqType.REQ_BREAK, blockID, event.getPlayer().getUUID(), requirements);
 		}
 
@@ -112,7 +76,7 @@ public class BreakHandler {
 		else if (XpUtils.hasXpGainObjectEntry(EventType.BLOCK_BREAK, blockID)) 
 			xpGains = XpUtils.getObjectExperienceMap(EventType.BLOCK_BREAK, blockID);
 		else if (Config.ENABLE_AUTO_VALUES.get()) 
-			xpGains = AutoValues.getExperienceAward(EventType.BLOCK_BREAK, event.getState());
+			xpGains = AutoValues.getExperienceAward(EventType.BLOCK_BREAK, blockID, ObjectType.BLOCK);
 
 		MsLoggy.info("XpGains: "+MsLoggy.mapToString(xpGains));
 		xpGains = XpUtils.applyXpModifiers(event.getPlayer(), null, xpGains);
@@ -130,8 +94,7 @@ public class BreakHandler {
 				XpEvent xpEvent = new XpEvent(players.get(i), award.getKey(), (award.getValue() / partyCount), new CompoundTag());
 				if (!MinecraftForge.EVENT_BUS.post(xpEvent)) {
 					XpUtils.setXpDiff(players.get(i).getUUID(), xpEvent.skill, xpEvent.amount);
-					//TODO replace the below line with better notifications such as world drops and the xp bar
-					players.get(i).sendMessage(new TextComponent(award.getKey()+": "+String.valueOf(xpEvent.amount)), players.get(i).getUUID());
+					XpUtils.sendXpAwardNotifications(players.get(i), award.getKey(), partyCount);
 				}
 			}
 		}

@@ -1,8 +1,10 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.events.impl.BreakHandler;
+import harmonised.pmmo.events.impl.BreakSpeedHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.util.Reference;
+import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -33,5 +35,12 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		PlaceHandler.handle(event);
+	}
+	
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onBreakSpeed(BreakSpeed event) {
+		if (event.isCanceled())
+			return;
+		BreakSpeedHandler.handle(event);
 	}
 }

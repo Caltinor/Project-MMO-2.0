@@ -1,4 +1,7 @@
 {
+	"BREAK_SPEED": {
+		"mining": [{"perk":"pmmo:break_speed"}] 
+	},
 	"SKILL_UP": {
 		"combat": [
 			{"perk":"pmmo:damage"}
@@ -13,7 +16,7 @@
 			{"perk":"pmmo:speed"}
 		]
 	},
-	"JUMPING": { 
+	"JUMP": { 
 		"agility": [ 
 			{"perk":"pmmo:jump_boost",
 			 "per_level": 0.005
@@ -40,7 +43,7 @@
 			{"perk":"pmmo:night_vision"}
 		]
 	},
-	"FALL_DAMAGE": { 
+	"FROM_IMPACT": { 
 		"agility": [ 
 			{"perk":"pmmo:fall_save",
 			 "per_level": 0.05

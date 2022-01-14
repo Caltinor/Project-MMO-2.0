@@ -18,7 +18,9 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +38,10 @@ public class XpUtils {
 	
 	public static long getPlayerXpRaw(UUID playerID, String skill) {
 		return PmmoSavedData.get().getXpRaw(playerID, skill);
+	}
+	
+	public static int getPlayerSkillLevel(String skill, UUID player) {
+		return getLevelFromXP(getPlayerXpRaw(player, skill));
 	}
 	
 	public static boolean hasXpGainObjectEntry(EventType eventType, ResourceLocation objectID) {
@@ -71,11 +77,6 @@ public class XpUtils {
 		return Config.MAX_LEVEL.get();
 	}
 	
-	public static long getXpGainFromMap(Map<String, Long> sourceMap, UUID playerID) {
-		//TODO generate
-		return 0l;
-	}
-	
 	public static Map<String, Long> deserializeAwardMap(ListTag nbt) {
 		Map<String, Long> map = new HashMap<>();
 		if (nbt.getElementType() != Tag.TAG_COMPOUND) {
@@ -100,6 +101,11 @@ public class XpUtils {
 				mapOut.put(award.getKey(), award.getValue());
 		}
 		return mapOut;
+	}
+	
+	public static void sendXpAwardNotifications(ServerPlayer player, String skillName, long amount) {
+		//TODO send packets for guis and drop XP
+		player.sendMessage(new TranslatableComponent("pmmo."+skillName).append(": "+String.valueOf(amount)), player.getUUID());
 	}
 	//====================LOGICAL METHODS==============================================
 	

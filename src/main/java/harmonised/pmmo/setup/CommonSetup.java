@@ -2,6 +2,7 @@ package harmonised.pmmo.setup;
 
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.config.readers.PerksParser;
 import harmonised.pmmo.core.XpUtils;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.storage.PmmoSavedData;
@@ -24,6 +25,7 @@ public class CommonSetup {
 		XpUtils.computeLevelsForCache();
 		MsLoggy.info("Loading settings from config jsons");
 		CoreParser.init();
+		PerksParser.parsePerks();
 		MsLoggy.info("PMMO Server loading process complete");
 	}
 	
