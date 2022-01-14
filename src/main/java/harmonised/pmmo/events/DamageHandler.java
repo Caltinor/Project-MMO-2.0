@@ -110,7 +110,7 @@ public class DamageHandler
 
                 damage -= endured;
 
-                enduranceXp = Math.min(0, damage * 5) + (endured * 7.5);
+                enduranceXp = Math.max(0, damage * 5) + (endured * 7.5);
 ///////////////////////////////////////////////////////////////////////FALL//////////////////////////////////////////////////////////////////////////////////////////////
                 if(isFallDamage)
                 {
@@ -124,7 +124,7 @@ public class DamageHandler
                     if(saved != 0 && player.getHealth() > damage)
                         player.displayClientMessage(new TranslatableComponent("pmmo.savedFall", saved), true);
 
-                    award = saved * 5;
+                    award = saved * 5; 
 
                     agilityXp = award;
                 }
