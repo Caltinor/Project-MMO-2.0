@@ -85,12 +85,9 @@ public class WorldTickHandler
         if(event.world.getServer() == null)
             return;
 
-        if(XP.getDimResLoc(event.world).equals(DimensionType.OVERWORLD_LOCATION.getRegistryName()) && event.world.getServer().getTickCount() % 200 == 0)
+        for (ServerPlayer player : event.world.getServer().getPlayerList().getPlayers())
         {
-            for (ServerPlayer player : event.world.getServer().getPlayerList().getPlayers())
-            {
-            	PerkRegistry.executePerk(PerkTrigger.SKILL_UP, player);
-            }
+        	PerkRegistry.executePerk(PerkTrigger.SKILL_UP, player);
         }
         
         for(Player player : event.world.getServer().getPlayerList().getPlayers())
