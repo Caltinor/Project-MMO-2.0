@@ -77,7 +77,6 @@ public class AttributePerks {
 		int heartBoost = (int)(perLevel * (double)level);
 		heartBoost = Math.min(maxHeart, heartBoost);		
 		AttributeInstance hpAttribute = player.getAttribute(Attributes.MAX_HEALTH);
-		System.out.println("heartBoost: "+heartBoost+" | "+hpAttribute.toString());
 		AttributeModifier hpModifier = new AttributeModifier(hpModifierID, "Max HP Bonus thanks to Endurance Level", heartBoost, AttributeModifier.Operation.ADDITION);
 		hpAttribute.removeModifier(hpModifierID);
 		hpAttribute.addPermanentModifier(hpModifier);
