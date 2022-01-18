@@ -12,17 +12,17 @@ public class MsLoggy {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static void info(String message, Object... obj) {
-		if (Config.ADV_LOGGING.get())
+		if (Config.INFO_LOGGING.get())
 			LOGGER.info(message, obj);
 	}
 	
 	public static void warn(String message, Object... obj) {
-		if (Config.ADV_LOGGING.get())
+		if (Config.WARN_LOGGING.get())
 			LOGGER.warn(message, obj);
 	}
 	
 	public static void debug(String message, Object... obj) {
-		if (Config.ADV_LOGGING.get())
+		if (Config.DEBUG_LOGGING.get())
 			LOGGER.debug(message, obj);
 	}
 	
@@ -32,7 +32,7 @@ public class MsLoggy {
 	}
 	
 	public static void fatal(String message, Object... obj) {
-		if (Config.ADV_LOGGING.get())
+		if (Config.FATAL_LOGGING.get())
 			LOGGER.fatal(message, obj);
 	}
 	
