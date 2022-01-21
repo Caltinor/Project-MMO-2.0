@@ -1,14 +1,27 @@
 modLoader="javafml"
-       loaderVersion="[31.1,)"
+loaderVersion="[39,)"
+license="All rights reserved"
 
-        license="All rights reserved"
-       [[mods]]
-           modId="pmmo"
-           version="${file.jarVersion}"
-           displayName="Project MMO"
-           displayURL="https://www.curseforge.com/minecraft/mc-mods/project-mmo"
-           credits="MMD were there when this mod needed them, including the start"
-           authors="Harmonised"
-           description='''
-           Adds many different skills and benefits thanks to the skills to the game!
-           '''
+[[mods]]
+modId="pmmo"
+version="${file.jarVersion}"
+displayName="Project MMO"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/project-mmo"
+credits="MMD were there when this mod needed them, including the start"
+authors="Harmonised"
+description='''
+Adds many different skills and benefits thanks to the skills to the game!
+'''
+           
+[[dependencies.pmmo]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[39.0.53,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.pmmo]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18,1.19)"
+    ordering="NONE"
+    side="BOTH"

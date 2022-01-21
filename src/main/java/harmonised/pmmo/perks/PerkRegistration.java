@@ -10,10 +10,10 @@ import net.minecraft.server.level.ServerPlayer;
 public class PerkRegistration {
 	public static void init() {
 		//Attribute Perks
-		PerkRegistry.registerPerk(rl("reach"), AttributePerks.REACH, NONE);
-		PerkRegistry.registerPerk(rl("damage"), AttributePerks.DAMAGE, NONE);
+		PerkRegistry.registerPerk(rl("reach"), AttributePerks.REACH, AttributePerks.REACH_TERM);
+		PerkRegistry.registerPerk(rl("damage"), AttributePerks.DAMAGE, AttributePerks.DAMAGE_TERM);
 		PerkRegistry.registerPerk(rl("speed"), AttributePerks.SPEED, AttributePerks.SPEED_TERM);
-		PerkRegistry.registerPerk(rl("health"), AttributePerks.HEALTH, NONE);
+		PerkRegistry.registerPerk(rl("health"), AttributePerks.HEALTH, AttributePerks.HEALTH_TERM);
 		//Event Perks
 		PerkRegistry.registerPerk(rl("jump_boost"), EventPerks.JUMP, NONE);
 		PerkRegistry.registerPerk(rl("breath"), EventPerks.BREATH, NONE);

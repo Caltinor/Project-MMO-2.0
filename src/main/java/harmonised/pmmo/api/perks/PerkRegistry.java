@@ -57,7 +57,7 @@ public class PerkRegistry {
 				CompoundTag src = tagFromJson(entries.get(i));
 				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				mergeTags(output, perkExecutions.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
+				output = mergeTags(output, perkExecutions.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
 			}
 		}
 		return output;
@@ -77,7 +77,7 @@ public class PerkRegistry {
 				CompoundTag src = tagFromJson(entries.get(i));
 				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				mergeTags(output, perkTerminations.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
+				output = mergeTags(output, perkTerminations.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
 			}
 		}
 		return output;

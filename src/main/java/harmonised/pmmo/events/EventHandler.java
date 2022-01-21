@@ -223,6 +223,13 @@ public class EventHandler
 		//if (event.isCanceled()) return;
 		GrowHandler.handleCropGrow(event);
 	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void shieldBlock(ShieldBlockEvent event)
+	{
+		//if (event.isCanceled()) return;
+		ShieldBlockHandler.handleBlock(event);
+	}
 
 	@SubscribeEvent
 	public static void travelDimension(EntityTravelToDimensionEvent event)

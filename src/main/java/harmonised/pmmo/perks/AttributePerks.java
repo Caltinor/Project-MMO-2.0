@@ -53,6 +53,12 @@ public class AttributePerks {
 		return NONE;
 	};
 	
+	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> DAMAGE_TERM = (player, nbt, level) -> {
+		AttributeInstance damageAttribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
+		damageAttribute.removeModifier(damageModifierID);
+		return NONE;
+	};
+	
 	private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> REACH = (player, nbt, level) -> {
 		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.1;
@@ -70,6 +76,12 @@ public class AttributePerks {
 		return NONE;
 	};
 	
+	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> REACH_TERM = (player, nbt, level) -> {
+		AttributeInstance reachAttribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
+		reachAttribute.removeModifier(reachModifierID);
+		return NONE;
+	};
+	
 	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> HEALTH = (player, nbt, level) -> {
 		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.1;
@@ -80,6 +92,12 @@ public class AttributePerks {
 		AttributeModifier hpModifier = new AttributeModifier(hpModifierID, "Max HP Bonus thanks to Endurance Level", heartBoost, AttributeModifier.Operation.ADDITION);
 		hpAttribute.removeModifier(hpModifierID);
 		hpAttribute.addPermanentModifier(hpModifier);
+		return NONE;
+	};
+	
+	public static final TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> HEALTH_TERM = (player, nbt, level) -> {
+		AttributeInstance hpAttribute = player.getAttribute(Attributes.MAX_HEALTH);
+		hpAttribute.removeModifier(hpModifierID);
 		return NONE;
 	};
 }
