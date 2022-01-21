@@ -9,7 +9,7 @@
 //import net.minecraft.client.entity.player.ClientPlayerEntity;
 //import net.minecraft.entity.player.PlayerEntity;
 //import net.minecraft.entity.player.ServerPlayerEntity;
-//import net.minecraft.nbt.CompoundNBT;
+//import net.minecraft.nbt.CompoundTag;
 //import net.minecraftforge.common.util.FakePlayer;
 //import org.openzen.zencode.java.ZenCodeType;
 //
@@ -21,7 +21,7 @@
 //    public static boolean checkLevels(MapData args, MCPlayerEntity mcPlayer)
 //    {
 //        PlayerEntity player = mcPlayer.getInternal();
-//        CompoundNBT reqLevels = args.getInternal();
+//        CompoundTag reqLevels = args.getInternal();
 //        String skill;
 //        for(String key : reqLevels.keySet())
 //        {
@@ -40,7 +40,7 @@
 //        PlayerEntity player = mcPlayer.getInternal();
 //        if(player instanceof ServerPlayerEntity)
 //        {
-//            CompoundNBT xpAwards = args.getInternal();
+//            CompoundTag xpAwards = args.getInternal();
 //            String skill;
 //            for(String key : xpAwards.keySet())
 //            {
@@ -63,7 +63,7 @@
 //        PlayerEntity player = mcPlayer.getInternal();
 //        if(player instanceof ServerPlayerEntity)
 //        {
-//            CompoundNBT xpAwards = args.getInternal();
+//            CompoundTag xpAwards = args.getInternal();
 //            String skill;
 //            for(String key : xpAwards.keySet())
 //            {
@@ -86,7 +86,7 @@
 //        PlayerEntity player = mcPlayer.getInternal();
 //        if(player instanceof ServerPlayerEntity)
 //        {
-//            CompoundNBT xpAwards = args.getInternal();
+//            CompoundTag xpAwards = args.getInternal();
 //            String skill;
 //            for(String key : xpAwards.keySet())
 //            {
@@ -109,7 +109,7 @@
 //        PlayerEntity player = mcPlayer.getInternal();
 //        if(player instanceof ServerPlayerEntity)
 //        {
-//            CompoundNBT xpAwards = args.getInternal();
+//            CompoundTag xpAwards = args.getInternal();
 //            String skill;
 //            for(String key : xpAwards.keySet())
 //            {
