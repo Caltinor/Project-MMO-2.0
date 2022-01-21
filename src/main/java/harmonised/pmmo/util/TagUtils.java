@@ -1,7 +1,7 @@
 package harmonised.pmmo.util;
 
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.FloatTag;
@@ -14,9 +14,10 @@ public class TagUtils {
 
 	public static CompoundTag mergeTags(CompoundTag tag1, CompoundTag tag2) {
 		CompoundTag output = new CompoundTag();
-		Set<String> allKeys = tag1.getAllKeys();
+		List<String> allKeys = new ArrayList<>(); 
+		tag1.getAllKeys().forEach(s -> allKeys.add(s));
 		for (String key : tag2.getAllKeys()) {
-			if (!allKeys.contains(key))
+			if (!allKeys.contains(key) && key != null)
 				allKeys.add(key);
 		}
 		for (String key : allKeys) {

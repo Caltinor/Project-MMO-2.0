@@ -13,6 +13,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.XpUtils;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
@@ -37,6 +38,7 @@ public class PerkRegistry {
 		Preconditions.checkNotNull(onConclude);
 		perkExecutions.put(perkID, onExecute);
 		perkTerminations.put(perkID, onConclude);
+		MsLoggy.debug("Registered Perk: "+perkID.toString());
 	}
 	
 	public static CompoundTag executePerk(EventType cause, ServerPlayer player) {
@@ -53,7 +55,7 @@ public class PerkRegistry {
 				CompoundTag src = tagFromJson(entries.get(i));
 				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				TagUtils.mergeTags(output, perkExecutions.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
+				output = TagUtils.mergeTags(output, perkExecutions.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
 			}
 		}
 		return output;
@@ -73,7 +75,7 @@ public class PerkRegistry {
 				CompoundTag src = tagFromJson(entries.get(i));
 				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				TagUtils.mergeTags(output, perkTerminations.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
+				output = TagUtils.mergeTags(output, perkTerminations.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
 			}
 		}
 		return output;

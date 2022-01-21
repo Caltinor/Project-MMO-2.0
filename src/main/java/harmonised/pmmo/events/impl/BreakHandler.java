@@ -25,14 +25,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class BreakHandler {
 	
 	public static void handle(BreakEvent event) {
-		if (!canPerform(event))
+		if (!canPerform(event)) {
 			event.setCanceled(true);
+			//TODO notify player of inability to perform
+		}
 		else {
 			CompoundTag eventHookOutput = getEventHookResults(event);
 			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) 
@@ -50,8 +53,12 @@ public class BreakHandler {
 	
 	private static boolean canPerform(BreakEvent event) {
 		ResourceLocation blockID = event.getState().getBlock().getRegistryName();
-		if (PredicateRegistry.predicateExists(blockID, ReqType.REQ_BREAK)) 
-			return PredicateRegistry.checkPredicateReq(event.getPlayer(), blockID, ReqType.REQ_BREAK);
+		if (PredicateRegistry.predicateExists(blockID, ReqType.REQ_BREAK)) {
+			BlockEntity tile = event.getPlayer().getLevel().getBlockEntity(event.getPos());
+			return tile == null ? 
+					PredicateRegistry.checkPredicateReq(event.getPlayer(), blockID, ReqType.REQ_BREAK) :
+					PredicateRegistry.checkPredicateReq(event.getPlayer(), tile, ReqType.REQ_BREAK);
+		}
 		else if (SkillGates.doesObjectReqExist(ReqType.REQ_BREAK, blockID))
 			return SkillGates.doesPlayerMeetReq(ReqType.REQ_BREAK, blockID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
@@ -94,7 +101,7 @@ public class BreakHandler {
 				XpEvent xpEvent = new XpEvent(players.get(i), award.getKey(), (award.getValue() / partyCount), new CompoundTag());
 				if (!MinecraftForge.EVENT_BUS.post(xpEvent)) {
 					XpUtils.setXpDiff(players.get(i).getUUID(), xpEvent.skill, xpEvent.amount);
-					XpUtils.sendXpAwardNotifications(players.get(i), award.getKey(), partyCount);
+					XpUtils.sendXpAwardNotifications(players.get(i), award.getKey(), award.getValue());
 				}
 			}
 		}

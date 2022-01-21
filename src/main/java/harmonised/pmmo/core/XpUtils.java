@@ -13,6 +13,8 @@ import com.google.common.base.Preconditions;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.XpValueDataType;
+import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -111,6 +113,8 @@ public class XpUtils {
 	
 	private static List<Long> levelCache = new ArrayList<>();
 	
+	public static List<Long> getLevelCache() {return levelCache;}
+	
 	public static void computeLevelsForCache() {
 		boolean exponential = Config.USE_EXPONENTIAL_FORUMULA.get();
 		
@@ -127,6 +131,9 @@ public class XpUtils {
 					exponentialBase * Math.pow(exponentialRoot, exponentialRate * (i)) :
 					linearBase + (i) * linearPer;
 			levelCache.add(current);
+		}
+		for (ServerPlayer player : PmmoSavedData.getServer().getPlayerList().getPlayers()) {
+			Networking.sendToClient(new CP_UpdateLevelCache(levelCache), player);
 		}
 	}
 	

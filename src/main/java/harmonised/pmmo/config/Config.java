@@ -26,6 +26,25 @@ public class Config {
 	private static void setupClient(ForgeConfigSpec.Builder builder) {
 		builder.comment("PMMO Client Configuration").push("Client");
 		
+		buildGUI(builder);
+		
+		builder.pop();
+	}
+	
+	public static ForgeConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_X;
+	public static ForgeConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_Y;
+	public static ForgeConfigSpec.ConfigValue<Boolean> SKILL_LIST_DISPLAY;
+	
+	private static void buildGUI(ForgeConfigSpec.Builder builder) {
+		builder.comment("Configuration settings for the guis").push("GUI");
+		
+	SKILL_LIST_OFFSET_X = builder.comment("how far right from the top left corner the skill list should be")
+						.define("Skill List Xoffset", 0d);
+	SKILL_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the skill list should be")
+						.define("Skill List Yoffset", 0d);
+	SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed")
+						.define("Display Skill List", true);
+		
 		builder.pop();
 	}
 	
