@@ -1,6 +1,8 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.ProjectMMOMod;
+import harmonised.pmmo.api.perks.PerkRegistry;
+import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
@@ -20,6 +22,7 @@ import java.util.*;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 
 public class PlayerConnectedHandler
 {
@@ -64,6 +67,8 @@ public class PlayerConnectedHandler
             UUID uuid = player.getUUID();
             boolean showWelcome = Config.forgeConfig.showWelcome.get();
             boolean showPatreonWelcome = Config.forgeConfig.showPatreonWelcome.get();
+            
+            PerkRegistry.terminatePerk(PerkTrigger.DISABLE, (ServerPlayer)event.getPlayer());
 
             PmmoSavedData.get().setName(player.getDisplayName().getString(), uuid);
             migratePlayerDataToWorldSavedData(player);
