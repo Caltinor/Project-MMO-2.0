@@ -10,12 +10,14 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class Networking {
-	private static SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Reference.MOD_ID, "net"),
-		() -> "1.0", 
-		s -> true, 
-		s -> true);
+	private static SimpleChannel INSTANCE;
 
 	public static void registerMessages() { 
+		INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Reference.MOD_ID, "net"),
+				() -> "1.0", 
+				s -> true, 
+				s -> true);
+		
 		int ID = 0;
 		//CLIENT BOUND PACKETS
 		INSTANCE.messageBuilder(CP_UpdateLevelCache.class, ID++)
@@ -29,6 +31,7 @@ public class Networking {
 			.consumer(CP_UpdateExperience::handle)
 			.add();
 		//SERVER BOUND PACKETS
+		System.out.println("Messages Registered");
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {

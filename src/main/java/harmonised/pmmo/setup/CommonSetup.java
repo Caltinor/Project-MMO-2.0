@@ -20,8 +20,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonSetup {
 	
-	@SubscribeEvent
-	public static void init(FMLCommonSetupEvent event) {
+	public static void init(final FMLCommonSetupEvent event) {
+		System.out.println("Common Setup Fired");
 		Networking.registerMessages();
 	}
 	
