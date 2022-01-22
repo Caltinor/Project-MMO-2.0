@@ -58,7 +58,6 @@ public class Config {
 		builder.pop(); //Common Blocks
 	}
 	
-	//TODO make a setting for each toggleable logging level
 	public static ForgeConfigSpec.ConfigValue<Boolean> INFO_LOGGING;
 	public static ForgeConfigSpec.ConfigValue<Boolean> DEBUG_LOGGING;
 	public static ForgeConfigSpec.ConfigValue<Boolean> WARN_LOGGING;
@@ -67,6 +66,7 @@ public class Config {
 	
 	private static void buildMsLoggy(ForgeConfigSpec.Builder builder) {
 		builder.comment("PMMO Error Logging Configuration").push("Ms Loggy");
+		
 		INFO_LOGGING = builder.comment("Should MsLoggy info logging be enabled?  This will flood your log with data, but provides essential details",
 									  " when trying to find data errors and bug fixing.  ")
 						.define("Info Logging", false);
@@ -80,6 +80,7 @@ public class Config {
 						.define("Error Logging", true);
 		FATAL_LOGGING = builder.comment("Should MsLoggy fatal logging be enabled?  I can't imagine a situation where you'd want this off, but here you go.")
 						.define("Info Logging", true);
+		
 		builder.pop(); //Ms. Loggy Block
 	}
 	

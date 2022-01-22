@@ -24,6 +24,10 @@ public class DataMirror {
 		return mySkills.getOrDefault(skill, 0l);
 	}
 	
+	public static Map<String, Long> getSkillMap() {
+		return mySkills;
+	}
+	
 	public static int getSkillLevel(long xp) {
 		for (int i = 0; i < levelCache.size(); i++) {
 			if (levelCache.get(i) > xp)
@@ -34,9 +38,9 @@ public class DataMirror {
 	
 	public static double getXpWithPercentToNextLevel(long rawXP) {
 		int currentLevel = getSkillLevel(rawXP);
-		long currentXPBar = levelCache.get(currentLevel);
-		long xpToNextLevel = levelCache.get(currentLevel + 1) - currentXPBar;
-		long progress = rawXP - currentXPBar;
+		long currentXPThreshold = levelCache.get(currentLevel);
+		long xpToNextLevel = levelCache.get(currentLevel + 1) - currentXPThreshold;
+		long progress = rawXP - currentXPThreshold;
 		return (double)currentLevel + (double)progress/(double)xpToNextLevel;
 	}
 

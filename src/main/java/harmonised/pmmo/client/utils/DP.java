@@ -3,13 +3,8 @@ package harmonised.pmmo.client.utils;
 import java.util.Locale;
 
 public class DP
-{
-	public static String dprefix(Float input)
-	{
-		return dprefix(input.doubleValue());
-	}
-	
-	public static String dprefix(Double input)
+{	
+	public static String dprefix(long input)
 	{
 		char prefix = ' ';
 

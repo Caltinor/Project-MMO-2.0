@@ -17,10 +17,7 @@ public class LoginHandler {
 		
 		//===========UPDATE DATA MIRROR=======================
 		for (Map.Entry<String, Long> skillMap : PmmoSavedData.get().getXpMap(player.getUUID()).entrySet()) {
-			Networking
-			.sendToClient(
-					new CP_UpdateExperience(skillMap.getKey(), skillMap.getValue()), 
-					player);
+			Networking.sendToClient(new CP_UpdateExperience(skillMap.getKey(), skillMap.getValue()), player);
 		}
 		Networking.sendToClient(new CP_UpdateLevelCache(XpUtils.getLevelCache()), player);
 	}

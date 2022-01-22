@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -28,8 +29,10 @@ public class PmmoSavedData extends SavedData{
 	public void setXpRaw(UUID playerID, String skillName, long value) {
 		xp.computeIfAbsent(playerID, s -> new HashMap<>()).put(skillName, value);
 		this.setDirty();
-		if (server.getPlayerList().getPlayer(playerID) != null) 
+		if (server.getPlayerList().getPlayer(playerID) != null) {
 			Networking.sendToClient(new CP_UpdateExperience(skillName, value), server.getPlayerList().getPlayer(playerID));
+			MsLoggy.debug("Skill Update Packet sent to Client"+playerID.toString());
+		}
 	}
 	
 	public Map<String, Long> getXpMap(UUID playerID) {

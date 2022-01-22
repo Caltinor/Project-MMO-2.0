@@ -8,18 +8,24 @@ import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.Reference;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
+@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonSetup {
 	
+	@SubscribeEvent
 	public static void init(FMLCommonSetupEvent event) {
 		Networking.registerMessages();
 	}
 	
+	@SubscribeEvent
 	public static void onServerStartup(ServerStartingEvent event) {
 		MsLoggy.info("Loading PMMO Saved Data");
 		PmmoSavedData.init(event.getServer());
@@ -33,11 +39,13 @@ public class CommonSetup {
 		MsLoggy.info("PMMO Server loading process complete");
 	}
 	
+	@SubscribeEvent
 	public static void onConfigReload(ModConfigEvent.Reloading event) {
 		if (event.getConfig().getType().equals(ModConfig.Type.SERVER))
 			XpUtils.computeLevelsForCache();
 	}
 	
+	@SubscribeEvent
 	public static void onCommandRegister(RegisterCommandsEvent event) {
 		CmdPmmoRoot.register(event.getDispatcher());
 	}
