@@ -27,5 +27,6 @@ public class CP_UpdateExperience {
 	public void handle(Supplier<NetworkEvent.Context> ctx ) {
 		DataMirror.setExperience(skill, xp);
 		MsLoggy.debug("Client Packet Handled for updating experience of "+skill+"["+xp+"]");
+		ctx.get().setPacketHandled(true);
 	}
 }
