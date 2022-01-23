@@ -1,27 +1,27 @@
 {
-	"pmmo:mining": {
+	"mining": {
 		"color": 16776960 
 	},
-	"pmmo:excavation": { 
+	"excavation": { 
 		"color": 39398
 	},
-	"pmmo:farming":
+	"farming":
 	{
 		"noAfkPenalty": 1
 	},
-	"pmmo:smithing":
+	"smithing":
 	{
 		"noAfkPenalty": 1
 	},
-	"pmmo:cooking":
+	"cooking":
 	{
 		"noAfkPenalty": 1
 	},
-	"pmmo:alchemy":
+	"alchemy":
 	{
 		"noAfkPenalty": 1
 	},
-	"pmmo:engineering":
+	"engineering":
 	{
 		"color": 16777215
 	}

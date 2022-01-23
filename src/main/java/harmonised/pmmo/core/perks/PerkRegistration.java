@@ -15,10 +15,10 @@ public class PerkRegistration {
 		PerkRegistry.registerPerk(rl("break_speed"), PerksImpl.BREAK_SPEED, NONE);
 		PerkRegistry.registerPerk(rl("fireworks"), FireworkHandler.FIREWORKS, NONE);
 		//Attribute Perks
-		PerkRegistry.registerPerk(rl("reach"), FeaturePerks.REACH, NONE);
-		PerkRegistry.registerPerk(rl("damage"), FeaturePerks.DAMAGE, NONE);
+		PerkRegistry.registerPerk(rl("reach"), FeaturePerks.REACH, FeaturePerks.REACH_TERM);
+		PerkRegistry.registerPerk(rl("damage"), FeaturePerks.DAMAGE, FeaturePerks.DAMAGE_TERM);
 		PerkRegistry.registerPerk(rl("speed"), FeaturePerks.SPEED, FeaturePerks.SPEED_TERM);
-		PerkRegistry.registerPerk(rl("health"), FeaturePerks.HEALTH, NONE);
+		PerkRegistry.registerPerk(rl("health"), FeaturePerks.HEALTH, FeaturePerks.HEALTH_TERM);
 		//Event Perks
 		PerkRegistry.registerPerk(rl("jump_boost"), FeaturePerks.JUMP, NONE);
 		PerkRegistry.registerPerk(rl("breath"), FeaturePerks.BREATH, NONE);

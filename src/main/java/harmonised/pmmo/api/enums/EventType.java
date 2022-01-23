@@ -56,5 +56,6 @@ public enum EventType {
 		SWIM_SPRINTING,
 	TAMING,
 	USE_ITEM,
-	VEIN_MINE	
+	VEIN_MINE,
+	DISABLE_PERK
 }

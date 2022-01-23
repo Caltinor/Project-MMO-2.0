@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.google.common.base.Preconditions;
 
-import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 
 public class DataConfig {
@@ -23,7 +22,7 @@ public class DataConfig {
 	
 	public static int getSkillColor(String skill) {
 		return coreData.computeIfAbsent(CoreType.SKILLS,s -> new HashMap<>())
-				.computeIfAbsent(new ResourceLocation(Reference.MOD_ID, skill),s -> new HashMap<>())
+				.computeIfAbsent(new ResourceLocation(skill),s -> new HashMap<>())
 				.getOrDefault(COLOR_KEY, 16777215);
 	}
 }
