@@ -26,8 +26,8 @@ public class PerksImpl {
 		if (speedBonus == 0) return NONE;
 		float heightConfig = nbt.contains(APIUtils.MODIFIER) ? nbt.getFloat(APIUtils.MODIFIER) : 1000;
 		BlockPos pos = nbt.contains(APIUtils.BLOCK_POS) ? BlockPos.of(nbt.getLong(APIUtils.BLOCK_POS)) : new BlockPos(0,0,0);
-		float heightMultiplier = 1 - pos.getY()/heightConfig;
-		float newSpeed = speedIn * Math.min(0, 1 + level * speedBonus * heightMultiplier);
+		float heightMultiplier = Math.max(0, 1 - pos.getY()/heightConfig);
+		float newSpeed = speedIn * Math.max(0, 1 + level * speedBonus * heightMultiplier);
 		return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, newSpeed).build();
 	};
 	

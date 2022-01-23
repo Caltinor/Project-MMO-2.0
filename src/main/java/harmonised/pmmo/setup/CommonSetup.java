@@ -21,7 +21,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class CommonSetup {
 	
 	public static void init(final FMLCommonSetupEvent event) {
-		System.out.println("Common Setup Fired");
 		Networking.registerMessages();
 	}
 	

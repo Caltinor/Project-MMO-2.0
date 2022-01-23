@@ -74,12 +74,12 @@ public class Config {
 				  					  " when trying to find bugs. DEVELOPER SETTING (mostly).  ")
 						.define("Debug Logging", false);
 		WARN_LOGGING = builder.comment("Should MsLoggy warn logging be enabled?  This log type is helpful for catching important but non-fatal issues")
-						.define("Info Logging", true);
+						.define("Warn Logging", true);
 		ERROR_LOGGING = builder.comment("Should Error Logging be enabled.  it is highly recommended this stay true.  however, you can",
 									  "disable it to remove pmmo errors from the log.")
 						.define("Error Logging", true);
 		FATAL_LOGGING = builder.comment("Should MsLoggy fatal logging be enabled?  I can't imagine a situation where you'd want this off, but here you go.")
-						.define("Info Logging", true);
+						.define("Fatal Logging", true);
 		
 		builder.pop(); //Ms. Loggy Block
 	}

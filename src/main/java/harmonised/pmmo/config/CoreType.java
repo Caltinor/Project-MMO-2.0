@@ -21,11 +21,11 @@ public enum CoreType {
     VEIN_BLACKLIST,    
 
     //TREASURE,   Loot Predicate as well
-    SALVAGE/*,
+    SALVAGE,/*
 
     SALVAGE_FROM,
-    TREASURE_FROM,
-    SKILLS,
+    TREASURE_FROM,*/
+    SKILLS/*,
     STATS,
     DIMENSION,
     CREDITS,

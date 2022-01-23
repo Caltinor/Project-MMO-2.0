@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.util.MsLoggy;
 
 /**This class serves as a run-time cache of data that the
  * client will utiliize for various rendering tasks.
@@ -18,7 +19,10 @@ public class DataMirror {
 	private static List<Long> levelCache = new ArrayList<>();
 	
 	public static void setLevelCache(List<Long> cache) {levelCache = cache;}
-	public static void setExperience(String skill, long amount) {mySkills.put(skill, amount);}
+	public static void setExperience(String skill, long amount) {
+		mySkills.put(skill, amount);
+		MsLoggy.debug("Client Side Skill Map: "+MsLoggy.mapToString(mySkills));
+	}
 	
 	public static long getXpForSkill(String skill) {
 		return mySkills.getOrDefault(skill, 0l);
@@ -38,8 +42,8 @@ public class DataMirror {
 	
 	public static double getXpWithPercentToNextLevel(long rawXP) {
 		int currentLevel = getSkillLevel(rawXP);
-		long currentXPThreshold = levelCache.get(currentLevel);
-		long xpToNextLevel = levelCache.get(currentLevel + 1) - currentXPThreshold;
+		long currentXPThreshold = currentLevel - 1 >= 0 ? levelCache.get(currentLevel - 1) : 0;
+		long xpToNextLevel = levelCache.get(currentLevel) - currentXPThreshold;
 		long progress = rawXP - currentXPThreshold;
 		return (double)currentLevel + (double)progress/(double)xpToNextLevel;
 	}

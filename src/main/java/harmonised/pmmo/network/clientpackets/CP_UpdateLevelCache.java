@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import harmonised.pmmo.client.utils.DataMirror;
+import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -27,5 +28,7 @@ public class CP_UpdateLevelCache {
 	
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		DataMirror.setLevelCache(levelCache);
+		MsLoggy.debug("Client Packet Handled for updating levelCache");
+		ctx.get().setPacketHandled(true);
 	}
 }

@@ -6,21 +6,16 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class XPOverlayGUI extends GuiComponent
 {
 	public static boolean configChanged = false;
@@ -31,44 +26,40 @@ public class XPOverlayGUI extends GuiComponent
 	private static boolean showSkillsListAtCorner = Config.SKILL_LIST_DISPLAY.get();
 	//private final ResourceLocation bar = new ResourceLocation(Reference.MOD_ID, "textures/gui/xpbar.png");
 	private static Minecraft mc = Minecraft.getInstance();
-	private static String tempSkill = "INVALID SKILL";
 	private static Font fontRenderer = mc.font;
 	private static int maxLevel = Config.MAX_LEVEL.get();
 	private static PoseStack stack;
 
 
-	@SubscribeEvent
-	public void renderOverlay(RenderGameOverlayEvent event)
+	public static void renderOverlay(RenderGameOverlayEvent event)
 	{
-		if(event.getType() == RenderGameOverlayEvent.ElementType.TEXT)	//Xp Drops
+		stack = event.getMatrixStack();
+		stack.pushPose();
+		RenderSystem.enableBlend();
+		try
 		{
-			stack = event.getMatrixStack();
-			stack.pushPose();
-			RenderSystem.enableBlend();
-			try
+			Window sr = mc.getWindow();
+			if(configChanged)
 			{
-				Window sr = mc.getWindow();
-				if(configChanged)
-				{
-					refreshClientSettings();
-					configChanged = false;
-				}
-				
-				int skillListX = (int) (sr.getGuiScaledWidth() * skillListOffsetX);
-				int skillListY = (int) (sr.getGuiScaledHeight() * skillListOffsetY);
-				
-				if(showSkillsListAtCorner)
-					renderSkillList(skillListX, skillListY);
+				refreshClientSettings();
+				configChanged = false;
 			}
-			catch(Exception e)
-			{
-				MsLoggy.error("Error rendering PMMO GUI");
-			}
-			//Causes black screen
+			
+			int skillListX = (int) (sr.getGuiScaledWidth() * skillListOffsetX);
+			int skillListY = (int) (sr.getGuiScaledHeight() * skillListOffsetY);
+			
+			if(showSkillsListAtCorner)
+				renderSkillList(skillListX, skillListY);
+		}
+		catch(Exception e)
+		{
+			MsLoggy.error("Error rendering PMMO GUI {}", e);
+			e.printStackTrace();
+		}
+		//Causes black screen
 //			RenderSystem.disableBlend();
 //			RenderSystem.color(255, 255, 255);
-			stack.popPose();
-		}
+		stack.popPose();
 	}
 
 	/*private void doRayTrace()
@@ -360,27 +351,33 @@ public class XPOverlayGUI extends GuiComponent
 		}
 	}*/
 
-	private void renderSkillList(int skillListX, int skillListY)
+	private static void renderSkillList(int skillListX, int skillListY)
 	{
 		if(!mc.options.renderDebug)
 		{
 			//TODO reintroduce bonuses
-			List<String> skillsKeys = DataMirror.getSkillMap().keySet().stream().toList();
+			List<String> skillsKeys = new ArrayList<>(); 
+			DataMirror.getSkillMap().keySet().stream().forEach(entry -> skillsKeys.add(entry));
 			skillsKeys.sort(Comparator.<String>comparingLong(a -> DataMirror.getXpForSkill(a)).reversed());
 
+			
 			for(int i = 0; i < skillsKeys.size(); i++) {
 				String skillKey = skillsKeys.get(i);
+				skillGap = fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) > skillGap 
+						? fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) 
+						: skillGap;
 				long currentXP = DataMirror.getXpForSkill(skillKey);
-				double level = DataMirror.getXpWithPercentToNextLevel(DataMirror.getXpForSkill(skillKey)); //TODO should use askill xp
+				double level = DataMirror.getXpWithPercentToNextLevel(DataMirror.getXpForSkill(skillKey));
 				String tempString = DP.dp(Math.floor(level * 100D) / 100D);
-				int color = 1677215; //Skill.getSkillColor(tempSkill); TODO colorize!
+				int color = DataConfig.getSkillColor(skillKey);
 				
 				if(level >= maxLevel)
 					tempString = "" + maxLevel;
 				
 				int listIndex = i * 9;
-				drawString(stack, fontRenderer, tempString, skillListX + levelGap + 4 - fontRenderer.width(tempString), skillListY + 3 + listIndex, color);
-				drawString(stack, fontRenderer, " | " + new TranslatableComponent("pmmo." + tempSkill).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
+				levelGap = fontRenderer.width(tempString);
+				drawString(stack, fontRenderer, tempString, skillListX + 4, skillListY + 3 + listIndex, color);
+				drawString(stack, fontRenderer, " | " + new TranslatableComponent("pmmo." + skillKey).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
 				drawString(stack, fontRenderer, " | " + DP.dprefix(currentXP), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color);
 			}
 		}

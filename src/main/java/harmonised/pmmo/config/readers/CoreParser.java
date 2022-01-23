@@ -21,6 +21,7 @@ import harmonised.pmmo.ProjectMMO;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.CoreType;
+import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.core.XpUtils;
 import harmonised.pmmo.util.MsLoggy;
@@ -169,6 +170,28 @@ public class CoreParser {
 			
 			if (!dataFile.exists())
 				createData(dataFile, path, filename);
+		
+		
+			try(InputStream input = new FileInputStream(dataFile.getPath());
+                Reader reader = new BufferedReader(new InputStreamReader(input)))
+            {
+            		Map<String, Map<String, Integer>> rawMap = gson.fromJson(reader, basicIntegerJsonType);
+            		for (Map.Entry<String, Map<String, Integer>> raw : rawMap.entrySet()) {
+            			List<ResourceLocation> tagResults = new ArrayList<>();
+            			if (raw.getKey().startsWith("#"))
+            				tagResults = getTagMembers(raw.getKey().substring(1));
+            			else
+            				tagResults.add(new ResourceLocation(raw.getKey()));
+            			for (ResourceLocation key : tagResults) {
+            				DataConfig.setCoreDataMap(type, key, raw.getValue());
+            				MsLoggy.info(type.name()+": "+key.toString()+MsLoggy.mapToString(raw.getValue())+" loaded from config");
+            			}
+            		}
+            }
+            catch(Exception e)
+            {
+                MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
+            }
 		}
 	}
 	
