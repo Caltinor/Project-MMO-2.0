@@ -35,7 +35,7 @@ public class JumpHandler
                 if (!player.isInWater())
                 {
                     Vec3 xpDropPos = player.position();
-                    double award = perkOutput.contains("power") ? perkOutput.getInt("power") : 1;
+                    double award = perkOutput.contains("power") ? Math.max(1, perkOutput.getInt("power")) : 1;
                     WorldXpDrop xpDrop = WorldXpDrop.fromXYZ(XP.getDimResLoc(player.getCommandSenderWorld()), xpDropPos.x(), xpDropPos.y() + 0.523, xpDropPos.z(), 0.15, award, Skill.AGILITY.toString());
                     XP.addWorldXpDrop(xpDrop, (ServerPlayer) player);
                     XP.awardXp((ServerPlayer) player, Skill.AGILITY.toString(), "jumping", award, true, false, false);
