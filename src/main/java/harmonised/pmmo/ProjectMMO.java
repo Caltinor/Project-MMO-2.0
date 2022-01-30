@@ -15,7 +15,7 @@ public class ProjectMMO {
     	ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
     	ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
-    	
+
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
     }
 }

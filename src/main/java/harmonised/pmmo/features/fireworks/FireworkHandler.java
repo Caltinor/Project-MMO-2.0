@@ -3,6 +3,7 @@ package harmonised.pmmo.features.fireworks;
 import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.config.DataConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
@@ -14,9 +15,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class FireworkHandler {
+	public static final String FIREWORK_SKILL = "firework_skill";
 	//This is technically a perk which is by default used during the SKILL_UP event trigger
+	//This should be passed both the skill triggering the event via FIREWORK_SKILL and take a parameter of SKILLNAME from the settings
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> FIREWORKS = (player, nbt, level) -> {
 		String skill = nbt.contains(APIUtils.SKILLNAME) ? nbt.getString(APIUtils.SKILLNAME) : "none";
+		String checkedSkill = nbt.contains(FIREWORK_SKILL) ? nbt.getString(FIREWORK_SKILL) : "none";
+		if (!skill.equals(checkedSkill)) return new CompoundTag();
 		BlockPos pos = player.blockPosition();
 		//GET STRING COLOR
 		spawnRocket(player.getLevel(), new Vec3(pos.getX(), pos.getY(), pos.getZ()), skill);
@@ -30,8 +35,10 @@ public class FireworkHandler {
 		ListTag explosion = new ListTag();
 		CompoundTag l = new CompoundTag();
 
-		int[] colors = new int[1];
-		//colors[0] = Skill.getSkillColor(skill);
+		int[] colors = new int[] {DataConfig.getSkillColor(skill)};
+		
+		
+		
 //		int[] fadeColors = {0xff0000, 0x00ff00, 0x0000ff};
 
 		l.putInt("Flicker", 1);

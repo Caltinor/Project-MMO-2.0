@@ -8,7 +8,6 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.core.XpUtils;
@@ -26,7 +25,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class BreakHandler {
@@ -98,9 +96,7 @@ public class BreakHandler {
 		int partyCount = players.size();
 		for (int i = 0; i < partyCount; i++) {
 			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
-				XpEvent xpEvent = new XpEvent(players.get(i), award.getKey(), (award.getValue() / partyCount), new CompoundTag());
-				if (!MinecraftForge.EVENT_BUS.post(xpEvent)) {
-					XpUtils.setXpDiff(players.get(i).getUUID(), xpEvent.skill, xpEvent.amount);
+				if (XpUtils.setXpDiff(players.get(i).getUUID(), award.getKey(), award.getValue())) {
 					XpUtils.sendXpAwardNotifications(players.get(i), award.getKey(), award.getValue());
 				}
 			}

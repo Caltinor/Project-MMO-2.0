@@ -8,13 +8,15 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 public class XpEvent extends PlayerEvent
 {
     public String skill;
-    public long amount;
+    public long amountAwarded; 
+    private long currentSkillXp;
     private CompoundTag context;
 
-    public XpEvent(ServerPlayer player, String skill, long amount, CompoundTag context) {
+    public XpEvent(ServerPlayer player, String skill, long currentSkillXp, long amountAwarded, CompoundTag context) {
         super(player);
         this.skill = skill;
-        this.amount = amount;
+        this.currentSkillXp = currentSkillXp;
+        this.amountAwarded = amountAwarded;
         this.context = context;
     }
 
@@ -24,11 +26,15 @@ public class XpEvent extends PlayerEvent
     }
 
     public int startLevel() {
-        return XpUtils.getLevelFromXP(XpUtils.getPlayerXpRaw(this.getPlayer().getUUID(), skill));
+        return XpUtils.getLevelFromXP(currentSkillXp);
     }
 
     public int endLevel() {
-        return XpUtils.getLevelFromXP(amount + XpUtils.getPlayerXpRaw(this.getPlayer().getUUID(), skill));
+        return XpUtils.getLevelFromXP(amountAwarded + currentSkillXp);
+    }
+    
+    public boolean isLevelUp() {
+    	return startLevel() < endLevel();
     }
     
     public CompoundTag getContext() {

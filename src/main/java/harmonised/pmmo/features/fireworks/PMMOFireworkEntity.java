@@ -10,28 +10,18 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
 
     public PMMOFireworkEntity(Level worldIn, double x, double y, double z, ItemStack givenItem)
     {
-        super(worldIn, x, y, z, givenItem);}/*
-        this.life = 0;
-        this.setPos(x, y, z);
-        int i = 1;
-        if (!givenItem.isEmpty() && givenItem.hasTag()) {
-            this.entityData.set(DATA_ID_FIREWORKS_ITEM, givenItem.copy());
-            i += givenItem.getOrCreateTagElement("Fireworks").getByte("Flight");
-        }
-
-        this.setDeltaMovement(this.random.nextGaussian() * 0.001D, 0.05D, this.random.nextGaussian() * 0.001D);
-        this.lifetime = 10 * i + this.random.nextInt(6) + this.random.nextInt(7);
+        super(worldIn, x, y, z, givenItem);
     }
 
-    public void setExplosionText(WorldText explosionText) {
+    /*public void setExplosionText(WorldText explosionText) {
         this.explosionText = explosionText;
-    }
+    }*/
 
     @Override
     public void explode()
     {
         this.level.broadcastEntityEvent(this, (byte)17);
-        if(explosionText != null)
+        /*if(explosionText != null)
         {
             Vec3 pos = position();
             ResourceLocation dimResLoc = XP.getDimResLoc(level);
@@ -44,8 +34,8 @@ public class PMMOFireworkEntity extends FireworkRocketEntity
                     XP.addWorldTextRadius(dimResLoc, explosionText, 128);
                 }
             }
-        }
-//        this.dealExplosionDamage();
+        }*/
+        //this.dealExplosionDamage();
         this.remove(RemovalReason.DISCARDED);
-    }*/
+    }
 }
