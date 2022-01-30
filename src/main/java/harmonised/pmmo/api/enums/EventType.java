@@ -1,6 +1,15 @@
 package harmonised.pmmo.api.enums;
 
-public enum EventType {
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import com.mojang.serialization.Codec;
+
+import net.minecraft.util.StringRepresentable;
+import net.minecraftforge.common.IExtensibleEnum;
+
+public enum EventType implements StringRepresentable, IExtensibleEnum{
 	ANVIL_REPAIR,  //smithing
 	BLOCK_BREAK,
 		BREAK_SPEED,
@@ -16,10 +25,14 @@ public enum EventType {
 		FROM_PROJECTILES,
 		FROM_ENVIRONMENT,
 		FROM_IMPACT,
-	DEAL_DAMAGE,
-		TO_MOBS,
-		TO_PLAYERS,
-		TO_ANIMALS,
+	DEAL_MELEE_DAMAGE,
+		MELEE_TO_MOBS,
+		MELEE_TO_PLAYERS,
+		MELEE_TO_ANIMALS,
+	DEAL_RANGED_DAMAGE,
+		RANGED_TO_MOBS,
+		RANGED_TO_PLAYERS,
+		RANGED_TO_ANIMALS,
 	DEATH,
 		KILLED_BY_MOBS,
 		KILLED_BY_PLAYERS,
@@ -57,5 +70,15 @@ public enum EventType {
 	TAMING,
 	USE_ITEM,
 	VEIN_MINE,
-	DISABLE_PERK
+	DISABLE_PERK;
+	
+	public static final Codec<EventType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(EventType::values, EventType::byName);
+	private static final Map<String, EventType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(EventType::getSerializedName, s -> {return s;}));
+	public static EventType byName(String name) {return BY_NAME.get(name);} 
+	
+	@Override
+	public String getSerializedName() {return this.name();}
+	
+	public static EventType create(String name) {throw new IllegalStateException("Enum not extended");}
+
 }

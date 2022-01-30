@@ -9,6 +9,7 @@ import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -47,5 +48,14 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onCommandRegister(RegisterCommandsEvent event) {
 		CmdPmmoRoot.register(event.getDispatcher());
+	}
+	
+	@SubscribeEvent
+	public static void onAddReloadListeners(AddReloadListenerEvent event) {
+		event.addListener(CoreParser.ITEM_LOADER);
+		event.addListener(CoreParser.BLOCK_LOADER);
+		event.addListener(CoreParser.ENTITY_LOADER);
+		event.addListener(CoreParser.BIOME_LOADER);
+		event.addListener(CoreParser.DIMENSION_LOADER);
 	}
 }

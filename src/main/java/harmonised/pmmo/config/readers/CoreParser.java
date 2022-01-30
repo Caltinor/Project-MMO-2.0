@@ -10,11 +10,15 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import harmonised.pmmo.ProjectMMO;
@@ -22,8 +26,13 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.CoreType;
 import harmonised.pmmo.config.DataConfig;
+import harmonised.pmmo.config.datapack.MergeableCodecDataManager;
+import harmonised.pmmo.config.datapack.codecs.CodecMapLocation;
+import harmonised.pmmo.config.datapack.codecs.CodecMapObject;
+import harmonised.pmmo.config.datapack.codecs.CodecTypeSalvage;
 import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.core.XpUtils;
+import harmonised.pmmo.features.salvaging.SalvageLogic;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -37,130 +46,94 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class CoreParser {
-	private static final Gson gson = new Gson();
-
-	public static final Type basicIntegerJsonType = new TypeToken<Map<String, Map<String, Integer>>>(){}.getType();
-	public static final Type basicDoubleJsonType = new TypeToken<Map<String, Map<String, Double>>>(){}.getType();
+	private static final Logger DATA_LOGGER = LogManager.getLogger();
+	private static final Gson gson = new Gson();	
+	public static final Type valueJsonType = new TypeToken<Map<String, JsonObject>>(){}.getType();
 	
-	public static final Type valueJsonType = new TypeToken<Map<String, Map<String, Map<String, Long>>>>(){}.getType();
+	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> ITEM_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/items", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(true, processed));
+	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> BLOCK_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/blocks", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(false, processed));
+	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> ENTITY_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/entities", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(false, processed));
+	
+	private static CodecMapObject.ObjectMapContainer mergeObjectTags(final List<CodecMapObject> raws) {
+		CodecMapObject.ObjectMapContainer outObject = new CodecMapObject.ObjectMapContainer();
+		for (int i = 0; i < raws.size(); i++) {
+			outObject = CodecMapObject.ObjectMapContainer.combine(outObject, new CodecMapObject.ObjectMapContainer(raws.get(i)));			
+		}
+		return outObject;
+	}	
+	private static void finalizeObjectMaps(boolean isItem, Map<ResourceLocation, CodecMapObject.ObjectMapContainer> data) {
+		data.forEach((rl, omc) -> {
+			for (Map.Entry<EventType, Map<String, Long>> xpValues : omc.xpValues.entrySet()) {
+				MsLoggy.info("XP_VALUES: "+xpValues.getKey().toString()+": "+rl.toString()+MsLoggy.mapToString(xpValues.getValue())+" loaded from config");
+				XpUtils.setObjectXpGainMap(xpValues.getKey(), rl, xpValues.getValue());
+			}			
+			for (Map.Entry<ReqType, Map<String, Integer>> reqs : omc.reqs.entrySet()) {
+				MsLoggy.info("REQS: "+reqs.getKey().toString()+": "+rl.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
+				SkillGates.setObjectSkillMap(reqs.getKey(), rl, reqs.getValue());
+			}
+			if (isItem) {
+				for (Map.Entry<XpValueDataType, Map<String, Double>> modifiers : omc.modifiers.entrySet()) {
+					MsLoggy.info("BONUSES: "+rl.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
+					XpUtils.setObjectXpModifierMap(modifiers.getKey(), rl, modifiers.getValue());
+				}
+				for (Map.Entry<ResourceLocation, CodecTypeSalvage.SalvageData> salvage : omc.salvage.entrySet()) {
+					MsLoggy.info("SALVAGE: "+rl.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
+					SalvageLogic.setSalvageData(rl, salvage.getKey(), salvage.getValue());
+				}
+			}
+		});
+	}
+	
+	public static final MergeableCodecDataManager<CodecMapLocation, CodecMapLocation.LocationMapContainer> BIOME_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/biomes", DATA_LOGGER, CodecMapLocation.CODEC, raws -> mergeLocationTags(raws), processed -> finalizeLocationMaps(processed));
+	public static final MergeableCodecDataManager<CodecMapLocation, CodecMapLocation.LocationMapContainer> DIMENSION_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/dimensions", DATA_LOGGER, CodecMapLocation.CODEC, raws -> mergeLocationTags(raws), processed -> finalizeLocationMaps(processed));
+	
+	private static CodecMapLocation.LocationMapContainer mergeLocationTags(final List<CodecMapLocation> raws) {
+		CodecMapLocation.LocationMapContainer outObject = new CodecMapLocation.LocationMapContainer();
+		for (int i = 0; i < raws.size(); i++) {
+			outObject = CodecMapLocation.LocationMapContainer.combine(outObject, new CodecMapLocation.LocationMapContainer(raws.get(i)));
+		}
+		return outObject;
+	}
+	private static void finalizeLocationMaps(Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data) {
+		data.forEach((rl, lmc) -> {
+			for (Map.Entry<XpValueDataType, Map<String, Double>> modifiers : lmc.bonusMap.entrySet()) {
+				MsLoggy.info("BONUSES: "+rl.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
+				XpUtils.setObjectXpModifierMap(modifiers.getKey(), rl, modifiers.getValue());
+			}
+			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMods : lmc.mobModifiers.entrySet()) {
+				MsLoggy.info("MOB MODIFIERS: "+rl.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
+				DataConfig.setMobModifierData(rl, mobMods.getKey(), mobMods.getValue());
+			}
+			DataConfig.setLocationEffectData(CoreType.LOCATION_EFFECT_POSITIVE, rl, lmc.positive);
+			DataConfig.setLocationEffectData(CoreType.LOCATION_EFFECT_NEGATIVE, rl, lmc.negative);
+			DataConfig.setArrayData(rl, lmc.veinBlacklist);
+			SkillGates.setObjectSkillMap(ReqType.REQ_TRAVEL, rl, lmc.travelReq);
+		});
+	}
+	
+	//TODO PLAYER_LOADER
+	
+	//TODO ENCHANTMENT_LOADER
 	
 	public static void init() {
-		parseRequirements();
-		parseXp_Values();
-		parseCore();
+		parseSkills();
+		parseGlobals();
 	}
 	
-	private static void parseRequirements() {
-		DATA_PATH path = DATA_PATH.REQS;
-		String filename;
-		File dataFile;
-		for (ReqType type : ReqType.values()) {
-			filename = type.name().toLowerCase() + ".json";
-			dataFile = FMLPaths.CONFIGDIR.get().resolve(path.config_path + filename).toFile();
-			
-			if (!dataFile.exists())
-				createData(dataFile, path, filename);
-			
-            try(InputStream input = new FileInputStream(dataFile.getPath());
-                Reader reader = new BufferedReader(new InputStreamReader(input)))
-            {
-            		Map<String, Map<String, Integer>> rawMap = gson.fromJson(reader, basicIntegerJsonType);
-            		for (Map.Entry<String, Map<String, Integer>> raw : rawMap.entrySet()) {
-            			List<ResourceLocation> tagResults = new ArrayList<>();
-            			if (raw.getKey().startsWith("#"))
-            				tagResults = getTagMembers(raw.getKey().substring(1));
-            			else
-            				tagResults.add(new ResourceLocation(raw.getKey()));
-            			for (ResourceLocation key : tagResults) {
-            				SkillGates.setObjectSkillMap(type, key, raw.getValue());
-            				MsLoggy.info(type.name()+": "+key.toString()+MsLoggy.mapToString(raw.getValue())+" loaded from config");
-            			}
-            		}
-            }
-            catch(Exception e)
-            {
-                MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
-            }
-        }
+	private static void parseSkills() {
+		
 	}
 	
-	private static void parseXp_Values() {
-		DATA_PATH path = DATA_PATH.EXP;
-		String filename;
-		File dataFile;
-		for (XpValueDataType type : XpValueDataType.values()) {
-			filename = type.name().toLowerCase() + ".json";
-			dataFile = FMLPaths.CONFIGDIR.get().resolve(path.config_path + filename).toFile();
-			
-			if (!dataFile.exists())
-				createData(dataFile, path, filename);
-			
-			try(InputStream input = new FileInputStream(dataFile.getPath());
-	                Reader reader = new BufferedReader(new InputStreamReader(input)))
-	            {
-						//Distinguish between long and double type configs
-						boolean isModifierType = false;
-						Map<String, Map<String, Map<String, Long>>> rawValueMap = new HashMap<>();
-						Map<String, Map<String, Double>> rawModifierMap = new HashMap<>();
-						//Check for modifier types and fill the appropriate raw map for later evaluation
-						for (XpValueDataType modType : XpValueDataType.modifierTypes) {
-							if (modType.equals(type)) {
-								rawModifierMap = gson.fromJson(reader, basicDoubleJsonType);
-								isModifierType = true;
-								break;
-							}
-						}
-						if (!isModifierType)
-							rawValueMap = new Gson().fromJson(reader, valueJsonType);
-						/* Evaluate configs based on their types
-						 * This works by only filling the maps of the appropriate type.
-						 * The loop for the incorrect type will be empty and simply bypassed.
-						 */
-	            		for (Map.Entry<String, Map<String, Map<String, Long>>> raw : rawValueMap.entrySet()) {	
-	            			List<ResourceLocation> tagResults = new ArrayList<>();
-	            			if (raw.getKey().startsWith("#")) 
-	            				tagResults = getTagMembers(raw.getKey().substring(1));
-	            			else
-	            				tagResults.add(new ResourceLocation(raw.getKey()));
-	            			for (ResourceLocation key : tagResults) {
-	            				//Validate the event type entries and skip out 
-	            				for (Map.Entry<String, Map<String, Long>> subset : raw.getValue().entrySet()) {
-	            					//validate the event type key from the json
-	            					EventType validEventKey = null;
-	            					for (EventType eType : EventType.values()) {
-	            						if (subset.getKey().toUpperCase().equals(eType.name().toUpperCase())) {
-	            							validEventKey = eType;
-	            							break;
-	            						}
-	            					}
-	            					if (validEventKey == null) continue;
-	            					//enter the resulting data into the data map
-	            					MsLoggy.info(validEventKey+": "+key.toString()+MsLoggy.mapToString(subset.getValue())+" loaded from config");
-	            					XpUtils.setObjectXpGainMap(validEventKey, key, subset.getValue());
-	            				}     				
-	            			}
-	            		}
-
-	            		for (Map.Entry<String, Map<String, Double>> raw : rawModifierMap.entrySet()) {
-	            			List<ResourceLocation> tagResults = new ArrayList<>();
-	            			if (raw.getKey().startsWith("#"))
-	            				tagResults = getTagMembers(raw.getKey().substring(1));
-	            			else 
-	            				tagResults.add(new ResourceLocation(raw.getKey()));
-	            			for (ResourceLocation key : tagResults) {
-	            				MsLoggy.info(key.toString()+MsLoggy.mapToString(raw.getValue())+" loaded from config");
-	            				XpUtils.setObjectXpModifierMap(type, key, raw.getValue());
-	            			}
-	            		}
-	            }
-	            catch(Exception e)
-	            {
-	                MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
-	            }
-		}
+	private static void parseGlobals() {
+		
 	}
 	
-	private static void parseCore() {
+	/*private static void parseCore() {
 		DATA_PATH path = DATA_PATH.CORE;
 		String filename;
 		File dataFile;
@@ -175,25 +148,28 @@ public class CoreParser {
 			try(InputStream input = new FileInputStream(dataFile.getPath());
                 Reader reader = new BufferedReader(new InputStreamReader(input)))
             {
-            		Map<String, Map<String, Integer>> rawMap = gson.fromJson(reader, basicIntegerJsonType);
-            		for (Map.Entry<String, Map<String, Integer>> raw : rawMap.entrySet()) {
-            			List<ResourceLocation> tagResults = new ArrayList<>();
+				if (isEnumArrayMember(type, CoreType.jsonTypes)) {
+					Map<String, JsonObject> rawJsonData = gson.fromJson(reader, valueJsonType);
+					for (Map.Entry<String, JsonObject> raw : rawJsonData.entrySet()) {
+						List<ResourceLocation> tagResults = new ArrayList<>();
             			if (raw.getKey().startsWith("#"))
             				tagResults = getTagMembers(raw.getKey().substring(1));
             			else
             				tagResults.add(new ResourceLocation(raw.getKey()));
             			for (ResourceLocation key : tagResults) {
-            				DataConfig.setCoreDataMap(type, key, raw.getValue());
-            				MsLoggy.info(type.name()+": "+key.toString()+MsLoggy.mapToString(raw.getValue())+" loaded from config");
+            				//TODO setup skills and globals
+            				//DataConfig.setMobModifierData(type, key, raw.getValue());
+            				MsLoggy.info(type.name()+": "+key.toString()+raw.getValue().toString()+" loaded from config");
             			}
-            		}
+					}
+				}
             }
             catch(Exception e)
             {
                 MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
             }
 		}
-	}
+	}*/
 	
 	public static List<ResourceLocation> getTagMembers(String tag)
 	{
@@ -233,8 +209,7 @@ public class CoreParser {
 		}
 
 		return results;
-	}
-	
+	}	
 	
 	//======================FILE MANAGEMENT======================
 	

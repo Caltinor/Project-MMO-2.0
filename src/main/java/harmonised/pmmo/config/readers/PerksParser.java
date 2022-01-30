@@ -27,8 +27,8 @@ import harmonised.pmmo.util.MsLoggy;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class PerksParser {
-	private static final String configFilePath = "pmmo/perks/perks.json"; 
-	private static final String srcFilePath = "/assets/pmmo/util/perks/perks.json";
+	private static final String configFilePath = "pmmo/perks.json"; 
+	private static final String srcFilePath = "/assets/pmmo/util/perks.json";
 	
 	private static final Type perkType = new TypeToken<Map<String, JsonObject>>(){}.getType();
 	private static Gson gson = new Gson();
