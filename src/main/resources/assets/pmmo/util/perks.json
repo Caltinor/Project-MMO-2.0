@@ -19,16 +19,24 @@
 	},
 	"SKILL_UP": {
 		"combat": [
-			{"perk":"pmmo:damage"}
+			{"perk":"pmmo:damage"},
+			{"perk":"pmmo:fireworks",
+			 "skill":"combat"}
 		],
 		"endurance": [ 
-			{"perk":"pmmo:health"}
+			{"perk":"pmmo:health"},
+			{"perk":"pmmo:fireworks",
+			 "skill":"endurance"}
 		],
 		"building": [
-			{"perk":"pmmo:reach"}
+			{"perk":"pmmo:reach"},
+			{"perk":"pmmo:fireworks",
+			 "skill":"building"}
 		],
 		"agility": [ 
-			{"perk":"pmmo:speed"}
+			{"perk":"pmmo:speed"},
+			{"perk":"pmmo:fireworks",
+			 "skill":"agility"}
 		]
 	},
 	"JUMP": { 

@@ -1,0 +1,10 @@
+{
+	"paths": {
+			"tmat0": "tic_materials[0]",
+            "tmat1": "tic_materials[1]",
+            "tmat2": "tic_materials[2]",
+            "tmat3": "tic_materials[3]",
+            "sgmats":"SGear_Data{}.Construction{}.Parts[].Item{}.tag{}.Materials[].ID"
+		},
+	"constants":{}
+}

@@ -1,0 +1,4 @@
+{
+	"RECEIVE_DAMAGE": { "combat": 10, "endurance": 5},
+	"DEAL_MELEE_DAMAGE": { "combat": 15}
+}

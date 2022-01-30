@@ -1,0 +1,6 @@
+{
+	"xp_values": { 
+		"BLOCK_BREAK": { "woodcutting": 10 },
+		"BLOCK_PLACE": { "building": 1}
+	}
+}

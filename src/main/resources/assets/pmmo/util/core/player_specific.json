@@ -1,6 +1,6 @@
 {
-	"UUID_GOES_HERE":
+	"uuid_goes_here":
 	{
-		"ignoreReq": 1
+		"ignoreReq": true
 	}
 }
