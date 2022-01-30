@@ -1,25 +1,34 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
+mixin
+{
+	disableEclipseAddon = true
+    add sourceSets.main, "pmmo.refmap.json"
+}
 apply plugin: 'maven-publish'
 
 version = '1.18.1-2.0.0.0'
 group = 'harmonised.pmmo'
-archivesBaseName = 'pmmo'
+archivesBaseName = 'Project_MMO'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     mappings channel: 'official', version: '1.18.1'
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -62,6 +71,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.1-39.0.58'
+    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }
 
 jar {
@@ -78,12 +88,16 @@ jar {
     }
 }
 
-jar.finalizedBy('reobfJar')
-
+def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfArtifact = artifacts.add('default', reobfFile)
+        {
+    type 'jar'
+    builtBy 'reobfJar'
+}
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact jar
+            artifact reobfArtifact
         }
     }
     repositories {

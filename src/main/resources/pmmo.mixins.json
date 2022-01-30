@@ -1,0 +1,16 @@
+{
+  "required": false,
+  "package": "harmonised.pmmo.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "pmmo.refmap.json",
+  "mixins": [
+
+  ],
+  "server": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
