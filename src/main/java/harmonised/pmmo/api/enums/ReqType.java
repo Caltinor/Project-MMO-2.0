@@ -21,6 +21,7 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum {
     REQ_KILL,
     REQ_CRAFT,
     REQ_TRAVEL,
+    REQ_RIDE,
     REQ_ENTITY_INTERACT;
 
 	public static final Codec<ReqType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(ReqType::values, ReqType::byName);
