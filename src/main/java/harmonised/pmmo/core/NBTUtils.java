@@ -13,6 +13,7 @@ import harmonised.pmmo.core.nbt.BehaviorToPrevious;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.core.nbt.LogicEntry.Case;
 import harmonised.pmmo.core.nbt.LogicEntry.Criteria;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.core.nbt.Operator;
 import harmonised.pmmo.core.nbt.PathReader;
 import harmonised.pmmo.core.nbt.Result;
@@ -34,7 +35,9 @@ public class NBTUtils {
 	
 	//======================SETTERS=================================
 	public static void setGlobals(CodecMapGlobals data) {
+		MsLoggy.info("GLOBAL PATHS: "+MsLoggy.mapToString(data.getPaths()));
 		globalPaths = data.getPaths();
+		MsLoggy.info("GLOBAL CONSTANTS"+MsLoggy.mapToString(data.getConstants()));
 		globalConst = data.getConstants();
 	}
 	

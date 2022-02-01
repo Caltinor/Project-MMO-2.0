@@ -1,13 +1,17 @@
 {
 	"mining": {
-		"color": "0x00ffff" 
+		"color": 65535 
 	},
 	"excavation": { 
-		"color": "0xe69900"
+		"color": 15112448
 	},
 	"farming":
 	{
+		"color": 58880,
 		"noAfkPenalty": true
+	},
+	"building":{ 
+		"color":65535
 	},
 	"smithing":
 	{

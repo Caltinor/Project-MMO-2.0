@@ -1,0 +1,22 @@
+{
+	"bonus": { 
+		"combat": 1.25,
+		"archery": 1.25,
+		"endurance": 1.25,
+		"flying": 2.50,
+		"farming": 0.75
+	},
+	"negative_effect":{
+		"minecraft:weakness":0},
+	"vein_blacklist":[
+		"minecraft:bedrock"
+	],
+	"travel_req":{
+		"combat": 25
+	},
+	"mob_multiplier":{
+		"health": 1.1,
+		"speed": 1.05,
+		"damage": 1.5
+	}
+}

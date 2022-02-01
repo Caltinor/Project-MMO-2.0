@@ -1,0 +1,30 @@
+{
+	"xp_values": { 
+		"CRAFT": { "crafting": 100}
+	},
+	"requirements": { 
+		"TOOL": {"mining": 10}
+	},
+	"bonuses":{ 
+		"HELD": { 
+			"mining": 3
+		}
+	},
+	"salvage":{ 
+		"minecraft:cobblestone": { 
+			"salvageMax": 3,
+			"baseChance": 0.25,
+			"maxChance" : 1,
+			"levelReq": { 
+				"smithing": 0
+			},
+			"chancePerLevel": { 
+				"mining": 0.01,
+				"smithing":0.05
+			},
+			"xpPerItem": { 
+				"smithing": 10
+			}
+		}
+	}
+}

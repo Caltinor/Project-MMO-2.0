@@ -15,9 +15,7 @@ public class DataConfig {
 	private static Map<ResourceLocation, Map<ResourceLocation, Map<String, Double>>> mobModifierData = new HashMap<>();
 	private static Map<CoreType, Map<ResourceLocation, Map<ResourceLocation, Integer>>> locationEffectData = new HashMap<>();
 	private static LinkedListMultimap<ResourceLocation, ResourceLocation> veinBlacklistData = LinkedListMultimap.create();
-	private static Map<UUID, CodecMapPlayer.PlayerData> playerSpecificSettings = new HashMap<>();
-	
-	
+	private static Map<UUID, CodecMapPlayer.PlayerData> playerSpecificSettings = new HashMap<>();	
 	private static Map<String, SkillData> skillData = new HashMap<>();
 	
 	//==================DATA SETTER METHODS==============================

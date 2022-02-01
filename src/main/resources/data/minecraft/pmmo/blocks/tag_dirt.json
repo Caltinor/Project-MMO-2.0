@@ -1,0 +1,19 @@
+{
+	"isTagFor":["minecraft:dirt",
+	    "minecraft:grass_block",
+	    "minecraft:podzol",
+	    "minecraft:coarse_dirt",
+	    "minecraft:mycelium",
+	    "minecraft:rooted_dirt",
+	    "minecraft:moss_block"
+	],
+	"xp_values": { 
+		"BLOCK_BREAK": { "excavation": 10 },
+		"BLOCK_PLACE": { "building": 1}
+	},
+	"requirements": { 
+		"TOOL": {
+			"excavation": 5
+		}
+	}
+}

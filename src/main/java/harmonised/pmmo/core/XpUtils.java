@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.readers.XpValueDataType;
+import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.impl.PerkRegistry;
 import harmonised.pmmo.network.Networking;
@@ -35,7 +35,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class XpUtils {
 	
 	private static Map<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainData = new HashMap<>();
-	private static Map<XpValueDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
+	private static Map<ModifierDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
 	
 	//===================XP INTERACTION METHODS=======================================
 	public static boolean setXpDiff(UUID playerID, String skillName, long change) {
@@ -78,7 +78,7 @@ public class XpUtils {
 		xpGainData.computeIfAbsent(eventType, s -> new HashMap<>()).put(objectID, xpMap);
 	}
 	
-	public static void setObjectXpModifierMap(XpValueDataType XpValueDataType, ResourceLocation objectID, Map<String, Double> xpMap) {
+	public static void setObjectXpModifierMap(ModifierDataType XpValueDataType, ResourceLocation objectID, Map<String, Double> xpMap) {
 		Preconditions.checkNotNull(XpValueDataType);
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(xpMap);
@@ -154,10 +154,10 @@ public class XpUtils {
 	
 	private static Map<String, Double> getConsolidatedModifierMap(Player player, @Nullable Entity entity) {
 		Map<String, Double> mapOut = new HashMap<>();
-		for (XpValueDataType type : XpValueDataType.modifierTypes) {
+		for (ModifierDataType type : ModifierDataType.values()) {
 			Map<String, Double> modifiers = new HashMap<>();
 			switch (type) {
-			case BONUS_BIOME: {
+			case BIOME: {
 				ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).getRegistryName();
 				modifiers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(biomeID, new HashMap<>());
 				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
@@ -165,7 +165,7 @@ public class XpUtils {
 				}
 				break;
 			}
-			case BONUS_HELD: {
+			case HELD: {
 				ItemStack offhandStack = player.getOffhandItem();
 				ItemStack mainhandStack = player.getMainHandItem();
 				//TODO get NBT based API data for this
@@ -181,7 +181,7 @@ public class XpUtils {
 				}				
 				break;
 			}
-			case BONUS_WORN: {
+			case WORN: {
 				player.getArmorSlots().forEach((stack) -> {
 					//TODO get NBT based API data for this
 					ResourceLocation itemID = stack.getItem().getRegistryName();
@@ -192,7 +192,7 @@ public class XpUtils {
 				});
 				break;
 			}
-			case BONUS_DIMENSION: {
+			case DIMENSION: {
 				ResourceLocation dimensionID = player.level.dimension().getRegistryName();
 				modifiers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(dimensionID, new HashMap<>());
 				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {

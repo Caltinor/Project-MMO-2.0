@@ -10,19 +10,19 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 
 public enum ReqType implements StringRepresentable, IExtensibleEnum {
-    REQ_WEAR,
-    REQ_USE_ENCHANTMENT,
-    REQ_TOOL,
-    REQ_WEAPON,
-    REQ_USE,
-    REQ_PLACE,
-    REQ_BREAK,
-    REQ_BIOME,
-    REQ_KILL,
-    REQ_CRAFT,
-    REQ_TRAVEL,
-    REQ_RIDE,
-    REQ_ENTITY_INTERACT;
+    WEAR,
+    USE_ENCHANTMENT,
+    TOOL,
+    WEAPON,
+    USE,
+    PLACE,
+    BREAK,
+    BIOME,
+    KILL,
+    CRAFT,
+    TRAVEL,
+    RIDE,
+    ENTITY_INTERACT;
 
 	public static final Codec<ReqType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(ReqType::values, ReqType::byName);
 	private static final Map<String, ReqType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ReqType::getSerializedName, s -> {return s;}));

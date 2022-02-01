@@ -110,13 +110,13 @@ public class TooltipRegistry {
 		if (reqType == null) return false;
 		if (res == null) return false;
 		
-		if (reqType.equals(ReqType.REQ_BREAK) || reqType.equals(ReqType.REQ_PLACE))
+		if (reqType.equals(ReqType.BREAK) || reqType.equals(ReqType.PLACE))
 		{
 			if (!blockReqTooltips.containsKey(reqType))
 				return false;
 			return blockReqTooltips.get(reqType).containsKey(res);
 		}
-		else if (reqType.equals(ReqType.REQ_KILL) || reqType.equals(ReqType.REQ_ENTITY_INTERACT))
+		else if (reqType.equals(ReqType.KILL) || reqType.equals(ReqType.ENTITY_INTERACT))
 		{
 			if (!entityReqTooltips.containsKey(reqType))
 				return false;

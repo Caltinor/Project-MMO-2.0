@@ -9,10 +9,11 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import harmonised.pmmo.config.readers.XpValueDataType;
+import harmonised.pmmo.config.readers.ModifierDataType;
 import net.minecraft.resources.ResourceLocation;
 
 public class CodecMapLocation {
+	private final Optional<List<ResourceLocation>> tagValues;
 	private final Optional<CodecTypeModifier> bonusMap;
 	private final Optional<Map<ResourceLocation, Integer>> positive;
 	private final Optional<Map<ResourceLocation, Integer>> negative;
@@ -21,6 +22,7 @@ public class CodecMapLocation {
 	private final Optional<CodecTypeMobMultiplier> mobModifiers;
 	
 	public static final Codec<CodecMapLocation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.list(ResourceLocation.CODEC).optionalFieldOf("isTagFor").forGetter(CodecMapLocation::getTagValues),
 			CodecTypeModifier.CODEC.optionalFieldOf("bonus").forGetter(CodecMapLocation::getBonusMap),
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("positive_effect").forGetter(CodecMapLocation::getPositive),
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("negative_effect").forGetter(CodecMapLocation::getPositive),
@@ -30,12 +32,14 @@ public class CodecMapLocation {
 			).apply(instance, CodecMapLocation::new));
 	
 	public CodecMapLocation(
+			Optional<List<ResourceLocation>> tagValues,
 			Optional<CodecTypeModifier> bonusMap,
 			Optional<Map<ResourceLocation, Integer>> positive,
 			Optional<Map<ResourceLocation, Integer>> negative,
 			Optional<List<ResourceLocation>> veinBlacklist,
 			Optional<Map<String, Integer>> travelReq,
 			Optional<CodecTypeMobMultiplier> mobModifiers) {
+		this.tagValues = tagValues;
 		this.bonusMap = bonusMap;
 		this.positive = positive;
 		this.negative = negative;
@@ -43,6 +47,7 @@ public class CodecMapLocation {
 		this.travelReq = travelReq;
 		this.mobModifiers = mobModifiers;
 	}
+	public Optional<List<ResourceLocation>> getTagValues() {return tagValues;}
 	public Optional<CodecTypeModifier> getBonusMap() {return bonusMap;}
 	public Optional<Map<ResourceLocation, Integer>> getPositive() {return positive;}
 	public Optional<Map<ResourceLocation, Integer>> getNegative() {return negative;}
@@ -51,7 +56,8 @@ public class CodecMapLocation {
 	public Optional<CodecTypeMobMultiplier> getMobModifiers() {return mobModifiers;}
 	
 	public static class LocationMapContainer {
-		public Map<XpValueDataType, Map<String, Double>> bonusMap = new HashMap<>();
+		public List<ResourceLocation> tagValues = new ArrayList<>();
+		public Map<ModifierDataType, Map<String, Double>> bonusMap = new HashMap<>();
 		public Map<ResourceLocation, Integer> positive = new HashMap<>();
 		public Map<ResourceLocation, Integer> negative = new HashMap<>();
 		public List<ResourceLocation> veinBlacklist = new ArrayList<>();
@@ -59,6 +65,7 @@ public class CodecMapLocation {
 		public  Map<ResourceLocation, Map<String, Double>> mobModifiers = new HashMap<>();
 		
 		public LocationMapContainer(CodecMapLocation src) {
+			tagValues = src.getTagValues().isPresent() ? src.getTagValues().get() : new ArrayList<>();
 			bonusMap = src.getBonusMap().isPresent() ? src.getBonusMap().get().getMap() : new HashMap<>();
 			positive = src.getPositive().orElseGet(() -> new HashMap<>());
 			negative = src.getNegative().orElseGet(() -> new HashMap<>());
@@ -69,6 +76,10 @@ public class CodecMapLocation {
 		public LocationMapContainer() {}
 		
 		public static LocationMapContainer combine(LocationMapContainer one, LocationMapContainer two) {
+			two.tagValues.forEach((rl) -> {
+				if (!one.tagValues.contains(rl))
+					one.tagValues.add(rl);
+			});
 			one.bonusMap.putAll(two.bonusMap);
 			one.positive.putAll(two.positive);
 			one.negative.putAll(two.negative);

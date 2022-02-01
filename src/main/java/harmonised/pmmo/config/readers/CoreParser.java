@@ -69,22 +69,26 @@ public class CoreParser {
 	}	
 	private static void finalizeObjectMaps(boolean isItem, Map<ResourceLocation, CodecMapObject.ObjectMapContainer> data) {
 		data.forEach((rl, omc) -> {
-			for (Map.Entry<EventType, Map<String, Long>> xpValues : omc.xpValues.entrySet()) {
-				MsLoggy.info("XP_VALUES: "+xpValues.getKey().toString()+": "+rl.toString()+MsLoggy.mapToString(xpValues.getValue())+" loaded from config");
-				XpUtils.setObjectXpGainMap(xpValues.getKey(), rl, xpValues.getValue());
-			}			
-			for (Map.Entry<ReqType, Map<String, Integer>> reqs : omc.reqs.entrySet()) {
-				MsLoggy.info("REQS: "+reqs.getKey().toString()+": "+rl.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
-				SkillGates.setObjectSkillMap(reqs.getKey(), rl, reqs.getValue());
-			}
-			if (isItem) {
-				for (Map.Entry<XpValueDataType, Map<String, Double>> modifiers : omc.modifiers.entrySet()) {
-					MsLoggy.info("BONUSES: "+rl.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
-					XpUtils.setObjectXpModifierMap(modifiers.getKey(), rl, modifiers.getValue());
+			List<ResourceLocation> tagValues = List.of(rl);
+			if (omc.tagValues.size() > 0) tagValues = omc.tagValues;
+			for (ResourceLocation tag : tagValues) {
+				for (Map.Entry<EventType, Map<String, Long>> xpValues : omc.xpValues.entrySet()) {
+					MsLoggy.info("XP_VALUES: "+xpValues.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(xpValues.getValue())+" loaded from config");
+					XpUtils.setObjectXpGainMap(xpValues.getKey(), tag, xpValues.getValue());
+				}			
+				for (Map.Entry<ReqType, Map<String, Integer>> reqs : omc.reqs.entrySet()) {
+					MsLoggy.info("REQS: "+reqs.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
+					SkillGates.setObjectSkillMap(reqs.getKey(), tag, reqs.getValue());
 				}
-				for (Map.Entry<ResourceLocation, CodecTypeSalvage.SalvageData> salvage : omc.salvage.entrySet()) {
-					MsLoggy.info("SALVAGE: "+rl.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
-					SalvageLogic.setSalvageData(rl, salvage.getKey(), salvage.getValue());
+				if (isItem) {
+					for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : omc.modifiers.entrySet()) {
+						MsLoggy.info("BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
+						XpUtils.setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
+					}
+					for (Map.Entry<ResourceLocation, CodecTypeSalvage.SalvageData> salvage : omc.salvage.entrySet()) {
+						MsLoggy.info("SALVAGE: "+tag.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
+						SalvageLogic.setSalvageData(tag, salvage.getKey(), salvage.getValue());
+					}
 				}
 			}
 		});
@@ -104,18 +108,26 @@ public class CoreParser {
 	}
 	private static void finalizeLocationMaps(Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data) {
 		data.forEach((rl, lmc) -> {
-			for (Map.Entry<XpValueDataType, Map<String, Double>> modifiers : lmc.bonusMap.entrySet()) {
-				MsLoggy.info("BONUSES: "+rl.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
-				XpUtils.setObjectXpModifierMap(modifiers.getKey(), rl, modifiers.getValue());
+			List<ResourceLocation> tagValues = List.of(rl);
+			if (lmc.tagValues.size() > 0) tagValues = lmc.tagValues;
+			for (ResourceLocation tag : tagValues) {
+				for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : lmc.bonusMap.entrySet()) {
+					MsLoggy.info("BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
+					XpUtils.setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
+				}
+				for (Map.Entry<ResourceLocation, Map<String, Double>> mobMods : lmc.mobModifiers.entrySet()) {
+					MsLoggy.info("MOB MODIFIERS: "+tag.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
+					DataConfig.setMobModifierData(tag, mobMods.getKey(), mobMods.getValue());
+				}
+				MsLoggy.info("POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive));
+				DataConfig.setLocationEffectData(CoreType.LOCATION_EFFECT_POSITIVE, tag, lmc.positive);
+				MsLoggy.info("NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative));
+				DataConfig.setLocationEffectData(CoreType.LOCATION_EFFECT_NEGATIVE, tag, lmc.negative);
+				MsLoggy.info("VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist));
+				DataConfig.setArrayData(tag, lmc.veinBlacklist);
+				MsLoggy.info("TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq));
+				SkillGates.setObjectSkillMap(ReqType.TRAVEL, tag, lmc.travelReq);
 			}
-			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMods : lmc.mobModifiers.entrySet()) {
-				MsLoggy.info("MOB MODIFIERS: "+rl.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
-				DataConfig.setMobModifierData(rl, mobMods.getKey(), mobMods.getValue());
-			}
-			DataConfig.setLocationEffectData(CoreType.LOCATION_EFFECT_POSITIVE, rl, lmc.positive);
-			DataConfig.setLocationEffectData(CoreType.LOCATION_EFFECT_NEGATIVE, rl, lmc.negative);
-			DataConfig.setArrayData(rl, lmc.veinBlacklist);
-			SkillGates.setObjectSkillMap(ReqType.REQ_TRAVEL, rl, lmc.travelReq);
 		});
 	}
 	
@@ -131,6 +143,7 @@ public class CoreParser {
 	}
 	private static void finalizePlayerMaps(Map<ResourceLocation, CodecMapPlayer.PlayerData> data) {
 		data.forEach((rl, pd) -> {
+			MsLoggy.info("PLAYER: ID:"+rl.getPath()+pd.toString());
 			DataConfig.setPlayerSpecificData(UUID.fromString(rl.getPath()), pd);
 		});
 	}
@@ -152,6 +165,7 @@ public class CoreParser {
 	}
 	private static void finalizeEnchantmentMaps(Map<ResourceLocation, Map<Integer, Map<String, Integer>>> data) {
 		data.forEach((rl, map) -> {
+			map.forEach((k, v) -> MsLoggy.info("ENCHANTMENT:"+rl.toString()+" Level:"+k+MsLoggy.mapToString(v)));
 			SkillGates.setEnchantmentReqs(rl, map);
 		});
 	}
@@ -178,8 +192,9 @@ public class CoreParser {
 				.resultOrPartial((s) -> MsLoggy.error(s))
 				.ifPresent(readResult::putAll);
 			for (Map.Entry<String, CodecTypeSkills> raw : readResult.entrySet()) {
-				MsLoggy.info("Skills: "+raw.getKey()+raw.getValue().toString()+" loaded from config");
-				DataConfig.setSkillData(raw.getKey(), new SkillData(raw.getValue()));
+				SkillData skillData = new SkillData(raw.getValue());
+				MsLoggy.info("Skills: "+raw.getKey()+skillData.toString()+" loaded from config");
+				DataConfig.setSkillData(raw.getKey(), skillData);
 			}
         }
         catch(Exception e)

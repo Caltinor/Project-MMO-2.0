@@ -1,4 +1,9 @@
 {
-	"RECEIVE_DAMAGE": { "combat": 10, "endurance": 5},
-	"DEAL_MELEE_DAMAGE": { "combat": 15}
+	"xp_values": { 
+		"RECEIVE_DAMAGE": { "combat": 10, "endurance": 5},
+		"DEAL_MELEE_DAMAGE": { "combat": 15}
+	},
+	"requirements": { 
+		"KILL": {"mining": 1}
+	}
 }

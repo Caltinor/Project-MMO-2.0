@@ -62,7 +62,7 @@ public class PredicateRegistry {
 	 */
 	public static boolean predicateExists(ResourceLocation res, ReqType jType) 
 	{
-		if (jType.equals(ReqType.REQ_BREAK))
+		if (jType.equals(ReqType.BREAK))
 			return reqBreakPredicates.containsKey(jType.toString()+";"+res.toString());
 		return reqPredicates.containsKey(jType.toString()+";"+res.toString());
 	}

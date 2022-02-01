@@ -76,30 +76,30 @@ public class BreakSpeedHandler {
 	
 	private static boolean canUseTool(BreakSpeed event) {
 		ResourceLocation toolID = event.getPlayer().getMainHandItem().getItem().getRegistryName();
-		if (PredicateRegistry.predicateExists(toolID, ReqType.REQ_TOOL))
-			return PredicateRegistry.checkPredicateReq(event.getPlayer(), toolID, ReqType.REQ_TOOL);
-		else if (SkillGates.doesObjectReqExist(ReqType.REQ_TOOL, toolID))
-			return SkillGates.doesPlayerMeetReq(ReqType.REQ_TOOL, toolID, event.getPlayer().getUUID());
+		if (PredicateRegistry.predicateExists(toolID, ReqType.TOOL))
+			return PredicateRegistry.checkPredicateReq(event.getPlayer(), toolID, ReqType.TOOL);
+		else if (SkillGates.doesObjectReqExist(ReqType.TOOL, toolID))
+			return SkillGates.doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
-			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.REQ_TOOL, toolID, ObjectType.BLOCK);
-			return SkillGates.doesPlayerMeetReq(ReqType.REQ_TOOL, toolID, event.getPlayer().getUUID(), requirements);
+			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.TOOL, toolID, ObjectType.BLOCK);
+			return SkillGates.doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID(), requirements);
 		} 
 		return true;
 	}
 	
 	private static boolean canPerform(BreakSpeed event) {		
 		ResourceLocation blockID = event.getState().getBlock().getRegistryName();
-		if (PredicateRegistry.predicateExists(blockID, ReqType.REQ_BREAK)) {
+		if (PredicateRegistry.predicateExists(blockID, ReqType.BREAK)) {
 			BlockEntity tile = event.getPlayer().getLevel().getBlockEntity(event.getPos());
 			return tile == null ? 
-					PredicateRegistry.checkPredicateReq(event.getPlayer(), blockID, ReqType.REQ_BREAK):
-					PredicateRegistry.checkPredicateReq(event.getPlayer(), tile, ReqType.REQ_BREAK);
+					PredicateRegistry.checkPredicateReq(event.getPlayer(), blockID, ReqType.BREAK):
+					PredicateRegistry.checkPredicateReq(event.getPlayer(), tile, ReqType.BREAK);
 		}
-		else if (SkillGates.doesObjectReqExist(ReqType.REQ_BREAK, blockID))
-			return SkillGates.doesPlayerMeetReq(ReqType.REQ_BREAK, blockID, event.getPlayer().getUUID());
+		else if (SkillGates.doesObjectReqExist(ReqType.BREAK, blockID))
+			return SkillGates.doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
-			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.REQ_BREAK, blockID, ObjectType.BLOCK);
-			return SkillGates.doesPlayerMeetReq(ReqType.REQ_BREAK, blockID, event.getPlayer().getUUID(), requirements);
+			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.BREAK, blockID, ObjectType.BLOCK);
+			return SkillGates.doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID(), requirements);
 		}
 
 		return true;

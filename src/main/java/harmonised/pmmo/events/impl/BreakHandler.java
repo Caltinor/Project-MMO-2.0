@@ -51,17 +51,17 @@ public class BreakHandler {
 	
 	private static boolean canPerform(BreakEvent event) {
 		ResourceLocation blockID = event.getState().getBlock().getRegistryName();
-		if (PredicateRegistry.predicateExists(blockID, ReqType.REQ_BREAK)) {
+		if (PredicateRegistry.predicateExists(blockID, ReqType.BREAK)) {
 			BlockEntity tile = event.getPlayer().getLevel().getBlockEntity(event.getPos());
 			return tile == null ? 
-					PredicateRegistry.checkPredicateReq(event.getPlayer(), blockID, ReqType.REQ_BREAK) :
-					PredicateRegistry.checkPredicateReq(event.getPlayer(), tile, ReqType.REQ_BREAK);
+					PredicateRegistry.checkPredicateReq(event.getPlayer(), blockID, ReqType.BREAK) :
+					PredicateRegistry.checkPredicateReq(event.getPlayer(), tile, ReqType.BREAK);
 		}
-		else if (SkillGates.doesObjectReqExist(ReqType.REQ_BREAK, blockID))
-			return SkillGates.doesPlayerMeetReq(ReqType.REQ_BREAK, blockID, event.getPlayer().getUUID());
+		else if (SkillGates.doesObjectReqExist(ReqType.BREAK, blockID))
+			return SkillGates.doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
-			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.REQ_BREAK, blockID, ObjectType.BLOCK);
-			return SkillGates.doesPlayerMeetReq(ReqType.REQ_BREAK, blockID, event.getPlayer().getUUID(), requirements);
+			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.BREAK, blockID, ObjectType.BLOCK);
+			return SkillGates.doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID(), requirements);
 		}
 
 		return true;
