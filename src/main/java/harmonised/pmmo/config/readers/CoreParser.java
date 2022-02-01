@@ -9,17 +9,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 
 import harmonised.pmmo.ProjectMMO;
 import harmonised.pmmo.api.enums.EventType;
@@ -29,20 +33,19 @@ import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.config.datapack.MergeableCodecDataManager;
 import harmonised.pmmo.config.datapack.codecs.CodecMapLocation;
 import harmonised.pmmo.config.datapack.codecs.CodecMapObject;
+import harmonised.pmmo.config.datapack.codecs.CodecMapPlayer;
+import harmonised.pmmo.config.datapack.codecs.CodecTypeReq;
 import harmonised.pmmo.config.datapack.codecs.CodecTypeSalvage;
+import harmonised.pmmo.config.readers.codecs.CodecMapGlobals;
+import harmonised.pmmo.config.readers.codecs.CodecTypeSkills;
+import harmonised.pmmo.config.readers.codecs.CodecTypeSkills.SkillData;
+import harmonised.pmmo.core.NBTUtils;
 import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.core.XpUtils;
 import harmonised.pmmo.features.salvaging.SalvageLogic;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Fluid;
+import net.minecraft.util.GsonHelper;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class CoreParser {
@@ -116,118 +119,98 @@ public class CoreParser {
 		});
 	}
 	
-	//TODO PLAYER_LOADER
+	public static final MergeableCodecDataManager<CodecMapPlayer, CodecMapPlayer.PlayerData> PLAYER_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/players", DATA_LOGGER, CodecMapPlayer.CODEC, raws -> mergePlayerTags(raws), processed -> finalizePlayerMaps(processed));
 	
-	//TODO ENCHANTMENT_LOADER
+	private static CodecMapPlayer.PlayerData mergePlayerTags(final List<CodecMapPlayer> raws) {
+		CodecMapPlayer.PlayerData outObject = CodecMapPlayer.PlayerData.getDefault();
+		for (int i = 0; i < raws.size(); i++) {
+			outObject = CodecMapPlayer.PlayerData.combine(outObject, new CodecMapPlayer.PlayerData(raws.get(i)));
+		}
+		return outObject;
+	}
+	private static void finalizePlayerMaps(Map<ResourceLocation, CodecMapPlayer.PlayerData> data) {
+		data.forEach((rl, pd) -> {
+			DataConfig.setPlayerSpecificData(UUID.fromString(rl.getPath()), pd);
+		});
+	}
+	
+	public static final Codec<Map<Integer, Map<String, Integer>>> ENCHANTMENT_CODEC = Codec.unboundedMap(Codec.INT, CodecTypeReq.INTEGER_CODEC);
+	public static final MergeableCodecDataManager<Map<Integer, Map<String, Integer>>, Map<Integer, Map<String, Integer>>> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/enchantments", DATA_LOGGER, ENCHANTMENT_CODEC, raws -> mergeEnchantmentTags(raws), processed -> finalizeEnchantmentMaps(processed));
+	private static Map<Integer, Map<String, Integer>> mergeEnchantmentTags(final List<Map<Integer, Map<String, Integer>>> raws) {
+		Map<Integer, Map<String, Integer>> outMap = new HashMap<>();
+		for (int i = 0; i < raws.size(); i++) {
+			for (Map.Entry<Integer, Map<String, Integer>> map : raws.get(i).entrySet()) {
+				outMap.computeIfAbsent(map.getKey(), (k) -> new HashMap<>());
+				map.getValue().forEach((k, v) -> {
+					outMap.get(map.getKey()).put(k, v);
+				});
+			}
+		}
+		return outMap;
+	}
+	private static void finalizeEnchantmentMaps(Map<ResourceLocation, Map<Integer, Map<String, Integer>>> data) {
+		data.forEach((rl, map) -> {
+			SkillGates.setEnchantmentReqs(rl, map);
+		});
+	}
 	
 	public static void init() {
 		parseSkills();
 		parseGlobals();
 	}
 	
+	private static final Codec<Map<String, CodecTypeSkills>> SKILLS_CODEC = Codec.unboundedMap(Codec.STRING, CodecTypeSkills.CODEC);
 	private static void parseSkills() {
+		String filename = "skills.json";
+		File dataFile = FMLPaths.CONFIGDIR.get().resolve("pmmo/" + filename).toFile();
 		
+		if (!dataFile.exists())
+			createData(dataFile, "/assets/pmmo/util/", filename);
+	
+	
+		try(InputStream input = new FileInputStream(dataFile.getPath());
+            Reader reader = new BufferedReader(new InputStreamReader(input)))
+        {
+			Map<String, CodecTypeSkills> readResult = new HashMap<>();
+			SKILLS_CODEC.parse(JsonOps.INSTANCE, GsonHelper.fromJson(gson, reader, JsonElement.class))
+				.resultOrPartial((s) -> MsLoggy.error(s))
+				.ifPresent(readResult::putAll);
+			for (Map.Entry<String, CodecTypeSkills> raw : readResult.entrySet()) {
+				MsLoggy.info("Skills: "+raw.getKey()+raw.getValue().toString()+" loaded from config");
+				DataConfig.setSkillData(raw.getKey(), new SkillData(raw.getValue()));
+			}
+        }
+        catch(Exception e)
+        {
+            MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
+        }
 	}
 	
 	private static void parseGlobals() {
+		String filename = "globals.json";
+		File dataFile = FMLPaths.CONFIGDIR.get().resolve("pmmo/" + filename).toFile();
 		
+		if (!dataFile.exists())
+			createData(dataFile, "/assets/pmmo/util/", filename);
+	
+	
+		try(InputStream input = new FileInputStream(dataFile.getPath());
+            Reader reader = new BufferedReader(new InputStreamReader(input)))
+        {
+			CodecMapGlobals.CODEC.parse(JsonOps.INSTANCE, GsonHelper.fromJson(gson, reader, JsonElement.class))
+				.resultOrPartial((s) -> MsLoggy.error(s))
+				.ifPresent(NBTUtils::setGlobals);
+        }
+        catch(Exception e)
+        {
+            MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
+        }
 	}
 	
-	/*private static void parseCore() {
-		DATA_PATH path = DATA_PATH.CORE;
-		String filename;
-		File dataFile;
-		for (CoreType type : CoreType.values()) {
-			filename = type.name().toLowerCase() + ".json";
-			dataFile = FMLPaths.CONFIGDIR.get().resolve(path.config_path + filename).toFile();
-			
-			if (!dataFile.exists())
-				createData(dataFile, path, filename);
-		
-		
-			try(InputStream input = new FileInputStream(dataFile.getPath());
-                Reader reader = new BufferedReader(new InputStreamReader(input)))
-            {
-				if (isEnumArrayMember(type, CoreType.jsonTypes)) {
-					Map<String, JsonObject> rawJsonData = gson.fromJson(reader, valueJsonType);
-					for (Map.Entry<String, JsonObject> raw : rawJsonData.entrySet()) {
-						List<ResourceLocation> tagResults = new ArrayList<>();
-            			if (raw.getKey().startsWith("#"))
-            				tagResults = getTagMembers(raw.getKey().substring(1));
-            			else
-            				tagResults.add(new ResourceLocation(raw.getKey()));
-            			for (ResourceLocation key : tagResults) {
-            				//TODO setup skills and globals
-            				//DataConfig.setMobModifierData(type, key, raw.getValue());
-            				MsLoggy.info(type.name()+": "+key.toString()+raw.getValue().toString()+" loaded from config");
-            			}
-					}
-				}
-            }
-            catch(Exception e)
-            {
-                MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
-            }
-		}
-	}*/
-	
-	public static List<ResourceLocation> getTagMembers(String tag)
-	{
-		ResourceLocation tagRL = new ResourceLocation(tag);
-		List<ResourceLocation> results = new ArrayList<>();
-
-		if (ItemTags.getAllTags().getAllTags().containsKey(tagRL)) {
-			for(Item element : ItemTags.getAllTags().getAllTags().get(tagRL).getValues())	{
-				try	{
-					results.add(element.getRegistryName());
-				} catch(Exception e){ /* Failed, don't care */ };
-			}
-		}
-
-		if (BlockTags.getAllTags().getAllTags().containsKey(tagRL)) {
-			for(Block element : BlockTags.getAllTags().getAllTags().get(tagRL).getValues()) {
-				try	{
-					results.add(element.getRegistryName());
-				} catch(Exception e){ /* Failed, don't care */ };
-			}
-		}
-
-		if(FluidTags.getAllTags().getAllTags().containsKey(tagRL)) {
-			for(Fluid element : FluidTags.getAllTags().getAllTags().get(tagRL).getValues()) {
-				try	{
-					results.add(element.getRegistryName());
-				} catch(Exception e){ /* Failed, don't care */ };
-			}
-		}
-		
-		if (EntityTypeTags.getAllTags().getAllTags().containsKey(tagRL)) {
-			for(EntityType<?> element : EntityTypeTags.getAllTags().getAllTags().get(tagRL).getValues()) {
-				try	{
-					results.add(element.getRegistryName());
-				} catch(Exception e){ /* Failed, don't care */ };
-			}
-		}
-
-		return results;
-	}	
-	
-	//======================FILE MANAGEMENT======================
-	
-	private static enum DATA_PATH {
-		REQS("/assets/pmmo/util/requirements/", "pmmo/requirements/"),
-		EXP("/assets/pmmo/util/xp_values/", "pmmo/xp_values/"),
-		CORE("/assets/pmmo/util/core/", "pmmo/core/");
-		
-		public String src_path;
-		public String config_path;
-		
-		DATA_PATH(String src_path, String config_path) {
-			this.src_path = src_path;
-			this.config_path = config_path;
-		}
-	}
-	
-	private static void createData(File dataFile, DATA_PATH path, String fileName)
+	//======================FILE MANAGEMENT======================	
+	private static void createData(File dataFile, String path, String fileName)
     {
         try     //create template data file
         {
@@ -240,7 +223,7 @@ public class CoreParser {
             return;
         }
 
-        try(InputStream inputStream = ProjectMMO.class.getResourceAsStream(path.src_path + fileName);
+        try(InputStream inputStream = ProjectMMO.class.getResourceAsStream(path + fileName);
              FileOutputStream outputStream = new FileOutputStream(dataFile);)
         {
             MsLoggy.debug("Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath());

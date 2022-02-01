@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 public class SkillGates {
 
 	private static Map<ReqType, Map<ResourceLocation, Map<String, Integer>>> reqData = new HashMap<>();
+	private static Map<ResourceLocation, Map<Integer, Map<String, Integer>>> enchantmentReqs = new HashMap<>();
 	
 	//====================REQDATA GETTERS AND SETTERS======================================
 	public static Map<String, Integer> getObjectSkillMap(ReqType reqType, ResourceLocation objectID) {
@@ -31,6 +32,12 @@ public class SkillGates {
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(skillMap);
 		reqData.computeIfAbsent(reqType, s -> new HashMap<>()).put(objectID, skillMap);
+	}
+	
+	public static void setEnchantmentReqs(ResourceLocation enchantmentID, Map<Integer, Map<String, Integer>> data) {
+		Preconditions.checkNotNull(enchantmentID);
+		Preconditions.checkNotNull(data);
+		enchantmentReqs.put(enchantmentID, data);
 	}
 	
 	public static List<String> getUsedSkills() {

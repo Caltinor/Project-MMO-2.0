@@ -28,17 +28,8 @@ public enum CoreType /*implements StringRepresentable, IExtensibleEnum*/{
     //TREASURE,   Loot Predicate as well
     //SALVAGE,				//map<string, jsonObject> new type
     GLOBALS,
-    SKILLS;/*,				//JsonType <= TODO update to
+    SKILLS/*,				//JsonType <= TODO update to
     CREDITS,
     
     HISCORE*/
-    
-    public static final CoreType[] jsonTypes = new CoreType[] {PLAYER_SPECIFIC, SKILLS};
-	
-    /*public static final Codec<CoreType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(CoreType::values, CoreType::byName);
-    private static final Map<String, CoreType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(CoreType::getSerializedName, s -> {return s;}));
-    public static CoreType byName(String name) {return BY_NAME.get(name);}
-    
-    @Override
-	public String getSerializedName() {return this.name().toLowerCase();}*/
 }

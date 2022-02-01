@@ -1,25 +1,25 @@
 {
 	"mining": {
-		"color": 16776960 
+		"color": "0x00ffff" 
 	},
 	"excavation": { 
-		"color": 39398
+		"color": "0xe69900"
 	},
 	"farming":
 	{
-		"noAfkPenalty": 1
+		"noAfkPenalty": true
 	},
 	"smithing":
 	{
-		"noAfkPenalty": 1
+		"noAfkPenalty": true
 	},
 	"cooking":
 	{
-		"noAfkPenalty": 1
+		"noAfkPenalty": true
 	},
 	"alchemy":
 	{
-		"noAfkPenalty": 1
+		"noAfkPenalty": true
 	},
 	"engineering":
 	{

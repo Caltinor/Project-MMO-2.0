@@ -3,19 +3,22 @@ package harmonised.pmmo.config;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.config.datapack.codecs.CodecMapPlayer;
+import harmonised.pmmo.config.readers.codecs.CodecTypeSkills.SkillData;
 import net.minecraft.resources.ResourceLocation;
 
 public class DataConfig {
 	private static Map<ResourceLocation, Map<ResourceLocation, Map<String, Double>>> mobModifierData = new HashMap<>();
 	private static Map<CoreType, Map<ResourceLocation, Map<ResourceLocation, Integer>>> locationEffectData = new HashMap<>();
 	private static LinkedListMultimap<ResourceLocation, ResourceLocation> veinBlacklistData = LinkedListMultimap.create();
+	private static Map<UUID, CodecMapPlayer.PlayerData> playerSpecificSettings = new HashMap<>();
+	
+	
+	private static Map<String, SkillData> skillData = new HashMap<>();
 	
 	//==================DATA SETTER METHODS==============================
 	public static void setMobModifierData(ResourceLocation locationID, ResourceLocation mobID, Map<String, Double> data) {
@@ -38,21 +41,20 @@ public class DataConfig {
 		veinBlacklistData.putAll(locationID, blockIDs);
 	}
 	
-	//==================UTILITY METHODS==============================
-	private static final String COLOR_KEY = "color";
+	public static void setSkillData(String skill, SkillData data) {
+		Preconditions.checkNotNull(skill);
+		Preconditions.checkNotNull(data);
+		skillData.put(skill, data);
+	}
 	
+	public static void setPlayerSpecificData(UUID playerID, CodecMapPlayer.PlayerData data) {
+		Preconditions.checkNotNull(playerID);
+		Preconditions.checkNotNull(data);
+		playerSpecificSettings.put(playerID, data);
+	}
+	
+	//==================UTILITY METHODS==============================	
 	public static int getSkillColor(String skill) {
-		JsonElement colorElement = mobModifierData.computeIfAbsent(CoreType.SKILLS,s -> new HashMap<>())
-				.getOrDefault(new ResourceLocation(skill),new JsonObject())
-				.get(COLOR_KEY);
-		if (colorElement != null) {
-			try {int out = colorElement.getAsInt();
-				return out;
-			}
-			catch(Exception e) {
-				MsLoggy.error("Color key for "+skill+" is incorrectly defined. Default used");
-			}
-		}
-		return 16777215;
+		return skillData.getOrDefault(skill, SkillData.getDefault()).color();
 	}
 }

@@ -11,7 +11,7 @@ import net.minecraftforge.common.IExtensibleEnum;
 
 public enum ReqType implements StringRepresentable, IExtensibleEnum {
     REQ_WEAR,
-    //REQ_USE_ENCHANTMENT,   move this to an NBT config
+    REQ_USE_ENCHANTMENT,
     REQ_TOOL,
     REQ_WEAPON,
     REQ_USE,

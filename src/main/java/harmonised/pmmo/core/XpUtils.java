@@ -200,15 +200,6 @@ public class XpUtils {
 				}
 				break;
 			}
-			case MULTIPLIER_ENTITY: {
-				if (entity == null) break;
-				ResourceLocation dimensionID = new ResourceLocation(entity.getEncodeId());
-				modifiers = xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(dimensionID, new HashMap<>());
-				for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-					mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
-				}
-				break;
-			}
 			default: {}
 			}
 			

@@ -27,6 +27,8 @@ import harmonised.pmmo.util.MsLoggy;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class PerksParser {
+	
+	//TODO convert this to a codec-based reader
 	private static final String configFilePath = "pmmo/perks.json"; 
 	private static final String srcFilePath = "/assets/pmmo/util/perks.json";
 	
