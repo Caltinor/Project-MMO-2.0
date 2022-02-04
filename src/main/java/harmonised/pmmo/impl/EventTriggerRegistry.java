@@ -20,18 +20,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
 
 public class EventTriggerRegistry {
+	public EventTriggerRegistry() {}
 	
+	private LinkedListMultimap<EventType, Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> eventListeners = LinkedListMultimap.create();
 	
-	private static LinkedListMultimap<EventType, Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> eventListeners = LinkedListMultimap.create();
-	
-	public static void registerListener(@NonNull ResourceLocation listenerID, @NonNull EventType eventType, @NonNull BiFunction<? super Event, CompoundTag, CompoundTag> executeOnTrigger) {
+	public void registerListener(@NonNull ResourceLocation listenerID, @NonNull EventType eventType, @NonNull BiFunction<? super Event, CompoundTag, CompoundTag> executeOnTrigger) {
 		Preconditions.checkNotNull(eventType);
 		Preconditions.checkNotNull(executeOnTrigger);
 		Preconditions.checkNotNull(listenerID);
 		eventListeners.get(eventType).add(Pair.of(listenerID, executeOnTrigger));
 	}
 	
-	public static CompoundTag executeEventListeners(EventType eventType, Event event, CompoundTag dataIn) {
+	public CompoundTag executeEventListeners(EventType eventType, Event event, CompoundTag dataIn) {
 		List<Pair<ResourceLocation, BiFunction<? super Event, CompoundTag, CompoundTag>>> listeners = eventListeners.get(eventType);
 		CompoundTag output = TagBuilder.start().withBool(APIUtils.IS_CANCELLED, false).build();
 		List<Integer> removals = new ArrayList<>();
@@ -50,7 +50,7 @@ public class EventTriggerRegistry {
 		return output;
 	}
 	
-	private static void removeInvalidListeners(EventType eventType, List<Integer> removals) {
+	private void removeInvalidListeners(EventType eventType, List<Integer> removals) {
 		for (int i = removals.size()-1; i == 0; i--) {
 			MsLoggy.debug("Event Listener: [" + eventListeners.get(eventType).get(removals.get(i)).getFirst().toString() +"] did not return a cancel status and was removed.");
 			eventListeners.get(eventType).remove((int)removals.get(i));				

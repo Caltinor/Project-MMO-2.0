@@ -22,8 +22,9 @@ import com.google.gson.reflect.TypeToken;
 
 import harmonised.pmmo.ProjectMMO;
 import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.impl.PerkRegistry;
+import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class PerksParser {
@@ -77,7 +78,7 @@ public class PerksParser {
         			settings.put(trigger, members);    				
         		}
         	}
-        	PerkRegistry.setSettings(settings);
+        	Core.get(LogicalSide.SERVER).getPerkRegistry().setSettings(settings);
         }
         catch(Exception e)
         {

@@ -21,15 +21,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
 public class PerkRegistry {
-	private static Map<ResourceLocation, TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag>> perkExecutions = new HashMap<>();
-	private static Map<ResourceLocation, TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag>> perkTerminations = new HashMap<>();
-	private static Map<EventType, LinkedListMultimap<String, JsonObject>> perkSettings = new HashMap<>();
+	public PerkRegistry() {}
 	
-	public static void setSettings(Map<EventType, LinkedListMultimap<String, JsonObject>> settings) {
+	private Map<ResourceLocation, TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag>> perkExecutions = new HashMap<>();
+	private Map<ResourceLocation, TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag>> perkTerminations = new HashMap<>();
+	private Map<EventType, LinkedListMultimap<String, JsonObject>> perkSettings = new HashMap<>();
+	
+	public void setSettings(Map<EventType, LinkedListMultimap<String, JsonObject>> settings) {
 		perkSettings = settings;
 	}
 	
-	public static void registerPerk(
+	public void registerPerk(
 			ResourceLocation perkID, 
 			TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> onExecute, 
 			TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> onConclude) {
@@ -41,11 +43,11 @@ public class PerkRegistry {
 		MsLoggy.debug("Registered Perk: "+perkID.toString());
 	}
 	
-	public static CompoundTag executePerk(EventType cause, ServerPlayer player) {
+	public CompoundTag executePerk(EventType cause, ServerPlayer player) {
 		return executePerk(cause, player, new CompoundTag());
 	}
 	
-	public static CompoundTag executePerk(EventType cause, ServerPlayer player, CompoundTag dataIn) {
+	public CompoundTag executePerk(EventType cause, ServerPlayer player, CompoundTag dataIn) {
 		LinkedListMultimap<String, JsonObject> map =  perkSettings.getOrDefault(cause, LinkedListMultimap.create());
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {
@@ -61,11 +63,11 @@ public class PerkRegistry {
 		return output;
 	}
 	
-	public static CompoundTag terminatePerk(EventType cause, ServerPlayer player) {
+	public CompoundTag terminatePerk(EventType cause, ServerPlayer player) {
 		return terminatePerk(cause, player, new CompoundTag());
 	}
 	
-	public static CompoundTag terminatePerk(EventType cause, ServerPlayer player, CompoundTag dataIn) {
+	public CompoundTag terminatePerk(EventType cause, ServerPlayer player, CompoundTag dataIn) {
 		LinkedListMultimap<String, JsonObject> map = perkSettings.getOrDefault(cause, LinkedListMultimap.create());
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {
@@ -81,7 +83,7 @@ public class PerkRegistry {
 		return output;
 	}
 	
-	private static CompoundTag tagFromJson(JsonObject json) {
+	private CompoundTag tagFromJson(JsonObject json) {
 		try {
 			return TagParser.parseTag(json.toString());
 		} catch(CommandSyntaxException e) {

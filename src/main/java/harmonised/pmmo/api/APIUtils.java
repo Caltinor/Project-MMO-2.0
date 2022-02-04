@@ -11,10 +11,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.impl.EventTriggerRegistry;
-import harmonised.pmmo.impl.PerkRegistry;
-import harmonised.pmmo.impl.PredicateRegistry;
-import harmonised.pmmo.impl.TooltipRegistry;
+import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -25,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.fml.LogicalSide;
 
 public class APIUtils {
 	/* NOTES
@@ -35,35 +33,35 @@ public class APIUtils {
 	 */
 	//===============REQ AND TOOLTIP REFERENCES======================
 	public static void registerActionPredicate(ResourceLocation res, ReqType jType, Predicate<Player> pred) {
-		PredicateRegistry.registerPredicate(res, jType, pred);
+		Core.get(LogicalSide.SERVER).getPredicateRegistry().registerPredicate(res, jType, pred);
 	}
 	
 	public static void registerBreakPredicate(ResourceLocation res, ReqType jType, BiPredicate<Player, BlockEntity> pred) {
-		PredicateRegistry.registerBreakPredicate(res, jType, pred);
+		Core.get(LogicalSide.SERVER).getPredicateRegistry().registerBreakPredicate(res, jType, pred);
 	}
 	
 	public static void registerItemRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<ItemStack, Map<String, Integer>> func)  {
-		TooltipRegistry.registerItemRequirementTooltipData(res, reqType, func);
+		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemRequirementTooltipData(res, reqType, func);
 	}
 	
 	public static void registerBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<BlockEntity, Map<String, Integer>> func) {
-		TooltipRegistry.registerBlockRequirementTooltipData(res, reqType, func);
+		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerBlockRequirementTooltipData(res, reqType, func);
 	}
 	
 	public static void registerEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<Entity, Map<String, Integer>> func) {
-		TooltipRegistry.registerEntityRequirementTooltipData(res, reqType, func);
+		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerEntityRequirementTooltipData(res, reqType, func);
 	}
 	
 	public static void registerItemXpGainTooltipData(ResourceLocation res, EventType eventType, Function<ItemStack, Map<String, Long>> func) {
-		TooltipRegistry.registerItemXpGainTooltipData(res, eventType, func);
+		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemXpGainTooltipData(res, eventType, func);
 	}
 	
 	public static void registerBlockXpGainTooltipData(ResourceLocation res, EventType eventType, Function<BlockEntity, Map<String, Long>> func) {
-		TooltipRegistry.registerBlockXpGainTooltipData(res, eventType, func);
+		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerBlockXpGainTooltipData(res, eventType, func);
 	}
 	
 	public static void registerEntityXpGainTooltipData(ResourceLocation res, EventType eventType, Function<Entity, Map<String, Long>> func) {
-		TooltipRegistry.registerEntityXpGainTooltipData(res, eventType, func);
+		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerEntityXpGainTooltipData(res, eventType, func);
 	}
 	
 	//===============EVENT TRIGGER REFERENCES========================
@@ -73,7 +71,7 @@ public class APIUtils {
 			@NonNull ResourceLocation listenerID, 
 			@NonNull EventType eventType, 
 			@NonNull BiFunction<? super Event, CompoundTag, CompoundTag> executeOnTrigger) {
-		EventTriggerRegistry.registerListener(listenerID, eventType, executeOnTrigger);
+		Core.get(LogicalSide.SERVER).getEventTriggerRegistry().registerListener(listenerID, eventType, executeOnTrigger);
 	}
 	
 	//===============PERK REFERENCES=================================
@@ -95,7 +93,7 @@ public class APIUtils {
 			@NonNull ResourceLocation perkID, 
 			@NonNull TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> onExecute, 
 			@NonNull TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> onConclude) {
-		PerkRegistry.registerPerk(perkID, onExecute, onConclude);
+		Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, onExecute, onConclude);
 	}	
 	
 	//===============UTILITY METHODS=================================

@@ -6,18 +6,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
+import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.LogicalSide;
 
 public class PmmoSavedData extends SavedData{
 	
@@ -29,6 +36,21 @@ public class PmmoSavedData extends SavedData{
 	//===========================GETTERS AND SETTERS================
 	public long getXpRaw(UUID playerID, String skillName) {
 		return xp.computeIfAbsent(playerID, s -> new HashMap<>()).getOrDefault(skillName, 0l);
+	}
+	
+	public boolean setXpDiff(UUID playerID, String skillName, long change) {
+		long oldValue = getXpRaw(playerID, skillName);
+		ServerPlayer player = server.getPlayerList().getPlayer(playerID);
+		
+		XpEvent levelUpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
+		if (MinecraftForge.EVENT_BUS.post(levelUpEvent))
+			return false;
+		
+		if (levelUpEvent.isLevelUp()) 
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
+		setXpRaw(playerID, levelUpEvent.skill, oldValue + levelUpEvent.amountAwarded);
+		return true;
 	}
 	
 	public void setXpRaw(UUID playerID, String skillName, long value) {

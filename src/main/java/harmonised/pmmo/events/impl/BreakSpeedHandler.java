@@ -10,9 +10,6 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.features.autovalues.AutoValues;
-import harmonised.pmmo.impl.EventTriggerRegistry;
-import harmonised.pmmo.impl.PerkRegistry;
-import harmonised.pmmo.impl.PredicateRegistry;
 import harmonised.pmmo.setup.Core;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -30,13 +27,14 @@ public class BreakSpeedHandler {
 	private record DetailsCache(ItemStack item, BlockPos pos, BlockState state, boolean cancelled, float newSpeed) {}
 	
 	public static void handle(BreakSpeed event) {
+		Core core = Core.get(event.getEntity().getLevel());
 		System.out.println("Server BreakSpeed: "+event.getNewSpeed());
 		//First, check the cache for a repeat event trigger
 		if (resultCache.containsKey(event.getPlayer().getUUID())) {
 			if (usingCache(event)) return;
 		}
 		//calculate the event results anew.
-		if (!canUseTool(event)) {
+		if (!canUseTool(core, event)) {
 			event.setCanceled(true);
 			event.getPlayer().displayClientMessage(new TextComponent("Unable to use this tool"), false);
 			//TODO Notify player of inability to perform.
@@ -45,7 +43,7 @@ public class BreakSpeedHandler {
 					new DetailsCache(event.getPlayer().getMainHandItem(), event.getPos(), event.getState(), true, event.getOriginalSpeed()));
 			return;
 		}
-		if (!canPerform(event)) {
+		if (!canPerform(core, event)) {
 			event.setCanceled(true);
 			event.getPlayer().displayClientMessage(new TextComponent("Unable to break this block"), false);
 			//TODO Notify player of inability to perform.
@@ -53,7 +51,7 @@ public class BreakSpeedHandler {
 					new DetailsCache(event.getPlayer().getMainHandItem(), event.getPos(), event.getState(), true, event.getOriginalSpeed()));
 		}
 		else {
-			CompoundTag eventHookOutput = getEventHookResults(event);
+			CompoundTag eventHookOutput = getEventHookResults(core, event);
 			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
 				event.setCanceled(true);
 				resultCache.put(event.getPlayer().getUUID(), 
@@ -64,7 +62,7 @@ public class BreakSpeedHandler {
 				perkDataIn.putFloat(APIUtils.BREAK_SPEED_INPUT_VALUE, event.getOriginalSpeed());
 				perkDataIn.putLong(APIUtils.BLOCK_POS, event.getPos().asLong());
 				//how am i gonna do gaps?  hmmmm
-				CompoundTag perkDataOut = PerkRegistry.executePerk(EventType.BREAK_SPEED, (ServerPlayer) event.getPlayer(), perkDataIn);
+				CompoundTag perkDataOut = core.getPerkRegistry().executePerk(EventType.BREAK_SPEED, (ServerPlayer) event.getPlayer(), perkDataIn);
 				if (perkDataOut.contains(APIUtils.BREAK_SPEED_OUTPUT_VALUE)) {
 					float newSpeed = Math.max(0, perkDataOut.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE));
 					event.setNewSpeed(newSpeed);
@@ -75,39 +73,39 @@ public class BreakSpeedHandler {
 		}
 	}
 	
-	private static boolean canUseTool(BreakSpeed event) {
+	private static boolean canUseTool(Core core, BreakSpeed event) {
 		ResourceLocation toolID = event.getPlayer().getMainHandItem().getItem().getRegistryName();
-		if (PredicateRegistry.predicateExists(toolID, ReqType.TOOL))
-			return PredicateRegistry.checkPredicateReq(event.getPlayer(), toolID, ReqType.TOOL);
-		else if (Core.get(event.getPlayer().getLevel()).getSkillGates().doesObjectReqExist(ReqType.TOOL, toolID))
-			return Core.get(event.getPlayer().getLevel()).getSkillGates().doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID());
+		if (core.getPredicateRegistry().predicateExists(toolID, ReqType.TOOL))
+			return core.getPredicateRegistry().checkPredicateReq(event.getPlayer(), toolID, ReqType.TOOL);
+		else if (core.getSkillGates().doesObjectReqExist(ReqType.TOOL, toolID))
+			return core.getSkillGates().doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
 			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.TOOL, toolID, ObjectType.BLOCK);
-			return Core.get(event.getPlayer().getLevel()).getSkillGates().doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID(), requirements);
+			return core.getSkillGates().doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID(), requirements);
 		} 
 		return true;
 	}
 	
-	private static boolean canPerform(BreakSpeed event) {		
+	private static boolean canPerform(Core core, BreakSpeed event) {		
 		ResourceLocation blockID = event.getState().getBlock().getRegistryName();
-		if (PredicateRegistry.predicateExists(blockID, ReqType.BREAK)) {
+		if (core.getPredicateRegistry().predicateExists(blockID, ReqType.BREAK)) {
 			BlockEntity tile = event.getPlayer().getLevel().getBlockEntity(event.getPos());
 			return tile == null ? 
-					PredicateRegistry.checkPredicateReq(event.getPlayer(), blockID, ReqType.BREAK):
-					PredicateRegistry.checkPredicateReq(event.getPlayer(), tile, ReqType.BREAK);
+					core.getPredicateRegistry().checkPredicateReq(event.getPlayer(), blockID, ReqType.BREAK):
+					core.getPredicateRegistry().checkPredicateReq(event.getPlayer(), tile, ReqType.BREAK);
 		}
-		else if (Core.get(event.getPlayer().getLevel()).getSkillGates().doesObjectReqExist(ReqType.BREAK, blockID))
-			return Core.get(event.getPlayer().getLevel()).getSkillGates().doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID());
+		else if (core.getSkillGates().doesObjectReqExist(ReqType.BREAK, blockID))
+			return core.getSkillGates().doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
 			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.BREAK, blockID, ObjectType.BLOCK);
-			return Core.get(event.getPlayer().getLevel()).getSkillGates().doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID(), requirements);
+			return core.getSkillGates().doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID(), requirements);
 		}
 
 		return true;
 	}
 	
-	private static CompoundTag getEventHookResults(BreakSpeed event) {
-		return EventTriggerRegistry.executeEventListeners(EventType.BREAK_SPEED, event, new CompoundTag());
+	private static CompoundTag getEventHookResults(Core core, BreakSpeed event) {
+		return core.getEventTriggerRegistry().executeEventListeners(EventType.BREAK_SPEED, event, new CompoundTag());
 	}
 
 	private static boolean usingCache(BreakSpeed event) {

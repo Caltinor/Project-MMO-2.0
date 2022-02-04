@@ -2,21 +2,14 @@ package harmonised.pmmo.core;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.readers.ModifierDataType;
-import harmonised.pmmo.features.fireworks.FireworkHandler;
-import harmonised.pmmo.impl.PerkRegistry;
-import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
-import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -25,7 +18,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 
 public class XpUtils {
 	public XpUtils() {}
@@ -34,20 +26,6 @@ public class XpUtils {
 	private  Map<ModifierDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
 	
 	//===================XP INTERACTION METHODS=======================================
-	public boolean setXpDiff(UUID playerID, String skillName, long change) {
-		long oldValue = PmmoSavedData.get().getXpRaw(playerID, skillName);
-		ServerPlayer player = PmmoSavedData.getServer().getPlayerList().getPlayer(playerID);
-		
-		XpEvent levelUpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
-		if (MinecraftForge.EVENT_BUS.post(levelUpEvent))
-			return false;
-		
-		if (levelUpEvent.isLevelUp()) 
-			PerkRegistry.executePerk(EventType.SKILL_UP, player,
-					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
-		PmmoSavedData.get().setXpRaw(playerID, levelUpEvent.skill, oldValue + levelUpEvent.amountAwarded);
-		return true;
-	}
 	
 	public boolean hasXpGainObjectEntry(EventType eventType, ResourceLocation objectID) {
 		if (!xpGainData.containsKey(eventType))
