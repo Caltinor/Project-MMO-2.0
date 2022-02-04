@@ -6,7 +6,7 @@
 	],
 	"xp_values": { 
 		"BLOCK_BREAK": { "mining": 10 },
-		"BLOCK_PLACE": { "building": 1}
+		"BLOCK_PLACE": { "building": 10}
 	},
 	"requirements": { 
 		"TOOL": {

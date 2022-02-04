@@ -2,20 +2,20 @@
 	"BREAK_SPEED": {
 		"mining": [{"perk":"pmmo:break_speed",
 					"modifier": 1000,
-					"pickaxe_dig": 1}],
+					"pickaxe_dig": 0.05}],
 		"excavation": [{"perk":"pmmo:break_speed",
 					"modifier": 1000,
-					"shovel_dig": 1}],
+					"shovel_dig": 0.05}],
 		"woodcutting": [{"perk":"pmmo:break_speed",
 					"modifier": 1000,
-					"axe_dig": 1}],
+					"axe_dig": 0.05}],
 		"farming": [{"perk":"pmmo:break_speed",
 					"modifier": 1000,
-					"hoe_dig": 1,
-					"shears_dig": 1}],
+					"hoe_dig": 0.05,
+					"shears_dig": 0.05}],
 		"combat": [{"perk":"pmmo:break_speed",
 					"modifier": 1000,
-					"sword_dig": 1}]  
+					"sword_dig": 0.05}]  
 	},
 	"SKILL_UP": {
 		"combat": [

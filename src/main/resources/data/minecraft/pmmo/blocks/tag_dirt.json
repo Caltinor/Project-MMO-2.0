@@ -5,14 +5,18 @@
 	    "minecraft:coarse_dirt",
 	    "minecraft:mycelium",
 	    "minecraft:rooted_dirt",
-	    "minecraft:moss_block"
+	    "minecraft:moss_block",
+	    "minecraft:sand"
 	],
 	"xp_values": { 
 		"BLOCK_BREAK": { "excavation": 10 },
-		"BLOCK_PLACE": { "building": 1}
+		"BLOCK_PLACE": { "landscaping": 10}
 	},
 	"requirements": { 
 		"TOOL": {
+			"excavation": 5
+		},
+		"PLACE": { 
 			"excavation": 5
 		}
 	}
