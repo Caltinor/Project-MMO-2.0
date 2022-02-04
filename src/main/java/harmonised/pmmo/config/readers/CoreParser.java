@@ -146,16 +146,19 @@ public class CoreParser {
 		});
 	}
 	
-	public static final Codec<Map<Integer, Map<String, Integer>>> ENCHANTMENT_CODEC = Codec.unboundedMap(Codec.INT, CodecTypeReq.INTEGER_CODEC);
-	public static final MergeableCodecDataManager<Map<Integer, Map<String, Integer>>, Map<Integer, Map<String, Integer>>> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
+	public static final Codec<Map<String, Map<String, Integer>>> ENCHANTMENT_CODEC = Codec.unboundedMap(Codec.STRING, CodecTypeReq.INTEGER_CODEC);
+	public static final MergeableCodecDataManager<Map<String, Map<String, Integer>>, Map<Integer, Map<String, Integer>>> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
 			"pmmo/enchantments", DATA_LOGGER, ENCHANTMENT_CODEC, raws -> mergeEnchantmentTags(raws), processed -> finalizeEnchantmentMaps(processed));
-	private static Map<Integer, Map<String, Integer>> mergeEnchantmentTags(final List<Map<Integer, Map<String, Integer>>> raws) {
+	private static Map<Integer, Map<String, Integer>> mergeEnchantmentTags(final List<Map<String, Map<String, Integer>>> raws) {
 		Map<Integer, Map<String, Integer>> outMap = new HashMap<>();
 		for (int i = 0; i < raws.size(); i++) {
-			for (Map.Entry<Integer, Map<String, Integer>> map : raws.get(i).entrySet()) {
-				outMap.computeIfAbsent(map.getKey(), (k) -> new HashMap<>());
+			for (Map.Entry<String, Map<String, Integer>> map : raws.get(i).entrySet()) {
+				int enchantLevel = 10000;
+				try {enchantLevel = Integer.valueOf(map.getKey());} catch(NumberFormatException e) {MsLoggy.error("Enchantment Number Incorrectly Defined:", e);}
+				outMap.computeIfAbsent(enchantLevel, (k) -> new HashMap<>());
+				final int ultimateLevel = enchantLevel;
 				map.getValue().forEach((k, v) -> {
-					outMap.get(map.getKey()).put(k, v);
+					outMap.get(ultimateLevel).put(k, v);
 				});
 			}
 		}
