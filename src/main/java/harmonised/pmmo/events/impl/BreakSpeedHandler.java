@@ -28,7 +28,6 @@ public class BreakSpeedHandler {
 	
 	public static void handle(BreakSpeed event) {
 		Core core = Core.get(event.getEntity().getLevel());
-		System.out.println("Server BreakSpeed: "+event.getNewSpeed());
 		//First, check the cache for a repeat event trigger
 		if (resultCache.containsKey(event.getPlayer().getUUID())) {
 			if (usingCache(event)) return;
@@ -50,7 +49,7 @@ public class BreakSpeedHandler {
 			resultCache.put(event.getPlayer().getUUID(), 
 					new DetailsCache(event.getPlayer().getMainHandItem(), event.getPos(), event.getState(), true, event.getOriginalSpeed()));
 		}
-		else {
+		else if (!event.getEntity().level.isClientSide){
 			CompoundTag eventHookOutput = getEventHookResults(core, event);
 			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
 				event.setCanceled(true);

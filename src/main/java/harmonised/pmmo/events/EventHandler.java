@@ -57,9 +57,6 @@ public class EventHandler {
 	public static void onBreakSpeed(BreakSpeed event) {
 		if (event.isCanceled())
 			return;
-		if (event.getPlayer().getLevel().isClientSide())
-			return; //TODO clien side?
-		else
-			BreakSpeedHandler.handle(event);
+		BreakSpeedHandler.handle(event);
 	}
 }
