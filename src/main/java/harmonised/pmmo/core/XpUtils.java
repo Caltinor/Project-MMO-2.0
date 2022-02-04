@@ -51,6 +51,9 @@ public class XpUtils {
 		xpModifierData.computeIfAbsent(XpValueDataType, s -> new HashMap<>()).put(objectID, xpMap);
 	}
 	
+	public Map<String, Double> getObjectModifierMap(ModifierDataType type, ResourceLocation objectID) {
+		return xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(objectID, new HashMap<>());
+	}
 	//====================UTILITY METHODS==============================================
 	public Map<String, Long> deserializeAwardMap(ListTag nbt) {
 		Map<String, Long> map = new HashMap<>();

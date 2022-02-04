@@ -9,6 +9,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 import harmonised.pmmo.config.datapack.codecs.CodecMapPlayer;
 import harmonised.pmmo.config.readers.codecs.CodecTypeSkills.SkillData;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 
 public class DataConfig {
@@ -52,9 +54,14 @@ public class DataConfig {
 		Preconditions.checkNotNull(data);
 		playerSpecificSettings.put(playerID, data);
 	}
+	//==================DATA GETTER METHODS==============================
+	public Map<String, SkillData> getSkillData() {return skillData;}
 	
 	//==================UTILITY METHODS==============================	
 	public int getSkillColor(String skill) {
 		return skillData.getOrDefault(skill, SkillData.getDefault()).color();
+	}
+	public Style getSkillStyle(String skill) {
+		return Style.EMPTY.withColor(TextColor.fromRgb(getSkillColor(skill)));
 	}
 }

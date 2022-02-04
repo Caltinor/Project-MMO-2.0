@@ -141,7 +141,7 @@ public class TooltipRegistry {
 	 * @param stack the itemstack being evaluated for skill requirements
 	 * @return the skill map of the item.
 	 */	
-	public Map<String, Integer> getItemRequirementTooltipData(ResourceLocation res, ReqType reqType, ItemStack stack)
+	public Map<String, Integer> getItemRequirementTooltipData(ResourceLocation res, ReqType reqType, ItemStack stack, LogicalSide side)
 	{
 		if (requirementTooltipExists(res, reqType)) {
 			Map<String, Integer> suppliedData = new HashMap<>();
@@ -158,7 +158,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return Core.get(LogicalSide.SERVER).getSkillGates().getObjectSkillMap(reqType, res);
+		return Core.get(side).getSkillGates().getObjectSkillMap(reqType, res);
 	}
 	
 	/**this is executed by PMMO where the required map for block tooltips are used.  some PMMO
@@ -187,7 +187,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return Core.get(LogicalSide.SERVER).getSkillGates().getObjectSkillMap(reqType, res);
+		return Core.get(tile.getLevel()).getSkillGates().getObjectSkillMap(reqType, res);
 	}
 	
 	/**this is executed by PMMO where the required map for entity interactions.  
@@ -214,7 +214,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return Core.get(LogicalSide.SERVER).getSkillGates().getObjectSkillMap(reqType, res);
+		return Core.get(entity.level).getSkillGates().getObjectSkillMap(reqType, res);
 	}
 
 	public void registerItemXpGainTooltipData(ResourceLocation res, EventType eventType, Function<ItemStack, Map<String, Long>> func) {
@@ -258,15 +258,15 @@ public class TooltipRegistry {
 		return false;
 	}
 	
-	public Map<String, Long> getItemXpGainTooltipData(ResourceLocation itemID, EventType eventType, ItemStack stack) {
-		return new HashMap<>();
+	public Map<String, Long> getItemXpGainTooltipData(ResourceLocation itemID, EventType eventType, ItemStack stack, LogicalSide side) {
+		return Core.get(side).getXpUtils().getObjectExperienceMap(eventType, itemID);
 	}
 	
-	public Map<String, Long> getBlockXpGainTooltipData(ResourceLocation itemID, EventType eventType, BlockEntity stack) {
-		return new HashMap<>();
+	public Map<String, Long> getBlockXpGainTooltipData(ResourceLocation itemID, EventType eventType, BlockEntity tile) {
+		return Core.get(tile.getLevel()).getXpUtils().getObjectExperienceMap(eventType, itemID);
 	}
 	
-	public Map<String, Long> getEntityXpGainTooltipData(ResourceLocation itemID, EventType eventType, Entity stack) {
+	public Map<String, Long> getEntityXpGainTooltipData(ResourceLocation itemID, EventType eventType, Entity entity) {
 		return new HashMap<>();
 	}
 }
