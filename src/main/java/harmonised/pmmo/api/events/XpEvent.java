@@ -1,6 +1,6 @@
 package harmonised.pmmo.api.events;
 
-import harmonised.pmmo.core.XpUtils;
+import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -26,11 +26,11 @@ public class XpEvent extends PlayerEvent
     }
 
     public int startLevel() {
-        return XpUtils.getLevelFromXP(currentSkillXp);
+        return PmmoSavedData.get().getLevelFromXP(currentSkillXp);
     }
 
     public int endLevel() {
-        return XpUtils.getLevelFromXP(amountAwarded + currentSkillXp);
+        return PmmoSavedData.get().getLevelFromXP(amountAwarded + currentSkillXp);
     }
     
     public boolean isLevelUp() {

@@ -3,7 +3,6 @@ package harmonised.pmmo.setup;
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.config.readers.PerksParser;
-import harmonised.pmmo.core.XpUtils;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.storage.PmmoSavedData;
@@ -30,7 +29,7 @@ public class CommonSetup {
 		MsLoggy.info("Loading PMMO Saved Data");
 		PmmoSavedData.init(event.getServer());
 		MsLoggy.info("Computing data for cache");
-		XpUtils.computeLevelsForCache();
+		PmmoSavedData.get().computeLevelsForCache();
 		MsLoggy.info("Loading settings from config jsons");
 		CoreParser.init();
 		PerksParser.parsePerks();
@@ -42,7 +41,7 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onConfigReload(ModConfigEvent.Reloading event) {
 		if (event.getConfig().getType().equals(ModConfig.Type.SERVER))
-			XpUtils.computeLevelsForCache();
+			PmmoSavedData.get().computeLevelsForCache();
 	}
 	
 	@SubscribeEvent

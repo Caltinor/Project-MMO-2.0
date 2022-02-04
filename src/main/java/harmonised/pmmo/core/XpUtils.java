@@ -1,8 +1,6 @@
 package harmonised.pmmo.core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,12 +10,9 @@ import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.impl.PerkRegistry;
-import harmonised.pmmo.network.Networking;
-import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -33,12 +28,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 public class XpUtils {
+	public XpUtils() {}
 	
-	private static Map<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainData = new HashMap<>();
-	private static Map<ModifierDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
+	private  Map<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainData = new HashMap<>();
+	private  Map<ModifierDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
 	
 	//===================XP INTERACTION METHODS=======================================
-	public static boolean setXpDiff(UUID playerID, String skillName, long change) {
+	public boolean setXpDiff(UUID playerID, String skillName, long change) {
 		long oldValue = PmmoSavedData.get().getXpRaw(playerID, skillName);
 		ServerPlayer player = PmmoSavedData.getServer().getPlayerList().getPlayer(playerID);
 		
@@ -53,32 +49,24 @@ public class XpUtils {
 		return true;
 	}
 	
-	public static long getPlayerXpRaw(UUID playerID, String skill) {
-		return PmmoSavedData.get().getXpRaw(playerID, skill);
-	}
-	
-	public static int getPlayerSkillLevel(String skill, UUID player) {
-		return getLevelFromXP(getPlayerXpRaw(player, skill));
-	}
-	
-	public static boolean hasXpGainObjectEntry(EventType eventType, ResourceLocation objectID) {
+	public boolean hasXpGainObjectEntry(EventType eventType, ResourceLocation objectID) {
 		if (!xpGainData.containsKey(eventType))
 			return false;
 		return xpGainData.get(eventType).containsKey(objectID);
 	}
 	
-	public static Map<String, Long> getObjectExperienceMap(EventType EventType, ResourceLocation objectID) {
+	public Map<String, Long> getObjectExperienceMap(EventType EventType, ResourceLocation objectID) {
 		return xpGainData.computeIfAbsent(EventType, s -> new HashMap<>()).getOrDefault(objectID, new HashMap<>());
 	}
 	
-	public static void setObjectXpGainMap(EventType eventType, ResourceLocation objectID, Map<String, Long> xpMap) {
+	public void setObjectXpGainMap(EventType eventType, ResourceLocation objectID, Map<String, Long> xpMap) {
 		Preconditions.checkNotNull(eventType);
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(xpMap);
 		xpGainData.computeIfAbsent(eventType, s -> new HashMap<>()).put(objectID, xpMap);
 	}
 	
-	public static void setObjectXpModifierMap(ModifierDataType XpValueDataType, ResourceLocation objectID, Map<String, Double> xpMap) {
+	public void setObjectXpModifierMap(ModifierDataType XpValueDataType, ResourceLocation objectID, Map<String, Double> xpMap) {
 		Preconditions.checkNotNull(XpValueDataType);
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(xpMap);
@@ -86,15 +74,7 @@ public class XpUtils {
 	}
 	
 	//====================UTILITY METHODS==============================================
-	public static int getLevelFromXP(long xp) {
-		for (int i = 0; i < levelCache.size(); i++) {
-			if (levelCache.get(i) > xp)
-				return i;
-		}
-		return Config.MAX_LEVEL.get();
-	}
-	
-	public static Map<String, Long> deserializeAwardMap(ListTag nbt) {
+	public Map<String, Long> deserializeAwardMap(ListTag nbt) {
 		Map<String, Long> map = new HashMap<>();
 		if (nbt.getElementType() != Tag.TAG_COMPOUND) {
 			MsLoggy.error("An API method passed an invalid award map.  This may not have negative effects on gameplay," + 
@@ -106,9 +86,9 @@ public class XpUtils {
 				   ,nbt.getCompound(i).getLong(Reference.API_MAP_SERIALIZER_VALUE));
 		}
 		return map;
-	}
+	}	
 	
-	public static Map<String, Long> applyXpModifiers(Player player, @Nullable Entity targetEntity, Map<String, Long> mapIn) {
+	public Map<String, Long> applyXpModifiers(Player player, @Nullable Entity targetEntity, Map<String, Long> mapIn) {
 		Map<String, Long> mapOut = new HashMap<>();
 		Map<String, Double> modifiers = getConsolidatedModifierMap(player, targetEntity);
 		for (Map.Entry<String, Long> award : mapIn.entrySet()) {
@@ -120,39 +100,13 @@ public class XpUtils {
 		return mapOut;
 	}
 	
-	public static void sendXpAwardNotifications(ServerPlayer player, String skillName, long amount) {
+	public void sendXpAwardNotifications(ServerPlayer player, String skillName, long amount) {
 		//TODO send packets for guis and drop XP
 		player.sendMessage(new TranslatableComponent("pmmo."+skillName).append(": "+String.valueOf(amount)), player.getUUID());
 	}
 	//====================LOGICAL METHODS==============================================
 	
-	private static List<Long> levelCache = new ArrayList<>();
-	
-	public static List<Long> getLevelCache() {return levelCache;}
-	
-	public static void computeLevelsForCache() {
-		boolean exponential = Config.USE_EXPONENTIAL_FORUMULA.get();
-		
-		long linearBase = Config.LINEAR_BASE_XP.get();
-		double linearPer = Config.LINEAR_PER_LEVEL.get();
-		
-		int exponentialBase = Config.EXPONENTIAL_BASE_XP.get();
-		double exponentialRoot = Config.EXPONENTIAL_POWER_BASE.get();
-		double exponentialRate = Config.EXPONENTIAL_LEVEL_MOD.get();
-		
-		long current = 0;
-		for (int i = 1; i <= Config.MAX_LEVEL.get(); i++) {
-			current += exponential?
-					exponentialBase * Math.pow(exponentialRoot, exponentialRate * (i)) :
-					linearBase + (i) * linearPer;
-			levelCache.add(current);
-		}
-		for (ServerPlayer player : PmmoSavedData.getServer().getPlayerList().getPlayers()) {
-			Networking.sendToClient(new CP_UpdateLevelCache(levelCache), player);
-		}
-	}
-	
-	private static Map<String, Double> getConsolidatedModifierMap(Player player, @Nullable Entity entity) {
+	private Map<String, Double> getConsolidatedModifierMap(Player player, @Nullable Entity entity) {
 		Map<String, Double> mapOut = new HashMap<>();
 		for (ModifierDataType type : ModifierDataType.values()) {
 			Map<String, Double> modifiers = new HashMap<>();

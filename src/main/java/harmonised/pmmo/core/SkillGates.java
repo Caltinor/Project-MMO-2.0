@@ -14,33 +14,34 @@ import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.resources.ResourceLocation;
 
 public class SkillGates {
+	public SkillGates () {}
 
-	private static Map<ReqType, Map<ResourceLocation, Map<String, Integer>>> reqData = new HashMap<>();
-	private static Map<ResourceLocation, Map<Integer, Map<String, Integer>>> enchantmentReqs = new HashMap<>();
+	private Map<ReqType, Map<ResourceLocation, Map<String, Integer>>> reqData = new HashMap<>();
+	private Map<ResourceLocation, Map<Integer, Map<String, Integer>>> enchantmentReqs = new HashMap<>();
 	
 	//====================REQDATA GETTERS AND SETTERS======================================
-	public static Map<String, Integer> getObjectSkillMap(ReqType reqType, ResourceLocation objectID) {
+	public Map<String, Integer> getObjectSkillMap(ReqType reqType, ResourceLocation objectID) {
 		return reqData.computeIfAbsent(reqType, s -> new HashMap<>()).computeIfAbsent(objectID, s -> new HashMap<>());
 	}
 	
-	public static int getObjectSkillLevel(ReqType reqType, ResourceLocation objectID, String skillName) {
+	public int getObjectSkillLevel(ReqType reqType, ResourceLocation objectID, String skillName) {
 		return reqData.computeIfAbsent(reqType, s -> new HashMap<>()).computeIfAbsent(objectID, s -> new HashMap<>()).getOrDefault(skillName, 0);
 	}
 	
-	public static void setObjectSkillMap(ReqType reqType, ResourceLocation objectID, Map<String, Integer> skillMap) {
+	public void setObjectSkillMap(ReqType reqType, ResourceLocation objectID, Map<String, Integer> skillMap) {
 		Preconditions.checkNotNull(reqType);
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(skillMap);
 		reqData.computeIfAbsent(reqType, s -> new HashMap<>()).put(objectID, skillMap);
 	}
 	
-	public static void setEnchantmentReqs(ResourceLocation enchantmentID, Map<Integer, Map<String, Integer>> data) {
+	public void setEnchantmentReqs(ResourceLocation enchantmentID, Map<Integer, Map<String, Integer>> data) {
 		Preconditions.checkNotNull(enchantmentID);
 		Preconditions.checkNotNull(data);
 		enchantmentReqs.put(enchantmentID, data);
 	}
 	
-	public static List<String> getUsedSkills() {
+	public List<String> getUsedSkills() {
 		List<String> out = new ArrayList<>();
 		for (Map.Entry<ReqType, Map<ResourceLocation, Map<String, Integer>>> entries : reqData.entrySet()) {
 			for (Map.Entry<ResourceLocation, Map<String,Integer>> entry : entries.getValue().entrySet()) {
@@ -54,19 +55,19 @@ public class SkillGates {
 		return out;
 	}
 	//====================REQDATA UTILITY METHODS======================================
-	public static boolean doesObjectReqExist(ReqType reqType, ResourceLocation objectID) {
+	public boolean doesObjectReqExist(ReqType reqType, ResourceLocation objectID) {
 		return reqData.containsKey(reqType) ? reqData.get(reqType).containsKey(objectID) : false;
 	}
 	
-	public static boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
+	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
 		Map<String, Integer> requirements = getObjectSkillMap(reqType, objectID);
 		return doesPlayerMeetReq(reqType, objectID, playerID, requirements);	
 	}
 	
-	public static boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID, Map<String, Integer> requirements) {
+	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID, Map<String, Integer> requirements) {
 		boolean meetsReq = true;
 		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
-			int skillLevel = XpUtils.getLevelFromXP(PmmoSavedData.get().getXpRaw(playerID, req.getKey()));
+			int skillLevel = PmmoSavedData.get().getLevelFromXP(PmmoSavedData.get().getXpRaw(playerID, req.getKey()));
 			if (req.getValue() > skillLevel)
 				return false;
 		}

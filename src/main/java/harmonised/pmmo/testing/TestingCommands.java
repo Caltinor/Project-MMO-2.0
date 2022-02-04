@@ -7,7 +7,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import harmonised.pmmo.core.XpUtils;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.commands.CommandSourceStack;
@@ -39,7 +38,7 @@ public class TestingCommands {
 			Map<String, Long> xpMap = PmmoSavedData.get().getXpMap(player.getUUID());
 			player.sendMessage(new TextComponent("My PMMO Skills"), player.getUUID());
 			for (Map.Entry<String, Long> skill : xpMap.entrySet()) {
-				player.sendMessage(new TextComponent(skill.getKey()+": "+String.valueOf(XpUtils.getLevelFromXP(skill.getValue()))), player.getUUID());
+				player.sendMessage(new TextComponent(skill.getKey()+": "+String.valueOf(PmmoSavedData.get().getLevelFromXP(skill.getValue()))), player.getUUID());
 			}
 			return 0;
 		}

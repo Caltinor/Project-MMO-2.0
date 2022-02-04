@@ -9,11 +9,11 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.impl.EventTriggerRegistry;
 import harmonised.pmmo.impl.PerkRegistry;
 import harmonised.pmmo.impl.PredicateRegistry;
+import harmonised.pmmo.setup.Core;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
@@ -30,6 +30,7 @@ public class BreakSpeedHandler {
 	private record DetailsCache(ItemStack item, BlockPos pos, BlockState state, boolean cancelled, float newSpeed) {}
 	
 	public static void handle(BreakSpeed event) {
+		System.out.println("Server BreakSpeed: "+event.getNewSpeed());
 		//First, check the cache for a repeat event trigger
 		if (resultCache.containsKey(event.getPlayer().getUUID())) {
 			if (usingCache(event)) return;
@@ -78,11 +79,11 @@ public class BreakSpeedHandler {
 		ResourceLocation toolID = event.getPlayer().getMainHandItem().getItem().getRegistryName();
 		if (PredicateRegistry.predicateExists(toolID, ReqType.TOOL))
 			return PredicateRegistry.checkPredicateReq(event.getPlayer(), toolID, ReqType.TOOL);
-		else if (SkillGates.doesObjectReqExist(ReqType.TOOL, toolID))
-			return SkillGates.doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID());
+		else if (Core.get(event.getPlayer().getLevel()).getSkillGates().doesObjectReqExist(ReqType.TOOL, toolID))
+			return Core.get(event.getPlayer().getLevel()).getSkillGates().doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
 			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.TOOL, toolID, ObjectType.BLOCK);
-			return SkillGates.doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID(), requirements);
+			return Core.get(event.getPlayer().getLevel()).getSkillGates().doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID(), requirements);
 		} 
 		return true;
 	}
@@ -95,11 +96,11 @@ public class BreakSpeedHandler {
 					PredicateRegistry.checkPredicateReq(event.getPlayer(), blockID, ReqType.BREAK):
 					PredicateRegistry.checkPredicateReq(event.getPlayer(), tile, ReqType.BREAK);
 		}
-		else if (SkillGates.doesObjectReqExist(ReqType.BREAK, blockID))
-			return SkillGates.doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID());
+		else if (Core.get(event.getPlayer().getLevel()).getSkillGates().doesObjectReqExist(ReqType.BREAK, blockID))
+			return Core.get(event.getPlayer().getLevel()).getSkillGates().doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID());
 		else if (Config.ENABLE_AUTO_VALUES.get()) {
 			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.BREAK, blockID, ObjectType.BLOCK);
-			return SkillGates.doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID(), requirements);
+			return Core.get(event.getPlayer().getLevel()).getSkillGates().doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID(), requirements);
 		}
 
 		return true;

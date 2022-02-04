@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.DataConfig;
+import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.platform.Window;
@@ -15,12 +15,14 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.LogicalSide;
 
 public class XPOverlayGUI extends GuiComponent
 {
+	private static Core core = Core.get(LogicalSide.CLIENT);
 	public static boolean configChanged = false;
 	private static int levelGap = 0, 
-			skillGap = 0;
+		skillGap = 0;
 	private static double skillListOffsetX = Config.SKILL_LIST_OFFSET_X.get(),
 		skillListOffsetY = Config.SKILL_LIST_OFFSET_Y.get();
 	private static boolean showSkillsListAtCorner = Config.SKILL_LIST_DISPLAY.get();
@@ -369,7 +371,7 @@ public class XPOverlayGUI extends GuiComponent
 				long currentXP = DataMirror.getXpForSkill(skillKey);
 				double level = DataMirror.getXpWithPercentToNextLevel(DataMirror.getXpForSkill(skillKey));
 				String tempString = DP.dp(Math.floor(level * 100D) / 100D);
-				int color = DataConfig.getSkillColor(skillKey);
+				int color = core.getDataConfig().getSkillColor(skillKey);
 				
 				if(level >= maxLevel)
 					tempString = "" + maxLevel;

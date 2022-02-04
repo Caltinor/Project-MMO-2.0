@@ -11,12 +11,13 @@ import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.core.SkillGates;
+import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.fml.LogicalSide;
 
 public class TooltipRegistry {
 	private static Map<ReqType, LinkedListMultimap<ResourceLocation, Function<ItemStack, Map<String, Integer>>>> itemReqTooltips = new HashMap<>();
@@ -155,7 +156,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return SkillGates.getObjectSkillMap(reqType, res);
+		return Core.get(LogicalSide.SERVER).getSkillGates().getObjectSkillMap(reqType, res);
 	}
 	
 	/**this is executed by PMMO where the required map for block tooltips are used.  some PMMO
@@ -184,7 +185,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return SkillGates.getObjectSkillMap(reqType, res);
+		return Core.get(LogicalSide.SERVER).getSkillGates().getObjectSkillMap(reqType, res);
 	}
 	
 	/**this is executed by PMMO where the required map for entity interactions.  
@@ -211,7 +212,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return SkillGates.getObjectSkillMap(reqType, res);
+		return Core.get(LogicalSide.SERVER).getSkillGates().getObjectSkillMap(reqType, res);
 	}
 
 	public static void registerItemXpGainTooltipData(ResourceLocation res, EventType eventType, Function<ItemStack, Map<String, Long>> func) {

@@ -1,17 +1,22 @@
 package harmonised.pmmo.storage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
+import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
 
 public class PmmoSavedData extends SavedData{
@@ -42,6 +47,10 @@ public class PmmoSavedData extends SavedData{
 	public void setXpMap(UUID playerID, Map<String, Long> map) {
 		xp.put(playerID, map != null ? map : new HashMap<>());
 		this.setDirty();
+	}
+	
+	public int getPlayerSkillLevel(String skill, UUID player) {
+		return getLevelFromXP(getXpRaw(player, skill));
 	}
 	//===========================CORE WSD LOGIC=====================
 	public PmmoSavedData() {}
@@ -92,4 +101,38 @@ public class PmmoSavedData extends SavedData{
 		return server;
 	}
 
+	//============================UTILITY METHODS===========================
+	public int getLevelFromXP(long xp) {
+		for (int i = 0; i < levelCache.size(); i++) {
+			if (levelCache.get(i) > xp)
+				return i;
+		}
+		return Config.MAX_LEVEL.get();
+	}	
+	
+	private List<Long> levelCache = new ArrayList<>();
+	
+	public List<Long> getLevelCache() {return levelCache;}
+	
+	public void computeLevelsForCache() {
+		boolean exponential = Config.USE_EXPONENTIAL_FORUMULA.get();
+		
+		long linearBase = Config.LINEAR_BASE_XP.get();
+		double linearPer = Config.LINEAR_PER_LEVEL.get();
+		
+		int exponentialBase = Config.EXPONENTIAL_BASE_XP.get();
+		double exponentialRoot = Config.EXPONENTIAL_POWER_BASE.get();
+		double exponentialRate = Config.EXPONENTIAL_LEVEL_MOD.get();
+		
+		long current = 0;
+		for (int i = 1; i <= Config.MAX_LEVEL.get(); i++) {
+			current += exponential?
+					exponentialBase * Math.pow(exponentialRoot, exponentialRate * (i)) :
+					linearBase + (i) * linearPer;
+			levelCache.add(current);
+		}
+		for (ServerPlayer player : PmmoSavedData.getServer().getPlayerList().getPlayers()) {
+			Networking.sendToClient(new CP_UpdateLevelCache(levelCache), player);
+		}
+	}
 }

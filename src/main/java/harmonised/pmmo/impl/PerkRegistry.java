@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.core.XpUtils;
+import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -50,7 +50,7 @@ public class PerkRegistry {
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {
 			List<JsonObject> entries = map.get(skill);
-			int skillLevel = XpUtils.getPlayerSkillLevel(skill, player.getUUID());
+			int skillLevel = PmmoSavedData.get().getPlayerSkillLevel(skill, player.getUUID());
 			for (int i = 0; i < entries.size(); i++) {
 				CompoundTag src = tagFromJson(entries.get(i));
 				src.merge(dataIn);
@@ -70,7 +70,7 @@ public class PerkRegistry {
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {
 			List<JsonObject> entries = map.get(skill);
-			int skillLevel = XpUtils.getPlayerSkillLevel(skill, player.getUUID());
+			int skillLevel = PmmoSavedData.get().getPlayerSkillLevel(skill, player.getUUID());
 			for (int i = 0; i < entries.size(); i++) {
 				CompoundTag src = tagFromJson(entries.get(i));
 				src.merge(dataIn);
