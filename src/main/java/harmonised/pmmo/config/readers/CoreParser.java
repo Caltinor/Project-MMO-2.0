@@ -39,7 +39,6 @@ import harmonised.pmmo.config.readers.codecs.CodecMapGlobals;
 import harmonised.pmmo.config.readers.codecs.CodecTypeSkills;
 import harmonised.pmmo.config.readers.codecs.CodecTypeSkills.SkillData;
 import harmonised.pmmo.core.NBTUtils;
-import harmonised.pmmo.features.salvaging.SalvageLogic;
 import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
@@ -69,24 +68,24 @@ public class CoreParser {
 	private static void finalizeObjectMaps(boolean isItem, Map<ResourceLocation, CodecMapObject.ObjectMapContainer> data) {
 		data.forEach((rl, omc) -> {
 			List<ResourceLocation> tagValues = List.of(rl);
-			if (omc.tagValues.size() > 0) tagValues = omc.tagValues;
+			if (omc.tagValues().size() > 0) tagValues = omc.tagValues();
 			for (ResourceLocation tag : tagValues) {
-				for (Map.Entry<EventType, Map<String, Long>> xpValues : omc.xpValues.entrySet()) {
+				for (Map.Entry<EventType, Map<String, Long>> xpValues : omc.xpValues().entrySet()) {
 					MsLoggy.info("XP_VALUES: "+xpValues.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(xpValues.getValue())+" loaded from config");
 					Core.get(LogicalSide.SERVER).getXpUtils().setObjectXpGainMap(xpValues.getKey(), tag, xpValues.getValue());
 				}			
-				for (Map.Entry<ReqType, Map<String, Integer>> reqs : omc.reqs.entrySet()) {
+				for (Map.Entry<ReqType, Map<String, Integer>> reqs : omc.reqs().entrySet()) {
 					MsLoggy.info("REQS: "+reqs.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
 					Core.get(LogicalSide.SERVER).getSkillGates().setObjectSkillMap(reqs.getKey(), tag, reqs.getValue());
 				}
 				if (isItem) {
-					for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : omc.modifiers.entrySet()) {
+					for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : omc.modifiers().entrySet()) {
 						MsLoggy.info("BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
 						Core.get(LogicalSide.SERVER).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
 					}
-					for (Map.Entry<ResourceLocation, CodecTypeSalvage.SalvageData> salvage : omc.salvage.entrySet()) {
+					for (Map.Entry<ResourceLocation, CodecTypeSalvage> salvage : omc.salvage().entrySet()) {
 						MsLoggy.info("SALVAGE: "+tag.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
-						SalvageLogic.setSalvageData(tag, salvage.getKey(), salvage.getValue());
+						Core.get(LogicalSide.SERVER).getSalvageLogic().setSalvageData(tag, salvage.getKey(), salvage.getValue());
 					}
 				}
 			}

@@ -8,6 +8,7 @@ import com.google.common.base.Suppliers;
 import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.core.SkillGates;
 import harmonised.pmmo.core.XpUtils;
+import harmonised.pmmo.features.salvaging.SalvageLogic;
 import harmonised.pmmo.impl.EventTriggerRegistry;
 import harmonised.pmmo.impl.PerkRegistry;
 import harmonised.pmmo.impl.PredicateRegistry;
@@ -24,6 +25,7 @@ public class Core {
 	  private final EventTriggerRegistry eventReg;
 	  private final TooltipRegistry tooltips;
 	  private final PerkRegistry perks;
+	  private final SalvageLogic salvageLogic;
 	  
 	  private Core() {
 	    this.xp = new XpUtils();
@@ -33,6 +35,7 @@ public class Core {
 	    this.eventReg = new EventTriggerRegistry();
 	    this.tooltips = new TooltipRegistry();
 	    this.perks = new PerkRegistry();
+	    this.salvageLogic = new SalvageLogic();
 	  }
 	  
 	  public static Core get(final LogicalSide side) {
@@ -49,4 +52,5 @@ public class Core {
 	  public EventTriggerRegistry getEventTriggerRegistry() {return eventReg;}
 	  public TooltipRegistry getTooltipRegistry() {return tooltips;}
 	  public PerkRegistry getPerkRegistry() {return perks;}
+	  public SalvageLogic getSalvageLogic() {return salvageLogic;}
 }

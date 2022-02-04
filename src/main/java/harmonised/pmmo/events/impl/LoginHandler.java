@@ -4,6 +4,7 @@ import java.util.Map;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_DataSkills;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.setup.Core;
@@ -23,5 +24,6 @@ public class LoginHandler {
 			Networking.sendToClient(new CP_UpdateExperience(skillMap.getKey(), skillMap.getValue()), player);
 		}
 		Networking.sendToClient(new CP_UpdateLevelCache(PmmoSavedData.get().getLevelCache()), player);
+		Networking.sendToClient(new CP_SyncData_DataSkills(Core.get(LogicalSide.SERVER).getDataConfig().getSkillData()), player);
 	}
 }

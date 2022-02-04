@@ -22,6 +22,7 @@ public class CommonSetup {
 	
 	public static void init(final FMLCommonSetupEvent event) {
 		Networking.registerMessages();
+		Networking.registerDataSyncPackets();
 	}
 	
 	@SubscribeEvent

@@ -1,7 +1,11 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_DataSkills;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,8 +34,26 @@ public class Networking {
 			.decoder(CP_UpdateExperience::new)
 			.consumer(CP_UpdateExperience::handle)
 			.add();
+		INSTANCE.messageBuilder(CP_SyncData_DataSkills.class, ID++)
+			.encoder(CP_SyncData_DataSkills::encode)
+			.decoder(CP_SyncData_DataSkills::decode)
+			.consumer(CP_SyncData_DataSkills::handle)
+			.add();
+		INSTANCE.messageBuilder(CP_SyncData_Objects.class, ID++)
+			.encoder(CP_SyncData_Objects::encode)
+			.decoder(CP_SyncData_Objects::decode)
+			.consumer(CP_SyncData_Objects::handle)
+			.add();
 		//SERVER BOUND PACKETS
-		System.out.println("Messages Registered");
+		MsLoggy.info("Messages Registered");
+	}
+	
+	public static void registerDataSyncPackets() {
+		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(true, o));});
+		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(false, o));});
+		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(false, o));});
+		//TODO BIOME and DIMENSION synchronizers
+		//TODO ENCHANTMENT synchronizer
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {

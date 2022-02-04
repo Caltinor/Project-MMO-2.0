@@ -2,6 +2,8 @@ package harmonised.pmmo.features.autovalues;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
@@ -10,8 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 
 public class AutoValues {
 	//============================DATA CACHES==============================================================
-	private static Map<ReqType, Map<ResourceLocation, Map<String, Integer>>> reqValues = new HashMap<>();
-	private static Map<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainValues = new HashMap<>();
+	private static ConcurrentMap<ReqType, Map<ResourceLocation, Map<String, Integer>>> reqValues = new ConcurrentHashMap<>();
+	private static ConcurrentMap<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainValues = new ConcurrentHashMap<>();
 	
 	//============================CACHE GETTERS============================================================	
 	public static void cacheRequirement(ReqType reqType, ResourceLocation objectID, Map<String, Integer> requirementMap) {

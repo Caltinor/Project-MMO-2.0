@@ -21,7 +21,7 @@ public class CodecTypeSkills {
 	public Optional<Integer> getColor() {return color;}
 	public Optional<Boolean> getAfkExempt() {return afkExempt;}
 	
-	public static record SkillData(int color, boolean afkPentaltyIgnored) {
+	public static record SkillData(int color, boolean afkPenaltyIgnored) {
 		public static final String COLOR = "color";
 		public static final String AFK = "noAfkPenalty";
 		public static SkillData getDefault() {return new SkillData(16777215, false);}
@@ -29,5 +29,10 @@ public class CodecTypeSkills {
 			this(data.color.orElseGet(() -> 16777215)
 				,data.afkExempt.orElseGet(() -> false));
 		}
+		
+		public static Codec<SkillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.INT.fieldOf(COLOR).forGetter(SkillData::color),
+				Codec.BOOL.fieldOf(AFK).forGetter(SkillData::afkPenaltyIgnored)
+				).apply(instance, SkillData::new));
 	}
 }

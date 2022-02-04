@@ -52,33 +52,47 @@ public class CodecMapObject {
 	//public Map<ReqType, JsonObject> getNBTReqMap() {return nbtReqMap;}
 	public Optional<Map<ResourceLocation, CodecTypeSalvage>> getSalvageMap() {return salvageMap;}
 	
-	public static class ObjectMapContainer {
-		public List<ResourceLocation> tagValues = new ArrayList<>();
-		public Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
-		public Map<ModifierDataType, Map<String, Double>> modifiers = new HashMap<>();
-		public Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
-		public Map<ResourceLocation, CodecTypeSalvage.SalvageData> salvage = new HashMap<>();
+	public static record ObjectMapContainer(
+		List<ResourceLocation> tagValues,
+		Map<EventType, Map<String, Long>> xpValues,
+		Map<ModifierDataType, Map<String, Double>> modifiers,
+		Map<ReqType, Map<String, Integer>> reqs,
+		Map<ResourceLocation, CodecTypeSalvage> salvage) {
 		
 		public ObjectMapContainer(CodecMapObject src) {
-			tagValues = src.getTagValues().isPresent() ? src.getTagValues().get() : new ArrayList<>();
-			xpValues = src.getXpValuesMap().isPresent() ? src.getXpValuesMap().get().getMap() : new HashMap<>();
-			modifiers = src.getBonusMap().isPresent() ? src.getBonusMap().get().getMap(): new HashMap<>();
-			reqs = src.getReqMap().isPresent() ? src.getReqMap().get().getMap() : new HashMap<>();
-			Map<ResourceLocation, CodecTypeSalvage> salvageRaw = src.getSalvageMap().isPresent() ? src.getSalvageMap().get() : new HashMap<>();
-			salvageRaw.forEach((rl, cts) -> {salvage.put(rl, new CodecTypeSalvage.SalvageData(cts));});
+			this(src.getTagValues().isPresent() ? src.getTagValues().get() : new ArrayList<>(),
+				src.getXpValuesMap().isPresent() ? src.getXpValuesMap().get().getMap() : new HashMap<>(),
+				src.getBonusMap().isPresent() ? src.getBonusMap().get().getMap(): new HashMap<>(),
+				src.getReqMap().isPresent() ? src.getReqMap().get().getMap() : new HashMap<>(),
+				src.getSalvageMap().isPresent() ? src.getSalvageMap().get() : new HashMap<>());
 		}
-		public ObjectMapContainer() {}
 		
 		public static ObjectMapContainer combine(ObjectMapContainer one, ObjectMapContainer two) {
+			List<ResourceLocation> tagValues = new ArrayList<>(one.tagValues);
 			two.tagValues.forEach((rl) -> {
-				if (!one.tagValues.contains(rl))
-					one.tagValues.add(rl);
+				if (!tagValues.contains(rl))
+					tagValues.add(rl);
 			});
-			one.xpValues.putAll(two.xpValues);
-			one.modifiers.putAll(two.modifiers);
-			one.reqs.putAll(two.reqs);
-			one.salvage.putAll(two.salvage);
-			return one;
+			Map<EventType, Map<String, Long>> xpValues = new HashMap<>(one.xpValues);
+			xpValues.putAll(two.xpValues);
+			Map<ModifierDataType, Map<String, Double>> modifiers = new HashMap<>(one.modifiers);
+			modifiers.putAll(two.modifiers);
+			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>(one.reqs);
+			reqs.putAll(two.reqs);
+			Map<ResourceLocation, CodecTypeSalvage> salvage = new HashMap<>(one.salvage);
+			salvage.putAll(two.salvage);
+			return new ObjectMapContainer(tagValues, xpValues, modifiers, reqs, salvage);
 		}
+		public ObjectMapContainer() {
+			this(new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
+		}
+		
+		public static final Codec<ObjectMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				ResourceLocation.CODEC.listOf().fieldOf("tagValues").forGetter(ObjectMapContainer::tagValues),
+				Codec.unboundedMap(EventType.CODEC, CodecTypeEvent.LONG_CODEC).fieldOf("xpValues").forGetter(ObjectMapContainer::xpValues),
+				Codec.unboundedMap(ModifierDataType.CODEC, CodecTypeModifier.DOUBLE_CODEC).fieldOf("modifiers").forGetter(ObjectMapContainer::modifiers),
+				Codec.unboundedMap(ReqType.CODEC, CodecTypeReq.INTEGER_CODEC).fieldOf("reqs").forGetter(ObjectMapContainer::reqs),
+				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypeSalvage.CODEC).fieldOf("salvage").forGetter(ObjectMapContainer::salvage)
+				).apply(instance, ObjectMapContainer::new));
 	}
 }
