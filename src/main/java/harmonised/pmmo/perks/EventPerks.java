@@ -11,6 +11,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 
 public class EventPerks {
@@ -28,7 +29,7 @@ public class EventPerks {
         jumpBoost = -0.011 + level * perLevel;
         jumpBoost = Math.min(maxBoost, jumpBoost);
         player.push(0, jumpBoost, 0);
-        player.hurtMarked = true; 
+        player.connection.send(new ClientboundSetEntityMotionPacket(player));
         CompoundTag output = new CompoundTag();
         output.putDouble("power", jumpBoost);
         return output;
