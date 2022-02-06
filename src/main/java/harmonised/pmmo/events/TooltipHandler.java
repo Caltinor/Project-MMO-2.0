@@ -432,27 +432,28 @@ public class TooltipHandler
                             LOGGER.error(e);
                         }
                     }
-                    /*
+                    
                     if(salvageFrom != null)
                     {
                         try
                         {
                             tooltip.add(new TranslatableComponent("pmmo.canBeSalvagedFrom").setStyle(XP.textStyle.get("green")));
                             level = Skill.getLevel(Skill.SMITHING.toString(), player);
-
-                            String key = (String) salvageFromArray[salvageFromArrayPos];
-                            String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
-
-                            Map<String, Double> salvageFromMap = salvageFrom.get(key);
-
-                            tooltip.add(new TranslatableComponent("pmmo.valueFromValue", " " + (int) (double) salvageFromMap.get("salvageMax"), displayName).setStyle(XP.textStyle.get(salvageFromMap.get("levelReq") > level ? "red" : "green")));
+                            if (salvageFromArray.length > 0) {
+	                            String key = (String) salvageFromArray[salvageFromArrayPos];
+	                            String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
+	
+	                            Map<String, Double> salvageFromMap = salvageFrom.get(key);
+	
+	                            tooltip.add(new TranslatableComponent("pmmo.valueFromValue", " " + (int) (double) salvageFromMap.get("salvageMax"), displayName).setStyle(XP.textStyle.get(salvageFromMap.get("levelReq") > level ? "red" : "green")));
+                            }
                         }
                         catch(Exception e)
                         {
-                            LOGGER.error(e);
+                            LOGGER.error("Salvage Tooltip Error: "+e);
                         }
                     }
-
+                    
                     if(treasureInfo != null && treasureInfo.size() > 0)
                     {
                         try
@@ -461,26 +462,28 @@ public class TooltipHandler
                             Map<String, Double> salvageToItemMap;
                             double chance, xpPerItem;
                             int minCount, maxCount;
-                            String key = (String) treasureToArray[treasureToArrayPos];
-
-                            salvageToItemMap = treasureInfo.get(key);
-                            chance = Util.mapCapped(level, salvageToItemMap.get("startLevel"), salvageToItemMap.get("endLevel"), salvageToItemMap.get("startChance"), salvageToItemMap.get("endChance"));
-                            xpPerItem = salvageToItemMap.get("xpPerItem");
-                            String itemName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
-                            minCount = (int) (double) salvageToItemMap.get("minCount");
-                            maxCount = (int) (double) salvageToItemMap.get("maxCount");
-
-                            if(chance > 100)
-                                chance = 100;
-                            if(chance <= 0)
-                                chance = 0;
-
-                            tooltip.add(new TranslatableComponent("pmmo.containsCountItemTreasure", (minCount == maxCount ? minCount : minCount + "-" + maxCount), itemName).setStyle(XP.textStyle.get("green")));
-                            tooltip.add(new TranslatableComponent("pmmo.xpEachChance", " " + DP.dp(xpPerItem), DP.dp(chance)).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+                            if (treasureToArray.length > 0) {
+	                            String key = (String) treasureToArray[treasureToArrayPos];
+	
+	                            salvageToItemMap = treasureInfo.get(key);
+	                            chance = Util.mapCapped(level, salvageToItemMap.get("startLevel"), salvageToItemMap.get("endLevel"), salvageToItemMap.get("startChance"), salvageToItemMap.get("endChance"));
+	                            xpPerItem = salvageToItemMap.get("xpPerItem");
+	                            String itemName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
+	                            minCount = (int) (double) salvageToItemMap.get("minCount");
+	                            maxCount = (int) (double) salvageToItemMap.get("maxCount");
+	
+	                            if(chance > 100)
+	                                chance = 100;
+	                            if(chance <= 0)
+	                                chance = 0;
+	
+	                            tooltip.add(new TranslatableComponent("pmmo.containsCountItemTreasure", (minCount == maxCount ? minCount : minCount + "-" + maxCount), itemName).setStyle(XP.textStyle.get("green")));
+	                            tooltip.add(new TranslatableComponent("pmmo.xpEachChance", " " + DP.dp(xpPerItem), DP.dp(chance)).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+                            }
                         }
                         catch(Exception e)
                         {
-                            LOGGER.error(e);
+                            LOGGER.error("Treasure Info Tooltip: "+e);
                         }
                     }
 
@@ -490,23 +493,24 @@ public class TooltipHandler
                         {
                             tooltip.add(new TranslatableComponent("pmmo.treasureFrom").setStyle(XP.textStyle.get("green")));
                             level = Skill.getLevel(Skill.EXCAVATION.toString(), player);
-
-                            String key = (String) treasureFromArray[treasureFromArrayPos];
-                            String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
-
-                            Map<String, Double> treasureFromMap = treasureFromInfo.get(key);
-                            Map<String, Double> treasureToMap = JsonConfig.data2.get(JType.TREASURE).get(key).get(regKey);
-                            int minCount = (int) (double) treasureFromMap.get("minCount");
-                            int maxCount = (int) (double) treasureFromMap.get("maxCount");
-                            double chance = Util.mapCapped(level, treasureToMap.get("startLevel"), treasureToMap.get("endLevel"), treasureToMap.get("startChance"), treasureToMap.get("endChance"));
-
-                            tooltip.add(new TranslatableComponent("pmmo.valueFromValue", " " + (minCount == maxCount ? minCount : minCount + "-" + maxCount), displayName).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+                            if (treasureFromArray.length > 0) {
+	                            String key = (String) treasureFromArray[treasureFromArrayPos];
+	                            String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
+	
+	                            Map<String, Double> treasureFromMap = treasureFromInfo.get(key);
+	                            Map<String, Double> treasureToMap = JsonConfig.data2.get(JType.TREASURE).get(key).get(regKey);
+	                            int minCount = (int) (double) treasureFromMap.get("minCount");
+	                            int maxCount = (int) (double) treasureFromMap.get("maxCount");
+	                            double chance = Util.mapCapped(level, treasureToMap.get("startLevel"), treasureToMap.get("endLevel"), treasureToMap.get("startChance"), treasureToMap.get("endChance"));
+	
+	                            tooltip.add(new TranslatableComponent("pmmo.valueFromValue", " " + (minCount == maxCount ? minCount : minCount + "-" + maxCount), displayName).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+                            }
                         }
                         catch(Exception e)
                         {
-                            LOGGER.error(e);
+                            LOGGER.error("TreasureFrom Tooltip Error: "+e);
                         }
-                    }*/
+                    }
                 }
                 
                 //ADVANCED TOOLTIP
