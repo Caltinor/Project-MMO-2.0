@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.function.TriFunction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,6 +17,8 @@ public class EventPerks {
 	private static final String PER_LEVEL = "per_level";
 	private static final String MAX_BOOST = "max_boost";
 	private static final String COOLDOWN = "cooldown";
+	public static final String WEAPON_TYPE = "weapon_type";
+	private static final String APPLICABLE_TO = "applies_to";
 	private static Map<UUID, Long> breathe_cooldown = new HashMap<>();
 	
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> JUMP = (player, nbt, level) -> {
@@ -56,6 +61,9 @@ public class EventPerks {
 		CompoundTag output = new CompoundTag();
 		if (!nbt.contains("damageIn")) return output;
 		double perLevel = nbt.contains(PER_LEVEL) ? nbt.getDouble(PER_LEVEL) : 0.05;
+		ListTag type = nbt.contains(WEAPON_TYPE) ? nbt.getList(WEAPON_TYPE, Tag.TAG_STRING) : new ListTag();
+		String applyTo = nbt.contains(APPLICABLE_TO) ? nbt.getString(APPLICABLE_TO) : "meleeWeapon";
+		if (!type.contains(StringTag.valueOf(applyTo))) return output;
 		float damage = nbt.getFloat("damageIn") * (float)(perLevel * (double)level);
 		output.putFloat("damage", damage);
 		return output;

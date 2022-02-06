@@ -53,13 +53,16 @@
 	},
 	"DEAL_DAMAGE": { 
 		"archery": [
-			{"perk":"pmmo:damage_boost"}
+			{"perk":"pmmo:damage_boost",
+			 "applies_to":"archeryWeapon"}
 		],
 		"magic": [
-			{"perk":"pmmo:damage_boost"}
+			{"perk":"pmmo:damage_boost",
+			 "applies_to":"magicWeapon"}
 		],
 		"gunslinging": [
-			{"perk":"pmmo:damage_boost"}
+			{"perk":"pmmo:damage_boost",
+			 "applies_to":"gunWeapon"}
 		]
 	}
 }

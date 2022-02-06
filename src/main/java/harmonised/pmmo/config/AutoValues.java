@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.*;
@@ -202,6 +204,16 @@ public class AutoValues
             skill = Skill.GUNSLINGING.toString();
 
         return skill;
+    }
+    
+    public static ListTag getItemSpecificWeaponTypes(String resLoc) {
+    	ListTag list = new ListTag();
+    	Map<String, Double> itemSpecificMap = JsonConfig.data.get(JType.ITEM_SPECIFIC).getOrDefault(resLoc.toString(), new HashMap<>());
+    	if (itemSpecificMap.getOrDefault("meleeWeapon", 0d) == 1d) list.add(StringTag.valueOf("meleeWeapon"));
+    	if (itemSpecificMap.getOrDefault("archeryWeapon", 0d) == 1d) list.add(StringTag.valueOf("archeryWeapon"));
+    	if (itemSpecificMap.getOrDefault("magicWeapon", 0d) == 1d) list.add(StringTag.valueOf("magicWeapon"));
+    	if (itemSpecificMap.getOrDefault("gunWeapon", 0d) == 1d) list.add(StringTag.valueOf("gunWeapon"));
+    	return list;
     }
 
     public static void setAutoValues()

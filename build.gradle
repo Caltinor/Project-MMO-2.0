@@ -103,7 +103,7 @@ repositories
     {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
+        url = "https://modmaven.dev"
     }
 
     maven { url = "https://maven.theillusivec4.top/" }
@@ -114,11 +114,11 @@ repositories
 
 dependencies
         {
-            minecraft 'net.minecraftforge:forge:1.18.1-39.0.55'
+            minecraft 'net.minecraftforge:forge:1.18.1-39.0.64'
             annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 
 //            compileOnly fg.deobf("mezz.jei:jei-1.17.1-8.0.0.16:api")
-//            runtimeOnly fg.deobf("mezz.jei:jei-1.17.1-8.0.0.16")
+//            runtimeOnly fg.deobf("curse.maven:jei-238222:3599262")
 //            runtimeOnly fg.deobf("curse.maven:jei:3039766")
 //            runtimeOnly fg.deobf("curse.maven:ores-and-metals:2967502")
 //            runtimeOnly fg.deobf("curse.maven:curio-of-undying:3122649")
@@ -130,15 +130,15 @@ dependencies
 //            runtimeOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
 //            compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.16.2:7.0.0.27")
             compileOnly fg.deobf("curse.maven:ftb-quests-forge:3596442")
-            runtimeOnly fg.deobf("curse.maven:ftb-quests-forge:3596442")
+//            runtimeOnly fg.deobf("curse.maven:ftb-quests-forge:3596442")
             compileOnly fg.deobf("curse.maven:ftb-library-forge:3598890")
-            runtimeOnly fg.deobf("curse.maven:ftb-library-forge:3598890")
+//            runtimeOnly fg.deobf("curse.maven:ftb-library-forge:3598890")
             compileOnly fg.deobf("curse.maven:item-filters-forge:3596362")
-            runtimeOnly fg.deobf("curse.maven:item-filters-forge:3596362")
+//            runtimeOnly fg.deobf("curse.maven:item-filters-forge:3596362")
             compileOnly fg.deobf("curse.maven:ftb-teams-forge:3596307")
-            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3596307")
+//            runtimeOnly fg.deobf("curse.maven:ftb-teams-forge:3596307")
             compileOnly fg.deobf("curse.maven:architectury-forge:3587338")
-            runtimeOnly fg.deobf("curse.maven:architectury-forge:3587338")
+//            runtimeOnly fg.deobf("curse.maven:architectury-forge:3587338")
 
 //            runtimeOnly fg.deobf("curse.maven:cgm:3224957")
 //            runtimeOnly fg.deobf("curse.maven:obfuscate-289380:3458195")
