@@ -132,13 +132,13 @@ public class PlayerTickHandler
                     lastCheeseUpdate.put(uuid, System.nanoTime());
                 }
 
-                if(hpRegenGap > getHpRegenTime(player))
+                /*if(hpRegenGap > getHpRegenTime(player))
                 {
                     float startHp = player.getHealth();
                     player.heal(1f);
-                    XP.awardXp(player, Skill.ENDURANCE.toString(), "Regeneration", (60 / getHpRegenTime(player)) * Config.forgeConfig.hpRegenXpMultiplier.get() * (player.getHealth() - startHp), true, false, false);
+                    //XP.awardXp(player, Skill.ENDURANCE.toString(), "Regeneration", (60 / getHpRegenTime(player)) * Config.forgeConfig.hpRegenXpMultiplier.get() * (player.getHealth() - startHp), true, false, false);
                     hpRegen.put(uuid, System.nanoTime());
-                }
+                }*/
             }
 
             if(syncGap > 2.5)

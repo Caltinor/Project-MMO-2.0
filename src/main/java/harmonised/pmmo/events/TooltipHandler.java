@@ -65,7 +65,7 @@ public class TooltipHandler
                 float hardness;
                 double dValue;
                 BlockState state = item instanceof BlockItem ? ((BlockItem) item).getBlock().defaultBlockState() : null;
-
+            
                 if(ClientHandler.OPEN_MENU.isDown())
                 {
                     GlossaryScreen.setButtonsToKey(regKey);
@@ -73,28 +73,28 @@ public class TooltipHandler
                     return;
                 }
 
-                Map<String, Double> craftReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_CRAFT, itemStack);
-                Map<String, Double> wearReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAR, itemStack);
-                Map<String, Double> toolReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_TOOL, itemStack);
-                Map<String, Double> weaponReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAPON, itemStack);
-                Map<String, Double> useReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_USE, itemStack);
-                Map<String, Double> useEnchantmentReq = XP.getEnchantsUseReq(itemStack);
-                Map<String, Double> placeReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_PLACE, itemStack);
-                Map<String, Double> breakReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_BREAK, itemStack);
-                Map<String, Double> xpValueGeneral = JsonConfig.data.get(JType.XP_VALUE_GENERAL).getOrDefault(regKey, new HashMap<>());
-                Map<String, Double> xpValueBreaking = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREAK, itemStack);
-                Map<String, Double> xpValueCrafting = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_CRAFT, itemStack);
-                Map<String, Double> xpValueSmelting = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_SMELT, itemStack);
-                Map<String, Double> xpValueCooking = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_COOK, itemStack);
-                Map<String, Double> xpValueBrewing = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREW, itemStack);
-                Map<String, Double> xpValueGrowing = JsonConfig.data.get(JType.XP_VALUE_GROW).getOrDefault(regKey, new HashMap<>());
-                Map<String, Double> xpValuePlacing = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_PLACE, itemStack);
-                Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
-                Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
-                Map<String, Map<String, Double>> treasureInfo = JsonConfig.data2.get(JType.TREASURE).getOrDefault(regKey, new HashMap<>());
-                Map<String, Map<String, Double>> treasureFromInfo = JsonConfig.data2.get(JType.TREASURE_FROM).getOrDefault(regKey, new HashMap<>());
-                Map<String, Double> heldItemXpBoost = XP.getStackXpBoosts(itemStack, true);
-                Map<String, Double> wornItemXpBoost = XP.getStackXpBoosts(itemStack, false);
+                Map<String, Double> craftReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_CRAFT, itemStack);
+                Map<String, Double> wearReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAR, itemStack);
+                Map<String, Double> toolReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_TOOL, itemStack);
+                Map<String, Double> weaponReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAPON, itemStack);
+                Map<String, Double> useReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_USE, itemStack);
+                Map<String, Double> useEnchantmentReq =  XP.getEnchantsUseReq(itemStack);
+                Map<String, Double> placeReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_PLACE, itemStack);
+                Map<String, Double> breakReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_BREAK, itemStack);
+                Map<String, Double> xpValueGeneral =  JsonConfig.data.get(JType.XP_VALUE_GENERAL).getOrDefault(regKey, new HashMap<>());
+                Map<String, Double> xpValueBreaking =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREAK, itemStack);
+                Map<String, Double> xpValueCrafting =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_CRAFT, itemStack);
+                Map<String, Double> xpValueSmelting =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_SMELT, itemStack);
+                Map<String, Double> xpValueCooking =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_COOK, itemStack);
+                Map<String, Double> xpValueBrewing =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREW, itemStack);
+                Map<String, Double> xpValueGrowing =  JsonConfig.data.get(JType.XP_VALUE_GROW).getOrDefault(regKey, new HashMap<>());
+                Map<String, Double> xpValuePlacing =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_PLACE, itemStack);
+                Map<String, Map<String, Double>> salvageInfo =  JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> salvageFrom =  JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> treasureInfo =  JsonConfig.data2.get(JType.TREASURE).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> treasureFromInfo =  JsonConfig.data2.get(JType.TREASURE_FROM).getOrDefault(regKey, new HashMap<>());
+                Map<String, Double> heldItemXpBoost =  XP.getStackXpBoosts(itemStack, true);
+                Map<String, Double> wornItemXpBoost =  XP.getStackXpBoosts(itemStack, false);
 
                 //Dynamic Reqs
                 if(Config.getConfig("autoGenerateValuesEnabled") != 0)
@@ -150,7 +150,7 @@ public class TooltipHandler
                             tooltip.add(new TranslatableComponent("pmmo.levelDisplay", " " + new TranslatableComponent("pmmo." + key).getString(), DP.dp(dValue)).setStyle(Skill.getSkillStyle(key)));
                         }
                     }
-
+         
                     if(xpValueBreaking != null && xpValueBreaking.size() > 0)      //XP BREAK
                     {
                         tooltip.add(new TranslatableComponent("pmmo.xpValueBreak"));
@@ -354,7 +354,7 @@ public class TooltipHandler
                         if(treasureFromArrayPos >= treasureFromArrayLength)
                             treasureFromArrayPos = 0;
                     }
-
+                    
                     if(!lastKey.equals(regKey))
                     {
                         if(salvageInfo != null)
@@ -384,7 +384,7 @@ public class TooltipHandler
 
                         lastKey = regKey;
                     }
-
+                    
                     if(salvageInfo != null && salvageInfo.size() > 0)
                     {
                         try
@@ -432,7 +432,7 @@ public class TooltipHandler
                             LOGGER.error(e);
                         }
                     }
-
+                    /*
                     if(salvageFrom != null)
                     {
                         try
@@ -506,9 +506,9 @@ public class TooltipHandler
                         {
                             LOGGER.error(e);
                         }
-                    }
+                    }*/
                 }
-
+                
                 //ADVANCED TOOLTIP
                 if(event.getFlags().isAdvanced())
                 {

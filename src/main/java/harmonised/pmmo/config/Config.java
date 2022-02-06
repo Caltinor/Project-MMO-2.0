@@ -66,29 +66,29 @@ public class Config
         localConfig.put("maxXp", Math.min(Double.MAX_VALUE, XP.xpAtLevel(forgeConfig.maxLevel.get())));
         localConfig.put("biomePenaltyMultiplier", forgeConfig.biomePenaltyMultiplier.get());
         localConfig.put("nightvisionUnlockLevel", (double) forgeConfig.nightvisionUnlockLevel.get());
-        localConfig.put("speedBoostPerLevel", forgeConfig.speedBoostPerLevel.get());
-        localConfig.put("maxSpeedBoost", forgeConfig.maxSpeedBoost.get());
-        localConfig.put("maxJumpBoost", forgeConfig.maxJumpBoost.get());
-        localConfig.put("maxFallSaveChance", forgeConfig.maxFallSaveChance.get());
-        localConfig.put("saveChancePerLevel", forgeConfig.saveChancePerLevel.get());
-        localConfig.put("levelsPerCrouchJumpBoost", forgeConfig.levelsPerCrouchJumpBoost.get());
-        localConfig.put("levelsPerSprintJumpBoost", forgeConfig.levelsPerSprintJumpBoost.get());
+        //localConfig.put("speedBoostPerLevel", forgeConfig.speedBoostPerLevel.get());
+        //localConfig.put("maxSpeedBoost", forgeConfig.maxSpeedBoost.get());
+        //localConfig.put("maxJumpBoost", forgeConfig.maxJumpBoost.get());
+        //localConfig.put("maxFallSaveChance", forgeConfig.maxFallSaveChance.get());
+        //localConfig.put("saveChancePerLevel", forgeConfig.saveChancePerLevel.get());
+        //localConfig.put("levelsPerCrouchJumpBoost", forgeConfig.levelsPerCrouchJumpBoost.get());
+        //localConfig.put("levelsPerSprintJumpBoost", forgeConfig.levelsPerSprintJumpBoost.get());
         localConfig.put("levelsPerOneReach", forgeConfig.levelsPerOneReach.get());
         localConfig.put("endurancePerLevel", forgeConfig.endurancePerLevel.get());
-        localConfig.put("hpRegenPerMinuteBase", forgeConfig.hpRegenPerMinuteBase.get());
-        localConfig.put("hpRegenPerMinuteBoostPerLevel", forgeConfig.hpRegenPerMinuteBoostPerLevel.get());
+        //localConfig.put("hpRegenPerMinuteBase", forgeConfig.hpRegenPerMinuteBase.get());
+        //localConfig.put("hpRegenPerMinuteBoostPerLevel", forgeConfig.hpRegenPerMinuteBoostPerLevel.get());
         localConfig.put("maxEndurance", forgeConfig.maxEndurance.get());
-        localConfig.put("levelsPerHeart", forgeConfig.levelsPerHeart.get());
-        localConfig.put("maxExtraHeartBoost", (double) forgeConfig.maxExtraHeartBoost.get());
+        //localConfig.put("levelsPerHeart", forgeConfig.levelsPerHeart.get());
+        //localConfig.put("maxExtraHeartBoost", (double) forgeConfig.maxExtraHeartBoost.get());
         localConfig.put("maxExtraReachBoost", forgeConfig.maxExtraReachBoost.get());
 
-        localConfig.put("damageBonusPercentPerLevelMelee", forgeConfig.damageBonusPercentPerLevelMelee.get());
-        localConfig.put("maxExtraDamagePercentageBoostMelee", forgeConfig.maxExtraDamagePercentageBoostMelee.get());
-        localConfig.put("damageBonusPercentPerLevelArchery", forgeConfig.damageBonusPercentPerLevelArchery.get());
-        localConfig.put("maxExtraDamagePercentageBoostArchery", forgeConfig.maxExtraDamagePercentageBoostArchery.get());
-        localConfig.put("damageBonusPercentPerLevelMagic", forgeConfig.damageBonusPercentPerLevelMagic.get());
-        localConfig.put("damageBonusPercentPerLevelGunslinging", forgeConfig.damageBonusPercentPerLevelGunslinging.get());
-        localConfig.put("maxExtraDamagePercentageBoostMagic", forgeConfig.maxExtraDamagePercentageBoostMagic.get());
+        //localConfig.put("damageBonusPercentPerLevelMelee", forgeConfig.damageBonusPercentPerLevelMelee.get());
+        //localConfig.put("maxExtraDamagePercentageBoostMelee", forgeConfig.maxExtraDamagePercentageBoostMelee.get());
+        //localConfig.put("damageBonusPercentPerLevelArchery", forgeConfig.damageBonusPercentPerLevelArchery.get());
+        //localConfig.put("maxExtraDamagePercentageBoostArchery", forgeConfig.maxExtraDamagePercentageBoostArchery.get());
+        //localConfig.put("damageBonusPercentPerLevelMagic", forgeConfig.damageBonusPercentPerLevelMagic.get());
+        //localConfig.put("damageBonusPercentPerLevelGunslinging", forgeConfig.damageBonusPercentPerLevelGunslinging.get());
+        //localConfig.put("maxExtraDamagePercentageBoostMagic", forgeConfig.maxExtraDamagePercentageBoostMagic.get());
 
         localConfig.put("mobHPBoostPerPowerLevel", forgeConfig.mobHPBoostPerPowerLevel.get());
         localConfig.put("maxMobHPBoost", forgeConfig.maxMobHPBoost.get());
@@ -308,31 +308,31 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> growthSpeedIncreasePerLevel;
 
         //Agility
-        public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
-        public ConfigHelper.ConfigValueListener<Double> saveChancePerLevel;
-        public ConfigHelper.ConfigValueListener<Double> maxJumpBoost;
-        public ConfigHelper.ConfigValueListener<Double> maxSpeedBoost;
-        public ConfigHelper.ConfigValueListener<Double> speedBoostPerLevel;
-        public ConfigHelper.ConfigValueListener<Double> levelsPerCrouchJumpBoost;
-        public ConfigHelper.ConfigValueListener<Double> levelsPerSprintJumpBoost;
+        //public ConfigHelper.ConfigValueListener<Double> maxFallSaveChance;
+        //public ConfigHelper.ConfigValueListener<Double> saveChancePerLevel;
+        //public ConfigHelper.ConfigValueListener<Double> maxJumpBoost;
+        //public ConfigHelper.ConfigValueListener<Double> maxSpeedBoost;
+        //public ConfigHelper.ConfigValueListener<Double> speedBoostPerLevel;
+        //public ConfigHelper.ConfigValueListener<Double> levelsPerCrouchJumpBoost;
+        //public ConfigHelper.ConfigValueListener<Double> levelsPerSprintJumpBoost;
 
         //Endurance
         public ConfigHelper.ConfigValueListener<Double> endurancePerLevel;
         public ConfigHelper.ConfigValueListener<Double> maxEndurance;
-        public ConfigHelper.ConfigValueListener<Double> levelsPerHeart;
-        public ConfigHelper.ConfigValueListener<Integer> maxExtraHeartBoost;
-        public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBase;
-        public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBoostPerLevel;
-        public ConfigHelper.ConfigValueListener<Double> hpRegenXpMultiplier;
+        //public ConfigHelper.ConfigValueListener<Double> levelsPerHeart;
+        //public ConfigHelper.ConfigValueListener<Integer> maxExtraHeartBoost;
+        //public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBase;
+        //public ConfigHelper.ConfigValueListener<Double> hpRegenPerMinuteBoostPerLevel;
+        //public ConfigHelper.ConfigValueListener<Double> hpRegenXpMultiplier;
 
         //Combat
-        public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMelee;
-        public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostMelee;
-        public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostArchery;
-        public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostMagic;
+        //public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMelee;
+        //public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostMelee;
+        //public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostArchery;
+        //public ConfigHelper.ConfigValueListener<Double> maxExtraDamagePercentageBoostMagic;
 
         //Archery
-        public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelArchery;
+        //public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelArchery;
 
         //Smithing
         public ConfigHelper.ConfigValueListener<Boolean> anvilHandlingEnabled;
@@ -378,10 +378,10 @@ public class Config
         public ConfigHelper.ConfigValueListener<Double> defaultCraftingXp;
 
         //Magic
-        public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMagic;
+        //public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelMagic;
 
         //Gunslinging
-        public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelGunslinging;
+        //public ConfigHelper.ConfigValueListener<Double> damageBonusPercentPerLevelGunslinging;
 
         //Slayer
         public ConfigHelper.ConfigValueListener<Double> passiveMobHunterXp;
@@ -1265,7 +1265,7 @@ public class Config
                 builder.pop();
             }
 
-            builder.push("Agility");
+            /*builder.push("Agility");
             {
                 this.maxFallSaveChance = subscriber.subscribe(builder
                         .comment("Maximum chance to save each point of fall damage (100 = no fall damage)")
@@ -1303,7 +1303,7 @@ public class Config
                         .defineInRange("speedBoostPerLevel", 0.5D, 0, 100));
 
                 builder.pop();
-            }
+            }*/
 
             builder.push("Endurance");
             {
@@ -1317,7 +1317,7 @@ public class Config
                         .translation("pmmo.endurancePerLevel")
                         .defineInRange("endurancePerLevel", 0.25D, 0, 100));
 
-                this.levelsPerHeart = subscriber.subscribe(builder
+                /*this.levelsPerHeart = subscriber.subscribe(builder
                         .comment("Per how many levels you gain 1 Max Heart")
                         .translation("pmmo.levelsPerHeart")
                         .defineInRange("levelsPerHeart", 10D, 1, 1000000000));
@@ -1340,12 +1340,12 @@ public class Config
                 this.hpRegenXpMultiplier = subscriber.subscribe(builder
                         .comment("Multiplier for xp gained in endurance from Regeneration")
                         .translation("pmmo.hpRegenXpMultiplier")
-                        .defineInRange("hpRegenXpMultiplier", 15.23D, 0, 1000000));
+                        .defineInRange("hpRegenXpMultiplier", 15.23D, 0, 1000000));*/
 
                 builder.pop();
             }
 
-            builder.push("Combat");
+            /*builder.push("Combat");
             {
                 this.damageBonusPercentPerLevelMelee = subscriber.subscribe(builder
                         .comment("How much percentage bonus damage do you get per Combat level in Melee?")
@@ -1373,7 +1373,7 @@ public class Config
                         .defineInRange("maxExtraDamagePercentageBoostArchery", 100D, 0, 1000000000));
 
                 builder.pop();
-            }
+            }*/
 
             builder.push("Smithing");
             {
@@ -1556,7 +1556,7 @@ public class Config
                 builder.pop();
             }
 
-            builder.push("Magic");
+            /*builder.push("Magic");
             {
                 this.damageBonusPercentPerLevelMagic = subscriber.subscribe(builder
                         .comment("How much percentage bonus damage do you get per Magic level in Magic?")
@@ -1579,7 +1579,7 @@ public class Config
                         .defineInRange("damageBonusPercentPerLevelGunslinging", 0.005D, 0.001, 1000));
 
                 builder.pop();
-            }
+            }*/
 
             builder.push("Slayer");
             {

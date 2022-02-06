@@ -53,15 +53,6 @@ public class DamageHandler
         endurePercent /= 100;
         return endurePercent;
     }
-
-    public static double getFallSaveChance(Player player)
-    {
-        int agilityLevel = APIUtils.getLevel(Skill.AGILITY.toString(), player);
-        double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
-        double saveChancePerLevel = Math.min(maxFallSaveChance, Config.forgeConfig.saveChancePerLevel.get() / 100);
-
-        return agilityLevel * saveChancePerLevel;
-    }
     
     private static final String SAVED = "saved";
     private static final String DAMAGE = "damage";
