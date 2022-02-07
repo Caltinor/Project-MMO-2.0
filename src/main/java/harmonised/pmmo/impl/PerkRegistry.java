@@ -8,15 +8,11 @@ import org.apache.commons.lang3.function.TriFunction;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
-import com.google.gson.JsonObject;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -25,9 +21,9 @@ public class PerkRegistry {
 	
 	private Map<ResourceLocation, TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag>> perkExecutions = new HashMap<>();
 	private Map<ResourceLocation, TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag>> perkTerminations = new HashMap<>();
-	private Map<EventType, LinkedListMultimap<String, JsonObject>> perkSettings = new HashMap<>();
+	private Map<EventType, LinkedListMultimap<String, CompoundTag>> perkSettings = new HashMap<>();
 	
-	public void setSettings(Map<EventType, LinkedListMultimap<String, JsonObject>> settings) {
+	public void setSettings(Map<EventType, LinkedListMultimap<String, CompoundTag>> settings) {
 		perkSettings = settings;
 	}
 	
@@ -48,16 +44,16 @@ public class PerkRegistry {
 	}
 	
 	public CompoundTag executePerk(EventType cause, ServerPlayer player, CompoundTag dataIn) {
-		LinkedListMultimap<String, JsonObject> map =  perkSettings.getOrDefault(cause, LinkedListMultimap.create());
+		LinkedListMultimap<String, CompoundTag> map =  perkSettings.getOrDefault(cause, LinkedListMultimap.create());
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {
-			List<JsonObject> entries = map.get(skill);
+			List<CompoundTag> entries = map.get(skill);
 			int skillLevel = PmmoSavedData.get().getPlayerSkillLevel(skill, player.getUUID());
 			for (int i = 0; i < entries.size(); i++) {
-				CompoundTag src = tagFromJson(entries.get(i));
+				CompoundTag src = entries.get(i);
 				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				output = TagUtils.mergeTags(output, perkExecutions.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
+				output = TagUtils.mergeTags(output, perkExecutions.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel));
 			}
 		}
 		return output;
@@ -68,27 +64,18 @@ public class PerkRegistry {
 	}
 	
 	public CompoundTag terminatePerk(EventType cause, ServerPlayer player, CompoundTag dataIn) {
-		LinkedListMultimap<String, JsonObject> map = perkSettings.getOrDefault(cause, LinkedListMultimap.create());
+		LinkedListMultimap<String, CompoundTag> map = perkSettings.getOrDefault(cause, LinkedListMultimap.create());
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {
-			List<JsonObject> entries = map.get(skill);
+			List<CompoundTag> entries = map.get(skill);
 			int skillLevel = PmmoSavedData.get().getPlayerSkillLevel(skill, player.getUUID());
 			for (int i = 0; i < entries.size(); i++) {
-				CompoundTag src = tagFromJson(entries.get(i));
+				CompoundTag src = entries.get(i);
 				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				output = TagUtils.mergeTags(output, perkTerminations.getOrDefault(perkID, (a,b,c) -> new CompoundTag()).apply(player, src, skillLevel));
+				output = TagUtils.mergeTags(output, perkTerminations.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel));
 			}
 		}
 		return output;
-	}
-	
-	private CompoundTag tagFromJson(JsonObject json) {
-		try {
-			return TagParser.parseTag(json.toString());
-		} catch(CommandSyntaxException e) {
-			e.printStackTrace();
-			return new CompoundTag();
-		}
 	}
 }

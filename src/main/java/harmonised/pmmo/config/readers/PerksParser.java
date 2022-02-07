@@ -19,11 +19,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.ProjectMMO;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -44,7 +47,7 @@ public class PerksParser {
             createData(srcFile, srcFilePath);
 		
         File file = FMLPaths.CONFIGDIR.get().resolve(configFilePath).toFile();
-        Map<EventType, LinkedListMultimap<String, JsonObject>> settings = new HashMap<>();
+        Map<EventType, LinkedListMultimap<String, CompoundTag>> settings = new HashMap<>();
         try
             (
                 InputStream input = new FileInputStream(file.getPath());
@@ -67,12 +70,12 @@ public class PerksParser {
         			MsLoggy.info(trigger.name().toString());
         			MsLoggy.info("========================");
         			JsonObject entries = map.getValue();
-        			LinkedListMultimap<String, JsonObject> members = LinkedListMultimap.create();
+        			LinkedListMultimap<String, CompoundTag> members = LinkedListMultimap.create();
         			for (String entryKey : entries.keySet()) {        				
         				JsonArray memList = entries.get(entryKey).getAsJsonArray();        				
         				for (int i = 0; i < memList.size(); i++) {
         					MsLoggy.info(entryKey+":"+memList.get(i).toString());
-        					members.get(entryKey).add(memList.get(i).getAsJsonObject());
+        					members.get(entryKey).add(tagFromJson(memList.get(i).getAsJsonObject()));
         				}
         			}
         			settings.put(trigger, members);    				
@@ -110,4 +113,14 @@ public class PerksParser {
             MsLoggy.error("Error copying over perks.json json config to " + dataFile.getPath(), dataFile.getPath(), e);
         }
     }
+	
+	
+	private static CompoundTag tagFromJson(JsonObject json) {
+		try {
+			return TagParser.parseTag(json.toString());
+		} catch(CommandSyntaxException e) {
+			e.printStackTrace();
+			return new CompoundTag();
+		}
+	}
 }

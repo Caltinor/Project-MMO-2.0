@@ -29,15 +29,13 @@ import harmonised.pmmo.ProjectMMO;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.CoreType;
-import harmonised.pmmo.config.datapack.MergeableCodecDataManager;
-import harmonised.pmmo.config.datapack.codecs.CodecMapLocation;
-import harmonised.pmmo.config.datapack.codecs.CodecMapObject;
-import harmonised.pmmo.config.datapack.codecs.CodecMapPlayer;
-import harmonised.pmmo.config.datapack.codecs.CodecTypeReq;
-import harmonised.pmmo.config.datapack.codecs.CodecTypeSalvage;
-import harmonised.pmmo.config.readers.codecs.CodecMapGlobals;
-import harmonised.pmmo.config.readers.codecs.CodecTypeSkills;
-import harmonised.pmmo.config.readers.codecs.CodecTypeSkills.SkillData;
+import harmonised.pmmo.config.codecs.CodecMapLocation;
+import harmonised.pmmo.config.codecs.CodecMapObject;
+import harmonised.pmmo.config.codecs.CodecMapPlayer;
+import harmonised.pmmo.config.codecs.CodecMapSkills;
+import harmonised.pmmo.config.codecs.CodecTypes;
+import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
+import harmonised.pmmo.config.codecs.CodecTypes.*;
 import harmonised.pmmo.core.NBTUtils;
 import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
@@ -83,7 +81,7 @@ public class CoreParser {
 						MsLoggy.info("BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
 						Core.get(LogicalSide.SERVER).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
 					}
-					for (Map.Entry<ResourceLocation, CodecTypeSalvage> salvage : omc.salvage().entrySet()) {
+					for (Map.Entry<ResourceLocation, SalvageData> salvage : omc.salvage().entrySet()) {
 						MsLoggy.info("SALVAGE: "+tag.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
 						Core.get(LogicalSide.SERVER).getSalvageLogic().setSalvageData(tag, salvage.getKey(), salvage.getValue());
 					}
@@ -107,24 +105,24 @@ public class CoreParser {
 	private static void finalizeLocationMaps(Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data) {
 		data.forEach((rl, lmc) -> {
 			List<ResourceLocation> tagValues = List.of(rl);
-			if (lmc.tagValues.size() > 0) tagValues = lmc.tagValues;
+			if (lmc.tagValues().size() > 0) tagValues = lmc.tagValues();
 			for (ResourceLocation tag : tagValues) {
-				for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : lmc.bonusMap.entrySet()) {
+				for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : lmc.bonusMap().entrySet()) {
 					MsLoggy.info("BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
 					Core.get(LogicalSide.SERVER).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
 				}
-				for (Map.Entry<ResourceLocation, Map<String, Double>> mobMods : lmc.mobModifiers.entrySet()) {
+				for (Map.Entry<ResourceLocation, Map<String, Double>> mobMods : lmc.mobModifiers().entrySet()) {
 					MsLoggy.info("MOB MODIFIERS: "+tag.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
 					Core.get(LogicalSide.SERVER).getDataConfig().setMobModifierData(tag, mobMods.getKey(), mobMods.getValue());
 				}
-				MsLoggy.info("POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive));
-				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(CoreType.LOCATION_EFFECT_POSITIVE, tag, lmc.positive);
-				MsLoggy.info("NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative));
-				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(CoreType.LOCATION_EFFECT_NEGATIVE, tag, lmc.negative);
-				MsLoggy.info("VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist));
-				Core.get(LogicalSide.SERVER).getDataConfig().setArrayData(tag, lmc.veinBlacklist);
-				MsLoggy.info("TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq));
-				Core.get(LogicalSide.SERVER).getSkillGates().setObjectSkillMap(ReqType.TRAVEL, tag, lmc.travelReq);
+				MsLoggy.info("POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
+				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(CoreType.LOCATION_EFFECT_POSITIVE, tag, lmc.positive());
+				MsLoggy.info("NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
+				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(CoreType.LOCATION_EFFECT_NEGATIVE, tag, lmc.negative());
+				MsLoggy.info("VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
+				Core.get(LogicalSide.SERVER).getDataConfig().setArrayData(tag, lmc.veinBlacklist());
+				MsLoggy.info("TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
+				Core.get(LogicalSide.SERVER).getSkillGates().setObjectSkillMap(ReqType.TRAVEL, tag, lmc.travelReq());
 			}
 		});
 	}
@@ -146,9 +144,8 @@ public class CoreParser {
 		});
 	}
 	
-	public static final Codec<Map<String, Map<String, Integer>>> ENCHANTMENT_CODEC = Codec.unboundedMap(Codec.STRING, CodecTypeReq.INTEGER_CODEC);
 	public static final MergeableCodecDataManager<Map<String, Map<String, Integer>>, Map<Integer, Map<String, Integer>>> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/enchantments", DATA_LOGGER, ENCHANTMENT_CODEC, raws -> mergeEnchantmentTags(raws), processed -> finalizeEnchantmentMaps(processed));
+			"pmmo/enchantments", DATA_LOGGER, CodecTypes.ENCHANTMENT_CODEC, raws -> mergeEnchantmentTags(raws), processed -> finalizeEnchantmentMaps(processed));
 	private static Map<Integer, Map<String, Integer>> mergeEnchantmentTags(final List<Map<String, Map<String, Integer>>> raws) {
 		Map<Integer, Map<String, Integer>> outMap = new HashMap<>();
 		for (int i = 0; i < raws.size(); i++) {
@@ -176,7 +173,7 @@ public class CoreParser {
 		parseGlobals();
 	}
 	
-	private static final Codec<Map<String, CodecTypeSkills>> SKILLS_CODEC = Codec.unboundedMap(Codec.STRING, CodecTypeSkills.CODEC);
+	private static final Codec<Map<String, CodecMapSkills>> SKILLS_CODEC = Codec.unboundedMap(Codec.STRING, CodecMapSkills.CODEC);
 	private static void parseSkills() {
 		String filename = "skills.json";
 		File dataFile = FMLPaths.CONFIGDIR.get().resolve("pmmo/" + filename).toFile();
@@ -188,11 +185,11 @@ public class CoreParser {
 		try(InputStream input = new FileInputStream(dataFile.getPath());
             Reader reader = new BufferedReader(new InputStreamReader(input)))
         {
-			Map<String, CodecTypeSkills> readResult = new HashMap<>();
+			Map<String, CodecMapSkills> readResult = new HashMap<>();
 			SKILLS_CODEC.parse(JsonOps.INSTANCE, GsonHelper.fromJson(gson, reader, JsonElement.class))
 				.resultOrPartial((s) -> MsLoggy.error(s))
 				.ifPresent(readResult::putAll);
-			for (Map.Entry<String, CodecTypeSkills> raw : readResult.entrySet()) {
+			for (Map.Entry<String, CodecMapSkills> raw : readResult.entrySet()) {
 				SkillData skillData = new SkillData(raw.getValue());
 				MsLoggy.info("Skills: "+raw.getKey()+skillData.toString()+" loaded from config");
 				Core.get(LogicalSide.SERVER).getDataConfig().setSkillData(raw.getKey(), skillData);
@@ -215,7 +212,7 @@ public class CoreParser {
 		try(InputStream input = new FileInputStream(dataFile.getPath());
             Reader reader = new BufferedReader(new InputStreamReader(input)))
         {
-			CodecMapGlobals.CODEC.parse(JsonOps.INSTANCE, GsonHelper.fromJson(gson, reader, JsonElement.class))
+			CodecTypes.GLOBALS_CODEC.parse(JsonOps.INSTANCE, GsonHelper.fromJson(gson, reader, JsonElement.class))
 				.resultOrPartial((s) -> MsLoggy.error(s))
 				.ifPresent(NBTUtils::setGlobals);
         }

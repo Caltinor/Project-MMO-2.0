@@ -7,8 +7,9 @@ import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
-import harmonised.pmmo.config.datapack.codecs.CodecMapPlayer;
-import harmonised.pmmo.config.readers.codecs.CodecTypeSkills.SkillData;
+
+import harmonised.pmmo.config.codecs.CodecMapPlayer;
+import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;

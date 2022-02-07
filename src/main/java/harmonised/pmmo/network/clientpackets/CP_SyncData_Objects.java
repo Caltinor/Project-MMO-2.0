@@ -10,9 +10,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.datapack.codecs.CodecMapObject;
-import harmonised.pmmo.config.datapack.codecs.CodecTypeSalvage;
-import harmonised.pmmo.config.datapack.codecs.CodecMapObject.ObjectMapContainer;
+import harmonised.pmmo.config.codecs.CodecMapObject;
+import harmonised.pmmo.config.codecs.CodecMapObject.ObjectMapContainer;
+import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
@@ -64,7 +64,7 @@ public class CP_SyncData_Objects {
 						MsLoggy.info("BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
 					}
-					for (Map.Entry<ResourceLocation, CodecTypeSalvage> salvage : omc.salvage().entrySet()) {
+					for (Map.Entry<ResourceLocation, SalvageData> salvage : omc.salvage().entrySet()) {
 						MsLoggy.info("SALVAGE: "+tag.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
 						Core.get(LogicalSide.CLIENT).getSalvageLogic().setSalvageData(tag, salvage.getKey(), salvage.getValue());
 					}

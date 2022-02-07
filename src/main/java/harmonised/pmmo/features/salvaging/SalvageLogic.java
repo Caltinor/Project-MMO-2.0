@@ -8,7 +8,7 @@ import java.util.Random;
 
 import com.google.common.base.Preconditions;
 
-import harmonised.pmmo.config.datapack.codecs.CodecTypeSalvage;
+import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -17,10 +17,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class SalvageLogic {
 	public SalvageLogic() {}
 	
-	private Map<ResourceLocation, Map<ResourceLocation, CodecTypeSalvage>> salvageData = new HashMap<>();
+	private Map<ResourceLocation, Map<ResourceLocation, SalvageData>> salvageData = new HashMap<>();
 	private Random rand = new Random();
 	
-	public void setSalvageData(ResourceLocation itemID, ResourceLocation outputID, CodecTypeSalvage data) {
+	public void setSalvageData(ResourceLocation itemID, ResourceLocation outputID, SalvageData data) {
 		Preconditions.checkNotNull(itemID);
 		Preconditions.checkNotNull(outputID);
 		Preconditions.checkNotNull(data);
@@ -31,8 +31,8 @@ public class SalvageLogic {
 		List<ItemStack> out = new ArrayList<>();
 		if (!salvageData.containsKey(salvagedItem)) return out;
 		
-		Map<ResourceLocation, CodecTypeSalvage> resultData = salvageData.get(salvagedItem);
-		for (Map.Entry<ResourceLocation, CodecTypeSalvage> result : resultData.entrySet()) {
+		Map<ResourceLocation, SalvageData> resultData = salvageData.get(salvagedItem);
+		for (Map.Entry<ResourceLocation, SalvageData> result : resultData.entrySet()) {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met. 
 			for (Map.Entry<String, Integer> skill : result.getValue().levelReq().entrySet()) {

@@ -8,7 +8,7 @@ import java.util.Map;
 import com.google.common.collect.LinkedListMultimap;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.readers.codecs.CodecMapGlobals;
+import harmonised.pmmo.config.codecs.CodecTypes.GlobalsData;
 import harmonised.pmmo.core.nbt.BehaviorToPrevious;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.core.nbt.LogicEntry.Case;
@@ -34,11 +34,11 @@ public class NBTUtils {
 	private static Map<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entityXpGainLogic = new HashMap<>();
 	
 	//======================SETTERS=================================
-	public static void setGlobals(CodecMapGlobals data) {
-		MsLoggy.info("GLOBAL PATHS: "+MsLoggy.mapToString(data.getPaths()));
-		globalPaths = data.getPaths();
-		MsLoggy.info("GLOBAL CONSTANTS"+MsLoggy.mapToString(data.getConstants()));
-		globalConst = data.getConstants();
+	public static void setGlobals(GlobalsData data) {
+		MsLoggy.info("GLOBAL PATHS: "+MsLoggy.mapToString(data.paths()));
+		globalPaths = data.paths();
+		MsLoggy.info("GLOBAL CONSTANTS"+MsLoggy.mapToString(data.constants()));
+		globalConst = data.constants();
 	}
 	
 	//======================GETTERS=================================

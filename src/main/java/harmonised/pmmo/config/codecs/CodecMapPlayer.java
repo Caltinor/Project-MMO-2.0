@@ -1,21 +1,15 @@
-package harmonised.pmmo.config.datapack.codecs;
+package harmonised.pmmo.config.codecs;
 
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public class CodecMapPlayer {
-	private final Optional<Boolean> ignoreReq;
+public record CodecMapPlayer (Optional<Boolean> ignoreReq) {
 	
 	public static final Codec<CodecMapPlayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.BOOL.optionalFieldOf("ignoreReq").forGetter(CodecMapPlayer::getIgnoreReq)
+			Codec.BOOL.optionalFieldOf("ignoreReq").forGetter(CodecMapPlayer::ignoreReq)
 			).apply(instance, CodecMapPlayer::new));
-	
-	public CodecMapPlayer(Optional<Boolean> ignoreReq) {
-		this.ignoreReq = ignoreReq;
-	}
-	public Optional<Boolean> getIgnoreReq() {return ignoreReq;}
 
 	public static record PlayerData(boolean ignoreReq) {
 		public static PlayerData getDefault() {return new PlayerData(false);}

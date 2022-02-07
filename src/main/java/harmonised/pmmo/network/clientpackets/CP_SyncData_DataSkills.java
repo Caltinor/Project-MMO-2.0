@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.config.DataConfig;
-import harmonised.pmmo.config.readers.codecs.CodecTypeSkills.SkillData;
+import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
 import harmonised.pmmo.setup.Core;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
