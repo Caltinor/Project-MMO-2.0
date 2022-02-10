@@ -18,7 +18,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	BREED,							//
 	BREW,							//
 	COOK,							//
-	CRAFT,							//
+	CRAFT,							//IMPLEMENTED
 	RECEIVE_DAMAGE,					//
 		FROM_MOBS,					//
 		FROM_PLAYERS,				//
