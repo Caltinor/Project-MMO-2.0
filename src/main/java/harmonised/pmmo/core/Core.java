@@ -125,7 +125,7 @@ public class Core {
 			else if (gates.doesObjectReqExist(type, entityID))
 				return gates.doesPlayerMeetReq(type, entityID, player.getUUID());
 			else if (Config.ENABLE_AUTO_VALUES.get()) {
-				Map<String, Integer> requirements = AutoValues.getRequirements(type, entityID, ObjectType.ITEM);
+				Map<String, Integer> requirements = AutoValues.getRequirements(type, entityID, ObjectType.ENTITY);
 				return gates.doesPlayerMeetReq(type, entityID, player.getUUID(), requirements);
 			}
 		  return true;
@@ -138,7 +138,7 @@ public class Core {
 		  boolean tooltipsUsed = false;
 		  ResourceLocation itemID = stack.getItem().getRegistryName();
 		  if (tooltipsUsed = tooltips.xpGainTooltipExists(itemID, type))
-			  xpGains = tooltips.getItemXpGainTooltipData(itemID, type, stack);
+			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getItemXpGainTooltipData(itemID, type, stack));
 		  return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, tooltipsUsed);
 	  }
 	  public Map<String, Long> getBlockExperienceAwards(EventType type, BlockPos pos, Player player, CompoundTag dataIn) {
@@ -148,14 +148,14 @@ public class Core {
 		  BlockEntity tile = player.getLevel().getBlockEntity(pos);
 		  ResourceLocation res = player.getLevel().getBlockState(pos).getBlock().getRegistryName();
 		  return tile == null ?
-				  getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, false) :
-				  getExperienceAwards(xpGains, type, tile, player);
+				  xp.mergeXpMapsWithSummateCondition(xpGains, getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, false)) :
+				  xp.mergeXpMapsWithSummateCondition(xpGains, getExperienceAwards(xpGains, type, tile, player));
 	  }
 	  private Map<String, Long> getExperienceAwards(Map<String, Long> xpGains, EventType type, BlockEntity tile, Player player) {		  
 			ResourceLocation blockID = tile.getBlockState().getBlock().getRegistryName();
 			boolean tooltipsUsed = false;
 			if (tooltipsUsed = tooltips.xpGainTooltipExists(blockID, type)) 
-				xpGains = tooltips.getBlockXpGainTooltipData(blockID, type, tile);
+				xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getBlockXpGainTooltipData(blockID, type, tile));
 		  return getCommonXpAwardData(xpGains, type, blockID, player, ObjectType.BLOCK, tooltipsUsed);
 	  }	  
 	  public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
@@ -165,15 +165,15 @@ public class Core {
 		  boolean tooltipsUsed = false;
 		  ResourceLocation entityID = new ResourceLocation(entity.getEncodeId());
 		  if (tooltipsUsed = tooltips.xpGainTooltipExists(entityID, type))
-			  tooltips.getEntityXpGainTooltipData(entityID, type, entity);
+			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getEntityXpGainTooltipData(entityID, type, entity));
 		  return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, tooltipsUsed);
 	  }
 	  private Map<String, Long> getCommonXpAwardData(Map<String, Long> inMap, EventType type, ResourceLocation objectID, Player player, ObjectType oType, boolean predicateUsed) {
 		  if (!predicateUsed) {
 			  if (xp.hasXpGainObjectEntry(type, objectID)) 
-				  inMap = xp.getObjectExperienceMap(type, objectID);
+				  inMap = xp.mergeXpMapsWithSummateCondition(inMap, xp.getObjectExperienceMap(type, objectID));
 			  else if (Config.ENABLE_AUTO_VALUES.get()) 
-				  inMap = AutoValues.getExperienceAward(type, objectID, oType);
+				  inMap = xp.mergeXpMapsWithSummateCondition(inMap, AutoValues.getExperienceAward(type, objectID, oType));
 		  }
 		  MsLoggy.info("XpGains: "+MsLoggy.mapToString(inMap));
 			inMap = xp.applyXpModifiers(player, inMap);

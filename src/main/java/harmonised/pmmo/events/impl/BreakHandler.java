@@ -7,6 +7,7 @@ import java.util.Map;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.storage.ChunkDataHandler;
@@ -28,7 +29,7 @@ public class BreakHandler {
 			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) 
 				event.setCanceled(true);
 			else {
-				//proecess perks
+				//Process perks
 				CompoundTag perkDataIn = eventHookOutput;
 				//if break data is needed by perks, we can add it here.  this is just default implementation.
 				CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_BREAK, (ServerPlayer) event.getPlayer(), perkDataIn));
@@ -42,9 +43,14 @@ public class BreakHandler {
 	}
 	
 	private static Map<String, Long> calculateXpAward(Core core, BreakEvent event, CompoundTag dataIn) {
-		//TODO decided if this should be NO XP as is, or reduced XP
-		if (ChunkDataHandler.playerMatchesPos(event.getPlayer(), event.getPos()))
-			return new HashMap<>();		
-		return core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), event.getPlayer(), dataIn);
+		Map<String, Long> outMap = core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), event.getPlayer(), dataIn); 
+		if (ChunkDataHandler.playerMatchesPos(event.getPlayer(), event.getPos())) {
+			double xpModifier = Config.REUSE_PENALTY.get();
+			if (xpModifier == 0) return new HashMap<>();
+			Map<String, Long> modifiedOutMap = new HashMap<>();
+			outMap.forEach((k, v) -> modifiedOutMap.put(k, (long)((double)v * xpModifier)));
+			return modifiedOutMap;
+		}
+		return outMap;
 	}
 }

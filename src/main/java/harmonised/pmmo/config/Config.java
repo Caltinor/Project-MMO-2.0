@@ -94,6 +94,7 @@ public class Config {
 	private static void setupServer(ForgeConfigSpec.Builder builder) {
 		buildLevels(builder);
 		buildRequirements(builder);
+		buildXpGains(builder);
 		buildAutoValue(builder);
 	}
 	
@@ -168,7 +169,7 @@ public class Config {
 		builder.pop();
 		builder.comment("Should requirements be strictly enforced?"
 				, "if no, then requirements will have certain penalties applied"
-				, "proportionate to the gap between the player and the requirement").push("Strict Reqs");
+				, "proportionate to the gap between the player and the requirement").push("Strict_Reqs");
 		
 		STRICT_REQS = rawReqList.stream().map((t) -> {
 			return builder.define(t.toString()+STRICT_REQ_SUFFIX, true);
@@ -177,5 +178,19 @@ public class Config {
 		builder.pop();
 		builder.pop();
 		
+	}
+	
+	public static ForgeConfigSpec.ConfigValue<Double> REUSE_PENALTY;
+	public static ForgeConfigSpec.ConfigValue<Boolean> SUMMATED_MAPS;
+	
+	private static void buildXpGains(ForgeConfigSpec.Builder builder) {
+		builder.comment("All settings related to the gain of experience").push("XP_Gains");
+		
+		REUSE_PENALTY = builder.comment("how much of the original XP should be awarded when a player breaks a block they placed")
+				.defineInRange("Reuse Penalty", 0d, 0d, Double.MAX_VALUE);
+		SUMMATED_MAPS = builder.comment("Should xp Gains from perks be added onto by configured xp values")
+				.define("Perks Plus Configs", false);
+		
+		builder.pop();
 	}
 }

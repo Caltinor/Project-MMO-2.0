@@ -1,6 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,19 +32,12 @@ public class PlaceHandler {
 				CompoundTag perkDataIn = eventHookOutput;
 				//if break data is needed by perks, we can add it here.  this is just default implementation.
 				CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_PLACE, (ServerPlayer) event.getEntity(), perkDataIn));
-				Map<String, Long> xpAward = calculateXpAward(core, event, perkOutput);
+				Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.BLOCK_PLACE, event.getPos(), (Player) event.getEntity(), perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 				core.awardXP(partyMembersInRange, xpAward);
 				//Add the newly placed block to the ChunkDataHandler
 				ChunkDataHandler.addPos(player.getLevel().dimension().getRegistryName(), event.getPos(), player.getUUID());
 			}
 		}
-	}
-	
-	private static Map<String, Long> calculateXpAward(Core core, EntityPlaceEvent event, CompoundTag dataIn) {
-		//TODO decided if this should be NO XP as is, or reduced XP
-		if (ChunkDataHandler.playerMatchesPos((Player) event.getEntity(), event.getPos()))
-			return new HashMap<>();
-		return core.getBlockExperienceAwards(EventType.BLOCK_PLACE, event.getPos(), (Player) event.getEntity(), dataIn);
 	}
 }

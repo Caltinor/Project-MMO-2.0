@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -87,6 +88,15 @@ public class XpUtils {
 	public void sendXpAwardNotifications(ServerPlayer player, String skillName, long amount) {
 		//TODO send packets for guis and drop XP
 		player.sendMessage(new TranslatableComponent("pmmo."+skillName).append(": "+String.valueOf(amount)), player.getUUID());
+	}
+	
+	public Map<String, Long> mergeXpMapsWithSummateCondition(Map<String, Long> ogMap, Map<String, Long> newMap) {
+		boolean summate = Config.SUMMATED_MAPS.get();
+		if (!summate) return newMap;
+		for (Map.Entry<String, Long> entry : newMap.entrySet()) {
+			ogMap.merge(entry.getKey(), entry.getValue(), (a, b) -> a > b ? a : b);
+		}
+		return ogMap;
 	}
 	//====================LOGICAL METHODS==============================================
 	
