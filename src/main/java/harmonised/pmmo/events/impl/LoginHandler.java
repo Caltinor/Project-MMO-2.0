@@ -3,11 +3,11 @@ package harmonised.pmmo.events.impl;
 import java.util.Map;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_DataSkills;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
-import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;

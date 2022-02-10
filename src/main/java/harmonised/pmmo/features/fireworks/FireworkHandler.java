@@ -3,7 +3,7 @@ package harmonised.pmmo.features.fireworks;
 import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.core.Core;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;

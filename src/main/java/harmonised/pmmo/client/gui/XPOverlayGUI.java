@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.platform.Window;

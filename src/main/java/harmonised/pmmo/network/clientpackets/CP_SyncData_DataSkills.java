@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.core.Core;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;

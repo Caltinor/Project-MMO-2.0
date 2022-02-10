@@ -2,8 +2,8 @@ package harmonised.pmmo.core.perks;
 
 import org.apache.commons.lang3.function.TriFunction;
 
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
-import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

@@ -1,4 +1,4 @@
- package harmonised.pmmo.config.readers;
+package harmonised.pmmo.config.readers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,8 +36,8 @@ import harmonised.pmmo.config.codecs.CodecMapSkills;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.NBTUtils;
-import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;

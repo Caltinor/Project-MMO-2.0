@@ -23,7 +23,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.ProjectMMO;
 import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;

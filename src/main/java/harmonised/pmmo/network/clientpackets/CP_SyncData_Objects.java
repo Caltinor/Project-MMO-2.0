@@ -14,7 +14,7 @@ import harmonised.pmmo.config.codecs.CodecMapObject;
 import harmonised.pmmo.config.codecs.CodecMapObject.ObjectMapContainer;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.readers.ModifierDataType;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
