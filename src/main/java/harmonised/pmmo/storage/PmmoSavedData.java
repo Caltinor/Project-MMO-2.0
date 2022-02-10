@@ -9,11 +9,11 @@ import java.util.UUID;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
-import harmonised.pmmo.setup.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
@@ -42,14 +42,14 @@ public class PmmoSavedData extends SavedData{
 		long oldValue = getXpRaw(playerID, skillName);
 		ServerPlayer player = server.getPlayerList().getPlayer(playerID);
 		
-		XpEvent levelUpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
-		if (MinecraftForge.EVENT_BUS.post(levelUpEvent))
+		XpEvent gainXpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
+		if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
 			return false;
 		
-		if (levelUpEvent.isLevelUp()) 
+		if (gainXpEvent.isLevelUp()) 
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
-		setXpRaw(playerID, levelUpEvent.skill, oldValue + levelUpEvent.amountAwarded);
+		setXpRaw(playerID, gainXpEvent.skill, oldValue + gainXpEvent.amountAwarded);
 		return true;
 	}
 	
@@ -73,6 +73,27 @@ public class PmmoSavedData extends SavedData{
 	
 	public int getPlayerSkillLevel(String skill, UUID player) {
 		return getLevelFromXP(getXpRaw(player, skill));
+	}
+	
+	public void setPlayerSkillLevel(String skill, UUID player, int level) {
+		setXpRaw(player, skill, levelCache.get(level));
+	}
+	
+	public boolean changePlayerSkillLevel(String skill, UUID playerID, int change) {
+		int currentLevel = getPlayerSkillLevel(skill, playerID);
+		long oldXp = getXpRaw(playerID, skill);
+		long newXp = levelCache.get(currentLevel + change);
+		ServerPlayer player = server.getPlayerList().getPlayer(playerID);	
+		
+		XpEvent gainXpEvent = new XpEvent(player, skill, oldXp, newXp - oldXp, TagBuilder.start().build());
+		if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
+			return false;
+		
+		if (gainXpEvent.isLevelUp()) 
+			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
+		setPlayerSkillLevel(gainXpEvent.skill, playerID, gainXpEvent.endLevel());
+		return true;
 	}
 	//===========================CORE WSD LOGIC=====================
 	public PmmoSavedData() {}

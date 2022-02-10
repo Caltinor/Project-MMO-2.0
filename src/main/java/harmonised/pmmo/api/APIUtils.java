@@ -1,17 +1,21 @@
 package harmonised.pmmo.api;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
-
 import org.apache.commons.lang3.function.TriFunction;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import com.google.common.base.Preconditions;
+
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.core.Core;
+import harmonised.pmmo.features.autovalues.AutoValues;
+import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -31,8 +35,87 @@ public class APIUtils {
 	 * - Add subjective methods for creating individualized req and xp behaviors
 	 * - JAVADOCS!!!!
 	 */
+	//===============CORE HOOKS======================================
+	public static int getLevel(String skill, UUID playerID) {
+		Preconditions.checkNotNull(skill);
+		Preconditions.checkNotNull(playerID);
+		return PmmoSavedData.get().getPlayerSkillLevel(skill, playerID);
+	}
+	
+	public static void setLevel(String skill, UUID playerID, int level) {
+		Preconditions.checkNotNull(skill);
+		Preconditions.checkNotNull(playerID);
+		PmmoSavedData.get().setPlayerSkillLevel(skill, playerID, level);
+	}
+	
+	public static boolean addLevel(String skill, UUID playerID, int levelChange) {
+		Preconditions.checkNotNull(skill);
+		Preconditions.checkNotNull(playerID);
+		return PmmoSavedData.get().changePlayerSkillLevel(skill, playerID, levelChange);
+	}
+	
+	public static long getXp(String skill, UUID playerID) {
+		Preconditions.checkNotNull(skill);
+		Preconditions.checkNotNull(playerID);
+		return PmmoSavedData.get().getXpRaw(playerID, skill);
+	}
+	
+	public static void setXp(String skill, UUID playerID, long xpRaw) {
+		Preconditions.checkNotNull(skill);
+		Preconditions.checkNotNull(playerID);
+		PmmoSavedData.get().setXpRaw(playerID, skill, xpRaw);
+	}
+	
+	public static boolean addXp(String skill, UUID playerID, long change) {
+		Preconditions.checkNotNull(skill);
+		Preconditions.checkNotNull(playerID);
+		return PmmoSavedData.get().setXpDiff(playerID, skill, change);
+	}
+	
+	public static Map<String, Long> getXpAwardMap(ItemStack item, EventType type, LogicalSide side) {
+		Preconditions.checkNotNull(item);
+		Preconditions.checkNotNull(type);
+		Preconditions.checkNotNull(side);
+		Core core = Core.get(side);
+		ResourceLocation rl = item.getItem().getRegistryName();
+		Map<String, Long> map =  core.getTooltipRegistry().getItemXpGainTooltipData(rl, type, item);
+		if (map.isEmpty())
+			map = core.getXpUtils().getObjectExperienceMap(type, rl);
+		if (map.isEmpty())
+			map = AutoValues.getExperienceAward(type, rl, ObjectType.ITEM);
+		return map;
+	}
+	
+	public static Map<String, Long> getXpAwardMap(BlockEntity tile, EventType type, LogicalSide side) {
+		Preconditions.checkNotNull(tile);
+		Preconditions.checkNotNull(type);
+		Preconditions.checkNotNull(side);
+		Core core = Core.get(side);
+		ResourceLocation rl = tile.getBlockState().getBlock().getRegistryName();
+		Map<String, Long> map =  core.getTooltipRegistry().getBlockXpGainTooltipData(rl, type, tile);
+		if (map.isEmpty())
+			map = core.getXpUtils().getObjectExperienceMap(type, rl);
+		if (map.isEmpty())
+			map = AutoValues.getExperienceAward(type, rl, ObjectType.BLOCK);
+		return map;
+	}
+	
+	public static Map<String, Long> getXpAwardMap(Entity entity, EventType type, LogicalSide side) {
+		Preconditions.checkNotNull(entity);
+		Preconditions.checkNotNull(type);
+		Preconditions.checkNotNull(side);
+		Core core = Core.get(side);
+		ResourceLocation rl = new ResourceLocation(entity.getEncodeId());
+		Map<String, Long> map =  core.getTooltipRegistry().getEntityXpGainTooltipData(rl, type, entity);
+		if (map.isEmpty())
+			map = core.getXpUtils().getObjectExperienceMap(type, rl);
+		if (map.isEmpty())
+			map = AutoValues.getExperienceAward(type, rl, ObjectType.ENTITY);
+		return map;
+	}
+	
 	//===============REQ AND TOOLTIP REFERENCES======================
-	public static void registerActionPredicate(ResourceLocation res, ReqType jType, Predicate<Player> pred) {
+	public static void registerActionPredicate(ResourceLocation res, ReqType jType, BiPredicate<Player, ItemStack> pred) {
 		Core.get(LogicalSide.SERVER).getPredicateRegistry().registerPredicate(res, jType, pred);
 	}
 	
