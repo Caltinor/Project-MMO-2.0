@@ -2,10 +2,12 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.events.impl.BreakHandler;
 import harmonised.pmmo.events.impl.BreakSpeedHandler;
+import harmonised.pmmo.events.impl.CraftHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
+import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
@@ -43,6 +45,7 @@ public class EventHandler {
 	public static void onBlockBreak(BreakEvent event) {
 		if (event.isCanceled())
 			return;
+		//NOTE Fires only on server
 		BreakHandler.handle(event);
 	}
 	
@@ -57,6 +60,14 @@ public class EventHandler {
 	public static void onBreakSpeed(BreakSpeed event) {
 		if (event.isCanceled())
 			return;
+		//NOTE fires on both sides
 		BreakSpeedHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onCraft(ItemCraftedEvent event) {
+		if (event.isCanceled())
+			return;
+		//NOTE fires on both sides
+		CraftHandler.handle(event);
 	}
 }
