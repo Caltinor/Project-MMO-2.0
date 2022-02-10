@@ -1,21 +1,24 @@
 package harmonised.pmmo.impl;
 
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class PredicateRegistry {
 	public PredicateRegistry() {}
 	
-	private LinkedListMultimap<String, Predicate<Player>> reqPredicates = LinkedListMultimap.create();
+	private LinkedListMultimap<String, BiPredicate<Player, ItemStack>> reqPredicates = LinkedListMultimap.create();
 	private LinkedListMultimap<String, BiPredicate<Player, BlockEntity>> reqBreakPredicates = LinkedListMultimap.create();
+	private LinkedListMultimap<String, BiPredicate<Player, Entity>> reqEntityPredicates = LinkedListMultimap.create();
 	
 	/** registers a predicate to be used in determining if a given player is permitted
 	 * to perform a particular action. [Except for break action.  see registerBreakPredicate.
@@ -28,11 +31,9 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public void registerPredicate(ResourceLocation res, ReqType jType, Predicate<Player> pred) 
-	{
+	public void registerPredicate(ResourceLocation res, ReqType jType, BiPredicate<Player, ItemStack> pred) {
+		Preconditions.checkNotNull(pred);
 		String condition = jType.toString()+";"+res.toString();
-		if (pred == null) 
-			return;
 		reqPredicates.get(condition).add(pred);
 		MsLoggy.info("Predicate Registered: "+condition);
 	}
@@ -47,13 +48,18 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public void registerBreakPredicate(ResourceLocation res, ReqType jType, BiPredicate<Player, BlockEntity> pred) 
-	{
+	public void registerBreakPredicate(ResourceLocation res, ReqType jType, BiPredicate<Player, BlockEntity> pred) {
+		Preconditions.checkNotNull(pred);
 		String condition = jType.toString()+";"+res.toString();
-		if (pred == null) 
-			return;
 		reqBreakPredicates.get(condition).add(pred);
 		MsLoggy.info("Predicate Registered: "+condition);
+	}
+	
+	public void registerEntityPredicate(ResourceLocation res, ReqType type, BiPredicate<Player, Entity> pred) {
+		Preconditions.checkNotNull(pred);
+		String condition = type.toString()+";"+res.toString();
+		reqEntityPredicates.get(condition).add(pred);
+		MsLoggy.info("Entity Predicate Regsitered: "+condition);
 	}
 	
 	/**this is an internal method to check if a predicate exists for the given conditions
@@ -62,11 +68,12 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @return whether or not a predicate is registered for the parameters
 	 */
-	public boolean predicateExists(ResourceLocation res, ReqType jType) 
+	public boolean predicateExists(ResourceLocation res, ReqType type) 
 	{
-		if (jType.equals(ReqType.BREAK))
-			return reqBreakPredicates.containsKey(jType.toString()+";"+res.toString());
-		return reqPredicates.containsKey(jType.toString()+";"+res.toString());
+		String key = type.toString()+";"+res.toString();
+		return reqPredicates.containsKey(key) ||
+				reqBreakPredicates.containsKey(key) ||
+				reqEntityPredicates.containsKey(key);
 	}
 	
 	/**this is executed by PMMO logic to determine if the player is permitted to perform
@@ -77,15 +84,14 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @return whether the player is permitted to do the action (true if yes)
 	 */
-	public boolean checkPredicateReq(Player player, ResourceLocation res, ReqType jType) 
+	public boolean checkPredicateReq(Player player, ItemStack stack, ReqType jType) 
 	{
-		if (!predicateExists(res, jType)) 
+		if (!predicateExists(stack.getItem().getRegistryName(), jType)) 
 			return false;
-		boolean outcome = true;
-		for (Predicate<Player> pred : reqPredicates.get(jType.toString()+";"+res.toString())) {
-			if (!pred.test(player)) return false;
+		for (BiPredicate<Player, ItemStack> pred : reqPredicates.get(jType.toString()+";"+stack.getItem().getRegistryName().toString())) {
+			if (!pred.test(player, stack)) return false;
 		}
-		return outcome;
+		return true;
 	}
 	
 	/**this is executed by PMMO logic to determine if the player is permitted to break
@@ -101,10 +107,19 @@ public class PredicateRegistry {
 		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
 		if (!predicateExists(res, jType)) 
 			return false;
-		boolean outcome = true;
 		for (BiPredicate<Player, BlockEntity> pred : reqBreakPredicates.get(jType.toString()+";"+res.toString())) {
 			if (!pred.test(player, tile)) return false;
 		}
-		return outcome;
+		return true;
+	}
+	
+	public boolean checkPredicateReq(Player player, Entity entity, ReqType type) {
+		ResourceLocation res = new ResourceLocation(entity.getEncodeId());
+		if (!predicateExists(res, type))
+			return false;
+		for (BiPredicate<Player, Entity> pred : reqEntityPredicates.get(type.toString()+";"+res.toString())) {
+			if (!pred.test(player, entity)) return false;
+		}
+		return true;
 	}
 }

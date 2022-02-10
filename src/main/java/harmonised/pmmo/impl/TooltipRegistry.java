@@ -11,13 +11,12 @@ import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fml.LogicalSide;
 
 public class TooltipRegistry {
 	public TooltipRegistry() {}
@@ -29,6 +28,8 @@ public class TooltipRegistry {
 	private Map<EventType, LinkedListMultimap<ResourceLocation, Function<ItemStack, Map<String, Long>>>> itemXpGainTooltips = new HashMap<>();
 	private Map<EventType, LinkedListMultimap<ResourceLocation, Function<BlockEntity, Map<String, Long>>>> blockXpGainTooltips = new HashMap<>();
 	private Map<EventType, LinkedListMultimap<ResourceLocation, Function<Entity, Map<String, Long>>>> entityXpGainTooltips = new HashMap<>();
+	
+	private Map<ModifierDataType, LinkedListMultimap<ResourceLocation, Function<ItemStack, Map<String, Double>>>> itemBonusTooltips = new HashMap<>();
 	
 	/**registers a Function to be used in providing the requirements for specific item
 	 * skill requirements. The map consists of skill name and skill value pairs.  
@@ -141,7 +142,7 @@ public class TooltipRegistry {
 	 * @param stack the itemstack being evaluated for skill requirements
 	 * @return the skill map of the item.
 	 */	
-	public Map<String, Integer> getItemRequirementTooltipData(ResourceLocation res, ReqType reqType, ItemStack stack, LogicalSide side)
+	public Map<String, Integer> getItemRequirementTooltipData(ResourceLocation res, ReqType reqType, ItemStack stack)
 	{
 		if (requirementTooltipExists(res, reqType)) {
 			Map<String, Integer> suppliedData = new HashMap<>();
@@ -158,7 +159,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return Core.get(side).getSkillGates().getObjectSkillMap(reqType, res);
+		return new HashMap<>();
 	}
 	
 	/**this is executed by PMMO where the required map for block tooltips are used.  some PMMO
@@ -187,7 +188,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return Core.get(tile.getLevel()).getSkillGates().getObjectSkillMap(reqType, res);
+		return new HashMap<>();
 	}
 	
 	/**this is executed by PMMO where the required map for entity interactions.  
@@ -214,7 +215,7 @@ public class TooltipRegistry {
 			}
 			return suppliedData;
 		}	
-		return Core.get(entity.level).getSkillGates().getObjectSkillMap(reqType, res);
+		return new HashMap<>();
 	}
 
 	public void registerItemXpGainTooltipData(ResourceLocation res, EventType eventType, Function<ItemStack, Map<String, Long>> func) {
@@ -258,15 +259,54 @@ public class TooltipRegistry {
 		return false;
 	}
 	
-	public Map<String, Long> getItemXpGainTooltipData(ResourceLocation itemID, EventType eventType, ItemStack stack, LogicalSide side) {
-		return Core.get(side).getXpUtils().getObjectExperienceMap(eventType, itemID);
+	public Map<String, Long> getItemXpGainTooltipData(ResourceLocation itemID, EventType eventType, ItemStack stack) {
+		return new HashMap<>();
 	}
 	
 	public Map<String, Long> getBlockXpGainTooltipData(ResourceLocation itemID, EventType eventType, BlockEntity tile) {
-		return Core.get(tile.getLevel()).getXpUtils().getObjectExperienceMap(eventType, itemID);
+		return new HashMap<>();
 	}
 	
 	public Map<String, Long> getEntityXpGainTooltipData(ResourceLocation itemID, EventType eventType, Entity entity) {
+		return new HashMap<>();
+	}
+	
+	public void registerItemBonusTooltipData(ResourceLocation res, ModifierDataType type, Function<ItemStack, Map<String, Double>> func) {
+		if (func == null) {MsLoggy.info("Supplied Function Null"); return;}
+		if (type == null) {MsLoggy.info("Supplied ModifierType Null"); return;}
+		if (res == null) {MsLoggy.info("Supplied ResourceLocation Null"); return;}
+		if (!itemBonusTooltips.containsKey(type)) {
+			MsLoggy.info("New tooltip category created for: "+type.toString()+" "+res.toString());
+			itemBonusTooltips.put(type, LinkedListMultimap.create());
+		}
+		itemBonusTooltips.get(type).get(res).add(func);
+	}
+
+	public boolean bonusTooltipExists(ResourceLocation res, ModifierDataType type) {
+		if (res == null) return false;
+		if (type == null) return false;
+		if (itemBonusTooltips.containsKey(type)) {
+			return itemBonusTooltips.get(type).containsKey(res);
+		}
+		return false;
+	}
+	
+	public Map<String, Double> getBonusTooltipData(ResourceLocation res, ModifierDataType type, ItemStack stack) {
+		if (bonusTooltipExists(res, type)) {
+			Map<String, Double> suppliedData = new HashMap<>();
+			List<Map<String, Double>> rawData = new ArrayList<>();
+			for (Function<ItemStack, Map<String, Double>> func : itemBonusTooltips.get(type).get(res)) {
+				rawData.add(func.apply(stack));
+			}
+			for (int i = 0; i < rawData.size(); i++) {
+				for (Map.Entry<String, Double> entry : rawData.get(i).entrySet()) {
+					suppliedData.merge(entry.getKey(), entry.getValue(), (o,n) -> {
+						return o > n ? o : n;
+					});
+				}
+			}
+			return suppliedData;
+		}	
 		return new HashMap<>();
 	}
 }

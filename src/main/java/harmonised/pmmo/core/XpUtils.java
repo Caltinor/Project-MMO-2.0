@@ -2,8 +2,6 @@ package harmonised.pmmo.core;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.jetbrains.annotations.Nullable;
-
 import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
@@ -15,7 +13,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -51,6 +48,12 @@ public class XpUtils {
 		xpModifierData.computeIfAbsent(XpValueDataType, s -> new HashMap<>()).put(objectID, xpMap);
 	}
 	
+	public boolean hasModifierObjectEntry(ModifierDataType type, ResourceLocation objectID) {
+		if (!xpModifierData.containsKey(type))
+			return false;
+		return xpModifierData.get(type).containsKey(objectID);
+	}
+	
 	public Map<String, Double> getObjectModifierMap(ModifierDataType type, ResourceLocation objectID) {
 		return xpModifierData.computeIfAbsent(type, s -> new HashMap<>()).getOrDefault(objectID, new HashMap<>());
 	}
@@ -69,9 +72,9 @@ public class XpUtils {
 		return map;
 	}	
 	
-	public Map<String, Long> applyXpModifiers(Player player, @Nullable Entity targetEntity, Map<String, Long> mapIn) {
+	public Map<String, Long> applyXpModifiers(Player player, Map<String, Long> mapIn) {
 		Map<String, Long> mapOut = new HashMap<>();
-		Map<String, Double> modifiers = getConsolidatedModifierMap(player, targetEntity);
+		Map<String, Double> modifiers = getConsolidatedModifierMap(player);
 		for (Map.Entry<String, Long> award : mapIn.entrySet()) {
 			if (modifiers.containsKey(award.getKey()))
 				mapOut.put(award.getKey(), (long)(award.getValue() * modifiers.get(award.getKey())));
@@ -87,7 +90,7 @@ public class XpUtils {
 	}
 	//====================LOGICAL METHODS==============================================
 	
-	private Map<String, Double> getConsolidatedModifierMap(Player player, @Nullable Entity entity) {
+	private Map<String, Double> getConsolidatedModifierMap(Player player) {
 		Map<String, Double> mapOut = new HashMap<>();
 		for (ModifierDataType type : ModifierDataType.values()) {
 			Map<String, Double> modifiers = new HashMap<>();
