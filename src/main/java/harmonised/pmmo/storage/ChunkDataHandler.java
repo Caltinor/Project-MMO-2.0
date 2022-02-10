@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.piston.MovingPistonBlock;
@@ -122,35 +123,17 @@ public class ChunkDataHandler {
     public static void addPos(ResourceLocation dimResLoc, BlockPos blockPos, UUID uuid)
     {
         ChunkPos chunkPos = new ChunkPos(blockPos);
-
-        if(!placedMap.containsKey(dimResLoc))
-            placedMap.put(dimResLoc, new HashMap<>());
-
-        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get(dimResLoc);
-
-        if(!chunkMap.containsKey(chunkPos))
-            chunkMap.put(chunkPos, new HashMap<>());
-
-        Map<BlockPos, UUID> blockMap = chunkMap.get(chunkPos);
-
-        blockMap.put(blockPos, uuid);
+        placedMap.computeIfAbsent(dimResLoc, s -> new HashMap<>())
+    		.computeIfAbsent(chunkPos, s -> new HashMap<>())
+    		.put(blockPos, uuid);
     }
 
     public static void delPos(ResourceLocation dimResLoc, BlockPos blockPos)
     {
         ChunkPos chunkPos = new ChunkPos(blockPos);
-
-        if(!placedMap.containsKey(dimResLoc))
-            placedMap.put(dimResLoc, new HashMap<>());
-
-        Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get(dimResLoc);
-
-        if(!chunkMap.containsKey(chunkPos))
-            chunkMap.put(chunkPos, new HashMap<>());
-
-        Map<BlockPos, UUID> blockMap = chunkMap.get(chunkPos);
-
-        blockMap.remove(blockPos);
+        placedMap.computeIfAbsent(dimResLoc, s -> new HashMap<>())
+        	.computeIfAbsent(chunkPos, s -> new HashMap<>())
+        	.remove(blockPos);
     }
 
     public static UUID checkPos(Level world, BlockPos pos)
@@ -161,5 +144,19 @@ public class ChunkDataHandler {
     public static UUID checkPos(ResourceLocation dimResLoc, BlockPos blockPos)
     {
         return placedMap.getOrDefault(dimResLoc, new HashMap<>()).getOrDefault(new ChunkPos(blockPos), new HashMap<>()).get(blockPos);
+    }
+    
+    public static boolean playerMatchesPos(Player player, BlockPos pos) {
+    	ResourceLocation dimKey = player.getLevel().dimension().getRegistryName();
+    	if (placedMap.containsKey(dimKey)) {
+    		ChunkPos cp = new ChunkPos(pos);
+    		Map<ChunkPos, Map<BlockPos, UUID>> map = placedMap.get(dimKey);
+    		if (map.containsKey(cp)) {
+    			Map<BlockPos, UUID> innerMap = map.get(cp);
+    			if (innerMap.containsKey(pos))
+    				return innerMap.get(pos).equals(player.getUUID());
+    		}
+    	}
+    	return false;
     }
 }
