@@ -1,15 +1,20 @@
 package harmonised.pmmo.client.events;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DP;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.ModifierDataType;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.core.Core;
+import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,25 +50,25 @@ public class TooltipHandler {
                 return;
             }*/
 
-            Map<String, Integer> craftReq = core.getTooltipRegistry().getItemRequirementTooltipData(item.getRegistryName(), ReqType.CRAFT, stack, LogicalSide.CLIENT);
-            Map<String, Integer> wearReq = core.getTooltipRegistry().getItemRequirementTooltipData(item.getRegistryName(), ReqType.WEAR, stack, LogicalSide.CLIENT);
-            Map<String, Integer> toolReq = core.getTooltipRegistry().getItemRequirementTooltipData(item.getRegistryName(), ReqType.TOOL, stack, LogicalSide.CLIENT);
-            Map<String, Integer> weaponReq = core.getTooltipRegistry().getItemRequirementTooltipData(item.getRegistryName(), ReqType.WEAPON, stack, LogicalSide.CLIENT);
-            Map<String, Integer> useReq = core.getTooltipRegistry().getItemRequirementTooltipData(item.getRegistryName(), ReqType.USE, stack, LogicalSide.CLIENT);
+            Map<String, Integer> craftReq = getReqData(core, item.getRegistryName(), ReqType.CRAFT, stack);
+            Map<String, Integer> wearReq = getReqData(core, item.getRegistryName(), ReqType.WEAR, stack);
+            Map<String, Integer> toolReq = getReqData(core, item.getRegistryName(), ReqType.TOOL, stack);
+            Map<String, Integer> weaponReq = getReqData(core, item.getRegistryName(), ReqType.WEAPON, stack);
+            Map<String, Integer> useReq = getReqData(core, item.getRegistryName(), ReqType.USE, stack);
             //Map<String, Integer> useEnchantmentReq = XP.getEnchantsUseReq(stack);
-            Map<String, Integer> placeReq = core.getTooltipRegistry().getItemRequirementTooltipData(item.getRegistryName(), ReqType.PLACE, stack, LogicalSide.CLIENT);
-            Map<String, Integer> breakReq = core.getTooltipRegistry().getItemRequirementTooltipData(item.getRegistryName(), ReqType.BREAK, stack, LogicalSide.CLIENT);
-            Map<String, Long> xpValueBreaking = core.getTooltipRegistry().getItemXpGainTooltipData(item.getRegistryName(),EventType.BLOCK_BREAK, stack, LogicalSide.CLIENT);
-            Map<String, Long> xpValueCrafting = core.getTooltipRegistry().getItemXpGainTooltipData(item.getRegistryName(),EventType.CRAFT, stack, LogicalSide.CLIENT);
-            Map<String, Long> xpValueSmelting = core.getTooltipRegistry().getItemXpGainTooltipData(item.getRegistryName(),EventType.SMELT, stack, LogicalSide.CLIENT);
-            Map<String, Long> xpValueCooking = core.getTooltipRegistry().getItemXpGainTooltipData(item.getRegistryName(),EventType.COOK, stack, LogicalSide.CLIENT);
-            Map<String, Long> xpValueBrewing = core.getTooltipRegistry().getItemXpGainTooltipData(item.getRegistryName(),EventType.BREW, stack, LogicalSide.CLIENT);
-            Map<String, Long> xpValueGrowing = core.getTooltipRegistry().getItemXpGainTooltipData(item.getRegistryName() ,EventType.GROW, stack, LogicalSide.CLIENT);
-            Map<String, Long> xpValuePlacing = core.getTooltipRegistry().getItemXpGainTooltipData(item.getRegistryName(),EventType.BLOCK_PLACE, stack, LogicalSide.CLIENT);
+            Map<String, Integer> placeReq = getReqData(core, item.getRegistryName(), ReqType.PLACE, stack);
+            Map<String, Integer> breakReq = getReqData(core, item.getRegistryName(), ReqType.BREAK, stack);
+            Map<String, Long> xpValueBreaking = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_BREAK, stack);
+            Map<String, Long> xpValueCrafting = getXpGainData(core, item.getRegistryName(),EventType.CRAFT, stack);
+            Map<String, Long> xpValueSmelting = getXpGainData(core, item.getRegistryName(),EventType.SMELT, stack);
+            Map<String, Long> xpValueCooking = getXpGainData(core, item.getRegistryName(),EventType.COOK, stack);
+            Map<String, Long> xpValueBrewing = getXpGainData(core, item.getRegistryName(),EventType.BREW, stack);
+            Map<String, Long> xpValueGrowing = getXpGainData(core, item.getRegistryName() ,EventType.GROW, stack);
+            Map<String, Long> xpValuePlacing = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_PLACE, stack);
             //Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
             //Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
-            Map<String, Double> heldItemXpBoost = core.getXpUtils().getObjectModifierMap(ModifierDataType.HELD, item.getRegistryName());
-            Map<String, Double> wornItemXpBoost = core.getXpUtils().getObjectModifierMap(ModifierDataType.WORN, item.getRegistryName());
+            Map<String, Double> heldItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.HELD, stack);
+            Map<String, Double> wornItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.WORN, stack);
             
             //=====================REQUIREMENTS=========================
             if (craftReq.size() > 0) {addRequirementTooltip("pmmo.toCraft", event, craftReq, core);}
@@ -110,5 +115,34 @@ public class TooltipHandler {
 	
 	private static String modifierPercent(Double value) {
 		return DP.dp((value - 1d) * 100d) + "%";
+	}
+	
+	private static Map<String, Integer> getReqData(Core core, ResourceLocation itemID, ReqType type, ItemStack stack) {
+		//if Reqs are not enabled, ignore the getters and return an empty map
+		//This will cause the map to be empty and result in no header being added.
+		if (!Config.reqEnabled(type).get()) return new HashMap<>();
+		//Gather req data and populate a map for return
+		Map<String, Integer> map = core.getTooltipRegistry().getItemRequirementTooltipData(itemID, type, stack);
+		if (map.isEmpty() && core.getSkillGates().doesObjectReqExist(type, itemID))
+			map = core.getSkillGates().getObjectSkillMap(type, itemID);
+		if (map.isEmpty())
+			map = AutoValues.getRequirements(type, itemID, ObjectType.ITEM);
+		return map;
+	}
+	
+	private static Map<String, Long> getXpGainData(Core core, ResourceLocation itemID, EventType type, ItemStack stack) {
+		Map<String, Long> map = core.getTooltipRegistry().getItemXpGainTooltipData(itemID, type, stack);
+		if (map.isEmpty() && core.getXpUtils().hasXpGainObjectEntry(type, itemID))
+			map = core.getXpUtils().getObjectExperienceMap(type, itemID);
+		if (map.isEmpty())
+			map = AutoValues.getExperienceAward(type, itemID, ObjectType.ITEM);
+		return map;
+	}
+	
+	private static Map<String, Double> getBonusData(Core core, ResourceLocation itemID, ModifierDataType type, ItemStack stack) {
+		Map<String, Double> map = core.getTooltipRegistry().getBonusTooltipData(itemID, type, stack);
+		if (map.isEmpty() && core.getXpUtils().hasModifierObjectEntry(type, itemID))
+			map = core.getXpUtils().getObjectModifierMap(type, itemID);
+		return map;
 	}
 }

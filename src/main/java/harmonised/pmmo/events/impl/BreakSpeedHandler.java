@@ -6,18 +6,13 @@ import java.util.UUID;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.Config;
-import harmonised.pmmo.features.autovalues.AutoValues;
-import harmonised.pmmo.setup.Core;
+import harmonised.pmmo.core.Core;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 
@@ -33,7 +28,7 @@ public class BreakSpeedHandler {
 			if (usingCache(event)) return;
 		}
 		//calculate the event results anew.
-		if (!canUseTool(core, event)) {
+		if (!core.isActionPermitted(ReqType.TOOL, event.getPlayer().getMainHandItem(), event.getPlayer())) {
 			event.setCanceled(true);
 			event.getPlayer().displayClientMessage(new TextComponent("Unable to use this tool"), false);
 			//TODO Notify player of inability to perform.
@@ -42,7 +37,7 @@ public class BreakSpeedHandler {
 					new DetailsCache(event.getPlayer().getMainHandItem(), event.getPos(), event.getState(), true, event.getOriginalSpeed()));
 			return;
 		}
-		if (!canPerform(core, event)) {
+		if (!core.isBlockActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 			event.getPlayer().displayClientMessage(new TextComponent("Unable to break this block"), false);
 			//TODO Notify player of inability to perform.
@@ -70,37 +65,6 @@ public class BreakSpeedHandler {
 				}
 			}
 		}
-	}
-	
-	private static boolean canUseTool(Core core, BreakSpeed event) {
-		ResourceLocation toolID = event.getPlayer().getMainHandItem().getItem().getRegistryName();
-		if (core.getPredicateRegistry().predicateExists(toolID, ReqType.TOOL))
-			return core.getPredicateRegistry().checkPredicateReq(event.getPlayer(), toolID, ReqType.TOOL);
-		else if (core.getSkillGates().doesObjectReqExist(ReqType.TOOL, toolID))
-			return core.getSkillGates().doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID());
-		else if (Config.ENABLE_AUTO_VALUES.get()) {
-			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.TOOL, toolID, ObjectType.BLOCK);
-			return core.getSkillGates().doesPlayerMeetReq(ReqType.TOOL, toolID, event.getPlayer().getUUID(), requirements);
-		} 
-		return true;
-	}
-	
-	private static boolean canPerform(Core core, BreakSpeed event) {		
-		ResourceLocation blockID = event.getState().getBlock().getRegistryName();
-		if (core.getPredicateRegistry().predicateExists(blockID, ReqType.BREAK)) {
-			BlockEntity tile = event.getPlayer().getLevel().getBlockEntity(event.getPos());
-			return tile == null ? 
-					core.getPredicateRegistry().checkPredicateReq(event.getPlayer(), blockID, ReqType.BREAK):
-					core.getPredicateRegistry().checkPredicateReq(event.getPlayer(), tile, ReqType.BREAK);
-		}
-		else if (core.getSkillGates().doesObjectReqExist(ReqType.BREAK, blockID))
-			return core.getSkillGates().doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID());
-		else if (Config.ENABLE_AUTO_VALUES.get()) {
-			Map<String, Integer> requirements = AutoValues.getRequirements(ReqType.BREAK, blockID, ObjectType.BLOCK);
-			return core.getSkillGates().doesPlayerMeetReq(ReqType.BREAK, blockID, event.getPlayer().getUUID(), requirements);
-		}
-
-		return true;
 	}
 	
 	private static CompoundTag getEventHookResults(Core core, BreakSpeed event) {
