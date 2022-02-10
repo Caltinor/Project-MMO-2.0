@@ -1,7 +1,6 @@
 package harmonised.pmmo.config.codecs;
 
 import java.util.Map;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -43,6 +42,9 @@ public class CodecTypes {
 	public static record NBTXpGainData() {/*TODO Generate*/}
 	public static final Codec<NBTXpGainData> NBT_XPGAIN_CODEC = null;
 	
+	public static record NBTBonusData() {/*TODO Generate*/}
+	public static final Codec<NBTBonusData> NBT_BONUS_CODEC = null;
+	
 	public record SalvageData (
 			Map<String, Double> chancePerLevel,
 			Map<String, Integer> levelReq,
@@ -64,4 +66,18 @@ public class CodecTypes {
 			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("paths").forGetter(GlobalsData::paths),
 			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("constants").forGetter(GlobalsData::constants)
 			).apply(instance, GlobalsData::new));
+	
+	//TODO Remove if remaining unused.
+	/*public static final PrimitiveCodec<ChunkPos> CHUNKPOS_CODEC = new PrimitiveCodec<>() {
+		@Override
+		public <T> DataResult<ChunkPos> read(DynamicOps<T> ops, T input) {
+			return DataResult.success(new ChunkPos(ops.getNumberValue(input).map(Number::longValue).getOrThrow(false, null)));
+		}
+		@Override
+		public <T> T write(DynamicOps<T> ops, ChunkPos value) {
+			return ops.createLong(ChunkPos.asLong(value.x, value.z));
+		}
+		@Override
+        public String toString() {return "ChunkPos";}
+	};*/
 }

@@ -21,6 +21,7 @@ public class SkillGates {
 	
 	//====================REQDATA GETTERS AND SETTERS======================================
 	public Map<String, Integer> getObjectSkillMap(ReqType reqType, ResourceLocation objectID) {
+		//TODO get autoValues if data not present
 		return reqData.computeIfAbsent(reqType, s -> new HashMap<>()).computeIfAbsent(objectID, s -> new HashMap<>());
 	}
 	

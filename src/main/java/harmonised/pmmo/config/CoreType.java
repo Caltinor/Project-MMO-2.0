@@ -18,17 +18,17 @@ public enum CoreType /*implements StringRepresentable, IExtensibleEnum*/{
     //FISH_POOL,
     //FISH_ENCHANT_POOL,    These 3 should be loot tables using pmmo loot predicates
     //MOB_RARE_DROP,
-    //TODO level up command will run a function from a datapack instead of reinenting the wheel
-    //LEVEL_UP_COMMAND,		TODO this is going to be a MC Function trigger
+    //level up command will run a function from a datapack instead of reinventing the wheel
+    //LEVEL_UP_COMMAND,		this is going to be a MC Function trigger
     PLAYER_SPECIFIC,		//jsonType
     //BLOCK_SPECIFIC,			//map<string, boolean?> maybe merge with Info?
-    //ITEM_SPECIFIC,			//TODO this might not be necessary anymore
+    //ITEM_SPECIFIC,			//this might not be necessary anymore
     //VEIN_BLACKLIST,    		//Dim //String Array
 
     //TREASURE,   Loot Predicate as well
     //SALVAGE,				//map<string, jsonObject> new type
     GLOBALS,
-    SKILLS/*,				//JsonType <= TODO update to
+    SKILLS/*,				//JsonType <=  update to
     CREDITS,
     
     HISCORE*/
