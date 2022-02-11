@@ -1,5 +1,6 @@
 package harmonised.pmmo.network;
 
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_DataSkills;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
@@ -49,9 +50,9 @@ public class Networking {
 	}
 	
 	public static void registerDataSyncPackets() {
-		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(true, o));});
-		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(false, o));});
-		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(false, o));});
+		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ITEM, o));});
+		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.BLOCK, o));});
+		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o));});
 		//TODO BIOME and DIMENSION synchronizers
 		//TODO ENCHANTMENT synchronizer
 	}

@@ -20,8 +20,9 @@ public record CodecMapObject (
 	Optional<EventData> xpValuesMap,
 	Optional<ModifierData> bonusMap,
 	Optional<ReqData> reqMap,
-	//Optional<NBTReqData> nbtReqMap;
-	//Optional<NBTXpGainData> nbtXpMap;
+	Optional<NBTReqData> nbtReqMap,
+	Optional<NBTXpGainData> nbtXpMap,
+	Optional<NBTBonusData> nbtBonusMap,
 	Optional<Map<ResourceLocation, SalvageData>> salvageMap){
 	
 	public static final Codec<CodecMapObject> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -29,6 +30,9 @@ public record CodecMapObject (
 			CodecTypes.EVENT_CODEC.optionalFieldOf("xp_values").forGetter(CodecMapObject::xpValuesMap),
 			CodecTypes.MODIFIER_CODEC.optionalFieldOf("bonuses").forGetter(CodecMapObject::bonusMap),
 			CodecTypes.REQ_CODEC.optionalFieldOf("requirements").forGetter(CodecMapObject::reqMap),
+			CodecTypes.NBT_REQ_CODEC.optionalFieldOf("nbt_requirements").forGetter(CodecMapObject::nbtReqMap),
+			CodecTypes.NBT_XPGAIN_CODEC.optionalFieldOf("nbt_xp_values").forGetter(CodecMapObject::nbtXpMap),
+			CodecTypes.NBT_BONUS_CODEC.optionalFieldOf("nbt_bonuses").forGetter(CodecMapObject::nbtBonusMap),
 			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).optionalFieldOf("salvage").forGetter(CodecMapObject::salvageMap)
 			).apply(instance, CodecMapObject::new));
 	
@@ -37,6 +41,9 @@ public record CodecMapObject (
 		Map<EventType, Map<String, Long>> xpValues,
 		Map<ModifierDataType, Map<String, Double>> modifiers,
 		Map<ReqType, Map<String, Integer>> reqs,
+		NBTReqData nbtReqs,
+		NBTXpGainData nbtXpGains,
+		NBTBonusData nbtBonuses,
 		Map<ResourceLocation, SalvageData> salvage) {
 		
 		public ObjectMapContainer(CodecMapObject src) {
@@ -44,6 +51,9 @@ public record CodecMapObject (
 				src.xpValuesMap().isPresent() ? src.xpValuesMap().get().obj() : new HashMap<>(),
 				src.bonusMap().isPresent() ? src.bonusMap().get().obj(): new HashMap<>(),
 				src.reqMap().isPresent() ? src.reqMap().get().obj() : new HashMap<>(),
+				src.nbtReqMap().isPresent() ? src.nbtReqMap().get() : new NBTReqData(),
+				src.nbtXpMap().isPresent() ? src.nbtXpMap().get() : new NBTXpGainData(),
+				src.nbtBonusMap().isPresent() ? src.nbtBonusMap().get() : new NBTBonusData(),
 				src.salvageMap().isPresent() ? src.salvageMap().get() : new HashMap<>());
 		}
 		
@@ -59,12 +69,13 @@ public record CodecMapObject (
 			modifiers.putAll(two.modifiers);
 			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>(one.reqs);
 			reqs.putAll(two.reqs);
+			
 			Map<ResourceLocation, SalvageData> salvage = new HashMap<>(one.salvage);
 			salvage.putAll(two.salvage);
-			return new ObjectMapContainer(tagValues, xpValues, modifiers, reqs, salvage);
+			return new ObjectMapContainer(tagValues, xpValues, modifiers, reqs, two.nbtReqs(), two.nbtXpGains(), two.nbtBonuses(), salvage);
 		}
 		public ObjectMapContainer() {
-			this(new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
+			this(new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new NBTReqData(), new NBTXpGainData(), new NBTBonusData(), new HashMap<>());
 		}
 		
 		public static final Codec<ObjectMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -72,6 +83,9 @@ public record CodecMapObject (
 				Codec.unboundedMap(EventType.CODEC, CodecTypes.LONG_CODEC).fieldOf("xpValues").forGetter(ObjectMapContainer::xpValues),
 				Codec.unboundedMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC).fieldOf("modifiers").forGetter(ObjectMapContainer::modifiers),
 				Codec.unboundedMap(ReqType.CODEC, CodecTypes.INTEGER_CODEC).fieldOf("reqs").forGetter(ObjectMapContainer::reqs),
+				CodecTypes.NBT_REQ_CODEC.fieldOf("nbt_requirements").forGetter(ObjectMapContainer::nbtReqs),
+				CodecTypes.NBT_XPGAIN_CODEC.fieldOf("nbt_xp_values").forGetter(ObjectMapContainer::nbtXpGains),
+				CodecTypes.NBT_BONUS_CODEC.fieldOf("nbt_bonuses").forGetter(ObjectMapContainer::nbtBonuses),
 				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).fieldOf("salvage").forGetter(ObjectMapContainer::salvage)
 				).apply(instance, ObjectMapContainer::new));
 	}

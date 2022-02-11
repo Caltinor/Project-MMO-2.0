@@ -45,6 +45,7 @@ public class Core {
 	  private final TooltipRegistry tooltips;
 	  private final PerkRegistry perks;
 	  private final SalvageLogic salvageLogic;
+	  private final NBTUtils nbt;
 	  
 	  private Core() {
 	    this.xp = new XpUtils();
@@ -55,6 +56,7 @@ public class Core {
 	    this.tooltips = new TooltipRegistry();
 	    this.perks = new PerkRegistry();
 	    this.salvageLogic = new SalvageLogic();
+	    this.nbt = new NBTUtils();
 	  }
 	  
 	  public static Core get(final LogicalSide side) {
@@ -72,6 +74,7 @@ public class Core {
 	  public TooltipRegistry getTooltipRegistry() {return tooltips;}
 	  public PerkRegistry getPerkRegistry() {return perks;}
 	  public SalvageLogic getSalvageLogic() {return salvageLogic;}
+	  public NBTUtils getNBTUtils() {return nbt;}
 	  
 	  public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
@@ -82,7 +85,7 @@ public class Core {
 				return gates.doesPlayerMeetReq(type, itemID, player.getUUID());
 			else if (Config.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, itemID, ObjectType.ITEM);
-				return gates.doesPlayerMeetReq(type, itemID, player.getUUID(), requirements);
+				return gates.doesPlayerMeetReq(player.getUUID(), requirements);
 			}
 		  return true;
 	  }
@@ -99,7 +102,7 @@ public class Core {
 				return gates.doesPlayerMeetReq(type, res, player.getUUID());
 		  else if (Config.ENABLE_AUTO_VALUES.get()) {
 			  Map<String, Integer> requirements = AutoValues.getRequirements(type, res, oType);
-			  return gates.doesPlayerMeetReq(type, res, player.getUUID(), requirements);
+			  return gates.doesPlayerMeetReq(player.getUUID(), requirements);
 		  }
 		  return true;
 	  }
@@ -113,7 +116,7 @@ public class Core {
 				return gates.doesPlayerMeetReq(type, blockID, player.getUUID());
 			else if (Config.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, blockID, ObjectType.BLOCK);
-				return gates.doesPlayerMeetReq(type, blockID, player.getUUID(), requirements);
+				return gates.doesPlayerMeetReq(player.getUUID(), requirements);
 			}
 		  return true;
 	  }
@@ -126,7 +129,7 @@ public class Core {
 				return gates.doesPlayerMeetReq(type, entityID, player.getUUID());
 			else if (Config.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, entityID, ObjectType.ENTITY);
-				return gates.doesPlayerMeetReq(type, entityID, player.getUUID(), requirements);
+				return gates.doesPlayerMeetReq(player.getUUID(), requirements);
 			}
 		  return true;
 	  }

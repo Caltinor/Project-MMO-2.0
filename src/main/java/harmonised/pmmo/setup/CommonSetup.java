@@ -3,6 +3,7 @@ package harmonised.pmmo.setup;
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.config.readers.PerksParser;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.storage.PmmoSavedData;
@@ -12,6 +13,7 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -36,6 +38,7 @@ public class CommonSetup {
 		PerksParser.parsePerks();
 		MsLoggy.info("Executing Default Registrations");
 		PerkRegistration.init();
+		Core.get(LogicalSide.SERVER).getNBTUtils().registerNBT(LogicalSide.SERVER);
 		MsLoggy.info("PMMO Server loading process complete");
 	}
 	

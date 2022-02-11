@@ -27,6 +27,7 @@ import com.mojang.serialization.JsonOps;
 
 import harmonised.pmmo.ProjectMMO;
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.CoreType;
 import harmonised.pmmo.config.codecs.CodecMapLocation;
@@ -37,7 +38,7 @@ import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
 import harmonised.pmmo.core.Core;
-import harmonised.pmmo.core.NBTUtils;
+import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -50,11 +51,11 @@ public class CoreParser {
 	public static final Type valueJsonType = new TypeToken<Map<String, JsonObject>>(){}.getType();
 	
 	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> ITEM_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/items", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(true, processed));
+			"pmmo/items", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(ObjectType.ITEM, processed));
 	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> BLOCK_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/blocks", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(false, processed));
+			"pmmo/blocks", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(ObjectType.BLOCK, processed));
 	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> ENTITY_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/entities", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(false, processed));
+			"pmmo/entities", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(ObjectType.ENTITY, processed));
 	
 	private static CodecMapObject.ObjectMapContainer mergeObjectTags(final List<CodecMapObject> raws) {
 		CodecMapObject.ObjectMapContainer outObject = new CodecMapObject.ObjectMapContainer();
@@ -63,7 +64,7 @@ public class CoreParser {
 		}
 		return outObject;
 	}	
-	private static void finalizeObjectMaps(boolean isItem, Map<ResourceLocation, CodecMapObject.ObjectMapContainer> data) {
+	private static void finalizeObjectMaps(ObjectType type, Map<ResourceLocation, CodecMapObject.ObjectMapContainer> data) {
 		data.forEach((rl, omc) -> {
 			List<ResourceLocation> tagValues = List.of(rl);
 			if (omc.tagValues().size() > 0) tagValues = omc.tagValues();
@@ -76,15 +77,53 @@ public class CoreParser {
 					MsLoggy.info("REQS: "+reqs.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
 					Core.get(LogicalSide.SERVER).getSkillGates().setObjectSkillMap(reqs.getKey(), tag, reqs.getValue());
 				}
-				if (isItem) {
+				switch (type) {
+				case ITEM: {
 					for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : omc.modifiers().entrySet()) {
 						MsLoggy.info("BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
 						Core.get(LogicalSide.SERVER).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
+					}
+					for (Map.Entry<ReqType, List<LogicEntry>> nbtReqs : omc.nbtReqs().logic().entrySet()) {
+						MsLoggy.info("NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
+						Core.get(LogicalSide.SERVER).getNBTUtils().setItemReq(nbtReqs.getKey(), rl, nbtReqs.getValue());
+					}
+					for (Map.Entry<EventType, List<LogicEntry>> nbtGains : omc.nbtXpGains().logic().entrySet()) {
+						MsLoggy.info("NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
+						Core.get(LogicalSide.SERVER).getNBTUtils().setItemXpGains(nbtGains.getKey(), rl, nbtGains.getValue());
+					}
+					for (Map.Entry<ModifierDataType, List<LogicEntry>> nbtBonus : omc.nbtBonuses().logic().entrySet()) {
+						MsLoggy.info("NBT BONUS: "+nbtBonus.getKey().toString()+": "+tag.toString()+" loaded from config");
+						Core.get(LogicalSide.SERVER).getNBTUtils().setBonuses(nbtBonus.getKey(), rl, nbtBonus.getValue());
 					}
 					for (Map.Entry<ResourceLocation, SalvageData> salvage : omc.salvage().entrySet()) {
 						MsLoggy.info("SALVAGE: "+tag.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
 						Core.get(LogicalSide.SERVER).getSalvageLogic().setSalvageData(tag, salvage.getKey(), salvage.getValue());
 					}
+					break;
+				}
+				case BLOCK: {
+					for (Map.Entry<ReqType, List<LogicEntry>> nbtReqs : omc.nbtReqs().logic().entrySet()) {
+						MsLoggy.info("NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
+						Core.get(LogicalSide.SERVER).getNBTUtils().setBlockReq(nbtReqs.getKey(), rl, nbtReqs.getValue());
+					}
+					for (Map.Entry<EventType, List<LogicEntry>> nbtGains : omc.nbtXpGains().logic().entrySet()) {
+						MsLoggy.info("NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
+						Core.get(LogicalSide.SERVER).getNBTUtils().setItemXpGains(nbtGains.getKey(), rl, nbtGains.getValue());
+					}
+					break;
+				}
+				case ENTITY: {
+					for (Map.Entry<ReqType, List<LogicEntry>> nbtReqs : omc.nbtReqs().logic().entrySet()) {
+						MsLoggy.info("NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
+						Core.get(LogicalSide.SERVER).getNBTUtils().setEntityReq(nbtReqs.getKey(), rl, nbtReqs.getValue());
+					}
+					for (Map.Entry<EventType, List<LogicEntry>> nbtGains : omc.nbtXpGains().logic().entrySet()) {
+						MsLoggy.info("NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
+						Core.get(LogicalSide.SERVER).getNBTUtils().setItemXpGains(nbtGains.getKey(), rl, nbtGains.getValue());
+					}
+					break;
+				}
+				default: {}
 				}
 			}
 		});
@@ -212,9 +251,10 @@ public class CoreParser {
 		try(InputStream input = new FileInputStream(dataFile.getPath());
             Reader reader = new BufferedReader(new InputStreamReader(input)))
         {
+			
 			CodecTypes.GLOBALS_CODEC.parse(JsonOps.INSTANCE, GsonHelper.fromJson(gson, reader, JsonElement.class))
 				.resultOrPartial((s) -> MsLoggy.error(s))
-				.ifPresent(NBTUtils::setGlobals);
+				.ifPresent(Core.get(LogicalSide.SERVER).getNBTUtils()::setGlobals);
         }
         catch(Exception e)
         {

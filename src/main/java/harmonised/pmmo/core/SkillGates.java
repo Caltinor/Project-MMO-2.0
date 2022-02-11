@@ -62,10 +62,10 @@ public class SkillGates {
 	
 	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
 		Map<String, Integer> requirements = getObjectSkillMap(reqType, objectID);
-		return doesPlayerMeetReq(reqType, objectID, playerID, requirements);	
+		return doesPlayerMeetReq(playerID, requirements);	
 	}
 	
-	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID, Map<String, Integer> requirements) {
+	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Integer> requirements) {
 		boolean meetsReq = true;
 		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
 			int skillLevel = PmmoSavedData.get().getLevelFromXP(PmmoSavedData.get().getXpRaw(playerID, req.getKey()));

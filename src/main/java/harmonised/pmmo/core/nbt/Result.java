@@ -6,7 +6,7 @@ public record Result(
 	Operator operator,
 	String comparator, 
 	String comparison,
-	Map<String, Integer> values) {
+	Map<String, Double> values) {
 
 	public boolean compares() {
 		switch (operator) {

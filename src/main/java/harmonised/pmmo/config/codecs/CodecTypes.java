@@ -1,5 +1,7 @@
 package harmonised.pmmo.config.codecs;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -7,6 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.readers.ModifierDataType;
+import harmonised.pmmo.core.nbt.LogicEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 
@@ -36,14 +39,26 @@ public class CodecTypes {
 			Codec.simpleMap(ReqType.CODEC, INTEGER_CODEC, StringRepresentable.keys(ReqType.values())).forGetter(ReqData::obj)
 			).apply(instance, ReqData::new));
 	
-	public static record NBTReqData() {/*TODO Generate*/}
-	public static final Codec<NBTReqData> NBT_REQ_CODEC = null;
+	public static record NBTReqData(Map<ReqType, List<LogicEntry>> logic) {
+		public NBTReqData() {this(new HashMap<>());}
+	}
+	public static final Codec<NBTReqData> NBT_REQ_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.simpleMap(ReqType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ReqType.values())).forGetter(NBTReqData::logic) 
+			).apply(instance, NBTReqData::new));
 	
-	public static record NBTXpGainData() {/*TODO Generate*/}
-	public static final Codec<NBTXpGainData> NBT_XPGAIN_CODEC = null;
+	public static record NBTXpGainData(Map<EventType, List<LogicEntry>> logic) {
+		public NBTXpGainData() {this(new HashMap<>());}
+	}
+	public static final Codec<NBTXpGainData> NBT_XPGAIN_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.simpleMap(EventType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(EventType.values())).forGetter(NBTXpGainData::logic) 
+			).apply(instance, NBTXpGainData::new));
 	
-	public static record NBTBonusData() {/*TODO Generate*/}
-	public static final Codec<NBTBonusData> NBT_BONUS_CODEC = null;
+	public static record NBTBonusData(Map<ModifierDataType, List<LogicEntry>> logic) {
+		public NBTBonusData() {this(new HashMap<>());}
+	}
+	public static final Codec<NBTBonusData> NBT_BONUS_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.simpleMap(ModifierDataType.CODEC, Codec.list(LogicEntry.CODEC), StringRepresentable.keys(ModifierDataType.values())).forGetter(NBTBonusData::logic) 
+			).apply(instance, NBTBonusData::new));
 	
 	public record SalvageData (
 			Map<String, Double> chancePerLevel,
@@ -66,18 +81,4 @@ public class CodecTypes {
 			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("paths").forGetter(GlobalsData::paths),
 			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("constants").forGetter(GlobalsData::constants)
 			).apply(instance, GlobalsData::new));
-	
-	//TODO Remove if remaining unused.
-	/*public static final PrimitiveCodec<ChunkPos> CHUNKPOS_CODEC = new PrimitiveCodec<>() {
-		@Override
-		public <T> DataResult<ChunkPos> read(DynamicOps<T> ops, T input) {
-			return DataResult.success(new ChunkPos(ops.getNumberValue(input).map(Number::longValue).getOrThrow(false, null)));
-		}
-		@Override
-		public <T> T write(DynamicOps<T> ops, ChunkPos value) {
-			return ops.createLong(ChunkPos.asLong(value.x, value.z));
-		}
-		@Override
-        public String toString() {return "ChunkPos";}
-	};*/
 }
