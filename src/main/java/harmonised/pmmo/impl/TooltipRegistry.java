@@ -111,26 +111,11 @@ public class TooltipRegistry {
 	 */
 	public boolean requirementTooltipExists(ResourceLocation res, ReqType reqType)
 	{
-		if (reqType == null) return false;
-		if (res == null) return false;
-		
-		if (reqType.equals(ReqType.BREAK) || reqType.equals(ReqType.PLACE))
-		{
-			if (!blockReqTooltips.containsKey(reqType))
-				return false;
-			return blockReqTooltips.get(reqType).containsKey(res);
-		}
-		else if (reqType.equals(ReqType.KILL) || reqType.equals(ReqType.ENTITY_INTERACT))
-		{
-			if (!entityReqTooltips.containsKey(reqType))
-				return false;
-			return entityReqTooltips.get(reqType).containsKey(res);
-		}
-
-		else if (!itemReqTooltips.containsKey(reqType)) 
-			return false;
-		
-		return itemReqTooltips.get(reqType).containsKey(res);
+		Preconditions.checkNotNull(res);
+		Preconditions.checkNotNull(reqType);
+		return blockReqTooltips.getOrDefault(reqType, LinkedListMultimap.create()).containsKey(res) ||
+				entityReqTooltips.getOrDefault(reqType, LinkedListMultimap.create()).containsKey(res) ||
+				itemReqTooltips.getOrDefault(reqType, LinkedListMultimap.create()).containsKey(res);
 	}
 	
 	/**this is executed by PMMO where the required map for tooltips is used.  some PMMO
@@ -160,8 +145,7 @@ public class TooltipRegistry {
 			return suppliedData;
 		}	
 		return new HashMap<>();
-	}
-	
+	}	
 	/**this is executed by PMMO where the required map for block tooltips are used.  some PMMO
 	 * behavior uses this map before a a requirement check for adding things like dynamic
 	 * values. 
@@ -189,8 +173,7 @@ public class TooltipRegistry {
 			return suppliedData;
 		}	
 		return new HashMap<>();
-	}
-	
+	}	
 	/**this is executed by PMMO where the required map for entity interactions.  
 	 * 
 	 * @param res res the block, item, or entity registrykey
@@ -229,7 +212,6 @@ public class TooltipRegistry {
 		}
 		itemXpGainTooltips.get(eventType).get(res).add(func);
 	}
-	
 	public void registerBlockXpGainTooltipData(ResourceLocation res, EventType eventType, Function<BlockEntity, Map<String, Long>> func) {
 		Preconditions.checkNotNull(res);
 		Preconditions.checkNotNull(eventType);
@@ -241,7 +223,6 @@ public class TooltipRegistry {
 		}
 		blockXpGainTooltips.get(eventType).get(res).add(func);
 	}
-	
 	public void registerEntityXpGainTooltipData(ResourceLocation res, EventType eventType, Function<Entity, Map<String, Long>> func) {	
 		Preconditions.checkNotNull(res);
 		Preconditions.checkNotNull(eventType);
@@ -252,23 +233,57 @@ public class TooltipRegistry {
 			entityXpGainTooltips.put(eventType, LinkedListMultimap.create());
 		}
 		entityXpGainTooltips.get(eventType).get(res).add(func);
-	}
+	}	
 	
-	//TODO implement all the below methods for the XpGain maps
 	public boolean xpGainTooltipExists(ResourceLocation res, EventType eventType) {
-		return false;
+		Preconditions.checkNotNull(res);
+		Preconditions.checkNotNull(eventType);
+		return blockXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).containsKey(res) ||
+				entityXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).containsKey(res) ||
+				itemXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).containsKey(res);
 	}
 	
 	public Map<String, Long> getItemXpGainTooltipData(ResourceLocation itemID, EventType eventType, ItemStack stack) {
-		return new HashMap<>();
+		List<Map<String, Long>> rawData = new ArrayList<>();
+		Map<String, Long> outData = new HashMap<>();
+		List<Function<ItemStack, Map<String, Long>>> functions = itemXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).get(itemID);
+		for (Function<ItemStack, Map<String, Long>> func : functions) {
+			rawData.add(func.apply(stack));
+		}
+		for (Map<String, Long> map : rawData) {
+			for (Map.Entry<String, Long> entry : map.entrySet()) {
+				outData.merge(entry.getKey(), entry.getValue(), (o, n) -> o > n ? o : n);
+			}
+		}
+		return outData;
+	}	
+	public Map<String, Long> getBlockXpGainTooltipData(ResourceLocation blockID, EventType eventType, BlockEntity tile) {
+		List<Map<String, Long>> rawData = new ArrayList<>();
+		Map<String, Long> outData = new HashMap<>();
+		List<Function<BlockEntity, Map<String, Long>>> functions = blockXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).get(blockID);
+		for (Function<BlockEntity, Map<String, Long>> func : functions) {
+			rawData.add(func.apply(tile));
+		}
+		for (Map<String, Long> map : rawData) {
+			for (Map.Entry<String, Long> entry : map.entrySet()) {
+				outData.merge(entry.getKey(), entry.getValue(), (o, n) -> o > n ? o : n);
+			}
+		}
+		return outData;
 	}
-	
-	public Map<String, Long> getBlockXpGainTooltipData(ResourceLocation itemID, EventType eventType, BlockEntity tile) {
-		return new HashMap<>();
-	}
-	
-	public Map<String, Long> getEntityXpGainTooltipData(ResourceLocation itemID, EventType eventType, Entity entity) {
-		return new HashMap<>();
+	public Map<String, Long> getEntityXpGainTooltipData(ResourceLocation entityID, EventType eventType, Entity entity) {
+		List<Map<String, Long>> rawData = new ArrayList<>();
+		Map<String, Long> outData = new HashMap<>();
+		List<Function<Entity, Map<String, Long>>> functions = entityXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).get(entityID);
+		for (Function<Entity, Map<String, Long>> func : functions) {
+			rawData.add(func.apply(entity));
+		}
+		for (Map<String, Long> map : rawData) {
+			for (Map.Entry<String, Long> entry : map.entrySet()) {
+				outData.merge(entry.getKey(), entry.getValue(), (o, n) -> o > n ? o : n);
+			}
+		}
+		return outData;
 	}
 	
 	public void registerItemBonusTooltipData(ResourceLocation res, ModifierDataType type, Function<ItemStack, Map<String, Double>> func) {
