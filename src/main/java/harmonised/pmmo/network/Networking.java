@@ -3,6 +3,8 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_DataSkills;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_Enchantments;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
@@ -45,16 +47,27 @@ public class Networking {
 			.decoder(CP_SyncData_Objects::decode)
 			.consumer(CP_SyncData_Objects::handle)
 			.add();
+		INSTANCE.messageBuilder(CP_SyncData_Locations.class, ID++)
+			.encoder(CP_SyncData_Locations::encode)
+			.decoder(CP_SyncData_Locations::decode)
+			.consumer(CP_SyncData_Locations::handle)
+			.add();
+		INSTANCE.messageBuilder(CP_SyncData_Enchantments.class, ID++)
+			.encoder(CP_SyncData_Enchantments::encode)
+			.decoder(CP_SyncData_Enchantments::decode)
+			.consumer(CP_SyncData_Enchantments::handle)
+			.add();
 		//SERVER BOUND PACKETS
 		MsLoggy.info("Messages Registered");
 	}
 	
 	public static void registerDataSyncPackets() {
-		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ITEM, o));});
-		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.BLOCK, o));});
-		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> {return new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o));});
-		//TODO BIOME and DIMENSION synchronizers
-		//TODO ENCHANTMENT synchronizer
+		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ITEM, o)));
+		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.BLOCK, o)));
+		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o)));
+		CoreParser.BIOME_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(o));
+		CoreParser.DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(o));
+		CoreParser.ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Enchantments(o));
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {

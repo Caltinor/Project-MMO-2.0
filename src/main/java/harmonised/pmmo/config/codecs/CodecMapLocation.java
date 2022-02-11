@@ -12,6 +12,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 
 public record CodecMapLocation (
 	Optional<List<ResourceLocation>> tagValues,
@@ -77,5 +78,15 @@ public record CodecMapLocation (
 			mobModifiers.putAll(two.mobModifiers);
 			return new LocationMapContainer(tagValues, bonusMap, positive, negative, veinBlacklist, travelReq, mobModifiers);
 		}
+		
+		public static final Codec<LocationMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.list(ResourceLocation.CODEC).fieldOf("tagValues").forGetter(LocationMapContainer::tagValues),
+				Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).fieldOf("bonusMap").forGetter(LocationMapContainer::bonusMap),
+				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("positive").forGetter(LocationMapContainer::positive),
+				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("negative").forGetter(LocationMapContainer::negative),
+				Codec.list(ResourceLocation.CODEC).fieldOf("veinBlacklist").forGetter(LocationMapContainer::veinBlacklist),
+				CodecTypes.INTEGER_CODEC.fieldOf("travelReq").forGetter(LocationMapContainer::travelReq),
+				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).fieldOf("mobModifiers").forGetter(LocationMapContainer::mobModifiers)
+				).apply(instance, LocationMapContainer::new));
 	}
 }
