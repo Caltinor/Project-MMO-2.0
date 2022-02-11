@@ -14,6 +14,7 @@ import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.DataConfig;
+import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.salvaging.SalvageLogic;
@@ -79,7 +80,10 @@ public class Core {
 	  public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
 		  ResourceLocation itemID = stack.getItem().getRegistryName();
-			if (predicates.predicateExists(itemID, type)) 
+		  	if (Config.reqEnabled(ReqType.USE_ENCHANTMENT).get())
+		  		if (!gates.doesPlayerMeetEnchantmentReq(stack, player.getUUID()))
+		  			return false;
+		  		if (predicates.predicateExists(itemID, type)) 
 				return predicates.checkPredicateReq(player, stack, type);
 			else if (gates.doesObjectReqExist(type, itemID))
 				return gates.doesPlayerMeetReq(type, itemID, player.getUUID());
@@ -186,6 +190,66 @@ public class Core {
 		  return inMap;
 	  }
 
+	  public Map<String, Double> getConsolidatedModifierMap(Player player) {
+			Map<String, Double> mapOut = new HashMap<>();
+			for (ModifierDataType type : ModifierDataType.values()) {
+				Map<String, Double> modifiers = new HashMap<>();
+				switch (type) {
+				case BIOME: {
+					ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).getRegistryName();
+					modifiers = xp.getObjectModifierMap(type, biomeID);
+					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+					}
+					break;
+				}
+				case HELD: {
+					ItemStack offhandStack = player.getOffhandItem();
+					ItemStack mainhandStack = player.getMainHandItem();
+					ResourceLocation offhandID = offhandStack.getItem().getRegistryName();
+					modifiers = tooltips.bonusTooltipExists(offhandID, type) ?
+							tooltips.getBonusTooltipData(offhandID, type, offhandStack) :
+							xp.getObjectModifierMap(type, offhandID);
+					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+					}				
+					ResourceLocation mainhandID = mainhandStack.getItem().getRegistryName();				
+					modifiers = tooltips.bonusTooltipExists(mainhandID, type) ?
+							tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
+							xp.getObjectModifierMap(type, mainhandID);
+					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+					}				
+					break;
+				}
+				case WORN: {
+					player.getArmorSlots().forEach((stack) -> {
+						ResourceLocation itemID = stack.getItem().getRegistryName();
+						Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, type) ?
+								tooltips.getBonusTooltipData(itemID, type, stack):
+								xp.getObjectModifierMap(type, itemID);
+						for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
+							mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+						}
+					});
+					break;
+				}
+				case DIMENSION: {
+					ResourceLocation dimensionID = player.level.dimension().getRegistryName();
+					modifiers = xp.getObjectModifierMap(type, dimensionID);
+					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+					}
+					break;
+				}
+				default: {}
+				}
+				
+			}
+			MsLoggy.info("Consolidated Modifier Map: "+MsLoggy.mapToString(mapOut));
+			return mapOut;
+		}
+	  
 	  public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
 		  int partyCount = players.size();
 			for (int i = 0; i < partyCount; i++) {

@@ -357,7 +357,7 @@ public class XPOverlayGUI extends GuiComponent
 	{
 		if(!mc.options.renderDebug)
 		{
-			//TODO reintroduce bonuses
+			Map<String, Double> modifiers = core.getConsolidatedModifierMap(mc.player);
 			List<String> skillsKeys = new ArrayList<>(); 
 			DataMirror.getSkillMap().keySet().stream().forEach(entry -> skillsKeys.add(entry));
 			skillsKeys.sort(Comparator.<String>comparingLong(a -> DataMirror.getXpForSkill(a)).reversed());
@@ -381,6 +381,11 @@ public class XPOverlayGUI extends GuiComponent
 				drawString(stack, fontRenderer, tempString, skillListX + 4, skillListY + 3 + listIndex, color);
 				drawString(stack, fontRenderer, " | " + new TranslatableComponent("pmmo." + skillKey).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
 				drawString(stack, fontRenderer, " | " + DP.dprefix(currentXP), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color);
+				if (modifiers.getOrDefault(skillKey, 1d) != 1d) {
+					double bonus = (Math.max(0, modifiers.get(skillKey)) -1) * 100;
+					tempString = (bonus >= 0 ? "+" : "-")+DP.dp(bonus)+"%";
+					drawString(stack, fontRenderer, tempString, skillListX + levelGap + skillGap + 38, skillListY + 3 + listIndex, color);
+				}
 			}
 		}
 	}

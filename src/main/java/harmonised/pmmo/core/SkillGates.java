@@ -11,7 +11,10 @@ import com.ibm.icu.text.Collator;
 
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.storage.PmmoSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class SkillGates {
 	public SkillGates () {}
@@ -21,7 +24,6 @@ public class SkillGates {
 	
 	//====================REQDATA GETTERS AND SETTERS======================================
 	public Map<String, Integer> getObjectSkillMap(ReqType reqType, ResourceLocation objectID) {
-		//TODO get autoValues if data not present
 		return reqData.computeIfAbsent(reqType, s -> new HashMap<>()).computeIfAbsent(objectID, s -> new HashMap<>());
 	}
 	
@@ -73,5 +75,17 @@ public class SkillGates {
 				return false;
 		}
 		return meetsReq;
+	}
+	
+	public boolean doesPlayerMeetEnchantmentReq(ItemStack stack, UUID playerID) {
+		ListTag enchantments = stack.getEnchantmentTags();
+		for (int i = 0; i < enchantments.size(); i++) {
+			CompoundTag enchantment = enchantments.getCompound(i);
+			ResourceLocation enchantID = new ResourceLocation(enchantment.getString("id"));
+			int enchantLvl = enchantment.getInt("lvl");
+			if (!doesPlayerMeetReq(playerID, enchantmentReqs.getOrDefault(enchantID, new HashMap<>()).getOrDefault(enchantLvl, new HashMap<>())))
+				return false;
+		}	
+		return true;
 	}
 }
