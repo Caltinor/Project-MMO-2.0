@@ -134,13 +134,11 @@ public class PmmoSavedData extends SavedData{
         PmmoSavedData.server = server;
     }
 	
-	public static PmmoSavedData get() {  //Only available on Server Side, after the Server has Started.
-		//TODO maybe throw an exception if null?
+	public static PmmoSavedData get() {  
         return server.overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
     }
 	
 	public static MinecraftServer getServer() {
-		//TODO maybe throw an exception if null?
 		return server;
 	}
 

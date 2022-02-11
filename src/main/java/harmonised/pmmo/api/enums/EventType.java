@@ -71,7 +71,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	TAMING,							//
 	USE_ITEM,						//
 	VEIN_MINE,						//
-	DISABLE_PERK;					//
+	DISABLE_PERK;					//IMPLEMENTED
 	
 	public static final Codec<EventType> CODEC = IExtensibleEnum.createCodecForExtensibleEnum(EventType::values, EventType::byName);
 	private static final Map<String, EventType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(EventType::getSerializedName, s -> {return s;}));

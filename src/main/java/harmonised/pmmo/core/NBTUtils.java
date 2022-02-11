@@ -100,7 +100,6 @@ public class NBTUtils {
 		return translateToInt(evaluateEntries(tile.getTileData(), blockReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(tile.getBlockState().getBlock().getRegistryName())));
 	}
 	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
-		//TODO verify this NBT getter is correct for our purposes
 		return translateToInt(evaluateEntries(entity.getPersistentData(), entityReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(new ResourceLocation(entity.getEncodeId()))));
 	}
 	public Map<String, Long> getXpMap(EventType reqType, ItemStack stack) {
@@ -110,7 +109,6 @@ public class NBTUtils {
 		return translateToLong(evaluateEntries(tile.getTileData(), blockXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(tile.getBlockState().getBlock().getRegistryName())));
 	}
 	public Map<String, Long> getXpMap(EventType reqType, Entity entity) {
-		//TODO verify this NBT getter is correct for our purposes
 		return translateToLong(evaluateEntries(entity.getPersistentData(), entityXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(new ResourceLocation(entity.getEncodeId()))));
 	}
 	public Map<String, Double> getBonusMap(ModifierDataType type, ItemStack stack) {
