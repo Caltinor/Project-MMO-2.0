@@ -1,6 +1,5 @@
 package harmonised.pmmo.gui;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.config.*;
@@ -69,7 +68,7 @@ public class PrefsScreen extends PmmoScreen
             case SETTINGS:
                 value = Math.min(Skill.getLevel(Skill.BUILDING.toString(), player) / Config.getConfig("levelsPerOneReach"), Config.getConfig("maxExtraReachBoost"));
                 addPrefsButtonDouble(Config.forgeConfig.maxExtraReachBoost, "maxExtraReachBoost", 0, value, true, true, true);
-                value = Math.min(Skill.getLevel(Skill.ENDURANCE.toString(), player) / Config.getConfig("levelsPerHeart"), Config.getConfig("maxExtraHeartBoost"));
+                /*value = Math.min(Skill.getLevel(Skill.ENDURANCE.toString(), player) / Config.getConfig("levelsPerHeart"), Config.getConfig("maxExtraHeartBoost"));
                 addPrefsButtonInteger(Config.forgeConfig.maxExtraHeartBoost, "maxExtraHeartBoost", 0, value, false, true, true);
                 value = Math.min(Skill.getLevel(Skill.COMBAT.toString(), player) * Config.getConfig("damageBonusPercentPerLevelMelee"), Config.getConfig("maxExtraDamagePercentageBoostMelee"));
                 addPrefsButtonDouble(Config.forgeConfig.maxExtraDamagePercentageBoostMelee, "maxExtraDamagePercentageBoostMelee", 0, value, true, true, true);
@@ -82,7 +81,7 @@ public class PrefsScreen extends PmmoScreen
                 value = Math.min(Skill.getLevel(Skill.AGILITY.toString(), player) * Config.getConfig("levelsPerSprintJumpBoost"), Config.getConfig("maxJumpBoost"));
                 addPrefsButtonDouble(Config.forgeConfig.maxJumpBoost, "maxSprintJumpBoost", 0, value, true, true, true);
                 value = Math.min(Skill.getLevel(Skill.AGILITY.toString(), player) * Config.getConfig("levelsPerCrouchJumpBoost"), Config.getConfig("maxJumpBoost"));
-                addPrefsButtonDouble(Config.forgeConfig.maxJumpBoost, "maxCrouchJumpBoost", 0, value, true, true, true);
+                addPrefsButtonDouble(Config.forgeConfig.maxJumpBoost, "maxCrouchJumpBoost", 0, value, true, true, true);*/
                 addPrefsButtonBool(Config.forgeConfig.wipeAllSkillsUponDeathPermanently, "wipeAllSkillsUponDeathPermanently", false, true, false);
                 addPrefsButtonBool(Config.forgeConfig.spawnFireworksCausedByMe, "spawnFireworksCausedByMe", false, true, false);
                 addPrefsButtonBool(Config.forgeConfig.spawnFireworksCausedByOthers, "spawnFireworksCausedByOthers", false, true, false);

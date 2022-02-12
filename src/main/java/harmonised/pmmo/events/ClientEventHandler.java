@@ -10,7 +10,6 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -22,11 +21,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 public class ClientEventHandler
 {
     private static boolean wasVeining = false, wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
-
-    public static void subscribeClientEvents(IEventBus eventBus)
-    {
-        eventBus.register(harmonised.pmmo.events.ClientEventHandler.class);
-    }
 
     @SuppressWarnings("resource")
 	@SubscribeEvent

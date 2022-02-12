@@ -65,7 +65,7 @@ public class TooltipHandler
                 float hardness;
                 double dValue;
                 BlockState state = item instanceof BlockItem ? ((BlockItem) item).getBlock().defaultBlockState() : null;
-
+            
                 if(ClientHandler.OPEN_MENU.isDown())
                 {
                     GlossaryScreen.setButtonsToKey(regKey);
@@ -73,28 +73,28 @@ public class TooltipHandler
                     return;
                 }
 
-                Map<String, Double> craftReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_CRAFT, itemStack);
-                Map<String, Double> wearReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAR, itemStack);
-                Map<String, Double> toolReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_TOOL, itemStack);
-                Map<String, Double> weaponReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAPON, itemStack);
-                Map<String, Double> useReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_USE, itemStack);
-                Map<String, Double> useEnchantmentReq = XP.getEnchantsUseReq(itemStack);
-                Map<String, Double> placeReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_PLACE, itemStack);
-                Map<String, Double> breakReq = TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_BREAK, itemStack);
-                Map<String, Double> xpValueGeneral = JsonConfig.data.get(JType.XP_VALUE_GENERAL).getOrDefault(regKey, new HashMap<>());
-                Map<String, Double> xpValueBreaking = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREAK, itemStack);
-                Map<String, Double> xpValueCrafting = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_CRAFT, itemStack);
-                Map<String, Double> xpValueSmelting = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_SMELT, itemStack);
-                Map<String, Double> xpValueCooking = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_COOK, itemStack);
-                Map<String, Double> xpValueBrewing = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREW, itemStack);
-                Map<String, Double> xpValueGrowing = JsonConfig.data.get(JType.XP_VALUE_GROW).getOrDefault(regKey, new HashMap<>());
-                Map<String, Double> xpValuePlacing = TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_PLACE, itemStack);
-                Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
-                Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
-                Map<String, Map<String, Double>> treasureInfo = JsonConfig.data2.get(JType.TREASURE).getOrDefault(regKey, new HashMap<>());
-                Map<String, Map<String, Double>> treasureFromInfo = JsonConfig.data2.get(JType.TREASURE_FROM).getOrDefault(regKey, new HashMap<>());
-                Map<String, Double> heldItemXpBoost = XP.getStackXpBoosts(itemStack, true);
-                Map<String, Double> wornItemXpBoost = XP.getStackXpBoosts(itemStack, false);
+                Map<String, Double> craftReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_CRAFT, itemStack);
+                Map<String, Double> wearReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAR, itemStack);
+                Map<String, Double> toolReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_TOOL, itemStack);
+                Map<String, Double> weaponReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_WEAPON, itemStack);
+                Map<String, Double> useReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_USE, itemStack);
+                Map<String, Double> useEnchantmentReq =  XP.getEnchantsUseReq(itemStack);
+                Map<String, Double> placeReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_PLACE, itemStack);
+                Map<String, Double> breakReq =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey), JType.REQ_BREAK, itemStack);
+                Map<String, Double> xpValueGeneral =  JsonConfig.data.getOrDefault(JType.XP_VALUE_GENERAL, new HashMap<>()).getOrDefault(regKey, new HashMap<>());
+                Map<String, Double> xpValueBreaking =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREAK, itemStack);
+                Map<String, Double> xpValueCrafting =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_CRAFT, itemStack);
+                Map<String, Double> xpValueSmelting =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_SMELT, itemStack);
+                Map<String, Double> xpValueCooking =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_COOK, itemStack);
+                Map<String, Double> xpValueBrewing =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_BREW, itemStack);
+                Map<String, Double> xpValueGrowing =  JsonConfig.data.getOrDefault(JType.XP_VALUE_GROW, new HashMap<>()).getOrDefault(regKey, new HashMap<>());
+                Map<String, Double> xpValuePlacing =  TooltipSupplier.getTooltipData(new ResourceLocation(regKey),JType.XP_VALUE_PLACE, itemStack);
+                Map<String, Map<String, Double>> salvageInfo =  JsonConfig.data2.getOrDefault(JType.SALVAGE, new HashMap<>()).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> salvageFrom =  JsonConfig.data2.getOrDefault(JType.SALVAGE_FROM, new HashMap<>()).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> treasureInfo =  JsonConfig.data2.getOrDefault(JType.TREASURE, new HashMap<>()).getOrDefault(regKey, new HashMap<>());
+                Map<String, Map<String, Double>> treasureFromInfo =  JsonConfig.data2.getOrDefault(JType.TREASURE_FROM, new HashMap<>()).getOrDefault(regKey, new HashMap<>());
+                Map<String, Double> heldItemXpBoost =  XP.getStackXpBoosts(itemStack, true);
+                Map<String, Double> wornItemXpBoost =  XP.getStackXpBoosts(itemStack, false);
 
                 //Dynamic Reqs
                 if(Config.getConfig("autoGenerateValuesEnabled") != 0)
@@ -150,7 +150,7 @@ public class TooltipHandler
                             tooltip.add(new TranslatableComponent("pmmo.levelDisplay", " " + new TranslatableComponent("pmmo." + key).getString(), DP.dp(dValue)).setStyle(Skill.getSkillStyle(key)));
                         }
                     }
-
+         
                     if(xpValueBreaking != null && xpValueBreaking.size() > 0)      //XP BREAK
                     {
                         tooltip.add(new TranslatableComponent("pmmo.xpValueBreak"));
@@ -354,7 +354,7 @@ public class TooltipHandler
                         if(treasureFromArrayPos >= treasureFromArrayLength)
                             treasureFromArrayPos = 0;
                     }
-
+                    
                     if(!lastKey.equals(regKey))
                     {
                         if(salvageInfo != null)
@@ -384,103 +384,111 @@ public class TooltipHandler
 
                         lastKey = regKey;
                     }
-
+                    
                     if(salvageInfo != null && salvageInfo.size() > 0)
                     {
                         try
                         {
-                            level = Skill.getLevel(Skill.SMITHING.toString(), player);
-                            Map<String, Double> salvageToItemMap;
-                            int reqLevel, finalLevel, salvageMax, potentialReturnAmount;
-                            double baseChance, xpPerItem, chancePerLevel, maxSalvageMaterialChance, chance, durabilityPercent;
-                            String key = (String) salvageToArray[salvageToArrayPos];
-
-                            salvageToItemMap = salvageInfo.get(key);
-                            reqLevel = (int) Math.floor(salvageToItemMap.get("levelReq"));
-                            finalLevel = level - reqLevel;
-
-                            baseChance = salvageToItemMap.get("baseChance");
-                            xpPerItem = salvageToItemMap.get("xpPerItem");
-                            chancePerLevel = salvageToItemMap.get("chancePerLevel");
-                            maxSalvageMaterialChance = salvageToItemMap.get("maxChance");
-                            chance = baseChance + (chancePerLevel * finalLevel);
-
-                            if(chance > maxSalvageMaterialChance)
-                                chance = maxSalvageMaterialChance;
-
-                            salvageMax = (int) Math.floor(salvageToItemMap.get("salvageMax"));
-                            durabilityPercent = (1.00D - ((double) itemStack.getDamageValue() / (double) itemStack.getMaxDamage()));
-
-                            if(Double.isNaN(durabilityPercent))
-                                durabilityPercent = 1;
-
-                            potentialReturnAmount = (int) Math.floor(salvageMax * durabilityPercent);
-                            Item salvageItem = XP.getItem(key);
-
-                            if(finalLevel < 0)
-                            {
-                                tooltip.add(new TranslatableComponent("pmmo.cannotSalvageLackLevel", reqLevel).setStyle(XP.textStyle.get("red")));
-                            }
-                            else
-                            {
-                                tooltip.add(new TranslatableComponent("pmmo.salvagesIntoCountItem", potentialReturnAmount, new TranslatableComponent(salvageItem.getDescriptionId())).setStyle(XP.textStyle.get(potentialReturnAmount > 0 ? "green" : "red")));
-                                tooltip.add(new TranslatableComponent("pmmo.xpEachChanceEach", " " + DP.dp(xpPerItem), DP.dp(chance)).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
-                            }
+                        	if (salvageToArray.length > 0) {
+	                            level = Skill.getLevel(Skill.SMITHING.toString(), player);
+	                            Map<String, Double> salvageToItemMap;
+	                            int reqLevel, finalLevel, salvageMax, potentialReturnAmount;
+	                            double baseChance, xpPerItem, chancePerLevel, maxSalvageMaterialChance, chance, durabilityPercent;
+	                            
+	                            String key = (String) salvageToArray[salvageToArrayPos];
+	
+	                            salvageToItemMap = salvageInfo.get(key);
+	                            reqLevel = (int) Math.floor(salvageToItemMap.get("levelReq"));
+	                            finalLevel = level - reqLevel;
+	
+	                            baseChance = salvageToItemMap.get("baseChance");
+	                            xpPerItem = salvageToItemMap.get("xpPerItem");
+	                            chancePerLevel = salvageToItemMap.get("chancePerLevel");
+	                            maxSalvageMaterialChance = salvageToItemMap.get("maxChance");
+	                            chance = baseChance + (chancePerLevel * finalLevel);
+	
+	                            if(chance > maxSalvageMaterialChance)
+	                                chance = maxSalvageMaterialChance;
+	
+	                            salvageMax = (int) Math.floor(salvageToItemMap.get("salvageMax"));
+	                            durabilityPercent = (1.00D - ((double) itemStack.getDamageValue() / (double) itemStack.getMaxDamage()));
+	
+	                            if(Double.isNaN(durabilityPercent))
+	                                durabilityPercent = 1;
+	
+	                            potentialReturnAmount = (int) Math.floor(salvageMax * durabilityPercent);
+	                            Item salvageItem = XP.getItem(key);
+	
+	                            if(finalLevel < 0)
+	                            {
+	                                tooltip.add(new TranslatableComponent("pmmo.cannotSalvageLackLevel", reqLevel).setStyle(XP.textStyle.get("red")));
+	                            }
+	                            else
+	                            {
+	                                tooltip.add(new TranslatableComponent("pmmo.salvagesIntoCountItem", potentialReturnAmount, new TranslatableComponent(salvageItem.getDescriptionId())).setStyle(XP.textStyle.get(potentialReturnAmount > 0 ? "green" : "red")));
+	                                tooltip.add(new TranslatableComponent("pmmo.xpEachChanceEach", " " + DP.dp(xpPerItem), DP.dp(chance)).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+	                            }
+                        	}
                         }
                         catch(Exception e)
                         {
                             LOGGER.error(e);
                         }
                     }
-
+                    
                     if(salvageFrom != null)
                     {
                         try
                         {
-                            tooltip.add(new TranslatableComponent("pmmo.canBeSalvagedFrom").setStyle(XP.textStyle.get("green")));
-                            level = Skill.getLevel(Skill.SMITHING.toString(), player);
-
-                            String key = (String) salvageFromArray[salvageFromArrayPos];
-                            String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
-
-                            Map<String, Double> salvageFromMap = salvageFrom.get(key);
-
-                            tooltip.add(new TranslatableComponent("pmmo.valueFromValue", " " + (int) (double) salvageFromMap.get("salvageMax"), displayName).setStyle(XP.textStyle.get(salvageFromMap.get("levelReq") > level ? "red" : "green")));
+                        	if (salvageFromArray.length > 0) {
+	                            tooltip.add(new TranslatableComponent("pmmo.canBeSalvagedFrom").setStyle(XP.textStyle.get("green")));
+	                            level = Skill.getLevel(Skill.SMITHING.toString(), player);
+                            
+	                            String key = (String) salvageFromArray[salvageFromArrayPos];
+	                            String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
+	
+	                            Map<String, Double> salvageFromMap = salvageFrom.get(key);
+	
+	                            tooltip.add(new TranslatableComponent("pmmo.valueFromValue", " " + (int) (double) salvageFromMap.get("salvageMax"), displayName).setStyle(XP.textStyle.get(salvageFromMap.get("levelReq") > level ? "red" : "green")));
+                            }
                         }
                         catch(Exception e)
                         {
-                            LOGGER.error(e);
+                            LOGGER.error("Salvage Tooltip Error: "+e);
                         }
                     }
-
+                    
                     if(treasureInfo != null && treasureInfo.size() > 0)
                     {
                         try
                         {
-                            level = Skill.getLevel(Skill.EXCAVATION.toString(), player);
-                            Map<String, Double> salvageToItemMap;
-                            double chance, xpPerItem;
-                            int minCount, maxCount;
-                            String key = (String) treasureToArray[treasureToArrayPos];
-
-                            salvageToItemMap = treasureInfo.get(key);
-                            chance = Util.mapCapped(level, salvageToItemMap.get("startLevel"), salvageToItemMap.get("endLevel"), salvageToItemMap.get("startChance"), salvageToItemMap.get("endChance"));
-                            xpPerItem = salvageToItemMap.get("xpPerItem");
-                            String itemName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
-                            minCount = (int) (double) salvageToItemMap.get("minCount");
-                            maxCount = (int) (double) salvageToItemMap.get("maxCount");
-
-                            if(chance > 100)
-                                chance = 100;
-                            if(chance <= 0)
-                                chance = 0;
-
-                            tooltip.add(new TranslatableComponent("pmmo.containsCountItemTreasure", (minCount == maxCount ? minCount : minCount + "-" + maxCount), itemName).setStyle(XP.textStyle.get("green")));
-                            tooltip.add(new TranslatableComponent("pmmo.xpEachChance", " " + DP.dp(xpPerItem), DP.dp(chance)).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+                        	if (treasureToArray.length > 0) {
+	                            level = Skill.getLevel(Skill.EXCAVATION.toString(), player);
+	                            Map<String, Double> salvageToItemMap;
+	                            double chance, xpPerItem;
+	                            int minCount, maxCount;
+                            
+	                            String key = (String) treasureToArray[treasureToArrayPos];
+	
+	                            salvageToItemMap = treasureInfo.get(key);
+	                            chance = Util.mapCapped(level, salvageToItemMap.get("startLevel"), salvageToItemMap.get("endLevel"), salvageToItemMap.get("startChance"), salvageToItemMap.get("endChance"));
+	                            xpPerItem = salvageToItemMap.get("xpPerItem");
+	                            String itemName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
+	                            minCount = (int) (double) salvageToItemMap.get("minCount");
+	                            maxCount = (int) (double) salvageToItemMap.get("maxCount");
+	
+	                            if(chance > 100)
+	                                chance = 100;
+	                            if(chance <= 0)
+	                                chance = 0;
+	
+	                            tooltip.add(new TranslatableComponent("pmmo.containsCountItemTreasure", (minCount == maxCount ? minCount : minCount + "-" + maxCount), itemName).setStyle(XP.textStyle.get("green")));
+	                            tooltip.add(new TranslatableComponent("pmmo.xpEachChance", " " + DP.dp(xpPerItem), DP.dp(chance)).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+                            }
                         }
                         catch(Exception e)
                         {
-                            LOGGER.error(e);
+                            LOGGER.error("Treasure Info Tooltip: "+e);
                         }
                     }
 
@@ -488,27 +496,29 @@ public class TooltipHandler
                     {
                         try
                         {
-                            tooltip.add(new TranslatableComponent("pmmo.treasureFrom").setStyle(XP.textStyle.get("green")));
-                            level = Skill.getLevel(Skill.EXCAVATION.toString(), player);
-
-                            String key = (String) treasureFromArray[treasureFromArrayPos];
-                            String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
-
-                            Map<String, Double> treasureFromMap = treasureFromInfo.get(key);
-                            Map<String, Double> treasureToMap = JsonConfig.data2.get(JType.TREASURE).get(key).get(regKey);
-                            int minCount = (int) (double) treasureFromMap.get("minCount");
-                            int maxCount = (int) (double) treasureFromMap.get("maxCount");
-                            double chance = Util.mapCapped(level, treasureToMap.get("startLevel"), treasureToMap.get("endLevel"), treasureToMap.get("startChance"), treasureToMap.get("endChance"));
-
-                            tooltip.add(new TranslatableComponent("pmmo.valueFromValue", " " + (minCount == maxCount ? minCount : minCount + "-" + maxCount), displayName).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+                        	if (treasureFromArray.length > 0) {
+	                            tooltip.add(new TranslatableComponent("pmmo.treasureFrom").setStyle(XP.textStyle.get("green")));
+	                            level = Skill.getLevel(Skill.EXCAVATION.toString(), player);
+	                            
+	                            String key = (String) treasureFromArray[treasureFromArrayPos];
+	                            String displayName = new TranslatableComponent(XP.getItem(key).getDescriptionId()).getString();
+	
+	                            Map<String, Double> treasureFromMap = treasureFromInfo.get(key);
+	                            Map<String, Double> treasureToMap = JsonConfig.data2.get(JType.TREASURE).get(key).get(regKey);
+	                            int minCount = (int) (double) treasureFromMap.get("minCount");
+	                            int maxCount = (int) (double) treasureFromMap.get("maxCount");
+	                            double chance = Util.mapCapped(level, treasureToMap.get("startLevel"), treasureToMap.get("endLevel"), treasureToMap.get("startChance"), treasureToMap.get("endChance"));
+	
+	                            tooltip.add(new TranslatableComponent("pmmo.valueFromValue", " " + (minCount == maxCount ? minCount : minCount + "-" + maxCount), displayName).setStyle(XP.textStyle.get(chance > 0 ? "green" : "red")));
+                            }
                         }
                         catch(Exception e)
                         {
-                            LOGGER.error(e);
+                            LOGGER.error("TreasureFrom Tooltip Error: "+e);
                         }
                     }
                 }
-
+                
                 //ADVANCED TOOLTIP
                 if(event.getFlags().isAdvanced())
                 {

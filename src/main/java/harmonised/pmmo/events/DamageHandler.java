@@ -12,6 +12,7 @@ import harmonised.pmmo.network.MessageDoubleTranslation;
 import harmonised.pmmo.network.NetworkHandler;
 import harmonised.pmmo.party.Party;
 import harmonised.pmmo.party.PartyMemberInfo;
+import harmonised.pmmo.perks.EventPerks;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
 import harmonised.pmmo.util.NBTHelper;
@@ -29,12 +30,14 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DamageHandler
@@ -49,15 +52,6 @@ public class DamageHandler
             endurePercent = maxEndurance;
         endurePercent /= 100;
         return endurePercent;
-    }
-
-    public static double getFallSaveChance(Player player)
-    {
-        int agilityLevel = APIUtils.getLevel(Skill.AGILITY.toString(), player);
-        double maxFallSaveChance = Config.forgeConfig.maxFallSaveChance.get();
-        double saveChancePerLevel = Math.min(maxFallSaveChance, Config.forgeConfig.saveChancePerLevel.get() / 100);
-
-        return agilityLevel * saveChancePerLevel;
     }
     
     private static final String SAVED = "saved";
@@ -214,11 +208,11 @@ public class DamageHandler
                     }
 
                     //Apply damage bonuses
-                    
                     CompoundTag dataIn = new CompoundTag();
                     dataIn.putFloat("damageIn", damage);
+                    dataIn.put(EventPerks.WEAPON_TYPE, AutoValues.getItemSpecificWeaponTypes(mainItemStack.getItem().getRegistryName().toString()));
                     CompoundTag dataOut = PerkRegistry.executePerk(PerkTrigger.DEAL_DAMAGE, player, dataIn);
-                    damage = dataOut.contains(DAMAGE) ? dataOut.getFloat(DAMAGE) : damage;
+                    damage = dataOut.contains(DAMAGE) ? damage + dataOut.getFloat(DAMAGE) : damage;
 
                     if(target.getEncodeId() != null)
                     {
