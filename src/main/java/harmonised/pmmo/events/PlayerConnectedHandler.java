@@ -1,10 +1,8 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.perks.PerkRegistry;
 import harmonised.pmmo.api.perks.PerkTrigger;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.network.WebHandler;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.proxy.ClientHandler;
 import harmonised.pmmo.skills.Skill;
@@ -19,8 +17,6 @@ import org.apache.logging.log4j.*;
 
 import java.util.*;
 
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -28,36 +24,29 @@ public class PlayerConnectedHandler
 {
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static List<UUID> lavenderPatreons      = new ArrayList<UUID>()
-    {{
-        add(UUID.fromString("12319dec-8880-4e9b-8ddb-01719a66e793"));	//STARBBLE
-        add(UUID.fromString("6aefd519-8f6b-4c3a-bb1b-aac88a8dd57e"));   //DEVIATE
-    }};
-    public static List<UUID> fieryPatreons      = new ArrayList<UUID>()
-    {{
-    }};
-    public static List<UUID> lapisPatreons      = new ArrayList<UUID>()
-    {{
-        add(UUID.fromString("e4c7e475-c1ff-4f94-956c-ac5be02ce04a"));	//LUCIFER
-    }};
-    public static List<UUID> dandelionPatreons  = new ArrayList<UUID>()
-    {{
-        add(UUID.fromString("8eb0578d-c113-49d3-abf6-a6d36f6d1116"));	//TYRIUS
-        add(UUID.fromString("554b53b8-d0fa-409e-ab87-2a34bf83e506"));	//JOERKIG
-        add(UUID.fromString("2ea5efa1-756b-4c9e-9605-7f53830d6cfa"));	//DIDIS
-        add(UUID.fromString("21bb554a-f339-48ef-80f7-9a5083172892"));	//JUDICIUS
-    }};
-    public static List<UUID> ironPatreons       = new ArrayList<UUID>()
-    {{
-        add(UUID.fromString("0bc51f06-9906-41ea-9fb4-7e9be169c980"));	//STRESSINDICATOR
-        add(UUID.fromString("5bfdb948-7b66-476a-aefe-d45e4778fb2d"));	//DADDY_P1G
-        add(UUID.fromString("edafb5eb-9ccb-4121-bef7-e7ffded64ee3"));	//LEWDCINA
-        add(UUID.fromString("8d2460f3-c840-4b8e-a2d2-f7d5168cbdeb"));	//QSIDED
-    }};
-    public static Set<UUID> muteList           = new HashSet<UUID>()
-    {{
-        add(UUID.fromString("21bb554a-f339-48ef-80f7-9a5083172892"));	//Do not greet (specified by Patreon)
-    }};
+    public static final List<UUID> lavenderPatreons = List.of(   
+        UUID.fromString("12319dec-8880-4e9b-8ddb-01719a66e793"),	//STARBBLE
+        UUID.fromString("6aefd519-8f6b-4c3a-bb1b-aac88a8dd57e")   	//DEVIATE
+    );
+    public static final List<UUID> fieryPatreons = new ArrayList<UUID>();
+    public static final List<UUID> lapisPatreons = List.of(
+        UUID.fromString("e4c7e475-c1ff-4f94-956c-ac5be02ce04a")		//LUCIFER
+    );
+    public static final List<UUID> dandelionPatreons = List.of(
+        UUID.fromString("8eb0578d-c113-49d3-abf6-a6d36f6d1116"),	//TYRIUS
+        UUID.fromString("554b53b8-d0fa-409e-ab87-2a34bf83e506"),	//JOERKIG
+        UUID.fromString("2ea5efa1-756b-4c9e-9605-7f53830d6cfa"),	//DIDIS
+        UUID.fromString("21bb554a-f339-48ef-80f7-9a5083172892")		//JUDICIUS
+    );
+    public static final List<UUID> ironPatreons = List.of(
+        UUID.fromString("0bc51f06-9906-41ea-9fb4-7e9be169c980"),	//STRESSINDICATOR
+        UUID.fromString("5bfdb948-7b66-476a-aefe-d45e4778fb2d"),	//DADDY_P1G
+        UUID.fromString("edafb5eb-9ccb-4121-bef7-e7ffded64ee3"),	//LEWDCINA
+        UUID.fromString("8d2460f3-c840-4b8e-a2d2-f7d5168cbdeb")		//QSIDED
+    );
+    public static final List<UUID> muteList = List.of(
+        UUID.fromString("21bb554a-f339-48ef-80f7-9a5083172892")		//Do not greet (specified by Patreon)
+    );
 
     public static void handlePlayerConnected(PlayerEvent.PlayerLoggedInEvent event)
     {
@@ -75,7 +64,7 @@ public class PlayerConnectedHandler
             XP.syncPlayer(player);
             awardScheduledXp(uuid);
 
-            if(Config.forgeConfig.warnOutdatedVersion.get() && ProjectMMOMod.isVersionBehind())
+            /*if(Config.forgeConfig.warnOutdatedVersion.get() && ProjectMMOMod.isVersionBehind())
             {
                 Style style = XP.getColorStyle(0xaa3333).setUnderlined(true);
                 String updateMsg = WebHandler.getLatestMessage();
@@ -84,7 +73,7 @@ public class PlayerConnectedHandler
                 TranslatableComponent textComp = new TranslatableComponent("pmmo.outdatedVersion", WebHandler.getLatestVersion(), ProjectMMOMod.getCurrentVersion());
                 textComp.setStyle(style);
                 player.displayClientMessage(textComp, false);
-            }
+            }*/
 
             if(!muteList.contains(uuid))
             {
