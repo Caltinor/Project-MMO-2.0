@@ -191,6 +191,34 @@ public class Config {
 		SUMMATED_MAPS = builder.comment("Should xp Gains from perks be added onto by configured xp values")
 				.define("Perks Plus Configs", false);
 		
+		buildEventBasedXPSettings(builder);
+		
+		builder.pop();
+	}
+	
+	public static ForgeConfigSpec.ConfigValue<Double> FROM_ENVIRONMENT_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<String>> FROM_ENVIRONMENT_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<Double> FROM_IMPACT_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<String>> FROM_IMPACT_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<Double> RECEIVE_DAMAGE_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<String>> RECEIVE_DAMAGE_SKILLS;
+	
+	private static void buildEventBasedXPSettings(ForgeConfigSpec.Builder builder) {
+		builder.comment("Settings related to certain default event XP awards.").push("Event_XP_Specifics");
+		
+		FROM_ENVIRONMENT_SKILLS = builder.comment("What skills should be given xp when receiving damage from environment")
+				.define("FROM_ENVIRONMENT skills", List.of("endurance"));
+		FROM_ENVIRONMENT_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+				.defineInRange("FROM_ENVIRONMENT xp modifier", 10d, 0d, Double.MAX_VALUE);
+		FROM_IMPACT_SKILLS = builder.comment("What skills should be given xp when receiving damage from impacts like falling or flying into a wall")
+				.define("FROM_IMPACT skills", List.of("endurance"));
+		FROM_IMPACT_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+				.defineInRange("FROM_IMPACT xp modifier", 15d, 0d, Double.MAX_VALUE);
+		RECEIVE_DAMAGE_SKILLS = builder.comment("What skills should be given xp when receiving damage from an uncategorized source")
+				.define("RECEIVE_DAMAGE skills", List.of("endurance"));
+		RECEIVE_DAMAGE_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+				.defineInRange("RECEIVE_DAMAGE xp modifier", 1d, 0d, Double.MAX_VALUE);
+		
 		builder.pop();
 	}
 }

@@ -1,5 +1,5 @@
 package harmonised.pmmo.events.impl;
 
-public class DamageHandler {
+public class DamageDealtHandler {
 
 }

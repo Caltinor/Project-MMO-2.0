@@ -3,9 +3,11 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.events.impl.BreakHandler;
 import harmonised.pmmo.events.impl.BreakSpeedHandler;
 import harmonised.pmmo.events.impl.CraftHandler;
+import harmonised.pmmo.events.impl.DamageReceivedHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.util.Reference;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
@@ -69,5 +71,11 @@ public class EventHandler {
 			return;
 		//NOTE fires on both sides
 		CraftHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onDamage(LivingHurtEvent event) {
+		if (event.isCanceled())
+			return;
+		DamageReceivedHandler.handle(event);
 	}
 }
