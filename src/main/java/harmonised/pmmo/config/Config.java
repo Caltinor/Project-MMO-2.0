@@ -197,28 +197,51 @@ public class Config {
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Double> FROM_ENVIRONMENT_MODIFIER;
-	public static ForgeConfigSpec.ConfigValue<List<String>> FROM_ENVIRONMENT_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> FROM_ENVIRONMENT_SKILLS;
 	public static ForgeConfigSpec.ConfigValue<Double> FROM_IMPACT_MODIFIER;
-	public static ForgeConfigSpec.ConfigValue<List<String>> FROM_IMPACT_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> FROM_IMPACT_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<Double> FROM_MAGIC_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> FROM_MAGIC_SKILLS;
 	public static ForgeConfigSpec.ConfigValue<Double> RECEIVE_DAMAGE_MODIFIER;
-	public static ForgeConfigSpec.ConfigValue<List<String>> RECEIVE_DAMAGE_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> RECEIVE_DAMAGE_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<Double> DEAL_MELEE_DAMAGE_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> DEAL_MELEE_DAMAGE_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<Double> DEAL_RANGED_DAMAGE_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> DEAL_RANGED_DAMAGE_SKILLS;
 	
 	private static void buildEventBasedXPSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related to certain default event XP awards.").push("Event_XP_Specifics");
 		
-		FROM_ENVIRONMENT_SKILLS = builder.comment("What skills should be given xp when receiving damage from environment")
-				.define("FROM_ENVIRONMENT skills", List.of("endurance"));
-		FROM_ENVIRONMENT_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
-				.defineInRange("FROM_ENVIRONMENT xp modifier", 10d, 0d, Double.MAX_VALUE);
-		FROM_IMPACT_SKILLS = builder.comment("What skills should be given xp when receiving damage from impacts like falling or flying into a wall")
-				.define("FROM_IMPACT skills", List.of("endurance"));
-		FROM_IMPACT_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
-				.defineInRange("FROM_IMPACT xp modifier", 15d, 0d, Double.MAX_VALUE);
-		RECEIVE_DAMAGE_SKILLS = builder.comment("What skills should be given xp when receiving damage from an uncategorized source")
-				.define("RECEIVE_DAMAGE skills", List.of("endurance"));
-		RECEIVE_DAMAGE_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
-				.defineInRange("RECEIVE_DAMAGE xp modifier", 1d, 0d, Double.MAX_VALUE);
+		builder.push("Damage_Received");
+			FROM_ENVIRONMENT_SKILLS = builder.comment("What skills should be given xp when receiving damage from environment")
+					.defineList("FROM_ENVIRONMENT skills", List.of("endurance"), (s) -> s instanceof String);
+			FROM_ENVIRONMENT_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+					.defineInRange("FROM_ENVIRONMENT xp modifier", 10d, 0d, Double.MAX_VALUE);
+			FROM_IMPACT_SKILLS = builder.comment("What skills should be given xp when receiving damage from impacts like falling or flying into a wall")
+					.defineList("FROM_IMPACT skills", List.of("endurance"), (s) -> s instanceof String);
+			FROM_IMPACT_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+					.defineInRange("FROM_IMPACT xp modifier", 15d, 0d, Double.MAX_VALUE);
+			FROM_MAGIC_SKILLS = builder.comment("What skills should be given xp when receiving damage from magic sources like potions")
+					.defineList("FROM_MAGIC skills", List.of("magic"), (s) -> s instanceof String);
+			FROM_MAGIC_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+					.defineInRange("FROM_MAGIC xp modifier", 15d, 0d, Double.MAX_VALUE);
+			RECEIVE_DAMAGE_SKILLS = builder.comment("What skills should be given xp when receiving damage from an uncategorized source")
+					.defineList("RECEIVE_DAMAGE skills", List.of("endurance"), (s) -> s instanceof String);
+			RECEIVE_DAMAGE_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+					.defineInRange("RECEIVE_DAMAGE xp modifier", 1d, 0d, Double.MAX_VALUE);
+		builder.pop();
 		
+		builder.push("Damage_Dealt");
+			DEAL_MELEE_DAMAGE_SKILLS = builder.comment("What skills should be given xp when receiving damage from an uncategorized source")
+					.defineList("DEAL_MELEE_DAMAGE skills", List.of("combat"), (s) -> s instanceof String);
+			DEAL_MELEE_DAMAGE_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+					.defineInRange("DEAL_MELEE_DAMAGE xp modifier", 1d, 0d, Double.MAX_VALUE);
+			DEAL_RANGED_DAMAGE_SKILLS = builder.comment("What skills should be given xp when receiving damage from an uncategorized source")
+					.defineList("DEAL_RANGED_DAMAGE skills", List.of("archery"), (s) -> s instanceof String);
+			DEAL_RANGED_DAMAGE_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+					.defineInRange("DEAL_RANGED_DAMAGE xp modifier", 1d, 0d, Double.MAX_VALUE);
+		builder.pop();
+			
 		builder.pop();
 	}
 }

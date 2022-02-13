@@ -30,6 +30,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -124,9 +125,10 @@ public class Core {
 			}
 		  return true;
 	  }
+	  private ResourceLocation playerID = new ResourceLocation("player");
 	  public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
-		  ResourceLocation entityID = new ResourceLocation(entity.getEncodeId());
+		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : new ResourceLocation(entity.getEncodeId());
 			if (predicates.predicateExists(entityID, type)) 
 				return predicates.checkPredicateReq(player, entity, type);
 			else if (gates.doesObjectReqExist(type, entityID))
@@ -170,7 +172,7 @@ public class Core {
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
 		  boolean tooltipsUsed = false;
-		  ResourceLocation entityID = new ResourceLocation(entity.getEncodeId());
+		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : new ResourceLocation(entity.getEncodeId());
 		  if (tooltipsUsed = tooltips.xpGainTooltipExists(entityID, type))
 			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getEntityXpGainTooltipData(entityID, type, entity));
 		  return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, tooltipsUsed);
@@ -246,7 +248,6 @@ public class Core {
 				}
 				
 			}
-			MsLoggy.info("Consolidated Modifier Map: "+MsLoggy.mapToString(mapOut));
 			return mapOut;
 		}
 	  

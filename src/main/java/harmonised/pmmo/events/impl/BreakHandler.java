@@ -23,6 +23,7 @@ public class BreakHandler {
 		if (!core.isBlockActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 			//TODO notify player of inability to perform
+			return;
 		}
 		else if (!event.getPlayer().level.isClientSide){
 			CompoundTag eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BLOCK_BREAK, event, new CompoundTag());

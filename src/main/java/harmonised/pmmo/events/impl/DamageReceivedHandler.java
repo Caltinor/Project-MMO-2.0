@@ -9,13 +9,13 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -26,7 +26,10 @@ public class DamageReceivedHandler {
 		if (event.getEntity() instanceof Player) {			
 			Player player = (Player) event.getEntity();
 			EventType type = getSourceCategory(event.getSource());
+			if (type.equals(EventType.FROM_PLAYERS) && player.equals(event.getSource().getEntity()))
+				return;
 			Core core = Core.get(player.getLevel());
+			MsLoggy.info("Source Type: "+type.name()+" | Source Raw: "+event.getSource().msgId);
 			
 			if (!player.level.isClientSide){
 				CompoundTag eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
@@ -49,35 +52,43 @@ public class DamageReceivedHandler {
 	
 	private static Map<String, Long> getExperienceAwards(Core core, EventType type, DamageSource source, float damage, Player player, CompoundTag dataIn) {	
 		Map<String, Long> mapOut = new HashMap<>();
+		float ultimateDamage = Math.min(damage, player.getHealth());
 		switch (type) {
 		case FROM_PLAYERS: case FROM_MOBS: case FROM_ANIMALS:{
 			core.getExperienceAwards(type, source.getEntity(), player, dataIn).forEach((skill, value) -> {
-				mapOut.put(skill, (long)((float)value * damage));
+				mapOut.put(skill, (long)((float)value * ultimateDamage));
 			});			
 			break;
 		}
 		case FROM_ENVIRONMENT: {
-			Double value = damage * Config.FROM_ENVIRONMENT_MODIFIER.get();
+			Double value = ultimateDamage * Config.FROM_ENVIRONMENT_MODIFIER.get();
 			Config.FROM_ENVIRONMENT_SKILLS.get().forEach((skill) -> {				
 				mapOut.put(skill, value.longValue());
 			});
 			break;
 		}
 		case FROM_IMPACT: {
-			Double value = damage * Config.FROM_IMPACT_MODIFIER.get();
+			Double value = ultimateDamage * Config.FROM_IMPACT_MODIFIER.get();
 			Config.FROM_IMPACT_SKILLS.get().forEach((skill) -> {				
 				mapOut.put(skill, value.longValue());
 			});
 			break;
 		} 
+		case FROM_MAGIC: {
+			Double value = ultimateDamage * Config.FROM_MAGIC_MODIFIER.get();
+			Config.FROM_MAGIC_SKILLS.get().forEach((skill) -> {
+				mapOut.put(skill, value.longValue());
+			});
+			break;
+		}
 		case RECEIVE_DAMAGE: {
 			Entity uncategorizedEntity = source.getEntity();
 			if (uncategorizedEntity != null) 
 				core.getExperienceAwards(type, uncategorizedEntity, player, dataIn).forEach((skill, value) -> {
-					mapOut.put(skill, (long)((float)value * damage));
+					mapOut.put(skill, (long)((float)value * ultimateDamage));
 				});
 			else {
-				Double value = damage * Config.RECEIVE_DAMAGE_MODIFIER.get();
+				Double value = ultimateDamage * Config.RECEIVE_DAMAGE_MODIFIER.get();
 				Config.RECEIVE_DAMAGE_SKILLS.get().forEach((skill) -> {					
 					mapOut.put(skill, value.longValue());
 				});
@@ -109,6 +120,9 @@ public class DamageReceivedHandler {
 			DamageSource.FALL.msgId,
 			DamageSource.STALAGMITE.msgId,
 			DamageSource.FLY_INTO_WALL.msgId);
+	private static final List<String> magic = List.of(
+			DamageSource.MAGIC.msgId,
+			"indirectMagic");
 	private static final ResourceLocation MOB_TAG = new ResourceLocation("pmmo:mobs");
 	private static final ResourceLocation ANIMAL_TAG = new ResourceLocation("pmmo:animals");
 	private static EventType getSourceCategory(DamageSource source) {
@@ -118,11 +132,15 @@ public class DamageReceivedHandler {
 			return EventType.FROM_ENVIRONMENT;
 		if (falling.contains(source.msgId))
 			return EventType.FROM_IMPACT;
-		if (EntityTypeTags.getAllTags().getTag(MOB_TAG).contains(source.getEntity().getType()))
-			return EventType.FROM_MOBS;
-		if (EntityTypeTags.getAllTags().getTag(ANIMAL_TAG).contains(source.getEntity().getType()))
-			return EventType.FROM_ANIMALS;
-		if (source instanceof IndirectEntityDamageSource)
+		if (magic.contains(source.msgId))
+			return EventType.FROM_MAGIC;
+		if (source.getEntity() != null) {
+			if (EntityTypeTags.getAllTags().getTag(MOB_TAG).contains(source.getEntity().getType()))
+				return EventType.FROM_MOBS;
+			if (EntityTypeTags.getAllTags().getTag(ANIMAL_TAG).contains(source.getEntity().getType()))
+				return EventType.FROM_ANIMALS;
+		}
+		if (source.isProjectile())
 			return EventType.FROM_PROJECTILES;
 		return EventType.RECEIVE_DAMAGE;
 	}

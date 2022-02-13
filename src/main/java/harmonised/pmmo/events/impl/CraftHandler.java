@@ -19,6 +19,7 @@ public class CraftHandler {
 		if (!core.isActionPermitted(ReqType.CRAFT, event.getCrafting(), event.getPlayer())) {
 			event.setCanceled(true);
 			//TODO notify player of inability to perform
+			return;
 		}
 		else if (!event.getPlayer().level.isClientSide){
 			CompoundTag eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.CRAFT, event, new CompoundTag());
