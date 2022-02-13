@@ -202,6 +202,8 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> FROM_IMPACT_SKILLS;
 	public static ForgeConfigSpec.ConfigValue<Double> FROM_MAGIC_MODIFIER;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> FROM_MAGIC_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<Double> FROM_PROJECTILE_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> FROM_PROJECTILE_SKILLS;
 	public static ForgeConfigSpec.ConfigValue<Double> RECEIVE_DAMAGE_MODIFIER;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> RECEIVE_DAMAGE_SKILLS;
 	public static ForgeConfigSpec.ConfigValue<Double> DEAL_MELEE_DAMAGE_MODIFIER;
@@ -225,6 +227,10 @@ public class Config {
 					.defineList("FROM_MAGIC skills", List.of("magic"), (s) -> s instanceof String);
 			FROM_MAGIC_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
 					.defineInRange("FROM_MAGIC xp modifier", 15d, 0d, Double.MAX_VALUE);
+			FROM_PROJECTILE_SKILLS = builder.comment("What skills should be given xp when receiving damage from magic sources like potions")
+					.defineList("FROM_PROJECTILE skills", List.of("endurance"), (s) -> s instanceof String);
+			FROM_PROJECTILE_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
+					.defineInRange("FROM_PROJECTILE xp modifier", 15d, 0d, Double.MAX_VALUE);
 			RECEIVE_DAMAGE_SKILLS = builder.comment("What skills should be given xp when receiving damage from an uncategorized source")
 					.defineList("RECEIVE_DAMAGE skills", List.of("endurance"), (s) -> s instanceof String);
 			RECEIVE_DAMAGE_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")

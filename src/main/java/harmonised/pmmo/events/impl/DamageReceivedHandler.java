@@ -81,7 +81,7 @@ public class DamageReceivedHandler {
 			});
 			break;
 		}
-		case RECEIVE_DAMAGE: {
+		case RECEIVE_DAMAGE: case FROM_PROJECTILES: {
 			Entity uncategorizedEntity = source.getEntity();
 			if (uncategorizedEntity != null) 
 				core.getExperienceAwards(type, uncategorizedEntity, player, dataIn).forEach((skill, value) -> {
