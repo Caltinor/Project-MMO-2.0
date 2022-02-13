@@ -6,12 +6,12 @@
 		}
 	},
 	"requirements": {  
-		"TOOL": {"mining": 10},
+		"TOOL": {"farming": 1},
 		"WEAPON": {"combat": 10}		
 	},
 	"salvage":{ 
 		"minecraft:cobblestone": { 
-			"salvageMax": 3,
+			"salvageMax": 2,
 			"baseChance": 0.25,
 			"maxChance" : 0.8,
 			"levelReq": { 
@@ -26,7 +26,7 @@
 			}
 		},
 		"minecraft:stick": { 
-			"salvageMax": 2,
+			"salvageMax": 1,
 			"baseChance": 0.25,
 			"maxChance": 0.8,
 			"levelReq": {},
