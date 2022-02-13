@@ -41,6 +41,8 @@ public class DamageDealtHandler {
 			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntityLiving());
 			MsLoggy.info("Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
 			
+			
+			//===========================DEFAULT LOGIC===================================
 			if (!core.isActionPermitted(ReqType.WEAPON, player.getMainHandItem(), player)) {
 				event.setCanceled(true);
 				//TODO notify player of inability to perform
