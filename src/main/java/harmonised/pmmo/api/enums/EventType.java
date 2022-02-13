@@ -24,6 +24,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		FROM_PLAYERS,				//
 		FROM_ANIMALS,				//
 		FROM_PROJECTILES,			//
+		FROM_MAGIC,					//
 		FROM_ENVIRONMENT,			//
 		FROM_IMPACT,				//
 	DEAL_MELEE_DAMAGE,				//
