@@ -59,7 +59,6 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		RIGHT_CLICK_ITEM,			//
 		RIGHT_CLICK,				//
 		ENTITY,						//
-		ENTITY_SPECIFIC,			//
 	RESPAWN,						//
 	SKILL_UP,						//
 	SLEEP,							//

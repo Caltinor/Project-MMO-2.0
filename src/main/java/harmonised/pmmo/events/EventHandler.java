@@ -5,6 +5,7 @@ import harmonised.pmmo.events.impl.BreakSpeedHandler;
 import harmonised.pmmo.events.impl.CraftHandler;
 import harmonised.pmmo.events.impl.DamageDealtHandler;
 import harmonised.pmmo.events.impl.DamageReceivedHandler;
+import harmonised.pmmo.events.impl.EntityInteractHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.util.Reference;
@@ -13,6 +14,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -51,15 +53,13 @@ public class EventHandler {
 			return;
 		//NOTE Fires only on server
 		BreakHandler.handle(event);
-	}
-	
+	}	
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onBlockPlace(EntityPlaceEvent event) {
 		if (event.isCanceled())
 			return;
 		PlaceHandler.handle(event);
 	}
-	
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onBreakSpeed(BreakSpeed event) {
 		if (event.isCanceled())
@@ -85,5 +85,11 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		DamageDealtHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onEntityInteract(EntityInteract event) {
+		if (event.isCanceled())
+			return;
+		EntityInteractHandler.handle(event);
 	}
 }
