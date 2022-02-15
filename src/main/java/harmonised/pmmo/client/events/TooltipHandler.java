@@ -50,7 +50,6 @@ public class TooltipHandler {
                 return;
             }*/
 
-            Map<String, Integer> craftReq = getReqData(core, item.getRegistryName(), ReqType.CRAFT, stack);
             Map<String, Integer> wearReq = getReqData(core, item.getRegistryName(), ReqType.WEAR, stack);
             Map<String, Integer> toolReq = getReqData(core, item.getRegistryName(), ReqType.TOOL, stack);
             Map<String, Integer> weaponReq = getReqData(core, item.getRegistryName(), ReqType.WEAPON, stack);
@@ -71,7 +70,6 @@ public class TooltipHandler {
             Map<String, Double> wornItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.WORN, stack);
             
             //=====================REQUIREMENTS=========================
-            if (craftReq.size() > 0) {addRequirementTooltip("pmmo.toCraft", event, craftReq, core);}
             if (wearReq.size() > 0)	 {addRequirementTooltip("pmmo.toWear", event, wearReq, core);}
             if (toolReq.size() > 0)  {addRequirementTooltip("pmmo.tool", event, toolReq, core);}
             if (weaponReq.size() > 0){addRequirementTooltip("pmmo.weapon", event, weaponReq, core);}

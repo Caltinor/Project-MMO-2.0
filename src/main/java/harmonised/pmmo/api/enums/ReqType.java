@@ -19,7 +19,6 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum {
     BREAK,
     BIOME,
     KILL,
-    CRAFT,
     TRAVEL, 
     RIDE,
     ENTITY_INTERACT;
