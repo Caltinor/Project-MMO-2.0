@@ -25,5 +25,8 @@ public class LoginHandler {
 		}
 		Networking.sendToClient(new CP_UpdateLevelCache(PmmoSavedData.get().getLevelCache()), player);
 		Networking.sendToClient(new CP_SyncData_DataSkills(Core.get(LogicalSide.SERVER).getDataConfig().getSkillData()), player);
+		
+		//===========EXECUTE FEATURE LOGIC====================
+		PmmoSavedData.get().awardScheduledXP(player.getUUID());
 	}
 }

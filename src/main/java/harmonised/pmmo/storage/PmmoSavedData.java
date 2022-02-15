@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.mojang.serialization.Codec;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
@@ -17,9 +18,9 @@ import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
+import net.minecraft.core.SerializableUUID;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -32,6 +33,11 @@ public class PmmoSavedData extends SavedData{
 	private static String NAME = Reference.MOD_ID;
 	
 	private static Map<UUID, Map<String, Long>> xp = new HashMap<>();
+	private static Map<UUID, Map<String, Long>> scheduledXP = new HashMap<>();
+	
+	private static final Codec<Map<UUID, Map<String, Long>>> XP_CODEC = 
+			Codec.unboundedMap(SerializableUUID.CODEC, 
+					Codec.unboundedMap(Codec.STRING, Codec.LONG));
 	
 	//===========================GETTERS AND SETTERS================
 	public long getXpRaw(UUID playerID, String skillName) {
@@ -42,6 +48,13 @@ public class PmmoSavedData extends SavedData{
 		long oldValue = getXpRaw(playerID, skillName);
 		ServerPlayer player = server.getPlayerList().getPlayer(playerID);
 		
+		//if player is not online, schedule the XP for player join.
+		if (player == null) {
+			scheduledXP.computeIfAbsent(playerID, (id) -> new HashMap<>()).merge(skillName, change, (o, n) -> o + n);
+			return true;
+		}
+		
+		//If player is online proceed with xp events, perks and committing xp to master map
 		XpEvent gainXpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
 		if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
 			return false;
@@ -84,49 +97,36 @@ public class PmmoSavedData extends SavedData{
 		long oldXp = getXpRaw(playerID, skill);
 		long newXp = levelCache.get(currentLevel + change);
 		ServerPlayer player = server.getPlayerList().getPlayer(playerID);	
-		
-		XpEvent gainXpEvent = new XpEvent(player, skill, oldXp, newXp - oldXp, TagBuilder.start().build());
-		if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
-			return false;
-		
-		if (gainXpEvent.isLevelUp()) 
-			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
-					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
-		setPlayerSkillLevel(gainXpEvent.skill, playerID, gainXpEvent.endLevel());
+			
+		if (player != null) {
+			XpEvent gainXpEvent = new XpEvent(player, skill, oldXp, newXp - oldXp, TagBuilder.start().build());
+			if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
+				return false;
+			
+			if (gainXpEvent.isLevelUp()) 
+				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
+			setPlayerSkillLevel(gainXpEvent.skill, playerID, gainXpEvent.endLevel());
+		}
+		else 
+			setPlayerSkillLevel(skill, playerID, currentLevel + change);
 		return true;
 	}
 	//===========================CORE WSD LOGIC=====================
 	public PmmoSavedData() {}
 	
-	private static final String SKILL_KEY = "skill";
-	private static final String VALUE_KEY = "value";
+	private static final String XP_KEY = "xp_data";
+	private static final String SCHEDULED_KEY = "scheduled_xp";
 	
 	public PmmoSavedData(CompoundTag nbt) {
-		for (String uuid : nbt.getAllKeys()) {
-			UUID playerID = UUID.fromString(uuid);
-			ListTag skillPairs = nbt.getList(uuid, Tag.TAG_COMPOUND);
-			Map<String, Long> playerMap = new HashMap<>();
-			for (int i = 0; i < skillPairs.size(); i++) {
-				String skill = skillPairs.getCompound(i).getString(SKILL_KEY);
-				long value = skillPairs.getCompound(i).getLong(VALUE_KEY);
-				playerMap.put(skill, value);
-			}
-			xp.put(playerID, playerMap);
-		}
+		xp = XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(XP_KEY)).result().orElse(new HashMap<>());
+		scheduledXP = XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(SCHEDULED_KEY)).result().orElse(new HashMap<>());
 	}
 
 	@Override
 	public CompoundTag save(CompoundTag nbt) {
-		for (Map.Entry<UUID, Map<String, Long>> xpMap : xp.entrySet()) {
-			ListTag skillPairs = new ListTag();
-			for (Map.Entry<String, Long> skills : xpMap.getValue().entrySet()) {
-				CompoundTag pair = new CompoundTag();
-				pair.putString(SKILL_KEY, skills.getKey());
-				pair.putLong(VALUE_KEY, skills.getValue());
-				skillPairs.add(pair);
-			}
-			nbt.put(xpMap.getKey().toString(), skillPairs);
-		}
+		nbt.put(XP_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, xp).result().orElse(new CompoundTag()))));
+		nbt.put(SCHEDULED_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, scheduledXP).result().orElse(new CompoundTag()))));
 		return nbt;
 	}
 	
@@ -151,6 +151,7 @@ public class PmmoSavedData extends SavedData{
 		return Config.MAX_LEVEL.get();
 	}	
 	
+	
 	private List<Long> levelCache = new ArrayList<>();
 	
 	public List<Long> getLevelCache() {return levelCache;}
@@ -174,6 +175,18 @@ public class PmmoSavedData extends SavedData{
 		}
 		for (ServerPlayer player : PmmoSavedData.getServer().getPlayerList().getPlayers()) {
 			Networking.sendToClient(new CP_UpdateLevelCache(levelCache), player);
+		}
+	}
+	
+	public void awardScheduledXP(UUID playerID) {
+		//Clone the original scheduled XP so that we can remove the original
+		//This is vital because a disconnect while this is running would result in 
+		//the player having their scheduledXP rescheduled and we cannot modify
+		//a collection whilst iterating over it.
+		Map<String, Long> queue = new HashMap<>(scheduledXP.getOrDefault(playerID, new HashMap<>()));
+		scheduledXP.remove(playerID);
+		for (Map.Entry<String, Long> scheduledValue : queue.entrySet()) {
+			setXpDiff(playerID, scheduledValue.getKey(), scheduledValue.getValue());
 		}
 	}
 }
