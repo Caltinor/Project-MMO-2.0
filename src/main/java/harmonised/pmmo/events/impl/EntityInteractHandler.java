@@ -21,6 +21,7 @@ public class EntityInteractHandler {
 		if (!core.isActionPermitted(ReqType.ENTITY_INTERACT, event.getTarget(), event.getPlayer())) {
 			event.setCanceled(true);
 			event.setCancellationResult(InteractionResult.FAIL);
+			//TODO notify player of inability to perform
 		}
 		else if (!event.getPlayer().level.isClientSide){
 			CompoundTag eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ENTITY, event, new CompoundTag());

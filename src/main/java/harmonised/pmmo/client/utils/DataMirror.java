@@ -8,13 +8,14 @@ import java.util.Map;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.MsLoggy;
 
-/**This class serves as a run-time cache of data that the
- * client will utiliize for various rendering tasks.
+/**This class serves as a run-time cache of data that
+ * PmmoSavedData typicaly stores.  
  * 
  * @author Caltinor
  *
  */
 public class DataMirror {
+	//TODO setup an xp queue to be used in displaying xp growth in the guis
 	private static Map<String, Long> mySkills = new HashMap<>();
 	private static List<Long> levelCache = new ArrayList<>();
 	

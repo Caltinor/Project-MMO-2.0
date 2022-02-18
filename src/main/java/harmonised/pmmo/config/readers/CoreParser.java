@@ -46,6 +46,8 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class CoreParser {
+	//TODO Figure out how to cleanse the maps of disabled packs
+	
 	private static final Logger DATA_LOGGER = LogManager.getLogger();
 	private static final Gson gson = new Gson();	
 	public static final Type valueJsonType = new TypeToken<Map<String, JsonObject>>(){}.getType();
