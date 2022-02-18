@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.readers.ModifierDataType;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
@@ -33,6 +35,7 @@ public class Config {
 		builder.comment("PMMO Client Configuration").push("Client");
 		
 		buildGUI(builder);
+		buildTooltips(builder);
 		
 		builder.pop();
 	}
@@ -52,6 +55,43 @@ public class Config {
 						.define("Display Skill List", true);
 		
 		builder.pop();
+	}
+	
+	private static BooleanValue[] TOOLTIP_REQ_ENABLED;
+	private static BooleanValue[] TOOLTIP_XP_ENABLED;
+	private static BooleanValue[] TOOLTIP_BONUS_ENABLED;
+	
+	private static final String TOOLTIP_SUFFIX = " tooltip enabled";
+	
+	public static BooleanValue tooltipReqEnabled(ReqType type) {return TOOLTIP_REQ_ENABLED[type.ordinal()];}
+	public static BooleanValue tooltipXpEnabled(EventType type) {return TOOLTIP_XP_ENABLED[type.ordinal()];}
+	public static BooleanValue tooltipBonusEnabled(ModifierDataType type) {return TOOLTIP_BONUS_ENABLED[type.ordinal()];}
+	
+	private static void buildTooltips(ForgeConfigSpec.Builder builder) {
+		builder.comment("This section covers the various tooltip elements and whether they should be enabled").push("Tooltip_Visibility");
+		
+		List<ReqType> rawReqList = new ArrayList<>(Arrays.asList(ReqType.values()));
+		builder.push("Requirement_Tooltips");
+		TOOLTIP_REQ_ENABLED = rawReqList.stream().map((t) -> {
+			return builder.define(t.toString()+" Req "+TOOLTIP_SUFFIX, true);
+		}).toArray(BooleanValue[]::new);
+		builder.pop(); //requirements
+		
+		List<EventType> rawEventList = new ArrayList<>(Arrays.asList(EventType.values()));
+		builder.push("Xp_Gain_Tooltips");
+		TOOLTIP_XP_ENABLED = rawEventList.stream().map((t) -> {
+			return builder.define(t.toString()+" XP Gain "+TOOLTIP_SUFFIX, true);
+		}).toArray(BooleanValue[]::new);
+		builder.pop(); //xp gains
+		
+		List<ModifierDataType> rawBonusList = new ArrayList<>(Arrays.asList(ModifierDataType.values()));
+		builder.push("Bonus_Tooltips");
+		TOOLTIP_BONUS_ENABLED = rawBonusList.stream().map((t) -> {
+			return builder.define(t.toString()+" Bonus "+TOOLTIP_SUFFIX, true);
+		}).toArray(BooleanValue[]::new);
+		builder.pop(); //bonuses
+		
+		builder.pop(); //outer
 	}
 	
 	//====================COMMON SETTINGS===============================

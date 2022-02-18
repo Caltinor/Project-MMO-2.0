@@ -70,23 +70,23 @@ public class TooltipHandler {
             Map<String, Double> wornItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.WORN, stack);
             
             //=====================REQUIREMENTS=========================
-            if (wearReq.size() > 0)	 {addRequirementTooltip("pmmo.toWear", event, wearReq, core);}
-            if (toolReq.size() > 0)  {addRequirementTooltip("pmmo.tool", event, toolReq, core);}
-            if (weaponReq.size() > 0){addRequirementTooltip("pmmo.weapon", event, weaponReq, core);}
-            if (useReq.size() > 0)   {addRequirementTooltip("pmmo.use", event, useReq, core);}
-            if (placeReq.size() > 0) {addRequirementTooltip("pmmo.place", event, placeReq, core);}
-            if (breakReq.size() > 0) {addRequirementTooltip("pmmo.break", event, breakReq, core);}
+            if (wearReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAR).get())	 {addRequirementTooltip("pmmo.toWear", event, wearReq, core);}
+            if (toolReq.size() > 0 && Config.tooltipReqEnabled(ReqType.TOOL).get())  {addRequirementTooltip("pmmo.tool", event, toolReq, core);}
+            if (weaponReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAPON).get()){addRequirementTooltip("pmmo.weapon", event, weaponReq, core);}
+            if (useReq.size() > 0 && Config.tooltipReqEnabled(ReqType.USE).get())   {addRequirementTooltip("pmmo.use", event, useReq, core);}
+            if (placeReq.size() > 0 && Config.tooltipReqEnabled(ReqType.PLACE).get()) {addRequirementTooltip("pmmo.place", event, placeReq, core);}
+            if (breakReq.size() > 0 && Config.tooltipReqEnabled(ReqType.BREAK).get()) {addRequirementTooltip("pmmo.break", event, breakReq, core);}
             //=====================XP VALUES============================
-            if (xpValueBreaking.size() > 0){addXpValueTooltip("pmmo.xpValueBreak", event, xpValueBreaking, core);}
-            if (xpValueCrafting.size() > 0){addXpValueTooltip("pmmo.xpValueCraft", event, xpValueCrafting, core);}
-            if (xpValueSmelting.size() > 0){addXpValueTooltip("pmmo.xpValueSmelt", event, xpValueSmelting, core);}
-            if (xpValueCooking.size() > 0) {addXpValueTooltip("pmmo.xpValueCook", event, xpValueCooking, core);}
-            if (xpValueBrewing.size() > 0) {addXpValueTooltip("pmmo.xpValueBrew", event, xpValueBrewing, core);}
-            if (xpValueGrowing.size() > 0) {addXpValueTooltip("pmmo.xpValueGrow", event, xpValueGrowing, core);}
-            if (xpValuePlacing.size() > 0) {addXpValueTooltip("pmmo.xpValuePlace", event, xpValuePlacing, core);}
+            if (xpValueBreaking.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_BREAK).get()){addXpValueTooltip("pmmo.xpValueBreak", event, xpValueBreaking, core);}
+            if (xpValueCrafting.size() > 0 && Config.tooltipXpEnabled(EventType.CRAFT).get()){addXpValueTooltip("pmmo.xpValueCraft", event, xpValueCrafting, core);}
+            if (xpValueSmelting.size() > 0 && Config.tooltipXpEnabled(EventType.SMELT).get()){addXpValueTooltip("pmmo.xpValueSmelt", event, xpValueSmelting, core);}
+            if (xpValueCooking.size() > 0 && Config.tooltipXpEnabled(EventType.COOK).get()) {addXpValueTooltip("pmmo.xpValueCook", event, xpValueCooking, core);}
+            if (xpValueBrewing.size() > 0 && Config.tooltipXpEnabled(EventType.BREW).get()) {addXpValueTooltip("pmmo.xpValueBrew", event, xpValueBrewing, core);}
+            if (xpValueGrowing.size() > 0 && Config.tooltipXpEnabled(EventType.GROW).get()) {addXpValueTooltip("pmmo.xpValueGrow", event, xpValueGrowing, core);}
+            if (xpValuePlacing.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_PLACE).get()) {addXpValueTooltip("pmmo.xpValuePlace", event, xpValuePlacing, core);}
             //=====================MODIFIERS============================
-            if (heldItemXpBoost.size() > 0) {addModifierTooltip("pmmo.itemXpBoostHeld", event, heldItemXpBoost, core);}
-            if (wornItemXpBoost.size() > 0) {addModifierTooltip("pmmo.itemXpBoostWorn", event, wornItemXpBoost, core);}
+            if (heldItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.HELD).get()) {addModifierTooltip("pmmo.itemXpBoostHeld", event, heldItemXpBoost, core);}
+            if (wornItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.WORN).get()) {addModifierTooltip("pmmo.itemXpBoostWorn", event, wornItemXpBoost, core);}
          }
 	}
 	
