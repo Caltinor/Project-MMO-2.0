@@ -10,6 +10,7 @@ import com.mojang.serialization.Codec;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.network.Networking;
@@ -18,7 +19,6 @@ import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
-import net.minecraft.core.SerializableUUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
@@ -36,7 +36,7 @@ public class PmmoSavedData extends SavedData{
 	private static Map<UUID, Map<String, Long>> scheduledXP = new HashMap<>();
 	
 	private static final Codec<Map<UUID, Map<String, Long>>> XP_CODEC = 
-			Codec.unboundedMap(SerializableUUID.CODEC, 
+			Codec.unboundedMap(CodecTypes.UUID_CODEC, 
 					Codec.unboundedMap(Codec.STRING, Codec.LONG));
 	
 	//===========================GETTERS AND SETTERS================
@@ -119,8 +119,8 @@ public class PmmoSavedData extends SavedData{
 	private static final String SCHEDULED_KEY = "scheduled_xp";
 	
 	public PmmoSavedData(CompoundTag nbt) {
-		xp = XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(XP_KEY)).result().orElse(new HashMap<>());
-		scheduledXP = XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(SCHEDULED_KEY)).result().orElse(new HashMap<>());
+		xp = new HashMap<>(XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(XP_KEY)).result().orElse(new HashMap<>()));
+		scheduledXP = new HashMap<>(XP_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(SCHEDULED_KEY)).result().orElse(new HashMap<>()));
 	}
 
 	@Override
