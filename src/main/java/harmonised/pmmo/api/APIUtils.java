@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
+import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.autovalues.AutoValues;
@@ -20,7 +21,6 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -123,6 +123,10 @@ public class APIUtils {
 		Core.get(LogicalSide.SERVER).getPredicateRegistry().registerBreakPredicate(res, jType, pred);
 	}
 	
+	public static void registerEntityPredicate(ResourceLocation res, ReqType reqType, BiPredicate<Player, Entity> pred) {
+		Core.get(LogicalSide.SERVER).getPredicateRegistry().registerEntityPredicate(res, reqType, pred);
+	}
+	
 	public static void registerItemRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<ItemStack, Map<String, Integer>> func)  {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemRequirementTooltipData(res, reqType, func);
 	}
@@ -175,11 +179,28 @@ public class APIUtils {
 	public static final String DAMAGE_IN = "damageIn";
 	public static final String DAMAGE_OUT ="damage";
 	
+	public static final String JUMP_OUT = "jump_boost_output";
+	
+	/**Called during common setup, this method is used to register custom perks
+	 * to PMMO so that players can use them in their configurations.  It is 
+	 * strongly recommended that you document your perks so that users have a
+	 * full understanding of how to use it. This includes inputs and outputs, 
+	 * reasonable triggers, and sidedness.
+	 * 
+	 * @param perkID a customer id for your perk that can be used in perks.json to reference this perk
+	 * @param onExecute the function executing the behavior of this perk when triggered
+	 * @param onConclude the function executing the behavior of this perk when expected to end
+	 * @param side the logical sides this perk should exeute on.  Your implementation should factor in sidedness to avoid crashes.
+	 */
 	public static void registerPerk(
 			@NonNull ResourceLocation perkID, 
-			@NonNull TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> onExecute, 
-			@NonNull TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> onConclude) {
-		Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, onExecute, onConclude);
+			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onExecute, 
+			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude,
+			@NonNull PerkSide side) {
+		if (side.equals(PerkSide.SERVER) || side.equals(PerkSide.BOTH))
+			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, onExecute, onConclude, side);
+		if (side.equals(PerkSide.CLIENT) || side.equals(PerkSide.BOTH))
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, onExecute, onConclude, side);
 	}	
 	
 	//===============UTILITY METHODS=================================

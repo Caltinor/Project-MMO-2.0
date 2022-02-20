@@ -6,10 +6,12 @@ import harmonised.pmmo.events.impl.CraftHandler;
 import harmonised.pmmo.events.impl.DamageDealtHandler;
 import harmonised.pmmo.events.impl.DamageReceivedHandler;
 import harmonised.pmmo.events.impl.EntityInteractHandler;
+import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
@@ -91,5 +93,11 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		EntityInteractHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onJump(LivingJumpEvent event) {
+		if (event.isCanceled())
+			return;
+		JumpHandler.handle(event);
 	}
 }

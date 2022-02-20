@@ -244,12 +244,20 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> FROM_MAGIC_SKILLS;
 	public static ForgeConfigSpec.ConfigValue<Double> FROM_PROJECTILE_MODIFIER;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> FROM_PROJECTILE_SKILLS;
+	
 	public static ForgeConfigSpec.ConfigValue<Double> RECEIVE_DAMAGE_MODIFIER;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> RECEIVE_DAMAGE_SKILLS;
 	public static ForgeConfigSpec.ConfigValue<Double> DEAL_MELEE_DAMAGE_MODIFIER;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> DEAL_MELEE_DAMAGE_SKILLS;
 	public static ForgeConfigSpec.ConfigValue<Double> DEAL_RANGED_DAMAGE_MODIFIER;
 	public static ForgeConfigSpec.ConfigValue<List<? extends String>> DEAL_RANGED_DAMAGE_SKILLS;
+	
+	public static ForgeConfigSpec.ConfigValue<Double> JUMP_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> JUMP_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<Double> SPRINT_JUMP_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> SPRINT_JUMP_SKILLS;
+	public static ForgeConfigSpec.ConfigValue<Double> CROUCH_JUMP_MODIFIER;
+	public static ForgeConfigSpec.ConfigValue<List<? extends String>> CROUCH_JUMP_SKILLS;
 	
 	private static void buildEventBasedXPSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related to certain default event XP awards.").push("Event_XP_Specifics");
@@ -260,7 +268,7 @@ public class Config {
 			FROM_ENVIRONMENT_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
 					.defineInRange("FROM_ENVIRONMENT xp modifier", 10d, 0d, Double.MAX_VALUE);
 			FROM_IMPACT_SKILLS = builder.comment("What skills should be given xp when receiving damage from impacts like falling or flying into a wall")
-					.defineList("FROM_IMPACT skills", List.of("endurance"), (s) -> s instanceof String);
+					.defineList("FROM_IMPACT skills", List.of("endurance", "flying"), (s) -> s instanceof String);
 			FROM_IMPACT_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
 					.defineInRange("FROM_IMPACT xp modifier", 15d, 0d, Double.MAX_VALUE);
 			FROM_MAGIC_SKILLS = builder.comment("What skills should be given xp when receiving damage from magic sources like potions")
@@ -286,6 +294,21 @@ public class Config {
 					.defineList("DEAL_RANGED_DAMAGE skills", List.of("archery"), (s) -> s instanceof String);
 			DEAL_RANGED_DAMAGE_MODIFIER = builder.comment("the xp award for this event is equal to the damage received times this value.")
 					.defineInRange("DEAL_RANGED_DAMAGE xp modifier", 1d, 0d, Double.MAX_VALUE);
+		builder.pop();
+		
+		builder.push("Jumps");
+		JUMP_SKILLS = builder.comment("What skills should be given xp when a player jumps")
+				.defineList("JUMP skills", List.of("agility"), (s) -> s instanceof String);
+		JUMP_MODIFIER = builder.comment("the xp award for this event is equal to the jump base amount times this value.", "note that perks may change the base value.")
+				.defineInRange("JUMP xp modifier", 2.5, 0d, Double.MAX_VALUE);
+		SPRINT_JUMP_SKILLS = builder.comment("What skills should be given xp when a player jumps while sprinting")
+				.defineList("SPRINT_JUMP skills", List.of("agility"), (s) -> s instanceof String);
+		SPRINT_JUMP_MODIFIER = builder.comment("the xp award for this event is equal to the jump base amount times this value.", "note that perks may change the base value.")
+				.defineInRange("SPRINT_JUMP xp modifier", 2.5, 0d, Double.MAX_VALUE);
+		CROUCH_JUMP_SKILLS = builder.comment("What skills should be given xp when a player jumps from a crouch")
+				.defineList("CROUCH_JUMP skills", List.of("agility"), (s) -> s instanceof String);
+		CROUCH_JUMP_MODIFIER = builder.comment("the xp award for this event is equal to the jump base amount times this value.", "note that perks may change the base value.")
+				.defineInRange("CROUCH_JUMP xp modifier", 2.5, 0d, Double.MAX_VALUE);
 		builder.pop();
 			
 		builder.pop();
