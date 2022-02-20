@@ -37,7 +37,8 @@ public class PmmoSavedData extends SavedData{
 	
 	private static final Codec<Map<UUID, Map<String, Long>>> XP_CODEC = 
 			Codec.unboundedMap(CodecTypes.UUID_CODEC, 
-					Codec.unboundedMap(Codec.STRING, Codec.LONG));
+					Codec.unboundedMap(Codec.STRING, Codec.LONG)
+						.xmap(map -> new HashMap<>(map), map -> new HashMap<>(map)));
 	
 	//===========================GETTERS AND SETTERS================
 	public long getXpRaw(UUID playerID, String skillName) {
