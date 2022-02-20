@@ -25,7 +25,7 @@ public class CraftHandler {
 		//proecess perks
 		CompoundTag perkDataIn = eventHookOutput;
 		//if break data is needed by perks, we can add it here.  this is just default implementation.
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.CRAFT, event.getPlayer(), perkDataIn));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.CRAFT, event.getPlayer(), perkDataIn, core.getSide()));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.CRAFT, event.getCrafting(), event.getPlayer(), perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());

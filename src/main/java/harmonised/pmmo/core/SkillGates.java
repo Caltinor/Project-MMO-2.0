@@ -1,20 +1,10 @@
 package harmonised.pmmo.core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 import com.google.common.base.Preconditions;
-import com.ibm.icu.text.Collator;
-
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.storage.PmmoSavedData;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
 public class SkillGates {
 	public SkillGates () {}
@@ -25,6 +15,10 @@ public class SkillGates {
 	//====================REQDATA GETTERS AND SETTERS======================================
 	public Map<String, Integer> getObjectSkillMap(ReqType reqType, ResourceLocation objectID) {
 		return reqData.computeIfAbsent(reqType, s -> new HashMap<>()).computeIfAbsent(objectID, s -> new HashMap<>());
+	}
+	
+	public Map<String, Integer> getEnchantmentReqs(ResourceLocation enchantID, int enchantLvl) {
+		return enchantmentReqs.getOrDefault(enchantID, new HashMap<>()).getOrDefault(enchantLvl, new HashMap<>());
 	}
 	
 	public int getObjectSkillLevel(ReqType reqType, ResourceLocation objectID, String skillName) {
@@ -43,49 +37,10 @@ public class SkillGates {
 		Preconditions.checkNotNull(data);
 		enchantmentReqs.put(enchantmentID, data);
 	}
-	
-	public List<String> getUsedSkills() {
-		List<String> out = new ArrayList<>();
-		for (Map.Entry<ReqType, Map<ResourceLocation, Map<String, Integer>>> entries : reqData.entrySet()) {
-			for (Map.Entry<ResourceLocation, Map<String,Integer>> entry : entries.getValue().entrySet()) {
-				for (Map.Entry<String, Integer> map : entry.getValue().entrySet()) {
-					if (!out.contains(map.getKey()))
-						out.add(map.getKey());
-				}
-			}
-		}
-		out.sort(Collator.getInstance());
-		return out;
-	}
 	//====================REQDATA UTILITY METHODS======================================
 	public boolean doesObjectReqExist(ReqType reqType, ResourceLocation objectID) {
 		return reqData.containsKey(reqType) ? reqData.get(reqType).containsKey(objectID) : false;
 	}
 	
-	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
-		Map<String, Integer> requirements = getObjectSkillMap(reqType, objectID);
-		return doesPlayerMeetReq(playerID, requirements);	
-	}
 	
-	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Integer> requirements) {
-		boolean meetsReq = true;
-		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
-			int skillLevel = PmmoSavedData.get().getLevelFromXP(PmmoSavedData.get().getXpRaw(playerID, req.getKey()));
-			if (req.getValue() > skillLevel)
-				return false;
-		}
-		return meetsReq;
-	}
-	
-	public boolean doesPlayerMeetEnchantmentReq(ItemStack stack, UUID playerID) {
-		ListTag enchantments = stack.getEnchantmentTags();
-		for (int i = 0; i < enchantments.size(); i++) {
-			CompoundTag enchantment = enchantments.getCompound(i);
-			ResourceLocation enchantID = new ResourceLocation(enchantment.getString("id"));
-			int enchantLvl = enchantment.getInt("lvl");
-			if (!doesPlayerMeetReq(playerID, enchantmentReqs.getOrDefault(enchantID, new HashMap<>()).getOrDefault(enchantLvl, new HashMap<>())))
-				return false;
-		}	
-		return true;
-	}
 }

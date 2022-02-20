@@ -35,7 +35,7 @@ public class PlaceHandler {
 		}
 		CompoundTag perkDataIn = eventHookOutput;
 		//if break data is needed by perks, we can add it here.  this is just default implementation.
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_PLACE, player, perkDataIn));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_PLACE, player, perkDataIn, core.getSide()));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.BLOCK_PLACE, event.getPos(), (Player) event.getEntity(), perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);

@@ -37,7 +37,7 @@ public class EntityInteractHandler {
 		//proecess perks
 		CompoundTag perkDataIn = eventHookOutput;
 		//if interact data is needed by perks, we can add it here.  this is just default implementation.
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ENTITY,  event.getPlayer(), perkDataIn));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ENTITY,  event.getPlayer(), perkDataIn, core.getSide()));
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENTITY, event.getTarget(), event.getPlayer(), perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());

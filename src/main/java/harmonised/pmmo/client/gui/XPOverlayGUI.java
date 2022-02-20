@@ -359,8 +359,8 @@ public class XPOverlayGUI extends GuiComponent
 		{
 			Map<String, Double> modifiers = core.getConsolidatedModifierMap(mc.player);
 			List<String> skillsKeys = new ArrayList<>(); 
-			DataMirror.getSkillMap().keySet().stream().forEach(entry -> skillsKeys.add(entry));
-			skillsKeys.sort(Comparator.<String>comparingLong(a -> DataMirror.getXpForSkill(a)).reversed());
+			core.getData().getXpMap(null).keySet().stream().forEach(entry -> skillsKeys.add(entry));
+			skillsKeys.sort(Comparator.<String>comparingLong(a -> core.getData().getXpRaw(null, a)).reversed());
 
 			
 			for(int i = 0; i < skillsKeys.size(); i++) {
@@ -368,8 +368,8 @@ public class XPOverlayGUI extends GuiComponent
 				skillGap = fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) > skillGap 
 						? fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) 
 						: skillGap;
-				long currentXP = DataMirror.getXpForSkill(skillKey);
-				double level = DataMirror.getXpWithPercentToNextLevel(DataMirror.getXpForSkill(skillKey));
+				long currentXP = core.getData().getXpRaw(null, skillKey);
+				double level = ((DataMirror)core.getData()).getXpWithPercentToNextLevel(core.getData().getXpRaw(null, skillKey));
 				String tempString = DP.dp(Math.floor(level * 100D) / 100D);
 				int color = core.getDataConfig().getSkillColor(skillKey);
 				

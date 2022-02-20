@@ -3,18 +3,17 @@ package harmonised.pmmo.core;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Supplier;
-
 import com.google.common.base.Preconditions;
-import com.google.common.base.Suppliers;
 import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.config.readers.ModifierDataType;
@@ -27,11 +26,14 @@ import harmonised.pmmo.impl.PerkRegistry;
 import harmonised.pmmo.impl.PredicateRegistry;
 import harmonised.pmmo.impl.TooltipRegistry;
 import harmonised.pmmo.storage.PmmoSavedData;
+import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -42,19 +44,21 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.LogicalSide;
 
 public class Core {
-	  private static final Map<LogicalSide, Supplier<Core>> INSTANCES = Map.of(LogicalSide.CLIENT, Suppliers.memoize(Core::new)::get, LogicalSide.SERVER, Suppliers.memoize(Core::new)::get);
-	  private final XpUtils xp;
-	  private final SkillGates gates;
-	  private final DataConfig config;
-	  private final PredicateRegistry predicates;
-	  private final EventTriggerRegistry eventReg;
-	  private final TooltipRegistry tooltips;
-	  private final PerkRegistry perks;
-	  private final SalvageLogic salvageLogic;
-	  private final NBTUtils nbt;
+	private static final Map<LogicalSide, Function<LogicalSide, Core>> INSTANCES = Map.of(LogicalSide.CLIENT, Functions.memoize(Core::new), LogicalSide.SERVER, Functions.memoize(Core::new));
+	private final XpUtils xp;
+	private final SkillGates gates;
+	private final DataConfig config;
+	private final PredicateRegistry predicates;
+	private final EventTriggerRegistry eventReg;
+	private final TooltipRegistry tooltips;
+	private final PerkRegistry perks;
+	private final SalvageLogic salvageLogic;
+	private final NBTUtils nbt;
+	private final IDataStorage data;
+	private final LogicalSide side;
 	  
-	  private Core() {
-	    this.xp = new XpUtils();
+	private Core(LogicalSide side) {
+		this.xp = new XpUtils();
 	    this.gates = new SkillGates();
 	    this.config = new DataConfig();
 	    this.predicates = new PredicateRegistry();
@@ -63,38 +67,68 @@ public class Core {
 	    this.perks = new PerkRegistry();
 	    this.salvageLogic = new SalvageLogic();
 	    this.nbt = new NBTUtils();
-	  }
+	    data = side.equals(LogicalSide.SERVER) ? new PmmoSavedData() : new DataMirror();
+	    this.side = side;
+	}
 	  
-	  public static Core get(final LogicalSide side) {
-	    return INSTANCES.get(side).get();
-	  }
-	  public static Core get(final Level level) {
-	    return get(level.isClientSide()? LogicalSide.CLIENT : LogicalSide.SERVER);
-	  }
+	public static Core get(final LogicalSide side) {
+	    return INSTANCES.get(side).apply(side);
+	}
+	public static Core get(final Level level) {
+	    return get(level.isClientSide() ? LogicalSide.CLIENT : LogicalSide.SERVER);
+	}
 	  
-	  public XpUtils getXpUtils() {return xp;}
-	  public SkillGates getSkillGates() {return gates;}
-	  public DataConfig getDataConfig() {return config;}
-	  public PredicateRegistry getPredicateRegistry() {return predicates;}
-	  public EventTriggerRegistry getEventTriggerRegistry() {return eventReg;}
-	  public TooltipRegistry getTooltipRegistry() {return tooltips;}
-	  public PerkRegistry getPerkRegistry() {return perks;}
-	  public SalvageLogic getSalvageLogic() {return salvageLogic;}
-	  public NBTUtils getNBTUtils() {return nbt;}
+	public XpUtils getXpUtils() {return xp;}
+	public SkillGates getSkillGates() {return gates;}
+	public DataConfig getDataConfig() {return config;}
+	public PredicateRegistry getPredicateRegistry() {return predicates;}
+	public EventTriggerRegistry getEventTriggerRegistry() {return eventReg;}
+	public TooltipRegistry getTooltipRegistry() {return tooltips;}
+	public PerkRegistry getPerkRegistry() {return perks;}
+	public SalvageLogic getSalvageLogic() {return salvageLogic;}
+	public NBTUtils getNBTUtils() {return nbt;}
+	public IDataStorage getData() {return data.get();}
+	public IDataStorage getData(MinecraftServer server) {return data.get(server);}
+	public LogicalSide getSide() {return side;}
+	  
+  	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
+		Map<String, Integer> requirements = gates.getObjectSkillMap(reqType, objectID);
+		return doesPlayerMeetReq(playerID, requirements);	
+	}	
+	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Integer> requirements) {
+		boolean meetsReq = true;
+		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
+			int skillLevel = getData().getLevelFromXP(getData().getXpRaw(playerID, req.getKey()));
+			if (req.getValue() > skillLevel)
+				return false;
+		}
+		return meetsReq;
+	}	
+	public boolean doesPlayerMeetEnchantmentReq(ItemStack stack, UUID playerID) {
+		ListTag enchantments = stack.getEnchantmentTags();
+		for (int i = 0; i < enchantments.size(); i++) {
+			CompoundTag enchantment = enchantments.getCompound(i);
+			ResourceLocation enchantID = new ResourceLocation(enchantment.getString("id"));
+			int enchantLvl = enchantment.getInt("lvl");
+			if (!doesPlayerMeetReq(playerID, gates.getEnchantmentReqs(enchantID, enchantLvl)))
+				return false;
+		}	
+		return true;
+	}
 	  
 	  public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
 		  ResourceLocation itemID = stack.getItem().getRegistryName();
 		  	if (Config.reqEnabled(ReqType.USE_ENCHANTMENT).get())
-		  		if (!gates.doesPlayerMeetEnchantmentReq(stack, player.getUUID()))
+		  		if (!doesPlayerMeetEnchantmentReq(stack, player.getUUID()))
 		  			return false;
 		  		if (predicates.predicateExists(itemID, type)) 
 				return predicates.checkPredicateReq(player, stack, type);
 			else if (gates.doesObjectReqExist(type, itemID))
-				return gates.doesPlayerMeetReq(type, itemID, player.getUUID());
+				return doesPlayerMeetReq(type, itemID, player.getUUID());
 			else if (Config.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, itemID, ObjectType.ITEM);
-				return gates.doesPlayerMeetReq(player.getUUID(), requirements);
+				return doesPlayerMeetReq(player.getUUID(), requirements);
 			}
 		  return true;
 	  }
@@ -108,10 +142,10 @@ public class Core {
 	  }
 	  private boolean isActionPermitted_BypassPredicates(ReqType type, ResourceLocation res, Player player, ObjectType oType) {
 		  if (gates.doesObjectReqExist(type, res))
-				return gates.doesPlayerMeetReq(type, res, player.getUUID());
+				return doesPlayerMeetReq(type, res, player.getUUID());
 		  else if (Config.ENABLE_AUTO_VALUES.get()) {
 			  Map<String, Integer> requirements = AutoValues.getRequirements(type, res, oType);
-			  return gates.doesPlayerMeetReq(player.getUUID(), requirements);
+			  return doesPlayerMeetReq(player.getUUID(), requirements);
 		  }
 		  return true;
 	  }
@@ -122,10 +156,10 @@ public class Core {
 				return predicates.checkPredicateReq(player, tile, type);
 			}
 			else if (gates.doesObjectReqExist(type, blockID))
-				return gates.doesPlayerMeetReq(type, blockID, player.getUUID());
+				return doesPlayerMeetReq(type, blockID, player.getUUID());
 			else if (Config.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, blockID, ObjectType.BLOCK);
-				return gates.doesPlayerMeetReq(player.getUUID(), requirements);
+				return doesPlayerMeetReq(player.getUUID(), requirements);
 			}
 		  return true;
 	  }
@@ -136,10 +170,10 @@ public class Core {
 			if (predicates.predicateExists(entityID, type)) 
 				return predicates.checkPredicateReq(player, entity, type);
 			else if (gates.doesObjectReqExist(type, entityID))
-				return gates.doesPlayerMeetReq(type, entityID, player.getUUID());
+				return doesPlayerMeetReq(type, entityID, player.getUUID());
 			else if (Config.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, entityID, ObjectType.ENTITY);
-				return gates.doesPlayerMeetReq(player.getUUID(), requirements);
+				return doesPlayerMeetReq(player.getUUID(), requirements);
 			}
 		  return true;
 	  }
@@ -259,7 +293,7 @@ public class Core {
 		  int partyCount = players.size();
 			for (int i = 0; i < partyCount; i++) {
 				for (Map.Entry<String, Long> award : xpValues.entrySet()) {
-					if (PmmoSavedData.get().setXpDiff(players.get(i).getUUID(), award.getKey(), award.getValue())) {
+					if (getData().setXpDiff(players.get(i).getUUID(), award.getKey(), award.getValue())) {
 						xp.sendXpAwardNotifications(players.get(i), award.getKey(), award.getValue());
 					}
 				}
@@ -277,14 +311,14 @@ public class Core {
 				if (entry.getKey().equals(ReqType.BREAK)) continue;
 				//register remaining items and cases
 				entry.getValue().forEach((rl, logic) -> {
-					BiPredicate<Player, ItemStack> pred = (player, stack) -> gates.doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), stack));
+					BiPredicate<Player, ItemStack> pred = (player, stack) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), stack));
 					predicates.registerPredicate(rl, entry.getKey(), pred);
 					Function<ItemStack, Map<String, Integer>> func = (stack) -> nbt.getReqMap(entry.getKey(), stack);
 					tooltips.registerItemRequirementTooltipData(rl, entry.getKey(), func);
 				});			
 			}
 			nbt.blockReqLogic().getOrDefault(ReqType.BREAK, LinkedListMultimap.create()).forEach((rl, logic) -> {
-				BiPredicate<Player, BlockEntity> pred = (player, tile) -> gates.doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(ReqType.BREAK, tile));
+				BiPredicate<Player, BlockEntity> pred = (player, tile) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(ReqType.BREAK, tile));
 				predicates.registerBreakPredicate(rl, ReqType.BREAK, pred);
 				Function<BlockEntity, Map<String, Integer>> func = (tile) -> nbt.getReqMap(ReqType.BREAK, tile);
 				tooltips.registerBlockRequirementTooltipData(rl, ReqType.BREAK, func);
@@ -294,7 +328,7 @@ public class Core {
 				if (entry.getKey().equals(ReqType.BREAK)) continue;
 				//register remaining items and cases
 				entry.getValue().forEach((rl, logic) -> {
-					BiPredicate<Player, Entity> pred = (player, entity) -> gates.doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), entity));
+					BiPredicate<Player, Entity> pred = (player, entity) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), entity));
 					predicates.registerEntityPredicate(rl, entry.getKey(), pred);
 					Function<Entity, Map<String, Integer>> func = (entity) -> nbt.getReqMap(entry.getKey(), entity);
 					tooltips.registerEntityRequirementTooltipData(rl, entry.getKey(), func);

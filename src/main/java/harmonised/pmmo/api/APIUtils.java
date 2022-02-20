@@ -1,7 +1,6 @@
 package harmonised.pmmo.api;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -16,7 +15,6 @@ import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.autovalues.AutoValues;
-import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -36,40 +34,40 @@ public class APIUtils {
 	 * - JAVADOCS!!!!
 	 */
 	//===============CORE HOOKS======================================
-	public static int getLevel(String skill, UUID playerID) {
+	public static int getLevel(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
-		Preconditions.checkNotNull(playerID);
-		return PmmoSavedData.get().getPlayerSkillLevel(skill, playerID);
+		Preconditions.checkNotNull(player);
+		return Core.get(player.level).getData().getPlayerSkillLevel(skill, player.getUUID());
 	}
 	
-	public static void setLevel(String skill, UUID playerID, int level) {
+	public static void setLevel(String skill, Player player, int level) {
 		Preconditions.checkNotNull(skill);
-		Preconditions.checkNotNull(playerID);
-		PmmoSavedData.get().setPlayerSkillLevel(skill, playerID, level);
+		Preconditions.checkNotNull(player);
+		Core.get(player.level).getData().setPlayerSkillLevel(skill, player.getUUID(), level);
 	}
 	
-	public static boolean addLevel(String skill, UUID playerID, int levelChange) {
+	public static boolean addLevel(String skill, Player player, int levelChange) {
 		Preconditions.checkNotNull(skill);
-		Preconditions.checkNotNull(playerID);
-		return PmmoSavedData.get().changePlayerSkillLevel(skill, playerID, levelChange);
+		Preconditions.checkNotNull(player);
+		return Core.get(player.level).getData().changePlayerSkillLevel(skill, player.getUUID(), levelChange);
 	}
 	
-	public static long getXp(String skill, UUID playerID) {
+	public static long getXp(String skill, Player player) {
 		Preconditions.checkNotNull(skill);
-		Preconditions.checkNotNull(playerID);
-		return PmmoSavedData.get().getXpRaw(playerID, skill);
+		Preconditions.checkNotNull(player);
+		return Core.get(player.level).getData().getXpRaw(player.getUUID(), skill);
 	}
 	
-	public static void setXp(String skill, UUID playerID, long xpRaw) {
+	public static void setXp(String skill, Player player, long xpRaw) {
 		Preconditions.checkNotNull(skill);
-		Preconditions.checkNotNull(playerID);
-		PmmoSavedData.get().setXpRaw(playerID, skill, xpRaw);
+		Preconditions.checkNotNull(player);
+		Core.get(player.level).getData().setXpRaw(player.getUUID(), skill, xpRaw);
 	}
 	
-	public static boolean addXp(String skill, UUID playerID, long change) {
+	public static boolean addXp(String skill, Player player, long change) {
 		Preconditions.checkNotNull(skill);
-		Preconditions.checkNotNull(playerID);
-		return PmmoSavedData.get().setXpDiff(playerID, skill, change);
+		Preconditions.checkNotNull(player);
+		return Core.get(player.level).getData().setXpDiff(player.getUUID(), skill, change);
 	}
 	
 	public static Map<String, Long> getXpAwardMap(ItemStack item, EventType type, LogicalSide side) {
@@ -198,9 +196,9 @@ public class APIUtils {
 			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude,
 			@NonNull PerkSide side) {
 		if (side.equals(PerkSide.SERVER) || side.equals(PerkSide.BOTH))
-			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, onExecute, onConclude, side);
+			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, onExecute, onConclude);
 		if (side.equals(PerkSide.CLIENT) || side.equals(PerkSide.BOTH))
-			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, onExecute, onConclude, side);
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, onExecute, onConclude);
 	}	
 	
 	//===============UTILITY METHODS=================================

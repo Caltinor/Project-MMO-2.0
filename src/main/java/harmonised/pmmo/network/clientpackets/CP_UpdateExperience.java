@@ -2,9 +2,10 @@ package harmonised.pmmo.network.clientpackets;
 
 import java.util.function.Supplier;
 
-import harmonised.pmmo.client.utils.DataMirror;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 
 public class CP_UpdateExperience {
@@ -25,8 +26,10 @@ public class CP_UpdateExperience {
 	}
 	
 	public void handle(Supplier<NetworkEvent.Context> ctx ) {
-		DataMirror.setExperience(skill, xp);
-		MsLoggy.debug("Client Packet Handled for updating experience of "+skill+"["+xp+"]");
+		ctx.get().enqueueWork(() -> {
+			Core.get(LogicalSide.CLIENT).getData().setXpRaw(null, skill, xp);
+			MsLoggy.debug("Client Packet Handled for updating experience of "+skill+"["+xp+"]");
+		});		
 		ctx.get().setPacketHandled(true);
 	}
 }

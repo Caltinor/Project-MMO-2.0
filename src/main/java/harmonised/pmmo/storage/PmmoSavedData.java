@@ -12,6 +12,7 @@ import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
@@ -27,7 +28,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.LogicalSide;
 
-public class PmmoSavedData extends SavedData{
+public class PmmoSavedData extends SavedData implements IDataStorage{
 	
 	private static MinecraftServer server;
 	private static String NAME = Reference.MOD_ID;
@@ -41,10 +42,11 @@ public class PmmoSavedData extends SavedData{
 						.xmap(map -> new HashMap<>(map), map -> new HashMap<>(map)));
 	
 	//===========================GETTERS AND SETTERS================
+	@Override
 	public long getXpRaw(UUID playerID, String skillName) {
 		return xp.computeIfAbsent(playerID, s -> new HashMap<>()).getOrDefault(skillName, 0l);
 	}
-	
+	@Override
 	public boolean setXpDiff(UUID playerID, String skillName, long change) {
 		long oldValue = getXpRaw(playerID, skillName);
 		ServerPlayer player = server.getPlayerList().getPlayer(playerID);
@@ -54,7 +56,6 @@ public class PmmoSavedData extends SavedData{
 			scheduledXP.computeIfAbsent(playerID, (id) -> new HashMap<>()).merge(skillName, change, (o, n) -> o + n);
 			return true;
 		}
-		
 		//If player is online proceed with xp events, perks and committing xp to master map
 		XpEvent gainXpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
 		if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
@@ -62,11 +63,11 @@ public class PmmoSavedData extends SavedData{
 		
 		if (gainXpEvent.isLevelUp()) 
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
-					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build());
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build(), LogicalSide.SERVER);
 		setXpRaw(playerID, gainXpEvent.skill, oldValue + gainXpEvent.amountAwarded);
 		return true;
 	}
-	
+	@Override
 	public void setXpRaw(UUID playerID, String skillName, long value) {
 		xp.computeIfAbsent(playerID, s -> new HashMap<>()).put(skillName, value);
 		this.setDirty();
@@ -75,24 +76,24 @@ public class PmmoSavedData extends SavedData{
 			MsLoggy.debug("Skill Update Packet sent to Client"+playerID.toString());
 		}
 	}
-	
+	@Override
 	public Map<String, Long> getXpMap(UUID playerID) {
 		return xp.getOrDefault(playerID, new HashMap<>());
 	}
-	
+	@Override
 	public void setXpMap(UUID playerID, Map<String, Long> map) {
 		xp.put(playerID, map != null ? map : new HashMap<>());
 		this.setDirty();
 	}
-	
+	@Override
 	public int getPlayerSkillLevel(String skill, UUID player) {
 		return getLevelFromXP(getXpRaw(player, skill));
 	}
-	
+	@Override
 	public void setPlayerSkillLevel(String skill, UUID player, int level) {
 		setXpRaw(player, skill, levelCache.get(level));
 	}
-	
+	@Override
 	public boolean changePlayerSkillLevel(String skill, UUID playerID, int change) {
 		int currentLevel = getPlayerSkillLevel(skill, playerID);
 		long oldXp = getXpRaw(playerID, skill);
@@ -106,7 +107,7 @@ public class PmmoSavedData extends SavedData{
 			
 			if (gainXpEvent.isLevelUp()) 
 				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
-						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build());
+						TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skill).build(), LogicalSide.SERVER);
 			setPlayerSkillLevel(gainXpEvent.skill, playerID, gainXpEvent.endLevel());
 		}
 		else 
@@ -130,20 +131,23 @@ public class PmmoSavedData extends SavedData{
 		nbt.put(SCHEDULED_KEY, ((CompoundTag)(XP_CODEC.encodeStart(NbtOps.INSTANCE, scheduledXP).result().orElse(new CompoundTag()))));
 		return nbt;
 	}
-	
-	public static void init(MinecraftServer server) {
+	@Override
+	public IDataStorage get(MinecraftServer server) {
         PmmoSavedData.server = server;
+        return get();
     }
 	
-	public static PmmoSavedData get() {  
+	@Override
+	public IDataStorage get() {  
         return server.overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
     }
 	
-	public static MinecraftServer getServer() {
+	public MinecraftServer getServer() {
 		return server;
 	}
 
 	//============================UTILITY METHODS===========================
+	@Override
 	public int getLevelFromXP(long xp) {
 		for (int i = 0; i < levelCache.size(); i++) {
 			if (levelCache.get(i) > xp)
@@ -174,7 +178,7 @@ public class PmmoSavedData extends SavedData{
 					linearBase + (i) * linearPer;
 			levelCache.add(current);
 		}
-		for (ServerPlayer player : PmmoSavedData.getServer().getPlayerList().getPlayers()) {
+		for (ServerPlayer player : server.getPlayerList().getPlayers()) {
 			Networking.sendToClient(new CP_UpdateLevelCache(levelCache), player);
 		}
 	}

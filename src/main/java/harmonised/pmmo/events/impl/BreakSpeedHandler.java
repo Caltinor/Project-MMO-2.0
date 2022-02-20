@@ -56,7 +56,7 @@ public class BreakSpeedHandler {
 		perkDataIn.putFloat(APIUtils.BREAK_SPEED_INPUT_VALUE, event.getOriginalSpeed());
 		perkDataIn.putLong(APIUtils.BLOCK_POS, event.getPos().asLong());
 		//how am i gonna do gaps?  hmmmm
-		CompoundTag perkDataOut = core.getPerkRegistry().executePerk(EventType.BREAK_SPEED, event.getPlayer(), perkDataIn);
+		CompoundTag perkDataOut = core.getPerkRegistry().executePerk(EventType.BREAK_SPEED, event.getPlayer(), perkDataIn, core.getSide());
 		if (perkDataOut.contains(APIUtils.BREAK_SPEED_OUTPUT_VALUE)) {
 			float newSpeed = Math.max(0, perkDataOut.getFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE));
 			event.setNewSpeed(newSpeed);

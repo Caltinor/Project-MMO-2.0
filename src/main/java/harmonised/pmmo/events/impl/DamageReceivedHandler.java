@@ -43,7 +43,7 @@ public class DamageReceivedHandler {
 			//Process perks
 			CompoundTag perkDataIn = eventHookOutput;
 			perkDataIn.putFloat(APIUtils.DAMAGE_IN, event.getAmount());
-			CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type,  player, perkDataIn));
+			CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type,  player, perkDataIn, core.getSide()));
 			if (perkOutput.contains(APIUtils.DAMAGE_OUT))
 				event.setAmount(perkOutput.getFloat(APIUtils.DAMAGE_OUT));
 			if (serverSide) {

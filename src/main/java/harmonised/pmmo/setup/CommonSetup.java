@@ -6,7 +6,6 @@ import harmonised.pmmo.config.readers.PerksParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.network.Networking;
-import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -31,9 +30,9 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onServerStartup(ServerStartingEvent event) {
 		MsLoggy.info("Loading PMMO Saved Data");
-		PmmoSavedData.init(event.getServer());
+		Core.get(LogicalSide.SERVER).getData(event.getServer());
 		MsLoggy.info("Computing data for cache");
-		PmmoSavedData.get().computeLevelsForCache();
+		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
 		MsLoggy.info("Loading settings from config jsons");
 		CoreParser.init();
 		PerksParser.parsePerks();
@@ -45,7 +44,7 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onConfigReload(ModConfigEvent.Reloading event) {
 		if (event.getConfig().getType().equals(ModConfig.Type.SERVER))
-			PmmoSavedData.get().computeLevelsForCache();
+			Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
 	}
 	
 	@SubscribeEvent

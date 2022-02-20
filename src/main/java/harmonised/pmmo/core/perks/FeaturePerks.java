@@ -140,16 +140,25 @@ public class FeaturePerks {
 		return NONE;
 	};
 	
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> JUMP = (player, nbt, level) -> {
+	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> JUMP_CLIENT = (player, nbt, level) -> {
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.0005;
 		double maxBoost = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 0.33;
         double jumpBoost;
         jumpBoost = -0.011 + level * perLevel;
         jumpBoost = Math.min(maxBoost, jumpBoost);
-        player.push(0, jumpBoost, 0);
+        player.setDeltaMovement(player.getDeltaMovement().add(0, jumpBoost, 0));
         player.hurtMarked = true; 
+        return NONE;
+	};
+	
+	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> JUMP_SERVER = (player, nbt, level) -> {
+		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.0005;
+		double maxBoost = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 0.33;
+        double jumpBoost;
+        jumpBoost = -0.011 + level * perLevel;
+        jumpBoost = Math.min(maxBoost, jumpBoost);
         CompoundTag output = new CompoundTag();
-        output.putDouble(APIUtils.JUMP_OUT, jumpBoost);
+        output.putDouble(APIUtils.JUMP_OUT, player.getDeltaMovement().y + jumpBoost);
         return output;
 	};
 	
