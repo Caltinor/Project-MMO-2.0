@@ -20,26 +20,30 @@ public class BreakHandler {
 	
 	public static void handle(BreakEvent event) {
 		Core core = Core.get(event.getPlayer().getLevel());
+		boolean serverSide = !event.getPlayer().level.isClientSide;
 		if (!core.isBlockActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
 			//TODO notify player of inability to perform
 			return;
 		}
-		else if (!event.getPlayer().level.isClientSide){
-			CompoundTag eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BLOCK_BREAK, event, new CompoundTag());
-			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) 
+		CompoundTag eventHookOutput = new CompoundTag();
+		if (serverSide){
+			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.BLOCK_BREAK, event, new CompoundTag());
+			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
 				event.setCanceled(true);
-			else {
-				//Process perks
-				CompoundTag perkDataIn = eventHookOutput;
-				//if break data is needed by perks, we can add it here.  this is just default implementation.
-				CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_BREAK, (ServerPlayer) event.getPlayer(), perkDataIn));
-				Map<String, Long> xpAward = calculateXpAward(core, event, perkOutput);
-				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
-				core.awardXP(partyMembersInRange, xpAward);
-				//update ChunkData to remove the block from the placed map
-				ChunkDataHandler.delPos(event.getPlayer().getLevel().dimension().getRegistryName(), event.getPos());
+				return;
 			}
+		}
+		//Process perks on both sides. note that only server-side perks will affect xp outputs.
+		CompoundTag perkDataIn = eventHookOutput;
+		//if break data is needed by perks, we can add it here.  this is just default implementation.
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_BREAK, event.getPlayer(), perkDataIn));
+		if (serverSide) {
+			Map<String, Long> xpAward = calculateXpAward(core, event, perkOutput);
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
+			core.awardXP(partyMembersInRange, xpAward);
+			//update ChunkData to remove the block from the placed map
+			ChunkDataHandler.delPos(event.getPlayer().getLevel().dimension().getRegistryName(), event.getPos());
 		}
 	}
 	

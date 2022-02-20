@@ -52,20 +52,21 @@ public class DamageDealtHandler {
 				event.setCanceled(true);
 				//TODO notify player of inability to perform
 			}
-			
-			else if (!player.level.isClientSide){
-				CompoundTag eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
+			boolean serverSide = !player.level.isClientSide;
+			CompoundTag eventHookOutput = new CompoundTag();
+			if (serverSide) {
+				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
 				if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) 
 					event.setCanceled(true);
-				else {
-					//Process perks
-					CompoundTag perkDataIn = eventHookOutput;
-					perkDataIn.putFloat(APIUtils.DAMAGE_IN, event.getAmount());
-					CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, (ServerPlayer) player, perkDataIn));
-					Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), player, perkOutput);
-					List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
-					core.awardXP(partyMembersInRange, xpAward);
-				}
+			}
+			//Process perks
+			CompoundTag perkDataIn = eventHookOutput;
+			perkDataIn.putFloat(APIUtils.DAMAGE_IN, event.getAmount());
+			CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, perkDataIn));
+			if (serverSide) {
+				Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), player, perkOutput);
+				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
+				core.awardXP(partyMembersInRange, xpAward);
 			}
 		}
 	}

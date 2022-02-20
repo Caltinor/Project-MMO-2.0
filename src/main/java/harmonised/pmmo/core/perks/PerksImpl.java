@@ -7,7 +7,7 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolAction;
@@ -16,11 +16,11 @@ import net.minecraftforge.common.ToolActions;
 public class PerksImpl {
 	private static final CompoundTag NONE = new CompoundTag();
 	
-	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> DUMMY = (player, nbt, level) -> {
+	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> DUMMY = (player, nbt, level) -> {
 		return NONE;
 	};	
 	
-	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> BREAK_SPEED = (player, nbt, level) -> {
+	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> BREAK_SPEED = (player, nbt, level) -> {
 		float speedIn = nbt.contains(APIUtils.BREAK_SPEED_INPUT_VALUE) ? nbt.getFloat(APIUtils.BREAK_SPEED_INPUT_VALUE) : player.getMainHandItem().getDestroySpeed(Blocks.OBSIDIAN.defaultBlockState());
 		float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
 		if (speedBonus == 0) return NONE;

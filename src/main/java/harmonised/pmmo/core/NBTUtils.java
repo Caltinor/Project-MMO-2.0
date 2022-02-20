@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 import harmonised.pmmo.api.enums.EventType;
@@ -24,10 +21,8 @@ import harmonised.pmmo.core.nbt.Result;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fml.LogicalSide;
 
 public class NBTUtils {
 	public NBTUtils() {}
@@ -114,6 +109,14 @@ public class NBTUtils {
 	public Map<String, Double> getBonusMap(ModifierDataType type, ItemStack stack) {
 		return evaluateEntries(stack.getTag(), bonusLogic.getOrDefault(type, LinkedListMultimap.create()).get(stack.getItem().getRegistryName()));
 	}
+	
+	public Map<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> itemReqLogic() {return new HashMap<>(itemReqLogic);}
+	public Map<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> blockReqLogic() {return new HashMap<>(blockReqLogic);}
+	public Map<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entityReqLogic() {return new HashMap<>(entityReqLogic);}
+	public Map<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> itemXpGainLogic() {return new HashMap<>(itemXpGainLogic);}
+	public Map<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> blockXpGainLogic() {return new HashMap<>(blockXpGainLogic);}
+	public Map<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entityXpGainLogic() {return new HashMap<>(entityXpGainLogic);}
+	public Map<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> bonusLogic() {return new HashMap<>(bonusLogic);}
 	
 	//======================INTERNAL GETTERS========================
 	private String getActualPath(String key) {
@@ -230,69 +233,5 @@ public class NBTUtils {
 	}
 	
 	//======================REGISTER DEFAULTS======================
-	public void registerNBT(LogicalSide side) {
-		Core core = Core.get(side);
-		
-		//==============REGISTER REQUIREMENT LOGIC=============================== 
-		for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : itemReqLogic.entrySet()) {
-			//bypass this req for items since it is not applicable
-			if (entry.getKey().equals(ReqType.BREAK)) continue;
-			//register remaining items and cases
-			entry.getValue().forEach((rl, logic) -> {
-				BiPredicate<Player, ItemStack> pred = (player, stack) -> core.getSkillGates().doesPlayerMeetReq(player.getUUID(), getReqMap(entry.getKey(), stack));
-				core.getPredicateRegistry().registerPredicate(rl, entry.getKey(), pred);
-				Function<ItemStack, Map<String, Integer>> func = (stack) -> getReqMap(entry.getKey(), stack);
-				core.getTooltipRegistry().registerItemRequirementTooltipData(rl, entry.getKey(), func);
-			});			
-		}
-		blockReqLogic.getOrDefault(ReqType.BREAK, LinkedListMultimap.create()).forEach((rl, logic) -> {
-			BiPredicate<Player, BlockEntity> pred = (player, tile) -> core.getSkillGates().doesPlayerMeetReq(player.getUUID(), getReqMap(ReqType.BREAK, tile));
-			core.getPredicateRegistry().registerBreakPredicate(rl, ReqType.BREAK, pred);
-			Function<BlockEntity, Map<String, Integer>> func = (tile) -> getReqMap(ReqType.BREAK, tile);
-			core.getTooltipRegistry().registerBlockRequirementTooltipData(rl, ReqType.BREAK, func);
-		});
-		for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : entityReqLogic.entrySet()) {
-			//bypass this req for items since it is not applicable
-			if (entry.getKey().equals(ReqType.BREAK)) continue;
-			//register remaining items and cases
-			entry.getValue().forEach((rl, logic) -> {
-				BiPredicate<Player, Entity> pred = (player, entity) -> core.getSkillGates().doesPlayerMeetReq(player.getUUID(), getReqMap(entry.getKey(), entity));
-				core.getPredicateRegistry().registerEntityPredicate(rl, entry.getKey(), pred);
-				Function<Entity, Map<String, Integer>> func = (entity) -> getReqMap(entry.getKey(), entity);
-				core.getTooltipRegistry().registerEntityRequirementTooltipData(rl, entry.getKey(), func);
-			});
-		}
-		
-		//==============REGISTER XP GAIN LOGIC=====================================
-		for (Map.Entry<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : itemXpGainLogic.entrySet()) {
-			//bypass this req for items since it is not applicable
-			if (entry.getKey().equals(EventType.BLOCK_BREAK)) continue;
-			//register remaining items and cases
-			entry.getValue().forEach((rl, logic) -> {
-				Function<ItemStack, Map<String, Long>> func = (stack) -> getXpMap(entry.getKey(), stack);
-				core.getTooltipRegistry().registerItemXpGainTooltipData(rl, entry.getKey(), func);
-			});
-		}
-		blockXpGainLogic.getOrDefault(ReqType.BREAK, LinkedListMultimap.create()).forEach((rl, logic) -> {
-			Function<BlockEntity, Map<String, Long>> func = (tile) -> getXpMap(EventType.BLOCK_BREAK, tile);
-			core.getTooltipRegistry().registerBlockXpGainTooltipData(rl, EventType.BLOCK_BREAK, func);
-		});
-		for (Map.Entry<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : entityXpGainLogic.entrySet()) {
-			//bypass this req for items since it is not applicable
-			if (entry.getKey().equals(EventType.BLOCK_BREAK)) continue;
-			//register remaining items and cases
-			entry.getValue().forEach((rl, logic) -> {
-				Function<Entity, Map<String, Long>> func = (entity) -> getXpMap(entry.getKey(), entity);
-				core.getTooltipRegistry().registerEntityXpGainTooltipData(rl, entry.getKey(), func);
-			});
-		}
-		
-		//==============REGISTER BONUSES LOGIC=====================================
-		for (Map.Entry<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : bonusLogic.entrySet()) {
-			entry.getValue().forEach((rl, logic) -> {
-				Function<ItemStack, Map<String, Double>> func = (stack) -> getBonusMap(entry.getKey(), stack);
-				core.getTooltipRegistry().registerItemBonusTooltipData(rl, entry.getKey(), func);
-			});
-		}
-	}
+	
 }

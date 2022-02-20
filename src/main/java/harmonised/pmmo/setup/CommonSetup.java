@@ -25,6 +25,7 @@ public class CommonSetup {
 	public static void init(final FMLCommonSetupEvent event) {
 		Networking.registerMessages();
 		Networking.registerDataSyncPackets();
+		PerkRegistration.init();
 	}
 	
 	@SubscribeEvent
@@ -37,8 +38,7 @@ public class CommonSetup {
 		CoreParser.init();
 		PerksParser.parsePerks();
 		MsLoggy.info("Executing Default Registrations");
-		PerkRegistration.init();
-		Core.get(LogicalSide.SERVER).getNBTUtils().registerNBT(LogicalSide.SERVER);
+		Core.get(LogicalSide.SERVER).registerNBT();
 		MsLoggy.info("PMMO Server loading process complete");
 	}
 	

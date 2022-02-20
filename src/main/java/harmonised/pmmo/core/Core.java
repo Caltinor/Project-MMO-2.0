@@ -3,10 +3,13 @@ package harmonised.pmmo.core;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
@@ -15,6 +18,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.config.readers.ModifierDataType;
+import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.salvaging.SalvageLogic;
@@ -261,4 +265,72 @@ public class Core {
 				}
 			}
 	  }
+	  
+	  /** This method registers applies PMMO's NBT logic to the values that are 
+	   *  configured.  This should be fired after data is loaded or else it will
+	   *  register nothing.
+	   */
+	  public void registerNBT() {			
+			//==============REGISTER REQUIREMENT LOGIC=============================== 
+			for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemReqLogic().entrySet()) {
+				//bypass this req for items since it is not applicable
+				if (entry.getKey().equals(ReqType.BREAK)) continue;
+				//register remaining items and cases
+				entry.getValue().forEach((rl, logic) -> {
+					BiPredicate<Player, ItemStack> pred = (player, stack) -> gates.doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), stack));
+					predicates.registerPredicate(rl, entry.getKey(), pred);
+					Function<ItemStack, Map<String, Integer>> func = (stack) -> nbt.getReqMap(entry.getKey(), stack);
+					tooltips.registerItemRequirementTooltipData(rl, entry.getKey(), func);
+				});			
+			}
+			nbt.blockReqLogic().getOrDefault(ReqType.BREAK, LinkedListMultimap.create()).forEach((rl, logic) -> {
+				BiPredicate<Player, BlockEntity> pred = (player, tile) -> gates.doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(ReqType.BREAK, tile));
+				predicates.registerBreakPredicate(rl, ReqType.BREAK, pred);
+				Function<BlockEntity, Map<String, Integer>> func = (tile) -> nbt.getReqMap(ReqType.BREAK, tile);
+				tooltips.registerBlockRequirementTooltipData(rl, ReqType.BREAK, func);
+			});
+			for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.entityReqLogic().entrySet()) {
+				//bypass this req for items since it is not applicable
+				if (entry.getKey().equals(ReqType.BREAK)) continue;
+				//register remaining items and cases
+				entry.getValue().forEach((rl, logic) -> {
+					BiPredicate<Player, Entity> pred = (player, entity) -> gates.doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), entity));
+					predicates.registerEntityPredicate(rl, entry.getKey(), pred);
+					Function<Entity, Map<String, Integer>> func = (entity) -> nbt.getReqMap(entry.getKey(), entity);
+					tooltips.registerEntityRequirementTooltipData(rl, entry.getKey(), func);
+				});
+			}
+			
+			//==============REGISTER XP GAIN LOGIC=====================================
+			for (Map.Entry<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemXpGainLogic().entrySet()) {
+				//bypass this req for items since it is not applicable
+				if (entry.getKey().equals(EventType.BLOCK_BREAK)) continue;
+				//register remaining items and cases
+				entry.getValue().forEach((rl, logic) -> {
+					Function<ItemStack, Map<String, Long>> func = (stack) -> nbt.getXpMap(entry.getKey(), stack);
+					tooltips.registerItemXpGainTooltipData(rl, entry.getKey(), func);
+				});
+			}
+			nbt.blockXpGainLogic().getOrDefault(ReqType.BREAK, LinkedListMultimap.create()).forEach((rl, logic) -> {
+				Function<BlockEntity, Map<String, Long>> func = (tile) -> nbt.getXpMap(EventType.BLOCK_BREAK, tile);
+				tooltips.registerBlockXpGainTooltipData(rl, EventType.BLOCK_BREAK, func);
+			});
+			for (Map.Entry<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.entityXpGainLogic().entrySet()) {
+				//bypass this req for items since it is not applicable
+				if (entry.getKey().equals(EventType.BLOCK_BREAK)) continue;
+				//register remaining items and cases
+				entry.getValue().forEach((rl, logic) -> {
+					Function<Entity, Map<String, Long>> func = (entity) -> nbt.getXpMap(entry.getKey(), entity);
+					tooltips.registerEntityXpGainTooltipData(rl, entry.getKey(), func);
+				});
+			}
+			
+			//==============REGISTER BONUSES LOGIC=====================================
+			for (Map.Entry<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.bonusLogic().entrySet()) {
+				entry.getValue().forEach((rl, logic) -> {
+					Function<ItemStack, Map<String, Double>> func = (stack) -> nbt.getBonusMap(entry.getKey(), stack);
+					tooltips.registerItemBonusTooltipData(rl, entry.getKey(), func);
+				});
+			}
+		}
 }

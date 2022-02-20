@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -18,7 +18,7 @@ public class FireworkHandler {
 	public static final String FIREWORK_SKILL = "firework_skill";
 	//This is technically a perk which is by default used during the SKILL_UP event trigger
 	//This should be passed both the skill triggering the event via FIREWORK_SKILL and take a parameter of SKILLNAME from the settings
-	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> FIREWORKS = (player, nbt, level) -> {
+	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> FIREWORKS = (player, nbt, level) -> {
 		String skill = nbt.contains(APIUtils.SKILLNAME) ? nbt.getString(APIUtils.SKILLNAME) : "none";
 		String checkedSkill = nbt.contains(FIREWORK_SKILL) ? nbt.getString(FIREWORK_SKILL) : "none";
 		if (!skill.equals(checkedSkill)) return new CompoundTag();
