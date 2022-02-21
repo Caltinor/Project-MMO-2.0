@@ -2,6 +2,7 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_DataSkills;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Enchantments;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
@@ -62,6 +63,11 @@ public class Networking {
 			.encoder(CP_SyncData_PerkSettings::encode)
 			.decoder(CP_SyncData_PerkSettings::decode)
 			.consumer(CP_SyncData_PerkSettings::handle)
+			.add();
+		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
+			.encoder((packet, buf) -> {})
+			.decoder(buf -> new CP_SyncData_ClearXp())
+			.consumer(CP_SyncData_ClearXp::handle)
 			.add();
 		//SERVER BOUND PACKETS
 		MsLoggy.info("Messages Registered");

@@ -91,13 +91,14 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	}
 	@Override
 	public void setPlayerSkillLevel(String skill, UUID player, int level) {
-		setXpRaw(player, skill, levelCache.get(level));
+		long xpRaw = level > 0 ? levelCache.get(level-1) : 0;
+		setXpRaw(player, skill, xpRaw);
 	}
 	@Override
 	public boolean changePlayerSkillLevel(String skill, UUID playerID, int change) {
 		int currentLevel = getPlayerSkillLevel(skill, playerID);
 		long oldXp = getXpRaw(playerID, skill);
-		long newXp = levelCache.get(currentLevel + change);
+		long newXp = (currentLevel - 1 + change) > 0 ? levelCache.get(currentLevel + change - 1) : 0l;
 		ServerPlayer player = server.getPlayerList().getPlayer(playerID);	
 			
 		if (player != null) {
