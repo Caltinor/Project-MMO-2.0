@@ -67,7 +67,7 @@ public class FeaturePerks {
 		return NONE;
 	};
 	
-	private static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
+	public static final UUID reachModifierID  = UUID.fromString("b20d3436-0d39-4868-96ab-d0a4856e68c6");
 	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> REACH = (player, nbt, level) -> {
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.1;
 		double maxReach = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 10d;

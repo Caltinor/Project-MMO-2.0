@@ -1,5 +1,9 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.config.Config;
+import harmonised.pmmo.core.Core;
+import harmonised.pmmo.core.perks.FeaturePerks;
 import harmonised.pmmo.events.impl.BreakHandler;
 import harmonised.pmmo.events.impl.BreakSpeedHandler;
 import harmonised.pmmo.events.impl.CraftHandler;
@@ -9,18 +13,25 @@ import harmonised.pmmo.events.impl.EntityInteractHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
+import harmonised.pmmo.features.mobscaling.MobAttributeHandler;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangeGameModeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -44,6 +55,28 @@ public class EventHandler {
 			return;
 		else
 			LoginHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST) 
+	public static void onDifficultyChange(DifficultyChangeEvent event ) {
+		if (event.isCanceled()) 
+			return;
+		MobAttributeHandler.updateMobDifficulty(event.getDifficulty());
+	}
+	@SubscribeEvent
+	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {
+		if (event.getNewGameMode().isCreative()) {
+			AttributeInstance reachAttribute = event.getPlayer().getAttribute(ForgeMod.REACH_DISTANCE.get());
+			if(reachAttribute.getModifier(FeaturePerks.reachModifierID) == null || reachAttribute.getModifier(FeaturePerks.reachModifierID).getAmount() != Config.CREATIVE_REACH.get())
+			{
+				AttributeModifier reachModifier = new AttributeModifier(FeaturePerks.reachModifierID, "Reach bonus thanks to Build Level", Config.CREATIVE_REACH.get(), AttributeModifier.Operation.ADDITION);
+				reachAttribute.removeModifier(FeaturePerks.reachModifierID);
+				reachAttribute.addPermanentModifier(reachModifier);
+			}
+		}
+		else {
+			LogicalSide side = event.getPlayer().level.isClientSide ? LogicalSide.CLIENT : LogicalSide.SERVER;
+			Core.get(side).getPerkRegistry().executePerk(EventType.SKILL_UP, event.getPlayer(), side);
+		}
 	}
 	
 	//==========================================================

@@ -132,10 +132,22 @@ public class Config {
 	
 	//====================SERVER SETTINGS===============================	
 	private static void setupServer(ForgeConfigSpec.Builder builder) {
+		buildBasics(builder);
 		buildLevels(builder);
 		buildRequirements(builder);
 		buildXpGains(builder);
 		buildAutoValue(builder);
+	}
+	
+	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
+	
+	private static void buildBasics(ForgeConfigSpec.Builder builder) {
+		builder.comment("General settings on the server").push("General");
+		
+		CREATIVE_REACH = builder.comment("how much extra reach should a player get in creative mode")
+				.defineInRange("Creative Reach", 50d, 4d, Double.MAX_VALUE);
+		
+		builder.pop();
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Integer> 	MAX_LEVEL;
