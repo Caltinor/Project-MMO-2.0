@@ -19,6 +19,7 @@ import harmonised.pmmo.config.DataConfig;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.features.anticheese.CheeseTracker;
+import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.salvaging.SalvageLogic;
 import harmonised.pmmo.impl.EventTriggerRegistry;
@@ -126,7 +127,7 @@ public class Core {
 				return predicates.checkPredicateReq(player, stack, type);
 			else if (gates.doesObjectReqExist(type, itemID))
 				return doesPlayerMeetReq(type, itemID, player.getUUID());
-			else if (Config.ENABLE_AUTO_VALUES.get()) {
+			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, itemID, ObjectType.ITEM);
 				return doesPlayerMeetReq(player.getUUID(), requirements);
 			}
@@ -143,7 +144,7 @@ public class Core {
 	  private boolean isActionPermitted_BypassPredicates(ReqType type, ResourceLocation res, Player player, ObjectType oType) {
 		  if (gates.doesObjectReqExist(type, res))
 				return doesPlayerMeetReq(type, res, player.getUUID());
-		  else if (Config.ENABLE_AUTO_VALUES.get()) {
+		  else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
 			  Map<String, Integer> requirements = AutoValues.getRequirements(type, res, oType);
 			  return doesPlayerMeetReq(player.getUUID(), requirements);
 		  }
@@ -157,7 +158,7 @@ public class Core {
 			}
 			else if (gates.doesObjectReqExist(type, blockID))
 				return doesPlayerMeetReq(type, blockID, player.getUUID());
-			else if (Config.ENABLE_AUTO_VALUES.get()) {
+			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, blockID, ObjectType.BLOCK);
 				return doesPlayerMeetReq(player.getUUID(), requirements);
 			}
@@ -171,7 +172,7 @@ public class Core {
 				return predicates.checkPredicateReq(player, entity, type);
 			else if (gates.doesObjectReqExist(type, entityID))
 				return doesPlayerMeetReq(type, entityID, player.getUUID());
-			else if (Config.ENABLE_AUTO_VALUES.get()) {
+			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
 				Map<String, Integer> requirements = AutoValues.getRequirements(type, entityID, ObjectType.ENTITY);
 				return doesPlayerMeetReq(player.getUUID(), requirements);
 			}
@@ -219,7 +220,7 @@ public class Core {
 		  if (!predicateUsed) {
 			  if (xp.hasXpGainObjectEntry(type, objectID)) 
 				  inMap = xp.mergeXpMapsWithSummateCondition(inMap, xp.getObjectExperienceMap(type, objectID));
-			  else if (Config.ENABLE_AUTO_VALUES.get()) 
+			  else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) 
 				  inMap = xp.mergeXpMapsWithSummateCondition(inMap, AutoValues.getExperienceAward(type, objectID, oType));
 		  }
 		  MsLoggy.info("XpGains: "+MsLoggy.mapToString(inMap));
