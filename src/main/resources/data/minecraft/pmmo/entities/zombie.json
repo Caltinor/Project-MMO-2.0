@@ -3,6 +3,7 @@
 		"RECEIVE_DAMAGE": { "endurance": 1},
 		"FROM_MOBS": { "endurance": 1},
 		"MELEE_TO_MOBS": { "combat": 1},
-		"DEAL_MELEE_DAMAGE": { "combat": 1}
+		"DEAL_MELEE_DAMAGE": { "combat": 1},
+		"DEATH": { "slayer": 100}
 	}
 }

@@ -14,9 +14,8 @@ public class PlayerDeathHandler {
 		//we can skip the heavier instanceof calculation if there is no loss on death
 		double lossRatio = 1 - Config.LOSS_ON_DEATH.get();
 		if (lossRatio <= 0) return;
-		//skip if the dying entity is not a player
-		if (!(event.getEntityLiving() instanceof Player)) return;		
-		
+	
+		//IMPORTANT  this is confirmed by the call in EventHandler.  this assumption is critical to this call
 		Player player = (Player) event.getEntityLiving();
 		Core core = Core.get(player.level);
 		

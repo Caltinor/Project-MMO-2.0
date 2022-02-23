@@ -35,12 +35,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		RANGED_TO_MOBS,				//IMPLEMENTED
 		RANGED_TO_PLAYERS,			//IMPLEMENTED
 		RANGED_TO_ANIMALS,			//IMPLEMENTED
-	DEATH,							//HALF-IMPLEMENTED
-		KILLED_MOBS,				//
-		KILLED_PLAYERS,				//
-		KILLED_ANIMALS,				//
-		KILLED_PROJECTILES,			//
-		KILLED_ENVIRONMENT,			//
+	DEATH,							//IMPLEMENTED
 	ENCHANT,						//
 	FISH,							//
 	SMELT,							//

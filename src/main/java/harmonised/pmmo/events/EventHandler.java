@@ -19,6 +19,7 @@ import harmonised.pmmo.features.mobscaling.MobAttributeHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -140,7 +141,8 @@ public class EventHandler {
 	public static void onDeath(LivingDeathEvent event) {
 		if (event.isCanceled())
 			return;
-		PlayerDeathHandler.handle(event);
+		if (event.getEntityLiving() instanceof Player)
+			PlayerDeathHandler.handle(event);
 		DeathHandler.handle(event);
 	}
 }
