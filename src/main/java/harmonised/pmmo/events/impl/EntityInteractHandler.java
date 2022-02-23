@@ -8,6 +8,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,7 +22,7 @@ public class EntityInteractHandler {
 		if (!core.isActionPermitted(ReqType.ENTITY_INTERACT, event.getTarget(), event.getPlayer())) {
 			event.setCanceled(true);
 			event.setCancellationResult(InteractionResult.FAIL);
-			//TODO notify player of inability to perform
+			Messenger.sendDenialMsg(ReqType.ENTITY_INTERACT, event.getPlayer(), event.getTarget().getName());
 			return;
 		}
 		boolean serverSide = !event.getPlayer().level.isClientSide;

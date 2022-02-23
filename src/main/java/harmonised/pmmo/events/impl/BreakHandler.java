@@ -11,6 +11,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.storage.ChunkDataHandler;
+import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,7 +24,7 @@ public class BreakHandler {
 		boolean serverSide = !event.getPlayer().level.isClientSide;
 		if (!core.isBlockActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
-			//TODO notify player of inability to perform
+			Messenger.sendDenialMsg(ReqType.BREAK, event.getPlayer(), event.getState().getBlock().getName());
 			return;
 		}
 		CompoundTag eventHookOutput = new CompoundTag();

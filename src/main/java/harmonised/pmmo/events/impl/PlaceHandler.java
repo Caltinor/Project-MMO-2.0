@@ -9,6 +9,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.storage.ChunkDataHandler;
+import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +23,7 @@ public class PlaceHandler {
 		Core core = Core.get(event.getEntity().getLevel());
 		if (!core.isBlockActionPermitted(ReqType.PLACE, event.getPos(), player)) {
 			event.setCanceled(true);
-			//TODO notify player of inability to perform
+			Messenger.sendDenialMsg(ReqType.PLACE, player, event.getPlacedBlock().getBlock().getName());
 		}
 		boolean serverSide = !player.level.isClientSide;
 		CompoundTag eventHookOutput = new CompoundTag();

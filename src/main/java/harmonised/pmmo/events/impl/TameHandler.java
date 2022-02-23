@@ -8,6 +8,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,7 +25,7 @@ public class TameHandler {
 
 		if (!core.isActionPermitted(ReqType.TAME, target, player)) {
 			event.setCanceled(true);
-			//TODO notify player of inability to perform
+			Messenger.sendDenialMsg(ReqType.TAME, player, target.getName());
 		}
 		boolean serverSide = !player.level.isClientSide;
 		CompoundTag hookOutput = new CompoundTag();

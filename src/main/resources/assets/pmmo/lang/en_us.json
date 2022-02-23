@@ -394,5 +394,20 @@
   "pmmo.curseforge": "Project MMO CurseForge Page!",
   "pmmo.outdatedVersion": "Project MMO version is outdated! Latest: %1$s, Installed: %2$s!",
   
-  "pmmo.perks.breathrefresh":"Your skill extended your breath"
+  "pmmo.perks.breathrefresh":"Your skill extended your breath",
+  
+  "pmmo.msg.denial.wear":"You are not skilled enough to wear $1$s",
+  "pmmo.msg.denial.use_enchantment":"You are not skilled enough to use %1$s with %2$s enchantment",
+  "pmmo.msg.denial.tool":"You are not skilled enough to use $1$s as tool",
+  "pmmo.msg.denial.weapon":"You are not skilled enough to use $1$s as a weapon",
+  "pmmo.msg.denial.use":"You are not skilled enough to use $1$s",
+  "pmmo.msg.denial.place":"You are not skilled enough to place $1$s",
+  "pmmo.msg.denial.break":"You are not skilled enough to break $1$s",
+  "pmmo.msg.denial.biome":"You are not skilled enough to survive in $1$s",
+  "pmmo.msg.denial.kill":"You are not skilled enough to kill $1$s",
+  "pmmo.msg.denial.travel":"You are not skilled enough to travel to $1$s",
+  "pmmo.msg.denial.ride":"You are not skilled enough to ride $1$s",
+  "pmmo.msg.denial.tame":"You are not skilled enough to tame $1$s",
+  "pmmo.msg.denial.entity_interact":"You are not skilled enough to interact with $1$s"
+  
 }

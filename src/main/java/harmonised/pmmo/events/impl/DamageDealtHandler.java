@@ -10,6 +10,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -45,12 +46,13 @@ public class DamageDealtHandler {
 			//===========================DEFAULT LOGIC===================================
 			if (!core.isActionPermitted(ReqType.WEAPON, player.getMainHandItem(), player)) {
 				event.setCanceled(true);
-				//TODO notify player of inability to perform
+				Messenger.sendDenialMsg(ReqType.WEAPON, player, player.getMainHandItem().getDisplayName());
 				return;
 			}
 			if (!core.isActionPermitted(ReqType.KILL, target, player)) {
 				event.setCanceled(true);
-				//TODO notify player of inability to perform
+				Messenger.sendDenialMsg(ReqType.KILL, player, target.getDisplayName());
+				return;
 			}
 			boolean serverSide = !player.level.isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();
