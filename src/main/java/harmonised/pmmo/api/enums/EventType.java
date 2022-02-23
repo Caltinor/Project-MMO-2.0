@@ -35,12 +35,12 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		RANGED_TO_MOBS,				//IMPLEMENTED
 		RANGED_TO_PLAYERS,			//IMPLEMENTED
 		RANGED_TO_ANIMALS,			//IMPLEMENTED
-	DEATH,							//
-		KILLED_BY_MOBS,				//
-		KILLED_BY_PLAYERS,			//
-		KILLED_BY_ANIMALS,			//
-		KILLED_BY_PROJECTILES,		//
-		KILLED_BY_ENVIRONMENT,		//
+	DEATH,							//HALF-IMPLEMENTED
+		KILLED_MOBS,				//
+		KILLED_PLAYERS,				//
+		KILLED_ANIMALS,				//
+		KILLED_PROJECTILES,			//
+		KILLED_ENVIRONMENT,			//
 	ENCHANT,						//
 	FISH,							//
 	SMELT,							//
@@ -60,7 +60,8 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		RIGHT_CLICK,				//
 		ENTITY,						//IMPLEMENTED
 	RESPAWN,						//
-	SKILL_UP,						//
+	RIDING,							//
+	SKILL_UP,						//IMPLEMENTED
 	SLEEP,							//
 	SPRINTING,						//
 	SUBMERGED,						//

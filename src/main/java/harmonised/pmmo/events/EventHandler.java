@@ -9,10 +9,12 @@ import harmonised.pmmo.events.impl.BreakSpeedHandler;
 import harmonised.pmmo.events.impl.CraftHandler;
 import harmonised.pmmo.events.impl.DamageDealtHandler;
 import harmonised.pmmo.events.impl.DamageReceivedHandler;
+import harmonised.pmmo.events.impl.DeathHandler;
 import harmonised.pmmo.events.impl.EntityInteractHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
+import harmonised.pmmo.events.impl.PlayerDeathHandler;
 import harmonised.pmmo.features.mobscaling.MobAttributeHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -20,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -132,5 +135,12 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		JumpHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onDeath(LivingDeathEvent event) {
+		if (event.isCanceled())
+			return;
+		PlayerDeathHandler.handle(event);
+		DeathHandler.handle(event);
 	}
 }

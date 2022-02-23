@@ -76,4 +76,6 @@ public class DataMirror implements IDataStorage{
 	@Deprecated
 	@Override
 	public void computeLevelsForCache() {}
+	@Override
+	public long getBaseXpForLevel(int level) {return level > 0 ? levelCache.get(level - 1) : 0l;}
 }

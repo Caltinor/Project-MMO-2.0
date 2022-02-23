@@ -18,4 +18,5 @@ public interface IDataStorage {
 	public IDataStorage get();
 	public IDataStorage get(MinecraftServer server);
 	public void computeLevelsForCache();
+	public long getBaseXpForLevel(int level);
 }

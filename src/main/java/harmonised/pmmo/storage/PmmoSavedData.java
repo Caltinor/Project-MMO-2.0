@@ -115,6 +115,10 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			setPlayerSkillLevel(skill, playerID, currentLevel + change);
 		return true;
 	}
+	@Override
+	public long getBaseXpForLevel(int level) {
+		return level > 0 ? levelCache.get(level - 1) : 0l;
+	}
 	//===========================CORE WSD LOGIC=====================
 	public PmmoSavedData() {}
 	

@@ -7,6 +7,7 @@ import java.util.List;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.readers.ModifierDataType;
+import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
@@ -136,7 +137,7 @@ public class Config {
 		buildLevels(builder);
 		buildRequirements(builder);
 		buildXpGains(builder);
-		buildAutoValue(builder);
+		AutoValueConfig.buildServer(builder);
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
@@ -151,6 +152,9 @@ public class Config {
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Integer> 	MAX_LEVEL;
+	public static ForgeConfigSpec.ConfigValue<Double> 	LOSS_ON_DEATH;
+	public static ForgeConfigSpec.ConfigValue<Boolean>	LOSE_LEVELS_ON_DEATH;
+	public static ForgeConfigSpec.ConfigValue<Boolean> 	LOSE_ONLY_EXCESS;
 	public static ForgeConfigSpec.ConfigValue<Boolean> 	USE_EXPONENTIAL_FORUMULA;
 	public static ForgeConfigSpec.ConfigValue<Long> 	LINEAR_BASE_XP;
 	public static ForgeConfigSpec.ConfigValue<Double> 	LINEAR_PER_LEVEL;
@@ -165,6 +169,19 @@ public class Config {
 						.defineInRange("Max Level", 1523, 1, Integer.MAX_VALUE);
 		USE_EXPONENTIAL_FORUMULA = builder.comment("shold levels be determined using an exponential forumula?")
 						.define("Use Exponential Formula", true);
+		LOSS_ON_DEATH = builder.comment("How much experience should players lose when they die?"
+						, "zero is no loss, one is lose everything")
+						.defineInRange("Loss on death", 0.05, 0d, 1d);
+		LOSE_LEVELS_ON_DEATH = builder.comment("should loss of experience cross levels?"
+						, "for example, if true, a player with 1 xp above their current level would lose the"
+						, "[Loss on death] percentage of xp and fall below their current level.  However,"
+						, "if false, the player would lose only 1 xp as that would put them at the base xp of their current level")
+						.define("Lose Levels On Death", false);
+		LOSE_ONLY_EXCESS = builder.comment("This setting only matters if [Lose Level On Death] is set to false."
+						, "If this is true the [Loss On Death] applies only to the experience above the current level"
+						, "for exmample if level 3 is 1000k xp and the player has 1020 and dies.  the player will only lose"
+						, "the [Loss On Death] of the 20 xp above the level's base.")
+						.define("Lose Only Excess", true);
 		
 		//========LINEAR SECTION===============
 		builder.comment("Settings for Linear XP configuration").push("LINEAR LEVELS");
@@ -185,18 +202,6 @@ public class Config {
 		builder.pop(); //COMPLETE EXPONENTIAL BLOCK
 		builder.pop(); //COMPLETE LEVELS BLOCK
 		
-	}
-	
-	public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_AUTO_VALUES;
-	
-	private static void buildAutoValue(ForgeConfigSpec.Builder builder) {
-		builder.comment("Auto Values estimate values based on item/block/entity properties", 
-						"and kick in when no other defined requirement or xp value is present").push("Auto Values");
-		
-		ENABLE_AUTO_VALUES = builder.comment("set this to false to disable the auto values system.")
-								.define("Auto Values Enabled", true);
-		
-		builder.pop();
 	}
 	
 	private static BooleanValue[] REQ_ENABLED;
