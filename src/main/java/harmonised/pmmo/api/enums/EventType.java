@@ -42,17 +42,15 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	GROW,							//
 	HEALTH_CHANGE,					//
 	JUMP,							//IMPLEMENTED
-		SPRINT_JUMP,				//
-		CROUCH_JUMP,				//
+		SPRINT_JUMP,				//IMPLEMENTED
+		CROUCH_JUMP,				//IMPLEMENTED
 	WORLD_CONNECT,					//IMPLEMENTED
 	WORLD_DISCONNECT,				//
 	INTERACT,						//
 		LEFT_CLICK_BLOCK,			//
 		LEFT_CLICK_ITEM,			//
-		LEFT_CLICK,					//
 		RIGHT_CLICK_BLOCK,			//
 		RIGHT_CLICK_ITEM,			//
-		RIGHT_CLICK,				//
 		ENTITY,						//IMPLEMENTED
 	RESPAWN,						//
 	RIDING,							//
