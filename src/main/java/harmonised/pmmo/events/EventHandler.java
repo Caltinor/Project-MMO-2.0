@@ -1,9 +1,6 @@
 package harmonised.pmmo.events;
 
-import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.core.Core;
-import harmonised.pmmo.core.perks.FeaturePerks;
 import harmonised.pmmo.events.impl.BreakHandler;
 import harmonised.pmmo.events.impl.BreakSpeedHandler;
 import harmonised.pmmo.events.impl.CraftHandler;
@@ -35,7 +32,6 @@ import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -70,16 +66,14 @@ public class EventHandler {
 	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
 			AttributeInstance reachAttribute = event.getPlayer().getAttribute(ForgeMod.REACH_DISTANCE.get());
-			if(reachAttribute.getModifier(FeaturePerks.reachModifierID) == null || reachAttribute.getModifier(FeaturePerks.reachModifierID).getAmount() != Config.CREATIVE_REACH.get())
+			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.CREATIVE_REACH.get())
 			{
-				AttributeModifier reachModifier = new AttributeModifier(FeaturePerks.reachModifierID, "Reach bonus thanks to Build Level", Config.CREATIVE_REACH.get(), AttributeModifier.Operation.ADDITION);
-				reachAttribute.removeModifier(FeaturePerks.reachModifierID);
-				reachAttribute.addPermanentModifier(reachModifier);
+				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
+				reachAttribute.addPermanentModifier(new AttributeModifier(Reference.CREATIVE_REACH_ATTRIBUTE, "PMMO Creative Reach Bonus", Config.CREATIVE_REACH.get(), AttributeModifier.Operation.ADDITION));
 			}
 		}
 		else {
-			LogicalSide side = event.getPlayer().level.isClientSide ? LogicalSide.CLIENT : LogicalSide.SERVER;
-			Core.get(side).getPerkRegistry().executePerk(EventType.SKILL_UP, event.getPlayer(), side);
+			event.getPlayer().getAttribute(ForgeMod.REACH_DISTANCE.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
 	}
 	
