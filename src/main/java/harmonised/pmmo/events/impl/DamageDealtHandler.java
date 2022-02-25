@@ -64,6 +64,7 @@ public class DamageDealtHandler {
 			//Process perks
 			CompoundTag perkDataIn = eventHookOutput;
 			perkDataIn.putFloat(APIUtils.DAMAGE_IN, event.getAmount());
+			//TODO add the WEAPON_TYPE parameter using "item_specific" settings from the AutoValuesConfig
 			CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, perkDataIn, core.getSide()));
 			if (serverSide) {
 				Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), player, perkOutput);

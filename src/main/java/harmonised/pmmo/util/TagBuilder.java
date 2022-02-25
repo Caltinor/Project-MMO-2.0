@@ -37,4 +37,14 @@ public class TagBuilder {
 		nbt.put(key, list);
 		return this;
 	}
+	
+	public TagBuilder withInt(@NonNull String key, @NonNull int value) {
+		nbt.putInt(key, value);
+		return this;
+	}
+	
+	public TagBuilder withDouble(@NonNull String key, @NonNull double value) {
+		nbt.putDouble(key, value);
+		return this;
+	}
 }

@@ -7,8 +7,8 @@ import java.util.Map;
 import org.apache.commons.lang3.function.TriFunction;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.LinkedListMultimap;
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
@@ -22,12 +22,6 @@ public class PerkRegistry {
 	
 	private Map<ResourceLocation, TriFunction<Player, CompoundTag, Integer, CompoundTag>> perkExecutions = new HashMap<>();
 	private Map<ResourceLocation, TriFunction<Player, CompoundTag, Integer, CompoundTag>> perkTerminations = new HashMap<>();
-	private Map<EventType, LinkedListMultimap<String, CompoundTag>> perkSettings = new HashMap<>();
-	
-	public void setSettings(Map<EventType, LinkedListMultimap<String, CompoundTag>> settings) {
-		perkSettings = settings;
-	}
-	public Map<EventType, LinkedListMultimap<String, CompoundTag>> getSettings() {return perkSettings;}
 	
 	public void registerPerk(
 			ResourceLocation perkID, 
@@ -46,7 +40,7 @@ public class PerkRegistry {
 	}
 	
 	public CompoundTag executePerk(EventType cause, Player player, CompoundTag dataIn, LogicalSide side) {
-		LinkedListMultimap<String, CompoundTag> map =  perkSettings.getOrDefault(cause, LinkedListMultimap.create());
+		Map<String, List<CompoundTag>> map =  PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>());
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {
 			List<CompoundTag> entries = map.get(skill);
@@ -68,7 +62,7 @@ public class PerkRegistry {
 	}
 	
 	public CompoundTag terminatePerk(EventType cause, Player player, CompoundTag dataIn, LogicalSide side) {
-		LinkedListMultimap<String, CompoundTag> map = perkSettings.getOrDefault(cause, LinkedListMultimap.create());
+		Map<String, List<CompoundTag>> map =  PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>());
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {
 			List<CompoundTag> entries = map.get(skill);

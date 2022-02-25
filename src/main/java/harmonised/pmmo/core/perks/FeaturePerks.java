@@ -8,6 +8,9 @@ import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -185,10 +188,15 @@ public class FeaturePerks {
 		return output;
 	};
 
+	public static final String WEAPON_TYPE = "weapon_type";
+	private static final String APPLICABLE_TO = "applies_to";
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE_BOOST = (player, nbt, level) -> {
 		CompoundTag output = new CompoundTag();
 		if (!nbt.contains("damageIn")) return output;
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
+		ListTag type = nbt.contains(WEAPON_TYPE) ? nbt.getList(WEAPON_TYPE, Tag.TAG_STRING) : new ListTag();
+		String applyTo = nbt.contains(APPLICABLE_TO) ? nbt.getString(APPLICABLE_TO) : "meleeWeapon";
+		if (!type.contains(StringTag.valueOf(applyTo))) return output;
 		float damage = nbt.getFloat("damageIn") * (float)(perLevel * (double)level);
 		output.putFloat("damage", damage);
 		return output;
