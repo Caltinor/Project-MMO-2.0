@@ -1,4 +1,4 @@
-package harmonised.pmmo.impl;
+package harmonised.pmmo.registry;
 
 import java.util.ArrayList;
 import java.util.List;

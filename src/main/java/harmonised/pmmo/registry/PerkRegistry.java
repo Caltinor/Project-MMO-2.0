@@ -1,4 +1,4 @@
-package harmonised.pmmo.impl;
+package harmonised.pmmo.registry;
 
 import java.util.HashMap;
 import java.util.List;
