@@ -3,11 +3,9 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_DataSkills;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Enchantments;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_PerkSettings;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.util.MsLoggy;
@@ -39,11 +37,6 @@ public class Networking {
 			.decoder(CP_UpdateExperience::new)
 			.consumer(CP_UpdateExperience::handle)
 			.add();
-		INSTANCE.messageBuilder(CP_SyncData_DataSkills.class, ID++)
-			.encoder(CP_SyncData_DataSkills::encode)
-			.decoder(CP_SyncData_DataSkills::decode)
-			.consumer(CP_SyncData_DataSkills::handle)
-			.add();
 		INSTANCE.messageBuilder(CP_SyncData_Objects.class, ID++)
 			.encoder(CP_SyncData_Objects::encode)
 			.decoder(CP_SyncData_Objects::decode)
@@ -58,11 +51,6 @@ public class Networking {
 			.encoder(CP_SyncData_Enchantments::encode)
 			.decoder(CP_SyncData_Enchantments::decode)
 			.consumer(CP_SyncData_Enchantments::handle)
-			.add();
-		INSTANCE.messageBuilder(CP_SyncData_PerkSettings.class, ID++)
-			.encoder(CP_SyncData_PerkSettings::encode)
-			.decoder(CP_SyncData_PerkSettings::decode)
-			.consumer(CP_SyncData_PerkSettings::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
 			.encoder((packet, buf) -> {})

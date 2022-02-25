@@ -1,55 +1,34 @@
 package harmonised.pmmo.config.readers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
-
-import harmonised.pmmo.ProjectMMO;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.CoreType;
 import harmonised.pmmo.config.codecs.CodecMapLocation;
 import harmonised.pmmo.config.codecs.CodecMapObject;
 import harmonised.pmmo.config.codecs.CodecMapPlayer;
-import harmonised.pmmo.config.codecs.CodecMapSkills;
 import harmonised.pmmo.config.codecs.CodecTypes;
-import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.loading.FMLPaths;
 
 public class CoreParser {
 	//TODO Figure out how to cleanse the maps of disabled packs
 	
-	private static final Logger DATA_LOGGER = LogManager.getLogger();
-	private static final Gson gson = new Gson();	
+	private static final Logger DATA_LOGGER = LogManager.getLogger();	
 	public static final Type valueJsonType = new TypeToken<Map<String, JsonObject>>(){}.getType();
 	
 	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> ITEM_LOADER = new MergeableCodecDataManager<>(
@@ -157,9 +136,9 @@ public class CoreParser {
 					Core.get(LogicalSide.SERVER).getDataConfig().setMobModifierData(tag, mobMods.getKey(), mobMods.getValue());
 				}
 				MsLoggy.info("POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
-				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(CoreType.LOCATION_EFFECT_POSITIVE, tag, lmc.positive());
+				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(true, tag, lmc.positive());
 				MsLoggy.info("NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
-				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(CoreType.LOCATION_EFFECT_NEGATIVE, tag, lmc.negative());
+				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(false, tag, lmc.negative());
 				MsLoggy.info("VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
 				Core.get(LogicalSide.SERVER).getDataConfig().setArrayData(tag, lmc.veinBlacklist());
 				MsLoggy.info("TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
@@ -208,85 +187,4 @@ public class CoreParser {
 			Core.get(LogicalSide.SERVER).getSkillGates().setEnchantmentReqs(rl, map);
 		});
 	}
-	
-	public static void init() {
-		parseSkills();
-		parseGlobals();
-	}
-	
-	private static final Codec<Map<String, CodecMapSkills>> SKILLS_CODEC = Codec.unboundedMap(Codec.STRING, CodecMapSkills.CODEC);
-	private static void parseSkills() {
-		String filename = "skills.json";
-		File dataFile = FMLPaths.CONFIGDIR.get().resolve("pmmo/" + filename).toFile();
-		
-		if (!dataFile.exists())
-			createData(dataFile, "/assets/pmmo/util/", filename);
-	
-	
-		try(InputStream input = new FileInputStream(dataFile.getPath());
-            Reader reader = new BufferedReader(new InputStreamReader(input)))
-        {
-			Map<String, CodecMapSkills> readResult = new HashMap<>();
-			SKILLS_CODEC.parse(JsonOps.INSTANCE, GsonHelper.fromJson(gson, reader, JsonElement.class))
-				.resultOrPartial((s) -> MsLoggy.error(s))
-				.ifPresent(readResult::putAll);
-			for (Map.Entry<String, CodecMapSkills> raw : readResult.entrySet()) {
-				SkillData skillData = new SkillData(raw.getValue());
-				MsLoggy.info("Skills: "+raw.getKey()+skillData.toString()+" loaded from config");
-				Core.get(LogicalSide.SERVER).getDataConfig().setSkillData(raw.getKey(), skillData);
-			}
-        }
-        catch(Exception e)
-        {
-            MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
-        }
-	}
-	
-	private static void parseGlobals() {
-		String filename = "globals.json";
-		File dataFile = FMLPaths.CONFIGDIR.get().resolve("pmmo/" + filename).toFile();
-		
-		if (!dataFile.exists())
-			createData(dataFile, "/assets/pmmo/util/", filename);
-	
-	
-		try(InputStream input = new FileInputStream(dataFile.getPath());
-            Reader reader = new BufferedReader(new InputStreamReader(input)))
-        {
-			
-			CodecTypes.GLOBALS_CODEC.parse(JsonOps.INSTANCE, GsonHelper.fromJson(gson, reader, JsonElement.class))
-				.resultOrPartial((s) -> MsLoggy.error(s))
-				.ifPresent(Core.get(LogicalSide.SERVER).getNBTUtils()::setGlobals);
-        }
-        catch(Exception e)
-        {
-            MsLoggy.error("ERROR READING PROJECT MMO CONFIG: Invalid JSON Structure of " + filename, e);
-        }
-	}
-	
-	//======================FILE MANAGEMENT======================	
-	private static void createData(File dataFile, String path, String fileName)
-    {
-        try     //create template data file
-        {
-            dataFile.getParentFile().mkdirs();
-            dataFile.createNewFile();
-        }
-        catch(IOException e)
-        {
-            MsLoggy.error("Could not create template json config!", dataFile.getPath(), e);
-            return;
-        }
-
-        try(InputStream inputStream = ProjectMMO.class.getResourceAsStream(path + fileName);
-             FileOutputStream outputStream = new FileOutputStream(dataFile);)
-        {
-            MsLoggy.debug("Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath());
-            IOUtils.copy(inputStream, outputStream);
-        }
-        catch(IOException e)
-        {
-            MsLoggy.error("Error copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath(), e);
-        }
-    }
 }

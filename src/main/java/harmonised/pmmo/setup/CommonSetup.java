@@ -2,7 +2,6 @@ package harmonised.pmmo.setup;
 
 import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.config.readers.CoreParser;
-import harmonised.pmmo.config.readers.PerksParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.network.Networking;
@@ -33,9 +32,6 @@ public class CommonSetup {
 		Core.get(LogicalSide.SERVER).getData(event.getServer());
 		MsLoggy.info("Computing data for cache");
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
-		MsLoggy.info("Loading settings from config jsons");
-		CoreParser.init();
-		PerksParser.parsePerks();
 		MsLoggy.info("Executing Default Registrations");
 		Core.get(LogicalSide.SERVER).registerNBT();
 		MsLoggy.info("PMMO Server loading process complete");

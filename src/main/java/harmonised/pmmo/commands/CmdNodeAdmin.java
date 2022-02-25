@@ -12,6 +12,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.network.Networking;
@@ -37,14 +38,14 @@ public class CmdNodeAdmin {
 				.then(Commands.argument(TARGET_ARG, EntityArgument.players())
 						.then(Commands.literal("set")
 								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
-										.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(Core.get(LogicalSide.SERVER).getDataConfig().getSkillData().keySet(), builder))
+										.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(SkillsConfig.SKILLS.get().keySet(), builder))
 										.then(Commands.argument(TYPE_ARG, StringArgumentType.word())
 												.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("level", "xp"), builder))
 												.then(Commands.argument(VALUE_ARG, LongArgumentType.longArg())
 														.executes(ctx -> adminSetOrAdd(ctx, true))))))
 						.then(Commands.literal("add")
 								.then(Commands.argument(SKILL_ARG, StringArgumentType.word())
-										.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(Core.get(LogicalSide.SERVER).getDataConfig().getSkillData().keySet(), builder))
+										.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(SkillsConfig.SKILLS.get().keySet(), builder))
 										.then(Commands.argument(TYPE_ARG, StringArgumentType.word())
 												.suggests((ctx, builder) -> SharedSuggestionProvider.suggest(List.of("level", "xp"), builder))
 												.then(Commands.argument(VALUE_ARG, LongArgumentType.longArg())

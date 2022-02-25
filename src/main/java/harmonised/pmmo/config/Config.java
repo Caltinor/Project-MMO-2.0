@@ -7,7 +7,6 @@ import java.util.List;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.readers.ModifierDataType;
-import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
@@ -48,11 +47,11 @@ public class Config {
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
 		
-	SKILL_LIST_OFFSET_X = builder.comment("how far right from the top left corner the skill list should be")
+		SKILL_LIST_OFFSET_X = builder.comment("how far right from the top left corner the skill list should be")
 						.define("Skill List Xoffset", 0d);
-	SKILL_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the skill list should be")
+		SKILL_LIST_OFFSET_Y = builder.comment("how far down from the top left corner the skill list should be")
 						.define("Skill List Yoffset", 0d);
-	SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed")
+		SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed")
 						.define("Display Skill List", true);
 		
 		builder.pop();
@@ -98,7 +97,10 @@ public class Config {
 	//====================COMMON SETTINGS===============================
 	
 	private static void setupCommon(ForgeConfigSpec.Builder builder) {
-		builder.comment("PMMO Configuration").push("Common");
+		builder.comment("===============================================","","",
+				"Most Configurations are found in the server config",
+				"You can find that in worldname/serverconfig/",
+				"","","===============================================").push("Common");
 		
 		buildMsLoggy(builder);
 		
@@ -137,7 +139,6 @@ public class Config {
 		buildLevels(builder);
 		buildRequirements(builder);
 		buildXpGains(builder);
-		AutoValueConfig.buildServer(builder);
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;

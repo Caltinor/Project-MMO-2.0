@@ -80,12 +80,6 @@ public class CodecTypes {
 			Codec.DOUBLE.fieldOf("maxChance").forGetter(SalvageData::maxChance)			
 			).apply(instance, SalvageData::new));
 	
-	public static record GlobalsData (Map<String, String> paths, Map<String, String> constants) {}
-	public static final Codec<GlobalsData> GLOBALS_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("paths").forGetter(GlobalsData::paths),
-			Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("constants").forGetter(GlobalsData::constants)
-			).apply(instance, GlobalsData::new));
-	
 	public static final PrimitiveCodec<UUID> UUID_CODEC = new PrimitiveCodec<>() {
 		@Override
 		public <T> DataResult<UUID> read(DynamicOps<T> ops, T input) {

@@ -5,8 +5,6 @@ import java.util.Map;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_DataSkills;
-import harmonised.pmmo.network.clientpackets.CP_SyncData_PerkSettings;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.storage.PmmoSavedData;
@@ -22,17 +20,15 @@ public class LoginHandler {
 		Core core = Core.get(player.level);
 		
 		core.getPerkRegistry().terminatePerk(EventType.DISABLE_PERK, player, core.getSide());
-		//===========UPDATE DATA MIRROR=======================
+		
 		if (core.getSide().equals(LogicalSide.SERVER)) {
+			//===========UPDATE DATA MIRROR=======================
 			for (Map.Entry<String, Long> skillMap : core.getData().getXpMap(player.getUUID()).entrySet()) {
 				Networking.sendToClient(new CP_UpdateExperience(skillMap.getKey(), skillMap.getValue()), (ServerPlayer) player);
 			}
 			Networking.sendToClient(new CP_UpdateLevelCache(((PmmoSavedData)core.getData()).getLevelCache()), (ServerPlayer) player);
-			Networking.sendToClient(new CP_SyncData_DataSkills(Core.get(LogicalSide.SERVER).getDataConfig().getSkillData()), (ServerPlayer) player);
-			Networking.sendToClient(new CP_SyncData_PerkSettings(Core.get(LogicalSide.SERVER).getPerkRegistry().getSettings()), (ServerPlayer) player);
-		}
-		//===========EXECUTE FEATURE LOGIC====================
-		if (core.getSide().equals(LogicalSide.SERVER)) {
+			
+			//===========EXECUTE FEATURE LOGIC====================
 			((PmmoSavedData)core.getData()).awardScheduledXP(player.getUUID());
 		}
 	}

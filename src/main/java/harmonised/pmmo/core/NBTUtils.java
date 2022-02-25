@@ -8,13 +8,12 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.codecs.CodecTypes.GlobalsData;
+import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.nbt.BehaviorToPrevious;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.core.nbt.LogicEntry.Case;
 import harmonised.pmmo.core.nbt.LogicEntry.Criteria;
-import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.core.nbt.Operator;
 import harmonised.pmmo.core.nbt.PathReader;
 import harmonised.pmmo.core.nbt.Result;
@@ -27,8 +26,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class NBTUtils {
 	public NBTUtils() {}
 	
-	private Map<String, String> globalPaths = new HashMap<>();
-	private Map<String, String> globalConst = new HashMap<>();
 	private Map<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> itemReqLogic = new HashMap<>();
 	private Map<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> blockReqLogic = new HashMap<>();
 	private Map<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entityReqLogic = new HashMap<>();
@@ -38,12 +35,6 @@ public class NBTUtils {
 	private Map<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> bonusLogic = new HashMap<>();
 	
 	//======================SETTERS=================================
-	public void setGlobals(GlobalsData data) {
-		MsLoggy.info("GLOBAL PATHS: "+MsLoggy.mapToString(data.paths()));
-		globalPaths = data.paths();
-		MsLoggy.info("GLOBAL CONSTANTS"+MsLoggy.mapToString(data.constants()));
-		globalConst = data.constants();
-	}
 	public void setItemReq(ReqType type, ResourceLocation id, List<LogicEntry> logic) {
 		Preconditions.checkNotNull(type);
 		Preconditions.checkNotNull(id);
@@ -120,10 +111,10 @@ public class NBTUtils {
 	
 	//======================INTERNAL GETTERS========================
 	private String getActualPath(String key) {
-		return key.contains("#") ? globalPaths.getOrDefault(key.replace("#", ""), "") : key;
+		return key.contains("#") ? GlobalsConfig.PATHS.get().getOrDefault(key.replace("#", ""), "") : key;
 	}
 	private String getActualConstant(String key) {
-		return key.contains("#") ? globalConst.getOrDefault(key.replace("#", ""), "") : key;
+		return key.contains("#") ? GlobalsConfig.CONSTANTS.get().getOrDefault(key.replace("#", ""), "") : key;
 	}
 	
 	//======================LOGICAL METHODS=========================

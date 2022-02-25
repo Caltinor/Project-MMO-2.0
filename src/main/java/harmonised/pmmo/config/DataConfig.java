@@ -18,10 +18,9 @@ public class DataConfig {
 	public DataConfig() {}
 	
 	private Map<ResourceLocation, Map<ResourceLocation, Map<String, Double>>> mobModifierData = new HashMap<>();
-	private Map<CoreType, Map<ResourceLocation, Map<ResourceLocation, Integer>>> locationEffectData = new HashMap<>();
+	private Map<Boolean, Map<ResourceLocation, Map<ResourceLocation, Integer>>> locationEffectData = new HashMap<>();
 	private LinkedListMultimap<ResourceLocation, ResourceLocation> veinBlacklistData = LinkedListMultimap.create();
 	private Map<UUID, CodecMapPlayer.PlayerData> playerSpecificSettings = new HashMap<>();	
-	private Map<String, SkillData> skillData = new HashMap<>();
 	
 	//==================DATA SETTER METHODS==============================
 	public void setMobModifierData(ResourceLocation locationID, ResourceLocation mobID, Map<String, Double> data) {
@@ -31,11 +30,11 @@ public class DataConfig {
 		mobModifierData.computeIfAbsent(locationID, s -> new HashMap<>()).put(mobID, data);
 	}
 	
-	public void setLocationEffectData(CoreType coreType, ResourceLocation objectID, Map<ResourceLocation, Integer> dataMap) {
-		Preconditions.checkNotNull(coreType);
+	public void setLocationEffectData(Boolean isPositiveEffect, ResourceLocation objectID, Map<ResourceLocation, Integer> dataMap) {
+		Preconditions.checkNotNull(isPositiveEffect);
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(dataMap);
-		locationEffectData.computeIfAbsent(coreType, s -> new HashMap<>()).put(objectID, dataMap);
+		locationEffectData.computeIfAbsent(isPositiveEffect, s -> new HashMap<>()).put(objectID, dataMap);
 	}
 	
 	public void setArrayData(ResourceLocation locationID, List<ResourceLocation> blockIDs) {
@@ -44,23 +43,15 @@ public class DataConfig {
 		veinBlacklistData.putAll(locationID, blockIDs);
 	}
 	
-	public void setSkillData(String skill, SkillData data) {
-		Preconditions.checkNotNull(skill);
-		Preconditions.checkNotNull(data);
-		skillData.put(skill, data);
-	}
-	
 	public void setPlayerSpecificData(UUID playerID, CodecMapPlayer.PlayerData data) {
 		Preconditions.checkNotNull(playerID);
 		Preconditions.checkNotNull(data);
 		playerSpecificSettings.put(playerID, data);
 	}
-	//==================DATA GETTER METHODS==============================
-	public Map<String, SkillData> getSkillData() {return skillData;}
 	
 	//==================UTILITY METHODS==============================	
 	public int getSkillColor(String skill) {
-		return skillData.getOrDefault(skill, SkillData.getDefault()).color();
+		return SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault()).color();
 	}
 	public Style getSkillStyle(String skill) {
 		return Style.EMPTY.withColor(TextColor.fromRgb(getSkillColor(skill)));
