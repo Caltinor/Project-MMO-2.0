@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.config.CoreType;
 import harmonised.pmmo.config.codecs.CodecMapLocation;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.Core;
@@ -54,9 +53,9 @@ public class CP_SyncData_Locations {
 					Core.get(LogicalSide.CLIENT).getDataConfig().setMobModifierData(tag, mobMods.getKey(), mobMods.getValue());
 				}
 				MsLoggy.info("POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
-				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(CoreType.LOCATION_EFFECT_POSITIVE, tag, lmc.positive());
+				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(true, tag, lmc.positive());
 				MsLoggy.info("NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
-				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(CoreType.LOCATION_EFFECT_NEGATIVE, tag, lmc.negative());
+				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(false, tag, lmc.negative());
 				MsLoggy.info("VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
 				Core.get(LogicalSide.CLIENT).getDataConfig().setArrayData(tag, lmc.veinBlacklist());
 				MsLoggy.info("TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
