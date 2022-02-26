@@ -24,6 +24,7 @@ public class PlaceHandler {
 		if (!core.isBlockActionPermitted(ReqType.PLACE, event.getPos(), player)) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.PLACE, player, event.getPlacedBlock().getBlock().getName());
+			return;
 		}
 		boolean serverSide = !player.level.isClientSide;
 		CompoundTag eventHookOutput = new CompoundTag();

@@ -291,8 +291,7 @@ public class Core {
 		}
 	  
 	  public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
-		  int partyCount = players.size();
-			for (int i = 0; i < partyCount; i++) {
+			for (int i = 0; i < players.size(); i++) {
 				for (Map.Entry<String, Long> award : xpValues.entrySet()) {
 					if (getData().setXpDiff(players.get(i).getUUID(), award.getKey(), award.getValue())) {
 						xp.sendXpAwardNotifications(players.get(i), award.getKey(), award.getValue());

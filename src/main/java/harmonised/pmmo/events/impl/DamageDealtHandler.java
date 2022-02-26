@@ -58,8 +58,10 @@ public class DamageDealtHandler {
 			CompoundTag eventHookOutput = new CompoundTag();
 			if (serverSide) {
 				eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(type, event, new CompoundTag());
-				if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) 
+				if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) { 
 					event.setCanceled(true);
+					return;
+				}
 			}
 			//Process perks
 			CompoundTag perkDataIn = eventHookOutput;

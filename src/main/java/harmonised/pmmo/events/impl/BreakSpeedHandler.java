@@ -43,6 +43,7 @@ public class BreakSpeedHandler {
 			Messenger.sendDenialMsg(ReqType.BREAK, event.getPlayer(), event.getState().getBlock().getName());
 			resultCache.put(event.getPlayer().getUUID(), 
 					new DetailsCache(event.getPlayer().getMainHandItem(), event.getPos(), event.getState(), true, event.getOriginalSpeed()));
+			return;
 		}
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (!event.getEntity().level.isClientSide){
@@ -51,6 +52,7 @@ public class BreakSpeedHandler {
 				event.setCanceled(true);
 				resultCache.put(event.getPlayer().getUUID(), 
 						new DetailsCache(event.getPlayer().getMainHandItem(), event.getPos(), event.getState(), true, event.getOriginalSpeed()));
+				return;
 			}
 		}
 		CompoundTag perkDataIn = eventHookOutput;

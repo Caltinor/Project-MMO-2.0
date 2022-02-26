@@ -3,7 +3,6 @@ package harmonised.pmmo.events.impl;
 import java.util.List;
 import java.util.Map;
 
-import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
@@ -17,11 +16,8 @@ public class CraftHandler {
 		Core core = Core.get(event.getPlayer().getLevel());
 		CompoundTag eventHookOutput = new CompoundTag();
 		boolean serverSide = !event.getPlayer().level.isClientSide; 
-		if (serverSide){			
+		if (serverSide)		
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.CRAFT, event, new CompoundTag());
-			if (eventHookOutput.getBoolean(APIUtils.IS_CANCELLED)) 
-				event.setCanceled(true);
-		}
 		//proecess perks
 		CompoundTag perkDataIn = eventHookOutput;
 		//if break data is needed by perks, we can add it here.  this is just default implementation.
