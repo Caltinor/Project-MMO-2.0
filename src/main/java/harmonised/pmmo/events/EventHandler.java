@@ -1,17 +1,23 @@
 package harmonised.pmmo.events;
 
+import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.events.impl.BreakHandler;
 import harmonised.pmmo.events.impl.BreakSpeedHandler;
+import harmonised.pmmo.events.impl.BreedHandler;
 import harmonised.pmmo.events.impl.CraftHandler;
+import harmonised.pmmo.events.impl.CropGrowHandler;
 import harmonised.pmmo.events.impl.DamageDealtHandler;
 import harmonised.pmmo.events.impl.DamageReceivedHandler;
 import harmonised.pmmo.events.impl.DeathHandler;
 import harmonised.pmmo.events.impl.EntityInteractHandler;
+import harmonised.pmmo.events.impl.FishHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.events.impl.PlayerDeathHandler;
+import harmonised.pmmo.events.impl.PotionHandler;
 import harmonised.pmmo.features.mobscaling.MobAttributeHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -19,16 +25,21 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.DifficultyChangeEvent;
+import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
+import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangeGameModeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -75,6 +86,11 @@ public class EventHandler {
 		else {
 			event.getPlayer().getAttribute(ForgeMod.REACH_DISTANCE.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
+	}
+	@SubscribeEvent
+	public static void onRespawn(PlayerRespawnEvent event) {
+		Core core = Core.get(event.getPlayer().level); 
+		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getPlayer(), core.getSide());
 	}
 	
 	//==========================================================
@@ -138,5 +154,25 @@ public class EventHandler {
 		if (event.getEntityLiving() instanceof Player)
 			PlayerDeathHandler.handle(event);
 		DeathHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onPotionCollect(PlayerBrewedPotionEvent event) {
+		PotionHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onBreed(BabyEntitySpawnEvent event) {
+		if (event.isCanceled())
+			return;
+		BreedHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST) 
+	public static void onFish(ItemFishedEvent event){
+		if (event.isCanceled())
+			return;
+		FishHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST) 
+	public static void onCropGrow(CropGrowEvent.Post event){
+		CropGrowHandler.handle(event);
 	}
 }
