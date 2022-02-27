@@ -18,9 +18,7 @@ public class PotionHandler {
 		Core core = Core.get(player.getLevel());
 		boolean serverSide = !player.level.isClientSide; 
 		//proecess perks
-		CompoundTag perkDataIn = new CompoundTag();
-		//if break data is needed by perks, we can add it here.  this is just default implementation.
-		CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.BREW, player, perkDataIn, core.getSide());
+		CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.BREW, player, new CompoundTag(), core.getSide());
 		if (serverSide) {
 			Map<String, Long> xpAward = core.getExperienceAwards(EventType.BREW, event.getStack(), event.getPlayer(), perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());

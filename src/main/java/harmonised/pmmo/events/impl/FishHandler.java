@@ -36,9 +36,7 @@ public class FishHandler {
 				return;
 			}
 		}
-		CompoundTag perkDataIn = eventHookOutput;
-		//if break data is needed by perks, we can add it here.  this is just default implementation.
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.FISH, player, perkDataIn, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.FISH, player, eventHookOutput, core.getSide()));
 		if (serverSide) {
 			Map<String, Long> xpAward = new HashMap<>(); 
 			for (ItemStack stack : event.getDrops()) {

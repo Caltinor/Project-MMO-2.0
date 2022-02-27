@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
-import net.minecraftforge.fml.LogicalSide;
 
 public class JumpHandler {
 
@@ -38,9 +37,7 @@ public class JumpHandler {
 			}
 		}
 		//Process perks
-		CompoundTag perkDataIn = eventHookOutput; //TODO this could just be passed as is in all cases.
-		//if break data is needed by perks, we can add it here.  this is just default implementation.
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, perkDataIn, serverSide ? LogicalSide.SERVER : LogicalSide.CLIENT));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(type, player, eventHookOutput, core.getSide()));
 		if (serverSide) {
 			//NOTE a default value of 0.4 is consistent with the base jump amount of a player without any vanilla/modded jump modifiers
 			double jumpXpBase = perkOutput.contains(APIUtils.JUMP_OUT) ? Math.max(0.4, perkOutput.getDouble(APIUtils.JUMP_OUT)) : player.getDeltaMovement().y;

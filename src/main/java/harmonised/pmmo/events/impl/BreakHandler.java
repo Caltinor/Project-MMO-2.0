@@ -15,6 +15,7 @@ import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class BreakHandler {
@@ -36,9 +37,7 @@ public class BreakHandler {
 			}
 		}
 		//Process perks on both sides. note that only server-side perks will affect xp outputs.
-		CompoundTag perkDataIn = eventHookOutput;
-		//if break data is needed by perks, we can add it here.  this is just default implementation.
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_BREAK, event.getPlayer(), perkDataIn, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_BREAK, event.getPlayer(), eventHookOutput, core.getSide()));
 		if (serverSide) {
 			Map<String, Long> xpAward = calculateXpAward(core, event, perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
@@ -49,7 +48,7 @@ public class BreakHandler {
 	}
 	
 	private static Map<String, Long> calculateXpAward(Core core, BreakEvent event, CompoundTag dataIn) {
-		Map<String, Long> outMap = core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), event.getPlayer(), dataIn); 
+		Map<String, Long> outMap = core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getWorld(), event.getPlayer(), dataIn); 
 		if (ChunkDataHandler.playerMatchesPos(event.getPlayer(), event.getPos())) {
 			double xpModifier = Config.REUSE_PENALTY.get();
 			if (xpModifier == 0) return new HashMap<>();
