@@ -1,0 +1,13 @@
+{
+	"xp_values": { 
+		"BREED": { "husbandry": 150},
+		"TAMING": { "taming": 100},
+		"MELEE_TO_ANIMALS": { "cruelty": 100},
+		"DEATH": { "butcher": 1000}
+	},
+	"requirements": { 
+		"BREED": { "mining": 2},
+		"TAME": { "mining": 2},
+		"RIDE": { "excavation": 2}
+	}
+}
