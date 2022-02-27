@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.mojang.serialization.Codec;
+
+import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.SerializableUUID;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
@@ -26,66 +29,21 @@ import net.minecraftforge.fml.common.Mod;
 public class ChunkDataHandler {
     private static Map<ResourceLocation, Map<ChunkPos, Map<BlockPos, UUID>>> placedMap = new HashMap<>();
     
-    private static final String LEVEL = "Level";
-    private static final String PLACED_POS = "placedPos";
-    private static final String PID = "UUID";
-    private static final String BLOCK_POS = "pos";
+    private static final Codec<Map<ResourceLocation, Map<ChunkPos, Map<BlockPos, UUID>>>> PLACED_CODEC =
+    		Codec.unboundedMap(ResourceLocation.CODEC, 
+    				Codec.unboundedMap(CodecTypes.CHUNKPOS_CODEC, 
+    						Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, SerializableUUID.CODEC)));
+    
+    private static final String PLACED_MAP = "placed_map";
 
     @SubscribeEvent
-    public static void handleChunkDataLoad(ChunkDataEvent.Load event)
-    {
-        CompoundTag chunkNBT = event.getData();
-        if(chunkNBT != null)
-        {
-            CompoundTag levelNBT = chunkNBT.getCompound(LEVEL);
-            if(levelNBT.contains(PLACED_POS))
-            {
-                ResourceLocation dimResLoc = ((Level) event.getWorld()).dimension().location();
-                ChunkPos chunkPos = event.getChunk().getPos();
-
-                if(!placedMap.containsKey(dimResLoc))
-                    placedMap.put(dimResLoc, new HashMap<>());
-
-                ListTag placedPosNBT = levelNBT.getList(PLACED_POS, Tag.TAG_COMPOUND);
-                if(placedPosNBT == null)
-                    return;
-                Map<ChunkPos, Map<BlockPos, UUID>> chunkMap = placedMap.get(dimResLoc);
-                Map<BlockPos, UUID> blockMap = new HashMap<>();
-                
-                for(int i = 0; i < placedPosNBT.size(); i++) {
-                	blockMap.put(BlockPos.of(placedPosNBT.getCompound(i).getLong(BLOCK_POS)), placedPosNBT.getCompound(i).getUUID(PID));
-                }
-
-                chunkMap.put(chunkPos, blockMap);
-            }
-        }
+    public static void handleChunkDataLoad(ChunkDataEvent.Load event){
+    	placedMap = new HashMap<>(PLACED_CODEC.parse(NbtOps.INSTANCE, event.getData().getCompound(PLACED_MAP)).result().orElse(new HashMap<>()));
     }
 
     @SubscribeEvent
-    public static void handleChunkDataSave(ChunkDataEvent.Save event)
-    {
-        ResourceLocation dimResLoc = ((Level)event.getWorld()).dimension().location();
-        if(placedMap.containsKey(dimResLoc))
-        {
-            ChunkPos chunkPos = event.getChunk().getPos();
-            if(placedMap.get(dimResLoc).containsKey(chunkPos))
-            {
-                if(!event.getData().contains(LEVEL))
-                    event.getData().put(LEVEL, new CompoundTag());
-                CompoundTag levelNBT = (CompoundTag) event.getData().get(LEVEL);
-
-                ListTag placedList = new ListTag();
-                for(Map.Entry<BlockPos, UUID> entry : placedMap.get(dimResLoc).get(chunkPos).entrySet())
-                {
-                    CompoundTag insidesNBT = new CompoundTag();
-                    insidesNBT.putLong(BLOCK_POS, entry.getKey().asLong());
-                    insidesNBT.putUUID(PID, entry.getValue());
-                    placedList.add(insidesNBT);
-                }
-
-                levelNBT.put(PLACED_POS, placedList);
-            }
-        }
+    public static void handleChunkDataSave(ChunkDataEvent.Save event){
+    	event.getData().put(PLACED_MAP, ((CompoundTag)(PLACED_CODEC.encodeStart(NbtOps.INSTANCE, placedMap).result().orElse(new CompoundTag()))));
     }
     
     @SubscribeEvent
@@ -138,7 +96,7 @@ public class ChunkDataHandler {
 
     public static UUID checkPos(Level world, BlockPos pos)
     {
-        return checkPos(world.dimension().location(), pos);
+        return checkPos(world.dimension().getRegistryName(), pos);
     }
 
     public static UUID checkPos(ResourceLocation dimResLoc, BlockPos blockPos)

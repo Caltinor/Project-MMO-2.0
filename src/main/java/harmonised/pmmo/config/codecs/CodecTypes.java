@@ -14,8 +14,10 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.nbt.LogicEntry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.ChunkPos;
 
 public class CodecTypes {
 	public static final Codec<Map<String, Double>> DOUBLE_CODEC = Codec.unboundedMap(Codec.STRING, Codec.DOUBLE);
@@ -91,5 +93,31 @@ public class CodecTypes {
 		}
 		@Override
 		public String toString() { return "uuid";}
+	};
+	
+	public static final PrimitiveCodec<BlockPos> BLOCKPOS_CODEC = new PrimitiveCodec<>() {
+		@Override
+		public <T> DataResult<BlockPos> read(DynamicOps<T> ops, T input) {
+			return DataResult.success(BlockPos.of(ops.getNumberValue(input).map(Number::longValue).getOrThrow(false, null)));
+		}
+		@Override
+		public <T> T write(DynamicOps<T> ops, BlockPos value) {
+			return ops.createLong(value.asLong());
+		}
+		@Override
+		public String toString() { return "blockpos";}
+	};
+	
+	public static final PrimitiveCodec<ChunkPos> CHUNKPOS_CODEC = new PrimitiveCodec<>() {
+		@Override
+		public <T> DataResult<ChunkPos> read(DynamicOps<T> ops, T input) {
+			return DataResult.success(new ChunkPos(ops.getNumberValue(input).map(Number::longValue).getOrThrow(false, null)));
+		}
+		@Override
+		public <T> T write(DynamicOps<T> ops, ChunkPos value) {
+			return ops.createLong(value.toLong());
+		}
+		@Override
+		public String toString() { return "chunkpos";}
 	};
 }
