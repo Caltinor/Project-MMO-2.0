@@ -189,12 +189,12 @@ public class Core {
 			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getItemXpGainTooltipData(itemID, type, stack));
 		  return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, tooltipsUsed);
 	  }
-	  public Map<String, Long> getBlockExperienceAwards(EventType type, BlockPos pos, Player player, CompoundTag dataIn) {
+	  public Map<String, Long> getBlockExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
-		  BlockEntity tile = player.getLevel().getBlockEntity(pos);
-		  ResourceLocation res = player.getLevel().getBlockState(pos).getBlock().getRegistryName();
+		  BlockEntity tile = level.getBlockEntity(pos);
+		  ResourceLocation res = level.getBlockState(pos).getBlock().getRegistryName();
 		  return tile == null ?
 				  xp.mergeXpMapsWithSummateCondition(xpGains, getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, false)) :
 				  xp.mergeXpMapsWithSummateCondition(xpGains, getExperienceAwards(xpGains, type, tile, player));
@@ -216,20 +216,21 @@ public class Core {
 			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getEntityXpGainTooltipData(entityID, type, entity));
 		  return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, tooltipsUsed);
 	  }
-	  private Map<String, Long> getCommonXpAwardData(Map<String, Long> inMap, EventType type, ResourceLocation objectID, Player player, ObjectType oType, boolean predicateUsed) {
-		  if (!predicateUsed) {
-			  if (xp.hasXpGainObjectEntry(type, objectID)) 
-				  inMap = xp.mergeXpMapsWithSummateCondition(inMap, xp.getObjectExperienceMap(type, objectID));
-			  else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) 
-				  inMap = xp.mergeXpMapsWithSummateCondition(inMap, AutoValues.getExperienceAward(type, objectID, oType));
-		  }
-		  MsLoggy.info("XpGains: "+MsLoggy.mapToString(inMap));
+	private Map<String, Long> getCommonXpAwardData(Map<String, Long> inMap, EventType type, ResourceLocation objectID, Player player, ObjectType oType, boolean predicateUsed) {
+		if (!predicateUsed) {
+			if (xp.hasXpGainObjectEntry(type, objectID)) 
+				inMap = xp.mergeXpMapsWithSummateCondition(inMap, xp.getObjectExperienceMap(type, objectID));
+			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) 
+				inMap = xp.mergeXpMapsWithSummateCondition(inMap, AutoValues.getExperienceAward(type, objectID, oType));
+		}
+		MsLoggy.info("XpGains: "+MsLoggy.mapToString(inMap));
+		if (player != null)
 			inMap = xp.applyXpModifiers(player, inMap);
-			MsLoggy.info("XpGains (afterMod): "+MsLoggy.mapToString(inMap));
-			inMap = CheeseTracker.applyAntiCheese(inMap);
-			MsLoggy.info("XpGains (afterCheese): "+MsLoggy.mapToString(inMap));			
-		  return inMap;
-	  }
+		MsLoggy.info("XpGains (afterMod): "+MsLoggy.mapToString(inMap));
+		inMap = CheeseTracker.applyAntiCheese(inMap);
+		MsLoggy.info("XpGains (afterCheese): "+MsLoggy.mapToString(inMap));			
+		return inMap;
+	}
 
 	  public Map<String, Double> getConsolidatedModifierMap(Player player) {
 			Map<String, Double> mapOut = new HashMap<>();

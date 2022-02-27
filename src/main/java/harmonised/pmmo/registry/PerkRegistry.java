@@ -40,6 +40,8 @@ public class PerkRegistry {
 	}
 	
 	public CompoundTag executePerk(EventType cause, Player player, CompoundTag dataIn, LogicalSide side) {
+		if (player == null) return new CompoundTag();
+		if (dataIn == null) dataIn = new CompoundTag();
 		Map<String, List<CompoundTag>> map =  PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>());
 		CompoundTag output = new CompoundTag();
 		for (String skill : map.keySet()) {

@@ -25,8 +25,8 @@ public class CropGrowHandler {
 		if (!level.isClientSide)
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.GROW, event, new CompoundTag());
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.GROW, player, core.getSide()));
-		if (!level.isClientSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.GROW, event.getPos(), player, hookOutput);
+		if (!level.isClientSide && placerID != null) {
+			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.GROW, event.getPos(), level, player, hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 			core.awardXP(partyMembersInRange, xpAward);
 		}

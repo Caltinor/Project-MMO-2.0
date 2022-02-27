@@ -15,9 +15,11 @@ import harmonised.pmmo.events.impl.EntityInteractHandler;
 import harmonised.pmmo.events.impl.FishHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
+import harmonised.pmmo.events.impl.MountHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.events.impl.PlayerDeathHandler;
 import harmonised.pmmo.events.impl.PotionHandler;
+import harmonised.pmmo.events.impl.TameHandler;
 import harmonised.pmmo.features.mobscaling.MobAttributeHandler;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -26,6 +28,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
+import net.minecraftforge.event.entity.EntityMountEvent;
+import net.minecraftforge.event.entity.living.AnimalTameEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -165,6 +169,12 @@ public class EventHandler {
 			return;
 		BreedHandler.handle(event);
 	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onTame(AnimalTameEvent event) {
+		if (event.isCanceled())
+			return;
+		TameHandler.handle(event);
+	}
 	@SubscribeEvent(priority=EventPriority.LOWEST) 
 	public static void onFish(ItemFishedEvent event){
 		if (event.isCanceled())
@@ -174,5 +184,11 @@ public class EventHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST) 
 	public static void onCropGrow(CropGrowEvent.Post event){
 		CropGrowHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onMount(EntityMountEvent event) {
+		if (event.isCanceled())
+			return;
+		MountHandler.handle(event);
 	}
 }
