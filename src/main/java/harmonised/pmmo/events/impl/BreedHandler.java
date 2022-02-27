@@ -25,6 +25,7 @@ public class BreedHandler {
 		if (!core.isActionPermitted(ReqType.BREED, event.getChild(), player)) {
 			event.setCanceled(true);
 			Messenger.sendDenialMsg(ReqType.BREED, player, event.getChild().getName());
+			return;
 		}
 		boolean serverSide = !player.level.isClientSide;
 		CompoundTag eventHookOutput = new CompoundTag();
