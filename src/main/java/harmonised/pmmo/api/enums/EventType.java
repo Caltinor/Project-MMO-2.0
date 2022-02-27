@@ -14,10 +14,10 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	BLOCK_BREAK(false, true, false, "mining"),				//IMPLEMENTED
 		BREAK_SPEED(false, true, false, "mining"),			//IMPLEMENTED
 	BLOCK_PLACE(true, true, false, "building"),				//IMPLEMENTED
-	BREATH_CHANGE(false, false, true, "swimming"),			//
-	BREED(false, false, true, "taming"),					//
-	BREW(true, false, false, "alchemy"),					//
-	COOK(true, false, false, "cooking"),					//
+	BREATH_CHANGE(false, false, true, "swimming"),			//				PLAYERTICK
+	BREED(false, false, true, "taming"),					//IMPLEMENTED
+	BREW(true, false, false, "alchemy"),					//PARTIAL		MIXIN NEEDED FOR OTHER EVENTS
+	COOK(true, false, false, "cooking"),					//				MIXIN
 	CRAFT(true, false, false, "crafting"),					//IMPLEMENTED
 	RECEIVE_DAMAGE(false, false, true, "endurance"),		//IMPLEMENTED
 		FROM_MOBS(false, false, true, "endurance"),			//IMPLEMENTED
@@ -36,11 +36,11 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		RANGED_TO_PLAYERS(false, false, true, "archery"),	//IMPLEMENTED
 		RANGED_TO_ANIMALS(false, false, true, "archery"),	//IMPLEMENTED
 	DEATH(false, false, true, "endurance"),					//IMPLEMENTED
-	ENCHANT(true, false, false, "magic"),					//
-	FISH(true, false, false, "fishing"),					//
-	SMELT(true, false, false, "smithing"),					//
-	GROW(false, true, false, "farming"),					//
-	HEALTH_CHANGE(false, false, false, ""),					//
+	ENCHANT(true, false, false, "magic"),					//				MIXIN (probably)
+	FISH(true, false, false, "fishing"),					//IMPLEMENTED
+	SMELT(true, false, false, "smithing"),					//				MIXIN
+	GROW(false, true, false, "farming"),					//IMPLEMENTED
+	HEALTH_CHANGE(false, false, false, ""),					//				PLAYER TICK
 	JUMP(false, false, true, "agility"),					//IMPLEMENTED
 		SPRINT_JUMP(false, false, true, "agility"),			//IMPLEMENTED
 		CROUCH_JUMP(false, false, true, "agility"),			//IMPLEMENTED
@@ -52,18 +52,18 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		RIGHT_CLICK_BLOCK(false, true, false, "dexterity"),	//
 		RIGHT_CLICK_ITEM(true, false, false, "dexterity"),	//
 		ENTITY(false, false, true, "charisma"),				//IMPLEMENTED
-	RESPAWN(false, false, false, ""),						//
-	RIDING(false, false, true, "taming"),					//
+	RESPAWN(false, false, false, ""),						//IMPLEMENTED
+	RIDING(false, false, true, "taming"),					//				PLAYER TICK
+	SHIELD_BLOCK(false, false, true, "combat"),				//
 	SKILL_UP(false, false, false, ""),						//IMPLEMENTED
 	SLEEP(false, false, true, "endurance"),					//
-	SPRINTING(false, false, true, "agility"),				//
-	SUBMERGED(false, false, true, "swimming"),				//
-		SWIMMING(false, false, true, "swimming"),			//
-		DIVING(false, false, true, "swimming"),				//
-		SURFACING(false, false, true, "swimming"),			//
-		SWIM_SPRINTING(false, false, true, "swimming"),		//
-	TAMING(false, false, true, "taming"),					//
-	USE_ITEM(true, false, false, "dexterity"),				//
+	SPRINTING(false, false, true, "agility"),				//				PLAYER TICK
+	SUBMERGED(false, false, true, "swimming"),				//				PLAYER TICK
+		SWIMMING(false, false, true, "swimming"),			//				PLAYER TICK
+		DIVING(false, false, true, "swimming"),				//				PLAYER TICK
+		SURFACING(false, false, true, "swimming"),			//				PLAYER TICK
+		SWIM_SPRINTING(false, false, true, "swimming"),		//				PLAYER TICK
+	TAMING(false, false, true, "taming"),					//IMPLEMENTED
 	VEIN_MINE(false, false, false, ""),						//
 	DISABLE_PERK(false, false, false, "");					//IMPLEMENTED
 	

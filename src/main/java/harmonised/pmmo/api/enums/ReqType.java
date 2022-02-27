@@ -10,20 +10,20 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 
 public enum ReqType implements StringRepresentable, IExtensibleEnum {
-    WEAR(true, false, false),
-    USE_ENCHANTMENT(true, false, false),
-    TOOL(true, false, false),
-    WEAPON(true, false, false),
-    USE(true, true, false),
-    PLACE(true, true, false),
-    BREAK(true, true, false),
-    BIOME(false, false, false),
-    KILL(false, false, true),
-    TRAVEL(false, false, false), 
-    RIDE(false, false, true),
-    TAME(false, false, true),
-    BREED(false, false, true),
-    ENTITY_INTERACT(false, false, true);
+    WEAR(true, false, false),				//PLAYER TICK
+    USE_ENCHANTMENT(true, false, false),	//PLAYER TICK
+    TOOL(true, false, false),				//IMPLEMENTED IN ACTIONS
+    WEAPON(true, false, false),				//IMPLEMENTED IN ACTIONS
+    USE(true, true, false),					//IMPLEMENTED IN ACTIONS
+    PLACE(true, true, false),				//IMPLEMENTED IN ACTIONS
+    BREAK(true, true, false),				//IMPLEMENTED IN ACTIONS
+    BIOME(false, false, false),				//PLAYER TICK
+    KILL(false, false, true),				//IMPLEMENTED IN ACTIONS
+    TRAVEL(false, false, false), 			//TRAVEL EVENT
+    RIDE(false, false, true),				//IMPLEMENTED IN EVENT
+    TAME(false, false, true),				//IMPLEMENTED IN ACTIONS
+    BREED(false, false, true),				//IMPLEMENTED IN ACTIONS
+    ENTITY_INTERACT(false, false, true);	//IMPLEMENTED IN ACTIONS
 	
 	
 	ReqType(boolean itemApplicable, boolean blockApplicable, boolean entityApplicable) {
