@@ -49,10 +49,11 @@ public class TooltipRegistry {
 		if (res == null) {MsLoggy.info("Supplied ResourceLocation Null"); return;}
 		
 		if (!itemReqTooltips.containsKey(reqType)) {
-			MsLoggy.info("New tooltip category created for: "+reqType.toString()+" "+res.toString());
+			MsLoggy.info("New tooltip category created for: "+reqType.toString());
 			itemReqTooltips.put(reqType, LinkedListMultimap.create());
 		}
 		itemReqTooltips.get(reqType).get(res).add(func);
+		MsLoggy.info("New tooltip registered for: "+reqType.toString()+" "+res.toString());
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
@@ -73,10 +74,11 @@ public class TooltipRegistry {
 		if (res == null) {MsLoggy.info("Supplied ResourceLocation Null"); return;}
 		
 		if (!blockReqTooltips.containsKey(reqType)) {
-			MsLoggy.info("New tooltip category created for: "+reqType.toString()+" "+res.toString());
+			MsLoggy.info("New tooltip category created for: "+reqType.toString());
 			blockReqTooltips.put(reqType, LinkedListMultimap.create());
 		}
 		blockReqTooltips.get(reqType).get(res).add(func);
+		MsLoggy.info("New tooltip registered for: "+reqType.toString()+" "+res.toString());
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
@@ -291,10 +293,11 @@ public class TooltipRegistry {
 		if (type == null) {MsLoggy.info("Supplied ModifierType Null"); return;}
 		if (res == null) {MsLoggy.info("Supplied ResourceLocation Null"); return;}
 		if (!itemBonusTooltips.containsKey(type)) {
-			MsLoggy.info("New tooltip category created for: "+type.toString()+" "+res.toString());
+			MsLoggy.info("New tooltip category created for: "+type.toString());
 			itemBonusTooltips.put(type, LinkedListMultimap.create());
 		}
 		itemBonusTooltips.get(type).get(res).add(func);
+		MsLoggy.info("New tooltip registered for: "+type.toString()+" "+res.toString());
 	}
 
 	public boolean bonusTooltipExists(ResourceLocation res, ModifierDataType type) {

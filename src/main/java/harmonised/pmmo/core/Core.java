@@ -306,6 +306,7 @@ public class Core {
 	   *  register nothing.
 	   */
 	  public void registerNBT() {			
+		  //TODO maybe change the loops to use the enum applicablity arrays
 			//==============REGISTER REQUIREMENT LOGIC=============================== 
 			for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemReqLogic().entrySet()) {
 				//bypass this req for items since it is not applicable
@@ -361,8 +362,11 @@ public class Core {
 			}
 			
 			//==============REGISTER BONUSES LOGIC=====================================
+			MsLoggy.debug("Bonus Logic entrySet size: "+nbt.bonusLogic().size());
 			for (Map.Entry<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.bonusLogic().entrySet()) {
+				MsLoggy.debug("Bonus Logic Element Size: "+entry.getKey().name()+" "+entry.getValue().size());
 				entry.getValue().forEach((rl, logic) -> {
+					MsLoggy.debug("Bonus Logic Detail: "+rl.toString()+" "+logic.toString());
 					Function<ItemStack, Map<String, Double>> func = (stack) -> nbt.getBonusMap(entry.getKey(), stack);
 					tooltips.registerItemBonusTooltipData(rl, entry.getKey(), func);
 				});
