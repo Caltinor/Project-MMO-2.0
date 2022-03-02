@@ -89,7 +89,7 @@ public class TooltipHandler {
             if (wornItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.WORN).get()) {addModifierTooltip("pmmo.itemXpBoostWorn", event, wornItemXpBoost, core);}
          }
 	}
-	
+	//TODO implement un-met requirement indicator
 	private static void addRequirementTooltip(String header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
 		event.getToolTip().add(new TranslatableComponent(header));
 		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
