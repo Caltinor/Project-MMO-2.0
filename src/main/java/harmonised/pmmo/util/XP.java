@@ -250,7 +250,7 @@ public class XP
 
 	public static ResourceLocation getBiomeResLoc(Level world, BlockPos pos)
 	{
-		return world.getBiomeName(pos).get().getRegistryName();
+		return world.getBiomeManager().m_47881_(pos).getRegistryName();
 	}
 
 	public static ResourceLocation getDimResLoc(Level world)
@@ -855,7 +855,7 @@ public class XP
 	{
 		Set<String> results = new HashSet<>();
 
-		for(Map.Entry<ResourceLocation, Tag<Item>> namedTag : ItemTags.getAllTags().getAllTags().entrySet())
+		for(Map.Entry<ResourceLocation, Tag<Item>> namedTag : ItemTags.m_13193_().m_5643_().entrySet())
 		{
 			if(namedTag.getKey().toString().startsWith(tag))
 			{
@@ -869,7 +869,7 @@ public class XP
 			}
 		}
 
-		for(Map.Entry<ResourceLocation, Tag<Block>> namedTag : BlockTags.getAllTags().getAllTags().entrySet())
+		for(Map.Entry<ResourceLocation, Tag<Block>> namedTag : BlockTags.m_13115_().m_5643_().entrySet())
 		{
 			if(namedTag.getKey().toString().equals(tag))
 			{
@@ -883,7 +883,7 @@ public class XP
 			}
 		}
 
-		for(Map.Entry<ResourceLocation, Tag<Fluid>> namedTag : FluidTags.getAllTags().getAllTags().entrySet())
+		for(Map.Entry<ResourceLocation, Tag<Fluid>> namedTag : FluidTags.m_144299_().m_5643_().entrySet())
 		{
 			if(namedTag.getKey().toString().equals(tag))
 			{
@@ -897,7 +897,7 @@ public class XP
 			}
 		}
 
-		for(Map.Entry<ResourceLocation, Tag<EntityType<?>>> namedTag : EntityTypeTags.getAllTags().getAllTags().entrySet())
+		for(Map.Entry<ResourceLocation, Tag<EntityType<?>>> namedTag : EntityTypeTags.m_13126_().m_5643_().entrySet())
 		{
 			if(namedTag.getKey().toString().equals(tag))
 			{
@@ -1212,7 +1212,7 @@ public class XP
 		Map<String, Double> biomeBoosts = new HashMap<>();
 		double biomePenaltyMultiplier = Config.getConfig("biomePenaltyMultiplier");
 
-		Biome biome = player.level.getBiome(vecToBlock(player.position()));
+		Biome biome = player.level.getBiomeManager().m_47881_(vecToBlock(player.position()));
 		ResourceLocation resLoc = biome.getRegistryName();
 		if(resLoc == null)
 			return new HashMap<>();
@@ -1703,7 +1703,7 @@ public class XP
 
 	public static void checkBiomeLevelReq(Player player)
 	{
-		Biome biome = player.level.getBiome(vecToBlock(player.position()));
+		Biome biome = player.level.getBiomeManager().m_47881_(vecToBlock(player.position()));
 		ResourceLocation resLoc = XP.getBiomeResLoc(player.level, biome);
 		if(resLoc == null)
 			return;
