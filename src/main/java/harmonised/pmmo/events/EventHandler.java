@@ -3,6 +3,7 @@ package harmonised.pmmo.events;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.events.impl.AnvilRepairHandler;
 import harmonised.pmmo.events.impl.BreakHandler;
 import harmonised.pmmo.events.impl.BreakSpeedHandler;
 import harmonised.pmmo.events.impl.BreedHandler;
@@ -17,10 +18,14 @@ import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.MountHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
+import harmonised.pmmo.events.impl.PlayerClickHandler;
 import harmonised.pmmo.events.impl.PlayerDeathHandler;
 import harmonised.pmmo.events.impl.PotionHandler;
+import harmonised.pmmo.events.impl.ShieldBlockHandler;
+import harmonised.pmmo.events.impl.SleepHandler;
 import harmonised.pmmo.events.impl.TameHandler;
 import harmonised.pmmo.features.mobscaling.MobAttributeHandler;
+import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -35,16 +40,23 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.ShieldBlockEvent;
+import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangeGameModeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -63,13 +75,13 @@ public class EventHandler {
 	//==========================================================
 	//                 CORE MOD EVENTS
 	//==========================================================
-	@SuppressWarnings("resource")
 	@SubscribeEvent(priority=EventPriority.LOW)
 	public static void onPlayerJoin(PlayerLoggedInEvent event) {
-		if (event.getPlayer().getLevel().isClientSide)
-			return;
-		else
-			LoginHandler.handle(event);
+		LoginHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onPlayerLeave(PlayerLoggedOutEvent event) {
+		PartyUtils.removeFromParty(event.getPlayer());
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST) 
 	public static void onDifficultyChange(DifficultyChangeEvent event ) {
@@ -95,6 +107,10 @@ public class EventHandler {
 	public static void onRespawn(PlayerRespawnEvent event) {
 		Core core = Core.get(event.getPlayer().level); 
 		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getPlayer(), core.getSide());
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onSleep(SleepFinishedTimeEvent event) {
+		SleepHandler.handle(event);
 	}
 	
 	//==========================================================
@@ -190,5 +206,27 @@ public class EventHandler {
 		if (event.isCanceled())
 			return;
 		MountHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onShieldBlock(ShieldBlockEvent event) {
+		if (event.isCanceled())
+			return;
+		ShieldBlockHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onAnvilRepar(AnvilRepairEvent event) {
+		AnvilRepairHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onBlockHit(LeftClickBlock event) {
+		PlayerClickHandler.leftClickBlock(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onBlockActivate(RightClickBlock event) {
+		PlayerClickHandler.rightClickBlock(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onItemActivate(RightClickItem event) {
+		PlayerClickHandler.rightClickItem(event);
 	}
 }

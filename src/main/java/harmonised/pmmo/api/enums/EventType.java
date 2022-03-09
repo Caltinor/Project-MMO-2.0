@@ -10,7 +10,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 
 public enum EventType implements StringRepresentable, IExtensibleEnum{
-	ANVIL_REPAIR(true, false, false, "smithing"),  			//
+	ANVIL_REPAIR(true, false, false, "smithing"),  			//IMPLEMENTED
 	BLOCK_BREAK(false, true, false, "mining"),				//IMPLEMENTED
 		BREAK_SPEED(false, true, false, "mining"),			//IMPLEMENTED
 	BLOCK_PLACE(true, true, false, "building"),				//IMPLEMENTED
@@ -45,18 +45,16 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		SPRINT_JUMP(false, false, true, "agility"),			//IMPLEMENTED
 		CROUCH_JUMP(false, false, true, "agility"),			//IMPLEMENTED
 	WORLD_CONNECT(false, false, false, ""),					//IMPLEMENTED
-	WORLD_DISCONNECT(false, false, false, ""),				//
-	INTERACT(false, false, true, "dexterity"),				//
-		LEFT_CLICK_BLOCK(false, true, false, "dexterity"),	//
-		LEFT_CLICK_ITEM(true, false, false, "dexterity"),	//
-		RIGHT_CLICK_BLOCK(false, true, false, "dexterity"),	//
-		RIGHT_CLICK_ITEM(true, false, false, "dexterity"),	//
-		ENTITY(false, false, true, "charisma"),				//IMPLEMENTED
+	WORLD_DISCONNECT(false, false, false, ""),				//IMPLEMENTED
+	HIT_BLOCK(false, true, false, "dexterity"),				//IMPLEMENTED
+	ACTIVATE_BLOCK(false, true, false, "dexterity"),		//IMPLEMENTED
+	ACTIVATE_ITEM(true, false, false, "dexterity"),			//IMPLEMENTED
+	ENTITY(false, false, true, "charisma"),					//IMPLEMENTED
 	RESPAWN(false, false, false, ""),						//IMPLEMENTED
 	RIDING(false, false, true, "taming"),					//				PLAYER TICK
-	SHIELD_BLOCK(false, false, true, "combat"),				//
+	SHIELD_BLOCK(false, false, true, "combat"),				//IMPLEMENTED
 	SKILL_UP(false, false, false, ""),						//IMPLEMENTED
-	SLEEP(false, false, true, "endurance"),					//
+	SLEEP(false, false, true, "endurance"),					//IMPLEMENTED
 	SPRINTING(false, false, true, "agility"),				//				PLAYER TICK
 	SUBMERGED(false, false, true, "swimming"),				//				PLAYER TICK
 		SWIMMING(false, false, true, "swimming"),			//				PLAYER TICK
@@ -64,7 +62,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		SURFACING(false, false, true, "swimming"),			//				PLAYER TICK
 		SWIM_SPRINTING(false, false, true, "swimming"),		//				PLAYER TICK
 	TAMING(false, false, true, "taming"),					//IMPLEMENTED
-	VEIN_MINE(false, false, false, ""),						//
+	VEIN_MINE(false, false, false, ""),						//				CUSTOM TRIGGER NO XP LOGIC
 	DISABLE_PERK(false, false, false, "");					//IMPLEMENTED
 	
 	public final boolean itemApplicable;
