@@ -51,7 +51,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	ACTIVATE_ITEM(true, false, false, "dexterity"),			//IMPLEMENTED
 	ENTITY(false, false, true, "charisma"),					//IMPLEMENTED
 	RESPAWN(false, false, false, ""),						//IMPLEMENTED
-	RIDING(false, false, true, "taming"),					//				PLAYER TICK
+	RIDING(false, false, true, "taming"),					//IMPLEMENTED	PLAYER TICK
 	SHIELD_BLOCK(false, false, true, "combat"),				//IMPLEMENTED
 	SKILL_UP(false, false, false, ""),						//IMPLEMENTED
 	SLEEP(false, false, true, "endurance"),					//IMPLEMENTED

@@ -3,6 +3,7 @@ package harmonised.pmmo.events.impl;
 import java.util.List;
 import java.util.Map;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
@@ -17,7 +18,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.eventbus.api.Event.Result;
 
 public class PlayerClickHandler {
-
+//TODO add in how to handle event trigger cancellations
 	public static void leftClickBlock(LeftClickBlock event ) {
 		Player player = event.getPlayer();
 		Core core = Core.get(player.level);
@@ -29,9 +30,16 @@ public class PlayerClickHandler {
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
 			event.setUseItem(Result.DENY);
 		}
+		if (event.getUseBlock().equals(Result.DENY)) return;
+		
 		CompoundTag hookOutput = new CompoundTag();
-		if (serverSide)
+		if (serverSide) {
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.HIT_BLOCK, event, hookOutput);
+			if (hookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
+				event.setCanceled(true);
+				return;
+			}
+		}
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.HIT_BLOCK, player, core.getSide()));
 		if (serverSide) {
@@ -52,9 +60,16 @@ public class PlayerClickHandler {
 		if (!core.isActionPermitted(ReqType.INTERACT, event.getItemStack(), player)) {
 			event.setUseItem(Result.DENY);
 		}
+		if (event.getUseBlock().equals(Result.DENY)) return;
+		
 		CompoundTag hookOutput = new CompoundTag();
-		if (serverSide)
+		if (serverSide) {
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ACTIVATE_BLOCK, event, hookOutput);
+			if (hookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
+				event.setCanceled(true);
+				return;
+			}
+		}
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_BLOCK, player, core.getSide()));
 		if (serverSide) {
@@ -71,10 +86,16 @@ public class PlayerClickHandler {
 		
 		if (!core.isActionPermitted(ReqType.USE, event.getItemStack(), player)) {
 			event.setResult(Result.DENY);
+			return;
 		}
 		CompoundTag hookOutput = new CompoundTag();
-		if (serverSide)
+		if (serverSide) {
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ACTIVATE_ITEM, event, hookOutput);
+			if (hookOutput.getBoolean(APIUtils.IS_CANCELLED)) {
+				event.setCanceled(true);
+				return;
+			}
+		}
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_ITEM, player, core.getSide()));
 		if (serverSide) {
