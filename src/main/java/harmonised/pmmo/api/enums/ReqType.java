@@ -23,6 +23,7 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum {
     RIDE(false, false, true),				//IMPLEMENTED IN EVENT
     TAME(false, false, true),				//IMPLEMENTED IN ACTIONS
     BREED(false, false, true),				//IMPLEMENTED IN ACTIONS
+    INTERACT(true, true, false),			//IMPLEMENTED IN ACTOINS
     ENTITY_INTERACT(false, false, true);	//IMPLEMENTED IN ACTIONS
 	
 	
