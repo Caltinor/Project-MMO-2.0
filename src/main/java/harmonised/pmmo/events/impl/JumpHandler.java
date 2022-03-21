@@ -13,7 +13,6 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 
 public class JumpHandler {
@@ -41,9 +40,10 @@ public class JumpHandler {
 		if (serverSide) {
 			//NOTE a default value of 0.4 is consistent with the base jump amount of a player without any vanilla/modded jump modifiers
 			double jumpXpBase = perkOutput.contains(APIUtils.JUMP_OUT) ? Math.max(0.4, perkOutput.getDouble(APIUtils.JUMP_OUT)) : player.getDeltaMovement().y;
-			Double xpValue = jumpModifier(type) * jumpXpBase;
 			Map<String, Long> xpAward = new HashMap<>();
-			jumpSkills(type).get().forEach((skill) -> {
+			Map<String, Double> ratios = getRatioMap(type);
+			ratios.keySet().forEach((skill) -> {
+				Double xpValue = ratios.getOrDefault(skill, 2.5) * jumpXpBase;
 				xpAward.put(skill, xpValue.longValue());
 			});
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
@@ -51,14 +51,9 @@ public class JumpHandler {
 		}
 	}
 	
-	private static double jumpModifier(EventType type) {
-		return type.equals(EventType.JUMP) ? Config.JUMP_MODIFIER.get() 
-				: type.equals(EventType.SPRINT_JUMP) ? Config.SPRINT_JUMP_MODIFIER.get() 
-						: type.equals(EventType.CROUCH_JUMP) ? Config.CROUCH_JUMP_MODIFIER.get() : 2.5;  
-	}
-	
-	private static ConfigValue<List<? extends String>> jumpSkills(EventType type) {
-		return type.equals(EventType.JUMP) ? Config.JUMP_SKILLS 
-				: type.equals(EventType.SPRINT_JUMP) ? Config.SPRINT_JUMP_SKILLS : Config.CROUCH_JUMP_SKILLS;
+	private static Map<String, Double> getRatioMap(EventType type) {
+		return type.equals(EventType.JUMP) ? Config.JUMP_XP.get() 
+				: type.equals(EventType.SPRINT_JUMP) ? Config.SPRINT_JUMP_XP.get() 
+						: type.equals(EventType.CROUCH_JUMP) ? Config.CROUCH_JUMP_XP.get() : new HashMap<>();  
 	}
 }

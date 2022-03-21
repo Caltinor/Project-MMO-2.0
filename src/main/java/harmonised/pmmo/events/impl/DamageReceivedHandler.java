@@ -11,12 +11,14 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -65,22 +67,22 @@ public class DamageReceivedHandler {
 			break;
 		}
 		case FROM_ENVIRONMENT: {
-			Double value = ultimateDamage * Config.FROM_ENVIRONMENT_MODIFIER.get();
-			Config.FROM_ENVIRONMENT_SKILLS.get().forEach((skill) -> {				
+			Config.FROM_ENVIRONMENT_XP.get().keySet().forEach((skill) -> {	
+				Double value = ultimateDamage * Config.FROM_ENVIRONMENT_XP.get().getOrDefault(skill, 0d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
 		}
 		case FROM_IMPACT: {
-			Double value = ultimateDamage * Config.FROM_IMPACT_MODIFIER.get();
-			Config.FROM_IMPACT_SKILLS.get().forEach((skill) -> {				
+			Config.FROM_IMPACT_XP.get().keySet().forEach((skill) -> {	
+				Double value = ultimateDamage * Config.FROM_IMPACT_XP.get().getOrDefault(skill, 0d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
 		} 
 		case FROM_MAGIC: {
-			Double value = ultimateDamage * Config.FROM_MAGIC_MODIFIER.get();
-			Config.FROM_MAGIC_SKILLS.get().forEach((skill) -> {
+			Config.FROM_MAGIC_XP.get().keySet().forEach((skill) -> {
+				Double value = ultimateDamage * Config.FROM_MAGIC_XP.get().getOrDefault(skill, 0d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
@@ -92,8 +94,8 @@ public class DamageReceivedHandler {
 					mapOut.put(skill, (long)((float)value * ultimateDamage));
 				});
 			else {
-				Double value = ultimateDamage * Config.RECEIVE_DAMAGE_MODIFIER.get();
-				Config.RECEIVE_DAMAGE_SKILLS.get().forEach((skill) -> {					
+				Config.RECEIVE_DAMAGE_XP.get().keySet().forEach((skill) -> {	
+					Double value = ultimateDamage * Config.RECEIVE_DAMAGE_XP.get().getOrDefault(skill, 0d);
 					mapOut.put(skill, value.longValue());
 				});
 			}
@@ -127,8 +129,8 @@ public class DamageReceivedHandler {
 	private static final List<String> magic = List.of(
 			DamageSource.MAGIC.msgId,
 			"indirectMagic");
-	private static final ResourceLocation MOB_TAG = new ResourceLocation("pmmo:mobs");
-	private static final ResourceLocation ANIMAL_TAG = new ResourceLocation("pmmo:animals");
+	private static final TagKey<EntityType<?>> MOB_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:mobs"));
+	private static final TagKey<EntityType<?>> ANIMAL_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:animals"));
 	private static EventType getSourceCategory(DamageSource source) {
 		if (source.msgId.equals("player"))
 			return EventType.FROM_PLAYERS;
@@ -139,9 +141,9 @@ public class DamageReceivedHandler {
 		if (magic.contains(source.msgId))
 			return EventType.FROM_MAGIC;
 		if (source.getEntity() != null) {
-			if (EntityTypeTags.getAllTags().getTag(MOB_TAG).contains(source.getEntity().getType()))
+			if (source.getEntity().getType().is(MOB_TAG))
 				return EventType.FROM_MOBS;
-			if (EntityTypeTags.getAllTags().getTag(ANIMAL_TAG).contains(source.getEntity().getType()))
+			if (source.getEntity().getType().is(ANIMAL_TAG))
 				return EventType.FROM_ANIMALS;
 		}
 		if (source.isProjectile())

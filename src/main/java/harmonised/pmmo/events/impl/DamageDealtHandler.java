@@ -13,10 +13,11 @@ import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -87,15 +88,15 @@ public class DamageDealtHandler {
 			break;
 		}
 		case DEAL_MELEE_DAMAGE: {
-			Double value = ultimateDamage * Config.DEAL_MELEE_DAMAGE_MODIFIER.get();
-			Config.DEAL_MELEE_DAMAGE_SKILLS.get().forEach((skill) -> {
+			Config.DEAL_MELEE_DAMAGE_XP.get().keySet().forEach((skill) -> {
+				Double value = ultimateDamage * Config.DEAL_MELEE_DAMAGE_XP.get().getOrDefault(skill, 0d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
 		}
 		case DEAL_RANGED_DAMAGE: {
-			Double value = ultimateDamage * Config.DEAL_RANGED_DAMAGE_MODIFIER.get();
-			Config.DEAL_RANGED_DAMAGE_SKILLS.get().forEach((skill) -> {
+			Config.DEAL_RANGED_DAMAGE_XP.get().keySet().forEach((skill) -> {
+				Double value = ultimateDamage * Config.DEAL_RANGED_DAMAGE_XP.get().getOrDefault(skill, 0d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
@@ -105,13 +106,13 @@ public class DamageDealtHandler {
 		return mapOut;
 	}
 	
-	private static final ResourceLocation MOB_TAG = new ResourceLocation("pmmo:mobs");
-	private static final ResourceLocation ANIMAL_TAG = new ResourceLocation("pmmo:animals");
+	private static final TagKey<EntityType<?>> MOB_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:mobs"));
+	private static final TagKey<EntityType<?>> ANIMAL_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:animals"));
 	private static EventType getEventCategory(boolean projectileSource, LivingEntity target) {
 		if (projectileSource) {
-			if (EntityTypeTags.getAllTags().getTag(MOB_TAG).contains(target.getType()))
+			if (target.getType().is(MOB_TAG))
 				return EventType.RANGED_TO_MOBS;
-			if (EntityTypeTags.getAllTags().getTag(ANIMAL_TAG).contains(target.getType()))
+			if (target.getType().is(ANIMAL_TAG))
 				return EventType.RANGED_TO_ANIMALS;
 			if (target.getType().equals(EntityType.PLAYER))
 				return EventType.RANGED_TO_PLAYERS;
@@ -119,9 +120,9 @@ public class DamageDealtHandler {
 				return EventType.DEAL_RANGED_DAMAGE;
 		}
 		else {
-			if (EntityTypeTags.getAllTags().getTag(MOB_TAG).contains(target.getType()))
+			if (target.getType().is(MOB_TAG))
 				return EventType.MELEE_TO_MOBS;
-			if (EntityTypeTags.getAllTags().getTag(ANIMAL_TAG).contains(target.getType()))
+			if (target.getType().is(ANIMAL_TAG))
 				return EventType.MELEE_TO_ANIMALS;
 			if (target.getType().equals(EntityType.PLAYER))
 				return EventType.MELEE_TO_PLAYERS;
