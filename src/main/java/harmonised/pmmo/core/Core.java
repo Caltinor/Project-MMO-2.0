@@ -238,7 +238,7 @@ public class Core {
 				Map<String, Double> modifiers = new HashMap<>();
 				switch (type) {
 				case BIOME: {
-					ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).getRegistryName();
+					ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).value().getRegistryName();
 					modifiers = xp.getObjectModifierMap(type, biomeID);
 					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
 						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
