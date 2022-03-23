@@ -20,6 +20,7 @@ import harmonised.pmmo.events.impl.MountHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.events.impl.PlayerClickHandler;
 import harmonised.pmmo.events.impl.PlayerDeathHandler;
+import harmonised.pmmo.events.impl.PlayerTickHandler;
 import harmonised.pmmo.events.impl.PotionHandler;
 import harmonised.pmmo.events.impl.ShieldBlockHandler;
 import harmonised.pmmo.events.impl.SleepHandler;
@@ -32,6 +33,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.DifficultyChangeEvent;
+import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.AnimalTameEvent;
@@ -228,5 +230,9 @@ public class EventHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onItemActivate(RightClickItem event) {
 		PlayerClickHandler.rightClickItem(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onPlayerTick(PlayerTickEvent event) {
+		PlayerTickHandler.handle(event);
 	}
 }

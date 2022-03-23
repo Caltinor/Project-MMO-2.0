@@ -14,7 +14,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	BLOCK_BREAK(false, true, false, "mining"),				//IMPLEMENTED
 		BREAK_SPEED(false, true, false, "mining"),			//IMPLEMENTED
 	BLOCK_PLACE(true, true, false, "building"),				//IMPLEMENTED
-	BREATH_CHANGE(false, false, true, "swimming"),			//				PLAYERTICK
+	BREATH_CHANGE(false, false, true, "swimming"),			//IMPLEMENTED	PLAYERTICK
 	BREED(false, false, true, "taming"),					//IMPLEMENTED
 	BREW(true, false, false, "alchemy"),					//PARTIAL		MIXIN NEEDED FOR OTHER EVENTS
 	COOK(true, false, false, "cooking"),					//				MIXIN
@@ -40,7 +40,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	FISH(true, false, false, "fishing"),					//IMPLEMENTED
 	SMELT(true, false, false, "smithing"),					//				MIXIN
 	GROW(false, true, false, "farming"),					//IMPLEMENTED
-	HEALTH_CHANGE(false, false, false, ""),					//				PLAYER TICK
+	HEALTH_CHANGE(false, false, false, ""),					//IMPLEMENTED	PLAYER TICK
 	JUMP(false, false, true, "agility"),					//IMPLEMENTED
 		SPRINT_JUMP(false, false, true, "agility"),			//IMPLEMENTED
 		CROUCH_JUMP(false, false, true, "agility"),			//IMPLEMENTED
@@ -55,12 +55,12 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	SHIELD_BLOCK(false, false, true, "combat"),				//IMPLEMENTED
 	SKILL_UP(false, false, false, ""),						//IMPLEMENTED
 	SLEEP(false, false, true, "endurance"),					//IMPLEMENTED
-	SPRINTING(false, false, true, "agility"),				//				PLAYER TICK
-	SUBMERGED(false, false, true, "swimming"),				//				PLAYER TICK
-		SWIMMING(false, false, true, "swimming"),			//				PLAYER TICK
-		DIVING(false, false, true, "swimming"),				//				PLAYER TICK
-		SURFACING(false, false, true, "swimming"),			//				PLAYER TICK
-		SWIM_SPRINTING(false, false, true, "swimming"),		//				PLAYER TICK
+	SPRINTING(false, false, true, "agility"),				//IMPLEMENTED	PLAYER TICK
+	SUBMERGED(false, false, true, "swimming"),				//IMPLEMENTED	PLAYER TICK
+		SWIMMING(false, false, true, "swimming"),			//IMPLEMENTED	PLAYER TICK
+		DIVING(false, false, true, "swimming"),				//IMPLEMENTED	PLAYER TICK
+		SURFACING(false, false, true, "swimming"),			//IMPLEMENTED	PLAYER TICK
+		SWIM_SPRINTING(false, false, true, "swimming"),		//IMPLEMENTED	PLAYER TICK
 	TAMING(false, false, true, "taming"),					//IMPLEMENTED
 	VEIN_MINE(false, false, false, ""),						//				CUSTOM TRIGGER NO XP LOGIC
 	DISABLE_PERK(false, false, false, "");					//IMPLEMENTED
