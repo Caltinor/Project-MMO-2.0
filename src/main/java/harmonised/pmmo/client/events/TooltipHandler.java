@@ -89,7 +89,7 @@ public class TooltipHandler {
             if (wornItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.WORN).get()) {addModifierTooltip("pmmo.itemXpBoostWorn", event, wornItemXpBoost, core);}
          }
 	}
-	//TODO implement un-met requirement indicator
+	
 	private static void addRequirementTooltip(String header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
 		event.getToolTip().add(new TranslatableComponent(header));
 		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
@@ -125,7 +125,14 @@ public class TooltipHandler {
 			map = core.getSkillGates().getObjectSkillMap(type, itemID);
 		if (map.isEmpty())
 			map = AutoValues.getRequirements(type, itemID, ObjectType.ITEM);
-		return map;
+		//remove values that meet the requirement
+		final Map<String, Integer> outMap = new HashMap<>();
+		map.forEach((skill, level) -> {
+			if (core.getData().getPlayerSkillLevel(skill, null) < level)
+				outMap.put(skill, level);
+		});
+		
+		return outMap;
 	}
 	
 	private static Map<String, Long> getXpGainData(Core core, ResourceLocation itemID, EventType type, ItemStack stack) {
