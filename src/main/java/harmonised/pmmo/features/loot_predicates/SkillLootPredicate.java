@@ -6,6 +6,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +27,9 @@ public class SkillLootPredicate implements LootItemCondition{
 		Integer level = t.getParamOrNull(LEVEL);
 		String skill = t.getParamOrNull(SKILL);
 		Entity player = t.getParamOrNull(LootContextParams.THIS_ENTITY);
-		return false;
+		if (player == null || skill == null || level == null) return false;
+		int actualLevel = Core.get(player.level).getData().getPlayerSkillLevel(skill, player.getUUID());
+		return actualLevel >= level;
 	}
 
 	@Override
