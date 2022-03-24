@@ -4,7 +4,8 @@ import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
-import harmonised.pmmo.features.loot_predicates.SkillLootPredicate;
+import harmonised.pmmo.features.loot_predicates.SkillLootConditionKill;
+import harmonised.pmmo.features.loot_predicates.SkillLootConditionPlayer;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -23,7 +24,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class CommonSetup {
 	
 	public static void init(final FMLCommonSetupEvent event) {
-		LootItemConditions.register("pmmo_skill", new SkillLootPredicate.Serializer());
+		LootItemConditions.register("pmmo_skill_level_kill", new SkillLootConditionKill.Serializer());
+		LootItemConditions.register("pmmo_skill_level", new SkillLootConditionPlayer.Serializer());
 		Networking.registerMessages();
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();

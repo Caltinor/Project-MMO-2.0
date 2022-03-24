@@ -1,0 +1,27 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:nether_star"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:pmmo_skill_level",
+          "skill": "combat",
+          "level_min": 10,
+          "level_max": 20
+        }
+      ]
+    },
+    { 
+    	"rolls": 1,
+    	"entries": [ 
+    		{ "type":"minecraft:item", "name":"minecraft:dirt"}
+    	]
+    }
+  ]
+}
