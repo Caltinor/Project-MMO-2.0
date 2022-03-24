@@ -29,6 +29,11 @@ public class PlayerTickHandler {
 		Player player = event.player;
 		Core core = Core.get(event.side);
 		
+		if (!airLast.containsKey(player.getUUID()))
+			airLast.put(player.getUUID(), player.getAirSupply());
+		if (!healthLast.containsKey(player.getUUID()))
+			healthLast.put(player.getUUID(), player.getHealth());
+		
 		if (player.getAirSupply() != airLast.getOrDefault(player.getUUID(), 0))
 			processEvent(EventType.BREATH_CHANGE, core, event);
 		if (player.getHealth() != healthLast.getOrDefault(player.getUUID(), 0f))
