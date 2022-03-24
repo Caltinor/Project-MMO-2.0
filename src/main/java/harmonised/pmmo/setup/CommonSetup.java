@@ -4,9 +4,11 @@ import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
+import harmonised.pmmo.features.loot_predicates.SkillLootPredicate;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -21,6 +23,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class CommonSetup {
 	
 	public static void init(final FMLCommonSetupEvent event) {
+		LootItemConditions.register("pmmo_skill", new SkillLootPredicate.Serializer());
 		Networking.registerMessages();
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
