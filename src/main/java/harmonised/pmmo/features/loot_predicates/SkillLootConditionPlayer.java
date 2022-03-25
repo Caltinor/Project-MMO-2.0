@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class SkillLootConditionPlayer implements LootItemCondition{
-	public static final LootItemConditionType SKILL_LEVEL_CONDITION_KILL = new LootItemConditionType(new SkillLootConditionPlayer.Serializer());
+	public static final LootItemConditionType SKILL_LEVEL_CONDITION = new LootItemConditionType(new SkillLootConditionPlayer.Serializer());
 
 	private String skill;
 	private Integer levelMin, levelMax;
@@ -29,16 +29,16 @@ public class SkillLootConditionPlayer implements LootItemCondition{
 	@Override
 	public boolean test(LootContext t) {
 		Entity player = t.getParamOrNull(LootContextParams.THIS_ENTITY);
-		if (player == null || skill == null || levelMin == null) return false;
+		if (player == null || skill == null) return false;
 		
 		int actualLevel = Core.get(player.level).getData().getPlayerSkillLevel(skill, player.getUUID());
 		
-		return actualLevel >= levelMin && (levelMax == null || actualLevel <= levelMax);
+		return (levelMin == null || actualLevel >= levelMin) && (levelMax == null || actualLevel <= levelMax);
 	}
 
 	@Override
 	public LootItemConditionType getType() {
-		return SKILL_LEVEL_CONDITION_KILL;
+		return SKILL_LEVEL_CONDITION;
 	}
 
 	public static final class Serializer implements net.minecraft.world.level.storage.loot.Serializer<SkillLootConditionPlayer> {

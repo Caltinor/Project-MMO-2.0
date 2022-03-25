@@ -4,6 +4,7 @@ import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
+import harmonised.pmmo.features.loot_predicates.SkillLootConditionHighestSkill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionKill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionPlayer;
 import harmonised.pmmo.network.Networking;
@@ -26,6 +27,7 @@ public class CommonSetup {
 	public static void init(final FMLCommonSetupEvent event) {
 		LootItemConditions.register("pmmo_skill_level_kill", new SkillLootConditionKill.Serializer());
 		LootItemConditions.register("pmmo_skill_level", new SkillLootConditionPlayer.Serializer());
+		LootItemConditions.register("pmmo_highest_skill", new SkillLootConditionHighestSkill.Serializer());
 		Networking.registerMessages();
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();

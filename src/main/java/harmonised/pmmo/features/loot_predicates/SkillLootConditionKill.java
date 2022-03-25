@@ -29,11 +29,11 @@ public class SkillLootConditionKill implements LootItemCondition{
 	@Override
 	public boolean test(LootContext t) {
 		Entity player = t.getParamOrNull(LootContextParams.KILLER_ENTITY);
-		if (player == null || skill == null || levelMin == null) return false;
+		if (player == null || skill == null) return false;
 		
 		int actualLevel = Core.get(player.level).getData().getPlayerSkillLevel(skill, player.getUUID());
 		
-		return actualLevel >= levelMin && (levelMax == null || actualLevel <= levelMax);
+		return (levelMin == null || actualLevel >= levelMin) && (levelMax == null || actualLevel <= levelMax);
 	}
 
 	@Override
