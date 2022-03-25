@@ -25,9 +25,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class CommonSetup {
 	
 	public static void init(final FMLCommonSetupEvent event) {
-		LootItemConditions.register("pmmo_skill_level_kill", new SkillLootConditionKill.Serializer());
-		LootItemConditions.register("pmmo_skill_level", new SkillLootConditionPlayer.Serializer());
-		LootItemConditions.register("pmmo_highest_skill", new SkillLootConditionHighestSkill.Serializer());
+		LootItemConditions.register("pmmo:skill_level_kill", new SkillLootConditionKill.Serializer());
+		LootItemConditions.register("pmmo:skill_level", new SkillLootConditionPlayer.Serializer());
+		LootItemConditions.register("pmmo:highest_skill", new SkillLootConditionHighestSkill.Serializer());
 		Networking.registerMessages();
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
