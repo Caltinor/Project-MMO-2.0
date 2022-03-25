@@ -52,20 +52,38 @@ public class PerksConfig {
 		bodyMap.put("combat", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("sword_dig", 0.05).build()));
 		defaultSettings.put(EventType.BREAK_SPEED, bodyMap);
 		bodyMap = new HashMap<>();
-		//TODO finish the fireworks defaults
 		//====================SKILL_UP DEFAULTS==========================
-		bodyMap.put("combat", List.of(
-				TagBuilder.start().withString("perk", "pmmo:damage").build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "combat").build()));
-		bodyMap.put("endurance", List.of(
-				TagBuilder.start().withString("perk", "pmmo:health").build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "endurance").build()));
+		bodyMap.put("mining", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "mining").build()));
 		bodyMap.put("building", List.of(
 				TagBuilder.start().withString("perk", "pmmo:reach").build(),
 				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "building").build()));
+		bodyMap.put("excavation", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "excavation").build()));
+		bodyMap.put("woodcutting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "woodcutting").build()));
+		bodyMap.put("farming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "farming").build()));
 		bodyMap.put("agility", List.of(
 				TagBuilder.start().withString("perk", "pmmo:speed").build(),
 				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "agility").build()));
+		bodyMap.put("endurance", List.of(
+				TagBuilder.start().withString("perk", "pmmo:health").build(),
+				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "endurance").build()));
+		bodyMap.put("combat", List.of(
+				TagBuilder.start().withString("perk", "pmmo:damage").build(),
+				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "combat").build()));
+		bodyMap.put("gunslinging", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "gunslinging").build()));
+		bodyMap.put("archery", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "archery").build()));
+		bodyMap.put("smithing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "smithing").build()));
+		bodyMap.put("flying", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "flying").build()));
+		bodyMap.put("swimming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "swimming").build()));
+		bodyMap.put("sailing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "sailing").build()));
+		bodyMap.put("fishing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "fishing").build()));
+		bodyMap.put("crafting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "crafting").build()));
+		bodyMap.put("magic", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "magic").build()));
+		bodyMap.put("slayer", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "slayer").build()));
+		bodyMap.put("hunter", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "hunter").build()));
+		bodyMap.put("taming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "taming").build()));
+		bodyMap.put("cooking", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "cooking").build()));
+		bodyMap.put("alchemy", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "alchemy").build()));
+		
 		defaultSettings.put(EventType.SKILL_UP, bodyMap);
 		bodyMap = new HashMap<>();
 		
