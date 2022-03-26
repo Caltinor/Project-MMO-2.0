@@ -17,7 +17,6 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	BREATH_CHANGE(false, false, true, "swimming"),			//IMPLEMENTED	PLAYERTICK
 	BREED(false, false, true, "taming"),					//IMPLEMENTED
 	BREW(true, false, false, "alchemy"),					//PARTIAL		MIXIN NEEDED FOR OTHER EVENTS
-	COOK(true, false, false, "cooking"),					//				MIXIN
 	CRAFT(true, false, false, "crafting"),					//IMPLEMENTED
 	RECEIVE_DAMAGE(false, false, true, "endurance"),		//IMPLEMENTED
 		FROM_MOBS(false, false, true, "endurance"),			//IMPLEMENTED
@@ -38,7 +37,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	DEATH(false, false, true, "endurance"),					//IMPLEMENTED
 	ENCHANT(true, false, false, "magic"),					//				MIXIN (probably)
 	FISH(true, false, false, "fishing"),					//IMPLEMENTED
-	SMELT(true, false, false, "smithing"),					//				MIXIN
+	SMELT(true, false, false, "smithing"),					//IMPLEMENTED	MIXIN
 	GROW(false, true, false, "farming"),					//IMPLEMENTED
 	HEALTH_CHANGE(false, false, false, ""),					//IMPLEMENTED	PLAYER TICK
 	JUMP(false, false, true, "agility"),					//IMPLEMENTED
