@@ -117,7 +117,7 @@ public class Core {
 		return true;
 	}
 	  
-	  public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
+	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
 		  ResourceLocation itemID = stack.getItem().getRegistryName();
 		  	if (Config.reqEnabled(ReqType.USE_ENCHANTMENT).get())
@@ -133,7 +133,7 @@ public class Core {
 			}
 		  return true;
 	  }
-	  public boolean isBlockActionPermitted(ReqType type, BlockPos pos, Player player) {
+	public boolean isBlockActionPermitted(ReqType type, BlockPos pos, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
 		  BlockEntity tile = player.getLevel().getBlockEntity(pos);
 		  ResourceLocation res = player.getLevel().getBlockState(pos).getBlock().getRegistryName();
@@ -141,7 +141,7 @@ public class Core {
 				  isActionPermitted_BypassPredicates(type, res, player, ObjectType.BLOCK) :
 				  isActionPermitted(type, tile, player);
 	  }
-	  private boolean isActionPermitted_BypassPredicates(ReqType type, ResourceLocation res, Player player, ObjectType oType) {
+	private boolean isActionPermitted_BypassPredicates(ReqType type, ResourceLocation res, Player player, ObjectType oType) {
 		  if (gates.doesObjectReqExist(type, res))
 				return doesPlayerMeetReq(type, res, player.getUUID());
 		  else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) {
@@ -150,7 +150,7 @@ public class Core {
 		  }
 		  return true;
 	  }
-	  private boolean isActionPermitted(ReqType type, BlockEntity tile, Player player) {
+	private boolean isActionPermitted(ReqType type, BlockEntity tile, Player player) {
 		  Preconditions.checkNotNull(tile);
 		  ResourceLocation blockID = tile.getBlockState().getBlock().getRegistryName();
 			if (predicates.predicateExists(blockID, type)) {
@@ -164,8 +164,8 @@ public class Core {
 			}
 		  return true;
 	  }
-	  private ResourceLocation playerID = new ResourceLocation("player");
-	  public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
+	private ResourceLocation playerID = new ResourceLocation("player");
+	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
 		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : new ResourceLocation(entity.getEncodeId());
 			if (predicates.predicateExists(entityID, type)) 
@@ -179,7 +179,7 @@ public class Core {
 		  return true;
 	  }
 	 
-	  public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
+	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
@@ -189,7 +189,7 @@ public class Core {
 			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getItemXpGainTooltipData(itemID, type, stack));
 		  return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, tooltipsUsed);
 	  }
-	  public Map<String, Long> getBlockExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
+	public Map<String, Long> getBlockExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
@@ -199,14 +199,14 @@ public class Core {
 				  xp.mergeXpMapsWithSummateCondition(xpGains, getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, false)) :
 				  xp.mergeXpMapsWithSummateCondition(xpGains, getExperienceAwards(xpGains, type, tile, player));
 	  }
-	  private Map<String, Long> getExperienceAwards(Map<String, Long> xpGains, EventType type, BlockEntity tile, Player player) {		  
+	private Map<String, Long> getExperienceAwards(Map<String, Long> xpGains, EventType type, BlockEntity tile, Player player) {		  
 			ResourceLocation blockID = tile.getBlockState().getBlock().getRegistryName();
 			boolean tooltipsUsed = false;
 			if (tooltipsUsed = tooltips.xpGainTooltipExists(blockID, type)) 
 				xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getBlockXpGainTooltipData(blockID, type, tile));
 		  return getCommonXpAwardData(xpGains, type, blockID, player, ObjectType.BLOCK, tooltipsUsed);
 	  }	  
-	  public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
+	public Map<String, Long> getExperienceAwards(EventType type, Entity entity, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
@@ -232,7 +232,7 @@ public class Core {
 		return inMap;
 	}
 
-	  public Map<String, Double> getConsolidatedModifierMap(Player player) {
+	public Map<String, Double> getConsolidatedModifierMap(Player player) {
 			Map<String, Double> mapOut = new HashMap<>();
 			for (ModifierDataType type : ModifierDataType.values()) {
 				Map<String, Double> modifiers = new HashMap<>();
@@ -291,7 +291,7 @@ public class Core {
 			return mapOut;
 		}
 	  
-	  public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
+	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
 			for (int i = 0; i < players.size(); i++) {
 				for (Map.Entry<String, Long> award : xpValues.entrySet()) {
 					if (getData().setXpDiff(players.get(i).getUUID(), award.getKey(), award.getValue())) {
@@ -301,11 +301,11 @@ public class Core {
 			}
 	  }
 	  
-	  /** This method registers applies PMMO's NBT logic to the values that are 
+	/** This method registers applies PMMO's NBT logic to the values that are 
 	   *  configured.  This should be fired after data is loaded or else it will
 	   *  register nothing.
 	   */
-	  public void registerNBT() {			
+	public void registerNBT() {			
 		  //TODO maybe change the loops to use the enum applicablity arrays
 			//==============REGISTER REQUIREMENT LOGIC=============================== 
 			for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemReqLogic().entrySet()) {

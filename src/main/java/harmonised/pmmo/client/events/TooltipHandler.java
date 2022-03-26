@@ -60,7 +60,6 @@ public class TooltipHandler {
             Map<String, Long> xpValueBreaking = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_BREAK, stack);
             Map<String, Long> xpValueCrafting = getXpGainData(core, item.getRegistryName(),EventType.CRAFT, stack);
             Map<String, Long> xpValueSmelting = getXpGainData(core, item.getRegistryName(),EventType.SMELT, stack);
-            Map<String, Long> xpValueCooking = getXpGainData(core, item.getRegistryName(),EventType.COOK, stack);
             Map<String, Long> xpValueBrewing = getXpGainData(core, item.getRegistryName(),EventType.BREW, stack);
             Map<String, Long> xpValueGrowing = getXpGainData(core, item.getRegistryName() ,EventType.GROW, stack);
             Map<String, Long> xpValuePlacing = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_PLACE, stack);
@@ -80,7 +79,6 @@ public class TooltipHandler {
             if (xpValueBreaking.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_BREAK).get()){addXpValueTooltip("pmmo.xpValueBreak", event, xpValueBreaking, core);}
             if (xpValueCrafting.size() > 0 && Config.tooltipXpEnabled(EventType.CRAFT).get()){addXpValueTooltip("pmmo.xpValueCraft", event, xpValueCrafting, core);}
             if (xpValueSmelting.size() > 0 && Config.tooltipXpEnabled(EventType.SMELT).get()){addXpValueTooltip("pmmo.xpValueSmelt", event, xpValueSmelting, core);}
-            if (xpValueCooking.size() > 0 && Config.tooltipXpEnabled(EventType.COOK).get()) {addXpValueTooltip("pmmo.xpValueCook", event, xpValueCooking, core);}
             if (xpValueBrewing.size() > 0 && Config.tooltipXpEnabled(EventType.BREW).get()) {addXpValueTooltip("pmmo.xpValueBrew", event, xpValueBrewing, core);}
             if (xpValueGrowing.size() > 0 && Config.tooltipXpEnabled(EventType.GROW).get()) {addXpValueTooltip("pmmo.xpValueGrow", event, xpValueGrowing, core);}
             if (xpValuePlacing.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_PLACE).get()) {addXpValueTooltip("pmmo.xpValuePlace", event, xpValuePlacing, core);}
@@ -125,6 +123,8 @@ public class TooltipHandler {
 			map = core.getSkillGates().getObjectSkillMap(type, itemID);
 		if (map.isEmpty())
 			map = AutoValues.getRequirements(type, itemID, ObjectType.ITEM);
+		if (!Config.HIDE_MET_REQS.get())
+			return map;
 		//remove values that meet the requirement
 		final Map<String, Integer> outMap = new HashMap<>();
 		map.forEach((skill, level) -> {
