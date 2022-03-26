@@ -62,6 +62,8 @@ public class Config {
 		builder.pop();
 	}
 	
+	public static BooleanValue HIDE_MET_REQS;
+	
 	private static BooleanValue[] TOOLTIP_REQ_ENABLED;
 	private static BooleanValue[] TOOLTIP_XP_ENABLED;
 	private static BooleanValue[] TOOLTIP_BONUS_ENABLED;
@@ -73,6 +75,10 @@ public class Config {
 	public static BooleanValue tooltipBonusEnabled(ModifierDataType type) {return TOOLTIP_BONUS_ENABLED[type.ordinal()];}
 	
 	private static void buildTooltips(ForgeConfigSpec.Builder builder) {
+		builder.comment("").push("ToolTip_Settings");
+		HIDE_MET_REQS = builder.comment("Should met reqs be hidden on the tooltip.")
+						.define("Hide Met Req Tooltips", true);
+		builder.pop();
 		builder.comment("This section covers the various tooltip elements and whether they should be enabled").push("Tooltip_Visibility");
 		
 		List<ReqType> rawReqList = new ArrayList<>(Arrays.asList(ReqType.values()));
