@@ -180,6 +180,10 @@ public class APIUtils {
 	public static final String JUMP_OUT = "jump_boost_output";
 	
 	public static final String STACK = "stack";
+	public static final String PLAYER_ID = "player_id";
+	
+	public static final String ENCHANT_LEVEL = "enchant_level";
+	public static final String ENCHANT_NAME = "enchant_name";
 	
 	/**Called during common setup, this method is used to register custom perks
 	 * to PMMO so that players can use them in their configurations.  It is 

@@ -7,7 +7,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +17,6 @@ import harmonised.pmmo.events.impl.FurnaceHandler;
 
 import javax.annotation.Nullable;
 
-@Debug
 @Mixin(AbstractFurnaceBlockEntity.class)
 public class AbstractFurnaceTileEntityShrinkMixin
 {
@@ -26,12 +24,11 @@ public class AbstractFurnaceTileEntityShrinkMixin
     protected NonNullList<ItemStack> items;
 
     @Inject(at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"),
+            	value = "INVOKE",
+            	target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"),
             method = "burn(Lnet/minecraft/world/item/crafting/Recipe;Lnet/minecraft/core/NonNullList;I)Z")
     public void projectmmo$$handleSmeltingShrink(@Nullable Recipe<?> p_155027_, NonNullList<ItemStack> p_155028_, int p_155029_, CallbackInfoReturnable<?> info)
     {
-    	System.out.println("Furnace Mixin Fired"); //TODO remove
         Level world = ((AbstractFurnaceBlockEntity)(Object)this).getLevel();
         BlockPos pos = ((AbstractFurnaceBlockEntity)(Object)this).getBlockPos();
         FurnaceHandler.handle(items.get(0), world, pos);

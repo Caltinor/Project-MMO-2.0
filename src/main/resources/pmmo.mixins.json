@@ -1,5 +1,5 @@
 {
-  "required": false,
+  "required": true,
   "minVersion": "0.7",
   "package": "harmonised.pmmo.mixin",
   "compatibilityLevel": "JAVA_17",

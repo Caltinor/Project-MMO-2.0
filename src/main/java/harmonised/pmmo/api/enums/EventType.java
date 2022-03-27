@@ -35,7 +35,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		RANGED_TO_PLAYERS(false, false, true, "archery"),	//IMPLEMENTED
 		RANGED_TO_ANIMALS(false, false, true, "archery"),	//IMPLEMENTED
 	DEATH(false, false, true, "endurance"),					//IMPLEMENTED
-	ENCHANT(true, false, false, "magic"),					//				MIXIN (probably)
+	ENCHANT(true, false, false, "magic"),					//IMPLEMENTED	MIXIN (probably)
 	FISH(true, false, false, "fishing"),					//IMPLEMENTED
 	SMELT(true, false, false, "smithing"),					//IMPLEMENTED	MIXIN
 	GROW(false, true, false, "farming"),					//IMPLEMENTED
