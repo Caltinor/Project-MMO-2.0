@@ -42,7 +42,8 @@ public class PlaceHandler {
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 			core.awardXP(partyMembersInRange, xpAward);
 			//Add the newly placed block to the ChunkDataHandler
-			ChunkDataHandler.addPos(player.getLevel().dimension().getRegistryName(), event.getPos(), player.getUUID());
+			ChunkDataHandler.addPos(player.getLevel().dimension(), event.getPos(), player.getUUID());
+			event.getWorld().getChunk(event.getPos()).setUnsaved(true);
 		}
 	}
 }

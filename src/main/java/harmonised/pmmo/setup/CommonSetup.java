@@ -8,10 +8,15 @@ import harmonised.pmmo.features.loot_predicates.SkillLootConditionHighestSkill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionKill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionPlayer;
 import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.storage.ChunkDataProvider;
+import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -64,5 +69,15 @@ public class CommonSetup {
 		event.addListener(CoreParser.DIMENSION_LOADER);
 		event.addListener(CoreParser.PLAYER_LOADER);
 		event.addListener(CoreParser.ENCHANTMENT_LOADER);
+	}
+	
+	@SubscribeEvent
+	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {
+		event.register(IChunkData.class);
+	}
+	
+	@SubscribeEvent
+	public static void onCapabilityAttach(AttachCapabilitiesEvent<LevelChunk> event) {
+		event.addCapability(ChunkDataProvider.CHUNK_CAP_ID, new ChunkDataProvider());
 	}
 }
