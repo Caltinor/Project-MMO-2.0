@@ -34,11 +34,12 @@ public class ChunkDataProvider implements ICapabilitySerializable<CompoundTag>{
 	}
 	
 	private static final Codec<Map<BlockPos, UUID>> CODEC = Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, SerializableUUID.CODEC);
+	
 	@Override
 	public CompoundTag serializeNBT() {
 		Map<BlockPos, UUID> unserializedMap = getCapability(CHUNK_CAP, null).orElse(backend).getMap();
 		MsLoggy.debug("Serialized Chunk Cap: "+MsLoggy.mapToString(unserializedMap));
-		CompoundTag nbt = (CompoundTag)CODEC.encodeStart(NbtOps.INSTANCE, unserializedMap).result().orElse(new CompoundTag());
+		CompoundTag nbt = (CompoundTag)CODEC.encodeStart(NbtOps.INSTANCE, unserializedMap).resultOrPartial(msg -> MsLoggy.error(msg)).orElse(new CompoundTag());
 		MsLoggy.debug("Serialized Chunk Cap NBT: "+nbt.toString());
 		return nbt;
 	}

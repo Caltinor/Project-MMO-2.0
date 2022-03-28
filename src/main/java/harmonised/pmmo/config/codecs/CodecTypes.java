@@ -98,11 +98,11 @@ public class CodecTypes {
 	public static final PrimitiveCodec<BlockPos> BLOCKPOS_CODEC = new PrimitiveCodec<>() {
 		@Override
 		public <T> DataResult<BlockPos> read(DynamicOps<T> ops, T input) {
-			return DataResult.success(BlockPos.of(ops.getNumberValue(input).map(Number::longValue).getOrThrow(false, null)));
+			return DataResult.success(BlockPos.of(ops.getStringValue(input).map(Long::valueOf).getOrThrow(false, null)));
 		}
 		@Override
 		public <T> T write(DynamicOps<T> ops, BlockPos value) {
-			return ops.createLong(value.asLong());
+			return ops.createString(String.valueOf(value.asLong()));
 		}
 		@Override
 		public String toString() { return "blockpos";}
