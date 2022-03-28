@@ -1,25 +1,28 @@
 package harmonised.pmmo.events.impl;
 
-import java.util.UUID;
-
-import harmonised.pmmo.storage.ChunkDataHandler;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.piston.MovingPistonBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.PistonType;
 import net.minecraftforge.event.world.PistonEvent;
 
 public class PistonHandler {
 	
-	 public static void handle(PistonEvent event)
-	    {
+	 public static void handle(PistonEvent event) {
+		 /* Design:
+		  * grab all of the blocks that will be pushed using the structure helper
+		  * as well as those being destroyed.
+		  * 
+		  * Then, iterater through each one and get the capability for the chunk
+		  * moved from (and delPos) and for the chunk moving to (and addpos). if
+		  * being destroyed, do nothing as the break event should fire for those.
+		  * 
+		  * This design should capture both extension and retraction since we are
+		  * using the offset direction position which provides an ultimate destination
+		  * and is agnostic to the push behavior.
+		  * 
 	        if(!event.getWorld().isClientSide())
 	        {
 	            Level world = (Level) event.getWorld();
 	            BlockPos pistonPos = event.getPos();
 	            Direction direction = event.getDirection();
+	            event.getStructureHelper().getToPush()
 	            UUID uuid;
 	            if(event.getPistonMoveType().equals(PistonEvent.PistonMoveType.EXTEND))
 	            {
@@ -41,6 +44,6 @@ public class PistonHandler {
 	                    ChunkDataHandler.delPos(world.dimension(), pistonPos.relative(direction, 2));
 	                }
 	            }
-	        }
+	        }*/
 	    }
 }

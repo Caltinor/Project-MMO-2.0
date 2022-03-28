@@ -12,12 +12,12 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.storage.ChunkDataHandler;
 import harmonised.pmmo.storage.ChunkDataProvider;
+import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
@@ -48,7 +48,7 @@ public class BreakHandler {
 			//update ChunkData to remove the block from the placed map
 			LevelChunk chunk = (LevelChunk) event.getWorld().getChunk(event.getPos());
 			chunk.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
-				cap.addPos(event.getPos(), event.getPlayer().getUUID());
+				cap.delPos(event.getPos());
 			});;
 			chunk.setUnsaved(true);
 		}
@@ -57,7 +57,8 @@ public class BreakHandler {
 	private static Map<String, Long> calculateXpAward(Core core, BreakEvent event, CompoundTag dataIn) {
 		Map<String, Long> outMap = core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getWorld(), event.getPlayer(), dataIn); 
 		LevelChunk chunk = (LevelChunk) event.getWorld().getChunk(event.getPos());
-		if (ChunkDataHandler.playerMatchesPos(event.getPlayer(), event.getPos())) {
+		IChunkData cap = chunk.getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
+		if (cap.playerMatchesPos(event.getPlayer(), event.getPos())) {
 			double xpModifier = Config.REUSE_PENALTY.get();
 			if (xpModifier == 0) return new HashMap<>();
 			Map<String, Long> modifiedOutMap = new HashMap<>();

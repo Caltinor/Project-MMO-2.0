@@ -8,6 +8,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.storage.ChunkDataHandler;
+import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,7 +20,7 @@ public class CropGrowHandler {
 	public static void handle(CropGrowEvent.Post event) {
 		Level level = (Level) event.getWorld();
 		Core core = Core.get(level);
-		UUID placerID = ChunkDataHandler.checkPos(level, event.getPos());
+		UUID placerID = level.getChunkAt(event.getPos()).getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new).checkPos(event.getPos());
 		ServerPlayer player = event.getWorld().getServer().getPlayerList().getPlayer(placerID);
 		CompoundTag hookOutput = new CompoundTag();
 		if (!level.isClientSide)

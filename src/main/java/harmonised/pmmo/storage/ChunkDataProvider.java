@@ -14,7 +14,6 @@ import net.minecraft.core.SerializableUUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -36,11 +35,11 @@ public class ChunkDataProvider implements ICapabilitySerializable<CompoundTag>{
 	private static final Codec<Map<BlockPos, UUID>> CODEC = Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, SerializableUUID.CODEC);
 	@Override
 	public CompoundTag serializeNBT() {
-		return (CompoundTag)CODEC.encodeStart(NbtOps.INSTANCE, backend.getMap()).result().orElse(new CompoundTag());
+		return (CompoundTag)CODEC.encodeStart(NbtOps.INSTANCE, getCapability(CHUNK_CAP, null).orElse(backend).getMap()).result().orElse(new CompoundTag());
 	}
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
-		backend.setMap(CODEC.parse(NbtOps.INSTANCE, nbt).result().orElse(new HashMap<>()));		
+		getCapability(CHUNK_CAP, null).orElse(backend).setMap(CODEC.parse(NbtOps.INSTANCE, nbt).result().orElse(new HashMap<>()));		
 	}
 	
 	

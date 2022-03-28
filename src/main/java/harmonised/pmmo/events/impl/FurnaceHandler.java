@@ -11,6 +11,8 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.storage.ChunkDataHandler;
+import harmonised.pmmo.storage.ChunkDataProvider;
+import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +26,8 @@ public class FurnaceHandler {
 	public static void handle(ItemStack input, Level level, BlockPos pos) {
 		//Checkers to exit early for non-applicable conditions
 		if (level.isClientSide) return;
-		UUID pid = ChunkDataHandler.checkPos(level, pos);
+		IChunkData cap = level.getChunkAt(pos).getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
+		UUID pid = cap.checkPos(pos);
 		if (pid == null) return;
 		ServerPlayer player = level.getServer().getPlayerList().getPlayer(pid);
 		if (player == null) {
