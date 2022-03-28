@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.config.codecs.CodecTypes;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,11 +36,17 @@ public class ChunkDataProvider implements ICapabilitySerializable<CompoundTag>{
 	private static final Codec<Map<BlockPos, UUID>> CODEC = Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, SerializableUUID.CODEC);
 	@Override
 	public CompoundTag serializeNBT() {
-		return (CompoundTag)CODEC.encodeStart(NbtOps.INSTANCE, getCapability(CHUNK_CAP, null).orElse(backend).getMap()).result().orElse(new CompoundTag());
+		Map<BlockPos, UUID> unserializedMap = getCapability(CHUNK_CAP, null).orElse(backend).getMap();
+		MsLoggy.debug("Serialized Chunk Cap: "+MsLoggy.mapToString(unserializedMap));
+		CompoundTag nbt = (CompoundTag)CODEC.encodeStart(NbtOps.INSTANCE, unserializedMap).result().orElse(new CompoundTag());
+		MsLoggy.debug("Serialized Chunk Cap NBT: "+nbt.toString());
+		return nbt;
 	}
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
-		getCapability(CHUNK_CAP, null).orElse(backend).setMap(CODEC.parse(NbtOps.INSTANCE, nbt).result().orElse(new HashMap<>()));		
+		Map<BlockPos, UUID> deserializedMap = new HashMap<>(CODEC.parse(NbtOps.INSTANCE, nbt).result().orElse(new HashMap<>()));
+		MsLoggy.debug("Deserialized Chunk Cap: "+MsLoggy.mapToString(deserializedMap));
+		getCapability(CHUNK_CAP, null).orElse(backend).setMap(deserializedMap);		
 	}
 	
 	

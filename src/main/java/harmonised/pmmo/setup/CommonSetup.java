@@ -71,7 +71,6 @@ public class CommonSetup {
 		event.addListener(CoreParser.ENCHANTMENT_LOADER);
 	}
 	
-	@SubscribeEvent
 	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {
 		event.register(IChunkData.class);
 	}

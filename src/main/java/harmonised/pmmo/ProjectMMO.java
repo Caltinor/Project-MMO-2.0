@@ -25,5 +25,6 @@ public class ProjectMMO {
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, PerksConfig.SERVER_CONFIG, "pmmo-Perks.toml");
 
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
+    	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::onCapabilityRegister);
     }
 }
