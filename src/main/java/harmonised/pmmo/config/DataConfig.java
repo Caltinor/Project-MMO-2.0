@@ -1,5 +1,6 @@
 package harmonised.pmmo.config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,9 @@ import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class DataConfig {
 	public DataConfig() {}
@@ -55,5 +59,15 @@ public class DataConfig {
 	}
 	public Style getSkillStyle(String skill) {
 		return Style.EMPTY.withColor(TextColor.fromRgb(getSkillColor(skill)));
+	}
+	
+	public List<MobEffectInstance> getLocationEffect(boolean isPositive, ResourceLocation biomeID) {
+		List<MobEffectInstance> effects = new ArrayList<>();
+		for (Map.Entry<ResourceLocation, Integer> effect 
+				: locationEffectData.getOrDefault(isPositive, new HashMap<>()).getOrDefault(biomeID, new HashMap<>()).entrySet()) {
+			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());
+			effects.add(new MobEffectInstance(effectRoot, 20, effect.getValue()));
+		}
+		return effects; 
 	}
 }

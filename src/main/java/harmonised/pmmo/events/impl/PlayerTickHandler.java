@@ -9,6 +9,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.features.penalties.EffectManager;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +29,8 @@ public class PlayerTickHandler {
 		
 		Player player = event.player;
 		Core core = Core.get(event.side);
+		
+		EffectManager.applyEffects(core, player);
 		
 		if (!airLast.containsKey(player.getUUID()))
 			airLast.put(player.getUUID(), player.getAirSupply());
