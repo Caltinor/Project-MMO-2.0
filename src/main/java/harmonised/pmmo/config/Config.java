@@ -150,6 +150,7 @@ public class Config {
 		buildLevels(builder);
 		buildRequirements(builder);
 		buildXpGains(builder);
+		buildPartySettings(builder);
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
@@ -338,6 +339,15 @@ public class Config {
 					"SWIM_SPRINTING Skills and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("swimming", 200d));
 		builder.pop();
 			
+		builder.pop();
+	}
+	
+	public static ForgeConfigSpec.IntValue PARTY_RANGE;
+	
+	private static void buildPartySettings(ForgeConfigSpec.Builder builder) {
+		builder.comment("All setings governing party behavior").push("Party");
+			PARTY_RANGE = builder.comment("How close do party members have to be to share experience.")
+					.defineInRange("Party Range", 50, 0, Integer.MAX_VALUE);
 		builder.pop();
 	}
 }

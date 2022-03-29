@@ -13,7 +13,7 @@ public class CmdPmmoRoot {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("pmmo")
 				.then(CmdNodeAdmin.register(dispatcher))
-				.then(Commands.literal("party"))
+				.then(CmdNodeParty.register(dispatcher))
 				.then(Commands.literal("resync"))
 				.then(Commands.literal("tools"))
 				.then(Commands.literal("checkbiome"))
