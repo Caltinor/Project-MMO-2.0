@@ -30,6 +30,7 @@ public class PlayerTickHandler {
 		Player player = event.player;
 		Core core = Core.get(event.side);
 		
+		//Apply positive and negative effects based on biome and items worn
 		EffectManager.applyEffects(core, player);
 		
 		if (!airLast.containsKey(player.getUUID()))

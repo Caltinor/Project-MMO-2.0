@@ -28,7 +28,7 @@ public class EffectManager {
 		// slots if mod is present
 		//================================
 		for (ItemStack stack : items) {
-			if (!stack.isEmpty() && !core.isActionPermitted(ReqType.WEAR, stack, player) && !core.doesPlayerMeetEnchantmentReq(stack, player.getUUID())) {
+			if (!stack.isEmpty() && (!core.isActionPermitted(ReqType.WEAR, stack, player) || !core.doesPlayerMeetEnchantmentReq(stack, player.getUUID()))) {
 				for (MobEffectInstance mei : core.getDataConfig().getItemEffect(stack.getItem().getRegistryName())) {
 					player.addEffect(mei);
 				}

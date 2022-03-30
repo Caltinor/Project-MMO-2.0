@@ -3,5 +3,13 @@
 		"ENCHANT": {
 			"magic": 100
 		}
+	},
+	"requirements": { 
+		"WEAR": { 
+			"slayer": 10
+		}
+	},
+	"negative_effect": { 
+		"minecraft:weakness": 1
 	}
 }
