@@ -12,6 +12,7 @@ import harmonised.pmmo.events.impl.CropGrowHandler;
 import harmonised.pmmo.events.impl.DamageDealtHandler;
 import harmonised.pmmo.events.impl.DamageReceivedHandler;
 import harmonised.pmmo.events.impl.DeathHandler;
+import harmonised.pmmo.events.impl.DimensionTravelHandler;
 import harmonised.pmmo.events.impl.EntityInteractHandler;
 import harmonised.pmmo.events.impl.FishHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
@@ -36,6 +37,7 @@ import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
+import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.AnimalTameEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -234,5 +236,9 @@ public class EventHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onPlayerTick(PlayerTickEvent event) {
 		PlayerTickHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onPlayerDimTravel(EntityTravelToDimensionEvent event) {
+		DimensionTravelHandler.handle(event);
 	}
 }
