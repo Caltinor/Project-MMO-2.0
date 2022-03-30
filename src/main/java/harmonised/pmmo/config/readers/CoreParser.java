@@ -47,6 +47,7 @@ public class CoreParser {
 	}	
 	private static void finalizeObjectMaps(ObjectType type, Map<ResourceLocation, CodecMapObject.ObjectMapContainer> data) {
 		data.forEach((rl, omc) -> {
+			Core core = Core.get(LogicalSide.SERVER);
 			List<ResourceLocation> tagValues = List.of(rl);
 			if (omc.tagValues().size() > 0) tagValues = omc.tagValues();
 			for (ResourceLocation tag : tagValues) {
@@ -67,6 +68,10 @@ public class CoreParser {
 					for (Map.Entry<ReqType, List<LogicEntry>> nbtReqs : omc.nbtReqs().logic().entrySet()) {
 						MsLoggy.info("NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
 						Core.get(LogicalSide.SERVER).getNBTUtils().setItemReq(nbtReqs.getKey(), tag, nbtReqs.getValue());
+					}
+					for (Map.Entry<String, Integer> reqEffects : omc.reqNegativeEffect().entrySet()) {
+						MsLoggy.info("REQ NEG EFFECTS: "+reqEffects.getKey()+", "+reqEffects.getValue());
+						core.getDataConfig().setReqEffectData(tag, new ResourceLocation(reqEffects.getKey()), reqEffects.getValue());
 					}
 					for (Map.Entry<EventType, List<LogicEntry>> nbtGains : omc.nbtXpGains().logic().entrySet()) {
 						MsLoggy.info("NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");

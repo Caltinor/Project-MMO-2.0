@@ -23,6 +23,7 @@ public class DataConfig {
 	
 	private Map<ResourceLocation, Map<ResourceLocation, Map<String, Double>>> mobModifierData = new HashMap<>();
 	private Map<Boolean, Map<ResourceLocation, Map<ResourceLocation, Integer>>> locationEffectData = new HashMap<>();
+	private Map<ResourceLocation, Map<ResourceLocation, Integer>> reqEffectData = new HashMap<>();
 	private LinkedListMultimap<ResourceLocation, ResourceLocation> veinBlacklistData = LinkedListMultimap.create();
 	private Map<UUID, CodecMapPlayer.PlayerData> playerSpecificSettings = new HashMap<>();	
 	
@@ -39,6 +40,13 @@ public class DataConfig {
 		Preconditions.checkNotNull(objectID);
 		Preconditions.checkNotNull(dataMap);
 		locationEffectData.computeIfAbsent(isPositiveEffect, s -> new HashMap<>()).put(objectID, dataMap);
+	}
+	
+	public void setReqEffectData(ResourceLocation itemID, ResourceLocation effectID, Integer effectPower) {
+		Preconditions.checkNotNull(itemID);
+		Preconditions.checkNotNull(effectID);
+		Preconditions.checkNotNull(effectPower);
+		reqEffectData.computeIfAbsent(itemID, s -> new HashMap<>()).put(effectID, effectPower);
 	}
 	
 	public void setArrayData(ResourceLocation locationID, List<ResourceLocation> blockIDs) {
@@ -66,8 +74,17 @@ public class DataConfig {
 		for (Map.Entry<ResourceLocation, Integer> effect 
 				: locationEffectData.getOrDefault(isPositive, new HashMap<>()).getOrDefault(biomeID, new HashMap<>()).entrySet()) {
 			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());
-			effects.add(new MobEffectInstance(effectRoot, 20, effect.getValue()));
+			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue()));
 		}
 		return effects; 
+	}
+	
+	public List<MobEffectInstance> getItemEffect(ResourceLocation itemID) {
+		List<MobEffectInstance> effects = new ArrayList<>();
+		for (Map.Entry<ResourceLocation, Integer> effect : reqEffectData.getOrDefault(itemID, new HashMap<>()).entrySet()) {
+			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());
+			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue()));
+		}
+		return effects;
 	}
 }
