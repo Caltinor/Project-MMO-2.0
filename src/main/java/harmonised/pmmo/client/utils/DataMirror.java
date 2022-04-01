@@ -40,6 +40,7 @@ public class DataMirror implements IDataStorage{
 	
 	public double getXpWithPercentToNextLevel(long rawXP) {
 		int currentLevel = getLevelFromXP(rawXP);
+		currentLevel = currentLevel >= levelCache.size() ? levelCache.size()-1 : currentLevel;
 		long currentXPThreshold = currentLevel - 1 >= 0 ? levelCache.get(currentLevel - 1) : 0;
 		long xpToNextLevel = levelCache.get(currentLevel) - currentXPThreshold;
 		long progress = rawXP - currentXPThreshold;
