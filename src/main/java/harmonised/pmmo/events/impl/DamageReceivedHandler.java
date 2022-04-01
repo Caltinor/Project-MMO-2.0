@@ -10,15 +10,12 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagUtils;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -129,8 +126,6 @@ public class DamageReceivedHandler {
 	private static final List<String> magic = List.of(
 			DamageSource.MAGIC.msgId,
 			"indirectMagic");
-	private static final TagKey<EntityType<?>> MOB_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:mobs"));
-	private static final TagKey<EntityType<?>> ANIMAL_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:animals"));
 	private static EventType getSourceCategory(DamageSource source) {
 		if (source.msgId.equals("player"))
 			return EventType.FROM_PLAYERS;
@@ -141,9 +136,9 @@ public class DamageReceivedHandler {
 		if (magic.contains(source.msgId))
 			return EventType.FROM_MAGIC;
 		if (source.getEntity() != null) {
-			if (source.getEntity().getType().is(MOB_TAG))
+			if (source.getEntity().getType().is(Reference.MOB_TAG))
 				return EventType.FROM_MOBS;
-			if (source.getEntity().getType().is(ANIMAL_TAG))
+			if (source.getEntity().getType().is(Reference.ANIMAL_TAG))
 				return EventType.FROM_ANIMALS;
 		}
 		if (source.isProjectile())

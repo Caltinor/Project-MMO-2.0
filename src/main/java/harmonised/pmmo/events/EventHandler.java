@@ -26,14 +26,12 @@ import harmonised.pmmo.events.impl.PotionHandler;
 import harmonised.pmmo.events.impl.ShieldBlockHandler;
 import harmonised.pmmo.events.impl.SleepHandler;
 import harmonised.pmmo.events.impl.TameHandler;
-import harmonised.pmmo.features.mobscaling.MobAttributeHandler;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
@@ -86,12 +84,6 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onPlayerLeave(PlayerLoggedOutEvent event) {
 		PartyUtils.removeFromParty(event.getPlayer());
-	}
-	@SubscribeEvent(priority=EventPriority.LOWEST) 
-	public static void onDifficultyChange(DifficultyChangeEvent event ) {
-		if (event.isCanceled()) 
-			return;
-		MobAttributeHandler.updateMobDifficulty(event.getDifficulty());
 	}
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {

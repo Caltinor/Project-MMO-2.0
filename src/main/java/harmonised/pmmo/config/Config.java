@@ -151,6 +151,7 @@ public class Config {
 		buildRequirements(builder);
 		buildXpGains(builder);
 		buildPartySettings(builder);
+		buildMobScalingSettings(builder);
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
@@ -198,9 +199,9 @@ public class Config {
 		
 		//========LINEAR SECTION===============
 		builder.comment("Settings for Linear XP configuration").push("LINEAR LEVELS");
-		LINEAR_BASE_XP = builder.comment("what is the base xp to reach level 2 (baseXp + level * xpPerLevel)")
+		LINEAR_BASE_XP = builder.comment("what is the base xp to reach level 2 (this + level * xpPerLevel)")
 							.defineInRange("Base XP", 250l, 1l, Long.MAX_VALUE);
-		LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level (baseXp + level * xpPerLevel)")
+		LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level (baseXp + level * this)")
 							.defineInRange("Per Level", 50d, 1d, Double.MAX_VALUE);		
 		builder.pop(); //COMPLETE LINEAR BLOCK
 		
@@ -349,5 +350,55 @@ public class Config {
 			PARTY_RANGE = builder.comment("How close do party members have to be to share experience.")
 					.defineInRange("Party Range", 50, 0, Integer.MAX_VALUE);
 		builder.pop();
+	}
+	
+	public static ForgeConfigSpec.BooleanValue MOB_SCALING_ENABLED;
+	
+	public static ForgeConfigSpec.ConfigValue<Boolean> 	MOB_USE_EXPONENTIAL_FORUMULA;
+	public static ForgeConfigSpec.ConfigValue<Integer>  MOB_SCALING_AOE;
+	public static ForgeConfigSpec.ConfigValue<Integer> 	MOB_SCALING_BASE_LEVEL;
+	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_LINEAR_PER_LEVEL;
+	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_POWER_BASE;
+	public static ForgeConfigSpec.ConfigValue<Double> 	MOB_EXPONENTIAL_LEVEL_MOD;
+	
+	public static ConfigObject<Map<String, Double>> MOB_SCALE_HP;
+	public static ConfigObject<Map<String, Double>> MOB_SCALE_SPEED;
+	public static ConfigObject<Map<String, Double>> MOB_SCALE_DAMAGE;
+	
+	private static void buildMobScalingSettings(ForgeConfigSpec.Builder builder) {
+		builder.comment("settings related to how strong mobs get based on player level.").push("Mob_Scaling");
+		
+		MOB_SCALING_ENABLED = builder.comment("Should mob scaling be turned on.")
+				.define("Enable Mob Scaling", true);
+		MOB_SCALING_AOE = builder.comment("How far should players be from spawning mobs to affect scaling?")
+				.defineInRange("Scaling AOE", 50, 0, Integer.MAX_VALUE);
+		MOB_SCALING_BASE_LEVEL = builder.comment("what is the minimum level for scaling to kick in")
+				.defineInRange("Base Level", 0, 0, Integer.MAX_VALUE);
+		
+			builder.comment("How should mob attributes be calculated with respect to the player's level.").push("Formula");
+				MOB_USE_EXPONENTIAL_FORUMULA = builder.comment("shold levels be determined using an exponential forumula?")
+						.define("Use Exponential Formula", true);
+				//========LINEAR SECTION===============
+				builder.comment("Settings for Linear scaling configuration").push("LINEAR_LEVELS");				
+				MOB_LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level ((level - base_level) * this)")
+									.defineInRange("Per Level", 50d, 1d, Double.MAX_VALUE);		
+				builder.pop(); //COMPLETE LINEAR BLOCK
+				
+				//========EXPONENTIAL SECTION==========
+				builder.comment("Settings for Exponential scaling configuration").push("EXPONENTIAL_LEVELS");
+				MOB_EXPONENTIAL_POWER_BASE = builder.comment("What is the x in: (x^([Per Level] * level))")
+									.defineInRange("Power Base", 1.104088404342588d, 0d, Double.MAX_VALUE);
+				MOB_EXPONENTIAL_LEVEL_MOD = builder.comment("What is the x in: ([Power Base]^(x * level))")
+									.defineInRange("Per Level", 1d, 0d, Double.MAX_VALUE);
+			builder.pop(); //Formula
+			builder.comment("These settings control which skills affect scaling and the ratio for each skill").push("Scaling_Settings");
+				MOB_SCALE_HP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
+						"HP Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.01));
+				MOB_SCALE_SPEED = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
+						"Speed Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.01));
+				MOB_SCALE_DAMAGE = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
+						"Damage Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.01));
+			builder.pop(); //Scaling Settings
+		builder.pop(); //Mob_Scaling
 	}
 }

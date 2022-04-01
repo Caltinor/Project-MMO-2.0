@@ -12,12 +12,10 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagUtils;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -106,13 +104,11 @@ public class DamageDealtHandler {
 		return mapOut;
 	}
 	
-	private static final TagKey<EntityType<?>> MOB_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:mobs"));
-	private static final TagKey<EntityType<?>> ANIMAL_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:animals"));
 	private static EventType getEventCategory(boolean projectileSource, LivingEntity target) {
 		if (projectileSource) {
-			if (target.getType().is(MOB_TAG))
+			if (target.getType().is(Reference.MOB_TAG))
 				return EventType.RANGED_TO_MOBS;
-			if (target.getType().is(ANIMAL_TAG))
+			if (target.getType().is(Reference.ANIMAL_TAG))
 				return EventType.RANGED_TO_ANIMALS;
 			if (target.getType().equals(EntityType.PLAYER))
 				return EventType.RANGED_TO_PLAYERS;
@@ -120,9 +116,9 @@ public class DamageDealtHandler {
 				return EventType.DEAL_RANGED_DAMAGE;
 		}
 		else {
-			if (target.getType().is(MOB_TAG))
+			if (target.getType().is(Reference.MOB_TAG))
 				return EventType.MELEE_TO_MOBS;
-			if (target.getType().is(ANIMAL_TAG))
+			if (target.getType().is(Reference.ANIMAL_TAG))
 				return EventType.MELEE_TO_ANIMALS;
 			if (target.getType().equals(EntityType.PLAYER))
 				return EventType.MELEE_TO_PLAYERS;
