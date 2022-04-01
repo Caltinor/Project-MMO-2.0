@@ -11,5 +11,37 @@
 	},
 	"negative_effect": { 
 		"minecraft:weakness": 1
-	}
+	},
+	"salvage": {
+		"minecraft:stone": { 
+	    	"baseChance": 0.0,
+	        "chancePerLevel": {
+	        	"smithing": 0.01,
+	        	"excavation": 0.025
+	      	},
+	      	"levelReq": {
+	        	"combat": 10
+	      	},
+	      	"maxChance": 1.0,
+	      	"xpPerItem": {
+	        	"smithing": 1000
+	      	},
+	      	"salvageMax": 2
+	 	},
+	 	"minecraft:stick": { 
+	    	"baseChance": 0.0,
+	        "chancePerLevel": {
+	        	"smithing": 0.01,
+	        	"excavation": 0.025
+	      	},
+	      	"levelReq": {
+	        	"combat": 30
+	      	},
+	      	"maxChance": 1.0,
+	      	"xpPerItem": {
+	        	"smithing": 1000
+	      	},
+	      	"salvageMax": 1
+	 	}
+  	}
 }

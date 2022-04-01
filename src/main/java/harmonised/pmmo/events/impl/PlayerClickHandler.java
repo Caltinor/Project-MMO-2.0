@@ -12,6 +12,7 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
@@ -69,7 +70,14 @@ public class PlayerClickHandler {
 				event.setCanceled(true);
 				return;
 			}
+			//======================SALVAGE DROP LOGIC=======================================
+			if (player.isCrouching() && event.getWorld().getBlockState(event.getPos()).getBlock().equals(Blocks.SMITHING_TABLE)) {
+				core.getSalvageLogic().getSalvage((ServerPlayer) player, core);
+			}
+			//=======================END SALVAGE============================================
 		}
+		
+		
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_BLOCK, player, core.getSide()));
 		if (serverSide) {
