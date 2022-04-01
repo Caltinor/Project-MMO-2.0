@@ -38,6 +38,7 @@ public class AutoValueConfig {
 		setupReqToggles(builder);
 		setupXpGainToggles(builder);
 		setupXpGainMaps(builder);
+		setupReqMaps(builder);
 		//end subsections
 
 		builder.pop();
@@ -105,6 +106,48 @@ public class AutoValueConfig {
 		ENTITY_XP_AWARDS = new HashMap<>();
 		for (EventType type : EventType.ENTITY_APPLICABLE_EVENTS) {
 			ENTITY_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 10l)));
+		}
+		builder.pop();
+		
+		builder.pop();
+	}
+	
+	private static Map<ReqType, ConfigObject<Map<String, Integer>>> ITEM_REQS;
+	private static Map<ReqType, ConfigObject<Map<String, Integer>>> BLOCK_REQS;
+	private static Map<ReqType, ConfigObject<Map<String, Integer>>> ENTITY_REQS;
+	
+	public static Map<String, Integer> getItemReq(ReqType type) {
+		ConfigObject<Map<String, Integer>> configEntry = ITEM_REQS.get(type);
+		return configEntry == null ? new HashMap<>() : configEntry.get();
+	}
+	public static Map<String, Integer> getBlockReq(ReqType type) {
+		ConfigObject<Map<String, Integer>> configEntry = BLOCK_REQS.get(type);
+		return configEntry == null ? new HashMap<>() : configEntry.get();
+	}
+	public static Map<String, Integer> getEntityReq(ReqType type) {
+		ConfigObject<Map<String, Integer>> configEntry = ENTITY_REQS.get(type);
+		return configEntry == null ? new HashMap<>() : configEntry.get();
+	}
+	
+	private static void setupReqMaps(ForgeConfigSpec.Builder builder) {
+		builder.comment("what skills and level should be required to perform the specified action").push("Requirements");
+		
+		builder.push("Items");
+		ITEM_REQS = new HashMap<>();
+		for (ReqType type : ReqType.ITEM_APPLICABLE_EVENTS) {
+			ITEM_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap("agility", 1)));
+		}
+		builder.pop();
+		builder.push("BLocks");
+		BLOCK_REQS = new HashMap<>();
+		for (ReqType type : ReqType.BLOCK_APPLICABLE_EVENTS) {
+			BLOCK_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap("agility", 1)));
+		}
+		builder.pop();
+		builder.push("Entities");
+		ENTITY_REQS = new HashMap<>();
+		for (ReqType type : ReqType.ENTITY_APPLICABLE_EVENTS) {
+			ENTITY_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap("agility", 1)));
 		}
 		builder.pop();
 		

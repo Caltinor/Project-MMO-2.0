@@ -16,11 +16,11 @@ public class AutoValues {
 	private static ConcurrentMap<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainValues = new ConcurrentHashMap<>();
 	
 	//============================CACHE GETTERS============================================================	
-	public static void cacheRequirement(ReqType reqType, ResourceLocation objectID, Map<String, Integer> requirementMap) {
+	private static void cacheRequirement(ReqType reqType, ResourceLocation objectID, Map<String, Integer> requirementMap) {
 		reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).put(objectID, requirementMap);
 	}
 	
-	public static void cacheXpGainValue(EventType eventType, ResourceLocation objectID, Map<String, Long> xpGainMap) {
+	private static void cacheXpGainValue(EventType eventType, ResourceLocation objectID, Map<String, Long> xpGainMap) {
 		xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).put(objectID, xpGainMap);
 	}
 
@@ -31,7 +31,21 @@ public class AutoValues {
 			return reqValues.get(reqType).get(objectID);
 		
 		Map<String, Integer> requirements = new HashMap<>();
-		//TODO calculate a new requirement
+		switch (autoValueType) {
+		case ITEM: {
+			requirements = AutoItem.processReqs(reqType, objectID);
+			break;
+		}
+		case BLOCK: {
+			requirements = AutoBlock.processReqs(reqType, objectID);
+			break;
+		}
+		case ENTITY: {
+			requirements = AutoEntity.processReqs(reqType, objectID);
+			break;
+		}
+		default: {}
+		}
 		cacheRequirement(reqType, objectID, requirements);
 		return requirements;
 	}
@@ -42,7 +56,21 @@ public class AutoValues {
 			return xpGainValues.get(eventType).get(objectID);
 
 		Map<String, Long> awards = new HashMap<>();
-		//TODO calculate new xp gains
+		switch (autoValueType) {
+		case ITEM: {
+			awards = AutoItem.processXpGains(eventType, objectID);
+			break;
+		}
+		case BLOCK: {
+			awards = AutoBlock.processXpGains(eventType, objectID);
+			break;
+		}
+		case ENTITY: {
+			awards = AutoEntity.processXpGains(eventType, objectID);
+			break;
+		}
+		default: {}
+		}
 		cacheXpGainValue(eventType, objectID, awards);
 		return awards;
 	}
