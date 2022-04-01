@@ -384,7 +384,7 @@ public class XPOverlayGUI extends GuiComponent
 				if (modifiers.getOrDefault(skillKey, 1d) != 1d) {
 					double bonus = (Math.max(0, modifiers.get(skillKey)) -1) * 100;
 					tempString = (bonus >= 0 ? "+" : "-")+DP.dp(bonus)+"%";
-					drawString(stack, fontRenderer, tempString, skillListX + levelGap + skillGap + 38, skillListY + 3 + listIndex, color);
+					drawString(stack, fontRenderer, tempString, skillListX + levelGap + skillGap + 50, skillListY + 3 + listIndex, color);
 				}
 			}
 		}
