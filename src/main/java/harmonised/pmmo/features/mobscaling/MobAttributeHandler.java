@@ -7,7 +7,9 @@ import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -23,7 +25,9 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MobAttributeHandler {
-	
+	private static final float HARD_CAP_HP = 1024f;
+	private static final float HARD_CAP_SPD = 1.5f;
+	private static final float HARD_CAP_DMG = 2048f;
 	
 	@SubscribeEvent
 	public static void onMobSpawn(SpecialSpawn event) {
@@ -31,18 +35,24 @@ public class MobAttributeHandler {
 			int diffScale = event.getWorld().getDifficulty().getId();
 			Vec3 spawnPos = new Vec3(event.getX(), event.getY(), event.getZ());
 			int range = Config.MOB_SCALING_AOE.get();
-			TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(range).selector(le -> le instanceof Player);
-			List<Player> nearbyPlayers = event.getWorld().getNearbyEntities(Player.class, targetCondition, event.getEntityLiving(), AABB.ofSize(spawnPos, range, range, range));
-			if (nearbyPlayers.size() == 0) return;
+			TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(Math.pow(range, 2)*3);
+			List<Player> nearbyPlayers = event.getWorld().getNearbyPlayers(targetCondition, event.getEntityLiving(), AABB.ofSize(spawnPos, range, range, range));
+			MsLoggy.debug("NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
+			if (nearbyPlayers.isEmpty()) return;
 			//Set each Modifier type
-			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_HP.get(), diffScale), Attributes.MAX_HEALTH, ModifierID.HP);
-			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_SPEED.get(), diffScale), Attributes.MOVEMENT_SPEED, ModifierID.SPEED);
-			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_DAMAGE.get(), diffScale), Attributes.ATTACK_DAMAGE, ModifierID.DAMAGE);
+			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_HP.get(), diffScale, event.getEntityLiving().getMaxHealth(), HARD_CAP_HP), Attributes.MAX_HEALTH, ModifierID.HP);
+			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_SPEED.get(), diffScale, event.getEntityLiving().getSpeed(), HARD_CAP_SPD), Attributes.MOVEMENT_SPEED, ModifierID.SPEED);
+			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_DAMAGE.get(), diffScale, 1f, HARD_CAP_DMG), Attributes.ATTACK_DAMAGE, ModifierID.DAMAGE);
 			event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth());
+			if (Config.DEBUG_LOGGING.get()) {
+				LivingEntity entity = event.getEntityLiving();
+				entity.setCustomName(new TextComponent("SCALED: HP:"+entity.getMaxHealth()+"| SPD:"+entity.getSpeed()));
+				entity.setCustomNameVisible(true);
+			}
 		}
 	}
 	
-	private static float getBonus(List<Player> nearbyPlayers, Map<String, Double> config, int scale) {
+	private static float getBonus(List<Player> nearbyPlayers, Map<String, Double> config, int scale, float ogValue, float cap) {
 		//summate all levels from the configured skills for each nearby player
 		Map<String, Integer> totalLevel = new HashMap<>();
 		for (Player player : nearbyPlayers) {
@@ -54,7 +64,7 @@ public class MobAttributeHandler {
 		float outValue = 0f;
 		for (Map.Entry<String, Double> configEntry : config.entrySet()) {
 			int averageLevel = totalLevel.getOrDefault(configEntry.getKey(), 0)/nearbyPlayers.size();
-			if (averageLevel > Config.MOB_SCALING_BASE_LEVEL.get()) return 0f;
+			if (averageLevel < Config.MOB_SCALING_BASE_LEVEL.get()) return 0f;
 			if (Config.MOB_USE_EXPONENTIAL_FORUMULA.get()) {
 				outValue += Math.pow(Config.MOB_EXPONENTIAL_POWER_BASE.get(), (Config.MOB_EXPONENTIAL_LEVEL_MOD.get() * (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get())));
 			}
@@ -62,8 +72,9 @@ public class MobAttributeHandler {
 				outValue += (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get()) * Config.MOB_LINEAR_PER_LEVEL.get();
 			outValue *= configEntry.getValue();
 		}
-		
-		return outValue * scale;
+		MsLoggy.debug("Modifier Value: "+outValue * scale);
+		outValue *= scale;
+		return outValue + ogValue > cap ? cap : outValue;
 	}
 	
 	private static enum ModifierID {
@@ -77,6 +88,7 @@ public class MobAttributeHandler {
 	
 	private static void setMobModifier(LivingEntity mob, float bonus, Attribute attribute, ModifierID modifID) {
 		AttributeInstance attributeInstance = mob.getAttribute(attribute);
+		MsLoggy.debug(modifID.name()+" isNull:"+(attributeInstance==null));
 		if (attributeInstance != null) {
 			AttributeModifier modifier = new AttributeModifier(modifID.id, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
 			attributeInstance.removeModifier(modifID.id);

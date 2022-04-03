@@ -381,7 +381,7 @@ public class Config {
 				//========LINEAR SECTION===============
 				builder.comment("Settings for Linear scaling configuration").push("LINEAR_LEVELS");				
 				MOB_LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level ((level - base_level) * this)")
-									.defineInRange("Per Level", 50d, 1d, Double.MAX_VALUE);		
+									.defineInRange("Per Level", 1d, 0d, Double.MAX_VALUE);		
 				builder.pop(); //COMPLETE LINEAR BLOCK
 				
 				//========EXPONENTIAL SECTION==========
@@ -391,13 +391,17 @@ public class Config {
 				MOB_EXPONENTIAL_LEVEL_MOD = builder.comment("What is the x in: ([Power Base]^(x * level))")
 									.defineInRange("Per Level", 1d, 0d, Double.MAX_VALUE);
 			builder.pop(); //Formula
-			builder.comment("These settings control which skills affect scaling and the ratio for each skill").push("Scaling_Settings");
+			builder.comment("These settings control which skills affect scaling and the ratio for each skill"
+					, "HP Scale: 1 = half a heart, or 1 hitpoint"
+					, "SPD Scale: 0.7 is base for most mobs.  this is added to that. so 0.7 from scaling is double speed"
+					, "DMG Scale: is a multiplier of their base damage.  1 = no change, 2 = double damage"
+					, "negative values are possible and you can use this to create counterbalance skills").push("Scaling_Settings");
 				MOB_SCALE_HP = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
 						"HP Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.01));
 				MOB_SCALE_SPEED = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-						"Speed Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.01));
+						"Speed Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.001));
 				MOB_SCALE_DAMAGE = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
-						"Damage Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.01));
+						"Damage Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.001));
 			builder.pop(); //Scaling Settings
 		builder.pop(); //Mob_Scaling
 	}
