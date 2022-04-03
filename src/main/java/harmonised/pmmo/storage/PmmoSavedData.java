@@ -167,6 +167,9 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	public List<Long> getLevelCache() {return levelCache;}
 	
 	public void computeLevelsForCache() {
+		//TODO fix issue with max level exceeding possible level
+		//     when formula creates too high of gains for variable
+		//     capacity
 		boolean exponential = Config.USE_EXPONENTIAL_FORUMULA.get();
 		
 		long linearBase = Config.LINEAR_BASE_XP.get();

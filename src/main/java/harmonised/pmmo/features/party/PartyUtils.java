@@ -61,6 +61,26 @@ public class PartyUtils {
 		invites.put(requestID, new Invite(playerToPartyMap.get(member.getUUID()), invitee.getUUID()));
 	}
 	
+	public static void uninviteToParty(Player member, Player invitee) {
+		int memberPartyID = playerToPartyMap.getOrDefault(member.getUUID(), -1);
+		if (memberPartyID == -1) {
+			member.sendMessage(new TranslatableComponent("pmmo.youAreNotInAParty"), member.getUUID());
+			return;
+		}
+		UUID inviteToRemove = null;
+		for (Map.Entry<UUID, Invite> invite : invites.entrySet()) {
+			Invite i = invite.getValue();
+			if (i.partyID() == memberPartyID && i.player().equals(invitee.getUUID())) {
+				inviteToRemove = invite.getKey();
+				break;
+			}				
+		}
+		if (inviteToRemove != null) {
+			invites.remove(inviteToRemove);
+			member.sendMessage(new TranslatableComponent("pmmo.msg.rescindInvite", invitee.getDisplayName()), member.getUUID());
+		}
+	}
+	
 	public static void acceptInvite(Player invitee, UUID requestID) {
 		if (invites.get(requestID) == null)
 			invitee.sendMessage(new TranslatableComponent("pmmo.youAreNotInvitedToAnyParty"), invitee.getUUID());

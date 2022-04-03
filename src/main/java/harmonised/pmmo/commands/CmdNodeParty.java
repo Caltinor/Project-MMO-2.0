@@ -1,5 +1,6 @@
 package harmonised.pmmo.commands;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -28,6 +29,12 @@ public class CmdNodeParty {
 				.then(Commands.literal("invite")
 						.then(Commands.argument("player", EntityArgument.player())
 								.executes(c -> partyInvite(c))))
+				.then(Commands.literal("uninvite")
+						.then(Commands.argument("player", EntityArgument.player())
+								.executes(c -> partyUninvite(c))))
+				//TODO list members
+				.then(Commands.literal("list")
+						.executes(c -> listParty(c)))
 				.then(Commands.literal("accept")
 						.then(Commands.argument(REQUEST_ID, UuidArgument.uuid())
 								.executes(c -> partyAccept(c))))
@@ -62,6 +69,23 @@ public class CmdNodeParty {
 		}
 		PartyUtils.inviteToParty(ctx.getSource().getPlayerOrException(), player);
 		ctx.getSource().sendSuccess(new TranslatableComponent("pmmo.youHaveInvitedAPlayerToYourParty", player.getDisplayName()), false);
+		return 0;
+	}
+	
+	public static int partyUninvite(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
+		PartyUtils.uninviteToParty(ctx.getSource().getPlayerOrException(), player);
+		return 0;
+	}
+	
+	public static int listParty(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+		if (!PartyUtils.isInParty(ctx.getSource().getPlayerOrException())) {
+			ctx.getSource().sendFailure(new TranslatableComponent("pmmo.youAreNotInAParty"));
+			return 1;
+		}
+		List<String> memberNames = PartyUtils.getPartyMembers(ctx.getSource().getPlayerOrException()).stream().map(s -> s.getName().getContents()).toList();
+		ctx.getSource().sendSuccess(new TranslatableComponent("pmmo.totalMembers", memberNames.size()), false);
+		ctx.getSource().sendSuccess(new TranslatableComponent("pmmo.partyMemberListEntry", memberNames), false);
 		return 0;
 	}
 	
