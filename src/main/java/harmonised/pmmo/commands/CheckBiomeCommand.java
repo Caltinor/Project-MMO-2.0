@@ -21,7 +21,7 @@ public class CheckBiomeCommand
     public static int execute(CommandContext<CommandSourceStack> context) throws CommandRuntimeException
     {
         Player sender = (Player) context.getSource().getEntity();
-        Biome biome = sender.level.getBiomeManager().m_47881_(new BlockPos(sender.position()));
+        Biome biome = sender.level.getBiome(new BlockPos(sender.position())).value();
         ResourceLocation biomeResLoc = XP.getBiomeResLoc(sender.level, biome);
         String biomeKey = biomeResLoc.toString();
         String transKey = Util.makeDescriptionId("biome", biomeResLoc);

@@ -522,10 +522,13 @@ public class TooltipHandler
                 //ADVANCED TOOLTIP
                 if(event.getFlags().isAdvanced())
                 {
-                    for(ResourceLocation tagKey : item.getTags())
+                	//Commented out because MC does this automatically with F3+H
+                	//This should also reduce the complaints about tooltip length
+                	//in this version
+                    /*for(ResourceLocation tagKey : item.getTags())
                     {
                         tooltip.add(new TextComponent("#" + tagKey.toString()).setStyle(XP.getColorStyle(0x666666)));
-                    }
+                    }*/
 
                     if(state != null)
                     {

@@ -237,7 +237,7 @@ public class PlayerTickHandler
                     }
                 }
 
-                if(player.isInWater() && (waterAbove || waterBelow || player.m_19941_(FluidTags.WATER)))
+                if(player.isInWater() && (waterAbove || waterBelow || player.isEyeInFluid(FluidTags.WATER)))
                 {
                     if(!player.isSprinting())
                     {
