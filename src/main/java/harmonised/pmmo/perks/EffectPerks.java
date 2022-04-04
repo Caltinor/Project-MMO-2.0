@@ -20,20 +20,23 @@ public class EffectPerks {
 
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> NIGHT_VISION = (player, nbt, level) -> {
 		int min = nbt.contains(MIN_LEVEL) ? nbt.getInt(MIN_LEVEL) : 50;
-		int duration = nbt.contains(DURATION) ? nbt.getInt(DURATION) : 30000;
+		int duration = nbt.contains(DURATION) ? nbt.getInt(DURATION) : 100;
 		if (level < min) return EMPTY;
-		player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, duration));
+		if (!player.hasEffect(MobEffects.NIGHT_VISION) || player.getEffect(MobEffects.NIGHT_VISION).getDuration() <= 80) {
+			player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, duration, 0, true, false, false));
+		}
 		return EMPTY;
 	};
 	
-	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> NIGHT_VISION_TERM = (player, nbt, level) -> {
+	//TODO remove entirely.  Implementation of Night Vision Perk has been reworked.
+	/*public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> NIGHT_VISION_TERM = (player, nbt, level) -> {
 		MobEffectInstance effect = player.getEffect(MobEffects.NIGHT_VISION);
 		if (effect == null) return EMPTY;
 		if (effect.getDuration() > 480) {
 			player.removeEffect(MobEffects.NIGHT_VISION);
 		}
 		return EMPTY;
-	};
+	};*/
 	
 	public static TriFunction<ServerPlayer, CompoundTag, Integer, CompoundTag> REGEN = (player, nbt, level) -> {
 		long cooldown = nbt.contains(COOLDOWN) ? nbt.getLong(COOLDOWN) : 300l;

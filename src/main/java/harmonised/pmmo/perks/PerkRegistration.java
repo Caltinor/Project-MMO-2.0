@@ -20,7 +20,7 @@ public class PerkRegistration {
 		PerkRegistry.registerPerk(rl("fall_save"), EventPerks.FALL_SAVE, NONE);
 		PerkRegistry.registerPerk(rl("damage_boost"), EventPerks.DAMAGE_BOOST, NONE);
 		//Effect Perks
-		PerkRegistry.registerPerk(rl("night_vision"), EffectPerks.NIGHT_VISION, EffectPerks.NIGHT_VISION_TERM);
+		PerkRegistry.registerPerk(rl("night_vision"), EffectPerks.NIGHT_VISION, NONE);
 		PerkRegistry.registerPerk(rl("regen"), EffectPerks.REGEN, NONE);
 	}
 	

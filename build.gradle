@@ -25,7 +25,7 @@ mixin
 }
 apply plugin: 'maven-publish'
 
-version = '1.18.2-3.69.8'
+version = '1.18.2-3.69.9'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
 
