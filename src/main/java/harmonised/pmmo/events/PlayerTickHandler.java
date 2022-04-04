@@ -55,7 +55,7 @@ public class PlayerTickHandler
             	PerkRegistry.executePerk(PerkTrigger.SPRINTING, player);
             else 
             	PerkRegistry.terminatePerk(PerkTrigger.SPRINTING, player);
-            if(player.isSwimming()) 
+            if(player.isUnderWater()) 
             	PerkRegistry.executePerk(PerkTrigger.SUBMERGED, player);
             else 
             	PerkRegistry.terminatePerk(PerkTrigger.SUBMERGED, player);
@@ -116,7 +116,7 @@ public class PlayerTickHandler
 
             double veinGap      = ((System.nanoTime() - lastVeinAward.get     (uuid)) / 1000000000D);
             double cheeseGap    = ((System.nanoTime() - lastCheeseUpdate.get  (uuid)) / 1000000000D);
-            double hpRegenGap   = ((System.nanoTime() - hpRegen.get           (uuid)) / 1000000000D);
+            //double hpRegenGap   = ((System.nanoTime() - hpRegen.get           (uuid)) / 1000000000D);
             double syncGap      = ((System.nanoTime() - sync.get              (uuid)) / 1000000000D);
 
             if(veinGap > 0.25)
@@ -237,7 +237,7 @@ public class PlayerTickHandler
                     }
                 }
 
-                if(player.isInWater() && (waterAbove || waterBelow || player.m_19941_(FluidTags.WATER)))
+                if(player.isInWater() && (waterAbove || waterBelow || player.isEyeInFluid(FluidTags.WATER)))
                 {
                     if(!player.isSprinting())
                     {

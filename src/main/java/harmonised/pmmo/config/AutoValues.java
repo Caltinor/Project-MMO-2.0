@@ -3,6 +3,7 @@ package harmonised.pmmo.config;
 import com.google.common.collect.Multimap;
 import harmonised.pmmo.pmmo_saved_data.PmmoSavedData;
 import harmonised.pmmo.skills.Skill;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.XP;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -17,10 +18,14 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.IReverseTag;
+
 import org.apache.logging.log4j.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -383,20 +388,20 @@ public class AutoValues
                         JType jType = JType.NONE;
                         Map<String, Double> infoMap = new HashMap<>();
                         double chance = 0;
-                        Set<ResourceLocation> tags = block.getTags();
+                        List<TagKey<Block>> tags = ForgeRegistries.BLOCKS.tags().getReverseTag(block).map(IReverseTag::getTagKeys).orElseGet(Stream::of).toList();
 
                         //Ore/Log/Plant Extra Chance
-                        if(block instanceof OreBlock || tags.contains(new ResourceLocation("forge:ores")))
+                        if(block instanceof OreBlock || tags.contains(Reference.FORGE_ORES))
                         {
                             jType = JType.INFO_ORE;
                             chance = Config.forgeConfig.defaultExtraChanceOre.get();
                         }
-                        else if(block instanceof CropBlock || tags.contains(new ResourceLocation("minecraft:crops")))
+                        else if(block instanceof CropBlock || tags.contains(Reference.FORGE_CROPS))
                         {
                             jType = JType.INFO_PLANT;
                             chance = Config.forgeConfig.defaultExtraChancePlant.get();
                         }
-                        else if(tags.contains(new ResourceLocation("minecraft:logs")))
+                        else if(tags.contains(Reference.FORGE_LOGS))
                         {
                             jType = JType.INFO_LOG;
                             chance = Config.forgeConfig.defaultExtraChanceLog.get();

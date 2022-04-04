@@ -146,11 +146,11 @@ public class XP
 
 	public static String getSkill(Block block)
 	{
-		if(block.getTags().contains(getResLoc( "forge:ores")))
+		if(ForgeRegistries.BLOCKS.tags().getTag(Reference.FORGE_ORES).contains(block))
 			return Skill.MINING.toString();
-		else if(block.getTags().contains(getResLoc("forge:logs")))
+		else if(ForgeRegistries.BLOCKS.tags().getTag(Reference.FORGE_LOGS).contains(block))
 			return Skill.WOODCUTTING.toString();
-		else if(block.getTags().contains(getResLoc("forge:plants")))
+		else if(ForgeRegistries.BLOCKS.tags().getTag(Reference.FORGE_PLANTS).contains(block))
 			return Skill.FARMING.toString();
 		else
 			return Skill.INVALID_SKILL.toString();
@@ -250,7 +250,7 @@ public class XP
 
 	public static ResourceLocation getBiomeResLoc(Level world, BlockPos pos)
 	{
-		return world.getBiomeManager().m_47881_(pos).getRegistryName();
+		return world.getBiome(pos).value().getRegistryName();
 	}
 
 	public static ResourceLocation getDimResLoc(Level world)
@@ -853,62 +853,43 @@ public class XP
 
 	public static Set<String> getElementsFromTag(String tag)
 	{
+		ResourceLocation keyRL = new ResourceLocation(tag);
+		TagKey<Item> itemKey = TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(), keyRL);
+		TagKey<Block> blockKey = TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), keyRL);
+		TagKey<Fluid> fluidKey = TagKey.create(ForgeRegistries.FLUIDS.getRegistryKey(), keyRL);
+		TagKey<EntityType<?>> entityKey = TagKey.create(ForgeRegistries.ENTITIES.getRegistryKey(), keyRL);
 		Set<String> results = new HashSet<>();
 
-		for(Map.Entry<ResourceLocation, Tag<Item>> namedTag : ItemTags.m_13193_().m_5643_().entrySet())
+		for(Item element : ForgeRegistries.ITEMS.tags().getTag(itemKey).stream().toList())
 		{
-			if(namedTag.getKey().toString().startsWith(tag))
+			try
 			{
-				for(Item element : namedTag.getValue().getValues())
-				{
-					try
-					{
-						results.add(element.getRegistryName().toString());
-					} catch(Exception e){ /* Failed, don't care */ };
-				}
-			}
+				results.add(element.getRegistryName().toString());
+			} catch(Exception e){ /* Failed, don't care */ };
 		}
 
-		for(Map.Entry<ResourceLocation, Tag<Block>> namedTag : BlockTags.m_13115_().m_5643_().entrySet())
+		for(Block element : ForgeRegistries.BLOCKS.tags().getTag(blockKey).stream().toList())
 		{
-			if(namedTag.getKey().toString().equals(tag))
+			try
 			{
-				for(Block element : namedTag.getValue().getValues())
-				{
-					try
-					{
-						results.add(element.getRegistryName().toString());
-					} catch(Exception e){ /* Failed, don't care */ };
-				}
-			}
+				results.add(element.getRegistryName().toString());
+			} catch(Exception e){ /* Failed, don't care */ };
 		}
 
-		for(Map.Entry<ResourceLocation, Tag<Fluid>> namedTag : FluidTags.m_144299_().m_5643_().entrySet())
+		for(Fluid element : ForgeRegistries.FLUIDS.tags().getTag(fluidKey).stream().toList())
 		{
-			if(namedTag.getKey().toString().equals(tag))
+			try
 			{
-				for(Fluid element : namedTag.getValue().getValues())
-				{
-					try
-					{
-						results.add(element.getRegistryName().toString());
-					} catch(Exception e){ /* Failed, don't care */ };
-				}
-			}
+				results.add(element.getRegistryName().toString());
+			} catch(Exception e){ /* Failed, don't care */ };
 		}
 
-		for(Map.Entry<ResourceLocation, Tag<EntityType<?>>> namedTag : EntityTypeTags.m_13126_().m_5643_().entrySet())
+		for(EntityType<?> element : ForgeRegistries.ENTITIES.tags().getTag(entityKey).stream().toList())
 		{
-			if(namedTag.getKey().toString().equals(tag))
+			try
 			{
-				for(EntityType<?> element : namedTag.getValue().getValues())
-				{
-					try
-					{
-						results.add(element.getRegistryName().toString());
-					} catch(Exception e){ /* Failed, don't care */ };
-				}
-			}
+				results.add(element.getRegistryName().toString());
+			} catch(Exception e){ /* Failed, don't care */ };
 		}
 
 		return results;
@@ -1212,7 +1193,7 @@ public class XP
 		Map<String, Double> biomeBoosts = new HashMap<>();
 		double biomePenaltyMultiplier = Config.getConfig("biomePenaltyMultiplier");
 
-		Biome biome = player.level.getBiomeManager().m_47881_(vecToBlock(player.position()));
+		Biome biome = player.level.getBiome(vecToBlock(player.position())).value();
 		ResourceLocation resLoc = biome.getRegistryName();
 		if(resLoc == null)
 			return new HashMap<>();
@@ -1703,7 +1684,7 @@ public class XP
 
 	public static void checkBiomeLevelReq(Player player)
 	{
-		Biome biome = player.level.getBiomeManager().m_47881_(vecToBlock(player.position()));
+		Biome biome = player.level.getBiome(vecToBlock(player.position())).value();
 		ResourceLocation resLoc = XP.getBiomeResLoc(player.level, biome);
 		if(resLoc == null)
 			return;

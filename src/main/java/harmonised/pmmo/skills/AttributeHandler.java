@@ -93,7 +93,7 @@ public class AttributeHandler
 
 	private static double getBiomeMobMultiplier(Mob mob, String type)
 	{
-		Biome biome = mob.level.getBiomeManager().m_47881_(new BlockPos(mob.position()));
+		Biome biome = mob.level.getBiome(new BlockPos(mob.position())).value();
 		ResourceLocation biomeResLoc = biome.getRegistryName();
 		double multiplier = 1;
 
