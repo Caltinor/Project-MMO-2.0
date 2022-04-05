@@ -34,6 +34,16 @@ public class NBTUtils {
 	private Map<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entityXpGainLogic = new HashMap<>();
 	private Map<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> bonusLogic = new HashMap<>();
 	
+	public void reset() {
+		itemReqLogic = new HashMap<>();
+		blockReqLogic = new HashMap<>();
+		entityReqLogic = new HashMap<>();
+		itemXpGainLogic = new HashMap<>();
+		blockXpGainLogic = new HashMap<>();
+		entityXpGainLogic = new HashMap<>();
+		bonusLogic = new HashMap<>();
+	}
+	
 	//======================SETTERS=================================
 	public void setItemReq(ReqType type, ResourceLocation id, List<LogicEntry> logic) {
 		Preconditions.checkNotNull(type);

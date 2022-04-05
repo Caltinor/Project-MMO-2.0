@@ -22,6 +22,8 @@ import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.salvaging.SalvageLogic;
+import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.registry.EventTriggerRegistry;
 import harmonised.pmmo.registry.PerkRegistry;
 import harmonised.pmmo.registry.PredicateRegistry;
@@ -77,6 +79,21 @@ public class Core {
 	}
 	public static Core get(final Level level) {
 	    return get(level.isClientSide() ? LogicalSide.CLIENT : LogicalSide.SERVER);
+	}
+	
+	public void resetDataForReload() {
+		xp.reset();
+		gates.reset();
+		config.reset();
+		salvageLogic.reset();
+		nbt.reset();
+		if (side.equals(LogicalSide.SERVER)) {
+			PmmoSavedData dataBackend = (PmmoSavedData) data;
+			if (dataBackend.getServer() == null) return;
+			for (ServerPlayer player : dataBackend.getServer().getPlayerList().getPlayers()) {
+				Networking.sendToClient(new CP_ClearData(), player);
+			}
+		}
 	}
 	  
 	public XpUtils getXpUtils() {return xp;}

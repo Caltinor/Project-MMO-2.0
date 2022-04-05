@@ -62,6 +62,7 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
+		event.addListener(CoreParser.RELOADER);
 		event.addListener(CoreParser.ITEM_LOADER);
 		event.addListener(CoreParser.BLOCK_LOADER);
 		event.addListener(CoreParser.ENTITY_LOADER);

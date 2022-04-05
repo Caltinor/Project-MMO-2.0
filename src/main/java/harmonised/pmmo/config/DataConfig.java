@@ -27,6 +27,14 @@ public class DataConfig {
 	private LinkedListMultimap<ResourceLocation, ResourceLocation> veinBlacklistData = LinkedListMultimap.create();
 	private Map<UUID, CodecMapPlayer.PlayerData> playerSpecificSettings = new HashMap<>();	
 	
+	public void reset() {
+		mobModifierData = new HashMap<>();
+		locationEffectData = new HashMap<>();
+		reqEffectData = new HashMap<>();
+		veinBlacklistData = LinkedListMultimap.create();
+		playerSpecificSettings = new HashMap<>();
+	}
+	
 	//==================DATA SETTER METHODS==============================
 	public void setMobModifierData(ResourceLocation locationID, ResourceLocation mobID, Map<String, Double> data) {
 		Preconditions.checkNotNull(locationID);

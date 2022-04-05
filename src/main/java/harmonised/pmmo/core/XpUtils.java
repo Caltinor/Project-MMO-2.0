@@ -22,6 +22,11 @@ public class XpUtils {
 	private  Map<EventType, Map<ResourceLocation, Map<String, Long>>> xpGainData = new HashMap<>();
 	private  Map<ModifierDataType, Map<ResourceLocation, Map<String, Double>>> xpModifierData = new HashMap<>();
 	
+	public void reset() {
+		xpGainData = new HashMap<>();
+		xpModifierData = new HashMap<>();
+	}
+	
 	//===================XP INTERACTION METHODS=======================================
 	
 	public boolean hasXpGainObjectEntry(EventType eventType, ResourceLocation objectID) {

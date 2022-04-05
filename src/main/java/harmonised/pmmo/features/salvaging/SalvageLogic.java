@@ -22,6 +22,10 @@ public class SalvageLogic {
 	private Map<ResourceLocation, Map<ResourceLocation, SalvageData>> salvageData = new HashMap<>();
 	private Random rand = new Random();
 	
+	public void reset() {
+		salvageData = new HashMap<>();
+	}
+	
 	public void setSalvageData(ResourceLocation itemID, ResourceLocation outputID, SalvageData data) {
 		Preconditions.checkNotNull(itemID);
 		Preconditions.checkNotNull(outputID);

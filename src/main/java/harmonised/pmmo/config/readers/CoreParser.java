@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.mojang.serialization.Codec;
+
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -30,6 +32,11 @@ public class CoreParser {
 	
 	private static final Logger DATA_LOGGER = LogManager.getLogger();	
 	public static final Type valueJsonType = new TypeToken<Map<String, JsonObject>>(){}.getType();
+	
+	public static final MergeableCodecDataManager<Byte, Byte> RELOADER = new MergeableCodecDataManager<>(
+			"dummy/dont/use/please/stop/this/will/break", DATA_LOGGER, Codec.BYTE, raws -> {return Byte.MIN_VALUE;}, func -> {
+				Core.get(LogicalSide.SERVER).resetDataForReload();
+			});
 	
 	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> ITEM_LOADER = new MergeableCodecDataManager<>(
 			"pmmo/items", DATA_LOGGER, CodecMapObject.CODEC, raws -> mergeObjectTags(raws), processed -> finalizeObjectMaps(ObjectType.ITEM, processed));

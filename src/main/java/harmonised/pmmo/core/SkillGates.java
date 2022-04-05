@@ -12,6 +12,11 @@ public class SkillGates {
 	private Map<ReqType, Map<ResourceLocation, Map<String, Integer>>> reqData = new HashMap<>();
 	private Map<ResourceLocation, Map<Integer, Map<String, Integer>>> enchantmentReqs = new HashMap<>();
 	
+	public void reset() {
+		reqData = new HashMap<>();
+		enchantmentReqs = new HashMap<>();
+	}
+	
 	//====================REQDATA GETTERS AND SETTERS======================================
 	public Map<String, Integer> getObjectSkillMap(ReqType reqType, ResourceLocation objectID) {
 		return reqData.computeIfAbsent(reqType, s -> new HashMap<>()).computeIfAbsent(objectID, s -> new HashMap<>());
