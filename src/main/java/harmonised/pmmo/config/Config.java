@@ -179,7 +179,10 @@ public class Config {
 	private static void buildLevels(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related level gain").push("Levels");
 		
-		MAX_LEVEL = builder.comment("The highest level a player can acheive in any skill.")
+		MAX_LEVEL = builder.comment("The highest level a player can acheive in any skill."
+						, "NOTE: if this is changing on you to a lower value, that's intentional"
+						, "If your formula makes the required xp to get max level greater than"
+						, "pmmo can store, pmmo will replace your value with the actual max.")
 						.defineInRange("Max Level", 1523, 1, Integer.MAX_VALUE);
 		USE_EXPONENTIAL_FORUMULA = builder.comment("shold levels be determined using an exponential forumula?")
 						.define("Use Exponential Formula", true);

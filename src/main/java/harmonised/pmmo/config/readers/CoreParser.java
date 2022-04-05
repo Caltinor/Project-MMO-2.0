@@ -28,7 +28,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
 public class CoreParser {
-	//TODO Figure out how to cleanse the maps of disabled packs
 	
 	private static final Logger DATA_LOGGER = LogManager.getLogger();	
 	public static final Type valueJsonType = new TypeToken<Map<String, JsonObject>>(){}.getType();
