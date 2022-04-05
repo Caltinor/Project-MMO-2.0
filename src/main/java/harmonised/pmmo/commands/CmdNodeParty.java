@@ -32,7 +32,6 @@ public class CmdNodeParty {
 				.then(Commands.literal("uninvite")
 						.then(Commands.argument("player", EntityArgument.player())
 								.executes(c -> partyUninvite(c))))
-				//TODO list members
 				.then(Commands.literal("list")
 						.executes(c -> listParty(c)))
 				.then(Commands.literal("accept")
