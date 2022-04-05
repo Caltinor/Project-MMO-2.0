@@ -29,7 +29,7 @@ public class PerkRegistration {
 		APIUtils.registerPerk(rl("fall_save"), FeaturePerks.FALL_SAVE, NONE, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("damage_boost"), FeaturePerks.DAMAGE_BOOST, NONE, PerkSide.SERVER);
 		//Effect Perks
-		APIUtils.registerPerk(rl("night_vision"), FeaturePerks.NIGHT_VISION, FeaturePerks.NIGHT_VISION_TERM, PerkSide.SERVER);
+		APIUtils.registerPerk(rl("night_vision"), FeaturePerks.NIGHT_VISION, NONE, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("regen"), FeaturePerks.REGEN, NONE, PerkSide.SERVER);
 	}
 	

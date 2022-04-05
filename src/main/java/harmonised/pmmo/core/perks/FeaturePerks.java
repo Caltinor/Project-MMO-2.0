@@ -1,6 +1,7 @@
 package harmonised.pmmo.core.perks;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -8,8 +9,6 @@ import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -114,17 +113,10 @@ public class FeaturePerks {
 
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> NIGHT_VISION = (player, nbt, level) -> {
 		int min = nbt.contains(APIUtils.MIN_LEVEL) ? nbt.getInt(APIUtils.MIN_LEVEL) : 50;
-		int duration = nbt.contains(APIUtils.DURATION) ? nbt.getInt(APIUtils.DURATION) : 30000;
+		int duration = nbt.contains(APIUtils.DURATION) ? nbt.getInt(APIUtils.DURATION) : 100;
 		if (level < min) return NONE;
-		player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, duration));
-		return NONE;
-	};
-	
-	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> NIGHT_VISION_TERM = (player, nbt, level) -> {
-		MobEffectInstance effect = player.getEffect(MobEffects.NIGHT_VISION);
-		if (effect == null) return NONE;
-		if (effect.getDuration() > 480) {
-			player.removeEffect(MobEffects.NIGHT_VISION);
+		if (!player.hasEffect(MobEffects.NIGHT_VISION) || player.getEffect(MobEffects.NIGHT_VISION).getDuration() <= 80) {
+			player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, duration, 0, true, false, false));
 		}
 		return NONE;
 	};
@@ -188,16 +180,14 @@ public class FeaturePerks {
 		return output;
 	};
 
-	public static final String WEAPON_TYPE = "weapon_type";
 	private static final String APPLICABLE_TO = "applies_to";
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE_BOOST = (player, nbt, level) -> {
 		CompoundTag output = new CompoundTag();
-		if (!nbt.contains("damageIn")) return output;
+		if (!nbt.contains(APIUtils.DAMAGE_IN) || !nbt.contains(APPLICABLE_TO)) return output;
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
-		ListTag type = nbt.contains(WEAPON_TYPE) ? nbt.getList(WEAPON_TYPE, Tag.TAG_STRING) : new ListTag();
-		String applyTo = nbt.contains(APPLICABLE_TO) ? nbt.getString(APPLICABLE_TO) : "meleeWeapon";
-		if (!type.contains(StringTag.valueOf(applyTo))) return output;
-		float damage = nbt.getFloat("damageIn") * (float)(perLevel * (double)level);
+		List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
+		if (!type.contains(player.getMainHandItem().getItem().getRegistryName().toString())) return output;
+		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (float)(perLevel * (double)level);
 		output.putFloat("damage", damage);
 		return output;
 	};
