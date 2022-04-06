@@ -32,6 +32,7 @@ public class XPOverlayGUI extends GuiComponent
 	private static int maxLevel = Config.MAX_LEVEL.get();
 	private static PoseStack stack;
 
+	//TODO render scheduled XP and award amounts
 
 	public static void renderOverlay(RenderGameOverlayEvent event)
 	{

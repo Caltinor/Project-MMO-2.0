@@ -23,11 +23,14 @@ import net.minecraft.server.MinecraftServer;
  */
 public class DataMirror implements IDataStorage{
 	public DataMirror() {}
-	//TODO setup an xp queue to be used in displaying xp growth in the guis
+	
 	private Map<String, Long> mySkills = new HashMap<>();
+	private Map<String, Long> scheduledXp = new HashMap<>();
 	private List<Long> levelCache = new ArrayList<>();
 	
 	public void setLevelCache(List<Long> cache) {levelCache = cache;}
+	
+	public long getScheduledXp(String skill) {return scheduledXp.getOrDefault(skill, 0l);}
 	
 	@Override
 	public int getLevelFromXP(long xp) {
@@ -54,6 +57,9 @@ public class DataMirror implements IDataStorage{
 	public boolean setXpDiff(UUID playerID, String skillName, long change) {return false;}
 	@Override
 	public void setXpRaw(UUID playerID, String skillName, long value) {
+		long oldValue = getXpRaw(playerID, skillName);
+		if (value > oldValue)
+			scheduledXp.merge(skillName, value-oldValue, (e, n) -> e + n);
 		mySkills.put(skillName, value);
 		MsLoggy.debug("Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
 	}
