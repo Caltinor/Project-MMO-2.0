@@ -182,13 +182,16 @@ public class FeaturePerks {
 
 	private static final String APPLICABLE_TO = "applies_to";
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE_BOOST = (player, nbt, level) -> {
+		System.out.println("damage boost trigger"); //TODO remove
 		CompoundTag output = new CompoundTag();
 		if (!nbt.contains(APIUtils.DAMAGE_IN) || !nbt.contains(APPLICABLE_TO)) return output;
+		System.out.println("damage boost prereqs found"); //TODO remove
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
 		List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
 		if (!type.contains(player.getMainHandItem().getItem().getRegistryName().toString())) return output;
+		System.out.println("damage boost applicable item found: "+player.getMainHandItem().getItem().getRegistryName().toString()); //TODO remove
 		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (float)(perLevel * (double)level);
-		output.putFloat("damage", damage);
+		output.putFloat(APIUtils.DAMAGE_OUT, damage);
 		return output;
 	};
 }

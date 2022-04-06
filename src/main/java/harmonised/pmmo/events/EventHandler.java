@@ -39,6 +39,7 @@ import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.AnimalTameEvent;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -147,6 +148,12 @@ public class EventHandler {
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onDealDamage(LivingAttackEvent event) {
+		if (event.isCanceled())
+			return;
+		DamageDealtHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onDealDamage(LivingDamageEvent event) {
 		if (event.isCanceled())
 			return;
 		DamageDealtHandler.handle(event);

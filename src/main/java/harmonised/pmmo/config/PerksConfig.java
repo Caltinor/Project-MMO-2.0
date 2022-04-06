@@ -11,6 +11,7 @@ import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class PerksConfig {
@@ -116,10 +117,11 @@ public class PerksConfig {
 		bodyMap = new HashMap<>();
 		
 		//=====================DEAL_RANGED_DAMAGE=======================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString("applies_to", "archeryWeapon").build()));
-		bodyMap.put("magic", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString("applies_to", "magicWeapon").build()));
-		bodyMap.put("gunslinging", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withString("applies_to", "gunGood Weapon").build()));
+		bodyMap.put("archery", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withList("applies_to", StringTag.valueOf("minecraft:bow"), StringTag.valueOf("mineraft:crossbow"), StringTag.valueOf("minecraft:trident")).build()));
+		bodyMap.put("magic", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withList("applies_to", StringTag.valueOf("ars_nouveau:spell_bow")).build()));
+		bodyMap.put("gunslinging", List.of(TagBuilder.start().withString("perk", "pmmo:damage_boost").withList("applies_to", StringTag.valueOf("cgm:pistol"),StringTag.valueOf("cgm:shotgun"),StringTag.valueOf("cgm:rifle")).build()));
 		defaultSettings.put(EventType.DEAL_RANGED_DAMAGE, bodyMap);
+		defaultSettings.put(EventType.RANGED_TO_MOBS, bodyMap);
 	}
 	
 	
