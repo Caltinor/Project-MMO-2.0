@@ -18,6 +18,7 @@ import harmonised.pmmo.events.impl.FishHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.MountHandler;
+import harmonised.pmmo.events.impl.PistonHandler;
 import harmonised.pmmo.events.impl.PlaceHandler;
 import harmonised.pmmo.events.impl.PlayerClickHandler;
 import harmonised.pmmo.events.impl.PlayerDeathHandler;
@@ -59,6 +60,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.world.PistonEvent;
 import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -108,6 +110,12 @@ public class EventHandler {
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onSleep(SleepFinishedTimeEvent event) {
 		SleepHandler.handle(event);
+	}
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public static void onPistonMove(PistonEvent.Pre event) {
+		if (event.isCanceled())
+			return;
+		PistonHandler.handle(event);
 	}
 	
 	//==========================================================

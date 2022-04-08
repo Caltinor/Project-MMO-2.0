@@ -1,49 +1,49 @@
 package harmonised.pmmo.events.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import harmonised.pmmo.storage.ChunkDataProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.piston.PistonStructureResolver;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.world.PistonEvent;
 
 public class PistonHandler {
 	
-	 public static void handle(PistonEvent event) {
-		 /* Design:
-		  * grab all of the blocks that will be pushed using the structure helper
-		  * as well as those being destroyed.
-		  * 
-		  * Then, iterater through each one and get the capability for the chunk
-		  * moved from (and delPos) and for the chunk moving to (and addpos). if
-		  * being destroyed, do nothing as the break event should fire for those.
-		  * 
-		  * This design should capture both extension and retraction since we are
-		  * using the offset direction position which provides an ultimate destination
-		  * and is agnostic to the push behavior.
-		  * 
-	        if(!event.getWorld().isClientSide())
-	        {
-	            Level world = (Level) event.getWorld();
-	            BlockPos pistonPos = event.getPos();
-	            Direction direction = event.getDirection();
-	            event.getStructureHelper().getToPush()
-	            UUID uuid;
-	            if(event.getPistonMoveType().equals(PistonEvent.PistonMoveType.EXTEND))
-	            {
-	                uuid = ChunkDataHandler.checkPos(world, pistonPos.relative(direction));
-	                if(uuid != null)
-	                {
-	                    ChunkDataHandler.addPos(world.dimension(), pistonPos.relative(direction, 2), uuid);
-	                    ChunkDataHandler.delPos(world.dimension(), pistonPos.relative(direction));
-	                }
-	            }
-	            else
-	            {
-	                BlockState state = world.getBlockState(pistonPos);
-	                if(state.hasProperty(MovingPistonBlock.TYPE) && state.getValue(MovingPistonBlock.TYPE).equals(PistonType.STICKY))
-	                {
-	                	//TODO grab a potentially pulled block UUID and make sure to update.
-	                    uuid = UUID.fromString("80008135-1337-3251-1523-852369874125");
-	                    ChunkDataHandler.addPos(world.dimension(), pistonPos.relative(direction), uuid);
-	                    ChunkDataHandler.delPos(world.dimension(), pistonPos.relative(direction, 2));
-	                }
-	            }
-	        }*/
-	    }
+	 public static void handle(PistonEvent.Pre event) {
+		 if (event.getWorld().isClientSide()) return;
+		 
+		 
+		 Level level = (Level) event.getWorld();
+		 PistonStructureResolver structure = event.getStructureHelper();
+		 structure.resolve();
+
+		 for (BlockPos destroyed : structure.getToDestroy()) {
+			 LevelChunk ck = level.getChunkAt(destroyed);
+			 ck.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
+				 cap.delPos(destroyed);
+			 });
+			 ck.setUnsaved(true);
+		 }		 
+		 Map<BlockPos, UUID> updateToMap = new HashMap<>();
+		 for (BlockPos moved : structure.getToPush()) {
+			 LevelChunk oldCK = level.getChunkAt(moved);			 
+			 UUID currentID = oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).map(cap -> cap.checkPos(moved)).get();
+			 oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
+				 cap.delPos(moved);
+			 });
+			 updateToMap.put( moved.relative(event.getStructureHelper().getPushDirection()), currentID);
+			 oldCK.setUnsaved(true);
+		 }
+		 for (Map.Entry<BlockPos, UUID> map : updateToMap.entrySet()) {
+			 LevelChunk toCK = level.getChunkAt(map.getKey());
+			 toCK.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
+				 cap.addPos(map.getKey(), map.getValue());
+			 });
+			 toCK.setUnsaved(true);
+		 }
+	 }
 }
