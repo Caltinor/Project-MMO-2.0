@@ -769,7 +769,6 @@ public class XP
 		return checkReq(player, XP.getResLoc(res), jType);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static boolean checkReq(Player player, BlockEntity tile, JType jType)
 	{
 		if(tile == null)
