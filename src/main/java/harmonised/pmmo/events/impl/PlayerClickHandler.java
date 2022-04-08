@@ -19,7 +19,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
 import net.minecraftforge.eventbus.api.Event.Result;
 
 public class PlayerClickHandler {
-//TODO add in how to handle event trigger cancellations
+
 	public static void leftClickBlock(LeftClickBlock event ) {
 		Player player = event.getPlayer();
 		Core core = Core.get(player.level);
@@ -40,6 +40,10 @@ public class PlayerClickHandler {
 				event.setCanceled(true);
 				return;
 			}
+			if (hookOutput.getBoolean(APIUtils.DENY_BLOCK_USE))
+				event.setUseBlock(Result.DENY);
+			if (hookOutput.getBoolean(APIUtils.DENY_ITEM_USE))
+				event.setUseItem(Result.DENY);
 		}
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.HIT_BLOCK, player, core.getSide()));

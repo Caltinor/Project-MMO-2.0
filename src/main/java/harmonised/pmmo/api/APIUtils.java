@@ -151,6 +151,8 @@ public class APIUtils {
 	
 	//===============EVENT TRIGGER REFERENCES========================
 	public static final String IS_CANCELLED = "is_cancelled";
+	public static final String DENY_ITEM_USE = "deny_item";
+	public static final String DENY_BLOCK_USE = "deny_block";
 	
 	public static void registerListener(
 			@NonNull ResourceLocation listenerID, 
