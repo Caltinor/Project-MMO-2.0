@@ -323,7 +323,7 @@ public class Core {
 	   *  register nothing.
 	   */
 	public void registerNBT() {			
-		  //TODO maybe change the loops to use the enum applicablity arrays
+		  //QOL maybe change the loops to use the enum applicablity arrays
 			//==============REGISTER REQUIREMENT LOGIC=============================== 
 			for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemReqLogic().entrySet()) {
 				//bypass this req for items since it is not applicable
