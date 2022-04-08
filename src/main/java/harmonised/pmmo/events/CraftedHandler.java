@@ -1,7 +1,6 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.api.APIUtils;
-import harmonised.pmmo.api.PredicateRegistry;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.gui.WorldXpDrop;
@@ -23,15 +22,14 @@ public class CraftedHandler
 
     public static void handleCrafted(PlayerEvent.ItemCraftedEvent event)
     {
+    	if (event.getPlayer().level.isClientSide) return;
         try
         {
             Player player = event.getPlayer();
             ItemStack itemStack = event.getCrafting();
             
-            if (!PredicateRegistry.checkPredicateReq(player, itemStack.getItem().getRegistryName(), JType.REQ_CRAFT)) {
-            	event.setCanceled(true);
-            	return;
-            }
+            if (!XP.checkReq(player, itemStack.getItem().getRegistryName(), JType.REQ_CRAFT))
+            		return;
             
             Vec3 pos = player.position();
             double defaultCraftingXp = Config.forgeConfig.defaultCraftingXp.get();
