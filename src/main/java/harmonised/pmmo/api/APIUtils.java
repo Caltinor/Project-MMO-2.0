@@ -31,7 +31,7 @@ public class APIUtils {
 	 * 
 	 * - Add methods to modify the configuration while live
 	 * - Add subjective methods for creating individualized req and xp behaviors
-	 * - JAVADOCS!!!!
+	 * - TODO JAVADOCS!!!!
 	 */
 	//===============CORE HOOKS======================================
 	public static int getLevel(String skill, Player player) {
@@ -193,7 +193,7 @@ public class APIUtils {
 	 * full understanding of how to use it. This includes inputs and outputs, 
 	 * reasonable triggers, and sidedness.
 	 * 
-	 * @param perkID a customer id for your perk that can be used in perks.json to reference this perk
+	 * @param perkID a custom id for your perk that can be used in perks.json to reference this perk
 	 * @param onExecute the function executing the behavior of this perk when triggered
 	 * @param onConclude the function executing the behavior of this perk when expected to end
 	 * @param side the logical sides this perk should exeute on.  Your implementation should factor in sidedness to avoid crashes.
@@ -210,8 +210,19 @@ public class APIUtils {
 	}	
 	
 	//===============UTILITY METHODS=================================
+	/** A standard key for use in providing PMMO with custom award maps
+	 */
 	public static final String SERIALIZED_AWARD_MAP = "serialized_award_map";
 	
+	/** Both Perks and Event Triggers can be used to provide custom XP award maps
+	 *  to events. When returning the {@link net.minecraft.nbt.CompoundTag CompoundTag} in  {@link onExecute} 
+	 *  and {@link onConclude}, use the key {@link APIUtils.SERIALIZED_AWARD_MAP SERIALIZED_AWARD_MAP} and use 
+	 *  this method to convert your award map into a universally serializable
+	 *  object that PMMO can understand and utilize when processing rewards.
+	 * 
+	 * @param awardMap a map of skillnames and xp values to be provided to the xp award logic 
+	 * @return a serialized {@link net.minecraft.nbt.ListTag ListTag} that can be deserialized consistently 
+	 */
 	public static ListTag serializeAwardMap(Map<String, Long> awardMap) {
 		ListTag out = new ListTag();
 		for (Map.Entry<String, Long> entry : awardMap.entrySet()) {

@@ -6,6 +6,7 @@ import net.minecraft.world.level.Level;
 
 public class PMMOFireworkEntity extends FireworkRocketEntity
 {
+	//TODO reimplement firework text
     //private WorldText explosionText;
 
     public PMMOFireworkEntity(Level worldIn, double x, double y, double z, ItemStack givenItem)

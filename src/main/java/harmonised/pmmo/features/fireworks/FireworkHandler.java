@@ -36,16 +36,11 @@ public class FireworkHandler {
 		CompoundTag l = new CompoundTag();
 
 		int[] colors = new int[] {Core.get(world).getDataConfig().getSkillColor(skill)};
-		
-		
-		
-//		int[] fadeColors = {0xff0000, 0x00ff00, 0x0000ff};
 
 		l.putInt("Flicker", 1);
 		l.putInt("Trail", 0);
 		l.putInt("Type", 1);
 		l.put("Colors", new IntArrayTag(colors));
-//		l.put("FadeColors", new IntArrayNBT(fadeColors));
 		explosion.add(l);
 
 		fw.put("Explosions", explosion);

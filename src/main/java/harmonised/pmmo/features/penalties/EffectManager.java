@@ -25,7 +25,7 @@ public class EffectManager {
 		List<ItemStack> items = List.of(inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39), player.getMainHandItem(), player.getOffhandItem());
 		//=====PLACEHOLDER FOR CURIOS=====
 		// reinstantiate list with curio
-		// slots if mod is present
+		// slots if mod is present TODO Curio
 		//================================
 		for (ItemStack stack : items) {
 			if (!stack.isEmpty() && (!core.isActionPermitted(ReqType.WEAR, stack, player) || !core.doesPlayerMeetEnchantmentReq(stack, player.getUUID()))) {
