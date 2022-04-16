@@ -47,7 +47,10 @@ public class Config {
 	
 	public static ForgeConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_X;
 	public static ForgeConfigSpec.ConfigValue<Double> SKILL_LIST_OFFSET_Y;
+	public static ForgeConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_X;
+	public static ForgeConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_Y;
 	public static ForgeConfigSpec.ConfigValue<Boolean> SKILL_LIST_DISPLAY;
+	public static ForgeConfigSpec.ConfigValue<Boolean> VEIN_GAUGE_DISPLAY;
 	
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
@@ -58,6 +61,12 @@ public class Config {
 						.define("Skill List Yoffset", 0d);
 		SKILL_LIST_DISPLAY = builder.comment("Should the skill list be displayed")
 						.define("Display Skill List", true);
+		VEIN_GAUGE_OFFSET_X = builder.comment("how far right from the bottom left corner the vein guage sholud be")
+				.define("Vein Gauge Xoffset", 4d);
+		VEIN_GAUGE_OFFSET_Y = builder.comment("how far up from the bottm left corner the vein guage should be")
+				.define("Vein Gauge Yoffset", 15d);
+		VEIN_GAUGE_DISPLAY = builder.comment("Should the vein charge data be displayed")
+				.define("Display Veing Gauge", true);
 		
 		builder.pop();
 	}
@@ -75,7 +84,7 @@ public class Config {
 	public static BooleanValue tooltipBonusEnabled(ModifierDataType type) {return TOOLTIP_BONUS_ENABLED[type.ordinal()];}
 	
 	private static void buildTooltips(ForgeConfigSpec.Builder builder) {
-		builder.comment("").push("ToolTip_Settings");
+		builder.comment("Generic Tooltip Settings").push("ToolTip_Settings");
 		HIDE_MET_REQS = builder.comment("Should met reqs be hidden on the tooltip.")
 						.define("Hide Met Req Tooltips", true);
 		builder.pop();
@@ -152,6 +161,7 @@ public class Config {
 		buildXpGains(builder);
 		buildPartySettings(builder);
 		buildMobScalingSettings(builder);
+		buildVeinMinerSettings(builder);
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
@@ -407,5 +417,18 @@ public class Config {
 						"Damage Scaling and Ratios", CodecTypes.DOUBLE_CODEC, Collections.singletonMap("combat", 0.001));
 			builder.pop(); //Scaling Settings
 		builder.pop(); //Mob_Scaling
+	}
+	
+	public static ForgeConfigSpec.ConfigValue<Boolean> REQUIRE_SETTING;
+	public static ForgeConfigSpec.ConfigValue<Integer> DEFAULT_CONSUME;
+	
+	private static void buildVeinMinerSettings(ForgeConfigSpec.Builder builder) {
+		builder.comment("Settings related to the Vein Miner").push("Vein_Miner");
+		REQUIRE_SETTING = builder.comment("If true, default consume will be ignored in favor of only allowing"
+				, "veining blocks with declared values.")
+				.define("Require Settings", false);
+		DEFAULT_CONSUME = builder.comment("how much a block should consume if no setting is defined.")
+				.define("Vein Mine Default Consume", 1);
+		builder.pop();
 	}
 }

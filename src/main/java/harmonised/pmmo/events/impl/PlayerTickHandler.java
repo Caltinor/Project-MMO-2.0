@@ -10,6 +10,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.features.penalties.EffectManager;
+import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,6 +33,8 @@ public class PlayerTickHandler {
 		
 		//Apply positive and negative effects based on biome and items worn
 		EffectManager.applyEffects(core, player);
+		//Recharge vein items
+		VeinMiningLogic.regenerateVein(player);
 		
 		if (!airLast.containsKey(player.getUUID()))
 			airLast.put(player.getUUID(), player.getAirSupply());

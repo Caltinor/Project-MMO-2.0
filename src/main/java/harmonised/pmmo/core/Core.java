@@ -22,6 +22,7 @@ import harmonised.pmmo.features.anticheese.CheeseTracker;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.salvaging.SalvageLogic;
+import harmonised.pmmo.features.veinmining.VeinDataManager;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.registry.EventTriggerRegistry;
@@ -57,6 +58,7 @@ public class Core {
 	private final PerkRegistry perks;
 	private final SalvageLogic salvageLogic;
 	private final NBTUtils nbt;
+	private final VeinDataManager vein;
 	private final IDataStorage data;
 	private final LogicalSide side;
 	  
@@ -70,6 +72,7 @@ public class Core {
 	    this.perks = new PerkRegistry();
 	    this.salvageLogic = new SalvageLogic();
 	    this.nbt = new NBTUtils();
+	    this.vein = new VeinDataManager();
 	    data = side.equals(LogicalSide.SERVER) ? new PmmoSavedData() : new DataMirror();
 	    this.side = side;
 	}
@@ -87,6 +90,7 @@ public class Core {
 		config.reset();
 		salvageLogic.reset();
 		nbt.reset();
+		vein.reset();
 		if (side.equals(LogicalSide.SERVER)) {
 			PmmoSavedData dataBackend = (PmmoSavedData) data;
 			if (dataBackend.getServer() == null) return;
@@ -105,6 +109,7 @@ public class Core {
 	public PerkRegistry getPerkRegistry() {return perks;}
 	public SalvageLogic getSalvageLogic() {return salvageLogic;}
 	public NBTUtils getNBTUtils() {return nbt;}
+	public VeinDataManager getVeinData() {return vein;}
 	public IDataStorage getData() {return data.get();}
 	public IDataStorage getData(MinecraftServer server) {return data.get(server);}
 	public LogicalSide getSide() {return side;}

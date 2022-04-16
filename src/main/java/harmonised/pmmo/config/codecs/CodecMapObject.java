@@ -13,6 +13,8 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
 import harmonised.pmmo.config.readers.ModifierDataType;
+import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
+import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import net.minecraft.resources.ResourceLocation;
 
 public record CodecMapObject (
@@ -24,7 +26,8 @@ public record CodecMapObject (
 	Optional<Map<String, Integer>> reqNegativeEffect,
 	Optional<NBTXpGainData> nbtXpMap,
 	Optional<NBTBonusData> nbtBonusMap,
-	Optional<Map<ResourceLocation, SalvageData>> salvageMap){
+	Optional<Map<ResourceLocation, SalvageData>> salvageMap,
+	Optional<VeinData> veinData){
 	
 	public static final Codec<CodecMapObject> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("isTagFor").forGetter(CodecMapObject::tagValues),
@@ -35,7 +38,8 @@ public record CodecMapObject (
 			CodecTypes.INTEGER_CODEC.optionalFieldOf("negative_effect").forGetter(CodecMapObject::reqNegativeEffect),
 			CodecTypes.NBT_XPGAIN_CODEC.optionalFieldOf("nbt_xp_values").forGetter(CodecMapObject::nbtXpMap),
 			CodecTypes.NBT_BONUS_CODEC.optionalFieldOf("nbt_bonuses").forGetter(CodecMapObject::nbtBonusMap),
-			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).optionalFieldOf("salvage").forGetter(CodecMapObject::salvageMap)
+			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).optionalFieldOf("salvage").forGetter(CodecMapObject::salvageMap),
+			VeinData.VEIN_DATA_CODEC.optionalFieldOf(VeinMiningLogic.VEIN_DATA).forGetter(CodecMapObject::veinData)
 			).apply(instance, CodecMapObject::new));
 	
 	public static record ObjectMapContainer(
@@ -47,7 +51,8 @@ public record CodecMapObject (
 		Map<String, Integer> reqNegativeEffect,
 		NBTXpGainData nbtXpGains,
 		NBTBonusData nbtBonuses,
-		Map<ResourceLocation, SalvageData> salvage) {
+		Map<ResourceLocation, SalvageData> salvage,
+		VeinData veinData) {
 		
 		public ObjectMapContainer(CodecMapObject src) {
 			this(src.tagValues().isPresent() ? src.tagValues().get() : new ArrayList<>(),
@@ -58,7 +63,8 @@ public record CodecMapObject (
 				src.reqNegativeEffect().isPresent() ? src.reqNegativeEffect().get() : new HashMap<>(),
 				src.nbtXpMap().isPresent() ? src.nbtXpMap().get() : new NBTXpGainData(),
 				src.nbtBonusMap().isPresent() ? src.nbtBonusMap().get() : new NBTBonusData(),
-				src.salvageMap().isPresent() ? src.salvageMap().get() : new HashMap<>());
+				src.salvageMap().isPresent() ? src.salvageMap().get() : new HashMap<>(),
+				src.veinData().isPresent() ? src.veinData().get() : VeinData.EMPTY);
 		}
 		
 		public static ObjectMapContainer combine(ObjectMapContainer one, ObjectMapContainer two) {
@@ -78,10 +84,11 @@ public record CodecMapObject (
 			
 			Map<ResourceLocation, SalvageData> salvage = new HashMap<>(one.salvage);
 			salvage.putAll(two.salvage);
-			return new ObjectMapContainer(tagValues, xpValues, modifiers, reqs, two.nbtReqs(), reqEffects, two.nbtXpGains(), two.nbtBonuses(), salvage);
+			VeinData combinedVein = one.veinData().combineWith(two.veinData());
+			return new ObjectMapContainer(tagValues, xpValues, modifiers, reqs, two.nbtReqs(), reqEffects, two.nbtXpGains(), two.nbtBonuses(), salvage, combinedVein);
 		}
 		public ObjectMapContainer() {
-			this(new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new NBTReqData(), new HashMap<>(), new NBTXpGainData(), new NBTBonusData(), new HashMap<>());
+			this(new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new NBTReqData(), new HashMap<>(), new NBTXpGainData(), new NBTBonusData(), new HashMap<>(), VeinData.EMPTY);
 		}
 		
 		public static final Codec<ObjectMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -93,7 +100,8 @@ public record CodecMapObject (
 				CodecTypes.INTEGER_CODEC.fieldOf("req_effects").forGetter(ObjectMapContainer::reqNegativeEffect),
 				CodecTypes.NBT_XPGAIN_CODEC.fieldOf("nbt_xp_values").forGetter(ObjectMapContainer::nbtXpGains),
 				CodecTypes.NBT_BONUS_CODEC.fieldOf("nbt_bonuses").forGetter(ObjectMapContainer::nbtBonuses),
-				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).fieldOf("salvage").forGetter(ObjectMapContainer::salvage)
+				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.SALVAGE_CODEC).fieldOf("salvage").forGetter(ObjectMapContainer::salvage),
+				VeinData.VEIN_DATA_CODEC.fieldOf(VeinMiningLogic.VEIN_DATA).forGetter(ObjectMapContainer::veinData)
 				).apply(instance, ObjectMapContainer::new));
 	}
 }

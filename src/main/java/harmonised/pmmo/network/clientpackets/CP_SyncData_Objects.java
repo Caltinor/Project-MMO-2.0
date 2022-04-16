@@ -62,6 +62,8 @@ public class CP_SyncData_Objects {
 					MsLoggy.info("REQS: "+reqs.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
 					Core.get(LogicalSide.CLIENT).getSkillGates().setObjectSkillMap(reqs.getKey(), tag, reqs.getValue());
 				}
+				MsLoggy.info("VEIN DATA: "+omc.veinData().toString());
+				Core.get(LogicalSide.CLIENT).getVeinData().setVeinData(tag, omc.veinData());
 				switch (type) {
 				case ITEM: {
 					for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : omc.modifiers().entrySet()) {

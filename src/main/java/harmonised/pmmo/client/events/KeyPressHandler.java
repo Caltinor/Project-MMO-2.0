@@ -1,28 +1,34 @@
 package harmonised.pmmo.client.events;
 
+import harmonised.pmmo.client.utils.VeinTracker;
+import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class KeyPressHandler {
-	private static boolean wasVeining = false, wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
+	private static boolean wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
 
 	@SuppressWarnings("resource")
 	@SubscribeEvent
     public static void keyPressEvent(net.minecraftforge.client.event.InputEvent.KeyInputEvent event)
     {
-        if(Minecraft.getInstance().player != null)
+		Minecraft mc = Minecraft.getInstance();
+        if(mc.player != null)
         {
-            if(wasVeining != ClientSetup.VEIN_KEY.isDown())
-            {
-                wasVeining = ClientSetup.VEIN_KEY.isDown();
-                //NetworkHandler.sendToServer(new MessageKeypress(ClientSetup.VEIN_KEY.isDown(), 1));
+            if(ClientSetup.VEIN_KEY.isDown() && mc.hitResult != null && mc.hitResult instanceof BlockHitResult) {
+            	BlockHitResult bhr = (BlockHitResult) mc.hitResult;
+            	VeinTracker.setTarget(bhr.getBlockPos());
+            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));
             }
+            	
 
             if(wasOpenMenu != ClientSetup.OPEN_MENU.isDown() || wasOpenSettings != ClientSetup.OPEN_SETTINGS.isDown() || wasOpenSkills != ClientSetup.OPEN_SKILLS.isDown() || wasOpenGlossary != ClientSetup.OPEN_GLOSSARY.isDown())
             {

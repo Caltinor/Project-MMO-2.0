@@ -9,6 +9,7 @@ import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
+import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
@@ -64,6 +65,11 @@ public class Networking {
 			.consumer(CP_ClearData::handle)
 			.add();
 		//SERVER BOUND PACKETS
+		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
+			.encoder(SP_UpdateVeinTarget::toBytes)
+			.decoder(SP_UpdateVeinTarget::new)
+			.consumer(SP_UpdateVeinTarget::handle)
+			.add();
 		MsLoggy.info("Messages Registered");
 	}
 	

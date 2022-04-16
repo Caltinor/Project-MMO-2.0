@@ -10,6 +10,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.storage.ChunkDataHandler;
 import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
@@ -17,7 +18,9 @@ import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
@@ -51,6 +54,15 @@ public class BreakHandler {
 				cap.delPos(event.getPos());
 			});;
 			chunk.setUnsaved(true);
+		}
+		//==============Process Vein Miner Logic==================
+		if (core.getVeinData().getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
+			BlockState block = event.getWorld().getBlockState(event.getPos());
+			if (event.getPlayer().getMainHandItem().getItem() instanceof TieredItem) {
+				TieredItem item = (TieredItem) event.getPlayer().getMainHandItem().getItem();
+				if (item.isCorrectToolForDrops(event.getPlayer().getMainHandItem(), block)) 
+					VeinMiningLogic.applyVein((ServerPlayer) event.getPlayer(), event.getPos());
+			}
 		}
 	}
 	
