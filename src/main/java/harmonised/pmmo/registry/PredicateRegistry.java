@@ -5,6 +5,7 @@ import java.util.function.BiPredicate;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.MsLoggy;
 import net.minecraft.resources.ResourceLocation;
@@ -21,36 +22,34 @@ public class PredicateRegistry {
 	private LinkedListMultimap<String, BiPredicate<Player, Entity>> reqEntityPredicates = LinkedListMultimap.create();
 	
 	/** registers a predicate to be used in determining if a given player is permitted
-	 * to perform a particular action. [Except for break action.  see registerBreakPredicate.
-	 * The ResouceLocation and JType parameters are 
+	 * to perform a particular action. [Except for break action.  see {@link APIUtils#registerBreakPredicate registerBreakPredicate}.
+	 * The ResouceLocation and ReqType parameters are 
 	 * conditions for when this check should be applied and are used by PMMO to know
-	 * which predicates apply in which contexts.  The predicate itself links to the 
-	 * compat mod's logic which handles the external behavior.
+	 * which predicates apply in which contexts.
 	 * 
-	 * @param res the block, item, or entity registrykey
-	 * @param jType the PMMO behavior type
+	 * @param res the item registrykey
+	 * @param reqType the requirement type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public void registerPredicate(ResourceLocation res, ReqType jType, BiPredicate<Player, ItemStack> pred) {
+	public void registerPredicate(ResourceLocation res, ReqType reqType, BiPredicate<Player, ItemStack> pred) {
 		Preconditions.checkNotNull(pred);
-		String condition = jType.toString()+";"+res.toString();
+		String condition = reqType.toString()+";"+res.toString();
 		reqPredicates.get(condition).add(pred);
 		MsLoggy.info("Predicate Registered: "+condition);
 	}
 	
 	/** registers a predicate to be used in determining if a given player is permitted
-	 * to break a block.  The ResouceLocation and JType parameters are 
+	 * to break a block.  The ResouceLocation and ReqType parameters are 
 	 * conditions for when this check should be applied and are used by PMMO to know
-	 * which predicates apply in which contexts.  The predicate itself links to the 
-	 * compat mod's logic which handles the external behavior.
+	 * which predicates apply in which contexts.
 	 * 
-	 * @param res the block, item, or entity registrykey
-	 * @param jType the PMMO behavior type
+	 * @param res the block registrykey
+	 * @param reqType the requirement type
 	 * @param pred what executes to determine if player is permitted to perform the action
 	 */
-	public void registerBreakPredicate(ResourceLocation res, ReqType jType, BiPredicate<Player, BlockEntity> pred) {
+	public void registerBreakPredicate(ResourceLocation res, ReqType reqType, BiPredicate<Player, BlockEntity> pred) {
 		Preconditions.checkNotNull(pred);
-		String condition = jType.toString()+";"+res.toString();
+		String condition = reqType.toString()+";"+res.toString();
 		reqBreakPredicates.get(condition).add(pred);
 		MsLoggy.info("Predicate Registered: "+condition);
 	}

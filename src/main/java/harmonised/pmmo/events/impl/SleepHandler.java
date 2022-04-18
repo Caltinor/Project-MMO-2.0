@@ -5,6 +5,6 @@ import net.minecraftforge.event.world.SleepFinishedTimeEvent;
 public class SleepHandler {
 
 	public static void handle(SleepFinishedTimeEvent event) {
-		//TODO populate.
+		//this is supposed to regenerate vein.  not sure if I want to retain that.
 	}
 }
