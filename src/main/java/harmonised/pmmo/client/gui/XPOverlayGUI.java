@@ -3,6 +3,8 @@ package harmonised.pmmo.client.gui;
 import java.util.*;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Pair;
+
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
@@ -13,6 +15,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -26,8 +29,6 @@ public class XPOverlayGUI
 	private static Minecraft mc = Minecraft.getInstance();
 	private static Font fontRenderer = mc.font;
 
-	//TODO render scheduled XP and award amounts
-
 	public static void renderOverlay(RenderGameOverlayEvent event)
 	{
 		PoseStack stack = event.getMatrixStack();
@@ -35,9 +36,11 @@ public class XPOverlayGUI
 		RenderSystem.enableBlend();
 		
 		if(Config.SKILL_LIST_DISPLAY.get())
-			renderSkillList(stack, Config.SKILL_LIST_OFFSET_X.get().intValue(), Config.SKILL_LIST_OFFSET_Y.get().intValue());
+			renderSkillList(stack, Config.SKILL_LIST_OFFSET_X.get(), Config.SKILL_LIST_OFFSET_Y.get());
 		if(Config.VEIN_GAUGE_DISPLAY.get())
-			renderVeinGauge(stack, Config.VEIN_GAUGE_OFFSET_X.get().intValue(), event.getWindow().getGuiScaledHeight() - Config.VEIN_GAUGE_OFFSET_Y.get().intValue());
+			renderVeinGauge(stack, Config.VEIN_GAUGE_OFFSET_X.get(), event.getWindow().getGuiScaledHeight() - Config.VEIN_GAUGE_OFFSET_Y.get());
+		if(Config.GAIN_LIST_DISPLAY.get())
+			renderGains(stack, event.getWindow().getGuiScaledWidth()/2 + Config.GAIN_LIST_OFFSET_X.get(), Config.GAIN_LIST_OFFSET_Y.get());
 		stack.popPose();
 	}
 
@@ -84,5 +87,22 @@ public class XPOverlayGUI
 			int currentCharge = VeinMiningLogic.getChargeFromAllItems(mc.player);
 			GuiComponent.drawString(stack, fontRenderer, new TranslatableComponent("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, guageY, 0xFFFFFF);
 		}
+	}
+	
+	private static List<Pair<String, Long>> xpGains = new ArrayList<>();
+	public static void addToGainList(String skill, long amount) {
+		if (xpGains.size() >= Config.GAIN_LIST_SIZE.get()) 
+			xpGains.remove(0);
+		xpGains.add(Pair.of(skill, amount));
+	}
+	
+	private static void renderGains(PoseStack stack, int listX, int listY) {
+		for (int i = 0; i < xpGains.size(); i++) {
+			TextComponent gain = new TextComponent("+"+String.valueOf(xpGains.get(i).getSecond())+" ");
+			gain.append(new TranslatableComponent("pmmo."+xpGains.get(i).getFirst()));
+			gain.setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(xpGains.get(i).getFirst()));
+			GuiComponent.drawString(stack, fontRenderer, gain, listX, 3+listY+ (i*9), i);
+		}
+		//QOL add something animated, or maybe just fade the numbers
 	}
 }

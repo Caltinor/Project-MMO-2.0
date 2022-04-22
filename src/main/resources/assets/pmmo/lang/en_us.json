@@ -427,6 +427,10 @@
   "pmmo.event_header":"XP Award Events",
   "pmmo.req_header":"Requirements",
   "pmmo.modifier_header":"XP Modifiers",
+  "pmmo.vein_header":"Vein Mining Attributes",
+  "pmmo.veindata_rate":"Vein Recharge Rate Per Tick: %1$s",
+  "pmmo.veindata_cap":"Vein Capacity Added By Item: %1$s",
+  "pmmo.veindata_consume":"Vein Consumed on Break: %1$s",
   
   "pmmo.enum.ANVIL_REPAIR":"Anvil Repair",
 	"pmmo.enum.BLOCK_BREAK":"Break Block",

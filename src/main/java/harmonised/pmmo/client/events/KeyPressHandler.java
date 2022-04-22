@@ -43,7 +43,7 @@ public class KeyPressHandler {
             			mc.setScreen(new StatsScreen(((EntityHitResult)mc.hitResult).getEntity()));
             	}
             	else if (mc.hitResult == null && !mc.player.isCrouching())
-            		mc.setScreen(new StatsScreen(mc.player));
+            		mc.setScreen(new StatsScreen(mc.player)); //FIXME this does not fire
             	else if (mc.player.isCrouching())
             		mc.setScreen(null); //TODO replace with glossary when built
             }
