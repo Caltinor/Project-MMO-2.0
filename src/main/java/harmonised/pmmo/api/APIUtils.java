@@ -170,7 +170,56 @@ public class APIUtils {
 		return Core.get(side).getExperienceAwards(type, entity, null, new CompoundTag());
 	}
 	
-	//TODO add methods for obtaining requirement map.
+	/**Returns a skill-level map for the requirements of the item and the requirement type passed.
+	 * Note that registered item predicates do not have to conform to the level system in determining
+	 * whether an item is permitted or not.  Because of this, a missing or innacurate tooltip 
+	 * registration may not reflect the outcome of a predicate check during gameplay.
+	 * 
+	 * @param item the item being queried
+	 * @param type the requirement type
+	 * @param side the side being queried.  this can be the actual setting on the server or the client mirror setting.
+	 * @return a map containing the skills and their required levels for this item and requirement type.
+	 */
+	public static Map<String, Integer> getRequirementMap(ItemStack item, ReqType type, LogicalSide side) {
+		Preconditions.checkNotNull(item);
+		Preconditions.checkNotNull(type);
+		Preconditions.checkNotNull(side);
+		return Core.get(side).getReqMap(type, item);
+	}
+	
+	/**Returns a skill-level map for the requirements of the block and the requirement type passed.
+	 * Note that registered block predicates do not have to conform to the level system in determining
+	 * whether an block action is permitted or not.  Because of this, a missing or innacurate tooltip 
+	 * registration may not reflect the outcome of a predicate check during gameplay.
+	 * 
+	 * @param pos the location of the block or block entity being queried
+	 * @param level the Level this block is located (this is also used for client/server sidedness checks)
+	 * @param type the requirement type
+	 * @return a map containing the skills and their required levels for this block and requirement type.
+	 */
+	public static Map<String, Integer> getRequirementMap(BlockPos pos, Level level, ReqType type) {
+		Preconditions.checkNotNull(pos);
+		Preconditions.checkNotNull(level);
+		Preconditions.checkNotNull(type);
+		return Core.get(level).getReqMap(null, pos, level);
+	}
+	
+	/**Returns a skill-level map for the requirements of the entity and the requirement type passed.
+	 * Note that registered entity predicates do not have to conform to the level system in determining
+	 * whether an block action is permitted or not.  Because of this, a missing or innacurate tooltip 
+	 * registration may not reflect the outcome of a predicate check during gameplay.
+	 * 
+	 * @param entity the entity being queried
+	 * @param type the requirement type
+	 * @param side the side being queried.  this can be the actual setting on the server or the client mirror setting.
+	 * @return a map containing the skills and their required levels for this entity and requirement type.
+	 */
+	public static Map<String, Integer> getRequirementMap(Entity entity, ReqType type, LogicalSide side) {
+		Preconditions.checkNotNull(entity);
+		Preconditions.checkNotNull(type);
+		Preconditions.checkNotNull(side);
+		return Core.get(side).getReqMap(type, entity);
+	}
 	
 	//===============REQ AND TOOLTIP REFERENCES======================
 	/** registers a predicate to be used in determining if a given player is permitted
