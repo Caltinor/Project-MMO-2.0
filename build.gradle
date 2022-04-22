@@ -20,6 +20,11 @@ mixin
 }
 apply plugin: 'maven-publish'
 
+repositories
+{
+	maven { url "https://www.cursemaven.com" }
+}
+
 version = '1.18.2-2.0.0.0'
 group = 'harmonised.pmmo'
 archivesBaseName = 'Project_MMO'
@@ -71,8 +76,10 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.46'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3723913")
 }
 
 jar {

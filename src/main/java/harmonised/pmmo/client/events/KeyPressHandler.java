@@ -1,73 +1,52 @@
 package harmonised.pmmo.client.events;
 
+import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.utils.VeinTracker;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult.Type;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
 public class KeyPressHandler {
-	private static boolean wasOpenMenu = false, wasOpenSettings = false, wasOpenSkills = false, wasOpenGlossary = false, tooltipKeyWasPressed = false;
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
     public static void keyPressEvent(net.minecraftforge.client.event.InputEvent.KeyInputEvent event)
     {
 		Minecraft mc = Minecraft.getInstance();
         if(mc.player != null)
         {
-            if(ClientSetup.VEIN_KEY.isDown() && mc.hitResult != null && mc.hitResult instanceof BlockHitResult) {
+            if(ClientSetup.VEIN_KEY.isDown() && mc.hitResult != null && mc.hitResult.getType().equals(Type.BLOCK)) {
             	BlockHitResult bhr = (BlockHitResult) mc.hitResult;
             	VeinTracker.setTarget(bhr.getBlockPos());
             	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));
             }
-            	
-
-            if(wasOpenMenu != ClientSetup.OPEN_MENU.isDown() || wasOpenSettings != ClientSetup.OPEN_SETTINGS.isDown() || wasOpenSkills != ClientSetup.OPEN_SKILLS.isDown() || wasOpenGlossary != ClientSetup.OPEN_GLOSSARY.isDown())
-            {
-                if(Minecraft.getInstance().screen == null)
-                {
-                    if(ClientSetup.OPEN_MENU.isDown())
-                    {
-                        //Minecraft.getInstance().setScreen(new MainScreen(uuid, new TranslatableComponent("pmmo.potato")));
-                        wasOpenMenu = ClientSetup.OPEN_MENU.isDown();
-                    }
-                    else if(ClientSetup.OPEN_SETTINGS.isDown())
-                    {
-                        //Minecraft.getInstance().setScreen(new PrefsChoiceScreen(new TranslatableComponent("pmmo.preferences")));
-                        wasOpenSettings = ClientSetup.OPEN_SETTINGS.isDown();
-                    }
-                    else if(ClientSetup.OPEN_SKILLS.isDown())
-                    {
-                        //Minecraft.getInstance().setScreen(new ListScreen(uuid,  new TranslatableComponent("pmmo.skills"), "", JType.SKILLS, Minecraft.getInstance().player));
-                        wasOpenSkills = ClientSetup.OPEN_SKILLS.isDown();
-                    }
-                    else if(ClientSetup.OPEN_GLOSSARY.isDown())
-                    {
-                        //Minecraft.getInstance().setScreen(new GlossaryScreen(uuid, new TranslatableComponent("pmmo.glossary"), true));
-                        wasOpenGlossary = ClientSetup.OPEN_GLOSSARY.isDown();
-                    }
-                }
-
+            if (ClientSetup.SHOW_LIST.isDown()) {
+            	Config.SKILL_LIST_DISPLAY.set(!Config.SKILL_LIST_DISPLAY.get());
             }
-
-            if(!(Minecraft.getInstance().player == null) && ClientSetup.TOGGLE_TOOLTIP.isDown() && !tooltipKeyWasPressed)
-            {
-                TooltipHandler.tooltipOn = !TooltipHandler.tooltipOn;
-                if(TooltipHandler.tooltipOn)
-                    Minecraft.getInstance().player.displayClientMessage(new TranslatableComponent("pmmo.tooltipOn"), true);
-                else
-                    Minecraft.getInstance().player.displayClientMessage(new TranslatableComponent("pmmo.tooltipOff"), true);
+            if (ClientSetup.SHOW_VEIN.isDown()) {
+            	Config.VEIN_GAUGE_DISPLAY.set(!Config.VEIN_GAUGE_DISPLAY.get());
             }
-
-            tooltipKeyWasPressed = ClientSetup.TOGGLE_TOOLTIP.isDown();
+            if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {
+            	if (mc.hitResult != null && !mc.player.isCrouching()) {
+            		if (mc.hitResult.getType().equals(Type.BLOCK)) 
+            			mc.setScreen(new StatsScreen(((BlockHitResult)mc.hitResult).getBlockPos()));
+            		else if (mc.hitResult.getType().equals(Type.ENTITY))
+            			mc.setScreen(new StatsScreen(((EntityHitResult)mc.hitResult).getEntity()));
+            	}
+            	else if (mc.hitResult == null && !mc.player.isCrouching())
+            		mc.setScreen(new StatsScreen(mc.player));
+            	else if (mc.player.isCrouching())
+            		mc.setScreen(null); //TODO replace with glossary when built
+            }
         }
     }
 

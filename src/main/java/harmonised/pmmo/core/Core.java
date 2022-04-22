@@ -200,7 +200,44 @@ public class Core {
 			}
 		  return true;
 	  }
-	 
+	
+	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
+		ResourceLocation itemID = stack.getItem().getRegistryName();
+		if (tooltips.requirementTooltipExists(itemID, reqType))
+			return tooltips.getItemRequirementTooltipData(itemID, reqType, stack);
+		else if (gates.doesObjectReqExist(reqType, itemID))
+			return gates.getObjectSkillMap(reqType, itemID);
+		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
+			return AutoValues.getRequirements(reqType, itemID, ObjectType.ITEM);
+		else
+			return new HashMap<>();
+	}
+	
+	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
+		ResourceLocation entityID = new ResourceLocation(entity.getEncodeId());
+		if (tooltips.requirementTooltipExists(entityID, reqType))
+			return tooltips.getEntityRequirementTooltipData(entityID, reqType, entity);
+		else if (gates.doesObjectReqExist(reqType, entityID))
+			return gates.getObjectSkillMap(reqType, entityID);
+		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
+			return AutoValues.getRequirements(reqType, entityID, ObjectType.ENTITY);
+		else
+			return new HashMap<>();
+	}
+	
+	public Map<String, Integer> getReqMap(ReqType reqType, BlockPos pos, Level level) {
+		BlockEntity tile = level.getBlockEntity(pos);
+		ResourceLocation blockID = level.getBlockState(pos).getBlock().getRegistryName();
+		if (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
+			return tooltips.getBlockRequirementTooltipData(blockID, reqType, tile);
+		else if (gates.doesObjectReqExist(reqType, blockID))
+			return gates.getObjectSkillMap(reqType, blockID);
+		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
+			return AutoValues.getRequirements(reqType, blockID, ObjectType.BLOCK);
+		else
+			return new HashMap<>();
+	}
+	
 	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))

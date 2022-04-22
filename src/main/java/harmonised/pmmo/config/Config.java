@@ -51,6 +51,8 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Double> VEIN_GAUGE_OFFSET_Y;
 	public static ForgeConfigSpec.ConfigValue<Boolean> SKILL_LIST_DISPLAY;
 	public static ForgeConfigSpec.ConfigValue<Boolean> VEIN_GAUGE_DISPLAY;
+	public static ForgeConfigSpec.ConfigValue<Integer> SECTION_HEADER_COLOR;
+	public static ForgeConfigSpec.ConfigValue<Integer> SALVAGE_ITEM_COLOR;
 	
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
@@ -67,6 +69,10 @@ public class Config {
 				.define("Vein Gauge Yoffset", 15d);
 		VEIN_GAUGE_DISPLAY = builder.comment("Should the vein charge data be displayed")
 				.define("Display Veing Gauge", true);
+		SECTION_HEADER_COLOR = builder.comment("what color should the background be for the section header lines in the glossary")
+				.define("Section Header Color", 0x1504B520);
+		SALVAGE_ITEM_COLOR = builder.comment("What color should the background be for the salvage item lines in the glossary")
+				.define("Salage Item Color", 0x15D2A319);
 		
 		builder.pop();
 	}

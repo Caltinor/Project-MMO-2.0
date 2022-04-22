@@ -5,6 +5,7 @@ import java.util.Map;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.ModifierDataType;
@@ -12,7 +13,9 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.util.Reference;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -45,12 +48,10 @@ public class TooltipHandler {
             if(item.getRegistryName() == null)
                 return;
 
-            /*if(ClientHandler.OPEN_MENU.isDown())
-            {
-                GlossaryScreen.setButtonsToKey(regKey);
-                Minecraft.getInstance().setScreen(new GlossaryScreen(Minecraft.getInstance().player.getUUID(), new TranslatableComponent("pmmo.glossary"), false));
+            if(ClientSetup.OPEN_MENU.isDown()) {
+                Minecraft.getInstance().setScreen(new StatsScreen(stack));
                 return;
-            }*/
+            }
 
             Map<String, Integer> wearReq = getReqData(core, item.getRegistryName(), ReqType.WEAR, stack);
             Map<String, Integer> toolReq = getReqData(core, item.getRegistryName(), ReqType.TOOL, stack);

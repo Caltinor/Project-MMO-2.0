@@ -9,6 +9,7 @@ import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
+import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.util.Reference;
 
@@ -26,5 +27,6 @@ public class ProjectMMO {
 
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::onCapabilityRegister);
+    	FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
     }
 }

@@ -33,6 +33,10 @@ public class SalvageLogic {
 		salvageData.computeIfAbsent(itemID,s -> new HashMap<>()).put(outputID, data);
 	}
 	
+	public Map<ResourceLocation, SalvageData> getSalvageData(ResourceLocation itemID) {
+		return salvageData.getOrDefault(itemID, new HashMap<>());
+	}
+	
 	public void getSalvage(ServerPlayer player, Core core) {
 		ItemStack salvageItem = player.getMainHandItem().isEmpty() 
 				? player.getOffhandItem().isEmpty() 
