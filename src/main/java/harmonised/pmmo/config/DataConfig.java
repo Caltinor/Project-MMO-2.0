@@ -16,6 +16,7 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DataConfig {
@@ -94,5 +95,9 @@ public class DataConfig {
 			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue()));
 		}
 		return effects;
+	}
+	
+	public boolean isBlockVeinBlacklisted(ResourceLocation locationID, Block block) {
+		return veinBlacklistData.get(locationID).contains(block.getRegistryName());
 	}
 }
