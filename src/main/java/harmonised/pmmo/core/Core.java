@@ -47,6 +47,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.LogicalSide;
 
+/**This class bridges the gap between various systems within Project MMO.
+ * Methods within this class connect these distinct systems without 
+ * poluting the features themselves with content that is not true to their
+ * purpose.  
+ * <br><br>
+ * This class also allows for client and server to have their own copies
+ * of both the data itself and the logic.  Using this approach Core can
+ * be invoked in side-sensitive contexts and not violate any cross-side
+ * boundaries. 
+ * 
+ * @author Caltinor
+ *
+ */
 public class Core {
 	private static final Map<LogicalSide, Function<LogicalSide, Core>> INSTANCES = Map.of(LogicalSide.CLIENT, Functions.memoize(Core::new), LogicalSide.SERVER, Functions.memoize(Core::new));
 	private final XpUtils xp;
@@ -211,10 +224,9 @@ public class Core {
 			return AutoValues.getRequirements(reqType, itemID, ObjectType.ITEM);
 		else
 			return new HashMap<>();
-	}
-	
+	}	
 	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
-		ResourceLocation entityID = new ResourceLocation(entity.getEncodeId());
+		ResourceLocation entityID = new ResourceLocation(entity.getType().equals(EntityType.PLAYER) ? "minecraft:player" : entity.getEncodeId());
 		if (tooltips.requirementTooltipExists(entityID, reqType))
 			return tooltips.getEntityRequirementTooltipData(entityID, reqType, entity);
 		else if (gates.doesObjectReqExist(reqType, entityID))
@@ -223,8 +235,7 @@ public class Core {
 			return AutoValues.getRequirements(reqType, entityID, ObjectType.ENTITY);
 		else
 			return new HashMap<>();
-	}
-	
+	}	
 	public Map<String, Integer> getReqMap(ReqType reqType, BlockPos pos, Level level) {
 		BlockEntity tile = level.getBlockEntity(pos);
 		ResourceLocation blockID = level.getBlockState(pos).getBlock().getRegistryName();

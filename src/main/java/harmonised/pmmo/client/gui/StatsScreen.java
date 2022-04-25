@@ -26,6 +26,10 @@ public class StatsScreen extends Screen{
 	private BlockPos block = null;
 	private Entity entity = null;
 
+	public StatsScreen() {
+		super(MENU_NAME);
+		init();
+	}
 	public StatsScreen(ItemStack stack) {
 		super(MENU_NAME);
 		this.stack = stack;

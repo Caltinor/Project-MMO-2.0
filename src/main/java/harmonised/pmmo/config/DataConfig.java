@@ -78,6 +78,17 @@ public class DataConfig {
 		return Style.EMPTY.withColor(TextColor.fromRgb(getSkillColor(skill)));
 	}
 	
+	public double getMobModifier(ResourceLocation locationID, ResourceLocation mobID, String modifierID) {
+		return mobModifierData
+				.computeIfAbsent(locationID, s -> new HashMap<>())
+				.computeIfAbsent(mobID, s -> new HashMap<>())
+				.getOrDefault(modifierID, 0d);
+	}
+	
+	public Map<ResourceLocation, Map<String, Double>> getMobModifierMap(ResourceLocation locationID) {
+		return mobModifierData.getOrDefault(locationID, new HashMap<>());
+	}
+	
 	public List<MobEffectInstance> getLocationEffect(boolean isPositive, ResourceLocation biomeID) {
 		List<MobEffectInstance> effects = new ArrayList<>();
 		for (Map.Entry<ResourceLocation, Integer> effect 
@@ -95,6 +106,10 @@ public class DataConfig {
 			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue()));
 		}
 		return effects;
+	}
+	
+	public List<ResourceLocation> getVeinBlacklist(ResourceLocation locationID) {
+		return veinBlacklistData.get(locationID);
 	}
 	
 	public boolean isBlockVeinBlacklisted(ResourceLocation locationID, Block block) {

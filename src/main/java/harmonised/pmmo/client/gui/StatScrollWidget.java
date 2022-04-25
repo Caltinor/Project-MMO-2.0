@@ -28,6 +28,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.ScrollPanel;
@@ -50,13 +51,15 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 	}
 	
-	private ItemStack stack;
-	private BlockPos blockPos;
-	private Entity entity;
+	private ItemStack stack = null;
+	private BlockPos blockPos = null;
+	private Entity entity = null;
 	private final List<Element> content = new ArrayList<>();
 
 	public StatScrollWidget(int width, int height, int top, int left) {
-		super(Minecraft.getInstance(), width, height, top, left, 4); 
+		super(Minecraft.getInstance(), width, height, top, left, 4);
+		if (stack == null && blockPos == null && entity == null)
+			generateGlossary();
 	}
 	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack) {
 		this(width, height, top, left);
@@ -174,7 +177,92 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 		}
 		
-		
+		if (entity != null && entity.getType().equals(EntityType.PLAYER)) {
+			//TODO player-specific data
+			
+		}
+	}
+	
+	public void generateGlossary() {
+		Minecraft mc = Minecraft.getInstance();
+		Core core = Core.get(LogicalSide.CLIENT);
+		ResourceLocation dimension = mc.player.level.dimension().location();
+		ResourceLocation biome = mc.player.level.getBiome(mc.player.blockPosition()).value().getRegistryName();
+		//DIMENSION DATA
+		content.add(new Element(new TranslatableComponent("pmmo.dimension_header", dimension).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+		if (core.getSkillGates().doesObjectReqExist(ReqType.TRAVEL, dimension)) {
+			content.add(new Element(ReqType.TRAVEL, step(1), 0xFFFFFF, false, 0));
+			for (Map.Entry<String, Integer> travelReq : core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, dimension).entrySet()) {
+				content.add(new Element(travelReq.getKey(), travelReq.getValue(), step(2), core.getDataConfig().getSkillColor(travelReq.getKey())));
+			}
+		}
+		if (!core.getXpUtils().hasModifierObjectEntry(ModifierDataType.DIMENSION, dimension)) {
+			content.add(new Element(ModifierDataType.DIMENSION, step(1), 0xFFFFFF, false, 0));
+			for (Map.Entry<String, Double> bonus : core.getXpUtils().getObjectModifierMap(ModifierDataType.DIMENSION, dimension).entrySet()) {
+				content.add(new Element(bonus.getKey(), bonus.getValue(), step(2), core.getDataConfig().getSkillColor(bonus.getKey())));
+			}
+		}
+		if (!core.getDataConfig().getVeinBlacklist(dimension).isEmpty()) {
+			content.add(new Element(new TranslatableComponent("pmmo.vein_blacklist_header"), step(1), 0xFFFFFF, false, 0));
+			for (ResourceLocation blockID : core.getDataConfig().getVeinBlacklist(dimension)) {
+				content.add(new Element(new TextComponent(blockID.toString()), step(2), 0xEEEEEE, false, 0));
+			}
+		}
+		if (!core.getDataConfig().getMobModifierMap(dimension).isEmpty()) {
+			content.add(new Element(new TranslatableComponent("pmmo.mob_modifier_header"), step(1), 0xFFFFFF, false, 0));
+			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(dimension).entrySet()) {
+				content.add(new Element(new TextComponent(mobMap.getKey().toString()), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
+				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
+					content.add(new Element(map.getKey(), map.getValue(), step(2), 0xFFFFFF));
+				}
+			}
+		}
+		//BIOME DATA
+		content.add(new Element(new TranslatableComponent("pmmo.biome_header", biome).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+		if (core.getSkillGates().doesObjectReqExist(ReqType.BIOME, biome)) {
+			content.add(new Element(ReqType.BIOME, step(1), 0xFFFFFF, false, 0));
+			for (Map.Entry<String, Integer> travelReq : core.getSkillGates().getObjectSkillMap(ReqType.BIOME, biome).entrySet()) {
+				content.add(new Element(travelReq.getKey(), travelReq.getValue(), step(2), core.getDataConfig().getSkillColor(travelReq.getKey())));
+			}
+			//negative effects only matter if there is a req to meet.  positive effects will apply always if no req is present
+			if (!core.getDataConfig().getLocationEffect(false, biome).isEmpty()) {
+				content.add(new Element(new TranslatableComponent("pmmo.biome_negative").withStyle(ChatFormatting.BOLD), step(1), 0xEEEEEE, false, 0));
+				for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(false, biome)) {
+					content.add(new Element(
+							new TextComponent("").append(mei.getEffect().getDisplayName()).append(": "+mei.getAmplifier())
+							, step(2), 0xEEEEEE, false, 0));
+				}
+			}
+		}
+		if (!core.getDataConfig().getLocationEffect(true, biome).isEmpty()) {
+			content.add(new Element(new TranslatableComponent("pmmo.biome_positive").withStyle(ChatFormatting.BOLD), step(1), 0xEEEEEE, false, 0));
+			for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(true, biome)) {
+				content.add(new Element(
+						new TextComponent("").append(mei.getEffect().getDisplayName()).append(": "+mei.getAmplifier())
+						, step(2), 0xEEEEEE, false, 0));
+			}
+		}
+		if (!core.getXpUtils().hasModifierObjectEntry(ModifierDataType.BIOME, biome)) {
+			content.add(new Element(ModifierDataType.BIOME, step(1), 0xFFFFFF, false, 0));
+			for (Map.Entry<String, Double> bonus : core.getXpUtils().getObjectModifierMap(ModifierDataType.BIOME, biome).entrySet()) {
+				content.add(new Element(bonus.getKey(), bonus.getValue(), step(2), core.getDataConfig().getSkillColor(bonus.getKey())));
+			}
+		}
+		if (!core.getDataConfig().getVeinBlacklist(biome).isEmpty()) {
+			content.add(new Element(new TranslatableComponent("pmmo.vein_blacklist_header"), step(1), 0xFFFFFF, false, 0));
+			for (ResourceLocation blockID : core.getDataConfig().getVeinBlacklist(biome)) {
+				content.add(new Element(new TextComponent(blockID.toString()), step(2), 0xEEEEEE, false, 0));
+			}
+		}
+		if (!core.getDataConfig().getMobModifierMap(biome).isEmpty()) {
+			content.add(new Element(new TranslatableComponent("pmmo.mob_modifier_header"), step(1), 0xFFFFFF, false, 0));
+			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(biome).entrySet()) {
+				content.add(new Element(new TextComponent(mobMap.getKey().toString()), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
+				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
+					content.add(new Element(map.getKey(), map.getValue(), step(2), 0xFFFFFF));
+				}
+			}
+		}
 	}
 
 	@Override

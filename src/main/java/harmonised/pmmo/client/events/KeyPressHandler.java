@@ -46,16 +46,17 @@ public class KeyPressHandler {
             	Config.VEIN_GAUGE_DISPLAY.set(!Config.VEIN_GAUGE_DISPLAY.get());
             }
             if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {
+            	System.out.println(mc.hitResult.getType()); //TODO Remove
             	if (mc.hitResult != null && !mc.player.isCrouching()) {
             		if (mc.hitResult.getType().equals(Type.BLOCK)) 
             			mc.setScreen(new StatsScreen(((BlockHitResult)mc.hitResult).getBlockPos()));
             		else if (mc.hitResult.getType().equals(Type.ENTITY))
             			mc.setScreen(new StatsScreen(((EntityHitResult)mc.hitResult).getEntity()));
+            		else if (mc.hitResult.getType().equals(Type.MISS))
+            			mc.setScreen(new StatsScreen(mc.player));
             	}
-            	else if (mc.hitResult == null && !mc.player.isCrouching())
-            		mc.setScreen(new StatsScreen(mc.player)); //FIXME this does not fire
             	else if (mc.player.isCrouching())
-            		mc.setScreen(null); //TODO replace with glossary when built
+            		mc.setScreen(new StatsScreen()); 
             }
         }
     }
