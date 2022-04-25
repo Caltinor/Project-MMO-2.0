@@ -10,6 +10,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -29,6 +30,7 @@ public class MobAttributeHandler {
 	private static final float HARD_CAP_SPD = 1.5f;
 	private static final float HARD_CAP_DMG = 2048f;
 	
+	//TODO add in biome scaling
 	@SubscribeEvent
 	public static void onMobSpawn(SpecialSpawn event) {
 		if (event.getEntityLiving().getType().is(Reference.MOB_TAG)) {
@@ -78,18 +80,24 @@ public class MobAttributeHandler {
 	}
 	
 	private static enum ModifierID {
-		HP(UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb")),
-		SPEED(UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3")),
-		DAMAGE(UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17"));
+		HP("health", UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb")),
+		SPEED("speed", UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3")),
+		DAMAGE("damage", UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17"));
 		
 		public UUID id;
-		ModifierID(UUID id) {this.id = id;}
+		public String configID;
+		ModifierID(String configID, UUID id) {this.id = id; this.configID = configID;}
 	}
 	
 	private static void setMobModifier(LivingEntity mob, float bonus, Attribute attribute, ModifierID modifID) {
 		AttributeInstance attributeInstance = mob.getAttribute(attribute);
 		MsLoggy.debug(modifID.name()+" isNull:"+(attributeInstance==null));
 		if (attributeInstance != null) {
+			bonus *= Core.get(mob.level).getDataConfig()
+					.getMobModifier(
+							mob.level.dimension().getRegistryName(), 
+							new ResourceLocation(mob.getEncodeId()), 
+							modifID.configID);
 			AttributeModifier modifier = new AttributeModifier(modifID.id, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
 			attributeInstance.removeModifier(modifID.id);
 			attributeInstance.addPermanentModifier(modifier);
