@@ -52,7 +52,7 @@ public class StatsScreen extends Screen{
 		scrollWidget = stack != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, stack) :
 						block != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, block) :
 						entity != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, entity) 
-								: new StatScrollWidget(206, 200, renderY+30, renderX+25);
+								: new StatScrollWidget(206, 200, renderY+30, renderX+25, 0);
 		super.init();
 	}
 	
