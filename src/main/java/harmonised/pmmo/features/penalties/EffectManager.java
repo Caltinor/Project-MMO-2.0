@@ -15,9 +15,10 @@ public class EffectManager {
 	public static void applyEffects(Core core, Player player) {
 		//BIOME/DIM Efects
 		ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).value().getRegistryName();
-		boolean meetsReq = core.doesPlayerMeetReq(ReqType.BIOME, biomeID, player.getUUID());
+		boolean meetsReq = core.doesPlayerMeetReq(ReqType.TRAVEL, biomeID, player.getUUID());
 		for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(meetsReq, biomeID)) {
-			player.addEffect(mei);
+			if (!player.hasEffect(mei.getEffect()) || player.getEffect(mei.getEffect()).getDuration() < 10)
+				player.addEffect(mei);
 		}
 		//WORN/HELD Effects
 		Inventory inv = player.getInventory();

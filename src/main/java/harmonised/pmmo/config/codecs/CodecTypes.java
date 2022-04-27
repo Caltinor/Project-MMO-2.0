@@ -15,7 +15,6 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.ChunkPos;
 
@@ -29,11 +28,6 @@ public class CodecTypes {
 	public static final Codec<ModifierData> MODIFIER_CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.simpleMap(ModifierDataType.CODEC, DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).forGetter(ModifierData::obj)
 			).apply(instance, ModifierData::new));
-	
-	public static record MobMultiplierData(Map<ResourceLocation, Map<String, Double>> obj) {}
-	public static final Codec<MobMultiplierData> MOB_MULTIPLIER_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-			Codec.unboundedMap(ResourceLocation.CODEC, DOUBLE_CODEC).fieldOf("mob_multiplier").forGetter(MobMultiplierData::obj)
-			).apply(instance, MobMultiplierData::new));
 	
 	public static record EventData(Map<EventType, Map<String, Long>> obj) {}
 	public static final Codec<EventData> EVENT_CODEC = RecordCodecBuilder.create(instance -> instance.group(

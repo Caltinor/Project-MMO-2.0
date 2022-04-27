@@ -148,13 +148,13 @@ public class CoreParser {
 					MsLoggy.info("MOB MODIFIERS: "+tag.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
 					Core.get(LogicalSide.SERVER).getDataConfig().setMobModifierData(tag, mobMods.getKey(), mobMods.getValue());
 				}
-				MsLoggy.info("POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
+				MsLoggy.info("POSITIVE EFFECTS: "+tag.toString()+MsLoggy.mapToString(lmc.positive())+" loaded from config");
 				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(true, tag, lmc.positive());
-				MsLoggy.info("NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
+				MsLoggy.info("NEGATIVE EFFECTS: "+tag.toString()+MsLoggy.mapToString(lmc.negative())+" loaded from config");
 				Core.get(LogicalSide.SERVER).getDataConfig().setLocationEffectData(false, tag, lmc.negative());
-				MsLoggy.info("VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
+				MsLoggy.info("VEIN BLACKLIST: "+tag.toString()+MsLoggy.listToString(lmc.veinBlacklist())+" loaded from config");
 				Core.get(LogicalSide.SERVER).getDataConfig().setArrayData(tag, lmc.veinBlacklist());
-				MsLoggy.info("TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
+				MsLoggy.info("TRAVEl REQ: "+tag.toString()+MsLoggy.mapToString(lmc.travelReq())+" loaded from config");
 				Core.get(LogicalSide.SERVER).getSkillGates().setObjectSkillMap(ReqType.TRAVEL, tag, lmc.travelReq());
 			}
 		});

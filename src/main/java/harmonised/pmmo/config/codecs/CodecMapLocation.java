@@ -21,7 +21,7 @@ public record CodecMapLocation (
 	Optional<Map<ResourceLocation, Integer>> negative,
 	Optional<List<ResourceLocation>> veinBlacklist,
 	Optional<Map<String, Integer>> travelReq,
-	Optional<MobMultiplierData> mobModifiers) {
+	Optional<Map<ResourceLocation, Map<String, Double>>> mobModifiers) {
 	
 	public static final Codec<CodecMapLocation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("isTagFor").forGetter(CodecMapLocation::tagValues),
@@ -30,7 +30,7 @@ public record CodecMapLocation (
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("negative_effect").forGetter(CodecMapLocation::negative),
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("vein_blacklist").forGetter(CodecMapLocation::veinBlacklist),
 			Codec.unboundedMap(Codec.STRING, Codec.INT).optionalFieldOf("travel_req").forGetter(CodecMapLocation::travelReq),
-			CodecTypes.MOB_MULTIPLIER_CODEC.optionalFieldOf("mob_multiplier").forGetter(CodecMapLocation::mobModifiers)
+			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).optionalFieldOf("mob_multiplier").forGetter(CodecMapLocation::mobModifiers)
 			).apply(instance, CodecMapLocation::new));
 	
 	public static record LocationMapContainer (
@@ -49,7 +49,7 @@ public record CodecMapLocation (
 			src.negative().orElseGet(() -> new HashMap<>()),
 			src.veinBlacklist().orElseGet(() -> new ArrayList<>()),
 			src.travelReq().orElseGet(() -> new HashMap<>()),
-			src.mobModifiers().isPresent() ? src.mobModifiers().get().obj() : new HashMap<>());
+			src.mobModifiers().orElseGet(() -> new HashMap<>()));
 		}
 		public LocationMapContainer() {
 			this(new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new ArrayList<>(), new HashMap<>(), new HashMap<>());
@@ -80,13 +80,13 @@ public record CodecMapLocation (
 		}
 		
 		public static final Codec<LocationMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-				Codec.list(ResourceLocation.CODEC).fieldOf("tagValues").forGetter(LocationMapContainer::tagValues),
-				Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).fieldOf("bonusMap").forGetter(LocationMapContainer::bonusMap),
-				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("positive").forGetter(LocationMapContainer::positive),
-				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("negative").forGetter(LocationMapContainer::negative),
-				Codec.list(ResourceLocation.CODEC).fieldOf("veinBlacklist").forGetter(LocationMapContainer::veinBlacklist),
-				CodecTypes.INTEGER_CODEC.fieldOf("travelReq").forGetter(LocationMapContainer::travelReq),
-				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).fieldOf("mobModifiers").forGetter(LocationMapContainer::mobModifiers)
+				Codec.list(ResourceLocation.CODEC).fieldOf("isTagFor").forGetter(LocationMapContainer::tagValues),
+				Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).fieldOf("bonus").forGetter(LocationMapContainer::bonusMap),
+				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("positive_effect").forGetter(LocationMapContainer::positive),
+				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("negative_effect").forGetter(LocationMapContainer::negative),
+				Codec.list(ResourceLocation.CODEC).fieldOf("vein_blacklist").forGetter(LocationMapContainer::veinBlacklist),
+				CodecTypes.INTEGER_CODEC.fieldOf("travel_req").forGetter(LocationMapContainer::travelReq),
+				Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).fieldOf("mob_multiplier").forGetter(LocationMapContainer::mobModifiers)
 				).apply(instance, LocationMapContainer::new));
 	}
 }
