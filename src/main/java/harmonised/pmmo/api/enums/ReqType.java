@@ -17,7 +17,6 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum {
     USE(true, true, false),					//IMPLEMENTED IN ACTIONS
     PLACE(true, true, false),				//IMPLEMENTED IN ACTIONS
     BREAK(true, true, false),				//IMPLEMENTED IN ACTIONS
-    BIOME(false, false, false),				//PLAYER TICK
     KILL(false, false, true),				//IMPLEMENTED IN ACTIONS
     TRAVEL(false, false, false), 			//TRAVEL EVENT
     RIDE(false, false, true),				//IMPLEMENTED IN EVENT
