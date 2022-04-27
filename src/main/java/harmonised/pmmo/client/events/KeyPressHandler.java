@@ -5,6 +5,7 @@ import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.util.Reference;
@@ -46,12 +47,14 @@ public class KeyPressHandler {
             	Config.VEIN_GAUGE_DISPLAY.set(!Config.VEIN_GAUGE_DISPLAY.get());
             }
             if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {
-            	System.out.println(mc.hitResult.getType()); //TODO Remove
             	if (mc.hitResult != null && !mc.player.isCrouching()) {
             		if (mc.hitResult.getType().equals(Type.BLOCK)) 
             			mc.setScreen(new StatsScreen(((BlockHitResult)mc.hitResult).getBlockPos()));
-            		else if (mc.hitResult.getType().equals(Type.ENTITY))
-            			mc.setScreen(new StatsScreen(((EntityHitResult)mc.hitResult).getEntity()));
+            		else if (mc.hitResult.getType().equals(Type.ENTITY)) {
+            			EntityHitResult ehr = (EntityHitResult) mc.hitResult;
+            			Networking.sendToServer(new SP_OtherExpRequest(ehr.getEntity().getUUID()));
+            			mc.setScreen(new StatsScreen(ehr.getEntity()));
+            		}
             		else if (mc.hitResult.getType().equals(Type.MISS))
             			mc.setScreen(new StatsScreen(mc.player));
             	}

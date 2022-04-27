@@ -9,6 +9,7 @@ import java.util.UUID;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.util.MsLoggy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 
 /**This class serves as a run-time cache of data that
@@ -24,7 +25,10 @@ import net.minecraft.server.MinecraftServer;
 public class DataMirror implements IDataStorage{
 	public DataMirror() {}
 	
+	public boolean me(UUID id) {return id == null || id.equals(Minecraft.getInstance().player.getUUID());}
+	
 	private Map<String, Long> mySkills = new HashMap<>();
+	private Map<String, Long> otherSkills = new HashMap<>();
 	private Map<String, Long> scheduledXp = new HashMap<>();
 	private List<Long> levelCache = new ArrayList<>();
 	
@@ -51,12 +55,14 @@ public class DataMirror implements IDataStorage{
 	}
 	
 	@Override
-	public long getXpRaw(UUID playerID, String skillName) {	return mySkills.getOrDefault(skillName, 0l);}
+	public long getXpRaw(UUID playerID, String skillName) {
+		return me(playerID) ? mySkills.getOrDefault(skillName, 0l) : otherSkills.getOrDefault(skillName, 0l);}
 	@Deprecated
 	@Override
 	public boolean setXpDiff(UUID playerID, String skillName, long change) {return false;}
 	@Override
 	public void setXpRaw(UUID playerID, String skillName, long value) {
+		if (!me(playerID)) return;
 		long oldValue = getXpRaw(playerID, skillName);
 		if (value > oldValue)
 			scheduledXp.merge(skillName, value-oldValue, (e, n) -> e + n);
@@ -64,11 +70,18 @@ public class DataMirror implements IDataStorage{
 		MsLoggy.debug("Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
 	}
 	@Override
-	public Map<String, Long> getXpMap(UUID playerID) {return mySkills;}
+	public Map<String, Long> getXpMap(UUID playerID) {return me(playerID) ? mySkills : otherSkills;}
 	@Override
-	public void setXpMap(UUID playerID, Map<String, Long> map) {mySkills = map;}
+	public void setXpMap(UUID playerID, Map<String, Long> map) {
+		if (me(playerID))
+			mySkills = map;
+		else
+			otherSkills = map;
+	}
 	@Override
-	public int getPlayerSkillLevel(String skill, UUID player) {return getLevelFromXP(mySkills.getOrDefault(skill, 0l));}
+	public int getPlayerSkillLevel(String skill, UUID player) {
+		return me(player) ? getLevelFromXP(mySkills.getOrDefault(skill, 0l)) 
+			: getLevelFromXP(otherSkills.getOrDefault(skill, 0l));}
 	@Deprecated
 	@Override
 	public void setPlayerSkillLevel(String skill, UUID player, int level) {}

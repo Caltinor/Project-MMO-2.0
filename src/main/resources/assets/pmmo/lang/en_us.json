@@ -437,6 +437,8 @@
   "pmmo.biome_positive":"Bonus Effects",
   "pmmo.vein_blacklist_header":"Vein Blacklisted Blocks",
   "pmmo.mob_modifier_header":"Mob Modifiers",
+  "pmmo.playerspecific_header":"Player-Specific Settings",
+  "pmmo.skilllist_header":"Player Skills",
   
   "pmmo.enum.ANVIL_REPAIR":"Anvil Repair",
 	"pmmo.enum.BLOCK_BREAK":"Break Block",
@@ -511,6 +513,8 @@
 	"pmmo.enum.BIOME":"Biome Modifier",
     "pmmo.enum.HELD":"Held Modifier",
     "pmmo.enum.WORN":"Worn Modifier",
-    "pmmo.enum.DIMENSION":"Dimension Modifier"
+    "pmmo.enum.DIMENSION":"Dimension Modifier",
+    
+    "pmmo.playerspecific.ignorereq":"Ignore Reqs: %1$s"
   
 }

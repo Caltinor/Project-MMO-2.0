@@ -3,12 +3,14 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
+import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Enchantments;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
+import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -64,11 +66,21 @@ public class Networking {
 			.decoder(buf -> new CP_ClearData())
 			.consumer(CP_ClearData::handle)
 			.add();
+		INSTANCE.messageBuilder(CP_SetOtherExperience.class, ID++)
+			.encoder(CP_SetOtherExperience::toBytes)
+			.decoder(CP_SetOtherExperience::new)
+			.consumer(CP_SetOtherExperience::handle)
+			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
 			.encoder(SP_UpdateVeinTarget::toBytes)
 			.decoder(SP_UpdateVeinTarget::new)
 			.consumer(SP_UpdateVeinTarget::handle)
+			.add();
+		INSTANCE.messageBuilder(SP_OtherExpRequest.class, ID++)
+			.encoder(SP_OtherExpRequest::toBytes)
+			.decoder(SP_OtherExpRequest::new)
+			.consumer(SP_OtherExpRequest::handle)
 			.add();
 		MsLoggy.info("Messages Registered");
 	}

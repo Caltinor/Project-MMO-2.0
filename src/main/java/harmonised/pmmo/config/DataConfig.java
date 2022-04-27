@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.config.codecs.CodecMapPlayer;
+import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
 import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -26,7 +27,7 @@ public class DataConfig {
 	private Map<Boolean, Map<ResourceLocation, Map<ResourceLocation, Integer>>> locationEffectData = new HashMap<>();
 	private Map<ResourceLocation, Map<ResourceLocation, Integer>> reqEffectData = new HashMap<>();
 	private LinkedListMultimap<ResourceLocation, ResourceLocation> veinBlacklistData = LinkedListMultimap.create();
-	private Map<UUID, CodecMapPlayer.PlayerData> playerSpecificSettings = new HashMap<>();	
+	private Map<UUID, PlayerData> playerSpecificSettings = new HashMap<>();	
 	
 	public void reset() {
 		mobModifierData = new HashMap<>();
@@ -87,6 +88,10 @@ public class DataConfig {
 	
 	public Map<ResourceLocation, Map<String, Double>> getMobModifierMap(ResourceLocation locationID) {
 		return mobModifierData.getOrDefault(locationID, new HashMap<>());
+	}
+	
+	public PlayerData getPlayerData(UUID playerID) {
+		return playerSpecificSettings.getOrDefault(playerID, PlayerData.getDefault());
 	}
 	
 	public List<MobEffectInstance> getLocationEffect(boolean isPositive, ResourceLocation biomeID) {

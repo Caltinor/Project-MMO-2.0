@@ -1,7 +1,9 @@
 package harmonised.pmmo.client.gui;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.Core;
@@ -180,8 +183,23 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 		
 		if (entity != null && entity.getType().equals(EntityType.PLAYER)) {
-			//TODO player-specific data
+			//Section for player-specific data as it expands
+			content.add(new Element(new TranslatableComponent("pmmo.playerspecific_header"), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+			PlayerData data = core.getDataConfig().getPlayerData(entity.getUUID());
+			content.add(new Element(new TranslatableComponent("pmmo.playerspecific.ignorereq", data.ignoreReq()), step(2), 0xFFFFFF, false, 0));
 			
+			//Section for skills
+			Map<String, Long> rawXp = core.getData().getXpMap(entity.getUUID());
+			LinkedHashMap<String, Integer> orderedMap = new LinkedHashMap<>();
+			List<String> skillKeys = new ArrayList<>(rawXp.keySet().stream().toList());
+			skillKeys.sort(Comparator.<String>comparingLong(a -> rawXp.get(a)).reversed());
+			skillKeys.forEach(skill -> {
+				orderedMap.put(skill, core.getData().getLevelFromXP(rawXp.get(skill)));
+			});
+			content.add(new Element(new TranslatableComponent("pmmo.skilllist_header"), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+			for (Map.Entry<String, Integer> rawMap : orderedMap.entrySet()) {
+				content.add(new Element(rawMap.getKey(), rawMap.getValue(), step(2), core.getDataConfig().getSkillColor(rawMap.getKey())));
+			}
 		}
 	}
 	
