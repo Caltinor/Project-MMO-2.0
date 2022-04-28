@@ -89,7 +89,7 @@ public class XpUtils {
 	}
 	
 	public void sendXpAwardNotifications(ServerPlayer player, String skillName, long amount) {
-		//TODO drop XP into world.
+		//drop XP into world.
 		//player.sendMessage(new TranslatableComponent("pmmo."+skillName).append(": "+String.valueOf(amount)), player.getUUID());
 	}
 	

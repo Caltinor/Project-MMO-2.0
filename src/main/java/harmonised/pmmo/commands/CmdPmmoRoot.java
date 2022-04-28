@@ -24,13 +24,13 @@ public class CmdPmmoRoot {
 	}
 	
 	public static int credits(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-		//TODO open credits gui
+		//QOL open credits gui
 		context.getSource().sendSuccess(new TextComponent("Mod by Harmony and Caltinor"), false);
 		return 0;
 	}
 	
 	public static int help(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-		//TODO open help gui on client
+		//QOL if Patchouli is installed, open the book
 		context.getSource().sendSuccess(new TextComponent("Help can be found on the wiki or in the discord"), false);
 		return 0;
 	}

@@ -365,6 +365,7 @@ public class Core {
 			for (int i = 0; i < players.size(); i++) {
 				for (Map.Entry<String, Long> award : xpValues.entrySet()) {
 					if (getData().setXpDiff(players.get(i).getUUID(), award.getKey(), award.getValue())) {
+						//TODO This line currently does nothing.  remove if no purposes is idenified
 						xp.sendXpAwardNotifications(players.get(i), award.getKey(), award.getValue());
 					}
 				}

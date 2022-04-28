@@ -30,7 +30,6 @@ public class MobAttributeHandler {
 	private static final float HARD_CAP_SPD = 1.5f;
 	private static final float HARD_CAP_DMG = 2048f;
 	
-	//TODO add in biome scaling
 	@SubscribeEvent
 	public static void onMobSpawn(SpecialSpawn event) {
 		if (event.getEntityLiving().getType().is(Reference.MOB_TAG)) {
