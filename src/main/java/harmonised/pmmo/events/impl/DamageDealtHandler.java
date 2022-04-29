@@ -14,6 +14,7 @@ import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
@@ -40,7 +41,7 @@ public class DamageDealtHandler {
 				return;
 			Core core = Core.get(player.level);
 			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntityLiving());
-			MsLoggy.info("Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
+			MsLoggy.info(LOG_CODE.EVENT,"Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
 			
 			
 			//===========================DEFAULT LOGIC===================================
@@ -81,11 +82,11 @@ public class DamageDealtHandler {
 			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntityLiving());
 			//Process perks
 			CompoundTag perkOutput = core.getPerkRegistry().executePerk(type, player, TagBuilder.start().withFloat(APIUtils.DAMAGE_IN, event.getAmount()).build(), core.getSide());
-			MsLoggy.debug("Pre-Perk Damage:"+event.getAmount());
+			MsLoggy.debug(LOG_CODE.EVENT, "Pre-Perk Damage:"+event.getAmount());
 			if (perkOutput.contains(APIUtils.DAMAGE_OUT)) {
 				event.setAmount(perkOutput.getFloat(APIUtils.DAMAGE_OUT));
 			}
-			MsLoggy.info("Attack Type: "+type.name()+" | Damage Out: "+event.getAmount());
+			MsLoggy.debug(LOG_CODE.EVENT, "Attack Type: "+type.name()+" | Damage Out: "+event.getAmount());
 			if (!player.level.isClientSide) {
 				Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), player, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);

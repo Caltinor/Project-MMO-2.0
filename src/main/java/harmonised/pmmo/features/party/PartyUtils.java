@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.MutableComponent;
@@ -104,11 +105,11 @@ public class PartyUtils {
 	
 	public static void createParty(Player player) {
 		playerToPartyMap.put(player.getUUID(), getFreePartyID());
-		MsLoggy.debug(MsLoggy.mapToString(playerToPartyMap));
+		MsLoggy.debug(LOG_CODE.FEATURE, MsLoggy.mapToString(playerToPartyMap));
 	}
 	
 	public static boolean isInParty(Player player) {
-		MsLoggy.debug("Is In Party: "+playerToPartyMap.containsKey(player.getUUID()));
+		MsLoggy.debug(LOG_CODE.FEATURE, "Is In Party: "+playerToPartyMap.containsKey(player.getUUID()));
 		return playerToPartyMap.containsKey(player.getUUID());
 	}
 	

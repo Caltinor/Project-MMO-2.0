@@ -12,6 +12,7 @@ import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagUtils;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -28,7 +29,7 @@ public class DamageReceivedHandler {
 			if (type.equals(EventType.FROM_PLAYERS) && player.equals(event.getSource().getEntity()))
 				return;
 			Core core = Core.get(player.getLevel());
-			MsLoggy.info("Source Type: "+type.name()+" | Source Raw: "+event.getSource().msgId);
+			MsLoggy.debug(LOG_CODE.EVENT, "Source Type: "+type.name()+" | Source Raw: "+event.getSource().msgId);
 			
 			boolean serverSide = !player.level.isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();

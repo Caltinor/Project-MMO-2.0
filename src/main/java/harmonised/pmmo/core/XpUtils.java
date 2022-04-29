@@ -9,6 +9,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -65,7 +66,7 @@ public class XpUtils {
 	public Map<String, Long> deserializeAwardMap(ListTag nbt) {
 		Map<String, Long> map = new HashMap<>();
 		if (nbt.getElementType() != Tag.TAG_COMPOUND) {
-			MsLoggy.error("An API method passed an invalid award map.  This may not have negative effects on gameplay," + 
+			MsLoggy.error(LOG_CODE.API, "An API method passed an invalid award map.  This may not have negative effects on gameplay," + 
 							"but may cause the source implementation to behave unexpectedly");
 			return map;
 		}

@@ -10,6 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +49,7 @@ public class VeinDataManager {
 	public void setMarkedPos(UUID playerID, BlockPos pos) {
 		BlockPos finalPos = pos.equals(getMarkedPos(playerID)) ? BlockPos.ZERO : pos;
 		markers.put(playerID, finalPos);
-		MsLoggy.debug("Player "+playerID.toString()+" Marked Pos: "+finalPos.toString());
+		MsLoggy.debug(LOG_CODE.FEATURE, "Player "+playerID.toString()+" Marked Pos: "+finalPos.toString());
 	}
 	public BlockPos getMarkedPos(UUID playerID) {
 		return markers.getOrDefault(playerID, BlockPos.ZERO);

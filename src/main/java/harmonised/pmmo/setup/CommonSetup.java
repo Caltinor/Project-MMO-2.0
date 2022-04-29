@@ -12,6 +12,7 @@ import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -40,13 +41,13 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onServerStartup(ServerStartingEvent event) {
-		MsLoggy.info("Loading PMMO Saved Data");
+		MsLoggy.info(LOG_CODE.LOADING, "Loading PMMO Saved Data");
 		Core.get(LogicalSide.SERVER).getData(event.getServer());
-		MsLoggy.info("Computing data for cache");
+		MsLoggy.info(LOG_CODE.LOADING, "Computing data for cache");
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
-		MsLoggy.info("Executing Default Registrations");
+		MsLoggy.info(LOG_CODE.LOADING, "Executing Default Registrations");
 		Core.get(LogicalSide.SERVER).registerNBT();
-		MsLoggy.info("PMMO Server loading process complete");
+		MsLoggy.info(LOG_CODE.LOADING, "PMMO Server loading process complete");
 	}
 	
 	@SubscribeEvent

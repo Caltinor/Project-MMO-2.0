@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +37,7 @@ public class VeinMiningLogic {
 			consumed += cost;
 			player.gameMode.destroyBlock(veinable);
 		}
-		MsLoggy.debug("Vein Consumed: "+consumed+" charge");
+		MsLoggy.debug(LOG_CODE.FEATURE, "Vein Consumed: "+consumed+" charge");
 		applyChargeCostToAllItems(player, consumed);
 	}
 	
@@ -77,7 +78,7 @@ public class VeinMiningLogic {
 		for (ItemStack stack : items) {
 			totalCharge += getCurrentCharge(stack, player.level);
 		}
-		MsLoggy.debug("Vein Charge: "+totalCharge);
+		MsLoggy.debug(LOG_CODE.FEATURE, "Vein Charge: "+totalCharge);
 		return totalCharge; 
 	}
 	
@@ -92,7 +93,7 @@ public class VeinMiningLogic {
 		for (ItemStack stack : items) {
 			totalCapacity += Core.get(player.level).getVeinData().getItemChargeCapSetting(stack);
 		}
-		MsLoggy.debug("Vein Capacity: "+totalCapacity);
+		MsLoggy.debug(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
 		return totalCapacity; 
 	}
 	

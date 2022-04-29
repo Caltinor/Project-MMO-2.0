@@ -12,6 +12,7 @@ import harmonised.pmmo.config.codecs.CodecMapLocation;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
@@ -45,20 +46,20 @@ public class CP_SyncData_Locations {
 			if (lmc.tagValues().size() > 0) tagValues = lmc.tagValues();
 			for (ResourceLocation tag : tagValues) {
 				for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : lmc.bonusMap().entrySet()) {
-					MsLoggy.info("BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
+					MsLoggy.info(LOG_CODE.DATA, "BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
 					Core.get(LogicalSide.CLIENT).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
 				}
 				for (Map.Entry<ResourceLocation, Map<String, Double>> mobMods : lmc.mobModifiers().entrySet()) {
-					MsLoggy.info("MOB MODIFIERS: "+tag.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
+					MsLoggy.info(LOG_CODE.DATA, "MOB MODIFIERS: "+tag.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
 					Core.get(LogicalSide.CLIENT).getDataConfig().setMobModifierData(tag, mobMods.getKey(), mobMods.getValue());
 				}
-				MsLoggy.info("POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
+				MsLoggy.info(LOG_CODE.DATA, "POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
 				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(true, tag, lmc.positive());
-				MsLoggy.info("NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
+				MsLoggy.info(LOG_CODE.DATA, "NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
 				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(false, tag, lmc.negative());
-				MsLoggy.info("VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
+				MsLoggy.info(LOG_CODE.DATA, "VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
 				Core.get(LogicalSide.CLIENT).getDataConfig().setArrayData(tag, lmc.veinBlacklist());
-				MsLoggy.info("TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
+				MsLoggy.info(LOG_CODE.DATA, "TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
 				Core.get(LogicalSide.CLIENT).getSkillGates().setObjectSkillMap(ReqType.TRAVEL, tag, lmc.travelReq());
 			}
 		});

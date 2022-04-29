@@ -9,6 +9,7 @@ import java.util.UUID;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 
@@ -67,7 +68,7 @@ public class DataMirror implements IDataStorage{
 		if (value > oldValue)
 			scheduledXp.merge(skillName, value-oldValue, (e, n) -> e + n);
 		mySkills.put(skillName, value);
-		MsLoggy.debug("Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
+		MsLoggy.debug(LOG_CODE.XP,"Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
 	}
 	@Override
 	public Map<String, Long> getXpMap(UUID playerID) {return me(playerID) ? mySkills : otherSkills;}

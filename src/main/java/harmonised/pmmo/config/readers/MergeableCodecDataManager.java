@@ -52,6 +52,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.Resource;
@@ -216,7 +217,7 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	@Override
 	protected void apply(final Map<ResourceLocation, FINE> processedData, final ResourceManager resourceManager, final ProfilerFiller profiler)
 	{
-		MsLoggy.info("Beginning loading of data for data loader: {}", this.folderName);
+		MsLoggy.info(LOG_CODE.DATA, "Beginning loading of data for data loader: {}", this.folderName);
 		// now that we're on the main thread, we can finalize the data
 		this.data = processedData;
 		finalizer.accept(processedData);

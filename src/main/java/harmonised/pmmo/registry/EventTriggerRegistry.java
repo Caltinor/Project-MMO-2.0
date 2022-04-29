@@ -15,6 +15,7 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagBuilder;
 import harmonised.pmmo.util.TagUtils;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
@@ -52,7 +53,7 @@ public class EventTriggerRegistry {
 	
 	private void removeInvalidListeners(EventType eventType, List<Integer> removals) {
 		for (int i = removals.size()-1; i == 0; i--) {
-			MsLoggy.debug("Event Listener: [" + eventListeners.get(eventType).get(removals.get(i)).getFirst().toString() +"] did not return a cancel status and was removed.");
+			MsLoggy.warn(LOG_CODE.API, "Event Listener: [" + eventListeners.get(eventType).get(removals.get(i)).getFirst().toString() +"] did not return a cancel status and was removed.");
 			eventListeners.get(eventType).remove((int)removals.get(i));				
 		}
 	}

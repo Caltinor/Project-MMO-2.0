@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
@@ -18,7 +19,7 @@ public class SP_UpdateVeinTarget {
 	
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
-			MsLoggy.debug("Vein Target sent to Server for pos: "+pos.toString());
+			MsLoggy.debug(LOG_CODE.FEATURE, "Vein Target sent to Server for pos: "+pos.toString());
 			Core.get(LogicalSide.SERVER).getVeinData().setMarkedPos(ctx.get().getSender().getUUID(), pos);
 		});
 		ctx.get().setPacketHandled(true);

@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
@@ -30,7 +31,7 @@ public class CP_SetOtherExperience {
 	public void handle(Supplier<NetworkEvent.Context> ctx ) {
 		ctx.get().enqueueWork(() -> {
 			Core.get(LogicalSide.CLIENT).getData().setXpMap(UUID.randomUUID(), map);
-			MsLoggy.debug("Client Packet Handled for getting Other Experience");
+			MsLoggy.debug(LOG_CODE.NETWORK, "Client Packet Handled for getting Other Experience");
 		});		
 		ctx.get().setPacketHandled(true);
 	}

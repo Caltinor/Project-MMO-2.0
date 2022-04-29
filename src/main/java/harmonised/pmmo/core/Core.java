@@ -32,6 +32,7 @@ import harmonised.pmmo.registry.TooltipRegistry;
 import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -293,12 +294,12 @@ public class Core {
 			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) 
 				inMap = xp.mergeXpMapsWithSummateCondition(inMap, AutoValues.getExperienceAward(type, objectID, oType));
 		}
-		MsLoggy.info("XpGains: "+MsLoggy.mapToString(inMap));
+		MsLoggy.info(LOG_CODE.XP, "XpGains: "+MsLoggy.mapToString(inMap));
 		if (player != null)
 			inMap = xp.applyXpModifiers(player, inMap);
-		MsLoggy.info("XpGains (afterMod): "+MsLoggy.mapToString(inMap));
+		MsLoggy.info(LOG_CODE.XP, "XpGains (afterMod): "+MsLoggy.mapToString(inMap));
 		inMap = CheeseTracker.applyAntiCheese(inMap);
-		MsLoggy.info("XpGains (afterCheese): "+MsLoggy.mapToString(inMap));			
+		MsLoggy.info(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(inMap));			
 		return inMap;
 	}
 
@@ -433,11 +434,11 @@ public class Core {
 			}
 			
 			//==============REGISTER BONUSES LOGIC=====================================
-			MsLoggy.debug("Bonus Logic entrySet size: "+nbt.bonusLogic().size());
+			MsLoggy.debug(LOG_CODE.API, "Bonus Logic entrySet size: "+nbt.bonusLogic().size());
 			for (Map.Entry<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.bonusLogic().entrySet()) {
-				MsLoggy.debug("Bonus Logic Element Size: "+entry.getKey().name()+" "+entry.getValue().size());
+				MsLoggy.debug(LOG_CODE.API, "Bonus Logic Element Size: "+entry.getKey().name()+" "+entry.getValue().size());
 				entry.getValue().forEach((rl, logic) -> {
-					MsLoggy.debug("Bonus Logic Detail: "+rl.toString()+" "+logic.toString());
+					MsLoggy.debug(LOG_CODE.API, "Bonus Logic Detail: "+rl.toString()+" "+logic.toString());
 					Function<ItemStack, Map<String, Double>> func = (stack) -> nbt.getBonusMap(entry.getKey(), stack);
 					tooltips.registerItemBonusTooltipData(rl, entry.getKey(), func);
 				});

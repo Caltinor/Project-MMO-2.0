@@ -12,6 +12,7 @@ import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +33,7 @@ public class PerkRegistry {
 		Preconditions.checkNotNull(onConclude);
 		perkExecutions.put(perkID, onExecute);
 		perkTerminations.put(perkID, onConclude);
-		MsLoggy.debug("Registered Perk: "+perkID.toString());
+		MsLoggy.debug(LOG_CODE.API, "Registered Perk: "+perkID.toString());
 	}
 	
 	public CompoundTag executePerk(EventType cause, Player player, LogicalSide side) {

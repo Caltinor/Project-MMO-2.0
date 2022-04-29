@@ -9,6 +9,7 @@ import com.mojang.serialization.Codec;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
@@ -32,7 +33,7 @@ public class CP_SyncData_Enchantments {
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			data.forEach((rl, map) -> {
-				map.forEach((k, v) -> MsLoggy.info("ENCHANTMENT:"+rl.toString()+" Level:"+k+MsLoggy.mapToString(v)));
+				map.forEach((k, v) -> MsLoggy.info(LOG_CODE.DATA, "ENCHANTMENT:"+rl.toString()+" Level:"+k+MsLoggy.mapToString(v)));
 				Core.get(LogicalSide.CLIENT).getSkillGates().setEnchantmentReqs(rl, map);
 			});
 		});

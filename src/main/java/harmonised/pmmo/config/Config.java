@@ -12,6 +12,7 @@ import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
@@ -145,28 +146,28 @@ public class Config {
 		builder.pop(); //Common Blocks
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<Boolean> INFO_LOGGING;
-	public static ForgeConfigSpec.ConfigValue<Boolean> DEBUG_LOGGING;
-	public static ForgeConfigSpec.ConfigValue<Boolean> WARN_LOGGING;
-	public static ForgeConfigSpec.ConfigValue<Boolean> ERROR_LOGGING;
-	public static ForgeConfigSpec.ConfigValue<Boolean> FATAL_LOGGING;
+	public static ForgeConfigSpec.ConfigValue<List<String>> INFO_LOGGING;
+	public static ForgeConfigSpec.ConfigValue<List<String>> DEBUG_LOGGING;
+	public static ForgeConfigSpec.ConfigValue<List<String>> WARN_LOGGING;
+	public static ForgeConfigSpec.ConfigValue<List<String>> ERROR_LOGGING;
+	public static ForgeConfigSpec.ConfigValue<List<String>> FATAL_LOGGING;
 	
 	private static void buildMsLoggy(ForgeConfigSpec.Builder builder) {
 		builder.comment("PMMO Error Logging Configuration").push("Ms Loggy");
 		
-		INFO_LOGGING = builder.comment("Should MsLoggy info logging be enabled?  This will flood your log with data, but provides essential details",
+		INFO_LOGGING = builder.comment("Which MsLoggy info logging should be enabled?  This will flood your log with data, but provides essential details",
 									  " when trying to find data errors and bug fixing.  ")
-						.define("Info Logging", false);
-		DEBUG_LOGGING = builder.comment("Should MsLoggy debug logging be enabled?  This will flood your log with data, but provides essential details",
+						.define("Info Logging", List.of(LOG_CODE.LOADING.code,LOG_CODE.NETWORK.code,LOG_CODE.API.code), s -> s instanceof String);
+		DEBUG_LOGGING = builder.comment("Which MsLoggy debug logging should be enabled?  This will flood your log with data, but provides essential details",
 				  					  " when trying to find bugs. DEVELOPER SETTING (mostly).  ")
-						.define("Debug Logging", false);
-		WARN_LOGGING = builder.comment("Should MsLoggy warn logging be enabled?  This log type is helpful for catching important but non-fatal issues")
-						.define("Warn Logging", true);
-		ERROR_LOGGING = builder.comment("Should Error Logging be enabled.  it is highly recommended this stay true.  however, you can",
+						.define("Debug Logging", List.of(), s -> s instanceof String);
+		WARN_LOGGING = builder.comment("Which MsLoggy warn logging should be enabled?  This log type is helpful for catching important but non-fatal issues")
+						.define("Warn Logging", List.of(LOG_CODE.API.code), s -> s instanceof String);
+		ERROR_LOGGING = builder.comment("Which Error Logging should be enabled.  it is highly recommended this stay true.  however, you can",
 									  "disable it to remove pmmo errors from the log.")
-						.define("Error Logging", true);
-		FATAL_LOGGING = builder.comment("Should MsLoggy fatal logging be enabled?  I can't imagine a situation where you'd want this off, but here you go.")
-						.define("Fatal Logging", true);
+						.define("Error Logging", List.of(LOG_CODE.DATA.code, LOG_CODE.API.code), s -> s instanceof String);
+		FATAL_LOGGING = builder.comment("Which MsLoggy fatal logging should be enabled?  I can't imagine a situation where you'd want this off, but here you go.")
+						.define("Fatal Logging", List.of(LOG_CODE.API.code), s -> s instanceof String);
 		
 		builder.pop(); //Ms. Loggy Block
 	}

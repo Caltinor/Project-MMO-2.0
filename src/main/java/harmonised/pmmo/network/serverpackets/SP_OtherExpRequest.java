@@ -7,6 +7,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
@@ -21,7 +22,7 @@ public class SP_OtherExpRequest {
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			Networking.sendToClient(new CP_SetOtherExperience(Core.get(LogicalSide.SERVER).getData().getXpMap(pid)) ,ctx.get().getSender());
-			MsLoggy.debug("Client request for Other Experience handled");
+			MsLoggy.debug(LOG_CODE.NETWORK, "Client request for Other Experience handled");
 		});
 		ctx.get().setPacketHandled(true);
 	}

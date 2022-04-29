@@ -14,6 +14,7 @@ import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -82,7 +83,7 @@ public class Networking {
 			.decoder(SP_OtherExpRequest::new)
 			.consumer(SP_OtherExpRequest::handle)
 			.add();
-		MsLoggy.info("Messages Registered");
+		MsLoggy.info(LOG_CODE.NETWORK, "Messages Registered");
 	}
 	
 	public static void registerDataSyncPackets() {

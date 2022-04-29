@@ -18,6 +18,7 @@ import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.nbt.CompoundTag;
@@ -73,7 +74,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		this.setDirty();
 		if (server.getPlayerList().getPlayer(playerID) != null) {
 			Networking.sendToClient(new CP_UpdateExperience(skillName, value), server.getPlayerList().getPlayer(playerID));
-			MsLoggy.debug("Skill Update Packet sent to Client"+playerID.toString());
+			MsLoggy.debug(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
 		}
 	}
 	@Override

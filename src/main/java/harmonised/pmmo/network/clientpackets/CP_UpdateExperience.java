@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import harmonised.pmmo.client.gui.XPOverlayGUI;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
@@ -31,7 +32,7 @@ public class CP_UpdateExperience {
 			long currentXPraw = Core.get(LogicalSide.CLIENT).getData().getXpRaw(null, skill);
 			Core.get(LogicalSide.CLIENT).getData().setXpRaw(null, skill, xp);
 			XPOverlayGUI.addToGainList(skill, xp-currentXPraw);
-			MsLoggy.debug("Client Packet Handled for updating experience of "+skill+"["+xp+"]");
+			MsLoggy.debug(LOG_CODE.XP, "Client Packet Handled for updating experience of "+skill+"["+xp+"]");
 		});		
 		ctx.get().setPacketHandled(true);
 	}

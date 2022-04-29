@@ -11,28 +11,45 @@ import harmonised.pmmo.config.Config;
 public class MsLoggy {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static void info(String message, Object... obj) {
-		if (Config.INFO_LOGGING.get())
+	public static enum LOG_CODE {
+		API("api"),
+		AUTO_VALUES("autovalues"),
+		CHUNK("chunk"),
+		DATA("data"),
+		EVENT("event"),
+		FEATURE("feature"),
+		LOADING("loading"),
+		NETWORK("network"),
+		XP("xp"),
+		//unused default
+		NONE("none");
+		
+		public String code;
+		LOG_CODE(String code) {this.code = code;}
+	}
+	
+	public static void info(LOG_CODE code, String message, Object... obj) {
+		if (Config.INFO_LOGGING.get().contains(code.code))
 			LOGGER.info(message, obj);
 	}
 	
-	public static void warn(String message, Object... obj) {
-		if (Config.WARN_LOGGING.get())
+	public static void warn(LOG_CODE code, String message, Object... obj) {
+		if (Config.WARN_LOGGING.get().contains(code.code))
 			LOGGER.warn(message, obj);
 	}
 	
-	public static void debug(String message, Object... obj) {
-		if (Config.DEBUG_LOGGING.get())
+	public static void debug(LOG_CODE code, String message, Object... obj) {
+		if (Config.DEBUG_LOGGING.get().contains(code.code))
 			LOGGER.debug(message, obj);
 	}
 	
-	public static void error(String message, Object... obj) {
-		if (Config.ERROR_LOGGING.get())
+	public static void error(LOG_CODE code, String message, Object... obj) {
+		if (Config.ERROR_LOGGING.get().contains(code.code))
 			LOGGER.error(message, obj);
 	}
 	
-	public static void fatal(String message, Object... obj) {
-		if (Config.FATAL_LOGGING.get())
+	public static void fatal(LOG_CODE code, String message, Object... obj) {
+		if (Config.FATAL_LOGGING.get().contains(code.code))
 			LOGGER.fatal(message, obj);
 	}
 	
