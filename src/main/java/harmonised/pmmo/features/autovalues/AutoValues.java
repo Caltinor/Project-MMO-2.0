@@ -46,8 +46,13 @@ public class AutoValues {
 		}
 		default: {}
 		}
-		cacheRequirement(reqType, objectID, requirements);
-		return requirements;
+		Map<String, Integer> finalReqs = new HashMap<>();
+		requirements.forEach((skill, level) -> {
+			if (level > 0)
+				finalReqs.put(skill, level);
+		});
+		cacheRequirement(reqType, objectID, finalReqs);
+		return finalReqs;
 	}
 	
 	public static Map<String, Long> getExperienceAward(EventType eventType, ResourceLocation objectID, ObjectType autoValueType) {
@@ -71,8 +76,13 @@ public class AutoValues {
 		}
 		default: {}
 		}
-		cacheXpGainValue(eventType, objectID, awards);
-		return awards;
+		Map<String, Long> finalAwards = new HashMap<>();
+		awards.forEach((skill, value) -> {
+			if (value > 0)
+				finalAwards.put(skill, value);
+		});
+		cacheXpGainValue(eventType, objectID, finalAwards);
+		return finalAwards;
 	}
 	
 }

@@ -11,6 +11,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
@@ -39,6 +40,7 @@ public class AutoValueConfig {
 		setupXpGainToggles(builder);
 		setupXpGainMaps(builder);
 		setupReqMaps(builder);
+		configureItemTweaks(builder);
 		//end subsections
 
 		builder.pop();
@@ -135,21 +137,108 @@ public class AutoValueConfig {
 		builder.push("Items");
 		ITEM_REQS = new HashMap<>();
 		for (ReqType type : ReqType.ITEM_APPLICABLE_EVENTS) {
-			ITEM_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap("agility", 1)));
+			ITEM_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
 		builder.pop();
 		builder.push("BLocks");
 		BLOCK_REQS = new HashMap<>();
 		for (ReqType type : ReqType.BLOCK_APPLICABLE_EVENTS) {
-			BLOCK_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap("agility", 1)));
+			BLOCK_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
 		builder.pop();
 		builder.push("Entities");
 		ENTITY_REQS = new HashMap<>();
 		for (ReqType type : ReqType.ENTITY_APPLICABLE_EVENTS) {
-			ENTITY_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap("agility", 1)));
+			ENTITY_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
 		builder.pop();
+		
+		builder.pop();
+	}
+	
+	private static Map<UtensilTypes, ConfigObject<Map<String, Double>>> UTENSIL_ATTRIBUTES;
+	private static Map<WearableTypes,ConfigObject<Map<String, Double>>> WEARABLE_ATTRIBUTES;
+	
+	public static enum UtensilTypes {
+		SWORD,
+		PICKAXE,
+		AXE,
+		SHOVEL,
+		HOE;
+	}
+	public static enum WearableTypes {
+		HEAD,
+		CHEST,
+		LEGS,
+		BOOTS,
+		WINGS;
+		
+		public static WearableTypes fromSlot(EquipmentSlot slot, boolean isElytra) {
+			switch (slot) {
+			case HEAD: return HEAD;
+			case CHEST: return isElytra ? WINGS : CHEST;
+			case LEGS: return LEGS;
+			case FEET: return BOOTS;
+			default: return null;
+			}
+		}
+	}
+	
+	public static enum AttributeKey {
+		DUR("Durability", 0.01),
+		TIER("Tier", 10d),
+		DMG("Damage", 10d),
+		SPD("Attack_Speed", 10d),
+		DIG("Dig_Speed", 10d),
+		//Armor attributes
+		AMR("Armor", 10d),
+		KBR("Knockback_Resistance", 10d),
+		TUF("Toughness", 10d);
+		
+		String key;
+		double value;
+		AttributeKey(String key, double value) {this.key = key; this.value = value;}
+		
+		public static final Map<String, Double> DEFAULT_ITEM_MAP = Map.of(
+			AttributeKey.DUR.key, AttributeKey.DUR.value,
+			AttributeKey.TIER.key, AttributeKey.TIER.value,
+			AttributeKey.DMG.key, AttributeKey.DMG.value,
+			AttributeKey.SPD.key, AttributeKey.SPD.value,
+			AttributeKey.DIG.key, AttributeKey.DIG.value);
+		public static Map<String, Double> DEFAULT_ARMOR_MAP = Map.of(
+			AttributeKey.DUR.key, AttributeKey.DUR.value,
+			AttributeKey.AMR.key, AttributeKey.AMR.value,
+			AttributeKey.KBR.key, AttributeKey.KBR.value,
+			AttributeKey.TUF.key, AttributeKey.TUF.value);
+	}
+	
+	public static double getUtensilAttribute(UtensilTypes tool, AttributeKey key) {return UTENSIL_ATTRIBUTES.get(tool).get().getOrDefault(key.key, 0d);}
+	public static double getWearableAttribute(WearableTypes piece, AttributeKey key) {return WEARABLE_ATTRIBUTES.get(piece).get().getOrDefault(key.key, 0d);}
+	
+	public static ForgeConfigSpec.ConfigValue<Double> HARDNESS_MODIFIER;
+	
+	private static void configureItemTweaks(ForgeConfigSpec.Builder builder) {		
+		builder.comment("Configuration tweaks specific to items."
+				,"'"+AttributeKey.DUR.key+"' determines how much item durability affects auto value calculations"
+				,"Default: 0.01 is equal to 1 per hundred durability"
+				,"'"+AttributeKey.DMG.key+"' determines how much item damage affects auto value calculations"
+				,"'"+AttributeKey.SPD.key+"' determines how much item attack speed affects auto value calculations"
+				,"'"+AttributeKey.TIER.key+"' multiplies the default req by this per teir."
+				,"'"+AttributeKey.DIG.key+"' Determines how much item block break speed affects auto value calculations"
+				,"'"+AttributeKey.AMR.key+"' Determines how much item armor amount affects auto value calculations"
+				,"'"+AttributeKey.KBR.key+"' Determines how much item knockback resistance affects auto value calculations"
+				,"'"+AttributeKey.TUF.key+"' Determines how much item armor toughness affects auto value calculations").push("Item_Tweaks");
+		
+		UTENSIL_ATTRIBUTES = new HashMap<>();
+		for (UtensilTypes utensil : UtensilTypes.values()) {
+			UTENSIL_ATTRIBUTES.put(utensil, TomlConfigHelper.<Map<String, Double>>defineObject(builder, utensil.toString()+"_Attributes", CodecTypes.DOUBLE_CODEC, AttributeKey.DEFAULT_ITEM_MAP));
+		}
+		WEARABLE_ATTRIBUTES = new HashMap<>();
+		for (WearableTypes piece : WearableTypes.values()) {
+			WEARABLE_ATTRIBUTES.put(piece, TomlConfigHelper.<Map<String, Double>>defineObject(builder, piece.toString()+"_Attributes", CodecTypes.DOUBLE_CODEC, AttributeKey.DEFAULT_ARMOR_MAP));
+		}
+		HARDNESS_MODIFIER = builder.comment("how much should block hardness contribute to value calculations")
+				.define("Block Hardness Modifier", 10d);
 		
 		builder.pop();
 	}
