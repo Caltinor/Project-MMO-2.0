@@ -30,6 +30,7 @@ import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class AutoItem {
@@ -153,6 +154,10 @@ public class AutoItem {
 		case BLOCK_PLACE: {
 			if (stack.getItem() instanceof BlockItem) {
 				float breakSpeed = ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getDestroySpeed(null, null);
+				if (((BlockItem)stack.getItem()).getBlock() instanceof CropBlock) {
+					outMap.putAll(AutoValueConfig.getBlockXpAward(EventType.GROW));
+				}
+				else
 				AutoValueConfig.getBlockXpAward(type).forEach((skill, level) -> {
 					outMap.put(skill, Double.valueOf(Math.max(0, (breakSpeed - BASE_HARDNESS) * AutoValueConfig.HARDNESS_MODIFIER.get())).longValue());
 				});

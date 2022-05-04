@@ -14,7 +14,7 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum {
     USE_ENCHANTMENT(true, false, false, "magic"),		//PLAYER TICK
     TOOL(true, false, false, "mining"),					//IMPLEMENTED IN ACTIONS
     WEAPON(true, false, false, "combat"),				//IMPLEMENTED IN ACTIONS
-    USE(true, true, false, "crafting"),					//IMPLEMENTED IN ACTIONS
+    USE(true, false, false, "crafting"),					//IMPLEMENTED IN ACTIONS
     PLACE(true, true, false, "building"),				//IMPLEMENTED IN ACTIONS
     BREAK(true, true, false, "mining"),					//IMPLEMENTED IN ACTIONS
     KILL(false, false, true, "combat"),					//IMPLEMENTED IN ACTIONS
