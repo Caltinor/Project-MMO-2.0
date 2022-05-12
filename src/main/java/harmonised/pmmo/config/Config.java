@@ -184,12 +184,15 @@ public class Config {
 	}
 	
 	public static ForgeConfigSpec.ConfigValue<Double> CREATIVE_REACH;
+	public static ForgeConfigSpec.ConfigValue<String> SALVAGE_BLOCK;
 	
 	private static void buildBasics(ForgeConfigSpec.Builder builder) {
 		builder.comment("General settings on the server").push("General");
 		
 		CREATIVE_REACH = builder.comment("how much extra reach should a player get in creative mode")
 				.defineInRange("Creative Reach", 50d, 4d, Double.MAX_VALUE);
+		SALVAGE_BLOCK = builder.comment("Which block should be used for salvaging")
+				.define("Salvage Block", "minecraft:smithing_table");
 		
 		builder.pop();
 	}

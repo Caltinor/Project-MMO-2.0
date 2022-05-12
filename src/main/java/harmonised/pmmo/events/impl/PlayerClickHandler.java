@@ -6,10 +6,12 @@ import java.util.Map;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
@@ -75,7 +77,7 @@ public class PlayerClickHandler {
 				return;
 			}
 			//======================SALVAGE DROP LOGIC=======================================
-			if (player.isCrouching() && event.getWorld().getBlockState(event.getPos()).getBlock().equals(Blocks.SMITHING_TABLE)) {
+			if (player.isCrouching() && event.getWorld().getBlockState(event.getPos()).getBlock().getRegistryName().equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
 				core.getSalvageLogic().getSalvage((ServerPlayer) player, core);
 			}
 			//=======================END SALVAGE============================================
