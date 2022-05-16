@@ -105,12 +105,11 @@ public class PartyUtils {
 	
 	public static void createParty(Player player) {
 		playerToPartyMap.put(player.getUUID(), getFreePartyID());
-		MsLoggy.debug(LOG_CODE.FEATURE, MsLoggy.mapToString(playerToPartyMap));
+		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, MsLoggy.mapToString(playerToPartyMap));
 	}
 	
 	public static boolean isInParty(Player player) {
-		MsLoggy.debug(LOG_CODE.FEATURE, "Is In Party: "+playerToPartyMap.containsKey(player.getUUID()));
-		return playerToPartyMap.containsKey(player.getUUID());
+		return MsLoggy.DEBUG.logAndReturn(playerToPartyMap.containsKey(player.getUUID()), LOG_CODE.FEATURE, "Is In Party: {}");
 	}
 	
 	private static int getFreePartyID() {

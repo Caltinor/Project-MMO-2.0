@@ -83,7 +83,7 @@ public class Networking {
 			.decoder(SP_OtherExpRequest::new)
 			.consumer(SP_OtherExpRequest::handle)
 			.add();
-		MsLoggy.info(LOG_CODE.NETWORK, "Messages Registered");
+		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}
 	
 	public static void registerDataSyncPackets() {

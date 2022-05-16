@@ -217,7 +217,7 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	@Override
 	protected void apply(final Map<ResourceLocation, FINE> processedData, final ResourceManager resourceManager, final ProfilerFiller profiler)
 	{
-		MsLoggy.info(LOG_CODE.DATA, "Beginning loading of data for data loader: {}", this.folderName);
+		MsLoggy.INFO.log(LOG_CODE.DATA, "Beginning loading of data for data loader: {}", this.folderName);
 		// now that we're on the main thread, we can finalize the data
 		this.data = processedData;
 		finalizer.accept(processedData);

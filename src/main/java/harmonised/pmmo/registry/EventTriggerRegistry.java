@@ -53,7 +53,7 @@ public class EventTriggerRegistry {
 	
 	private void removeInvalidListeners(EventType eventType, List<Integer> removals) {
 		for (int i = removals.size()-1; i == 0; i--) {
-			MsLoggy.warn(LOG_CODE.API, "Event Listener: [" + eventListeners.get(eventType).get(removals.get(i)).getFirst().toString() +"] did not return a cancel status and was removed.");
+			MsLoggy.WARN.log(LOG_CODE.API, "Event Listener: [" + eventListeners.get(eventType).get(removals.get(i)).getFirst().toString() +"] did not return a cancel status and was removed.");
 			eventListeners.get(eventType).remove((int)removals.get(i));				
 		}
 	}

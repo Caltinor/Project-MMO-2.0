@@ -22,7 +22,7 @@ public class SP_OtherExpRequest {
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			Networking.sendToClient(new CP_SetOtherExperience(Core.get(LogicalSide.SERVER).getData().getXpMap(pid)) ,ctx.get().getSender());
-			MsLoggy.debug(LOG_CODE.NETWORK, "Client request for Other Experience handled");
+			MsLoggy.DEBUG.log(LOG_CODE.NETWORK, "Client request for Other Experience handled");
 		});
 		ctx.get().setPacketHandled(true);
 	}

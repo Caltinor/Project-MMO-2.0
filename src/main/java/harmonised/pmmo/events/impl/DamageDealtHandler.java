@@ -41,7 +41,7 @@ public class DamageDealtHandler {
 				return;
 			Core core = Core.get(player.level);
 			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntityLiving());
-			MsLoggy.info(LOG_CODE.EVENT,"Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
+			MsLoggy.INFO.log(LOG_CODE.EVENT,"Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
 			
 			
 			//===========================DEFAULT LOGIC===================================
@@ -82,11 +82,11 @@ public class DamageDealtHandler {
 			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntityLiving());
 			//Process perks
 			CompoundTag perkOutput = core.getPerkRegistry().executePerk(type, player, TagBuilder.start().withFloat(APIUtils.DAMAGE_IN, event.getAmount()).build(), core.getSide());
-			MsLoggy.debug(LOG_CODE.EVENT, "Pre-Perk Damage:"+event.getAmount());
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Pre-Perk Damage:"+event.getAmount());
 			if (perkOutput.contains(APIUtils.DAMAGE_OUT)) {
 				event.setAmount(perkOutput.getFloat(APIUtils.DAMAGE_OUT));
 			}
-			MsLoggy.debug(LOG_CODE.EVENT, "Attack Type: "+type.name()+" | Damage Out: "+event.getAmount());
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+type.name()+" | Damage Out: "+event.getAmount());
 			if (!player.level.isClientSide) {
 				Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), player, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);

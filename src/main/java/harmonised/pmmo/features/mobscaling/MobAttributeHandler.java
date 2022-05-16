@@ -39,7 +39,7 @@ public class MobAttributeHandler {
 			int range = Config.MOB_SCALING_AOE.get();
 			TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(Math.pow(range, 2)*3);
 			List<Player> nearbyPlayers = event.getWorld().getNearbyPlayers(targetCondition, event.getEntityLiving(), AABB.ofSize(spawnPos, range, range, range));
-			MsLoggy.debug(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
+			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
 			if (nearbyPlayers.isEmpty()) return;
 			//Set each Modifier type
 			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_HP.get(), diffScale, event.getEntityLiving().getMaxHealth(), HARD_CAP_HP), Attributes.MAX_HEALTH, ModifierID.HP);
@@ -74,7 +74,7 @@ public class MobAttributeHandler {
 				outValue += (averageLevel - Config.MOB_SCALING_BASE_LEVEL.get()) * Config.MOB_LINEAR_PER_LEVEL.get();
 			outValue *= configEntry.getValue();
 		}
-		MsLoggy.debug(LOG_CODE.FEATURE, "Modifier Value: "+outValue * scale);
+		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Modifier Value: "+outValue * scale);
 		outValue *= scale;
 		return outValue + ogValue > cap ? cap : outValue;
 	}
@@ -91,7 +91,7 @@ public class MobAttributeHandler {
 	
 	private static void setMobModifier(LivingEntity mob, float bonus, Attribute attribute, ModifierID modifID) {
 		AttributeInstance attributeInstance = mob.getAttribute(attribute);
-		MsLoggy.debug(LOG_CODE.FEATURE, modifID.name()+" isNull:"+(attributeInstance==null));
+		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, modifID.name()+" isNull:"+(attributeInstance==null));
 		if (attributeInstance != null) {
 			bonus *= Core.get(mob.level).getDataConfig()
 					.getMobModifier(

@@ -33,7 +33,7 @@ public class PerkRegistry {
 		Preconditions.checkNotNull(onConclude);
 		perkExecutions.put(perkID, onExecute);
 		perkTerminations.put(perkID, onConclude);
-		MsLoggy.debug(LOG_CODE.API, "Registered Perk: "+perkID.toString());
+		MsLoggy.DEBUG.log(LOG_CODE.API, "Registered Perk: "+perkID.toString());
 	}
 	
 	public CompoundTag executePerk(EventType cause, Player player, LogicalSide side) {

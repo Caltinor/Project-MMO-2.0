@@ -204,7 +204,7 @@ public class AutoItem {
 		AutoValueConfig.getItemReq(type).forEach((skill, level) -> {
 			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
 		});
-		MsLoggy.debug(LOG_CODE.AUTO_VALUES, "AutoItem Req Map: "+MsLoggy.mapToString(outMap));
+		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Req Map: "+MsLoggy.mapToString(outMap));
 		return outMap;
 	}
 	private static Map<String, Long> getUtensilData(UtensilTypes utensil, EventType type, ItemStack stack, boolean asWeapon) {
@@ -213,7 +213,7 @@ public class AutoItem {
 		AutoValueConfig.getItemXpAward(type).forEach((skill, level) -> {
 			outMap.put(skill, Double.valueOf(Math.max(0,(double)level * scale)).longValue());
 		});
-		MsLoggy.debug(LOG_CODE.AUTO_VALUES, "AutoItem XpGain Map: "+MsLoggy.mapToString(outMap));
+		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem XpGain Map: "+MsLoggy.mapToString(outMap));
 		return outMap;
 	}
 	private static Map<String, Integer> getWearableData(ReqType type, ItemStack stack, boolean isArmor) {
@@ -260,7 +260,7 @@ public class AutoItem {
 		double atkSpdScale = asWeapon ? getAttackSpeed(stack) * AutoValueConfig.getUtensilAttribute(type, AttributeKey.SPD) : 0d;
 		//Tool specified
 		double digSpeedScale = asWeapon ? 0d : stack.getDestroySpeed(Blocks.COBWEB.defaultBlockState()) + AutoValueConfig.getUtensilAttribute(type, AttributeKey.DIG);
-		MsLoggy.debug(LOG_CODE.AUTO_VALUES, "AutoItem Attributes: DUR="+durabilityScale+" TIER="+tierScale+" DMG="+damageScale+" SPD="+atkSpdScale+" DIG="+digSpeedScale);
+		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Attributes: DUR="+durabilityScale+" TIER="+tierScale+" DMG="+damageScale+" SPD="+atkSpdScale+" DIG="+digSpeedScale);
 		return damageScale + atkSpdScale + digSpeedScale + durabilityScale + tierScale;
 	}
 	
@@ -273,7 +273,7 @@ public class AutoItem {
 		double toughnessScale = isArmor? material.getToughness() * AutoValueConfig.getWearableAttribute(type, AttributeKey.TUF) : 0d;
 		double knockbackScale = isArmor? material.getKnockbackResistance() * AutoValueConfig.getWearableAttribute(type, AttributeKey.KBR) : 0d;
 		//return and log output
-		MsLoggy.debug(LOG_CODE.AUTO_VALUES, "AutoItem Attributes: DUR="+durabilityScale+" ARM="+armorScale+" TUF="+toughnessScale+" KBR="+knockbackScale);
+		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Attributes: DUR="+durabilityScale+" ARM="+armorScale+" TUF="+toughnessScale+" KBR="+knockbackScale);
 		return durabilityScale + armorScale + toughnessScale + knockbackScale;
 	}
 }

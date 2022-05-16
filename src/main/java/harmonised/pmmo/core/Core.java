@@ -159,7 +159,7 @@ public class Core {
 		  	if (Config.reqEnabled(ReqType.USE_ENCHANTMENT).get())
 		  		if (!doesPlayerMeetEnchantmentReq(stack, player.getUUID()))
 		  			return false;
-		  		if (predicates.predicateExists(itemID, type)) 
+		  	if (predicates.predicateExists(itemID, type)) 
 				return predicates.checkPredicateReq(player, stack, type);
 			else if (gates.doesObjectReqExist(type, itemID))
 				return doesPlayerMeetReq(type, itemID, player.getUUID());
@@ -294,12 +294,12 @@ public class Core {
 			else if (AutoValueConfig.ENABLE_AUTO_VALUES.get()) 
 				inMap = xp.mergeXpMapsWithSummateCondition(inMap, AutoValues.getExperienceAward(type, objectID, oType));
 		}
-		MsLoggy.info(LOG_CODE.XP, "XpGains: "+MsLoggy.mapToString(inMap));
+		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains: "+MsLoggy.mapToString(inMap));
 		if (player != null)
 			inMap = xp.applyXpModifiers(player, inMap);
-		MsLoggy.info(LOG_CODE.XP, "XpGains (afterMod): "+MsLoggy.mapToString(inMap));
+		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterMod): "+MsLoggy.mapToString(inMap));
 		inMap = CheeseTracker.applyAntiCheese(inMap);
-		MsLoggy.info(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(inMap));			
+		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(inMap));			
 		return inMap;
 	}
 
@@ -434,11 +434,11 @@ public class Core {
 			}
 			
 			//==============REGISTER BONUSES LOGIC=====================================
-			MsLoggy.debug(LOG_CODE.API, "Bonus Logic entrySet size: "+nbt.bonusLogic().size());
+			MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic entrySet size: "+nbt.bonusLogic().size());
 			for (Map.Entry<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.bonusLogic().entrySet()) {
-				MsLoggy.debug(LOG_CODE.API, "Bonus Logic Element Size: "+entry.getKey().name()+" "+entry.getValue().size());
+				MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic Element Size: "+entry.getKey().name()+" "+entry.getValue().size());
 				entry.getValue().forEach((rl, logic) -> {
-					MsLoggy.debug(LOG_CODE.API, "Bonus Logic Detail: "+rl.toString()+" "+logic.toString());
+					MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic Detail: "+rl.toString()+" "+logic.toString());
 					Function<ItemStack, Map<String, Double>> func = (stack) -> nbt.getBonusMap(entry.getKey(), stack);
 					tooltips.registerItemBonusTooltipData(rl, entry.getKey(), func);
 				});

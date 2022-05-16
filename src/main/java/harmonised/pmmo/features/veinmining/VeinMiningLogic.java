@@ -37,7 +37,7 @@ public class VeinMiningLogic {
 			consumed += cost;
 			player.gameMode.destroyBlock(veinable);
 		}
-		MsLoggy.debug(LOG_CODE.FEATURE, "Vein Consumed: "+consumed+" charge");
+		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Consumed: "+consumed+" charge");
 		applyChargeCostToAllItems(player, consumed);
 	}
 	
@@ -78,7 +78,7 @@ public class VeinMiningLogic {
 		for (ItemStack stack : items) {
 			totalCharge += getCurrentCharge(stack, player.level);
 		}
-		MsLoggy.debug(LOG_CODE.FEATURE, "Vein Charge: "+totalCharge);
+		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Charge: "+totalCharge);
 		return totalCharge; 
 	}
 	
@@ -93,7 +93,7 @@ public class VeinMiningLogic {
 		for (ItemStack stack : items) {
 			totalCapacity += Core.get(player.level).getVeinData().getItemChargeCapSetting(stack);
 		}
-		MsLoggy.debug(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
+		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Capacity: "+totalCapacity);
 		return totalCapacity; 
 	}
 	

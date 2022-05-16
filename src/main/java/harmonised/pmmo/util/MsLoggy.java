@@ -1,15 +1,38 @@
 package harmonised.pmmo.util;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import harmonised.pmmo.config.Config;
 
-public class MsLoggy {
-	private static final Logger LOGGER = LogManager.getLogger();
+public enum MsLoggy {
+	INFO((code, message, args) -> {
+		if (Config.INFO_LOGGING.get().contains(code.code))
+			LogManager.getLogger().info(message, args);
+	}), 
+	WARN((code, message, args) -> {
+		if (Config.WARN_LOGGING.get().contains(code.code))
+			LogManager.getLogger().warn(message, args);
+	}),  
+	DEBUG((code, message, args) -> {
+		if (Config.DEBUG_LOGGING.get().contains(code.code))
+			LogManager.getLogger().debug(message, args);
+	}), 
+	ERROR((code, message, args) -> {
+		if (Config.ERROR_LOGGING.get().contains(code.code))
+			LogManager.getLogger().error(message, args);
+	}), 
+	FATAL((code, message, args) -> {
+		if (Config.FATAL_LOGGING.get().contains(code.code))
+			LogManager.getLogger().fatal(message, args);
+	});
+		
+	private TriConsumer<LOG_CODE, String, Object[]> logExecutor;
+	public void log(LOG_CODE code, String message, Object... obj) {logExecutor.accept(code, message, obj);}
+	MsLoggy(TriConsumer<LOG_CODE, String, Object[]> logger) {this.logExecutor = logger;}	
 	
 	public static enum LOG_CODE {
 		API("api"),
@@ -28,31 +51,15 @@ public class MsLoggy {
 		LOG_CODE(String code) {this.code = code;}
 	}
 	
-	public static void info(LOG_CODE code, String message, Object... obj) {
-		if (Config.INFO_LOGGING.get().contains(code.code))
-			LOGGER.info(message, obj);
+	//=============RETURNABLE LOGGERS=========================
+	//These loggers let you inline your logging
+	//========================================================
+	public <VALUE> VALUE logAndReturn(VALUE value, LOG_CODE code, String message, Object... args) {
+		List<Object> consolidatedArgs = Arrays.asList(args);
+		consolidatedArgs.add(value);
+		this.logExecutor.accept(code, message, consolidatedArgs.toArray());
+		return value;
 	}
-	
-	public static void warn(LOG_CODE code, String message, Object... obj) {
-		if (Config.WARN_LOGGING.get().contains(code.code))
-			LOGGER.warn(message, obj);
-	}
-	
-	public static void debug(LOG_CODE code, String message, Object... obj) {
-		if (Config.DEBUG_LOGGING.get().contains(code.code))
-			LOGGER.debug(message, obj);
-	}
-	
-	public static void error(LOG_CODE code, String message, Object... obj) {
-		if (Config.ERROR_LOGGING.get().contains(code.code))
-			LOGGER.error(message, obj);
-	}
-	
-	public static void fatal(LOG_CODE code, String message, Object... obj) {
-		if (Config.FATAL_LOGGING.get().contains(code.code))
-			LOGGER.fatal(message, obj);
-	}
-	
 	//=============PRINTING UTILITIES=========================
 	
 	public static String mapToString(Map<?, ?> map) {

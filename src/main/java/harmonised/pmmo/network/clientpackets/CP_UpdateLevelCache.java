@@ -32,7 +32,7 @@ public class CP_UpdateLevelCache {
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			((DataMirror)Core.get(LogicalSide.CLIENT).getData()).setLevelCache(levelCache);
-			MsLoggy.debug(LOG_CODE.XP, "Client Packet Handled for updating levelCache");
+			MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating levelCache");
 		});
 		ctx.get().setPacketHandled(true);
 	}

@@ -68,7 +68,7 @@ public class DataMirror implements IDataStorage{
 		if (value > oldValue)
 			scheduledXp.merge(skillName, value-oldValue, (e, n) -> e + n);
 		mySkills.put(skillName, value);
-		MsLoggy.debug(LOG_CODE.XP,"Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
+		MsLoggy.DEBUG.log(LOG_CODE.XP,"Client Side Skill Map: "+MsLoggy.mapToString(mySkills));		
 	}
 	@Override
 	public Map<String, Long> getXpMap(UUID playerID) {return me(playerID) ? mySkills : otherSkills;}

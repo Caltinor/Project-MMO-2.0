@@ -74,7 +74,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		this.setDirty();
 		if (server.getPlayerList().getPlayer(playerID) != null) {
 			Networking.sendToClient(new CP_UpdateExperience(skillName, value), server.getPlayerList().getPlayer(playerID));
-			MsLoggy.debug(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
+			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
 		}
 	}
 	@Override

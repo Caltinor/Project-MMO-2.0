@@ -45,16 +45,16 @@ public class TooltipRegistry {
 	 */
 	public void registerItemRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<ItemStack, Map<String, Integer>> func) 
 	{
-		if (func == null) {MsLoggy.info(LOG_CODE.API, "Supplied Function Null"); return;}
-		if (reqType == null) {MsLoggy.info(LOG_CODE.API, "Supplied ReqType Null"); return;}
-		if (res == null) {MsLoggy.info(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
+		if (func == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied Function Null"); return;}
+		if (reqType == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ReqType Null"); return;}
+		if (res == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
 		
 		if (!itemReqTooltips.containsKey(reqType)) {
-			MsLoggy.info(LOG_CODE.API, "New tooltip category created for: "+reqType.toString());
+			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+reqType.toString());
 			itemReqTooltips.put(reqType, LinkedListMultimap.create());
 		}
 		itemReqTooltips.get(reqType).get(res).add(func);
-		MsLoggy.info(LOG_CODE.API, "New tooltip registered for: "+reqType.toString()+" "+res.toString());
+		MsLoggy.INFO.log(LOG_CODE.API, "New tooltip registered for: "+reqType.toString()+" "+res.toString());
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
@@ -70,16 +70,16 @@ public class TooltipRegistry {
 	 */
 	public void registerBlockRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<BlockEntity, Map<String, Integer>> func) 
 	{
-		if (func == null) {MsLoggy.info(LOG_CODE.API, "Supplied Function Null"); return;}
-		if (reqType == null) {MsLoggy.info(LOG_CODE.API, "Supplied ReqType Null"); return;}
-		if (res == null) {MsLoggy.info(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
+		if (func == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied Function Null"); return;}
+		if (reqType == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ReqType Null"); return;}
+		if (res == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
 		
 		if (!blockReqTooltips.containsKey(reqType)) {
-			MsLoggy.info(LOG_CODE.API, "New tooltip category created for: "+reqType.toString());
+			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+reqType.toString());
 			blockReqTooltips.put(reqType, LinkedListMultimap.create());
 		}
 		blockReqTooltips.get(reqType).get(res).add(func);
-		MsLoggy.info(LOG_CODE.API, "New tooltip registered for: "+reqType.toString()+" "+res.toString());
+		MsLoggy.INFO.log(LOG_CODE.API, "New tooltip registered for: "+reqType.toString()+" "+res.toString());
 	}
 	
 	/**registers a Function to be used in providing the requirements for specific item
@@ -95,12 +95,12 @@ public class TooltipRegistry {
 	 */
 	public void registerEntityRequirementTooltipData(ResourceLocation res, ReqType reqType, Function<Entity, Map<String, Integer>> func) 
 	{
-		if (func == null) {MsLoggy.info(LOG_CODE.API, "Supplied Function Null"); return;}
-		if (reqType == null) {MsLoggy.info(LOG_CODE.API, "Supplied ReqType Null"); return;}
-		if (res == null) {MsLoggy.info(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
+		if (func == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied Function Null"); return;}
+		if (reqType == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ReqType Null"); return;}
+		if (res == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
 		
 		if (!blockReqTooltips.containsKey(reqType)) {
-			MsLoggy.info(LOG_CODE.API, "New tooltip category created for: "+reqType.toString()+" "+res.toString());
+			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+reqType.toString()+" "+res.toString());
 			entityReqTooltips.put(reqType, LinkedListMultimap.create());
 		}
 		entityReqTooltips.get(reqType).get(res).add(func);
@@ -210,7 +210,7 @@ public class TooltipRegistry {
 		Preconditions.checkNotNull(func);
 		
 		if (!itemXpGainTooltips.containsKey(eventType)) {
-			MsLoggy.info(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
+			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
 			itemXpGainTooltips.put(eventType, LinkedListMultimap.create());
 		}
 		itemXpGainTooltips.get(eventType).get(res).add(func);
@@ -221,7 +221,7 @@ public class TooltipRegistry {
 		Preconditions.checkNotNull(func);
 		
 		if (!blockXpGainTooltips.containsKey(eventType)) {
-			MsLoggy.info(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
+			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
 			blockXpGainTooltips.put(eventType, LinkedListMultimap.create());
 		}
 		blockXpGainTooltips.get(eventType).get(res).add(func);
@@ -232,7 +232,7 @@ public class TooltipRegistry {
 		Preconditions.checkNotNull(func);
 		
 		if (!entityXpGainTooltips.containsKey(eventType)) {
-			MsLoggy.info(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
+			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
 			entityXpGainTooltips.put(eventType, LinkedListMultimap.create());
 		}
 		entityXpGainTooltips.get(eventType).get(res).add(func);
@@ -290,15 +290,15 @@ public class TooltipRegistry {
 	}
 	
 	public void registerItemBonusTooltipData(ResourceLocation res, ModifierDataType type, Function<ItemStack, Map<String, Double>> func) {
-		if (func == null) {MsLoggy.info(LOG_CODE.API, "Supplied Function Null"); return;}
-		if (type == null) {MsLoggy.info(LOG_CODE.API, "Supplied ModifierType Null"); return;}
-		if (res == null) {MsLoggy.info(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
+		if (func == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied Function Null"); return;}
+		if (type == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ModifierType Null"); return;}
+		if (res == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
 		if (!itemBonusTooltips.containsKey(type)) {
-			MsLoggy.info(LOG_CODE.API, "New tooltip category created for: "+type.toString());
+			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+type.toString());
 			itemBonusTooltips.put(type, LinkedListMultimap.create());
 		}
 		itemBonusTooltips.get(type).get(res).add(func);
-		MsLoggy.info(LOG_CODE.API, "New tooltip registered for: "+type.toString()+" "+res.toString());
+		MsLoggy.INFO.log(LOG_CODE.API, "New tooltip registered for: "+type.toString()+" "+res.toString());
 	}
 
 	public boolean bonusTooltipExists(ResourceLocation res, ModifierDataType type) {

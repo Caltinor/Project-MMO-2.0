@@ -41,13 +41,13 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onServerStartup(ServerStartingEvent event) {
-		MsLoggy.info(LOG_CODE.LOADING, "Loading PMMO Saved Data");
+		MsLoggy.INFO.log(LOG_CODE.LOADING, "Loading PMMO Saved Data");
 		Core.get(LogicalSide.SERVER).getData(event.getServer());
-		MsLoggy.info(LOG_CODE.LOADING, "Computing data for cache");
+		MsLoggy.INFO.log(LOG_CODE.LOADING, "Computing data for cache");
 		Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
-		MsLoggy.info(LOG_CODE.LOADING, "Executing Default Registrations");
+		MsLoggy.INFO.log(LOG_CODE.LOADING, "Executing Default Registrations");
 		Core.get(LogicalSide.SERVER).registerNBT();
-		MsLoggy.info(LOG_CODE.LOADING, "PMMO Server loading process complete");
+		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
 	}
 	
 	@SubscribeEvent

@@ -29,7 +29,7 @@ public class DamageReceivedHandler {
 			if (type.equals(EventType.FROM_PLAYERS) && player.equals(event.getSource().getEntity()))
 				return;
 			Core core = Core.get(player.getLevel());
-			MsLoggy.debug(LOG_CODE.EVENT, "Source Type: "+type.name()+" | Source Raw: "+event.getSource().msgId);
+			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Source Type: "+type.name()+" | Source Raw: "+event.getSource().msgId);
 			
 			boolean serverSide = !player.level.isClientSide;
 			CompoundTag eventHookOutput = new CompoundTag();

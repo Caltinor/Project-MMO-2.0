@@ -31,7 +31,7 @@ public class CP_SetOtherExperience {
 	public void handle(Supplier<NetworkEvent.Context> ctx ) {
 		ctx.get().enqueueWork(() -> {
 			Core.get(LogicalSide.CLIENT).getData().setXpMap(UUID.randomUUID(), map);
-			MsLoggy.debug(LOG_CODE.NETWORK, "Client Packet Handled for getting Other Experience");
+			MsLoggy.DEBUG.log(LOG_CODE.NETWORK, "Client Packet Handled for getting Other Experience");
 		});		
 		ctx.get().setPacketHandled(true);
 	}

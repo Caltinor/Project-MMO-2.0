@@ -52,7 +52,7 @@ public class TooltipHandler {
                 Minecraft.getInstance().setScreen(new StatsScreen(stack));
                 return;
             }
-
+            //TODO make this generate via loop
             Map<String, Integer> wearReq = getReqData(core, item.getRegistryName(), ReqType.WEAR, stack);
             Map<String, Integer> toolReq = getReqData(core, item.getRegistryName(), ReqType.TOOL, stack);
             Map<String, Integer> weaponReq = getReqData(core, item.getRegistryName(), ReqType.WEAPON, stack);

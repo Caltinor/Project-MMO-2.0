@@ -36,7 +36,7 @@ public class PredicateRegistry {
 		Preconditions.checkNotNull(pred);
 		String condition = reqType.toString()+";"+res.toString();
 		reqPredicates.get(condition).add(pred);
-		MsLoggy.info(LOG_CODE.API, "Predicate Registered: "+condition);
+		MsLoggy.INFO.log(LOG_CODE.API, "Predicate Registered: "+condition);
 	}
 	
 	/** registers a predicate to be used in determining if a given player is permitted
@@ -52,14 +52,14 @@ public class PredicateRegistry {
 		Preconditions.checkNotNull(pred);
 		String condition = reqType.toString()+";"+res.toString();
 		reqBreakPredicates.get(condition).add(pred);
-		MsLoggy.info(LOG_CODE.API, "Predicate Registered: "+condition);
+		MsLoggy.INFO.log(LOG_CODE.API, "Predicate Registered: "+condition);
 	}
 	
 	public void registerEntityPredicate(ResourceLocation res, ReqType type, BiPredicate<Player, Entity> pred) {
 		Preconditions.checkNotNull(pred);
 		String condition = type.toString()+";"+res.toString();
 		reqEntityPredicates.get(condition).add(pred);
-		MsLoggy.info(LOG_CODE.API, "Entity Predicate Regsitered: "+condition);
+		MsLoggy.INFO.log(LOG_CODE.API, "Entity Predicate Regsitered: "+condition);
 	}
 	
 	/**this is an internal method to check if a predicate exists for the given conditions

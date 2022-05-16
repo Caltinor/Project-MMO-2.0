@@ -56,57 +56,57 @@ public class CP_SyncData_Objects {
 			if (omc.tagValues().size() > 0) tagValues = omc.tagValues();
 			for (ResourceLocation tag : tagValues) {
 				for (Map.Entry<EventType, Map<String, Long>> xpValues : omc.xpValues().entrySet()) {
-					MsLoggy.info(LOG_CODE.DATA, "XP_VALUES: "+xpValues.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(xpValues.getValue())+" loaded from config");
+					MsLoggy.INFO.log(LOG_CODE.DATA, "XP_VALUES: "+xpValues.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(xpValues.getValue())+" loaded from config");
 					Core.get(LogicalSide.CLIENT).getXpUtils().setObjectXpGainMap(xpValues.getKey(), tag, xpValues.getValue());
 				}			
 				for (Map.Entry<ReqType, Map<String, Integer>> reqs : omc.reqs().entrySet()) {
-					MsLoggy.info(LOG_CODE.DATA, "REQS: "+reqs.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
+					MsLoggy.INFO.log(LOG_CODE.DATA, "REQS: "+reqs.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
 					Core.get(LogicalSide.CLIENT).getSkillGates().setObjectSkillMap(reqs.getKey(), tag, reqs.getValue());
 				}
-				MsLoggy.info(LOG_CODE.DATA, "VEIN DATA: "+omc.veinData().toString());
+				MsLoggy.INFO.log(LOG_CODE.DATA, "VEIN DATA: "+omc.veinData().toString());
 				Core.get(LogicalSide.CLIENT).getVeinData().setVeinData(tag, omc.veinData());
 				switch (type) {
 				case ITEM: {
 					for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : omc.modifiers().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
+						MsLoggy.INFO.log(LOG_CODE.DATA, "BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
 					}
 					for (Map.Entry<ReqType, List<LogicEntry>> nbtReqs : omc.nbtReqs().logic().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
+						MsLoggy.INFO.log(LOG_CODE.DATA, "NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getNBTUtils().setItemReq(nbtReqs.getKey(), tag, nbtReqs.getValue());
 					}
 					for (Map.Entry<EventType, List<LogicEntry>> nbtGains : omc.nbtXpGains().logic().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
+						MsLoggy.INFO.log(LOG_CODE.DATA, "NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getNBTUtils().setItemXpGains(nbtGains.getKey(), tag, nbtGains.getValue());
 					}
 					for (Map.Entry<ModifierDataType, List<LogicEntry>> nbtBonus : omc.nbtBonuses().logic().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "NBT BONUS: "+nbtBonus.getKey().toString()+": "+tag.toString()+" loaded from config");
+						MsLoggy.INFO.log(LOG_CODE.DATA, "NBT BONUS: "+nbtBonus.getKey().toString()+": "+tag.toString()+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getNBTUtils().setBonuses(nbtBonus.getKey(), tag, nbtBonus.getValue());
 					}
 					for (Map.Entry<ResourceLocation, SalvageData> salvage : omc.salvage().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "SALVAGE: "+tag.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
+						MsLoggy.INFO.log(LOG_CODE.DATA, "SALVAGE: "+tag.toString()+": "+salvage.getKey().toString()+salvage.getValue().toString());
 						Core.get(LogicalSide.CLIENT).getSalvageLogic().setSalvageData(tag, salvage.getKey(), salvage.getValue());
 					}
 					break;
 				}
 				case BLOCK: {
 					for (Map.Entry<ReqType, List<LogicEntry>> nbtReqs : omc.nbtReqs().logic().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
+						MsLoggy.INFO.log(LOG_CODE.DATA, "NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getNBTUtils().setBlockReq(nbtReqs.getKey(), tag, nbtReqs.getValue());
 					}
 					for (Map.Entry<EventType, List<LogicEntry>> nbtGains : omc.nbtXpGains().logic().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
+						MsLoggy.INFO.log(LOG_CODE.DATA, "NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getNBTUtils().setItemXpGains(nbtGains.getKey(), tag, nbtGains.getValue());
 					}
 					break;
 				}
 				case ENTITY: {
 					for (Map.Entry<ReqType, List<LogicEntry>> nbtReqs : omc.nbtReqs().logic().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
+						MsLoggy.INFO.log(LOG_CODE.DATA, "NBT REQS: "+nbtReqs.getKey().toString()+": "+tag.toString()+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getNBTUtils().setEntityReq(nbtReqs.getKey(), tag, nbtReqs.getValue());
 					}
 					for (Map.Entry<EventType, List<LogicEntry>> nbtGains : omc.nbtXpGains().logic().entrySet()) {
-						MsLoggy.info(LOG_CODE.DATA, "NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
+						MsLoggy.INFO.log(LOG_CODE.DATA, "NBT GAINS: "+nbtGains.getKey().toString()+": "+tag.toString()+" loaded from config");
 						Core.get(LogicalSide.CLIENT).getNBTUtils().setItemXpGains(nbtGains.getKey(), tag, nbtGains.getValue());
 					}
 					break;

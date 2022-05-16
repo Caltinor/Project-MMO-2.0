@@ -66,7 +66,7 @@ public class XpUtils {
 	public Map<String, Long> deserializeAwardMap(ListTag nbt) {
 		Map<String, Long> map = new HashMap<>();
 		if (nbt.getElementType() != Tag.TAG_COMPOUND) {
-			MsLoggy.error(LOG_CODE.API, "An API method passed an invalid award map.  This may not have negative effects on gameplay," + 
+			MsLoggy.ERROR.log(LOG_CODE.API, "An API method passed an invalid award map.  This may not have negative effects on gameplay," + 
 							"but may cause the source implementation to behave unexpectedly");
 			return map;
 		}

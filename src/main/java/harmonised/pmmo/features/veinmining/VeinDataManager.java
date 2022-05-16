@@ -49,7 +49,7 @@ public class VeinDataManager {
 	public void setMarkedPos(UUID playerID, BlockPos pos) {
 		BlockPos finalPos = pos.equals(getMarkedPos(playerID)) ? BlockPos.ZERO : pos;
 		markers.put(playerID, finalPos);
-		MsLoggy.debug(LOG_CODE.FEATURE, "Player "+playerID.toString()+" Marked Pos: "+finalPos.toString());
+		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Player "+playerID.toString()+" Marked Pos: "+finalPos.toString());
 	}
 	public BlockPos getMarkedPos(UUID playerID) {
 		return markers.getOrDefault(playerID, BlockPos.ZERO);

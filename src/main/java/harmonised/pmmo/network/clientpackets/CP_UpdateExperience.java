@@ -32,7 +32,7 @@ public class CP_UpdateExperience {
 			long currentXPraw = Core.get(LogicalSide.CLIENT).getData().getXpRaw(null, skill);
 			Core.get(LogicalSide.CLIENT).getData().setXpRaw(null, skill, xp);
 			XPOverlayGUI.addToGainList(skill, xp-currentXPraw);
-			MsLoggy.debug(LOG_CODE.XP, "Client Packet Handled for updating experience of "+skill+"["+xp+"]");
+			MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating experience of "+skill+"["+xp+"]");
 		});		
 		ctx.get().setPacketHandled(true);
 	}

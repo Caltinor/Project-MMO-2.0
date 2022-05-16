@@ -46,20 +46,20 @@ public class CP_SyncData_Locations {
 			if (lmc.tagValues().size() > 0) tagValues = lmc.tagValues();
 			for (ResourceLocation tag : tagValues) {
 				for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : lmc.bonusMap().entrySet()) {
-					MsLoggy.info(LOG_CODE.DATA, "BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
+					MsLoggy.INFO.log(LOG_CODE.DATA, "BONUSES: "+tag.toString()+modifiers.getKey().toString()+MsLoggy.mapToString(modifiers.getValue())+" loaded from config");
 					Core.get(LogicalSide.CLIENT).getXpUtils().setObjectXpModifierMap(modifiers.getKey(), tag, modifiers.getValue());
 				}
 				for (Map.Entry<ResourceLocation, Map<String, Double>> mobMods : lmc.mobModifiers().entrySet()) {
-					MsLoggy.info(LOG_CODE.DATA, "MOB MODIFIERS: "+tag.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
+					MsLoggy.INFO.log(LOG_CODE.DATA, "MOB MODIFIERS: "+tag.toString()+mobMods.getKey().toString()+MsLoggy.mapToString(mobMods.getValue())+" loaded from config");
 					Core.get(LogicalSide.CLIENT).getDataConfig().setMobModifierData(tag, mobMods.getKey(), mobMods.getValue());
 				}
-				MsLoggy.info(LOG_CODE.DATA, "POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
+				MsLoggy.INFO.log(LOG_CODE.DATA, "POSITIVE EFFECTS: "+MsLoggy.mapToString(lmc.positive()));
 				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(true, tag, lmc.positive());
-				MsLoggy.info(LOG_CODE.DATA, "NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
+				MsLoggy.INFO.log(LOG_CODE.DATA, "NEGATIVE EFFECTS: "+MsLoggy.mapToString(lmc.negative()));
 				Core.get(LogicalSide.CLIENT).getDataConfig().setLocationEffectData(false, tag, lmc.negative());
-				MsLoggy.info(LOG_CODE.DATA, "VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
+				MsLoggy.INFO.log(LOG_CODE.DATA, "VEIN BLACKLIST: "+MsLoggy.listToString(lmc.veinBlacklist()));
 				Core.get(LogicalSide.CLIENT).getDataConfig().setArrayData(tag, lmc.veinBlacklist());
-				MsLoggy.info(LOG_CODE.DATA, "TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
+				MsLoggy.INFO.log(LOG_CODE.DATA, "TRAVEl REQ: "+MsLoggy.mapToString(lmc.travelReq()));
 				Core.get(LogicalSide.CLIENT).getSkillGates().setObjectSkillMap(ReqType.TRAVEL, tag, lmc.travelReq());
 			}
 		});

@@ -33,7 +33,7 @@ public class CP_SyncData_Enchantments {
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			data.forEach((rl, map) -> {
-				map.forEach((k, v) -> MsLoggy.info(LOG_CODE.DATA, "ENCHANTMENT:"+rl.toString()+" Level:"+k+MsLoggy.mapToString(v)));
+				map.forEach((k, v) -> MsLoggy.INFO.log(LOG_CODE.DATA, "ENCHANTMENT:"+rl.toString()+" Level:"+k+MsLoggy.mapToString(v)));
 				Core.get(LogicalSide.CLIENT).getSkillGates().setEnchantmentReqs(rl, map);
 			});
 		});
