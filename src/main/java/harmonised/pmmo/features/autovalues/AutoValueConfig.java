@@ -30,7 +30,7 @@ public class AutoValueConfig {
 	
 	public static void setupServer(ForgeConfigSpec.Builder builder) {
 		builder.comment("Auto Values estimate values based on item/block/entity properties", 
-				"and kick in when no other defined requirement or xp value is present").push("Auto_Values");
+				"and apply when no other defined requirement or xp value is present").push("Auto_Values");
 
 		ENABLE_AUTO_VALUES = builder.comment("set this to false to disable the auto values system.")
 						.define("Auto Values Enabled", true);
@@ -41,6 +41,7 @@ public class AutoValueConfig {
 		setupXpGainMaps(builder);
 		setupReqMaps(builder);
 		configureItemTweaks(builder);
+		configureEntityTweaks(builder);
 		//end subsections
 
 		builder.pop();
@@ -193,7 +194,10 @@ public class AutoValueConfig {
 		//Armor attributes
 		AMR("Armor", 10d),
 		KBR("Knockback_Resistance", 10d),
-		TUF("Toughness", 10d);
+		TUF("Toughness", 10d),
+		//EntityAttributes
+		HEALTH("Health", 2),
+		SPEED("Move_Speed", 2);
 		
 		String key;
 		double value;
@@ -210,6 +214,10 @@ public class AutoValueConfig {
 			AttributeKey.AMR.key, AttributeKey.AMR.value,
 			AttributeKey.KBR.key, AttributeKey.KBR.value,
 			AttributeKey.TUF.key, AttributeKey.TUF.value);
+		public static Map<String, Double> DEFAULT_ENTITY_MAP = Map.of(
+			AttributeKey.DMG.key, AttributeKey.DMG.value,
+			AttributeKey.HEALTH.key, AttributeKey.HEALTH.value,
+			AttributeKey.SPEED.key, AttributeKey.SPEED.value);
 	}
 	
 	public static double getUtensilAttribute(UtensilTypes tool, AttributeKey key) {return UTENSIL_ATTRIBUTES.get(tool).get().getOrDefault(key.key, 0d);}
@@ -239,6 +247,20 @@ public class AutoValueConfig {
 		}
 		HARDNESS_MODIFIER = builder.comment("how much should block hardness contribute to value calculations")
 				.define("Block Hardness Modifier", 10d);
+		
+		builder.pop();
+	}
+	
+	public static ConfigObject<Map<String, Double>> ENTITY_ATTRIBUTES;
+	
+	private static void configureEntityTweaks(ForgeConfigSpec.Builder builder) {		
+		builder.comment("Configuration tweaks specific to entities."
+				,"'"+AttributeKey.HEALTH.key+"' Determines how much entity health affects auto value calculations"
+				,"'"+AttributeKey.SPEED.key+"' Determines how much entity speed affects auto value calculations"
+				,"'"+AttributeKey.DMG.key+"' Determines how much entity damage affects auto value calculations").push("Entity_Tweaks");
+		
+		ENTITY_ATTRIBUTES = TomlConfigHelper.<Map<String, Double>>defineObject(builder, 
+				"Entity_Attributes", CodecTypes.DOUBLE_CODEC, AttributeKey.DEFAULT_ENTITY_MAP);
 		
 		builder.pop();
 	}
