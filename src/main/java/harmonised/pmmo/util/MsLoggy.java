@@ -1,6 +1,5 @@
 package harmonised.pmmo.util;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -54,10 +53,8 @@ public enum MsLoggy {
 	//=============RETURNABLE LOGGERS=========================
 	//These loggers let you inline your logging
 	//========================================================
-	public <VALUE> VALUE logAndReturn(VALUE value, LOG_CODE code, String message, Object... args) {
-		List<Object> consolidatedArgs = Arrays.asList(args);
-		consolidatedArgs.add(value);
-		this.logExecutor.accept(code, message, consolidatedArgs.toArray());
+	public <VALUE> VALUE logAndReturn(VALUE value, LOG_CODE code, String message) {
+		this.logExecutor.accept(code, message, List.of(value).toArray());
 		return value;
 	}
 	//=============PRINTING UTILITIES=========================

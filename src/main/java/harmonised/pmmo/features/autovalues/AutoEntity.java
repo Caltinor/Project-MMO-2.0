@@ -5,16 +5,16 @@ import java.util.Map;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
-import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.AttributeKey;
-import harmonised.pmmo.storage.PmmoSavedData;
+import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class AutoEntity {
@@ -24,14 +24,10 @@ public class AutoEntity {
 		if (!type.entityApplicable)
 			return new HashMap<>();
 			
-		EntityType<?> entity = ForgeRegistries.ENTITIES.getValue(entityID);
-		Entity e = entity.create(((PmmoSavedData)Core.get(LogicalSide.SERVER).getData()).getServer().overworld());
-		LivingEntity livingEntity = e instanceof LivingEntity ? (LivingEntity)e : null;
-		if (livingEntity == null) return new HashMap<>();
 		Map<String, Integer> outMap = new HashMap<>();
 		switch (type) {
 		case KILL: case RIDE: case TAME: case BREED: case ENTITY_INTERACT:{
-			outMap.putAll(getReqMap(livingEntity, type));
+			outMap.putAll(getReqMap(entityID, type));
 			break;
 		}
 		default: }
@@ -43,10 +39,6 @@ public class AutoEntity {
 		if (!type.entityApplicable)
 			return new HashMap<>();
 				
-		EntityType<?> entity = ForgeRegistries.ENTITIES.getValue(entityID);
-		Entity e = entity.create(((PmmoSavedData)Core.get(LogicalSide.SERVER).getData()).getServer().overworld());
-		LivingEntity livingEntity = e instanceof LivingEntity ? (LivingEntity)e : null;
-		if (livingEntity == null) return new HashMap<>();
 		Map<String, Long> outMap = new HashMap<>();
 		switch (type) {
 		case BREED: 		
@@ -64,7 +56,7 @@ public class AutoEntity {
 		case RIDING: 	
 		case SHIELD_BLOCK:		
 		case TAMING: {
-			outMap.putAll(getXpMap(livingEntity, type));
+			outMap.putAll(getXpMap(entityID, type));
 			break;
 		}
 		default: }
@@ -72,11 +64,17 @@ public class AutoEntity {
 	}
 	
 	//========================GETTER METHODS==============================
-	private static Map<String, Integer> getReqMap(LivingEntity entity, ReqType type) {
+	private static Map<String, Integer> getReqMap(ResourceLocation entity, ReqType type) {
 		Map<String, Integer> outMap = new HashMap<>();
-		float healthScale = getMaxHealth(entity) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH, 0d).floatValue();
-		float speedScale = getSpeed(entity) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED, 0d).floatValue();
-		double damageScale = getDamage(entity) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.DMG, 0d).floatValue();
+		double healthScale = 
+				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.MAX_HEALTH), LOG_CODE.AUTO_VALUES, "Health Attribute: {}") * 
+				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH.key, 0d), LOG_CODE.AUTO_VALUES, "Health Config Value: {}");
+		double speedScale = 
+				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.MOVEMENT_SPEED), LOG_CODE.AUTO_VALUES, "Speed Attribute: {}") * 
+				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED.key, 0d), LOG_CODE.AUTO_VALUES, "Speed Config Value: {}");
+		double damageScale = 
+				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.ATTACK_DAMAGE), LOG_CODE.AUTO_VALUES, "Damage Attribute: {}") * 
+				MsLoggy.DEBUG.logAndReturn(AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.DMG.key, 0d), LOG_CODE.AUTO_VALUES, "Damage Config Value: {}");
 		double scale = healthScale + speedScale + damageScale;
 		
 		AutoValueConfig.getEntityReq(type).forEach((skill, level) -> {
@@ -85,11 +83,11 @@ public class AutoEntity {
 		return outMap;
 	}
 	
-	private static Map<String, Long> getXpMap(LivingEntity entity, EventType type) {
+	private static Map<String, Long> getXpMap(ResourceLocation entity, EventType type) {
 		Map<String, Long> outMap = new HashMap<>();
-		float healthScale = getMaxHealth(entity) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH, 0d).floatValue();
-		float speedScale = getSpeed(entity) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED, 0d).floatValue();
-		double damageScale = getDamage(entity) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.DMG, 0d).floatValue();
+		double healthScale = getAttribute(entity, Attributes.MAX_HEALTH) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.HEALTH.key, 0d);
+		double speedScale = getAttribute(entity, Attributes.MOVEMENT_SPEED) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.SPEED.key, 0d);
+		double damageScale = getAttribute(entity, Attributes.ATTACK_DAMAGE) * AutoValueConfig.ENTITY_ATTRIBUTES.get().getOrDefault(AttributeKey.DMG.key, 0d);
 		double scale = healthScale + speedScale + damageScale;
 		
 		AutoValueConfig.getEntityXpAward(type).forEach((skill, value) -> {
@@ -99,16 +97,10 @@ public class AutoEntity {
 	}
 	
 	//========================UTILITY METHODS=============================
-	private static float getMaxHealth(LivingEntity entity) {
-		AttributeInstance attribute = entity.getAttribute(Attributes.MAX_HEALTH);
-		return (float) (entity.getMaxHealth() + attribute.getValue());
-	}
-	private static float getSpeed(LivingEntity entity) {
-		AttributeInstance attribute = entity.getAttribute(Attributes.MOVEMENT_SPEED);
-		return (float) (entity.getSpeed() + attribute.getValue());
-	}
-	private static double getDamage(LivingEntity entity) {
-		AttributeInstance attribute = entity.getAttribute(Attributes.ATTACK_DAMAGE);
-		return attribute != null ? attribute.getValue() : 0d;
+	@SuppressWarnings("unchecked")
+	private static double getAttribute(ResourceLocation entityID, Attribute attribute) {
+		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITIES.getValue(entityID);
+		AttributeSupplier attSup = DefaultAttributes.getSupplier(entity);
+		return attSup == null ? 0d: attSup.getBaseValue(attribute);
 	}
 }

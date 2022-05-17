@@ -160,7 +160,7 @@ public class Config {
 						.define("Info Logging", new ArrayList<>(List.of(LOG_CODE.LOADING.code,LOG_CODE.NETWORK.code,LOG_CODE.API.code)), s -> s instanceof String);
 		DEBUG_LOGGING = builder.comment("Which MsLoggy debug logging should be enabled?  This will flood your log with data, but provides essential details",
 				  					  " when trying to find bugs. DEVELOPER SETTING (mostly).  ")
-						.define("Debug Logging", new ArrayList<>(), s -> s instanceof String);
+						.define("Debug Logging", new ArrayList<>(List.of(LOG_CODE.AUTO_VALUES.code, LOG_CODE.NONE.code)), s -> s instanceof String);
 		WARN_LOGGING = builder.comment("Which MsLoggy warn logging should be enabled?  This log type is helpful for catching important but non-fatal issues")
 						.define("Warn Logging", new ArrayList<>(List.of(LOG_CODE.API.code)), s -> s instanceof String);
 		ERROR_LOGGING = builder.comment("Which Error Logging should be enabled.  it is highly recommended this stay true.  however, you can",

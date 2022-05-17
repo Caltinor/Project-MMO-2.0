@@ -481,7 +481,7 @@
 	"pmmo.enum.ENTITY":"Interact with Entity",
 	"pmmo.enum.RESPAWN":"Respawn",
 	"pmmo.enum.RIDING":"Riding",
-	"pmmo.enum.SHEILD_BLOCK":"Block with Shield",
+	"pmmo.enum.SHIELD_BLOCK":"Block with Shield",
 	"pmmo.enum.SKILL_UP":"Level Up",
 	"pmmo.enum.SLEEP":"Sleep",
 	"pmmo.enum.SPRINTING":"Sprinting",
