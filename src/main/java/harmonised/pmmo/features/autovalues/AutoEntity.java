@@ -26,7 +26,7 @@ public class AutoEntity {
 			
 		Map<String, Integer> outMap = new HashMap<>();
 		switch (type) {
-		case KILL: case RIDE: case TAME: case BREED: case ENTITY_INTERACT:{
+		case RIDE: case TAME: case BREED: case ENTITY_INTERACT:{
 			outMap.putAll(getReqMap(entityID, type));
 			break;
 		}
