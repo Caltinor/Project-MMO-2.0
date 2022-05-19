@@ -95,19 +95,19 @@ public class AutoValueConfig {
 		
 		builder.push("Items");
 		ITEM_XP_AWARDS = new HashMap<>();
-		for (EventType type : EventType.ITEM_APPLICABLE_EVENTS) {
+		for (EventType type : AutoItem.EVENTTYPES) {
 			ITEM_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 10l)));
 		}
 		builder.pop();
 		builder.push("Blocks");
 		BLOCK_XP_AWARDS = new HashMap<>();
-		for (EventType type : EventType.BLOCK_APPLICABLE_EVENTS) {
+		for (EventType type : AutoBlock.EVENTTYPES) {
 			BLOCK_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 10l)));
 		}
 		builder.pop();
 		builder.push("Entities");
 		ENTITY_XP_AWARDS = new HashMap<>();
-		for (EventType type : EventType.ENTITY_APPLICABLE_EVENTS) {
+		for (EventType type : AutoEntity.EVENTTYPES) {
 			ENTITY_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 10l)));
 		}
 		builder.pop();
@@ -137,19 +137,19 @@ public class AutoValueConfig {
 		
 		builder.push("Items");
 		ITEM_REQS = new HashMap<>();
-		for (ReqType type : ReqType.ITEM_APPLICABLE_EVENTS) {
+		for (ReqType type : AutoItem.REQTYPES) {
 			ITEM_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
 		builder.pop();
 		builder.push("BLocks");
 		BLOCK_REQS = new HashMap<>();
-		for (ReqType type : ReqType.BLOCK_APPLICABLE_EVENTS) {
+		for (ReqType type : AutoBlock.REQTYPES) {
 			BLOCK_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
 		builder.pop();
 		builder.push("Entities");
 		ENTITY_REQS = new HashMap<>();
-		for (ReqType type : ReqType.ENTITY_APPLICABLE_EVENTS) {
+		for (ReqType type : AutoEntity.REQTYPES) {
 			ENTITY_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
 		builder.pop();

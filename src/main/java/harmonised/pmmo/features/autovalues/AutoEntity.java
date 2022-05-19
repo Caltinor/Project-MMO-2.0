@@ -18,6 +18,11 @@ import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class AutoEntity {
+	public static final ReqType[] REQTYPES = {ReqType.RIDE, ReqType.TAME, ReqType.BREED, ReqType.ENTITY_INTERACT};
+	public static final EventType[] EVENTTYPES = {EventType.BREED, EventType.FROM_MOBS, EventType.FROM_PLAYERS,	EventType.FROM_ANIMALS, 		
+			EventType.MELEE_TO_MOBS, EventType.MELEE_TO_PLAYERS, EventType.MELEE_TO_ANIMALS, EventType.RANGED_TO_MOBS,
+			EventType.RANGED_TO_PLAYERS, EventType.RANGED_TO_ANIMALS, EventType.DEATH, EventType.ENTITY, EventType.RIDING, 	
+			EventType.SHIELD_BLOCK,	EventType.TAMING};
 
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation entityID) {
 		//exit early if not an applicable type

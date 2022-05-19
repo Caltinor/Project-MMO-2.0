@@ -16,6 +16,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.AxeItem;
@@ -39,7 +40,9 @@ public class AutoItem {
 	private static final double BASE_DURABILITY = 59d;
 	private static final double BASE_DAMAGE = 4;
 	
-	private static final double BASE_HARDNESS = 4;
+	public static final ReqType[] REQTYPES = {ReqType.WEAR, ReqType.USE_ENCHANTMENT, ReqType.TOOL, ReqType.WEAPON};
+	public static final EventType[] EVENTTYPES = {EventType.ANVIL_REPAIR, EventType.BLOCK_PLACE, EventType.CRAFT,
+			EventType.CONSUME, EventType.BREW, EventType.ENCHANT, EventType.FISH, EventType.SMELT};	
 
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
@@ -108,25 +111,9 @@ public class AutoItem {
 			}
 			break;
 		}
-		case USE: {
-			//not going to populate this because of how volatile uses can be with configs.
-			break;
-		}
-		case PLACE: {
+		case PLACE: case BREAK: {
 			if (stack.getItem() instanceof BlockItem) {
-				float breakSpeed = ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getDestroySpeed(null, null);
-				AutoValueConfig.getBlockReq(type).forEach((skill, level) -> {
-					outMap.put(skill, (int)Math.max(0, (breakSpeed - BASE_HARDNESS) * AutoValueConfig.HARDNESS_MODIFIER.get()));
-				});
-			}
-			break;
-		}
-		case BREAK: {
-			if (stack.getItem() instanceof BlockItem) {
-				float breakSpeed = ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getDestroySpeed(null, null);
-				AutoValueConfig.getBlockReq(type).forEach((skill, level) -> {
-					outMap.put(skill, (int)Math.max(0, (breakSpeed) * AutoValueConfig.HARDNESS_MODIFIER.get()));
-				});
+				outMap.putAll(AutoBlock.processReqs(type, stackID));
 			}
 			break;
 		}
@@ -153,14 +140,11 @@ public class AutoItem {
 		}
 		case BLOCK_PLACE: {
 			if (stack.getItem() instanceof BlockItem) {
-				float breakSpeed = ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getDestroySpeed(null, null);
 				if (((BlockItem)stack.getItem()).getBlock() instanceof CropBlock) {
 					outMap.putAll(AutoValueConfig.getBlockXpAward(EventType.GROW));
 				}
 				else
-				AutoValueConfig.getBlockXpAward(type).forEach((skill, level) -> {
-					outMap.put(skill, Double.valueOf(Math.max(0, (breakSpeed - BASE_HARDNESS) * AutoValueConfig.HARDNESS_MODIFIER.get())).longValue());
-				});
+					outMap.putAll(AutoBlock.processXpGains(type, stackID));
 			}
 			break;
 		}
@@ -183,13 +167,18 @@ public class AutoItem {
 				outMap.putAll(getWearableData(type, stack, false));
 			break;
 		}
+		case CONSUME: {
+			if (stack.isEdible()) {
+				AutoValueConfig.getItemXpAward(type).forEach((skill, xp) -> {
+					FoodProperties properties = stack.getItem().getFoodProperties();
+					Float nutritionScale = (float)properties.getNutrition() * properties.getSaturationModifier();
+					outMap.put(skill, xp * nutritionScale.longValue());
+				});
+			}
+		}
 		case BREW: case ENCHANT: case FISH: case SMELT:{
 			//The proportion calculation for enchant is handled in the event, we just need a default skill/value
 			outMap.putAll(AutoValueConfig.getItemXpAward(type));
-			break;
-		}
-		case ACTIVATE_ITEM: {
-			//like ReqTypes.USE, too nuanced.
 			break;
 		}		
 		default:

@@ -13,6 +13,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class AutoBlock {
 	private static final double BASE_HARDNESS = 4;
 	
+	public static final ReqType[] REQTYPES = {ReqType.BREAK, ReqType.PLACE};
+	public static final EventType[] EVENTTYPES = {EventType.BLOCK_BREAK, EventType.BLOCK_PLACE, EventType.GROW};
+	
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation blockID) {
 		//exit early if the type is not valid for a block
 		if (!type.blockApplicable)
@@ -26,10 +29,6 @@ public class AutoBlock {
 			AutoValueConfig.getBlockReq(type).forEach((skill, level) -> {
 				outMap.put(skill, (int)Math.max(0, (breakSpeed - BASE_HARDNESS) * AutoValueConfig.HARDNESS_MODIFIER.get()));
 			});
-			break;
-		}
-		case INTERACT: {
-			//Too nuanced to define.
 			break;
 		}
 		default: }
@@ -55,14 +54,6 @@ public class AutoBlock {
 			if (block instanceof CropBlock) {
 				outMap.putAll(AutoValueConfig.getBlockXpAward(type));
 			}
-			break;
-		}
-		case HIT_BLOCK: {
-			//too nuanced.
-			break;
-		}
-		case ACTIVATE_BLOCK: {
-			//too nuanced.
 			break;
 		}
 		default: }
