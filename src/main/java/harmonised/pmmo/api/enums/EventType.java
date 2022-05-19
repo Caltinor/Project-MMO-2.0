@@ -17,6 +17,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	BREATH_CHANGE(false, false, true, "swimming"),			//IMPLEMENTED	PLAYERTICK
 	BREED(false, false, true, "taming"),					//IMPLEMENTED
 	BREW(true, false, false, "alchemy"),					//PARTIAL		MIXIN NEEDED FOR OTHER EVENTS
+	CONSUME(true, false, false, "cooking"),					//IMPLEMENTED
 	CRAFT(true, false, false, "crafting"),					//IMPLEMENTED
 	RECEIVE_DAMAGE(false, false, true, "endurance"),		//IMPLEMENTED
 		FROM_MOBS(false, false, true, "endurance"),			//IMPLEMENTED

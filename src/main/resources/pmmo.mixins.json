@@ -6,7 +6,9 @@
   "refmap": "pmmo.refmap.json",
   "mixins": [
 	"AbstractFurnaceTileEntityShrinkMixin",
-	"EnchantApplyMixin"
+	"EnchantApplyMixin",
+	"PlayerMixin",
+	"PotionItemMixin"
   ],
   "server": [
   ],

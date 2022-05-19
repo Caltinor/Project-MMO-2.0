@@ -1,6 +1,7 @@
 package harmonised.pmmo.events;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.events.EatFoodEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.events.impl.AnvilRepairHandler;
@@ -15,6 +16,7 @@ import harmonised.pmmo.events.impl.DeathHandler;
 import harmonised.pmmo.events.impl.DimensionTravelHandler;
 import harmonised.pmmo.events.impl.EntityInteractHandler;
 import harmonised.pmmo.events.impl.FishHandler;
+import harmonised.pmmo.events.impl.FoodEatHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.MountHandler;
@@ -247,5 +249,9 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onPlayerDimTravel(EntityTravelToDimensionEvent event) {
 		DimensionTravelHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onFoodEat(EatFoodEvent event) {
+		FoodEatHandler.handle(event);
 	}
 }

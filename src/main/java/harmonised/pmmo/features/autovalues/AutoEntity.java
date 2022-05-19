@@ -100,6 +100,7 @@ public class AutoEntity {
 	@SuppressWarnings("unchecked")
 	private static double getAttribute(ResourceLocation entityID, Attribute attribute) {
 		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITIES.getValue(entityID);
+		if (!DefaultAttributes.hasSupplier(entity)) return 0d;
 		AttributeSupplier attSup = DefaultAttributes.getSupplier(entity);
 		return attSup == null ? 0d: attSup.getBaseValue(attribute);
 	}

@@ -25,9 +25,9 @@ repositories
 	maven { url "https://www.cursemaven.com" }
 }
 
-version = '1.18.2-2.0.0.0'
+version = '1.18.2-2.0.0.4'
 group = 'harmonised.pmmo'
-archivesBaseName = 'Project_MMO'
+archivesBaseName = 'pmmo'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
