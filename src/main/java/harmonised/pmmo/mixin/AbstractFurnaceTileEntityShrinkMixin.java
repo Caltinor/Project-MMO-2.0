@@ -3,6 +3,7 @@ package harmonised.pmmo.mixin;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -13,8 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import harmonised.pmmo.events.impl.FurnaceHandler;
-
+import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import javax.annotation.Nullable;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
@@ -31,6 +31,6 @@ public class AbstractFurnaceTileEntityShrinkMixin
     {
         Level world = ((AbstractFurnaceBlockEntity)(Object)this).getLevel();
         BlockPos pos = ((AbstractFurnaceBlockEntity)(Object)this).getBlockPos();
-        FurnaceHandler.handle(items.get(0), world, pos);
+        MinecraftForge.EVENT_BUS.post(new FurnaceBurnEvent(items.get(0), world, pos));
     }
 }

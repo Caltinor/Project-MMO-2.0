@@ -2,6 +2,8 @@ package harmonised.pmmo.events;
 
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.EatFoodEvent;
+import harmonised.pmmo.api.events.EnchantEvent;
+import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.events.impl.AnvilRepairHandler;
@@ -14,9 +16,11 @@ import harmonised.pmmo.events.impl.DamageDealtHandler;
 import harmonised.pmmo.events.impl.DamageReceivedHandler;
 import harmonised.pmmo.events.impl.DeathHandler;
 import harmonised.pmmo.events.impl.DimensionTravelHandler;
+import harmonised.pmmo.events.impl.EnchantHandler;
 import harmonised.pmmo.events.impl.EntityInteractHandler;
 import harmonised.pmmo.events.impl.FishHandler;
 import harmonised.pmmo.events.impl.FoodEatHandler;
+import harmonised.pmmo.events.impl.FurnaceHandler;
 import harmonised.pmmo.events.impl.JumpHandler;
 import harmonised.pmmo.events.impl.LoginHandler;
 import harmonised.pmmo.events.impl.MountHandler;
@@ -253,5 +257,13 @@ public class EventHandler {
 	@SubscribeEvent
 	public static void onFoodEat(EatFoodEvent event) {
 		FoodEatHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onSmelt(FurnaceBurnEvent event) {
+		FurnaceHandler.handle(event);
+	}
+	@SubscribeEvent
+	public static void onEnchant(EnchantEvent event) {
+		EnchantHandler.handle(event);
 	}
 }

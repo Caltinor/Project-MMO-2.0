@@ -8,40 +8,39 @@ import com.mojang.authlib.GameProfile;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.events.FurnaceBurnEvent;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
 import harmonised.pmmo.storage.ChunkDataHandler;
 import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.TagUtils;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+
 
 public class FurnaceHandler {
 
-	public static void handle(ItemStack input, Level level, BlockPos pos) {
+	public static void handle(FurnaceBurnEvent event) {
 		//Checkers to exit early for non-applicable conditions
-		if (level.isClientSide) return;
-		IChunkData cap = level.getChunkAt(pos).getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
-		UUID pid = cap.checkPos(pos);
+		if (event.getLevel().isClientSide) return;
+		IChunkData cap = event.getLevel().getChunkAt(event.getPos()).getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
+		UUID pid = cap.checkPos(event.getPos());
 		if (pid == null) return;
-		ServerPlayer player = level.getServer().getPlayerList().getPlayer(pid);
+		ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(pid);
 		if (player == null) {
-			GameProfile playerProfile = level.getServer().getProfileCache().get(pid).orElseGet(null);
+			GameProfile playerProfile = event.getLevel().getServer().getProfileCache().get(pid).orElseGet(null);
 			if (playerProfile == null) return;
-			player = new ServerPlayer(level.getServer(), (ServerLevel) level, playerProfile);
+			player = new ServerPlayer(event.getLevel().getServer(), (ServerLevel) event.getLevel(), playerProfile);
 		}
 		
 		//core logic 
-		Core core = Core.get(level);
-		CompoundTag eventHook = core.getEventTriggerRegistry().executeEventListeners(EventType.SMELT, null, new CompoundTag());
-		eventHook.putString(APIUtils.STACK, input.serializeNBT().getAsString());
+		Core core = Core.get(event.getLevel());
+		CompoundTag eventHook = core.getEventTriggerRegistry().executeEventListeners(EventType.SMELT, event, new CompoundTag());
+		eventHook.putString(APIUtils.STACK, event.getInput().serializeNBT().getAsString());
 		eventHook = TagUtils.mergeTags(eventHook, core.getPerkRegistry().executePerk(EventType.SMELT, player, eventHook, core.getSide()));
-		Map<String, Long> xpAwards = core.getExperienceAwards(EventType.SMELT, input, player, eventHook);
+		Map<String, Long> xpAwards = core.getExperienceAwards(EventType.SMELT, event.getInput(), player, eventHook);
 		List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange(player);
 		core.awardXP(partyMembersInRange, xpAwards);
 		
