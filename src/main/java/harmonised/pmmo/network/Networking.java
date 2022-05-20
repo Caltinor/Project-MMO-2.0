@@ -3,6 +3,7 @@ package harmonised.pmmo.network;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
+import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Enchantments;
@@ -71,6 +72,11 @@ public class Networking {
 			.encoder(CP_SetOtherExperience::toBytes)
 			.decoder(CP_SetOtherExperience::new)
 			.consumer(CP_SetOtherExperience::handle)
+			.add();
+		INSTANCE.messageBuilder(CP_ResetXP.class, ID++)
+			.encoder((packet, buf) -> {})
+			.decoder(buf -> new CP_ResetXP())
+			.consumer(CP_ResetXP::handle)
 			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)

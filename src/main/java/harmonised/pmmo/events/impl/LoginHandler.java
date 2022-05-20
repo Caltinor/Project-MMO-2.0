@@ -5,6 +5,7 @@ import java.util.Map;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.storage.PmmoSavedData;
@@ -23,6 +24,7 @@ public class LoginHandler {
 		
 		if (core.getSide().equals(LogicalSide.SERVER)) {
 			//===========UPDATE DATA MIRROR=======================
+			Networking.sendToClient(new CP_ResetXP(), (ServerPlayer) player);
 			for (Map.Entry<String, Long> skillMap : core.getData().getXpMap(player.getUUID()).entrySet()) {
 				Networking.sendToClient(new CP_UpdateExperience(skillMap.getKey(), skillMap.getValue()), (ServerPlayer) player);
 			}

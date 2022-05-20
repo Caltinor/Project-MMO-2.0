@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class FurnaceHandler {
 
+	@SuppressWarnings("resource")
 	public static void handle(FurnaceBurnEvent event) {
 		//Checkers to exit early for non-applicable conditions
 		if (event.getLevel().isClientSide) return;
