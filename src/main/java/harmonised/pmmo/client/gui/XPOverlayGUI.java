@@ -102,7 +102,6 @@ public class XPOverlayGUI
 	public static void tickDownGainList() {
 		for (GainEntry gain : xpGains) {
 			gain.downTick();
-			System.out.println(gain.duration); //TODO remove
 		}
 	}
 	

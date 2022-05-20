@@ -13,7 +13,6 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 public class XpUtils {
@@ -87,11 +86,6 @@ public class XpUtils {
 				mapOut.put(award.getKey(), award.getValue());
 		}
 		return mapOut;
-	}
-	
-	public void sendXpAwardNotifications(ServerPlayer player, String skillName, long amount) {
-		//drop XP into world.
-		//player.sendMessage(new TranslatableComponent("pmmo."+skillName).append(": "+String.valueOf(amount)), player.getUUID());
 	}
 	
 	public Map<String, Long> mergeXpMapsWithSummateCondition(Map<String, Long> ogMap, Map<String, Long> newMap) {
