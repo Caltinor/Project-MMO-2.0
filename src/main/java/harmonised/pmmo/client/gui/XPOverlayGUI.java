@@ -3,13 +3,13 @@ package harmonised.pmmo.client.gui;
 import java.util.*;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
-
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -39,8 +39,11 @@ public class XPOverlayGUI
 			renderSkillList(stack, Config.SKILL_LIST_OFFSET_X.get(), Config.SKILL_LIST_OFFSET_Y.get());
 		if(Config.VEIN_GAUGE_DISPLAY.get())
 			renderVeinGauge(stack, Config.VEIN_GAUGE_OFFSET_X.get(), event.getWindow().getGuiScaledHeight() - Config.VEIN_GAUGE_OFFSET_Y.get());
-		if(Config.GAIN_LIST_DISPLAY.get())
+		if(Config.GAIN_LIST_DISPLAY.get()) {
+			if (xpGains.size() >= 1 && xpGains.get(0).duration <= 0)
+				xpGains.remove(0);
 			renderGains(stack, event.getWindow().getGuiScaledWidth()/2 + Config.GAIN_LIST_OFFSET_X.get(), Config.GAIN_LIST_OFFSET_Y.get());
+		}
 		stack.popPose();
 	}
 
@@ -89,20 +92,41 @@ public class XPOverlayGUI
 		}
 	}
 	
-	private static List<Pair<String, Long>> xpGains = new ArrayList<>();
+	private static List<GainEntry> xpGains = new ArrayList<>();
 	public static void addToGainList(String skill, long amount) {
 		if (xpGains.size() >= Config.GAIN_LIST_SIZE.get()) 
 			xpGains.remove(0);
-		xpGains.add(Pair.of(skill, amount));
+		xpGains.add(new GainEntry(skill, amount));
+	}
+	
+	public static void tickDownGainList() {
+		for (GainEntry gain : xpGains) {
+			gain.downTick();
+			System.out.println(gain.duration); //TODO remove
+		}
 	}
 	
 	private static void renderGains(PoseStack stack, int listX, int listY) {
 		for (int i = 0; i < xpGains.size(); i++) {
-			TextComponent gain = new TextComponent("+"+String.valueOf(xpGains.get(i).getSecond())+" ");
-			gain.append(new TranslatableComponent("pmmo."+xpGains.get(i).getFirst()));
-			gain.setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(xpGains.get(i).getFirst()));
+			TextComponent gain = new TextComponent("+"+String.valueOf(xpGains.get(i).value)+" ");
+			gain.append(new TranslatableComponent("pmmo."+xpGains.get(i).skill));
+			gain.setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(xpGains.get(i).skill));
 			GuiComponent.drawString(stack, fontRenderer, gain, listX, 3+listY+ (i*9), i);
 		}
-		//QOL add something animated, or maybe just fade the numbers
+	}
+	
+	private static class GainEntry {
+		int duration;
+		String skill;
+		long value;
+		public GainEntry(String skill, long value) {
+			this.skill = skill;
+			this.value = value;
+			this.duration = MsLoggy.DEBUG.logAndReturn(Config.GAIN_LIST_LINGER_DURATION.get()
+								, LOG_CODE.GUI, "Gain Duration Set as: {}");
+		}
+		public void downTick() {
+			duration--;
+		}
 	}
 }

@@ -15,6 +15,7 @@ import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 public class Config {
 	public static ForgeConfigSpec CLIENT_CONFIG;
@@ -58,6 +59,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> SECTION_HEADER_COLOR;
 	public static ForgeConfigSpec.ConfigValue<Integer> SALVAGE_ITEM_COLOR;
 	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_SIZE;
+	public static ForgeConfigSpec.ConfigValue<Integer> GAIN_LIST_LINGER_DURATION;
 	
 	private static void buildGUI(ForgeConfigSpec.Builder builder) {
 		builder.comment("Configuration settings for the guis").push("GUI");
@@ -86,6 +88,8 @@ public class Config {
 				.define("Salage Item Color", 0x15D2A319);
 		GAIN_LIST_SIZE = builder.comment("how much xp gain hisory should display")
 				.define("Gain List Size", 3);
+		GAIN_LIST_LINGER_DURATION = builder.comment("How long, in ticks, items on the gain list should stay on screen before disappearing")
+				.define("Gain List Linger Duration", 100);
 		
 		builder.pop();
 	}
@@ -146,28 +150,28 @@ public class Config {
 		builder.pop(); //Common Blocks
 	}
 	
-	public static ForgeConfigSpec.ConfigValue<List<String>> INFO_LOGGING;
-	public static ForgeConfigSpec.ConfigValue<List<String>> DEBUG_LOGGING;
-	public static ForgeConfigSpec.ConfigValue<List<String>> WARN_LOGGING;
-	public static ForgeConfigSpec.ConfigValue<List<String>> ERROR_LOGGING;
-	public static ForgeConfigSpec.ConfigValue<List<String>> FATAL_LOGGING;
+	public static ConfigValue<List<? extends String>> INFO_LOGGING;
+	public static ConfigValue<List<? extends String>> DEBUG_LOGGING;
+	public static ConfigValue<List<? extends String>> WARN_LOGGING;
+	public static ConfigValue<List<? extends String>> ERROR_LOGGING;
+	public static ConfigValue<List<? extends String>> FATAL_LOGGING;
 	
 	private static void buildMsLoggy(ForgeConfigSpec.Builder builder) {
 		builder.comment("PMMO Error Logging Configuration").push("Ms Loggy");
 		
 		INFO_LOGGING = builder.comment("Which MsLoggy info logging should be enabled?  This will flood your log with data, but provides essential details",
 									  " when trying to find data errors and bug fixing.  ")
-						.define("Info Logging", new ArrayList<>(List.of(LOG_CODE.LOADING.code,LOG_CODE.NETWORK.code,LOG_CODE.API.code)), s -> s instanceof String);
+						.defineList("Info Logging", new ArrayList<>(List.of(LOG_CODE.LOADING.code,LOG_CODE.NETWORK.code,LOG_CODE.API.code)), s -> s instanceof String);
 		DEBUG_LOGGING = builder.comment("Which MsLoggy debug logging should be enabled?  This will flood your log with data, but provides essential details",
 				  					  " when trying to find bugs. DEVELOPER SETTING (mostly).  ")
-						.define("Debug Logging", new ArrayList<>(List.of(LOG_CODE.AUTO_VALUES.code, LOG_CODE.NONE.code)), s -> s instanceof String);
+						.defineList("Debug Logging", new ArrayList<>(List.of(LOG_CODE.AUTO_VALUES.code)), s -> s instanceof String);
 		WARN_LOGGING = builder.comment("Which MsLoggy warn logging should be enabled?  This log type is helpful for catching important but non-fatal issues")
-						.define("Warn Logging", new ArrayList<>(List.of(LOG_CODE.API.code)), s -> s instanceof String);
+						.defineList("Warn Logging", new ArrayList<>(List.of(LOG_CODE.API.code)), s -> s instanceof String);
 		ERROR_LOGGING = builder.comment("Which Error Logging should be enabled.  it is highly recommended this stay true.  however, you can",
 									  "disable it to remove pmmo errors from the log.")
-						.define("Error Logging", new ArrayList<>(List.of(LOG_CODE.DATA.code, LOG_CODE.API.code)), s -> s instanceof String);
+						.defineList("Error Logging", new ArrayList<>(List.of(LOG_CODE.DATA.code, LOG_CODE.API.code)), s -> s instanceof String);
 		FATAL_LOGGING = builder.comment("Which MsLoggy fatal logging should be enabled?  I can't imagine a situation where you'd want this off, but here you go.")
-						.define("Fatal Logging", new ArrayList<>(List.of(LOG_CODE.API.code)), s -> s instanceof String);
+						.defineList("Fatal Logging", new ArrayList<>(List.of(LOG_CODE.API.code)), s -> s instanceof String);
 		
 		builder.pop(); //Ms. Loggy Block
 	}

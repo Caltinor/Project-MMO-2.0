@@ -40,6 +40,7 @@ public enum MsLoggy {
 		DATA("data"),
 		EVENT("event"),
 		FEATURE("feature"),
+		GUI("gui"),
 		LOADING("loading"),
 		NETWORK("network"),
 		XP("xp"),
