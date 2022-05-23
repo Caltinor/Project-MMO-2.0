@@ -2,6 +2,8 @@ package harmonised.pmmo.features.veinmining;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -47,9 +49,11 @@ public class VeinMiningLogic {
 		items.addAll(inv.armor);
 		items.addAll(inv.items);
 		items.addAll(inv.offhand);
-		//=====PLACEHOLDER FOR CURIOS=====
-		// reinstantiate list with curio
-		// slots if mod is present TODO Curio
+		//========== CURIOS ==============
+		if (CurioCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CurioCompat.getItems(player));
+		}
 		//================================
 		Core core = Core.get(player.level);
 		for (ItemStack stack : items) {
@@ -70,9 +74,11 @@ public class VeinMiningLogic {
 	public static int getChargeFromAllItems(Player player) {
 		Inventory inv = player.getInventory();		
 		List<ItemStack> items = List.of(inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39), player.getMainHandItem(), player.getOffhandItem());
-		//=====PLACEHOLDER FOR CURIOS=====
-		// reinstantiate list with curio
-		// slots if mod is present TODO Curio
+		//========== CURIOS ==============
+		if (CurioCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CurioCompat.getItems(player));
+		}
 		//================================
 		int totalCharge = 0;
 		for (ItemStack stack : items) {
@@ -85,9 +91,11 @@ public class VeinMiningLogic {
 	public static int getMaxChargeFromAllItems(Player player) {
 		Inventory inv = player.getInventory();		
 		List<ItemStack> items = List.of(inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39), player.getMainHandItem(), player.getOffhandItem());
-		//=====PLACEHOLDER FOR CURIOS=====
-		// reinstantiate list with curio
-		// slots if mod is present TODO Curio
+		//========== CURIOS ==============
+		if (CurioCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CurioCompat.getItems(player));
+		}
 		//================================
 		int totalCapacity = 0;
 		for (ItemStack stack : items) {
@@ -100,9 +108,11 @@ public class VeinMiningLogic {
 	private static void applyChargeCostToAllItems(ServerPlayer player, int charge) {
 		Inventory inv = player.getInventory();		
 		List<ItemStack> items = List.of(player.getMainHandItem(), player.getOffhandItem(), inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39));
-		//=====PLACEHOLDER FOR CURIOS=====
-		// reinstantiate list with curio
-		// slots if mod is present TODO Curio
+		//========== CURIOS ==============
+		if (CurioCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CurioCompat.getItems(player));
+		}
 		//================================
 		int index = 0;
 		while (charge > 0 && index < items.size()) {

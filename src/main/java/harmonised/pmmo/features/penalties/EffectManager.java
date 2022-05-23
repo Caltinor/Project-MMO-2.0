@@ -1,8 +1,10 @@
 package harmonised.pmmo.features.penalties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,9 +26,11 @@ public class EffectManager {
 		Inventory inv = player.getInventory();
 		
 		List<ItemStack> items = List.of(inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39), player.getMainHandItem(), player.getOffhandItem());
-		//=====PLACEHOLDER FOR CURIOS=====
-		// reinstantiate list with curio
-		// slots if mod is present TODO Curio
+		//========== CURIOS ==============
+		if (CurioCompat.hasCurio) {
+			items = new ArrayList<>(items);
+			items.addAll(CurioCompat.getItems(player));
+		}
 		//================================
 		for (ItemStack stack : items) {
 			if (!stack.isEmpty() && (!core.isActionPermitted(ReqType.WEAR, stack, player) || !core.doesPlayerMeetEnchantmentReq(stack, player.getUUID()))) {

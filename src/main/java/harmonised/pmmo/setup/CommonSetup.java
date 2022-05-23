@@ -1,6 +1,8 @@
 package harmonised.pmmo.setup;
 
 import harmonised.pmmo.commands.CmdPmmoRoot;
+import harmonised.pmmo.compat.curios.CurioCompat;
+import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
@@ -22,6 +24,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -37,6 +40,10 @@ public class CommonSetup {
 		Networking.registerMessages();
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
+		
+		//=========COMPAT=============
+		CurioCompat.hasCurio = ModList.get().isLoaded("curios");
+		if (ModList.get().isLoaded("ftbquests")) FTBQHandler.init();
 	}
 	
 	@SubscribeEvent
