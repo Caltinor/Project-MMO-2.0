@@ -11,7 +11,7 @@ import com.google.common.collect.LinkedListMultimap;
 
 import harmonised.pmmo.config.codecs.CodecMapPlayer;
 import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
-import harmonised.pmmo.config.codecs.CodecMapSkills.SkillData;
+import harmonised.pmmo.config.codecs.SkillData;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
@@ -73,7 +73,7 @@ public class DataConfig {
 	
 	//==================UTILITY METHODS==============================	
 	public int getSkillColor(String skill) {
-		return SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault()).color();
+		return SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault()).getColor();
 	}
 	public Style getSkillStyle(String skill) {
 		return Style.EMPTY.withColor(TextColor.fromRgb(getSkillColor(skill)));
