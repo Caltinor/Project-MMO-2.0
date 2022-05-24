@@ -6,6 +6,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.util.MsLoggy;
@@ -94,6 +96,10 @@ public class XPOverlayGUI
 	
 	private static List<GainEntry> xpGains = new ArrayList<>();
 	public static void addToGainList(String skill, long amount) {
+		SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault());
+		if (Config.GAIN_BLACKLIST.get().contains(skill) 
+				|| (skillData.isSkillGroup() && skillData.getGroup().containsKey(skill)))
+			return;
 		if (xpGains.size() >= Config.GAIN_LIST_SIZE.get()) 
 			xpGains.remove(0);
 		xpGains.add(new GainEntry(skill, amount));

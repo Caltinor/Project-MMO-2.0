@@ -27,4 +27,32 @@ public record SkillData (
 	
 	public boolean isSkillGroup() {return !getGroup().isEmpty();}
 	public Map<String, Double> getGroup() {return groupedSkills.orElse(new HashMap<>());}
+	
+	public Map<String, Long> getGroupXP(long xp) {
+		Map<String, Long> outMap = new HashMap<>();
+		double denominator = getGroup().values().stream().mapToDouble(value -> value).sum();
+		getGroup().forEach((skill, ratio) -> {
+			outMap.put(skill, Double.valueOf((ratio / denominator) * xp).longValue());
+		});
+		return outMap;
+	}
+	
+	public Map<String, Integer> getGroupReq(int level) {
+		Map<String, Integer> outMap = new HashMap<>();
+		double denominator = getGroup().values().stream().mapToDouble(value -> value).sum();
+		getGroup().forEach((skill, ratio) -> {
+			outMap.put(skill, (int)((ratio / denominator) * (double)level));
+		});
+		return outMap;
+	}
+	
+	public Map<String, Double> getGroupBonus(double bonus) {
+		Map<String, Double> outMap = new HashMap<>();
+		double denominator = getGroup().values().stream().mapToDouble(value -> value).sum();
+		double gainLossModifier = bonus >= 1d ? 1d : 0d;
+		getGroup().forEach((skill, ratio) -> {
+			outMap.put(skill, gainLossModifier + (ratio / denominator) * bonus);
+		});
+		return outMap;
+	}
 }

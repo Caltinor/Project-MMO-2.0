@@ -16,6 +16,8 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.DataConfig;
+import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.features.anticheese.CheeseTracker;
@@ -134,6 +136,8 @@ public class Core {
 	}	
 	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Integer> requirements) {
 		boolean meetsReq = true;
+		//convert skill group ids into raw skills 
+		processSkillGroupReqs(requirements);
 		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
 			int skillLevel = getData().getLevelFromXP(getData().getXpRaw(playerID, req.getKey()));
 			if (req.getValue() > skillLevel)
@@ -215,25 +219,61 @@ public class Core {
 		  return true;
 	  }
 	
+	private Map<String, Integer> processSkillGroupReqs(Map<String, Integer> map) {
+		Map<String, Integer> mapClone = new HashMap<>(map);
+		new HashMap<>(map).forEach((skill, level) -> {
+			SkillData data = SkillData.getDefault();
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault())).isSkillGroup()) {
+				mapClone.remove(skill);
+				mapClone.putAll(data.getGroupReq(level));																					
+			}
+		});
+		return mapClone;
+	}
+	
+	public Map<String, Long> processSkillGroupXP(Map<String, Long> map) {
+		Map<String, Long> mapClone = new HashMap<>(map);
+		new HashMap<>(map).forEach((skill, level) -> {
+			SkillData data = SkillData.getDefault();
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault())).isSkillGroup()) {
+				mapClone.remove(skill);
+				mapClone.putAll(data.getGroupXP(level));																					
+			}
+		});
+		return mapClone;
+	}
+	
+	public Map<String, Double> processSkillGroupBonus(Map<String, Double> map) {
+		Map<String, Double> mapClone = new HashMap<>(map);
+		new HashMap<>(map).forEach((skill, level) -> {
+			SkillData data = SkillData.getDefault();
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault())).isSkillGroup()) {
+				mapClone.remove(skill);
+				mapClone.putAll(data.getGroupBonus(level));																					
+			}
+		});
+		return mapClone;
+	}
+	
 	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
 		ResourceLocation itemID = stack.getItem().getRegistryName();
-		if (tooltips.requirementTooltipExists(itemID, reqType))
-			return tooltips.getItemRequirementTooltipData(itemID, reqType, stack);
+		if (tooltips.requirementTooltipExists(itemID, reqType)) 
+			return processSkillGroupReqs(tooltips.getItemRequirementTooltipData(itemID, reqType, stack));
 		else if (gates.doesObjectReqExist(reqType, itemID))
-			return gates.getObjectSkillMap(reqType, itemID);
+			return processSkillGroupReqs(gates.getObjectSkillMap(reqType, itemID));
 		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
-			return AutoValues.getRequirements(reqType, itemID, ObjectType.ITEM);
+			return processSkillGroupReqs(AutoValues.getRequirements(reqType, itemID, ObjectType.ITEM));
 		else
 			return new HashMap<>();
 	}	
 	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
 		ResourceLocation entityID = new ResourceLocation(entity.getType().equals(EntityType.PLAYER) ? "minecraft:player" : entity.getEncodeId());
 		if (tooltips.requirementTooltipExists(entityID, reqType))
-			return tooltips.getEntityRequirementTooltipData(entityID, reqType, entity);
+			return processSkillGroupReqs(tooltips.getEntityRequirementTooltipData(entityID, reqType, entity));
 		else if (gates.doesObjectReqExist(reqType, entityID))
-			return gates.getObjectSkillMap(reqType, entityID);
+			return processSkillGroupReqs(gates.getObjectSkillMap(reqType, entityID));
 		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
-			return AutoValues.getRequirements(reqType, entityID, ObjectType.ENTITY);
+			return processSkillGroupReqs(AutoValues.getRequirements(reqType, entityID, ObjectType.ENTITY));
 		else
 			return new HashMap<>();
 	}	
@@ -241,11 +281,11 @@ public class Core {
 		BlockEntity tile = level.getBlockEntity(pos);
 		ResourceLocation blockID = level.getBlockState(pos).getBlock().getRegistryName();
 		if (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
-			return tooltips.getBlockRequirementTooltipData(blockID, reqType, tile);
+			return processSkillGroupReqs(tooltips.getBlockRequirementTooltipData(blockID, reqType, tile));
 		else if (gates.doesObjectReqExist(reqType, blockID))
-			return gates.getObjectSkillMap(reqType, blockID);
+			return processSkillGroupReqs(gates.getObjectSkillMap(reqType, blockID));
 		else if (AutoValueConfig.ENABLE_AUTO_VALUES.get())
-			return AutoValues.getRequirements(reqType, blockID, ObjectType.BLOCK);
+			return processSkillGroupReqs(AutoValues.getRequirements(reqType, blockID, ObjectType.BLOCK));
 		else
 			return new HashMap<>();
 	}
@@ -300,7 +340,7 @@ public class Core {
 		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterMod): "+MsLoggy.mapToString(inMap));
 		inMap = CheeseTracker.applyAntiCheese(inMap);
 		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterCheese): "+MsLoggy.mapToString(inMap));			
-		return inMap;
+		return processSkillGroupXP(inMap);
 	}
 
 	public Map<String, Double> getConsolidatedModifierMap(Player player) {
@@ -359,7 +399,7 @@ public class Core {
 				}
 				
 			}
-			return mapOut;
+			return processSkillGroupBonus(mapOut);
 		}
 	  
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {

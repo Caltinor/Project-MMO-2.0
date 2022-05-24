@@ -53,13 +53,13 @@ public class TooltipHandler {
                 return;
             }
             //TODO make this generate via loop
-            Map<String, Integer> wearReq = getReqData(core, item.getRegistryName(), ReqType.WEAR, stack);
-            Map<String, Integer> toolReq = getReqData(core, item.getRegistryName(), ReqType.TOOL, stack);
-            Map<String, Integer> weaponReq = getReqData(core, item.getRegistryName(), ReqType.WEAPON, stack);
-            Map<String, Integer> useReq = getReqData(core, item.getRegistryName(), ReqType.USE, stack);
+            Map<String, Integer> wearReq = getReqData(core, ReqType.WEAR, stack);
+            Map<String, Integer> toolReq = getReqData(core, ReqType.TOOL, stack);
+            Map<String, Integer> weaponReq = getReqData(core, ReqType.WEAPON, stack);
+            Map<String, Integer> useReq = getReqData(core, ReqType.USE, stack);
             //Map<String, Integer> useEnchantmentReq = XP.getEnchantsUseReq(stack);
-            Map<String, Integer> placeReq = getReqData(core, item.getRegistryName(), ReqType.PLACE, stack);
-            Map<String, Integer> breakReq = getReqData(core, item.getRegistryName(), ReqType.BREAK, stack);
+            Map<String, Integer> placeReq = getReqData(core, ReqType.PLACE, stack);
+            Map<String, Integer> breakReq = getReqData(core, ReqType.BREAK, stack);
             Map<String, Long> xpValueBreaking = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_BREAK, stack);
             Map<String, Long> xpValueCrafting = getXpGainData(core, item.getRegistryName(),EventType.CRAFT, stack);
             Map<String, Long> xpValueSmelting = getXpGainData(core, item.getRegistryName(),EventType.SMELT, stack);
@@ -137,26 +137,21 @@ public class TooltipHandler {
 		return DP.dp((value - 1d) * 100d) + "%";
 	}
 	
-	private static Map<String, Integer> getReqData(Core core, ResourceLocation itemID, ReqType type, ItemStack stack) {
+	private static Map<String, Integer> getReqData(Core core, ReqType type, ItemStack stack) {		
 		//if Reqs are not enabled, ignore the getters and return an empty map
 		//This will cause the map to be empty and result in no header being added.
 		if (!Config.reqEnabled(type).get()) return new HashMap<>();
 		//Gather req data and populate a map for return
-		Map<String, Integer> map = core.getTooltipRegistry().getItemRequirementTooltipData(itemID, type, stack);
-		if (map.isEmpty() && core.getSkillGates().doesObjectReqExist(type, itemID))
-			map = core.getSkillGates().getObjectSkillMap(type, itemID);
-		if (map.isEmpty())
-			map = AutoValues.getRequirements(type, itemID, ObjectType.ITEM);
+		Map<String, Integer> map = core.getReqMap(type, stack);
 		if (!Config.HIDE_MET_REQS.get())
 			return map;
 		//remove values that meet the requirement
-		final Map<String, Integer> outMap = new HashMap<>();
-		map.forEach((skill, level) -> {
-			if (core.getData().getPlayerSkillLevel(skill, null) < level)
-				outMap.put(skill, level);
+		new HashMap<>(map).forEach((skill, level) -> {
+			if (core.getData().getPlayerSkillLevel(skill, null) >= level)
+				map.remove(skill);
 		});
 		
-		return outMap;
+		return map;
 	}
 	
 	private static Map<String, Long> getXpGainData(Core core, ResourceLocation itemID, EventType type, ItemStack stack) {
@@ -165,13 +160,13 @@ public class TooltipHandler {
 			map = core.getXpUtils().getObjectExperienceMap(type, itemID);
 		if (map.isEmpty())
 			map = AutoValues.getExperienceAward(type, itemID, ObjectType.ITEM);
-		return map;
+		return core.processSkillGroupXP(map);
 	}
 	
 	private static Map<String, Double> getBonusData(Core core, ResourceLocation itemID, ModifierDataType type, ItemStack stack) {
 		Map<String, Double> map = core.getTooltipRegistry().getBonusTooltipData(itemID, type, stack);
 		if (map.isEmpty() && core.getXpUtils().hasModifierObjectEntry(type, itemID))
 			map = core.getXpUtils().getObjectModifierMap(type, itemID);
-		return map;
+		return core.processSkillGroupBonus(map);
 	}
 }

@@ -67,7 +67,7 @@ public class SkillsConfig {
 		defaultSkills.put("cooking", 	new SkillData(0xe69900, true));
 		defaultSkills.put("alchemy", 	new SkillData(0xe69900, true));
 		defaultSkills.put("engineering",new SkillData(0xffffff));
-		defaultSkills.put("fightGroup", new SkillData(Optional.empty(), Optional.of(false), Optional.of(Map.of(
+		defaultSkills.put("fightgroup", new SkillData(Optional.empty(), Optional.of(false), Optional.of(Map.of(
 				"combat", 0.5,
 				"endurance", 0.3,
 				"archery", 0.2))));
