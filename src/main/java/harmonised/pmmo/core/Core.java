@@ -222,8 +222,8 @@ public class Core {
 	private Map<String, Integer> processSkillGroupReqs(Map<String, Integer> map) {
 		Map<String, Integer> mapClone = new HashMap<>(map);
 		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillData.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault())).isSkillGroup()) {
+			SkillData data = SkillData.Builder.getDefault();
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
 				mapClone.remove(skill);
 				mapClone.putAll(data.getGroupReq(level));																					
 			}
@@ -234,8 +234,8 @@ public class Core {
 	public Map<String, Long> processSkillGroupXP(Map<String, Long> map) {
 		Map<String, Long> mapClone = new HashMap<>(map);
 		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillData.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault())).isSkillGroup()) {
+			SkillData data = SkillData.Builder.getDefault();
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
 				mapClone.remove(skill);
 				mapClone.putAll(data.getGroupXP(level));																					
 			}
@@ -246,8 +246,8 @@ public class Core {
 	public Map<String, Double> processSkillGroupBonus(Map<String, Double> map) {
 		Map<String, Double> mapClone = new HashMap<>(map);
 		new HashMap<>(map).forEach((skill, level) -> {
-			SkillData data = SkillData.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault())).isSkillGroup()) {
+			SkillData data = SkillData.Builder.getDefault();
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
 				mapClone.remove(skill);
 				mapClone.putAll(data.getGroupBonus(level));																					
 			}
@@ -399,7 +399,8 @@ public class Core {
 				}
 				
 			}
-			return processSkillGroupBonus(mapOut);
+			return config.getPlayerData(player.getUUID())
+					.mergeWithPlayerBonuses(processSkillGroupBonus(mapOut));
 		}
 	  
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {

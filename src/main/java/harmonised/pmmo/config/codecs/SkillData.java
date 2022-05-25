@@ -7,23 +7,24 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import harmonised.pmmo.config.Config;
+
 public record SkillData (
 	Optional<Integer> color,
 	Optional<Boolean> afkExempt,
-	Optional<Map<String, Double>> groupedSkills) {
-	public SkillData(int color) {this(color, false);}
-	public SkillData(int color, boolean afkExempt) {this(Optional.of(color), Optional.of(afkExempt), Optional.empty());}
+	Optional<Map<String, Double>> groupedSkills,
+	Optional<Integer> maxLevel) {
 	
 	public static Codec<SkillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.optionalFieldOf("color").forGetter(SkillData::color),
 			Codec.BOOL.optionalFieldOf("noAfkPenalty").forGetter(SkillData::afkExempt),
-			CodecTypes.DOUBLE_CODEC.optionalFieldOf("groupFor").forGetter(SkillData::groupedSkills)
+			CodecTypes.DOUBLE_CODEC.optionalFieldOf("groupFor").forGetter(SkillData::groupedSkills),
+			Codec.INT.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel)
 			).apply(instance, SkillData::new));
-	
-	public static SkillData getDefault() {return new SkillData(Optional.of(16777215), Optional.of(false), Optional.empty());}
 
 	public int getColor() {return color.orElse(16777215);}
 	public boolean getAfkExempt() {return afkExempt.orElse(false);}
+	public int getMaxLevel() {return maxLevel.orElse(Config.MAX_LEVEL.get());}
 	
 	public boolean isSkillGroup() {return !getGroup().isEmpty();}
 	public Map<String, Double> getGroup() {return groupedSkills.orElse(new HashMap<>());}
@@ -54,5 +55,50 @@ public record SkillData (
 			outMap.put(skill, gainLossModifier + (ratio / denominator) * bonus);
 		});
 		return outMap;
+	}
+	
+	public static class Builder {
+		int color, maxLevel;
+		boolean afkExempt;
+		Map<String, Double> groupOf;
+		
+		private Builder() {
+			color = 16777215;
+			maxLevel = Config.MAX_LEVEL.get();
+			afkExempt = false;
+			groupOf = new HashMap<>();
+		}
+		public static SkillData getDefault() {return new SkillData(
+				Optional.of(16777215), 
+				Optional.of(false), 
+				Optional.empty(), 
+				Optional.of(Config.MAX_LEVEL.get()));}
+		
+		public static Builder start() {
+			return new Builder();
+		}
+		public Builder withColor(int color) {
+			this.color = color;
+			return this;
+		}
+		public Builder withMaxLevel(int maxLevel) {
+			this.maxLevel = maxLevel;
+			return this;
+		}
+		public Builder withAfkExempt(boolean afkExempt) {
+			this.afkExempt = afkExempt;
+			return this;
+		}
+		public Builder setGroupOf(Map<String, Double> group) {
+			this.groupOf = group;
+			return this;
+		}
+		public SkillData build() {
+			return new SkillData(
+					Optional.of(color), 
+					Optional.of(afkExempt),
+					groupOf.isEmpty() ? Optional.empty() : Optional.of(groupOf),
+					Optional.of(maxLevel));			
+		}
 	}
 }

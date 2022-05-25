@@ -2,8 +2,6 @@ package harmonised.pmmo.config;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-
 import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.config.codecs.SkillData;
@@ -44,32 +42,33 @@ public class SkillsConfig {
 	
 	private static void generateDefaults() {
 		defaultSkills = new HashMap<>();
-		defaultSkills.put("mining", 	new SkillData(0x00ffff));
-		defaultSkills.put("building", 	new SkillData(0x00ffff));
-		defaultSkills.put("excavation", new SkillData(0xe69900));
-		defaultSkills.put("woodcutting",new SkillData(0xffa31a));
-		defaultSkills.put("farming", 	new SkillData(0x00e600));
-		defaultSkills.put("agility", 	new SkillData(0x66cc66));
-		defaultSkills.put("endurance", 	new SkillData(0xcc0000));
-		defaultSkills.put("combat", 	new SkillData(0xff3300));
-		defaultSkills.put("gunslinging",new SkillData(0xd3c1a3));
-		defaultSkills.put("archery", 	new SkillData(0xffff00));		
-		defaultSkills.put("smithing", 	new SkillData(0xf0f0f0, true));
-		defaultSkills.put("flying", 	new SkillData(0xccccff));
-		defaultSkills.put("swimming", 	new SkillData(0x3366ff));
-		defaultSkills.put("sailing", 	new SkillData(0x99b3ff));
-		defaultSkills.put("fishing", 	new SkillData(0x00ccff));
-		defaultSkills.put("crafting", 	new SkillData(0xff9900));
-		defaultSkills.put("magic",	 	new SkillData(0x0000ff));
-		defaultSkills.put("slayer", 	new SkillData(0xffffff));
-		defaultSkills.put("hunter", 	new SkillData(0xcf7815));
-		defaultSkills.put("taming", 	new SkillData(0xffffff));		
-		defaultSkills.put("cooking", 	new SkillData(0xe69900, true));
-		defaultSkills.put("alchemy", 	new SkillData(0xe69900, true));
-		defaultSkills.put("engineering",new SkillData(0xffffff));
-		defaultSkills.put("fightgroup", new SkillData(Optional.empty(), Optional.of(false), Optional.of(Map.of(
+		defaultSkills.put("mining", 	SkillData.Builder.start().withColor(0x00ffff).build());
+		defaultSkills.put("building", 	SkillData.Builder.start().withColor(0x00ffff).build());
+		defaultSkills.put("excavation", SkillData.Builder.start().withColor(0xe69900).build());
+		defaultSkills.put("woodcutting",SkillData.Builder.start().withColor(0xffa31a).build());
+		defaultSkills.put("farming", 	SkillData.Builder.start().withColor(0x00e600).build());
+		defaultSkills.put("agility", 	SkillData.Builder.start().withColor(0x66cc66).build());
+		defaultSkills.put("endurance", 	SkillData.Builder.start().withColor(0xcc0000).build());
+		defaultSkills.put("combat", 	SkillData.Builder.start().withColor(0xff3300).build());
+		defaultSkills.put("gunslinging",SkillData.Builder.start().withColor(0xd3c1a3).build());
+		defaultSkills.put("archery", 	SkillData.Builder.start().withColor(0xffff00).build());		
+		defaultSkills.put("smithing", 	SkillData.Builder.start().withColor(0xf0f0f0).withAfkExempt(true).build());
+		defaultSkills.put("flying", 	SkillData.Builder.start().withColor(0xccccff).build());
+		defaultSkills.put("swimming", 	SkillData.Builder.start().withColor(0x3366ff).build());
+		defaultSkills.put("sailing", 	SkillData.Builder.start().withColor(0x99b3ff).build());
+		defaultSkills.put("fishing", 	SkillData.Builder.start().withColor(0x00ccff).build());
+		defaultSkills.put("crafting", 	SkillData.Builder.start().withColor(0xff9900).build());
+		defaultSkills.put("magic",	 	SkillData.Builder.start().withColor(0x0000ff).build());
+		defaultSkills.put("slayer", 	SkillData.Builder.start().withColor(0xffffff).build());
+		defaultSkills.put("hunter", 	SkillData.Builder.start().withColor(0xcf7815).build());
+		defaultSkills.put("taming", 	SkillData.Builder.start().withColor(0xffffff).build());		
+		defaultSkills.put("cooking", 	SkillData.Builder.start().withColor(0xe69900).withAfkExempt(true).build());
+		defaultSkills.put("alchemy", 	SkillData.Builder.start().withColor(0xe69900).withAfkExempt(true).build());
+		defaultSkills.put("engineering",SkillData.Builder.start().withColor(0xffffff).withMaxLevel(100).build());
+		defaultSkills.put("fightgroup", SkillData.Builder.start().setGroupOf(Map.of(
 				"combat", 0.5,
 				"endurance", 0.3,
-				"archery", 0.2))));
+				"archery", 0.2))
+				.build());
 	}
 }

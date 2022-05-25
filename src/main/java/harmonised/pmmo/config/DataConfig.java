@@ -73,7 +73,7 @@ public class DataConfig {
 	
 	//==================UTILITY METHODS==============================	
 	public int getSkillColor(String skill) {
-		return SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault()).getColor();
+		return SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getColor();
 	}
 	public Style getSkillStyle(String skill) {
 		return Style.EMPTY.withColor(TextColor.fromRgb(getSkillColor(skill)));

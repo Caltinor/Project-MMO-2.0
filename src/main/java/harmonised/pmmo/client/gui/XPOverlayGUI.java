@@ -96,7 +96,7 @@ public class XPOverlayGUI
 	
 	private static List<GainEntry> xpGains = new ArrayList<>();
 	public static void addToGainList(String skill, long amount) {
-		SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.getDefault());
+		SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
 		if (Config.GAIN_BLACKLIST.get().contains(skill) 
 				|| (skillData.isSkillGroup() && skillData.getGroup().containsKey(skill)))
 			return;
