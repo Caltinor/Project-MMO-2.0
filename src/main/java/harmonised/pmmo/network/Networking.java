@@ -9,6 +9,7 @@ import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Enchantments;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
+import harmonised.pmmo.network.clientpackets.CP_SyncData_Players;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
@@ -57,6 +58,11 @@ public class Networking {
 			.encoder(CP_SyncData_Enchantments::encode)
 			.decoder(CP_SyncData_Enchantments::decode)
 			.consumer(CP_SyncData_Enchantments::handle)
+			.add();
+		INSTANCE.messageBuilder(CP_SyncData_Players.class, ID++)
+			.encoder(CP_SyncData_Players::encode)
+			.decoder(CP_SyncData_Players::decode)
+			.consumer(CP_SyncData_Players::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
 			.encoder((packet, buf) -> {})
