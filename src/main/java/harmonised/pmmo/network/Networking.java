@@ -105,6 +105,7 @@ public class Networking {
 		CoreParser.BIOME_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(o));
 		CoreParser.DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(o));
 		CoreParser.ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Enchantments(o));
+		CoreParser.PLAYER_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Players(o));
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {
