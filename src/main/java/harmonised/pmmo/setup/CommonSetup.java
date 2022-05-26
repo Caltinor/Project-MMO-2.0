@@ -10,11 +10,13 @@ import harmonised.pmmo.features.loot_predicates.SkillLootConditionHighestSkill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionKill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionPlayer;
 import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -29,6 +31,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonSetup {
@@ -87,5 +90,12 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onCapabilityAttach(AttachCapabilitiesEvent<LevelChunk> event) {
 		event.addCapability(ChunkDataProvider.CHUNK_CAP_ID, new ChunkDataProvider());
+	}
+	
+	public static void gatherData(GatherDataEvent event) {
+		DataGenerator generator = event.getGenerator();
+		if (event.includeClient()) {
+			generator.addProvider(new LangProvider(generator, "en_us"));
+		}
 	}
 }
