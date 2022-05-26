@@ -448,6 +448,7 @@
 	"pmmo.enum.BREED":"Breed",
 	"pmmo.enum.BREW":"Brew",
 	"pmmo.enum.CRAFT":"Craft",
+	"pmmo.enum.CONSUME":"Eat/Drink",
 	"pmmo.enum.RECEIVE_DAMAGE":"Receive Damage (Unspecified)",
 	"pmmo.enum.FROM_MOBS":"Receive Mob Damage",
 	"pmmo.enum.FROM_PLAYERS":"Receive Player Damage",
@@ -515,6 +516,7 @@
     "pmmo.enum.WORN":"Worn Modifier",
     "pmmo.enum.DIMENSION":"Dimension Modifier",
     
-    "pmmo.playerspecific.ignorereq":"Ignore Reqs: %1$s"
+    "pmmo.playerspecific.ignorereq":"Ignore Reqs: %1$s",
+    "pmmo.playerspecific.bonus":"Player Bonuses:"
   
 }

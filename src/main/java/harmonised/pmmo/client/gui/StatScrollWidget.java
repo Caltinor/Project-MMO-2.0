@@ -187,6 +187,12 @@ public class StatScrollWidget extends ScrollPanel{
 			content.add(new Element(new TranslatableComponent("pmmo.playerspecific_header"), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 			PlayerData data = core.getDataConfig().getPlayerData(entity.getUUID());
 			content.add(new Element(new TranslatableComponent("pmmo.playerspecific.ignorereq", data.ignoreReq()), step(2), 0xFFFFFF, false, 0));
+			if (!data.bonus().isEmpty()) {
+				content.add(new Element(new TranslatableComponent("pmmo.playerspecific.bonus"), step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
+				for (Map.Entry<String, Double> bonus : data.bonus().entrySet()) {
+					content.add(new Element(bonus.getKey(), bonus.getValue(), step(3), core.getDataConfig().getSkillColor(bonus.getKey())));
+				}
+			}
 			
 			//Section for skills
 			Map<String, Long> rawXp = core.getData().getXpMap(entity.getUUID());
