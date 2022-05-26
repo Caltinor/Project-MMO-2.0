@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -81,8 +83,11 @@ public class DataMirror implements IDataStorage{
 	}
 	@Override
 	public int getPlayerSkillLevel(String skill, UUID player) {
-		return me(player) ? getLevelFromXP(mySkills.getOrDefault(skill, 0l)) 
-			: getLevelFromXP(otherSkills.getOrDefault(skill, 0l));}
+		int rawLevel =  me(player) ? getLevelFromXP(mySkills.getOrDefault(skill, 0l)) 
+			: getLevelFromXP(otherSkills.getOrDefault(skill, 0l));
+		int skillMax = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
+		return rawLevel > skillMax ? skillMax : rawLevel;
+	}
 	@Deprecated
 	@Override
 	public void setPlayerSkillLevel(String skill, UUID player, int level) {}

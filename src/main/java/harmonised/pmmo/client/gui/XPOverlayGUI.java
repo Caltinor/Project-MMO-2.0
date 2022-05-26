@@ -66,6 +66,8 @@ public class XPOverlayGUI
 						: skillGap;
 				long currentXP = core.getData().getXpRaw(null, skillKey);
 				double level = ((DataMirror)core.getData()).getXpWithPercentToNextLevel(core.getData().getXpRaw(null, skillKey));
+				int skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault()).getMaxLevel();
+				level = level > skillMaxLevel ? skillMaxLevel : level;
 				String tempString = DP.dp(Math.floor(level * 100D) / 100D);
 				int color = core.getDataConfig().getSkillColor(skillKey);
 				

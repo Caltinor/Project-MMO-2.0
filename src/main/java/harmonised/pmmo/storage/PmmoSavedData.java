@@ -10,7 +10,9 @@ import com.mojang.serialization.Codec;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.events.XpEvent;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.CodecTypes;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.features.fireworks.FireworkHandler;
@@ -88,7 +90,9 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	}
 	@Override
 	public int getPlayerSkillLevel(String skill, UUID player) {
-		return getLevelFromXP(getXpRaw(player, skill));
+		int rawLevel = getLevelFromXP(getXpRaw(player, skill));
+		int skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
+		return rawLevel > skillMaxLevel ? skillMaxLevel : rawLevel;
 	}
 	@Override
 	public void setPlayerSkillLevel(String skill, UUID player, int level) {
