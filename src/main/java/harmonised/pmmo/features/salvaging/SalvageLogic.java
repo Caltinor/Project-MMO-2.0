@@ -44,7 +44,7 @@ public class SalvageLogic {
 						: player.getOffhandItem()
 				: player.getMainHandItem();
 		boolean salvageMainHand = !player.getMainHandItem().isEmpty();
-		boolean salvageOffHand = !salvageMainHand && !player.getMainHandItem().isEmpty();
+		boolean salvageOffHand = !salvageMainHand && !player.getOffhandItem().isEmpty();
 		if (!salvageData.containsKey(salvageItem.getItem().getRegistryName())) return;
 		Map<String, Long> playerXp = core.getData().getXpMap(player.getUUID());
 		
