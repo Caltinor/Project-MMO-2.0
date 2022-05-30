@@ -160,7 +160,14 @@ public class Config {
 	public static ConfigValue<List<? extends String>> FATAL_LOGGING;
 	
 	private static void buildMsLoggy(ForgeConfigSpec.Builder builder) {
-		builder.comment("PMMO Error Logging Configuration").push("Ms Loggy");
+		builder.comment("PMMO Error Logging Configuration","",
+				"===================================================",
+				"To enable Logging with MsLoggy, enter a logging",
+				"keyword into the logging level list that you want.",
+				"the list of keywords are (lowercase only):",
+				"'api', 'autovalues', 'chunk', 'data', 'event', ",
+				"'feature', 'gui', 'loading', 'network', and 'xp'",
+				"===================================================").push("Ms Loggy");
 		
 		INFO_LOGGING = builder.comment("Which MsLoggy info logging should be enabled?  This will flood your log with data, but provides essential details",
 									  " when trying to find data errors and bug fixing.  ")
