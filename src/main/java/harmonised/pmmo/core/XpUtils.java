@@ -5,8 +5,8 @@ import java.util.Map;
 import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.config.Config;
-import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;

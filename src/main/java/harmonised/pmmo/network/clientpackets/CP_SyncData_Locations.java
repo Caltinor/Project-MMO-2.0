@@ -7,9 +7,9 @@ import java.util.function.Supplier;
 
 import com.mojang.serialization.Codec;
 
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecMapLocation;
-import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;

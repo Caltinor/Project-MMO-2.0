@@ -1,4 +1,4 @@
-package harmonised.pmmo.config.readers;
+package harmonised.pmmo.api.enums;
 
 import java.util.Arrays;
 import java.util.Map;

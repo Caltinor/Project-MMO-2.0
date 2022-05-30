@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes;
-import harmonised.pmmo.config.readers.ModifierDataType;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -439,6 +439,7 @@ public class Config {
 									.defineInRange("Power Base", 1.104088404342588d, 0d, Double.MAX_VALUE);
 				MOB_EXPONENTIAL_LEVEL_MOD = builder.comment("What is the x in: ([Power Base]^(x * level))")
 									.defineInRange("Per Level", 1d, 0d, Double.MAX_VALUE);
+				builder.pop();
 			builder.pop(); //Formula
 			builder.comment("These settings control which skills affect scaling and the ratio for each skill"
 					, "HP Scale: 1 = half a heart, or 1 hitpoint"

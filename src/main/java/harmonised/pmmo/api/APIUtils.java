@@ -10,6 +10,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.PerkSide;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.core.Core;
@@ -342,6 +343,18 @@ public class APIUtils {
 	 */
 	public static void registerEntityXpGainTooltipData(ResourceLocation res, EventType eventType, Function<Entity, Map<String, Long>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerEntityXpGainTooltipData(res, eventType, func);
+	}
+	
+	/**Registers a function to be used in supplying custom bonuses for the item ID,
+	 * and modifier type provided.  This supercedes the configured settings and will
+	 * override and negate them.
+	 * 
+	 * @param res the item ID
+	 * @param type the modifier type (HELD or WORN)
+	 * @param func the custom logic outputting the resulting modifier map
+	 */
+	public static void registerItemBonusData(ResourceLocation res, ModifierDataType type, Function<ItemStack, Map<String, Double>> func) {
+		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemBonusTooltipData(res, type, func);
 	}
 	
 	//===============EVENT TRIGGER REFERENCES========================

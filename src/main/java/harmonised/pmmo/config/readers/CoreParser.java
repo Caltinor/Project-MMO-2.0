@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mojang.serialization.Codec;
 
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecMapLocation;

@@ -9,8 +9,8 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
-import harmonised.pmmo.config.readers.ModifierDataType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 
