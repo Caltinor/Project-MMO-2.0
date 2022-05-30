@@ -504,7 +504,7 @@
 	"pmmo.enum.BREAK":"Break Block",
 	"pmmo.enum.BIOME":"Enter Biome",
 	"pmmo.enum.KILL":"Kill Entity",
-	"pmmo.enum.TRAVEL":"Travel to Dimension",
+	"pmmo.enum.TRAVEL":"Travel to",
 	"pmmo.enum.RIDE":"Ride/Drive",
 	"pmmo.enum.TAME":"Tame Animal",
 	"pmmo.enum.BREED":"Breed Animal",
