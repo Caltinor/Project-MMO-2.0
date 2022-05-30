@@ -107,6 +107,7 @@ public class AutoEntity {
 		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITIES.getValue(entityID);
 		if (!DefaultAttributes.hasSupplier(entity)) return 0d;
 		AttributeSupplier attSup = DefaultAttributes.getSupplier(entity);
-		return attSup == null ? 0d: attSup.getBaseValue(attribute);
+		if (attSup == null) return 0d;
+		return attSup.hasAttribute(attribute) ? attSup.getBaseValue(attribute) : 0d;
 	}
 }
