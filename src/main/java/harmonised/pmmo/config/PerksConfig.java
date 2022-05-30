@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.mojang.serialization.Codec;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
@@ -54,36 +55,36 @@ public class PerksConfig {
 		defaultSettings.put(EventType.BREAK_SPEED, bodyMap);
 		bodyMap = new HashMap<>();
 		//====================SKILL_UP DEFAULTS==========================
-		bodyMap.put("mining", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "mining").build()));
+		bodyMap.put("mining", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "mining").build()));
 		bodyMap.put("building", List.of(
 				TagBuilder.start().withString("perk", "pmmo:reach").build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "building").build()));
-		bodyMap.put("excavation", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "excavation").build()));
-		bodyMap.put("woodcutting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "woodcutting").build()));
-		bodyMap.put("farming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "farming").build()));
+				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "building").build()));
+		bodyMap.put("excavation", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "excavation").build()));
+		bodyMap.put("woodcutting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "woodcutting").build()));
+		bodyMap.put("farming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "farming").build()));
 		bodyMap.put("agility", List.of(
 				TagBuilder.start().withString("perk", "pmmo:speed").build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "agility").build()));
+				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "agility").build()));
 		bodyMap.put("endurance", List.of(
 				TagBuilder.start().withString("perk", "pmmo:health").build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "endurance").build()));
+				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "endurance").build()));
 		bodyMap.put("combat", List.of(
 				TagBuilder.start().withString("perk", "pmmo:damage").build(),
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "combat").build()));
-		bodyMap.put("gunslinging", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "gunslinging").build()));
-		bodyMap.put("archery", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "archery").build()));
-		bodyMap.put("smithing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "smithing").build()));
-		bodyMap.put("flying", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "flying").build()));
-		bodyMap.put("swimming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "swimming").build()));
-		bodyMap.put("sailing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "sailing").build()));
-		bodyMap.put("fishing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "fishing").build()));
-		bodyMap.put("crafting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "crafting").build()));
-		bodyMap.put("magic", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "magic").build()));
-		bodyMap.put("slayer", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "slayer").build()));
-		bodyMap.put("hunter", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "hunter").build()));
-		bodyMap.put("taming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "taming").build()));
-		bodyMap.put("cooking", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "cooking").build()));
-		bodyMap.put("alchemy", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString("skill", "alchemy").build()));
+				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "combat").build()));
+		bodyMap.put("gunslinging", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "gunslinging").build()));
+		bodyMap.put("archery", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "archery").build()));
+		bodyMap.put("smithing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "smithing").build()));
+		bodyMap.put("flying", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "flying").build()));
+		bodyMap.put("swimming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "swimming").build()));
+		bodyMap.put("sailing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "sailing").build()));
+		bodyMap.put("fishing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "fishing").build()));
+		bodyMap.put("crafting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "crafting").build()));
+		bodyMap.put("magic", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "magic").build()));
+		bodyMap.put("slayer", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "slayer").build()));
+		bodyMap.put("hunter", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "hunter").build()));
+		bodyMap.put("taming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "taming").build()));
+		bodyMap.put("cooking", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "cooking").build()));
+		bodyMap.put("alchemy", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "alchemy").build()));
 		
 		defaultSettings.put(EventType.SKILL_UP, bodyMap);
 		bodyMap = new HashMap<>();
