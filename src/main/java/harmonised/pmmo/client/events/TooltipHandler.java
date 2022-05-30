@@ -125,11 +125,11 @@ public class TooltipHandler {
 		event.getToolTip().add(new TranslatableComponent(header));
 		event.getToolTip().add(new TranslatableComponent("pmmo.veindata",
 				String.valueOf(charge),
-				data.chargeCap().get(),
-				DP.dp(data.chargeRate().get() * 20d)));
+				data.chargeCap().orElse(0),
+				DP.dp(data.chargeRate().orElse(0d) * 20d)));
 		if (isBlockItem) {
 			event.getToolTip().add(new TranslatableComponent("pmmo.veinbreak",
-					data.consumeAmount().get()));
+					data.consumeAmount().orElse(0)));
 		}
 	}
 	
