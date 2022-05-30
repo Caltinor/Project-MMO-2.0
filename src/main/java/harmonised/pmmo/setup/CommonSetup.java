@@ -6,6 +6,7 @@ import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
+import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionHighestSkill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionKill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionPlayer;
@@ -62,8 +63,12 @@ public class CommonSetup {
 	
 	@SubscribeEvent
 	public static void onConfigReload(ModConfigEvent.Reloading event) {
-		if (event.getConfig().getType().equals(ModConfig.Type.SERVER))
-			Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
+		if (event.getConfig().getType().equals(ModConfig.Type.SERVER)) {
+			if (event.getConfig().getFileName().equalsIgnoreCase("pmmo-server.toml"))
+				Core.get(LogicalSide.SERVER).getData().computeLevelsForCache();
+			if (event.getConfig().getFileName().equalsIgnoreCase("pmmo-autovalues.toml"))
+				AutoValues.resetCache();
+		}
 	}
 	
 	@SubscribeEvent

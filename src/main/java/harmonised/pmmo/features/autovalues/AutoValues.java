@@ -23,6 +23,11 @@ public class AutoValues {
 	private static void cacheXpGainValue(EventType eventType, ResourceLocation objectID, Map<String, Long> xpGainMap) {
 		xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).put(objectID, xpGainMap);
 	}
+	
+	public static void resetCache() {
+		reqValues = new ConcurrentHashMap<>();
+		xpGainValues = new ConcurrentHashMap<>();
+	}
 
 	//============================AUTO VALUE GETTERS=======================================================
 	public static Map<String, Integer> getRequirements(ReqType reqType, ResourceLocation objectID, ObjectType autoValueType) {
