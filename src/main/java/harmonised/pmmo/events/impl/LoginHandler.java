@@ -9,6 +9,10 @@ import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.storage.PmmoSavedData;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
@@ -16,9 +20,18 @@ import net.minecraftforge.fml.LogicalSide;
 
 public class LoginHandler {
 
-	public static void handle(PlayerLoggedInEvent event) {
+	public static void handle(PlayerLoggedInEvent event) {		
 		Player player = event.getPlayer();
 		Core core = Core.get(player.level);
+		//Send welcome message encouraging datapack usage
+		TranslatableComponent link = new TranslatableComponent("pmmo.clickMe");
+		link.setStyle(Style.EMPTY
+				.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.curseforge.com/minecraft/texture-packs/search?category=&search=project+mmo"))
+				.withUnderlined(true)
+				.withColor(ChatFormatting.BLUE));
+		TranslatableComponent welcome = new TranslatableComponent("pmmo.welcomeText", link);
+		player.sendMessage(welcome, player.getUUID());
+		
 		
 		core.getPerkRegistry().terminatePerk(EventType.DISABLE_PERK, player, core.getSide());
 		
