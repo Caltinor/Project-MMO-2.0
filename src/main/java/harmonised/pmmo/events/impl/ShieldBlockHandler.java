@@ -19,6 +19,8 @@ import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 public class ShieldBlockHandler {
 
 	public static void handle(ShieldBlockEvent event) {
+		if (!(event.getEntityLiving() instanceof Player)) return;
+		
 		Player player = (Player) event.getEntityLiving();
 		Core core = Core.get(player.level);
 		ItemStack shield = player.getUseItem();
