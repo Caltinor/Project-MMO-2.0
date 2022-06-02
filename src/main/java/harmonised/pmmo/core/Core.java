@@ -406,7 +406,10 @@ public class Core {
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
 			for (int i = 0; i < players.size(); i++) {
 				for (Map.Entry<String, Long> award : xpValues.entrySet()) {
-					getData().setXpDiff(players.get(i).getUUID(), award.getKey(), award.getValue());
+					long xpAward = award.getValue();
+					if (players.size() > 1)
+						xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
+					getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
 				}
 			}
 	  }
