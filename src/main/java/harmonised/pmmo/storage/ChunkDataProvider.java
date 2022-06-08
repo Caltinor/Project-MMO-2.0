@@ -12,7 +12,7 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.SerializableUUID;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +34,7 @@ public class ChunkDataProvider implements ICapabilitySerializable<CompoundTag>{
 		return cap == CHUNK_CAP ? instance.cast() : LazyOptional.empty();
 	}
 	
-	private static final Codec<Map<BlockPos, UUID>> CODEC = Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, SerializableUUID.CODEC);
+	private static final Codec<Map<BlockPos, UUID>> CODEC = Codec.unboundedMap(CodecTypes.BLOCKPOS_CODEC, UUIDUtil.CODEC);
 	
 	@Override
 	public CompoundTag serializeNBT() {

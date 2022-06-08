@@ -84,11 +84,12 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @return whether the player is permitted to do the action (true if yes)
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean checkPredicateReq(Player player, ItemStack stack, ReqType jType) 
 	{
-		if (!predicateExists(stack.getItem().getRegistryName(), jType)) 
+		if (!predicateExists(stack.getItem().builtInRegistryHolder().unwrapKey().get().location(), jType)) 
 			return false;
-		for (BiPredicate<Player, ItemStack> pred : reqPredicates.get(jType.toString()+";"+stack.getItem().getRegistryName().toString())) {
+		for (BiPredicate<Player, ItemStack> pred : reqPredicates.get(jType.toString()+";"+stack.getItem().builtInRegistryHolder().unwrapKey().get().location().toString())) {
 			if (!pred.test(player, stack)) return false;
 		}
 		return true;
@@ -102,9 +103,10 @@ public class PredicateRegistry {
 	 * @param jType the PMMO behavior type
 	 * @return whether the player is permitted to do the action (true if yes)
 	 */
+	@SuppressWarnings("deprecation")
 	public boolean checkPredicateReq(Player player, BlockEntity tile, ReqType jType) 
 	{
-		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
+		ResourceLocation res = tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location();
 		if (!predicateExists(res, jType)) 
 			return false;
 		for (BiPredicate<Player, BlockEntity> pred : reqBreakPredicates.get(jType.toString()+";"+res.toString())) {

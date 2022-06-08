@@ -157,9 +157,10 @@ public class Core {
 		return true;
 	}
 	  
+	@SuppressWarnings("deprecation")
 	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
-		  ResourceLocation itemID = stack.getItem().getRegistryName();
+		  ResourceLocation itemID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
 		  	if (Config.reqEnabled(ReqType.USE_ENCHANTMENT).get())
 		  		if (!doesPlayerMeetEnchantmentReq(stack, player.getUUID()))
 		  			return false;
@@ -173,10 +174,11 @@ public class Core {
 			}
 		  return true;
 	  }
+	@SuppressWarnings("deprecation")
 	public boolean isBlockActionPermitted(ReqType type, BlockPos pos, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
 		  BlockEntity tile = player.getLevel().getBlockEntity(pos);
-		  ResourceLocation res = player.getLevel().getBlockState(pos).getBlock().getRegistryName();
+		  ResourceLocation res = player.getLevel().getBlockState(pos).getBlock().builtInRegistryHolder().unwrapKey().get().location();
 		  return tile == null ?
 				  isActionPermitted_BypassPredicates(type, res, player, ObjectType.BLOCK) :
 				  isActionPermitted(type, tile, player);
@@ -190,9 +192,10 @@ public class Core {
 		  }
 		  return true;
 	  }
+	@SuppressWarnings("deprecation")
 	private boolean isActionPermitted(ReqType type, BlockEntity tile, Player player) {
 		  Preconditions.checkNotNull(tile);
-		  ResourceLocation blockID = tile.getBlockState().getBlock().getRegistryName();
+		  ResourceLocation blockID = tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location();
 			if (predicates.predicateExists(blockID, type)) {
 				return predicates.checkPredicateReq(player, tile, type);
 			}
@@ -255,8 +258,9 @@ public class Core {
 		return mapClone;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
-		ResourceLocation itemID = stack.getItem().getRegistryName();
+		ResourceLocation itemID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
 		if (tooltips.requirementTooltipExists(itemID, reqType)) 
 			return processSkillGroupReqs(tooltips.getItemRequirementTooltipData(itemID, reqType, stack));
 		else if (gates.doesObjectReqExist(reqType, itemID))
@@ -277,9 +281,10 @@ public class Core {
 		else
 			return new HashMap<>();
 	}	
+	@SuppressWarnings("deprecation")
 	public Map<String, Integer> getReqMap(ReqType reqType, BlockPos pos, Level level) {
 		BlockEntity tile = level.getBlockEntity(pos);
-		ResourceLocation blockID = level.getBlockState(pos).getBlock().getRegistryName();
+		ResourceLocation blockID = level.getBlockState(pos).getBlock().builtInRegistryHolder().unwrapKey().get().location();
 		if (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
 			return processSkillGroupReqs(tooltips.getBlockRequirementTooltipData(blockID, reqType, tile));
 		else if (gates.doesObjectReqExist(reqType, blockID))
@@ -290,28 +295,31 @@ public class Core {
 			return new HashMap<>();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
 		  boolean tooltipsUsed = false;
-		  ResourceLocation itemID = stack.getItem().getRegistryName();
+		  ResourceLocation itemID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
 		  if (tooltipsUsed = tooltips.xpGainTooltipExists(itemID, type))
 			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getItemXpGainTooltipData(itemID, type, stack));
 		  return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, tooltipsUsed);
 	  }
+	@SuppressWarnings("deprecation")
 	public Map<String, Long> getBlockExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
 		  BlockEntity tile = level.getBlockEntity(pos);
-		  ResourceLocation res = level.getBlockState(pos).getBlock().getRegistryName();
+		  ResourceLocation res = level.getBlockState(pos).getBlock().builtInRegistryHolder().unwrapKey().get().location();
 		  return tile == null ?
 				  xp.mergeXpMapsWithSummateCondition(xpGains, getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, false)) :
 				  xp.mergeXpMapsWithSummateCondition(xpGains, getExperienceAwards(xpGains, type, tile, player));
 	  }
+	@SuppressWarnings("deprecation")
 	private Map<String, Long> getExperienceAwards(Map<String, Long> xpGains, EventType type, BlockEntity tile, Player player) {		  
-			ResourceLocation blockID = tile.getBlockState().getBlock().getRegistryName();
+			ResourceLocation blockID = tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location();
 			boolean tooltipsUsed = false;
 			if (tooltipsUsed = tooltips.xpGainTooltipExists(blockID, type)) 
 				xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getBlockXpGainTooltipData(blockID, type, tile));
@@ -343,13 +351,14 @@ public class Core {
 		return processSkillGroupXP(inMap);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Map<String, Double> getConsolidatedModifierMap(Player player) {
 			Map<String, Double> mapOut = new HashMap<>();
 			for (ModifierDataType type : ModifierDataType.values()) {
 				Map<String, Double> modifiers = new HashMap<>();
 				switch (type) {
 				case BIOME: {
-					ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).value().getRegistryName();
+					ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).unwrapKey().get().location();
 					modifiers = xp.getObjectModifierMap(type, biomeID);
 					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
 						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
@@ -359,14 +368,14 @@ public class Core {
 				case HELD: {
 					ItemStack offhandStack = player.getOffhandItem();
 					ItemStack mainhandStack = player.getMainHandItem();
-					ResourceLocation offhandID = offhandStack.getItem().getRegistryName();
+					ResourceLocation offhandID = offhandStack.getItem().builtInRegistryHolder().unwrapKey().get().location();
 					modifiers = tooltips.bonusTooltipExists(offhandID, type) ?
 							tooltips.getBonusTooltipData(offhandID, type, offhandStack) :
 							xp.getObjectModifierMap(type, offhandID);
 					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
 						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
 					}				
-					ResourceLocation mainhandID = mainhandStack.getItem().getRegistryName();				
+					ResourceLocation mainhandID = mainhandStack.getItem().builtInRegistryHolder().unwrapKey().get().location();				
 					modifiers = tooltips.bonusTooltipExists(mainhandID, type) ?
 							tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
 							xp.getObjectModifierMap(type, mainhandID);
@@ -377,7 +386,7 @@ public class Core {
 				}
 				case WORN: {
 					player.getArmorSlots().forEach((stack) -> {
-						ResourceLocation itemID = stack.getItem().getRegistryName();
+						ResourceLocation itemID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
 						Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, type) ?
 								tooltips.getBonusTooltipData(itemID, type, stack):
 								xp.getObjectModifierMap(type, itemID);
@@ -388,7 +397,7 @@ public class Core {
 					break;
 				}
 				case DIMENSION: {
-					ResourceLocation dimensionID = player.level.dimension().getRegistryName();
+					ResourceLocation dimensionID = player.level.dimension().location();
 					modifiers = xp.getObjectModifierMap(type, dimensionID);
 					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
 						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});

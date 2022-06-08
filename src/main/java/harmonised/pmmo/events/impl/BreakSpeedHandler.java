@@ -11,7 +11,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.Messenger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -30,7 +30,7 @@ public class BreakSpeedHandler {
 		//calculate the event results anew.
 		if (!core.isActionPermitted(ReqType.TOOL, event.getPlayer().getMainHandItem(), event.getPlayer())) {
 			event.setCanceled(true);
-			event.getPlayer().displayClientMessage(new TextComponent("Unable to use this tool"), false);
+			event.getPlayer().displayClientMessage(Component.literal("Unable to use this tool"), false);
 			Messenger.sendDenialMsg(ReqType.TOOL, event.getPlayer(), event.getPlayer().getMainHandItem().getDisplayName());
 			//Cache the result for future event occurrences
 			resultCache.put(event.getPlayer().getUUID(), 
@@ -39,7 +39,7 @@ public class BreakSpeedHandler {
 		}
 		if (!core.isBlockActionPermitted(ReqType.BREAK, event.getPos(), event.getPlayer())) {
 			event.setCanceled(true);
-			event.getPlayer().displayClientMessage(new TextComponent("Unable to break this block"), false);
+			event.getPlayer().displayClientMessage(Component.literal("Unable to break this block"), false);
 			Messenger.sendDenialMsg(ReqType.BREAK, event.getPlayer(), event.getState().getBlock().getName());
 			resultCache.put(event.getPlayer().getUUID(), 
 					new DetailsCache(event.getPlayer().getMainHandItem(), event.getPos(), event.getState(), true, event.getOriginalSpeed()));

@@ -16,8 +16,7 @@ import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -44,8 +43,10 @@ public class TooltipHandler {
         	Core core = Core.get(LogicalSide.CLIENT);
             ItemStack stack = event.getItemStack();
             Item item = stack.getItem();
+            @SuppressWarnings("deprecation")
+			ResourceLocation itemID = item.builtInRegistryHolder().unwrapKey().get().location();
 
-            if(item.getRegistryName() == null)
+            if(itemID == null)
                 return;
 
             if(ClientSetup.OPEN_MENU.isDown()) {
@@ -60,16 +61,16 @@ public class TooltipHandler {
             //Map<String, Integer> useEnchantmentReq = XP.getEnchantsUseReq(stack);
             Map<String, Integer> placeReq = getReqData(core, ReqType.PLACE, stack);
             Map<String, Integer> breakReq = getReqData(core, ReqType.BREAK, stack);
-            Map<String, Long> xpValueBreaking = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_BREAK, stack);
-            Map<String, Long> xpValueCrafting = getXpGainData(core, item.getRegistryName(),EventType.CRAFT, stack);
-            Map<String, Long> xpValueSmelting = getXpGainData(core, item.getRegistryName(),EventType.SMELT, stack);
-            Map<String, Long> xpValueBrewing = getXpGainData(core, item.getRegistryName(),EventType.BREW, stack);
-            Map<String, Long> xpValueGrowing = getXpGainData(core, item.getRegistryName() ,EventType.GROW, stack);
-            Map<String, Long> xpValuePlacing = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_PLACE, stack);
+            Map<String, Long> xpValueBreaking = getXpGainData(core, itemID,EventType.BLOCK_BREAK, stack);
+            Map<String, Long> xpValueCrafting = getXpGainData(core, itemID,EventType.CRAFT, stack);
+            Map<String, Long> xpValueSmelting = getXpGainData(core, itemID,EventType.SMELT, stack);
+            Map<String, Long> xpValueBrewing = getXpGainData(core, itemID,EventType.BREW, stack);
+            Map<String, Long> xpValueGrowing = getXpGainData(core, itemID ,EventType.GROW, stack);
+            Map<String, Long> xpValuePlacing = getXpGainData(core, itemID,EventType.BLOCK_PLACE, stack);
             //Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
             //Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
-            Map<String, Double> heldItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.HELD, stack);
-            Map<String, Double> wornItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.WORN, stack);
+            Map<String, Double> heldItemXpBoost = getBonusData(core, itemID, ModifierDataType.HELD, stack);
+            Map<String, Double> wornItemXpBoost = getBonusData(core, itemID, ModifierDataType.WORN, stack);
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
             int veinCharge = 0;
             VeinData veinData = VeinData.EMPTY;
@@ -101,34 +102,34 @@ public class TooltipHandler {
 	}
 	
 	private static void addRequirementTooltip(String header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
-		event.getToolTip().add(new TranslatableComponent(header));
+		event.getToolTip().add(Component.translatable(header));
 		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+req.getKey()).append(new TextComponent(" "+String.valueOf(req.getValue()))).setStyle(core.getDataConfig().getSkillStyle(req.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(" "+String.valueOf(req.getValue()))).setStyle(core.getDataConfig().getSkillStyle(req.getKey())));
 		}
 	}
 	
 	private static void addXpValueTooltip(String header, ItemTooltipEvent event, Map<String, Long> values, Core core) {
-		event.getToolTip().add(new TranslatableComponent(header));
+		event.getToolTip().add(Component.translatable(header));
 		for (Map.Entry<String, Long> value : values.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+value.getKey()).append(new TextComponent(" "+String.valueOf(value.getValue()))).setStyle(core.getDataConfig().getSkillStyle(value.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+value.getKey()).append(Component.literal(" "+String.valueOf(value.getValue()))).setStyle(core.getDataConfig().getSkillStyle(value.getKey())));
 		}
 	}
 	
 	private static void addModifierTooltip(String header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
-		event.getToolTip().add(new TranslatableComponent(header));
+		event.getToolTip().add(Component.translatable(header));
 		for (Map.Entry<String, Double> modifier: values.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+modifier.getKey()).append(new TextComponent(" "+modifierPercent(modifier.getValue()))).setStyle(core.getDataConfig().getSkillStyle(modifier.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+modifier.getKey()).append(Component.literal(" "+modifierPercent(modifier.getValue()))).setStyle(core.getDataConfig().getSkillStyle(modifier.getKey())));
 		}
 	}
 	
 	private static void addVeinTooltip(String header, ItemTooltipEvent event, VeinData data, double charge, boolean isBlockItem) {
-		event.getToolTip().add(new TranslatableComponent(header));
-		event.getToolTip().add(new TranslatableComponent("pmmo.veindata",
+		event.getToolTip().add(Component.translatable(header));
+		event.getToolTip().add(Component.translatable("pmmo.veindata",
 				String.valueOf(charge),
 				data.chargeCap().orElse(0),
 				DP.dp(data.chargeRate().orElse(0d) * 20d)));
 		if (isBlockItem) {
-			event.getToolTip().add(new TranslatableComponent("pmmo.veinbreak",
+			event.getToolTip().add(Component.translatable("pmmo.veinbreak",
 					data.consumeAmount().orElse(0)));
 		}
 	}

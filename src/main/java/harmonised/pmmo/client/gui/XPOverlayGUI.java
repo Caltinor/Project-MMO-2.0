@@ -17,8 +17,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -33,7 +33,7 @@ public class XPOverlayGUI
 
 	public static void renderOverlay(RenderGameOverlayEvent event)
 	{
-		PoseStack stack = event.getMatrixStack();
+		PoseStack stack = event.getPoseStack();
 		stack.pushPose();
 		RenderSystem.enableBlend();
 		
@@ -61,8 +61,8 @@ public class XPOverlayGUI
 			
 			for(int i = 0; i < skillsKeys.size(); i++) {
 				String skillKey = skillsKeys.get(i);
-				skillGap = fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) > skillGap 
-						? fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) 
+				skillGap = fontRenderer.width(Component.translatable("pmmo." + skillKey).getString()) > skillGap 
+						? fontRenderer.width(Component.translatable("pmmo." + skillKey).getString()) 
 						: skillGap;
 				long currentXP = core.getData().getXpRaw(null, skillKey);
 				double level = ((DataMirror)core.getData()).getXpWithPercentToNextLevel(core.getData().getXpRaw(null, skillKey));
@@ -77,7 +77,7 @@ public class XPOverlayGUI
 				int listIndex = i * 9;
 				levelGap = fontRenderer.width(tempString);
 				GuiComponent.drawString(stack, fontRenderer, tempString, skillListX + 4, skillListY + 3 + listIndex, color);
-				GuiComponent.drawString(stack, fontRenderer, " | " + new TranslatableComponent("pmmo." + skillKey).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
+				GuiComponent.drawString(stack, fontRenderer, " | " + Component.translatable("pmmo." + skillKey).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
 				GuiComponent.drawString(stack, fontRenderer, " | " + DP.dprefix(currentXP), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color);
 				if (modifiers.getOrDefault(skillKey, 1d) != 1d) {
 					double bonus = (Math.max(0, modifiers.get(skillKey)) -1) * 100;
@@ -92,7 +92,7 @@ public class XPOverlayGUI
 		int maxCharge = VeinMiningLogic.getMaxChargeFromAllItems(mc.player);
 		if (maxCharge > 0) {
 			int currentCharge = VeinMiningLogic.getChargeFromAllItems(mc.player);
-			GuiComponent.drawString(stack, fontRenderer, new TranslatableComponent("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, guageY, 0xFFFFFF);
+			GuiComponent.drawString(stack, fontRenderer, Component.translatable("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, guageY, 0xFFFFFF);
 		}
 	}
 	
@@ -115,9 +115,9 @@ public class XPOverlayGUI
 	
 	private static void renderGains(PoseStack stack, int listX, int listY) {
 		for (int i = 0; i < xpGains.size(); i++) {
-			TextComponent gain = new TextComponent("+"+String.valueOf(xpGains.get(i).value)+" ");
-			gain.append(new TranslatableComponent("pmmo."+xpGains.get(i).skill));
-			gain.setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(xpGains.get(i).skill));
+			MutableComponent gain = Component.literal("+"+String.valueOf(xpGains.get(i).value)+" ")
+					.append(Component.translatable("pmmo."+xpGains.get(i).skill))
+					.setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(xpGains.get(i).skill));
 			GuiComponent.drawString(stack, fontRenderer, gain, listX, 3+listY+ (i*9), i);
 		}
 	}
