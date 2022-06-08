@@ -10,7 +10,7 @@ import org.apache.commons.lang3.function.TriFunction;
 import harmonised.pmmo.api.APIUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -166,7 +166,7 @@ public class FeaturePerks {
 		if (currentAir < 2 && (currentCD < System.currentTimeMillis() - cooldown 
 				|| currentCD + 20 >= System.currentTimeMillis())) {
 			player.setAirSupply(currentAir + perLevel);
-			player.sendSystemMessage(Component.translatable("pmmo.perks.breathrefresh"));
+			player.sendMessage(new TranslatableComponent("pmmo.perks.breathrefresh"), player.getUUID());
 			breathe_cooldown.put(player.getUUID(), System.currentTimeMillis());
 		}
 		return new CompoundTag();
@@ -181,13 +181,12 @@ public class FeaturePerks {
 	};
 
 	private static final String APPLICABLE_TO = "applies_to";
-	@SuppressWarnings("deprecation")
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE_BOOST = (player, nbt, level) -> {
 		CompoundTag output = new CompoundTag();
 		if (!nbt.contains(APIUtils.DAMAGE_IN) || !nbt.contains(APPLICABLE_TO)) return output;
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
 		List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
-		if (!type.contains(player.getMainHandItem().getItem().builtInRegistryHolder().unwrapKey().get().location().toString())) return output;
+		if (!type.contains(player.getMainHandItem().getItem().getRegistryName().toString())) return output;
 		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (float)(perLevel * (double)level);
 		output.putFloat(APIUtils.DAMAGE_OUT, damage);
 		return output;

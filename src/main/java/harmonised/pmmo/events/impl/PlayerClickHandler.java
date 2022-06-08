@@ -55,7 +55,6 @@ public class PlayerClickHandler {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void rightClickBlock(RightClickBlock event) {
 		Player player = event.getPlayer();
 		Core core = Core.get(player.level);
@@ -77,7 +76,7 @@ public class PlayerClickHandler {
 				return;
 			}
 			//======================SALVAGE DROP LOGIC=======================================
-			if (player.isCrouching() && event.getWorld().getBlockState(event.getPos()).getBlock().builtInRegistryHolder().unwrapKey().get().location().equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
+			if (player.isCrouching() && event.getWorld().getBlockState(event.getPos()).getBlock().getRegistryName().equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
 				core.getSalvageLogic().getSalvage((ServerPlayer) player, core);
 			}
 			//=======================END SALVAGE============================================

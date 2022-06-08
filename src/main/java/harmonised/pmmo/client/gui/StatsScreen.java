@@ -9,8 +9,7 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class StatsScreen extends Screen{
 	private static final ResourceLocation GUI_BG = new ResourceLocation(Reference.MOD_ID, "textures/gui/screenboxy.png");
-	private static final MutableComponent MENU_NAME = Component.literal("Item Detail Screen");
+	private static final TextComponent MENU_NAME = new TextComponent("Item Detail Screen");
 	
 	private StatScrollWidget scrollWidget;
 	private int renderX, renderY;

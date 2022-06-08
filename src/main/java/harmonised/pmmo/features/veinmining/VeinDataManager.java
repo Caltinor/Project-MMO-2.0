@@ -55,28 +55,23 @@ public class VeinDataManager {
 		return markers.getOrDefault(playerID, BlockPos.ZERO);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean hasData(ItemStack stack) {
-		return data.containsKey(stack.getItem().builtInRegistryHolder().unwrapKey().get().location());
+		return data.containsKey(stack.getItem().getRegistryName());
 	}
-	@SuppressWarnings("deprecation")
 	public int getBlockConsume(Block block) {
-		return data.getOrDefault(block.builtInRegistryHolder().unwrapKey().get().location(), VeinData.EMPTY).consumeAmount().orElseGet(() -> {
+		return data.getOrDefault(block.getRegistryName(), VeinData.EMPTY).consumeAmount().orElseGet(() -> {
 			return Config.REQUIRE_SETTING.get() ? -1 : Config.DEFAULT_CONSUME.get();
 		});
 	}
 	
-	@SuppressWarnings("deprecation")
 	public int getItemChargeCapSetting(ItemStack stack) {
-		return data.getOrDefault(stack.getItem().builtInRegistryHolder().unwrapKey().get().location(), VeinData.EMPTY).chargeCap().orElse(0);
+		return data.getOrDefault(stack.getItem().getRegistryName(), VeinData.EMPTY).chargeCap().orElse(0);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public double getItemRechargeRateSetting(ItemStack stack) {
-		return data.getOrDefault(stack.getItem().builtInRegistryHolder().unwrapKey().get().location(), VeinData.EMPTY).chargeRate().orElse(0d);
+		return data.getOrDefault(stack.getItem().getRegistryName(), VeinData.EMPTY).chargeRate().orElse(0d);
 	}
-	@SuppressWarnings("deprecation")
 	public VeinData getData(ItemStack stack) {
-		return data.getOrDefault(stack.getItem().builtInRegistryHolder().unwrapKey().get().location(), VeinData.EMPTY);
+		return data.getOrDefault(stack.getItem().getRegistryName(), VeinData.EMPTY);
 	}
 }

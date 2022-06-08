@@ -117,8 +117,7 @@ public class DataConfig {
 		return veinBlacklistData.get(locationID);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public boolean isBlockVeinBlacklisted(ResourceLocation locationID, Block block) {
-		return veinBlacklistData.get(locationID).contains(block.builtInRegistryHolder().unwrapKey().get().location());
+		return veinBlacklistData.get(locationID).contains(block.getRegistryName());
 	}
 }

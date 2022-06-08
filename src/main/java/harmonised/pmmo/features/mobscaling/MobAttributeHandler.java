@@ -10,7 +10,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -48,7 +48,7 @@ public class MobAttributeHandler {
 			event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth());
 			if (Config.DEBUG_LOGGING.get().contains(LOG_CODE.FEATURE.code)) {
 				LivingEntity entity = event.getEntityLiving();
-				entity.setCustomName(Component.literal("SCALED: HP:"+entity.getMaxHealth()+"| SPD:"+entity.getSpeed()));
+				entity.setCustomName(new TextComponent("SCALED: HP:"+entity.getMaxHealth()+"| SPD:"+entity.getSpeed()));
 				entity.setCustomNameVisible(true);
 			}
 		}
@@ -95,7 +95,7 @@ public class MobAttributeHandler {
 		if (attributeInstance != null) {
 			bonus *= Core.get(mob.level).getDataConfig()
 					.getMobModifier(
-							mob.level.dimension().location(), 
+							mob.level.dimension().getRegistryName(), 
 							new ResourceLocation(mob.getEncodeId()), 
 							modifID.configID);
 			AttributeModifier modifier = new AttributeModifier(modifID.id, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);

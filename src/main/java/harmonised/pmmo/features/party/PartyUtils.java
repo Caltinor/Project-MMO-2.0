@@ -13,7 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -54,10 +54,10 @@ public class PartyUtils {
 	public static void inviteToParty(Player member, Player invitee) {
 		UUID requestID = UUID.randomUUID();
 		Style acceptStyle = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pmmo party accept "+requestID.toString())).withBold(true).withColor(ChatFormatting.GREEN).withUnderlined(true);
-		MutableComponent accept = Component.translatable("pmmo.msg.accept").withStyle(acceptStyle);
+		MutableComponent accept = new TranslatableComponent("pmmo.msg.accept").withStyle(acceptStyle);
 		Style declineStyle = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pmmo party decline "+requestID.toString())).withBold(true).withColor(ChatFormatting.RED).withUnderlined(true);
-		MutableComponent decline = Component.translatable("pmmo.msg.decline").withStyle(declineStyle);
-		invitee.sendSystemMessage(Component.translatable("pmmo.playerInvitedYouToAParty", member.getDisplayName(), accept, decline));
+		MutableComponent decline = new TranslatableComponent("pmmo.msg.decline").withStyle(declineStyle);
+		invitee.sendMessage(new TranslatableComponent("pmmo.playerInvitedYouToAParty", member.getDisplayName(), accept, decline), invitee.getUUID());
 		
 		invites.put(requestID, new Invite(playerToPartyMap.get(member.getUUID()), invitee.getUUID()));
 	}
@@ -65,7 +65,7 @@ public class PartyUtils {
 	public static void uninviteToParty(Player member, Player invitee) {
 		int memberPartyID = playerToPartyMap.getOrDefault(member.getUUID(), -1);
 		if (memberPartyID == -1) {
-			member.sendSystemMessage(Component.translatable("pmmo.youAreNotInAParty"));
+			member.sendMessage(new TranslatableComponent("pmmo.youAreNotInAParty"), member.getUUID());
 			return;
 		}
 		UUID inviteToRemove = null;
@@ -78,13 +78,13 @@ public class PartyUtils {
 		}
 		if (inviteToRemove != null) {
 			invites.remove(inviteToRemove);
-			member.sendSystemMessage(Component.translatable("pmmo.msg.rescindInvite", invitee.getDisplayName()));
+			member.sendMessage(new TranslatableComponent("pmmo.msg.rescindInvite", invitee.getDisplayName()), member.getUUID());
 		}
 	}
 	
 	public static void acceptInvite(Player invitee, UUID requestID) {
 		if (invites.get(requestID) == null)
-			invitee.sendSystemMessage(Component.translatable("pmmo.youAreNotInvitedToAnyParty"));
+			invitee.sendMessage(new TranslatableComponent("pmmo.youAreNotInvitedToAnyParty"), invitee.getUUID());
 		Invite invite = invites.get(requestID);
 		if (!invite.player().equals(invitee.getUUID()))
 			return;
@@ -92,7 +92,7 @@ public class PartyUtils {
 			playerToPartyMap.put(invitee.getUUID(), invite.partyID());
 			invites.remove(requestID);
 		}
-		invitee.sendSystemMessage(Component.translatable("pmmo.youJoinedAParty"));
+		invitee.sendMessage(new TranslatableComponent("pmmo.youJoinedAParty"), invitee.getUUID());
 	}
 	
 	public static boolean declineInvite(UUID requestID) {

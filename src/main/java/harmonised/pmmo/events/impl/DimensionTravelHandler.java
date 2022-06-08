@@ -10,7 +10,7 @@ public class DimensionTravelHandler {
 	public static void handle(EntityTravelToDimensionEvent event) {
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
-		if (Core.get(player.level).doesPlayerMeetReq(ReqType.TRAVEL, event.getDimension().location(), player.getUUID()))
+		if (Core.get(player.level).doesPlayerMeetReq(ReqType.TRAVEL, event.getDimension().getRegistryName(), player.getUUID()))
 			event.setCanceled(true);
 	}
 }

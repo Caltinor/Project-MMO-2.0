@@ -7,8 +7,7 @@ import java.util.Map;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class LangProvider extends LanguageProvider{
@@ -103,8 +102,8 @@ public class LangProvider extends LanguageProvider{
 	}
 	
 	public static record Translation(String key, Map<String, String> localeMap) {
-		public MutableComponent asComponent() {
-			return Component.translatable(key());
+		public TranslatableComponent asComponent() {
+			return new TranslatableComponent(key());
 		}
 		public static class Builder {
 			String key;

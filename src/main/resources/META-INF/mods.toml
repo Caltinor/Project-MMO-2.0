@@ -1,5 +1,5 @@
 modLoader="javafml" 
-loaderVersion="[41,)" 
+loaderVersion="[39,)" 
 license="All rights reserved"
 issueTrackerURL="https://github.com/Caltinor/Project-MMO-2.0/issues/"
 
@@ -17,13 +17,13 @@ Adds many different skills and benefits thanks to the skills to the game!
 [[dependencies.pmmo]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[41,)"
+    versionRange="[39,)"
     ordering="NONE"
     side="BOTH"  #this might get changed to server only.
 
 [[dependencies.pmmo]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+	versionRange="[1.18,1.19)"
     ordering="NONE"
     side="BOTH"
