@@ -41,7 +41,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.io.IOUtils;
+//import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Maps;
@@ -142,7 +142,7 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	{
 		final Map<ResourceLocation, List<RAW>> map = Maps.newHashMap();
 
-		for (ResourceLocation resourceLocation : resourceManager.listResources(this.folderName, MergeableCodecDataManager::isStringJsonFile))
+		for (ResourceLocation resourceLocation : resourceManager.listResources(this.folderName, MergeableCodecDataManager::isStringJsonFile).keySet())
 		{
 			final String namespace = resourceLocation.getNamespace();
 			final String filePath = resourceLocation.getPath();
@@ -154,39 +154,31 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 			final List<RAW> unmergedRaws = new ArrayList<>();
 			// it's entirely possible that there are multiple jsons with this identifier,
 			// we can query the resource manager for these
-			try
+			for (Resource resource : resourceManager.getResourceStack(jsonIdentifier))
 			{
-				for (Resource resource : resourceManager.getResources(resourceLocation))
+				try // with resources
+				(
+					final InputStream inputStream = resource.open();
+					final Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+				)
 				{
-					try // with resources
-					(
-						final InputStream inputStream = resource.getInputStream();
-						final Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-					)
-					{
-						// read the json file and save the parsed object for later
-						// this json element may return null
-						final JsonElement jsonElement = GsonHelper.fromJson(this.gson, reader, JsonElement.class);
-						this.codec.parse(JsonOps.INSTANCE, jsonElement)
-							// resultOrPartial either returns a non-empty optional or calls the consumer given
-							.resultOrPartial(MergeableCodecDataManager::throwJsonParseException)
-							.ifPresent(unmergedRaws::add);
-					}
-					catch(RuntimeException | IOException exception)
-					{
-						this.logger.error("Data loader for {} could not read data {} from file {} in data pack {}", this.folderName, jsonIdentifier, resourceLocation, resource.getSourceName(), exception); 
-					}
-					finally
-					{
-						IOUtils.closeQuietly(resource);
-					}
+					// read the json file and save the parsed object for later
+					// this json element may return null
+					final JsonElement jsonElement = GsonHelper.fromJson(this.gson, reader, JsonElement.class);
+					this.codec.parse(JsonOps.INSTANCE, jsonElement)
+						// resultOrPartial either returns a non-empty optional or calls the consumer given
+						.resultOrPartial(MergeableCodecDataManager::throwJsonParseException)
+						.ifPresent(unmergedRaws::add);
 				}
-			}
-			catch (IOException exception)
-			{
-				this.logger.error("Data loader for {} could not read data {} from file {}", this.folderName, jsonIdentifier, resourceLocation, exception);
-			}
-			
+				catch(RuntimeException | IOException exception)
+				{
+					this.logger.error("Data loader for {} could not read data {} from file {} in data pack {}", this.folderName, jsonIdentifier, resourceLocation, resource.sourcePackId(), exception); 
+				}
+				/*finally
+				{
+					IOUtils.closeQuietly((Closeable) resource);
+				}*/
+			}			
 			
 			map.put(jsonIdentifier, unmergedRaws);
 		}
@@ -194,9 +186,9 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 		return MergeableCodecDataManager.mapValues(map, this.merger::apply);
 	}
 	
-	static boolean isStringJsonFile(final String filename)
+	static boolean isStringJsonFile(final ResourceLocation file)
 	{
-		return filename.endsWith(JSON_EXTENSION);
+		return file.getPath().endsWith(".json");
 	}
 	
 	static void throwJsonParseException(final String codecParseFailure)

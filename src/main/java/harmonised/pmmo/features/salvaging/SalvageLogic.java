@@ -37,6 +37,7 @@ public class SalvageLogic {
 		return salvageData.getOrDefault(itemID, new HashMap<>());
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void getSalvage(ServerPlayer player, Core core) {
 		ItemStack salvageItem = player.getMainHandItem().isEmpty() 
 				? player.getOffhandItem().isEmpty() 
@@ -45,11 +46,11 @@ public class SalvageLogic {
 				: player.getMainHandItem();
 		boolean salvageMainHand = !player.getMainHandItem().isEmpty();
 		boolean salvageOffHand = !salvageMainHand && !player.getOffhandItem().isEmpty();
-		if (!salvageData.containsKey(salvageItem.getItem().getRegistryName())) return;
+		if (!salvageData.containsKey(salvageItem.getItem().builtInRegistryHolder().unwrapKey().get().location())) return;
 		Map<String, Long> playerXp = core.getData().getXpMap(player.getUUID());
 		
 		Map<String, Long> xpAwards = new HashMap<>();
-		Map<ResourceLocation, SalvageData> resultData = salvageData.get(salvageItem.getItem().getRegistryName());
+		Map<ResourceLocation, SalvageData> resultData = salvageData.get(salvageItem.getItem().builtInRegistryHolder().unwrapKey().get().location());
 		for (Map.Entry<ResourceLocation, SalvageData> result : resultData.entrySet()) {
 			//First look for any skills that do not meet the req and continue to the next output 
 			//item if the req is not met. 

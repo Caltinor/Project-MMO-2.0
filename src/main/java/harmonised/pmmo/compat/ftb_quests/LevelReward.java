@@ -1,7 +1,7 @@
 package harmonised.pmmo.compat.ftb_quests;
 
 
-import dev.ftb.mods.ftblibrary.config.ConfigGroup;
+/*import dev.ftb.mods.ftblibrary.config.ConfigGroup;
 import dev.ftb.mods.ftblibrary.config.NameMap;
 import dev.ftb.mods.ftbquests.quest.Quest;
 import dev.ftb.mods.ftbquests.quest.reward.*;
@@ -13,9 +13,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-public class LevelReward extends Reward
-{
+*/
+public class LevelReward// extends Reward
+{/*
     public static RewardType LEVEL_REWARD = FTBQHandler.LEVEL_REWARD;
     public String skill = "mining";
     public int amount = 1;
@@ -78,5 +78,5 @@ public class LevelReward extends Reward
     public void claim(ServerPlayer player, boolean notify)
     {
         Core.get(player.level).getData().changePlayerSkillLevel(skill, player.getUUID(), amount);
-    }
+    }*/
 }
