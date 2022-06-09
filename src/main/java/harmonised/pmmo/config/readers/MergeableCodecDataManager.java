@@ -26,12 +26,8 @@ SOFTWARE.
 
 package harmonised.pmmo.config.readers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +37,6 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-//import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Maps;
@@ -154,13 +149,10 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 			final List<RAW> unmergedRaws = new ArrayList<>();
 			// it's entirely possible that there are multiple jsons with this identifier,
 			// we can query the resource manager for these
-			for (Resource resource : resourceManager.getResourceStack(jsonIdentifier))
+			for (Resource resource : resourceManager.getResourceStack(resourceLocation))
 			{
 				try // with resources
-				(
-					final InputStream inputStream = resource.open();
-					final Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-				)
+				(final Reader reader = resource.openAsReader();	)
 				{
 					// read the json file and save the parsed object for later
 					// this json element may return null
@@ -174,10 +166,6 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 				{
 					this.logger.error("Data loader for {} could not read data {} from file {} in data pack {}", this.folderName, jsonIdentifier, resourceLocation, resource.sourcePackId(), exception); 
 				}
-				/*finally
-				{
-					IOUtils.closeQuietly((Closeable) resource);
-				}*/
 			}			
 			
 			map.put(jsonIdentifier, unmergedRaws);
