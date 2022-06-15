@@ -3,6 +3,8 @@ package harmonised.pmmo.client.gui;
 import java.util.*;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+
+import harmonised.pmmo.client.events.ClientTickHandler;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.Config;
@@ -10,59 +12,54 @@ import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
-import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.IIngameOverlay;
 import net.minecraftforge.fml.LogicalSide;
 
-public class XPOverlayGUI
+public class XPOverlayGUI implements IIngameOverlay
 {
-	private static Core core = Core.get(LogicalSide.CLIENT);
-	private static int skillGap = 0;
-	//private final ResourceLocation bar = new ResourceLocation(Reference.MOD_ID, "textures/gui/xpbar.png");
-	private static Minecraft mc = Minecraft.getInstance();
-	private static Font fontRenderer = mc.font;
-	
-	private static int ticksElapsed = 0;
-	
-	public static void tickGUI() {ticksElapsed++;}	
-	private static boolean isRefreshTick() {return ticksElapsed >= 15;}
-	private static void resetTicks() {ticksElapsed = 0;}
+	private Core core = Core.get(LogicalSide.CLIENT);
+	private int skillGap = 0;
+	private Minecraft mc;
+	private Font fontRenderer;
 
-	public static void renderOverlay(RenderGameOverlayEvent event)
-	{
+	@Override
+	public void render(ForgeIngameGui gui, PoseStack stack, float partialTick, int width, int height){
+		if (mc == null)
+			mc = Minecraft.getInstance();
+		if (fontRenderer == null)
+			fontRenderer = mc.font;
+		
 		if(!mc.options.renderDebug){	
-			PoseStack stack = event.getPoseStack();
 			stack.pushPose();
 			RenderSystem.enableBlend();
 			
 			if(Config.SKILL_LIST_DISPLAY.get())
 				renderSkillList(stack, Config.SKILL_LIST_OFFSET_X.get(), Config.SKILL_LIST_OFFSET_Y.get());
 			if(Config.VEIN_GAUGE_DISPLAY.get())
-				renderVeinGauge(stack, Config.VEIN_GAUGE_OFFSET_X.get(), event.getWindow().getGuiScaledHeight() - Config.VEIN_GAUGE_OFFSET_Y.get());
+				renderVeinGauge(stack, Config.VEIN_GAUGE_OFFSET_X.get(), mc.getWindow().getGuiScaledHeight() - Config.VEIN_GAUGE_OFFSET_Y.get());
 			if(Config.GAIN_LIST_DISPLAY.get()) {
-				if (xpGains.size() >= 1 && xpGains.get(0).duration <= 0)
-					xpGains.remove(0);
-				renderGains(stack, event.getWindow().getGuiScaledWidth()/2 + Config.GAIN_LIST_OFFSET_X.get(), Config.GAIN_LIST_OFFSET_Y.get());
+				if (ClientTickHandler.xpGains.size() >= 1 && ClientTickHandler.xpGains.get(0).duration <= 0)
+					ClientTickHandler.xpGains.remove(0);
+				renderGains(stack, mc.getWindow().getGuiScaledWidth()/2 + Config.GAIN_LIST_OFFSET_X.get(), Config.GAIN_LIST_OFFSET_Y.get());
 			}
 			stack.popPose();
 		}
-		if (isRefreshTick()) {resetTicks();}
+		if (ClientTickHandler.isRefreshTick()) {ClientTickHandler.resetTicks();}
 	}
 	
-	private static Map<String, Double> modifiers = new HashMap<>();
-	private static List<String> skillsKeys = new ArrayList<>();
+	private Map<String, Double> modifiers = new HashMap<>();
+	private List<String> skillsKeys = new ArrayList<>();
 
-	private static void renderSkillList(PoseStack stack, int skillListX, int skillListY)
+	private void renderSkillList(PoseStack stack, int skillListX, int skillListY)
 	{
-		if (isRefreshTick()) {
+		if (ClientTickHandler.isRefreshTick()) {
 			modifiers = core.getConsolidatedModifierMap(mc.player);	
 			skillsKeys = new ArrayList<>();
 			core.getData().getXpMap(null).keySet().stream().forEach(entry -> skillsKeys.add(entry));
@@ -98,11 +95,11 @@ public class XPOverlayGUI
 		}
 	}
 	
-	private static int maxCharge = 0;
-	private static int currentCharge = 0;
+	private int maxCharge = 0;
+	private int currentCharge = 0;
 	
-	private static void renderVeinGauge(PoseStack stack, int gaugeX, int guageY) {
-		if (isRefreshTick()) {
+	private void renderVeinGauge(PoseStack stack, int gaugeX, int guageY) {
+		if (ClientTickHandler.isRefreshTick()) {
 			maxCharge = VeinMiningLogic.getMaxChargeFromAllItems(mc.player);
 			if (maxCharge > 0)
 				currentCharge = VeinMiningLogic.getChargeFromAllItems(mc.player);
@@ -111,42 +108,11 @@ public class XPOverlayGUI
 			GuiComponent.drawString(stack, fontRenderer, Component.translatable("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, guageY, 0xFFFFFF);
 	}
 	
-	private static List<GainEntry> xpGains = new ArrayList<>();
-	
-	public static void addToGainList(String skill, long amount) {
-		SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault());
-		if (Config.GAIN_BLACKLIST.get().contains(skill) 
-				|| (skillData.isSkillGroup() && skillData.getGroup().containsKey(skill)))
-			return;
-		if (xpGains.size() >= Config.GAIN_LIST_SIZE.get()) 
-			xpGains.remove(0);
-		xpGains.add(new GainEntry(skill, amount));
-	}
-	
-	public static void tickDownGainList() {
-		for (GainEntry gain : xpGains) {
-			gain.downTick();
+	private void renderGains(PoseStack stack, int listX, int listY) {
+		for (int i = 0; i < ClientTickHandler.xpGains.size(); i++) {			
+			GuiComponent.drawString(stack, fontRenderer, ClientTickHandler.xpGains.get(i).display, listX, 3+listY+ (i*9), i);
 		}
 	}
 	
-	private static void renderGains(PoseStack stack, int listX, int listY) {
-		for (int i = 0; i < xpGains.size(); i++) {			
-			GuiComponent.drawString(stack, fontRenderer, xpGains.get(i).display, listX, 3+listY+ (i*9), i);
-		}
-	}
 	
-	private static class GainEntry {
-		int duration;
-		final Component display;
-		public GainEntry(String skill, long value) {
-			this.duration = MsLoggy.DEBUG.logAndReturn(Config.GAIN_LIST_LINGER_DURATION.get()
-								, LOG_CODE.GUI, "Gain Duration Set as: {}");
-			display = Component.literal("+"+value+" ")
-					.append(Component.translatable("pmmo."+skill))
-					.setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(skill));
-		}
-		public void downTick() {
-			duration--;
-		}
-	}
 }

@@ -2,10 +2,13 @@ package harmonised.pmmo.setup;
 
 import org.lwjgl.glfw.GLFW;
 
+import harmonised.pmmo.client.gui.XPOverlayGUI;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.gui.IIngameOverlay;
+import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -20,6 +23,8 @@ public class ClientSetup {
     public static final KeyMapping OPEN_SETTINGS = new KeyMapping("key.pmmo.openSettings", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo");
     public static final KeyMapping OPEN_SKILLS = new KeyMapping("key.pmmo.openSkills", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo");
     public static final KeyMapping OPEN_GLOSSARY = new KeyMapping("key.pmmo.openGlossary", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo");
+    
+    public static final IIngameOverlay STATS_OVERLAY = OverlayRegistry.registerOverlayTop("stats_overlay", new XPOverlayGUI());
     
     public static void init(FMLClientSetupEvent event) {
     	ClientRegistry.registerKeyBinding(SHOW_VEIN);
