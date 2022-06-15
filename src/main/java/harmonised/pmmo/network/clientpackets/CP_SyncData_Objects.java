@@ -17,6 +17,7 @@ import harmonised.pmmo.config.codecs.CodecMapObject.ObjectMapContainer;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.nbt.LogicEntry;
+import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
@@ -63,8 +64,10 @@ public class CP_SyncData_Objects {
 					MsLoggy.INFO.log(LOG_CODE.DATA, "REQS: "+reqs.getKey().toString()+": "+tag.toString()+MsLoggy.mapToString(reqs.getValue())+" loaded from config");
 					Core.get(LogicalSide.CLIENT).getSkillGates().setObjectSkillMap(reqs.getKey(), tag, reqs.getValue());
 				}
-				MsLoggy.INFO.log(LOG_CODE.DATA, "VEIN DATA: "+omc.veinData().toString());
-				Core.get(LogicalSide.CLIENT).getVeinData().setVeinData(tag, omc.veinData());
+				if (!omc.veinData().equals(VeinData.EMPTY)) {
+					MsLoggy.INFO.log(LOG_CODE.DATA, "VEIN DATA: "+omc.veinData().toString());
+					Core.get(LogicalSide.CLIENT).getVeinData().setVeinData(tag, omc.veinData());
+				}
 				switch (type) {
 				case ITEM: {
 					for (Map.Entry<ModifierDataType, Map<String, Double>> modifiers : omc.modifiers().entrySet()) {
