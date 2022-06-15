@@ -12,5 +12,6 @@ public class ClientTickHandler {
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event) {
 		XPOverlayGUI.tickDownGainList();
+		XPOverlayGUI.tickGUI();
 	}
 }
