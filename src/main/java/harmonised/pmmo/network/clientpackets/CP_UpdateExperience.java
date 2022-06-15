@@ -3,6 +3,7 @@ package harmonised.pmmo.network.clientpackets;
 import java.util.function.Supplier;
 
 import harmonised.pmmo.client.gui.XPOverlayGUI;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -31,7 +32,8 @@ public class CP_UpdateExperience {
 		ctx.get().enqueueWork(() -> {
 			long currentXPraw = Core.get(LogicalSide.CLIENT).getData().getXpRaw(null, skill);
 			Core.get(LogicalSide.CLIENT).getData().setXpRaw(null, skill, xp);
-			XPOverlayGUI.addToGainList(skill, xp-currentXPraw);
+			if (Config.GAIN_LIST_DISPLAY.get())
+				XPOverlayGUI.addToGainList(skill, xp-currentXPraw);
 			MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating experience of "+skill+"["+xp+"]");
 		});		
 		ctx.get().setPacketHandled(true);
