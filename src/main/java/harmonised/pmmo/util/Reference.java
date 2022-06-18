@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Block;
 
 public class Reference {
 	public static final String MOD_ID = "pmmo";
@@ -15,6 +16,9 @@ public class Reference {
 	
 	public static final UUID CREATIVE_REACH_ATTRIBUTE = UUID.fromString("c97b8776-05c8-4dbe-835c-10211ad4aba6");
 	
-	public static final TagKey<EntityType<?>> MOB_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:mobs"));
-	public static final TagKey<EntityType<?>> ANIMAL_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("pmmo:animals"));
+	public static final TagKey<EntityType<?>> MOB_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(MOD_ID, "mobs"));
+	public static final TagKey<EntityType<?>> ANIMAL_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(MOD_ID, "animals"));
+	public static final TagKey<Block> CROPS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "crops"));
+	public static final TagKey<Block> WOOD = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "wood"));
+	public static final TagKey<Block> EXCAVATABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "excavatables"));
 }
