@@ -15,14 +15,18 @@ import harmonised.pmmo.storage.ChunkDataHandler;
 import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.Messenger;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BreakHandler {
 	
@@ -71,6 +75,10 @@ public class BreakHandler {
 		LevelChunk chunk = (LevelChunk) event.getWorld().getChunk(event.getPos());
 		IChunkData cap = chunk.getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
 		if (cap.playerMatchesPos(event.getPlayer(), event.getPos())) {
+			//Do not apply self-place penalty to crops
+			BlockState cropState = event.getWorld().getBlockState(event.getPos()); 
+			if (cropState.getBlock() instanceof CropBlock && ((CropBlock)cropState.getBlock()).isMaxAge(cropState))
+				return outMap;
 			double xpModifier = Config.REUSE_PENALTY.get();
 			if (xpModifier == 0) return new HashMap<>();
 			Map<String, Long> modifiedOutMap = new HashMap<>();
