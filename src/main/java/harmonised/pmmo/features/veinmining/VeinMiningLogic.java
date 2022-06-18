@@ -57,7 +57,7 @@ public class VeinMiningLogic {
 		//================================
 		Core core = Core.get(player.level);
 		for (ItemStack stack : items) {
-			if (!core.getVeinData().hasData(stack)) continue;
+			if (!core.getVeinData().hasChargeData(stack)) continue;
 			int chargeCap = core.getVeinData().getItemChargeCapSetting(stack);
 			if (stack.getTag() == null || !stack.getTag().contains(CURRENT_CHARGE)) {
 				stack.getOrCreateTag().putDouble(CURRENT_CHARGE, chargeCap);
