@@ -58,6 +58,16 @@ public class VeinDataManager {
 	public boolean hasData(ItemStack stack) {
 		return data.containsKey(stack.getItem().getRegistryName());
 	}
+
+	@SuppressWarnings("deprecation")
+	public boolean hasChargeData(ItemStack stack) {
+		ResourceLocation stackID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
+		return hasData(stack) ?
+				!(data.get(stackID).chargeCap().orElseGet(() -> VeinData.EMPTY.chargeCap().get()) == VeinData.EMPTY.chargeCap().get()
+				&& data.get(stackID).chargeRate().orElseGet(() -> VeinData.EMPTY.chargeRate().get()) == VeinData.EMPTY.chargeRate().get())
+				: false;
+	}	
+	@SuppressWarnings("deprecation")
 	public int getBlockConsume(Block block) {
 		return data.getOrDefault(block.getRegistryName(), VeinData.EMPTY).consumeAmount().orElseGet(() -> {
 			return Config.REQUIRE_SETTING.get() ? -1 : Config.DEFAULT_CONSUME.get();
