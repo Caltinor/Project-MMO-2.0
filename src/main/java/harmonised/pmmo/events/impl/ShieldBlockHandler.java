@@ -12,6 +12,7 @@ import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;
@@ -20,10 +21,12 @@ public class ShieldBlockHandler {
 
 	public static void handle(ShieldBlockEvent event) {
 		if (!(event.getEntityLiving() instanceof Player)) return;
+		if (event.getDamageSource().getDirectEntity() != null) return;
 		
 		Player player = (Player) event.getEntityLiving();
 		Core core = Core.get(player.level);
 		ItemStack shield = player.getUseItem();
+		Entity attacker = event.getDamageSource().getDirectEntity();
 
 		if (!core.isActionPermitted(ReqType.WEAPON, shield, player)) {
 			event.setCanceled(true);
@@ -43,7 +46,7 @@ public class ShieldBlockHandler {
 		hookOutput.putFloat(APIUtils.DAMAGE_IN, event.getBlockedDamage());
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.SHIELD_BLOCK, player, hookOutput, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getExperienceAwards(EventType.SHIELD_BLOCK, shield, player, hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.SHIELD_BLOCK, attacker, player, hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 			core.awardXP(partyMembersInRange, xpAward);
 		}
