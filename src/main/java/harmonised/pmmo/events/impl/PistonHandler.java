@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import harmonised.pmmo.storage.ChunkDataProvider;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.piston.PistonStructureResolver;
@@ -32,6 +33,7 @@ public class PistonHandler {
 		 for (BlockPos moved : structure.getToPush()) {
 			 LevelChunk oldCK = level.getChunkAt(moved);			 
 			 UUID currentID = oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).map(cap -> cap.checkPos(moved)).get();
+			 if (currentID.equals(Reference.NIL)) continue;
 			 oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
 				 cap.delPos(moved);
 			 });
