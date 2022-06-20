@@ -10,6 +10,7 @@ import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
@@ -159,7 +160,7 @@ public class TooltipHandler {
 		Map<String, Long> map = core.getTooltipRegistry().getItemXpGainTooltipData(itemID, type, stack);
 		if (map.isEmpty() && core.getXpUtils().hasXpGainObjectEntry(type, itemID))
 			map = core.getXpUtils().getObjectExperienceMap(type, itemID);
-		if (map.isEmpty())
+		if (map.isEmpty() && AutoValueConfig.ENABLE_AUTO_VALUES.get())
 			map = AutoValues.getExperienceAward(type, itemID, ObjectType.ITEM);
 		return core.processSkillGroupXP(map);
 	}
