@@ -30,9 +30,13 @@ public class CP_UpdateExperience {
 	public void handle(Supplier<NetworkEvent.Context> ctx ) {
 		ctx.get().enqueueWork(() -> {
 			long currentXPraw = Core.get(LogicalSide.CLIENT).getData().getXpRaw(null, skill);
-			Core.get(LogicalSide.CLIENT).getData().setXpRaw(null, skill, xp);
-			ClientTickHandler.addToGainList(skill, xp-currentXPraw);
-			MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating experience of "+skill+"["+xp+"]");
+			//fixes #18: do not add a skill to the player map with zero xp
+			//this causes a skill to display with zero xp and clutters the screen.
+			if(currentXPraw != xp) {
+				Core.get(LogicalSide.CLIENT).getData().setXpRaw(null, skill, xp);
+				ClientTickHandler.addToGainList(skill, xp-currentXPraw);
+				MsLoggy.DEBUG.log(LOG_CODE.XP, "Client Packet Handled for updating experience of "+skill+"["+xp+"]");
+			}
 		});		
 		ctx.get().setPacketHandled(true);
 	}
