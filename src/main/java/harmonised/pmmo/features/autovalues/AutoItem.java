@@ -10,6 +10,7 @@ import harmonised.pmmo.features.autovalues.AutoValueConfig.AttributeKey;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.UtensilTypes;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.WearableTypes;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -42,7 +43,7 @@ public class AutoItem {
 	
 	public static final ReqType[] REQTYPES = {ReqType.WEAR, ReqType.USE_ENCHANTMENT, ReqType.TOOL, ReqType.WEAPON};
 	public static final EventType[] EVENTTYPES = {EventType.ANVIL_REPAIR, EventType.BLOCK_PLACE, EventType.CRAFT,
-			EventType.CONSUME, EventType.BREW, EventType.ENCHANT, EventType.FISH, EventType.SMELT};	
+			EventType.CONSUME, EventType.ENCHANT, EventType.FISH, EventType.SMELT};	
 
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
@@ -177,7 +178,11 @@ public class AutoItem {
 				});
 			}
 		}
-		case BREW: case ENCHANT: case FISH: case SMELT:{
+		case BREW: {
+			if (ForgeRegistries.ITEMS.tags().getTag(Reference.BREWABLES).contains(stack.getItem()))
+				outMap.putAll(AutoValueConfig.BREWABLES_OVERRIDE.get());
+		}		
+		case ENCHANT: case FISH: case SMELT:{
 			//The proportion calculation for enchant is handled in the event, we just need a default skill/value
 			outMap.putAll(AutoValueConfig.getItemXpAward(type));
 			break;
