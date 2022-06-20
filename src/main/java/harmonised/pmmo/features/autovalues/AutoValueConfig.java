@@ -78,6 +78,7 @@ public class AutoValueConfig {
 	private static Map<EventType, ConfigObject<Map<String, Long>>> ENTITY_XP_AWARDS;
 	public static ConfigObject<Map<String, Long>> WOOD_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> EXCAVATABLE_OVERRIDE;
+	public static ConfigObject<Map<String, Long>> BREWABLES_OVERRIDE;
 	
 	public static Map<String, Long> getItemXpAward(EventType type) {
 		ConfigObject<Map<String, Long>> configEntry = ITEM_XP_AWARDS.get(type);
@@ -100,6 +101,11 @@ public class AutoValueConfig {
 		for (EventType type : AutoItem.EVENTTYPES) {
 			ITEM_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 10l)));
 		}
+		BREWABLES_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
+				builder,
+				EventType.BREW.toString()+" Default Xp Award",
+				CodecTypes.LONG_CODEC,
+				Collections.singletonMap(EventType.BREW.autoValueSkill, 100l));
 		builder.pop();
 		builder.push("Blocks");
 		BLOCK_XP_AWARDS = new HashMap<>();

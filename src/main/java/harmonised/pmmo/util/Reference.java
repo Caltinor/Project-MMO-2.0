@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 public class Reference {
@@ -23,4 +24,5 @@ public class Reference {
 	public static final TagKey<Block> CROPS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "crops"));
 	public static final TagKey<Block> WOOD = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "wood"));
 	public static final TagKey<Block> EXCAVATABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "excavatables"));
+	public static final TagKey<Item> BREWABLES = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MOD_ID, "brewables"));
 }
