@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Versions:**
  - Minecraft: (eg 1.18.2)
  - Loader: (eg. Forge-40.1.20)
- - OblivionClaims: 1.18.2-0.0.1
+ - PMMO: 1.18.2-0.0.1
 
 **Additional context**
 Add any other context about the problem here.
