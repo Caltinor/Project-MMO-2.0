@@ -31,6 +31,11 @@ public class AutoValues {
 
 	//============================AUTO VALUE GETTERS=======================================================
 	public static Map<String, Integer> getRequirements(ReqType reqType, ResourceLocation objectID, ObjectType autoValueType) {
+		//ignore processing if individual req is disabled and clear the cache for this object
+		if (!AutoValueConfig.isReqEnabled(reqType)) {
+			reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).remove(objectID);
+			return new HashMap<>();
+		}
 		//Check the cache for an existing calculation
 		if (reqValues.computeIfAbsent(reqType, s -> new HashMap<>()).containsKey(objectID))
 			return reqValues.get(reqType).get(objectID);
@@ -61,6 +66,11 @@ public class AutoValues {
 	}
 	
 	public static Map<String, Long> getExperienceAward(EventType eventType, ResourceLocation objectID, ObjectType autoValueType) {
+		//ignore processing if individual event is disabled and clear existing data
+		if (!AutoValueConfig.isXpGainEnabled(eventType)) {
+			xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).remove(objectID);
+			return new HashMap<>();
+		}
 		//Check the cache for an existing calculation
 		if (xpGainValues.computeIfAbsent(eventType, s -> new HashMap<>()).containsKey(objectID))
 			return xpGainValues.get(eventType).get(objectID);
