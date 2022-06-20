@@ -11,6 +11,8 @@ import net.minecraft.world.level.block.Block;
 public class Reference {
 	public static final String MOD_ID = "pmmo";
 	
+	public static final UUID NIL = UUID.fromString("00000000-0000-0000-0000-000000000000");
+	
 	public static final String API_MAP_SERIALIZER_KEY = "key";
 	public static final String API_MAP_SERIALIZER_VALUE = "value";
 	
