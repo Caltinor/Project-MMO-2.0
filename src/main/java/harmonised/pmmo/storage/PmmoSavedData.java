@@ -36,8 +36,8 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	private static MinecraftServer server;
 	private static String NAME = Reference.MOD_ID;
 	
-	private static Map<UUID, Map<String, Long>> xp = new HashMap<>();
-	private static Map<UUID, Map<String, Long>> scheduledXP = new HashMap<>();
+	private Map<UUID, Map<String, Long>> xp = new HashMap<>();
+	private Map<UUID, Map<String, Long>> scheduledXP = new HashMap<>();
 	
 	private static final Codec<Map<UUID, Map<String, Long>>> XP_CODEC = 
 			Codec.unboundedMap(CodecTypes.UUID_CODEC, 
