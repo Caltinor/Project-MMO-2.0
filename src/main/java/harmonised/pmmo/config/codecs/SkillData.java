@@ -64,7 +64,7 @@ public record SkillData (
 		
 		private Builder() {
 			color = 16777215;
-			maxLevel = Config.MAX_LEVEL.get();
+			maxLevel = Integer.MAX_VALUE;
 			afkExempt = false;
 			groupOf = new HashMap<>();
 		}
