@@ -25,4 +25,5 @@ public class Reference {
 	public static final TagKey<Block> WOOD = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "wood"));
 	public static final TagKey<Block> EXCAVATABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "excavatables"));
 	public static final TagKey<Item> BREWABLES = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MOD_ID, "brewables"));
+	public static final TagKey<Item> SMELTABLES = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MOD_ID, "smeltables"));
 }
