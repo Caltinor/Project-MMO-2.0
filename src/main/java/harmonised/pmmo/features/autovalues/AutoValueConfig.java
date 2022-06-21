@@ -79,6 +79,7 @@ public class AutoValueConfig {
 	public static ConfigObject<Map<String, Long>> WOOD_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> EXCAVATABLE_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> BREWABLES_OVERRIDE;
+	public static ConfigObject<Map<String, Long>> SMELTABLES_OVERRIDE;
 	
 	public static Map<String, Long> getItemXpAward(EventType type) {
 		ConfigObject<Map<String, Long>> configEntry = ITEM_XP_AWARDS.get(type);
@@ -106,6 +107,11 @@ public class AutoValueConfig {
 				EventType.BREW.toString()+" Default Xp Award",
 				CodecTypes.LONG_CODEC,
 				Collections.singletonMap(EventType.BREW.autoValueSkill, 100l));
+		SMELTABLES_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
+				builder,
+				EventType.SMELT.toString()+" Default Xp Award",
+				CodecTypes.LONG_CODEC,
+				Collections.singletonMap(EventType.SMELT.autoValueSkill, 100l));
 		builder.pop();
 		builder.push("Blocks");
 		BLOCK_XP_AWARDS = new HashMap<>();

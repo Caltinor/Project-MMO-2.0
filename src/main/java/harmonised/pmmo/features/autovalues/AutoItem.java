@@ -181,8 +181,14 @@ public class AutoItem {
 		case BREW: {
 			if (ForgeRegistries.ITEMS.tags().getTag(Reference.BREWABLES).contains(stack.getItem()))
 				outMap.putAll(AutoValueConfig.BREWABLES_OVERRIDE.get());
+			break;
 		}		
-		case ENCHANT: case FISH: case SMELT:{
+		case SMELT: {
+			if (ForgeRegistries.ITEMS.tags().getTag(Reference.SMELTABLES).contains(stack.getItem()))
+				outMap.putAll(AutoValueConfig.SMELTABLES_OVERRIDE.get());
+			break;
+		}
+		case ENCHANT: case FISH: {
 			//The proportion calculation for enchant is handled in the event, we just need a default skill/value
 			outMap.putAll(AutoValueConfig.getItemXpAward(type));
 			break;
