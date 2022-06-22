@@ -32,7 +32,6 @@ import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class AutoItem {
@@ -112,7 +111,7 @@ public class AutoItem {
 			}
 			break;
 		}
-		case PLACE: case BREAK: {
+		case BREAK: {
 			if (stack.getItem() instanceof BlockItem) {
 				outMap.putAll(AutoBlock.processReqs(type, stackID));
 			}
@@ -123,6 +122,7 @@ public class AutoItem {
 		return outMap;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation stackID) {
 		//exit early if the event type is not valid for an item
 		if (!type.itemApplicable)
@@ -141,11 +141,7 @@ public class AutoItem {
 		}
 		case BLOCK_PLACE: {
 			if (stack.getItem() instanceof BlockItem) {
-				if (((BlockItem)stack.getItem()).getBlock() instanceof CropBlock) {
-					outMap.putAll(AutoValueConfig.getBlockXpAward(EventType.GROW));
-				}
-				else
-					outMap.putAll(AutoBlock.processXpGains(type, stackID));
+				outMap.putAll(AutoBlock.processXpGains(type, ((BlockItem)stack.getItem()).getBlock().builtInRegistryHolder().unwrapKey().get().location()));
 			}
 			break;
 		}
@@ -171,7 +167,6 @@ public class AutoItem {
 		case CONSUME: {
 			if (stack.isEdible()) {
 				AutoValueConfig.getItemXpAward(type).forEach((skill, xp) -> {
-					@SuppressWarnings("deprecation")
 					FoodProperties properties = stack.getItem().getFoodProperties();
 					Float nutritionScale = (float)properties.getNutrition() * properties.getSaturationModifier();
 					outMap.put(skill, xp * nutritionScale.longValue());

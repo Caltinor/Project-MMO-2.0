@@ -23,7 +23,6 @@ public class LangProvider extends LanguageProvider{
 	public LangProvider(DataGenerator gen, String locale) {
 		super(gen, Reference.MOD_ID, locale);
 		this.locale = locale;
-		// TODO Auto-generated constructor stub
 	}
 	
 	public static final Translation ENUM_ANVIL_REPAIR = Translation.Builder.start("pmmo.enum."+EventType.ANVIL_REPAIR.name())
