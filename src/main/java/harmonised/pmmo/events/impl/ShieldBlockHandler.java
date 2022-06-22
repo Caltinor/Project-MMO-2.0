@@ -21,7 +21,7 @@ public class ShieldBlockHandler {
 
 	public static void handle(ShieldBlockEvent event) {
 		if (!(event.getEntityLiving() instanceof Player)) return;
-		if (event.getDamageSource().getDirectEntity() != null) return;
+		if (event.getDamageSource().getDirectEntity() == null) return;
 		
 		Player player = (Player) event.getEntityLiving();
 		Core core = Core.get(player.level);
