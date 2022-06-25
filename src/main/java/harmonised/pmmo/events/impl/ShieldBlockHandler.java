@@ -1,5 +1,6 @@
 package harmonised.pmmo.events.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +22,12 @@ public class ShieldBlockHandler {
 
 	public static void handle(ShieldBlockEvent event) {
 		if (!(event.getEntityLiving() instanceof Player)) return;
-		if (event.getDamageSource().getDirectEntity() == null) return;
+		if (event.getDamageSource().getEntity() == null) return;
 		
 		Player player = (Player) event.getEntityLiving();
 		Core core = Core.get(player.level);
 		ItemStack shield = player.getUseItem();
-		Entity attacker = event.getDamageSource().getDirectEntity();
+		Entity attacker = event.getDamageSource().getEntity();
 
 		if (!core.isActionPermitted(ReqType.WEAPON, shield, player)) {
 			event.setCanceled(true);
@@ -46,7 +47,10 @@ public class ShieldBlockHandler {
 		hookOutput.putFloat(APIUtils.DAMAGE_IN, event.getBlockedDamage());
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.SHIELD_BLOCK, player, hookOutput, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getExperienceAwards(EventType.SHIELD_BLOCK, attacker, player, hookOutput);
+			Map<String, Long> xpAward = new HashMap<>();
+			core.getExperienceAwards(EventType.SHIELD_BLOCK, attacker, player, hookOutput).forEach((skill, value) -> {
+				xpAward.put(skill, (long) (value * event.getBlockedDamage()));
+			});;			
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 			core.awardXP(partyMembersInRange, xpAward);
 		}
