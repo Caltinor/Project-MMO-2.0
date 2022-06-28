@@ -233,7 +233,7 @@ public class Core {
 		Map<String, Integer> mapClone = new HashMap<>(map);
 		new HashMap<>(map).forEach((skill, level) -> {
 			SkillData data = SkillData.Builder.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup() && !data.getUseTotalLevels()) {
 				mapClone.remove(skill);
 				mapClone.putAll(data.getGroupReq(level));																					
 			}
@@ -245,7 +245,7 @@ public class Core {
 		Map<String, Long> mapClone = new HashMap<>(map);
 		new HashMap<>(map).forEach((skill, level) -> {
 			SkillData data = SkillData.Builder.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup() && !data.getUseTotalLevels()) {
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
 				mapClone.remove(skill);
 				mapClone.putAll(data.getGroupXP(level));																					
 			}
