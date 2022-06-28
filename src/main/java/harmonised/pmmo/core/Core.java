@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
 
@@ -135,15 +137,23 @@ public class Core {
 		return doesPlayerMeetReq(playerID, requirements);	
 	}	
 	public boolean doesPlayerMeetReq(UUID playerID, Map<String, Integer> requirements) {
-		boolean meetsReq = true;
 		//convert skill group ids into raw skills 
 		processSkillGroupReqs(requirements);
 		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
 			int skillLevel = getData().getLevelFromXP(getData().getXpRaw(playerID, req.getKey()));
-			if (req.getValue() > skillLevel)
+			if (SkillsConfig.SKILLS.get().getOrDefault(req.getKey(), SkillData.Builder.getDefault()).isSkillGroup()) {
+				SkillData skillData = SkillsConfig.SKILLS.get().get(req.getKey());
+				if (skillData.useTotalLevels().orElse(false)) {
+					int total = skillData.getGroup().keySet().stream().map(skill-> getData().getPlayerSkillLevel(skill, playerID)).collect(Collectors.summingInt(Integer::intValue));
+					if (req.getValue() > total) {
+						return false;
+					}
+				}
+			}
+			else if (req.getValue() > skillLevel)
 				return false;
 		}
-		return meetsReq;
+		return true;
 	}	
 	public boolean doesPlayerMeetEnchantmentReq(ItemStack stack, UUID playerID) {
 		ListTag enchantments = stack.getEnchantmentTags();
@@ -238,7 +248,7 @@ public class Core {
 		Map<String, Long> mapClone = new HashMap<>(map);
 		new HashMap<>(map).forEach((skill, level) -> {
 			SkillData data = SkillData.Builder.getDefault();
-			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup()) {
+			if ((data = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault())).isSkillGroup() && !data.getUseTotalLevels()) {
 				mapClone.remove(skill);
 				mapClone.putAll(data.getGroupXP(level));																					
 			}
