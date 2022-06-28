@@ -181,6 +181,15 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 		}
 		
+		if (blockPos != null) {
+			@SuppressWarnings("resource")
+			VeinData veinData = core.getVeinData().getData(new ItemStack(Minecraft.getInstance().level.getBlockState(blockPos).getBlock().asItem()));
+			if (veinData.consumeAmount() != VeinData.EMPTY.consumeAmount()) {
+				content.add(new Element(Component.translatable("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new Element(Component.translatable("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+			}
+		}
+		
 		if (entity != null && entity.getType().equals(EntityType.PLAYER)) {
 			//Section for player-specific data as it expands
 			content.add(new Element(Component.translatable("pmmo.playerspecific_header"), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
