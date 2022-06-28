@@ -2,6 +2,8 @@ package harmonised.pmmo.client.events;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
@@ -9,6 +11,8 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.client.gui.StatsScreen;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
@@ -149,7 +153,18 @@ public class TooltipHandler {
 			return map;
 		//remove values that meet the requirement
 		new HashMap<>(map).forEach((skill, level) -> {
-			if (core.getData().getPlayerSkillLevel(skill, null) >= level)
+			if (SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).isSkillGroup()) {
+				int total = SkillsConfig.SKILLS.get().get(skill)
+						.getGroup()
+						.keySet()
+						.stream()
+						.map(groupskill-> core.getData().getPlayerSkillLevel(groupskill, null))
+						.collect(Collectors.summingInt(Integer::intValue));
+				if (level > total) {
+					map.remove(skill);
+				}
+			}
+			else if (core.getData().getPlayerSkillLevel(skill, null) >= level)
 				map.remove(skill);
 		});
 		
