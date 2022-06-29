@@ -6,8 +6,7 @@ import java.util.Map;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.features.autovalues.AutoValueConfig.AttributeKey;
-import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +17,7 @@ import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class AutoEntity {
-	public static final ReqType[] REQTYPES = {ReqType.RIDE, ReqType.TAME, ReqType.BREED, ReqType.ENTITY_INTERACT};
+	//public static final ReqType[] REQTYPES = {ReqType.RIDE, ReqType.TAME, ReqType.BREED, ReqType.ENTITY_INTERACT};
 	public static final EventType[] EVENTTYPES = {EventType.BREED, EventType.FROM_MOBS, EventType.FROM_PLAYERS,	EventType.FROM_ANIMALS, 		
 			EventType.MELEE_TO_MOBS, EventType.MELEE_TO_PLAYERS, EventType.MELEE_TO_ANIMALS, EventType.RANGED_TO_MOBS,
 			EventType.RANGED_TO_PLAYERS, EventType.RANGED_TO_ANIMALS, EventType.DEATH, EventType.ENTITY, EventType.RIDING, 	
@@ -26,17 +25,35 @@ public class AutoEntity {
 
 	public static Map<String, Integer> processReqs(ReqType type, ResourceLocation entityID) {
 		//exit early if not an applicable type
-		if (!type.entityApplicable)
+		//if (!type.entityApplicable)
 			return new HashMap<>();
 			
-		Map<String, Integer> outMap = new HashMap<>();
+		/*Map<String, Integer> outMap = new HashMap<>();
 		switch (type) {
-		case RIDE: case TAME: case BREED: case ENTITY_INTERACT:{
+		case RIDE: {
+			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.RIDEABLE_TAG)) {
+				outMap.putAll(getReqMap(entityID, type));
+			}
+			break;
+		}
+		case TAME: {
+			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.TAMABLE_TAG)) {
+				outMap.putAll(getReqMap(entityID, type));
+			}
+			break;
+		}	
+		case BREED: {
+			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.TAMABLE_TAG)) {
+				outMap.putAll(getReqMap(entityID, type));
+			}
+			break;
+		}	
+		case ENTITY_INTERACT:{
 			outMap.putAll(getReqMap(entityID, type));
 			break;
 		}
 		default: }
-		return outMap;
+		return outMap;*/
 	}
 	
 	public static Map<String, Long> processXpGains(EventType type, ResourceLocation entityID) {
@@ -45,23 +62,54 @@ public class AutoEntity {
 			return new HashMap<>();
 				
 		Map<String, Long> outMap = new HashMap<>();
-		switch (type) {
-		case BREED: 		
-		case FROM_MOBS:		
-		case FROM_PLAYERS:		
-		case FROM_ANIMALS: 		
-		case MELEE_TO_MOBS: 		
-		case MELEE_TO_PLAYERS:		
-		case MELEE_TO_ANIMALS: 		
-		case RANGED_TO_MOBS:		
-		case RANGED_TO_PLAYERS:		
-		case RANGED_TO_ANIMALS: 	
+		switch (type) {		 				
+		case FROM_PLAYERS:					 		
+		case MELEE_TO_PLAYERS:						
+		case RANGED_TO_PLAYERS:	{
+			if (entityID.equals(new ResourceLocation("minecraft:player"))) {
+				outMap.putAll(getXpMap(entityID, type));
+			}
+			break;
+		}
+		case RIDING: {
+			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.RIDEABLE_TAG)) {
+				outMap.putAll(getXpMap(entityID, type));
+			}
+			break;
+		}
 		case DEATH:		
-		case ENTITY:		
-		case RIDING: 	
+		case ENTITY:			
 		case SHIELD_BLOCK:		
-		case TAMING: {
+		{
 			outMap.putAll(getXpMap(entityID, type));
+			break;
+		}
+		case BREED: {
+			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.BREEDABLE_TAG)) {
+				outMap.putAll(getXpMap(entityID, type));
+			}
+			break;
+		}
+		case TAMING: {
+			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.TAMABLE_TAG)) {
+				outMap.putAll(getXpMap(entityID, type));
+			}
+			break;
+		}
+		case FROM_ANIMALS: 
+		case MELEE_TO_ANIMALS: 
+		case RANGED_TO_ANIMALS: {
+			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.ANIMAL_TAG)) {
+				outMap.putAll(getXpMap(entityID, type));
+			}
+			break;
+		}
+		case FROM_MOBS: 
+		case MELEE_TO_MOBS:
+		case RANGED_TO_MOBS: {
+			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.MOB_TAG)) {
+				outMap.putAll(getXpMap(entityID, type));
+			}
 			break;
 		}
 		default: }
@@ -69,7 +117,7 @@ public class AutoEntity {
 	}
 	
 	//========================GETTER METHODS==============================
-	private static Map<String, Integer> getReqMap(ResourceLocation entity, ReqType type) {
+	/*private static Map<String, Integer> getReqMap(ResourceLocation entity, ReqType type) {
 		Map<String, Integer> outMap = new HashMap<>();
 		double healthScale = 
 				MsLoggy.DEBUG.logAndReturn(getAttribute(entity, Attributes.MAX_HEALTH), LOG_CODE.AUTO_VALUES, "Health Attribute: {}") * 
@@ -86,7 +134,7 @@ public class AutoEntity {
 			outMap.put(skill, Double.valueOf((double)level * scale).intValue());
 		});
 		return outMap;
-	}
+	}*/
 	
 	private static Map<String, Long> getXpMap(ResourceLocation entity, EventType type) {
 		Map<String, Long> outMap = new HashMap<>();
