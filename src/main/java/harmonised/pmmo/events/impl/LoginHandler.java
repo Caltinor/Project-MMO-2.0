@@ -8,6 +8,7 @@ import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
@@ -31,7 +32,6 @@ public class LoginHandler {
 				.withColor(ChatFormatting.BLUE));
 		TranslatableComponent welcome = new TranslatableComponent("pmmo.welcomeText", link);
 		player.sendMessage(welcome, player.getUUID());
-		
 		
 		core.getPerkRegistry().terminatePerk(EventType.DISABLE_PERK, player, core.getSide());
 		
