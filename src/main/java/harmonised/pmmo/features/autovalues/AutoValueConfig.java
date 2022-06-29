@@ -116,7 +116,7 @@ public class AutoValueConfig {
 		builder.push("Blocks");
 		BLOCK_XP_AWARDS = new HashMap<>();
 		for (EventType type : AutoBlock.EVENTTYPES) {
-			BLOCK_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 10l)));
+			BLOCK_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 1l)));
 		}
 		WOOD_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
 				builder.comment("Special override for "+EventType.BLOCK_BREAK.toString()+" and "+EventType.BLOCK_PLACE.toString()+" events when breaking",
@@ -134,7 +134,7 @@ public class AutoValueConfig {
 		builder.push("Entities");
 		ENTITY_XP_AWARDS = new HashMap<>();
 		for (EventType type : AutoEntity.EVENTTYPES) {
-			ENTITY_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 10l)));
+			ENTITY_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 1l)));
 		}
 		builder.pop();
 		
@@ -214,7 +214,7 @@ public class AutoValueConfig {
 	public static enum AttributeKey {
 		DUR("Durability", 0.01),
 		TIER("Tier", 10d),
-		DMG("Damage", 10d),
+		DMG("Damage", 1.5d),
 		SPD("Attack_Speed", 10d),
 		DIG("Dig_Speed", 10d),
 		//Armor attributes
@@ -222,8 +222,8 @@ public class AutoValueConfig {
 		KBR("Knockback_Resistance", 10d),
 		TUF("Toughness", 10d),
 		//EntityAttributes
-		HEALTH("Health", 2),
-		SPEED("Move_Speed", 2);
+		HEALTH("Health", 0.5),
+		SPEED("Move_Speed", 0.15);
 		
 		String key;
 		double value;
