@@ -8,6 +8,7 @@ import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
@@ -25,14 +26,14 @@ public class LoginHandler {
 		Player player = event.getPlayer();
 		Core core = Core.get(player.level);
 		//Send welcome message encouraging datapack usage
-		MutableComponent link = Component.translatable("pmmo.clickMe");
-		link.setStyle(Style.EMPTY
-				.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.curseforge.com/minecraft/texture-packs/search?category=&search=project+mmo"))
-				.withUnderlined(true)
-				.withColor(ChatFormatting.BLUE));
-		MutableComponent welcome = Component.translatable("pmmo.welcomeText", link);
-		player.sendSystemMessage(welcome);
-		
+		MutableComponent welcome = Component.translatable(LangProvider.WELCOME_TEXT.key()
+				, LangProvider.CLICK_ME.asComponent()
+					.setStyle(Style.EMPTY
+					.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.curseforge.com/minecraft/texture-packs/search?category=&search=project+mmo"))
+					.withUnderlined(true)
+					.withColor(ChatFormatting.BLUE))
+				);
+		player.sendSystemMessage(welcome);		
 		
 		core.getPerkRegistry().terminatePerk(EventType.DISABLE_PERK, player, core.getSide());
 		

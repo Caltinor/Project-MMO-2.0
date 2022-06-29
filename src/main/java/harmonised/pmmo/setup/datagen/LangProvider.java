@@ -26,6 +26,12 @@ public class LangProvider extends LanguageProvider{
 		this.locale = locale;
 	}
 	
+	//=========LOGIN HANDLER===================
+	public static final Translation WELCOME_TEXT = Translation.Builder.start("pmmo.welcomeText")
+			.addLocale(Locale.EN_US, "Welcome! Project MMO is more fun with datapacks. download one %s").build();
+	public static final Translation CLICK_ME = Translation.Builder.start("pmmo.clickMe")
+			.addLocale(Locale.EN_US, "HERE").build();
+	//=========ENUM VALUES=====================
 	public static final Translation ENUM_ANVIL_REPAIR = Translation.Builder.start("pmmo.enum."+EventType.ANVIL_REPAIR.name())
 			.addLocale(Locale.EN_US, "Anvil Repair").build();
 	public static final Translation ENUM_BLOCK_BREAK = Translation.Builder.start("pmmo.enum."+EventType.BLOCK_BREAK.name())
