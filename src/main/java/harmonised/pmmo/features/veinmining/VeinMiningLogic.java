@@ -38,7 +38,7 @@ public class VeinMiningLogic {
 		VeinShapeData veinData = new VeinShapeData(level, pos, maxBlocks);
 		for (BlockPos veinable : veinData.getVein()) {
 			consumed += cost;
-			player.gameMode.destroyBlock(veinable);
+			player.gameMode.destroyAndAck(veinable, 1, "Vein Break");
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Consumed: "+consumed+" charge");
 		applyChargeCostToAllItems(player, consumed);
