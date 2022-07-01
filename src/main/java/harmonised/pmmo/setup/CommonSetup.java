@@ -10,6 +10,8 @@ import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionHighestSkill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionKill;
 import harmonised.pmmo.features.loot_predicates.SkillLootConditionPlayer;
+import harmonised.pmmo.features.veinmining.capability.IVeinCap;
+import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.ChunkDataProvider;
@@ -18,6 +20,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -90,11 +93,17 @@ public class CommonSetup {
 	
 	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {
 		event.register(IChunkData.class);
+		event.register(IVeinCap.class);
 	}
 	
 	@SubscribeEvent
-	public static void onCapabilityAttach(AttachCapabilitiesEvent<LevelChunk> event) {
+	public static void onChunkCapabilityAttach(AttachCapabilitiesEvent<LevelChunk> event) {
 		event.addCapability(ChunkDataProvider.CHUNK_CAP_ID, new ChunkDataProvider());
+	}
+	
+	@SubscribeEvent
+	public static void onItemCapabilityAttach(AttachCapabilitiesEvent<ItemStack> event) {
+		event.addCapability(VeinProvider.VEIN_CAP_ID, new VeinProvider());
 	}
 	
 	public static void gatherData(GatherDataEvent event) {
