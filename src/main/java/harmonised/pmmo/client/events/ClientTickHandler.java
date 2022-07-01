@@ -11,6 +11,8 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,8 +57,8 @@ public class ClientTickHandler {
 		public GainEntry(String skill, long value) {
 			this.duration = MsLoggy.DEBUG.logAndReturn(Config.GAIN_LIST_LINGER_DURATION.get()
 								, LOG_CODE.GUI, "Gain Duration Set as: {}");
-			display = Component.literal("+"+value+" ")
-					.append(Component.translatable("pmmo."+skill))
+			display = new TextComponent("+"+value+" ")
+					.append(new TranslatableComponent("pmmo."+skill))
 					.setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(skill));
 		}
 		public void downTick() {

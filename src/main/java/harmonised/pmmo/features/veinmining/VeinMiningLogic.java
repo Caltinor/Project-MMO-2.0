@@ -10,6 +10,7 @@ import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -38,7 +39,7 @@ public class VeinMiningLogic {
 		VeinShapeData veinData = new VeinShapeData(level, pos, maxBlocks);
 		for (BlockPos veinable : veinData.getVein()) {
 			consumed += cost;
-			player.gameMode.destroyAndAck(veinable, 1, "Vein Break");
+			player.gameMode.destroyAndAck(veinable, ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK, "Vein Break");
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Consumed: "+consumed+" charge");
 		applyChargeCostToAllItems(player, consumed);

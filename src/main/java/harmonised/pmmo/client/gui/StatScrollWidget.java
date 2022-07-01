@@ -186,8 +186,8 @@ public class StatScrollWidget extends ScrollPanel{
 			@SuppressWarnings("resource")
 			VeinData veinData = core.getVeinData().getData(new ItemStack(Minecraft.getInstance().level.getBlockState(blockPos).getBlock().asItem()));
 			if (veinData.consumeAmount() != VeinData.EMPTY.consumeAmount()) {
-				content.add(new Element(Component.translatable("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-				content.add(new Element(Component.translatable("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+				content.add(new Element(new TranslatableComponent("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new Element(new TranslatableComponent("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
 			}
 		}
 		
