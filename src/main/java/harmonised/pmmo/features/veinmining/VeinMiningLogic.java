@@ -5,6 +5,8 @@ import java.util.List;
 
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.features.veinmining.capability.VeinHandler;
+import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
@@ -18,7 +20,6 @@ import net.minecraft.world.level.block.Block;
 
 public class VeinMiningLogic {
 	public static final String VEIN_DATA = "vein_data";
-	private static final String CURRENT_CHARGE = "vein_charge";
 
 	/**This executes the actual break logic.  This should only be called
 	 * on the server.
@@ -59,13 +60,14 @@ public class VeinMiningLogic {
 		for (ItemStack stack : items) {
 			if (!core.getVeinData().hasChargeData(stack)) continue;
 			int chargeCap = core.getVeinData().getItemChargeCapSetting(stack);
-			if (stack.getTag() == null || !stack.getTag().contains(CURRENT_CHARGE)) {
-				stack.getOrCreateTag().putDouble(CURRENT_CHARGE, chargeCap);
-			}
-			else if (stack.getTag().getDouble(CURRENT_CHARGE) < chargeCap){
-				double newCharge = stack.getTag().getDouble(CURRENT_CHARGE) + core.getVeinData().getItemRechargeRateSetting(stack);
-				stack.getTag().putDouble(CURRENT_CHARGE, newCharge > chargeCap ? chargeCap : newCharge);
-			}
+			stack.getCapability(VeinProvider.VEIN_CAP).ifPresent(cap -> {
+				if (cap.getCharge() == -1)
+					cap.setCharge(chargeCap);
+				else {
+					double newCharge = cap.getCharge() + core.getVeinData().getItemRechargeRateSetting(stack);
+					cap.setCharge(newCharge > chargeCap ? chargeCap : newCharge);
+				}
+			});
 		}
 	}
 	
@@ -120,10 +122,10 @@ public class VeinMiningLogic {
 			int currentCharge = getCurrentCharge(stack, player.level);
 			if (charge >= currentCharge) {
 				charge -= currentCharge;
-				stack.getTag().putDouble(CURRENT_CHARGE, 0d);
+				stack.getCapability(VeinProvider.VEIN_CAP).resolve().get().setCharge(0d);
 			}
 			else {
-				stack.getTag().putDouble(CURRENT_CHARGE, currentCharge-charge);
+				stack.getCapability(VeinProvider.VEIN_CAP).resolve().get().setCharge(currentCharge - charge);
 				charge = 0;
 			}
 			index++;
@@ -131,13 +133,9 @@ public class VeinMiningLogic {
 	}
 	
 	public static int getCurrentCharge(ItemStack stack, Level level) {
-		if (stack.getTag() == null || !stack.getTag().contains(CURRENT_CHARGE)) {
-			int baseCharge = Core.get(level).getVeinData().getItemChargeCapSetting(stack);
-			if (baseCharge == 0) return 0;
-			stack.getOrCreateTag().putDouble(CURRENT_CHARGE, (double)baseCharge);
-			return baseCharge;
-		}
-		else 
-			return (int)Math.floor(stack.getTag().getDouble(CURRENT_CHARGE));			
+		return Core.get(level).getVeinData().getItemChargeCapSetting(stack) == 0 
+				? 0
+				: (int)Math.floor(stack.getCapability(VeinProvider.VEIN_CAP).orElseGet(() -> new VeinHandler(-1d)).getCharge());
+		
 	}
 }
