@@ -251,17 +251,17 @@ public class Config {
 		LINEAR_BASE_XP = builder.comment("what is the base xp to reach level 2 (this + level * xpPerLevel)")
 							.defineInRange("Base XP", 250l, 1l, Long.MAX_VALUE);
 		LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level (baseXp + level * this)")
-							.defineInRange("Per Level", 50d, 1d, Double.MAX_VALUE);		
+							.defineInRange("Per Level", 500d, 1d, Double.MAX_VALUE);		
 		builder.pop(); //COMPLETE LINEAR BLOCK
 		
 		//========EXPONENTIAL SECTION==========
 		builder.comment("Settings for Exponential XP configuration").push("EXPONENTIAL LEVELS");
 		EXPONENTIAL_BASE_XP = builder.comment("What is the x in: x * ([Power Base]^([Per Level] * level))")
-							.defineInRange("Base XP", 83, 1, Integer.MAX_VALUE);
+							.defineInRange("Base XP", 250, 1, Integer.MAX_VALUE);
 		EXPONENTIAL_POWER_BASE = builder.comment("What is the x in: [Base XP] * (x^([Per Level] * level))")
 							.defineInRange("Power Base", 1.104088404342588d, 0d, Double.MAX_VALUE);
 		EXPONENTIAL_LEVEL_MOD = builder.comment("What is the x in: [Base XP] * ([Power Base]^(x * level))")
-							.defineInRange("Per Level", 1d, 0d, Double.MAX_VALUE);
+							.defineInRange("Per Level", 1.1, 0d, Double.MAX_VALUE);
 		builder.pop(); //COMPLETE EXPONENTIAL BLOCK
 		builder.pop(); //COMPLETE LEVELS BLOCK
 		
