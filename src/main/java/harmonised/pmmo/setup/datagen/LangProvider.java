@@ -111,6 +111,9 @@ public class LangProvider extends LanguageProvider{
 		public MutableComponent asComponent() {
 			return Component.translatable(key());
 		}
+		public MutableComponent asComponent(Object...obj) {
+			return Component.translatable(key(), obj);
+		}
 		public static class Builder {
 			String key;
 			Map<String, String> localeMap;

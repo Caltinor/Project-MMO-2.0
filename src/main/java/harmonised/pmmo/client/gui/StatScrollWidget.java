@@ -176,7 +176,7 @@ public class StatScrollWidget extends ScrollPanel{
 				content.add(new Element(Component.translatable("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 				content.add(new Element(Component.translatable("pmmo.veindata_rate", veinData.chargeRate().get()), step(1), 0xFFFFFF, false, 0));
 				content.add(new Element(Component.translatable("pmmo.veindata_cap", veinData.chargeCap().get()), step(1), 0xFFFFFF, false, 0));
-				if (stack.getItem() instanceof BlockItem) //TODO make blocks in world return a block item for this to work.
+				if (stack.getItem() instanceof BlockItem)
 					content.add(new Element(Component.translatable("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
 			}
 		}
