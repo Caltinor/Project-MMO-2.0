@@ -20,6 +20,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ElytraItem;
@@ -139,7 +140,7 @@ public class AutoItem {
 			}
 			break;
 		}
-		case BLOCK_PLACE: {
+		case BLOCK_PLACE: case BLOCK_BREAK:{
 			if (stack.getItem() instanceof BlockItem) {
 				outMap.putAll(AutoBlock.processXpGains(type, ((BlockItem)stack.getItem()).getBlock().builtInRegistryHolder().unwrapKey().get().location()));
 			}
@@ -195,7 +196,11 @@ public class AutoItem {
 	
 	//=========================ITEM CLASS SPECIFIC METHODS==============================================
 	private static Map<String, Integer> getUtensilData(UtensilTypes utensil, ReqType type, ItemStack stack, boolean asWeapon) {
-		Map<String, Integer> outMap = new HashMap<>();	
+		Map<String, Integer> outMap = new HashMap<>();
+		//if the item being evaluated is a basic item, return a blank map
+		if (stack.getItem() instanceof TieredItem && getTier((TieredItem) stack.getItem()) <= 0 ) 
+			return outMap;
+		
 		final double scale = getUtensilAttributes(utensil, stack, asWeapon);
 		AutoValueConfig.getItemReq(type).forEach((skill, level) -> {
 			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
@@ -214,6 +219,10 @@ public class AutoItem {
 	}
 	private static Map<String, Integer> getWearableData(ReqType type, ItemStack stack, boolean isArmor) {
 		Map<String, Integer> outMap = new HashMap<>();
+		//if the item being evaluated is a basic item, return a blank map
+		if (stack.getItem() instanceof ArmorItem && ((ArmorItem)stack.getItem()).getMaterial().equals(ArmorMaterials.LEATHER)) 
+			return outMap;
+		
 		final double scale = getWearableAttributes(WearableTypes.fromSlot(LivingEntity.getEquipmentSlotForItem(stack), !isArmor), stack, isArmor);
 		AutoValueConfig.getItemReq(type).forEach((skill, level) -> {
 			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
@@ -265,7 +274,7 @@ public class AutoItem {
 		double durabilityScale = (double)stack.getMaxDamage() * AutoValueConfig.getWearableAttribute(type, AttributeKey.DUR);
 		//Armor Specific
 		ArmorMaterial material = isArmor ? ((ArmorItem)stack.getItem()).getMaterial() : null;
-		double armorScale = isArmor ? material.getDurabilityForSlot(LivingEntity.getEquipmentSlotForItem(stack)) * AutoValueConfig.getWearableAttribute(type, AttributeKey.AMR) : 0d;
+		double armorScale = isArmor ? material.getDefenseForSlot(LivingEntity.getEquipmentSlotForItem(stack)) * AutoValueConfig.getWearableAttribute(type, AttributeKey.AMR) : 0d;
 		double toughnessScale = isArmor? material.getToughness() * AutoValueConfig.getWearableAttribute(type, AttributeKey.TUF) : 0d;
 		double knockbackScale = isArmor? material.getKnockbackResistance() * AutoValueConfig.getWearableAttribute(type, AttributeKey.KBR) : 0d;
 		//return and log output

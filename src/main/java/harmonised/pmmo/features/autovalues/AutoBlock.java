@@ -44,8 +44,7 @@ public class AutoBlock {
 		Block block = ForgeRegistries.BLOCKS.getValue(blockID);
 		Map<String, Long> outMap = new HashMap<>();
 		switch (type) {
-		case BLOCK_BREAK: case BLOCK_PLACE: {
-			float breakSpeed = block.defaultBlockState().getDestroySpeed(null, null);
+		case BLOCK_BREAK: case BLOCK_PLACE: {			
 			if (ForgeRegistries.BLOCKS.tags().getTag(Reference.CROPS).contains(block))
 				outMap.putAll(AutoValueConfig.getBlockXpAward(EventType.GROW));
 			else if (ForgeRegistries.BLOCKS.tags().getTag(Reference.WOOD).contains(block))
@@ -54,7 +53,8 @@ public class AutoBlock {
 				outMap.putAll(AutoValueConfig.EXCAVATABLE_OVERRIDE.get());
 			else
 				AutoValueConfig.getBlockXpAward(type).forEach((skill, level) -> {
-					outMap.put(skill, Double.valueOf(Math.max(0, breakSpeed * AutoValueConfig.HARDNESS_MODIFIER.get())).longValue());
+					float breakSpeed = Math.max(1, block.defaultBlockState().getDestroySpeed(null, null));
+					outMap.put(skill, Double.valueOf(Math.max(0, breakSpeed * AutoValueConfig.HARDNESS_MODIFIER.get() * level)).longValue());
 				});
 			break;
 		}
