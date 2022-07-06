@@ -2,7 +2,7 @@
 	"replace": false,
 	"values": [ 
 		"minecraft:dirt",
-        "minecraft:grass",
+        "minecraft:grass_block",
         "minecraft:dirt_path",
         "minecraft:farmland",
         "minecraft:coarse_dirt",
@@ -14,6 +14,7 @@
         "minecraft:sand",
         "minecraft:red_sand",
         "minecraft:soul_sand",
-        "minecraft:soul_soil"
+        "minecraft:soul_soil",
+        "minecraft:clay"
 	]
 }
