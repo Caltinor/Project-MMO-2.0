@@ -78,6 +78,7 @@ public class AutoValueConfig {
 	private static Map<EventType, ConfigObject<Map<String, Long>>> ENTITY_XP_AWARDS;
 	public static ConfigObject<Map<String, Long>> WOOD_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> EXCAVATABLE_OVERRIDE;
+	public static ForgeConfigSpec.DoubleValue RARITIES_MODIFIER;
 	public static ConfigObject<Map<String, Long>> BREWABLES_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> SMELTABLES_OVERRIDE;
 	
@@ -130,6 +131,8 @@ public class AutoValueConfig {
 				"Excavatable Block Action Override", 
 				CodecTypes.LONG_CODEC, 
 				Collections.singletonMap("excavation", 10l));
+		RARITIES_MODIFIER = builder.comment("How much should xp for rare blocks like ores be multiplied by.")
+				.defineInRange("Rarities Mulitplier", 10d, 0d, Double.MAX_VALUE);
 		builder.pop();
 		builder.push("Entities");
 		ENTITY_XP_AWARDS = new HashMap<>();

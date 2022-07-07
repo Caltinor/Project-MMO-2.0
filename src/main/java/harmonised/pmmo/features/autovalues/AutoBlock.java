@@ -9,6 +9,7 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class AutoBlock {
@@ -54,7 +55,10 @@ public class AutoBlock {
 			else
 				AutoValueConfig.getBlockXpAward(type).forEach((skill, level) -> {
 					float breakSpeed = Math.max(1, block.defaultBlockState().getDestroySpeed(null, null));
-					outMap.put(skill, Double.valueOf(Math.max(0, breakSpeed * AutoValueConfig.HARDNESS_MODIFIER.get() * level)).longValue());
+					long xpOut = Double.valueOf(Math.max(0, breakSpeed * AutoValueConfig.HARDNESS_MODIFIER.get() * level)).longValue();
+					if (ForgeRegistries.BLOCKS.tags().getTag(Tags.Blocks.ORES).contains(block))
+						xpOut *= AutoValueConfig.RARITIES_MODIFIER.get();
+					outMap.put(skill, xpOut);
 				});
 			break;
 		}
