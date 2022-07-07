@@ -1,6 +1,7 @@
 { 
 	"replace": false,
 	"values": [ 
+		"#minecraft:crops",
 		"minecraft:wheat",
 		"minecraft:potatoes",
 		"minecraft:carrots",
