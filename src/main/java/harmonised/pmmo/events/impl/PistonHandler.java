@@ -32,7 +32,7 @@ public class PistonHandler {
 		 Map<BlockPos, UUID> updateToMap = new HashMap<>();
 		 for (BlockPos moved : structure.getToPush()) {
 			 LevelChunk oldCK = level.getChunkAt(moved);			 
-			 UUID currentID = oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).map(cap -> cap.checkPos(moved)).get();
+			 UUID currentID = oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).map(cap -> cap.checkPos(moved)).orElse(Reference.NIL);
 			 if (currentID.equals(Reference.NIL)) continue;
 			 oldCK.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
 				 cap.delPos(moved);
