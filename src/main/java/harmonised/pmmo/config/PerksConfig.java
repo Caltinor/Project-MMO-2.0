@@ -47,11 +47,11 @@ public class PerksConfig {
 		Map<String, List<CompoundTag>> bodyMap = new HashMap<>();
 		
 		//====================BREAK SPEED DEFAULTS========================
-		bodyMap.put("mining", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("pickaxe_dig", 0.05).build()));
-		bodyMap.put("excavation", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("shovel_dig", 0.05).build()));
-		bodyMap.put("woodcutting", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("axe_dig", 0.05).build()));
-		bodyMap.put("farming", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("hoe_dig", 0.05).withDouble("shears_dig", 0.05).build()));
-		bodyMap.put("combat", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("sword_dig", 0.05).build()));
+		bodyMap.put("mining", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("pickaxe_dig", 0.005).build()));
+		bodyMap.put("excavation", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("shovel_dig", 0.005).build()));
+		bodyMap.put("woodcutting", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("axe_dig", 0.005).build()));
+		bodyMap.put("farming", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("hoe_dig", 0.005).withDouble("shears_dig", 0.005).build()));
+		bodyMap.put("combat", List.of(TagBuilder.start().withString("perk", "pmmo:break_speed").withInt("modifier", 1000).withDouble("sword_dig", 0.005).build()));
 		defaultSettings.put(EventType.BREAK_SPEED, bodyMap);
 		bodyMap = new HashMap<>();
 		//====================SKILL_UP DEFAULTS==========================
@@ -90,17 +90,17 @@ public class PerksConfig {
 		bodyMap = new HashMap<>();
 		
 		//=====================JUMP DEFAULTS=============================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.005).build()));
+		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.0005).build()));
 		defaultSettings.put(EventType.JUMP, bodyMap);
 		bodyMap = new HashMap<>();
 		
 		//=====================JUMP DEFAULTS=============================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.01).build()));
+		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.001).build()));
 		defaultSettings.put(EventType.SPRINT_JUMP, bodyMap);
 		bodyMap = new HashMap<>();
 				
 		//=====================JUMP DEFAULTS=============================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.015).build()));
+		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:jump_boost").withDouble("per_level", 0.0015).build()));
 		defaultSettings.put(EventType.CROUCH_JUMP, bodyMap);
 		bodyMap = new HashMap<>();
 		
@@ -112,8 +112,8 @@ public class PerksConfig {
 		bodyMap = new HashMap<>();
 		
 		//=====================FROM_IMPACT==============================
-		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:fall_save").withDouble("per_level", 0.05).build()));
-		bodyMap.put("endurance", List.of(TagBuilder.start().withString("perk", "pmmo:fall_save").withDouble("per_level", 0.25).build()));
+		bodyMap.put("agility", List.of(TagBuilder.start().withString("perk", "pmmo:fall_save").withDouble("per_level", 0.005).build()));
+		bodyMap.put("endurance", List.of(TagBuilder.start().withString("perk", "pmmo:fall_save").withDouble("per_level", 0.025).build()));
 		defaultSettings.put(EventType.FROM_IMPACT, bodyMap);
 		bodyMap = new HashMap<>();
 		
