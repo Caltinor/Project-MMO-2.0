@@ -8,9 +8,10 @@ import java.util.UUID;
 import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -28,7 +29,7 @@ public class FeaturePerks {
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");	
 	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> SPEED = (player, nbt, level) -> {
 		double maxSpeedBoost = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 1d;
-		double boostPerLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.5;
+		double boostPerLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.005;
 		AttributeInstance speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
 		double speedBoost = player.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() 
 							* Math.max(0, Math.min(maxSpeedBoost, Math.min(maxSpeedBoost, (level * boostPerLevel) / 100)));
@@ -54,7 +55,7 @@ public class FeaturePerks {
 	private static final UUID damageModifierID = UUID.fromString("992b11f1-7b3f-48d9-8ebd-1acfc3257b17");
 	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE = (player, nbt, level) -> {
 		double maxDamage = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 1;
-		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
+		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.005;
 		AttributeInstance damageAttribute = player.getAttribute(Attributes.ATTACK_DAMAGE);
 		double damageBoost = Math.min(maxDamage, level * perLevel);
 		AttributeModifier damageModifier = new AttributeModifier(damageModifierID, "Damage Boost thanks to Combat Level", damageBoost, AttributeModifier.Operation.MULTIPLY_BASE);
@@ -94,7 +95,7 @@ public class FeaturePerks {
 	
 	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> HEALTH = (player, nbt, level) -> {
-		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.1;
+		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
 		int maxHeart	= nbt.contains(APIUtils.MAX_BOOST) ? nbt.getInt(APIUtils.MAX_BOOST) : 10;
 		int heartBoost = (int)(perLevel * (double)level);
 		heartBoost = Math.min(maxHeart, heartBoost);		
@@ -137,7 +138,7 @@ public class FeaturePerks {
 	
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> JUMP_CLIENT = (player, nbt, level) -> {
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.0005;
-		double maxBoost = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 0.33;
+		double maxBoost = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 0.033;
         double jumpBoost;
         jumpBoost = -0.011 + level * perLevel;
         jumpBoost = Math.min(maxBoost, jumpBoost);
@@ -148,7 +149,7 @@ public class FeaturePerks {
 	
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> JUMP_SERVER = (player, nbt, level) -> {
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.0005;
-		double maxBoost = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 0.33;
+		double maxBoost = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 0.033;
         double jumpBoost;
         jumpBoost = -0.011 + level * perLevel;
         jumpBoost = Math.min(maxBoost, jumpBoost);
@@ -166,7 +167,7 @@ public class FeaturePerks {
 		if (currentAir < 2 && (currentCD < System.currentTimeMillis() - cooldown 
 				|| currentCD + 20 >= System.currentTimeMillis())) {
 			player.setAirSupply(currentAir + perLevel);
-			player.sendMessage(new TranslatableComponent("pmmo.perks.breathrefresh"), player.getUUID());
+			player.sendSystemMessage(Component.translatable("pmmo.perks.breathrefresh"));
 			breathe_cooldown.put(player.getUUID(), System.currentTimeMillis());
 		}
 		return new CompoundTag();
@@ -174,7 +175,7 @@ public class FeaturePerks {
 	
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> FALL_SAVE = (player, nbt, level) -> {
 		CompoundTag output = new CompoundTag();
-		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.1;
+		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.025;
 		int saved = (int)(perLevel * (double)level);
 		output.putInt("saved", saved);
 		return output;
@@ -186,7 +187,7 @@ public class FeaturePerks {
 		if (!nbt.contains(APIUtils.DAMAGE_IN) || !nbt.contains(APPLICABLE_TO)) return output;
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
 		List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
-		if (!type.contains(player.getMainHandItem().getItem().getRegistryName().toString())) return output;
+		if (!type.contains(RegistryUtil.getId(player.getMainHandItem()).toString())) return output;
 		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (float)(perLevel * (double)level);
 		output.putFloat(APIUtils.DAMAGE_OUT, damage);
 		return output;
