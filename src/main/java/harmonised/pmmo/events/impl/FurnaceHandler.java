@@ -2,6 +2,7 @@ package harmonised.pmmo.events.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
@@ -31,9 +32,10 @@ public class FurnaceHandler {
 		if (pid == null) return;
 		ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(pid);
 		if (player == null) {
-			GameProfile playerProfile = event.getLevel().getServer().getProfileCache().get(pid).orElseGet(null);
-			if (playerProfile == null) return;
-			player = new ServerPlayer(event.getLevel().getServer(), (ServerLevel) event.getLevel(), playerProfile, null);
+			Optional<GameProfile> playerProfile = event.getLevel().getServer().getProfileCache().get(pid);
+			if (playerProfile == null || playerProfile.orElseGet(null) == null) 
+				return;
+			player = new ServerPlayer(event.getLevel().getServer(), (ServerLevel) event.getLevel(), playerProfile.get(), null);
 		}
 		
 		//core logic 
