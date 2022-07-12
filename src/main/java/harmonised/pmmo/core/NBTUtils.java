@@ -95,7 +95,7 @@ public class NBTUtils {
 	}
 	@SuppressWarnings("deprecation")
 	public Map<String, Integer> getReqMap(ReqType reqType, BlockEntity tile) {
-		return translateToInt(evaluateEntries(tile.getTileData(), blockReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location())));
+		return translateToInt(evaluateEntries(tile.getPersistentData(), blockReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location())));
 	}
 	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
 		return translateToInt(evaluateEntries(entity.getPersistentData(), entityReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(new ResourceLocation(entity.getEncodeId()))));
@@ -106,7 +106,7 @@ public class NBTUtils {
 	}
 	@SuppressWarnings("deprecation")
 	public Map<String, Long> getXpMap(EventType reqType, BlockEntity tile) {
-		return translateToLong(evaluateEntries(tile.getTileData(), blockXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location())));
+		return translateToLong(evaluateEntries(tile.getPersistentData(), blockXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location())));
 	}
 	public Map<String, Long> getXpMap(EventType reqType, Entity entity) {
 		return translateToLong(evaluateEntries(entity.getPersistentData(), entityXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(new ResourceLocation(entity.getEncodeId()))));

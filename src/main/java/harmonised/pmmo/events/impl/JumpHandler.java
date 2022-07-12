@@ -18,8 +18,8 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 public class JumpHandler {
 
 	public static void handle(LivingJumpEvent event) {
-		if (!(event.getEntityLiving() instanceof Player)) return;
-		Player player = (Player) event.getEntityLiving();
+		if (!(event.getEntity() instanceof Player)) return;
+		Player player = (Player) event.getEntity();
 		
 		EventType type = EventType.JUMP;
 		if (player.isSprinting()) type = EventType.SPRINT_JUMP;

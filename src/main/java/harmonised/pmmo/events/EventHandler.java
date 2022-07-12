@@ -63,11 +63,11 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
-import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
-import net.minecraftforge.event.world.PistonEvent;
-import net.minecraftforge.event.world.SleepFinishedTimeEvent;
+import net.minecraftforge.event.level.BlockEvent.BreakEvent;
+import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
+import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.level.PistonEvent;
+import net.minecraftforge.event.level.SleepFinishedTimeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -92,12 +92,12 @@ public class EventHandler {
 	}
 	@SubscribeEvent
 	public static void onPlayerLeave(PlayerLoggedOutEvent event) {
-		PartyUtils.removeFromParty(event.getPlayer());
+		PartyUtils.removeFromParty(event.getEntity());
 	}
 	@SubscribeEvent
 	public static void onGamemodeChange(PlayerChangeGameModeEvent event) {
 		if (event.getNewGameMode().isCreative()) {
-			AttributeInstance reachAttribute = event.getPlayer().getAttribute(ForgeMod.REACH_DISTANCE.get());
+			AttributeInstance reachAttribute = event.getEntity().getAttribute(ForgeMod.REACH_DISTANCE.get());
 			if(reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE) == null || reachAttribute.getModifier(Reference.CREATIVE_REACH_ATTRIBUTE).getAmount() != Config.CREATIVE_REACH.get())
 			{
 				reachAttribute.removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
@@ -105,13 +105,13 @@ public class EventHandler {
 			}
 		}
 		else {
-			event.getPlayer().getAttribute(ForgeMod.REACH_DISTANCE.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
+			event.getEntity().getAttribute(ForgeMod.REACH_DISTANCE.get()).removeModifier(Reference.CREATIVE_REACH_ATTRIBUTE);
 		}
 	}
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
-		Core core = Core.get(event.getPlayer().level); 
-		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getPlayer(), core.getSide());
+		Core core = Core.get(event.getEntity().level); 
+		core.getPerkRegistry().executePerk(EventType.SKILL_UP, event.getEntity(), core.getSide());
 	}
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public static void onSleep(SleepFinishedTimeEvent event) {
@@ -188,7 +188,7 @@ public class EventHandler {
 	public static void onDeath(LivingDeathEvent event) {
 		if (event.isCanceled())
 			return;
-		if (event.getEntityLiving() instanceof Player)
+		if (event.getEntity() instanceof Player)
 			PlayerDeathHandler.handle(event);
 		DeathHandler.handle(event);
 	}

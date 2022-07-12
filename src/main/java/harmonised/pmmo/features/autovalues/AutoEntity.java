@@ -72,7 +72,7 @@ public class AutoEntity {
 			break;
 		}
 		case RIDING: {
-			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.RIDEABLE_TAG)) {
+			if (ForgeRegistries.ENTITY_TYPES.getValue(entityID).is(Reference.RIDEABLE_TAG)) {
 				outMap.putAll(getXpMap(entityID, type));
 			}
 			break;
@@ -85,13 +85,13 @@ public class AutoEntity {
 			break;
 		}
 		case BREED: {
-			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.BREEDABLE_TAG)) {
+			if (ForgeRegistries.ENTITY_TYPES.getValue(entityID).is(Reference.BREEDABLE_TAG)) {
 				outMap.putAll(getXpMap(entityID, type));
 			}
 			break;
 		}
 		case TAMING: {
-			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.TAMABLE_TAG)) {
+			if (ForgeRegistries.ENTITY_TYPES.getValue(entityID).is(Reference.TAMABLE_TAG)) {
 				outMap.putAll(getXpMap(entityID, type));
 			}
 			break;
@@ -99,7 +99,7 @@ public class AutoEntity {
 		case FROM_ANIMALS: 
 		case MELEE_TO_ANIMALS: 
 		case RANGED_TO_ANIMALS: {
-			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.ANIMAL_TAG)) {
+			if (ForgeRegistries.ENTITY_TYPES.getValue(entityID).is(Reference.ANIMAL_TAG)) {
 				outMap.putAll(getXpMap(entityID, type));
 			}
 			break;
@@ -107,7 +107,7 @@ public class AutoEntity {
 		case FROM_MOBS: 
 		case MELEE_TO_MOBS:
 		case RANGED_TO_MOBS: {
-			if (ForgeRegistries.ENTITIES.getValue(entityID).is(Reference.MOB_TAG)) {
+			if (ForgeRegistries.ENTITY_TYPES.getValue(entityID).is(Reference.MOB_TAG)) {
 				outMap.putAll(getXpMap(entityID, type));
 			}
 			break;
@@ -152,7 +152,7 @@ public class AutoEntity {
 	//========================UTILITY METHODS=============================
 	@SuppressWarnings("unchecked")
 	private static double getAttribute(ResourceLocation entityID, Attribute attribute) {
-		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITIES.getValue(entityID);
+		EntityType<? extends LivingEntity> entity = (EntityType<? extends LivingEntity>) ForgeRegistries.ENTITY_TYPES.getValue(entityID);
 		if (!DefaultAttributes.hasSupplier(entity)) return 0d;
 		AttributeSupplier attSup = DefaultAttributes.getSupplier(entity);
 		if (attSup == null) return 0d;

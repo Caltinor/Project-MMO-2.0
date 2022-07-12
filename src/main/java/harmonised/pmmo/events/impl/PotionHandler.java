@@ -14,14 +14,14 @@ import net.minecraftforge.event.brewing.PlayerBrewedPotionEvent;
 public class PotionHandler {
 
 	public static void handle(PlayerBrewedPotionEvent event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		Core core = Core.get(player.getLevel());
 		boolean serverSide = !player.level.isClientSide; 
 		//proecess perks
 		CompoundTag perkOutput = core.getPerkRegistry().executePerk(EventType.BREW, player, new CompoundTag(), core.getSide());
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getExperienceAwards(EventType.BREW, event.getStack(), event.getPlayer(), perkOutput);
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.BREW, event.getStack(), event.getEntity(), perkOutput);
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 	}

@@ -23,7 +23,7 @@ import net.minecraftforge.fml.LogicalSide;
 public class LoginHandler {
 
 	public static void handle(PlayerLoggedInEvent event) {		
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		Core core = Core.get(player.level);
 		//Send welcome message encouraging datapack usage
 		MutableComponent welcome = Component.translatable(LangProvider.WELCOME_TEXT.key()

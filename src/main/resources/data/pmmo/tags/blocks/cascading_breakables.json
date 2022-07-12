@@ -1,0 +1,15 @@
+{ 
+	"replace": false,
+	"values": [ 
+		"minecraft:sugar_cane",
+		"minecraft:bamboo",
+		"minecraft:cactus",
+		"minecraft:chorus_plant",
+		"minecraft:pointed_dripstone",
+		"minecraft:kelp",
+		"minecraft:twisting_vines",
+		"miencraft:weeping_vines",
+		"minecraft:cave_vines",
+		"minecraft:cave_vines_plant"
+	]
+}

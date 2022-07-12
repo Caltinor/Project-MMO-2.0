@@ -17,11 +17,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.IIngameOverlay;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.fml.LogicalSide;
 
-public class XPOverlayGUI implements IIngameOverlay
+public class XPOverlayGUI implements IGuiOverlay
 {
 	private Core core = Core.get(LogicalSide.CLIENT);
 	private int skillGap = 0;
@@ -29,7 +29,7 @@ public class XPOverlayGUI implements IIngameOverlay
 	private Font fontRenderer;
 
 	@Override
-	public void render(ForgeIngameGui gui, PoseStack stack, float partialTick, int width, int height){
+	public void render(ForgeGui gui, PoseStack stack, float partialTick, int width, int height){
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)

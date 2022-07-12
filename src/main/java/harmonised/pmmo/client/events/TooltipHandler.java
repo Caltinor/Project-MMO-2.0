@@ -42,7 +42,7 @@ public class TooltipHandler {
 		if(!tooltipOn)
             return;
 
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
 
         if(player != null) {
         	Core core = Core.get(LogicalSide.CLIENT);

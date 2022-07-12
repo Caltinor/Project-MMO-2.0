@@ -13,4 +13,7 @@ public interface IChunkData {
 	 public boolean playerMatchesPos(Player player, BlockPos pos);
 	 public Map<BlockPos, UUID> getMap();
 	 public void setMap(Map<BlockPos, UUID> map);
+	 //cascading break util methods
+	 public UUID getBreaker(BlockPos pos, boolean shouldRemove);
+	 public void setBreaker(BlockPos pos, UUID breaker);
 }

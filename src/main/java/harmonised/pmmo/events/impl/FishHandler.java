@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.player.ItemFishedEvent;
 public class FishHandler {
 
 	public static void handle(ItemFishedEvent event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		Core core = Core.get(player.getLevel());
 		if (!core.isActionPermitted(ReqType.TOOL, event.getDrops().get(0), player)) {
 			event.setCanceled(true);

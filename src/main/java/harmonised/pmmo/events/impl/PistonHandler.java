@@ -10,15 +10,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.piston.PistonStructureResolver;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.event.world.PistonEvent;
+import net.minecraftforge.event.level.PistonEvent;
 
 public class PistonHandler {
 	
 	 public static void handle(PistonEvent.Pre event) {
-		 if (event.getWorld().isClientSide()) return;
+		 if (event.getLevel().isClientSide()) return;
 		 
 		 
-		 Level level = (Level) event.getWorld();
+		 Level level = (Level) event.getLevel();
 		 PistonStructureResolver structure = event.getStructureHelper();
 		 structure.resolve();
 

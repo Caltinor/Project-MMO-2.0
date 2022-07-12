@@ -32,7 +32,7 @@ public class DamageDealtHandler {
 		
 		//Execute actual logic only if the source is a player
 		if (event.getSource().getEntity() instanceof Player) {
-			LivingEntity target = event.getEntityLiving();
+			LivingEntity target = event.getEntity();
 			//Confirm our target is a living entity
 			if (target == null) return;
 			
@@ -40,7 +40,7 @@ public class DamageDealtHandler {
 			if (target.equals(player))
 				return;
 			Core core = Core.get(player.level);
-			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntityLiving());
+			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntity());
 			MsLoggy.INFO.log(LOG_CODE.EVENT,"Attack Type: "+type.name()+" | TargetType: "+target.getType().toString());
 			
 			
@@ -72,14 +72,14 @@ public class DamageDealtHandler {
 		if (event.getSource().getEntity() == null) return;
 		//Execute actual logic only if the source is a player
 		if (event.getSource().getEntity() instanceof Player) {
-			LivingEntity target = event.getEntityLiving();
+			LivingEntity target = event.getEntity();
 			if (target == null) return;
 			
 			Player player = (Player) event.getSource().getEntity();
 			if (target.equals(player)) return;
 			
 			Core core = Core.get(player.level);
-			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntityLiving());
+			EventType type = getEventCategory(event.getSource().isProjectile(), event.getEntity());
 			//Process perks
 			CompoundTag perkOutput = core.getPerkRegistry().executePerk(type, player, TagBuilder.start().withFloat(APIUtils.DAMAGE_IN, event.getAmount()).build(), core.getSide());
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Pre-Perk Damage:"+event.getAmount());

@@ -26,11 +26,11 @@ public class XpEvent extends PlayerEvent
     }
 
     public int startLevel() {
-        return Core.get(this.getPlayer().level).getData().getLevelFromXP(currentSkillXp);
+        return Core.get(this.getEntity().level).getData().getLevelFromXP(currentSkillXp);
     }
 
     public int endLevel() {
-        return Core.get(this.getPlayer().level).getData().getLevelFromXP(amountAwarded + currentSkillXp);
+        return Core.get(this.getEntity().level).getData().getLevelFromXP(amountAwarded + currentSkillXp);
     }
     
     public boolean isLevelUp() {

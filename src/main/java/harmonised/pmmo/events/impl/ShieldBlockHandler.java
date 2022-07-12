@@ -21,10 +21,10 @@ import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 public class ShieldBlockHandler {
 
 	public static void handle(ShieldBlockEvent event) {
-		if (!(event.getEntityLiving() instanceof Player)) return;
+		if (!(event.getEntity() instanceof Player)) return;
 		if (event.getDamageSource().getEntity() == null) return;
 		
-		Player player = (Player) event.getEntityLiving();
+		Player player = (Player) event.getEntity();
 		Core core = Core.get(player.level);
 		ItemStack shield = player.getUseItem();
 		Entity attacker = event.getDamageSource().getEntity();

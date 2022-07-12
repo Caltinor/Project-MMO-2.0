@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.Mod;
 public class KeyPressHandler {
 
 	@SubscribeEvent
-    public static void keyPressEvent(net.minecraftforge.client.event.InputEvent.KeyInputEvent event)
+    public static void keyPressEvent(net.minecraftforge.client.event.InputEvent.Key event)
     {
 		Minecraft mc = Minecraft.getInstance();
         if(mc.player != null)

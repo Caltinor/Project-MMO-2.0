@@ -18,14 +18,14 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 public class EntityInteractHandler {
 	
 	public static void handle(EntityInteract event) {
-		Core core = Core.get(event.getPlayer().level);
-		if (!core.isActionPermitted(ReqType.ENTITY_INTERACT, event.getTarget(), event.getPlayer())) {
+		Core core = Core.get(event.getEntity().level);
+		if (!core.isActionPermitted(ReqType.ENTITY_INTERACT, event.getTarget(), event.getEntity())) {
 			event.setCanceled(true);
 			event.setCancellationResult(InteractionResult.FAIL);
-			Messenger.sendDenialMsg(ReqType.ENTITY_INTERACT, event.getPlayer(), event.getTarget().getName());
+			Messenger.sendDenialMsg(ReqType.ENTITY_INTERACT, event.getEntity(), event.getTarget().getName());
 			return;
 		}
-		boolean serverSide = !event.getPlayer().level.isClientSide;
+		boolean serverSide = !event.getEntity().level.isClientSide;
 		CompoundTag eventHookOutput = new CompoundTag();
 		if (serverSide){
 			eventHookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ENTITY, event, new CompoundTag());
@@ -36,10 +36,10 @@ public class EntityInteractHandler {
 			}
 		}
 		//Process perks
-		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ENTITY,  event.getPlayer(), eventHookOutput, core.getSide()));
+		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.ENTITY,  event.getEntity(), eventHookOutput, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENTITY, event.getTarget(), event.getPlayer(), perkOutput);
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENTITY, event.getTarget(), event.getEntity(), perkOutput);
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);
 		}
 	}

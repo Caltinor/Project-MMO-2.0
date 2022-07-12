@@ -16,7 +16,7 @@ public class PlayerDeathHandler {
 		if (lossRatio <= 0) return;
 	
 		//IMPORTANT  this is confirmed by the call in EventHandler.  this assumption is critical to this call
-		Player player = (Player) event.getEntityLiving();
+		Player player = (Player) event.getEntity();
 		Core core = Core.get(player.level);
 		
 		Map<String, Long> currentXp = new HashMap<>(core.getData().getXpMap(player.getUUID()));

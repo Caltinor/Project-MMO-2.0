@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
 
 public class PlaceHandler {
 	public static void handle(EntityPlaceEvent event) {
@@ -39,11 +39,11 @@ public class PlaceHandler {
 		}
 		CompoundTag perkOutput = TagUtils.mergeTags(eventHookOutput, core.getPerkRegistry().executePerk(EventType.BLOCK_PLACE, player, eventHookOutput, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.BLOCK_PLACE, event.getPos(),(Level) event.getWorld(), (Player) event.getEntity(), perkOutput);
+			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.BLOCK_PLACE, event.getPos(),(Level) event.getLevel(), (Player) event.getEntity(), perkOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 			core.awardXP(partyMembersInRange, xpAward);
 			//Add the newly placed block to the ChunkDataHandler
-			LevelChunk chunk = (LevelChunk) event.getWorld().getChunk(event.getPos());
+			LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
 			chunk.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
 				cap.addPos(event.getPos(), player.getUUID());
 			});;

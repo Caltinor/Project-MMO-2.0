@@ -27,4 +27,21 @@ public class ChunkDataHandler implements IChunkData{
 	public Map<BlockPos, UUID> getMap() {return placedMap;}
 	@Override
 	public void setMap(Map<BlockPos, UUID> map) {placedMap = map;}
+	
+	//===============================================================
+	//    Cascading Breaking Blocks Tracker
+	///===============================================================
+	
+	private Map<BlockPos, UUID> breakMap = new HashMap<>();
+	@Override
+	public UUID getBreaker(BlockPos pos, boolean shouldRemove) {
+		UUID breaker = breakMap.getOrDefault(pos, Reference.NIL);
+		if (shouldRemove)
+			breakMap.remove(pos);
+		return breaker;
+	}
+	@Override
+	public void setBreaker(BlockPos pos, UUID breaker) {
+		breakMap.put(pos, breaker);
+	}
 }

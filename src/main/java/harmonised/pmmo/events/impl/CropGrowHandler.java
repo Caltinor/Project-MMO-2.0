@@ -13,16 +13,16 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
+import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
 
 public class CropGrowHandler {
 
 	public static void handle(CropGrowEvent.Post event) {
-		Level level = (Level) event.getWorld();
+		Level level = (Level) event.getLevel();
 		if (!level.isClientSide) {
 			Core core = Core.get(level);
 			UUID placerID = level.getChunkAt(event.getPos()).getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new).checkPos(event.getPos());
-			ServerPlayer player = event.getWorld().getServer().getPlayerList().getPlayer(placerID);
+			ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(placerID);
 			if (player == null) return;
 			CompoundTag hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.GROW, event, new CompoundTag());
 			hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.GROW, player, core.getSide()));

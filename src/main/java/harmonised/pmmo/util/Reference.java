@@ -25,6 +25,7 @@ public class Reference {
 	public static final TagKey<EntityType<?>> BREEDABLE_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(MOD_ID, "breedable"));
 	public static final TagKey<EntityType<?>> RIDEABLE_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(MOD_ID, "rideable"));
 	public static final TagKey<Block> CROPS = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "crops"));
+	public static final TagKey<Block> CASCADING_BREAKABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, "cascading_breakables"));
 	public static final TagKey<Block> WOOD = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("mineable/axe"));
 	public static final TagKey<Block> EXCAVATABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("mineable/shovel"));
 	public static final TagKey<Item> BREWABLES = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MOD_ID, "brewables"));

@@ -22,7 +22,7 @@ import net.minecraftforge.eventbus.api.Event.Result;
 public class PlayerClickHandler {
 
 	public static void leftClickBlock(LeftClickBlock event ) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		Core core = Core.get(player.level);
 		boolean serverSide = !player.level.isClientSide;
 		
@@ -49,15 +49,15 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.HIT_BLOCK, player, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.HIT_BLOCK, event.getPos(), player.getLevel(), event.getPlayer(), hookOutput);
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
+			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.HIT_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static void rightClickBlock(RightClickBlock event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		Core core = Core.get(player.level);
 		boolean serverSide = !player.level.isClientSide;
 		
@@ -77,7 +77,7 @@ public class PlayerClickHandler {
 				return;
 			}
 			//======================SALVAGE DROP LOGIC=======================================
-			if (player.isCrouching() && event.getWorld().getBlockState(event.getPos()).getBlock().builtInRegistryHolder().unwrapKey().get().location().equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
+			if (player.isCrouching() && event.getLevel().getBlockState(event.getPos()).getBlock().builtInRegistryHolder().unwrapKey().get().location().equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
 				core.getSalvageLogic().getSalvage((ServerPlayer) player, core);
 			}
 			//=======================END SALVAGE============================================
@@ -87,14 +87,14 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_BLOCK, player, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.ACTIVATE_BLOCK, event.getPos(), player.getLevel(), event.getPlayer(), hookOutput);
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
+			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.ACTIVATE_BLOCK, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 	}
 	
 	public static void rightClickItem(RightClickItem event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		Core core = Core.get(player.level);
 		boolean serverSide = !player.level.isClientSide;
 		
@@ -113,8 +113,8 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_ITEM, player, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.ACTIVATE_ITEM, event.getPos(), player.getLevel(), event.getPlayer(), hookOutput);
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
+			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.ACTIVATE_ITEM, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 	}

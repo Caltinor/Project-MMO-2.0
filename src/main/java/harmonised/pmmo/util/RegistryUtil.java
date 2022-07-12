@@ -41,6 +41,6 @@ public class RegistryUtil {
 	}
 
 	public static ResourceLocation getId(EntityType<?> entity) {
-		return ForgeRegistries.ENTITIES.getKey(entity);
+		return ForgeRegistries.ENTITY_TYPES.getKey(entity);
 	}
 }

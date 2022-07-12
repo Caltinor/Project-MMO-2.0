@@ -17,26 +17,26 @@ import net.minecraft.server.level.ServerPlayer;
 public class EnchantHandler {
 
 	public static void handle(EnchantEvent event) {
-		Core core = Core.get(event.getPlayer().getLevel());
+		Core core = Core.get(event.getEntity().getLevel());
 		CompoundTag hookOutput = new CompoundTag();
-		boolean serverSide = !event.getPlayer().level.isClientSide; 
+		boolean serverSide = !event.getEntity().level.isClientSide; 
 		if (serverSide) {
 			CompoundTag dataIn = TagBuilder.start()
 					.withString(APIUtils.STACK, event.getItem().serializeNBT().getAsString())
-					.withString(APIUtils.PLAYER_ID, event.getPlayer().getUUID().toString())
+					.withString(APIUtils.PLAYER_ID, event.getEntity().getUUID().toString())
 					.withInt(APIUtils.ENCHANT_LEVEL, event.getEnchantment().level)
 					.withString(APIUtils.ENCHANT_NAME, event.getEnchantment().enchantment.getDescriptionId()).build();
 			hookOutput = core.getEventTriggerRegistry().executeEventListeners(EventType.ENCHANT, event, dataIn);
 		}
-		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ENCHANT, event.getPlayer(), hookOutput, core.getSide()));
+		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ENCHANT, event.getEntity(), hookOutput, core.getSide()));
 		if (serverSide) {
 			double proportion = (double)event.getEnchantment().level / (double)event.getEnchantment().enchantment.getMaxLevel();
-			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENCHANT, event.getItem(), event.getPlayer(), hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ENCHANT, event.getItem(), event.getEntity(), hookOutput);
 			Set<String> keys = xpAward.keySet();
 			keys.forEach((skill) -> {
 				xpAward.computeIfPresent(skill, (key, value) -> Double.valueOf((double)value * proportion).longValue());
 			});
-			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
+			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
 		
