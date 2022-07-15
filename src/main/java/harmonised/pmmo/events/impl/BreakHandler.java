@@ -15,6 +15,7 @@ import harmonised.pmmo.storage.ChunkDataHandler;
 import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
 import harmonised.pmmo.util.Messenger;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,9 +51,12 @@ public class BreakHandler {
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getPlayer());
 			core.awardXP(partyMembersInRange, xpAward);
 			//update ChunkData to remove the block from the placed map
+			//if a cascading breaking crop block, add the breaker value.
 			LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
 			chunk.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
 				cap.delPos(event.getPos());
+				if (event.getLevel().getBlockState(event.getPos()).is(Reference.CASCADING_BREAKABLES))
+					cap.setBreaker(event.getPos(), event.getPlayer().getUUID());
 			});;
 			chunk.setUnsaved(true);
 		}

@@ -14,6 +14,6 @@ public interface IChunkData {
 	 public Map<BlockPos, UUID> getMap();
 	 public void setMap(Map<BlockPos, UUID> map);
 	 //cascading break util methods
-	 public UUID getBreaker(BlockPos pos, boolean shouldRemove);
+	 public UUID getBreaker(BlockPos pos);
 	 public void setBreaker(BlockPos pos, UUID breaker);
 }

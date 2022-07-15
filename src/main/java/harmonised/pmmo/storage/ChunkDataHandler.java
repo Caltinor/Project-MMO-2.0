@@ -34,11 +34,8 @@ public class ChunkDataHandler implements IChunkData{
 	
 	private Map<BlockPos, UUID> breakMap = new HashMap<>();
 	@Override
-	public UUID getBreaker(BlockPos pos, boolean shouldRemove) {
-		UUID breaker = breakMap.getOrDefault(pos, Reference.NIL);
-		if (shouldRemove)
-			breakMap.remove(pos);
-		return breaker;
+	public UUID getBreaker(BlockPos pos) {
+		return breakMap.remove(pos);
 	}
 	@Override
 	public void setBreaker(BlockPos pos, UUID breaker) {
