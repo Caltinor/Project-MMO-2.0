@@ -37,63 +37,63 @@ public class Networking {
 		INSTANCE.messageBuilder(CP_UpdateLevelCache.class, ID++)
 			.encoder(CP_UpdateLevelCache::toBytes)
 			.decoder(CP_UpdateLevelCache::new)
-			.consumer(CP_UpdateLevelCache::handle)
+			.consumerNetworkThread(CP_UpdateLevelCache::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_UpdateExperience.class, ID++)
 			.encoder(CP_UpdateExperience::toBytes)
 			.decoder(CP_UpdateExperience::new)
-			.consumer(CP_UpdateExperience::handle)
+			.consumerNetworkThread(CP_UpdateExperience::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_Objects.class, ID++)
 			.encoder(CP_SyncData_Objects::encode)
 			.decoder(CP_SyncData_Objects::decode)
-			.consumer(CP_SyncData_Objects::handle)
+			.consumerNetworkThread(CP_SyncData_Objects::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_Locations.class, ID++)
 			.encoder(CP_SyncData_Locations::encode)
 			.decoder(CP_SyncData_Locations::decode)
-			.consumer(CP_SyncData_Locations::handle)
+			.consumerNetworkThread(CP_SyncData_Locations::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_Enchantments.class, ID++)
 			.encoder(CP_SyncData_Enchantments::encode)
 			.decoder(CP_SyncData_Enchantments::decode)
-			.consumer(CP_SyncData_Enchantments::handle)
+			.consumerNetworkThread(CP_SyncData_Enchantments::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_Players.class, ID++)
 			.encoder(CP_SyncData_Players::encode)
 			.decoder(CP_SyncData_Players::decode)
-			.consumer(CP_SyncData_Players::handle)
+			.consumerNetworkThread(CP_SyncData_Players::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SyncData_ClearXp.class, ID++)
 			.encoder((packet, buf) -> {})
 			.decoder(buf -> new CP_SyncData_ClearXp())
-			.consumer(CP_SyncData_ClearXp::handle)
+			.consumerNetworkThread(CP_SyncData_ClearXp::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_ClearData.class, ID++)
 			.encoder((packet, buf) -> {})
 			.decoder(buf -> new CP_ClearData())
-			.consumer(CP_ClearData::handle)
+			.consumerNetworkThread(CP_ClearData::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_SetOtherExperience.class, ID++)
 			.encoder(CP_SetOtherExperience::toBytes)
 			.decoder(CP_SetOtherExperience::new)
-			.consumer(CP_SetOtherExperience::handle)
+			.consumerNetworkThread(CP_SetOtherExperience::handle)
 			.add();
 		INSTANCE.messageBuilder(CP_ResetXP.class, ID++)
 			.encoder((packet, buf) -> {})
 			.decoder(buf -> new CP_ResetXP())
-			.consumer(CP_ResetXP::handle)
+			.consumerNetworkThread(CP_ResetXP::handle)
 			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
 			.encoder(SP_UpdateVeinTarget::toBytes)
 			.decoder(SP_UpdateVeinTarget::new)
-			.consumer(SP_UpdateVeinTarget::handle)
+			.consumerNetworkThread(SP_UpdateVeinTarget::handle)
 			.add();
 		INSTANCE.messageBuilder(SP_OtherExpRequest.class, ID++)
 			.encoder(SP_OtherExpRequest::toBytes)
 			.decoder(SP_OtherExpRequest::new)
-			.consumer(SP_OtherExpRequest::handle)
+			.consumerNetworkThread(SP_OtherExpRequest::handle)
 			.add();
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}
