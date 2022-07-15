@@ -33,7 +33,6 @@ public class ClientSetup {
     	event.register(OPEN_MENU);
     }
     
-    @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
     	event.registerAboveAll("stats_overlay", new XPOverlayGUI());
     }
