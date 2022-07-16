@@ -16,8 +16,15 @@
 		"minecraft:red_mushroom",
 		"minecraft:brown_mushroom",
 		"minecraft:kelp",
+		"minecraft:kelp_plant",
 		"minecraft:nether_wart",
 		"minecraft:sea_pickle",
-		"minecraft:chorus_plant"
+		"minecraft:chorus_plant",
+		"minecraft:weeping_vines",
+		"minecraft:weeping_vines_plant",
+		"minecraft:twisting_vines",
+		"minecraft:twisting_vines_plant",
+		"minecraft:cave_vines_plant",
+		"minecraft:cave_vines"
 	]
 }
