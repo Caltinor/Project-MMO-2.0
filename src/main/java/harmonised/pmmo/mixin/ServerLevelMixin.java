@@ -20,6 +20,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.level.BlockEvent;
 
+/**This mixin is named "ServerLevel" Mixin because we are checking first and 
+ * foremost if the instance of level is an instance of ServerLevel before 
+ * executing our logic.  Therefore, even though we are technically mixing into
+ * {@link net.minecraft.world.level.Level Level}, we are only ever executing within
+ * ServerLevel.  This was necessary because you cannot inject into inherited
+ * methods with mixin.
+ * 
+ * @author Caltinor
+ *
+ */
 @Mixin(Level.class)
 public class ServerLevelMixin {
 	
@@ -28,8 +38,8 @@ public class ServerLevelMixin {
 				value="INVOKE",
 				target="Lnet/minecraft/world/level/Level;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z"))
 	public void setBlockInvocation(BlockPos pos, boolean p_46627_, @Nullable Entity entity, int p_46629_, CallbackInfoReturnable<?> ci) {
-		if (!((Level)(Object)this instanceof ServerLevel) || ci.getReturnValueZ() == false)
-		execute(pos, (Level)(Object)this);
+		if ((Level)(Object)this instanceof ServerLevel)
+			execute(pos, (Level)(Object)this);
 	}
 	
 	private static void execute(BlockPos pos, Level level) {
