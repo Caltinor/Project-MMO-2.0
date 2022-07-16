@@ -9,6 +9,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -55,7 +56,6 @@ public class PlayerClickHandler {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void rightClickBlock(RightClickBlock event) {
 		Player player = event.getEntity();
 		Core core = Core.get(player.level);
@@ -77,7 +77,7 @@ public class PlayerClickHandler {
 				return;
 			}
 			//======================SALVAGE DROP LOGIC=======================================
-			if (player.isCrouching() && event.getLevel().getBlockState(event.getPos()).getBlock().builtInRegistryHolder().unwrapKey().get().location().equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
+			if (player.isCrouching() && RegistryUtil.getId(event.getLevel().getBlockState(event.getPos()).getBlock()).equals(new ResourceLocation(Config.SALVAGE_BLOCK.get()))) {
 				core.getSalvageLogic().getSalvage((ServerPlayer) player, core);
 			}
 			//=======================END SALVAGE============================================
