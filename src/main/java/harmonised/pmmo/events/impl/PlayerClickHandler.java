@@ -14,6 +14,7 @@ import harmonised.pmmo.util.TagUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
@@ -81,9 +82,7 @@ public class PlayerClickHandler {
 				core.getSalvageLogic().getSalvage((ServerPlayer) player, core);
 			}
 			//=======================END SALVAGE============================================
-		}
-		
-		
+		}		
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_BLOCK, player, core.getSide()));
 		if (serverSide) {
@@ -99,7 +98,9 @@ public class PlayerClickHandler {
 		boolean serverSide = !player.level.isClientSide;
 		
 		if (!core.isActionPermitted(ReqType.USE, event.getItemStack(), player)) {
-			event.setResult(Result.DENY);
+			System.out.println("item action denied"); //TODO remove
+			event.setCancellationResult(InteractionResult.FAIL);
+			event.setCanceled(true);
 			return;
 		}
 		CompoundTag hookOutput = new CompoundTag();
@@ -113,7 +114,7 @@ public class PlayerClickHandler {
 		
 		hookOutput = TagUtils.mergeTags(hookOutput, core.getPerkRegistry().executePerk(EventType.ACTIVATE_ITEM, player, core.getSide()));
 		if (serverSide) {
-			Map<String, Long> xpAward = core.getBlockExperienceAwards(EventType.ACTIVATE_ITEM, event.getPos(), player.getLevel(), event.getEntity(), hookOutput);
+			Map<String, Long> xpAward = core.getExperienceAwards(EventType.ACTIVATE_ITEM, event.getItemStack(), event.getEntity(), hookOutput);
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) event.getEntity());
 			core.awardXP(partyMembersInRange, xpAward);	
 		}
