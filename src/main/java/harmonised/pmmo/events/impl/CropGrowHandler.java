@@ -27,11 +27,9 @@ public class CropGrowHandler {
 			
 			//if this block grew to exist because of a cascading block, return the block which spawned it
 			BlockPos sourcePos = getParentPos(level, event.getState(), event.getPos());
-			System.out.println(level.getBlockState(sourcePos).toString()+" | "+sourcePos.toString()); //TODO remove
 			//get the owner of the source block to know who to give the grow XP to.
 			ChunkDataHandler cap = (ChunkDataHandler) level.getChunkAt(sourcePos).getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
 			UUID placerID = cap.checkPos(sourcePos);
-			System.out.println(placerID.toString());
 			ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(placerID);
 			
 			//if there is no owning player, return as there is no XP to give
