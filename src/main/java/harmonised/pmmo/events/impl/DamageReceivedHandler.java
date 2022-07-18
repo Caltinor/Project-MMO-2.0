@@ -66,21 +66,21 @@ public class DamageReceivedHandler {
 		}
 		case FROM_ENVIRONMENT: {
 			Config.FROM_ENVIRONMENT_XP.get().keySet().forEach((skill) -> {	
-				Double value = ultimateDamage * Config.FROM_ENVIRONMENT_XP.get().getOrDefault(skill, 0d);
+				Double value = ultimateDamage * Config.FROM_ENVIRONMENT_XP.get().getOrDefault(skill, 0d) * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
 		}
 		case FROM_IMPACT: {
 			Config.FROM_IMPACT_XP.get().keySet().forEach((skill) -> {	
-				Double value = ultimateDamage * Config.FROM_IMPACT_XP.get().getOrDefault(skill, 0d);
+				Double value = ultimateDamage * Config.FROM_IMPACT_XP.get().getOrDefault(skill, 0d) * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
 		} 
 		case FROM_MAGIC: {
 			Config.FROM_MAGIC_XP.get().keySet().forEach((skill) -> {
-				Double value = ultimateDamage * Config.FROM_MAGIC_XP.get().getOrDefault(skill, 0d);
+				Double value = ultimateDamage * Config.FROM_MAGIC_XP.get().getOrDefault(skill, 0d) * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
@@ -93,7 +93,7 @@ public class DamageReceivedHandler {
 				});
 			else {
 				Config.RECEIVE_DAMAGE_XP.get().keySet().forEach((skill) -> {	
-					Double value = ultimateDamage * Config.RECEIVE_DAMAGE_XP.get().getOrDefault(skill, 0d);
+					Double value = ultimateDamage * Config.RECEIVE_DAMAGE_XP.get().getOrDefault(skill, 0d) * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
 					mapOut.put(skill, value.longValue());
 				});
 			}

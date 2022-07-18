@@ -107,14 +107,14 @@ public class DamageDealtHandler {
 		}
 		case DEAL_MELEE_DAMAGE: {
 			Config.DEAL_MELEE_DAMAGE_XP.get().keySet().forEach((skill) -> {
-				Double value = ultimateDamage * Config.DEAL_MELEE_DAMAGE_XP.get().getOrDefault(skill, 0d);
+				Double value = ultimateDamage * Config.DEAL_MELEE_DAMAGE_XP.get().getOrDefault(skill, 0d) * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
 		}
 		case DEAL_RANGED_DAMAGE: {
 			Config.DEAL_RANGED_DAMAGE_XP.get().keySet().forEach((skill) -> {
-				Double value = ultimateDamage * Config.DEAL_RANGED_DAMAGE_XP.get().getOrDefault(skill, 0d);
+				Double value = ultimateDamage * Config.DEAL_RANGED_DAMAGE_XP.get().getOrDefault(skill, 0d) * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
 				mapOut.put(skill, value.longValue());
 			});
 			break;
