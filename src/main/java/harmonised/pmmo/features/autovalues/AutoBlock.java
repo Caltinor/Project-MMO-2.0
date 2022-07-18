@@ -48,10 +48,12 @@ public class AutoBlock {
 		case BLOCK_BREAK: case BLOCK_PLACE: {			
 			if (ForgeRegistries.BLOCKS.tags().getTag(Reference.CROPS).contains(block))
 				outMap.putAll(AutoValueConfig.getBlockXpAward(EventType.GROW));
-			else if (ForgeRegistries.BLOCKS.tags().getTag(Reference.WOOD).contains(block))
-				outMap.putAll(AutoValueConfig.WOOD_OVERRIDE.get());
-			else if (ForgeRegistries.BLOCKS.tags().getTag(Reference.EXCAVATABLES).contains(block))
-				outMap.putAll(AutoValueConfig.EXCAVATABLE_OVERRIDE.get());
+			else if (ForgeRegistries.BLOCKS.tags().getTag(Reference.MINABLE_AXE).contains(block))
+				outMap.putAll(AutoValueConfig.AXE_OVERRIDE.get());
+			else if (ForgeRegistries.BLOCKS.tags().getTag(Reference.MINABLE_HOE).contains(block))
+				outMap.putAll(AutoValueConfig.HOE_OVERRIDE.get());
+			else if (ForgeRegistries.BLOCKS.tags().getTag(Reference.MINABLE_SHOVEL).contains(block))
+				outMap.putAll(AutoValueConfig.SHOVEL_OVERRIDE.get());
 			else
 				AutoValueConfig.getBlockXpAward(type).forEach((skill, level) -> {
 					float breakSpeed = Math.max(1, block.defaultBlockState().getDestroySpeed(null, null));
