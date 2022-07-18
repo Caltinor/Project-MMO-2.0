@@ -45,9 +45,12 @@ public class VeinShapeData {
 		ringMap.forEach((pos, node) -> {
 			map.put(pos, node.setScanned());
 			Map<BlockPos, Node> newRingMap = new HashMap<>();
+			outer:
 			for (int x = -1; x <= 1; x++) {
 				for (int y = -1; y <= 1; y++) {
 					for (int z = -1; z <= 1; z++) {
+						if (maxBlocks <= 0)
+							break outer;
 						BlockPos currentPos = pos.offset(x, y, z);
 						if (map.containsKey(currentPos)) continue; 
 						if (level.getBlockState(currentPos).getBlock().equals(block)) {
