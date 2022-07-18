@@ -76,8 +76,9 @@ public class AutoValueConfig {
 	private static Map<EventType, ConfigObject<Map<String, Long>>> ITEM_XP_AWARDS;
 	private static Map<EventType, ConfigObject<Map<String, Long>>> BLOCK_XP_AWARDS;
 	private static Map<EventType, ConfigObject<Map<String, Long>>> ENTITY_XP_AWARDS;
-	public static ConfigObject<Map<String, Long>> WOOD_OVERRIDE;
-	public static ConfigObject<Map<String, Long>> EXCAVATABLE_OVERRIDE;
+	public static ConfigObject<Map<String, Long>> AXE_OVERRIDE;
+	public static ConfigObject<Map<String, Long>> HOE_OVERRIDE;
+	public static ConfigObject<Map<String, Long>> SHOVEL_OVERRIDE;
 	public static ForgeConfigSpec.DoubleValue RARITIES_MODIFIER;
 	public static ConfigObject<Map<String, Long>> BREWABLES_OVERRIDE;
 	public static ConfigObject<Map<String, Long>> SMELTABLES_OVERRIDE;
@@ -119,16 +120,22 @@ public class AutoValueConfig {
 		for (EventType type : AutoBlock.EVENTTYPES) {
 			BLOCK_XP_AWARDS.put(type, TomlConfigHelper.<Map<String, Long>>defineObject(builder, type.toString()+" Default Xp Award", CodecTypes.LONG_CODEC, Collections.singletonMap(type.autoValueSkill, 1l)));
 		}
-		WOOD_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
+		AXE_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
 				builder.comment("Special override for "+EventType.BLOCK_BREAK.toString()+" and "+EventType.BLOCK_PLACE.toString()+" events when breaking",
-						"members of pmmo's wood blocktag."),
-				"Wood Block Action Override", 
+						"blocks in the minecraft:mineable/axe tag."),
+				"Axe Breakable Block Action Override", 
 				CodecTypes.LONG_CODEC, 
 				Collections.singletonMap("woodcutting", 10l));
-		EXCAVATABLE_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
+		HOE_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
 				builder.comment("Special override for "+EventType.BLOCK_BREAK.toString()+" and "+EventType.BLOCK_PLACE.toString()+" events when breaking",
-						"members of pmmo's excavatables blocktag."),
-				"Excavatable Block Action Override", 
+						"blocks in the minecraft:mineable/hoe tag."),
+				"Hoe Breakable Block Action Override", 
+				CodecTypes.LONG_CODEC, 
+				Collections.singletonMap("farming", 10l));
+		SHOVEL_OVERRIDE = TomlConfigHelper.<Map<String, Long>>defineObject(
+				builder.comment("Special override for "+EventType.BLOCK_BREAK.toString()+" and "+EventType.BLOCK_PLACE.toString()+" events when breaking",
+						"blocks in the minecraft:mineable/shovel tag."),
+				"Shovel Breakable Block Action Override", 
 				CodecTypes.LONG_CODEC, 
 				Collections.singletonMap("excavation", 10l));
 		RARITIES_MODIFIER = builder.comment("How much should xp for rare blocks like ores be multiplied by.")
