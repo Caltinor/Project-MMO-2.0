@@ -89,11 +89,12 @@ public class PlayerTickHandler {
 					? core.getXpUtils().deserializeAwardMap(perkOutput.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
 			switch (type) {
+			//TODO make these config derived XP calculations into a Core method and use that here and in the damage dealt/received events
 			case BREATH_CHANGE: {
 				int diff = Math.abs(airLast.getOrDefault(event.player.getUUID(), 0) - event.player.getAirSupply());
 				Map<String, Double> ratio = Config.BREATH_CHANGE_XP.get();
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * diff;
+					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 				break;
@@ -102,7 +103,7 @@ public class PlayerTickHandler {
 				float diff = Math.abs(healthLast.getOrDefault(event.player.getUUID(), 0f) - event.player.getHealth());
 				Map<String, Double> ratio = Config.HEALTH_CHANGE_XP.get();
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * diff;
+					Double value = ratio.getOrDefault(skill, 0d) * diff * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 				break;
@@ -118,7 +119,7 @@ public class PlayerTickHandler {
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.SPRINTING_XP.get();
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude;
+					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});;
 				break;
@@ -135,7 +136,7 @@ public class PlayerTickHandler {
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.SWIMMING_XP.get();
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude;
+					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 				break;
@@ -145,7 +146,7 @@ public class PlayerTickHandler {
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.DIVING_XP.get();
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude;
+					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 				break;
@@ -155,7 +156,7 @@ public class PlayerTickHandler {
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.SURFACING_XP.get();
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude;
+					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 				break;
@@ -165,7 +166,7 @@ public class PlayerTickHandler {
 				double magnitude = Math.sqrt(Math.pow(vec.x(), 2)+Math.pow(vec.y(), 2)+Math.pow(vec.z(), 2));
 				Map<String, Double> ratio = Config.SWIM_SPRINTING_XP.get();
 				ratio.keySet().forEach((skill) -> {
-					Double value = ratio.getOrDefault(skill, 0d) * magnitude;
+					Double value = ratio.getOrDefault(skill, 0d) * magnitude * core.getConsolidatedModifierMap(event.player).getOrDefault(skill, 1d);
 					xpAward.put(skill, value.longValue());
 				});
 				break;

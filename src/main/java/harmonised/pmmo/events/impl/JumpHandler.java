@@ -43,7 +43,7 @@ public class JumpHandler {
 			Map<String, Long> xpAward = new HashMap<>();
 			Map<String, Double> ratios = getRatioMap(type);
 			ratios.keySet().forEach((skill) -> {
-				Double xpValue = ratios.getOrDefault(skill, 2.5) * jumpXpBase;
+				Double xpValue = ratios.getOrDefault(skill, 2.5) * jumpXpBase * core.getConsolidatedModifierMap(player).getOrDefault(skill, 1d);
 				xpAward.put(skill, xpValue.longValue());
 			});
 			List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
