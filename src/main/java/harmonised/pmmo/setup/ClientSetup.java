@@ -11,7 +11,7 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE, value=Dist.CLIENT)
+@Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD, value=Dist.CLIENT)
 public class ClientSetup {
 
 	public static final KeyMapping SHOW_VEIN = new KeyMapping("key.pmmo.showVein", GLFW.GLFW_KEY_TAB, "category.pmmo");
@@ -23,8 +23,6 @@ public class ClientSetup {
     public static final KeyMapping OPEN_SKILLS = new KeyMapping("key.pmmo.openSkills", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo");
     public static final KeyMapping OPEN_GLOSSARY = new KeyMapping("key.pmmo.openGlossary", GLFW.GLFW_KEY_UNKNOWN, "category.pmmo");
     
-    //public static final IGuiOverlay STATS_OVERLAY = OverlayRegistry.registerOverlayTop("stats_overlay", new XPOverlayGUI());
-    
     @SubscribeEvent
     public static void init(RegisterKeyMappingsEvent event) {
     	event.register(SHOW_VEIN);
@@ -33,6 +31,7 @@ public class ClientSetup {
     	event.register(OPEN_MENU);
     }
     
+    @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
     	event.registerAboveAll("stats_overlay", new XPOverlayGUI());
     }
