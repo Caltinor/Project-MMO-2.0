@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Block;
 
 public class VeinMiningLogic {
 	public static final String VEIN_DATA = "vein_data";
-	private static final String CURRENT_CHARGE = "vein_charge";
+	public static final String CURRENT_CHARGE = "vein_charge";
 
 	/**This executes the actual break logic.  This should only be called
 	 * on the server.
