@@ -37,6 +37,7 @@ import harmonised.pmmo.storage.PmmoSavedData;
 import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -361,47 +362,46 @@ public class Core {
 		return processSkillGroupXP(inMap);
 	}
 
-	@SuppressWarnings("deprecation")
 	public Map<String, Double> getConsolidatedModifierMap(Player player) {
 			Map<String, Double> mapOut = new HashMap<>();
 			for (ModifierDataType type : ModifierDataType.values()) {
 				Map<String, Double> modifiers = new HashMap<>();
 				switch (type) {
 				case BIOME: {
-					ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).unwrapKey().get().location();
+					ResourceLocation biomeID = RegistryUtil.getId(player.level.getBiome(player.blockPosition()).value());
 					modifiers = xp.getObjectModifierMap(type, biomeID);
 					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 					}
 					break;
 				}
 				case HELD: {
 					ItemStack offhandStack = player.getOffhandItem();
 					ItemStack mainhandStack = player.getMainHandItem();
-					ResourceLocation offhandID = offhandStack.getItem().builtInRegistryHolder().unwrapKey().get().location();
+					ResourceLocation offhandID = RegistryUtil.getId(offhandStack);
 					modifiers = tooltips.bonusTooltipExists(offhandID, type) ?
 							tooltips.getBonusTooltipData(offhandID, type, offhandStack) :
 							xp.getObjectModifierMap(type, offhandID);
 					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 					}				
-					ResourceLocation mainhandID = mainhandStack.getItem().builtInRegistryHolder().unwrapKey().get().location();				
+					ResourceLocation mainhandID = RegistryUtil.getId(mainhandStack);				
 					modifiers = tooltips.bonusTooltipExists(mainhandID, type) ?
 							tooltips.getBonusTooltipData(mainhandID, null, mainhandStack) :
 							xp.getObjectModifierMap(type, mainhandID);
 					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 					}				
 					break;
 				}
 				case WORN: {
 					player.getArmorSlots().forEach((stack) -> {
-						ResourceLocation itemID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
+						ResourceLocation itemID = RegistryUtil.getId(stack);
 						Map<String, Double> modifers = tooltips.bonusTooltipExists(itemID, type) ?
 								tooltips.getBonusTooltipData(itemID, type, stack):
 								xp.getObjectModifierMap(type, itemID);
 						for (Map.Entry<String, Double> modMap : modifers.entrySet()) {
-							mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+							mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 						}
 					});
 					break;
@@ -410,7 +410,7 @@ public class Core {
 					ResourceLocation dimensionID = player.level.dimension().location();
 					modifiers = xp.getObjectModifierMap(type, dimensionID);
 					for (Map.Entry<String, Double> modMap : modifiers.entrySet()) {
-						mapOut.merge(modMap.getKey(), modMap.getValue(), (n, o) -> {return n * o;});
+						mapOut.merge(modMap.getKey(), modMap.getValue(), (o, n) -> {return o + (n-1);});
 					}
 					break;
 				}
