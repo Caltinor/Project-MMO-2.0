@@ -98,7 +98,6 @@ public class PlayerClickHandler {
 		boolean serverSide = !player.level.isClientSide;
 		
 		if (!core.isActionPermitted(ReqType.USE, event.getItemStack(), player)) {
-			System.out.println("item action denied"); //TODO remove
 			event.setCancellationResult(InteractionResult.FAIL);
 			event.setCanceled(true);
 			return;
