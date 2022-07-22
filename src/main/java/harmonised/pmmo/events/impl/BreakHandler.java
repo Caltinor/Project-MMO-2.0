@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.event.level.BlockEvent.BreakEvent;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
 public class BreakHandler {
 	
@@ -52,17 +52,17 @@ public class BreakHandler {
 			core.awardXP(partyMembersInRange, xpAward);
 			//update ChunkData to remove the block from the placed map
 			//if a cascading breaking crop block, add the breaker value.
-			LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
+			LevelChunk chunk = (LevelChunk) event.getWorld().getChunk(event.getPos());
 			chunk.getCapability(ChunkDataProvider.CHUNK_CAP).ifPresent(cap -> {
 				cap.delPos(event.getPos());
-				if (event.getLevel().getBlockState(event.getPos()).is(Reference.CASCADING_BREAKABLES))
+				if (event.getWorld().getBlockState(event.getPos()).is(Reference.CASCADING_BREAKABLES))
 					cap.setBreaker(event.getPos(), event.getPlayer().getUUID());
 			});;
 			chunk.setUnsaved(true);
 		}
 		//==============Process Vein Miner Logic==================
 		if (core.getVeinData().getMarkedPos(event.getPlayer().getUUID()).equals(event.getPos())) {
-			BlockState block = event.getLevel().getBlockState(event.getPos());
+			BlockState block = event.getWorld().getBlockState(event.getPos());
 			if (event.getPlayer().getMainHandItem().getItem() instanceof TieredItem) {
 				TieredItem item = (TieredItem) event.getPlayer().getMainHandItem().getItem();
 				if (item.isCorrectToolForDrops(event.getPlayer().getMainHandItem(), block)) 
@@ -72,12 +72,12 @@ public class BreakHandler {
 	}
 	
 	private static Map<String, Long> calculateXpAward(Core core, BreakEvent event, CompoundTag dataIn) {
-		Map<String, Long> outMap = core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getLevel(), event.getPlayer(), dataIn); 
-		LevelChunk chunk = (LevelChunk) event.getLevel().getChunk(event.getPos());
+		Map<String, Long> outMap = core.getBlockExperienceAwards(EventType.BLOCK_BREAK, event.getPos(), (Level)event.getWorld(), event.getPlayer(), dataIn); 
+		LevelChunk chunk = (LevelChunk) event.getWorld().getChunk(event.getPos());
 		IChunkData cap = chunk.getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
 		if (cap.playerMatchesPos(event.getPlayer(), event.getPos())) {
 			//Do not apply self-place penalty to crops
-			BlockState cropState = event.getLevel().getBlockState(event.getPos()); 
+			BlockState cropState = event.getWorld().getBlockState(event.getPos()); 
 			if (cropState.getBlock() instanceof CropBlock && ((CropBlock)cropState.getBlock()).isMaxAge(cropState))
 				return outMap;
 			double xpModifier = Config.REUSE_PENALTY.get();

@@ -16,12 +16,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.level.BlockEvent.CropGrowEvent;
+import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
 
 public class CropGrowHandler {
 
 	public static void handle(CropGrowEvent.Post event) {
-		Level level = (Level) event.getLevel();
+		Level level = (Level) event.getWorld();
 		if (!level.isClientSide) {
 			Core core = Core.get(level);
 			
@@ -30,7 +30,7 @@ public class CropGrowHandler {
 			//get the owner of the source block to know who to give the grow XP to.
 			ChunkDataHandler cap = (ChunkDataHandler) level.getChunkAt(sourcePos).getCapability(ChunkDataProvider.CHUNK_CAP).orElseGet(ChunkDataHandler::new);
 			UUID placerID = cap.checkPos(sourcePos);
-			ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(placerID);
+			ServerPlayer player = event.getWorld().getServer().getPlayerList().getPlayer(placerID);
 			
 			//if there is no owning player, return as there is no XP to give
 			if (player == null) return;

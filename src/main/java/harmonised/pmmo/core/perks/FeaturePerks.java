@@ -12,6 +12,7 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -175,7 +176,7 @@ public class FeaturePerks {
 		if (currentAir < 2 && (currentCD < System.currentTimeMillis() - cooldown 
 				|| currentCD + 20 >= System.currentTimeMillis())) {
 			player.setAirSupply(currentAir + perLevel);
-			player.sendSystemMessage(Component.translatable("pmmo.perks.breathrefresh"));
+			player.sendMessage(new TranslatableComponent("pmmo.perks.breathrefresh"), player.getUUID());
 			breathe_cooldown.put(player.getUUID(), System.currentTimeMillis());
 		}
 		return new CompoundTag();

@@ -8,7 +8,6 @@ import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
-import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.PmmoSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
