@@ -1,7 +1,10 @@
 package harmonised.pmmo.features.veinmining;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
@@ -21,6 +24,7 @@ import net.minecraft.world.level.block.Block;
 public class VeinMiningLogic {
 	public static final String VEIN_DATA = "vein_data";
 	public static final String CURRENT_CHARGE = "vein_charge";
+	public static final Map<UUID, Integer> maxBlocksPerPlayer = new HashMap<>();
 
 	/**This executes the actual break logic.  This should only be called
 	 * on the server.
@@ -35,7 +39,7 @@ public class VeinMiningLogic {
 		int charge = getCurrentCharge(player);
 		int consumed = 0;	
 		Block block = level.getBlockState(pos).getBlock();
-		int maxBlocks = charge/Core.get(level).getVeinData().getBlockConsume(block);
+		int maxBlocks = Math.min(charge/Core.get(level).getVeinData().getBlockConsume(block), maxBlocksPerPlayer.computeIfAbsent(player.getUUID(), id -> 64));
 		VeinShapeData veinData = new VeinShapeData(level, pos, maxBlocks);
 		for (BlockPos veinable : veinData.getVein()) {
 			consumed += cost;
