@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import harmonised.pmmo.client.events.ClientTickHandler;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.client.utils.DataMirror;
+import harmonised.pmmo.client.utils.VeinTracker;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
@@ -99,7 +100,7 @@ public class XPOverlayGUI implements IIngameOverlay
 		if (ClientTickHandler.isRefreshTick()) {
 			maxCharge = VeinMiningLogic.getMaxChargeFromAllItems(mc.player);
 			if (maxCharge > 0)
-				currentCharge = VeinMiningLogic.getChargeFromAllItems(mc.player);
+				currentCharge = VeinTracker.getCurrentCharge();
 		}
 		if (maxCharge > 0)
 			GuiComponent.drawString(stack, fontRenderer, new TranslatableComponent("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, guageY, 0xFFFFFF);

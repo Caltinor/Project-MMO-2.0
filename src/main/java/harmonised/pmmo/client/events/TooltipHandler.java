@@ -17,7 +17,6 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
-import harmonised.pmmo.features.veinmining.VeinMiningLogic;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
@@ -76,10 +75,8 @@ public class TooltipHandler {
             Map<String, Double> heldItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.HELD, stack);
             Map<String, Double> wornItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.WORN, stack);
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
-            int veinCharge = 0;
             VeinData veinData = VeinData.EMPTY;
             if (core.getVeinData().hasData(stack)) {
-            	veinCharge = VeinMiningLogic.getCurrentCharge(stack, player.level);
             	veinData = core.getVeinData().getData(stack);
             }
             
@@ -101,7 +98,7 @@ public class TooltipHandler {
             if (heldItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.HELD).get()) {addModifierTooltip("pmmo.itemXpBoostHeld", event, heldItemXpBoost, core);}
             if (wornItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.WORN).get()) {addModifierTooltip("pmmo.itemXpBoostWorn", event, wornItemXpBoost, core);}
             //=====================VEIN DATA============================
-            if (!veinData.equals(VeinData.EMPTY)) {addVeinTooltip("pmmo.veintooltip", event, veinData, veinCharge, stack.getItem() instanceof BlockItem);}
+            if (!veinData.equals(VeinData.EMPTY)) {addVeinTooltip("pmmo.veintooltip", event, veinData, stack.getItem() instanceof BlockItem);}
          }
 	}
 	
@@ -129,7 +126,6 @@ public class TooltipHandler {
 	private static void addVeinTooltip(String header, ItemTooltipEvent event, VeinData data, double charge, boolean isBlockItem) {
 		event.getToolTip().add(new TranslatableComponent(header));
 		event.getToolTip().add(new TranslatableComponent("pmmo.veindata",
-				String.valueOf(charge),
 				data.chargeCap().orElse(0),
 				DP.dp(data.chargeRate().orElse(0d) * 20d)));
 		if (isBlockItem) {
