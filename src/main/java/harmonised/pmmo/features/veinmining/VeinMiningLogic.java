@@ -5,6 +5,9 @@ import java.util.List;
 
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.features.veinmining.capability.VeinProvider;
+import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.core.BlockPos;
@@ -13,7 +16,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 public class VeinMiningLogic {
@@ -30,7 +32,7 @@ public class VeinMiningLogic {
 		ServerLevel level = player.getLevel();
 		int cost = Core.get(level).getVeinData().getBlockConsume(level.getBlockState(pos).getBlock());
 		if (cost == -1) return; 
-		int charge = getChargeFromAllItems(player);
+		int charge = getCurrentCharge(player);
 		int consumed = 0;	
 		Block block = level.getBlockState(pos).getBlock();
 		int maxBlocks = charge/Core.get(level).getVeinData().getBlockConsume(block);
@@ -40,14 +42,14 @@ public class VeinMiningLogic {
 			player.gameMode.destroyAndAck(veinable, 1, "Vein Break");
 		}
 		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Consumed: "+consumed+" charge");
-		applyChargeCostToAllItems(player, consumed);
+		applyChargeCost(player, consumed, charge);
 	}
 	
-	public static void regenerateVein(Player player) {
-		Inventory inv = player.getInventory();		
+	public static void regenerateVein(ServerPlayer player) {
+		Inventory inv = player.getInventory();	
 		List<ItemStack> items = new ArrayList<>();
 		items.addAll(inv.armor);
-		items.addAll(inv.items);
+		items.add(inv.getSelected());
 		items.addAll(inv.offhand);
 		//========== CURIOS ==============
 		if (CurioCompat.hasCurio) {
@@ -56,36 +58,42 @@ public class VeinMiningLogic {
 		}
 		//================================
 		Core core = Core.get(player.level);
+		double currentCharge = getCurrentCharge(player);
+		int chargeCap = 0;
+		double chargeRate = 0d;
 		for (ItemStack stack : items) {
-			if (!core.getVeinData().hasChargeData(stack)) continue;
-			int chargeCap = core.getVeinData().getItemChargeCapSetting(stack);
-			if (stack.getTag() == null || !stack.getTag().contains(CURRENT_CHARGE)) {
-				stack.getOrCreateTag().putDouble(CURRENT_CHARGE, chargeCap);
+			if (core.getVeinData().hasChargeData(stack)) {
+				chargeCap += core.getVeinData().getItemChargeCapSetting(stack);
+				chargeRate += core.getVeinData().getItemRechargeRateSetting(stack);
 			}
-			else if (stack.getTag().getDouble(CURRENT_CHARGE) < chargeCap){
-				double newCharge = stack.getTag().getDouble(CURRENT_CHARGE) + core.getVeinData().getItemRechargeRateSetting(stack);
-				stack.getTag().putDouble(CURRENT_CHARGE, newCharge > chargeCap ? chargeCap : newCharge);
-			}
+		}
+		if (chargeRate == 0 || chargeCap == 0 || currentCharge >= chargeCap) 
+			return;
+	
+		final int fCap = chargeCap;
+		final double fRate = chargeRate;
+		if ((currentCharge + fRate) >= fCap) {
+			player.getCapability(VeinProvider.VEIN_CAP).ifPresent(vein -> {
+				vein.setCharge(fCap);
+				MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen at Cap: "+fCap);
+				Networking.sendToClient(new CP_SyncVein(fCap), player);
+			});
+			
+		}
+		else {
+			player.getCapability(VeinProvider.VEIN_CAP).ifPresent(vein -> {
+				vein.setCharge(vein.getCharge() + fRate);
+				MsLoggy.DEBUG.log(MsLoggy.LOG_CODE.FEATURE, "Regen: "+(vein.getCharge()+fRate));
+				Networking.sendToClient(new CP_SyncVein(vein.getCharge() + fRate),player);
+			});	
+			
 		}
 	}
 	
 	//=========================UTILITY METHODS=============================
 	
-	public static int getChargeFromAllItems(Player player) {
-		Inventory inv = player.getInventory();		
-		List<ItemStack> items = List.of(inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39), player.getMainHandItem(), player.getOffhandItem());
-		//========== CURIOS ==============
-		if (CurioCompat.hasCurio) {
-			items = new ArrayList<>(items);
-			items.addAll(CurioCompat.getItems(player));
-		}
-		//================================
-		int totalCharge = 0;
-		for (ItemStack stack : items) {
-			totalCharge += getCurrentCharge(stack, player.level);
-		}
-		MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "Vein Charge: "+totalCharge);
-		return totalCharge; 
+	public static int getCurrentCharge(Player player) {
+		return player.getCapability(VeinProvider.VEIN_CAP).map(vein -> (int)vein.getCharge()).orElse(0); 
 	}
 	
 	public static int getMaxChargeFromAllItems(Player player) {
@@ -105,39 +113,8 @@ public class VeinMiningLogic {
 		return totalCapacity; 
 	}
 	
-	private static void applyChargeCostToAllItems(ServerPlayer player, int charge) {
-		Inventory inv = player.getInventory();		
-		List<ItemStack> items = List.of(player.getMainHandItem(), player.getOffhandItem(), inv.getItem(36), inv.getItem(37), inv.getItem(38), inv.getItem(39));
-		//========== CURIOS ==============
-		if (CurioCompat.hasCurio) {
-			items = new ArrayList<>(items);
-			items.addAll(CurioCompat.getItems(player));
-		}
-		//================================
-		int index = 0;
-		while (charge > 0 && index < items.size()) {
-			ItemStack stack = items.get(index);
-			int currentCharge = getCurrentCharge(stack, player.level);
-			if (charge >= currentCharge) {
-				charge -= currentCharge;
-				stack.getTag().putDouble(CURRENT_CHARGE, 0d);
-			}
-			else {
-				stack.getTag().putDouble(CURRENT_CHARGE, currentCharge-charge);
-				charge = 0;
-			}
-			index++;
-		}
-	}
-	
-	public static int getCurrentCharge(ItemStack stack, Level level) {
-		if (stack.getTag() == null || !stack.getTag().contains(CURRENT_CHARGE)) {
-			int baseCharge = Core.get(level).getVeinData().getItemChargeCapSetting(stack);
-			if (baseCharge == 0) return 0;
-			stack.getOrCreateTag().putDouble(CURRENT_CHARGE, (double)baseCharge);
-			return baseCharge;
-		}
-		else 
-			return (int)Math.floor(stack.getTag().getDouble(CURRENT_CHARGE));			
+	private static void applyChargeCost(ServerPlayer player, int cost, double currentCharge) {
+		player.getCapability(VeinProvider.VEIN_CAP).ifPresent(vein -> vein.setCharge(currentCharge-cost));
+		Networking.sendToClient(new CP_SyncVein(currentCharge-cost), player);
 	}
 }

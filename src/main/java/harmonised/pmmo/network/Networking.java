@@ -10,6 +10,7 @@ import harmonised.pmmo.network.clientpackets.CP_SyncData_Enchantments;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Locations;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Objects;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_Players;
+import harmonised.pmmo.network.clientpackets.CP_SyncVein;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
@@ -83,6 +84,11 @@ public class Networking {
 			.encoder((packet, buf) -> {})
 			.decoder(buf -> new CP_ResetXP())
 			.consumerNetworkThread(CP_ResetXP::handle)
+			.add();
+		INSTANCE.messageBuilder(CP_SyncVein.class, ID++)
+			.encoder(CP_SyncVein::encode)
+			.decoder(CP_SyncVein::new)
+			.consumerNetworkThread(CP_SyncVein::handle)
 			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)

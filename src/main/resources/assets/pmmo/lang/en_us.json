@@ -120,7 +120,7 @@
   "pmmo.xpValueGrow": "Grow Xp Value",
   "pmmo.xpValuePlace": "Place Xp Value",
   "pmmo.veintooltip": "Vein Mining",
-  "pmmo.veindata": "Charge %1$s/%2$s, recharges %3$s/s",
+  "pmmo.veindata": "Charge Cap %1$s, recharges %3$s/s",
   "pmmo.veinbreak": "Cost to break as block: %s",
   "pmmo.place": "Place Down",
   "pmmo.plant": "Plant",

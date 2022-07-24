@@ -36,7 +36,8 @@ public class PlayerTickHandler {
 		//Apply positive and negative effects based on biome and items worn
 		EffectManager.applyEffects(core, player);
 		//Recharge vein items
-		VeinMiningLogic.regenerateVein(player);
+		if (player instanceof ServerPlayer)
+			VeinMiningLogic.regenerateVein((ServerPlayer)player);
 		
 		if (!airLast.containsKey(player.getUUID()))
 			airLast.put(player.getUUID(), player.getAirSupply());
