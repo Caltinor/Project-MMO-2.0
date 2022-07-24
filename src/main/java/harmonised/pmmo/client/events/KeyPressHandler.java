@@ -6,6 +6,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
+import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.util.Reference;
@@ -45,6 +46,14 @@ public class KeyPressHandler {
             }
             if (ClientSetup.SHOW_VEIN.isDown()) {
             	Config.VEIN_GAUGE_DISPLAY.set(!Config.VEIN_GAUGE_DISPLAY.get());
+            }
+            if (ClientSetup.ADD_VEIN.isDown()) {
+            	Config.VEIN_LIMIT.set(Config.VEIN_LIMIT.get()+1);
+            	Networking.sendToServer(new SP_SetVeinLimit(Config.VEIN_LIMIT.get()));
+            }
+            if (ClientSetup.SUB_VEIN.isDown()) {
+            	Config.VEIN_LIMIT.set(Config.VEIN_LIMIT.get()-1);
+            	Networking.sendToServer(new SP_SetVeinLimit(Config.VEIN_LIMIT.get()));
             }
             if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {
             	if (mc.hitResult != null && !mc.player.isCrouching()) {

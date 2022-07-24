@@ -16,6 +16,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientSetup {
 
 	public static final KeyMapping SHOW_VEIN = new KeyMapping("key.pmmo.showVein", GLFW.GLFW_KEY_TAB, "category.pmmo");
+	public static final KeyMapping ADD_VEIN = new KeyMapping("key.pmmo.addvein", GLFW.GLFW_KEY_LEFT_BRACKET, "category.pmmo");
+	public static final KeyMapping SUB_VEIN = new KeyMapping("key.pmmo.subvein", GLFW.GLFW_KEY_RIGHT_BRACKET, "category.pmmo");
     public static final KeyMapping SHOW_LIST = new KeyMapping("key.pmmo.showList", GLFW.GLFW_KEY_LEFT_ALT, "category.pmmo");
     public static final KeyMapping TOGGLE_TOOLTIP = new KeyMapping("key.pmmo.toggleTooltip", GLFW.GLFW_KEY_F6, "category.pmmo");
     public static final KeyMapping VEIN_KEY = new KeyMapping("key.pmmo.vein", GLFW.GLFW_KEY_GRAVE_ACCENT, "category.pmmo");
@@ -28,6 +30,8 @@ public class ClientSetup {
     
     public static void init(FMLClientSetupEvent event) {
     	ClientRegistry.registerKeyBinding(SHOW_VEIN);
+		ClientRegistry.registerKeyBinding(ADD_VEIN);
+		ClientRegistry.registerKeyBinding(SUB_VEIN);
     	ClientRegistry.registerKeyBinding(SHOW_LIST);
     	ClientRegistry.registerKeyBinding(VEIN_KEY);
     	ClientRegistry.registerKeyBinding(OPEN_MENU);

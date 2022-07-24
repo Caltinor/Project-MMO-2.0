@@ -96,14 +96,16 @@ public class XPOverlayGUI implements IIngameOverlay
 	private int maxCharge = 0;
 	private int currentCharge = 0;
 	
-	private void renderVeinGauge(PoseStack stack, int gaugeX, int guageY) {
+	private void renderVeinGauge(PoseStack stack, int gaugeX, int gaugeY) {
 		if (ClientTickHandler.isRefreshTick()) {
 			maxCharge = VeinMiningLogic.getMaxChargeFromAllItems(mc.player);
 			if (maxCharge > 0)
 				currentCharge = VeinTracker.getCurrentCharge();
 		}
-		if (maxCharge > 0)
-			GuiComponent.drawString(stack, fontRenderer, new TranslatableComponent("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, guageY, 0xFFFFFF);
+		if (currentCharge > 0) {
+			GuiComponent.drawString(stack, fontRenderer, new TranslatableComponent("pmmo.veinLimit", Config.VEIN_LIMIT.get()), gaugeX, gaugeY-11, 0xFFFFFF);
+			GuiComponent.drawString(stack, fontRenderer, new TranslatableComponent("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, gaugeY, 0xFFFFFF);
+		}
 	}
 	
 	private void renderGains(PoseStack stack, int listX, int listY) {

@@ -16,6 +16,7 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public class Config {
 	public static ForgeConfigSpec CLIENT_CONFIG;
@@ -43,6 +44,7 @@ public class Config {
 		
 		buildGUI(builder);
 		buildTooltips(builder);
+		buildVein(builder);
 		
 		builder.pop();
 	}
@@ -138,6 +140,17 @@ public class Config {
 		builder.pop(); //bonuses
 		
 		builder.pop(); //outer
+	}
+	
+	public static IntValue VEIN_LIMIT;
+	
+	private static void buildVein(ForgeConfigSpec.Builder builder) {
+		builder.comment("Client Settings Related to the Vein Mining Ability").push("Vein_Miner");
+		
+		VEIN_LIMIT = builder.comment("The max blocks a vein activation should consume regardless of charge")
+				.defineInRange("Vein_Limit", 64, 0, Integer.MAX_VALUE);
+		
+		builder.pop();
 	}
 	
 	//====================COMMON SETTINGS===============================
