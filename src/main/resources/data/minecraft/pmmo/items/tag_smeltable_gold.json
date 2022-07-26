@@ -1,0 +1,13 @@
+{
+    "isTagFor":[
+        "minecraft:raw_gold",
+        "minecraft:gold_ore",
+        "minecraft:deepslate_gold_ore",
+        "minecraft:nether_gold_ore"
+    ],
+    "xp_values":{
+        "SMELT": {
+            "smithing": 200
+        }
+    }
+}

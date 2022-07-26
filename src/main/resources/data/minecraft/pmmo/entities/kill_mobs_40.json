@@ -1,0 +1,20 @@
+{
+    "isTagFor": [
+        "minecraft:evoker",
+        "minecraft:wither_skeleton"
+    ],
+    "xp_values":{
+        "KILL":{
+            "combat":40
+        },
+        "MELEE_TO_MOBS": {
+            "combat":40
+        },
+        "RANGED_TO_MOBS":{
+            "archery":40
+        }
+    },
+    "requirements":{
+        "KILL": {"combat": 0}
+    }
+}

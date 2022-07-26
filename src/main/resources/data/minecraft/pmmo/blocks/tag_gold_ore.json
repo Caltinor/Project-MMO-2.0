@@ -1,0 +1,19 @@
+{
+    "isTagFor":[
+        "minecraft:gold_ore",
+        "minecraft:deepslate_gold_ore",
+        "minecraft:nether_gold"
+    ],
+    "xp_values":{
+        "BLOCK_BREAK" : {
+            "mining": 2200
+        },
+        "BLOCK_PLACE": {
+            "building": 10
+        }
+    },
+    "requirements":{
+        "BREAK": {"mining":0},
+        "PLACE": {"mining":0}
+    }
+}

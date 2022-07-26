@@ -1,0 +1,11 @@
+{
+    "isTagFor": [
+        "minecraft:wheat",
+        "minecraft:wheat_seeds"
+    ],
+    "xp_values": {
+        "GROW": {
+            "farming": 90
+        }
+    }
+}

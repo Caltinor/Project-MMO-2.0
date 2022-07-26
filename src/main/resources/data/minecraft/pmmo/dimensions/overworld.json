@@ -1,0 +1,12 @@
+{
+    "bonus":{
+        "DIMENSION":{
+            "mining": 1.25,
+		    "excavation": 1.25,
+		    "building": 1.25,
+            "woodcutting": 1.25,
+		    "farming": 1.25
+        }
+    },
+    "vein_blacklist":["minecraft:bedrock"]
+}

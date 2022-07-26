@@ -1,0 +1,14 @@
+{
+    "isTagFor": [
+        "minecraft:carrot",
+        "minecraft:carrots"
+    ],
+    "xp_values": {
+        "BLOCK_BREAK":{
+            "farming":10
+        },
+        "GROW": {
+            "farming":80
+        }
+    }
+}

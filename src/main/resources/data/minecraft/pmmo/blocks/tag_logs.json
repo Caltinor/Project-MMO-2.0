@@ -1,0 +1,33 @@
+{
+    "isTagFor":[
+        "minecraft:oak_log",
+        "minecraft:birch_log",
+        "minecraft:jungle_log",
+        "minecraft:acacia_log",
+        "minecraft:dark_oak_log",
+        "minecraft:spruce_log",
+        "minecraft:crimson_stem",
+        "minecraft:warped_stem",
+
+        "minecraft:stripped_oak_log",
+        "minecraft:stripped_birch_log",
+        "minecraft:stripped_jungle_log",
+        "minecraft:stripped_acacia_log",
+        "minecraft:stripped_dark_oak_log",
+        "minecraft:stripped_spruce_log",
+        "minecraft:stripped_crimson_stem",
+        "minecraft:stripped_warped_stem"
+    ],
+    "xp_values":{
+        "BLOCK_BREAK" : {
+            "woodcutting": 80
+        },
+        "BLOCK_PLACE": {
+            "building": 10
+        }
+    },
+    "requirements":{
+        "BREAK": {"mining":0},
+        "PLACE": {"mining":0}
+    }
+}

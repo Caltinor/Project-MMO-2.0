@@ -1,0 +1,10 @@
+{
+    "xp_values":{
+        "TAMING":{
+            "taming": 20
+        }
+    },
+    "requirements":{
+        "KILL": {"combat": 0}
+    }
+}

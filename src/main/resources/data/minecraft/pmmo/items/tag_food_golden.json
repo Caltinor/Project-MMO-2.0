@@ -1,0 +1,22 @@
+{
+    "isTagFor": [
+        "minecraft:enchanted_golden_apple",
+        "minecraft:golden_apple",
+        "minecraft:golden_carrot"
+    ],
+    "xp_values": {
+        "CONSUME": {
+            "endurance": 300,
+            "cooking": 300
+        },
+        "CRAFT": {
+            "cooking": 1500
+        },
+        "FISH": {
+            "fishing": 1000
+        }
+    },
+    "bonuses": {
+        "magic": 1.5
+    }
+}

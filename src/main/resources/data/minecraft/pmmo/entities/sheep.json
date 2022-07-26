@@ -1,0 +1,10 @@
+{
+    "xp_values": {
+        "BREED": {
+            "farming": 30
+        }
+    },
+    "requirements":{
+        "KILL": {"combat": 0}
+    }
+}

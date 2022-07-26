@@ -1,0 +1,14 @@
+{
+    "isTagFor": [
+        "minecraft:beetroot",
+        "minecraft:beetroots"
+    ],
+    "xp_values": {
+        "BLOCK_BREAK":{
+            "farming": 150
+        },
+        "GROW":{
+            "farming": 120
+        }
+    }
+}

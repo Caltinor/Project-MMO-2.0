@@ -1,0 +1,12 @@
+{
+    "xp_values":{
+        "KILL": {
+            "combat": 35
+        }
+    },
+    "requirements": {
+        "KILL": {
+            "combat": 10
+        }
+    }
+}

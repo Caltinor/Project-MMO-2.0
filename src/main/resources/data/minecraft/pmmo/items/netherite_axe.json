@@ -1,0 +1,70 @@
+{
+    "xp_values":{
+        "ANVIL_REPAIR" :{
+            "smithing": 6000
+        },
+        "CRAFT": {
+            "crafting": 6000,
+            "smithing": 1000
+        },
+        "ENCHANT": {
+            "magic": 250
+        }
+    },
+    "requirements":{
+        "WEAR": {
+            "woodcutting": 90
+        },
+        "TOOL": {
+            "woodcutting": 90
+        },
+        "WEAPON": {
+            "combat": 60
+        }
+    },
+    "negative_effect":{
+        "minecraft:mining_fatigue":3
+    },
+    "salvage":{
+        "minecraft:diamond": {
+            "salvageMax": 3,
+            "baseChance": 0.0,
+            "maxChance": 0.9,
+            "chancePerLevel": {
+                "smithing": 0.005
+            },
+            "levelReq": {
+                "smithing": 5
+            },
+            "xpPerItem": {
+                "smithing": 300
+            }
+        },
+        "minecraft:netherite_ingot": {
+            "salvageMax": 1,
+            "baseChance": 0.0,
+            "maxChance": 0.3,
+            "chancePerLevel": {
+                "smithing": 0.0005
+            },
+            "levelReq": {
+                "smithing": 50
+            },
+            "xpPerItem": {
+                "smithing": 3000
+            }
+        },
+        "minecraft:stick": {
+            "salvageMax": 2,
+            "baseChance": 0.15,
+            "maxChance": 1,
+            "chancePerLevel": {
+                "smithing": 0.05
+            },
+            "levelReq": {},
+            "xpPerItem": {
+                "smithing": 10
+            }
+        }
+    }
+}

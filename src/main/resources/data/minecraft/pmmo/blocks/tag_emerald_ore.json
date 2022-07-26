@@ -1,0 +1,18 @@
+{
+    "isTagFor":[
+        "minecraft:emerald_ore",
+        "minecraft:deepslate_emerald_ore"
+    ],
+    "xp_values":{
+        "BLOCK_BREAK" : {
+            "mining": 6000
+        },
+        "BLOCK_PLACE": {
+            "building": 10
+        }
+    },
+    "requirements":{
+        "BREAK": {"mining":0},
+        "PLACE": {"mining":0}
+    }
+}

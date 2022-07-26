@@ -1,0 +1,18 @@
+{
+    "isTagFor":[
+        "minecraft:diamond_ore",
+        "minecraft:deepslate_diamond_ore"
+    ],
+    "xp_values":{
+        "BLOCK_BREAK" : {
+            "mining": 3500
+        },
+        "BLOCK_PLACE": {
+            "building": 10
+        }
+    },
+    "requirements":{
+        "BREAK": {"mining":0},
+        "PLACE": {"mining":0}
+    }
+}

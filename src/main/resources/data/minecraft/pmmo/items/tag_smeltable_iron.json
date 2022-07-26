@@ -1,0 +1,12 @@
+{
+    "isTagFor":[
+        "minecraft:raw_iron",
+        "minecraft:iron_ore",
+        "minecraft:deepslate_iron_ore"
+    ],
+    "xp_values":{
+        "SMELT": {
+            "smithing": 100
+        }
+    }
+}

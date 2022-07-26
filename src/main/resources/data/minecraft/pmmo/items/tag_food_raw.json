@@ -1,0 +1,37 @@
+{
+    "isTagFor": [
+        "minecraft:apple",
+        "minecraft:beetroot",
+        "minecraft:carrot",
+        "minecraft:chorus_fruit",
+        "minecraft:glow_berries",
+        "minecraft:honey_bottle",
+        "minecraft:melon_slice",
+        "minecraft:poisonous_potato",
+        "minecraft:potato",
+        "minecraft:pufferfish",
+        "minecraft:raw_beef",
+        "minecraft:raw_chicken",
+        "minecraft:raw_cod",
+        "minecraft:raw_mutton",
+        "minecraft:raw_porkchop",
+        "minecraft:raw_rabbit",
+        "minecraft:raw_salmon",
+        "minecraft:rotten_flesh",
+        "minecraft:spider_eye",
+        "minecraft:sweet_berries",
+        "minecraft:tropical_fish"
+    ],
+    "xp_values": {
+        "CONSUME": {
+            "endurance": 30,
+            "cooking": 10
+        },
+        "CRAFT": {
+            "cooking": 25
+        },
+        "FISH": {
+            "fishing": 100
+        }
+    }
+}

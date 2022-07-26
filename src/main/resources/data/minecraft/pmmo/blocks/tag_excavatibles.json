@@ -1,0 +1,33 @@
+{
+    "isTagFor": [
+        "minecraft:dirt",
+        "minecraft:grass",
+        "minecraft:dirt_path",
+        "minecraft:farmland",
+        "minecraft:coarse_dirt",
+        "minecraft:rooted_dirt",
+        "minecraft:podzol",
+        "minecraft:mycelium",
+        "minecraft:crimson_nylium",
+        "minecraft:warped_nylium",
+        "minecraft:sand",
+        "minecraft:red_sand",
+        "minecraft:soul_sand",
+        "minecraft:soul_dirt"
+    ],
+    "xp_values":{
+        "BLOCK_BREAK": {
+            "excavation":150
+        },
+        "BLOCK_PLACE": {
+            "building": 10
+        }
+    },
+    "requirements":{
+        "PLACE": {"building":0},
+        "BREAK": {"excavation":0}
+    },
+    "vein_data":{
+        "consumeAmount": 1
+    }
+}

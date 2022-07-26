@@ -1,0 +1,35 @@
+{
+    "isTagFor": [
+        "minecraft:splash_potion",
+        "minecraft:lingering_potion"
+    ],
+    "nbt_xp_values": {
+        "ACTIVATE_ITEM": [
+            {"behavior_to_previous": "ADD_TO", "should_cases_add": false,
+                "cases":[
+                    {"paths":["Potion"],
+                     "criteria": [
+                        {"operator":"EQUALS","comparators":["minecraft:water","minecraft:awkward","minecraft:thick","minecraft:mundane"],"value":{"alchemy":1}},
+                        {"operator":"EQUALS","comparators":["minecraft:regeneration","minecraft:poison","minecraft:healing"],"value":{"endurance":5}},
+                        {"operator":"EQUALS","comparators":["minecraft:strong_regeneration","minecraft:strong_poison","minecraft:strong_healing"],"value":{"endurance":40}},
+                        {"operator":"EQUALS","comparators":["minecraft:long_regeneration","minecraft:long_poison"],"value":{"endurance":30}},
+                        {"operator":"EQUALS","comparators":["minecraft:swiftness"],"value":{"agility":5}},
+                        {"operator":"EQUALS","comparators":["minecraft:strong_swiftness","minecraft:long_slow_falling"],"value":{"agility":40}},
+                        {"operator":"EQUALS","comparators":["minecraft:long_swiftness","minecraft:strong_leaping","minecraft:long_leaping","minecraft:slow_falling"],"value":{"agility":30}},
+                        {"operator":"EQUALS","comparators":["minecraft:fire_resistance"],"value":{"alchemy":5}},
+                        {"operator":"EQUALS","comparators":["minecraft:strong_fire_resistance","minecraft:long_fire_resistance","minecraft:night_vision","minecraft:long_weakness","minecraft:strong_strength","minecraft:long_strength","minecraft:strong_slowness","minecraft:long_slowness","minecraft:strong_harming"],"value":{"alchemy":25}},
+                        {"operator":"EQUALS","comparators":["minecraft:long_night_vision","minecraft:invisibility"],"value":{"alchemy":35}},
+                        {"operator":"EQUALS","comparators":["minecraft:weakness","minecraft:strength","minecraft:slowness","minecraft:harming"],"value":{"alchemy":15}},
+                        {"operator":"EQUALS","comparators":["minecraft:water_breathing"],"value":{"swimming":30}},
+                        {"operator":"EQUALS","comparators":["minecraft:long_water_breathing"],"value":{"swimming":40}},
+                        {"operator":"EQUALS","comparators":["minecraft:long_invisibility"],"value":{"alchemy":45}},
+                        {"operator":"EQUALS","comparators":["minecraft:leaping"],"value":{"agility":20}},
+                        {"operator":"EQUALS","comparators":["minecraft:turtle_master"],"value":{"swimming":10, "endurance":10}},
+                        {"operator":"EQUALS","comparators":["minecraft:strong_turtle_master"],"value":{"swimming":20, "endurance":20}},
+                        {"operator":"EQUALS","comparators":["minecraft:long_turtle_master"],"value":{"swimming":20, "endurance":20}},
+                        {"operator":"EQUALS","comparators":["minecraft:luck"],"value":{"fishing":10}}
+                   ]}
+               ]}
+        ]
+    }
+}

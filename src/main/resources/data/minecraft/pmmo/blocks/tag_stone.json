@@ -1,0 +1,31 @@
+{
+    "isTagFor":[
+        "minecraft:stone",
+        "minecraft:cobblestone",
+        "minecraft:diorite",
+        "minecraft:andesite",
+        "minecraft:granite",
+        "minecraft:deepslate",
+        "minecraft:tuff",
+        "minecraft:cobbled_deepslate",
+        "minecraft:calcite",
+        "minecraft:infested_stone",
+        "minecraft:polished_andesite",
+        "minecraft:polished_diorite",
+        "minecraft:polished_granite",
+        "minecraft:polished_deepslate",
+        "minecraft:infested_deepslate"
+    ],
+    "xp_values":{
+        "BLOCK_BREAK" : {
+            "mining": 10
+        },
+        "BLOCK_PLACE": {
+            "building": 10
+        }
+    },
+    "requirements":{
+        "BREAK": {"mining":0},
+        "PLACE": {"mining":0}
+    }
+}

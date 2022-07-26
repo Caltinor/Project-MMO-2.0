@@ -1,0 +1,18 @@
+{
+    "xp_values":{
+        "KILL": {
+            "combat": 50
+        },
+        "MELEE_TO_MOBS": {
+            "combat":50
+        },
+        "RANGED_TO_MOBS":{
+            "archery":50
+        }
+    },
+    "requirements": {
+        "KILL": {
+            "combat": 0
+        }
+    }
+}
