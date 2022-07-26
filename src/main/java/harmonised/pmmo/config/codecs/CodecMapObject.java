@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -15,9 +16,11 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.util.Functions;
 import net.minecraft.resources.ResourceLocation;
 
 public record CodecMapObject (
+	Optional<Boolean> override,
 	Optional<List<ResourceLocation>> tagValues,
 	Optional<EventData> xpValuesMap,
 	Optional<ModifierData> bonusMap,
@@ -30,6 +33,7 @@ public record CodecMapObject (
 	Optional<VeinData> veinData){
 	
 	public static final Codec<CodecMapObject> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.BOOL.optionalFieldOf("override").forGetter(CodecMapObject::override),
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("isTagFor").forGetter(CodecMapObject::tagValues),
 			CodecTypes.EVENT_CODEC.optionalFieldOf("xp_values").forGetter(CodecMapObject::xpValuesMap),
 			CodecTypes.MODIFIER_CODEC.optionalFieldOf("bonuses").forGetter(CodecMapObject::bonusMap),
@@ -43,6 +47,7 @@ public record CodecMapObject (
 			).apply(instance, CodecMapObject::new));
 	
 	public static record ObjectMapContainer(
+		boolean override,
 		List<ResourceLocation> tagValues,
 		Map<EventType, Map<String, Long>> xpValues,
 		Map<ModifierDataType, Map<String, Double>> modifiers,
@@ -55,7 +60,8 @@ public record CodecMapObject (
 		VeinData veinData) {
 		
 		public ObjectMapContainer(CodecMapObject src) {
-			this(src.tagValues().isPresent() ? src.tagValues().get() : new ArrayList<>(),
+			this(src.override().orElse(false),
+				src.tagValues().isPresent() ? src.tagValues().get() : new ArrayList<>(),
 				src.xpValuesMap().isPresent() ? src.xpValuesMap().get().obj() : new HashMap<>(),
 				src.bonusMap().isPresent() ? src.bonusMap().get().obj(): new HashMap<>(),
 				src.reqMap().isPresent() ? src.reqMap().get().obj() : new HashMap<>(),
@@ -68,30 +74,75 @@ public record CodecMapObject (
 		}
 		
 		public static ObjectMapContainer combine(ObjectMapContainer one, ObjectMapContainer two) {
-			List<ResourceLocation> tagValues = new ArrayList<>(one.tagValues);
-			two.tagValues.forEach((rl) -> {
-				if (!tagValues.contains(rl))
-					tagValues.add(rl);
-			});
-			Map<EventType, Map<String, Long>> xpValues = new HashMap<>(one.xpValues);
-			xpValues.putAll(two.xpValues);
-			Map<ModifierDataType, Map<String, Double>> modifiers = new HashMap<>(one.modifiers);
-			modifiers.putAll(two.modifiers);
-			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>(one.reqs);
-			reqs.putAll(two.reqs);
-			Map<String, Integer> reqEffects = new HashMap<>(one.reqNegativeEffect());
-			reqEffects.putAll(two.reqNegativeEffect());
+			List<ResourceLocation> tagValues = new ArrayList<>();
+			Map<EventType, Map<String, Long>> xpValues = new HashMap<>();
+			Map<ModifierDataType, Map<String, Double>> modifiers = new HashMap<>();
+			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
+			Map<String, Integer> reqEffects = new HashMap<>();
+			Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
+			VeinData combinedVein = one.veinData();
 			
-			Map<ResourceLocation, SalvageData> salvage = new HashMap<>(one.salvage);
-			salvage.putAll(two.salvage);
-			VeinData combinedVein = one.veinData().combineWith(two.veinData());
-			return new ObjectMapContainer(tagValues, xpValues, modifiers, reqs, two.nbtReqs(), reqEffects, two.nbtXpGains(), two.nbtBonuses(), salvage, combinedVein);
+			BiConsumer<ObjectMapContainer, ObjectMapContainer> bothOrNeither = (o, t) -> {
+				tagValues.addAll(o.tagValues());
+				t.tagValues.forEach((rl) -> {
+					if (!tagValues.contains(rl))
+						tagValues.add(rl);
+				});			
+				xpValues.putAll(o.xpValues());
+				t.xpValues().forEach((event, map) -> {
+					xpValues.merge(event, map, (oMap, nMap) -> {
+						Map<String, Long> mergedMap = new HashMap<>(oMap);
+						nMap.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
+						return mergedMap;
+					});
+				});
+				modifiers.putAll(o.modifiers());	
+				t.modifiers().forEach((event, map) -> {
+					modifiers.merge(event, map, (oMap, nMap) -> {
+						Map<String, Double> mergedMap = new HashMap<>(oMap);
+						nMap.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
+						return mergedMap;
+					});
+				});
+				reqs.putAll(o.reqs());	
+				t.reqs().forEach((event, map) -> {
+					reqs.merge(event, map, (oMap, nMap) -> {
+						Map<String, Integer> mergedMap = new HashMap<>(oMap);
+						nMap.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
+						return mergedMap;
+					});
+				});
+				reqEffects.putAll(o.reqNegativeEffect());	
+				t.reqNegativeEffect().forEach((skill, level) -> {
+					reqEffects.merge(skill, level, (o1, n1) -> o1 > n1 ? o1 : n1);
+				});
+				salvage.putAll(o.salvage());
+				t.salvage().forEach((rl, data) -> {
+					salvage.merge(rl, data, (oD, nD) -> {
+						return SalvageData.combine(oD, nD, o.override(), t.override());
+					});
+				});
+				combinedVein.combineWith(o.veinData());
+			};
+			Functions.biPermutation(one, two, one.override(), two.override(), (o, t) -> {
+				tagValues.addAll(o.tagValues().isEmpty() ? t.tagValues() : o.tagValues());
+				xpValues.putAll(o.xpValues().isEmpty() ? t.xpValues() : o.xpValues());
+				modifiers.putAll(o.modifiers().isEmpty() ? t.modifiers() : o.modifiers());
+				reqs.putAll(o.reqs().isEmpty() ? t.reqs() : o.reqs());
+				reqEffects.putAll(o.reqNegativeEffect().isEmpty() ? t.reqNegativeEffect() : o.reqNegativeEffect());
+				salvage.putAll(o.salvage().isEmpty() ? t.salvage() : o.salvage());
+			}, 
+			bothOrNeither, 
+			bothOrNeither);
+			
+			return new ObjectMapContainer(one.override() || two.override(), tagValues, xpValues, modifiers, reqs, two.nbtReqs(), reqEffects, two.nbtXpGains(), two.nbtBonuses(), salvage, combinedVein);
 		}
 		public ObjectMapContainer() {
-			this(new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new NBTReqData(), new HashMap<>(), new NBTXpGainData(), new NBTBonusData(), new HashMap<>(), VeinData.EMPTY);
+			this(false, new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new NBTReqData(), new HashMap<>(), new NBTXpGainData(), new NBTBonusData(), new HashMap<>(), VeinData.EMPTY);
 		}
 		
 		public static final Codec<ObjectMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.BOOL.fieldOf("override").forGetter(ObjectMapContainer::override),
 				ResourceLocation.CODEC.listOf().fieldOf("tagValues").forGetter(ObjectMapContainer::tagValues),
 				Codec.unboundedMap(EventType.CODEC, CodecTypes.LONG_CODEC).fieldOf("xpValues").forGetter(ObjectMapContainer::xpValues),
 				Codec.unboundedMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC).fieldOf("modifiers").forGetter(ObjectMapContainer::modifiers),

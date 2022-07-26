@@ -5,16 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
+import harmonised.pmmo.util.Functions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 
 public record CodecMapLocation (
+	Optional<Boolean> override,
 	Optional<List<ResourceLocation>> tagValues,
 	Optional<ModifierData> bonusMap,
 	Optional<Map<ResourceLocation, Integer>> positive,
@@ -24,6 +27,7 @@ public record CodecMapLocation (
 	Optional<Map<ResourceLocation, Map<String, Double>>> mobModifiers) {
 	
 	public static final Codec<CodecMapLocation> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.BOOL.optionalFieldOf("override").forGetter(CodecMapLocation::override),
 			Codec.list(ResourceLocation.CODEC).optionalFieldOf("isTagFor").forGetter(CodecMapLocation::tagValues),
 			CodecTypes.MODIFIER_CODEC.optionalFieldOf("bonus").forGetter(CodecMapLocation::bonusMap),
 			Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("positive_effect").forGetter(CodecMapLocation::positive),
@@ -34,6 +38,7 @@ public record CodecMapLocation (
 			).apply(instance, CodecMapLocation::new));
 	
 	public static record LocationMapContainer (
+		boolean override,
 		List<ResourceLocation> tagValues,
 		Map<ModifierDataType, Map<String, Double>> bonusMap,
 		Map<ResourceLocation, Integer> positive,
@@ -43,43 +48,82 @@ public record CodecMapLocation (
 		Map<ResourceLocation, Map<String, Double>> mobModifiers) {
 		
 		public LocationMapContainer(CodecMapLocation src) {
-			this(src.tagValues().isPresent() ? src.tagValues().get() : new ArrayList<>(),
+			this(src.override().orElse(false),
+			src.tagValues().orElse(new ArrayList<>()),
 			src.bonusMap().isPresent() ? src.bonusMap().get().obj() : new HashMap<>(),
-			src.positive().orElseGet(() -> new HashMap<>()),
-			src.negative().orElseGet(() -> new HashMap<>()),
+			src.positive().orElse(new HashMap<>()),
+			src.negative().orElse(new HashMap<>()),
 			src.veinBlacklist().orElseGet(() -> new ArrayList<>()),
-			src.travelReq().orElseGet(() -> new HashMap<>()),
-			src.mobModifiers().orElseGet(() -> new HashMap<>()));
+			src.travelReq().orElse(new HashMap<>()),
+			src.mobModifiers().orElse(new HashMap<>()));
 		}
 		public LocationMapContainer() {
-			this(new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new ArrayList<>(), new HashMap<>(), new HashMap<>());
+			this(false, new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new ArrayList<>(), new HashMap<>(), new HashMap<>());
 		}
 		
 		public static LocationMapContainer combine(LocationMapContainer one, LocationMapContainer two) {
-			List<ResourceLocation> tagValues = new ArrayList<>(one.tagValues());
-			two.tagValues.forEach((rl) -> {
-				if (!tagValues.contains(rl))
-					tagValues.add(rl);
-			});
-			Map<ModifierDataType, Map<String, Double>> bonusMap = new HashMap<>(one.bonusMap());
-			bonusMap.putAll(two.bonusMap);
-			Map<ResourceLocation, Integer> positive = new HashMap<>(one.positive());
-			positive.putAll(two.positive);
-			Map<ResourceLocation, Integer> negative = new HashMap<>(one.negative());
-			negative.putAll(two.negative);
-			List<ResourceLocation> veinBlacklist = new ArrayList<>(one.veinBlacklist());
-			two.veinBlacklist.forEach((rl) -> {
-				if (!veinBlacklist.contains(rl)) 
-					veinBlacklist.add(rl);
-			});
-			Map<String, Integer> travelReq = new HashMap<>(one.travelReq());
-			travelReq.putAll(two.travelReq);
-			Map<ResourceLocation, Map<String, Double>> mobModifiers = new HashMap<>(one.mobModifiers());
-			mobModifiers.putAll(two.mobModifiers);
-			return new LocationMapContainer(tagValues, bonusMap, positive, negative, veinBlacklist, travelReq, mobModifiers);
+			List<ResourceLocation> tagValues = new ArrayList<>();
+			Map<ModifierDataType, Map<String, Double>> bonusMap = new HashMap<>();
+			Map<ResourceLocation, Integer> positive = new HashMap<>();
+			Map<ResourceLocation, Integer> negative = new HashMap<>();
+			List<ResourceLocation> veinBlacklist = new ArrayList<>();
+			Map<String, Integer> travelReq = new HashMap<>();
+			Map<ResourceLocation, Map<String, Double>> mobModifiers = new HashMap<>();
+			
+			BiConsumer<LocationMapContainer, LocationMapContainer> bothOrNeither = (o, t) -> {
+				tagValues.addAll(o.tagValues());
+				t.tagValues().forEach((rl) -> {
+					if (!tagValues.contains(rl))
+						tagValues.add(rl);
+				});		
+				bonusMap.putAll(o.bonusMap());
+				t.bonusMap().forEach((key, value) -> {
+					bonusMap.merge(key, value, (oldV, newV) -> {
+						Map<String, Double> mergedMap = new HashMap<>(oldV);
+						newV.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
+						return mergedMap;
+					});
+				});		
+				positive.putAll(o.positive());
+				t.positive().forEach((key, value) -> positive.merge(key, value, (o1, n1) -> o1 > n1 ? o1 : n1));			
+				negative.putAll(o.negative());
+				t.negative().forEach((key, value) -> negative.merge(key, value, (o1, n1) -> o1 > n1 ? o1 : n1));			
+				veinBlacklist.addAll(o.veinBlacklist());
+				t.veinBlacklist().forEach((rl) -> {
+					if (!veinBlacklist.contains(rl)) 
+						veinBlacklist.add(rl);
+				});		
+				travelReq.putAll(o.travelReq());
+				t.travelReq().forEach((key, value) -> travelReq.merge(key, value, (o1, n1) -> o1 > n1 ? o1 : n1));			
+				mobModifiers.putAll(o.mobModifiers());
+				t.mobModifiers().forEach((key, value) -> {
+					mobModifiers.merge(key, value, (oldV, newV) -> {
+						Map<String, Double> mergedMap = new HashMap<>(oldV);
+						newV.forEach((k, v) -> mergedMap.merge(k, v, (o1, n1) -> o1 > n1 ? o1 : n1));
+						return mergedMap;
+					});
+				});	
+			};
+			Functions.biPermutation(one, two, one.override(), two.override(), 
+			(o, t) -> {
+				tagValues.addAll(o.tagValues().isEmpty() ? t.tagValues() : o.tagValues());
+				bonusMap.putAll(o.bonusMap().isEmpty() ? t.bonusMap() : o.bonusMap());
+				positive.putAll(o.positive().isEmpty() ? t.positive() : o.positive());
+				negative.putAll(o.negative().isEmpty() ? t.negative() : o.negative());
+				veinBlacklist.addAll(o.veinBlacklist().isEmpty() ? t.veinBlacklist(): o.veinBlacklist());
+				travelReq.putAll(o.travelReq().isEmpty() ? t.travelReq() : o.travelReq());
+				mobModifiers.putAll(o.mobModifiers().isEmpty() ? t.mobModifiers() : o.mobModifiers());
+			}, 
+			bothOrNeither,
+			bothOrNeither);
+			
+			return new LocationMapContainer(one.override() || two.override(), tagValues, bonusMap, positive, negative, veinBlacklist, travelReq, mobModifiers);
 		}
 		
+		
+		
 		public static final Codec<LocationMapContainer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				Codec.BOOL.fieldOf("override").forGetter(LocationMapContainer::override),
 				Codec.list(ResourceLocation.CODEC).fieldOf("isTagFor").forGetter(LocationMapContainer::tagValues),
 				Codec.simpleMap(ModifierDataType.CODEC, CodecTypes.DOUBLE_CODEC, StringRepresentable.keys(ModifierDataType.values())).fieldOf("bonus").forGetter(LocationMapContainer::bonusMap),
 				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).fieldOf("positive_effect").forGetter(LocationMapContainer::positive),
