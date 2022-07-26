@@ -1,0 +1,24 @@
+{
+    "isTagFor": [
+        "minecraft:cave_spider",
+        "minecraft:creeper",
+        "minecraft:drowned",
+        "minecraft:guardian",
+        "minecraft:skeleton",
+        "minecraft:zombie_pigman"
+    ],
+    "xp_values":{
+        "KILL":{
+            "combat":25
+        },
+        "MELEE_TO_MOBS": {
+            "combat":25
+        },
+        "RANGED_TO_MOBS":{
+            "archery":25
+        }
+    },
+    "requirements":{
+        "KILL": {"combat": 0}
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "xp_values": {
+        "BLOCK_BREAK":{
+            "farming":350
+        },
+        "GROW": {
+            "farming":80
+        }
+    }
+}

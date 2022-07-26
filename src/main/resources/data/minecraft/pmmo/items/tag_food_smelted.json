@@ -1,0 +1,25 @@
+{
+    "isTagFor": [
+        "minecraft:baked_potato",
+        "minecraft:cooked_chicken",
+        "minecraft:cooked_cod",
+        "minecraft:cooked_mutton",
+        "minecraft:cooked_porkchop",
+        "minecraft:cooked_rabbit",
+        "minecraft:cooked_salmon",
+        "minecraft:dried_kelp",
+        "minecraft:steak"
+    ],
+    "xp_values": {
+        "CONSUME": {
+            "endurance": 90,
+            "cooking": 100
+        },
+        "SMELT": {
+            "cooking": 250
+        },
+        "FISH": {
+            "fishing": 100
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "bonus":{
+        "BIOME":{
+            "swimming": 1.75,
+		    "fishing": 1.40
+        }
+    },
+    "negative_effect":{
+        "minecraft:slowness": 2,
+		"minecraft:weakness": 1
+    },
+    "travel_req":{
+        "swimming": 35,
+		"endurance": 15
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "xp_values":{
+        "ANVIL_REPAIR" :{
+            "smithing": 1500
+        },
+        "CRAFT": {
+            "crafting": 2000,
+            "smithing": 300
+        },
+        "ENCHANT": {
+            "magic": 60
+        }
+    },
+    "requirements":{
+        "WEAR": {
+            "endurance": 10
+        }
+    },
+    "bonuses": {
+        "mining": 1.25
+    },
+    "negative_effect":{
+        "minecraft:slowness":1,
+        "minecraft:weakness":1
+    },
+    "salvage":{
+        "minecraft:gold_ingot": {
+            "salvageMax": 8,
+            "baseChance": 0.0,
+            "maxChance": 0.9,
+            "chancePerLevel": {
+                "smithing": 0.005
+            },
+            "levelReq": {
+                "smithing": 5
+            },
+            "xpPerItem": {
+                "smithing": 30
+            }
+        }
+    }
+}

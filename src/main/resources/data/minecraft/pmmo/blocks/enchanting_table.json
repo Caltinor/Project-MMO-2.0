@@ -1,0 +1,8 @@
+{
+    "xp_values":{},
+    "requirements":{
+        "BLOCK_PLACE": {
+            "building": 25
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "isTagFor": [
+        "minecraft:brown_mushroom",
+        "minecraft:brown_mushroom_block"
+    ],
+    "xp_values": {
+        "BLOCK_BREAK":{
+            "farming": 100
+        }
+    }
+}

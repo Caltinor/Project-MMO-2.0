@@ -1,0 +1,11 @@
+{
+    "isTagFor":[
+        "minecraft:kelp",
+        "minecraft:kelp_plant"
+    ],
+    "xp_values": {
+        "GROW": {
+            "farming": 20
+        }
+    }
+}

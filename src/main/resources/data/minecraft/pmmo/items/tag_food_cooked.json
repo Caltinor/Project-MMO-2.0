@@ -1,0 +1,23 @@
+{
+    "isTagFor": [
+        "minecraft:beetroot_soup",
+        "minecraft:bread",
+        "minecraft:cookie",
+        "minecraft:mushroom_stew",
+        "minecraft:pumpkin_pie",
+        "minecraft:rabbit_stew",
+        "minecraft:suspicious_stew"
+    ],
+    "xp_values": {
+        "CONSUME": {
+            "endurance": 90,
+            "cooking": 100
+        },
+        "CRAFT": {
+            "cooking": 250
+        },
+        "FISH": {
+            "fishing": 100
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "isTagFor":[
+        "minecraft:blast_furnace",
+        "minecraft:scaffolding",
+        "minecraft:smoker",
+        "minecraft:stonecutter"
+    ],
+    "requirements":{
+        "building": 10
+    }
+}

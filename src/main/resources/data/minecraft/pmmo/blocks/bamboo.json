@@ -1,0 +1,15 @@
+{
+    "isTagFor": [
+        "minecraft:bamboo",
+        "minecraft:bamboo_sapling"
+    ],
+    "xp_values": {
+        "BLOCK_BREAK": {
+            "farming": 20,
+            "woodcutting": 40
+        },
+        "GROW":{
+            "farming": 12
+        }
+    }
+}

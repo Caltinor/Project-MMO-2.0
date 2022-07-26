@@ -1,0 +1,53 @@
+{
+    "isTagFor": [
+        "minecraft:leather_helemet",
+        "minecraft:leather_chestplate",
+        "minecraft:leather_leggings",
+        "minecraft:leather_boots"
+    ],
+    "requirements": {
+        "mining": 0,
+        "excavation": 0,
+        "farming": 0,
+        "woodcutting": 0
+    },
+    "nbt_bonuses": {
+        "WORN": [
+			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
+			 "cases":[
+			 	{"paths":["Damage"],
+			 	 "criteria":[
+			 	 	{"operator":"EXISTS","value":{"woodcutting":2.5, "farming":2.5, "agility":2.5, "fishing":2.5}}
+			 	]}
+			]},
+			{"behavior_to_previous": "SUB_FROM", "should_cases_add": false,
+			 "cases":[
+			 	{"paths":["display{}.color"],
+			 	 "criteria":[
+			 	 	{"operator":"EXISTS","value":{"woodcutting":2.5, "farming":2.5, "agility":2.5, "fishing":2.5}}
+			 	]}
+			]},
+			{"behavior_to_previous": "REPLACE", "should_cases_add": false,
+			 "cases":[
+			 	{"paths":["display{}.color"],
+			 	 "criteria":[
+			 	 	{"operator":"EQUALS","comparators":["16701501"],"value":{"woodcutting":10}},
+			 	 	{"operator":"EQUALS","comparators":["8439583"],"value":{"agility":10}},
+			 	 	{"operator":"EQUALS","comparators":["6192150"],"value":{"farming":10}},
+			 	 	{"operator":"EQUALS","comparators":["3949738"],"value":{"fishing":10}},
+			 	 	{"operator":"EQUALS","comparators":["1908001"],"value":{"combat":10}},
+			 	 	{"operator":"EQUALS","comparators":["11546150"],"value":{"endurance":10}},
+			 	 	{"operator":"EQUALS","comparators":["16383998"],"value":{"smithing":10}},
+			 	 	{"operator":"EQUALS","comparators":["16351261"],"value":{"crafting":10}},
+			 	 	{"operator":"EQUALS","comparators":["13061821"],"value":{"taming":10}},
+			 	 	{"operator":"EQUALS","comparators":["3847130"],"value":{"building":10}},
+			 	 	{"operator":"EQUALS","comparators":["15961002"],"value":{"cooking":10}},
+			 	 	{"operator":"EQUALS","comparators":["4673362"],"value":{"alchemy":10}},
+			 	 	{"operator":"EQUALS","comparators":["10329495"],"value":{"mining":10}},
+			 	 	{"operator":"EQUALS","comparators":["1481884"],"value":{"swimming":10}},
+			 	 	{"operator":"EQUALS","comparators":["8991416"],"value":{"excavation":10}}
+			 	]}
+			]}
+		]
+    }
+}

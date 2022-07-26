@@ -1,0 +1,49 @@
+{
+    "isTagFor":[
+        "minecraft:bamboo_jungle",
+        "minecraft:bamboo_jungle_hills",
+        "minecraft:jungle",
+        "minecraft:jungle_edge",
+        "minecraft:junlge_hills"
+    ],
+    "bonus":{
+        "BIOME":{
+            "agility": 1.25,
+		    "swimming": 1.25,
+            "fishing": 1.25,
+            "combat": 1.10,
+            "archery": 1.35,
+            "woodcutting": 0.75,
+            "farming": 0.75
+        }
+    },
+    "negative_effect":{
+        "minecraft:slowness": 0,
+		"minecraft:weakness": 0
+    },
+    "travel_req":{
+        "endurance": 20
+    },
+    "mob_multiplier":{
+        "minecraft:zombie" :{
+            "speed": 1.5,
+		    "health": 1.25
+        },
+        "minecraft:skeleton" :{
+            "speed": 1.5,
+		    "health": 1.25
+        },
+        "minecraft:creeper" :{
+            "speed": 1.5,
+		    "health": 1.25
+        },
+        "minecraft:spider" :{
+            "speed": 1.5,
+		    "health": 1.25
+        },
+        "minecraft:enderman" :{
+            "speed": 1.5,
+		    "health": 1.25
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "isTagFor":[
+        "minecraft:potato",
+        "minecraft:potatoes"
+    ],
+    "xp_values": {
+        "GROW": {
+            "farming": 66
+        }
+    }
+}
