@@ -1,6 +1,8 @@
 {
     "xp_values": {
-        "mining": 2000
+    	"BLOCK_BREAK": { 
+        	"mining": 2000
+        }
     },
     "vein_data": {
         "consumeAmount": 25
