@@ -80,7 +80,7 @@ public record CodecMapObject (
 			Map<ReqType, Map<String, Integer>> reqs = new HashMap<>();
 			Map<String, Integer> reqEffects = new HashMap<>();
 			Map<ResourceLocation, SalvageData> salvage = new HashMap<>();
-			VeinData combinedVein = one.veinData();
+			VeinData[] combinedVein = {one.veinData()};
 			
 			BiConsumer<ObjectMapContainer, ObjectMapContainer> bothOrNeither = (o, t) -> {
 				tagValues.addAll(o.tagValues());
@@ -122,7 +122,8 @@ public record CodecMapObject (
 						return SalvageData.combine(oD, nD, o.override(), t.override());
 					});
 				});
-				combinedVein.combineWith(o.veinData());
+				
+				combinedVein[0] = combinedVein[0].combineWith(t.veinData());
 			};
 			Functions.biPermutation(one, two, one.override(), two.override(), (o, t) -> {
 				tagValues.addAll(o.tagValues().isEmpty() ? t.tagValues() : o.tagValues());
@@ -135,7 +136,7 @@ public record CodecMapObject (
 			bothOrNeither, 
 			bothOrNeither);
 			
-			return new ObjectMapContainer(one.override() || two.override(), tagValues, xpValues, modifiers, reqs, two.nbtReqs(), reqEffects, two.nbtXpGains(), two.nbtBonuses(), salvage, combinedVein);
+			return new ObjectMapContainer(one.override() || two.override(), tagValues, xpValues, modifiers, reqs, two.nbtReqs(), reqEffects, two.nbtXpGains(), two.nbtBonuses(), salvage, combinedVein[0]);
 		}
 		public ObjectMapContainer() {
 			this(false, new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new NBTReqData(), new HashMap<>(), new NBTXpGainData(), new NBTBonusData(), new HashMap<>(), VeinData.EMPTY);
