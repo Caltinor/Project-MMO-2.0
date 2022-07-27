@@ -175,8 +175,8 @@ public class StatScrollWidget extends ScrollPanel{
 			VeinData veinData = core.getVeinData().getData(stack);
 			if (!veinData.equals(VeinData.EMPTY)) {
 				content.add(new Element(new TranslatableComponent("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-				content.add(new Element(new TranslatableComponent("pmmo.veindata_rate", veinData.chargeRate().get()), step(1), 0xFFFFFF, false, 0));
-				content.add(new Element(new TranslatableComponent("pmmo.veindata_cap", veinData.chargeCap().get()), step(1), 0xFFFFFF, false, 0));
+				content.add(new Element(new TranslatableComponent("pmmo.veindata_rate", veinData.chargeRate().orElse(0d)), step(1), 0xFFFFFF, false, 0));
+				content.add(new Element(new TranslatableComponent("pmmo.veindata_cap", veinData.chargeCap().orElse(0)), step(1), 0xFFFFFF, false, 0));
 				if (stack.getItem() instanceof BlockItem) //TODO make blocks in world return a block item for this to work.
 					content.add(new Element(new TranslatableComponent("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
 			}
