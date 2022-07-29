@@ -33,7 +33,7 @@ public class FurnaceHandler {
 		ServerPlayer player = event.getLevel().getServer().getPlayerList().getPlayer(pid);
 		if (player == null) {
 			Optional<GameProfile> playerProfile = event.getLevel().getServer().getProfileCache().get(pid);
-			if (playerProfile == null || playerProfile.orElseGet(null) == null) 
+			if (playerProfile.isEmpty()) 
 				return;
 			player = new ServerPlayer(event.getLevel().getServer(), (ServerLevel) event.getLevel(), playerProfile.get(), null);
 		}
