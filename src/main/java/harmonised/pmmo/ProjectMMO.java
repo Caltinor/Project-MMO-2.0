@@ -28,5 +28,6 @@ public class ProjectMMO {
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::onCapabilityRegister);
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+    	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::gatherData);
     }
 }
