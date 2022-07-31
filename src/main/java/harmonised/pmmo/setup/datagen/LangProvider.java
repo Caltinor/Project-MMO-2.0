@@ -158,12 +158,69 @@ public class LangProvider extends LanguageProvider{
 	    addEN_US("pmmo.enum.DIMENSION","Dimension Modifier");
 	}
 
+	//=========KEY BINDINGS====================
+	public static final Translation KEYBIND_CATEGORY = Translation.Builder.start("category.pmmo")
+			.addLocale(Locale.EN_US, "Project MMO").build();
+	public static final Translation KEYBIND_SHOWVEIN = Translation.Builder.start("key.pmmo.showVein")
+			.addLocale(Locale.EN_US, "Toggle Vein Gauge").build();
+	public static final Translation KEYBIND_ADDVEIN = Translation.Builder.start("key.pmmo.addVein")
+			.addLocale(Locale.EN_US, "Increase Vein Size").build();
+	public static final Translation KEYBIND_SUBVEIN = Translation.Builder.start("key.pmmo.subVein")
+			.addLocale(Locale.EN_US, "Decrease Vein Size").build();
+	public static final Translation KEYBIND_SHOWLIST = Translation.Builder.start("key.pmmo.showList")
+			.addLocale(Locale.EN_US, "Toggle Skill List").build();
+	public static final Translation KEYBIND_VEIN = Translation.Builder.start("key.pmmo.vein")
+			.addLocale(Locale.EN_US, "Vein Mine Marker").build();
+	public static final Translation KEYBIND_OPENMENU = Translation.Builder.start("key.pmmo.openMenu")
+			.addLocale(Locale.EN_US, "Open Glossary").build();
 	
 	//=========LOGIN HANDLER===================
 	public static final Translation WELCOME_TEXT = Translation.Builder.start("pmmo.welcomeText")
 			.addLocale(Locale.EN_US, "Welcome! Project MMO is more fun with datapacks. download one %s").build();
 	public static final Translation CLICK_ME = Translation.Builder.start("pmmo.clickMe")
 			.addLocale(Locale.EN_US, "HERE").build();
+	
+	//=========KEY PRESS HANLDER===============
+	public static final Translation VEIN_BLACKLIST = Translation.Builder.start("pmmo.veinBlacklist")
+			.addLocale(Locale.EN_US, "Blacklisted blocks from Veining").build();
+	
+	//=========TOOLTIP HEADERS=================
+	public static final Translation REQ_WEAR = Translation.Builder.start("pmmo.toWear")
+			.addLocale(Locale.EN_US, "To Wear").build();
+	public static final Translation REQ_TOOL = Translation.Builder.start("pmmo.tool")
+			.addLocale(Locale.EN_US, "Tool").build();
+	public static final Translation REQ_WEAPON = Translation.Builder.start("pmmo.weapon")
+			.addLocale(Locale.EN_US, "Weapon").build();
+	public static final Translation REQ_USE = Translation.Builder.start("pmmo.use")
+			.addLocale(Locale.EN_US, "Use").build();
+	public static final Translation REQ_PLACE = Translation.Builder.start("pmmo.place")
+			.addLocale(Locale.EN_US, "To Place").build();
+	public static final Translation REQ_BREAK = Translation.Builder.start("pmmo.break")
+			.addLocale(Locale.EN_US, "To Break").build();
+	public static final Translation XP_VALUE_BREAK = Translation.Builder.start("pmmo.xpValueBreak")
+			.addLocale(Locale.EN_US, "Break Xp Value").build();
+	public static final Translation XP_VALUE_CRAFT = Translation.Builder.start("pmmo.xpValueCraft")
+			.addLocale(Locale.EN_US, "Craft Xp Value").build();
+	public static final Translation XP_VALUE_SMELT = Translation.Builder.start("pmmo.xpValueSmelt")
+			.addLocale(Locale.EN_US, "Smelt Xp Value").build();
+	public static final Translation XP_VALUE_BREW = Translation.Builder.start("pmmo.xpValueBrew")
+			.addLocale(Locale.EN_US, "Brew Xp Value").build();
+	public static final Translation XP_VALUE_GROW = Translation.Builder.start("pmmo.xpValueGrow")
+			.addLocale(Locale.EN_US, "Grow Xp Value").build();
+	public static final Translation XP_VALUE_PLACE = Translation.Builder.start("pmmo.xpValuePlace")
+			.addLocale(Locale.EN_US, "Place Xp Value").build();
+	public static final Translation BOOST_HELD = Translation.Builder.start("pmmo.itemXpBoostHeld")
+			.addLocale(Locale.EN_US, "Xp Boost In Hand").build();
+	public static final Translation BOOST_WORN = Translation.Builder.start("pmmo.itemXpBoostWorn")
+			.addLocale(Locale.EN_US, "Xp Boost Worn").build();
+	public static final Translation VEIN_TOOLTIP = Translation.Builder.start("pmmo.veintooltip")
+			.addLocale(Locale.EN_US, "Vein Mining").build();
+	public static final Translation VEIN_DATA = Translation.Builder.start("pmmo.veindata")
+			.addLocale(Locale.EN_US, "Charge Cap %1$s, recharges %3$s/s").build();
+	public static final Translation VEIN_BREAK = Translation.Builder.start("pmmo.veinbreak")
+			.addLocale(Locale.EN_US, "Cost to break as block: %s").build();
+	
+	//=========STAT SCROLL WIDGET=================
 	
 	
 	@Override
