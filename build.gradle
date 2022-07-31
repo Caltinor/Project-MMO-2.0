@@ -72,7 +72,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'pmmo', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 examplemod {
                     source sourceSets.main

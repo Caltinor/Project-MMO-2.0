@@ -9,9 +9,9 @@ import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -39,7 +39,7 @@ public class KeyPressHandler {
 	            	Networking.sendToServer(new SP_UpdateVeinTarget(bhr.getBlockPos()));
             	}
             	else
-            		mc.player.sendMessage(new TranslatableComponent("pmmo.veinBlacklist"), mc.player.getUUID());
+            		mc.player.sendMessage(LangProvider.VEIN_BLACKLIST.asComponent(), mc.player.getUUID());
             }
             if (ClientSetup.SHOW_LIST.isDown()) {
             	Config.SKILL_LIST_DISPLAY.set(!Config.SKILL_LIST_DISPLAY.get());

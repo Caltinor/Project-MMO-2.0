@@ -18,10 +18,11 @@ import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.autovalues.AutoValues;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.setup.ClientSetup;
+import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.setup.datagen.LangProvider.Translation;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -42,14 +43,16 @@ public class TooltipHandler {
 		if(!tooltipOn)
             return;
 
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
 
         if(player != null) {
         	Core core = Core.get(LogicalSide.CLIENT);
             ItemStack stack = event.getItemStack();
             Item item = stack.getItem();
+            @SuppressWarnings("deprecation")
+			ResourceLocation itemID = item.builtInRegistryHolder().unwrapKey().get().location();
 
-            if(item.getRegistryName() == null)
+            if(itemID == null)
                 return;
 
             if(ClientSetup.OPEN_MENU.isDown()) {
@@ -64,16 +67,16 @@ public class TooltipHandler {
             //Map<String, Integer> useEnchantmentReq = XP.getEnchantsUseReq(stack);
             Map<String, Integer> placeReq = getReqData(core, ReqType.PLACE, stack);
             Map<String, Integer> breakReq = getReqData(core, ReqType.BREAK, stack);
-            Map<String, Long> xpValueBreaking = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_BREAK, stack);
-            Map<String, Long> xpValueCrafting = getXpGainData(core, item.getRegistryName(),EventType.CRAFT, stack);
-            Map<String, Long> xpValueSmelting = getXpGainData(core, item.getRegistryName(),EventType.SMELT, stack);
-            Map<String, Long> xpValueBrewing = getXpGainData(core, item.getRegistryName(),EventType.BREW, stack);
-            Map<String, Long> xpValueGrowing = getXpGainData(core, item.getRegistryName() ,EventType.GROW, stack);
-            Map<String, Long> xpValuePlacing = getXpGainData(core, item.getRegistryName(),EventType.BLOCK_PLACE, stack);
+            Map<String, Long> xpValueBreaking = getXpGainData(core, itemID,EventType.BLOCK_BREAK, stack);
+            Map<String, Long> xpValueCrafting = getXpGainData(core, itemID,EventType.CRAFT, stack);
+            Map<String, Long> xpValueSmelting = getXpGainData(core, itemID,EventType.SMELT, stack);
+            Map<String, Long> xpValueBrewing = getXpGainData(core, itemID,EventType.BREW, stack);
+            Map<String, Long> xpValueGrowing = getXpGainData(core, itemID ,EventType.GROW, stack);
+            Map<String, Long> xpValuePlacing = getXpGainData(core, itemID,EventType.BLOCK_PLACE, stack);
             //Map<String, Map<String, Double>> salvageInfo = JsonConfig.data2.get(JType.SALVAGE).getOrDefault(regKey, new HashMap<>());
             //Map<String, Map<String, Double>> salvageFrom = JsonConfig.data2.get(JType.SALVAGE_FROM).getOrDefault(regKey, new HashMap<>());
-            Map<String, Double> heldItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.HELD, stack);
-            Map<String, Double> wornItemXpBoost = getBonusData(core, item.getRegistryName(), ModifierDataType.WORN, stack);
+            Map<String, Double> heldItemXpBoost = getBonusData(core, itemID, ModifierDataType.HELD, stack);
+            Map<String, Double> wornItemXpBoost = getBonusData(core, itemID, ModifierDataType.WORN, stack);
             //============VEIN MINER TOOLTIP DATA COLLECTION ========================
             VeinData veinData = VeinData.EMPTY;
             if (core.getVeinData().hasData(stack)) {
@@ -81,55 +84,55 @@ public class TooltipHandler {
             }
             
             //=====================REQUIREMENTS=========================
-            if (wearReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAR).get())	 {addRequirementTooltip("pmmo.toWear", event, wearReq, core);}
-            if (toolReq.size() > 0 && Config.tooltipReqEnabled(ReqType.TOOL).get())  {addRequirementTooltip("pmmo.tool", event, toolReq, core);}
-            if (weaponReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAPON).get()){addRequirementTooltip("pmmo.weapon", event, weaponReq, core);}
-            if (useReq.size() > 0 && Config.tooltipReqEnabled(ReqType.USE).get())   {addRequirementTooltip("pmmo.use", event, useReq, core);}
-            if (placeReq.size() > 0 && Config.tooltipReqEnabled(ReqType.PLACE).get()) {addRequirementTooltip("pmmo.place", event, placeReq, core);}
-            if (breakReq.size() > 0 && Config.tooltipReqEnabled(ReqType.BREAK).get()) {addRequirementTooltip("pmmo.break", event, breakReq, core);}
+            if (wearReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAR).get())	 {addRequirementTooltip(LangProvider.REQ_WEAR, event, wearReq, core);}
+            if (toolReq.size() > 0 && Config.tooltipReqEnabled(ReqType.TOOL).get())  {addRequirementTooltip(LangProvider.REQ_TOOL, event, toolReq, core);}
+            if (weaponReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAPON).get()){addRequirementTooltip(LangProvider.REQ_WEAPON, event, weaponReq, core);}
+            if (useReq.size() > 0 && Config.tooltipReqEnabled(ReqType.USE).get())   {addRequirementTooltip(LangProvider.REQ_USE, event, useReq, core);}
+            if (placeReq.size() > 0 && Config.tooltipReqEnabled(ReqType.PLACE).get()) {addRequirementTooltip(LangProvider.REQ_PLACE, event, placeReq, core);}
+            if (breakReq.size() > 0 && Config.tooltipReqEnabled(ReqType.BREAK).get()) {addRequirementTooltip(LangProvider.REQ_BREAK, event, breakReq, core);}
             //=====================XP VALUES============================
-            if (xpValueBreaking.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_BREAK).get()){addXpValueTooltip("pmmo.xpValueBreak", event, xpValueBreaking, core);}
-            if (xpValueCrafting.size() > 0 && Config.tooltipXpEnabled(EventType.CRAFT).get()){addXpValueTooltip("pmmo.xpValueCraft", event, xpValueCrafting, core);}
-            if (xpValueSmelting.size() > 0 && Config.tooltipXpEnabled(EventType.SMELT).get()){addXpValueTooltip("pmmo.xpValueSmelt", event, xpValueSmelting, core);}
-            if (xpValueBrewing.size() > 0 && Config.tooltipXpEnabled(EventType.BREW).get()) {addXpValueTooltip("pmmo.xpValueBrew", event, xpValueBrewing, core);}
-            if (xpValueGrowing.size() > 0 && Config.tooltipXpEnabled(EventType.GROW).get()) {addXpValueTooltip("pmmo.xpValueGrow", event, xpValueGrowing, core);}
-            if (xpValuePlacing.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_PLACE).get()) {addXpValueTooltip("pmmo.xpValuePlace", event, xpValuePlacing, core);}
+            if (xpValueBreaking.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_BREAK).get()){addXpValueTooltip(LangProvider.XP_VALUE_BREAK, event, xpValueBreaking, core);}
+            if (xpValueCrafting.size() > 0 && Config.tooltipXpEnabled(EventType.CRAFT).get()){addXpValueTooltip(LangProvider.XP_VALUE_CRAFT, event, xpValueCrafting, core);}
+            if (xpValueSmelting.size() > 0 && Config.tooltipXpEnabled(EventType.SMELT).get()){addXpValueTooltip(LangProvider.XP_VALUE_SMELT, event, xpValueSmelting, core);}
+            if (xpValueBrewing.size() > 0 && Config.tooltipXpEnabled(EventType.BREW).get()) {addXpValueTooltip(LangProvider.XP_VALUE_BREW, event, xpValueBrewing, core);}
+            if (xpValueGrowing.size() > 0 && Config.tooltipXpEnabled(EventType.GROW).get()) {addXpValueTooltip(LangProvider.XP_VALUE_GROW, event, xpValueGrowing, core);}
+            if (xpValuePlacing.size() > 0 && Config.tooltipXpEnabled(EventType.BLOCK_PLACE).get()) {addXpValueTooltip(LangProvider.XP_VALUE_PLACE, event, xpValuePlacing, core);}
             //=====================MODIFIERS============================
-            if (heldItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.HELD).get()) {addModifierTooltip("pmmo.itemXpBoostHeld", event, heldItemXpBoost, core);}
-            if (wornItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.WORN).get()) {addModifierTooltip("pmmo.itemXpBoostWorn", event, wornItemXpBoost, core);}
+            if (heldItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.HELD).get()) {addModifierTooltip(LangProvider.BOOST_HELD, event, heldItemXpBoost, core);}
+            if (wornItemXpBoost.size() > 0 && Config.tooltipBonusEnabled(ModifierDataType.WORN).get()) {addModifierTooltip(LangProvider.BOOST_WORN, event, wornItemXpBoost, core);}
             //=====================VEIN DATA============================
-            if (!veinData.equals(VeinData.EMPTY)) {addVeinTooltip("pmmo.veintooltip", event, veinData, stack.getItem() instanceof BlockItem);}
+            if (!veinData.equals(VeinData.EMPTY)) {addVeinTooltip(LangProvider.VEIN_TOOLTIP, event, veinData, stack.getItem() instanceof BlockItem);}
          }
 	}
 	
-	private static void addRequirementTooltip(String header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
-		event.getToolTip().add(new TranslatableComponent(header));
+	private static void addRequirementTooltip(Translation header, ItemTooltipEvent event, Map<String, Integer> reqs, Core core) {
+		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Integer> req : reqs.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+req.getKey()).append(new TextComponent(" "+String.valueOf(req.getValue()))).setStyle(core.getDataConfig().getSkillStyle(req.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+req.getKey()).append(Component.literal(" "+String.valueOf(req.getValue()))).setStyle(core.getDataConfig().getSkillStyle(req.getKey())));
 		}
 	}
 	
-	private static void addXpValueTooltip(String header, ItemTooltipEvent event, Map<String, Long> values, Core core) {
-		event.getToolTip().add(new TranslatableComponent(header));
+	private static void addXpValueTooltip(Translation header, ItemTooltipEvent event, Map<String, Long> values, Core core) {
+		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Long> value : values.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+value.getKey()).append(new TextComponent(" "+String.valueOf(value.getValue()))).setStyle(core.getDataConfig().getSkillStyle(value.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+value.getKey()).append(Component.literal(" "+String.valueOf(value.getValue()))).setStyle(core.getDataConfig().getSkillStyle(value.getKey())));
 		}
 	}
 	
-	private static void addModifierTooltip(String header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
-		event.getToolTip().add(new TranslatableComponent(header));
+	private static void addModifierTooltip(Translation header, ItemTooltipEvent event, Map<String, Double> values, Core core) {
+		event.getToolTip().add(header.asComponent());
 		for (Map.Entry<String, Double> modifier: values.entrySet()) {
-			event.getToolTip().add(new TranslatableComponent("pmmo."+modifier.getKey()).append(new TextComponent(" "+modifierPercent(modifier.getValue()))).setStyle(core.getDataConfig().getSkillStyle(modifier.getKey())));
+			event.getToolTip().add(Component.translatable("pmmo."+modifier.getKey()).append(Component.literal(" "+modifierPercent(modifier.getValue()))).setStyle(core.getDataConfig().getSkillStyle(modifier.getKey())));
 		}
 	}
 	
-	private static void addVeinTooltip(String header, ItemTooltipEvent event, VeinData data, double charge, boolean isBlockItem) {
-		event.getToolTip().add(new TranslatableComponent(header));
-		event.getToolTip().add(new TranslatableComponent("pmmo.veindata",
+	private static void addVeinTooltip(Translation header, ItemTooltipEvent event, VeinData data, boolean isBlockItem) {
+		event.getToolTip().add(header.asComponent());
+		event.getToolTip().add(LangProvider.VEIN_DATA.asComponent(
 				data.chargeCap().orElse(0),
 				DP.dp(data.chargeRate().orElse(0d) * 20d)));
 		if (isBlockItem) {
-			event.getToolTip().add(new TranslatableComponent("pmmo.veinbreak",
+			event.getToolTip().add(LangProvider.VEIN_BREAK.asComponent(
 					data.consumeAmount().orElse(0)));
 		}
 	}
