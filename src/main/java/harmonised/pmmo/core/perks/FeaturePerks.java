@@ -198,7 +198,7 @@ public class FeaturePerks {
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
 		List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
 		if (!type.contains(RegistryUtil.getId(player.getMainHandItem()).toString())) return output;
-		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (float)(perLevel * (double)level);
+		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (float)Math.max(1d, (float)(perLevel * (double)level));
 		output.putFloat(APIUtils.DAMAGE_OUT, damage);
 		return output;
 	};
