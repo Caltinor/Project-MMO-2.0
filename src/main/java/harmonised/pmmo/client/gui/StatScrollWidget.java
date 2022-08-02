@@ -110,9 +110,10 @@ public class StatScrollWidget extends ScrollPanel{
 					blockPos != null ? core.getReqMap(reqType, blockPos, Minecraft.getInstance().level) :
 					stack != null ? core.getReqMap(reqType, stack) : 
 						new HashMap<>();
-			if (!reqMap.isEmpty()) {
+			if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 				content.add(new Element(reqType, 1, 0xFFFFFF, false, 0));
 				for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
+					if (map.getValue() == 0) continue;
 					content.add(new Element(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
 				}
 			}
@@ -224,9 +225,10 @@ public class StatScrollWidget extends ScrollPanel{
 		ResourceLocation biome = mc.player.level.getBiome(mc.player.blockPosition()).unwrapKey().get().location();
 		//DIMENSION DATA
 		content.add(new Element(Component.translatable("pmmo.dimension_header", dimension).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-		if (core.getSkillGates().doesObjectReqExist(ReqType.TRAVEL, dimension)) {
+		Map<String, Integer> travelReqs = core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, dimension);
+		if (!travelReqs.isEmpty() && !travelReqs.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 			content.add(new Element(ReqType.TRAVEL, step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<String, Integer> travelReq : core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, dimension).entrySet()) {
+			for (Map.Entry<String, Integer> travelReq : travelReqs.entrySet()) {
 				content.add(new Element(travelReq.getKey(), travelReq.getValue(), step(2), core.getDataConfig().getSkillColor(travelReq.getKey())));
 			}
 		}
@@ -253,9 +255,11 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 		//BIOME DATA
 		content.add(new Element(Component.translatable("pmmo.biome_header", biome).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-		if (core.getSkillGates().doesObjectReqExist(ReqType.TRAVEL, biome)) {
-			content.add(new Element(ReqType.TRAVEL, step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<String, Integer> travelReq : core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, biome).entrySet()) {
+		travelReqs = core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, biome);
+		if (!travelReqs.isEmpty() && !travelReqs.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
+			content.add(new Element(ReqType.TRAVEL, step(1), 0xFFFFFF, false, 0));			
+			for (Map.Entry<String, Integer> travelReq : travelReqs.entrySet()) {
+				if (travelReq.getValue() == 0) continue;
 				content.add(new Element(travelReq.getKey(), travelReq.getValue(), step(2), core.getDataConfig().getSkillColor(travelReq.getKey())));
 			}
 			//negative effects only matter if there is a req to meet.  positive effects will apply always if no req is present
