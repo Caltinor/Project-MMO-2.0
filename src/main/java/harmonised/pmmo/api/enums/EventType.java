@@ -27,14 +27,14 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 		FROM_MAGIC(false, false, true, "endurance"),		//IMPLEMENTED
 		FROM_ENVIRONMENT(false, false, true, "endurance"),	//IMPLEMENTED
 		FROM_IMPACT(false, false, true, "endurance"),		//IMPLEMENTED
-	DEAL_MELEE_DAMAGE(false, false, true, "combat"),		//IMPLEMENTED
-		MELEE_TO_MOBS(false, false, true, "combat"),		//IMPLEMENTED
-		MELEE_TO_PLAYERS(false, false, true, "combat"),		//IMPLEMENTED
-		MELEE_TO_ANIMALS(false, false, true, "combat"),		//IMPLEMENTED
-	DEAL_RANGED_DAMAGE(false, false, true, "archery"),		//IMPLEMENTED
-		RANGED_TO_MOBS(false, false, true, "archery"),		//IMPLEMENTED
-		RANGED_TO_PLAYERS(false, false, true, "archery"),	//IMPLEMENTED
-		RANGED_TO_ANIMALS(false, false, true, "archery"),	//IMPLEMENTED
+	DEAL_MELEE_DAMAGE(true, false, true, "combat"),			//IMPLEMENTED
+		MELEE_TO_MOBS(true, false, true, "combat"),			//IMPLEMENTED
+		MELEE_TO_PLAYERS(true, false, true, "combat"),		//IMPLEMENTED
+		MELEE_TO_ANIMALS(true, false, true, "combat"),		//IMPLEMENTED
+	DEAL_RANGED_DAMAGE(true, false, true, "archery"),		//IMPLEMENTED
+		RANGED_TO_MOBS(true, false, true, "archery"),		//IMPLEMENTED
+		RANGED_TO_PLAYERS(true, false, true, "archery"),	//IMPLEMENTED
+		RANGED_TO_ANIMALS(true, false, true, "archery"),	//IMPLEMENTED
 	DEATH(false, false, true, "endurance"),					//IMPLEMENTED
 	ENCHANT(true, false, false, "magic"),					//IMPLEMENTED	MIXIN (probably)
 	FISH(true, false, false, "fishing"),					//IMPLEMENTED

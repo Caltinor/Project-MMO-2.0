@@ -10,6 +10,7 @@ import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.util.Functions;
 import harmonised.pmmo.util.Messenger;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -17,9 +18,12 @@ import harmonised.pmmo.util.TagBuilder;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 
@@ -87,20 +91,25 @@ public class DamageDealtHandler {
 				event.setAmount(perkOutput.getFloat(APIUtils.DAMAGE_OUT));
 			}
 			MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Attack Type: "+type.name()+" | Damage Out: "+event.getAmount());
-			if (!player.level.isClientSide) {
-				Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), player, perkOutput);
+			if (!player.level.isClientSide) { 
+				Map<String, Long> xpAward = getExperienceAwards(core, type, target, event.getAmount(), event.getSource(), player, perkOutput);
 				List<ServerPlayer> partyMembersInRange = PartyUtils.getPartyMembersInRange((ServerPlayer) player);
 				core.awardXP(partyMembersInRange, xpAward);
 			}
 		}
 	}
 	
-	private static Map<String, Long> getExperienceAwards(Core core, EventType type, LivingEntity target, float damage, Player player, CompoundTag dataIn) {
+	private static Map<String, Long> getExperienceAwards(Core core, EventType type, LivingEntity target, float damage, DamageSource source, Player player, CompoundTag dataIn) {
 		Map<String, Long> mapOut = new HashMap<>();
 		float ultimateDamage = Math.min(damage, target.getHealth());
+		ItemStack weapon = player.getMainHandItem();
+		Entity srcEntity = source.isProjectile() ? source.getDirectEntity() : player;
 		switch (type) {
 		case MELEE_TO_MOBS: case MELEE_TO_ANIMALS: case MELEE_TO_PLAYERS: case RANGED_TO_MOBS: case RANGED_TO_ANIMALS: case RANGED_TO_PLAYERS: {
-			core.getExperienceAwards(type, target, player, dataIn).forEach((skill, value) -> {
+			Functions.mergeMaps(core.getExperienceAwards(type, weapon, player, dataIn),
+								core.getExperienceAwards(type, srcEntity, player, dataIn),
+								core.getExperienceAwards(type, target, player, dataIn))
+			.forEach((skill, value) -> {
 				mapOut.put(skill, (long)((float)value * ultimateDamage));
 			});
 			break;

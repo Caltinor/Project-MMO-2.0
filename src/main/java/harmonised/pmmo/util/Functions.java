@@ -1,9 +1,12 @@
 package harmonised.pmmo.util;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 
 public class Functions<X, Y> {
 	
@@ -43,5 +46,26 @@ public class Functions<X, Y> {
 		else if (!isOneTrue && isTwoTrue) either.accept(two, one);
 		else if (!isOneTrue && !isTwoTrue) neither.accept(one, two);
 		else both.accept(one, two);
+	}
+	
+	@SafeVarargs
+	public static <K, V extends Number> Map<K, V> mergeMaps(Map<K, V>...maps) {
+		Map<K, V> outMap = maps.length >= 2 
+				? mergeMaps(maps[0], maps[1]) 
+				: maps.length >= 1 
+					? maps[0] : new HashMap<>();
+		for (int i =2; i < maps.length; i++) {
+			outMap = mergeMaps(outMap, maps[i]);
+		}
+		return outMap;
+	}
+	
+	public static <K, V extends Number> Map<K, V> mergeMaps(Map<K, V> one, Map<K, V> two) {
+		Map<K, V> outMap = new HashMap<>(one);
+		two.forEach((key, value) -> {
+			outMap.merge(key, value, (v1, v2) -> v1.longValue() > v2.longValue() ? v1 : v2);
+		});
+		 MsLoggy.DEBUG.log(LOG_CODE.EVENT, "Merged Map: {}", MsLoggy.mapToString(outMap));
+		return outMap;
 	}
 }
