@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
