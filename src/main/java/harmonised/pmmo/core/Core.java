@@ -134,6 +134,7 @@ public class Core {
 	public LogicalSide getSide() {return side;}
 	  
   	public boolean doesPlayerMeetReq(ReqType reqType, ResourceLocation objectID, UUID playerID) {
+  		if (!Config.reqEnabled(reqType).get()) return true;
 		Map<String, Integer> requirements = gates.getObjectSkillMap(reqType, objectID);
 		return doesPlayerMeetReq(playerID, requirements);	
 	}	
