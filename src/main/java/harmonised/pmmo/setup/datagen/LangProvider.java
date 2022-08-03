@@ -246,8 +246,8 @@ public class LangProvider extends LanguageProvider{
 			return new TranslatableComponent(key());
 		}
 		public static class Builder {
-			String key;
-			Map<String, String> localeMap;
+			private final String key;
+			private Map<String, String> localeMap;
 			private Builder(String key) {this.key = key; localeMap = new HashMap<>();}
 			
 			public static Builder start(String key) {
