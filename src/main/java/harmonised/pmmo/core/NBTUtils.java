@@ -17,6 +17,7 @@ import harmonised.pmmo.core.nbt.LogicEntry.Criteria;
 import harmonised.pmmo.core.nbt.Operator;
 import harmonised.pmmo.core.nbt.PathReader;
 import harmonised.pmmo.core.nbt.Result;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -90,25 +91,25 @@ public class NBTUtils {
 	
 	//======================GETTERS=================================
 	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
-		return translateToInt(evaluateEntries(stack.getTag(), itemReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(stack.getItem().getRegistryName())));
+		return translateToInt(evaluateEntries(stack.getTag(), itemReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(stack))));
 	}
 	public Map<String, Integer> getReqMap(ReqType reqType, BlockEntity tile) {
-		return translateToInt(evaluateEntries(tile.getTileData(), blockReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(tile.getBlockState().getBlock().getRegistryName())));
+		return translateToInt(evaluateEntries(tile.getPersistentData(), blockReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(tile.getBlockState()))));
 	}
 	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
-		return translateToInt(evaluateEntries(entity.getPersistentData(), entityReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(new ResourceLocation(entity.getEncodeId()))));
+		return translateToInt(evaluateEntries(entity.getPersistentData(), entityReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(entity))));
 	}
 	public Map<String, Long> getXpMap(EventType reqType, ItemStack stack) {
-		return translateToLong(evaluateEntries(stack.getTag(), itemXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(stack.getItem().getRegistryName())));
+		return translateToLong(evaluateEntries(stack.getTag(), itemXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(stack))));
 	}
 	public Map<String, Long> getXpMap(EventType reqType, BlockEntity tile) {
-		return translateToLong(evaluateEntries(tile.getTileData(), blockXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(tile.getBlockState().getBlock().getRegistryName())));
+		return translateToLong(evaluateEntries(tile.getPersistentData(), blockXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(tile.getBlockState()))));
 	}
 	public Map<String, Long> getXpMap(EventType reqType, Entity entity) {
-		return translateToLong(evaluateEntries(entity.getPersistentData(), entityXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(new ResourceLocation(entity.getEncodeId()))));
+		return translateToLong(evaluateEntries(entity.getPersistentData(), entityXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(entity))));
 	}
 	public Map<String, Double> getBonusMap(ModifierDataType type, ItemStack stack) {
-		return evaluateEntries(stack.getTag(), bonusLogic.getOrDefault(type, LinkedListMultimap.create()).get(stack.getItem().getRegistryName()));
+		return evaluateEntries(stack.getTag(), bonusLogic.getOrDefault(type, LinkedListMultimap.create()).get(RegistryUtil.getId(stack)));
 	}
 	
 	public Map<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> itemReqLogic() {return new HashMap<>(itemReqLogic);}

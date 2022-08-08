@@ -9,6 +9,7 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -86,9 +87,9 @@ public class PredicateRegistry {
 	 */
 	public boolean checkPredicateReq(Player player, ItemStack stack, ReqType jType) 
 	{
-		if (!predicateExists(stack.getItem().getRegistryName(), jType)) 
+		if (!predicateExists(RegistryUtil.getId(stack), jType)) 
 			return false;
-		for (BiPredicate<Player, ItemStack> pred : reqPredicates.get(jType.toString()+";"+stack.getItem().getRegistryName().toString())) {
+		for (BiPredicate<Player, ItemStack> pred : reqPredicates.get(jType.toString()+";"+RegistryUtil.getId(stack).toString())) {
 			if (!pred.test(player, stack)) return false;
 		}
 		return true;
@@ -104,7 +105,7 @@ public class PredicateRegistry {
 	 */
 	public boolean checkPredicateReq(Player player, BlockEntity tile, ReqType jType) 
 	{
-		ResourceLocation res = tile.getBlockState().getBlock().getRegistryName();
+		ResourceLocation res = RegistryUtil.getId(tile.getBlockState());
 		if (!predicateExists(res, jType)) 
 			return false;
 		for (BiPredicate<Player, BlockEntity> pred : reqBreakPredicates.get(jType.toString()+";"+res.toString())) {
@@ -114,7 +115,7 @@ public class PredicateRegistry {
 	}
 	
 	public boolean checkPredicateReq(Player player, Entity entity, ReqType type) {
-		ResourceLocation res = new ResourceLocation(entity.getEncodeId());
+		ResourceLocation res = RegistryUtil.getId(entity);
 		if (!predicateExists(res, type))
 			return false;
 		for (BiPredicate<Player, Entity> pred : reqEntityPredicates.get(type.toString()+";"+res.toString())) {

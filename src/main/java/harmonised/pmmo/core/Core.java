@@ -222,7 +222,7 @@ public class Core {
 	private ResourceLocation playerID = new ResourceLocation("player");
 	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
-		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : new ResourceLocation(entity.getEncodeId());
+		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
 			if (predicates.predicateExists(entityID, type)) 
 				return predicates.checkPredicateReq(player, entity, type);
 			else if (gates.doesObjectReqExist(type, entityID))
@@ -283,7 +283,7 @@ public class Core {
 			return new HashMap<>();
 	}	
 	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
-		ResourceLocation entityID = new ResourceLocation(entity.getType().equals(EntityType.PLAYER) ? "minecraft:player" : entity.getEncodeId());
+		ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? new ResourceLocation("minecraft:player") : RegistryUtil.getId(entity);
 		if (tooltips.requirementTooltipExists(entityID, reqType))
 			return processSkillGroupReqs(tooltips.getEntityRequirementTooltipData(entityID, reqType, entity));
 		else if (gates.doesObjectReqExist(reqType, entityID))
@@ -342,7 +342,7 @@ public class Core {
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
 		  boolean tooltipsUsed = false;
-		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : new ResourceLocation(entity.getEncodeId());
+		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
 		  if (tooltipsUsed = tooltips.xpGainTooltipExists(entityID, type))
 			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getEntityXpGainTooltipData(entityID, type, entity));
 		  return getCommonXpAwardData(xpGains, type, entityID, player, ObjectType.ENTITY, tooltipsUsed);
