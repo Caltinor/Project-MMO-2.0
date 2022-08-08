@@ -9,6 +9,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -96,7 +97,7 @@ public class MobAttributeHandler {
 			bonus *= Core.get(mob.level).getDataConfig()
 					.getMobModifier(
 							mob.level.dimension().location(), 
-							new ResourceLocation(mob.getEncodeId()), 
+							RegistryUtil.getId(mob), 
 							modifID.configID);
 			AttributeModifier modifier = new AttributeModifier(modifID.id, "Boost to Mob Scaling", bonus, AttributeModifier.Operation.ADDITION);
 			attributeInstance.removeModifier(modifID.id);
