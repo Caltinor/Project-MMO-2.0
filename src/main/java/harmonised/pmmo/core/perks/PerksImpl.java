@@ -5,7 +5,6 @@ import org.apache.commons.lang3.function.TriFunction;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.util.TagBuilder;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,10 +23,7 @@ public class PerksImpl {
 		float speedIn = nbt.contains(APIUtils.BREAK_SPEED_INPUT_VALUE) ? nbt.getFloat(APIUtils.BREAK_SPEED_INPUT_VALUE) : player.getMainHandItem().getDestroySpeed(Blocks.OBSIDIAN.defaultBlockState());
 		float speedBonus = getRatioForTool(player.getMainHandItem(), nbt);
 		if (speedBonus == 0) return NONE;
-		float heightConfig = nbt.contains(APIUtils.MODIFIER) ? nbt.getFloat(APIUtils.MODIFIER) : 1000;
-		BlockPos pos = nbt.contains(APIUtils.BLOCK_POS) ? BlockPos.of(nbt.getLong(APIUtils.BLOCK_POS)) : new BlockPos(0,0,0);
-		float heightMultiplier = Math.max(0, 1 - pos.getY()/heightConfig);
-		float newSpeed = speedIn * Math.max(0, 1 + level * speedBonus * heightMultiplier);
+		float newSpeed = speedIn * Math.max(0, 1 + level * speedBonus);
 		return TagBuilder.start().withFloat(APIUtils.BREAK_SPEED_OUTPUT_VALUE, newSpeed).build();
 	};
 	
