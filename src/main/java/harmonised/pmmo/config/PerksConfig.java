@@ -78,11 +78,11 @@ public class PerksConfig {
 		bodyMap.put("swimming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "swimming").build()));
 		bodyMap.put("sailing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "sailing").build()));
 		bodyMap.put("fishing", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "fishing").build()));
-		bodyMap.put("crafting", List.of(
-				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "crafting").build(),
+		bodyMap.put("crafting", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "crafting").build()));
+		bodyMap.put("magic", List.of(
+				TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "magic").build(),
 				TagBuilder.start().withString("perk", "ars_scalaes:mana_boost").withDouble(APIUtils.MAX_BOOST, 3000d).withDouble(APIUtils.PER_LEVEL, 3.0d).build(),
 				TagBuilder.start().withString("perk", "ars_scalaes:mana_regen").withDouble(APIUtils.MAX_BOOST, 100d).withDouble(APIUtils.PER_LEVEL, 0.06d).build()));
-		bodyMap.put("magic", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "magic").build()));
 		bodyMap.put("slayer", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "slayer").build()));
 		bodyMap.put("hunter", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "hunter").build()));
 		bodyMap.put("taming", List.of(TagBuilder.start().withString("perk", "pmmo:fireworks").withString(APIUtils.SKILLNAME, "taming").build()));
