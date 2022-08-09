@@ -245,6 +245,9 @@ public class LangProvider extends LanguageProvider{
 		public TranslatableComponent asComponent() {
 			return new TranslatableComponent(key());
 		}
+		public TranslatableComponent asComponent(Object...objs) {
+			return new TranslatableComponent(key(), objs);
+		}
 		public static class Builder {
 			private final String key;
 			private Map<String, String> localeMap;

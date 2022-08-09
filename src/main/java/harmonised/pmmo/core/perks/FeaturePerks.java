@@ -11,7 +11,6 @@ import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

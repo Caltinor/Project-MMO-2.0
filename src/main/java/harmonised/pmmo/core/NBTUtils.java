@@ -94,7 +94,7 @@ public class NBTUtils {
 		return translateToInt(evaluateEntries(stack.getTag(), itemReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(stack))));
 	}
 	public Map<String, Integer> getReqMap(ReqType reqType, BlockEntity tile) {
-		return translateToInt(evaluateEntries(tile.getPersistentData(), blockReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(tile.getBlockState()))));
+		return translateToInt(evaluateEntries(tile.getTileData(), blockReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(tile.getBlockState()))));
 	}
 	public Map<String, Integer> getReqMap(ReqType reqType, Entity entity) {
 		return translateToInt(evaluateEntries(entity.getPersistentData(), entityReqLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(entity))));
@@ -103,7 +103,7 @@ public class NBTUtils {
 		return translateToLong(evaluateEntries(stack.getTag(), itemXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(stack))));
 	}
 	public Map<String, Long> getXpMap(EventType reqType, BlockEntity tile) {
-		return translateToLong(evaluateEntries(tile.getPersistentData(), blockXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(tile.getBlockState()))));
+		return translateToLong(evaluateEntries(tile.getTileData(), blockXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(tile.getBlockState()))));
 	}
 	public Map<String, Long> getXpMap(EventType reqType, Entity entity) {
 		return translateToLong(evaluateEntries(entity.getPersistentData(), entityXpGainLogic.getOrDefault(reqType, LinkedListMultimap.create()).get(RegistryUtil.getId(entity))));

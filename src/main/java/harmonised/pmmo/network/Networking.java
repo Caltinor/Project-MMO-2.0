@@ -89,7 +89,7 @@ public class Networking {
 		INSTANCE.messageBuilder(CP_SyncVein.class, ID++)
 			.encoder(CP_SyncVein::encode)
 			.decoder(CP_SyncVein::new)
-			.consumerNetworkThread(CP_SyncVein::handle)
+			.consumer(CP_SyncVein::handle)
 			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
@@ -105,7 +105,7 @@ public class Networking {
 		INSTANCE.messageBuilder(SP_SetVeinLimit.class, ID++)
 			.encoder(SP_SetVeinLimit::encode)
 			.decoder(SP_SetVeinLimit::new)
-			.consumerNetworkThread(SP_SetVeinLimit::handle)
+			.consumer(SP_SetVeinLimit::handle)
 			.add();
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}

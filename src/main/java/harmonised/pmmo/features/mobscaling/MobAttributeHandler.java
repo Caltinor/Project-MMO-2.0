@@ -11,8 +11,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -35,21 +34,21 @@ public class MobAttributeHandler {
 	@SubscribeEvent
 	public static void onMobSpawn(SpecialSpawn event) {
 		if (event.getEntity().getType().is(Reference.MOB_TAG)) {
-			int diffScale = event.getLevel().getDifficulty().getId();
+			int diffScale = event.getWorld().getDifficulty().getId();
 			Vec3 spawnPos = new Vec3(event.getX(), event.getY(), event.getZ());
 			int range = Config.MOB_SCALING_AOE.get();
 			TargetingConditions targetCondition = TargetingConditions.forNonCombat().ignoreInvisibilityTesting().ignoreLineOfSight().range(Math.pow(range, 2)*3);
-			List<Player> nearbyPlayers = event.getLevel().getNearbyPlayers(targetCondition, event.getEntity(), AABB.ofSize(spawnPos, range, range, range));
+			List<Player> nearbyPlayers = event.getWorld().getNearbyPlayers(targetCondition, event.getEntityLiving(), AABB.ofSize(spawnPos, range, range, range));
 			MsLoggy.DEBUG.log(LOG_CODE.FEATURE, "NearbyPlayers on Spawn: "+MsLoggy.listToString(nearbyPlayers));
 			if (nearbyPlayers.isEmpty()) return;
 			//Set each Modifier type
-			setMobModifier(event.getEntity(), getBonus(nearbyPlayers, Config.MOB_SCALE_HP.get(), diffScale, event.getEntity().getMaxHealth(), HARD_CAP_HP), Attributes.MAX_HEALTH, ModifierID.HP);
-			setMobModifier(event.getEntity(), getBonus(nearbyPlayers, Config.MOB_SCALE_SPEED.get(), diffScale, event.getEntity().getSpeed(), HARD_CAP_SPD), Attributes.MOVEMENT_SPEED, ModifierID.SPEED);
-			setMobModifier(event.getEntity(), getBonus(nearbyPlayers, Config.MOB_SCALE_DAMAGE.get(), diffScale, 1f, HARD_CAP_DMG), Attributes.ATTACK_DAMAGE, ModifierID.DAMAGE);
-			event.getEntity().setHealth(event.getEntity().getMaxHealth());
+			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_HP.get(), diffScale, event.getEntityLiving().getMaxHealth(), HARD_CAP_HP), Attributes.MAX_HEALTH, ModifierID.HP);
+			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_SPEED.get(), diffScale, event.getEntityLiving().getSpeed(), HARD_CAP_SPD), Attributes.MOVEMENT_SPEED, ModifierID.SPEED);
+			setMobModifier(event.getEntityLiving(), getBonus(nearbyPlayers, Config.MOB_SCALE_DAMAGE.get(), diffScale, 1f, HARD_CAP_DMG), Attributes.ATTACK_DAMAGE, ModifierID.DAMAGE);
+			event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth());
 			if (Config.DEBUG_LOGGING.get().contains(LOG_CODE.FEATURE.code)) {
-				LivingEntity entity = event.getEntity();
-				entity.setCustomName(Component.literal("SCALED: HP:"+entity.getMaxHealth()+"| SPD:"+entity.getSpeed()));
+				LivingEntity entity = event.getEntityLiving();
+				entity.setCustomName(new TextComponent("SCALED: HP:"+entity.getMaxHealth()+"| SPD:"+entity.getSpeed()));
 				entity.setCustomNameVisible(true);
 			}
 		}
