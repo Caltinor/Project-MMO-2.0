@@ -63,7 +63,6 @@ public class TooltipHandler
                     return;
 
                 String regKey = item.getRegistryName().toString();
-                float hardness;
                 double dValue;
                 BlockState state = item instanceof BlockItem ? ((BlockItem) item).getBlock().getDefaultState() : null;
 
@@ -507,23 +506,6 @@ public class TooltipHandler
                         {
                             LOGGER.error(e);
                         }
-                    }
-                }
-
-                //ADVANCED TOOLTIP
-                if(event.getFlags().isAdvanced())
-                {
-                    for(ResourceLocation tagKey : item.getTags())
-                    {
-                        tooltip.add(new StringTextComponent("#" + tagKey.toString()).setStyle(XP.getColorStyle(0x666666)));
-                    }
-
-                    if(state != null)
-                    {
-                        hardness = state.getBlockHardness(null, new BlockPos(0, 0, 0));
-                        if(hardness > 0)
-                            tooltip.add(new TranslationTextComponent("pmmo.levelDisplay", " " + new TranslationTextComponent("pmmo.hardness", DP.dp(hardness)).getString()));
-//                    tooltip.add(new StringTextComponent(XP.checkMaterial(material) + " " + XP.getSkill(material)));
                     }
                 }
             }
