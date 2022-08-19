@@ -4,6 +4,9 @@
         	"mining": 2000
         }
     },
+    "requirements": {
+        "BREAK": {"mining": 30}
+    },
     "vein_data": {
         "consumeAmount": 25
     }
