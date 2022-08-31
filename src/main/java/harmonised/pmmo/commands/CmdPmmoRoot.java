@@ -20,7 +20,12 @@ public class CmdPmmoRoot {
 						.executes(ctx -> {
 							PackGenerator.generateEmptyPack(ctx.getSource().getServer());
 							return 0;
-						}))
+						})
+						.then(Commands.literal("disabler")
+								.executes(ctx -> {
+									PackGenerator.generateDisablingPack(ctx.getSource().getServer());
+									return 0;
+								})))
 				.then(Commands.literal("checkbiome"))
 				.then(Commands.literal("debug"))
 				.then(Commands.literal("help")

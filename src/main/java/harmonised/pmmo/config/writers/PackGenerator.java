@@ -16,6 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class PackGenerator {
 	public static final String PACKNAME = "generated_pack";
+	public static final String DISABLER = "pmmo_disabler_pack";
 	
 	private enum Category {
 		ITEMS("pmmo/items", server -> ForgeRegistries.ITEMS.getKeys()),
@@ -59,5 +60,24 @@ public class PackGenerator {
 				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()); e.printStackTrace();}
 			}			
 		}
+	}
+	
+	public static void generateDisablingPack(MinecraftServer server) {
+		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(DISABLER);
+		filepath.toFile().mkdirs();
+		filepath.resolve("data").toFile().mkdirs();
+		try {
+		Files.write(
+				filepath.resolve("pack.mcmeta"), 
+				List.of(
+						"{",
+						"\"pack\":{\"description\":\"Pack to disable PMMO Defaults\",",
+						"\"pack_format\":9},",
+						"\"filter\":{\"block\":[{\"path\":\"pmmo\"}]}",
+						"}"), 
+				Charset.defaultCharset(),
+				StandardOpenOption.CREATE_NEW,
+				StandardOpenOption.WRITE);
+		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data"); e.printStackTrace();}
 	}
 }
