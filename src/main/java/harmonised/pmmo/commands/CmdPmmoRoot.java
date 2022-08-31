@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import harmonised.pmmo.config.writers.PackGenerator;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;
@@ -13,9 +14,13 @@ public class CmdPmmoRoot {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("pmmo")
 				.then(CmdNodeAdmin.register(dispatcher))
-				.then(CmdNodeParty.register(dispatcher))
-				.then(Commands.literal("resync"))
-				.then(Commands.literal("tools"))
+				.then(CmdNodeParty.register(dispatcher))					
+				.then(Commands.literal("genData")
+						.requires(ctx -> ctx.hasPermission(2))
+						.executes(ctx -> {
+							PackGenerator.generateEmptyPack(ctx.getSource().getServer());
+							return 0;
+						}))
 				.then(Commands.literal("checkbiome"))
 				.then(Commands.literal("debug"))
 				.then(Commands.literal("help")
