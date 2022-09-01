@@ -46,6 +46,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 
+import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
@@ -232,4 +233,17 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 			channel.send(target, packet);
 		};
 	}
+	
+	public <PACKET> MergeableCodecDataManager<RAW, FINE> subscribeAsSplitSyncable(final SimpleChannel channel,
+			final Function<Map<ResourceLocation, FINE>, PACKET> packetFactory)
+	{
+		MinecraftForge.EVENT_BUS.addListener(this.getDatapackSyncSplitListener(channel, packetFactory));
+		return this;
+	}
+	
+	private <PACKET> Consumer<OnDatapackSyncEvent> getDatapackSyncSplitListener(final SimpleChannel channel,
+			final Function<Map<ResourceLocation, FINE>, PACKET> packetFactory)
+		{
+			return event -> Networking.splitToClient(packetFactory.apply(this.data), event.getPlayer());
+		}
 }

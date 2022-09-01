@@ -1,5 +1,8 @@
 package harmonised.pmmo.network;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
@@ -19,10 +22,15 @@ import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
+import net.minecraft.network.Connection;
+import net.minecraft.network.ConnectionProtocol;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.filters.VanillaPacketSplitter;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class Networking {
@@ -112,12 +120,12 @@ public class Networking {
 	
 	public static void registerDataSyncPackets() {
 		CoreParser.RELOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_ClearData());
-		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ITEM, o)));
-		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.BLOCK, o)));
-		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o)));
-		CoreParser.BIOME_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(o));
-		CoreParser.DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(o));
-		CoreParser.ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Enchantments(o));
+		CoreParser.ITEM_LOADER.subscribeAsSplitSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ITEM, o)));
+		CoreParser.BLOCK_LOADER.subscribeAsSplitSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.BLOCK, o)));
+		CoreParser.ENTITY_LOADER.subscribeAsSplitSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o)));
+		CoreParser.BIOME_LOADER.subscribeAsSplitSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(o));
+		CoreParser.DIMENSION_LOADER.subscribeAsSplitSyncable(INSTANCE, (o) -> new CP_SyncData_Locations(o));
+		CoreParser.ENCHANTMENT_LOADER.subscribeAsSplitSyncable(INSTANCE, (o) -> new CP_SyncData_Enchantments(o));
 		CoreParser.PLAYER_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Players(o));
 	}
 
@@ -126,5 +134,13 @@ public class Networking {
 	}
 	public static void sendToServer(Object packet) {
 		INSTANCE.sendToServer(packet);
+	}
+	
+	public static void splitToClient(Object packet, ServerPlayer player) {
+		Packet<?> vanillaPacket = INSTANCE.toVanillaPacket(packet, NetworkDirection.PLAY_TO_CLIENT);
+        List<Packet<?>> packets = new ArrayList<>();
+        VanillaPacketSplitter.appendPackets(ConnectionProtocol.PLAY, PacketFlow.CLIENTBOUND, vanillaPacket, packets);
+        Connection connection = player.connection.getConnection();
+        packets.forEach(connection::send);
 	}
 }
