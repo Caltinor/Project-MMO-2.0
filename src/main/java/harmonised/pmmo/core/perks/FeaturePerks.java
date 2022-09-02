@@ -78,8 +78,7 @@ public class FeaturePerks {
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.1;
 		double maxReach = nbt.contains(APIUtils.MAX_BOOST) ? nbt.getDouble(APIUtils.MAX_BOOST) : 10d;
 		double reach = -0.91 + (level * perLevel);
-		reach = Math.min(maxReach, reach);
-		reach = player.isCreative() ? Math.max(50, reach) : reach;		
+		reach = Math.min(maxReach, reach);	
 		AttributeInstance reachAttribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
 		if(reachAttribute.getModifier(reachModifierID) == null || reachAttribute.getModifier(reachModifierID).getAmount() != reach)
 		{
