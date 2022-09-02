@@ -14,6 +14,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +29,7 @@ public class CP_SyncData_Locations {
 	
 	public CP_SyncData_Locations(Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data) {this.data = data;}
 	public static CP_SyncData_Locations decode(FriendlyByteBuf buf) {
-		return new CP_SyncData_Locations(MAPPER.parse(NbtOps.INSTANCE, buf.readNbt()).result().orElse(new HashMap<>()));
+		return new CP_SyncData_Locations(MAPPER.parse(NbtOps.INSTANCE, buf.readNbt(NbtAccounter.UNLIMITED)).result().orElse(new HashMap<>()));
 	}
 	public void encode(FriendlyByteBuf buf) {
 		buf.writeNbt((CompoundTag)(MAPPER.encodeStart(NbtOps.INSTANCE, data).result().orElse(new CompoundTag())));
