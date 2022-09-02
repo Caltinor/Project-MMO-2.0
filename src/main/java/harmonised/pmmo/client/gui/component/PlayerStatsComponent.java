@@ -3,8 +3,6 @@ package harmonised.pmmo.client.gui.component;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import harmonised.pmmo.client.utils.DP;
-import harmonised.pmmo.client.utils.DataMirror;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
@@ -18,11 +16,8 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.client.gui.widget.ScrollPanel;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +31,7 @@ import java.util.Map;
 
 public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
     protected static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/player_stats.png");
-    private final Core core = Core.get(LogicalSide.CLIENT);
+    protected static final Core core = Core.get(LogicalSide.CLIENT);
     protected Minecraft minecraft;
     private boolean visible;
     private int xOffset;
@@ -86,12 +81,12 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         this.statsScroller.populateAbilities(core, this.minecraft);
     }
     
-    public int updateScreenPosition(int p_181402_, int p_181403_) {
+    public int updateScreenPosition(int x, int y) {
         int i;
         if (this.isVisible() && !this.widthTooNarrow) {
-            i = 177 + (p_181402_ - p_181403_ - 200) / 2;
+            i = 177 + (x - y - 200) / 2;
         } else {
-            i = (p_181402_ - p_181403_) / 2;
+            i = (x - y) / 2;
         }
         
         return i;
@@ -151,14 +146,8 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
             skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXpRaw(null, skill)).reversed());
             
             for (String skillKey : skillsKeys) {
-                long currentXP = dataStorage.getXpRaw(null, skillKey);
-                double level = ((DataMirror) dataStorage).getXpWithPercentToNextLevel(currentXP);
-                int skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault()).getMaxLevel();
-                level = level > skillMaxLevel ? skillMaxLevel : level;
-                String tempString = DP.dp(Math.floor(level * 100D) / 100D);
-                int color = core.getDataConfig().getSkillColor(skillKey);
-                
-                abilities.add(new StatComponent(minecraft, Component.translatable("pmmo." + skillKey).getString(), color, this.left + 1, this.top));
+                SkillData skillData = SkillsConfig.SKILLS.get().getOrDefault(skillKey, SkillData.Builder.getDefault());
+                abilities.add(new StatComponent(minecraft, this.left + 1, this.top, skillKey, skillData));
             }
         }
     
@@ -169,13 +158,13 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
                 int y = (int) (relativeY + (i * (component.getHeight() + 1)) - scrollDistance);
                 
                 component.setPosition(component.x, y);
-                component.render(poseStack, mouseX, mouseY, (float) (i * Math.PI));
+                component.render(poseStack, mouseX, mouseY, Minecraft.getInstance().getPartialTick());
             }
         }
         
         @Override
         protected int getContentHeight() {
-            return (int) (abilities.size() * (StatComponent.BASE_HEIGHT / 1.3));
+            return (int) (abilities.size() * (StatComponent.BASE_HEIGHT / 1.34));
         }
         
         @Override @NotNull public NarrationPriority narrationPriority() { return NarrationPriority.NONE; }
@@ -184,35 +173,54 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     
     static class StatComponent extends ImageButton {
         private final Minecraft minecraft;
+    
         private final String skillName;
+        private final SkillData skillData;
+        
         private final Color skillColor;
+        private final int skillLevel;
+        private final int skillMaxLevel;
+        private final long skillCurrentXP;
         
         private static final int BASE_WIDTH = 123;
         private static final int BASE_HEIGHT = 24;
         
-        public StatComponent(Minecraft minecraft, String skillName, int skillColor, int pX, int pY) {
+        public StatComponent(Minecraft minecraft, int pX, int pY, String skillKey, SkillData skillData) {
             super(pX, pY, 123, 24, 0, 167, 25, TEXTURE_LOCATION, pButton -> {});
             this.minecraft = minecraft;
-            this.skillName = skillName;
-            this.skillColor = new Color(skillColor);
+            this.skillName = Component.translatable("pmmo." + skillKey).getString();
+            this.skillData = skillData;
+            
+            this.skillColor = new Color(skillData.getColor());
+            this.skillCurrentXP = core.getData().getXpRaw(null, skillKey);
+            this.skillLevel = core.getData().getLevelFromXP(skillCurrentXP);
+            this.skillMaxLevel = skillData.getMaxLevel();
         }
     
         @Override
         public void renderButton(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
             super.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
-            MobEffectTextureManager mobeffecttexturemanager = this.minecraft.getMobEffectTextures();
-            TextureAtlasSprite sprite = skillName.equals("Agility") ? mobeffecttexturemanager.get(MobEffects.MOVEMENT_SPEED) :
-                skillName.equals("Mining") ? mobeffecttexturemanager.get(MobEffects.DIG_SPEED) : mobeffecttexturemanager.get(MobEffects.ABSORPTION);
             
-            RenderSystem.setShaderTexture(0, sprite.atlas().location());
-            blit(pPoseStack, this.x + 3, this.y + 3, 0, 18, 18, sprite);
-    
+            RenderSystem.setShaderTexture(0, skillData.getIcon());
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            blit(pPoseStack, this.x + 3, this.y + 3, 0, 0, 18, 18, 18, 18);
+            
+            renderProgressBar(pPoseStack);
+            GuiComponent.drawString(pPoseStack, minecraft.font, skillName, this.x + 24, this.y + 5, skillColor.getRGB());
+            GuiComponent.drawString(pPoseStack, minecraft.font, String.valueOf(skillLevel), (this.x + this.width - 5) - minecraft.font.width(String.valueOf(skillLevel)), this.y + 5, skillColor.getRGB());
+        }
+        
+        public void renderProgressBar(PoseStack pPoseStack) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, TEXTURE_LOCATION);
             RenderSystem.setShaderColor(skillColor.getRed() / 255.0f, skillColor.getGreen() / 255.0f, skillColor.getBlue() / 255.0f, skillColor.getAlpha() / 255.0f);
-            blit(pPoseStack, this.x + 24, this.y + (minecraft.font.lineHeight + 6), 93, 5, 0.0F, 217.0F, 102, 5, 256, 256);
-    
-            GuiComponent.drawString(pPoseStack, minecraft.font, skillName, this.x + 24, this.y + 5, skillColor.getRGB());
+            blit(pPoseStack, this.x + 24, this.y + (minecraft.font.lineHeight + 6), 94, 5, 0.0F, 217.0F, 102, 5, 256, 256);
+            
+            long baseXP = core.getData().getBaseXpForLevel(skillLevel);
+            long requiredXP = core.getData().getBaseXpForLevel(skillLevel + 1);
+            float percent = 100.0f / (requiredXP - baseXP);
+            int xp = (int) Math.min(Math.floor(percent * (skillCurrentXP - baseXP)), 94);
+            blit(pPoseStack, this.x + 24, this.y + (minecraft.font.lineHeight + 6), xp, 5, 0.0F, 223.0F, 102, 5, 256, 256);
         }
     }
 }

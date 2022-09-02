@@ -8,6 +8,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.util.Reference;
+import net.minecraft.resources.ResourceLocation;
 
 public record SkillData (
 	Optional<Integer> color,
@@ -15,7 +17,8 @@ public record SkillData (
 	Optional<Boolean> displayGroupName,
 	Optional<Boolean> useTotalLevels,
 	Optional<Map<String, Double>> groupedSkills,
-	Optional<Integer> maxLevel) {
+	Optional<Integer> maxLevel,
+	Optional<ResourceLocation> icon) {
 	
 	public static Codec<SkillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.optionalFieldOf("color").forGetter(SkillData::color),
@@ -23,17 +26,19 @@ public record SkillData (
 			Codec.BOOL.optionalFieldOf("displayGroupName").forGetter(SkillData::displayGroupName),
 			Codec.BOOL.optionalFieldOf("useTotalLevels").forGetter(SkillData::useTotalLevels),
 			CodecTypes.DOUBLE_CODEC.optionalFieldOf("groupFor").forGetter(SkillData::groupedSkills),
-			Codec.INT.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel)
+			Codec.INT.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel),
+			ResourceLocation.CODEC.optionalFieldOf("icon").forGetter(SkillData::icon)
 			).apply(instance, SkillData::new));
-
-	public int getColor() {return color.orElse(16777215);}
-	public boolean getAfkExempt() {return afkExempt.orElse(false);}
-	public boolean getDisplayGroupName() {return displayGroupName.orElse(false);}
-	public boolean getUseTotalLevels() {return useTotalLevels.orElse(false);}
-	public int getMaxLevel() {return maxLevel.orElse(Config.MAX_LEVEL.get());}
 	
-	public boolean isSkillGroup() {return !getGroup().isEmpty();}
-	public Map<String, Double> getGroup() {return groupedSkills.orElse(new HashMap<>());}
+	public int getColor() { return color.orElse(16777215); }
+	public boolean getAfkExempt() { return afkExempt.orElse(false); }
+	public boolean getDisplayGroupName() { return displayGroupName.orElse(false); }
+	public boolean getUseTotalLevels() { return useTotalLevels.orElse(false); }
+	public int getMaxLevel() { return maxLevel.orElse(Config.MAX_LEVEL.get()); }
+	public ResourceLocation getIcon() { return icon.orElse(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")); }
+	
+	public boolean isSkillGroup() { return !getGroup().isEmpty(); }
+	public Map<String, Double> getGroup() { return groupedSkills.orElse(new HashMap<>()); }
 	
 	public Map<String, Long> getGroupXP(long xp) {
 		Map<String, Long> outMap = new HashMap<>();
@@ -66,6 +71,7 @@ public record SkillData (
 	public static class Builder {
 		int color, maxLevel;
 		boolean afkExempt, displayName, useTotal;
+		ResourceLocation icon;
 		Map<String, Double> groupOf;
 		
 		private Builder() {
@@ -74,6 +80,7 @@ public record SkillData (
 			afkExempt = false;
 			displayName = false;
 			useTotal = false;
+			icon = new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png");
 			groupOf = new HashMap<>();
 		}
 		public static SkillData getDefault() {return new SkillData(
@@ -82,13 +89,18 @@ public record SkillData (
 				Optional.of(false),
 				Optional.of(false),
 				Optional.empty(), 
-				Optional.of(Config.MAX_LEVEL.get()));}
+				Optional.of(Config.MAX_LEVEL.get()),
+				Optional.of(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")));}
 		
 		public static Builder start() {
 			return new Builder();
 		}
 		public Builder withColor(int color) {
 			this.color = color;
+			return this;
+		}
+		public Builder withIcon(ResourceLocation icon) {
+			this.icon = icon;
 			return this;
 		}
 		public Builder withMaxLevel(int maxLevel) {
@@ -118,7 +130,8 @@ public record SkillData (
 					Optional.of(displayName),
 					Optional.of(useTotal),
 					groupOf.isEmpty() ? Optional.empty() : Optional.of(groupOf),
-					Optional.of(maxLevel));			
+					Optional.of(maxLevel),
+					Optional.of(icon));
 		}
 	}
 }

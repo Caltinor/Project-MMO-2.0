@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class SkillsConfig {
@@ -42,12 +43,12 @@ public class SkillsConfig {
 	
 	private static void generateDefaults() {
 		defaultSkills = new HashMap<>();
-		defaultSkills.put("mining", 	SkillData.Builder.start().withColor(0x00ffff).build());
+		defaultSkills.put("mining", 	SkillData.Builder.start().withColor(0x00ffff).withIcon(new ResourceLocation("textures/mob_effect/haste.png")).build());
 		defaultSkills.put("building", 	SkillData.Builder.start().withColor(0x00ffff).build());
-		defaultSkills.put("excavation", SkillData.Builder.start().withColor(0xe69900).build());
+		defaultSkills.put("excavation", SkillData.Builder.start().withColor(0xe69900).withIcon(new ResourceLocation("textures/item/iron_shovel.png")).build());
 		defaultSkills.put("woodcutting",SkillData.Builder.start().withColor(0xffa31a).build());
 		defaultSkills.put("farming", 	SkillData.Builder.start().withColor(0x00e600).build());
-		defaultSkills.put("agility", 	SkillData.Builder.start().withColor(0x66cc66).build());
+		defaultSkills.put("agility", 	SkillData.Builder.start().withColor(0x66cc66).withIcon(new ResourceLocation("textures/mob_effect/speed.png")).build());
 		defaultSkills.put("endurance", 	SkillData.Builder.start().withColor(0xcc0000).build());
 		defaultSkills.put("combat", 	SkillData.Builder.start().withColor(0xff3300).build());
 		defaultSkills.put("gunslinging",SkillData.Builder.start().withColor(0xd3c1a3).build());
