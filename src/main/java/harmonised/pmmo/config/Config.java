@@ -6,10 +6,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.mojang.serialization.Codec;
+
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes;
+import harmonised.pmmo.config.readers.ConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
@@ -234,6 +237,7 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Integer> 	EXPONENTIAL_BASE_XP;
 	public static ForgeConfigSpec.ConfigValue<Double> 	EXPONENTIAL_POWER_BASE;
 	public static ForgeConfigSpec.ConfigValue<Double> 	EXPONENTIAL_LEVEL_MOD;
+	public static ConfigHelper.ConfigObject<List<Long>> STATIC_LEVELS;
 	
 	private static void buildLevels(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related level gain").push("Levels");
@@ -245,6 +249,20 @@ public class Config {
 						.defineInRange("Max Level", 1523, 1, Integer.MAX_VALUE);
 		USE_EXPONENTIAL_FORUMULA = builder.comment("shold levels be determined using an exponential forumula?")
 						.define("Use Exponential Formula", true);
+		STATIC_LEVELS = ConfigHelper.<List<Long>>defineObject(builder
+				.comment("=====LEAVE -1 VALUE UNLESS YOU WANT STATIC LEVELS====="
+				, "Replacing the -1 and adding values to this list will set the xp required to advance for each"
+				, "level manually.  Note that the number of level settings you enter into this list"
+				, "will set your max level.  If you only add 10 entries, your max level will be 10."
+				, "This setting is intended for players/ops who want fine-tune control over their"
+				, "level growth.  use with caution.  ", ""
+				, "As a technical note, if you enter values that are not greater than their previous"
+				, "value, the entire list will be ignored and revert back to the selected exponential"
+				, "or linear formulaic calculation"),
+				"Static_Levels",
+				Codec.LONG.listOf(), 
+				new ArrayList<Long>(List.of(-1l))); 
+
 		LOSS_ON_DEATH = builder.comment("How much experience should players lose when they die?"
 						, "zero is no loss, one is lose everything")
 						.defineInRange("Loss on death", 0.05, 0d, 1d);
