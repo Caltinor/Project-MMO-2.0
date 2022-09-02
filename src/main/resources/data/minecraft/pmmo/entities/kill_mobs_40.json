@@ -4,6 +4,9 @@
         "minecraft:wither_skeleton"
     ],
     "xp_values":{
+    	"FROM_MOBS": {
+            "endurance": 40
+        },
         "KILL":{
             "combat":40
         },

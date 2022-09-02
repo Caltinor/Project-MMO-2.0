@@ -4,6 +4,9 @@
         "minecraft:vindicator"
     ],
     "xp_values":{
+    	"FROM_MOBS": {
+            "endurance": 35
+        },
         "KILL":{
             "combat":35
         },
