@@ -172,6 +172,24 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	public List<Long> getLevelCache() {return levelCache;}
 	
 	public void computeLevelsForCache() {
+		if (Config.STATIC_LEVELS.get().size() > 0 && Config.STATIC_LEVELS.get().get(0) != -1) {
+			List<Long> values = new ArrayList<>(Config.STATIC_LEVELS.get());
+			boolean validList = true;
+			//Iterate through the list and ensure all values are greater than their preceding value.
+			for (int i = 1; i < values.size(); i++) {
+				if (values.get(i) <= values.get(i-1)) {
+					validList = false;
+					break;
+				}					
+			}
+			//If all values are valid, set the cache and exit the function
+			if (validList) {
+				Config.MAX_LEVEL.set(values.size());
+				levelCache = values;
+				return;
+			}
+		}
+		
 		boolean exponential = Config.USE_EXPONENTIAL_FORUMULA.get();
 		
 		long linearBase = Config.LINEAR_BASE_XP.get();
