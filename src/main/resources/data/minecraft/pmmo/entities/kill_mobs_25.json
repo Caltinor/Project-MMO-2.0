@@ -8,6 +8,9 @@
         "minecraft:zombie_pigman"
     ],
     "xp_values":{
+    	"FROM_MOBS": {
+            "endurance": 25
+        },
         "KILL":{
             "combat":25
         },
