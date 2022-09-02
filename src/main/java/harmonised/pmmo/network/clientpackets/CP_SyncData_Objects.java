@@ -21,6 +21,7 @@ import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -38,7 +39,7 @@ public class CP_SyncData_Objects {
 	
 	public CP_SyncData_Objects(DataObjectRecord data) {this.data = data;}
 	public static CP_SyncData_Objects decode(FriendlyByteBuf buf) {
-		return new CP_SyncData_Objects(MAPPER.parse(NbtOps.INSTANCE, buf.readNbt()).result().orElse(new DataObjectRecord(ObjectType.ITEM, new HashMap<>())));
+		return new CP_SyncData_Objects(MAPPER.parse(NbtOps.INSTANCE, buf.readNbt(NbtAccounter.UNLIMITED)).result().orElse(new DataObjectRecord(ObjectType.ITEM, new HashMap<>())));
 	}
 	public void encode(FriendlyByteBuf buf) {
 		buf.writeNbt((CompoundTag)(MAPPER.encodeStart(NbtOps.INSTANCE, data).result().orElse(new CompoundTag())));
