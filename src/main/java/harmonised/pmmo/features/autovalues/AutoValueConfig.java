@@ -282,7 +282,7 @@ public class AutoValueConfig {
 			WEARABLE_ATTRIBUTES.put(piece, TomlConfigHelper.<Map<String, Double>>defineObject(builder, piece.toString()+"_Attributes", CodecTypes.DOUBLE_CODEC, AttributeKey.DEFAULT_ARMOR_MAP));
 		}
 		HARDNESS_MODIFIER = builder.comment("how much should block hardness contribute to value calculations")
-				.define("Block Hardness Modifier", 10d);
+				.define("Block Hardness Modifier", 0.65d);
 		
 		builder.pop();
 	}
