@@ -388,6 +388,7 @@ public class APIUtils {
 	public static final String RATIO = "ratio";
 	public static final String MODIFIER = "modifier";
 	public static final String MIN_LEVEL = "min_level";
+	public static final String MAX_LEVEL = "max_level";
 	public static final String COOLDOWN = "cooldown";
 	public static final String DURATION = "duration";
 	
