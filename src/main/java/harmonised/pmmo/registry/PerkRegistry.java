@@ -7,7 +7,10 @@ import java.util.Map;
 import org.apache.commons.lang3.function.TriFunction;
 
 import com.google.common.base.Preconditions;
+
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
@@ -53,7 +56,10 @@ public class PerkRegistry {
 				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
 				CompoundTag executionOutput = new CompoundTag();
-				executionOutput = perkExecutions.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel);
+				int maxSetting = src.contains(APIUtils.MAX_LEVEL) ? src.getInt(APIUtils.MAX_LEVEL) : Config.MAX_LEVEL.get();
+				int minSetting = src.contains(APIUtils.MIN_LEVEL) ? src.getInt(APIUtils.MIN_LEVEL) : 0;
+				if (skillLevel <= maxSetting && skillLevel >= minSetting)
+					executionOutput = perkExecutions.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel);
 				output = TagUtils.mergeTags(output, executionOutput);
 			}
 		}
