@@ -1,10 +1,4 @@
 {
-    "isTagFor":[
-        "minecraft:zombie", 
-        "minecraft:zombie_villager", 
-        "minecraft:drowned", 
-        "minecraft:husk"
-    ],
     "xp_values":{
         "FROM_MOBS": {
             "endurance": 15
