@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -207,15 +208,22 @@ public class PackGenerator {
 		
 		public String route;
 		public Function<MinecraftServer, Set<ResourceLocation>> valueList;
-		public List<String> defaultData;
+		private List<String> defaultData;
 		Category(String route, Function<MinecraftServer, Set<ResourceLocation>> values, List<String> defaultData) {
 			this.route = route;
 			this.valueList = values;
 			this.defaultData = defaultData;
 		}
+		
+		public List<String> defaultData(boolean withOverride) {
+			List<String> outList = new ArrayList<>(defaultData);
+			if (withOverride)
+				outList.set(0, "{\"override\":true,");
+			return outList;
+		}
 	}
 	
-	public static void generateEmptyPack(MinecraftServer server) {		
+	public static void generateEmptyPack(MinecraftServer server, boolean withOverride) {		
 		Path filepath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME);
 		filepath.toFile().mkdirs();
 		try {
@@ -234,7 +242,7 @@ public class PackGenerator {
 				try {
 				Files.write(
 						finalPath.resolve(id.getPath()+".json"), 
-						category.defaultData, 
+						category.defaultData(withOverride), 
 						Charset.defaultCharset(),
 						StandardOpenOption.CREATE_NEW,
 						StandardOpenOption.WRITE);

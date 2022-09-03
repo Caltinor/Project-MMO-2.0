@@ -18,9 +18,14 @@ public class CmdPmmoRoot {
 				.then(Commands.literal("genData")
 						.requires(ctx -> ctx.hasPermission(2))
 						.executes(ctx -> {
-							PackGenerator.generateEmptyPack(ctx.getSource().getServer());
+							PackGenerator.generateEmptyPack(ctx.getSource().getServer(), false);
 							return 0;
 						})
+						.then(Commands.literal("withOverride")
+								.executes(ctx -> {
+									PackGenerator.generateEmptyPack(ctx.getSource().getServer(), true);
+									return 0;
+								}))
 						.then(Commands.literal("disabler")
 								.executes(ctx -> {
 									PackGenerator.generateDisablingPack(ctx.getSource().getServer());
