@@ -1,12 +1,4 @@
 {
-    "isTagFor": [
-        "minecraft:cave_spider",
-        "minecraft:creeper",
-        "minecraft:drowned",
-        "minecraft:guardian",
-        "minecraft:skeleton",
-        "minecraft:zombie_pigman"
-    ],
     "xp_values":{
     	"FROM_MOBS": {
             "endurance": 25
