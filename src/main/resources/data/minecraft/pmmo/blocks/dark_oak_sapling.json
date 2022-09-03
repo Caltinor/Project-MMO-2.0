@@ -1,0 +1,13 @@
+{
+    "xp_values":{
+        "GROW": {
+            "farming": 300
+        }
+    },
+    "requirements":{
+        "BLOCK_PLACE": {
+            "farming": 5,
+            "woodcutting": 10
+        }
+    }
+}
