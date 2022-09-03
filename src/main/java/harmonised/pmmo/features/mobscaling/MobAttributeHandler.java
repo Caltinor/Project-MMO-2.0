@@ -12,7 +12,6 @@ import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.RegistryUtil;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;

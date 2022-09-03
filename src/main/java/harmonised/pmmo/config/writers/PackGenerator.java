@@ -220,12 +220,12 @@ public class PackGenerator {
 		filepath.toFile().mkdirs();
 		try {
 		Files.write(
-				filepath.resolve("pack.mcmeta"), 
-				List.of("{","\"pack\":{\"description\":\"Generated Resources\",","\"pack_format\":9}","}"), 
-				Charset.defaultCharset(),
-				StandardOpenOption.CREATE_NEW,
-				StandardOpenOption.WRITE);
-		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data"); e.printStackTrace();}
+			filepath.resolve("pack.mcmeta"), 
+			List.of("{","\"pack\":{\"description\":\"Generated Resources\",","\"pack_format\":9}","}"), 
+			Charset.defaultCharset(),
+			StandardOpenOption.CREATE_NEW,
+			StandardOpenOption.WRITE);
+		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
 		
 		for (Category category : Category.values()) {
 			for (ResourceLocation id : category.valueList.apply(server)) {
@@ -238,7 +238,7 @@ public class PackGenerator {
 						Charset.defaultCharset(),
 						StandardOpenOption.CREATE_NEW,
 						StandardOpenOption.WRITE);
-				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()); e.printStackTrace();}
+				} catch (IOException e) {System.out.println("Error While Generating Pack File For: "+id.toString()+" ("+e.toString()+")");}
 			}			
 		}
 	}
@@ -249,16 +249,16 @@ public class PackGenerator {
 		filepath.resolve("data").toFile().mkdirs();
 		try {
 		Files.write(
-				filepath.resolve("pack.mcmeta"), 
-				List.of(
-						"{",
-						"\"pack\":{\"description\":\"Pack to disable PMMO Defaults\",",
-						"\"pack_format\":9},",
-						"\"filter\":{\"block\":[{\"path\":\"pmmo\"}]}",
-						"}"), 
-				Charset.defaultCharset(),
-				StandardOpenOption.CREATE_NEW,
-				StandardOpenOption.WRITE);
-		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data"); e.printStackTrace();}
+			filepath.resolve("pack.mcmeta"), 
+			List.of(
+					"{",
+					"\"pack\":{\"description\":\"Pack to disable PMMO Defaults\",",
+					"\"pack_format\":9},",
+					"\"filter\":{\"block\":[{\"path\":\"pmmo\"}]}",
+					"}"), 
+			Charset.defaultCharset(),
+			StandardOpenOption.CREATE_NEW,
+			StandardOpenOption.WRITE);
+		} catch (IOException e) {System.out.println("Error While Generating pack.mcmeta for Generated Data: "+e.toString());}
 	}
 }
