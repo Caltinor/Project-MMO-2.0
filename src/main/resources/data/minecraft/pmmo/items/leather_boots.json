@@ -1,10 +1,4 @@
 {
-    "isTagFor": [
-        "minecraft:leather_helemet",
-        "minecraft:leather_chestplate",
-        "minecraft:leather_leggings",
-        "minecraft:leather_boots"
-    ],
     "requirements": {
         "mining": 0,
         "excavation": 0,

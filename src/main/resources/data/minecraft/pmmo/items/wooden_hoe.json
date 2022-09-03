@@ -1,11 +1,4 @@
 {
-    "isTagFor":[
-        "minecraft:wooden_pickaxe", 
-        "minecraft:wooden_shovel", 
-        "minecraft:wooden_hoe", 
-        "minecraft:wooden_axe",
-        "minecraft:wooden_sword"
-    ],
     "xp_values":{
         "ANVIL_REPAIR": {
             "smithing": 50
