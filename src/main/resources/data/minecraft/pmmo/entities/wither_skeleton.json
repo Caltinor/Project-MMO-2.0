@@ -1,0 +1,19 @@
+{
+    "xp_values":{
+    	"FROM_MOBS": {
+            "endurance": 40
+        },
+        "KILL":{
+            "combat":40
+        },
+        "MELEE_TO_MOBS": {
+            "combat":40
+        },
+        "RANGED_TO_MOBS":{
+            "archery":40
+        }
+    },
+    "requirements":{
+        "KILL": {"combat": 0}
+    }
+}
