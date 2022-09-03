@@ -1,8 +1,4 @@
 {
-    "isTagFor":[
-        "minecraft:iron_ore",
-        "minecraft:deepslate_iron_ore"
-    ],
     "xp_values":{
         "BLOCK_BREAK" : {
             "mining": 1200
