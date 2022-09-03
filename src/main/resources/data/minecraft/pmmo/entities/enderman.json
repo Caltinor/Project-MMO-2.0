@@ -1,8 +1,4 @@
 {
-    "isTagFor": [
-        "minecraft:enderman",
-        "minecraft:vindicator"
-    ],
     "xp_values":{
     	"FROM_MOBS": {
             "endurance": 35
