@@ -214,7 +214,7 @@ public class LangProvider extends LanguageProvider{
 	public static final Translation VEIN_TOOLTIP = Translation.Builder.start("pmmo.veintooltip")
 			.addLocale(Locale.EN_US, "Vein Mining").build();
 	public static final Translation VEIN_DATA = Translation.Builder.start("pmmo.veindata")
-			.addLocale(Locale.EN_US, "Charge Cap %1$s, recharges %3$s/s").build();
+			.addLocale(Locale.EN_US, "Charge Cap %1$s, recharges %2$s/s").build();
 	public static final Translation VEIN_BREAK = Translation.Builder.start("pmmo.veinbreak")
 			.addLocale(Locale.EN_US, "Cost to break as block: %s").build();
 	
