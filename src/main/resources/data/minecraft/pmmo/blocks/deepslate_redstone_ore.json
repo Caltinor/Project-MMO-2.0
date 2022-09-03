@@ -1,8 +1,4 @@
 {
-    "isTagFor":[
-        "minecraft:redstone_ore",
-        "minecraft:deepslate_redstone_ore"
-    ],
     "xp_values":{
         "BLOCK_BREAK" : {
             "mining": 3000
