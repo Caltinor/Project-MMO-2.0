@@ -1,0 +1,14 @@
+{
+    "xp_values": {
+        "CONSUME": {
+            "endurance": 30,
+            "cooking": 10
+        },
+        "CRAFT": {
+            "cooking": 25
+        },
+        "FISH": {
+            "fishing": 100
+        }
+    }
+}
