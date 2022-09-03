@@ -1,8 +1,4 @@
 {
-    "isTagFor":[
-        "minecraft:copper_ore",
-        "minecraft:deepslate_copper_ore"
-    ],
     "xp_values":{
         "BLOCK_BREAK" : {
             "mining": 650
