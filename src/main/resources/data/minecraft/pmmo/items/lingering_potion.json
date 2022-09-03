@@ -1,8 +1,4 @@
 {
-    "isTagFor": [
-        "minecraft:splash_potion",
-        "minecraft:lingering_potion"
-    ],
     "nbt_xp_values": {
         "ACTIVATE_ITEM": [
             {"behavior_to_previous": "ADD_TO", "should_cases_add": false,
