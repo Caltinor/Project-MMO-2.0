@@ -1,8 +1,4 @@
 {
-    "isTagFor":[
-        "minecraft:lapis_ore",
-        "minecraft:deepslate_lapis_ore"
-    ],
     "xp_values":{
         "BLOCK_BREAK" : {
             "mining": 500
