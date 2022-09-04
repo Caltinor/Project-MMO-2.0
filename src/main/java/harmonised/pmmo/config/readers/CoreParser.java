@@ -29,6 +29,7 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.ModList;
 
 public class CoreParser {
 	
@@ -56,6 +57,8 @@ public class CoreParser {
 	}	
 	private static void finalizeObjectMaps(ObjectType type, Map<ResourceLocation, CodecMapObject.ObjectMapContainer> data) {
 		data.forEach((rl, omc) -> {
+			if (!ModList.get().isLoaded(rl.getNamespace()))
+				return;
 			Core core = Core.get(LogicalSide.SERVER);
 			List<ResourceLocation> tagValues = List.of(rl);
 			if (omc.tagValues().size() > 0) tagValues = omc.tagValues();
@@ -142,6 +145,8 @@ public class CoreParser {
 	}
 	private static void finalizeLocationMaps(Map<ResourceLocation, CodecMapLocation.LocationMapContainer> data) {
 		data.forEach((rl, lmc) -> {
+			if (!ModList.get().isLoaded(rl.getNamespace()))
+				return;
 			List<ResourceLocation> tagValues = List.of(rl);
 			if (lmc.tagValues().size() > 0) tagValues = lmc.tagValues();
 			for (ResourceLocation tag : tagValues) {
@@ -201,6 +206,8 @@ public class CoreParser {
 	}
 	private static void finalizeEnchantmentMaps(Map<ResourceLocation, Map<Integer, Map<String, Integer>>> data) {
 		data.forEach((rl, map) -> {
+			if (!ModList.get().isLoaded(rl.getNamespace()))
+				return;
 			map.forEach((k, v) -> MsLoggy.INFO.log(LOG_CODE.DATA, "ENCHANTMENT:"+rl.toString()+" Level:"+k+MsLoggy.mapToString(v)));
 			Core.get(LogicalSide.SERVER).getSkillGates().setEnchantmentReqs(rl, map);
 		});
