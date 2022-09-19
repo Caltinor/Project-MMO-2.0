@@ -40,7 +40,6 @@ import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -49,19 +48,20 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.LogicalSide;
 
-/**This class bridges the gap between various systems within Project MMO.
+/**<p>This class bridges the gap between various systems within Project MMO.
  * Methods within this class connect these distinct systems without 
  * poluting the features themselves with content that is not true to their
- * purpose.  
- * <br><br>
- * This class also allows for client and server to have their own copies
+ * purpose.</p>  
+ * <p>This class also allows for client and server to have their own copies
  * of both the data itself and the logic.  Using this approach Core can
  * be invoked in side-sensitive contexts and not violate any cross-side
- * boundaries. 
+ * boundaries.</p> 
  * 
  * @author Caltinor
  *
@@ -158,21 +158,17 @@ public class Core {
 		return true;
 	}	
 	public boolean doesPlayerMeetEnchantmentReq(ItemStack stack, UUID playerID) {
-		ListTag enchantments = stack.getEnchantmentTags();
-		for (int i = 0; i < enchantments.size(); i++) {
-			CompoundTag enchantment = enchantments.getCompound(i);
-			ResourceLocation enchantID = new ResourceLocation(enchantment.getString("id"));
-			int enchantLvl = enchantment.getInt("lvl");
-			if (!doesPlayerMeetReq(playerID, gates.getEnchantmentReqs(enchantID, enchantLvl)))
+		if (!Config.reqEnabled(ReqType.USE_ENCHANTMENT).get()) return true;
+		for (Map.Entry<Enchantment, Integer> enchantment : EnchantmentHelper.getEnchantments(stack).entrySet()) {
+			if (!doesPlayerMeetReq(playerID, gates.getEnchantmentReqs(RegistryUtil.getId(enchantment.getKey()), enchantment.getValue())))
 				return false;
 		}	
 		return true;
 	}
 	  
-	@SuppressWarnings("deprecation")
 	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
-		  ResourceLocation itemID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
+		  ResourceLocation itemID = RegistryUtil.getId(stack.getItem());
 		  	if (Config.reqEnabled(ReqType.USE_ENCHANTMENT).get())
 		  		if (!doesPlayerMeetEnchantmentReq(stack, player.getUUID()))
 		  			return false;
@@ -186,11 +182,11 @@ public class Core {
 			}
 		  return true;
 	  }
-	@SuppressWarnings("deprecation")
+
 	public boolean isBlockActionPermitted(ReqType type, BlockPos pos, Player player) {
 		  if (!Config.reqEnabled(type).get()) return true;
 		  BlockEntity tile = player.getLevel().getBlockEntity(pos);
-		  ResourceLocation res = player.getLevel().getBlockState(pos).getBlock().builtInRegistryHolder().unwrapKey().get().location();
+		  ResourceLocation res = RegistryUtil.getId(player.getLevel().getBlockState(pos));
 		  return tile == null ?
 				  isActionPermitted_BypassPredicates(type, res, player, ObjectType.BLOCK) :
 				  isActionPermitted(type, tile, player);
@@ -204,10 +200,11 @@ public class Core {
 		  }
 		  return true;
 	  }
-	@SuppressWarnings("deprecation")
+
 	private boolean isActionPermitted(ReqType type, BlockEntity tile, Player player) {
+		if (!Config.reqEnabled(type).get()) return true;
 		  Preconditions.checkNotNull(tile);
-		  ResourceLocation blockID = tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location();
+		  ResourceLocation blockID = RegistryUtil.getId(tile.getBlockState());
 			if (predicates.predicateExists(blockID, type)) {
 				return predicates.checkPredicateReq(player, tile, type);
 			}
@@ -270,9 +267,8 @@ public class Core {
 		return mapClone;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
-		ResourceLocation itemID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
+		ResourceLocation itemID = RegistryUtil.getId(stack);
 		if (tooltips.requirementTooltipExists(itemID, reqType)) 
 			return processSkillGroupReqs(tooltips.getItemRequirementTooltipData(itemID, reqType, stack));
 		else if (gates.doesObjectReqExist(reqType, itemID))
@@ -293,10 +289,10 @@ public class Core {
 		else
 			return new HashMap<>();
 	}	
-	@SuppressWarnings("deprecation")
+
 	public Map<String, Integer> getReqMap(ReqType reqType, BlockPos pos, Level level) {
 		BlockEntity tile = level.getBlockEntity(pos);
-		ResourceLocation blockID = level.getBlockState(pos).getBlock().builtInRegistryHolder().unwrapKey().get().location();
+		ResourceLocation blockID = RegistryUtil.getId(level.getBlockState(pos));
 		if (tile != null && tooltips.requirementTooltipExists(blockID, reqType))
 			return processSkillGroupReqs(tooltips.getBlockRequirementTooltipData(blockID, reqType, tile));
 		else if (gates.doesObjectReqExist(reqType, blockID))
@@ -307,31 +303,28 @@ public class Core {
 			return new HashMap<>();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public Map<String, Long> getExperienceAwards(EventType type, ItemStack stack, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
 		  boolean tooltipsUsed = false;
-		  ResourceLocation itemID = stack.getItem().builtInRegistryHolder().unwrapKey().get().location();
+		  ResourceLocation itemID = RegistryUtil.getId(stack);
 		  if (tooltipsUsed = tooltips.xpGainTooltipExists(itemID, type))
 			  xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getItemXpGainTooltipData(itemID, type, stack));
 		  return getCommonXpAwardData(xpGains, type, itemID, player, ObjectType.ITEM, tooltipsUsed);
 	  }
-	@SuppressWarnings("deprecation")
 	public Map<String, Long> getBlockExperienceAwards(EventType type, BlockPos pos, Level level, Player player, CompoundTag dataIn) {
 		  Map<String, Long> xpGains = dataIn.contains(APIUtils.SERIALIZED_AWARD_MAP) 
 					? xp.deserializeAwardMap(dataIn.getList(APIUtils.SERIALIZED_AWARD_MAP, Tag.TAG_COMPOUND))
 					: new HashMap<>();
 		  BlockEntity tile = level.getBlockEntity(pos);
-		  ResourceLocation res = level.getBlockState(pos).getBlock().builtInRegistryHolder().unwrapKey().get().location();
+		  ResourceLocation res = RegistryUtil.getId(level.getBlockState(pos));
 		  return tile == null ?
 				  xp.mergeXpMapsWithSummateCondition(xpGains, getCommonXpAwardData(xpGains, type, res, player, ObjectType.BLOCK, false)) :
 				  xp.mergeXpMapsWithSummateCondition(xpGains, getExperienceAwards(xpGains, type, tile, player));
 	  }
-	@SuppressWarnings("deprecation")
 	private Map<String, Long> getExperienceAwards(Map<String, Long> xpGains, EventType type, BlockEntity tile, Player player) {		  
-			ResourceLocation blockID = tile.getBlockState().getBlock().builtInRegistryHolder().unwrapKey().get().location();
+			ResourceLocation blockID = RegistryUtil.getId(tile.getBlockState());
 			boolean tooltipsUsed = false;
 			if (tooltipsUsed = tooltips.xpGainTooltipExists(blockID, type)) 
 				xpGains = xp.mergeXpMapsWithSummateCondition(xpGains, tooltips.getBlockXpGainTooltipData(blockID, type, tile));
