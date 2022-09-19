@@ -25,9 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEventListener, NarratableEntry {
     protected static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(Reference.MOD_ID, "textures/gui/player_stats.png");
@@ -38,6 +36,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     private int width;
     private int height;
     private boolean widthTooNarrow;
+    private int timesInventoryChanged;
     
     protected PlayerStatsScroller statsScroller;
     
@@ -45,14 +44,23 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     public static final int IMAGE_HEIGHT = 166;
     private static final int OFFSET_X_POSITION = 86;
     
-    public void init(int p_100310_, int p_100311_, Minecraft p_100312_, boolean p_100313_) {
-        this.minecraft = p_100312_;
-        this.width = p_100310_;
-        this.height = p_100311_;
-        this.widthTooNarrow = p_100313_;
+    public void init(int width, int height, Minecraft minecraft, boolean widthTooNarrow) {
+        this.minecraft = minecraft;
+        this.width = width;
+        this.height = height;
+        this.widthTooNarrow = widthTooNarrow;
+        this.timesInventoryChanged = minecraft.player.getInventory().getTimesChanged();
         
         if (this.visible) {
             this.initVisuals();
+        }
+    }
+    
+    public void tick() {
+        if (this.isVisible()) {
+            if (this.timesInventoryChanged != this.minecraft.player.getInventory().getTimesChanged()) {
+                this.timesInventoryChanged = this.minecraft.player.getInventory().getTimesChanged();
+            }
         }
     }
     
@@ -60,12 +68,12 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         if (this.isVisible()) {
             poseStack.pushPose();
-            poseStack.translate(0.0D, 0.0D, 100.0D);
+            poseStack.translate(0.0D, 0.0D, 120.0D);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, TEXTURE_LOCATION);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            int i = (this.width - 147) / 2 - this.xOffset;
-            int j = (this.height - 166) / 2;
+            int i = (this.width - IMAGE_WIDTH) / 2 - this.xOffset;
+            int j = (this.height - IMAGE_HEIGHT) / 2;
             this.blit(poseStack, i, j, 0, 0, 147, 166);
             this.statsScroller.render(poseStack, mouseX, mouseY, partialTicks);
             poseStack.popPose();
@@ -73,9 +81,9 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     }
     
     public void initVisuals() {
-        this.xOffset = this.widthTooNarrow ? 0 : 86;
-        int i = (this.width - 147) / 2 - this.xOffset;
-        int j = (this.height - 166) / 2;
+        this.xOffset = this.widthTooNarrow ? 0 : OFFSET_X_POSITION;
+        int i = (this.width - IMAGE_WIDTH) / 2 - this.xOffset;
+        int j = (this.height - IMAGE_HEIGHT) / 2;
         
         this.statsScroller = new PlayerStatsScroller(Minecraft.getInstance(), 131, 150, j + 8, i + 8);
         this.statsScroller.populateAbilities(core, this.minecraft);
@@ -129,7 +137,6 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
     @Override public void updateNarration(@NotNull NarrationElementOutput pNarrationElementOutput) { }
     
     static class PlayerStatsScroller extends ScrollPanel {
-        private Map<String, Double> modifiers = new HashMap<>();
         private final List<String> skillsKeys = new ArrayList<>();
         private final List<StatComponent> abilities = new ArrayList<>();
         
@@ -140,8 +147,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         
         public void populateAbilities(Core core, Minecraft minecraft) {
             IDataStorage dataStorage = core.getData();
-    
-            modifiers = core.getConsolidatedModifierMap(minecraft.player);
+            
             skillsKeys.addAll(dataStorage.getXpMap(null).keySet());
             skillsKeys.sort(Comparator.<String>comparingLong(skill -> dataStorage.getXpRaw(null, skill)).reversed());
             
@@ -179,10 +185,8 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         
         private final Color skillColor;
         private final int skillLevel;
-        private final int skillMaxLevel;
         private final long skillCurrentXP;
         
-        private static final int BASE_WIDTH = 123;
         private static final int BASE_HEIGHT = 24;
         
         public StatComponent(Minecraft minecraft, int pX, int pY, String skillKey, SkillData skillData) {
@@ -194,7 +198,6 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
             this.skillColor = new Color(skillData.getColor());
             this.skillCurrentXP = core.getData().getXpRaw(null, skillKey);
             this.skillLevel = core.getData().getLevelFromXP(skillCurrentXP);
-            this.skillMaxLevel = skillData.getMaxLevel();
         }
     
         @Override
@@ -203,7 +206,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
             
             RenderSystem.setShaderTexture(0, skillData.getIcon());
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            blit(pPoseStack, this.x + 3, this.y + 3, 0, 0, 18, 18, 18, 18);
+            blit(pPoseStack, this.x + 3, this.y + 3, 18, 18, 0, 0, skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize(), skillData.getIconSize());
             
             renderProgressBar(pPoseStack);
             GuiComponent.drawString(pPoseStack, minecraft.font, skillName, this.x + 24, this.y + 5, skillColor.getRGB());

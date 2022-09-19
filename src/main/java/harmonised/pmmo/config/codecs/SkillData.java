@@ -18,7 +18,8 @@ public record SkillData (
 	Optional<Boolean> useTotalLevels,
 	Optional<Map<String, Double>> groupedSkills,
 	Optional<Integer> maxLevel,
-	Optional<ResourceLocation> icon) {
+	Optional<ResourceLocation> icon,
+	Optional<Integer> iconSize) {
 	
 	public static Codec<SkillData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.optionalFieldOf("color").forGetter(SkillData::color),
@@ -27,7 +28,8 @@ public record SkillData (
 			Codec.BOOL.optionalFieldOf("useTotalLevels").forGetter(SkillData::useTotalLevels),
 			CodecTypes.DOUBLE_CODEC.optionalFieldOf("groupFor").forGetter(SkillData::groupedSkills),
 			Codec.INT.optionalFieldOf("maxLevel").forGetter(SkillData::maxLevel),
-			ResourceLocation.CODEC.optionalFieldOf("icon").forGetter(SkillData::icon)
+			ResourceLocation.CODEC.optionalFieldOf("icon").forGetter(SkillData::icon),
+			Codec.INT.optionalFieldOf("iconSize").forGetter(SkillData::iconSize)
 			).apply(instance, SkillData::new));
 	
 	public int getColor() { return color.orElse(16777215); }
@@ -36,6 +38,7 @@ public record SkillData (
 	public boolean getUseTotalLevels() { return useTotalLevels.orElse(false); }
 	public int getMaxLevel() { return maxLevel.orElse(Config.MAX_LEVEL.get()); }
 	public ResourceLocation getIcon() { return icon.orElse(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")); }
+	public int getIconSize() { return iconSize.orElse(18); }
 	
 	public boolean isSkillGroup() { return !getGroup().isEmpty(); }
 	public Map<String, Double> getGroup() { return groupedSkills.orElse(new HashMap<>()); }
@@ -69,7 +72,7 @@ public record SkillData (
 	}
 	
 	public static class Builder {
-		int color, maxLevel;
+		int color, maxLevel, iconSize;
 		boolean afkExempt, displayName, useTotal;
 		ResourceLocation icon;
 		Map<String, Double> groupOf;
@@ -81,16 +84,20 @@ public record SkillData (
 			displayName = false;
 			useTotal = false;
 			icon = new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png");
+			iconSize = 18;
 			groupOf = new HashMap<>();
 		}
-		public static SkillData getDefault() {return new SkillData(
+		public static SkillData getDefault() {
+			return new SkillData(
 				Optional.of(16777215), 
 				Optional.of(false), 
 				Optional.of(false),
 				Optional.of(false),
 				Optional.empty(), 
 				Optional.of(Config.MAX_LEVEL.get()),
-				Optional.of(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")));}
+				Optional.of(new ResourceLocation(Reference.MOD_ID, "textures/skills/missing_icon.png")),
+				Optional.of(18));
+		}
 		
 		public static Builder start() {
 			return new Builder();
@@ -101,6 +108,10 @@ public record SkillData (
 		}
 		public Builder withIcon(ResourceLocation icon) {
 			this.icon = icon;
+			return this;
+		}
+		public Builder withIconSize(int size) {
+			this.iconSize = size;
 			return this;
 		}
 		public Builder withMaxLevel(int maxLevel) {
@@ -123,15 +134,18 @@ public record SkillData (
 			this.groupOf = group;
 			return this;
 		}
+		
 		public SkillData build() {
 			return new SkillData(
-					Optional.of(color), 
-					Optional.of(afkExempt),
-					Optional.of(displayName),
-					Optional.of(useTotal),
-					groupOf.isEmpty() ? Optional.empty() : Optional.of(groupOf),
-					Optional.of(maxLevel),
-					Optional.of(icon));
+				Optional.of(color),
+				Optional.of(afkExempt),
+				Optional.of(displayName),
+				Optional.of(useTotal),
+				groupOf.isEmpty() ? Optional.empty() : Optional.of(groupOf),
+				Optional.of(maxLevel),
+				Optional.of(icon),
+				Optional.of(iconSize)
+			);
 		}
 	}
 }
