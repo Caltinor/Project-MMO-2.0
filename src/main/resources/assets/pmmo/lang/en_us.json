@@ -416,7 +416,7 @@
   "pmmo.msg.denial.break":"You are not skilled enough to break %1$s",
   "pmmo.msg.denial.biome":"You are not skilled enough to survive in %1$s",
   "pmmo.msg.denial.kill":"You are not skilled enough to kill %1$s",
-  "pmmo.msg.denial.travel":"You are not skilled enough to travel to %1$s",
+  "pmmo.msg.denial.travel":"Travel to %1$s requires %2$s",
   "pmmo.msg.denial.ride":"You are not skilled enough to ride %1$s",
   "pmmo.msg.denial.tame":"You are not skilled enough to tame %1$s",
   "pmmo.msg.denial.entity_interact":"You are not skilled enough to interact with %1$s",
