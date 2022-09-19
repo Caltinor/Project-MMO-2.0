@@ -94,19 +94,19 @@ dependencies {
 
     //compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0:api")
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
-  	//compileOnly fg.deobf('local.maven:ftb-quests-forge:1802.3.8-build.101')
-  	//compileOnly fg.deobf('local.maven:ftb-teams-forge:1802.2.6-build.51')
-  	//compileOnly fg.deobf('local.maven:ftb-library-forge:1802.3.6-build.119')
-  	//compileOnly fg.deobf('local.maven:item-filters-forge:1802.2.7-build.27')
-  	//compileOnly fg.deobf('local.maven:architectury:4.4.61')
+  	compileOnly fg.deobf('local.maven:ftb-quests-forge:1902.4.2-build.116')
+  	compileOnly fg.deobf('local.maven:ftb-teams-forge:1902.2.9-build.61')
+  	compileOnly fg.deobf('local.maven:ftb-library-forge:1902.3.9-build.144')
+  	compileOnly fg.deobf('local.maven:item-filters-forge:1902.2.9-build.41')
+  	compileOnly fg.deobf('local.maven:architectury:6.2.46-forge')
   	
   	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
-  	//runtimeOnly fg.deobf('local.maven:ftb-quests-forge:1802.3.8-build.101')
-  	//runtimeOnly fg.deobf('local.maven:ftb-teams-forge:1802.2.6-build.51')
-  	//runtimeOnly fg.deobf('local.maven:ftb-library-forge:1802.3.6-build.119')
-  	//runtimeOnly fg.deobf('local.maven:item-filters-forge:1802.2.7-build.27')
-  	//runtimeOnly fg.deobf('local.maven:architectury:4.4.61')
+  	runtimeOnly fg.deobf('local.maven:ftb-quests-forge:1902.4.2-build.116')
+  	runtimeOnly fg.deobf('local.maven:ftb-teams-forge:1902.2.9-build.61')
+  	runtimeOnly fg.deobf('local.maven:ftb-library-forge:1902.3.9-build.144')
+  	runtimeOnly fg.deobf('local.maven:item-filters-forge:1902.2.9-build.41')
+  	runtimeOnly fg.deobf('local.maven:architectury:6.2.46-forge')
 }
 
 jar {
