@@ -2,36 +2,40 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'eclipse'
-mixin
-{
-	config "pmmo.mixins.json"
-	disableEclipseAddon = true
-    add sourceSets.main, "pmmo.refmap.json"
-}
 apply plugin: 'maven-publish'
+apply plugin: 'eclipse'
 
-repositories
-{
-    maven { url "https://maven.theillusivec4.top/"}
+mixin {
+    config "pmmo.mixins.json"
+    add sourceSets.main, "pmmo.refmap.json"
+    disableEclipseAddon = true
+
+    debug.export = true
+}
+
+repositories {
+    maven { url "https://maven.theillusivec4.top/" }
     maven {
-    	name = "Progwml6 maven"
-    	url = "https://dvs1.progwml6.com/files/maven/"
-  	}
-  	maven {
-    	name = "ModMaven"
-    	url = "https://modmaven.dev"
-  	}
-  	flatDir { dirs 'libs'}
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    flatDir { dirs 'libs' }
 }
 
 version = '1.18.2-2.0.0.10'
@@ -47,34 +51,34 @@ minecraft {
 
     runs {
         client {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run/client')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                examplemod {
+                pmmo {
                     source sourceSets.main
                 }
             }
         }
 
         server {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run/server')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                examplemod {
+                pmmo {
                     source sourceSets.main
                 }
             }
         }
 
         data {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run/client')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             args '--mod', 'pmmo', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
-                examplemod {
+                pmmo {
                     source sourceSets.main
                 }
             }
@@ -96,7 +100,7 @@ dependencies {
   	compileOnly fg.deobf('local.maven:item-filters-forge:1802.2.7-build.27')
   	compileOnly fg.deobf('local.maven:architectury:4.4.61')
   	
-  	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0")
+  	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
   	//runtimeOnly fg.deobf('local.maven:ftb-quests-forge:1802.3.8-build.101')
   	//runtimeOnly fg.deobf('local.maven:ftb-teams-forge:1802.2.6-build.51')
@@ -120,11 +124,11 @@ jar {
 }
 
 def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile)
-        {
+def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
     builtBy 'reobfJar'
 }
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
