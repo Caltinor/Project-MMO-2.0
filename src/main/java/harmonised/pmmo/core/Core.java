@@ -52,6 +52,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.LogicalSide;
 
 /**<p>This class bridges the gap between various systems within Project MMO.
@@ -167,7 +168,7 @@ public class Core {
 	}
 	  
 	public boolean isActionPermitted(ReqType type, ItemStack stack, Player player) {
-		  if (!Config.reqEnabled(type).get()) return true;
+		  if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
 		  ResourceLocation itemID = RegistryUtil.getId(stack.getItem());
 		  	if (Config.reqEnabled(ReqType.USE_ENCHANTMENT).get())
 		  		if (!doesPlayerMeetEnchantmentReq(stack, player.getUUID()))
@@ -184,7 +185,7 @@ public class Core {
 	  }
 
 	public boolean isBlockActionPermitted(ReqType type, BlockPos pos, Player player) {
-		  if (!Config.reqEnabled(type).get()) return true;
+		  if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
 		  BlockEntity tile = player.getLevel().getBlockEntity(pos);
 		  ResourceLocation res = RegistryUtil.getId(player.getLevel().getBlockState(pos));
 		  return tile == null ?
@@ -202,7 +203,7 @@ public class Core {
 	  }
 
 	private boolean isActionPermitted(ReqType type, BlockEntity tile, Player player) {
-		if (!Config.reqEnabled(type).get()) return true;
+		if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
 		  Preconditions.checkNotNull(tile);
 		  ResourceLocation blockID = RegistryUtil.getId(tile.getBlockState());
 			if (predicates.predicateExists(blockID, type)) {
@@ -218,7 +219,7 @@ public class Core {
 	  }
 	private ResourceLocation playerID = new ResourceLocation("player");
 	public boolean isActionPermitted(ReqType type, Entity entity, Player player) {
-		  if (!Config.reqEnabled(type).get()) return true;
+		  if (player instanceof FakePlayer || !Config.reqEnabled(type).get()) return true;
 		  ResourceLocation entityID = entity.getType().equals(EntityType.PLAYER) ? playerID : RegistryUtil.getId(entity);
 			if (predicates.predicateExists(entityID, type)) 
 				return predicates.checkPredicateReq(player, entity, type);
@@ -359,7 +360,7 @@ public class Core {
 				inMap = xp.mergeXpMapsWithSummateCondition(inMap, AutoValues.getExperienceAward(type, objectID, oType));
 		}
 		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains: "+MsLoggy.mapToString(inMap));
-		if (player != null)
+		if (player != null && !(player instanceof FakePlayer))
 			inMap = xp.applyXpModifiers(player, inMap);
 		MsLoggy.INFO.log(LOG_CODE.XP, "XpGains (afterMod): "+MsLoggy.mapToString(inMap));
 		inMap = CheeseTracker.applyAntiCheese(inMap);
@@ -369,6 +370,7 @@ public class Core {
 
 	public Map<String, Double> getConsolidatedModifierMap(Player player) {
 			Map<String, Double> mapOut = new HashMap<>();
+			if (player instanceof FakePlayer) return mapOut;
 			for (ModifierDataType type : ModifierDataType.values()) {
 				Map<String, Double> modifiers = new HashMap<>();
 				switch (type) {
@@ -429,6 +431,7 @@ public class Core {
 	  
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
 			for (int i = 0; i < players.size(); i++) {
+				if (players.get(i) instanceof FakePlayer) continue;
 				for (Map.Entry<String, Long> award : xpValues.entrySet()) {
 					long xpAward = award.getValue();
 					if (players.size() > 1)
