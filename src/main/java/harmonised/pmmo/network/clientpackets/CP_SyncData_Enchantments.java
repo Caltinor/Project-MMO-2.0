@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.mojang.serialization.Codec;
-
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
@@ -22,7 +21,10 @@ public class CP_SyncData_Enchantments {
 	private final Map<ResourceLocation, Map<Integer, Map<String, Integer>>> data;
 	
 	private static final Codec<Map<ResourceLocation, Map<Integer, Map<String, Integer>>>> MAPPER =
-			Codec.unboundedMap(ResourceLocation.CODEC, Codec.unboundedMap(Codec.INT, CodecTypes.INTEGER_CODEC));
+			Codec.unboundedMap(ResourceLocation.CODEC, 
+					Codec.unboundedMap(
+							Codec.STRING.xmap(a -> Integer.valueOf(a), b -> String.valueOf(b)), 
+							CodecTypes.INTEGER_CODEC));
 	
 	public CP_SyncData_Enchantments(Map<ResourceLocation, Map<Integer, Map<String, Integer>>> data) {this.data = data;}
 	public static CP_SyncData_Enchantments decode(FriendlyByteBuf buf) {

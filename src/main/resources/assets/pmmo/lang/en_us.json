@@ -131,6 +131,7 @@
   "pmmo.chop": "Chop",
   "pmmo.harvest": "Harvest",
   "pmmo.use": "Use",
+  "pmmo.use_enchant":"Use Enchantment",
   "pmmo.itemXpBoostHeld": "Xp Boost in Hand",
   "pmmo.itemXpBoostWorn": "Xp Boost Worn",
   "pmmo.oreExtraDrop": "Extra Mined: %1$s",

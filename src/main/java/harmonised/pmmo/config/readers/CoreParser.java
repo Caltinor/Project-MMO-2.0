@@ -194,7 +194,9 @@ public class CoreParser {
 		for (int i = 0; i < raws.size(); i++) {
 			for (Map.Entry<String, Map<String, Integer>> map : raws.get(i).entrySet()) {
 				int enchantLevel = 10000;
-				try {enchantLevel = Integer.valueOf(map.getKey());} catch(NumberFormatException e) {MsLoggy.ERROR.log(LOG_CODE.DATA, "Enchantment Number Incorrectly Defined:", e);}
+				try {enchantLevel = Integer.valueOf(map.getKey());} 
+				catch(NumberFormatException e) {MsLoggy.ERROR.log(LOG_CODE.DATA, "Enchantment Number Incorrectly Defined:", e);}
+				
 				outMap.computeIfAbsent(enchantLevel, (k) -> new HashMap<>());
 				final int ultimateLevel = enchantLevel;
 				map.getValue().forEach((k, v) -> {

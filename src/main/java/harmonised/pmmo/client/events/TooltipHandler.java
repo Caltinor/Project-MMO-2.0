@@ -65,7 +65,7 @@ public class TooltipHandler {
             Map<String, Integer> toolReq = getReqData(core, ReqType.TOOL, stack);
             Map<String, Integer> weaponReq = getReqData(core, ReqType.WEAPON, stack);
             Map<String, Integer> useReq = getReqData(core, ReqType.USE, stack);
-            //Map<String, Integer> useEnchantmentReq = XP.getEnchantsUseReq(stack);
+            Map<String, Integer> useEnchantmentReq = getReqData(core, ReqType.USE_ENCHANTMENT, stack);
             Map<String, Integer> placeReq = getReqData(core, ReqType.PLACE, stack);
             Map<String, Integer> breakReq = getReqData(core, ReqType.BREAK, stack);
             Map<String, Long> xpValueBreaking = getXpGainData(core, itemID,EventType.BLOCK_BREAK, stack);
@@ -89,6 +89,7 @@ public class TooltipHandler {
             if (toolReq.size() > 0 && Config.tooltipReqEnabled(ReqType.TOOL).get())  {addRequirementTooltip(LangProvider.REQ_TOOL, event, toolReq, core);}
             if (weaponReq.size() > 0 && Config.tooltipReqEnabled(ReqType.WEAPON).get()){addRequirementTooltip(LangProvider.REQ_WEAPON, event, weaponReq, core);}
             if (useReq.size() > 0 && Config.tooltipReqEnabled(ReqType.USE).get())   {addRequirementTooltip(LangProvider.REQ_USE, event, useReq, core);}
+            if (useEnchantmentReq.size() > 0 && Config.tooltipReqEnabled(ReqType.USE_ENCHANTMENT).get()) {addRequirementTooltip(LangProvider.REQ_ENCHANT, event, useEnchantmentReq, core);}
             if (placeReq.size() > 0 && Config.tooltipReqEnabled(ReqType.PLACE).get()) {addRequirementTooltip(LangProvider.REQ_PLACE, event, placeReq, core);}
             if (breakReq.size() > 0 && Config.tooltipReqEnabled(ReqType.BREAK).get()) {addRequirementTooltip(LangProvider.REQ_BREAK, event, breakReq, core);}
             //=====================XP VALUES============================
@@ -147,7 +148,9 @@ public class TooltipHandler {
 		//This will cause the map to be empty and result in no header being added.
 		if (!Config.reqEnabled(type).get()) return new HashMap<>();
 		//Gather req data and populate a map for return
-		Map<String, Integer> map = core.getReqMap(type, stack);
+		Map<String, Integer> map = type == ReqType.USE_ENCHANTMENT 
+				? core.getEnchantReqs(stack)
+				: core.getReqMap(type, stack);
 		if (!Config.HIDE_MET_REQS.get())
 			return map;
 		//remove values that meet the requirement
