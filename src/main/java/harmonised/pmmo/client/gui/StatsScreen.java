@@ -3,6 +3,7 @@ package harmonised.pmmo.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import harmonised.pmmo.client.gui.component.StatScrollWidget;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;

@@ -34,7 +34,7 @@ public class EffectManager {
 		}
 		//================================
 		for (ItemStack stack : items) {
-			if (!stack.isEmpty() && (!core.isActionPermitted(ReqType.WEAR, stack, player) || !core.doesPlayerMeetEnchantmentReq(stack, player.getUUID()))) {
+			if (!stack.isEmpty() && !core.isActionPermitted(ReqType.WEAR, stack, player)) {
 				for (MobEffectInstance mei : core.getDataConfig().getItemEffect(stack.getItem().builtInRegistryHolder().unwrapKey().get().location())) {
 					player.addEffect(mei);
 				}

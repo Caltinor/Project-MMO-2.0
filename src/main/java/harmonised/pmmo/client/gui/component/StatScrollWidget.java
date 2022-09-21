@@ -1,4 +1,4 @@
-package harmonised.pmmo.client.gui;
+package harmonised.pmmo.client.gui.component;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -110,6 +110,8 @@ public class StatScrollWidget extends ScrollPanel{
 					blockPos != null ? core.getReqMap(reqType, blockPos, Minecraft.getInstance().level) :
 					stack != null ? core.getReqMap(reqType, stack) : 
 						new HashMap<>();
+			if (reqType == ReqType.USE_ENCHANTMENT && stack != null && stack.isEnchanted())
+				core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
 			if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 				content.add(new Element(reqType, 1, 0xFFFFFF, false, 0));
 				for (Map.Entry<String, Integer> map : reqMap.entrySet()) {

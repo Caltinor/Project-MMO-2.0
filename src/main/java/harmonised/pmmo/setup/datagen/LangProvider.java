@@ -194,6 +194,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Use").build();
 	public static final Translation REQ_PLACE = Translation.Builder.start("pmmo.place")
 			.addLocale(Locale.EN_US, "To Place").build();
+	public static final Translation REQ_ENCHANT = Translation.Builder.start("pmmo.use_enchant")
+			.addLocale(Locale.EN_US, "Use Enchantment").build();
 	public static final Translation REQ_BREAK = Translation.Builder.start("pmmo.break")
 			.addLocale(Locale.EN_US, "To Break").build();
 	public static final Translation XP_VALUE_BREAK = Translation.Builder.start("pmmo.xpValueBreak")

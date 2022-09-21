@@ -267,6 +267,17 @@ public class Core {
 		return mapClone;
 	}
 	
+	public Map<String, Integer> getEnchantReqs(ItemStack stack) {
+		Map<String, Integer> outMap = new HashMap<>();
+		if (!stack.isEnchanted()) return outMap;
+		for (Map.Entry<Enchantment, Integer> enchant : EnchantmentHelper.getEnchantments(stack).entrySet()) {
+			gates.getEnchantmentReqs(RegistryUtil.getId(enchant.getKey()), enchant.getValue()).forEach((skill, level) -> {
+				outMap.merge(skill, level, (o, n) -> o > n ? o : n);
+			});
+		}
+		return outMap;
+	}
+	
 	public Map<String, Integer> getReqMap(ReqType reqType, ItemStack stack) {
 		ResourceLocation itemID = RegistryUtil.getId(stack);
 		if (tooltips.requirementTooltipExists(itemID, reqType)) 
