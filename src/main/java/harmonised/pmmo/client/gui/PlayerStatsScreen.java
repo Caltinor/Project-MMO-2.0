@@ -86,7 +86,8 @@ public class PlayerStatsScreen extends EffectRenderingInventoryScreen<InventoryM
         float f1 = (float) Math.atan(pMouseY / 40.0F);
         renderEntityInInventoryRaw(pPosX, pPosY, pScale, f, f1, pLivingEntity);
     }
-    public static void renderEntityInInventoryRaw(int pPosX, int pPosY, int pScale, float angleXComponent, float angleYComponent, LivingEntity pLivingEntity) {
+    @SuppressWarnings("deprecation")
+	public static void renderEntityInInventoryRaw(int pPosX, int pPosY, int pScale, float angleXComponent, float angleYComponent, LivingEntity pLivingEntity) {
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.pushPose();
         posestack.translate(pPosX, pPosY, 1050.0D);
