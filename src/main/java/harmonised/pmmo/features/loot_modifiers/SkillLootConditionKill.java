@@ -1,4 +1,4 @@
-package harmonised.pmmo.features.loot_predicates;
+package harmonised.pmmo.features.loot_modifiers;
 
 import javax.annotation.Nonnull;
 
