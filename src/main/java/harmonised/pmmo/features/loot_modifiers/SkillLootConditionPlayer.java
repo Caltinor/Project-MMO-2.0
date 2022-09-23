@@ -15,8 +15,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class SkillLootConditionPlayer implements LootItemCondition{
-	public static final LootItemConditionType SKILL_LEVEL_CONDITION = new LootItemConditionType(new SkillLootConditionPlayer.Serializer());
-
 	private String skill;
 	private Integer levelMin, levelMax;
 	
@@ -38,17 +36,19 @@ public class SkillLootConditionPlayer implements LootItemCondition{
 
 	@Override
 	public LootItemConditionType getType() {
-		return SKILL_LEVEL_CONDITION;
+		return GLMRegistry.SKILL_PLAYER.get();
 	}
 
 	public static final class Serializer implements net.minecraft.world.level.storage.loot.Serializer<SkillLootConditionPlayer> {
-        public void serialize(JsonObject json, SkillLootConditionPlayer itemCondition, @Nonnull JsonSerializationContext context) {
+        @Override
+		public void serialize(JsonObject json, SkillLootConditionPlayer itemCondition, @Nonnull JsonSerializationContext context) {
             json.addProperty("skill", itemCondition.skill);
             json.addProperty("level_min", itemCondition.levelMin);
             json.addProperty("level_max", itemCondition.levelMax);
         }
 
         @Nonnull
+        @Override
         public SkillLootConditionPlayer deserialize(JsonObject json, @Nonnull JsonDeserializationContext context) {
         	Integer levelMin = GsonHelper.getAsInt(json, "level_min");
         	Integer levelMax = GsonHelper.getAsInt(json, "level_max");

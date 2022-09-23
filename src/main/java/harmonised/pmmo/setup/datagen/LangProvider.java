@@ -141,12 +141,12 @@ public class LangProvider extends LanguageProvider{
 		addEN_US("pmmo.enum.USE","Activate Item Ability");
 		addEN_US("pmmo.enum.PLACE","Place Block");
 		addEN_US("pmmo.enum.BREAK","Break Block");
-		addEN_US("pmmo.enum.BIOME","Enter Biome");
+		//addEN_US("pmmo.enum.BIOME","Enter Biome");
 		addEN_US("pmmo.enum.KILL","Kill Entity");
 		addEN_US("pmmo.enum.TRAVEL","Travel to");
 		addEN_US("pmmo.enum.RIDE","Ride/Drive");
 		addEN_US("pmmo.enum.TAME","Tame Animal");
-		addEN_US("pmmo.enum.BREED","Breed Animal");
+		//addEN_US("pmmo.enum.BREED","Breed Animal");
 		addEN_US("pmmo.enum.INTERACT","Interact with Block");
 		addEN_US("pmmo.enum.ENTITY_INTERACT","Interact with Entity");
 		
@@ -222,6 +222,10 @@ public class LangProvider extends LanguageProvider{
 	
 	//=========STAT SCROLL WIDGET=================
 	
+	
+	//=========FEATURES===========================
+	public static final Translation FOUND_TREASURE = Translation.Builder.start("pmmo.youFoundTreasure")
+			.addLocale(Locale.EN_US, "You Found Treasure!").build();
 	
 	@Override
 	protected void addTranslations() {

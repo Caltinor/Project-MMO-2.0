@@ -15,7 +15,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class SkillLootConditionKill implements LootItemCondition{
-	public static final LootItemConditionType SKILL_LEVEL_CONDITION_KILL = new LootItemConditionType(new SkillLootConditionKill.Serializer());
 
 	private String skill;
 	private Integer levelMin, levelMax;
@@ -38,7 +37,7 @@ public class SkillLootConditionKill implements LootItemCondition{
 
 	@Override
 	public LootItemConditionType getType() {
-		return SKILL_LEVEL_CONDITION_KILL;
+		return GLMRegistry.SKILL_KILL.get();
 	}
 
 	public static final class Serializer implements net.minecraft.world.level.storage.loot.Serializer<SkillLootConditionKill> {

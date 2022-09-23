@@ -7,12 +7,10 @@ import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.autovalues.AutoValues;
-import harmonised.pmmo.features.loot_modifiers.SkillLootConditionHighestSkill;
-import harmonised.pmmo.features.loot_modifiers.SkillLootConditionKill;
-import harmonised.pmmo.features.loot_modifiers.SkillLootConditionPlayer;
 import harmonised.pmmo.features.veinmining.capability.VeinHandler;
 import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
+import harmonised.pmmo.setup.datagen.GLMProvider;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.storage.ChunkDataProvider;
 import harmonised.pmmo.storage.IChunkData;
@@ -23,7 +21,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -42,9 +39,6 @@ import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 public class CommonSetup {
 	
 	public static void init(final FMLCommonSetupEvent event) {
-		LootItemConditions.register("pmmo:skill_level_kill", new SkillLootConditionKill.Serializer());
-		LootItemConditions.register("pmmo:skill_level", new SkillLootConditionPlayer.Serializer());
-		LootItemConditions.register("pmmo:highest_skill", new SkillLootConditionHighestSkill.Serializer());
 		Networking.registerMessages();
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
@@ -112,6 +106,9 @@ public class CommonSetup {
 		DataGenerator generator = event.getGenerator();
 		if (event.includeClient()) {
 			generator.addProvider(new LangProvider(generator, "en_us"));
+		}
+		if (event.includeServer()) {
+			generator.addProvider(true, new GLMProvider(generator));
 		}
 	}
 }

@@ -19,7 +19,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class SkillLootConditionHighestSkill implements LootItemCondition{
-	public static final LootItemConditionType SKILL_LEVEL_CONDITION_HIGHEST = new LootItemConditionType(new SkillLootConditionHighestSkill.Serializer());
 
 	private String targetSkill;
 	private List<String> comparables;
@@ -46,7 +45,7 @@ public class SkillLootConditionHighestSkill implements LootItemCondition{
 
 	@Override
 	public LootItemConditionType getType() {
-		return SKILL_LEVEL_CONDITION_HIGHEST;
+		return GLMRegistry.HIGHEST_SKILL.get();
 	}
 
 	public static final class Serializer implements net.minecraft.world.level.storage.loot.Serializer<SkillLootConditionHighestSkill> {
