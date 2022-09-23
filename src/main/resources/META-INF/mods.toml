@@ -17,13 +17,13 @@ Adds many different skills and benefits thanks to the skills to the game!
 [[dependencies.pmmo]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[41.0.64,)"
+    versionRange="[43.1.20,)"
     ordering="NONE"
-    side="BOTH"  #this might get changed to server only.
+    side="BOTH"  
 
 [[dependencies.pmmo]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.19.2,1.20)"
     ordering="NONE"
     side="BOTH"
