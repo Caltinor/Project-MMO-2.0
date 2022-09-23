@@ -9,6 +9,7 @@ import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
+import harmonised.pmmo.features.loot_modifiers.GLMRegistry;
 import harmonised.pmmo.setup.CommonSetup;
 import harmonised.pmmo.util.Reference;
 
@@ -23,6 +24,9 @@ public class ProjectMMO {
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, GlobalsConfig.SERVER_CONFIG, "pmmo-Globals.toml");
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SkillsConfig.SERVER_CONFIG, "pmmo-Skills.toml");
     	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, PerksConfig.SERVER_CONFIG, "pmmo-Perks.toml");
+    	
+    	GLMRegistry.CONDITIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    	GLMRegistry.GLM.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::onCapabilityRegister);
