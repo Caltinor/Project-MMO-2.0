@@ -90,7 +90,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	}
 	@Override
 	public int getPlayerSkillLevel(String skill, UUID player) {
-		int rawLevel = getLevelFromXP(getXpRaw(player, skill));
+		int rawLevel = Core.get(LogicalSide.SERVER).getLevelProvider().process(skill, getLevelFromXP(getXpRaw(player, skill)));
 		int skillMaxLevel = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
 		return rawLevel > skillMaxLevel ? skillMaxLevel : rawLevel;
 	}
@@ -161,7 +161,7 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 	public int getLevelFromXP(long xp) {
 		for (int i = 0; i < levelCache.size(); i++) {
 			if (levelCache.get(i) > xp)
-				return i;
+				return Core.get(LogicalSide.SERVER).getLevelProvider().process("", i);
 		}
 		return Config.MAX_LEVEL.get();
 	}	

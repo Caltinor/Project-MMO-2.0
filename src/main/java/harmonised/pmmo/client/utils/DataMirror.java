@@ -9,11 +9,13 @@ import java.util.UUID;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.LogicalSide;
 
 /**This class serves as a run-time cache of data that
  * PmmoSavedData typicaly stores.  
@@ -43,18 +45,26 @@ public class DataMirror implements IDataStorage{
 	public int getLevelFromXP(long xp) {
 		for (int i = 0; i < levelCache.size(); i++) {
 			if (levelCache.get(i) > xp)
+				return Core.get(LogicalSide.CLIENT).getLevelProvider().process("", i);
+		}
+		return Config.MAX_LEVEL.get();
+	}
+	
+	private int getLevelFromXPwithoutLevelProvider(long xp) {
+		for (int i = 0; i < levelCache.size(); i++) {
+			if (levelCache.get(i) > xp)
 				return i;
 		}
 		return Config.MAX_LEVEL.get();
 	}
 	
 	public double getXpWithPercentToNextLevel(long rawXP) {
-		int currentLevel = getLevelFromXP(rawXP);
+		int currentLevel = getLevelFromXPwithoutLevelProvider(rawXP);
 		currentLevel = currentLevel >= levelCache.size() ? levelCache.size()-1 : currentLevel;
 		long currentXPThreshold = currentLevel - 1 >= 0 ? levelCache.get(currentLevel - 1) : 0;
 		long xpToNextLevel = levelCache.get(currentLevel) - currentXPThreshold;
 		long progress = rawXP - currentXPThreshold;
-		return (double)currentLevel + (double)progress/(double)xpToNextLevel;
+		return (double)Core.get(LogicalSide.CLIENT).getLevelProvider().process("", currentLevel) + (double)progress/(double)xpToNextLevel;
 	}
 	
 	@Override
@@ -85,6 +95,7 @@ public class DataMirror implements IDataStorage{
 	public int getPlayerSkillLevel(String skill, UUID player) {
 		int rawLevel =  me(player) ? getLevelFromXP(mySkills.getOrDefault(skill, 0l)) 
 			: getLevelFromXP(otherSkills.getOrDefault(skill, 0l));
+		rawLevel = Core.get(LogicalSide.CLIENT).getLevelProvider().process(skill, rawLevel);
 		int skillMax = SkillsConfig.SKILLS.get().getOrDefault(skill, SkillData.Builder.getDefault()).getMaxLevel();
 		return rawLevel > skillMax ? skillMax : rawLevel;
 	}
