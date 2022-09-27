@@ -26,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class APIUtils {
 	/* NOTES
@@ -355,6 +356,23 @@ public class APIUtils {
 	 */
 	public static void registerItemBonusData(ResourceLocation res, ModifierDataType type, Function<ItemStack, Map<String, Double>> func) {
 		Core.get(LogicalSide.SERVER).getTooltipRegistry().registerItemBonusTooltipData(res, type, func);
+	}
+	
+	/**<p>Registers a function which receives the level and skill that pmmo would provide
+	 * by default and allows for modification of that value.  This is a completely replace
+	 * function so failure to provide a default value, the original value, or using zero
+	 * as a placeholder is ill advised.</p>
+	 * <p>Providers are registered and executed in sequence.  The level value supplied to
+	 * your function may be the product of a previous implementation.  
+	 * 
+	 * @param provider the funtion providing the new player level
+	 * @param event required to ensure event process correctly during lifecycle
+	 */
+	public static void registerLevelProvider(BiFunction<String, Integer, Integer> provider, FMLCommonSetupEvent event) {
+		event.enqueueWork(() -> {
+			Core.get(LogicalSide.SERVER).getLevelProvider().registerLevelProvider(provider);
+			Core.get(LogicalSide.CLIENT).getLevelProvider().registerLevelProvider(provider);
+		});
 	}
 	
 	//===============EVENT TRIGGER REFERENCES========================

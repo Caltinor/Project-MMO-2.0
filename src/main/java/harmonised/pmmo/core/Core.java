@@ -30,6 +30,7 @@ import harmonised.pmmo.features.veinmining.VeinDataManager;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.registry.EventTriggerRegistry;
+import harmonised.pmmo.registry.LevelRegistry;
 import harmonised.pmmo.registry.PerkRegistry;
 import harmonised.pmmo.registry.PredicateRegistry;
 import harmonised.pmmo.registry.TooltipRegistry;
@@ -76,6 +77,7 @@ public class Core {
 	private final EventTriggerRegistry eventReg;
 	private final TooltipRegistry tooltips;
 	private final PerkRegistry perks;
+	private final LevelRegistry lvlProvider;
 	private final SalvageLogic salvageLogic;
 	private final NBTUtils nbt;
 	private final VeinDataManager vein;
@@ -90,6 +92,7 @@ public class Core {
 	    this.eventReg = new EventTriggerRegistry();
 	    this.tooltips = new TooltipRegistry();
 	    this.perks = new PerkRegistry();
+	    this.lvlProvider = new LevelRegistry();
 	    this.salvageLogic = new SalvageLogic();
 	    this.nbt = new NBTUtils();
 	    this.vein = new VeinDataManager();
@@ -127,6 +130,7 @@ public class Core {
 	public EventTriggerRegistry getEventTriggerRegistry() {return eventReg;}
 	public TooltipRegistry getTooltipRegistry() {return tooltips;}
 	public PerkRegistry getPerkRegistry() {return perks;}
+	public LevelRegistry getLevelProvider() {return lvlProvider;}
 	public SalvageLogic getSalvageLogic() {return salvageLogic;}
 	public NBTUtils getNBTUtils() {return nbt;}
 	public VeinDataManager getVeinData() {return vein;}
@@ -143,7 +147,7 @@ public class Core {
 		//convert skill group ids into raw skills 
 		processSkillGroupReqs(requirements);
 		for (Map.Entry<String, Integer> req : requirements.entrySet()) {
-			int skillLevel = getData().getLevelFromXP(getData().getXpRaw(playerID, req.getKey()));
+			int skillLevel = getData().getPlayerSkillLevel(req.getKey(), playerID);
 			if (SkillsConfig.SKILLS.get().getOrDefault(req.getKey(), SkillData.Builder.getDefault()).isSkillGroup()) {
 				SkillData skillData = SkillsConfig.SKILLS.get().get(req.getKey());
 				if (skillData.useTotalLevels().orElse(false)) {
