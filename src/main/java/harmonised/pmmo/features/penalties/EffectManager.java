@@ -6,6 +6,7 @@ import java.util.List;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 
 public class EffectManager {
 
-	@SuppressWarnings("deprecation")
 	public static void applyEffects(Core core, Player player) {
 		//BIOME/DIM Efects
 		ResourceLocation biomeID = player.level.getBiome(player.blockPosition()).unwrapKey().get().location();
@@ -35,7 +35,7 @@ public class EffectManager {
 		//================================
 		for (ItemStack stack : items) {
 			if (!stack.isEmpty() && !core.isActionPermitted(ReqType.WEAR, stack, player)) {
-				for (MobEffectInstance mei : core.getDataConfig().getItemEffect(stack.getItem().builtInRegistryHolder().unwrapKey().get().location())) {
+				for (MobEffectInstance mei : core.getDataConfig().getItemEffect(RegistryUtil.getId(stack))) {
 					player.addEffect(mei);
 				}
 			}
