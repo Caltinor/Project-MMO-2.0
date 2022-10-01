@@ -12,6 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -45,6 +47,17 @@ public class TreasureLootModifier extends LootModifier{
 	@Override
 	protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,	LootContext context) {
 		if (context.getRandom().nextDouble() <= chance) {
+			
+			//this section checks if the drop is air and replaces it with the block
+			//being broken.  is is the logic for Extra Drops
+			BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
+			if (state != null && drop.getItem() == Items.AIR) {
+				int count = drop.getCount();
+				drop = new ItemStack(state.getBlock().asItem());
+				drop.setCount(count);
+			}
+			
+			//Notify player that their skill awarded them an extra drop.
 			Entity breaker = context.getParamOrNull(LootContextParams.THIS_ENTITY);
 			if (breaker != null && breaker instanceof Player) {
 				((Player)breaker).sendSystemMessage(LangProvider.FOUND_TREASURE.asComponent());
