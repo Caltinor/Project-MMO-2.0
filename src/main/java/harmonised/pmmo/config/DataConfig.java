@@ -99,7 +99,7 @@ public class DataConfig {
 		for (Map.Entry<ResourceLocation, Integer> effect 
 				: locationEffectData.getOrDefault(isPositive, new HashMap<>()).getOrDefault(biomeID, new HashMap<>()).entrySet()) {
 			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());
-			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue()));
+			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue(), true, true));
 		}
 		return effects; 
 	}
