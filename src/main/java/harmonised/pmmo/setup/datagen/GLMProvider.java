@@ -8,12 +8,16 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootTableIdCondition;
@@ -122,6 +126,14 @@ public class GLMProvider extends GlobalLootModifierProvider{
 		add("fish_wood_pick", fish(Items.WOODEN_PICKAXE, 1, 0.01, "fishing", 0));
 		add("fish_wood_shovel", fish(Items.WOODEN_SHOVEL, 1, 0.01, "fishing", 0));
 		add("fish_wood_sword", fish(Items.WOODEN_SWORD, 1, 0.01, "fishing", 0));
+		
+		//===========RARE MOB DROPS==================
+		add("mob_chicken", mob(EntityType.CHICKEN, Items.EGG, 1, 0.1, "breeding", 10));
+		add("mob_dragon_head", mob(EntityType.ENDER_DRAGON, Items.DRAGON_HEAD, 1, 1.0, "slayer", 50));
+		add("mob_dragon_egg", mob(EntityType.ENDER_DRAGON, Items.DRAGON_EGG, 1, 1.0, "slayer", 50));
+		add("mob_sheep", mob(EntityType.SHEEP, Items.STRING, 1, 0.1, "breeding", 10));
+		add("mob_slime", mob(EntityType.SLIME, Items.SLIME_BLOCK, 1, 1, "slayer", 30));
+		add("mob_zombie", mob(EntityType.ZOMBIE, Items.BEETROOT, 1, 0.4, "combat", 20));
 	}
 
 	private TreasureLootModifier of(TagKey<Block> validBlocks, Item drop, int count, double chance, String skill, int minLevel) {
@@ -165,5 +177,14 @@ public class GLMProvider extends GlobalLootModifierProvider{
 						LootTableIdCondition.builder(BuiltInLootTables.FISHING).build(),
 						new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill)
 				}, RegistryUtil.getId(drop), count, chance);
+	}
+	
+	private TreasureLootModifier mob(EntityType<?> mob, Item drop, int count, double chance, String skill, int minLevel) {
+		return new TreasureLootModifier(
+				new LootItemCondition[] {
+						LootItemKilledByPlayerCondition.killedByPlayer().build(),
+						LootTableIdCondition.builder(mob.getDefaultLootTable()).build(),
+						new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill)
+				}, RegistryUtil.getId(drop), count, chance);				
 	}
 }
