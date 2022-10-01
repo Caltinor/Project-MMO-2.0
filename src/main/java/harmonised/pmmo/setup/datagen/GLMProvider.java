@@ -23,20 +23,20 @@ public class GLMProvider extends GlobalLootModifierProvider{
 	@Override
 	protected void start() {
 		//===========TREASURE==================
-		add("coal_ores", of(Tags.Blocks.ORES_COAL, Items.DIAMOND, 1, 0.1, "mining", 30));
-		add("apple_from_leaves", of(BlockTags.LEAVES, Items.APPLE, 1, 0.25, "farming", 30));
-		add("gapple_from_leaves",of(BlockTags.LEAVES, Items.GOLDEN_APPLE, 1, 0.1, "farming", 60));
+		add("coal_ores", of(Tags.Blocks.ORES_COAL, Items.DIAMOND, 1, 0.01, "mining", 30));
+		add("apple_from_leaves", of(BlockTags.LEAVES, Items.APPLE, 1, 0.025, "farming", 30));
+		add("gapple_from_leaves",of(BlockTags.LEAVES, Items.GOLDEN_APPLE, 1, 0.01, "farming", 60));
 		add("egapple_from_leaves",of(BlockTags.LEAVES, Items.ENCHANTED_GOLDEN_APPLE, 1, 0.01, "farming", 60));
 		add("dirt_cake", of(BlockTags.DIRT, Items.CAKE, 1, 0.003251, "excavation", 0));
-		add("dirt_bone", of(BlockTags.DIRT, Items.BONE, 1, 0.05, "excavation", 25));
-		add("iron_dposits", of(Tags.Blocks.STONE, Items.IRON_NUGGET, 2, 0.01, "mining", 15));
-		add("pig_step", of(Tags.Blocks.BOOKSHELVES, Items.MUSIC_DISC_PIGSTEP, 1, 0.05, "building", 10));
-		add("grass_grass", of(Blocks.GRASS_BLOCK, Items.GRASS, 1, 0.1, "farming", 5));
-		add("magma_to_cream", of(Blocks.MAGMA_BLOCK, Items.MAGMA_CREAM, 1, 0.1, "mining", 25));
-		add("nether_gold", of(Tags.Blocks.NETHERRACK, Items.GOLD_NUGGET, 2, 0.1, "mining", 20));
-		add("berry_surprise", of(Blocks.PODZOL, Items.SWEET_BERRIES, 2, 0.1, "farming", 15));
-		add("tears_of_sand", of(Blocks.SOUL_SAND, Items.GHAST_TEAR, 1, 0.01, "excavation", 40));
-		add("tears_of_soil", of(Blocks.SOUL_SOIL, Items.GHAST_TEAR, 1, 0.01, "excavation", 40));
+		add("dirt_bone", of(BlockTags.DIRT, Items.BONE, 1, 0.0, "excavation", 25));
+		add("iron_dposits", of(Tags.Blocks.STONE, Items.IRON_NUGGET, 2, 0.001, "mining", 15));
+		add("pig_step", of(Tags.Blocks.BOOKSHELVES, Items.MUSIC_DISC_PIGSTEP, 1, 0.005, "building", 10));
+		add("grass_grass", of(Blocks.GRASS_BLOCK, Items.GRASS, 1, 0.01, "farming", 5));
+		add("magma_to_cream", of(Blocks.MAGMA_BLOCK, Items.MAGMA_CREAM, 1, 0.01, "mining", 25));
+		add("nether_gold", of(Tags.Blocks.NETHERRACK, Items.GOLD_NUGGET, 2, 0.01, "mining", 20));
+		add("berry_surprise", of(Blocks.PODZOL, Items.SWEET_BERRIES, 2, 0.0, "farming", 15));
+		add("tears_of_sand", of(Blocks.SOUL_SAND, Items.GHAST_TEAR, 1, 0.001, "excavation", 40));
+		add("tears_of_soil", of(Blocks.SOUL_SOIL, Items.GHAST_TEAR, 1, 0.001, "excavation", 40));
 		
 		//===========EXTRA DROPS==================
 		add("extra_logs", extra(BlockTags.LOGS, 1, 0.01, "woodcutting", 1));
@@ -45,11 +45,25 @@ public class GLMProvider extends GlobalLootModifierProvider{
 		add("extra_diamond", extra(Tags.Blocks.ORES_DIAMOND, 1, 0.0033, "mining", 30));
 		add("extra_emerald", extra(Tags.Blocks.ORES_EMERALD, 1, 0.0075, "mining", 20));
 		add("extra_debris", of(Blocks.ANCIENT_DEBRIS, Items.ANCIENT_DEBRIS, 1, 0.01, "mining", 60));
-		add("extra_gold", extra(Tags.Blocks.ORES_GOLD, 1, 0.05, "mining", 25));
+		add("extra_gold", extra(Tags.Blocks.ORES_GOLD, 1, 0.005, "mining", 25));
 		add("extra_iron", extra(Tags.Blocks.ORES_IRON, 1, 0.05, "mining", 20));
-		add("extra_lapis",extra(Tags.Blocks.ORES_LAPIS,1, 0.015,"mining", 30));
+		add("extra_lapis",extra(Tags.Blocks.ORES_LAPIS,1, 0.0015,"mining", 30));
 		add("extra_quartz", extra(Tags.Blocks.ORES_QUARTZ, 1, 0.005, "mining", 30));
 		add("extra_redstone", extra(Tags.Blocks.ORES_REDSTONE, 3, 0.02, "mining", 20));
+		add("extra_bamboo", of(Blocks.BAMBOO, Items.BAMBOO, 1, 0.0035, "farming", 20));
+		add("extra_beets", of(Blocks.BEETROOTS, Items.BEETROOT, 1, 0.001, "farming",1));
+		add("extra_cactus", of(Blocks.CACTUS, Items.CACTUS, 1, 0.0045, "farming", 10));
+		add("extra_carrot", of(Blocks.CARROTS, Items.CARROT, 1, 0.015, "farming", 1));
+		add("extra_cocoa", of(Blocks.COCOA, Items.COCOA_BEANS, 1, 0.015, "farming", 15));
+		add("extra_kelp", of(Blocks.KELP, Items.KELP, 1, 0.025, "farming", 10));
+		add("extra_kelp_plant", of(Blocks.KELP_PLANT, Items.KELP, 1, 0.025, "farming", 10));
+		add("extra_melon", of(Blocks.MELON, Items.MELON_SLICE, 1, 0.01, "farming", 20));
+		add("extra_wart", of(Blocks.NETHER_WART, Items.NETHER_WART, 1, 0.075, "farming", 50));
+		add("extra_potato", of(Blocks.POTATOES, Items.POTATO, 1, 0.015, "farming", 1));
+		add("extra_pumpkin", of(Blocks.PUMPKIN, Items.PUMPKIN, 1, 0.006, "farming", 20));
+		add("extra_pickle", of(Blocks.SEA_PICKLE, Items.SEA_PICKLE, 1, 0.015, "farming", 10));
+		add("extra_sugar", of(Blocks.SUGAR_CANE, Items.SUGAR_CANE, 1, 0.033, "farming", 5));
+		add("extra_wheat", of(Blocks.WHEAT, Items.WHEAT, 1, 0.05, "farming", 1));
 	}
 
 	private TreasureLootModifier of(TagKey<Block> validBlocks, Item drop, int count, double chance, String skill, int minLevel) {
