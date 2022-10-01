@@ -153,7 +153,6 @@ public class AutoValueConfig {
 	
 	private static Map<ReqType, ConfigObject<Map<String, Integer>>> ITEM_REQS;
 	private static Map<ReqType, ConfigObject<Map<String, Integer>>> BLOCK_REQS;
-	//private static Map<ReqType, ConfigObject<Map<String, Integer>>> ENTITY_REQS;
 	
 	public static Map<String, Integer> getItemReq(ReqType type) {
 		ConfigObject<Map<String, Integer>> configEntry = ITEM_REQS.get(type);
@@ -163,10 +162,6 @@ public class AutoValueConfig {
 		ConfigObject<Map<String, Integer>> configEntry = BLOCK_REQS.get(type);
 		return configEntry == null ? new HashMap<>() : configEntry.get();
 	}
-	/*public static Map<String, Integer> getEntityReq(ReqType type) {
-		ConfigObject<Map<String, Integer>> configEntry = ENTITY_REQS.get(type);
-		return configEntry == null ? new HashMap<>() : configEntry.get();
-	}*/
 	
 	private static void setupReqMaps(ForgeConfigSpec.Builder builder) {
 		builder.comment("what skills and level should be required to perform the specified action").push("Requirements");
@@ -183,12 +178,6 @@ public class AutoValueConfig {
 			BLOCK_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
 		builder.pop();
-		/*builder.push("Entities");
-		ENTITY_REQS = new HashMap<>();
-		for (ReqType type : AutoEntity.REQTYPES) {
-			ENTITY_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
-		}
-		builder.pop();*/
 		
 		builder.pop();
 	}
