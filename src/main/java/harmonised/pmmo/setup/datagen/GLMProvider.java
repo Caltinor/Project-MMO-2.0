@@ -1,5 +1,7 @@
 package harmonised.pmmo.setup.datagen;
 
+import harmonised.pmmo.features.loot_modifiers.RareDropModifier;
+import harmonised.pmmo.features.loot_modifiers.SkillLootConditionKill;
 import harmonised.pmmo.features.loot_modifiers.SkillLootConditionPlayer;
 import harmonised.pmmo.features.loot_modifiers.TreasureLootModifier;
 import harmonised.pmmo.features.loot_modifiers.ValidBlockCondition;
@@ -32,7 +34,7 @@ public class GLMProvider extends GlobalLootModifierProvider{
 		add("gapple_from_leaves",of(BlockTags.LEAVES, Items.GOLDEN_APPLE, 1, 0.01, "farming", 60));
 		add("egapple_from_leaves",of(BlockTags.LEAVES, Items.ENCHANTED_GOLDEN_APPLE, 1, 0.01, "farming", 60));
 		add("dirt_cake", of(BlockTags.DIRT, Items.CAKE, 1, 0.003251, "excavation", 0));
-		add("dirt_bone", of(BlockTags.DIRT, Items.BONE, 1, 0.0, "excavation", 25));
+		add("dirt_bone", of(BlockTags.DIRT, Items.BONE, 1, 0.01, "excavation", 25));
 		add("iron_dposits", of(Tags.Blocks.STONE, Items.IRON_NUGGET, 2, 0.001, "mining", 15));
 		add("pig_step", of(Tags.Blocks.BOOKSHELVES, Items.MUSIC_DISC_PIGSTEP, 1, 0.005, "building", 10));
 		add("grass_grass", of(Blocks.GRASS_BLOCK, Items.GRASS, 1, 0.01, "farming", 5));
@@ -119,11 +121,11 @@ public class GLMProvider extends GlobalLootModifierProvider{
 		add("fish_netherite_plate", fish(Items.NETHERITE_CHESTPLATE, 1, 0.00001, "fishing", 70));
 		add("fish_netherite_helm", fish(Items.NETHERITE_HELMET, 1, 0.00001, "fishing", 70));
 		add("fish_netherite_pants", fish(Items.NETHERITE_LEGGINGS, 1, 0.00001, "fishing", 70));
-		add("fish_wood_axe", fish(Items.WOODEN_AXE, 1, 0.01, "fishing", 0));
-		add("fish_wood_hoe", fish(Items.WOODEN_HOE, 1, 0.01, "fishing", 0));
-		add("fish_wood_pick", fish(Items.WOODEN_PICKAXE, 1, 0.01, "fishing", 0));
-		add("fish_wood_shovel", fish(Items.WOODEN_SHOVEL, 1, 0.01, "fishing", 0));
-		add("fish_wood_sword", fish(Items.WOODEN_SWORD, 1, 0.01, "fishing", 0));
+		add("fish_wood_axe", fish(Items.WOODEN_AXE, 1, 0.001, "fishing", 0, 15));
+		add("fish_wood_hoe", fish(Items.WOODEN_HOE, 1, 0.001, "fishing", 0, 15));
+		add("fish_wood_pick", fish(Items.WOODEN_PICKAXE, 1, 0.001, "fishing", 0, 15));
+		add("fish_wood_shovel", fish(Items.WOODEN_SHOVEL, 1, 0.001, "fishing", 0, 15));
+		add("fish_wood_sword", fish(Items.WOODEN_SWORD, 1, 0.001, "fishing", 0, 15));
 		
 		//===========RARE MOB DROPS==================
 		add("mob_chicken", mob(EntityType.CHICKEN, Items.EGG, 1, 0.1, "breeding", 10));
@@ -169,20 +171,28 @@ public class GLMProvider extends GlobalLootModifierProvider{
 				}, RegistryUtil.getId(Blocks.AIR), count, chance);
 	}
 	
-	private TreasureLootModifier fish(Item drop, int count, double chance, String skill, int minLevel) {
-		return new TreasureLootModifier(
+	private RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel, int maxLevel) {
+		return new RareDropModifier(
 				new LootItemCondition[] {
 						LootTableIdCondition.builder(BuiltInLootTables.FISHING).build(),
-						new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill)
+						new SkillLootConditionKill(minLevel, maxLevel, skill)
 				}, RegistryUtil.getId(drop), count, chance);
 	}
 	
-	private TreasureLootModifier mob(EntityType<?> mob, Item drop, int count, double chance, String skill, int minLevel) {
-		return new TreasureLootModifier(
+	private RareDropModifier fish(Item drop, int count, double chance, String skill, int minLevel) {
+		return fish(drop, count, chance, skill, minLevel, Integer.MAX_VALUE);
+	}
+	
+	private RareDropModifier mob(EntityType<?> mob, Item drop, int count, double chance, String skill, int minLevel, int maxLevel) {
+		return new RareDropModifier(
 				new LootItemCondition[] {
 						LootItemKilledByPlayerCondition.killedByPlayer().build(),
 						LootTableIdCondition.builder(mob.getDefaultLootTable()).build(),
-						new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill)
+						new SkillLootConditionKill(minLevel, maxLevel, skill)
 				}, RegistryUtil.getId(drop), count, chance);				
+	}
+	
+	private RareDropModifier mob(EntityType<?> mob, Item drop, int count, double chance, String skill, int minLevel) {
+		return mob(mob, drop, count, chance, skill, minLevel, Integer.MAX_VALUE);
 	}
 }

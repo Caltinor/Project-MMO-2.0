@@ -15,6 +15,7 @@ public class GLMRegistry {
 	public static final DeferredRegister<LootItemConditionType> CONDITIONS = DeferredRegister.create(Registry.LOOT_CONDITION_TYPE.key(), Reference.MOD_ID);
 	
 	public static final RegistryObject<Codec<TreasureLootModifier>> TREASURE = GLM.register("treasure", () -> TreasureLootModifier.CODEC);
+	public static final RegistryObject<Codec<RareDropModifier>> RARE_DROP = GLM.register("rare_drop", () -> RareDropModifier.CODEC);
 	
 	public static final RegistryObject<LootItemConditionType> SKILL_PLAYER = CONDITIONS.register("skill_level", 
 			() -> new LootItemConditionType(new SkillLootConditionPlayer.Serializer()));
