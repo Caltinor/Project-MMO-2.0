@@ -137,6 +137,9 @@ public class Networking {
 	}
 	
 	public static void splitToClient(Object packet, ServerPlayer player) {
+		//this might just be a check needed for Dev, but it's in here now.
+		if (player == null) return;
+		
 		Packet<?> vanillaPacket = INSTANCE.toVanillaPacket(packet, NetworkDirection.PLAY_TO_CLIENT);
         List<Packet<?>> packets = new ArrayList<>();
         VanillaPacketSplitter.appendPackets(ConnectionProtocol.PLAY, PacketFlow.CLIENTBOUND, vanillaPacket, packets);
