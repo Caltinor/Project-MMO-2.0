@@ -12,9 +12,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
+import net.minecraftforge.common.loot.LootTableIdCondition;
 
 public class GLMProvider extends GlobalLootModifierProvider{
 
@@ -64,6 +66,62 @@ public class GLMProvider extends GlobalLootModifierProvider{
 		add("extra_pickle", of(Blocks.SEA_PICKLE, Items.SEA_PICKLE, 1, 0.015, "farming", 10));
 		add("extra_sugar", of(Blocks.SUGAR_CANE, Items.SUGAR_CANE, 1, 0.033, "farming", 5));
 		add("extra_wheat", of(Blocks.WHEAT, Items.WHEAT, 1, 0.05, "farming", 1));
+		
+		//===========RARE FISH POOL==================
+		add("fish_bow", fish(Items.BOW, 1, 0.01, "fishing", 10));
+		add("fish_rod", fish(Items.FISHING_ROD, 1, 0.05, "fishing", 1));
+		add("fish_heart", fish(Items.HEART_OF_THE_SEA, 1, 0.001, "fishing", 30));
+		add("fish_nautilus", fish(Items.NAUTILUS_SHELL, 1, 0.005, "fishing", 25));
+		add("fish_star", fish(Items.NETHER_STAR, 1, 0.0001, "fishing", 60));
+		add("fish_chain_boots", fish(Items.CHAINMAIL_BOOTS, 1, 0.005, "fishing", 20));
+		add("fish_chain_plate", fish(Items.CHAINMAIL_CHESTPLATE, 1, 0.005, "fishing", 20));
+		add("fish_chain_helm", fish(Items.CHAINMAIL_HELMET, 1, 0.005, "fishing", 20));
+		add("fish_chain_pants", fish(Items.CHAINMAIL_LEGGINGS, 1, 0.005, "fishing", 20));
+		add("fish_diamond_axe", fish(Items.DIAMOND_AXE, 1, 0.0001, "fishing", 50));
+		add("fish_diamond_hoe", fish(Items.DIAMOND_HOE, 1, 0.0001, "fishing", 50));
+		add("fish_diamond_pick", fish(Items.DIAMOND_PICKAXE, 1, 0.0001, "fishing", 50));
+		add("fish_diamond_shovel", fish(Items.DIAMOND_SHOVEL, 1, 0.0001, "fishing", 50));
+		add("fish_diamond_sword", fish(Items.DIAMOND_SWORD, 1, 0.0001, "fishing", 50));
+		add("fish_diamond_boots", fish(Items.DIAMOND_BOOTS, 1, 0.0001, "fishing", 50));
+		add("fish_diamond_plate", fish(Items.DIAMOND_CHESTPLATE, 1, 0.0001, "fishing", 50));
+		add("fish_diamond_helm", fish(Items.DIAMOND_HELMET, 1, 0.0001, "fishing", 50));
+		add("fish_diamond_pants", fish(Items.DIAMOND_LEGGINGS, 1, 0.0001, "fishing", 50));
+		add("fish_gold_axe", fish(Items.GOLDEN_AXE, 1, 0.005, "fishing", 30));
+		add("fish_gold_hoe", fish(Items.GOLDEN_HOE, 1, 0.005, "fishing", 30));
+		add("fish_gold_pick", fish(Items.GOLDEN_PICKAXE, 1, 0.005, "fishing", 30));
+		add("fish_gold_shovel", fish(Items.GOLDEN_SHOVEL, 1, 0.005, "fishing", 30));
+		add("fish_gold_sword", fish(Items.GOLDEN_SWORD, 1, 0.005, "fishing", 30));
+		add("fish_gold_boots", fish(Items.GOLDEN_BOOTS, 1, 0.005, "fishing", 30));
+		add("fish_gold_plate", fish(Items.GOLDEN_CHESTPLATE, 1, 0.005, "fishing", 30));
+		add("fish_gold_helm", fish(Items.GOLDEN_HELMET, 1, 0.005, "fishing", 30));
+		add("fish_gold_pants", fish(Items.GOLDEN_LEGGINGS, 1, 0.005, "fishing", 30));
+		add("fish_iron_axe", fish(Items.IRON_AXE, 1, 0.01, "fishing", 20));
+		add("fish_iron_hoe", fish(Items.IRON_HOE, 1, 0.01, "fishing", 20));
+		add("fish_iron_pick", fish(Items.IRON_PICKAXE, 1, 0.01, "fishing", 20));
+		add("fish_iron_shovel", fish(Items.IRON_SHOVEL, 1, 0.01, "fishing", 20));
+		add("fish_iron_sword", fish(Items.IRON_SWORD, 1, 0.01, "fishing", 20));
+		add("fish_iron_boots", fish(Items.IRON_BOOTS, 1, 0.01, "fishing", 20));
+		add("fish_iron_plate", fish(Items.IRON_CHESTPLATE, 1, 0.01, "fishing", 20));
+		add("fish_iron_helm", fish(Items.IRON_HELMET, 1, 0.01, "fishing", 20));
+		add("fish_iron_pants", fish(Items.IRON_LEGGINGS, 1, 0.01, "fishing", 20));	
+		add("fish_leather_boots", fish(Items.LEATHER_BOOTS, 1, 0.01, "fishing", 1));
+		add("fish_leather_plate", fish(Items.LEATHER_CHESTPLATE, 1, 0.01, "fishing", 1));
+		add("fish_leather_helm", fish(Items.LEATHER_HELMET, 1, 0.01, "fishing", 1));
+		add("fish_leather_pants", fish(Items.LEATHER_LEGGINGS, 1, 0.01, "fishing", 1));	
+		add("fish_netherite_axe", fish(Items.NETHERITE_AXE, 1, 0.00001, "fishing", 70));
+		add("fish_netherite_hoe", fish(Items.NETHERITE_HOE, 1, 0.00001, "fishing", 70));
+		add("fish_netherite_pick", fish(Items.NETHERITE_PICKAXE, 1, 0.00001, "fishing", 70));
+		add("fish_netherite_shovel", fish(Items.NETHERITE_SHOVEL, 1, 0.00001, "fishing", 70));
+		add("fish_netherite_sword", fish(Items.NETHERITE_SWORD, 1, 0.00001, "fishing", 70));
+		add("fish_netherite_boots", fish(Items.NETHERITE_BOOTS, 1, 0.00001, "fishing", 70));
+		add("fish_netherite_plate", fish(Items.NETHERITE_CHESTPLATE, 1, 0.00001, "fishing", 70));
+		add("fish_netherite_helm", fish(Items.NETHERITE_HELMET, 1, 0.00001, "fishing", 70));
+		add("fish_netherite_pants", fish(Items.NETHERITE_LEGGINGS, 1, 0.00001, "fishing", 70));
+		add("fish_wood_axe", fish(Items.WOODEN_AXE, 1, 0.01, "fishing", 0));
+		add("fish_wood_hoe", fish(Items.WOODEN_HOE, 1, 0.01, "fishing", 0));
+		add("fish_wood_pick", fish(Items.WOODEN_PICKAXE, 1, 0.01, "fishing", 0));
+		add("fish_wood_shovel", fish(Items.WOODEN_SHOVEL, 1, 0.01, "fishing", 0));
+		add("fish_wood_sword", fish(Items.WOODEN_SWORD, 1, 0.01, "fishing", 0));
 	}
 
 	private TreasureLootModifier of(TagKey<Block> validBlocks, Item drop, int count, double chance, String skill, int minLevel) {
@@ -99,5 +157,13 @@ public class GLMProvider extends GlobalLootModifierProvider{
 					new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill),
 					new ValidBlockCondition(validBlocks)
 				}, RegistryUtil.getId(Blocks.AIR), count, chance);
+	}
+	
+	private TreasureLootModifier fish(Item drop, int count, double chance, String skill, int minLevel) {
+		return new TreasureLootModifier(
+				new LootItemCondition[] {
+						LootTableIdCondition.builder(BuiltInLootTables.FISHING).build(),
+						new SkillLootConditionPlayer(minLevel, Integer.MAX_VALUE, skill)
+				}, RegistryUtil.getId(drop), count, chance);
 	}
 }
