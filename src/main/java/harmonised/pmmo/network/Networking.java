@@ -18,6 +18,7 @@ import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
+import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
@@ -114,6 +115,11 @@ public class Networking {
 			.encoder(SP_SetVeinLimit::encode)
 			.decoder(SP_SetVeinLimit::new)
 			.consumerNetworkThread(SP_SetVeinLimit::handle)
+			.add();
+		INSTANCE.messageBuilder(SP_SetVeinShape.class, ID++)
+			.encoder(SP_SetVeinShape::encode)
+			.decoder(SP_SetVeinShape::new)
+			.consumerNetworkThread(SP_SetVeinShape::handle)
 			.add();
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}

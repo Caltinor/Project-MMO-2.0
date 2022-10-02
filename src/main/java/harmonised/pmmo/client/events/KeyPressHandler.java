@@ -7,6 +7,7 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
+import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
@@ -54,6 +55,11 @@ public class KeyPressHandler {
             if (ClientSetup.SUB_VEIN.isDown()) {
             	Config.VEIN_LIMIT.set(Config.VEIN_LIMIT.get()-1);
             	Networking.sendToServer(new SP_SetVeinLimit(Config.VEIN_LIMIT.get()));
+            }
+            if (ClientSetup.CYCLE_VEIN.isDown()) {
+            	VeinTracker.nextMode();
+            	mc.player.displayClientMessage(LangProvider.VEIN_SHAPE.asComponent(VeinTracker.mode.name()), false);
+            	Networking.sendToServer(new SP_SetVeinShape(VeinTracker.mode));
             }
             if (mc.screen == null && ClientSetup.OPEN_MENU.isDown()) {
             	if (mc.hitResult != null && !mc.player.isCrouching()) {
