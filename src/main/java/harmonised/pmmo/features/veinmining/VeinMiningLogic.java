@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.core.Core;
+import harmonised.pmmo.features.veinmining.VeinShapeData.ShapeType;
 import harmonised.pmmo.features.veinmining.capability.VeinProvider;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncVein;
@@ -26,6 +27,7 @@ public class VeinMiningLogic {
 	public static final String VEIN_DATA = "vein_data";
 	public static final String CURRENT_CHARGE = "vein_charge";
 	public static final Map<UUID, Integer> maxBlocksPerPlayer = new HashMap<>();
+	public static final Map<UUID, ShapeType> shapePerPlayer = new HashMap<>();
 
 	/**This executes the actual break logic.  This should only be called
 	 * on the server.
@@ -41,7 +43,8 @@ public class VeinMiningLogic {
 		int consumed = 0;	
 		Block block = level.getBlockState(pos).getBlock();
 		int maxBlocks = Math.min(charge/Core.get(level).getVeinData().getBlockConsume(block), maxBlocksPerPlayer.computeIfAbsent(player.getUUID(), id -> 64));
-		VeinShapeData veinData = new VeinShapeData(level, pos, maxBlocks);
+		ShapeType mode = shapePerPlayer.computeIfAbsent(player.getUUID(), id -> ShapeType.AOE);
+		VeinShapeData veinData = new VeinShapeData(level, pos, maxBlocks, mode, player.getDirection());
 		for (BlockPos veinable : veinData.getVein()) {
 			consumed += cost;
 			player.gameMode.destroyAndAck(veinable, ServerboundPlayerActionPacket.Action.STOP_DESTROY_BLOCK, "Vein Break");

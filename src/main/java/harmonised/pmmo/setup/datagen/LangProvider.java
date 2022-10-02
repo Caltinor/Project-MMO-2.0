@@ -165,6 +165,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Increase Vein Size").build();
 	public static final Translation KEYBIND_SUBVEIN = Translation.Builder.start("key.pmmo.subVein")
 			.addLocale(Locale.EN_US, "Decrease Vein Size").build();
+	public static final Translation KEYBIND_VEINCYCLE = Translation.Builder.start("key.pmmo.cyclevein")
+			.addLocale(Locale.EN_US, "Cycle Vein Mode").build();
 	public static final Translation KEYBIND_SHOWLIST = Translation.Builder.start("key.pmmo.showList")
 			.addLocale(Locale.EN_US, "Toggle Skill List").build();
 	public static final Translation KEYBIND_VEIN = Translation.Builder.start("key.pmmo.vein")
@@ -181,6 +183,8 @@ public class LangProvider extends LanguageProvider{
 	//=========KEY PRESS HANLDER===============
 	public static final Translation VEIN_BLACKLIST = Translation.Builder.start("pmmo.veinBlacklist")
 			.addLocale(Locale.EN_US, "Blacklisted blocks from Veining").build();
+	public static final Translation VEIN_SHAPE = Translation.Builder.start("pmmo.veinshape")
+			.addLocale(Locale.EN_US, "Vein Shape Set To: %s").build();
 	
 	//=========TOOLTIP HEADERS=================
 	public static final Translation REQ_WEAR = Translation.Builder.start("pmmo.toWear")
@@ -231,7 +235,8 @@ public class LangProvider extends LanguageProvider{
 	protected void addTranslations() {
 		for (Field entry : this.getClass().getDeclaredFields()) {
 			if (entry.getType() == Translation.class) {
-				//add((Translation)entry.get(LangProvider.class));
+				try {add((Translation)entry.get(LangProvider.class));}
+				catch(Exception e) {e.printStackTrace();}
 			}
 		}
 		for (Translation implied : impliedTranslations) {
