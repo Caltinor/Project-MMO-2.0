@@ -148,8 +148,11 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
     }
 	
 	@Override
-	public IDataStorage get() {  
-        return server.overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
+	public IDataStorage get() { 
+		if (server != null)
+			return server.overworld().getDataStorage().computeIfAbsent(PmmoSavedData::new, PmmoSavedData::new, NAME);
+		else
+			return new PmmoSavedData();
     }
 	
 	public MinecraftServer getServer() {
