@@ -179,13 +179,14 @@ public class FeaturePerks {
 		}
 		return new CompoundTag();
 	};
-	
+
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> FALL_SAVE = (player, nbt, level) -> {
 		if (nbt.contains(APIUtils.MIN_LEVEL) && nbt.getInt(APIUtils.MIN_LEVEL) > level) return NONE;
 		CompoundTag output = new CompoundTag();
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.025;
-		int saved = (int)(perLevel * (double)level);
-		output.putInt("saved", saved);
+		float damageIn = nbt.contains(APIUtils.DAMAGE_IN) ? nbt.getFloat(APIUtils.DAMAGE_IN) : 0;
+		float saved = (int)(perLevel * (double)level);
+		output.putFloat(APIUtils.DAMAGE_OUT, Math.max(damageIn - saved, 0));
 		return output;
 	};
 
