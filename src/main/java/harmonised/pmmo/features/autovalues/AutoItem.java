@@ -163,6 +163,8 @@ public class AutoItem {
 				outMap.putAll(getWearableData(type, stack, true));
 			else if (stack.getItem() instanceof ElytraItem) 
 				outMap.putAll(getWearableData(type, stack, false));
+			else
+				outMap.putAll(AutoValueConfig.getItemXpAward(type));
 			break;
 		}
 		case CONSUME: {
