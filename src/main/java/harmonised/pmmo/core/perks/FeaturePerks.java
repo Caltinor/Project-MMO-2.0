@@ -12,6 +12,8 @@ import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -202,5 +204,23 @@ public class FeaturePerks {
 		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * modifier;
 		output.putFloat(APIUtils.DAMAGE_OUT, damage);
 		return output;
+	};
+	
+	private static final String COMMAND = "command";
+	private static final String FUNCTION = "function";
+	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> RUN_COMMAND = (p, nbt, level) -> {
+		if (!(p instanceof ServerPlayer)) return NONE;
+		ServerPlayer player = (ServerPlayer) p;
+		if (nbt.contains(FUNCTION)) {
+			player.getServer().getFunctions().execute(
+					player.getServer().getFunctions().get(new ResourceLocation(nbt.getString(FUNCTION))).get(), 
+					player.getServer().getFunctions().getGameLoopSender().withSuppressedOutput().withMaximumPermission(2));			
+		}
+		else if (nbt.contains(COMMAND)) {
+			player.getServer().getCommands().performPrefixedCommand(
+					player.getServer().getFunctions().getGameLoopSender().withSuppressedOutput().withMaximumPermission(2), 
+					nbt.getString(COMMAND));
+		}
+		return NONE;
 	};
 }
