@@ -214,11 +214,11 @@ public class FeaturePerks {
 		if (nbt.contains(FUNCTION)) {
 			player.getServer().getFunctions().execute(
 					player.getServer().getFunctions().get(new ResourceLocation(nbt.getString(FUNCTION))).get(), 
-					player.getServer().getFunctions().getGameLoopSender().withSuppressedOutput().withMaximumPermission(2));			
+					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2));			
 		}
 		else if (nbt.contains(COMMAND)) {
 			player.getServer().getCommands().performPrefixedCommand(
-					player.getServer().getFunctions().getGameLoopSender().withSuppressedOutput().withMaximumPermission(2), 
+					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2), 
 					nbt.getString(COMMAND));
 		}
 		return NONE;
