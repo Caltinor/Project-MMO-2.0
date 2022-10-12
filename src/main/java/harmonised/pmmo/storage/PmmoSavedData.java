@@ -63,11 +63,11 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 		XpEvent gainXpEvent = new XpEvent(player, skillName, oldValue, change, TagBuilder.start().build());
 		if (MinecraftForge.EVENT_BUS.post(gainXpEvent))
 			return false;
-		
+
+		setXpRaw(playerID, gainXpEvent.skill, oldValue + gainXpEvent.amountAwarded);
 		if (gainXpEvent.isLevelUp()) 
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build(), LogicalSide.SERVER);
-		setXpRaw(playerID, gainXpEvent.skill, oldValue + gainXpEvent.amountAwarded);
 		return true;
 	}
 	@Override
