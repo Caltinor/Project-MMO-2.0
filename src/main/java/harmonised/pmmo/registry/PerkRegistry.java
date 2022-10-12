@@ -58,7 +58,8 @@ public class PerkRegistry {
 				CompoundTag executionOutput = new CompoundTag();
 				int maxSetting = src.contains(APIUtils.MAX_LEVEL) ? src.getInt(APIUtils.MAX_LEVEL) : Config.MAX_LEVEL.get();
 				int minSetting = src.contains(APIUtils.MIN_LEVEL) ? src.getInt(APIUtils.MIN_LEVEL) : 0;
-				if (skillLevel <= maxSetting && skillLevel >= minSetting)
+				int perSetting = src.contains(APIUtils.MODULUS) ? src.getInt(APIUtils.MODULUS) : skillLevel;
+				if (skillLevel <= maxSetting && skillLevel >= minSetting && skillLevel % Math.max(1, perSetting) == 0)
 					executionOutput = perkExecutions.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel);
 				output = TagUtils.mergeTags(output, executionOutput);
 			}
