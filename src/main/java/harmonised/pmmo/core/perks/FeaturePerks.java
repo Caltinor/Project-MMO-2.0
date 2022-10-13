@@ -14,6 +14,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class FeaturePerks {
 	private static final CompoundTag NONE = new CompoundTag();
@@ -220,6 +222,19 @@ public class FeaturePerks {
 			player.getServer().getCommands().performPrefixedCommand(
 					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2), 
 					nbt.getString(COMMAND));
+		}
+		return NONE;
+	};
+	
+	private static final String EFFECT = "effect";
+	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> GIVE_EFFECT = (player, nbt, level) -> {
+		if (nbt.contains(EFFECT)) {
+			MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(nbt.getString(EFFECT)));
+			int perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getInt(APIUtils.PER_LEVEL) : 20;
+			int amplifier = nbt.contains(APIUtils.MODIFIER) ? nbt.getInt(APIUtils.MODIFIER) : 0;
+			boolean ambient = nbt.contains(APIUtils.AMBIENT) ? nbt.getBoolean(APIUtils.AMBIENT) : false;
+			boolean visible = nbt.contains(APIUtils.VISIBLE) ? nbt.getBoolean(APIUtils.VISIBLE) : true;
+			player.addEffect(new MobEffectInstance(effect, perLevel * level, amplifier, ambient, visible));
 		}
 		return NONE;
 	};

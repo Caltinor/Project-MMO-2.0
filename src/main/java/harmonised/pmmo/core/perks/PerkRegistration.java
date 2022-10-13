@@ -32,6 +32,7 @@ public class PerkRegistration {
 		//Effect Perks
 		APIUtils.registerPerk(rl("night_vision"), FeaturePerks.NIGHT_VISION, NONE, PerkSide.SERVER);
 		APIUtils.registerPerk(rl("regen"), FeaturePerks.REGEN, NONE, PerkSide.SERVER);
+		APIUtils.registerPerk(rl("effect"), FeaturePerks.GIVE_EFFECT, NONE, PerkSide.SERVER);
 	}
 	
 	private static TriFunction<Player, CompoundTag, Integer, CompoundTag> NONE = (a,b,c) -> {return new CompoundTag();};
