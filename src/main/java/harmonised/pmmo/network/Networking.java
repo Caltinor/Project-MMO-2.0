@@ -23,7 +23,6 @@ import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
-import net.minecraft.network.Connection;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
@@ -31,6 +30,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor.PacketTarget;
 import net.minecraftforge.network.filters.VanillaPacketSplitter;
 import net.minecraftforge.network.simple.SimpleChannel;
 
@@ -142,14 +143,14 @@ public class Networking {
 		INSTANCE.sendToServer(packet);
 	}
 	
-	public static void splitToClient(Object packet, ServerPlayer player) {
-		//this might just be a check needed for Dev, but it's in here now.
-		if (player == null) return;
-		
+	public static void splitToClient(Object packet, ServerPlayer player) {		
 		Packet<?> vanillaPacket = INSTANCE.toVanillaPacket(packet, NetworkDirection.PLAY_TO_CLIENT);
         List<Packet<?>> packets = new ArrayList<>();
         VanillaPacketSplitter.appendPackets(ConnectionProtocol.PLAY, PacketFlow.CLIENTBOUND, vanillaPacket, packets);
-        Connection connection = player.connection.getConnection();
-        packets.forEach(connection::send);
+        
+        PacketTarget target = player == null
+        		? PacketDistributor.ALL.noArg()
+        		: PacketDistributor.PLAYER.with(() -> player);
+        packets.forEach(pkt -> target.send(pkt));
 	}
 }
