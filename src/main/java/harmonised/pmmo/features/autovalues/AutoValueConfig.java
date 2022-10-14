@@ -6,11 +6,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.mojang.serialization.Codec;
+
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ReqType;
 import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
@@ -153,6 +157,7 @@ public class AutoValueConfig {
 	
 	private static Map<ReqType, ConfigObject<Map<String, Integer>>> ITEM_REQS;
 	private static Map<ReqType, ConfigObject<Map<String, Integer>>> BLOCK_REQS;
+	public static TomlConfigHelper.ConfigObject<Map<ResourceLocation, Integer>> ITEM_PENALTIES;
 	
 	public static Map<String, Integer> getItemReq(ReqType type) {
 		ConfigObject<Map<String, Integer>> configEntry = ITEM_REQS.get(type);
@@ -171,6 +176,12 @@ public class AutoValueConfig {
 		for (ReqType type : AutoItem.REQTYPES) {
 			ITEM_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
+		ITEM_PENALTIES = TomlConfigHelper.defineObject(builder.comment("")
+				, "Item Penalties"
+				, Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
+				, Map.of(new ResourceLocation("mining_fatigue"), 1,
+						new ResourceLocation("weakness"), 1,
+						new ResourceLocation("slowness"), 1));
 		builder.pop();
 		builder.push("BLocks");
 		BLOCK_REQS = new HashMap<>();

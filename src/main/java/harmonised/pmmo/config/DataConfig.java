@@ -12,6 +12,7 @@ import com.google.common.collect.LinkedListMultimap;
 import harmonised.pmmo.config.codecs.CodecMapPlayer;
 import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
 import harmonised.pmmo.config.codecs.SkillData;
+import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
@@ -106,7 +107,8 @@ public class DataConfig {
 	
 	public List<MobEffectInstance> getItemEffect(ResourceLocation itemID) {
 		List<MobEffectInstance> effects = new ArrayList<>();
-		for (Map.Entry<ResourceLocation, Integer> effect : reqEffectData.getOrDefault(itemID, new HashMap<>()).entrySet()) {
+		Map<ResourceLocation, Integer> effectSettings = reqEffectData.getOrDefault(itemID, AutoValueConfig.ITEM_PENALTIES.get());
+		for (Map.Entry<ResourceLocation, Integer> effect : effectSettings.entrySet()) {
 			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());
 			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue()));
 		}
