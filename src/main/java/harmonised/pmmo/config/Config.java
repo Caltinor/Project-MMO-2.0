@@ -232,6 +232,8 @@ public class Config {
 	public static ForgeConfigSpec.ConfigValue<Boolean>	LOSE_LEVELS_ON_DEATH;
 	public static ForgeConfigSpec.ConfigValue<Boolean> 	LOSE_ONLY_EXCESS;
 	public static ForgeConfigSpec.ConfigValue<Boolean> 	USE_EXPONENTIAL_FORUMULA;
+	public static ForgeConfigSpec.ConfigValue<Double> 	GLOBAL_MODIFIER;
+	public static TomlConfigHelper.ConfigObject<Map<String, Double>> SKILL_MODIFIERS;
 	public static ForgeConfigSpec.ConfigValue<Long> 	LINEAR_BASE_XP;
 	public static ForgeConfigSpec.ConfigValue<Double> 	LINEAR_PER_LEVEL;
 	public static ForgeConfigSpec.ConfigValue<Integer> 	EXPONENTIAL_BASE_XP;
@@ -276,6 +278,13 @@ public class Config {
 						, "for exmample if level 3 is 1000k xp and the player has 1020 and dies.  the player will only lose"
 						, "the [Loss On Death] of the 20 xp above the level's base.")
 						.define("Lose Only Excess", true);
+		GLOBAL_MODIFIER = builder.comment("Modifies how much xp is earned.  This is multiplicative to the XP.")
+						.define("Global Modifier", 1.0);
+		SKILL_MODIFIERS = TomlConfigHelper.defineObject(builder.comment("Modifies xp gains for specific skills.  This is multiplicative to the XP.")
+							, "Skill Modifiers"
+							, CodecTypes.DOUBLE_CODEC
+							, Collections.singletonMap("agility", 1.0)); 			
+					
 		
 		//========LINEAR SECTION===============
 		builder.comment("Settings for Linear XP configuration").push("LINEAR LEVELS");
