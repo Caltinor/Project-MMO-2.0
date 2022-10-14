@@ -203,7 +203,7 @@ public class PackGenerator {
 						"}")),
 		ENCHANTMENTS("pmmo/enchantments", server -> ForgeRegistries.ENCHANTMENTS.getKeys(), 
 				List.of("{",
-						"\"1\":{}",
+						"\"levels\":[]",
 						"}"));
 		
 		public String route;

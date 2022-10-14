@@ -26,7 +26,6 @@ public class CodecTypes {
 	public static final Codec<Map<String, Double>> DOUBLE_CODEC = Codec.unboundedMap(Codec.STRING, Codec.DOUBLE);
 	public static final Codec<Map<String, Long>> LONG_CODEC = Codec.unboundedMap(Codec.STRING, Codec.LONG);
 	public static final Codec<Map<String, Integer>> INTEGER_CODEC = Codec.unboundedMap(Codec.STRING, Codec.INT);	
-	public static final Codec<Map<String, Map<String, Integer>>> ENCHANTMENT_CODEC = Codec.unboundedMap(Codec.STRING, INTEGER_CODEC);
 	
 	public static record ModifierData(Map<ModifierDataType, Map<String, Double>> obj) {}
 	public static final Codec<ModifierData> MODIFIER_CODEC = RecordCodecBuilder.create(instance -> instance.group(

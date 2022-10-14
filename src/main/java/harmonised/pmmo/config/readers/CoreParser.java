@@ -1,6 +1,7 @@
 package harmonised.pmmo.config.readers;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,10 +18,10 @@ import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.codecs.CodecMapEnchantment;
 import harmonised.pmmo.config.codecs.CodecMapLocation;
 import harmonised.pmmo.config.codecs.CodecMapObject;
 import harmonised.pmmo.config.codecs.CodecMapPlayer;
-import harmonised.pmmo.config.codecs.CodecTypes;
 import harmonised.pmmo.config.codecs.CodecTypes.*;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.nbt.LogicEntry;
@@ -187,24 +188,19 @@ public class CoreParser {
 		});
 	}
 	
-	public static final MergeableCodecDataManager<Map<String, Map<String, Integer>>, Map<Integer, Map<String, Integer>>> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
-			"pmmo/enchantments", DATA_LOGGER, CodecTypes.ENCHANTMENT_CODEC, raws -> mergeEnchantmentTags(raws), processed -> finalizeEnchantmentMaps(processed));
-	private static Map<Integer, Map<String, Integer>> mergeEnchantmentTags(final List<Map<String, Map<String, Integer>>> raws) {
-		Map<Integer, Map<String, Integer>> outMap = new HashMap<>();
-		for (int i = 0; i < raws.size(); i++) {
-			for (Map.Entry<String, Map<String, Integer>> map : raws.get(i).entrySet()) {
-				int enchantLevel = 10000;
-				try {enchantLevel = Integer.valueOf(map.getKey());} 
-				catch(NumberFormatException e) {MsLoggy.ERROR.log(LOG_CODE.DATA, "Enchantment Number Incorrectly Defined:", e);}
-				
-				outMap.computeIfAbsent(enchantLevel, (k) -> new HashMap<>());
-				final int ultimateLevel = enchantLevel;
-				map.getValue().forEach((k, v) -> {
-					outMap.get(ultimateLevel).put(k, v);
-				});
-			}
+	public static final MergeableCodecDataManager<CodecMapEnchantment, Map<Integer, Map<String, Integer>>> ENCHANTMENT_LOADER = new MergeableCodecDataManager<>(
+			"pmmo/enchantments", DATA_LOGGER, CodecMapEnchantment.CODEC, raws -> mergeEnchantmentTags(raws), processed -> finalizeEnchantmentMaps(processed));
+	private static Map<Integer, Map<String, Integer>> mergeEnchantmentTags(final List<CodecMapEnchantment> raws) {
+		CodecMapEnchantment mergedObject = new CodecMapEnchantment(false, new ArrayList<>());
+		for (CodecMapEnchantment entry : raws) {
+			mergedObject = CodecMapEnchantment.combine(mergedObject, entry);
 		}
-		return outMap;
+		
+		Map<Integer, Map<String, Integer>> outMap = new HashMap<>();
+		for (int i = 0; i < mergedObject.skillArray().size(); i++) {
+			outMap.put(i+1, mergedObject.skillArray().get(i));
+		}
+ 		return outMap;
 	}
 	private static void finalizeEnchantmentMaps(Map<ResourceLocation, Map<Integer, Map<String, Integer>>> data) {
 		data.forEach((rl, map) -> {
