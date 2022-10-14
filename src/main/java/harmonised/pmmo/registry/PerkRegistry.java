@@ -1,5 +1,6 @@
 package harmonised.pmmo.registry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.TagUtils;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
@@ -58,8 +61,16 @@ public class PerkRegistry {
 				CompoundTag executionOutput = new CompoundTag();
 				int maxSetting = src.contains(APIUtils.MAX_LEVEL) ? src.getInt(APIUtils.MAX_LEVEL) : Config.MAX_LEVEL.get();
 				int minSetting = src.contains(APIUtils.MIN_LEVEL) ? src.getInt(APIUtils.MIN_LEVEL) : 0;
-				int perSetting = src.contains(APIUtils.MODULUS) ? src.getInt(APIUtils.MODULUS) : skillLevel;
-				if (skillLevel <= maxSetting && skillLevel >= minSetting && skillLevel % Math.max(1, perSetting) == 0)
+				int perSetting = src.contains(APIUtils.MODULUS) ? src.getInt(APIUtils.MODULUS) : -1;
+				List<Integer> milestones = src.contains(APIUtils.MILESTONES) 
+						? src.getList(APIUtils.MILESTONES, Tag.TAG_DOUBLE).stream().map(tag -> ((DoubleTag)tag).getAsInt()).toList()
+						: new ArrayList<>();
+				if (skillLevel <= maxSetting && skillLevel >= minSetting 
+						&& ( 
+							   (perSetting != -1	  && skillLevel % Math.max(1, perSetting) == 0) 
+							|| (!milestones.isEmpty() && milestones.contains(skillLevel))
+						)
+					)
 					executionOutput = perkExecutions.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel);
 				output = TagUtils.mergeTags(output, executionOutput);
 			}
