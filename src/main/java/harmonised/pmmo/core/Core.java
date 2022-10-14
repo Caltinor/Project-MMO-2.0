@@ -437,7 +437,10 @@ public class Core {
 			for (int i = 0; i < players.size(); i++) {
 				if (players.get(i) instanceof FakePlayer) continue;
 				for (Map.Entry<String, Long> award : xpValues.entrySet()) {
-					long xpAward = award.getValue();
+					double modifier = Config.SKILL_MODIFIERS.get().containsKey(award.getKey()) 
+							? Config.SKILL_MODIFIERS.get().getOrDefault(award.getKey(), 1d) 
+							: Config.GLOBAL_MODIFIER.get();
+					long xpAward = (long)((double)award.getValue() * modifier);
 					if (players.size() > 1)
 						xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
 					getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
