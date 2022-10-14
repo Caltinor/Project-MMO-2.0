@@ -519,6 +519,7 @@
   "pmmo.enum.WORN": "Worn Modifier",
     
     "pmmo.playerspecific.ignorereq":"Ignore Reqs: %1$s",
-    "pmmo.playerspecific.bonus":"Player Bonuses:"
+    "pmmo.playerspecific.bonus":"Player Bonuses:",
+    "pmmo.leveled_up": "You leveled up to %s in %s"
   
 }

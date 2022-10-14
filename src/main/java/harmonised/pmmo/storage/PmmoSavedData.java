@@ -19,6 +19,7 @@ import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;
@@ -65,9 +66,11 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			return false;
 
 		setXpRaw(playerID, gainXpEvent.skill, oldValue + gainXpEvent.amountAwarded);
-		if (gainXpEvent.isLevelUp()) 
+		if (gainXpEvent.isLevelUp()) {
+			player.displayClientMessage(LangProvider.LEVELED_UP.asComponent(gainXpEvent.endLevel(), LangProvider.skill(skillName)), false);
 			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
 					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build(), LogicalSide.SERVER);
+		}
 		return true;
 	}
 	@Override

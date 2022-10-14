@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.common.data.LanguageProvider;
+import net.minecraftforge.fml.LogicalSide;
 
 public class LangProvider extends LanguageProvider{
 	private String locale;
@@ -231,6 +233,8 @@ public class LangProvider extends LanguageProvider{
 	//=========FEATURES===========================
 	public static final Translation FOUND_TREASURE = Translation.Builder.start("pmmo.youFoundTreasure")
 			.addLocale(Locale.EN_US, "You Found Treasure!").build();
+	public static final Translation LEVELED_UP = Translation.Builder.start("pmmo.leveled_up")
+			.addLocale(Locale.EN_US, "You leveled up to %s in %s").build();
 	
 	@Override
 	protected void addTranslations() {
@@ -251,6 +255,10 @@ public class LangProvider extends LanguageProvider{
 	
 	private static void addEN_US(String key, String translation) {
 		impliedTranslations.add(Translation.Builder.start(key).addLocale(Locale.EN_US, translation).build());
+	}
+	
+	public static MutableComponent skill(String skill) {
+		return Component.translatable("pmmo."+skill).withStyle(style -> style.withColor(Core.get(LogicalSide.SERVER).getDataConfig().getSkillColor(skill)));
 	}
 	
 	public static record Translation(String key, Map<String, String> localeMap) {
