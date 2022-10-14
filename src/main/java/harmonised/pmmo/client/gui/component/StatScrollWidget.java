@@ -19,6 +19,8 @@ import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
+import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -83,11 +85,10 @@ public class StatScrollWidget extends ScrollPanel{
 	//Utility method for uniform nesting indentation
 	private int step(int level) {return level * 10;}
 	
-	@SuppressWarnings("deprecation")
 	private void generateContent() {
 		Core core = Core.get(LogicalSide.CLIENT);
 		
-		content.add(new Element(Component.translatable("pmmo.event_header").withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+		content.add(new Element(LangProvider.EVENT_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 		for (EventType event : EventType.values()) {
 			Map<String, Long> xpAwards = 
 					entity != null ? core.getExperienceAwards(event, entity, null, new CompoundTag()) :
@@ -102,7 +103,7 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 		}
 		
-		content.add(new Element(Component.translatable("pmmo.req_header").withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+		content.add(new Element(LangProvider.REQ_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 		for (ReqType reqType : ReqType.values()) {
 			if (!Config.reqEnabled(reqType).get()) continue;
 			Map<String, Integer> reqMap = 
@@ -123,19 +124,19 @@ public class StatScrollWidget extends ScrollPanel{
 		
 		
 		if (stack != null) {
-			List<MobEffectInstance> reqEffects = core.getDataConfig().getItemEffect(stack.getItem().builtInRegistryHolder().unwrapKey().get().location());
+			List<MobEffectInstance> reqEffects = core.getDataConfig().getItemEffect(RegistryUtil.getId(stack));
 			if (reqEffects.size() > 0) {
-				content.add(new Element(Component.translatable("pmmo.req_effects_header"), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new Element(LangProvider.REQ_EFFECTS_HEADER.asComponent(), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 				for (MobEffectInstance mei : reqEffects) {
 					content.add(new Element(mei.getEffect().getDisplayName(), step(1), 0xFFFFFF, false, 0));
 				}
 			}
 			
-			content.add(new Element(Component.translatable("pmmo.modifier_header").withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+			content.add(new Element(LangProvider.MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 			for (ModifierDataType mod : ModifierDataType.values()) {
-				Map<String, Double> modifiers = core.getTooltipRegistry().bonusTooltipExists(stack.getItem().builtInRegistryHolder().unwrapKey().get().location(), mod) ?
-						core.getTooltipRegistry().getBonusTooltipData(stack.getItem().builtInRegistryHolder().unwrapKey().get().location(), mod, stack) :
-						core.getXpUtils().getObjectModifierMap(mod, stack.getItem().builtInRegistryHolder().unwrapKey().get().location());
+				Map<String, Double> modifiers = core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(stack), mod) ?
+						core.getTooltipRegistry().getBonusTooltipData(RegistryUtil.getId(stack), mod, stack) :
+						core.getXpUtils().getObjectModifierMap(mod, RegistryUtil.getId(stack));
 				if (!modifiers.isEmpty()) {
 					content.add(new Element(mod, 1, 0xFFFFFF, false, 0));
 					for (Map.Entry<String, Double> map : modifiers.entrySet()) {
@@ -144,7 +145,7 @@ public class StatScrollWidget extends ScrollPanel{
 				}
 			}
 			
-			Map<ResourceLocation, SalvageData> salvage = core.getSalvageLogic().getSalvageData(stack.getItem().builtInRegistryHolder().unwrapKey().get().location());
+			Map<ResourceLocation, SalvageData> salvage = core.getSalvageLogic().getSalvageData(RegistryUtil.getId(stack));
 			if (!salvage.isEmpty()) {
 				content.add(new Element(Component.translatable("pmmo.salvage_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 				for (Map.Entry<ResourceLocation, SalvageData> salvageEntry : salvage.entrySet()) {

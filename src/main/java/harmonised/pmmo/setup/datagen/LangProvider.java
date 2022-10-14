@@ -149,14 +149,13 @@ public class LangProvider extends LanguageProvider{
 		addEN_US("pmmo.enum.TRAVEL","Travel to");
 		addEN_US("pmmo.enum.RIDE","Ride/Drive");
 		addEN_US("pmmo.enum.TAME","Tame Animal");
-		//addEN_US("pmmo.enum.BREED","Breed Animal");
 		addEN_US("pmmo.enum.INTERACT","Interact with Block");
 		addEN_US("pmmo.enum.ENTITY_INTERACT","Interact with Entity");
 		
-		addEN_US("pmmo.enum.BIOME","Biome Modifier");
-	    addEN_US("pmmo.enum.HELD","Held Modifier");
-	    addEN_US("pmmo.enum.WORN","Worn Modifier");
-	    addEN_US("pmmo.enum.DIMENSION","Dimension Modifier");
+		addEN_US("pmmo.enum.BIOME","Biome");
+	    addEN_US("pmmo.enum.HELD","Held In Hand");
+	    addEN_US("pmmo.enum.WORN","Worn");
+	    addEN_US("pmmo.enum.DIMENSION","Dimension");
 	}
 
 	//=========KEY BINDINGS====================
@@ -228,7 +227,14 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Cost to break as block: %s").build();
 	
 	//=========STAT SCROLL WIDGET=================
-	
+	public static final Translation EVENT_HEADER = Translation.Builder.start("pmmo.event_header")
+			.addLocale(Locale.EN_US, "XP Award Events").build();
+	public static final Translation REQ_HEADER = Translation.Builder.start("pmmo.req_header")
+			.addLocale(Locale.EN_US, "Requirements").build();
+	public static final Translation REQ_EFFECTS_HEADER = Translation.Builder.start("pmmo.req_effects_header")
+			.addLocale(Locale.EN_US, "Negative Effects for unmet Reqs").build();
+	public static final Translation MODIFIER_HEADER = Translation.Builder.start("pmmo.modifier_header")
+			.addLocale(Locale.EN_US, "XP Modifiers").build();
 	
 	//=========FEATURES===========================
 	public static final Translation FOUND_TREASURE = Translation.Builder.start("pmmo.youFoundTreasure")
