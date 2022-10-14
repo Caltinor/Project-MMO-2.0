@@ -21,12 +21,12 @@ import harmonised.pmmo.setup.ClientSetup;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.setup.datagen.LangProvider.Translation;
 import harmonised.pmmo.util.Reference;
+import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -48,9 +48,7 @@ public class TooltipHandler {
         if(player != null) {
         	Core core = Core.get(LogicalSide.CLIENT);
             ItemStack stack = event.getItemStack();
-            Item item = stack.getItem();
-            @SuppressWarnings("deprecation")
-			ResourceLocation itemID = item.builtInRegistryHolder().unwrapKey().get().location();
+			ResourceLocation itemID = RegistryUtil.getId(stack);
 
             if(itemID == null)
                 return;
