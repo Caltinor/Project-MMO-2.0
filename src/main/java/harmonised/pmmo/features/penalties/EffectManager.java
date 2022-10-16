@@ -36,7 +36,8 @@ public class EffectManager {
 		for (ItemStack stack : items) {
 			if (!stack.isEmpty() && !core.isActionPermitted(ReqType.WEAR, stack, player)) {
 				for (MobEffectInstance mei : core.getDataConfig().getItemEffect(RegistryUtil.getId(stack))) {
-					player.addEffect(mei);
+					if (!player.hasEffect(mei.getEffect()) || player.getEffect(mei.getEffect()).getDuration() < 10)
+						player.addEffect(mei);
 				}
 			}
 		}
