@@ -176,7 +176,7 @@ public class AutoValueConfig {
 		for (ReqType type : AutoItem.REQTYPES) {
 			ITEM_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
-		ITEM_PENALTIES = TomlConfigHelper.defineObject(builder.comment("")
+		ITEM_PENALTIES = TomlConfigHelper.defineObject(builder.comment("What effects and levels should be applied if a player does not meet an item req")
 				, "Item Penalties"
 				, Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
 				, Map.of(new ResourceLocation("mining_fatigue"), 1,
