@@ -308,34 +308,20 @@ public class Config {
 	}
 	
 	private static BooleanValue[] REQ_ENABLED;
-	private static BooleanValue[] STRICT_REQS;
 	
 	private static final String REQ_ENABLED_SUFFIX = " Req Enabled";
-	private static final String STRICT_REQ_SUFFIX  = " Req Strict";
 	
 	public static BooleanValue reqEnabled(ReqType type) {return REQ_ENABLED[type.ordinal()];}
-	public static BooleanValue reqStrict(ReqType type) {return STRICT_REQS[type.ordinal()];}
 	
 	private static void buildRequirements(ForgeConfigSpec.Builder builder) {
 		List<ReqType> rawReqList = new ArrayList<>(Arrays.asList(ReqType.values()));
 		
-		builder.comment("Settngs governing requirements at the macro level").push("Requirements");
-		builder.comment("Should requirements apply for the applicable action type").push("Req_Enabled");		
+		builder.comment("Should requirements apply for the applicable action type").push("Requirements");		
 		
 		REQ_ENABLED = rawReqList.stream().map((t) -> {
 			return builder.define(t.toString()+REQ_ENABLED_SUFFIX, true);
 		}).toArray(BooleanValue[]::new);
 		
-		builder.pop();
-		builder.comment("Should requirements be strictly enforced?"
-				, "if no, then requirements will have certain penalties applied"
-				, "proportionate to the gap between the player and the requirement").push("Strict_Reqs");
-		
-		STRICT_REQS = rawReqList.stream().map((t) -> {
-			return builder.define(t.toString()+STRICT_REQ_SUFFIX, true);
-		}).toArray(BooleanValue[]::new);
-		
-		builder.pop();
 		builder.pop();
 		
 	}
