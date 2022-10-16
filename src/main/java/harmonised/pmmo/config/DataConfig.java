@@ -110,7 +110,7 @@ public class DataConfig {
 		Map<ResourceLocation, Integer> effectSettings = reqEffectData.getOrDefault(itemID, AutoValueConfig.ITEM_PENALTIES.get());
 		for (Map.Entry<ResourceLocation, Integer> effect : effectSettings.entrySet()) {
 			MobEffect effectRoot = ForgeRegistries.MOB_EFFECTS.getValue(effect.getKey());
-			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue()));
+			effects.add(new MobEffectInstance(effectRoot, 75, effect.getValue(), true, true));
 		}
 		return effects;
 	}

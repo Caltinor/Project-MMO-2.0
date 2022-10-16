@@ -32,12 +32,13 @@ public class PlayerTickHandler {
 		
 		Player player = event.player;
 		Core core = Core.get(event.side);
-		
-		//Apply positive and negative effects based on biome and items worn
-		EffectManager.applyEffects(core, player);
+
 		//Recharge vein items
-		if (player instanceof ServerPlayer)
+		if (player instanceof ServerPlayer) {
 			VeinMiningLogic.regenerateVein((ServerPlayer)player);
+			//Apply positive and negative effects based on biome and items worn
+			EffectManager.applyEffects(core, player);
+		}
 		
 		if (!airLast.containsKey(player.getUUID()))
 			airLast.put(player.getUUID(), player.getAirSupply());
