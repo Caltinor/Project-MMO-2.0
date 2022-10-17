@@ -289,9 +289,9 @@ public class Config {
 		//========LINEAR SECTION===============
 		builder.comment("Settings for Linear XP configuration").push("LINEAR LEVELS");
 		LINEAR_BASE_XP = builder.comment("what is the base xp to reach level 2 (this + level * xpPerLevel)")
-							.defineInRange("Base XP", 250l, 1l, Long.MAX_VALUE);
+							.defineInRange("Base XP", 250l, 0l, Long.MAX_VALUE);
 		LINEAR_PER_LEVEL = builder.comment("What is the xp increase per level (baseXp + level * this)")
-							.defineInRange("Per Level", 500d, 1d, Double.MAX_VALUE);		
+							.defineInRange("Per Level", 500d, 0d, Double.MAX_VALUE);		
 		builder.pop(); //COMPLETE LINEAR BLOCK
 		
 		//========EXPONENTIAL SECTION==========
