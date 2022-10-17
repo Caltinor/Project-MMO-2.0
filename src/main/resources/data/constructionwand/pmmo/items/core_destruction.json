@@ -1,0 +1,39 @@
+{
+    "override": true,
+    "xp_values":{
+        "CRAFT": {
+            "crafting": 10000,
+            "smithing": 7000
+        }
+    },
+    "salvage":{
+        "minecraft:diamond": {
+            "salvageMax": 6,
+            "baseChance": 0.0,
+            "maxChance": 0.9,
+            "chancePerLevel": {
+                "smithing": 0.005
+            },
+            "levelReq": {
+                "smithing": 5
+            },
+            "xpPerItem": {
+                "smithing": 30
+            }
+        },
+        "minecraft:diamond_block": {
+            "salvageMax": 1,
+            "baseChance": 0.0,
+            "maxChance": 0.9,
+            "chancePerLevel": {
+                "smithing": 0.005
+            },
+            "levelReq": {
+                "smithing": 5
+            },
+            "xpPerItem": {
+                "smithing": 180
+            }
+        }
+    }
+}
