@@ -51,7 +51,6 @@ import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 
-import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
@@ -246,24 +245,15 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 	{
 		return event -> {
 			ServerPlayer player = event.getPlayer();
-			PACKET packet = packetFactory.apply(this.data);
+			List<PACKET> packets = new ArrayList<>();
+			for (Map.Entry<ResourceLocation, FINE> entry : this.data.entrySet()) {
+				packets.add(packetFactory.apply(Map.of(entry.getKey(), entry.getValue())));
+			}
+			//packetFactory.apply(this.data);
 			PacketTarget target = player == null
 				? PacketDistributor.ALL.noArg()
 				: PacketDistributor.PLAYER.with(() -> player);
-			channel.send(target, packet);
+			packets.forEach(packet -> channel.send(target, packet));
 		};
 	}
-	
-	public <PACKET> MergeableCodecDataManager<RAW, FINE> subscribeAsSplitSyncable(final SimpleChannel channel,
-			final Function<Map<ResourceLocation, FINE>, PACKET> packetFactory)
-	{
-		MinecraftForge.EVENT_BUS.addListener(this.getDatapackSyncSplitListener(channel, packetFactory));
-		return this;
-	}
-	
-	private <PACKET> Consumer<OnDatapackSyncEvent> getDatapackSyncSplitListener(final SimpleChannel channel,
-			final Function<Map<ResourceLocation, FINE>, PACKET> packetFactory)
-		{
-			return event -> Networking.splitToClient(packetFactory.apply(this.data), event.getPlayer());
-		}
 }

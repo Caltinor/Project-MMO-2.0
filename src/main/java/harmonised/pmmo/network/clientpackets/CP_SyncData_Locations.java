@@ -33,6 +33,7 @@ public class CP_SyncData_Locations {
 	}
 	public void encode(FriendlyByteBuf buf) {
 		buf.writeNbt((CompoundTag)(MAPPER.encodeStart(NbtOps.INSTANCE, data).result().orElse(new CompoundTag())));
+		MsLoggy.DEBUG.log(LOG_CODE.NETWORK, "Payload for {} is {}", this.getClass().getSimpleName(), buf.readableBytes());
 	}
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
