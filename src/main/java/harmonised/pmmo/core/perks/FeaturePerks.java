@@ -101,7 +101,6 @@ public class FeaturePerks {
 	
 	private static final UUID hpModifierID     = UUID.fromString("c95a6e8c-a1c3-4177-9118-1e2cf49b7fcb");
 	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> HEALTH = (player, nbt, level) -> {
-		if (nbt.contains(APIUtils.MIN_LEVEL) && nbt.getInt(APIUtils.MIN_LEVEL) > level) return NONE;
 		double perLevel = nbt.contains(APIUtils.PER_LEVEL) ? nbt.getDouble(APIUtils.PER_LEVEL) : 0.05;
 		int maxHeart	= nbt.contains(APIUtils.MAX_BOOST) ? nbt.getInt(APIUtils.MAX_BOOST) : 10;
 		int heartBoost = (int)(perLevel * (double)level);
