@@ -65,9 +65,10 @@ public class PerkRegistry {
 				List<Integer> milestones = src.contains(APIUtils.MILESTONES) 
 						? src.getList(APIUtils.MILESTONES, Tag.TAG_DOUBLE).stream().map(tag -> ((DoubleTag)tag).getAsInt()).toList()
 						: new ArrayList<>();
+				
 				if (skillLevel <= maxSetting && skillLevel >= minSetting 
-						&& ( 
-							   (perSetting != -1	  && skillLevel % Math.max(1, perSetting) == 0) 
+						&& ( (perSetting == -1 && milestones.isEmpty())
+							|| (perSetting != -1	  && skillLevel % Math.max(1, perSetting) == 0) 
 							|| (!milestones.isEmpty() && milestones.contains(skillLevel))
 						)
 					)
