@@ -17,12 +17,12 @@ import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.IDataStorage;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_SyncData_ClearXp;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -66,21 +66,21 @@ public class CmdNodeAdmin {
 			if (isSet) {
 				if (isLevel) {
 					data.setPlayerSkillLevel(skillName, player.getUUID(), value.intValue());
-					ctx.getSource().sendSuccess(new TranslatableComponent("pmmo.setLevel", skillName, value, player.getName()), true);
+					ctx.getSource().sendSuccess(LangProvider.SET_LEVEL.asComponent(skillName, value, player.getName()), true);
 				}
 				else {
 					data.setXpRaw(player.getUUID(), skillName, value);
-					ctx.getSource().sendSuccess(new TranslatableComponent("pmmo.setXp", skillName, value, player.getName()), true);
+					ctx.getSource().sendSuccess(LangProvider.SET_XP.asComponent(skillName, value, player.getName()), true);
 				}
 			}
 			else {
 				if (isLevel) {
 					data.changePlayerSkillLevel(skillName, player.getUUID(), value.intValue());
-					ctx.getSource().sendSuccess(new TranslatableComponent("pmmo.addLevel", skillName, value, player.getName()), true);
+					ctx.getSource().sendSuccess(LangProvider.ADD_LEVEL.asComponent(skillName, value, player.getName()), true);
 				}
 				else {
 					data.setXpDiff(player.getUUID(), skillName, value);
-					ctx.getSource().sendSuccess(new TranslatableComponent("pmmo.addXp", skillName, value, player.getName()), true);
+					ctx.getSource().sendSuccess(LangProvider.ADD_XP.asComponent(skillName, value, player.getName()), true);
 				}
 			}
 		}
@@ -103,7 +103,7 @@ public class CmdNodeAdmin {
 			ctx.getSource().sendSuccess(player.getName(), false);
 			for (Map.Entry<String, Long> skillMap : data.getXpMap(player.getUUID()).entrySet()) {
 				int level = data.getLevelFromXP(skillMap.getValue());
-				ctx.getSource().sendSuccess(new TextComponent(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
+				ctx.getSource().sendSuccess(Component.literal(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
 			}
 		}
 		return 0;
