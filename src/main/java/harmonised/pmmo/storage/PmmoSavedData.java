@@ -66,20 +66,22 @@ public class PmmoSavedData extends SavedData implements IDataStorage{
 			return false;
 
 		setXpRaw(playerID, gainXpEvent.skill, oldValue + gainXpEvent.amountAwarded);
-		if (gainXpEvent.isLevelUp()) {
-			player.displayClientMessage(LangProvider.LEVELED_UP.asComponent(gainXpEvent.endLevel(), LangProvider.skill(skillName)), false);
-			Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
-					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build(), LogicalSide.SERVER);
-		}
 		return true;
 	}
 	@Override
 	public void setXpRaw(UUID playerID, String skillName, long value) {
+		long formerRaw = getLevelFromXP(getXpRaw(playerID, skillName));
 		xp.computeIfAbsent(playerID, s -> new HashMap<>()).put(skillName, value);
 		this.setDirty();
-		if (server.getPlayerList().getPlayer(playerID) != null) {
-			Networking.sendToClient(new CP_UpdateExperience(skillName, value), server.getPlayerList().getPlayer(playerID));
+		ServerPlayer player;
+		if ((player = server.getPlayerList().getPlayer(playerID)) != null) {
+			Networking.sendToClient(new CP_UpdateExperience(skillName, value), player);
 			MsLoggy.DEBUG.log(LOG_CODE.XP, "Skill Update Packet sent to Client"+playerID.toString());
+			//capture command cases for XP gain which should prompt a skillup event
+			if (formerRaw != getLevelFromXP(value)) {
+				Core.get(LogicalSide.SERVER).getPerkRegistry().executePerk(EventType.SKILL_UP, player,
+					TagBuilder.start().withString(FireworkHandler.FIREWORK_SKILL, skillName).build(), LogicalSide.SERVER);
+			}
 		}
 	}
 	@Override
