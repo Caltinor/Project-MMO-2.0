@@ -32,6 +32,16 @@ public class TooltipRegistry {
 	
 	private Map<ModifierDataType, LinkedListMultimap<ResourceLocation, Function<ItemStack, Map<String, Double>>>> itemBonusTooltips = new HashMap<>();
 	
+	public void clearRegistry() {
+		itemReqTooltips = new HashMap<>();
+		blockReqTooltips = new HashMap<>();
+		entityReqTooltips = new HashMap<>();
+		itemXpGainTooltips = new HashMap<>();
+		blockXpGainTooltips = new HashMap<>();
+		entityXpGainTooltips = new HashMap<>();
+		itemBonusTooltips = new HashMap<>();
+	}
+	
 	/**registers a Function to be used in providing the requirements for specific item
 	 * skill requirements. The map consists of skill name and skill value pairs.  
 	 * The ResouceLocation and ReqType parameters are conditions for when this check
