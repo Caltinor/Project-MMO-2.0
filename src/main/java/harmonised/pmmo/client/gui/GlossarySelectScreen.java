@@ -47,17 +47,17 @@ public class GlossarySelectScreen extends Screen{
 	protected void init() {
 		renderX = this.width/2 - 128;
 		renderY = this.height/2 - 128;
-		selectSection = new SelectionWidget<>(this.width/2 - 100, 25, 200, 
+		selectSection = new SelectionWidget<>(this.width/2 - 100, renderY + 25, 200, 
 				LangProvider.GLOSSARY_DEFAULT_SECTION.asComponent(), 
 				this::updateSelection);
 		selectSection.setEntries(SELECTION.CHOICE_LIST);
 		
-		selectObject = new SelectionWidget<>(this.width/2 - 100, 50, 200, 
+		selectObject = new SelectionWidget<>(this.width/2 - 100, renderY + 50, 200, 
 				LangProvider.GLOSSARY_DEFAULT_OBJECT.asComponent(), 
 				sel -> {object = sel.reference; this.updateEnum(sel);});
 		selectObject.visible = false;
 		
-		selectSkills = new SelectionWidget<>(this.width/2 - 100, 75, 200, 
+		selectSkills = new SelectionWidget<>(this.width/2 - 100, renderY + 75, 200, 
 				LangProvider.GLOSSARY_DEFAULT_SKILL.asComponent(), 
 				sel -> skill = sel.reference);
 		
@@ -70,14 +70,15 @@ public class GlossarySelectScreen extends Screen{
 		);
 		selectSkills.visible = false;
 		
-		selectEnum = new SelectionWidget<>(this.width/2 - 100, 100, 200, 
+		selectEnum = new SelectionWidget<>(this.width/2 - 100, renderY + 100, 200, 
 				LangProvider.GLOSSARY_DEFAULT_ENUM.asComponent(), 
 				sel -> type = sel.reference);
 		selectEnum.visible = false;
 		
-		viewButton = new Button(this.width/2 - 20, 125, 80, 20, 
+		viewButton = new Button(this.width/2 - 40, renderY + 125, 80, 20, 
 				LangProvider.GLOSSARY_VIEW_BUTTON.asComponent(), 
 				button -> Minecraft.getInstance().setScreen(new StatsScreen(selection, object, skill, type)));
+		viewButton.visible = false;
 		
 		addRenderableWidget(viewButton);
 		addRenderableWidget(selectEnum);
@@ -99,6 +100,19 @@ public class GlossarySelectScreen extends Screen{
 	}
 	
 	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrolled) {
+		if (selectSection.isExtended())
+			return selectSection.mouseScrolled(mouseX, mouseY, scrolled) || super.mouseScrolled(mouseX, mouseY, scrolled);
+		if (selectObject.isExtended())
+			return selectObject.mouseScrolled(mouseX, mouseY, scrolled) || super.mouseScrolled(mouseX, mouseY, scrolled);
+		if (selectSkills.isExtended())
+			return selectSkills.mouseScrolled(mouseX, mouseY, scrolled) || super.mouseScrolled(mouseX, mouseY, scrolled);
+		if (selectEnum.isExtended())
+			return selectEnum.mouseScrolled(mouseX, mouseY, scrolled) || super.mouseScrolled(mouseX, mouseY, scrolled);
+		return super.mouseScrolled(mouseX, mouseY, scrolled);
+	}
+	
+	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int partialTicks) {
 		if (selectSection.isExtended())
 			return selectSection.mouseClicked(mouseX, mouseY, partialTicks) || super.mouseClicked(mouseX, mouseY, partialTicks);
@@ -116,7 +130,8 @@ public class GlossarySelectScreen extends Screen{
 		selectObject.visible = true;
 		selectObject.setEntries(selection == SELECTION.SALVAGE ? List.of(new SelectionEntry<OBJECT>(OBJECT.ITEMS.text, OBJECT.ITEMS)) : OBJECT.CHOICE_LIST);
 		selectSkills.visible = true;
-		selectEnum.visible = selection != SELECTION.SALVAGE;		
+		selectEnum.visible = selection != SELECTION.SALVAGE;	
+		viewButton.visible = true;
 	}
 	
 	private void updateEnum(SelectionEntry<OBJECT> sel) {
