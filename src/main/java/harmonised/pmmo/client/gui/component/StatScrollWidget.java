@@ -1,11 +1,14 @@
 package harmonised.pmmo.client.gui.component;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -13,6 +16,8 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
+import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
@@ -23,40 +28,82 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.gui.widget.ScrollPanel;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class StatScrollWidget extends ScrollPanel{
-	private static record Element(Component text, int xOffset, int color, boolean isHeader, int headerColor) {
-		public Element(String key, int value, int xOffset, int color) {
+	private static interface Element {public void render(PoseStack poseStack, int x, int y, int width, ItemRenderer itemRenderer);}
+	
+	private static record TextElement(Component text, int xOffset, int color, boolean isHeader, int headerColor) implements Element{
+		public TextElement(String key, int value, int xOffset, int color) {
 			this(Component.translatable("pmmo."+key).append(Component.literal(": "+value)), xOffset, color, false, 0);
 		}
-		public Element(String key, long value, int xOffset, int color) {
+		public TextElement(String key, long value, int xOffset, int color) {
 			this(Component.translatable("pmmo."+key).append(Component.literal(": "+value)), xOffset, color, false, 0);
 		}
-		public Element(String key, double value, int xOffset, int color) {
+		public TextElement(String key, double value, int xOffset, int color) {
 			this(Component.translatable("pmmo."+key).append(Component.literal(": "+DP.dp(value*100)+"%")), xOffset, color, false, 0);
 		}
-		public Element(Enum<?> type, int xOffset, int color, boolean isHeader, int headerColor) {
+		public TextElement(Enum<?> type, int xOffset, int color, boolean isHeader, int headerColor) {
 			this(Component.translatable("pmmo.enum."+type.name()), xOffset, color, isHeader, headerColor);
+		}
+		@SuppressWarnings("resource")
+		@Override
+		public void render(PoseStack poseStack, int x, int y, int width, ItemRenderer unused) {
+			if (isHeader()) 
+				GuiComponent.fill(poseStack, x, y, x+width, y+12, headerColor());
+			GuiComponent.drawString(poseStack, Minecraft.getInstance().font, text(), x + xOffset(), y, color());
 		}
 	}
 	
-	private ItemStack stack = null;
-	private BlockPos blockPos = null;
-	private Entity entity = null;
+	private static record RenderableElement(Component text, int xOffset, int color, int headerColor, ItemStack stack, Block block, Entity entity) implements Element{
+		RenderableElement(Component text, int xOffset, int color, int headerColor, ItemStack stack) {
+			this(text, xOffset, color, headerColor, stack, null, null);
+		}
+		RenderableElement(Component text, int xOffset, int color, int headerColor, Block block) {
+			this(text, xOffset, color, headerColor, null, block, null);
+		}
+		RenderableElement(Component text, int xOffset, int color, int headerColor, Entity entity) {
+			this(text, xOffset, color, headerColor, null, null, entity);
+		}
+		@Override
+		public void render(PoseStack poseStack, int x, int y, int width, ItemRenderer itemRenderer) {
+			GuiComponent.fill(poseStack, x, y, x+width, y+12, headerColor());
+			@SuppressWarnings("resource")
+			Font font = Minecraft.getInstance().font;
+			if (stack() != null || block() != null) {
+				ItemStack renderStack = stack() == null ? new ItemStack(block().asItem()) : stack();
+				itemRenderer.renderAndDecorateItem(renderStack, x+width - 25, y);
+				GuiComponent.drawString(poseStack, font, renderStack.getDisplayName(), x + 10, y, 0xFFFFFF);
+			}
+			else if (entity != null && entity instanceof LivingEntity) {
+				int scale = Math.max(1, 10 / Math.max(1, (int) entity.getBoundingBox().getSize()));
+				InventoryScreen.renderEntityInInventory(x+width - 20, y+12,  scale, (float)(x+ 51) - 100, (float)(y + 75 - 50) - 100, (LivingEntity) entity);
+				GuiComponent.drawString(poseStack, font, this.entity.getDisplayName(), x, y, 0xFFFFFF);
+			}
+		}
+	}
+	
+	Minecraft mc = Minecraft.getInstance();
+	Core core = Core.get(LogicalSide.CLIENT);
+	ItemRenderer itemRenderer = null;
 	private final List<Element> content = new ArrayList<>();
 
 	private StatScrollWidget(int width, int height, int top, int left) {
@@ -64,243 +111,435 @@ public class StatScrollWidget extends ScrollPanel{
 	}
 	public StatScrollWidget(int width, int height, int top, int left, int pointless) {
 		this(width, height, top, left);
-		generateGlossary();
+		populateLocation(List.of(mc.level.dimension().location()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.DIMENSION}, "", false, true);
+		populateLocation(List.of(RegistryUtil.getId(mc.level.getBiome(mc.player.blockPosition()).value())), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.BIOME}, "", true, true);
 	}
-	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack) {
+	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack, ItemRenderer itemRenderer) {
 		this(width, height, top, left);
-		this.stack = stack;
-		generateContent();
+		this.itemRenderer = itemRenderer;
+		populateItems(List.of(stack), EventType.ITEM_APPLICABLE_EVENTS, ReqType.ITEM_APPLICABLE_EVENTS, ModifierDataType.values(), "", true, true);
 	}
 	public StatScrollWidget(int width, int height, int top, int left, Entity entity) {
 		this(width, height, top, left);
-		this.entity = entity;
-		generateContent();
+		populateEntity(List.of(entity), EventType.ENTITY_APPLICABLE_EVENTS, ReqType.ENTITY_APPLICABLE_EVENTS, entity instanceof Player, "");
 	}
-	public StatScrollWidget(int width, int height, int top, int left, BlockPos pos) {
+	public StatScrollWidget(int width, int height, int top, int left, BlockPos pos, ItemRenderer itemRenderer) {
 		this(width, height, top, left);
-		this.blockPos = pos;
-		generateContent();
+		this.itemRenderer = itemRenderer;
+		populateBlockFromWorld(pos, EventType.BLOCK_APPLICABLE_EVENTS, ReqType.BLOCK_APPLICABLE_EVENTS);
+	}
+	public StatScrollWidget(int width, int height, int top, int left, SELECTION selection, OBJECT object, String skill, GuiEnumGroup type, ItemRenderer itemRenderer) {
+		this(width, height, top, left);
+		this.itemRenderer = itemRenderer;
+		generateGlossary(selection, object, skill, type);
 	}
 	
 	//Utility method for uniform nesting indentation
 	private int step(int level) {return level * 10;}
 	
-	private void generateContent() {
-		Core core = Core.get(LogicalSide.CLIENT);
-		
-		content.add(new Element(LangProvider.EVENT_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-		for (EventType event : EventType.values()) {
-			Map<String, Long> xpAwards = 
-					entity != null ? core.getExperienceAwards(event, entity, null, new CompoundTag()) :
-					blockPos != null ? core.getBlockExperienceAwards(event, blockPos, Minecraft.getInstance().level, null, new CompoundTag()) :
-					stack != null ? core.getExperienceAwards(event, stack, null, new CompoundTag()) : 
-						new HashMap<>();
-			if (!xpAwards.isEmpty()) {
-				content.add(new Element(event, 1, 0xFFFFFF, false, 0));
-				for (Map.Entry<String, Long> map : xpAwards.entrySet()) {
-					content.add(new Element(map.getKey(), map.getValue(), 5, core.getDataConfig().getSkillColor(map.getKey())));
-				}
+	public void generateGlossary(SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
+		switch (selection) {
+		case REQS:{
+			EventType[] events = new EventType[] {};
+			ModifierDataType[] bonuses = new ModifierDataType[] {};
+			switch (object) {
+			case ITEMS: {
+				populateItems(
+					ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+					events,
+					type == null ? ReqType.ITEM_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
+					bonuses,
+					skill,
+					false,
+					false);
+				break;}
+			case BLOCKS: {
+				populateBlocks(
+					ForgeRegistries.BLOCKS.getValues(),
+					events,
+					type == null ? ReqType.BLOCK_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
+					false,
+					skill);
+				break;}
+			case ENTITY: {
+				populateEntity(
+					ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(mc.level)).filter(entity -> entity != null).toList(),
+					events,
+					type == null ? ReqType.ENTITY_APPLICABLE_EVENTS : new ReqType[] {(ReqType) type},
+					false,
+					skill);
+				break;}
+			case DIMENSIONS: {
+				populateLocation(mc.player.connection.levels().stream().map(key -> key.location()).toList(),
+					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, false, false);
+				break;}
+			case BIOMES: {
+				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
+					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, true, false);
+				break;}
+			case ENCHANTS: {
+				populateEnchants(ForgeRegistries.ENCHANTMENTS.getValues().stream().map(ench -> RegistryUtil.getId(ench)).toList(), skill);
+				break;}
+			default:{}
 			}
+			break;
 		}
-		
-		content.add(new Element(LangProvider.REQ_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-		for (ReqType reqType : ReqType.values()) {
-			if (!Config.reqEnabled(reqType).get()) continue;
-			Map<String, Integer> reqMap = 
-					entity != null ? core.getReqMap(reqType, entity) :
-					blockPos != null ? core.getReqMap(reqType, blockPos, Minecraft.getInstance().level) :
-					stack != null ? core.getReqMap(reqType, stack) : 
-						new HashMap<>();
-			if (reqType == ReqType.USE_ENCHANTMENT && stack != null && stack.isEnchanted())
-				core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
-			if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
-				content.add(new Element(reqType, 1, 0xFFFFFF, false, 0));
-				for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
-					if (map.getValue() == 0) continue;
-					content.add(new Element(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
-				}
+		case XP:{
+			ReqType[] reqs = new ReqType[] {};
+			ModifierDataType[] bonuses = new ModifierDataType[] {};
+			switch (object) {
+			case ITEMS: {
+				populateItems(
+						ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+						type == null ? EventType.ITEM_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
+						reqs, bonuses, skill, false, false);
+				break;}
+			case BLOCKS: {
+				populateBlocks(
+						ForgeRegistries.BLOCKS.getValues(),
+						type == null ? EventType.ITEM_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
+						reqs, false, skill);
+				break;}
+			case ENTITY: {
+				populateEntity(
+						ForgeRegistries.ENTITY_TYPES.getValues().stream().map(entityType -> entityType.create(Minecraft.getInstance().level)).filter(entity -> entity != null).toList(),
+						type == null ? EventType.ITEM_APPLICABLE_EVENTS : new EventType[] {(EventType) type},
+						reqs, false, skill);
+				break;}
+			default:{}
 			}
+			break;
 		}
-		
-		
-		if (stack != null) {
-			List<MobEffectInstance> reqEffects = core.getDataConfig().getItemEffect(RegistryUtil.getId(stack));
-			if (reqEffects.size() > 0) {
-				content.add(new Element(LangProvider.REQ_EFFECTS_HEADER.asComponent(), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-				for (MobEffectInstance mei : reqEffects) {
-					content.add(new Element(mei.getEffect().getDisplayName(), step(1), 0xFFFFFF, false, 0));
-				}
+		case BONUS:{
+			ReqType[] reqs = new ReqType[] {};
+			EventType[] events = new EventType[] {};
+			switch (object) {
+			case ITEMS: {
+				populateItems(
+						ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+						events, reqs, 
+						type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, 
+						skill, false, false);
+				break;}
+			case DIMENSIONS: {
+				populateLocation(mc.player.connection.levels().stream().map(key -> key.location()).toList(),
+						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, false, false);
+				break;}
+			case BIOMES: {
+				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
+						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, true, false);
+				break;}
+			default:{}
 			}
-			
-			content.add(new Element(LangProvider.MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-			for (ModifierDataType mod : ModifierDataType.values()) {
-				Map<String, Double> modifiers = core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(stack), mod) ?
+			break;}
+		case SALVAGE: {
+			if (object == OBJECT.ITEMS) {
+				populateItems(
+						ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+						new EventType[] {}, new ReqType[] {}, new ModifierDataType[] {}, skill, true, false);
+			}
+			break;}
+		case VEIN: {
+			ReqType[] reqs = new ReqType[] {};
+			EventType[] events = new EventType[] {};
+			ModifierDataType[] bonuses = new ModifierDataType[] {};
+			switch (object) {
+			case ITEMS: {
+				populateItems(
+						ForgeRegistries.ITEMS.getValues().stream().map(item -> new ItemStack(item)).toList(),
+						events, reqs, bonuses, skill, false, true);
+				break;}
+			case BLOCKS: {
+				populateBlocks(
+						ForgeRegistries.BLOCKS.getValues(),
+						events,	reqs, true, skill);
+				break;}
+			case DIMENSIONS: {
+				populateLocation(mc.player.connection.levels().stream().map(key -> key.location()).toList(),
+						reqs, bonuses, skill, false, true);
+				break;}
+			case BIOMES: {
+				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
+						reqs, bonuses, skill, true, true);
+				break;}
+			default:{}
+			}
+			break;}
+		default:{}
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void populateItems(List<ItemStack> items, EventType[] events, ReqType[] reqs, ModifierDataType[] modifiers, String skillFilter, boolean includeSalvage, boolean includeVein) {
+		for (ItemStack stack : items) {
+			int lengthBeforeProcessing = content.size() + 1;
+			if (items.size() > 1) 
+				content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color.getColor(), Config.SECTION_HEADER_COLOR.get(), stack));
+			addEventSection((event -> core.getExperienceAwards(event, stack, Minecraft.getInstance().player, new CompoundTag())), events, skillFilter);
+			addReqSection((reqType -> {
+				Map<String, Integer> reqMap = core.getReqMap(reqType, stack);
+				if (reqType == ReqType.USE_ENCHANTMENT)
+					core.getEnchantReqs(stack).forEach((skill, level) -> reqMap.merge(skill, level, (o,n) -> o>n ? o : n));
+				return reqMap;
+				}),	core.getDataConfig().getItemEffect(RegistryUtil.getId(stack)), reqs, skillFilter);
+			addModifierSection((mod -> core.getTooltipRegistry().bonusTooltipExists(RegistryUtil.getId(stack), mod) ?
 						core.getTooltipRegistry().getBonusTooltipData(RegistryUtil.getId(stack), mod, stack) :
-						core.getXpUtils().getObjectModifierMap(mod, RegistryUtil.getId(stack));
-				if (!modifiers.isEmpty()) {
-					content.add(new Element(mod, 1, 0xFFFFFF, false, 0));
-					for (Map.Entry<String, Double> map : modifiers.entrySet()) {
-						content.add(new Element(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
-					}
-				}
-			}
-			
-			Map<ResourceLocation, SalvageData> salvage = core.getSalvageLogic().getSalvageData(RegistryUtil.getId(stack));
-			if (!salvage.isEmpty()) {
-				content.add(new Element(Component.translatable("pmmo.salvage_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-				for (Map.Entry<ResourceLocation, SalvageData> salvageEntry : salvage.entrySet()) {
-					SalvageData data = salvageEntry.getValue();
-					ItemStack resultStack = new ItemStack(ForgeRegistries.ITEMS.getValue(salvageEntry.getKey()));
-					content.add(new Element(resultStack.getDisplayName(), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
-					if (!data.levelReq().isEmpty()) {
-						content.add(new Element(Component.translatable("pmmo.salvage_levelreq").withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
-						for (Map.Entry<String, Integer> req : data.levelReq().entrySet()) {
-							content.add(new Element(req.getKey(), req.getValue(), step(2), core.getDataConfig().getSkillColor(req.getKey())));
-						}
-					}
-					content.add(new Element(Component.translatable("pmmo.salvage_chance", data.baseChance(), data.maxChance()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
-					content.add(new Element(Component.translatable("pmmo.salvage_max", data.salvageMax()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
-					if (!data.chancePerLevel().isEmpty()) {
-						content.add(new Element(Component.translatable("pmmo.salvage_chance_modifier").withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
-						for (Map.Entry<String, Double> perLevel : data.chancePerLevel().entrySet()) {
-							content.add(new Element(perLevel.getKey(), perLevel.getValue(), step(2), core.getDataConfig().getSkillColor(perLevel.getKey())));
-						}
-					}
-					if (!data.xpAward().isEmpty()) {
-						content.add(new Element(Component.translatable("pmmo.salvage_xpAward_header").withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
-						for (Map.Entry<String, Long> award : data.xpAward().entrySet()) {
-							content.add(new Element(award.getKey(), award.getValue(), step(2), core.getDataConfig().getSkillColor(award.getKey())));
-						}
-					}
-				}
-			}
-			
-			VeinData veinData = core.getVeinData().getData(stack);
-			if (!veinData.equals(VeinData.EMPTY)) {
-				content.add(new Element(Component.translatable("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-				content.add(new Element(Component.translatable("pmmo.veindata_rate", veinData.chargeRate().orElse(0d)), step(1), 0xFFFFFF, false, 0));
-				content.add(new Element(Component.translatable("pmmo.veindata_cap", veinData.chargeCap().orElse(0)), step(1), 0xFFFFFF, false, 0));
-				if (stack.getItem() instanceof BlockItem)
-					content.add(new Element(Component.translatable("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
-			}
+						core.getXpUtils().getObjectModifierMap(mod, RegistryUtil.getId(stack))
+				), modifiers, skillFilter);
+			if (includeSalvage)
+				addSalvageSection(core.getSalvageLogic().getSalvageData(RegistryUtil.getId(stack)));
+			if (includeVein)
+				addItemVeinSection(core.getVeinData().getData(stack), stack.getItem() instanceof BlockItem);
+			if (lengthBeforeProcessing == content.size())
+				content.remove(content.size()-1);
 		}
-		
-		if (blockPos != null) {
-			@SuppressWarnings("resource")
-			VeinData veinData = core.getVeinData().getData(new ItemStack(Minecraft.getInstance().level.getBlockState(blockPos).getBlock().asItem()));
-			if (veinData.consumeAmount() != VeinData.EMPTY.consumeAmount()) {
-				content.add(new Element(Component.translatable("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-				content.add(new Element(Component.translatable("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
-			}
+	}
+	
+	@SuppressWarnings("resource")
+	private void populateBlockFromWorld(BlockPos block, EventType[] events, ReqType[] reqs) {
+		addEventSection((event -> core.getBlockExperienceAwards(event, block, Minecraft.getInstance().level, null, new CompoundTag())), events, "");
+		addReqSection((reqType -> core.getReqMap(reqType, block, Minecraft.getInstance().level)), new ArrayList<>(), reqs, "");
+		addBlockVeinSection(core.getVeinData().getData(new ItemStack(Minecraft.getInstance().level.getBlockState(block).getBlock().asItem())));
+	}
+	
+	private static final String PREDICATE_KEY = "usesPredicate";
+	@SuppressWarnings("deprecation")
+	private void populateBlocks(Collection<Block> blocks, EventType[] events, ReqType[] reqs, boolean includeVein, String skillFilter) {
+		for (Block block : blocks) {
+			int lengthBeforeProcessing = content.size() + 1;
+			ItemStack stack = new ItemStack(block.asItem());
+			ResourceLocation id = RegistryUtil.getId(block);
+			content.add(new RenderableElement(stack.getDisplayName(), 1, stack.getRarity().color.getColor(), Config.SECTION_HEADER_COLOR.get(), block));
+			addEventSection((event -> core.getTooltipRegistry().xpGainTooltipExists(id, event)
+					? Collections.singletonMap(PREDICATE_KEY, 0l)
+					: core.getXpUtils().getObjectExperienceMap(event, id))
+				, events, skillFilter);
+			addReqSection((reqType -> core.getPredicateRegistry().predicateExists(id, reqType)
+					? Collections.singletonMap(PREDICATE_KEY, 0)
+					: core.getSkillGates().getObjectSkillMap(reqType, id))
+				, new ArrayList<>()
+				, reqs, skillFilter);
+			if (includeVein)
+				addBlockVeinSection(core.getVeinData().getData(stack));
+			if (lengthBeforeProcessing == content.size())
+				content.remove(content.size()-1);
 		}
-		
-		if (entity != null && entity.getType().equals(EntityType.PLAYER)) {
-			//Section for player-specific data as it expands
-			content.add(new Element(Component.translatable("pmmo.playerspecific_header"), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-			PlayerData data = core.getDataConfig().getPlayerData(entity.getUUID());
-			content.add(new Element(Component.translatable("pmmo.playerspecific.ignorereq", data.ignoreReq()), step(2), 0xFFFFFF, false, 0));
-			if (!data.bonus().isEmpty()) {
-				content.add(new Element(Component.translatable("pmmo.playerspecific.bonus"), step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
-				for (Map.Entry<String, Double> bonus : data.bonus().entrySet()) {
-					content.add(new Element(bonus.getKey(), bonus.getValue(), step(3), core.getDataConfig().getSkillColor(bonus.getKey())));
+	}
+	
+	private void populateEntity(List<? extends Entity> entities, EventType[] events, ReqType[] reqs, boolean isPlayer, String skillFilter) {
+		for (Entity entity : entities) {
+			int lengthBeforeProcessing = content.size() + 1;
+			if (entities.size() > 1)
+				content.add(new RenderableElement(entity.getDisplayName(), 1, 0xEEEEEE, Config.SECTION_HEADER_COLOR.get(), entity));
+			addEventSection((event -> core.getExperienceAwards(event, entity, null, new CompoundTag())), events, skillFilter);
+			addReqSection((reqType -> core.getReqMap(reqType, entity)), new ArrayList<>(), reqs, skillFilter);
+			if (isPlayer)
+				addPlayerSection(entity);
+			if (lengthBeforeProcessing == content.size())
+				content.remove(content.size()-1);
+		}
+	}
+	
+	private void populateLocation(List<ResourceLocation> locations, ReqType[] reqs, ModifierDataType[] modifiers, String skillFilter, boolean isBiome, boolean includeVein) {
+		locations.forEach(loc -> {
+			int lengthBeforeProcessing = content.size() + 1;
+			if (locations.size() > 1)
+				content.add(new TextElement(Component.literal(loc.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+			addReqSection((reqType -> core.getSkillGates().getObjectSkillMap(reqType, loc)), isBiome ? core.getDataConfig().getLocationEffect(false, loc) : new ArrayList<>(), reqs, skillFilter);
+			if (reqs.length > 0 && isBiome)
+				addReqEffectSection(core.getDataConfig().getLocationEffect(true, loc), false);
+			addModifierSection((mod -> core.getXpUtils().getObjectModifierMap(mod, loc)), modifiers, skillFilter);
+			if (includeVein)
+				addVeinBlacklistSection(loc);
+			if (lengthBeforeProcessing == content.size())
+				content.remove(content.size()-1);
+		});
+	}
+	
+	private void populateEnchants(List<ResourceLocation> enchants, String skillFilter) {
+		enchants.forEach(ench -> {
+			int lengthBeforeProcessing = content.size() + 1;
+			if (enchants.size() > 1)
+				content.add(new TextElement(Component.literal(ench.toString()).withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+			List<TextElement> holder = new ArrayList<>();
+			for (int i = 0; i <= ForgeRegistries.ENCHANTMENTS.getValue(ench).getMaxLevel(); i++) {
+				Map<String, Integer> reqMap = core.getSkillGates().getEnchantmentReqs(ench, i).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
+				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
+					holder.add(new TextElement(Component.literal(String.valueOf(i)), 1, 0xFFFFFF, false, 0));
+					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
+						if (map.getValue() == 0) continue;
+						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
+					}
 				}
 			}
-			
-			//Section for skills
-			Map<String, Long> rawXp = core.getData().getXpMap(entity.getUUID());
-			LinkedHashMap<String, Integer> orderedMap = new LinkedHashMap<>();
-			List<String> skillKeys = new ArrayList<>(rawXp.keySet().stream().toList());
-			skillKeys.sort(Comparator.<String>comparingLong(a -> rawXp.get(a)).reversed());
-			skillKeys.forEach(skill -> {
-				orderedMap.put(skill, core.getData().getLevelFromXP(rawXp.get(skill)));
-			});
-			content.add(new Element(Component.translatable("pmmo.skilllist_header"), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-			for (Map.Entry<String, Integer> rawMap : orderedMap.entrySet()) {
-				content.add(new Element(rawMap.getKey(), rawMap.getValue(), step(2), core.getDataConfig().getSkillColor(rawMap.getKey())));
+			if (holder.size() > 0) {
+				content.add(new TextElement(LangProvider.REQ_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.addAll(holder);
+			}
+			if (lengthBeforeProcessing == content.size())
+				content.remove(content.size()-1);
+		});
+	}
+	
+	private void addEventSection(Function<EventType, Map<String,Long>> xpSrc, EventType[] events, String skillFilter) {
+		if (events.length > 0) {
+			List<TextElement> holder = new ArrayList<>();
+			for (EventType event : events) {
+				Map<String, Long> xpAwards = xpSrc.apply(event).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+				if (xpAwards.containsKey(PREDICATE_KEY))
+					holder.add(new TextElement(LangProvider.ADDON_AFFECTED_ATTRIBUTE.asComponent(), 5, 0xFF9C03, false, 0x000000));
+				else if (!xpAwards.isEmpty()) {
+					holder.add(new TextElement(event, 1, 0xFFFFFF, false, 0));
+					for (Map.Entry<String, Long> map : xpAwards.entrySet()) {
+						holder.add(new TextElement(map.getKey(), map.getValue(), 5, core.getDataConfig().getSkillColor(map.getKey())));
+					}
+				}
+			}
+			if (holder.size() > 0) {
+				content.add(new TextElement(LangProvider.EVENT_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.addAll(holder);
 			}
 		}
 	}
 	
-	public void generateGlossary() {
-		Minecraft mc = Minecraft.getInstance();
-		Core core = Core.get(LogicalSide.CLIENT);
-		ResourceLocation dimension = mc.player.level.dimension().location();
-		ResourceLocation biome = mc.player.level.getBiome(mc.player.blockPosition()).unwrapKey().get().location();
-		//DIMENSION DATA
-		content.add(new Element(Component.translatable("pmmo.dimension_header", dimension).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-		Map<String, Integer> travelReqs = core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, dimension);
-		if (!travelReqs.isEmpty() && !travelReqs.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
-			content.add(new Element(ReqType.TRAVEL, step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<String, Integer> travelReq : travelReqs.entrySet()) {
-				content.add(new Element(travelReq.getKey(), travelReq.getValue(), step(2), core.getDataConfig().getSkillColor(travelReq.getKey())));
+	private void addReqSection(Function<ReqType, Map<String, Integer>> reqSrc, List<MobEffectInstance> reqEffects, ReqType[] reqs, String skillFilter) {
+		if (reqs.length > 0) {
+			List<TextElement> holder = new ArrayList<>();
+			for (ReqType reqType: reqs) {
+				Map<String, Integer> reqMap = reqSrc.apply(reqType).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));				
+				if (!reqMap.isEmpty() && !reqMap.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
+					holder.add(new TextElement(reqType, 1, 0xFFFFFF, false, 0));
+					for (Map.Entry<String, Integer> map : reqMap.entrySet()) {
+						if (map.getValue() == 0) continue;
+						holder.add(new TextElement(map.getKey(), map.getValue(), step(1), core.getDataConfig().getSkillColor(map.getKey())));
+					}
+				}
+			}
+			if (holder.size() > 0) {
+				content.add(new TextElement(LangProvider.REQ_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.addAll(holder);
+				addReqEffectSection(reqEffects, true);
 			}
 		}
-		if (core.getXpUtils().hasModifierObjectEntry(ModifierDataType.DIMENSION, dimension)) {
-			content.add(new Element(ModifierDataType.DIMENSION, step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<String, Double> bonus : core.getXpUtils().getObjectModifierMap(ModifierDataType.DIMENSION, dimension).entrySet()) {
-				content.add(new Element(bonus.getKey(), bonus.getValue(), step(2), core.getDataConfig().getSkillColor(bonus.getKey())));
+	}
+	
+	private void addReqEffectSection(List<MobEffectInstance> reqEffects, boolean isNegative) {
+		if (reqEffects.size() > 0) {
+			content.add(new TextElement(isNegative ? LangProvider.REQ_EFFECTS_HEADER.asComponent() : LangProvider.BIOME_EFFECT_POS.asComponent(), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+			for (MobEffectInstance mei : reqEffects) {
+				content.add(new TextElement(mei.getEffect().getDisplayName(), step(1), 0xFFFFFF, false, 0));
 			}
 		}
-		if (!core.getDataConfig().getVeinBlacklist(dimension).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.vein_blacklist_header").withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
-			for (ResourceLocation blockID : core.getDataConfig().getVeinBlacklist(dimension)) {
-				content.add(new Element(Component.literal(blockID.toString()), step(2), 0xEEEEEE, false, 0));
+	}
+	
+	private void addModifierSection(Function<ModifierDataType, Map<String, Double>> bonusSrc, ModifierDataType[] mods, String skillFilter) {
+		if (mods.length > 0) {
+			List<TextElement> holder = new ArrayList<>();
+			for (ModifierDataType mod : mods) {
+				Map<String, Double> modifiers = bonusSrc.apply(mod).entrySet().stream().filter(entry -> entry.getKey().contains(skillFilter)).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+				if (!modifiers.isEmpty()) {
+					content.add(new TextElement(mod, 1, 0xFFFFFF, false, 0));
+					modifiers.forEach((key, value) 
+							-> content.add(new TextElement(key, value, step(1), core.getDataConfig().getSkillColor(key))));
+				}
+			}
+			if (holder.size() > 0) {
+				content.add(new TextElement(LangProvider.MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.addAll(holder);
 			}
 		}
-		if (!core.getDataConfig().getMobModifierMap(dimension).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.mob_modifier_header").withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(dimension).entrySet()) {
-				content.add(new Element(Component.literal(mobMap.getKey().toString()), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
-				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
-					content.add(new Element(map.getKey(), map.getValue(), step(2), 0xFFFFFF));
+	}
+	
+	private void addSalvageSection(Map<ResourceLocation, SalvageData> salvage) {
+		if (!salvage.isEmpty()) {
+			content.add(new TextElement(LangProvider.SALVAGE_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+			for (Map.Entry<ResourceLocation, SalvageData> salvageEntry : salvage.entrySet()) {
+				SalvageData data = salvageEntry.getValue();
+				ItemStack resultStack = new ItemStack(ForgeRegistries.ITEMS.getValue(salvageEntry.getKey()));
+				content.add(new TextElement(resultStack.getDisplayName(), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
+				if (!data.levelReq().isEmpty()) {
+					content.add(new TextElement(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+					for (Map.Entry<String, Integer> req : data.levelReq().entrySet()) {
+						content.add(new TextElement(req.getKey(), req.getValue(), step(2), core.getDataConfig().getSkillColor(req.getKey())));
+					}
+				}
+				content.add(new TextElement(LangProvider.SALVAGE_CHANCE.asComponent(data.baseChance(), data.maxChance()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+				content.add(new TextElement(LangProvider.SALVAGE_MAX.asComponent(data.salvageMax()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+				if (!data.chancePerLevel().isEmpty()) {
+					content.add(new TextElement(LangProvider.SALVAGE_CHANCE_MOD.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+					for (Map.Entry<String, Double> perLevel : data.chancePerLevel().entrySet()) {
+						content.add(new TextElement(perLevel.getKey(), perLevel.getValue(), step(2), core.getDataConfig().getSkillColor(perLevel.getKey())));
+					}
+				}
+				if (!data.xpAward().isEmpty()) {
+					content.add(new TextElement(LangProvider.SALVAGE_XP_AWARD.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+					for (Map.Entry<String, Long> award : data.xpAward().entrySet()) {
+						content.add(new TextElement(award.getKey(), award.getValue(), step(2), core.getDataConfig().getSkillColor(award.getKey())));
+					}
 				}
 			}
 		}
-		//BIOME DATA
-		content.add(new Element(Component.translatable("pmmo.biome_header", biome).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
-		travelReqs = core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, biome);
-		if (!travelReqs.isEmpty() && !travelReqs.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
-			content.add(new Element(ReqType.TRAVEL, step(1), 0xFFFFFF, false, 0));			
-			for (Map.Entry<String, Integer> travelReq : travelReqs.entrySet()) {
-				if (travelReq.getValue() == 0) continue;
-				content.add(new Element(travelReq.getKey(), travelReq.getValue(), step(2), core.getDataConfig().getSkillColor(travelReq.getKey())));
-			}
-			//negative effects only matter if there is a req to meet.  positive effects will apply always if no req is present
-			if (!core.getDataConfig().getLocationEffect(false, biome).isEmpty()) {
-				content.add(new Element(Component.translatable("pmmo.biome_negative").withStyle(ChatFormatting.BOLD), step(1), 0xEEEEEE, false, 0));
-				for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(false, biome)) {
-					content.add(new Element(
-							Component.literal("").append(mei.getEffect().getDisplayName()).append(": "+(mei.getAmplifier()+1))
-							, step(2), 0xEEEEEE, false, 0));
-				}
+	}
+	
+	private void addItemVeinSection(VeinData veinData, boolean isBlockItem) {
+		if (!veinData.equals(VeinData.EMPTY)) {
+			content.add(new TextElement(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+			content.add(new TextElement(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate().orElse(0d)), step(1), 0xFFFFFF, false, 0));
+			content.add(new TextElement(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap().orElse(0)), step(1), 0xFFFFFF, false, 0));
+			if (isBlockItem)
+				content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+		}
+	}
+	
+	private void addBlockVeinSection(VeinData veinData) {
+		if (veinData.consumeAmount() != VeinData.EMPTY.consumeAmount()) {
+			content.add(new TextElement(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+			content.add(new TextElement(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+		}
+	}
+	
+	private void addPlayerSection(Entity entity) {
+		//Section for player-specific data as it expands
+		content.add(new TextElement(LangProvider.PLAYER_HEADER.asComponent(), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+		PlayerData data = core.getDataConfig().getPlayerData(entity.getUUID());
+		content.add(new TextElement(LangProvider.PLAYER_IGNORE_REQ.asComponent(data.ignoreReq()), step(2), 0xFFFFFF, false, 0));
+		if (!data.bonus().isEmpty()) {
+			content.add(new TextElement(LangProvider.PLAYER_BONUSES.asComponent(), step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
+			for (Map.Entry<String, Double> bonus : data.bonus().entrySet()) {
+				content.add(new TextElement(bonus.getKey(), bonus.getValue(), step(3), core.getDataConfig().getSkillColor(bonus.getKey())));
 			}
 		}
-		if (!core.getDataConfig().getLocationEffect(true, biome).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.biome_positive").withStyle(ChatFormatting.BOLD), step(1), 0xEEEEEE, false, 0));
-			for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(true, biome)) {
-				content.add(new Element(
-						Component.literal("").append(mei.getEffect().getDisplayName()).append(": "+(mei.getAmplifier()+1))
-						, step(2), 0xEEEEEE, false, 0));
+		
+		//Section for skills
+		Map<String, Long> rawXp = core.getData().getXpMap(entity.getUUID());
+		LinkedHashMap<String, Integer> orderedMap = new LinkedHashMap<>();
+		List<String> skillKeys = new ArrayList<>(rawXp.keySet().stream().toList());
+		skillKeys.sort(Comparator.<String>comparingLong(a -> rawXp.get(a)).reversed());
+		skillKeys.forEach(skill -> {
+			orderedMap.put(skill, core.getData().getLevelFromXP(rawXp.get(skill)));
+		});
+		content.add(new TextElement(LangProvider.SKILL_LIST_HEADER.asComponent(), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+		for (Map.Entry<String, Integer> rawMap : orderedMap.entrySet()) {
+			content.add(new TextElement(rawMap.getKey(), rawMap.getValue(), step(2), core.getDataConfig().getSkillColor(rawMap.getKey())));
+		}
+	}
+	
+	private void addVeinBlacklistSection(ResourceLocation location) {
+		if (!core.getDataConfig().getVeinBlacklist(location).isEmpty()) {
+			content.add(new TextElement(LangProvider.VEIN_BLACKLIST_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
+			for (ResourceLocation blockID : core.getDataConfig().getVeinBlacklist(location)) {
+				content.add(new TextElement(Component.literal(blockID.toString()), step(2), 0xEEEEEE, false, 0));
 			}
 		}
-		if (core.getXpUtils().hasModifierObjectEntry(ModifierDataType.BIOME, biome)) {
-			content.add(new Element(ModifierDataType.BIOME, step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<String, Double> bonus : core.getXpUtils().getObjectModifierMap(ModifierDataType.BIOME, biome).entrySet()) {
-				content.add(new Element(bonus.getKey(), bonus.getValue(), step(2), core.getDataConfig().getSkillColor(bonus.getKey())));
-			}
-		}
-		if (!core.getDataConfig().getVeinBlacklist(biome).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.vein_blacklist_header").withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
-			for (ResourceLocation blockID : core.getDataConfig().getVeinBlacklist(biome)) {
-				content.add(new Element(Component.literal(blockID.toString()), step(2), 0xEEEEEE, false, 0));
-			}
-		}
-		if (!core.getDataConfig().getMobModifierMap(biome).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.mob_modifier_header").withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
-			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(biome).entrySet()) {
-				content.add(new Element(Component.literal(mobMap.getKey().toString()), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
+	}
+	
+	private void addMobModifierSection(ResourceLocation location) {
+		if (!core.getDataConfig().getMobModifierMap(location).isEmpty()) {
+			content.add(new TextElement(LangProvider.MOB_MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
+			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(location).entrySet()) {
+				content.add(new TextElement(Component.literal(mobMap.getKey().toString()), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
-					content.add(new Element(map.getKey(), map.getValue(), step(2), 0xFFFFFF));
+					content.add(new TextElement(map.getKey(), map.getValue(), step(2), 0xFFFFFF));
 				}
 			}
 		}
@@ -325,15 +564,10 @@ public class StatScrollWidget extends ScrollPanel{
 		return super.mouseClicked(mouseX, mouseY, partialTicks);
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	protected void drawPanel(PoseStack poseStack, int entryRight, int relativeY, Tesselator tess, int mouseX, int mouseY) {
 		for (int i = 0; i < content.size(); i++) {
-			Element element = content.get(i);
-			int y = (int)(relativeY + (i*12) - scrollDistance);
-			if (element.isHeader()) 
-				GuiComponent.fill(poseStack, this.left, (int) y, this.left+this.width, y+12, element.headerColor());
-			GuiComponent.drawString(poseStack, Minecraft.getInstance().font, element.text(), this.left + element.xOffset(), y, element.color);
+			content.get(i).render(poseStack, this.left, (int)(relativeY + (i*12) - scrollDistance), this.width, this.itemRenderer);			
 		}
 	}
 

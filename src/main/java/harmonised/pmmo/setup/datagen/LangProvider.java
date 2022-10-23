@@ -227,6 +227,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Cost to break as block: %s").build();
 	
 	//=========STAT SCROLL WIDGET=================
+	public static final Translation OPEN_GLOSSARY = Translation.Builder.start("pmmo.gui.stat_screen.open_glossary")
+			.addLocale(Locale.EN_US, "Open Glossary").build();
 	public static final Translation EVENT_HEADER = Translation.Builder.start("pmmo.event_header")
 			.addLocale(Locale.EN_US, "XP Award Events").build();
 	public static final Translation REQ_HEADER = Translation.Builder.start("pmmo.req_header")
@@ -235,6 +237,84 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Negative Effects for unmet Reqs").build();
 	public static final Translation MODIFIER_HEADER = Translation.Builder.start("pmmo.modifier_header")
 			.addLocale(Locale.EN_US, "XP Modifiers").build();
+	public static final Translation SALVAGE_HEADER = Translation.Builder.start("pmmo.salvage_header")
+			.addLocale(Locale.EN_US, "Salvage").build();
+	public static final Translation SALVAGE_LEVEL_REQ = Translation.Builder.start("pmmo.salvage_levelreq")
+			.addLocale(Locale.EN_US, "Required level to obtain").build();
+	public static final Translation SALVAGE_CHANCE = Translation.Builder.start("pmmo.salvage_chance")
+			.addLocale(Locale.EN_US, "Chance: %1$s / %2$s").build();
+	public static final Translation SALVAGE_MAX = Translation.Builder.start("pmmo.salvage_max")
+			.addLocale(Locale.EN_US, "Max Obtainable: %1$s").build();
+	public static final Translation SALVAGE_CHANCE_MOD = Translation.Builder.start("pmmo.salvage_chance_modifier")
+			.addLocale(Locale.EN_US, "Chance boost based on level").build();
+	public static final Translation SALVAGE_XP_AWARD = Translation.Builder.start("pmmo.salvage_xpAward_header")
+			.addLocale(Locale.EN_US, "Xp awarded on success").build();
+	public static final Translation VEIN_HEADER = Translation.Builder.start("pmmo.vein_header")
+			.addLocale(Locale.EN_US, "Vein Mining Attributes").build();
+	public static final Translation VEIN_RATE = Translation.Builder.start("pmmo.veindata_rate")
+			.addLocale(Locale.EN_US, "Vein Recharge Rate Per Tick: %1$s").build();
+	public static final Translation VEIN_CAP = Translation.Builder.start("pmmo.veindata_cap")
+			.addLocale(Locale.EN_US, "Vein Capacity Added By Item: %1$s").build();
+	public static final Translation VEIN_CONSUME = Translation.Builder.start("pmmo.veindata_consume")
+			.addLocale(Locale.EN_US, "Vein Consumed on Break: %1$s").build();
+	public static final Translation PLAYER_HEADER = Translation.Builder.start("pmmo.playerspecific_header")
+			.addLocale(Locale.EN_US, "Player-Specific Settings").build();
+	public static final Translation PLAYER_IGNORE_REQ = Translation.Builder.start("pmmo.playerspecific.ignorereq")
+			.addLocale(Locale.EN_US, "Ignore Reqs: %1$s").build();
+	public static final Translation PLAYER_BONUSES = Translation.Builder.start("pmmo.playerspecific.bonus")
+			.addLocale(Locale.EN_US, "Player Bonuses:").build();
+	public static final Translation SKILL_LIST_HEADER = Translation.Builder.start("pmmo.skilllist_header")
+			.addLocale(Locale.EN_US, "Player Skills").build();
+	public static final Translation DIMENSION_HEADER = Translation.Builder.start("pmmo.dimension_header")
+			.addLocale(Locale.EN_US, "Dimension: %1$s").build();
+	public static final Translation VEIN_BLACKLIST_HEADER = Translation.Builder.start("pmmo.vein_blacklist_header")
+			.addLocale(Locale.EN_US, "Vein Blacklisted Blocks").build();
+	public static final Translation MOB_MODIFIER_HEADER = Translation.Builder.start("pmmo.mob_modifier_header")
+			.addLocale(Locale.EN_US, "Mob Modifiers").build();
+	public static final Translation BIOME_HEADER = Translation.Builder.start("pmmo.biome_header")
+			.addLocale(Locale.EN_US, "Mob Modifiers").build();
+	public static final Translation BIOME_EFFECT_NEG = Translation.Builder.start("pmmo.biome_negative")
+			.addLocale(Locale.EN_US, "Penalty Effects").build();
+	public static final Translation BIOME_EFFECT_POS = Translation.Builder.start("pmmo.biome_positive")
+			.addLocale(Locale.EN_US, "Bonus Effects").build();
+	public static final Translation ADDON_AFFECTED_ATTRIBUTE = Translation.Builder.start("pmmo.gui.statscroll.addon_affected")
+			.addLocale(Locale.EN_US, "This Property is Dynamically Defined").build();
+	
+	//=========GLOSSARY SELECT SCREEN=============
+	public static final Translation GLOSSARY_DEFAULT_SECTION = Translation.Builder.start("pmmo.gui.glossary.default_section")
+			.addLocale(Locale.EN_US, "Choose Section").build();
+	public static final Translation GLOSSARY_SECTION_REQ = Translation.Builder.start("pmmo.gui.glossary.section.req")
+			.addLocale(Locale.EN_US, "Requirements").build();
+	public static final Translation GLOSSARY_SECTION_XP = Translation.Builder.start("pmmo.gui.glossary.section.xp_sources")
+			.addLocale(Locale.EN_US, "XP Sources").build();
+	public static final Translation GLOSSARY_SECTION_BONUS = Translation.Builder.start("pmmo.gui.glossary.section.bonuses")
+			.addLocale(Locale.EN_US, "Bonuses").build();
+	public static final Translation GLOSSARY_SECTION_SALVAGE = Translation.Builder.start("pmmo.gui.glossary.section.salvage")
+			.addLocale(Locale.EN_US, "Salvage").build();
+	public static final Translation GLOSSARY_SECTION_VEIN = Translation.Builder.start("pmmo.gui.glossary.section.vein")
+			.addLocale(Locale.EN_US, "Vein Mining").build();
+	
+	public static final Translation GLOSSARY_DEFAULT_OBJECT = Translation.Builder.start("pmmo.gui.glossary.default_object")
+			.addLocale(Locale.EN_US, "All Content").build();
+	public static final Translation GLOSSARY_OBJECT_ITEMS = Translation.Builder.start("pmmo.gui.glossary.object.items")
+			.addLocale(Locale.EN_US, "Items").build();
+	public static final Translation GLOSSARY_OBJECT_BLOCKS = Translation.Builder.start("pmmo.gui.glossary.object.blocks")
+			.addLocale(Locale.EN_US, "Blocks").build();
+	public static final Translation GLOSSARY_OBJECT_ENTITIES = Translation.Builder.start("pmmo.gui.glossary.object.entities")
+			.addLocale(Locale.EN_US, "Animals/Mobs").build();
+	public static final Translation GLOSSARY_OBJECT_DIMENSIONS = Translation.Builder.start("pmmo.gui.glossary.object.dimensions")
+			.addLocale(Locale.EN_US, "Dimensions").build();
+	public static final Translation GLOSSARY_OBJECT_BIOMES = Translation.Builder.start("pmmo.gui.glossary.object.biomes")
+			.addLocale(Locale.EN_US, "Biomes").build();
+	public static final Translation GLOSSARY_OBJECT_ENCHANTS = Translation.Builder.start("pmmo.gui.glossary.object.enchantments")
+			.addLocale(Locale.EN_US, "Enchantments").build();
+	
+	public static final Translation GLOSSARY_DEFAULT_SKILL = Translation.Builder.start("pmmo.gui.glossary.default_skill")
+			.addLocale(Locale.EN_US, "All Skills").build();
+	public static final Translation GLOSSARY_DEFAULT_ENUM = Translation.Builder.start("pmmo.gui.glossary.default_enum")
+			.addLocale(Locale.EN_US, "All Event/Req/Type").build();
+	public static final Translation GLOSSARY_VIEW_BUTTON = Translation.Builder.start("pmmo.gui.glossary.view_button")
+			.addLocale(Locale.EN_US, "View Info").build();
 	
 	//=========FEATURES===========================
 	public static final Translation FOUND_TREASURE = Translation.Builder.start("pmmo.youFoundTreasure")

@@ -6,10 +6,11 @@ import java.util.stream.Collectors;
 
 import com.mojang.serialization.Codec;
 
+import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 
-public enum ModifierDataType implements StringRepresentable, IExtensibleEnum{
+public enum ModifierDataType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
     BIOME,
     HELD,
     WORN,
@@ -25,4 +26,7 @@ public enum ModifierDataType implements StringRepresentable, IExtensibleEnum{
 	public static ModifierDataType create(String name) {
 	     throw new IllegalStateException("Enum not extended");
 	}
+
+	@Override
+	public String getName() {return name();}
 }
