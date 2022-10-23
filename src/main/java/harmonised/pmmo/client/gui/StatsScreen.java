@@ -3,10 +3,15 @@ package harmonised.pmmo.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
+import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
+import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import harmonised.pmmo.client.gui.component.StatScrollWidget;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.BlockPos;
@@ -22,11 +27,16 @@ public class StatsScreen extends Screen{
 	private static final MutableComponent MENU_NAME = Component.literal("Item Detail Screen");
 	
 	private StatScrollWidget scrollWidget;
+	private Button openGlossary;
 	private int renderX, renderY;
 	
 	private ItemStack stack = null;
 	private BlockPos block = null;
 	private Entity entity = null;
+	private SELECTION selection = null;
+	private OBJECT object = null;
+	private String skill = null;
+	private GuiEnumGroup type = null;
 
 	public StatsScreen() {
 		super(MENU_NAME);
@@ -48,13 +58,27 @@ public class StatsScreen extends Screen{
 		init();
 	}
 	
+	public StatsScreen(SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
+		super(MENU_NAME);
+		this.selection = selection;
+		this.object = object;
+		this.skill = skill;
+		this.type = type;
+		init();
+	}
+	
 	protected void init() {
 		renderX = this.width/2 - 128;
 		renderY = this.height/2 - 128;
 		scrollWidget = stack != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, stack) :
 						block != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, block) :
-						entity != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, entity) 
+						entity != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, entity) :
+						selection != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, selection, object, skill ,type)
 								: new StatScrollWidget(206, 200, renderY+30, renderX+25, 0);
+		openGlossary = new Button(0, 0, 80, 20, LangProvider.OPEN_GLOSSARY.asComponent(), b -> Minecraft.getInstance().setScreen(new GlossarySelectScreen()));
+		
+		this.addRenderableWidget(scrollWidget);
+		this.addRenderableWidget(openGlossary);
 		super.init();
 	}
 	
@@ -70,7 +94,6 @@ public class StatsScreen extends Screen{
 			InventoryScreen.renderEntityInInventory(this.renderX+30, this.renderY+30,  10, (float)(this .renderX+ 51) - mouseX, (float)(this.renderY + 75 - 50) - mouseY, (LivingEntity) entity);
 			GuiComponent.drawString(stack, font, this.entity.getDisplayName(), this.renderX + 65, this.renderY+15, 0xFFFFFF);
 		}	
-		scrollWidget.render(stack, mouseX, mouseY, partialTicks);
 		super.render(stack, mouseX, mouseY, partialTicks);
 	}
 	

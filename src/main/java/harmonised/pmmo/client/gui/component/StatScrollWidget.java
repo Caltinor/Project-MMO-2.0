@@ -13,6 +13,8 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
+import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
@@ -57,6 +59,10 @@ public class StatScrollWidget extends ScrollPanel{
 	private ItemStack stack = null;
 	private BlockPos blockPos = null;
 	private Entity entity = null;
+	private SELECTION selection = null;
+	private OBJECT object = null;
+	private String skill = null;
+	private GuiEnumGroup type = null;
 	private final List<Element> content = new ArrayList<>();
 
 	private StatScrollWidget(int width, int height, int top, int left) {
@@ -64,7 +70,7 @@ public class StatScrollWidget extends ScrollPanel{
 	}
 	public StatScrollWidget(int width, int height, int top, int left, int pointless) {
 		this(width, height, top, left);
-		generateGlossary();
+		generateLocations();
 	}
 	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack) {
 		this(width, height, top, left);
@@ -80,6 +86,14 @@ public class StatScrollWidget extends ScrollPanel{
 		this(width, height, top, left);
 		this.blockPos = pos;
 		generateContent();
+	}
+	public StatScrollWidget(int width, int height, int top, int left, SELECTION selection, OBJECT object, String skill, GuiEnumGroup type) {
+		this(width, height, top, left);
+		this.selection = selection;
+		this.object = object;
+		this.skill = skill;
+		this.type = type;
+		generateGlossary();
 	}
 	
 	//Utility method for uniform nesting indentation
@@ -147,27 +161,27 @@ public class StatScrollWidget extends ScrollPanel{
 			
 			Map<ResourceLocation, SalvageData> salvage = core.getSalvageLogic().getSalvageData(RegistryUtil.getId(stack));
 			if (!salvage.isEmpty()) {
-				content.add(new Element(Component.translatable("pmmo.salvage_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new Element(LangProvider.SALVAGE_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 				for (Map.Entry<ResourceLocation, SalvageData> salvageEntry : salvage.entrySet()) {
 					SalvageData data = salvageEntry.getValue();
 					ItemStack resultStack = new ItemStack(ForgeRegistries.ITEMS.getValue(salvageEntry.getKey()));
 					content.add(new Element(resultStack.getDisplayName(), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
 					if (!data.levelReq().isEmpty()) {
-						content.add(new Element(Component.translatable("pmmo.salvage_levelreq").withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+						content.add(new Element(LangProvider.SALVAGE_LEVEL_REQ.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
 						for (Map.Entry<String, Integer> req : data.levelReq().entrySet()) {
 							content.add(new Element(req.getKey(), req.getValue(), step(2), core.getDataConfig().getSkillColor(req.getKey())));
 						}
 					}
-					content.add(new Element(Component.translatable("pmmo.salvage_chance", data.baseChance(), data.maxChance()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
-					content.add(new Element(Component.translatable("pmmo.salvage_max", data.salvageMax()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+					content.add(new Element(LangProvider.SALVAGE_CHANCE.asComponent(data.baseChance(), data.maxChance()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+					content.add(new Element(LangProvider.SALVAGE_MAX.asComponent(data.salvageMax()).withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
 					if (!data.chancePerLevel().isEmpty()) {
-						content.add(new Element(Component.translatable("pmmo.salvage_chance_modifier").withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+						content.add(new Element(LangProvider.SALVAGE_CHANCE_MOD.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
 						for (Map.Entry<String, Double> perLevel : data.chancePerLevel().entrySet()) {
 							content.add(new Element(perLevel.getKey(), perLevel.getValue(), step(2), core.getDataConfig().getSkillColor(perLevel.getKey())));
 						}
 					}
 					if (!data.xpAward().isEmpty()) {
-						content.add(new Element(Component.translatable("pmmo.salvage_xpAward_header").withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
+						content.add(new Element(LangProvider.SALVAGE_XP_AWARD.asComponent().withStyle(ChatFormatting.UNDERLINE), step(1), 0xFFFFFF, false, 0));
 						for (Map.Entry<String, Long> award : data.xpAward().entrySet()) {
 							content.add(new Element(award.getKey(), award.getValue(), step(2), core.getDataConfig().getSkillColor(award.getKey())));
 						}
@@ -177,11 +191,11 @@ public class StatScrollWidget extends ScrollPanel{
 			
 			VeinData veinData = core.getVeinData().getData(stack);
 			if (!veinData.equals(VeinData.EMPTY)) {
-				content.add(new Element(Component.translatable("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-				content.add(new Element(Component.translatable("pmmo.veindata_rate", veinData.chargeRate().orElse(0d)), step(1), 0xFFFFFF, false, 0));
-				content.add(new Element(Component.translatable("pmmo.veindata_cap", veinData.chargeCap().orElse(0)), step(1), 0xFFFFFF, false, 0));
+				content.add(new Element(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new Element(LangProvider.VEIN_RATE.asComponent(veinData.chargeRate().orElse(0d)), step(1), 0xFFFFFF, false, 0));
+				content.add(new Element(LangProvider.VEIN_CAP.asComponent(veinData.chargeCap().orElse(0)), step(1), 0xFFFFFF, false, 0));
 				if (stack.getItem() instanceof BlockItem)
-					content.add(new Element(Component.translatable("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+					content.add(new Element(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
 			}
 		}
 		
@@ -189,18 +203,18 @@ public class StatScrollWidget extends ScrollPanel{
 			@SuppressWarnings("resource")
 			VeinData veinData = core.getVeinData().getData(new ItemStack(Minecraft.getInstance().level.getBlockState(blockPos).getBlock().asItem()));
 			if (veinData.consumeAmount() != VeinData.EMPTY.consumeAmount()) {
-				content.add(new Element(Component.translatable("pmmo.vein_header").withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
-				content.add(new Element(Component.translatable("pmmo.veindata_consume", veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
+				content.add(new Element(LangProvider.VEIN_HEADER.asComponent().withStyle(ChatFormatting.BOLD), 1, 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+				content.add(new Element(LangProvider.VEIN_CONSUME.asComponent(veinData.consumeAmount().get()), step(1), 0xFFFFFF, false, 0));
 			}
 		}
 		
 		if (entity != null && entity.getType().equals(EntityType.PLAYER)) {
 			//Section for player-specific data as it expands
-			content.add(new Element(Component.translatable("pmmo.playerspecific_header"), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+			content.add(new Element(LangProvider.PLAYER_HEADER.asComponent(), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 			PlayerData data = core.getDataConfig().getPlayerData(entity.getUUID());
-			content.add(new Element(Component.translatable("pmmo.playerspecific.ignorereq", data.ignoreReq()), step(2), 0xFFFFFF, false, 0));
+			content.add(new Element(LangProvider.PLAYER_IGNORE_REQ.asComponent(data.ignoreReq()), step(2), 0xFFFFFF, false, 0));
 			if (!data.bonus().isEmpty()) {
-				content.add(new Element(Component.translatable("pmmo.playerspecific.bonus"), step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
+				content.add(new Element(LangProvider.PLAYER_BONUSES.asComponent(), step(2), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
 				for (Map.Entry<String, Double> bonus : data.bonus().entrySet()) {
 					content.add(new Element(bonus.getKey(), bonus.getValue(), step(3), core.getDataConfig().getSkillColor(bonus.getKey())));
 				}
@@ -214,20 +228,20 @@ public class StatScrollWidget extends ScrollPanel{
 			skillKeys.forEach(skill -> {
 				orderedMap.put(skill, core.getData().getLevelFromXP(rawXp.get(skill)));
 			});
-			content.add(new Element(Component.translatable("pmmo.skilllist_header"), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
+			content.add(new Element(LangProvider.SKILL_LIST_HEADER.asComponent(), step(1), 0xFFFFFF, true, Config.SECTION_HEADER_COLOR.get()));
 			for (Map.Entry<String, Integer> rawMap : orderedMap.entrySet()) {
 				content.add(new Element(rawMap.getKey(), rawMap.getValue(), step(2), core.getDataConfig().getSkillColor(rawMap.getKey())));
 			}
 		}
 	}
 	
-	public void generateGlossary() {
+	public void generateLocations() {
 		Minecraft mc = Minecraft.getInstance();
 		Core core = Core.get(LogicalSide.CLIENT);
 		ResourceLocation dimension = mc.player.level.dimension().location();
 		ResourceLocation biome = mc.player.level.getBiome(mc.player.blockPosition()).unwrapKey().get().location();
 		//DIMENSION DATA
-		content.add(new Element(Component.translatable("pmmo.dimension_header", dimension).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+		content.add(new Element(LangProvider.DIMENSION_HEADER.asComponent(dimension).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 		Map<String, Integer> travelReqs = core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, dimension);
 		if (!travelReqs.isEmpty() && !travelReqs.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 			content.add(new Element(ReqType.TRAVEL, step(1), 0xFFFFFF, false, 0));
@@ -242,13 +256,13 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 		}
 		if (!core.getDataConfig().getVeinBlacklist(dimension).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.vein_blacklist_header").withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
+			content.add(new Element(LangProvider.VEIN_BLACKLIST_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
 			for (ResourceLocation blockID : core.getDataConfig().getVeinBlacklist(dimension)) {
 				content.add(new Element(Component.literal(blockID.toString()), step(2), 0xEEEEEE, false, 0));
 			}
 		}
 		if (!core.getDataConfig().getMobModifierMap(dimension).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.mob_modifier_header").withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
+			content.add(new Element(LangProvider.MOB_MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
 			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(dimension).entrySet()) {
 				content.add(new Element(Component.literal(mobMap.getKey().toString()), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
@@ -257,7 +271,7 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 		}
 		//BIOME DATA
-		content.add(new Element(Component.translatable("pmmo.biome_header", biome).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+		content.add(new Element(LangProvider.BIOME_HEADER.asComponent(biome).withStyle(ChatFormatting.BOLD), 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
 		travelReqs = core.getSkillGates().getObjectSkillMap(ReqType.TRAVEL, biome);
 		if (!travelReqs.isEmpty() && !travelReqs.entrySet().stream().allMatch(entry -> entry.getValue() == 0)) {
 			content.add(new Element(ReqType.TRAVEL, step(1), 0xFFFFFF, false, 0));			
@@ -267,7 +281,7 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 			//negative effects only matter if there is a req to meet.  positive effects will apply always if no req is present
 			if (!core.getDataConfig().getLocationEffect(false, biome).isEmpty()) {
-				content.add(new Element(Component.translatable("pmmo.biome_negative").withStyle(ChatFormatting.BOLD), step(1), 0xEEEEEE, false, 0));
+				content.add(new Element(LangProvider.BIOME_EFFECT_NEG.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xEEEEEE, false, 0));
 				for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(false, biome)) {
 					content.add(new Element(
 							Component.literal("").append(mei.getEffect().getDisplayName()).append(": "+(mei.getAmplifier()+1))
@@ -276,7 +290,7 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 		}
 		if (!core.getDataConfig().getLocationEffect(true, biome).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.biome_positive").withStyle(ChatFormatting.BOLD), step(1), 0xEEEEEE, false, 0));
+			content.add(new Element(LangProvider.BIOME_EFFECT_POS.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xEEEEEE, false, 0));
 			for (MobEffectInstance mei : core.getDataConfig().getLocationEffect(true, biome)) {
 				content.add(new Element(
 						Component.literal("").append(mei.getEffect().getDisplayName()).append(": "+(mei.getAmplifier()+1))
@@ -290,19 +304,29 @@ public class StatScrollWidget extends ScrollPanel{
 			}
 		}
 		if (!core.getDataConfig().getVeinBlacklist(biome).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.vein_blacklist_header").withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
+			content.add(new Element(LangProvider.VEIN_BLACKLIST_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
 			for (ResourceLocation blockID : core.getDataConfig().getVeinBlacklist(biome)) {
 				content.add(new Element(Component.literal(blockID.toString()), step(2), 0xEEEEEE, false, 0));
 			}
 		}
 		if (!core.getDataConfig().getMobModifierMap(biome).isEmpty()) {
-			content.add(new Element(Component.translatable("pmmo.mob_modifier_header").withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
+			content.add(new Element(LangProvider.MOB_MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
 			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(biome).entrySet()) {
 				content.add(new Element(Component.literal(mobMap.getKey().toString()), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
 					content.add(new Element(map.getKey(), map.getValue(), step(2), 0xFFFFFF));
 				}
 			}
+		}
+	}
+	
+	public void generateGlossary() {
+		switch (selection) {
+		case REQS:{break;}
+		case XP:{break;}
+		case BONUS:{break;}
+		case SALVAGE: {break;}
+		default:{}
 		}
 	}
 

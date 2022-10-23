@@ -6,10 +6,11 @@ import java.util.stream.Collectors;
 
 import com.mojang.serialization.Codec;
 
+import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 
-public enum EventType implements StringRepresentable, IExtensibleEnum{
+public enum EventType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
 	ANVIL_REPAIR(true, false, false, "smithing"),  			//IMPLEMENTED
 	BLOCK_BREAK(false, true, false, "mining"),				//IMPLEMENTED
 		BREAK_SPEED(false, true, false, "mining"),			//IMPLEMENTED
@@ -89,4 +90,7 @@ public enum EventType implements StringRepresentable, IExtensibleEnum{
 	public String getSerializedName() {return this.name();}
 	
 	public static EventType create(String name, boolean itemApplicable, boolean blockApplicable, boolean entityApplicable, String autoValueSkillDefault) {throw new IllegalStateException("Enum not extended");}
+
+	@Override
+	public String getName() {return name();}
 }

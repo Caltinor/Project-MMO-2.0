@@ -6,10 +6,11 @@ import java.util.stream.Collectors;
 
 import com.mojang.serialization.Codec;
 
+import harmonised.pmmo.client.gui.component.GuiEnumGroup;
 import net.minecraft.util.StringRepresentable;
 import net.minecraftforge.common.IExtensibleEnum;
 
-public enum ReqType implements StringRepresentable, IExtensibleEnum {
+public enum ReqType implements StringRepresentable, IExtensibleEnum, GuiEnumGroup {
     WEAR(true, false, false, "endurance"),				//PLAYER TICK
     USE_ENCHANTMENT(true, false, false, "magic"),		//PLAYER TICK
     TOOL(true, false, false, "mining"),					//IMPLEMENTED IN ACTIONS
@@ -48,4 +49,7 @@ public enum ReqType implements StringRepresentable, IExtensibleEnum {
 	@Override
 	public String getSerializedName() {return this.name();}
 	public static ReqType create(String name, boolean itemApplicable, boolean blockApplicable, boolean entityApplicable, String defaultSkill) {throw new IllegalStateException("Enum not extended");}
+
+	@Override
+	public String getName() {return name();}
 }
