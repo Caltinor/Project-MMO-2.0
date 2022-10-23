@@ -70,12 +70,12 @@ public class StatsScreen extends Screen{
 	protected void init() {
 		renderX = this.width/2 - 128;
 		renderY = this.height/2 - 128;
-		scrollWidget = stack != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, stack) :
-						block != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, block) :
+		scrollWidget = stack != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, stack, this.itemRenderer) :
+						block != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, block, this.itemRenderer) :
 						entity != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, entity) :
-						selection != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, selection, object, skill ,type)
+						selection != null ? new StatScrollWidget(206, 200, renderY+30, renderX+25, selection, object, skill ,type, this.itemRenderer)
 								: new StatScrollWidget(206, 200, renderY+30, renderX+25, 0);
-		openGlossary = new Button(0, 0, 80, 20, LangProvider.OPEN_GLOSSARY.asComponent(), b -> Minecraft.getInstance().setScreen(new GlossarySelectScreen()));
+		openGlossary = new Button(this.width-84, 4, 80, 20, LangProvider.OPEN_GLOSSARY.asComponent(), b -> Minecraft.getInstance().setScreen(new GlossarySelectScreen()));
 		
 		this.addRenderableWidget(scrollWidget);
 		this.addRenderableWidget(openGlossary);
