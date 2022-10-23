@@ -322,6 +322,16 @@ public class LangProvider extends LanguageProvider{
 	public static final Translation LEVELED_UP = Translation.Builder.start("pmmo.leveled_up")
 			.addLocale(Locale.EN_US, "You leveled up to %s in %s").build();
 	
+	//=========COMMANDS===========================
+	public static final Translation SET_LEVEL = Translation.Builder.start("pmmo.setLevel")
+			.addLocale(Locale.EN_US, "%1$s has been set to level %2$s for %3$s").build();
+	public static final Translation SET_XP = Translation.Builder.start("pmmo.setXp")
+			.addLocale(Locale.EN_US, "%1$s has been set to %2$sxp for %3$s").build();
+	public static final Translation ADD_LEVEL = Translation.Builder.start("pmmo.addLevel")
+			.addLocale(Locale.EN_US, "%1$s has been changed by %2$s levels for %3$s").build();
+	public static final Translation ADD_XP = Translation.Builder.start("pmmo.addXp")
+			.addLocale(Locale.EN_US, "%1$s has been changed by %2$sxp for %3$s").build();
+	
 	@Override
 	protected void addTranslations() {
 		for (Field entry : this.getClass().getDeclaredFields()) {
