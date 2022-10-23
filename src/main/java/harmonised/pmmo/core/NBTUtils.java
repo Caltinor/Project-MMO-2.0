@@ -134,7 +134,7 @@ public class NBTUtils {
 	private Map<String, Double> evaluateEntries(CompoundTag nbt, List<LogicEntry> logic) {
 		Map<String, Double> output = new HashMap<>();
 		//cancels the evaluation if NBT has no data or never existed
-		if (nbt.isEmpty() || nbt == null) return output;
+		if (nbt == null || nbt.isEmpty()) return output;
 		//this section cycles through the logic and generates usable result objects
 		List<LogicTier> logicSequence = new ArrayList<>();
 		for (int i = 0; i < logic.size(); i++) {

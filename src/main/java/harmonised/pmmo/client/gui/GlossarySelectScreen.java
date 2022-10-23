@@ -35,7 +35,7 @@ public class GlossarySelectScreen extends Screen{
 	private Button viewButton;
 	private SELECTION selection;
 	private OBJECT object;
-	private String skill;
+	private String skill = "";
 	private GuiEnumGroup type;
 	private int renderX, renderY;
 
@@ -77,7 +77,10 @@ public class GlossarySelectScreen extends Screen{
 		
 		viewButton = new Button(this.width/2 - 40, renderY + 125, 80, 20, 
 				LangProvider.GLOSSARY_VIEW_BUTTON.asComponent(), 
-				button -> Minecraft.getInstance().setScreen(new StatsScreen(selection, object, skill, type)));
+				button -> {
+					if (selection != null && object != null)
+						Minecraft.getInstance().setScreen(new StatsScreen(selection, object, skill, type));
+				});
 		viewButton.visible = false;
 		
 		addRenderableWidget(viewButton);
@@ -128,9 +131,9 @@ public class GlossarySelectScreen extends Screen{
 	private void updateSelection(SelectionEntry<SELECTION> sel) {
 		selection = sel.reference;
 		selectObject.visible = true;
-		selectObject.setEntries(selection == SELECTION.SALVAGE ? List.of(new SelectionEntry<OBJECT>(OBJECT.ITEMS.text, OBJECT.ITEMS)) : OBJECT.CHOICE_LIST);
+		selectObject.setEntries(selection.validObjects);
 		selectSkills.visible = true;
-		selectEnum.visible = selection != SELECTION.SALVAGE;	
+		selectEnum.visible = selection != SELECTION.SALVAGE && selection != SELECTION.VEIN;	
 		viewButton.visible = true;
 	}
 	
@@ -177,13 +180,20 @@ public class GlossarySelectScreen extends Screen{
 	}
 	
 	public static enum SELECTION {
-		REQS(LangProvider.GLOSSARY_SECTION_REQ.asComponent()),
-		XP(LangProvider.GLOSSARY_SECTION_XP.asComponent()),
-		BONUS(LangProvider.GLOSSARY_SECTION_BONUS.asComponent()),
-		SALVAGE(LangProvider.GLOSSARY_SECTION_SALVAGE.asComponent());
+		REQS(LangProvider.GLOSSARY_SECTION_REQ.asComponent(), 
+				Arrays.stream(OBJECT.values()).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
+		XP(LangProvider.GLOSSARY_SECTION_XP.asComponent(), 
+				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.BLOCKS, OBJECT.ENTITY}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
+		BONUS(LangProvider.GLOSSARY_SECTION_BONUS.asComponent(), 
+				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
+		SALVAGE(LangProvider.GLOSSARY_SECTION_SALVAGE.asComponent(), 
+				List.of(new SelectionEntry<OBJECT>(OBJECT.ITEMS.text, OBJECT.ITEMS))),
+		VEIN(LangProvider.GLOSSARY_SECTION_VEIN.asComponent(), 
+				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.BLOCKS, OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList());
 		
 		MutableComponent text;
-		SELECTION(MutableComponent text) {this.text = text;}
+		List<SelectionEntry<OBJECT>> validObjects;
+		SELECTION(MutableComponent text, List<SelectionEntry<OBJECT>> validObjects) {this.text = text; this.validObjects = validObjects;}
 		
 		public static final List<SelectionEntry<SELECTION>> CHOICE_LIST = Arrays.stream(SELECTION.values()).map(val -> new SelectionEntry<>(val.text, val)).toList();
 	}

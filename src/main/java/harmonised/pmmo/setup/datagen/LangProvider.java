@@ -276,6 +276,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Penalty Effects").build();
 	public static final Translation BIOME_EFFECT_POS = Translation.Builder.start("pmmo.biome_positive")
 			.addLocale(Locale.EN_US, "Bonus Effects").build();
+	public static final Translation ADDON_AFFECTED_ATTRIBUTE = Translation.Builder.start("pmmo.gui.statscroll.addon_affected")
+			.addLocale(Locale.EN_US, "This Property is Dynamically Defined").build();
 	
 	//=========GLOSSARY SELECT SCREEN=============
 	public static final Translation GLOSSARY_DEFAULT_SECTION = Translation.Builder.start("pmmo.gui.glossary.default_section")
@@ -288,6 +290,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Bonuses").build();
 	public static final Translation GLOSSARY_SECTION_SALVAGE = Translation.Builder.start("pmmo.gui.glossary.section.salvage")
 			.addLocale(Locale.EN_US, "Salvage").build();
+	public static final Translation GLOSSARY_SECTION_VEIN = Translation.Builder.start("pmmo.gui.glossary.section.vein")
+			.addLocale(Locale.EN_US, "Vein Mining").build();
 	
 	public static final Translation GLOSSARY_DEFAULT_OBJECT = Translation.Builder.start("pmmo.gui.glossary.default_object")
 			.addLocale(Locale.EN_US, "All Content").build();
