@@ -189,7 +189,9 @@ public class GlossarySelectScreen extends Screen{
 		SALVAGE(LangProvider.GLOSSARY_SECTION_SALVAGE.asComponent(), 
 				List.of(new SelectionEntry<OBJECT>(OBJECT.ITEMS.text, OBJECT.ITEMS))),
 		VEIN(LangProvider.GLOSSARY_SECTION_VEIN.asComponent(), 
-				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.BLOCKS, OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList());
+				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.BLOCKS, OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
+		MOB_SCALING(LangProvider.GLOSSARY_SECTION_MOB.asComponent(),
+				Arrays.stream(new OBJECT[] {OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList());
 		
 		MutableComponent text;
 		List<SelectionEntry<OBJECT>> validObjects;
