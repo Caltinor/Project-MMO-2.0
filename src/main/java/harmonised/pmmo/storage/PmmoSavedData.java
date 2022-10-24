@@ -19,7 +19,6 @@ import harmonised.pmmo.features.fireworks.FireworkHandler;
 import harmonised.pmmo.network.Networking;
 import harmonised.pmmo.network.clientpackets.CP_UpdateExperience;
 import harmonised.pmmo.network.clientpackets.CP_UpdateLevelCache;
-import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.Reference;

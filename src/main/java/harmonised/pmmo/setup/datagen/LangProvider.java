@@ -31,6 +31,9 @@ public class LangProvider extends LanguageProvider{
 	static final List<Translation> impliedTranslations = new ArrayList<>();
 	static {
 		//=========PROVIDED SKILLS================
+		addEN_US("pmmo.health", "Health");
+		addEN_US("pmmo.speed", "Speed");
+		addEN_US("pmmo.damage", "Damage");
 		addEN_US("pmmo.power", "Power");
 		addEN_US("pmmo.mining", "Mining");
 		addEN_US("pmmo.building", "Building");
@@ -292,6 +295,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Salvage").build();
 	public static final Translation GLOSSARY_SECTION_VEIN = Translation.Builder.start("pmmo.gui.glossary.section.vein")
 			.addLocale(Locale.EN_US, "Vein Mining").build();
+	public static final Translation GLOSSARY_SECTION_MOB = Translation.Builder.start("pmmo.gui.glossary.section.mobscaling")
+			.addLocale(Locale.EN_US, "Mob Scaling").build();
 	
 	public static final Translation GLOSSARY_DEFAULT_OBJECT = Translation.Builder.start("pmmo.gui.glossary.default_object")
 			.addLocale(Locale.EN_US, "All Content").build();
@@ -320,6 +325,12 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "You Found Treasure!").build();
 	public static final Translation LEVELED_UP = Translation.Builder.start("pmmo.leveled_up")
 			.addLocale(Locale.EN_US, "You leveled up to %s in %s").build();
+	public static final Translation PERK_BREATH_REFRESH = Translation.Builder.start("pmmo.perks.breathrefresh")
+			.addLocale(Locale.EN_US, "Your skill extended your breath").build();
+	public static final Translation VEIN_LIMIT = Translation.Builder.start("pmmo.veinLimit")
+			.addLocale(Locale.EN_US, "Vein Limit: %1$s").build();
+	public static final Translation VEIN_CHARGE = Translation.Builder.start("pmmo.veinCharge")
+			.addLocale(Locale.EN_US, "Vein Ability: %1$s/%2$s").build();
 	
 	//=========COMMANDS===========================
 	public static final Translation SET_LEVEL = Translation.Builder.start("pmmo.setLevel")
@@ -330,6 +341,62 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "%1$s has been changed by %2$s levels for %3$s").build();
 	public static final Translation ADD_XP = Translation.Builder.start("pmmo.addXp")
 			.addLocale(Locale.EN_US, "%1$s has been changed by %2$sxp for %3$s").build();
+	public static final Translation PARTY_ALREADY_IN = Translation.Builder.start("pmmo.youAreAlreadyInAParty")
+			.addLocale(Locale.EN_US, "You are already in a Party").build();
+	public static final Translation PARTY_CREATED = Translation.Builder.start("pmmo.partyCreated")
+			.addLocale(Locale.EN_US, "You have created a Party").build();
+	public static final Translation PARTY_LEFT = Translation.Builder.start("pmmo.youLeftTheParty")
+			.addLocale(Locale.EN_US, "You have left the Party").build();
+	public static final Translation PARTY_NOT_IN = Translation.Builder.start("pmmo.youAreNotInAParty")
+			.addLocale(Locale.EN_US, "You are not in a Party").build();
+	public static final Translation PARTY_INVITE = Translation.Builder.start("pmmo.youHaveInvitedAPlayerToYourParty")
+			.addLocale(Locale.EN_US, "You invited %1$s to your Party").build();
+	public static final Translation PARTY_MEMBER_TOTAL = Translation.Builder.start("pmmo.totalMembers")
+			.addLocale(Locale.EN_US, "Total Members: %1$s").build();
+	public static final Translation PARTY_MEMBER_LIST = Translation.Builder.start("pmmo.partyMemberListEntry")
+			.addLocale(Locale.EN_US, "%1$s").build();
+	public static final Translation PARTY_DECLINE = Translation.Builder.start("pmmo.youHaveDeclinedPartyInvitation")
+			.addLocale(Locale.EN_US, "You have declined the Party invitation").build();
+	public static final Translation PARTY_NO_INVITES = Translation.Builder.start("pmmo.youAreNotInvitedToAnyParty")
+			.addLocale(Locale.EN_US, "You have no pending Party invitations").build();
+	public static final Translation PARTY_JOINED = Translation.Builder.start("pmmo.youJoinedAParty")
+			.addLocale(Locale.EN_US, "You have joined the Party!").build();
+	public static final Translation PARTY_RESCIND_INVITE = Translation.Builder.start("pmmo.msg.rescindInvite")
+			.addLocale(Locale.EN_US, "You have removed the invite for %1$s").build();
+	public static final Translation PARTY_ACCEPT = Translation.Builder.start("pmmo.msg.accept")
+			.addLocale(Locale.EN_US, "Accept").build();
+	public static final Translation PARTY_DECLINE_INVITE = Translation.Builder.start("pmmo.msg.decline")
+			.addLocale(Locale.EN_US, "Decline").build();
+	public static final Translation PARTY_PLAYER_INVITED = Translation.Builder.start("pmmo.playerInvitedYouToAParty")
+			.addLocale(Locale.EN_US, "%1$s invited you to their Party, %2$s|%3$s").build();
+	
+	//=========DENIAL MESSAGES====================
+	public static final Translation DENIAL_WEAR = Translation.Builder.start("pmmo.msg.denial.wear")
+			.addLocale(Locale.EN_US, "You are not skilled enough to wear %1$s").build();
+	public static final Translation DENIAL_USE_ENCHANT = Translation.Builder.start("pmmo.msg.denial.use_enchantment")
+			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s with %2$s enchantment").build();
+	public static final Translation DENIAL_TOOL = Translation.Builder.start("pmmo.msg.denial.tool")
+			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as tool").build();
+	public static final Translation DENIAL_WEAPON = Translation.Builder.start("pmmo.msg.denial.weapon")
+			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s as a weapon").build();
+	public static final Translation DENIAL_USE = Translation.Builder.start("pmmo.msg.denial.use")
+			.addLocale(Locale.EN_US, "You are not skilled enough to use %1$s").build();
+	public static final Translation DENIAL_PLACE = Translation.Builder.start("pmmo.msg.denial.place")
+			.addLocale(Locale.EN_US, "You are not skilled enough to place %1$s").build();
+	public static final Translation DENIAL_BREAK = Translation.Builder.start("pmmo.msg.denial.break")
+			.addLocale(Locale.EN_US, "You are not skilled enough to break %1$s").build();
+	public static final Translation DENIAL_BIOME = Translation.Builder.start("pmmo.msg.denial.biome")
+			.addLocale(Locale.EN_US, "You are not skilled enough to survive in %1$s").build();
+	public static final Translation DENIAL_KILL = Translation.Builder.start("pmmo.msg.denial.kill")
+			.addLocale(Locale.EN_US, "You are not skilled enough to kill %1$s").build();
+	public static final Translation DENIAL_TRAVEL = Translation.Builder.start("pmmo.msg.denial.travel")
+			.addLocale(Locale.EN_US, "Travel to %1$s requires %2$s").build();
+	public static final Translation DENIAL_RIDE = Translation.Builder.start("pmmo.msg.denial.ride")
+			.addLocale(Locale.EN_US, "You are not skilled enough to ride %1$s").build();
+	public static final Translation DENIAL_TAME = Translation.Builder.start("pmmo.msg.denial.tame")
+			.addLocale(Locale.EN_US, "You are not skilled enough to tame %1$s").build();
+	public static final Translation DENIAL_ENTITY_INTERACT = Translation.Builder.start("pmmo.msg.denial.entity_interact")
+			.addLocale(Locale.EN_US, "You are not skilled enough to interact with %1$s").build();
 	
 	@Override
 	protected void addTranslations() {

@@ -13,16 +13,18 @@ import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.setup.datagen.LangProvider;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.IIngameOverlay;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.fml.LogicalSide;
 
-public class XPOverlayGUI implements IIngameOverlay
+public class XPOverlayGUI implements IGuiOverlay
 {
 	private Core core = Core.get(LogicalSide.CLIENT);
 	private int skillGap = 0;
@@ -30,7 +32,7 @@ public class XPOverlayGUI implements IIngameOverlay
 	private Font fontRenderer;
 
 	@Override
-	public void render(ForgeIngameGui gui, PoseStack stack, float partialTick, int width, int height){
+	public void render(ForgeGui gui, PoseStack stack, float partialTick, int width, int height){
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)
@@ -64,11 +66,12 @@ public class XPOverlayGUI implements IIngameOverlay
 			skillsKeys = new ArrayList<>();
 			core.getData().getXpMap(null).keySet().stream().forEach(entry -> skillsKeys.add(entry));
 			skillsKeys.sort(Comparator.<String>comparingLong(a -> core.getData().getXpRaw(null, a)).reversed());
-		}	
+		}
+			
 		for(int i = 0; i < skillsKeys.size(); i++) {
 			String skillKey = skillsKeys.get(i);
-			skillGap = fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) > skillGap 
-					? fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) 
+			skillGap = fontRenderer.width(Component.translatable("pmmo." + skillKey).getString()) > skillGap 
+					? fontRenderer.width(Component.translatable("pmmo." + skillKey).getString()) 
 					: skillGap;
 			long currentXP = core.getData().getXpRaw(null, skillKey);
 			double level = ((DataMirror)core.getData()).getXpWithPercentToNextLevel(core.getData().getXpRaw(null, skillKey));
@@ -83,7 +86,7 @@ public class XPOverlayGUI implements IIngameOverlay
 			int listIndex = i * 9;
 			int levelGap = fontRenderer.width(tempString);
 			GuiComponent.drawString(stack, fontRenderer, tempString, skillListX + 4, skillListY + 3 + listIndex, color);
-			GuiComponent.drawString(stack, fontRenderer, " | " + new TranslatableComponent("pmmo." + skillKey).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
+			GuiComponent.drawString(stack, fontRenderer, " | " + Component.translatable("pmmo." + skillKey).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
 			GuiComponent.drawString(stack, fontRenderer, " | " + DP.dprefix(currentXP), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color);
 			if (modifiers.getOrDefault(skillKey, 1d) != 1d) {
 				double bonus = (Math.max(0, modifiers.get(skillKey)) -1) * 100;
@@ -103,8 +106,8 @@ public class XPOverlayGUI implements IIngameOverlay
 				currentCharge = VeinTracker.getCurrentCharge();
 		}
 		if (currentCharge > 0) {
-			GuiComponent.drawString(stack, fontRenderer, new TranslatableComponent("pmmo.veinLimit", Config.VEIN_LIMIT.get()), gaugeX, gaugeY-11, 0xFFFFFF);
-			GuiComponent.drawString(stack, fontRenderer, new TranslatableComponent("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, gaugeY, 0xFFFFFF);
+			GuiComponent.drawString(stack, fontRenderer, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()), gaugeX, gaugeY-11, 0xFFFFFF);
+			GuiComponent.drawString(stack, fontRenderer, LangProvider.VEIN_CHARGE.asComponent(currentCharge, maxCharge), gaugeX, gaugeY, 0xFFFFFF);
 		}
 	}
 	
