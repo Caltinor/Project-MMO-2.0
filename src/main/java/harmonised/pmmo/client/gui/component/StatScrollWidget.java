@@ -111,8 +111,8 @@ public class StatScrollWidget extends ScrollPanel{
 	}
 	public StatScrollWidget(int width, int height, int top, int left, int pointless) {
 		this(width, height, top, left);
-		populateLocation(List.of(mc.level.dimension().location()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.DIMENSION}, "", false, true);
-		populateLocation(List.of(RegistryUtil.getId(mc.level.getBiome(mc.player.blockPosition()).value())), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.BIOME}, "", true, true);
+		populateLocation(List.of(mc.level.dimension().location()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.DIMENSION}, "", false, true, true);
+		populateLocation(List.of(RegistryUtil.getId(mc.level.getBiome(mc.player.blockPosition()).value())), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.BIOME}, "", true, true, true);
 	}
 	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack, ItemRenderer itemRenderer) {
 		this(width, height, top, left);
@@ -171,11 +171,11 @@ public class StatScrollWidget extends ScrollPanel{
 				break;}
 			case DIMENSIONS: {
 				populateLocation(mc.player.connection.levels().stream().map(key -> key.location()).toList(),
-					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, false, false);
+					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, false, false, false);
 				break;}
 			case BIOMES: {
 				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
-					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, true, false);
+					new ReqType[] {ReqType.TRAVEL}, bonuses, skill, true, false, false);
 				break;}
 			case ENCHANTS: {
 				populateEnchants(ForgeRegistries.ENCHANTMENTS.getValues().stream().map(ench -> RegistryUtil.getId(ench)).toList(), skill);
@@ -223,11 +223,11 @@ public class StatScrollWidget extends ScrollPanel{
 				break;}
 			case DIMENSIONS: {
 				populateLocation(mc.player.connection.levels().stream().map(key -> key.location()).toList(),
-						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, false, false);
+						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, false, false, false);
 				break;}
 			case BIOMES: {
 				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
-						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, true, false);
+						reqs, type == null ? ModifierDataType.values() : new ModifierDataType[] {(ModifierDataType) type}, skill, true, false, false);
 				break;}
 			default:{}
 			}
@@ -256,11 +256,26 @@ public class StatScrollWidget extends ScrollPanel{
 				break;}
 			case DIMENSIONS: {
 				populateLocation(mc.player.connection.levels().stream().map(key -> key.location()).toList(),
-						reqs, bonuses, skill, false, true);
+						reqs, bonuses, skill, false, true, false);
 				break;}
 			case BIOMES: {
 				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
-						reqs, bonuses, skill, true, true);
+						reqs, bonuses, skill, true, true, false);
+				break;}
+			default:{}
+			}
+			break;}
+		case MOB_SCALING: {
+			ReqType[] reqs = new ReqType[] {};
+			ModifierDataType[] bonuses = new ModifierDataType[] {};
+			switch(object) {
+			case DIMENSIONS: {
+				populateLocation(mc.player.connection.levels().stream().map(key -> key.location()).toList(),
+						reqs, bonuses, skill, false, false, true);
+				break;}
+			case BIOMES: {
+				populateLocation(ForgeRegistries.BIOMES.getKeys().stream().toList(),
+						reqs, bonuses, skill, true, false, true);
 				break;}
 			default:{}
 			}
@@ -340,7 +355,7 @@ public class StatScrollWidget extends ScrollPanel{
 		}
 	}
 	
-	private void populateLocation(List<ResourceLocation> locations, ReqType[] reqs, ModifierDataType[] modifiers, String skillFilter, boolean isBiome, boolean includeVein) {
+	private void populateLocation(List<ResourceLocation> locations, ReqType[] reqs, ModifierDataType[] modifiers, String skillFilter, boolean isBiome, boolean includeVein, boolean includeScaling) {
 		locations.forEach(loc -> {
 			int lengthBeforeProcessing = content.size() + 1;
 			if (locations.size() > 1)
@@ -351,6 +366,8 @@ public class StatScrollWidget extends ScrollPanel{
 			addModifierSection((mod -> core.getXpUtils().getObjectModifierMap(mod, loc)), modifiers, skillFilter);
 			if (includeVein)
 				addVeinBlacklistSection(loc);
+			if (includeScaling)
+				addMobModifierSection(loc);
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		});
@@ -537,7 +554,8 @@ public class StatScrollWidget extends ScrollPanel{
 		if (!core.getDataConfig().getMobModifierMap(location).isEmpty()) {
 			content.add(new TextElement(LangProvider.MOB_MODIFIER_HEADER.asComponent().withStyle(ChatFormatting.BOLD), step(1), 0xFFFFFF, false, 0));
 			for (Map.Entry<ResourceLocation, Map<String, Double>> mobMap : core.getDataConfig().getMobModifierMap(location).entrySet()) {
-				content.add(new TextElement(Component.literal(mobMap.getKey().toString()), step(1), 0xFFFFFF, true, Config.SALVAGE_ITEM_COLOR.get()));
+				Entity entity = ForgeRegistries.ENTITY_TYPES.getValue(mobMap.getKey()).create(mc.level);
+				content.add(new RenderableElement(entity.getName(), step(1), 0xFFFFFF, Config.SALVAGE_ITEM_COLOR.get(), entity));
 				for (Map.Entry<String, Double> map : mobMap.getValue().entrySet()) {
 					content.add(new TextElement(map.getKey(), map.getValue(), step(2), 0xFFFFFF));
 				}
