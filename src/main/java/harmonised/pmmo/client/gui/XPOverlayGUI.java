@@ -13,6 +13,8 @@ import harmonised.pmmo.config.SkillsConfig;
 import harmonised.pmmo.config.codecs.SkillData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinMiningLogic;
+import harmonised.pmmo.setup.datagen.LangProvider;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -104,8 +106,8 @@ public class XPOverlayGUI implements IGuiOverlay
 				currentCharge = VeinTracker.getCurrentCharge();
 		}
 		if (currentCharge > 0) {
-			GuiComponent.drawString(stack, fontRenderer, Component.translatable("pmmo.veinLimit", Config.VEIN_LIMIT.get()), gaugeX, gaugeY-11, 0xFFFFFF);
-			GuiComponent.drawString(stack, fontRenderer, Component.translatable("pmmo.veinCharge", currentCharge, maxCharge), gaugeX, gaugeY, 0xFFFFFF);
+			GuiComponent.drawString(stack, fontRenderer, LangProvider.VEIN_LIMIT.asComponent(Config.VEIN_LIMIT.get()), gaugeX, gaugeY-11, 0xFFFFFF);
+			GuiComponent.drawString(stack, fontRenderer, LangProvider.VEIN_CHARGE.asComponent(currentCharge, maxCharge), gaugeX, gaugeY, 0xFFFFFF);
 		}
 	}
 	

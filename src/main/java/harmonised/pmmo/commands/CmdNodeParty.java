@@ -9,11 +9,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import harmonised.pmmo.features.party.PartyUtils;
+import harmonised.pmmo.setup.datagen.LangProvider;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.UuidArgument;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 public class CmdNodeParty {
@@ -46,28 +46,28 @@ public class CmdNodeParty {
 	public static int partyCreate(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		ServerPlayer player = ctx.getSource().getPlayerOrException();		
 		if (PartyUtils.isInParty(player)) {
-			ctx.getSource().sendFailure(Component.translatable("pmmo.youAreAlreadyInAParty"));
+			ctx.getSource().sendFailure(LangProvider.PARTY_ALREADY_IN.asComponent());
 			return 1;
 		}
 		PartyUtils.createParty(player);
-		ctx.getSource().sendSuccess(Component.translatable("pmmo.partyCreated"), false);
+		ctx.getSource().sendSuccess(LangProvider.PARTY_CREATED.asComponent(), false);
 		return 0;
 	}
 	
 	public static int partyLeave(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		PartyUtils.removeFromParty(ctx.getSource().getPlayerOrException());
-		ctx.getSource().sendSuccess(Component.translatable("pmmo.youLeftTheParty"), false);
+		ctx.getSource().sendSuccess(LangProvider.PARTY_LEFT.asComponent(), false);
 		return 0;
 	}
 	
 	public static int partyInvite(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		ServerPlayer player = EntityArgument.getPlayer(ctx, "player");
 		if (!PartyUtils.isInParty(ctx.getSource().getPlayerOrException())) {
-			ctx.getSource().sendFailure(Component.translatable("pmmo.youAreNotInAParty"));
+			ctx.getSource().sendFailure(LangProvider.PARTY_NOT_IN.asComponent());
 			return 1;
 		}
 		PartyUtils.inviteToParty(ctx.getSource().getPlayerOrException(), player);
-		ctx.getSource().sendSuccess(Component.translatable("pmmo.youHaveInvitedAPlayerToYourParty", player.getDisplayName()), false);
+		ctx.getSource().sendSuccess(LangProvider.PARTY_INVITE.asComponent(player.getDisplayName()), false);
 		return 0;
 	}
 	
@@ -79,12 +79,12 @@ public class CmdNodeParty {
 	
 	public static int listParty(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		if (!PartyUtils.isInParty(ctx.getSource().getPlayerOrException())) {
-			ctx.getSource().sendFailure(Component.translatable("pmmo.youAreNotInAParty"));
+			ctx.getSource().sendFailure(LangProvider.PARTY_NOT_IN.asComponent());
 			return 1;
 		}
 		List<String> memberNames = PartyUtils.getPartyMembers(ctx.getSource().getPlayerOrException()).stream().map(s -> s.getName().getString()).toList();
-		ctx.getSource().sendSuccess(Component.translatable("pmmo.totalMembers", memberNames.size()), false);
-		ctx.getSource().sendSuccess(Component.translatable("pmmo.partyMemberListEntry", memberNames), false);
+		ctx.getSource().sendSuccess(LangProvider.PARTY_MEMBER_TOTAL.asComponent(memberNames.size()), false);
+		ctx.getSource().sendSuccess(LangProvider.PARTY_MEMBER_LIST.asComponent(memberNames), false);
 		return 0;
 	}
 	
@@ -97,11 +97,11 @@ public class CmdNodeParty {
 	public static int partyDecline(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
 		UUID requestID = UuidArgument.getUuid(ctx, REQUEST_ID);
 		if (PartyUtils.declineInvite(requestID)) {
-			ctx.getSource().sendSuccess(Component.translatable("pmmo.youHaveDeclinedPartyInvitation"), false);
+			ctx.getSource().sendSuccess(LangProvider.PARTY_DECLINE.asComponent(), false);
 			return 1;
 		}
 		else {
-			ctx.getSource().sendSuccess(Component.translatable("pmmo.youAreNotInvitedToAnyParty"), false);
+			ctx.getSource().sendSuccess(LangProvider.PARTY_NO_INVITES.asComponent(), false);
 			return 0;
 		}
 	}
