@@ -177,7 +177,7 @@ public class FeaturePerks {
 		if (currentAir < 2 && (currentCD < System.currentTimeMillis() - cooldown 
 				|| currentCD + 20 >= System.currentTimeMillis())) {
 			player.setAirSupply(currentAir + perLevel);
-			player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
+			player.sendMessage(LangProvider.PERK_BREATH_REFRESH.asComponent(), player.getUUID());
 			breathe_cooldown.put(player.getUUID(), System.currentTimeMillis());
 		}
 		return new CompoundTag();
@@ -218,7 +218,7 @@ public class FeaturePerks {
 					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2));			
 		}
 		else if (nbt.contains(COMMAND)) {
-			player.getServer().getCommands().performPrefixedCommand(
+			player.getServer().getCommands().performCommand(
 					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2), 
 					nbt.getString(COMMAND));
 		}

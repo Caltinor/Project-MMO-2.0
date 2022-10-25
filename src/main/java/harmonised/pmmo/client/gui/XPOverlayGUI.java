@@ -19,12 +19,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.IIngameOverlay;
 import net.minecraftforge.fml.LogicalSide;
 
-public class XPOverlayGUI implements IGuiOverlay
+public class XPOverlayGUI implements IIngameOverlay
 {
 	private Core core = Core.get(LogicalSide.CLIENT);
 	private int skillGap = 0;
@@ -32,7 +32,7 @@ public class XPOverlayGUI implements IGuiOverlay
 	private Font fontRenderer;
 
 	@Override
-	public void render(ForgeGui gui, PoseStack stack, float partialTick, int width, int height){
+	public void render(ForgeIngameGui gui, PoseStack stack, float partialTick, int width, int height){
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)
@@ -70,8 +70,8 @@ public class XPOverlayGUI implements IGuiOverlay
 			
 		for(int i = 0; i < skillsKeys.size(); i++) {
 			String skillKey = skillsKeys.get(i);
-			skillGap = fontRenderer.width(Component.translatable("pmmo." + skillKey).getString()) > skillGap 
-					? fontRenderer.width(Component.translatable("pmmo." + skillKey).getString()) 
+			skillGap = fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) > skillGap 
+					? fontRenderer.width(new TranslatableComponent("pmmo." + skillKey).getString()) 
 					: skillGap;
 			long currentXP = core.getData().getXpRaw(null, skillKey);
 			double level = ((DataMirror)core.getData()).getXpWithPercentToNextLevel(core.getData().getXpRaw(null, skillKey));
@@ -86,7 +86,7 @@ public class XPOverlayGUI implements IGuiOverlay
 			int listIndex = i * 9;
 			int levelGap = fontRenderer.width(tempString);
 			GuiComponent.drawString(stack, fontRenderer, tempString, skillListX + 4, skillListY + 3 + listIndex, color);
-			GuiComponent.drawString(stack, fontRenderer, " | " + Component.translatable("pmmo." + skillKey).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
+			GuiComponent.drawString(stack, fontRenderer, " | " + new TranslatableComponent("pmmo." + skillKey).getString(), skillListX + levelGap + 4, skillListY + 3 + listIndex, color);
 			GuiComponent.drawString(stack, fontRenderer, " | " + DP.dprefix(currentXP), skillListX + levelGap + skillGap + 13, skillListY + 3 + listIndex, color);
 			if (modifiers.getOrDefault(skillKey, 1d) != 1d) {
 				double bonus = (Math.max(0, modifiers.get(skillKey)) -1) * 100;

@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ScreenHandler {
     
     @SubscribeEvent
-    public static void onScreenInit(ScreenEvent.Init.Post event) {
+    public static void onScreenInit(ScreenEvent.InitScreenEvent.Post event) {
         Screen screen = event.getScreen();
     
         if (screen instanceof InventoryScreen inv) {
@@ -22,7 +22,7 @@ public class ScreenHandler {
     }
     
     @SubscribeEvent
-    public static void onScreenRender(ScreenEvent.Render.Post event) {
+    public static void onScreenRender(ScreenEvent.DrawScreenEvent.Post event) {
         Screen screen = event.getScreen();
         if (screen instanceof InventoryScreen inventory) {
             inventory.renderables.forEach(widget -> {

@@ -34,7 +34,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     private Font font = Minecraft.getInstance().font;
 
     public SelectionWidget(int x, int y, int width, Component title, Consumer<T> selectCallback) {
-        super(x, y, width, ENTRY_HEIGHT, Component.empty());
+        super(x, y, width, ENTRY_HEIGHT, title);
         this.title = title;
         this.selectCallback = selectCallback;
     }

@@ -57,7 +57,7 @@ public class PartyUtils {
 		MutableComponent accept = LangProvider.PARTY_ACCEPT.asComponent().withStyle(acceptStyle);
 		Style declineStyle = Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/pmmo party decline "+requestID.toString())).withBold(true).withColor(ChatFormatting.RED).withUnderlined(true);
 		MutableComponent decline = LangProvider.PARTY_DECLINE_INVITE.asComponent().withStyle(declineStyle);
-		invitee.sendSystemMessage(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline));
+		invitee.sendMessage(LangProvider.PARTY_PLAYER_INVITED.asComponent(member.getDisplayName(), accept, decline), invitee.getUUID());
 		
 		invites.put(requestID, new Invite(playerToPartyMap.get(member.getUUID()), invitee.getUUID()));
 	}
@@ -65,7 +65,7 @@ public class PartyUtils {
 	public static void uninviteToParty(Player member, Player invitee) {
 		int memberPartyID = playerToPartyMap.getOrDefault(member.getUUID(), -1);
 		if (memberPartyID == -1) {
-			member.sendSystemMessage(LangProvider.PARTY_NOT_IN.asComponent());
+			member.sendMessage(LangProvider.PARTY_NOT_IN.asComponent(), member.getUUID());
 			return;
 		}
 		UUID inviteToRemove = null;
@@ -78,13 +78,13 @@ public class PartyUtils {
 		}
 		if (inviteToRemove != null) {
 			invites.remove(inviteToRemove);
-			member.sendSystemMessage(LangProvider.PARTY_RESCIND_INVITE.asComponent(invitee.getDisplayName()));
+			member.sendMessage(LangProvider.PARTY_RESCIND_INVITE.asComponent(invitee.getDisplayName()), member.getUUID());
 		}
 	}
 	
 	public static void acceptInvite(Player invitee, UUID requestID) {
 		if (invites.get(requestID) == null)
-			invitee.sendSystemMessage(LangProvider.PARTY_NO_INVITES.asComponent());
+			invitee.sendMessage(LangProvider.PARTY_NO_INVITES.asComponent(), invitee.getUUID());
 		Invite invite = invites.get(requestID);
 		if (!invite.player().equals(invitee.getUUID()))
 			return;
@@ -92,7 +92,7 @@ public class PartyUtils {
 			playerToPartyMap.put(invitee.getUUID(), invite.partyID());
 			invites.remove(requestID);
 		}
-		invitee.sendSystemMessage(LangProvider.PARTY_JOINED.asComponent());
+		invitee.sendMessage(LangProvider.PARTY_JOINED.asComponent(), invitee.getUUID());
 	}
 	
 	public static boolean declineInvite(UUID requestID) {

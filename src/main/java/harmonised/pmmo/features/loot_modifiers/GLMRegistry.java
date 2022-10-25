@@ -1,21 +1,19 @@
 package harmonised.pmmo.features.loot_modifiers;
 
-import com.mojang.serialization.Codec;
-
 import harmonised.pmmo.util.Reference;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class GLMRegistry {
-	public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> GLM = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Reference.MOD_ID);
+	public static final DeferredRegister<GlobalLootModifierSerializer<?>> GLM = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, Reference.MOD_ID);
 	public static final DeferredRegister<LootItemConditionType> CONDITIONS = DeferredRegister.create(Registry.LOOT_CONDITION_TYPE.key(), Reference.MOD_ID);
 	
-	public static final RegistryObject<Codec<TreasureLootModifier>> TREASURE = GLM.register("treasure", () -> TreasureLootModifier.CODEC);
-	public static final RegistryObject<Codec<RareDropModifier>> RARE_DROP = GLM.register("rare_drop", () -> RareDropModifier.CODEC);
+	public static final RegistryObject<TreasureLootModifier.Serializer> TREASURE = GLM.register("treasure", TreasureLootModifier.Serializer::new);
+	public static final RegistryObject<RareDropModifier.Serializer> RARE_DROP = GLM.register("rare_drop", RareDropModifier.Serializer::new);
 	
 	public static final RegistryObject<LootItemConditionType> SKILL_PLAYER = CONDITIONS.register("skill_level", 
 			() -> new LootItemConditionType(new SkillLootConditionPlayer.Serializer()));

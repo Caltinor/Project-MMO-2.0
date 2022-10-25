@@ -111,7 +111,7 @@ public class Networking {
 		INSTANCE.messageBuilder(SP_SetVeinShape.class, ID++)
 			.encoder(SP_SetVeinShape::encode)
 			.decoder(SP_SetVeinShape::new)
-			.consumerNetworkThread(SP_SetVeinShape::handle)
+			.consumer(SP_SetVeinShape::handle)
 			.add();
 		MsLoggy.INFO.log(LOG_CODE.NETWORK, "Messages Registered");
 	}

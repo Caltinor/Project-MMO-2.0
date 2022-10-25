@@ -7,10 +7,11 @@ import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid=Reference.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD, value=Dist.CLIENT)
 public class ClientSetup {
@@ -28,18 +29,14 @@ public class ClientSetup {
     //public static final KeyMapping OPEN_GLOSSARY = new KeyMapping("key.pmmo.openGlossary", GLFW.GLFW_KEY_UNKNOWN, LangProvider.KEYBIND_CATEGORY.key());
     
     @SubscribeEvent
-    public static void init(RegisterKeyMappingsEvent event) {
-    	event.register(SHOW_VEIN);
-    	event.register(ADD_VEIN);
-    	event.register(SUB_VEIN);
-    	event.register(CYCLE_VEIN);
-    	event.register(SHOW_LIST);
-    	event.register(VEIN_KEY);
-    	event.register(OPEN_MENU);
-    }
-    
-    @SubscribeEvent
-    public static void registerOverlay(RegisterGuiOverlaysEvent event) {
-    	event.registerAboveAll("stats_overlay", new XPOverlayGUI());
+    public static void init(FMLClientSetupEvent event) {
+    	ClientRegistry.registerKeyBinding(SHOW_VEIN);
+    	ClientRegistry.registerKeyBinding(ADD_VEIN);
+    	ClientRegistry.registerKeyBinding(SUB_VEIN);
+    	ClientRegistry.registerKeyBinding(CYCLE_VEIN);
+    	ClientRegistry.registerKeyBinding(SHOW_LIST);
+    	ClientRegistry.registerKeyBinding(VEIN_KEY);
+    	ClientRegistry.registerKeyBinding(OPEN_MENU);
+    	OverlayRegistry.registerOverlayTop("stats_overlay", new XPOverlayGUI());
     }
 }

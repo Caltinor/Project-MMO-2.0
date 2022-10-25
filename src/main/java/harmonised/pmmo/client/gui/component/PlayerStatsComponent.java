@@ -16,9 +16,9 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.gui.widget.ScrollPanel;
+import net.minecraftforge.client.gui.ScrollPanel;
 import net.minecraftforge.fml.LogicalSide;
 import org.jetbrains.annotations.NotNull;
 
@@ -164,7 +164,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
                 int y = (int) (relativeY + (i * (component.getHeight() + 1)) - scrollDistance);
                 
                 component.setPosition(component.x, y);
-                component.render(poseStack, mouseX, mouseY, Minecraft.getInstance().getPartialTick());
+                component.render(poseStack, mouseX, mouseY, Minecraft.getInstance().getFrameTime());
             }
         }
         
@@ -192,7 +192,7 @@ public class PlayerStatsComponent extends GuiComponent implements Widget, GuiEve
         public StatComponent(Minecraft minecraft, int pX, int pY, String skillKey, SkillData skillData) {
             super(pX, pY, 123, 24, 0, 167, 25, TEXTURE_LOCATION, pButton -> {});
             this.minecraft = minecraft;
-            this.skillName = Component.translatable("pmmo." + skillKey).getString();
+            this.skillName = new TranslatableComponent("pmmo." + skillKey).getString();
             this.skillData = skillData;
             
             this.skillColor = new Color(skillData.getColor());

@@ -108,7 +108,7 @@ public class CommonSetup {
 			generator.addProvider(new LangProvider(generator, "en_us"));
 		}
 		if (event.includeServer()) {
-			generator.addProvider(true, new GLMProvider(generator));
+			generator.addProvider(new GLMProvider(generator));
 		}
 	}
 }

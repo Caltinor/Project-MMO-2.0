@@ -120,7 +120,7 @@ public class PackGenerator {
 					    "    \"consumeAmount\": 1",
 					    "}",
 						"}")),
-		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITY_TYPES.getKeys(), 
+		ENTITIES("pmmo/entities", server -> ForgeRegistries.ENTITIES.getKeys(), 
 				List.of("{",
 						"\"xp_values\":{",
 					    "	\""+EventType.BREED.name()+"\":{},",

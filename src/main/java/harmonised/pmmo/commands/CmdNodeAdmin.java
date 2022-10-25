@@ -22,7 +22,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -103,7 +103,7 @@ public class CmdNodeAdmin {
 			ctx.getSource().sendSuccess(player.getName(), false);
 			for (Map.Entry<String, Long> skillMap : data.getXpMap(player.getUUID()).entrySet()) {
 				int level = data.getLevelFromXP(skillMap.getValue());
-				ctx.getSource().sendSuccess(Component.literal(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
+				ctx.getSource().sendSuccess(new TextComponent(skillMap.getKey()+": "+level+" | "+skillMap.getValue()), false);
 			}
 		}
 		return 0;

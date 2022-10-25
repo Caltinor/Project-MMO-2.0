@@ -20,8 +20,9 @@ import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -40,7 +41,7 @@ public class GlossarySelectScreen extends Screen{
 	private int renderX, renderY;
 
 	public GlossarySelectScreen () {
-		super(Component.literal("pmmo_glossary"));
+		super(new TextComponent("pmmo_glossary"));
 		init();
 	}
 	
@@ -64,7 +65,7 @@ public class GlossarySelectScreen extends Screen{
 		selectSkills.setEntries(SkillsConfig.SKILLS.get().keySet().stream()
 				.sorted()
 				.map(skill -> new SelectionEntry<>(
-						Component.translatable("pmmo."+skill).setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(skill)), 
+						new TranslatableComponent("pmmo."+skill).setStyle(Core.get(LogicalSide.CLIENT).getDataConfig().getSkillStyle(skill)), 
 						skill))
 				.toList()
 		);
@@ -176,7 +177,7 @@ public class GlossarySelectScreen extends Screen{
 	}
 	
 	private List<SelectionEntry<GuiEnumGroup>> enumToList(GuiEnumGroup[] array) {
-		return Arrays.stream(array).map(val -> new SelectionEntry<GuiEnumGroup>(Component.translatable("pmmo.enum."+val.getName()), val)).toList();
+		return Arrays.stream(array).map(val -> new SelectionEntry<GuiEnumGroup>(new TranslatableComponent("pmmo.enum."+val.getName()), val)).toList();
 	}
 	
 	public static enum SELECTION {
