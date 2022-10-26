@@ -38,7 +38,7 @@ repositories {
     flatDir { dirs 'libs' }
 }
 
-version = '1.18.2-2.0.0.10'
+version = '1.18.2-2.0.0.11'
 group = 'harmonised.pmmo'
 archivesBaseName = 'pmmo'
 
@@ -100,7 +100,7 @@ dependencies {
   	compileOnly fg.deobf('local.maven:item-filters-forge:1802.2.7-build.27')
   	compileOnly fg.deobf('local.maven:architectury:4.4.61')
   	
-  	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
+  	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
   	//runtimeOnly fg.deobf('local.maven:ftb-quests-forge:1802.3.8-build.101')
   	//runtimeOnly fg.deobf('local.maven:ftb-teams-forge:1802.2.6-build.51')
