@@ -26,6 +26,7 @@ import harmonised.pmmo.config.codecs.CodecTypes.*;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.nbt.LogicEntry;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
+import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
@@ -40,6 +41,18 @@ public class CoreParser {
 	public static final MergeableCodecDataManager<Byte, Byte> RELOADER = new MergeableCodecDataManager<>(
 			"dummy/dont/use/please/stop/this/will/break", DATA_LOGGER, Codec.BYTE, raws -> {return Byte.MIN_VALUE;}, func -> {
 				Core.get(LogicalSide.SERVER).resetDataForReload();
+			});
+	
+	public static final MergeableCodecDataManager<Byte, Byte> DEFAULT_CONFIG = new MergeableCodecDataManager<>(
+			"dummy/dont/use/please/stop/this/will/break", DATA_LOGGER, Codec.BYTE, raws -> {return Byte.MIN_VALUE;}, func -> {
+				MsLoggy.INFO.log(LOG_CODE.DATA, "Configuration Defaults from API Applied");
+				ConfigurationRegistry.get().applyDefaults(Core.get(LogicalSide.SERVER));
+			});
+	
+	public static final MergeableCodecDataManager<Byte, Byte> OVERRIDE_CONFIG = new MergeableCodecDataManager<>(
+			"dummy/dont/use/please/stop/this/will/break", DATA_LOGGER, Codec.BYTE, raws -> {return Byte.MIN_VALUE;}, func -> {
+				MsLoggy.INFO.log(LOG_CODE.DATA, "Configuration Overrides from API Applied");
+				ConfigurationRegistry.get().applyOverrides(Core.get(LogicalSide.SERVER));
 			});
 	
 	public static final MergeableCodecDataManager<CodecMapObject, CodecMapObject.ObjectMapContainer> ITEM_LOADER = new MergeableCodecDataManager<>(

@@ -2,6 +2,7 @@ package harmonised.pmmo.network;
 
 import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.network.clientpackets.CP_ApplyConfigRegistry;
 import harmonised.pmmo.network.clientpackets.CP_ClearData;
 import harmonised.pmmo.network.clientpackets.CP_ResetXP;
 import harmonised.pmmo.network.clientpackets.CP_SetOtherExperience;
@@ -17,11 +18,13 @@ import harmonised.pmmo.network.serverpackets.SP_OtherExpRequest;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinLimit;
 import harmonised.pmmo.network.serverpackets.SP_SetVeinShape;
 import harmonised.pmmo.network.serverpackets.SP_UpdateVeinTarget;
+import harmonised.pmmo.registry.ConfigurationRegistry;
 import harmonised.pmmo.util.MsLoggy;
 import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -92,6 +95,11 @@ public class Networking {
 			.decoder(CP_SyncVein::new)
 			.consumerNetworkThread(CP_SyncVein::handle)
 			.add();
+		INSTANCE.messageBuilder(CP_ApplyConfigRegistry.class, ID++)
+			.encoder(CP_ApplyConfigRegistry::encode)
+			.decoder(CP_ApplyConfigRegistry::new)
+			.consumerNetworkThread(CP_ApplyConfigRegistry::handle)
+			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
 			.encoder(SP_UpdateVeinTarget::toBytes)
@@ -118,6 +126,7 @@ public class Networking {
 	
 	public static void registerDataSyncPackets() {
 		CoreParser.RELOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_ClearData());
+		ConfigurationRegistry.addSyncPacket(INSTANCE, false);
 		CoreParser.ITEM_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ITEM, o)));
 		CoreParser.BLOCK_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.BLOCK, o)));
 		CoreParser.ENTITY_LOADER.subscribeAsSyncable(INSTANCE, (o) -> new CP_SyncData_Objects(new CP_SyncData_Objects.DataObjectRecord(ObjectType.ENTITY, o)));
@@ -125,6 +134,7 @@ public class Networking {
 		CoreParser.DIMENSION_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Locations::new);
 		CoreParser.ENCHANTMENT_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Enchantments::new);
 		CoreParser.PLAYER_LOADER.subscribeAsSyncable(INSTANCE, CP_SyncData_Players::new);
+		ConfigurationRegistry.addSyncPacket(INSTANCE, true);
 	}
 
 	public static void sendToClient(Object packet, ServerPlayer player) {
