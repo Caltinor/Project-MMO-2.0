@@ -4,6 +4,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
 import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;

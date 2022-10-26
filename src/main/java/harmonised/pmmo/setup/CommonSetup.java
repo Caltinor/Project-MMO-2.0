@@ -43,6 +43,7 @@ public class CommonSetup {
 		Networking.registerDataSyncPackets();
 		PerkRegistration.init();
 		
+		
 		//=========COMPAT=============
 		CurioCompat.hasCurio = ModList.get().isLoaded("curios");
 		if (ModList.get().isLoaded("ftbquests")) FTBQHandler.init();
@@ -77,6 +78,7 @@ public class CommonSetup {
 	@SubscribeEvent
 	public static void onAddReloadListeners(AddReloadListenerEvent event) {
 		event.addListener(CoreParser.RELOADER);
+		event.addListener(CoreParser.DEFAULT_CONFIG);
 		event.addListener(CoreParser.ITEM_LOADER);
 		event.addListener(CoreParser.BLOCK_LOADER);
 		event.addListener(CoreParser.ENTITY_LOADER);
@@ -84,6 +86,7 @@ public class CommonSetup {
 		event.addListener(CoreParser.DIMENSION_LOADER);
 		event.addListener(CoreParser.PLAYER_LOADER);
 		event.addListener(CoreParser.ENCHANTMENT_LOADER);
+		event.addListener(CoreParser.OVERRIDE_CONFIG);
 	}
 	
 	public static void onCapabilityRegister(RegisterCapabilitiesEvent event) {
