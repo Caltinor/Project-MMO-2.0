@@ -106,6 +106,7 @@ public class CommonSetup {
 		DataGenerator generator = event.getGenerator();
 		if (event.includeClient()) {
 			generator.addProvider(new LangProvider(generator, "en_us"));
+			//generator.addProvider(new GLMProvider(generator));
 		}
 		if (event.includeServer()) {
 			generator.addProvider(new GLMProvider(generator));

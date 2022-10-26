@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -34,6 +35,8 @@ public class RareDropModifier extends LootModifier{
 	}
 
     public static class Serializer extends GlobalLootModifierSerializer<RareDropModifier> {
+        public Serializer() {super();}
+        
 		@Override
 		public RareDropModifier read(ResourceLocation location, JsonObject object,	LootItemCondition[] ailootcondition) {
 			ResourceLocation lootItemID = new ResourceLocation(object.get("item").getAsString());
@@ -44,7 +47,7 @@ public class RareDropModifier extends LootModifier{
 
 		@Override
 		public JsonObject write(RareDropModifier instance) {
-			JsonObject json = new JsonObject();
+			JsonObject json = makeConditions(instance.conditions);
 			json.addProperty("item", instance.drop.getItem().getRegistryName().toString());
 			json.addProperty("count", instance.drop.getCount());
 			json.addProperty("chance", instance.chance);

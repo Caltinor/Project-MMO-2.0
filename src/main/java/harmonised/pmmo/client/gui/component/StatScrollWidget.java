@@ -114,7 +114,7 @@ public class StatScrollWidget extends ScrollPanel{
 	public StatScrollWidget(int width, int height, int top, int left, int pointless) {
 		this(width, height, top, left);
 		populateLocation(List.of(mc.level.dimension().location()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.DIMENSION}, "", false, true, true);
-		populateLocation(List.of(RegistryUtil.getId(mc.level.getBiome(mc.player.blockPosition()).value())), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.BIOME}, "", true, true, true);
+		populateLocation(List.of(mc.level.getBiome(mc.player.blockPosition()).value().getRegistryName()), new ReqType[] {ReqType.TRAVEL}, new ModifierDataType[] {ModifierDataType.BIOME}, "", true, true, true);
 	}
 	public StatScrollWidget(int width, int height, int top, int left, ItemStack stack, ItemRenderer itemRenderer) {
 		this(width, height, top, left);

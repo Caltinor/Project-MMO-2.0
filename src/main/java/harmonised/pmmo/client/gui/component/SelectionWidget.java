@@ -17,6 +17,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
@@ -34,7 +35,7 @@ public class SelectionWidget<T extends SelectionWidget.SelectionEntry<?>> extend
     private Font font = Minecraft.getInstance().font;
 
     public SelectionWidget(int x, int y, int width, Component title, Consumer<T> selectCallback) {
-        super(x, y, width, ENTRY_HEIGHT, title);
+        super(x, y, width, ENTRY_HEIGHT, new TextComponent(""));
         this.title = title;
         this.selectCallback = selectCallback;
     }

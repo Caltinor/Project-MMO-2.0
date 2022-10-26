@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 import harmonised.pmmo.setup.datagen.LangProvider;
+import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -53,6 +54,8 @@ public class TreasureLootModifier extends LootModifier{
 	}
 	
 	public static class Serializer extends GlobalLootModifierSerializer<TreasureLootModifier> {
+	    public Serializer() {super();}
+	    
 		@Override
 		public TreasureLootModifier read(ResourceLocation location, JsonObject object,	LootItemCondition[] ailootcondition) {
 			ResourceLocation lootItemID = new ResourceLocation(object.get("item").getAsString());
@@ -63,7 +66,7 @@ public class TreasureLootModifier extends LootModifier{
 
 		@Override
 		public JsonObject write(TreasureLootModifier instance) {
-			JsonObject json = new JsonObject();
+			JsonObject json = makeConditions(instance.conditions);
 			json.addProperty("item", instance.drop.getItem().getRegistryName().toString());
 			json.addProperty("count", instance.drop.getCount());
 			json.addProperty("chance", instance.chance);
