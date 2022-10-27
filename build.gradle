@@ -35,6 +35,9 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        url "https://maven.blamejared.com"
+    }
     flatDir { dirs 'libs' }
 }
 
@@ -91,6 +94,10 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.1.27'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    //CT Processors
+    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors:3.0.0.10'
+    annotationProcessor 'net.minecraftforge:forge:1.19.2-43.1.27'
+    annotationProcessor 'com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.14'
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0:api")
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
@@ -99,6 +106,7 @@ dependencies {
   	compileOnly fg.deobf('local.maven:ftb-library-forge:1902.3.9-build.144')
   	compileOnly fg.deobf('local.maven:item-filters-forge:1902.2.9-build.41')
   	compileOnly fg.deobf('local.maven:architectury:6.2.46-forge')
+  	compileOnly('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.14')
   	
   	//runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
