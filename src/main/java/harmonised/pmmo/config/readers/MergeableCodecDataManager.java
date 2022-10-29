@@ -130,6 +130,8 @@ public class MergeableCodecDataManager<RAW, FINE> extends SimplePreparableReload
 		this.finalizer = finalizer;
 		this.gson = gson;
 	}
+	
+	public Map<ResourceLocation, FINE> getData() {return data;}
 
 	/** Off-thread processing (can include reading files from hard drive) **/
 	@Override

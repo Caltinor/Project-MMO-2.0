@@ -115,6 +115,7 @@ dependencies {
   	//runtimeOnly fg.deobf('local.maven:ftb-library-forge:1902.3.9-build.144')
   	//runtimeOnly fg.deobf('local.maven:item-filters-forge:1902.2.9-build.41')
   	//runtimeOnly fg.deobf('local.maven:architectury:6.2.46-forge')
+  	runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.19.2:10.0.14')
 }
 
 jar {

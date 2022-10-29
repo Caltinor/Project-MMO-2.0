@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import com.blamejared.crafttweaker.api.action.base.IRuntimeAction;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
@@ -12,16 +13,19 @@ import org.openzen.zencode.java.ZenCodeType;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
+import harmonised.pmmo.api.enums.ObjectType;
 import harmonised.pmmo.api.enums.ReqType;
+import harmonised.pmmo.config.codecs.CodecMapLocation.LocationMapContainer;
+import harmonised.pmmo.config.codecs.CodecMapObject.ObjectMapContainer;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
+import harmonised.pmmo.config.readers.CoreParser;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.registry.ConfigurationRegistry;
-import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 
 @ZenRegister
+@ZenCodeType.Name("mods.pmmo.CTUtils")
 public class CTUtils implements IRuntimeAction{
 	@Override
 	public void apply() {
@@ -43,9 +47,29 @@ public class CTUtils implements IRuntimeAction{
 	 * @param asOverride should this apply after datapacks as an override
 	 */	
 	@ZenCodeType.Method
-	public static void registerRequirement(ResourceLocation objectID, ReqType type, Map<String, Integer> requirements) {
-		//TODO hook into the data loaders themselves and modify the `data` object
-		//cor.getSkillGates().setObjectSkillMap(type, objectID, requirements);
+	public static void setReq(ObjectType objectType, ResourceLocation objectID, ReqType type, Map<String, Integer> requirements) {
+		//Map<String, Integer> requirements = reqs.entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> Integer.valueOf(entry.getValue())));
+		switch (objectType) {
+		case ITEM -> {CoreParser.ITEM_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).reqs().put(type, requirements);}
+		case BLOCK -> {CoreParser.BLOCK_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).reqs().put(type, requirements);}
+		case ENTITY -> {CoreParser.ENTITY_LOADER.getData().computeIfAbsent(objectID, rl -> new ObjectMapContainer()).reqs().put(type, requirements);}
+		case DIMENSION -> {
+			var data = CoreParser.DIMENSION_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer());
+			data.travelReq().clear();
+			data.travelReq().putAll(requirements);
+		}
+		case BIOME -> {
+			var data = CoreParser.BIOME_LOADER.getData().computeIfAbsent(objectID, rl -> new LocationMapContainer());
+			data.travelReq().clear();
+			data.travelReq().putAll(requirements);
+		}
+		//TODO enchantments separately
+		/*case ENCHANTMENT -> {
+			CoreParser.ENCHANTMENT_LOADER.getData(objectID).clear();
+			CoreParser.ENCHANTMENT_LOADER.getData(objectID).putAll(null);
+		}*/
+		default -> {}
+		}
 	}
 	/**registers a configuration setting for experience that should be awarded
 	 * to a player for performing an action with/on a specific object.
