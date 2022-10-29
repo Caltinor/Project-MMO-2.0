@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 import harmonised.pmmo.util.MsLoggy;
-import harmonised.pmmo.util.Reference;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

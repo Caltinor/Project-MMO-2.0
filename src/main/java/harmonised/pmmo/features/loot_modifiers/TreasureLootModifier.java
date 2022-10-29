@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 import harmonised.pmmo.setup.datagen.LangProvider;
-import harmonised.pmmo.util.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;

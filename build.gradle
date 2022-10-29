@@ -35,6 +35,9 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        url "https://maven.blamejared.com"
+    }
     flatDir { dirs 'libs' }
 }
 
@@ -91,22 +94,27 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.68'
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    annotationProcessor 'com.blamejared.crafttweaker:Crafttweaker_Annotation_Processors-1.18.2:2.0.0.100'
+    annotationProcessor 'net.minecraftforge:forge:1.18.2-40.1.68'
+    annotationProcessor 'com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.197'
     
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0:api")    
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.1:api")    
     //compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195:api")  	
   	compileOnly fg.deobf('local.maven:ftb-quests-forge:1802.3.8-build.101')
   	compileOnly fg.deobf('local.maven:ftb-teams-forge:1802.2.6-build.51')
   	compileOnly fg.deobf('local.maven:ftb-library-forge:1802.3.6-build.119')
   	compileOnly fg.deobf('local.maven:item-filters-forge:1802.2.7-build.27')
   	compileOnly fg.deobf('local.maven:architectury:4.4.61')
+  	compileOnly('com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.197')
   	
-  	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.0")
+  	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.7.1")
   	//runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.195")
   	//runtimeOnly fg.deobf('local.maven:ftb-quests-forge:1802.3.8-build.101')
   	//runtimeOnly fg.deobf('local.maven:ftb-teams-forge:1802.2.6-build.51')
   	//runtimeOnly fg.deobf('local.maven:ftb-library-forge:1802.3.6-build.119')
   	//runtimeOnly fg.deobf('local.maven:item-filters-forge:1802.2.7-build.27')
   	//runtimeOnly fg.deobf('local.maven:architectury:4.4.61')
+  	runtimeOnly fg.deobf('com.blamejared.crafttweaker:CraftTweaker-forge-1.18.2:9.1.197')
 }
 
 jar {

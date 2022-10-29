@@ -97,7 +97,7 @@ public class Networking {
 		INSTANCE.messageBuilder(CP_ApplyConfigRegistry.class, ID++)
 			.encoder(CP_ApplyConfigRegistry::encode)
 			.decoder(CP_ApplyConfigRegistry::new)
-			.consumerNetworkThread(CP_ApplyConfigRegistry::handle)
+			.consumer(CP_ApplyConfigRegistry::handle)
 			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
