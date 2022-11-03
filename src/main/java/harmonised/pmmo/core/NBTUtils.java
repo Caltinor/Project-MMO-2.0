@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedListMultimap;
+import com.mojang.datafixers.util.Pair;
+
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -17,6 +19,8 @@ import harmonised.pmmo.core.nbt.LogicEntry.Criteria;
 import harmonised.pmmo.core.nbt.Operator;
 import harmonised.pmmo.core.nbt.PathReader;
 import harmonised.pmmo.core.nbt.Result;
+import harmonised.pmmo.util.MsLoggy;
+import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import harmonised.pmmo.util.RegistryUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +47,7 @@ public class NBTUtils {
 		blockXpGainLogic = new HashMap<>();
 		entityXpGainLogic = new HashMap<>();
 		bonusLogic = new HashMap<>();
+		cache.clear();
 	}
 	
 	//======================SETTERS=================================
@@ -131,10 +136,14 @@ public class NBTUtils {
 	//======================LOGICAL METHODS=========================
 	private record LogicTier (BehaviorToPrevious behavior, boolean isSummative, List<Result> results) {}
 	
-	private Map<String, Double> evaluateEntries(CompoundTag nbt, List<LogicEntry> logic) {
+	private final Map<Pair<CompoundTag, List<LogicEntry>>, Map<String, Double>> cache = new HashMap<>();
+	
+	private Map<String, Double> evaluateEntries(CompoundTag nbt, List<LogicEntry> logic) {		
 		Map<String, Double> output = new HashMap<>();
 		//cancels the evaluation if NBT has no data or never existed
 		if (nbt == null || nbt.isEmpty()) return output;
+		//if the compound matches a cached result, return that instead
+		if (cache.containsKey(Pair.of(nbt, logic))) return MsLoggy.DEBUG.logAndReturn(cache.get(Pair.of(nbt, logic)), LOG_CODE.DATA, "NBT Cache Used");
 		//this section cycles through the logic and generates usable result objects
 		List<LogicTier> logicSequence = new ArrayList<>();
 		for (int i = 0; i < logic.size(); i++) {
@@ -190,6 +199,7 @@ public class NBTUtils {
 			}
 			}
 		}
+		cache.put(Pair.of(nbt, logic), output);
 		return output;
 	}
 	
