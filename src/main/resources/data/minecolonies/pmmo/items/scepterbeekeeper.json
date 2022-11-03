@@ -1,0 +1,15 @@
+{
+    "requirements":{
+        "WEAR":{},
+        "TOOL":{
+            "woodcutting": 0,
+            "mining": 0,
+            "excavation": 0
+        },
+        "WEAPON":{},
+        "USE":{},
+        "PLACE":{},
+        "BREAK":{},
+        "INTERACT":{}
+    }
+}
