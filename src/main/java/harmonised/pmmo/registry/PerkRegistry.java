@@ -1,17 +1,17 @@
 package harmonised.pmmo.registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.lang3.function.TriFunction;
+import org.jetbrains.annotations.NotNull;
 
 import com.google.common.base.Preconditions;
 
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
-import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.MsLoggy;
@@ -46,37 +46,50 @@ public class PerkRegistry {
 		return executePerk(cause, player, new CompoundTag(), side);
 	}
 	
-	public CompoundTag executePerk(EventType cause, Player player, CompoundTag dataIn, LogicalSide side) {
+	public CompoundTag executePerk(EventType cause, Player player, @NotNull CompoundTag dataIn, LogicalSide side) {
 		if (player == null) return new CompoundTag();
-		if (dataIn == null) dataIn = new CompoundTag();
-		Map<String, List<CompoundTag>> map =  PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>());
 		CompoundTag output = new CompoundTag();
-		for (String skill : map.keySet()) {
-			List<CompoundTag> entries = map.get(skill);
+		PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>()).forEach((skill, list) -> {
 			int skillLevel = Core.get(side).getData().getPlayerSkillLevel(skill, player.getUUID());
-			for (int i = 0; i < entries.size(); i++) {
-				CompoundTag src = entries.get(i);
+			list.forEach(src -> {
 				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
 				CompoundTag executionOutput = new CompoundTag();
-				int maxSetting = src.contains(APIUtils.MAX_LEVEL) ? src.getInt(APIUtils.MAX_LEVEL) : Config.MAX_LEVEL.get();
-				int minSetting = src.contains(APIUtils.MIN_LEVEL) ? src.getInt(APIUtils.MIN_LEVEL) : 0;
-				int perSetting = src.contains(APIUtils.MODULUS) ? src.getInt(APIUtils.MODULUS) : -1;
-				List<Integer> milestones = src.contains(APIUtils.MILESTONES) 
-						? src.getList(APIUtils.MILESTONES, Tag.TAG_DOUBLE).stream().map(tag -> ((DoubleTag)tag).getAsInt()).toList()
-						: new ArrayList<>();
 				
-				if (skillLevel <= maxSetting && skillLevel >= minSetting 
-						&& ( (perSetting == -1 && milestones.isEmpty())
-							|| (perSetting != -1	  && skillLevel % Math.max(1, perSetting) == 0) 
-							|| (!milestones.isEmpty() && milestones.contains(skillLevel))
-						)
-					)
+				if (isValidContext(src, skillLevel))
 					executionOutput = perkExecutions.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel);
-				output = TagUtils.mergeTags(output, executionOutput);
-			}
-		}
+				output.merge(TagUtils.mergeTags(output, executionOutput));
+			});
+		});
 		return output;
+	}
+	
+	private final Random rand = new Random();
+	
+	private boolean isValidContext(CompoundTag src, int skillLevel) {
+		if (src.contains(APIUtils.MAX_LEVEL) && skillLevel > src.getInt(APIUtils.MAX_LEVEL))
+			return false;
+		if (src.contains(APIUtils.MIN_LEVEL) && skillLevel < src.getInt(APIUtils.MIN_LEVEL))
+			return false;
+		boolean modulus = src.contains(APIUtils.MODULUS), 
+				milestone = src.contains(APIUtils.MILESTONES);
+		if (modulus || milestone) {
+			boolean modulus_match = modulus,
+					milestone_match = milestone;
+			if (modulus && skillLevel % Math.max(1, src.getInt(APIUtils.MODULUS)) != 0)
+				modulus_match = false;
+			if (milestone && !src.getList(APIUtils.MILESTONES, Tag.TAG_DOUBLE).stream()
+					.map(tag -> ((DoubleTag)tag).getAsInt()).toList().contains(skillLevel))
+				milestone_match = false;
+			if (!modulus_match && !milestone_match)
+				return false;
+		}
+		//since this is the last if, we can return it's outcome.  
+		//modify if more logic is applied after this random check.
+		if (src.contains(APIUtils.CHANCE))
+			return src.getDouble(APIUtils.CHANCE) > rand.nextDouble() ;
+		
+		return true;
 	}
 	
 	public CompoundTag terminatePerk(EventType cause, Player player, LogicalSide side) {

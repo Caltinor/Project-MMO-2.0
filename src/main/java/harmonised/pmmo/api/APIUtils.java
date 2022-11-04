@@ -610,6 +610,7 @@ public class APIUtils {
 	public static final String MAX_LEVEL = "max_level";
 	public static final String MILESTONES = "milestones";
 	public static final String MODULUS = "per_x_level";
+	public static final String CHANCE = "chance";
 	public static final String COOLDOWN = "cooldown";
 	public static final String DURATION = "duration";
 	
