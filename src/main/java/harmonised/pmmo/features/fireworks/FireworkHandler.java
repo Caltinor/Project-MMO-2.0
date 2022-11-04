@@ -19,9 +19,8 @@ public class FireworkHandler {
 	//This is technically a perk which is by default used during the SKILL_UP event trigger
 	//This should be passed both the skill triggering the event via FIREWORK_SKILL and take a parameter of SKILLNAME from the settings
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> FIREWORKS = (player, nbt, level) -> {
-		String skill = nbt.contains(APIUtils.SKILLNAME) ? nbt.getString(APIUtils.SKILLNAME) : "none";
-		String checkedSkill = nbt.contains(FIREWORK_SKILL) ? nbt.getString(FIREWORK_SKILL) : "none";
-		if (!skill.equals(checkedSkill)) return new CompoundTag();
+		String skill = nbt.getString(APIUtils.SKILLNAME);
+		if (!skill.equals(nbt.getString(FIREWORK_SKILL))) return new CompoundTag();
 		BlockPos pos = player.blockPosition();
 		//GET STRING COLOR
 		spawnRocket(player.getLevel(), new Vec3(pos.getX(), pos.getY(), pos.getZ()), skill);
