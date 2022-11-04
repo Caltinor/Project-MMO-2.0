@@ -32,9 +32,17 @@ public class PerksImpl {
 	private static float getRatioForTool(ItemStack tool, CompoundTag nbt) {
 		float ratio = 0f;
 		for (ToolAction action : DIG_ACTIONS) {
-			if (tool.canPerformAction(action) && nbt.contains(action.name()))
+			if (tool.canPerformAction(action))
 				ratio += nbt.getFloat(action.name());
 		}
 		return ratio;
+	}
+	
+	public static CompoundTag getDefaults() {
+		TagBuilder builder = TagBuilder.start();
+		for (ToolAction action : DIG_ACTIONS) {
+			builder.withFloat(action.name(), 0);
+		}
+		return builder.build();
 	}
 }

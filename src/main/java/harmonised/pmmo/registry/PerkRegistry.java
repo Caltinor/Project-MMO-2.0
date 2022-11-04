@@ -22,25 +22,39 @@ import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.fml.LogicalSide;
 
 public class PerkRegistry {
 	public PerkRegistry() {}
 	
+	private Map<ResourceLocation, CompoundTag> properties = new HashMap<>();
+	private Map<ResourceLocation, TriPredicate<Player, CompoundTag, Integer>> conditions = new HashMap<>();
 	private Map<ResourceLocation, TriFunction<Player, CompoundTag, Integer, CompoundTag>> perkExecutions = new HashMap<>();
 	private Map<ResourceLocation, TriFunction<Player, CompoundTag, Integer, CompoundTag>> perkTerminations = new HashMap<>();
 	
 	public void registerPerk(
 			ResourceLocation perkID, 
+			CompoundTag propertyDefaults,
+			TriPredicate<Player, CompoundTag, Integer> customConditions,
 			TriFunction<Player, CompoundTag, Integer, CompoundTag> onExecute, 
 			TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude) {
 		Preconditions.checkNotNull(perkID);
+		Preconditions.checkNotNull(propertyDefaults);
+		Preconditions.checkNotNull(customConditions);
 		Preconditions.checkNotNull(onExecute);
 		Preconditions.checkNotNull(onConclude);
+		properties.put(perkID, propertyDefaults);
+		conditions.put(perkID, customConditions);
 		perkExecutions.put(perkID, onExecute);
 		perkTerminations.put(perkID, onConclude);
 		MsLoggy.DEBUG.log(LOG_CODE.API, "Registered Perk: "+perkID.toString());
 	}
+	
+	/* REWORK NOTES
+	 * 1. add a predicate for non-standard conditions
+	 * 2. add a property registry with a record of (String key, T default value)
+	 */
 	
 	public CompoundTag executePerk(EventType cause, Player player, LogicalSide side) {
 		return executePerk(cause, player, new CompoundTag(), side);
@@ -52,11 +66,11 @@ public class PerkRegistry {
 		PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>()).forEach((skill, list) -> {
 			int skillLevel = Core.get(side).getData().getPlayerSkillLevel(skill, player.getUUID());
 			list.forEach(src -> {
-				src.merge(dataIn);
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
+				src = properties.get(perkID).merge(src.merge(dataIn));
 				CompoundTag executionOutput = new CompoundTag();
 				
-				if (isValidContext(src, skillLevel))
+				if (isValidContext(perkID, player, src, skillLevel))
 					executionOutput = perkExecutions.getOrDefault(perkID, (plyr, nbt, level) -> new CompoundTag()).apply(player, src, skillLevel);
 				output.merge(TagUtils.mergeTags(output, executionOutput));
 			});
@@ -64,9 +78,10 @@ public class PerkRegistry {
 		return output;
 	}
 	
+	
 	private final Random rand = new Random();
 	
-	private boolean isValidContext(CompoundTag src, int skillLevel) {
+	private boolean isValidContext(ResourceLocation perkID, Player player, CompoundTag src, int skillLevel) {
 		if (src.contains(APIUtils.MAX_LEVEL) && skillLevel > src.getInt(APIUtils.MAX_LEVEL))
 			return false;
 		if (src.contains(APIUtils.MIN_LEVEL) && skillLevel < src.getInt(APIUtils.MIN_LEVEL))
@@ -84,12 +99,10 @@ public class PerkRegistry {
 			if (!modulus_match && !milestone_match)
 				return false;
 		}
-		//since this is the last if, we can return it's outcome.  
-		//modify if more logic is applied after this random check.
-		if (src.contains(APIUtils.CHANCE))
-			return src.getDouble(APIUtils.CHANCE) > rand.nextDouble() ;
+		if (src.contains(APIUtils.CHANCE) && src.getDouble(APIUtils.CHANCE) < rand.nextDouble())
+			return false;
 		
-		return true;
+		return conditions.getOrDefault(perkID, (p,s,l) -> true).test(player, src, skillLevel);
 	}
 	
 	public CompoundTag terminatePerk(EventType cause, Player player, LogicalSide side) {

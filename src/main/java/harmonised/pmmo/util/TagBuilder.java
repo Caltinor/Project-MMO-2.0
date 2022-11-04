@@ -57,4 +57,9 @@ public class TagBuilder {
 		nbt.putDouble(key, value);
 		return this;
 	}
+	
+	public TagBuilder withLong(@NonNull String key, @NonNull long value) {
+		nbt.putLong(key, value);
+		return this;
+	}
 }

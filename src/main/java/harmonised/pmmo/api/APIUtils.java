@@ -32,6 +32,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -641,19 +642,23 @@ public class APIUtils {
 	 * reasonable triggers, and sidedness.
 	 * 
 	 * @param perkID a custom id for your perk that can be used in perks.json to reference this perk
+	 * @param propertyDefaults keys used by your perks and default values to supply if omitted
+	 * @param customConditions a predicate for checks outside the standard built in checks
 	 * @param onExecute the function executing the behavior of this perk when triggered
 	 * @param onConclude the function executing the behavior of this perk when expected to end
 	 * @param side the logical sides this perk should exeute on.  Your implementation should factor in sidedness to avoid crashes.
 	 */
 	public static void registerPerk(
-			@NonNull ResourceLocation perkID, 
+			@NonNull ResourceLocation perkID,
+			@NonNull CompoundTag propertyDefaults,
+			@NonNull TriPredicate<Player, CompoundTag, Integer> customConditions,
 			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onExecute, 
 			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude,
 			@NonNull PerkSide side) {
 		if (side.equals(PerkSide.SERVER) || side.equals(PerkSide.BOTH))
-			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, onExecute, onConclude);
+			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
 		if (side.equals(PerkSide.CLIENT) || side.equals(PerkSide.BOTH))
-			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, onExecute, onConclude);
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
 	}	
 	
 	//===============UTILITY METHODS=================================
