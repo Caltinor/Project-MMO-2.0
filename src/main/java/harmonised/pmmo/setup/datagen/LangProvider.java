@@ -1,16 +1,14 @@
 package harmonised.pmmo.setup.datagen;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -28,138 +26,250 @@ public class LangProvider extends LanguageProvider{
 		super(gen, Reference.MOD_ID, locale);
 		this.locale = locale;
 	}
+
+	//=========SKILL NAMES=====================
+	public static final Translation SKILL_HEALTH = Translation.Builder.start("pmmo.health")
+			.addLocale(Locale.EN_US, "Health").build();
+	public static final Translation SKILL_SPEED = Translation.Builder.start("pmmo.speed")
+			.addLocale(Locale.EN_US, "Speed").build();
+	public static final Translation SKILL_DAMAGE = Translation.Builder.start("pmmo.damage")
+			.addLocale(Locale.EN_US, "Damage").build();
+	public static final Translation SKILL_POWER = Translation.Builder.start("pmmo.power")
+			.addLocale(Locale.EN_US, "Power").build();
+	public static final Translation SKILL_MINING = Translation.Builder.start("pmmo.mining")
+			.addLocale(Locale.EN_US, "Mining").build();
+	public static final Translation SKILL_BUILDING = Translation.Builder.start("pmmo.building")
+			.addLocale(Locale.EN_US, "Building").build();
+	public static final Translation SKILL_EXCAVATION = Translation.Builder.start("pmmo.excavation")
+			.addLocale(Locale.EN_US, "Excavation").build();
+	public static final Translation SKILL_WOODCUTTING = Translation.Builder.start("pmmo.woodcutting")
+			.addLocale(Locale.EN_US, "Woodcutting").build();
+	public static final Translation SKILL_FARMING = Translation.Builder.start("pmmo.farming")
+			.addLocale(Locale.EN_US, "Farming").build();
+	public static final Translation SKILL_AGILITY = Translation.Builder.start("pmmo.agility")
+			.addLocale(Locale.EN_US, "Agility").build();
+	public static final Translation SKILL_ENDURANCE = Translation.Builder.start("pmmo.endurance")
+			.addLocale(Locale.EN_US, "Endurance").build();
+	public static final Translation SKILL_COMBAT = Translation.Builder.start("pmmo.combat")
+			.addLocale(Locale.EN_US, "Combat").build();
+	public static final Translation SKILL_ARCHERY = Translation.Builder.start("pmmo.archery")
+			.addLocale(Locale.EN_US, "Archery").build();
+	public static final Translation SKILL_SMITHING = Translation.Builder.start("pmmo.smithing")
+			.addLocale(Locale.EN_US, "Smithing").build();
+	public static final Translation SKILL_FLYING = Translation.Builder.start("pmmo.flying")
+			.addLocale(Locale.EN_US, "Flying").build();
+	public static final Translation SKILL_SWIMMING = Translation.Builder.start("pmmo.swimming")
+			.addLocale(Locale.EN_US, "Swimming").build();
+	public static final Translation SKILL_FISHING = Translation.Builder.start("pmmo.fishing")
+			.addLocale(Locale.EN_US, "Fishing").build();
+	public static final Translation SKILL_CRAFTING = Translation.Builder.start("pmmo.crafting")
+			.addLocale(Locale.EN_US, "Crafting").build();
+	public static final Translation SKILL_MAGIC = Translation.Builder.start("pmmo.magic")
+			.addLocale(Locale.EN_US, "Magic").build();
+	public static final Translation SKILL_GUNSLINGING = Translation.Builder.start("pmmo.gunslinging")
+			.addLocale(Locale.EN_US, "Gunslinging").build();
+	public static final Translation SKILL_SLAYER = Translation.Builder.start("pmmo.slayer")
+			.addLocale(Locale.EN_US, "Slayer").build();
+	public static final Translation SKILL_FLETCHING = Translation.Builder.start("pmmo.fletching")
+			.addLocale(Locale.EN_US, "Fletching").build();
+	public static final Translation SKILL_TAMING = Translation.Builder.start("pmmo.taming")
+			.addLocale(Locale.EN_US, "Taming").build();
+	public static final Translation SKILL_HUNTER = Translation.Builder.start("pmmo.hunter")
+			.addLocale(Locale.EN_US, "Hunter").build();
+	public static final Translation SKILL_ENGINEERING = Translation.Builder.start("pmmo.engineering")
+			.addLocale(Locale.EN_US, "Engineering").build();
+	public static final Translation SKILL_BLOOD_MAGIC = Translation.Builder.start("pmmo.blood_magic")
+			.addLocale(Locale.EN_US, "Blood Magic").build();
+	public static final Translation SKILL_ASTRAL_MAGIC = Translation.Builder.start("pmmo.astral_magic")
+			.addLocale(Locale.EN_US, "Astral Magic").build();
+	public static final Translation SKILL_GOOD_MAGIC = Translation.Builder.start("pmmo.good_magic")
+			.addLocale(Locale.EN_US, "Good Magic").build();
+	public static final Translation SKILL_EVIL_MAGIC = Translation.Builder.start("pmmo.evil_magic")
+			.addLocale(Locale.EN_US, "Evil Magic").build();
+	public static final Translation SKILL_ARCANE_MAGIC = Translation.Builder.start("pmmo.arcane_magic")
+			.addLocale(Locale.EN_US, "Arcane Magic").build();
+	public static final Translation SKILL_ELEMENTAL = Translation.Builder.start("pmmo.elemental")
+			.addLocale(Locale.EN_US, "Elemental").build();
+	public static final Translation SKILL_EARTH = Translation.Builder.start("pmmo.earth")
+			.addLocale(Locale.EN_US, "Earth").build();
+	public static final Translation SKILL_WATER = Translation.Builder.start("pmmo.water")
+			.addLocale(Locale.EN_US, "Water").build();
+	public static final Translation SKILL_AIR = Translation.Builder.start("pmmo.air")
+			.addLocale(Locale.EN_US, "Air").build();
+	public static final Translation SKILL_FIRE = Translation.Builder.start("pmmo.fire")
+			.addLocale(Locale.EN_US, "Fire").build();
+	public static final Translation SKILL_LIGHTNING = Translation.Builder.start("pmmo.lightning")
+			.addLocale(Locale.EN_US, "Lightning").build();
+	public static final Translation SKILL_VOID = Translation.Builder.start("pmmo.void")
+			.addLocale(Locale.EN_US, "Void").build();
+	public static final Translation SKILL_THAUMATIC = Translation.Builder.start("pmmo.thaumatic")
+			.addLocale(Locale.EN_US, "Thaumatic").build();
+	public static final Translation SKILL_SUMMONING = Translation.Builder.start("pmmo.summoning")
+			.addLocale(Locale.EN_US, "Summoning").build();
+	public static final Translation SKILL_INVENTION = Translation.Builder.start("pmmo.invention")
+			.addLocale(Locale.EN_US, "Invention").build();
+	public static final Translation SKILL_RUNECRAFTING = Translation.Builder.start("pmmo.runecrafting")
+			.addLocale(Locale.EN_US, "Runecrafting").build();
+	public static final Translation SKILL_PRAYER = Translation.Builder.start("pmmo.prayer")
+			.addLocale(Locale.EN_US, "Prayer").build();
+	public static final Translation SKILL_COOKING = Translation.Builder.start("pmmo.cooking")
+			.addLocale(Locale.EN_US, "Cooking").build();
+	public static final Translation SKILL_FIREMAKING = Translation.Builder.start("pmmo.firemaking")
+			.addLocale(Locale.EN_US, "Firemaking").build();
+	public static final Translation SKILL_AFKING = Translation.Builder.start("pmmo.afking")
+			.addLocale(Locale.EN_US, "Afking").build();
+	public static final Translation SKILL_TRADING = Translation.Builder.start("pmmo.trading")
+			.addLocale(Locale.EN_US, "Trading").build();
+	public static final Translation SKILL_SAILING = Translation.Builder.start("pmmo.sailing")
+			.addLocale(Locale.EN_US, "Sailing").build();
+	public static final Translation SKILL_ALCHEMY = Translation.Builder.start("pmmo.alchemy")
+			.addLocale(Locale.EN_US, "Alchemy").build();
+	public static final Translation SKILL_CONSTRUCTION = Translation.Builder.start("pmmo.construction")
+			.addLocale(Locale.EN_US, "Construction").build();
+	public static final Translation SKILL_LEATHERWORKING = Translation.Builder.start("pmmo.leatherworking")
+			.addLocale(Locale.EN_US, "Leatherworking").build();
+	public static final Translation SKILL_EXPLORATION = Translation.Builder.start("pmmo.exploration")
+			.addLocale(Locale.EN_US, "Exploration").build();
+	public static final Translation SKILL_CHARISMA = Translation.Builder.start("pmmo.charisma")
+			.addLocale(Locale.EN_US, "Charisma").build();
 	
-	static final List<Translation> impliedTranslations = new ArrayList<>();
-	static {
-		//=========PROVIDED SKILLS================
-		addEN_US("pmmo.health", "Health");
-		addEN_US("pmmo.speed", "Speed");
-		addEN_US("pmmo.damage", "Damage");
-		addEN_US("pmmo.power", "Power");
-		addEN_US("pmmo.mining", "Mining");
-		addEN_US("pmmo.building", "Building");
-		addEN_US("pmmo.excavation", "Excavation");
-		addEN_US("pmmo.woodcutting", "Woodcutting");
-		addEN_US("pmmo.farming", "Farming");
-		addEN_US("pmmo.agility", "Agility");
-		addEN_US("pmmo.endurance", "Endurance");
-		addEN_US("pmmo.combat", "Combat");
-		addEN_US("pmmo.archery", "Archery");
-		addEN_US("pmmo.smithing", "Smithing");
-		addEN_US("pmmo.flying", "Flying");
-		addEN_US("pmmo.swimming", "Swimming");
-		addEN_US("pmmo.fishing", "Fishing");
-		addEN_US("pmmo.crafting", "Crafting");
-		addEN_US("pmmo.magic", "Magic");
-		addEN_US("pmmo.gunslinging", "Gunslinging");
-		addEN_US("pmmo.slayer", "Slayer");
-		addEN_US("pmmo.fletching", "Fletching");
-		addEN_US("pmmo.taming", "Taming");
-		addEN_US("pmmo.hunter", "Hunter");
-		addEN_US("pmmo.engineering", "Engineering");
-		addEN_US("pmmo.blood_magic", "Blood Magic");
-		addEN_US("pmmo.astral_magic", "Astral Magic");
-		addEN_US("pmmo.good_magic", "Good Magic");
-		addEN_US("pmmo.evil_magic", "Evil Magic");
-		addEN_US("pmmo.arcane_magic", "Arcane Magic");
-		addEN_US("pmmo.elemental", "Elemental");
-		addEN_US("pmmo.earth", "Earth");
-		addEN_US("pmmo.water", "Water");
-		addEN_US("pmmo.air", "Air");
-		addEN_US("pmmo.fire", "Fire");
-		addEN_US("pmmo.lightning", "Lightning");
-		addEN_US("pmmo.void", "Void");
-		addEN_US("pmmo.thaumatic", "Thaumatic");
-		addEN_US("pmmo.summoning", "Summoning");
-		addEN_US("pmmo.invention", "Invention");
-		addEN_US("pmmo.runecrafting", "Runecrafting");
-		addEN_US("pmmo.prayer", "Prayer");
-		addEN_US("pmmo.cooking", "Cooking");
-		addEN_US("pmmo.firemaking", "Firemaking");
-		addEN_US("pmmo.afking", "Afking");
-		addEN_US("pmmo.trading", "Trading");
-		addEN_US("pmmo.sailing", "Sailing");
-		addEN_US("pmmo.alchemy", "Alchemy");
-		addEN_US("pmmo.construction", "Construction");
-		addEN_US("pmmo.leatherworking", "Leatherworking");
-		addEN_US("pmmo.exploration", "Exploration");
-		addEN_US("pmmo.charisma","Charisma");
-		//=========ENUM VALUES=====================
-		addEN_US("pmmo.enum.ANVIL_REPAIR","Anvil Repair");
-		addEN_US("pmmo.enum.BLOCK_BREAK","Break Block");
-		addEN_US("pmmo.enum.BREAK_SPEED","Break Speed");
-		addEN_US("pmmo.enum.BLOCK_PLACE","Place Block");
-		addEN_US("pmmo.enum.BREATH_CHANGE","Breath Change");
-		addEN_US("pmmo.enum.BREED","Breed");
-		addEN_US("pmmo.enum.BREW","Brew");
-		addEN_US("pmmo.enum.CRAFT","Craft");
-		addEN_US("pmmo.enum.CONSUME","Eat/Drink");
-		addEN_US("pmmo.enum.RECEIVE_DAMAGE","Receive Damage (Unspecified)");
-		addEN_US("pmmo.enum.FROM_MOBS","Receive Mob Damage");
-		addEN_US("pmmo.enum.FROM_PLAYERS","Receive Player Damage");
-		addEN_US("pmmo.enum.FROM_ANIMALS","Receive Animal Damage");
-		addEN_US("pmmo.enum.FROM_PROJECTILES","Receive Projectile Damage");
-		addEN_US("pmmo.enum.FROM_MAGIC","Receive Magic Damage");
-		addEN_US("pmmo.enum.FROM_ENVIRONMENT","Receive Environmental Damage");
-		addEN_US("pmmo.enum.FROM_IMPACT","Receive Impact Damage");
-		addEN_US("pmmo.enum.DEAL_MELEE_DAMAGE","Deal Melee Damage (Unspecified)");
-		addEN_US("pmmo.enum.MELEE_TO_MOBS","Deal Melee Damage to Mobs");
-		addEN_US("pmmo.enum.MELEE_TO_PLAYERS","Deal Melee Damage to Players");
-		addEN_US("pmmo.enum.MELEE_TO_ANIMALS","Deal Melee Damage to Animals");
-		addEN_US("pmmo.enum.DEAL_RANGED_DAMAGE","Deal Ranged Damage (Unspecified)");
-		addEN_US("pmmo.enum.RANGED_TO_MOBS","Deal Ranged Damage to Mobs");
-		addEN_US("pmmo.enum.RANGED_TO_PLAYERS","Deal Ranged Damage to Players");
-		addEN_US("pmmo.enum.RANGED_TO_ANIMALS","Deal Ranged Damage to Animals");
-		addEN_US("pmmo.enum.DEATH","Death");
-		addEN_US("pmmo.enum.ENCHANT","Enchant");
-		addEN_US("pmmo.enum.FISH","Fish");
-		addEN_US("pmmo.enum.SMELT","Smelt/Cook");
-		addEN_US("pmmo.enum.GROW","Grow");
-		addEN_US("pmmo.enum.HEALTH_CHANGE","Health Change");
-		addEN_US("pmmo.enum.JUMP","Jump");
-		addEN_US("pmmo.enum.SPRINT_JUMP","Sprint Jump");
-		addEN_US("pmmo.enum.CROUCH_JUMP","Crouch Jump");
-		addEN_US("pmmo.enum.WORLD_CONNECT","World Connect");
-		addEN_US("pmmo.enum.WORLD_DISCONNECT","World Disconnect");
-		addEN_US("pmmo.enum.HIT_BLOCK","Hit Block");
-		addEN_US("pmmo.enum.ACTIVATE_BLOCK","Activate Block");
-		addEN_US("pmmo.enum.ACTIVATE_ITEM","Activate Item");
-		addEN_US("pmmo.enum.ENTITY","Interact with Entity");
-		addEN_US("pmmo.enum.RESPAWN","Respawn");
-		addEN_US("pmmo.enum.RIDING","Riding");
-		addEN_US("pmmo.enum.SHIELD_BLOCK","Block with Shield");
-		addEN_US("pmmo.enum.SKILL_UP","Level Up");
-		addEN_US("pmmo.enum.SLEEP","Sleep");
-		addEN_US("pmmo.enum.SPRINTING","Sprinting");
-		addEN_US("pmmo.enum.SUBMERGED","Submerged");
-		addEN_US("pmmo.enum.SWIMMING","Swimming (above surface)");
-		addEN_US("pmmo.enum.DIVING","Diving");
-		addEN_US("pmmo.enum.SURFACING","Surfacing");
-		addEN_US("pmmo.enum.SWIM_SPRINTING","Fast Swimming");
-		addEN_US("pmmo.enum.TAMING","Taming");
-		addEN_US("pmmo.enum.VEIN_MINE","Vein Mining");
-		addEN_US("pmmo.enum.DISABLE_PERK","Disable Perk");
-		
-		addEN_US("pmmo.enum.WEAR","Wear Item");
-		addEN_US("pmmo.enum.USE_ENCHANTMENT","Use Enchantment");
-		addEN_US("pmmo.enum.TOOL","Use as Tool");
-		addEN_US("pmmo.enum.WEAPON","Use as Weapon");
-		addEN_US("pmmo.enum.USE","Activate Item Ability");
-		addEN_US("pmmo.enum.PLACE","Place Block");
-		addEN_US("pmmo.enum.BREAK","Break Block");
-		//addEN_US("pmmo.enum.BIOME","Enter Biome");
-		addEN_US("pmmo.enum.KILL","Kill Entity");
-		addEN_US("pmmo.enum.TRAVEL","Travel to");
-		addEN_US("pmmo.enum.RIDE","Ride/Drive");
-		addEN_US("pmmo.enum.TAME","Tame Animal");
-		addEN_US("pmmo.enum.INTERACT","Interact with Block");
-		addEN_US("pmmo.enum.ENTITY_INTERACT","Interact with Entity");
-		
-		addEN_US("pmmo.enum.BIOME","Biome");
-	    addEN_US("pmmo.enum.HELD","Held In Hand");
-	    addEN_US("pmmo.enum.WORN","Worn");
-	    addEN_US("pmmo.enum.DIMENSION","Dimension");
-	}
+	//=========ENUM VALUES=====================
+	public static final Translation ENUM_ANVIL_REPAIR = Translation.Builder.start("pmmo.enum.ANVIL_REPAIR")
+			.addLocale(Locale.EN_US, "Anvil Repair").build();
+	public static final Translation ENUM_BLOCK_BREAK = Translation.Builder.start("pmmo.enum.BLOCK_BREAK")
+			.addLocale(Locale.EN_US, "Break Block").build();
+	public static final Translation ENUM_BREAK_SPEED = Translation.Builder.start("pmmo.enum.BREAK_SPEED")
+			.addLocale(Locale.EN_US, "Break Speed").build();
+	public static final Translation ENUM_BLOCK_PLACE = Translation.Builder.start("pmmo.enum.BLOCK_PLACE")
+			.addLocale(Locale.EN_US, "Place Block").build();
+	public static final Translation ENUM_BREATH_CHANGE = Translation.Builder.start("pmmo.enum.BREATH_CHANGE")
+			.addLocale(Locale.EN_US, "Breath Change").build();
+	public static final Translation ENUM_BREED = Translation.Builder.start("pmmo.enum.BREED")
+			.addLocale(Locale.EN_US, "Breed").build();
+	public static final Translation ENUM_BREW = Translation.Builder.start("pmmo.enum.BREW")
+			.addLocale(Locale.EN_US, "Brew").build();
+	public static final Translation ENUM_CRAFT = Translation.Builder.start("pmmo.enum.CRAFT")
+			.addLocale(Locale.EN_US, "Craft").build();
+	public static final Translation ENUM_CONSUME = Translation.Builder.start("pmmo.enum.CONSUME")
+			.addLocale(Locale.EN_US, "Eat/Drink").build();
+	public static final Translation ENUM_RECEIVE_DAMAGE = Translation.Builder.start("pmmo.enum.RECEIVE_DAMAGE")
+			.addLocale(Locale.EN_US, "Receive Damage (Unspecified)").build();
+	public static final Translation ENUM_FROM_MOBS = Translation.Builder.start("pmmo.enum.FROM_MOBS")
+			.addLocale(Locale.EN_US, "Receive Mob Damage").build();
+	public static final Translation ENUM_FROM_PLAYERS = Translation.Builder.start("pmmo.enum.FROM_PLAYERS")
+			.addLocale(Locale.EN_US, "Receive Player Damage").build();
+	public static final Translation ENUM_FROM_ANIMALS = Translation.Builder.start("pmmo.enum.FROM_ANIMALS")
+			.addLocale(Locale.EN_US, "Receive Animal Damage").build();
+	public static final Translation ENUM_FROM_PROJECTILES = Translation.Builder.start("pmmo.enum.FROM_PROJECTILES")
+			.addLocale(Locale.EN_US, "Receive Projectile Damage").build();
+	public static final Translation ENUM_FROM_MAGIC = Translation.Builder.start("pmmo.enum.FROM_MAGIC")
+			.addLocale(Locale.EN_US, "Receive Magic Damage").build();
+	public static final Translation ENUM_FROM_ENVIRONMENT = Translation.Builder.start("pmmo.enum.FROM_ENVIRONMENT")
+			.addLocale(Locale.EN_US, "Receive Environmental Damage").build();
+	public static final Translation ENUM_FROM_IMPACT = Translation.Builder.start("pmmo.enum.FROM_IMPACT")
+			.addLocale(Locale.EN_US, "Receive Impact Damage").build();
+	public static final Translation ENUM_DEAL_MELEE_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_MELEE_DAMAGE")
+			.addLocale(Locale.EN_US, "Deal Melee Damage (Unspecified)").build();
+	public static final Translation ENUM_MELEE_TO_MOBS = Translation.Builder.start("pmmo.enum.MELEE_TO_MOBS")
+			.addLocale(Locale.EN_US, "Deal Melee Damage to Mobs").build();
+	public static final Translation ENUM_MELEE_TO_PLAYERS = Translation.Builder.start("pmmo.enum.MELEE_TO_PLAYERS")
+			.addLocale(Locale.EN_US, "Deal Melee Damage to Players").build();
+	public static final Translation ENUM_MELEE_TO_ANIMALS = Translation.Builder.start("pmmo.enum.MELEE_TO_ANIMALS")
+			.addLocale(Locale.EN_US, "Deal Melee Damage to Animals").build();
+	public static final Translation ENUM_DEAL_RANGED_DAMAGE = Translation.Builder.start("pmmo.enum.DEAL_RANGED_DAMAGE")
+			.addLocale(Locale.EN_US, "Deal Ranged Damage (Unspecified)").build();
+	public static final Translation ENUM_RANGED_TO_MOBS = Translation.Builder.start("pmmo.enum.RANGED_TO_MOBS")
+			.addLocale(Locale.EN_US, "Deal Ranged Damage to Mobs").build();
+	public static final Translation ENUM_RANGED_TO_PLAYERS = Translation.Builder.start("pmmo.enum.RANGED_TO_PLAYERS")
+			.addLocale(Locale.EN_US, "Deal Ranged Damage to Players").build();
+	public static final Translation ENUM_RANGED_TO_ANIMALS = Translation.Builder.start("pmmo.enum.RANGED_TO_ANIMALS")
+			.addLocale(Locale.EN_US, "Deal Ranged Damage to Animals").build();
+	public static final Translation ENUM_DEATH = Translation.Builder.start("pmmo.enum.DEATH")
+			.addLocale(Locale.EN_US, "Death").build();
+	public static final Translation ENUM_ENCHANT = Translation.Builder.start("pmmo.enum.ENCHANT")
+			.addLocale(Locale.EN_US, "Enchant").build();
+	public static final Translation ENUM_FISH = Translation.Builder.start("pmmo.enum.FISH")
+			.addLocale(Locale.EN_US, "Fish").build();
+	public static final Translation ENUM_SMELT = Translation.Builder.start("pmmo.enum.SMELT")
+			.addLocale(Locale.EN_US, "Smelt/Cook").build();
+	public static final Translation ENUM_GROW = Translation.Builder.start("pmmo.enum.GROW")
+			.addLocale(Locale.EN_US, "Grow").build();
+	public static final Translation ENUM_HEALTH_CHANGE = Translation.Builder.start("pmmo.enum.HEALTH_CHANGE")
+			.addLocale(Locale.EN_US, "Health Change").build();
+	public static final Translation ENUM_JUMP = Translation.Builder.start("pmmo.enum.JUMP")
+			.addLocale(Locale.EN_US, "Jump").build();
+	public static final Translation ENUM_SPRINT_JUMP = Translation.Builder.start("pmmo.enum.SPRINT_JUMP")
+			.addLocale(Locale.EN_US, "Sprint Jump").build();
+	public static final Translation ENUM_CROUCH_JUMP = Translation.Builder.start("pmmo.enum.CROUCH_JUMP")
+			.addLocale(Locale.EN_US, "Crouch Jump").build();
+	public static final Translation ENUM_WORLD_CONNECT = Translation.Builder.start("pmmo.enum.WORLD_CONNECT")
+			.addLocale(Locale.EN_US, "World Connect").build();
+	public static final Translation ENUM_WORLD_DISCONNECT = Translation.Builder.start("pmmo.enum.WORLD_DISCONNECT")
+			.addLocale(Locale.EN_US, "World Disconnect").build();
+	public static final Translation ENUM_HIT_BLOCK = Translation.Builder.start("pmmo.enum.HIT_BLOCK")
+			.addLocale(Locale.EN_US, "Hit Block").build();
+	public static final Translation ENUM_ACTIVATE_BLOCK = Translation.Builder.start("pmmo.enum.ACTIVATE_BLOCK")
+			.addLocale(Locale.EN_US, "Activate Block").build();
+	public static final Translation ENUM_ACTIVATE_ITEM = Translation.Builder.start("pmmo.enum.ACTIVATE_ITEM")
+			.addLocale(Locale.EN_US, "Activate Item").build();
+	public static final Translation ENUM_ENTITY = Translation.Builder.start("pmmo.enum.ENTITY")
+			.addLocale(Locale.EN_US, "Interact with Entity").build();
+	public static final Translation ENUM_RESPAWN = Translation.Builder.start("pmmo.enum.RESPAWN")
+			.addLocale(Locale.EN_US, "Respawn").build();
+	public static final Translation ENUM_RIDING = Translation.Builder.start("pmmo.enum.RIDING")
+			.addLocale(Locale.EN_US, "Riding").build();
+	public static final Translation ENUM_SHIELD_BLOCK = Translation.Builder.start("pmmo.enum.SHIELD_BLOCK")
+			.addLocale(Locale.EN_US, "Block with Shield").build();
+	public static final Translation ENUM_SKILL_UP = Translation.Builder.start("pmmo.enum.SKILL_UP")
+			.addLocale(Locale.EN_US, "Level Up").build();
+	public static final Translation ENUM_SLEEP = Translation.Builder.start("pmmo.enum.SLEEP")
+			.addLocale(Locale.EN_US, "Sleep").build();
+	public static final Translation ENUM_SPRINTING = Translation.Builder.start("pmmo.enum.SPRINTING")
+			.addLocale(Locale.EN_US, "Sprinting").build();
+	public static final Translation ENUM_SUBMERGED = Translation.Builder.start("pmmo.enum.SUBMERGED")
+			.addLocale(Locale.EN_US, "Submerged").build();
+	public static final Translation ENUM_SWIMMING = Translation.Builder.start("pmmo.enum.SWIMMING")
+			.addLocale(Locale.EN_US, "Swimming (above surface)").build();
+	public static final Translation ENUM_DIVING = Translation.Builder.start("pmmo.enum.DIVING")
+			.addLocale(Locale.EN_US, "Diving").build();
+	public static final Translation ENUM_SURFACING = Translation.Builder.start("pmmo.enum.SURFACING")
+			.addLocale(Locale.EN_US, "Surfacing").build();
+	public static final Translation ENUM_SWIM_SPRINTING = Translation.Builder.start("pmmo.enum.SWIM_SPRINTING")
+			.addLocale(Locale.EN_US, "Fast Swimming").build();
+	public static final Translation ENUM_TAMING = Translation.Builder.start("pmmo.enum.TAMING")
+			.addLocale(Locale.EN_US, "Taming").build();
+	public static final Translation ENUM_VEIN_MINE = Translation.Builder.start("pmmo.enum.VEIN_MINE")
+			.addLocale(Locale.EN_US, "Vein Mining").build();
+	public static final Translation ENUM_DISABLE_PERK = Translation.Builder.start("pmmo.enum.DISABLE_PERK")
+			.addLocale(Locale.EN_US, "Disable Perk").build();
+	public static final Translation ENUM_WEAR = Translation.Builder.start("pmmo.enum.WEAR")
+			.addLocale(Locale.EN_US, "Wear Item").build();
+	public static final Translation ENUM_USE_ENCHANTMENT = Translation.Builder.start("pmmo.enum.USE_ENCHANTMENT")
+			.addLocale(Locale.EN_US, "Use Enchantment").build();
+	public static final Translation ENUM_TOOL = Translation.Builder.start("pmmo.enum.TOOL")
+			.addLocale(Locale.EN_US, "Use as Tool").build();
+	public static final Translation ENUM_WEAPON = Translation.Builder.start("pmmo.enum.WEAPON")
+			.addLocale(Locale.EN_US, "Use as Weapon").build();
+	public static final Translation ENUM_USE = Translation.Builder.start("pmmo.enum.USE")
+			.addLocale(Locale.EN_US, "Activate Item Ability").build();
+	public static final Translation ENUM_PLACE = Translation.Builder.start("pmmo.enum.PLACE")
+			.addLocale(Locale.EN_US, "Place Block").build();
+	public static final Translation ENUM_BREAK = Translation.Builder.start("pmmo.enum.BREAK")
+			.addLocale(Locale.EN_US, "Break Block").build();
+	public static final Translation ENUM_KILL = Translation.Builder.start("pmmo.enum.KILL")
+			.addLocale(Locale.EN_US, "Kill Entity").build();
+	public static final Translation ENUM_TRAVEL = Translation.Builder.start("pmmo.enum.TRAVEL")
+			.addLocale(Locale.EN_US, "Travel to").build();
+	public static final Translation ENUM_RIDE = Translation.Builder.start("pmmo.enum.RIDE")
+			.addLocale(Locale.EN_US, "Ride/Drive").build();
+	public static final Translation ENUM_TAME = Translation.Builder.start("pmmo.enum.TAME")
+			.addLocale(Locale.EN_US, "Tame Animal").build();
+	public static final Translation ENUM_INTERACT = Translation.Builder.start("pmmo.enum.INTERACT")
+			.addLocale(Locale.EN_US, "Interact with Block").build();
+	public static final Translation ENUM_ENTITY_INTERACT = Translation.Builder.start("pmmo.enum.ENTITY_INTERACT")
+			.addLocale(Locale.EN_US, "Interact with Entity").build();
+	public static final Translation ENUM_BIOME = Translation.Builder.start("pmmo.enum.BIOME")
+			.addLocale(Locale.EN_US, "Biome").build();
 
 	//=========KEY BINDINGS====================
 	public static final Translation KEYBIND_CATEGORY = Translation.Builder.start("category.pmmo")
@@ -407,29 +517,22 @@ public class LangProvider extends LanguageProvider{
 				catch(Exception e) {e.printStackTrace();}
 			}
 		}
-		for (Translation implied : impliedTranslations) {
-			add(implied);
-		}
 	}
 	
 	private void add(Translation translation) {
 		add(translation.key(), translation.localeMap().getOrDefault(locale, ""));
 	}
 	
-	private static void addEN_US(String key, String translation) {
-		impliedTranslations.add(Translation.Builder.start(key).addLocale(Locale.EN_US, translation).build());
-	}
-	
-	public static Component skill(String skill) {
-		return new TranslatableComponent("pmmo."+skill).withStyle(style -> style.withColor(Core.get(LogicalSide.SERVER).getDataConfig().getSkillColor(skill)));
+	public static MutableComponent skill(String skill) {
+		return Component.translatable("pmmo."+skill).withStyle(style -> style.withColor(Core.get(LogicalSide.SERVER).getDataConfig().getSkillColor(skill)));
 	}
 	
 	public static record Translation(String key, Map<String, String> localeMap) {
-		public TranslatableComponent asComponent() {
-			return new TranslatableComponent(key());
+		public MutableComponent asComponent() {
+			return Component.translatable(key());
 		}
-		public TranslatableComponent asComponent(Object...objs) {
-			return new TranslatableComponent(key(), objs);
+		public MutableComponent asComponent(Object...obj) {
+			return Component.translatable(key(), obj);
 		}
 		public static class Builder {
 			private final String key;
