@@ -20,13 +20,14 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.Font;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.IIngameOverlay;
 import net.minecraftforge.fml.LogicalSide;
 
-public class XPOverlayGUI implements IGuiOverlay
+public class XPOverlayGUI implements IIngameOverlay
 {
 	private Core core = Core.get(LogicalSide.CLIENT);
 	private int skillGap = 0;
@@ -34,7 +35,7 @@ public class XPOverlayGUI implements IGuiOverlay
 	private Font fontRenderer;
 
 	@Override
-	public void render(ForgeGui gui, PoseStack stack, float partialTick, int width, int height){
+	public void render(ForgeIngameGui gui, PoseStack stack, float partialTick, int width, int height){
 		if (mc == null)
 			mc = Minecraft.getInstance();
 		if (fontRenderer == null)
@@ -73,7 +74,7 @@ public class XPOverlayGUI implements IGuiOverlay
 			lineRenderers.clear();
 			AtomicInteger yOffset = new AtomicInteger(0);
 			skillGap = skillsKeys.stream()
-					.map(skill -> fontRenderer.width(Component.translatable("pmmo."+skill).getString()))
+					.map(skill -> fontRenderer.width(new TranslatableComponent("pmmo."+skill).getString()))
 					.max(Comparator.comparingInt(t -> t)).orElse(0);
 			skillsKeys.forEach((skillKey)-> {
 				var xpRaw = core.getData().getXpRaw(null, skillKey);
@@ -112,10 +113,10 @@ public class XPOverlayGUI implements IGuiOverlay
 	}
 	
 	private record SkillLine(String xpRaw, MutableComponent skillName, String bonusLine, long xpValue, int color, int yOffset, int skillGap) {
-		public static SkillLine DEFAULT = new SkillLine("", Component.literal(""), "", -1, 0xFFFFFF, 0, 0);
+		public static SkillLine DEFAULT = new SkillLine("", new TextComponent(""), "", -1, 0xFFFFFF, 0, 0);
 		public SkillLine(String skillName, double bonus, long xpValue, int yOffset, int skillGap) {
 			this(rawXpLine(xpValue, skillName), 
-				Component.translatable("pmmo."+skillName), 
+				new TranslatableComponent("pmmo."+skillName), 
 				bonusLine(bonus), 
 				xpValue,
 				Core.get(LogicalSide.CLIENT).getDataConfig().getSkillColor(skillName),

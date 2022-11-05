@@ -416,11 +416,11 @@ public class StatScrollWidget extends ScrollPanel{
 			PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>()).forEach((skill, list) -> {
 				if (!skill.contains(skillFilter)) 
 					return;
-				holder.add(new TextElement(Component.translatable("pmmo."+skill).withStyle(ChatFormatting.UNDERLINE),
+				holder.add(new TextElement(new TranslatableComponent("pmmo."+skill).withStyle(ChatFormatting.UNDERLINE),
 						step(1), core.getDataConfig().getSkillStyle(skill).getColor().getValue(), false, 0));
 				list.forEach(src -> {
 					ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-					holder.add(new TextElement(Component.translatable("pmmo."+perkID.getNamespace()+"."+perkID.getPath()), 
+					holder.add(new TextElement(new TranslatableComponent("pmmo."+perkID.getNamespace()+"."+perkID.getPath()), 
 							step(1), 0xFFFFFF, false, 0));
 					CompoundTag newsrc = internalDefaults.copy().merge(core.getPerkRegistry().getProperties(perkID).merge(src));
 					newsrc.getAllKeys().forEach(key -> {
@@ -428,13 +428,13 @@ public class StatScrollWidget extends ScrollPanel{
 							return;
 						if (newsrc.get(key) instanceof ListTag) {
 							ListTag innerList = newsrc.getList(key, ((ListTag)newsrc.get(key)).getElementType());
-							holder.add(new TextElement(Component.literal(key +" = "), step(2), 0xAAFFFF, false, 0));
+							holder.add(new TextElement(new TextComponent(key +" = "), step(2), 0xAAFFFF, false, 0));
 							innerList.forEach(tag -> {
-								holder.add(new TextElement(Component.literal(tag.getAsString()), step(3), 0x7C83BC, false, 0));
+								holder.add(new TextElement(new TextComponent(tag.getAsString()), step(3), 0x7C83BC, false, 0));
 							});
 						}
 						else 
-							holder.add(new TextElement(Component.literal(key +" = " + newsrc.get(key).getAsString()), 
+							holder.add(new TextElement(new TextComponent(key +" = " + newsrc.get(key).getAsString()), 
 									step(2), 0xAAFFFF, false, 0));
 						
 					});

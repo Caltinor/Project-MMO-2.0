@@ -154,7 +154,7 @@ public class FeaturePerks {
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> BREATH = (player, nbt, level) -> {
 		int perLevel = Math.max(1, (int)((double)level * nbt.getDouble(APIUtils.PER_LEVEL)));
 		player.setAirSupply(player.getAirSupply() + perLevel);
-		player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
+		player.sendMessage(LangProvider.PERK_BREATH_REFRESH.asComponent(), player.getUUID());
 		breathe_cooldown.put(player.getUUID(), System.currentTimeMillis());
 		return NONE;
 	};
@@ -192,7 +192,7 @@ public class FeaturePerks {
 					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2));			
 		}
 		else if (nbt.contains(COMMAND)) {
-			player.getServer().getCommands().performPrefixedCommand(
+			player.getServer().getCommands().performCommand(
 					player.createCommandSourceStack().withSuppressedOutput().withMaximumPermission(2), 
 					nbt.getString(COMMAND));
 		}
