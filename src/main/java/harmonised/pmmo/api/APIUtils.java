@@ -655,8 +655,10 @@ public class APIUtils {
 			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onExecute, 
 			@NonNull TriFunction<Player, CompoundTag, Integer, CompoundTag> onConclude,
 			@NonNull PerkSide side) {
-		if (side.equals(PerkSide.SERVER) || side.equals(PerkSide.BOTH))
+		if (side.equals(PerkSide.SERVER) || side.equals(PerkSide.BOTH)) {
 			Core.get(LogicalSide.SERVER).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
+			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerProperties(perkID, propertyDefaults);
+		}
 		if (side.equals(PerkSide.CLIENT) || side.equals(PerkSide.BOTH))
 			Core.get(LogicalSide.CLIENT).getPerkRegistry().registerPerk(perkID, propertyDefaults, customConditions, onExecute, onConclude);
 	}	

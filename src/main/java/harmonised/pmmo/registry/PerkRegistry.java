@@ -51,10 +51,13 @@ public class PerkRegistry {
 		MsLoggy.DEBUG.log(LOG_CODE.API, "Registered Perk: "+perkID.toString());
 	}
 	
-	/* REWORK NOTES
-	 * 1. add a predicate for non-standard conditions
-	 * 2. add a property registry with a record of (String key, T default value)
-	 */
+	public void registerProperties(ResourceLocation perkID, CompoundTag propertyDefaults) {
+		properties.put(perkID, propertyDefaults);
+	}
+	
+	public CompoundTag getProperties(ResourceLocation perkID) {
+		return properties.getOrDefault(perkID, new CompoundTag()).copy();
+	}
 	
 	public CompoundTag executePerk(EventType cause, Player player, LogicalSide side) {
 		return executePerk(cause, player, new CompoundTag(), side);
@@ -67,7 +70,7 @@ public class PerkRegistry {
 			int skillLevel = Core.get(side).getData().getPlayerSkillLevel(skill, player.getUUID());
 			list.forEach(src -> {
 				ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
-				src = properties.get(perkID).merge(src.merge(dataIn));
+				src = getProperties(perkID).merge(src.merge(dataIn));
 				CompoundTag executionOutput = new CompoundTag();
 				
 				if (isValidContext(perkID, player, src, skillLevel))
