@@ -23,6 +23,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.util.TriPredicate;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class FeaturePerks {
@@ -34,10 +35,9 @@ public class FeaturePerks {
 	private static final UUID speedModifierID  = UUID.fromString("d6103cbc-b90b-4c4b-b3c0-92701fb357b3");	
 	public static final TriFunction<Player, CompoundTag, Integer, CompoundTag> SPEED = (player, nbt, level) -> {
 		double maxSpeedBoost = nbt.getDouble(APIUtils.MAX_BOOST);
-		double boostPerLevel = nbt.getDouble(APIUtils.PER_LEVEL);
 		AttributeInstance speedAttribute = player.getAttribute(Attributes.MOVEMENT_SPEED);
 		double speedBoost = player.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() 
-							* Math.max(0, Math.min(maxSpeedBoost, Math.min(maxSpeedBoost, (level * boostPerLevel) / 100)));
+							* Math.max(0, Math.min(maxSpeedBoost, Math.min(maxSpeedBoost, (level * nbt.getDouble(APIUtils.PER_LEVEL)) / 100)));
 
 		if(speedBoost > 0)
 		{
@@ -117,10 +117,12 @@ public class FeaturePerks {
 	};
 
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> NIGHT_VISION = (player, nbt, level) -> {
-		if (!player.hasEffect(MobEffects.NIGHT_VISION) || player.getEffect(MobEffects.NIGHT_VISION).getDuration() <= 80) {
-			player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, nbt.getInt(APIUtils.DURATION), 0, true, false, false));
-		}
+		player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, nbt.getInt(APIUtils.DURATION), 0, true, false, false));
 		return NONE;
+	};
+	
+	public static TriPredicate<Player, CompoundTag, Integer> NIGHT_VISION_CHECK = (player, nbt, level) -> {
+		return !player.hasEffect(MobEffects.NIGHT_VISION) || player.getEffect(MobEffects.NIGHT_VISION).getDuration() <= 80;
 	};
 	
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> REGEN = (player, nbt, level) -> {
@@ -151,15 +153,16 @@ public class FeaturePerks {
 	
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> BREATH = (player, nbt, level) -> {
 		int perLevel = Math.max(1, (int)((double)level * nbt.getDouble(APIUtils.PER_LEVEL)));
+		player.setAirSupply(player.getAirSupply() + perLevel);
+		player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
+		breathe_cooldown.put(player.getUUID(), System.currentTimeMillis());
+		return NONE;
+	};
+	
+	public static TriPredicate<Player, CompoundTag, Integer> BREATH_CHECK = (player, nbt, level) -> {
 		long currentCD = breathe_cooldown.getOrDefault(player.getUUID(), System.currentTimeMillis());
-		int currentAir = player.getAirSupply();
-		if (currentAir < 2 && (currentCD < System.currentTimeMillis() - nbt.getLong(APIUtils.COOLDOWN) 
-				|| currentCD + 20 >= System.currentTimeMillis())) {
-			player.setAirSupply(currentAir + perLevel);
-			player.sendSystemMessage(LangProvider.PERK_BREATH_REFRESH.asComponent());
-			breathe_cooldown.put(player.getUUID(), System.currentTimeMillis());
-		}
-		return new CompoundTag();
+		return player.getAirSupply() < 2 && (currentCD < System.currentTimeMillis() - nbt.getLong(APIUtils.COOLDOWN) 
+				|| currentCD + 20 >= System.currentTimeMillis());
 	};
 
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> FALL_SAVE = (player, nbt, level) -> {
@@ -169,10 +172,13 @@ public class FeaturePerks {
 
 	public static final String APPLICABLE_TO = "applies_to";
 	public static TriFunction<Player, CompoundTag, Integer, CompoundTag> DAMAGE_BOOST = (player, nbt, level) -> {
-		List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
-		if (!type.contains(RegistryUtil.getId(player.getMainHandItem()).toString())) return NONE;
 		float damage = nbt.getFloat(APIUtils.DAMAGE_IN) * (1f + (float)(nbt.getDouble(APIUtils.PER_LEVEL) * (double)level));
 		return TagBuilder.start().withFloat(APIUtils.DAMAGE_OUT, damage).build();
+	};
+	
+	public static TriPredicate<Player, CompoundTag, Integer> DAMAGE_BOOST_CHECK = (player, nbt, level) -> {
+		List<String> type = nbt.getList(APPLICABLE_TO, Tag.TAG_STRING).stream().map(tag -> tag.getAsString()).toList();
+		return type.contains(RegistryUtil.getId(player.getMainHandItem()).toString());
 	};
 	
 	private static final String COMMAND = "command";

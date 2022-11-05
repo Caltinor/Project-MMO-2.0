@@ -70,7 +70,7 @@ public class PerkRegistration {
 		
 		APIUtils.registerPerk(rl("breath"),
 				TagBuilder.start().withLong(APIUtils.COOLDOWN, 300l).withDouble(APIUtils.PER_LEVEL, 1d).build(),
-				PASS_TRUE,
+				FeaturePerks.BREATH_CHECK,
 				FeaturePerks.BREATH, 
 				NONE, 
 				PerkSide.SERVER);
@@ -83,7 +83,7 @@ public class PerkRegistration {
 					.withFloat(APIUtils.DAMAGE_IN, 0)
 					.withList(FeaturePerks.APPLICABLE_TO, StringTag.valueOf("weapon:id"))
 					.withDouble(APIUtils.PER_LEVEL, 0.05).build(),
-				PASS_TRUE,
+				FeaturePerks.DAMAGE_BOOST_CHECK,
 				FeaturePerks.DAMAGE_BOOST, 
 				NONE, 
 				PerkSide.SERVER);
@@ -96,7 +96,7 @@ public class PerkRegistration {
 		//Effect Perks
 		APIUtils.registerPerk(rl("night_vision"),
 				TagBuilder.start().withInt(APIUtils.DURATION, 100).build(),
-				PASS_TRUE,
+				FeaturePerks.NIGHT_VISION_CHECK,
 				FeaturePerks.NIGHT_VISION, 
 				NONE, 
 				PerkSide.SERVER);
