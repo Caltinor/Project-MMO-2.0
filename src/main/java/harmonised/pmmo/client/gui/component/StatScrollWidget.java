@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -20,12 +22,14 @@ import harmonised.pmmo.client.gui.GlossarySelectScreen.OBJECT;
 import harmonised.pmmo.client.gui.GlossarySelectScreen.SELECTION;
 import harmonised.pmmo.client.utils.DP;
 import harmonised.pmmo.config.Config;
+import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.codecs.CodecMapPlayer.PlayerData;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinDataManager.VeinData;
 import harmonised.pmmo.setup.datagen.LangProvider;
 import harmonised.pmmo.util.RegistryUtil;
+import harmonised.pmmo.util.TagBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -35,6 +39,7 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -282,6 +287,9 @@ public class StatScrollWidget extends ScrollPanel{
 			default:{}
 			}
 			break;}
+		case PERKS: {
+			populatePerks(skill);
+			break;}
 		default:{}
 		}
 	}
@@ -398,6 +406,45 @@ public class StatScrollWidget extends ScrollPanel{
 			if (lengthBeforeProcessing == content.size())
 				content.remove(content.size()-1);
 		});
+	}
+	private final CompoundTag internalDefaults = TagBuilder.start()
+			.withInt(APIUtils.MIN_LEVEL, 0)
+			.withInt(APIUtils.MAX_LEVEL, Config.MAX_LEVEL.get()).build();
+	private void populatePerks(String skillFilter) {
+		for (EventType cause : EventType.values()) {
+			List<TextElement> holder = new ArrayList<>();
+			PerksConfig.PERK_SETTINGS.get().getOrDefault(cause, new HashMap<>()).forEach((skill, list) -> {
+				if (!skill.contains(skillFilter)) 
+					return;
+				holder.add(new TextElement(Component.translatable("pmmo."+skill).withStyle(ChatFormatting.UNDERLINE),
+						step(1), core.getDataConfig().getSkillStyle(skill).getColor().getValue(), false, 0));
+				list.forEach(src -> {
+					ResourceLocation perkID = new ResourceLocation(src.getString("perk"));
+					holder.add(new TextElement(Component.translatable("pmmo."+perkID.getNamespace()+"."+perkID.getPath()), 
+							step(1), 0xFFFFFF, false, 0));
+					CompoundTag newsrc = internalDefaults.copy().merge(core.getPerkRegistry().getProperties(perkID).merge(src));
+					newsrc.getAllKeys().forEach(key -> {
+						if (key.equals("perk")) 
+							return;
+						if (newsrc.get(key) instanceof ListTag) {
+							ListTag innerList = newsrc.getList(key, ((ListTag)newsrc.get(key)).getElementType());
+							holder.add(new TextElement(Component.literal(key +" = "), step(2), 0xAAFFFF, false, 0));
+							innerList.forEach(tag -> {
+								holder.add(new TextElement(Component.literal(tag.getAsString()), step(3), 0x7C83BC, false, 0));
+							});
+						}
+						else 
+							holder.add(new TextElement(Component.literal(key +" = " + newsrc.get(key).getAsString()), 
+									step(2), 0xAAFFFF, false, 0));
+						
+					});
+				});
+			});
+			if (holder.size() > 0) {
+				content.add(new TextElement(cause, 1, 0xEEEEEE, true, Config.SECTION_HEADER_COLOR.get()));
+				content.addAll(holder);
+			}
+		}
 	}
 	
 	private void addEventSection(Function<EventType, Map<String,Long>> xpSrc, EventType[] events, String skillFilter) {

@@ -134,7 +134,7 @@ public class GlossarySelectScreen extends Screen{
 		selectObject.visible = true;
 		selectObject.setEntries(selection.validObjects);
 		selectSkills.visible = true;
-		selectEnum.visible = selection != SELECTION.SALVAGE && selection != SELECTION.VEIN;	
+		selectEnum.visible = selection != SELECTION.SALVAGE && selection != SELECTION.VEIN && selection != SELECTION.PERKS;	
 		viewButton.visible = true;
 	}
 	
@@ -192,7 +192,9 @@ public class GlossarySelectScreen extends Screen{
 		VEIN(LangProvider.GLOSSARY_SECTION_VEIN.asComponent(), 
 				Arrays.stream(new OBJECT[] {OBJECT.ITEMS, OBJECT.BLOCKS, OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
 		MOB_SCALING(LangProvider.GLOSSARY_SECTION_MOB.asComponent(),
-				Arrays.stream(new OBJECT[] {OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList());
+				Arrays.stream(new OBJECT[] {OBJECT.DIMENSIONS, OBJECT.BIOMES}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList()),
+		PERKS(LangProvider.GLOSSARY_SECTION_PERKS.asComponent(),
+				Arrays.stream(new OBJECT[] {OBJECT.PERKS}).map(obj -> new SelectionEntry<OBJECT>(obj.text, obj)).toList());
 		
 		MutableComponent text;
 		List<SelectionEntry<OBJECT>> validObjects;
@@ -207,7 +209,8 @@ public class GlossarySelectScreen extends Screen{
 		ENTITY(LangProvider.GLOSSARY_OBJECT_ENTITIES.asComponent()),
 		DIMENSIONS(LangProvider.GLOSSARY_OBJECT_DIMENSIONS.asComponent()),
 		BIOMES(LangProvider.GLOSSARY_OBJECT_BIOMES.asComponent()),
-		ENCHANTS(LangProvider.GLOSSARY_OBJECT_ENCHANTS.asComponent());
+		ENCHANTS(LangProvider.GLOSSARY_OBJECT_ENCHANTS.asComponent()),
+		PERKS(LangProvider.GLOSSARY_OBJECT_PERKS.asComponent());
 		
 		MutableComponent text;
 		OBJECT(MutableComponent text) {this.text = text;}

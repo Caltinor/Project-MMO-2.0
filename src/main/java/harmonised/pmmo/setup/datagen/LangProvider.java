@@ -27,6 +27,36 @@ public class LangProvider extends LanguageProvider{
 		this.locale = locale;
 	}
 
+	//=========PERK NAMES======================
+	public static final Translation PERK_BREAK_SPEED = Translation.Builder.start("pmmo.pmmo.break_speed")
+			.addLocale(Locale.EN_US, "Break Speed Modifier").build();
+	public static final Translation PERK_FIREWORK = Translation.Builder.start("pmmo.pmmo.fireworks")
+			.addLocale(Locale.EN_US, "Firework").build();
+	public static final Translation PERK_REACH = Translation.Builder.start("pmmo.pmmo.reach")
+			.addLocale(Locale.EN_US, "Player Reach Distance").build();
+	public static final Translation PERK_DAMAGE = Translation.Builder.start("pmmo.pmmo.damage")
+			.addLocale(Locale.EN_US, "Melee Damage").build();
+	public static final Translation PERK_SPEED = Translation.Builder.start("pmmo.pmmo.speed")
+			.addLocale(Locale.EN_US, "Player Move Speed").build();
+	public static final Translation PERK_HEALTH = Translation.Builder.start("pmmo.pmmo.health")
+			.addLocale(Locale.EN_US, "Extra Hearts").build();
+	public static final Translation PERK_JUMP_BOOST = Translation.Builder.start("pmmo.pmmo.jump_boost")
+			.addLocale(Locale.EN_US, "Extra Jump Height").build();
+	public static final Translation PERK_BREATH = Translation.Builder.start("pmmo.pmmo.breath")
+			.addLocale(Locale.EN_US, "Breath Refresh").build();
+	public static final Translation PERK_DAMAGE_BOOST = Translation.Builder.start("pmmo.pmmo.damage_boost")
+			.addLocale(Locale.EN_US, "Damage Modifier").build();
+	public static final Translation PERK_COMMAND = Translation.Builder.start("pmmo.pmmo.command")
+			.addLocale(Locale.EN_US, "Custom Commands").build();
+	public static final Translation PERK_NIGHT_VISION = Translation.Builder.start("pmmo.pmmo.night_vision")
+			.addLocale(Locale.EN_US, "Night Vision").build();
+	public static final Translation PERK_REGEN = Translation.Builder.start("pmmo.pmmo.regen")
+			.addLocale(Locale.EN_US, "Regeneration").build();
+	public static final Translation PERK_EFFECT = Translation.Builder.start("pmmo.pmmo.effect")
+			.addLocale(Locale.EN_US, "Status Effect").build();
+	public static final Translation PERK_FALL_SAVE = Translation.Builder.start("pmmo.pmmo.fall_save")
+			.addLocale(Locale.EN_US, "Reduce Fall Damage").build();
+	
 	//=========SKILL NAMES=====================
 	public static final Translation SKILL_HEALTH = Translation.Builder.start("pmmo.health")
 			.addLocale(Locale.EN_US, "Health").build();
@@ -408,6 +438,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Vein Mining").build();
 	public static final Translation GLOSSARY_SECTION_MOB = Translation.Builder.start("pmmo.gui.glossary.section.mobscaling")
 			.addLocale(Locale.EN_US, "Mob Scaling").build();
+	public static final Translation GLOSSARY_SECTION_PERKS = Translation.Builder.start("pmmo.gui.glossary.section.perks")
+			.addLocale(Locale.EN_US, "Perks").build();
 	
 	public static final Translation GLOSSARY_DEFAULT_OBJECT = Translation.Builder.start("pmmo.gui.glossary.default_object")
 			.addLocale(Locale.EN_US, "All Content").build();
@@ -423,6 +455,8 @@ public class LangProvider extends LanguageProvider{
 			.addLocale(Locale.EN_US, "Biomes").build();
 	public static final Translation GLOSSARY_OBJECT_ENCHANTS = Translation.Builder.start("pmmo.gui.glossary.object.enchantments")
 			.addLocale(Locale.EN_US, "Enchantments").build();
+	public static final Translation GLOSSARY_OBJECT_PERKS = Translation.Builder.start("pmmo.gui.glossary.object.perks")
+			.addLocale(Locale.EN_US, "Perks").build();
 	
 	public static final Translation GLOSSARY_DEFAULT_SKILL = Translation.Builder.start("pmmo.gui.glossary.default_skill")
 			.addLocale(Locale.EN_US, "All Skills").build();
