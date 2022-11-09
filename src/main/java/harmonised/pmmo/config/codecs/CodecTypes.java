@@ -71,6 +71,16 @@ public class CodecTypes {
 			double baseChance, 
 			double maxChance){
 		
+		public static SalvageData migrate(Map<String, Double> data) {
+			Map<String, Double> chancePerLevel = Map.of("smithing",data.getOrDefault("chancePerLevel", 0.0));
+			Map<String, Integer> levelReq = Map.of("smithing", data.getOrDefault("levelReq", 0d).intValue());
+			Map<String, Long> xpAward = Map.of("smithing", data.getOrDefault("xpPerItem", 1d).longValue());
+			int salvageMax = data.getOrDefault("salvageMax", 1d).intValue();
+			double baseChance = data.getOrDefault("baseChance", 0d);
+			double maxChance = data.getOrDefault("maxChance", 1.0);
+			return new SalvageData(chancePerLevel, levelReq, xpAward, salvageMax, baseChance, maxChance);
+		}
+		
 		public static SalvageData combine(SalvageData one, SalvageData two, boolean oneOverride, boolean twoOverride) {
 			Map<String, Double> chancePerLevel = new HashMap<>();
 			Map<String, Integer> levelReq = new HashMap<>();

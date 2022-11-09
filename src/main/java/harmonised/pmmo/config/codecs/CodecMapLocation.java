@@ -37,6 +37,30 @@ public record CodecMapLocation (
 			Codec.unboundedMap(ResourceLocation.CODEC, CodecTypes.DOUBLE_CODEC).optionalFieldOf("mob_multiplier").forGetter(CodecMapLocation::mobModifiers)
 			).apply(instance, CodecMapLocation::new));
 	
+	public static class Builder {
+		boolean override = false;
+		List<ResourceLocation> tagValues = new ArrayList<>();
+		Map<ModifierDataType, Map<String, Double>> bonusMap = new HashMap<>();
+		Map<ResourceLocation, Integer> positive  = new HashMap<>();
+		Map<ResourceLocation, Integer> negative  = new HashMap<>();
+		List<ResourceLocation> veinBlacklist = new ArrayList<>();
+		Map<String, Integer> travelReq = new HashMap<>();
+		Map<ResourceLocation, Map<String, Double>> mobModifiers = new HashMap<>();
+		private Builder() {}
+		public static Builder start() {return new Builder();}
+		public Builder override(boolean bool) {this.override = bool; return this;}
+		public Builder isTagFor(List<ResourceLocation> tags) {this.tagValues = tags; return this;}
+		public Builder bonus(Map<ModifierDataType, Map<String, Double>> bonuses) {this.bonusMap = bonuses; return this;}
+		public Builder positive(Map<ResourceLocation, Integer> pos) {this.positive = pos; return this;}
+		public Builder negative(Map<ResourceLocation, Integer> neg) {this.negative = neg; return this;}
+		public Builder veinBlacklist(List<ResourceLocation> blacklist) {this.veinBlacklist = blacklist; return this;}
+		public Builder req(Map<String, Integer> reqs) {this.travelReq = reqs; return this;}
+		public Builder mobifiers(Map<ResourceLocation, Map<String, Double>> mobification) {this.mobModifiers = mobification; return this;}
+		public LocationMapContainer build() {
+			return new LocationMapContainer(override, tagValues, bonusMap, positive, negative, veinBlacklist, travelReq, mobModifiers);
+		}
+	}
+	
 	public static record LocationMapContainer (
 		boolean override,
 		List<ResourceLocation> tagValues,

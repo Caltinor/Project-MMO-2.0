@@ -21,6 +21,16 @@ public record CodecMapEnchantment(
 			CodecTypes.INTEGER_CODEC.listOf().fieldOf("levels").forGetter(CodecMapEnchantment::skillArray)
 		).apply(instance, (o, map) -> new CodecMapEnchantment(o.orElse(false), map)));
 	
+	public static class Builder {
+		boolean override = false;
+		List<Map<String, Integer>> skillArray = new ArrayList<>();
+		private Builder() {}
+		public static Builder start() {return new Builder();}
+		public Builder override(boolean bool) {this.override = bool; return this;}
+		public Builder skillArray(List<Map<String, Integer>> arr) {this.skillArray = arr; return this;}
+		public CodecMapEnchantment build() {return new CodecMapEnchantment(override, skillArray);}
+	}
+	
 	public static CodecMapEnchantment combine(CodecMapEnchantment one, CodecMapEnchantment two) {
 		List<Map<String, Integer>> skillArray = new ArrayList<>();
 		
