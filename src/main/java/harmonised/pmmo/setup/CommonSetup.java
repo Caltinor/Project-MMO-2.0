@@ -4,6 +4,7 @@ import harmonised.pmmo.commands.CmdPmmoRoot;
 import harmonised.pmmo.compat.curios.CurioCompat;
 import harmonised.pmmo.compat.ftb_quests.FTBQHandler;
 import harmonised.pmmo.config.readers.CoreParser;
+import harmonised.pmmo.config.writers.DataMigrator;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.core.perks.PerkRegistration;
 import harmonised.pmmo.features.autovalues.AutoValues;
@@ -58,6 +59,10 @@ public class CommonSetup {
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "Executing Default Registrations");
 		Core.get(LogicalSide.SERVER).registerNBT();
 		MsLoggy.INFO.log(LOG_CODE.LOADING, "PMMO Server loading process complete");
+		
+		//Migration Logic
+		if (DataMigrator.shouldMigrate(event.getServer()))
+			DataMigrator.generateMigrationPack(event.getServer());
 	}
 	
 	@SubscribeEvent
