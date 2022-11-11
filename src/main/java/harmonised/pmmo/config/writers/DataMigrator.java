@@ -36,7 +36,6 @@ import harmonised.pmmo.config.codecs.CodecMapObject;
 import harmonised.pmmo.config.codecs.CodecMapObject.ObjectMapContainer;
 import harmonised.pmmo.config.codecs.CodecTypes.SalvageData;
 import harmonised.pmmo.util.MsLoggy;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;

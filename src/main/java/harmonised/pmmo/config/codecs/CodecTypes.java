@@ -72,12 +72,12 @@ public class CodecTypes {
 			double maxChance){
 		
 		public static SalvageData migrate(Map<String, Double> data) {
-			Map<String, Double> chancePerLevel = Map.of("smithing",data.getOrDefault("chancePerLevel", 0.0));
+			Map<String, Double> chancePerLevel = Map.of("smithing",data.getOrDefault("chancePerLevel", 0.0)/100d);
 			Map<String, Integer> levelReq = Map.of("smithing", data.getOrDefault("levelReq", 0d).intValue());
-			Map<String, Long> xpAward = Map.of("smithing", data.getOrDefault("xpPerItem", 1d).longValue());
+			Map<String, Long> xpAward = Map.of("smithing", data.getOrDefault("xpPerItem", 1d).longValue()*10l);
 			int salvageMax = data.getOrDefault("salvageMax", 1d).intValue();
-			double baseChance = data.getOrDefault("baseChance", 0d);
-			double maxChance = data.getOrDefault("maxChance", 1.0);
+			double baseChance = data.getOrDefault("baseChance", 0d)/100d;
+			double maxChance = data.getOrDefault("maxChance", 1.0)/100d;
 			return new SalvageData(chancePerLevel, levelReq, xpAward, salvageMax, baseChance, maxChance);
 		}
 		
