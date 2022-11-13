@@ -15,6 +15,7 @@ import harmonised.pmmo.util.TagUtils;
 import harmonised.pmmo.util.MsLoggy.LOG_CODE;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -56,7 +57,7 @@ public class DamageReceivedHandler {
 	
 	private static Map<String, Long> getExperienceAwards(Core core, EventType type, DamageSource source, float damage, Player player, CompoundTag dataIn) {	
 		Map<String, Long> mapOut = new HashMap<>();
-		float ultimateDamage = Math.min(damage, player.getHealth());
+		float ultimateDamage = Mth.clamp(damage, 0, player.getHealth());
 		switch (type) {
 		case FROM_PLAYERS: case FROM_MOBS: case FROM_ANIMALS:{
 			core.getExperienceAwards(type, source.getEntity(), player, dataIn).forEach((skill, value) -> {
