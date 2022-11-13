@@ -9,6 +9,7 @@ import harmonised.pmmo.config.Config;
 import harmonised.pmmo.config.GlobalsConfig;
 import harmonised.pmmo.config.PerksConfig;
 import harmonised.pmmo.config.SkillsConfig;
+import harmonised.pmmo.config.writers.DataMigrator;
 import harmonised.pmmo.features.autovalues.AutoValueConfig;
 import harmonised.pmmo.features.loot_modifiers.GLMRegistry;
 import harmonised.pmmo.setup.CommonSetup;
@@ -32,5 +33,8 @@ public class ProjectMMO {
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::onCapabilityRegister);
     	FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::gatherData);
+    	
+    	if (DataMigrator.shouldConfigsClone())
+    	    DataMigrator.cloneLegacyConfig();
     }
 }

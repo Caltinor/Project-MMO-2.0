@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.util.TriConsumer;
-
 import com.google.common.collect.Comparators;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -51,6 +51,10 @@ public class DataMigrator {
 	public static boolean shouldMigrate(MinecraftServer server) {
 		return !server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACKNAME).toFile().exists()
 				&& FMLPaths.CONFIGDIR.get().resolve(LEGACYDIR).toFile().exists();
+	}
+	
+	public static boolean shouldConfigsClone() {
+	    return !FMLPaths.CONFIGDIR.get().resolve("pmmo-common-legacy.toml").toFile().exists();
 	}
 	
 	private static final String PACKNAME = "migration_pack";
@@ -426,5 +430,11 @@ public class DataMigrator {
 				StandardOpenOption.CREATE_NEW,
 				StandardOpenOption.WRITE);
 		} catch (IOException e) {System.out.println("Error While Generating Migration Pack File For: "+rl.toString()+" ("+e.toString()+")");}
+	}
+	
+	public static void cloneLegacyConfig() {
+	    //cache the legacy config 
+	    try {FileUtils.copyFile(FMLPaths.CONFIGDIR.get().resolve("pmmo-common.toml").toFile(), FMLPaths.CONFIGDIR.get().resolve("pmmo-common-legacy.toml").toFile());}
+	    catch (Exception e) {e.printStackTrace(); return;}	    
 	}
 }
