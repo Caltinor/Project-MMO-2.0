@@ -2,6 +2,7 @@ package harmonised.pmmo.client.events;
 
 import harmonised.pmmo.client.gui.VeinRenderer;
 import harmonised.pmmo.client.utils.VeinTracker;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,7 +19,7 @@ public class WorldRenderHandler {
 			return;
 		Minecraft mc = Minecraft.getInstance();
 
-		if (VeinTracker.isLookingAtVeinTarget(mc.hitResult)) {
+		if (Config.VEIN_ENABLED.get() && VeinTracker.isLookingAtVeinTarget(mc.hitResult)) {
 			VeinTracker.updateVein(mc.player);
 			VeinRenderer.drawBoxHighlights(event.getPoseStack(), VeinTracker.getVein());
 		}

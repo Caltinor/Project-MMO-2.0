@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import harmonised.pmmo.compat.curios.CurioCompat;
+import harmonised.pmmo.config.Config;
 import harmonised.pmmo.core.Core;
 import harmonised.pmmo.features.veinmining.VeinShapeData.ShapeType;
 import harmonised.pmmo.features.veinmining.capability.VeinProvider;
@@ -35,6 +36,7 @@ public class VeinMiningLogic {
 	 * @param pos
 	 */
 	public static void applyVein(ServerPlayer player, BlockPos pos) {
+		if (!Config.VEIN_ENABLED.get()) return;
 		ServerLevel level = player.getLevel();
 		int cost = Core.get(level).getVeinData().getBlockConsume(level.getBlockState(pos).getBlock());
 		if (cost == -1) return; 
@@ -53,6 +55,7 @@ public class VeinMiningLogic {
 	}
 	
 	public static void regenerateVein(ServerPlayer player) {
+		if (!Config.VEIN_ENABLED.get()) return;
 		Inventory inv = player.getInventory();	
 		List<ItemStack> items = new ArrayList<>();
 		items.addAll(inv.armor);
