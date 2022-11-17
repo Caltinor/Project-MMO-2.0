@@ -204,7 +204,10 @@ public class AutoItem {
 			return outMap;
 		
 		final double scale = getUtensilAttributes(utensil, stack, asWeapon);
-		AutoValueConfig.getItemReq(type).forEach((skill, level) -> {
+		Map<String, Integer> configValue = type == ReqType.TOOL || type == ReqType.WEAR
+				? AutoValueConfig.getToolReq(stack) 
+				: AutoValueConfig.getItemReq(type);
+		configValue.forEach((skill, level) -> {
 			outMap.put(skill, (int)Math.max(0, (double)level * (scale)));
 		});
 		MsLoggy.DEBUG.log(LOG_CODE.AUTO_VALUES, "AutoItem Req Map: "+MsLoggy.mapToString(outMap));

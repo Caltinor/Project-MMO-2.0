@@ -16,6 +16,12 @@ import harmonised.pmmo.config.readers.TomlConfigHelper;
 import harmonised.pmmo.config.readers.TomlConfigHelper.ConfigObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SwordItem;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
@@ -158,6 +164,10 @@ public class AutoValueConfig {
 	private static Map<ReqType, ConfigObject<Map<String, Integer>>> ITEM_REQS;
 	private static Map<ReqType, ConfigObject<Map<String, Integer>>> BLOCK_REQS;
 	public static TomlConfigHelper.ConfigObject<Map<ResourceLocation, Integer>> ITEM_PENALTIES;
+	private static ConfigObject<Map<String, Integer>> AXE_TOOL_OVERRIDE;
+	private static ConfigObject<Map<String, Integer>> SHOVEL_TOOL_OVERRIDE;
+	private static ConfigObject<Map<String, Integer>> HOE_TOOL_OVERRIDE;
+	private static ConfigObject<Map<String, Integer>> SWORD_TOOL_OVERRIDE;
 	
 	public static Map<String, Integer> getItemReq(ReqType type) {
 		ConfigObject<Map<String, Integer>> configEntry = ITEM_REQS.get(type);
@@ -168,6 +178,15 @@ public class AutoValueConfig {
 		return configEntry == null ? new HashMap<>() : configEntry.get();
 	}
 	
+	public static Map<String, Integer> getToolReq(ItemStack stack) {
+		Item item = stack.getItem();
+		if (item instanceof ShovelItem) return SHOVEL_TOOL_OVERRIDE.get();
+		else if (item instanceof SwordItem) return SWORD_TOOL_OVERRIDE.get();
+		else if (item instanceof AxeItem) return AXE_TOOL_OVERRIDE.get();
+		else if (item instanceof HoeItem) return HOE_TOOL_OVERRIDE.get();
+		else return getItemReq(ReqType.TOOL);
+	}
+	
 	private static void setupReqMaps(ForgeConfigSpec.Builder builder) {
 		builder.comment("what skills and level should be required to perform the specified action").push("Requirements");
 		
@@ -176,6 +195,14 @@ public class AutoValueConfig {
 		for (ReqType type : AutoItem.REQTYPES) {
 			ITEM_REQS.put(type, TomlConfigHelper.<Map<String, Integer>>defineObject(builder, type.toString()+" Default Req", CodecTypes.INTEGER_CODEC, Collections.singletonMap(type.defaultSkill, 1)));
 		}
+		SHOVEL_TOOL_OVERRIDE = TomlConfigHelper.<Map<String, Integer>>defineObject(builder.comment("Tool requirments specifically for shovels.)"),
+				"Shovel TOOL Override", CodecTypes.INTEGER_CODEC, Map.of("excavation", 1));
+		SWORD_TOOL_OVERRIDE = TomlConfigHelper.<Map<String, Integer>>defineObject(builder.comment("Tool requirments specifically for swords.)"),
+				"Sword TOOL Override", CodecTypes.INTEGER_CODEC, Map.of("farming", 1));
+		AXE_TOOL_OVERRIDE = TomlConfigHelper.<Map<String, Integer>>defineObject(builder.comment("Tool requirments specifically for axes.)"),
+				"Axe TOOL Override", CodecTypes.INTEGER_CODEC, Map.of("woodcutting", 1));
+		HOE_TOOL_OVERRIDE = TomlConfigHelper.<Map<String, Integer>>defineObject(builder.comment("Tool requirments specifically for hoes.)"),
+				"Hoe TOOL Override", CodecTypes.INTEGER_CODEC, Map.of("farming", 1));
 		ITEM_PENALTIES = TomlConfigHelper.defineObject(builder.comment("What effects and levels should be applied if a player does not meet an item req")
 				, "Item Penalties"
 				, Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT)
