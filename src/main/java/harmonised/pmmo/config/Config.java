@@ -486,11 +486,14 @@ public class Config {
 		builder.pop(); //Mob_Scaling
 	}
 	
+	public static ForgeConfigSpec.ConfigValue<Boolean> VEIN_ENABLED;
 	public static ForgeConfigSpec.ConfigValue<Boolean> REQUIRE_SETTING;
 	public static ForgeConfigSpec.ConfigValue<Integer> DEFAULT_CONSUME;
 	
 	private static void buildVeinMinerSettings(ForgeConfigSpec.Builder builder) {
 		builder.comment("Settings related to the Vein Miner").push("Vein_Miner");
+		VEIN_ENABLED = builder.comment("setting to false disables all vein features")
+				.define("vein enabled", true);
 		REQUIRE_SETTING = builder.comment("If true, default consume will be ignored in favor of only allowing"
 				, "veining blocks with declared values.")
 				.define("Require Settings", false);

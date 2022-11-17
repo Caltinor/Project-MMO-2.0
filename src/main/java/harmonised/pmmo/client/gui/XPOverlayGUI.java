@@ -47,7 +47,7 @@ public class XPOverlayGUI implements IIngameOverlay
 			
 			if(Config.SKILL_LIST_DISPLAY.get())
 				renderSkillList(stack, Config.SKILL_LIST_OFFSET_X.get(), Config.SKILL_LIST_OFFSET_Y.get());
-			if(Config.VEIN_GAUGE_DISPLAY.get())
+			if(Config.VEIN_ENABLED.get() && Config.VEIN_GAUGE_DISPLAY.get())
 				renderVeinGauge(stack, Config.VEIN_GAUGE_OFFSET_X.get(), mc.getWindow().getGuiScaledHeight() - Config.VEIN_GAUGE_OFFSET_Y.get());
 			if(Config.GAIN_LIST_DISPLAY.get()) {
 				if (ClientTickHandler.xpGains.size() >= 1 && ClientTickHandler.xpGains.get(0).duration <= 0)
