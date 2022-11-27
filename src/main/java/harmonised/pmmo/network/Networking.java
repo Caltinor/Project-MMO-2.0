@@ -105,7 +105,7 @@ public class Networking {
 		INSTANCE.messageBuilder(CP_RegisterNBT.class, ID++)
 			.encoder((packet, buf) -> {})
 			.decoder(buf -> new CP_RegisterNBT())
-			.consumerNetworkThread(CP_RegisterNBT::handle)
+			.consumer(CP_RegisterNBT::handle)
 			.add();
 		//SERVER BOUND PACKETS
 		INSTANCE.messageBuilder(SP_UpdateVeinTarget.class, ID++)
