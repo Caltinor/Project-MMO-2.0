@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.LinkedListMultimap;
-
+import com.google.common.collect.HashMultimap;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
 import harmonised.pmmo.api.enums.ReqType;
@@ -22,15 +22,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class TooltipRegistry {
 	public TooltipRegistry() {}
 	
-	private Map<ReqType, LinkedListMultimap<ResourceLocation, Function<ItemStack, Map<String, Integer>>>> itemReqTooltips = new HashMap<>();
-	private Map<ReqType, LinkedListMultimap<ResourceLocation, Function<BlockEntity, Map<String, Integer>>>> blockReqTooltips = new HashMap<>();
-	private Map<ReqType, LinkedListMultimap<ResourceLocation, Function<Entity, Map<String, Integer>>>> entityReqTooltips = new HashMap<>();
+	private Map<ReqType, HashMultimap<ResourceLocation, Function<ItemStack, Map<String, Integer>>>> itemReqTooltips = new HashMap<>();
+	private Map<ReqType, HashMultimap<ResourceLocation, Function<BlockEntity, Map<String, Integer>>>> blockReqTooltips = new HashMap<>();
+	private Map<ReqType, HashMultimap<ResourceLocation, Function<Entity, Map<String, Integer>>>> entityReqTooltips = new HashMap<>();
 	
-	private Map<EventType, LinkedListMultimap<ResourceLocation, Function<ItemStack, Map<String, Long>>>> itemXpGainTooltips = new HashMap<>();
-	private Map<EventType, LinkedListMultimap<ResourceLocation, Function<BlockEntity, Map<String, Long>>>> blockXpGainTooltips = new HashMap<>();
-	private Map<EventType, LinkedListMultimap<ResourceLocation, Function<Entity, Map<String, Long>>>> entityXpGainTooltips = new HashMap<>();
+	private Map<EventType, HashMultimap<ResourceLocation, Function<ItemStack, Map<String, Long>>>> itemXpGainTooltips = new HashMap<>();
+	private Map<EventType, HashMultimap<ResourceLocation, Function<BlockEntity, Map<String, Long>>>> blockXpGainTooltips = new HashMap<>();
+	private Map<EventType, HashMultimap<ResourceLocation, Function<Entity, Map<String, Long>>>> entityXpGainTooltips = new HashMap<>();
 	
-	private Map<ModifierDataType, LinkedListMultimap<ResourceLocation, Function<ItemStack, Map<String, Double>>>> itemBonusTooltips = new HashMap<>();
+	private Map<ModifierDataType, HashMultimap<ResourceLocation, Function<ItemStack, Map<String, Double>>>> itemBonusTooltips = new HashMap<>();
 	
 	public void clearRegistry() {
 		itemReqTooltips = new HashMap<>();
@@ -61,7 +61,7 @@ public class TooltipRegistry {
 		
 		if (!itemReqTooltips.containsKey(reqType)) {
 			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+reqType.toString());
-			itemReqTooltips.put(reqType, LinkedListMultimap.create());
+			itemReqTooltips.put(reqType, HashMultimap.create());
 		}
 		itemReqTooltips.get(reqType).get(res).add(func);
 		MsLoggy.INFO.log(LOG_CODE.API, "New tooltip registered for: "+reqType.toString()+" "+res.toString());
@@ -86,7 +86,7 @@ public class TooltipRegistry {
 		
 		if (!blockReqTooltips.containsKey(reqType)) {
 			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+reqType.toString());
-			blockReqTooltips.put(reqType, LinkedListMultimap.create());
+			blockReqTooltips.put(reqType, HashMultimap.create());
 		}
 		blockReqTooltips.get(reqType).get(res).add(func);
 		MsLoggy.INFO.log(LOG_CODE.API, "New tooltip registered for: "+reqType.toString()+" "+res.toString());
@@ -111,7 +111,7 @@ public class TooltipRegistry {
 		
 		if (!blockReqTooltips.containsKey(reqType)) {
 			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+reqType.toString()+" "+res.toString());
-			entityReqTooltips.put(reqType, LinkedListMultimap.create());
+			entityReqTooltips.put(reqType, HashMultimap.create());
 		}
 		entityReqTooltips.get(reqType).get(res).add(func);
 	}
@@ -126,9 +126,9 @@ public class TooltipRegistry {
 	{
 		Preconditions.checkNotNull(res);
 		Preconditions.checkNotNull(reqType);
-		return blockReqTooltips.getOrDefault(reqType, LinkedListMultimap.create()).containsKey(res) ||
-				entityReqTooltips.getOrDefault(reqType, LinkedListMultimap.create()).containsKey(res) ||
-				itemReqTooltips.getOrDefault(reqType, LinkedListMultimap.create()).containsKey(res);
+		return blockReqTooltips.getOrDefault(reqType, HashMultimap.create()).containsKey(res) ||
+				entityReqTooltips.getOrDefault(reqType, HashMultimap.create()).containsKey(res) ||
+				itemReqTooltips.getOrDefault(reqType, HashMultimap.create()).containsKey(res);
 	}
 	
 	/**this is executed by PMMO where the required map for tooltips is used.  some PMMO
@@ -221,7 +221,7 @@ public class TooltipRegistry {
 		
 		if (!itemXpGainTooltips.containsKey(eventType)) {
 			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
-			itemXpGainTooltips.put(eventType, LinkedListMultimap.create());
+			itemXpGainTooltips.put(eventType, HashMultimap.create());
 		}
 		itemXpGainTooltips.get(eventType).get(res).add(func);
 	}
@@ -232,7 +232,7 @@ public class TooltipRegistry {
 		
 		if (!blockXpGainTooltips.containsKey(eventType)) {
 			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
-			blockXpGainTooltips.put(eventType, LinkedListMultimap.create());
+			blockXpGainTooltips.put(eventType, HashMultimap.create());
 		}
 		blockXpGainTooltips.get(eventType).get(res).add(func);
 	}
@@ -243,7 +243,7 @@ public class TooltipRegistry {
 		
 		if (!entityXpGainTooltips.containsKey(eventType)) {
 			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+eventType.toString()+" "+res.toString());
-			entityXpGainTooltips.put(eventType, LinkedListMultimap.create());
+			entityXpGainTooltips.put(eventType, HashMultimap.create());
 		}
 		entityXpGainTooltips.get(eventType).get(res).add(func);
 	}	
@@ -251,15 +251,15 @@ public class TooltipRegistry {
 	public boolean xpGainTooltipExists(ResourceLocation res, EventType eventType) {
 		Preconditions.checkNotNull(res);
 		Preconditions.checkNotNull(eventType);
-		return blockXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).containsKey(res) ||
-				entityXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).containsKey(res) ||
-				itemXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).containsKey(res);
+		return blockXpGainTooltips.getOrDefault(eventType, HashMultimap.create()).containsKey(res) ||
+				entityXpGainTooltips.getOrDefault(eventType, HashMultimap.create()).containsKey(res) ||
+				itemXpGainTooltips.getOrDefault(eventType, HashMultimap.create()).containsKey(res);
 	}
 	
 	public Map<String, Long> getItemXpGainTooltipData(ResourceLocation itemID, EventType eventType, ItemStack stack) {
 		List<Map<String, Long>> rawData = new ArrayList<>();
 		Map<String, Long> outData = new HashMap<>();
-		List<Function<ItemStack, Map<String, Long>>> functions = itemXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).get(itemID);
+		Set<Function<ItemStack, Map<String, Long>>> functions = itemXpGainTooltips.getOrDefault(eventType, HashMultimap.create()).get(itemID);
 		for (Function<ItemStack, Map<String, Long>> func : functions) {
 			rawData.add(func.apply(stack));
 		}
@@ -273,7 +273,7 @@ public class TooltipRegistry {
 	public Map<String, Long> getBlockXpGainTooltipData(ResourceLocation blockID, EventType eventType, BlockEntity tile) {
 		List<Map<String, Long>> rawData = new ArrayList<>();
 		Map<String, Long> outData = new HashMap<>();
-		List<Function<BlockEntity, Map<String, Long>>> functions = blockXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).get(blockID);
+		Set<Function<BlockEntity, Map<String, Long>>> functions = blockXpGainTooltips.getOrDefault(eventType, HashMultimap.create()).get(blockID);
 		for (Function<BlockEntity, Map<String, Long>> func : functions) {
 			rawData.add(func.apply(tile));
 		}
@@ -287,7 +287,7 @@ public class TooltipRegistry {
 	public Map<String, Long> getEntityXpGainTooltipData(ResourceLocation entityID, EventType eventType, Entity entity) {
 		List<Map<String, Long>> rawData = new ArrayList<>();
 		Map<String, Long> outData = new HashMap<>();
-		List<Function<Entity, Map<String, Long>>> functions = entityXpGainTooltips.getOrDefault(eventType, LinkedListMultimap.create()).get(entityID);
+		Set<Function<Entity, Map<String, Long>>> functions = entityXpGainTooltips.getOrDefault(eventType, HashMultimap.create()).get(entityID);
 		for (Function<Entity, Map<String, Long>> func : functions) {
 			rawData.add(func.apply(entity));
 		}
@@ -305,7 +305,7 @@ public class TooltipRegistry {
 		if (res == null) {MsLoggy.INFO.log(LOG_CODE.API, "Supplied ResourceLocation Null"); return;}
 		if (!itemBonusTooltips.containsKey(type)) {
 			MsLoggy.INFO.log(LOG_CODE.API, "New tooltip category created for: "+type.toString());
-			itemBonusTooltips.put(type, LinkedListMultimap.create());
+			itemBonusTooltips.put(type, HashMultimap.create());
 		}
 		itemBonusTooltips.get(type).get(res).add(func);
 		MsLoggy.INFO.log(LOG_CODE.API, "New tooltip registered for: "+type.toString()+" "+res.toString());

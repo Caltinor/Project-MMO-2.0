@@ -89,7 +89,6 @@ public class ConfigurationRegistry {
 	 * 
 	 * @param channel the network channel the packet is being sent through
 	 * @param isOverride should the client behavior apply the overrides (true) or the defaults (false)
-	 * @return an event listener implementation.
 	 */
 	public static void addSyncPacket(SimpleChannel channel, boolean isOverride) {
 		MinecraftForge.EVENT_BUS.addListener(ConfigurationRegistry.onDataReload(channel, isOverride));
