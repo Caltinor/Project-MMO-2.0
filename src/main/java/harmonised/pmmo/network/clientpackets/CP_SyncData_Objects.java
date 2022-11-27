@@ -48,7 +48,6 @@ public class CP_SyncData_Objects {
 	public void handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
 			finalizeObjectMaps(data.type(), data.data());
-			Core.get(LogicalSide.CLIENT).registerNBT();
 		});
 		ctx.get().setPacketHandled(true);
 	}

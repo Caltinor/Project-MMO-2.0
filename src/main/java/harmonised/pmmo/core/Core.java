@@ -9,8 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.LinkedListMultimap;
-
+import com.google.common.collect.HashMultimap;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.api.enums.EventType;
 import harmonised.pmmo.api.enums.ModifierDataType;
@@ -112,6 +111,7 @@ public class Core {
 		gates.reset();
 		config.reset();
 		salvageLogic.reset();
+		tooltips.clearRegistry();
 		nbt.reset();
 		vein.reset();
 		if (side.equals(LogicalSide.SERVER)) {
@@ -434,89 +434,89 @@ public class Core {
 		}
 	  
 	public void awardXP(List<ServerPlayer> players, Map<String, Long> xpValues) {
-			for (int i = 0; i < players.size(); i++) {
-				if (players.get(i) instanceof FakePlayer) continue;
-				for (Map.Entry<String, Long> award : xpValues.entrySet()) {
-					double modifier = Config.SKILL_MODIFIERS.get().containsKey(award.getKey()) 
-							? Config.SKILL_MODIFIERS.get().getOrDefault(award.getKey(), 1d) 
-							: Config.GLOBAL_MODIFIER.get();
-					long xpAward = (long)((double)award.getValue() * modifier);
-					if (players.size() > 1)
-						xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
-					getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
-				}
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i) instanceof FakePlayer) continue;
+			for (Map.Entry<String, Long> award : xpValues.entrySet()) {
+				double modifier = Config.SKILL_MODIFIERS.get().containsKey(award.getKey()) 
+						? Config.SKILL_MODIFIERS.get().getOrDefault(award.getKey(), 1d) 
+						: Config.GLOBAL_MODIFIER.get();
+				long xpAward = (long)((double)award.getValue() * modifier);
+				if (players.size() > 1)
+					xpAward = Double.valueOf((double)xpAward * (Config.PARTY_BONUS.get() * (double)players.size())).longValue();
+				getData().setXpDiff(players.get(i).getUUID(), award.getKey(), xpAward/players.size());
 			}
+		}
 	  }
 	  
 	/** This method registers applies PMMO's NBT logic to the values that are 
 	   *  configured.  This should be fired after data is loaded or else it will
 	   *  register nothing.
 	   */
-	public void registerNBT() {			
-		  //QOL maybe change the loops to use the enum applicablity arrays
-			//==============REGISTER REQUIREMENT LOGIC=============================== 
-			for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemReqLogic().entrySet()) {
-				//bypass this req for items since it is not applicable
-				if (entry.getKey().equals(ReqType.BREAK)) continue;
-				//register remaining items and cases
-				entry.getValue().forEach((rl, logic) -> {
-					BiPredicate<Player, ItemStack> pred = (player, stack) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), stack));
-					predicates.registerPredicate(rl, entry.getKey(), pred);
-					Function<ItemStack, Map<String, Integer>> func = (stack) -> nbt.getReqMap(entry.getKey(), stack);
-					tooltips.registerItemRequirementTooltipData(rl, entry.getKey(), func);
-				});			
-			}
-			nbt.blockReqLogic().getOrDefault(ReqType.BREAK, LinkedListMultimap.create()).forEach((rl, logic) -> {
-				BiPredicate<Player, BlockEntity> pred = (player, tile) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(ReqType.BREAK, tile));
-				predicates.registerBreakPredicate(rl, ReqType.BREAK, pred);
-				Function<BlockEntity, Map<String, Integer>> func = (tile) -> nbt.getReqMap(ReqType.BREAK, tile);
-				tooltips.registerBlockRequirementTooltipData(rl, ReqType.BREAK, func);
-			});
-			for (Map.Entry<ReqType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.entityReqLogic().entrySet()) {
-				//bypass this req for items since it is not applicable
-				if (entry.getKey().equals(ReqType.BREAK)) continue;
-				//register remaining items and cases
-				entry.getValue().forEach((rl, logic) -> {
-					BiPredicate<Player, Entity> pred = (player, entity) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), entity));
-					predicates.registerEntityPredicate(rl, entry.getKey(), pred);
-					Function<Entity, Map<String, Integer>> func = (entity) -> nbt.getReqMap(entry.getKey(), entity);
-					tooltips.registerEntityRequirementTooltipData(rl, entry.getKey(), func);
-				});
-			}
-			
-			//==============REGISTER XP GAIN LOGIC=====================================
-			for (Map.Entry<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemXpGainLogic().entrySet()) {
-				//bypass this req for items since it is not applicable
-				if (entry.getKey().equals(EventType.BLOCK_BREAK)) continue;
-				//register remaining items and cases
-				entry.getValue().forEach((rl, logic) -> {
-					Function<ItemStack, Map<String, Long>> func = (stack) -> nbt.getXpMap(entry.getKey(), stack);
-					tooltips.registerItemXpGainTooltipData(rl, entry.getKey(), func);
-				});
-			}
-			nbt.blockXpGainLogic().getOrDefault(ReqType.BREAK, LinkedListMultimap.create()).forEach((rl, logic) -> {
-				Function<BlockEntity, Map<String, Long>> func = (tile) -> nbt.getXpMap(EventType.BLOCK_BREAK, tile);
-				tooltips.registerBlockXpGainTooltipData(rl, EventType.BLOCK_BREAK, func);
-			});
-			for (Map.Entry<EventType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.entityXpGainLogic().entrySet()) {
-				//bypass this req for items since it is not applicable
-				if (entry.getKey().equals(EventType.BLOCK_BREAK)) continue;
-				//register remaining items and cases
-				entry.getValue().forEach((rl, logic) -> {
-					Function<Entity, Map<String, Long>> func = (entity) -> nbt.getXpMap(entry.getKey(), entity);
-					tooltips.registerEntityXpGainTooltipData(rl, entry.getKey(), func);
-				});
-			}
-			
-			//==============REGISTER BONUSES LOGIC=====================================
-			MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic entrySet size: "+nbt.bonusLogic().size());
-			for (Map.Entry<ModifierDataType, LinkedListMultimap<ResourceLocation, LogicEntry>> entry : nbt.bonusLogic().entrySet()) {
-				MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic Element Size: "+entry.getKey().name()+" "+entry.getValue().size());
-				entry.getValue().forEach((rl, logic) -> {
-					MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic Detail: "+rl.toString()+" "+logic.toString());
-					Function<ItemStack, Map<String, Double>> func = (stack) -> nbt.getBonusMap(entry.getKey(), stack);
-					tooltips.registerItemBonusTooltipData(rl, entry.getKey(), func);
-				});
-			}
+	public void registerNBT() {		
+		//QOL maybe change the loops to use the enum applicability arrays
+		//==============REGISTER REQUIREMENT LOGIC=============================== 
+		for (Map.Entry<ReqType, HashMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemReqLogic().entrySet()) {
+			//bypass this req for items since it is not applicable
+			if (entry.getKey().equals(ReqType.BREAK)) continue;
+			//register remaining items and cases
+			entry.getValue().forEach((rl, logic) -> {
+				BiPredicate<Player, ItemStack> pred = (player, stack) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), stack));
+				predicates.registerPredicate(rl, entry.getKey(), pred);
+				Function<ItemStack, Map<String, Integer>> func = (stack) -> nbt.getReqMap(entry.getKey(), stack);
+				tooltips.registerItemRequirementTooltipData(rl, entry.getKey(), func);
+			});			
 		}
+		nbt.blockReqLogic().getOrDefault(ReqType.BREAK, HashMultimap.create()).forEach((rl, logic) -> {
+			BiPredicate<Player, BlockEntity> pred = (player, tile) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(ReqType.BREAK, tile));
+			predicates.registerBreakPredicate(rl, ReqType.BREAK, pred);
+			Function<BlockEntity, Map<String, Integer>> func = (tile) -> nbt.getReqMap(ReqType.BREAK, tile);
+			tooltips.registerBlockRequirementTooltipData(rl, ReqType.BREAK, func);
+		});
+		for (Map.Entry<ReqType, HashMultimap<ResourceLocation, LogicEntry>> entry : nbt.entityReqLogic().entrySet()) {
+			//bypass this req for items since it is not applicable
+			if (entry.getKey().equals(ReqType.BREAK)) continue;
+			//register remaining items and cases
+			entry.getValue().forEach((rl, logic) -> {
+				BiPredicate<Player, Entity> pred = (player, entity) -> doesPlayerMeetReq(player.getUUID(), nbt.getReqMap(entry.getKey(), entity));
+				predicates.registerEntityPredicate(rl, entry.getKey(), pred);
+				Function<Entity, Map<String, Integer>> func = (entity) -> nbt.getReqMap(entry.getKey(), entity);
+				tooltips.registerEntityRequirementTooltipData(rl, entry.getKey(), func);
+			});
+		}
+		
+		//==============REGISTER XP GAIN LOGIC=====================================
+		for (Map.Entry<EventType, HashMultimap<ResourceLocation, LogicEntry>> entry : nbt.itemXpGainLogic().entrySet()) {
+			//bypass this req for items since it is not applicable
+			if (entry.getKey().equals(EventType.BLOCK_BREAK)) continue;
+			//register remaining items and cases
+			entry.getValue().forEach((rl, logic) -> {
+				Function<ItemStack, Map<String, Long>> func = (stack) -> nbt.getXpMap(entry.getKey(), stack);
+				tooltips.registerItemXpGainTooltipData(rl, entry.getKey(), func);
+			});
+		}
+		nbt.blockXpGainLogic().getOrDefault(ReqType.BREAK, HashMultimap.create()).forEach((rl, logic) -> {
+			Function<BlockEntity, Map<String, Long>> func = (tile) -> nbt.getXpMap(EventType.BLOCK_BREAK, tile);
+			tooltips.registerBlockXpGainTooltipData(rl, EventType.BLOCK_BREAK, func);
+		});
+		for (Map.Entry<EventType, HashMultimap<ResourceLocation, LogicEntry>> entry : nbt.entityXpGainLogic().entrySet()) {
+			//bypass this req for items since it is not applicable
+			if (entry.getKey().equals(EventType.BLOCK_BREAK)) continue;
+			//register remaining items and cases
+			entry.getValue().forEach((rl, logic) -> {
+				Function<Entity, Map<String, Long>> func = (entity) -> nbt.getXpMap(entry.getKey(), entity);
+				tooltips.registerEntityXpGainTooltipData(rl, entry.getKey(), func);
+			});
+		}
+		
+		//==============REGISTER BONUSES LOGIC=====================================
+		MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic entrySet size: "+nbt.bonusLogic().size());
+		for (Map.Entry<ModifierDataType, HashMultimap<ResourceLocation, LogicEntry>> entry : nbt.bonusLogic().entrySet()) {
+			MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic Element Size: "+entry.getKey().name()+" "+entry.getValue().size());
+			entry.getValue().forEach((rl, logic) -> {
+				MsLoggy.DEBUG.log(LOG_CODE.API, "Bonus Logic Detail: "+rl.toString()+" "+logic.toString());
+				Function<ItemStack, Map<String, Double>> func = (stack) -> nbt.getBonusMap(entry.getKey(), stack);
+				tooltips.registerItemBonusTooltipData(rl, entry.getKey(), func);
+			});
+		}
+	}
 }
