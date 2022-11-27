@@ -275,7 +275,7 @@ public class Config {
 						.define("Lose Levels On Death", false);
 		LOSE_ONLY_EXCESS = builder.comment("This setting only matters if [Lose Level On Death] is set to false."
 						, "If this is true the [Loss On Death] applies only to the experience above the current level"
-						, "for exmample if level 3 is 1000k xp and the player has 1020 and dies.  the player will only lose"
+						, "for example if level 3 is 1000k xp and the player has 1020 and dies.  the player will only lose"
 						, "the [Loss On Death] of the 20 xp above the level's base.")
 						.define("Lose Only Excess", true);
 		GLOBAL_MODIFIER = builder.comment("Modifies how much xp is earned.  This is multiplicative to the XP.")

@@ -12,7 +12,9 @@ public class PlayerDeathHandler {
 
 	public static void handle(LivingDeathEvent event) {
 		//we can skip the heavier instanceof calculation if there is no loss on death
-		double lossRatio = 1 - Config.LOSS_ON_DEATH.get();
+		double lossRatio = Config.LOSS_ON_DEATH.get() == 1.0 
+				? 1.0
+				: 1 - Config.LOSS_ON_DEATH.get();
 		if (lossRatio <= 0) return;
 	
 		//IMPORTANT  this is confirmed by the call in EventHandler.  this assumption is critical to this call
